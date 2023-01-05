@@ -30,7 +30,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -41,4 +40,61 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    public function getAbilities($level)
+    {
+        
+        $authoritys = [];
+        if($level == 0) // 일반 유저
+            array_push($authoritys, ['action'=> 'manage', 'subject'=> 'Auth']);
+        else if($level == 10)   // 가맹점
+            array_push($authoritys, ['action'=> 'manage', 'subject'=> 'Auth']);
+        else if($level == 15)   // 대리점
+            array_push($authoritys, ['action'=> 'manage', 'subject'=> 'all']);
+        else if($level == 20)   // 총판
+            array_push($authoritys, ['action'=> 'manage', 'subject'=> 'all']);
+        else if($level == 30)   // 지사
+            array_push($authoritys, ['action'=> 'manage', 'subject'=> 'all']);
+        else if($level == 35)   // 협력사
+            array_push($authoritys, ['action'=> 'read', 'subject'=> 'all']);
+        else if($level == 40)   // 본사
+            array_push($authoritys, ['action'=> 'manage', 'subject'=> 'all']);
+        else if($level == 50)   // 개발사
+            array_push($authoritys, ['action'=> 'manage', 'subject'=> 'all']);
+        return $authoritys;
+    }
+
+    private function getRole()
+    {
+        if($this->level == 0)
+            return __('normal');
+        else if($this->level == 10)
+            return __('merchandise');
+        else if($this->level == 15)
+            return __('agency');
+        else if($this->level == 20)
+            return __('distributor');
+        else if($this->level == 30)
+            return __('branch');            
+        else if($this->level == 35)
+            return __('partner');            
+        else if($this->level == 40)
+            return __('headquarters');
+        else if($this->level == 50)
+            return __('developer');
+        else
+            return __('unknown');
+    }
+
+    public function getAuthData()
+    {
+        return [
+            'id'=> $this->id,
+            'avatar'    => $this->avatar,
+            'email'     => $this->email,
+            'fullName'  => $this->nick_nm,
+            'role'      => $this->getRole(),
+            'username'  =>  $this->nick_nm,
+        ];
+    }
 }

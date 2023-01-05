@@ -1,5 +1,5 @@
 {
-  "name": "vuexy-vuetify-vuejs-admin-template",
+  "name": "redvery-vuejs-admin",
   "version": "7.0.1",
   "scripts": {
     "dev": "npm run build:icons && vite --host",

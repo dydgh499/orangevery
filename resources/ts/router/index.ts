@@ -1,8 +1,8 @@
+import { canNavigate } from '@layouts/plugins/casl'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { createRouter, createWebHistory } from 'vue-router'
-import { isUserLoggedIn } from './utils'
 import routes from '~pages'
-import { canNavigate } from '@layouts/plugins/casl'
+import { isUserLoggedIn } from './utils'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,11 +14,13 @@ const router = createRouter({
       redirect: to => {
         const userData = JSON.parse(localStorage.getItem('userData') || '{}')
         const userRole = userData && userData.role ? userData.role : null
-
-        if (userRole === 'admin')
-          return { name: 'dashboards-analytics' }
-        if (userRole === 'client')
-          return { name: 'access-control' }
+        const adminRoles = ['admin', 'merchandise', 'agency', 'distributor', 'branch', 'partner', 'headquarters', 'developer']
+        const userRoles  = ['client']
+        
+        if (adminRoles.includes(userRole))
+          return { name: 'dashboards-home'}
+        if (userRoles.includes(userRole))
+          return { name: 'access-control'}
 
         return { name: 'login', query: to.query }
       },

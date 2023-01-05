@@ -319,7 +319,7 @@ const refForm = ref<VForm>()
         <VTextField
           v-model="requiredField"
           persistent-placeholder
-          placeholder="This field is required"
+          placeholder="이 필드는 필수로 입력이 요구됩니다."
           :rules="[requiredValidator]"
         />
       </VCol>
@@ -515,7 +515,7 @@ const refForm = ref()
         <VTextField
           v-model="requiredField"
           persistent-placeholder
-          placeholder="This field is required"
+          placeholder="이 필드는 필수로 입력이 요구됩니다."
           :rules="[requiredValidator]"
         />
       </VCol>

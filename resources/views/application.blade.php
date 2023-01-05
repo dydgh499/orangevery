@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" href="/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vuexy - Vuejs Admin Dashboard Template</title>
+  <title>Redvery Management</title>
   <link rel="stylesheet" type="text/css" href="/loader.css" />
   @vite(['resources/ts/main.ts'])
 </head>
@@ -25,8 +24,15 @@
   </div>
   
   <script>
+    @php
+      if(isset($brand))
+      {
+        $brand = json_encode($brand->toArray());
+        echo "localStorage.setItem('brand', JSON.stringify($brand));";
+      }
+    @endphp
     const loaderColor = localStorage.getItem('Vuexy-initial-loader-bg') || '#FFFFFF'
-    const primaryColor = localStorage.getItem('Vuexy-initial-loader-color') || '#7367F0'
+    const primaryColor = localStorage.getItem('Vuexy-initial-loader-color') || '#EA5455'
 
     if (loaderColor)
       document.documentElement.style.setProperty('--initial-loader-bg', loaderColor)

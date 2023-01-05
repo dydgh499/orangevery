@@ -1,19 +1,19 @@
 <script lang="ts" setup>
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-import type { VForm } from 'vuetify/components'
 import {
-  alphaDashValidator,
-  alphaValidator,
-  betweenValidator,
-  confirmedValidator,
-  emailValidator,
-  integerValidator,
-  lengthValidator,
-  passwordValidator,
-  regexValidator,
-  requiredValidator,
-  urlValidator,
-} from '@validators'
+alphaDashValidator,
+alphaValidator,
+betweenValidator,
+confirmedValidator,
+emailValidator,
+integerValidator,
+lengthValidator,
+passwordValidator,
+regexValidator,
+requiredValidator,
+urlValidator
+} from '@validators';
+import type { VForm } from 'vuetify/components';
 
 const requiredField = ref('')
 const numberBetween10to20 = ref('')
@@ -43,7 +43,7 @@ const refForm = ref<VForm>()
         <VTextField
           v-model="requiredField"
           persistent-placeholder
-          placeholder="This field is required"
+          placeholder="이 필드는 필수로 입력이 요구됩니다."
           :rules="[requiredValidator]"
         />
       </VCol>

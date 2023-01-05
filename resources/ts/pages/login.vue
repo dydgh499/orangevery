@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { VForm } from 'vuetify/components'
 import type { LoginResponse } from '@/@fake-db/types'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
@@ -8,6 +7,7 @@ import { useGenerateImageVariant } from '@core/composable/useGenerateImageVarian
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
 import { emailValidator, requiredValidator } from '@validators'
+import { VForm } from 'vuetify/components'
 
 import authV2LoginIllustrationBorderedDark from '@images/pages/auth-v2-login-illustration-bordered-dark.png'
 import authV2LoginIllustrationBorderedLight from '@images/pages/auth-v2-login-illustration-bordered-light.png'
@@ -30,6 +30,7 @@ const ability = useAppAbility()
 const errors = ref<Record<string, string | undefined>>({
   email: undefined,
   password: undefined,
+  message: undefined,
 })
 
 const refVForm = ref<VForm>()
@@ -38,10 +39,11 @@ const password = ref('admin')
 const rememberMe = ref(false)
 
 const login = () => {
-  axios.post<LoginResponse>('/auth/login', { email: email.value, password: password.value })
-    .then(r => {
+  let brand = JSON.parse(localStorage.getItem('brand') || '{}');
+  axios.post<LoginResponse>('api/v1/auth/sign-in', { brand_id: brand['id'], email: email.value, password: password.value })
+    .then(r => {  //'api/v1/auth/sign-in'
       const { accessToken, userData, userAbilities } = r.data
-
+      console.log(userAbilities);
       localStorage.setItem('userAbilities', JSON.stringify(userAbilities))
       ability.update(userAbilities)
 
@@ -55,7 +57,7 @@ const login = () => {
       const { errors: formErrors } = e.response.data
 
       errors.value = formErrors
-      console.error(e.response.data)
+      console.error(e.response.data.message)
     })
 }
 
@@ -142,7 +144,7 @@ const onSubmit = () => {
                   label="Email"
                   type="email"
                   :rules="[requiredValidator, emailValidator]"
-                  :error-messages="errors.email"
+                  :error-messages="errors.message"
                 />
               </VCol>
 
@@ -153,7 +155,7 @@ const onSubmit = () => {
                   label="Password"
                   :rules="[requiredValidator]"
                   :type="isPasswordVisible ? 'text' : 'password'"
-                  :error-messages="errors.password"
+                  :error-messages="errors.message"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                   @click:append-inner="isPasswordVisible = !isPasswordVisible"
                 />

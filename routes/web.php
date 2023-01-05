@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,5 +15,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('{any?}', function() {
-    return view('application');
+    $path = request()->path();
+    if($path === 'login')
+    {
+        $brand = AuthController::getDNSInformation();      
+        return view('application', ['brand'=>$brand]);  
+    }
+    else
+        return view('application');  
 })->where('any', '.*');
