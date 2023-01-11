@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { avatarText, kFormatter } from '@core/utils/formatters'
+import { avatarText, kFormatter } from '@core/utils/formatters';
 
 interface Props {
   userData: {
@@ -154,7 +154,7 @@ const resolveUserRoleVariant = (role: string) => {
         <!-- 👉 Details -->
         <VCardText>
           <p class="text-sm text-uppercase text-disabled">
-            Details
+            상세정보
           </p>
 
           <!-- 👉 User Details list -->
@@ -162,7 +162,7 @@ const resolveUserRoleVariant = (role: string) => {
             <VListItem>
               <VListItemTitle>
                 <h6 class="text-base font-weight-semibold">
-                  Name:
+                  대표자명:
                   <span class="text-body-2">
                     {{ props.userData.fullName }}
                   </span>

@@ -24,10 +24,9 @@ use App\Http\Controllers\AuthController;
 Route::prefix('v1')->group(function()
 {
     Route::prefix('auth')->group(function() {
-        Route::options('domain', [AuthController::class, 'DNSValidate']);
         Route::post('sign-in',[AuthController::class, 'signin']);
         Route::post('sign-up', [AuthController::class, 'signup']);
-        Route::middleware('auth:sanctum')->post('sign-out',[AuthController::class, 'signout']);
+        Route::middleware('auth:sanctum')->get('sign-out',[AuthController::class, 'signout']);
     });
 });
 

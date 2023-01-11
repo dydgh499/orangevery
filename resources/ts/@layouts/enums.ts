@@ -1,18 +1,18 @@
 export const ContentWidth = {
-  Fluid: 'fluid',
-  Boxed: 'boxed',
+  꽉차게: 'fluid',
+  중앙정렬: 'boxed',
 } as const
 
 export const NavbarType = {
-  Sticky: 'sticky',
-  Static: 'static',
-  Hidden: 'hidden',
+  고정: 'sticky',
+  배치: 'static',
+  숨김: 'hidden',
 } as const
 
 export const FooterType = {
-  Sticky: 'sticky',
-  Static: 'static',
-  Hidden: 'hidden',
+  고정: 'sticky',
+  배치: 'static',
+  숨김: 'hidden',
 } as const
 
 export const AppContentLayoutNav = {

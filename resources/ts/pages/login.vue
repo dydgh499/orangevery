@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { LoginResponse } from '@/@fake-db/types'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import axios from '@axios'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
@@ -30,34 +29,32 @@ const ability = useAppAbility()
 const errors = ref<Record<string, string | undefined>>({
   email: undefined,
   password: undefined,
-  message: undefined,
 })
 
 const refVForm = ref<VForm>()
 const email = ref('admin@demo.com')
 const password = ref('admin')
-const rememberMe = ref(false)
-
+/*
+  Admin Email: <strong>admin@demo.com</strong> / Pass: <strong>admin</strong>
+  Client Email: <strong>client@demo.com</strong> / Pass: <strong>client</strong>
+*/
 const login = () => {
-  let brand = JSON.parse(localStorage.getItem('brand') || '{}');
-  axios.post<LoginResponse>('api/v1/auth/sign-in', { brand_id: brand['id'], email: email.value, password: password.value })
-    .then(r => {  //'api/v1/auth/sign-in'
+  axios.post<LoginResponse>('/api/v1/auth/sign-in', {email: email.value, password: password.value })
+    .then(r => {      
       const { accessToken, userData, userAbilities } = r.data
-      console.log(userAbilities);
       localStorage.setItem('userAbilities', JSON.stringify(userAbilities))
-      ability.update(userAbilities)
-
       localStorage.setItem('userData', JSON.stringify(userData))
-      localStorage.setItem('accessToken', JSON.stringify(accessToken))
-
+      localStorage.setItem('accessToken', accessToken)
+      axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
+      
+      ability.update(userAbilities)
       // Redirect to `to` query if exist or redirect to index route
       router.replace(route.query.to ? String(route.query.to) : '/')
     })
     .catch(e => {
       const { errors: formErrors } = e.response.data
-
       errors.value = formErrors
-      console.error(e.response.data.message)
+      console.error(e.response.data)
     })
 }
 
@@ -119,19 +116,6 @@ const onSubmit = () => {
           </p>
         </VCardText>
         <VCardText>
-          <VAlert
-            color="primary"
-            variant="tonal"
-          >
-            <p class="text-caption mb-2">
-              Admin Email: <strong>admin@demo.com</strong> / Pass: <strong>admin</strong>
-            </p>
-            <p class="text-caption mb-0">
-              Client Email: <strong>client@demo.com</strong> / Pass: <strong>client</strong>
-            </p>
-          </VAlert>
-        </VCardText>
-        <VCardText>
           <VForm
             ref="refVForm"
             @submit.prevent="onSubmit"
@@ -141,10 +125,10 @@ const onSubmit = () => {
               <VCol cols="12">
                 <VTextField
                   v-model="email"
-                  label="Email"
+                  label="이메일 입력"
                   type="email"
                   :rules="[requiredValidator, emailValidator]"
-                  :error-messages="errors.message"
+                  :error-messages="errors.email"
                 />
               </VCol>
 
@@ -152,24 +136,20 @@ const onSubmit = () => {
               <VCol cols="12">
                 <VTextField
                   v-model="password"
-                  label="Password"
+                  label="패스워드 입력"
                   :rules="[requiredValidator]"
                   :type="isPasswordVisible ? 'text' : 'password'"
-                  :error-messages="errors.message"
+                  :error-messages="errors.password"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                   @click:append-inner="isPasswordVisible = !isPasswordVisible"
                 />
 
                 <div class="d-flex align-center flex-wrap justify-space-between mt-2 mb-4">
-                  <VCheckbox
-                    v-model="rememberMe"
-                    label="Remember me"
-                  />
                   <RouterLink
                     class="text-primary ms-2 mb-1"
                     :to="{ name: 'forgot-password' }"
                   >
-                    Forgot Password?
+                    패스워드를 잊으셨나요?
                   </RouterLink>
                 </div>
 
@@ -186,29 +166,18 @@ const onSubmit = () => {
                 cols="12"
                 class="text-center"
               >
-                <span>New on our platform?</span>
+                <span>새로운 고객이신가요?</span>
                 <RouterLink
                   class="text-primary ms-2"
                   :to="{ name: 'register' }"
                 >
-                  Create an account
+                  회원가입
                 </RouterLink>
               </VCol>
               <VCol
                 cols="12"
                 class="d-flex align-center"
               >
-                <VDivider />
-                <span class="mx-4">or</span>
-                <VDivider />
-              </VCol>
-
-              <!-- auth providers -->
-              <VCol
-                cols="12"
-                class="text-center"
-              >
-                <AuthProvider />
               </VCol>
             </VRow>
           </VForm>

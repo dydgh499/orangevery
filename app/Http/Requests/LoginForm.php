@@ -25,7 +25,6 @@ class LoginForm extends FormRequest
     public function rules()
     {
         return [
-            'brand_id'  => 'required',
             'email'     => 'required',
             'password'  => 'required',
         ];
@@ -33,7 +32,6 @@ class LoginForm extends FormRequest
     public function attributes()
     {
         return [
-            'brand_id' => __('brand'),
             'email'    => __('email'),
             'password' => __('password'),
         ];
@@ -41,7 +39,6 @@ class LoginForm extends FormRequest
     public function data()
     {
         $data = [
-            'brand_id'  => $this->input('brand_id'),
             'email'     => $this->input('email'),
             'password'  => $this->input('password'),
             'level'     => 0,

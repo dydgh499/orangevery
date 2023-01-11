@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->integer('result_code')->default(0)->comment('거래 결과코드');
             $table->foreignId('mcht_id')->comment('가맹점 FK');
             $table->integer('gid')->default(0)->comment('gid');
             $table->integer('mid')->default(0)->comment('mid');
@@ -34,6 +35,7 @@ return new class extends Migration
             $table->string('buyer_nm')->comment('구매자명');
             $table->string('buyer_phone')->comment('구매자 휴대폰번호');
             $table->string('item_nm')->comment('상품명');
+            $table->string('result_msg')->default('')->comment('거래 내용');
             $table->timestamps();
         });
     }

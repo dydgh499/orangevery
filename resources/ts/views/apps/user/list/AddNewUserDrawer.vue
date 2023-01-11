@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
+import { PerfectScrollbar } from 'vue3-perfect-scrollbar';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-import type { VForm } from 'vuetify/components'
+import type { VForm } from 'vuetify/components';
 
-import type { UserProperties } from '@/@fake-db/types'
-import { emailValidator, requiredValidator } from '@validators'
+import type { UserProperties } from '@/@fake-db/types';
+import { emailValidator, requiredValidator } from '@validators';
 
 interface Emit {
   (e: 'update:isDrawerOpen', value: boolean): void
@@ -81,7 +81,7 @@ const handleDrawerModelValueUpdate = (val: boolean) => {
     <!-- 👉 Title -->
     <div class="d-flex align-center pa-6 pb-1">
       <h6 class="text-h6">
-        Add User
+        유저추가
       </h6>
 
       <VSpacer />
@@ -117,7 +117,7 @@ const handleDrawerModelValueUpdate = (val: boolean) => {
                 <VTextField
                   v-model="fullName"
                   :rules="[requiredValidator]"
-                  label="Full Name"
+                  label="상호 입력"
                 />
               </VCol>
 
@@ -126,7 +126,7 @@ const handleDrawerModelValueUpdate = (val: boolean) => {
                 <VTextField
                   v-model="email"
                   :rules="[requiredValidator, emailValidator]"
-                  label="Email"
+                  label="이메일 입력"
                 />
               </VCol>
 

@@ -1,28 +1,25 @@
 <script setup lang="ts">
-import { initialAbility } from '@/plugins/casl/ability'
-import { useAppAbility } from '@/plugins/casl/useAppAbility'
+import { initialAbility } from '@/plugins/casl/ability';
+import { useAppAbility } from '@/plugins/casl/useAppAbility';
+import axios from '@axios';
 
 const router = useRouter()
 const ability = useAppAbility()
 const userData = JSON.parse(localStorage.getItem('userData') || 'null')
-
-const logout = () => {
-  // Remove "userData" from localStorage
+const logout = async () => {
+  await axios.get('/api/v1/auth/sign-out', {})
   localStorage.removeItem('userData')
-
-  // Remove "accessToken" from localStorage
   localStorage.removeItem('accessToken')
-
+  localStorage.removeItem('userAbilities')
   // Redirect to login page
   router.push('/login')
     .then(() => {
       // ℹ️ We had to remove abilities in then block because if we don't nav menu items mutation is visible while redirecting user to login page
       // Remove "userAbilities" from localStorage
-      localStorage.removeItem('userAbilities')
-
       // Reset ability to initial ability
       ability.update(initialAbility)
-    })
+  })
+
 }
 </script>
 

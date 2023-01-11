@@ -24,13 +24,6 @@
   </div>
   
   <script>
-    @php
-      if(isset($brand))
-      {
-        $brand = json_encode($brand->toArray());
-        echo "localStorage.setItem('brand', JSON.stringify($brand));";
-      }
-    @endphp
     const loaderColor = localStorage.getItem('Vuexy-initial-loader-bg') || '#FFFFFF'
     const primaryColor = localStorage.getItem('Vuexy-initial-loader-color') || '#EA5455'
 

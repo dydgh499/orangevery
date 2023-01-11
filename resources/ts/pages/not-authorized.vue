@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import page401 from '@images/pages/401.png'
-import miscMaskDark from '@images/pages/misc-mask-dark.png'
-import miscMaskLight from '@images/pages/misc-mask-light.png'
+import page401 from '@images/pages/401.png';
+import miscMaskDark from '@images/pages/misc-mask-dark.png';
+import miscMaskLight from '@images/pages/misc-mask-light.png';
 
-import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
+import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant';
 
 const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
 </script>
@@ -13,11 +13,11 @@ const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
     <div class="misc-center-content text-center mb-12">
       <!-- 👉 Title and subtitle -->
       <h4 class="text-h4 font-weight-medium mb-3">
-        You are not authorized! 🔐
+        권한이 없습니다! 🔐
       </h4>
-      <p>You don't have permission to access this page. Go Home!</p>
+      <p>이 페이지에 액세스할 수 있는 권한이 없습니다. 로그인 후 이용해주세요.</p>
       <VBtn to="/">
-        Back to Home
+        로그인 하기
       </VBtn>
     </div>
 

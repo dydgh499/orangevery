@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import type { UserProperties } from '@/@fake-db/types'
-import AddNewUserDrawer from '@/views/apps/user/list/AddNewUserDrawer.vue'
-import { useUserListStore } from '@/views/apps/user/useUserListStore'
-import { avatarText } from '@core/utils/formatters'
+import type { UserProperties } from '@/@fake-db/types';
+import AddNewUserDrawer from '@/views/apps/user/list/AddNewUserDrawer.vue';
+import { useUserListStore } from '@/views/apps/user/useUserListStore';
 
 // 👉 Store
 const userListStore = useUserListStore()
@@ -103,8 +102,8 @@ watchEffect(() => {
 const paginationData = computed(() => {
   const firstIndex = users.value.length ? ((currentPage.value - 1) * rowPerPage.value) + 1 : 0
   const lastIndex = users.value.length + ((currentPage.value - 1) * rowPerPage.value)
-
-  return `Showing ${firstIndex} to ${lastIndex} of ${totalUsers.value} entries`
+  
+  return `총 ${totalUsers.value}개 항목 중 ${firstIndex} ~ ${lastIndex}개 표시`
 })
 
 // 👉 Add new user
@@ -186,44 +185,35 @@ const userListMeta = [
       </VCol>
 
       <VCol cols="12">
-        <VCard title="Search Filter">
+        <VCard title="검색 옵션">
           <!-- 👉 Filters -->
           <VCardText>
             <VRow>
               <!-- 👉 Select Role -->
-              <VCol
-                cols="12"
-                sm="4"
-              >
+              <VCol cols="12" sm="4">
                 <VSelect
                   v-model="selectedRole"
-                  label="Select Role"
+                  label="하위 지사"
                   :items="roles"
                   clearable
                   clear-icon="tabler-x"
                 />
               </VCol>
               <!-- 👉 Select Plan -->
-              <VCol
-                cols="12"
-                sm="4"
-              >
+              <VCol cols="12" sm="4">
                 <VSelect
                   v-model="selectedPlan"
-                  label="Select Plan"
+                  label="하위 총판"
                   :items="plans"
                   clearable
                   clear-icon="tabler-x"
                 />
               </VCol>
               <!-- 👉 Select Status -->
-              <VCol
-                cols="12"
-                sm="4"
-              >
+              <VCol cols="12" sm="4">
                 <VSelect
                   v-model="selectedStatus"
-                  label="Select Status"
+                  label="하위 대리점"
                   :items="status"
                   clearable
                   clear-icon="tabler-x"
@@ -231,7 +221,6 @@ const userListMeta = [
               </VCol>
             </VRow>
           </VCardText>
-
           <VDivider />
 
           <VCardText class="d-flex flex-wrap py-4 gap-4">
@@ -251,29 +240,21 @@ const userListMeta = [
 
             <div class="app-user-search-filter d-flex align-center flex-wrap gap-4">
               <!-- 👉 Search  -->
-              <div style="width: 10rem;">
+              <div style="width: 13.35rem;">
                 <VTextField
                   v-model="searchQuery"
-                  placeholder="Search"
+                  placeholder="ID, 상호, 대표자명 검색"
                   density="compact"
                 />
               </div>
 
               <!-- 👉 Export button -->
-              <VBtn
-                variant="tonal"
-                color="secondary"
-                prepend-icon="tabler-screen-share"
-              >
-                Export
+              <VBtn variant="tonal" color="secondary" prepend-icon="tabler-screen-share">
+                엑셀 추출
               </VBtn>
-
               <!-- 👉 Add user button -->
-              <VBtn
-                prepend-icon="tabler-plus"
-                @click="isAddNewUserDrawerVisible = true"
-              >
-                Add New User
+              <VBtn prepend-icon="tabler-plus" @click="isAddNewUserDrawerVisible = true">
+                유저 추가
               </VBtn>
             </div>
           </VCardText>
@@ -284,85 +265,59 @@ const userListMeta = [
             <!-- 👉 table head -->
             <thead>
               <tr>
-                <th scope="col">
-                  USER
-                </th>
-                <th scope="col">
-                  ROLE
-                </th>
-                <th scope="col">
-                  PLAN
-                </th>
-                <th scope="col">
-                  BILLING
-                </th>
-                <th scope="col">
-                  STATUS
-                </th>
-                <th scope="col">
-                  ACTIONS
-                </th>
+                <th scope="col">NO.</th>
+                <th scope="col">상호/수수료율</th>
+                <th scope="col">상위상호/수수료율</th>
+                <th scope="col">연락처</th>
+                <th scope="col">사업자등록번호</th>
+                <th scope="col">주민등록번호</th>
+                <th scope="col">주소</th>
+                <th scope="col">은행</th>
+                <th scope="col">은행코드</th>
+                <th scope="col">계좌번호</th>
+                <th scope="col">예금주</th>
+                <th scope="col">생성시간</th>
+                <th scope="col">수정/삭제</th>
               </tr>
             </thead>
             <!-- 👉 table body -->
             <tbody>
-              <tr
-                v-for="user in users"
-                :key="user.id"
-                style="height: 3.75rem;"
-              >
-                <!-- 👉 User -->
+              <tr v-for="user in users" :key="user.id" style="height: 3.75rem;">
                 <td>
-                  <div class="d-flex align-center">
-                    <VAvatar
-                      variant="tonal"
-                      :color="resolveUserRoleVariant(user.role).color"
-                      class="me-3"
-                      size="38"
-                    >
-                      <VImg
-                        v-if="user.avatar"
-                        :src="user.avatar"
-                      />
-                      <span v-else>{{ avatarText(user.fullName) }}</span>
-                    </VAvatar>
-
-                    <div class="d-flex flex-column">
-                      <h6 class="text-base">
-                        <RouterLink
-                          :to="{ name: 'apps-user-view-id', params: { id: user.id } }"
-                          class="font-weight-medium user-list-name"
-                        >
-                          {{ user.fullName }}
-                        </RouterLink>
-                      </h6>
-                      <span class="text-sm text-disabled">@{{ user.email }}</span>
-                    </div>
-                  </div>
+                  <span class="text-base">{{ user.id }}</span>
+                </td>         
+                <td class="align-center">
+                  <span class="text-base">{{ user.id }}</span>
                 </td>
-
-                <!-- 👉 Role -->
                 <td>
-                  <VAvatar
-                    :color="resolveUserRoleVariant(user.role).color"
-                    :icon="resolveUserRoleVariant(user.role).icon"
-                    variant="tonal"
-                    size="30"
-                    class="me-4"
-                  />
-                  <span class="text-capitalize text-base">{{ user.role }}</span>
+                  <span class="text-base">{{ user.id }}</span>
                 </td>
-
+                <td>
+                  <span class="text-base">{{ user.id }}</span>
+                </td>
+                <td>
+                  <span class="text-base">{{ user.id }}</span>
+                </td>
+                <td>
+                  <span class="text-base">{{ user.id }}</span>
+                </td>
+                <td>
+                  <span class="text-base">{{ user.id }}</span>
+                </td>
+                <td>
+                  <span class="text-base">{{ user.id }}</span>
+                </td>
+                <td>
+                  <span class="text-base">{{ user.id }}</span>
+                </td>
                 <!-- 👉 Plan -->
                 <td>
                   <span class="text-capitalize text-base font-weight-semibold">{{ user.currentPlan }}</span>
                 </td>
-
                 <!-- 👉 Billing -->
                 <td>
                   <span class="text-base">{{ user.billing }}</span>
                 </td>
-
                 <!-- 👉 Status -->
                 <td>
                   <VChip

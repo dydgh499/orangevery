@@ -92,9 +92,9 @@ class User extends Authenticatable
             'id'=> $this->id,
             'avatar'    => $this->avatar,
             'email'     => $this->email,
-            'fullName'  => $this->nick_nm,
+            'fullName'  => $this->business_nm,
             'role'      => $this->getRole(),
-            'username'  =>  $this->nick_nm,
+            'username'  =>  $this->business_nm,
         ];
     }
 }

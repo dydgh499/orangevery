@@ -1,10 +1,10 @@
 <script setup lang="tsx">
-import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
-import { useTheme } from 'vuetify'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { RouteTransitions, Skins } from '@core/enums'
 import { AppContentLayoutNav, ContentWidth, FooterType, NavbarType } from '@layouts/enums'
 import { themeConfig } from '@themeConfig'
+import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
+import { useTheme } from 'vuetify'
 
 // import { useTheme } from 'vuetify'
 
@@ -88,9 +88,9 @@ const headerValues = computed(() => {
       <div class="customizer-heading d-flex align-center justify-space-between">
         <div>
           <h6 class="text-h6">
-            THEME CUSTOMIZER
+            테마 수정
           </h6>
-          <span class="text-body-1">Customize & Preview in Real Time</span>
+          <span class="text-body-1">제작 & 실시간 프리뷰</span>
         </div>
         <VBtn
           icon
@@ -119,7 +119,7 @@ const headerValues = computed(() => {
         >
           <!-- 👉 Skin -->
           <h6 class="text-base font-weight-regular">
-            Skins
+            배경
           </h6>
           <VRadioGroup
             v-model="skin"
@@ -135,21 +135,21 @@ const headerValues = computed(() => {
 
           <!-- 👉 Theme -->
           <h6 class="mt-3 text-base font-weight-regular">
-            Theme
+            다크모드
           </h6>
           <div class="d-flex align-center">
             <VLabel
               for="pricing-plan-toggle"
               class="me-3"
             >
-              Light
+              비활성화
             </VLabel>
 
             <div>
               <VSwitch
                 id="pricing-plan-toggle"
                 v-model="theme"
-                label="Dark"
+                label="활성화"
                 true-value="dark"
                 false-value="light"
               />
@@ -158,7 +158,7 @@ const headerValues = computed(() => {
 
           <!-- 👉 Primary color -->
           <h6 class="mt-3 text-base font-weight-regular">
-            Primary Color
+            테마 색상
           </h6>
           <div class="d-flex gap-x-4 mt-2">
             <div
@@ -183,10 +183,10 @@ const headerValues = computed(() => {
         <!-- !SECTION -->
 
         <!-- SECTION LAYOUT -->
-        <CustomizerSection title="LAYOUT">
+        <CustomizerSection title="레이아웃">
           <!-- 👉 Content Width -->
           <h6 class="text-base font-weight-regular">
-            Content width
+            콘텐츠 넓이
           </h6>
           <VRadioGroup
             v-model="appContentWidth"
@@ -201,7 +201,7 @@ const headerValues = computed(() => {
           </VRadioGroup>
           <!-- 👉 Navbar Type -->
           <h6 class="mt-3 text-base font-weight-regular">
-            {{ appContentLayoutNav === AppContentLayoutNav.Vertical ? 'Navbar' : 'Header' }} Type
+            {{ appContentLayoutNav === AppContentLayoutNav.Vertical ? '네비' : '헤더' }} 타입
           </h6>
           <VRadioGroup
             v-model="navbarType"
@@ -216,7 +216,7 @@ const headerValues = computed(() => {
           </VRadioGroup>
           <!-- 👉 Footer Type -->
           <h6 class="mt-3 text-base font-weight-regular">
-            Footer Type
+            푸터 타입
           </h6>
           <VRadioGroup
             v-model="footerType"
@@ -235,7 +235,7 @@ const headerValues = computed(() => {
               for="customizer-navbar-blur"
               class="text-high-emphasis"
             >
-              Navbar Blur
+              네비 불투명 적용
             </VLabel>
             <div>
               <VSwitch
@@ -252,7 +252,7 @@ const headerValues = computed(() => {
         <CustomizerSection title="MENU">
           <!-- 👉 Menu Type -->
           <h6 class="text-base font-weight-regular">
-            Menu Type
+            메뉴 타입
           </h6>
           <VRadioGroup
             v-model="appContentLayoutNav"
@@ -275,7 +275,7 @@ const headerValues = computed(() => {
               for="customizer-menu-collapsed"
               class="text-high-emphasis"
             >
-              Collapsed Menu
+              메뉴 확장
             </VLabel>
             <div>
               <VSwitch

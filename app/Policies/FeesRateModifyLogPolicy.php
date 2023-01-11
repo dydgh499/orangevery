@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
-use App\Models\Brand;
+use App\Models\feesRateModifyLog;
 use App\Models\User;
 
-class BrandPolicy
+class FeesRateModifyLogPolicy
 {
     use HandlesAuthorization;
 
@@ -25,10 +25,10 @@ class BrandPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\feesRateModifyLog  $feesRateModifyLog
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Brand $brand)
+    public function view(User $user, feesRateModifyLog $feesRateModifyLog)
     {
         //
     }
@@ -48,10 +48,10 @@ class BrandPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\feesRateModifyLog  $feesRateModifyLog
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Brand $brand)
+    public function update(User $user, feesRateModifyLog $feesRateModifyLog)
     {
         //
     }
@@ -60,10 +60,10 @@ class BrandPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\feesRateModifyLog  $feesRateModifyLog
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Brand $brand)
+    public function delete(User $user, feesRateModifyLog $feesRateModifyLog)
     {
         //
     }
@@ -72,10 +72,10 @@ class BrandPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\feesRateModifyLog  $feesRateModifyLog
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Brand $brand)
+    public function restore(User $user, feesRateModifyLog $feesRateModifyLog)
     {
         //
     }
@@ -84,10 +84,10 @@ class BrandPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\feesRateModifyLog  $feesRateModifyLog
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Brand $brand)
+    public function forceDelete(User $user, feesRateModifyLog $feesRateModifyLog)
     {
         //
     }

@@ -26,36 +26,6 @@ return new class extends Migration
             $table->tinyInteger('event_type')->default(0)->comment('이벤트 타입(0=퍼스널,1=비즈니스,2=가족,3=기념일,4=기타)');
             $table->timestamps();
         });
-
-        //foregin key
-        // ----------------- realiation brand_id ----------------
-        Schema::table('users', function($table) {
-            $table->foreign('brand_id')->references('id')->on('brands');
-        });
-        Schema::table('notices', function($table) {
-            $table->foreign('brand_id')->references('id')->on('brands');
-        });
-        // ----------------- realiation user_id ----------------
-        Schema::table('merchandises', function($table) {
-            $table->foreign('user_id')->references('id')->on('users');
-        });
-        Schema::table('privacies', function($table) {
-            $table->foreign('user_id')->references('id')->on('users');
-        });
-        Schema::table('calendar_events', function($table) {
-            $table->foreign('user_id')->references('id')->on('users');
-        });
-        // ----------------- realiation mcht_id ----------------
-        Schema::table('terminals', function($table) {
-            $table->foreign('mcht_id')->references('id')->on('merchandises');
-        });
-        Schema::table('transactions', function($table) {
-            $table->foreign('mcht_id')->references('id')->on('merchandises');
-        });
-        // ----------------- realiation notice_id ----------------
-        Schema::table('comments', function($table) {
-            $table->foreign('notice_id')->references('id')->on('notices');
-        });
     }
 
     /**

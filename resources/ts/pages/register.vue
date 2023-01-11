@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { VForm } from 'vuetify/components'
 import type { RegisterResponse } from '@/@fake-db/types'
 import authV2RegisterIllustrationBorderedDark from '@images/pages/auth-v2-register-illustration-bordered-dark.png'
 import authV2RegisterIllustrationBorderedLight from '@images/pages/auth-v2-register-illustration-bordered-light.png'
@@ -7,9 +6,9 @@ import authV2RegisterIllustrationDark from '@images/pages/auth-v2-register-illus
 import authV2RegisterIllustrationLight from '@images/pages/auth-v2-register-illustration-light.png'
 import authV2MaskDark from '@images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@images/pages/misc-mask-light.png'
+import { VForm } from 'vuetify/components'
 
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import axios from '@axios'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
@@ -17,9 +16,9 @@ import { themeConfig } from '@themeConfig'
 import { alphaDashValidator, emailValidator, requiredValidator } from '@validators'
 
 const refVForm = ref<VForm>()
-const username = ref('johnDoe')
-const email = ref('john@example.com')
-const password = ref('john@VUEXY#123')
+const username = ref(null)
+const email = ref(null)
+const password = ref(null)
 const privacyPolicies = ref(true)
 
 // Router
@@ -46,7 +45,6 @@ const register = () => {
 
       localStorage.setItem('userAbilities', JSON.stringify(userAbilities))
       ability.update(userAbilities)
-
       localStorage.setItem('userData', JSON.stringify(userData))
       localStorage.setItem('accessToken', JSON.stringify(accessToken))
 
@@ -127,7 +125,7 @@ const onSubmit = () => {
             Adventure starts here 🚀
           </h5>
           <p class="mb-0">
-            Make your app management easy and fun!
+            Make your payment management easy and fun!
           </p>
         </VCardText>
 
@@ -142,7 +140,7 @@ const onSubmit = () => {
                 <VTextField
                   v-model="username"
                   :rules="[requiredValidator, alphaDashValidator]"
-                  label="Username"
+                  label="이름 입력"
                 />
               </VCol>
 
@@ -151,7 +149,7 @@ const onSubmit = () => {
                 <VTextField
                   v-model="email"
                   :rules="[requiredValidator, emailValidator]"
-                  label="Email"
+                  label="이메일 입력"
                   type="email"
                 />
               </VCol>
@@ -161,7 +159,7 @@ const onSubmit = () => {
                 <VTextField
                   v-model="password"
                   :rules="[requiredValidator]"
-                  label="Password"
+                  label="패스워드 입력"
                   :type="isPasswordVisible ? 'text' : 'password'"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                   @click:append-inner="isPasswordVisible = !isPasswordVisible"
@@ -178,11 +176,11 @@ const onSubmit = () => {
                     class="pb-1"
                     style="opacity: 1;"
                   >
-                    <span class="me-1">I agree to</span>
                     <a
                       href="javascript:void(0)"
                       class="text-primary"
-                    >privacy policy & terms</a>
+                    >개인 정보 보호 정책 및 약관</a>
+                    <span class="me-1">에 동의합니다.</span>
                   </VLabel>
                 </div>
 
@@ -199,30 +197,13 @@ const onSubmit = () => {
                 cols="12"
                 class="text-center text-base"
               >
-                <span>Already have an account?</span>
+                <span>이미 계정이 있으신가요?</span>
                 <RouterLink
                   class="text-primary ms-2"
                   :to="{ name: 'login' }"
                 >
-                  Sign in instead
+                  로그인하기
                 </RouterLink>
-              </VCol>
-
-              <VCol
-                cols="12"
-                class="d-flex align-center"
-              >
-                <VDivider />
-                <span class="mx-4">or</span>
-                <VDivider />
-              </VCol>
-
-              <!-- auth providers -->
-              <VCol
-                cols="12"
-                class="text-center"
-              >
-                <AuthProvider />
               </VCol>
             </VRow>
           </VForm>

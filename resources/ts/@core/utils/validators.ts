@@ -30,7 +30,7 @@ export const passwordValidator = (password: string) => {
   return (
     // eslint-disable-next-line operator-linebreak
     validPassword ||
-    '필드에는 최소 8자의 대문자, 소문자, 특수 문자 및 숫자가 하나 이상 포함되어야 합니다.'
+    '최소 8자의 대문자, 소문자, 특수 문자 및 숫자가 하나 이상 포함되어야 합니다.'
   )
 }
 
@@ -97,7 +97,13 @@ export const lengthValidator = (value: unknown, length: number) => {
 
   return String(value).length === length || `최소 문자 필드는 ${length}자 이상이어야 합니다.`
 }
+// 👉 Length Validator
+export const lengthValidatorV2 = (value: unknown, length: number) => {
+  if (isEmpty(value))
+    return true
 
+  return String(value).length === length || `${length}자 이어야 합니다.`
+}
 // 👉 Alpha-dash Validator
 export const alphaDashValidator = (value: unknown) => {
   if (isEmpty(value))
@@ -106,4 +112,9 @@ export const alphaDashValidator = (value: unknown) => {
   const valueAsString = String(value)
 
   return /^[0-9A-Z_-]*$/i.test(valueAsString) || '모든 문자가 유효하지 않습니다.'
+}
+
+// custom
+export const businessNumValidator = (value: unknown) => {
+  return /^[0-9]{3}[0-9]{2}[0-9]{5}$/.test(String(value)) || '유효한 사업자 번호를 입력하세요.'
 }

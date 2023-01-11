@@ -61,10 +61,5 @@ class Handler extends ExceptionHandler
         $this->renderable(function (ErrorException $e, $request) {
             return $this->extendResponse(990, $e->getMessage());
         });
-        $this->renderable(function (ValidationException $e, $request) {
-            $exceptions = $e->errors();
-            $first_key  = array_key_first($exceptions);
-            return $this->extendResponse(1004, $exceptions[$first_key][0]);
-        });
     }
 }

@@ -17,6 +17,7 @@ return [
     | such as the size rules. Feel free to tweak each of these messages.
     |
     */
+    'system_error' => '시스템 에러입니다. 관리자에게 문의해주세요.',
     'after_or_equal'       => ':attribute 은 :date 보다 빠르거나 같아야 합니다.',
     'before_or_equal'      => ':attribute 은 :date 보다 늦거나 같아야 합니다.',
 
@@ -84,7 +85,7 @@ return [
     ],
     'string' => ':attribute 값이 글자가 아닙니다.',
     'timezone' => ':attribute 값이 올바른 시간대가 아닙니다.',
-    'unique' => ':attribute 값은 이미 사용 중입니다.',
+    'unique' => ':attribute 값이 이미 사용 중입니다.',
     'url' => ':attribute 값이 유효한 URL이 아닙니다.',
 
     /*
@@ -127,7 +128,5 @@ return [
         'code'=> '제품 ID',
         'price'=> '가격',
         'context'=> '상세설명',
-//        'use'=> '제품용도',
-//        'size'=> '제품규격',
     ],
 ];

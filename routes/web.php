@@ -14,13 +14,14 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+Route::get('clear', function() {
+
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('config:cache');
+    Artisan::call('view:clear');     
+    return "Cleared!";     
+});
 Route::get('{any?}', function() {
-    $path = request()->path();
-    if($path === 'login')
-    {
-        $brand = AuthController::getDNSInformation();      
-        return view('application', ['brand'=>$brand]);  
-    }
-    else
-        return view('application');  
+    return view('application');  
 })->where('any', '.*');

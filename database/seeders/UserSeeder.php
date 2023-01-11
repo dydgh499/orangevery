@@ -16,8 +16,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'brand_id'  => 1,
-            'nick_nm'   => fake()->name(),
+            'business_nm'   => fake()->name(),
             'email'     => 'admin@demo.com',
             'email_verified_at' => now(),
             'password'  => Hash::make('admin'), // password
@@ -27,8 +26,7 @@ class UserSeeder extends Seeder
 
         ]);
         User::create([
-            'brand_id'  => 1,
-            'nick_nm'   => fake()->name(),
+            'business_nm'   => fake()->name(),
             'email'     => 'client@gmail.com',
             'email_verified_at' => now(),
             'password'  => Hash::make('client'), // password
@@ -37,8 +35,7 @@ class UserSeeder extends Seeder
             'phone'     => fake()->unique->e164PhoneNumber,
         ]);
         User::create([
-            'brand_id'  => 1,
-            'nick_nm'   => fake()->name(),
+            'business_nm'   => fake()->name(),
             'email'     => 'agcy@gmail.com',
             'email_verified_at' => now(),
             'password'  => Hash::make('1234'), // password
@@ -47,8 +44,7 @@ class UserSeeder extends Seeder
             'phone'     => fake()->unique->e164PhoneNumber,
         ]);
         User::create([
-            'brand_id'  => 1,
-            'nick_nm'   => fake()->name(),
+            'business_nm'   => fake()->name(),
             'email'     => 'sf@gmail.com',
             'email_verified_at' => now(),
             'password'  => Hash::make('1234'), // password

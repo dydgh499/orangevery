@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Privacy;
+use App\Models\TransNotification;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StorePrivacyRequest;
-use App\Http\Requests\UpdatePrivacyRequest;
+use App\Http\Requests\StoreTransNotificationRequest;
+use App\Http\Requests\UpdateTransNotificationRequest;
 
-class PrivacyController extends Controller
+class TransNotificationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -32,10 +32,10 @@ class PrivacyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StorePrivacyRequest  $request
+     * @param  \App\Http\Requests\StoreTransNotificationRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePrivacyRequest $request)
+    public function store(StoreTransNotificationRequest $request)
     {
         //
     }
@@ -43,10 +43,10 @@ class PrivacyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Privacy  $privacy
+     * @param  \App\Models\TransNotification  $transNotification
      * @return \Illuminate\Http\Response
      */
-    public function show(Privacy $privacy)
+    public function show(TransNotification $transNotification)
     {
         //
     }
@@ -54,10 +54,10 @@ class PrivacyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Privacy  $privacy
+     * @param  \App\Models\TransNotification  $transNotification
      * @return \Illuminate\Http\Response
      */
-    public function edit(Privacy $privacy)
+    public function edit(TransNotification $transNotification)
     {
         //
     }
@@ -65,11 +65,11 @@ class PrivacyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdatePrivacyRequest  $request
-     * @param  \App\Models\Privacy  $privacy
+     * @param  \App\Http\Requests\UpdateTransNotificationRequest  $request
+     * @param  \App\Models\TransNotification  $transNotification
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePrivacyRequest $request, Privacy $privacy)
+    public function update(UpdateTransNotificationRequest $request, TransNotification $transNotification)
     {
         //
     }
@@ -77,10 +77,10 @@ class PrivacyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Privacy  $privacy
+     * @param  \App\Models\TransNotification  $transNotification
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Privacy $privacy)
+    public function destroy(TransNotification $transNotification)
     {
         //
     }

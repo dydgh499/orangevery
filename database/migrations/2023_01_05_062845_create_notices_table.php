@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('notices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('brand_id')->comment('브랜드 FK');
+            $table->string('notice_type')->comment('공지사항 타입');
             $table->string('writer')->comment('작성자');
             $table->string('title')->comment('제목');
             $table->text('content')->comment('내용');
