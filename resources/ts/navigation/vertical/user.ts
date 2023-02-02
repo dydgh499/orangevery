@@ -3,7 +3,7 @@ export default [
   {
     title: 'User',
     icon: { icon: 'tabler-user' },
-    to: 'apps-user-user',
+    to: 'apps-user',
   },
   {
     title: 'Terminal',

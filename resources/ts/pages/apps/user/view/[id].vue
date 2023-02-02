@@ -1,89 +1,65 @@
-<script setup lang="ts">
-import { useUserListStore } from '@/views/apps/user/useUserListStore'
-import UserBioPanel from '@/views/apps/user/view/UserBioPanel.vue'
-import UserTabBillingsPlans from '@/views/apps/user/view/UserTabBillingsPlans.vue'
-import UserTabConnections from '@/views/apps/user/view/UserTabConnections.vue'
-import UserTabNotifications from '@/views/apps/user/view/UserTabNotifications.vue'
-import UserTabOverview from '@/views/apps/user/view/UserTabOverview.vue'
-import UserTabSecurity from '@/views/apps/user/view/UserTabSecurity.vue'
+<script lang="ts" setup>
+import type { IUserModel } from '@/views/apps/user/types';
+import UserPrivacyOverview from '@/views/apps/user/view/UserDefaultOverview.vue';
+import UserMerchandiseOverview from '@/views/apps/user/view/UserMerchandiseOverview.vue';
 
-// 👉 Store
-const userListStore = useUserListStore()
+let submitType = {text: '제출'}
+let userModel : IUserModel;
 
-const route = useRoute()
-const userData = ref()
+const isDialogVisible = ref(false)
+const tabs = [
+  { icon: 'tabler-user-check', title: '개인정보' },
+  { icon: 'ph-buildings', title: '가맹점정보' },
+  { icon: 'tabler-currency-dollar', title: '영업자정보' },
+]
 const userTab = ref(null)
 
-const tabs = [
-  { icon: 'tabler-user-check', title: 'Overview' },
-  { icon: 'tabler-lock', title: 'Security' },
-  { icon: 'tabler-currency-dollar', title: 'Billing & Plan' },
-  { icon: 'tabler-bell', title: 'Notifications' },
-  { icon: 'tabler-link', title: 'Connections' },
-]
-
-userListStore.fetchUser(Number(route.params.id)).then(response => {
-  userData.value = response.data
-})
+ 
 </script>
 
 <template>
-  <VRow v-if="userData">
-    <VCol
-      cols="12"
-      md="5"
-      lg="4"
-    >
-      <UserBioPanel :user-data="userData" />
-    </VCol>
+  <VTabs v-model="userTab" class="v-tabs-pill">
+    <VTab v-for="tab in tabs" :key="tab.icon">
+      <VIcon :size="18" :icon="tab.icon" class="me-1" />
+      <span>{{ tab.title }}</span>
+    </VTab>
+  </VTabs>
 
-    <VCol
-      cols="12"
-      md="7"
-      lg="8"
-    >
-      <VTabs
-        v-model="userTab"
-        class="v-tabs-pill"
+  <VWindow v-model="userTab" class="mt-6 disable-tab-transition" :touch="false">
+    <VWindowItem>
+      <UserPrivacyOverview :user="userModel" :submit="submitType"/>
+    </VWindowItem>
+    <VWindowItem>
+      <UserMerchandiseOverview />
+    </VWindowItem>
+  </VWindow>
+
+  
+  <VDialog v-if="isDialogVisible"
+        v-model="isDialogVisible"
+        width="500"
       >
-        <VTab
-          v-for="tab in tabs"
-          :key="tab.icon"
-        >
-          <VIcon
-            :size="18"
-            :icon="tab.icon"
-            class="me-1"
-          />
-          <span>{{ tab.title }}</span>
-        </VTab>
-      </VTabs>
+        <!-- Activator -->
+        <template #activator="{ props }">
+          <VBtn v-bind="props">
+            Click Me
+          </VBtn>
+        </template>
 
-      <VWindow
-        v-model="userTab"
-        class="mt-6 disable-tab-transition"
-        :touch="false"
-      >
-        <VWindowItem>
-          <UserTabOverview />
-        </VWindowItem>
+        <!-- Dialog close btn -->
+        <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
 
-        <VWindowItem>
-          <UserTabSecurity />
-        </VWindowItem>
+        <!-- Dialog Content -->
+        <VCard title="Privacy Policy">
+          <VCardText>
+            Bear claw pastry cotton candy jelly toffee. Pudding chocolate cake shortbread bonbon biscuit sweet. Lemon drops cupcake muffin brownie fruitcake. Pastry pastry tootsie roll jujubes chocolate cake gummi bears muffin pudding caramels. Jujubes lollipop gummies croissant shortbread. Cupcake dessert marzipan topping gingerbread apple pie chupa chups powder. Cake croissant halvah candy canes gummies.
+          </VCardText>
 
-        <VWindowItem>
-          <UserTabBillingsPlans />
-        </VWindowItem>
-
-        <VWindowItem>
-          <UserTabNotifications />
-        </VWindowItem>
-
-        <VWindowItem>
-          <UserTabConnections />
-        </VWindowItem>
-      </VWindow>
-    </VCol>
-  </VRow>
+          <VCardText class="d-flex justify-end">
+            <VBtn @click="isDialogVisible = false">
+              I accept
+            </VBtn>
+          </VCardText>
+        </VCard>
+      </VDialog>
 </template>
