@@ -3,26 +3,30 @@
 namespace App\Http\Traits;
 
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Log;
 
 trait ExtendResponseTrait 
 {
     public function extendResponse($code, $msg)
     {
+        $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all()];
         if($code == 990)
         {
             $host = request()->getHost();
             $msg  = ($host != "localhost") ? "Server error" : $msg;   
             $http_code = 500; 
+            Log::error($msg, $logs);
         }
         else if($code == 1004)
         {
             $http_code = 409;
+            Log::notice($msg, $logs);
         }
         return Response::json(['code'=>$code, 'message'=>$msg], $http_code);        
     }
-    public function errorResponse($errors)
+    public function errorResponse($errors, $http_code=409)
     {
-        return Response::json(['errors'=>$errors], 409);
+        return Response::json(['errors'=>$errors], $http_code);
     }
     public function clearResponse($data, $http_code=200)
     {
@@ -38,17 +42,17 @@ trait ExtendResponseTrait
             //---------------- route error ----------------- (404)
             case 940:   $msg = "not found route."; break;
             //---------------- auth error ----------------- (950 ~ 959)
-            case 950:   $msg = "Authentication token is missing or incorrect"; break;
-            case 951:   $msg = "You do not have permission"; break;
-            case 952:   $msg = "This is an unapproved device"; break;
+            case 950:   $msg = __("auth.failed"); break;
+            case 951:   $msg = __("auth.auth"); break;
+            case 952:   $msg = __("auth.device"); break;
             case 953:   $msg = "CSRF token mismatch"; break;
             //-------------- server error ----------------- (990 ~ 999)
             case 990:   $msg = "시스템 에러입니다."; break;
             //---------- business logic error ------------- (1000 ~ 1999)
-            case 1000:  $msg = "데이터를 찾을 수 없습니다."; break;
-            case 1001:  $msg = "이미 존재합니다."; break;
-            case 1002:  $msg = "포인트가 부족합니다."; break;
-            case 1003:  $msg = "포인트 금액이 이상합니다."; break;
+            case 1000:  $msg = __("validation.not_found_obj"); break;
+            case 1001:  $msg = __("validation.already_exsit", ['attribute'=>'데이터']); break;
+            case 1002:  $msg = __("validation.running_out_point"); break;
+            case 1003:  $msg = __("validation.wrong_point_price"); break;
             //user (1100~1199)
             case 1100:  $msg = "패스워드가 틀립니다."; break;
             case 2000:  $msg = "알려지지 않은 에러입니다."; break;
@@ -63,6 +67,7 @@ trait ExtendResponseTrait
             return Response::json($data, 204);
         else
         {
+            $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all()];
             if($code == 940)
                 $http_code = 404;
             else if($code == 950)
@@ -77,6 +82,12 @@ trait ExtendResponseTrait
                 $http_code = 409;
             else
                 $http_code = 500;
+                
+            if(($code > 949 && $code < 960) || $code > 999)
+                Log::notice($msg, $logs);
+            else if($code > 989 && $code < 1000)
+                Log::error($msg, $logs);
+
             return Response::json(['code'=>$code, 'message'=>$msg], $http_code);        
         }
     }

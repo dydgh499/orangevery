@@ -18,14 +18,14 @@ return new class extends Migration
             $table->integer('result_code')->default(0)->comment('거래 결과코드');
             $table->foreignId('mcht_id')->comment('가맹점 FK');
             $table->integer('gid')->default(0)->comment('gid');
-            $table->integer('mid')->default(0)->comment('mid');
-            $table->integer('tid')->default(0)->comment('tid');
+            $table->string('mid')->default('')->comment('mid');
+            $table->string('tid')->default('')->comment('tid');
             $table->datetime('trans_dt')->comment('거래 날짜');
             $table->datetime('trans_tm')->comment('거래 시간');
             $table->integer('trans_price')->comment('거래 금액');
             $table->integer('trans_type')->comment('거래 타입');
-            $table->integer('trans_id')->default(0)->comment('거래번호');
-            $table->integer('origin_trans_id')->default(0)->comment('원거래번호');
+            $table->integer('trans_num')->default(0)->comment('거래번호');
+            $table->integer('ori_trans_num')->default(0)->comment('원거래번호');
             $table->string('card_nm', 100)->comment('거래 카드명');
             $table->string('card_num', 100)->comment('거래 카드번호');
             $table->integer('bank_cd')->comment('거래 은행코드');

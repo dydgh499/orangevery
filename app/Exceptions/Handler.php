@@ -46,18 +46,6 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
-        $this->renderable(function (TokenMismatchException $e, $request) {
-            return $this->response(953);
-        });
-        $this->renderable(function (AuthenticationException $e, $request) {
-            return $this->response(950);
-        });
-        $this->renderable(function (AccessDeniedHttpException $e, $request) {
-            return $this->response(951);
-        });
-        $this->renderable(function (QueryException $e, $request) {
-            return $this->extendResponse(990, $e->getMessage());
-        });  
         $this->renderable(function (ErrorException $e, $request) {
             return $this->extendResponse(990, $e->getMessage());
         });

@@ -1,15 +1,15 @@
 import axios from 'axios';
 
 const accessToken = localStorage.getItem('accessToken') || ''
-const axiosIns = axios.create({
-  // You can add your headers here
-  // ================================
+const comagain = axios.create({
   timeout: 1000,
   headers: {
     'Authorization': `Bearer ${accessToken}`,
     'Accept': 'application/json',
     "Content-Type": "application/json",
+    'Access-Control-Allow-Origin' : "*",
   },
-  withCredentials: true
+  withCredentials: true,
 })
-export default axiosIns
+export default comagain
+

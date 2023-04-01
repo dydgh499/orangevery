@@ -18,7 +18,7 @@ loadFonts()
 
 // Create vue app
 const app = createApp(App)
-
+//app.config.globalProperties.$comagain = 
 // Use plugins
 app.use(vuetify)
 app.use(createPinia())

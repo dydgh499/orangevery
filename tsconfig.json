@@ -41,6 +41,12 @@
       "@axios": [
         "resources/ts/plugins/axios"
       ],
+      "@comagain": [
+        "resources/ts/plugins/comagain"
+      ],
+      "@corp": [
+        "resources/ts/plugins/corp"
+      ],
       "@validators": [
         "resources/ts/@core/utils/validators"
       ],
