@@ -20,11 +20,15 @@ export default [
     icon: { icon: 'fluent-payment-32-regular' },
     children: [
       {
-        title: 'Handwritten payment',
+        title: 'Hand payment',
         to: 'apps-transaction-settlement-details',
       },
       {
-        title: 'Authentication payment',
+        title: 'Auth payment',
+        to: 'apps-transaction-settlement-details',
+      },
+      {
+        title: 'Simple payment',
         to: 'apps-transaction-settlement-details',
       },
     ]

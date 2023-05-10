@@ -4,7 +4,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import routes from '~pages'
 import { isUserLoggedIn } from './utils'
 
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -13,17 +12,13 @@ const router = createRouter({
     {
       path: '/',
       redirect: to => {
-        const userData = JSON.parse(localStorage.getItem('userData') || '{}')
-        const userRole = userData && userData.role ? userData.role : null
-        const adminRoles = ['admin', 'merchandise', 'agency', 'distributor', 'branch', 'partner', 'headquarters', 'developer']
-        const userRoles  = ['client']
+        const user  = JSON.parse(localStorage.getItem('user') || '{}')
+        const roles = [10, 15, 20, 30, 35, 40, 50]
         
-        if (adminRoles.includes(userRole))
+        if(roles.includes(user ? user.level : 0))
           return { name: 'dashboards-home'}
-        if (userRoles.includes(userRole))
-          return { name: 'access-control'}
-
-        return { name: 'login', query: to.query }
+        else
+          return { name: 'login', query: to.query }
       },
     },
     {
@@ -33,6 +28,12 @@ const router = createRouter({
     {
       path: '/pages/account-settings',
       redirect: () => ({ name: 'pages-account-settings-tab', params: { tab: 'account' } }),
+    },
+    {        
+      path: '/dashboards/home',
+      redirect: to => {
+        return { name: 'dashboards-home', query: to.query }
+    }
     },
     ...setupLayouts(routes),
   ],

@@ -1,15 +1,16 @@
-import axios from 'axios';
+import axiosIns from 'axios';
 
-const accessToken = localStorage.getItem('accessToken') || ''
-const axiosIns = axios.create({
+const pay_token = localStorage.getItem('payvery-token') || ''
+const com_token = localStorage.getItem('com-token') || ''
+const axios = axiosIns.create({
   // You can add your headers here
-  // ================================
-  timeout: 1000,
+  // ================================  timeout: 3000,
   headers: {
-    'Authorization': `Bearer ${accessToken}`,
+    'Authorization': `Bearer ${pay_token}`,
+    'X-COM-Authorization': `Comagain ${com_token}`,
     'Accept': 'application/json',
     "Content-Type": "application/json",
   },
   withCredentials: true
 })
-export default axiosIns
+export default axios

@@ -44,11 +44,9 @@ class LoginForm extends FormRequest
     public function data($level=0, $bid)
     {
         $data = [
-            'brand_id'  => $bid,
+            'brand_id'  => $this->input('brand_id'),
             'user_name' => $this->input('user_name'),
-            'user_pw'   => Hash::make($this->input('user_pw')),
-            'level'     => $level,
-            'group_id'  => $this->input('group_id', 0),
+            'user_pw'   =>$this->input('user_pw'),
         ];
         return $data;
     }

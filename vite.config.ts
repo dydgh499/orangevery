@@ -13,46 +13,20 @@ import vuetify from 'vite-plugin-vuetify'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  server: {
-    hmr: {
-      host: "127.0.0.1",
-    },    
-    proxy: {
-      '/api': {
-        target: 'http:://localhost:8000',
-        changeOrigin: true,
-        ws: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-        configure: (proxy, _options) => {
-          proxy.on('error', (err, _req, _res) => {
-            console.log('proxy error', err);
-          });
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
-            console.log('Sending Request to the Target:', req.method, req.url);
-          });
-          proxy.on('proxyRes', (proxyRes, req, _res) => {
-            console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
-          });
-        },
-      }
-    },
-  },
   plugins: [
     laravel({
-  input: ['resources/ts/main.ts'],
-  refresh: true,
-}),
+      input: ['resources/ts/main.ts'],
+      refresh: true,
+    }),
     vue({
-  template: {
-      transformAssetUrls: {
-          base: null,
-          includeAbsolute: false,
+      template: {
+          transformAssetUrls: {
+              base: null,
+              includeAbsolute: false,
+          },
       },
-  },
-}),
+    }),
     vueJsx(),
-
     // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
     vuetify({
       styles: {
@@ -109,6 +83,11 @@ export default defineConfig({
     }),
     DefineOptions(),
   ],
+  server: {
+    hmr: {
+      host: "127.0.0.1",
+    },
+  },
   define: { 'process.env': {} },
   resolve: {
     alias: {
@@ -122,7 +101,6 @@ export default defineConfig({
       '@configured-variables': fileURLToPath(new URL('./resources/styles/variables/_template.scss', import.meta.url)),
       '@axios': fileURLToPath(new URL('./resources/ts/plugins/axios', import.meta.url)),
       '@corp': fileURLToPath(new URL('./resources/ts/plugins/corp', import.meta.url)),      
-      '@comagain': fileURLToPath(new URL('./resources/ts/plugins/comagain', import.meta.url)),
       '@validators': fileURLToPath(new URL('./resources/ts/@core/utils/validators', import.meta.url)),
       'apexcharts': fileURLToPath(new URL('node_modules/apexcharts-clevision', import.meta.url)),
     },

@@ -1,5 +1,5 @@
-import type { Router } from 'vue-router'
 import type { NavGroup, NavLink, NavLinkProps } from '@layouts/types'
+import type { Router } from 'vue-router'
 
 export const openGroups = ref<string[]>([])
 
@@ -87,4 +87,20 @@ export const hexToRgb = (hex: string) => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
 
   return result ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}` : null
+}
+
+export const getRating = (level: number) : string => {
+    let rating : string = "";
+    switch (level)
+    {
+        case 0:     rating = '일반유저'; break;
+        case 10:    rating = '가맹점'; break;
+        case 15:    rating = '대리점'; break;
+        case 20:    rating = '총판'; break;
+        case 30:    rating = '지사'; break;
+        case 35:    rating = '협력사'; break;
+        case 40:    rating = '본사'; break;
+        case 50:    rating = '개발사'; break;            
+    }
+    return rating;
 }

@@ -2,24 +2,24 @@
 import { initialAbility } from '@/plugins/casl/ability';
 import { useAppAbility } from '@/plugins/casl/useAppAbility';
 import axios from '@axios';
+import { getRating } from '@layouts/utils';
 
 const router = useRouter()
 const ability = useAppAbility()
-const userData = JSON.parse(localStorage.getItem('userData') || 'null')
+const user = JSON.parse(localStorage.getItem('user') || 'null')
 const logout = async () => {
   await axios.get('/api/v1/auth/sign-out', {})
-  localStorage.removeItem('userData')
+  localStorage.removeItem('user')
   localStorage.removeItem('accessToken')
-  localStorage.removeItem('userAbilities')
+  localStorage.removeItem('abilities')
   // Redirect to login page
   router.push('/login')
     .then(() => {
       // ℹ️ We had to remove abilities in then block because if we don't nav menu items mutation is visible while redirecting user to login page
-      // Remove "userAbilities" from localStorage
+      // Remove "abilities" from localStorage
       // Reset ability to initial ability
       ability.update(initialAbility)
   })
-
 }
 </script>
 
@@ -38,8 +38,8 @@ const logout = async () => {
       variant="tonal"
     >
       <VImg
-        v-if="userData && userData.avatar"
-        :src="userData.avatar"
+        v-if="user && user.profile_img"
+        :src="user.profile_img"
       />
       <VIcon
         v-else
@@ -70,8 +70,8 @@ const logout = async () => {
                     variant="tonal"
                   >
                     <VImg
-                      v-if="userData && userData.avatar"
-                      :src="userData.avatar"
+                      v-if="user && user.profile_img"
+                      :src="user.profile_img"
                     />
                     <VIcon
                       v-else
@@ -83,9 +83,9 @@ const logout = async () => {
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              {{ userData.fullName }}
+              {{ user.user_name }}
             </VListItemTitle>
-            <VListItemSubtitle>{{ userData.role }}</VListItemSubtitle>
+            <VListItemSubtitle>{{ getRating(user.level) }}</VListItemSubtitle>
           </VListItem>
 
           <VDivider class="my-2" />

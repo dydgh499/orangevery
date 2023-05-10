@@ -1,13 +1,21 @@
 export default [
   { heading: 'User information' },
   {
-    title: 'User',
+    title: 'Md management',
     icon: { icon: 'tabler-user' },
-    to: 'apps-user',
+    children: [
+      { title: 'Md list', to: 'merchandises' },
+      { title: 'Paymodule management', to: 'payment-modules'},
+      { title: 'Calculate', to: 'calculates' },
+    ]
   },
   {
-    title: 'Terminal',
-    icon: { icon: 'tabler:terminal-2' },
-    to: 'apps-user-terminal',
+    title: 'Sf management',
+    icon: { icon: 'tabler-user' },
+    children: [
+        { title: 'Sf list', to: 'salesforces'},
+        { title: 'Unders treeview', to: 'under-treeview'},
+        //{ title: 'Calculate', to: 'calculates' },
+    ] 
   },
 ]

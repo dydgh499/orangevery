@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\DomainController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,13 +15,11 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('clear', function() {
-
     Artisan::call('cache:clear');
     Artisan::call('config:clear');
     Artisan::call('config:cache');
     Artisan::call('view:clear');     
-    return "Cleared!";     
+    return "Cleared!";
 });
-Route::get('{any?}', function() {
-    return view('application');  
-})->where('any', '.*');
+
+Route::get('{any}', DomainController::class)->where('any','.*');;

@@ -13,12 +13,10 @@ import '@core-scss/template/index.scss'
 import '@styles/styles.scss'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-
 loadFonts()
 
 // Create vue app
 const app = createApp(App)
-//app.config.globalProperties.$comagain = 
 // Use plugins
 app.use(vuetify)
 app.use(createPinia())
@@ -28,6 +26,5 @@ app.use(i18n)
 app.use(abilitiesPlugin, ability, {
   useGlobalProperties: true,
 })
-
 // Mount vue app
 app.mount('#app')

@@ -77,7 +77,7 @@ const database: SearchItem[] = [
   },
   {
     id: 11,
-    url: { name: 'apps-user-list' },
+    url: { name: 'apps-user' },
     icon: 'tabler-user',
     title: 'User List',
     category: 'appsPages',

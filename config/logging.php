@@ -55,6 +55,7 @@ return [
             'driver' => 'stack',
             'channels' => ['single'],
             'ignore_exceptions' => false,
+            'days' => 120,
         ],
 
         'single' => [

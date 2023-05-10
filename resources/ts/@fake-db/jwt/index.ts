@@ -85,7 +85,7 @@ mock.onPost('/auth/login').reply(request => {
       ) as UserOut['userData']
 
       const response: UserOut = {
-        userAbilities: userData.abilities,
+        abilities: userData.abilities,
         accessToken,
         userData: userOutData,
       }
@@ -173,7 +173,7 @@ mock.onPost('/auth/register').reply(request => {
     const response = {
       userData: user,
       accessToken,
-      userAbilities: abilities,
+      abilities: abilities,
     }
 
     return [200, response]

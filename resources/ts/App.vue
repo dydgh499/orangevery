@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useThemeConfig } from '@core/composable/useThemeConfig';
 import corp from '@corp';
+import { hexToRgb } from '@layouts/utils';
 import { themeConfig } from '@themeConfig';
 import { useTheme } from 'vuetify';
 
 //themeConfig.app.logo = corp.logo_img;
 themeConfig.app.title = corp.name;
-
 const { syncInitialLoaderTheme, syncVuetifyThemeWithTheme: syncConfigThemeWithVuetifyTheme, isAppRtl } = useThemeConfig()
 const { global } = useTheme()
 //global.current.value.colors.primary = corp.color;
@@ -14,11 +14,10 @@ const { global } = useTheme()
 syncInitialLoaderTheme()
 syncConfigThemeWithVuetifyTheme()
 </script>
-
 <template>
   <VLocaleProvider :rtl="isAppRtl">
     <!-- ℹ️ This is required to set the background color of active nav link based on currently active global theme's primary -->
-    <VApp :style="`--v-global-theme-primary: ${corp.color}`">
+    <VApp :style="`--v-global-theme-primary: ${hexToRgb(corp.color)};`">
       <RouterView />
     </VApp>
   </VLocaleProvider>

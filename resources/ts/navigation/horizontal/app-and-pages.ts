@@ -32,7 +32,7 @@ export default [
         title: 'User',
         icon: { icon: 'tabler-user' },
         children: [
-          { title: 'List', to: 'apps-user-list' },
+          { title: 'List', to: 'apps-user' },
           { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
         ],
       },

@@ -16,7 +16,7 @@ const shortcuts = [
     icon: 'tabler-user',
     title: 'Users',
     subtitle: 'Manage Users',
-    to: { name: 'apps-user-list' },
+    to: { name: 'apps-user' },
   },
   {
     icon: 'tabler-layout',

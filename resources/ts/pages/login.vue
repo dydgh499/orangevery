@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import { UserAbility } from '@/plugins/casl/AppAbility';
 import { useAppAbility } from '@/plugins/casl/useAppAbility';
-import comagain from '@comagain';
+import axios from '@axios';
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant';
 import corp from '@corp';
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer';
@@ -26,38 +27,49 @@ const router = useRouter()
 const ability = useAppAbility()
 
 const errors = ref<Record<string, string | undefined>>({
-  brand_id : undefined,
-  user_name: undefined,
-  user_pw: undefined,
+    code : undefined,
+    message: undefined,
+    data: undefined,
 })
 
 const refVForm = ref<VForm>()
-const user_name = ref('admin@demo.com')
+const user_name = ref('master')
 const user_pw = ref('1234')
 /*
   Admin user_name: <strong>admin@demo.com</strong> / Pass: <strong>admin</strong>
   Client user_name: <strong>client@demo.com</strong> / Pass: <strong>client</strong>
 */
-const login = async () => {
-  let result = await comagain.post('/api/v1/auth/sign-in', {brand_id: corp.id, user_name: user_name.value, user_pw: user_pw.value })
-  if(result.status === 200)
-  {
-
-    const { accessToken, userData, userAbilities } = result.data
-      localStorage.setItem('userAbilities', JSON.stringify(userAbilities))
-      localStorage.setItem('userData', JSON.stringify(userData))
-      localStorage.setItem('accessToken', accessToken)
-      comagain.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
-      
-      ability.update(userAbilities)
-      // Redirect to `to` query if exist or redirect to index route
-      router.replace(route.query.to ? String(route.query.to) : '/')
-  }
-  else
-  {
-    
-  }
-
+const getAbilities = (level: number) : UserAbility[] => {
+    let auth :UserAbility[] = [];
+    switch (level) 
+    {
+        case 0:     auth.push({action: 'manage', subject: 'Auth'}); break;
+        case 10:    auth.push({action: 'manage', subject: 'Auth'}); break;
+        case 15:    auth.push({action: 'manage', subject: 'all'}); break;
+        case 20:    auth.push({action: 'manage', subject: 'all'}); break;
+        case 30:    auth.push({action: 'manage', subject: 'all'}); break;
+        case 35:    auth.push({action: 'read', subject: 'all'}); break;
+        case 40:    auth.push({action: 'manage', subject: 'all'}); break;
+        case 50:    auth.push({action: 'manage', subject: 'all'}); break;            
+    }
+    return auth;
+}
+const login = () => {
+    axios.post('api/v1/auth/sign-in', {brand_id: corp.id, user_name: user_name.value, user_pw: user_pw.value })
+    .then(r => {
+        const {access_token, user} = r.data
+        const abilities = getAbilities(user['level']);
+        ability.update(abilities);
+        localStorage.setItem('user', JSON.stringify(user))
+        localStorage.setItem('payvery-token', access_token)
+        localStorage.setItem('abilities', JSON.stringify(abilities))
+        axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
+        // Redirect to `to` query if exist or redirect to index route
+        router.replace(route.query.to ? String(route.query.to) : '/')
+    })
+    .catch(e => {
+        errors.value = e.response.data
+    })
 }
 
 const onSubmit = () => {
@@ -130,7 +142,7 @@ const onSubmit = () => {
                   label="아이디 입력"
                   type="user_name"
                   :rules="[requiredValidator]"
-                  :error-messages="errors.user_name"
+                  :error-messages="errors.message"
                 />
               </VCol>
 
@@ -141,7 +153,6 @@ const onSubmit = () => {
                   label="패스워드 입력"
                   :rules="[requiredValidator]"
                   :type="isPasswordVisible ? 'text' : 'password'"
-                  :error-messages="errors.password"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                   @click:append-inner="isPasswordVisible = !isPasswordVisible"
                 />

@@ -41,10 +41,10 @@ const register = () => {
     password: password.value,
   })
     .then(r => {
-      const { accessToken, userData, userAbilities } = r.data
+      const { accessToken, userData, abilities } = r.data
 
-      localStorage.setItem('userAbilities', JSON.stringify(userAbilities))
-      ability.update(userAbilities)
+      localStorage.setItem('abilities', JSON.stringify(abilities))
+      ability.update(abilities)
       localStorage.setItem('userData', JSON.stringify(userData))
       localStorage.setItem('accessToken', JSON.stringify(accessToken))
 

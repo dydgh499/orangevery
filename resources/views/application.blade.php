@@ -1,26 +1,3 @@
-@php
-    use Illuminate\Support\Facades\Http;
-
-    $comagain_url = env('COMAGAIN_BACK_URL', 'http://127.0.0.1:8000');
-    $res = Http::get("$comagain_url/api/v1/auth/domain?dns=".$_SERVER['HTTP_HOST']);
-    $code = $res->status();
-    if($code == 200)
-    {
-        $json = $res->json();
-        $com_csrf_token = "";
-        $cookies = $res->cookies()->toArray();
-        for($i=0; $i<count($cookies); $i++)
-        {
-            if($cookies[$i]['Name'] === 'XSRF-TOKEN')
-            {
-                $com_csrf_token = $cookies[$i]['Value'];
-                break;
-            }
-        }
-        $json['css']   = json_decode($json['theme_css'], true);
-        $json['color'] = isset($json['css']['main_color']) ? $json['css']['main_color'] : "#7367F0";;        
-    }
-@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,7 +16,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="{{ $json['name'] }}">
   <meta name="theme-color" content="{{ $json['color'] }}">
-  <meta name="comagain-csrf-token" content="{{ $com_csrf_token }}" id='comagain-csrf-token'>
+  <meta name="comagain-csrf-token" content="{{ $json['com_csrf_token'] }}" id='comagain-csrf-token'>
   <link rel="apple-touch-icon" sizes="180x180" href="{{ $json['favicon_img'] }}">
   <link rel="stylesheet" type="text/css" href="/loader.css" />
   @vite(['resources/ts/main.ts'])
@@ -56,7 +33,7 @@
   <div id="app">
     <div id="loading-bg">
       <div class="loading-logo">
-        <img src="{{ $json['favicon_img'] }}" alt="Logo" onerror="document.querySelector('#load-custom').style['display'] = 'none'; document.querySelector('#load-default').style['display'] = 'block';" id='load-custom'/>
+        <img src="{{ $json['logo_img'] }}" alt="Logo" onerror="document.querySelector('#load-custom').style['display'] = 'none'; document.querySelector('#load-default').style['display'] = 'block';" id='load-custom'/>
         <div style="display:none;" alt="Logo" id='load-default'>
             <svg width="34" height="24" viewBox="0 0 34 24" fill="none" xmlns="http://www.w3.org/2000/svg" style='width: 100%;height: 100%;'>
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M0.00183571 0.3125V7.59485C0.00183571 7.59485 -0.141502 9.88783 2.10473 11.8288L14.5469 23.6837L21.0172 23.6005L19.9794 10.8126L17.5261 7.93369L9.81536 0.3125H0.00183571Z" fill="currentColor" style='opacity: 0.68;'></path>
