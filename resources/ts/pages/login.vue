@@ -41,8 +41,7 @@ const user_pw = ref('1234')
 */
 const getAbilities = (level: number) : UserAbility[] => {
     let auth :UserAbility[] = [];
-    switch (level) 
-    {
+    switch (level)  {
         case 0:     auth.push({action: 'manage', subject: 'Auth'}); break;
         case 10:    auth.push({action: 'manage', subject: 'Auth'}); break;
         case 15:    auth.push({action: 'manage', subject: 'all'}); break;
@@ -54,6 +53,7 @@ const getAbilities = (level: number) : UserAbility[] => {
     }
     return auth;
 }
+console.log(corp)
 const login = () => {
     axios.post('api/v1/auth/sign-in', {brand_id: corp.id, user_name: user_name.value, user_pw: user_pw.value })
     .then(r => {
@@ -63,7 +63,6 @@ const login = () => {
         localStorage.setItem('user', JSON.stringify(user))
         localStorage.setItem('payvery-token', access_token)
         localStorage.setItem('abilities', JSON.stringify(abilities))
-        axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`
         // Redirect to `to` query if exist or redirect to index route
         router.replace(route.query.to ? String(route.query.to) : '/')
     })

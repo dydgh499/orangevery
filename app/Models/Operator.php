@@ -21,11 +21,6 @@ class Operator extends Authenticatable
     protected   $guarded      = [];
     protected   $hidden = [
         'user_pw',
-        'remember_token',
-    ];
-    protected   $casts = [
-        'created_at' => "datetime:Y-m-d H:m:s",
-        'updated_at' => "datetime:Y-m-d H:m:s",
     ];
 
     protected function serializeDate(DateTimeInterface $date)

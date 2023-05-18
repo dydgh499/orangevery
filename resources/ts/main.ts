@@ -1,4 +1,3 @@
-/* eslint-disable import/order */
 import '@/@fake-db/db'
 import '@/@iconify/icons-bundle'
 import App from '@/App.vue'
@@ -15,8 +14,32 @@ import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 loadFonts()
 
+
+declare module '@vue/runtime-core' {
+    export interface ComponentCustomProperties {
+      $errorHandler: (e: any) => any;
+      $formatDate: (e: Date) => string;
+    }
+}
+
 // Create vue app
 const app = createApp(App)
+
+app.config.globalProperties.$errorHandler = (e: any): any => {
+    console.log(e)
+    if(e.response.status == 401 || e.response.status == 403) {
+        localStorage.removeItem('payvery-token')
+        router.replace('login')
+    }
+    return e.response
+};
+app.config.globalProperties.$formatDate = (date: Date): string => {
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`;
+}
+
 // Use plugins
 app.use(vuetify)
 app.use(createPinia())
@@ -26,5 +49,6 @@ app.use(i18n)
 app.use(abilitiesPlugin, ability, {
   useGlobalProperties: true,
 })
+
 // Mount vue app
 app.mount('#app')

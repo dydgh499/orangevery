@@ -19,4 +19,11 @@ class Salesforce extends Authenticatable
     protected   $table          = 'salesforces';
     protected   $primaryKey     = 'id';
     protected   $guarded        = [];
+    protected   $hidden = [
+        'user_pw',
+    ];
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format("Y-m-d H:i:s");
+    }
 }

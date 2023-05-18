@@ -6,7 +6,7 @@ use App\Models\Notice;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\NoticeForm;
-use App\Http\Requests\Manager\IndexForm;
+use App\Http\Requests\Manager\IndexRequest;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -33,7 +33,7 @@ class NoticeController extends Controller
      *
      * @queryParam search string 검색어(제목)
      */
-    public function index(IndexForm $request)
+    public function index(IndexRequest $request)
     {
         $search = $request->input('search', '');
         $query  = $this->notices

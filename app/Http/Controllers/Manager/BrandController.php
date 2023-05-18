@@ -6,7 +6,7 @@ use App\Models\Brand;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\BrandForm;
-use App\Http\Requests\Manager\IndexForm;
+use App\Http\Requests\Manager\IndexRequest;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -40,7 +40,7 @@ class BrandController extends Controller
      *
      * @queryParam search string 검색어(브랜드 명)
      */
-    public function index(IndexForm $request)
+    public function index(IndexRequest $request)
     {
         $search     = $request->input('search', '');
         $brand_id   = $request->user()->brand_id;

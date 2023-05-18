@@ -5,7 +5,7 @@ export default [
     icon: { icon: 'tabler-user' },
     children: [
       { title: 'Md list', to: 'merchandises' },
-      { title: 'Paymodule management', to: 'payment-modules'},
+      { title: 'Paymodule management', to: 'pay-modules'},
       { title: 'Calculate', to: 'calculates' },
     ]
   },
@@ -16,6 +16,6 @@ export default [
         { title: 'Sf list', to: 'salesforces'},
         { title: 'Unders treeview', to: 'under-treeview'},
         //{ title: 'Calculate', to: 'calculates' },
-    ] 
+    ]
   },
 ]

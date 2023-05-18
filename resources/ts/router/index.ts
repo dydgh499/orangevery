@@ -1,3 +1,4 @@
+import axios from '@axios'
 import { canNavigate } from '@layouts/plugins/casl'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -42,29 +43,10 @@ const router = createRouter({
 // Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach(to => {
   const isLoggedIn = isUserLoggedIn()
-
-  /*
-
-  ℹ️ Commented code is legacy code
-
-  if (!canNavigate(to)) {
-    // Redirect to login if not logged in
-    // ℹ️ Only add `to` query param if `to` route is not index route
-    if (!isLoggedIn)
-      return next({ name: 'login', query: { to: to.name !== 'index' ? to.fullPath : undefined } })
-
-    // If logged in => not authorized
-    return next({ name: 'not-authorized' })
-  }
-
-  // Redirect if logged in
-  if (to.meta.redirectIfLoggedIn && isLoggedIn)
-    next('/')
-
-  return next()
-
-  */
-
+  const access_token = localStorage.getItem('payvery-token');
+  if (access_token)
+    axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+ 
   if (canNavigate(to)) {
     if (to.meta.redirectIfLoggedIn && isLoggedIn)
       return '/'

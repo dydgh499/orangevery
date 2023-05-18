@@ -13,7 +13,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(AuthController::class, User::class);
+        $this->app->bind(SalesforceController::class, Salesforce::class);
+        $this->app->bind(PaymentModuleController::class, PaymentModule::class);        
     }
 
     /**

@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 use DateTimeInterface;
 
-class PaymentGateway extends Model
+class PaymentSection extends Model
 {
     use HasFactory;
-    protected   $table        = 'payment_gateways';
+    protected   $table        = 'payment_sections';
     protected   $primaryKey   = 'id';
     protected   $guarded      = [];
 

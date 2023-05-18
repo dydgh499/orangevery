@@ -56,7 +56,7 @@
         //const loaderColor = "{{ $json['color'] }}" || '#FFFFFF';
 
         const loaderColor = localStorage.getItem('Vuexy-initial-loader-bg') || '#FFFFFF';
-        const primaryColor =  "{{ $json['color'] }}" || '#EA5455';
+        const primaryColor = "{{ $json['color'] }}" || '#EA5455';
 
         window.corp = {!! json_encode($json, true) !!};
         if (loaderColor)

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LoginForm;
 use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -17,7 +17,7 @@ class AuthController extends Controller
         ];
     }
 
-    public function signIn(LoginForm $request)
+    public function signIn(Request $request)
     {
         $res = Http::withHeaders($this->headers)->post($this->url.'/sign-in', $request);
         return response($res, $res->status());

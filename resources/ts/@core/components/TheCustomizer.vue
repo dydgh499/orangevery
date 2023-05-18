@@ -249,23 +249,7 @@ const headerValues = computed(() => {
         <!-- !SECTION -->
 
         <!-- SECTION Menu -->
-        <CustomizerSection title="MENU">
-          <!-- 👉 Menu Type -->
-          <h6 class="text-base font-weight-regular">
-            메뉴 타입
-          </h6>
-          <VRadioGroup
-            v-model="appContentLayoutNav"
-            inline
-          >
-            <VRadio
-              v-for="[key, val] in Object.entries(AppContentLayoutNav)"
-              :key="key"
-              :label="key"
-              :value="val"
-            />
-          </VRadioGroup>
-
+        <CustomizerSection title="MENU">          
           <!-- 👉 Collapsed Menu -->
           <div
             v-if="appContentLayoutNav === AppContentLayoutNav.Vertical"
@@ -285,48 +269,11 @@ const headerValues = computed(() => {
               />
             </div>
           </div>
-
-          <!-- 👉 Semi Dark Menu -->
-          <div
-            class="align-center justify-space-between"
-            :class="theme === 'light' && appContentLayoutNav === AppContentLayoutNav.Vertical ? 'd-flex' : 'd-none'"
-          >
-            <VLabel
-              for="customizer-menu-semi-dark"
-              class="text-high-emphasis"
-            >
-              Semi Dark Menu
-            </VLabel>
-            <div>
-              <VSwitch
-                id="customizer-menu-semi-dark"
-                v-model="isVerticalNavSemiDark"
-                class="ms-2"
-              />
-            </div>
-          </div>
         </CustomizerSection>
         <!-- !SECTION -->
 
         <!-- SECTION MISC -->
         <CustomizerSection title="MISC">
-          <!-- 👉 RTL -->
-          <div class="d-flex align-center justify-space-between">
-            <VLabel
-              for="customizer-rtl"
-              class="text-high-emphasis"
-            >
-              RTL
-            </VLabel>
-            <div>
-              <VSwitch
-                id="customizer-rtl"
-                v-model="isAppRtl"
-                class="ms-2"
-              />
-            </div>
-          </div>
-
           <!-- 👉 Route Transition -->
           <div class="mt-6">
             <VRow>

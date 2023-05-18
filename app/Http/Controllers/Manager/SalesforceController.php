@@ -6,6 +6,7 @@ use App\Models\Salesforce;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
+use App\Http\Requests\Manager\IndexRequest;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -19,9 +20,6 @@ class SalesforceController extends Controller
     {
         $this->salesforces = $salesforces;
         $this->imgs = [
-            'params'    => ['profile_img'],
-            'folders'   => ['profiles'],
-            'sizes'     => [120],
         ];
     }
 
@@ -32,16 +30,12 @@ class SalesforceController extends Controller
      *
      * @queryParam search string 검색어(유저 ID)
      */
-    public function index(IndexForm $request)
+    public function index(IndexRequest $request)
     {
         $search = $request->input('search', '');
         $query = $this->salesforces
             ->where('brand_id', $request->user()->brand_id)
             ->where('user_name', 'like', "%$search%");
-
-        if($this->isMerchandise($request))
-            $query = $query->where('id', $request->user()->id);
-
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }
@@ -214,5 +208,10 @@ class SalesforceController extends Controller
         }
         else
             return $this->extendResponse($result['code'], $result['msg'], $result['fail']);
+    }
+
+    public function hierarchical(Request $request)
+    {
+
     }
 }

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/salesforces/useSalesStore'
+
+import type { PayModule } from '@/views/types'
+import { useSearchStore } from '@/views/pay-modules/usePayModStore'
 import LoadingDialog from '@/views/utils/LoadingDialog.vue';
 import SearchFilterDialog from '@/views/utils/SearchFilterDialog.vue';
 import AlertDialog from '@/views/utils/AlertDialog.vue';
@@ -64,8 +66,8 @@ const userListMeta = [
         subtitle: 'Last week analytics',
     },
 ]
-</script>
 
+</script>
 <template>
     <section>
         <VRow>
@@ -133,24 +135,19 @@ const userListMeta = [
                                     @click="store.excel()">
                                     엑셀 추출
                                 </VBtn>
-                                <!-- 👉 Add user button -->
-                                <VBtn prepend-icon="tabler-plus" @click="store.create()">
-                                    영업자 추가
-                                </VBtn>
                             </div>
                         </VRow>
                     </VCardText>
 
                     <VDivider />
-
-                    <VTable class="text-no-wrap">
+                    <VTable fixed-header class="text-no-wrap">
                         <!-- 👉 table head -->
                         <thead>
                             <tr>
                                 <th v-for="header in store.headers" :key="header.ko" scope="col" v-show="!header.hidden">
                                     {{ header.ko }}
                                 </th>
-                                <th scope="col">수정/삭제</th>
+                                <th scope="col">삭제</th>
                             </tr>
                         </thead>
                         <!-- 👉 table body -->
@@ -163,22 +160,20 @@ const userListMeta = [
                                 </td>
                                 <!-- 👉 Actions -->
                                 <td class="text-center" style="width: 5rem;">
-                                    <VBtn icon size="x-small" color="default" variant="text" @click="store.edit(user.id)">
-                                        <VIcon size="22" icon="tabler-edit" />
-                                    </VBtn>
-
                                     <VBtn icon size="x-small" color="default" variant="text">
                                         <VIcon size="22" icon="tabler-trash" @click="store.remove(user.id)" />
                                     </VBtn>
                                 </td>
                             </tr>
                         </tbody>
-
                         <!-- 👉 table footer  -->
                         <tfoot v-show="!store.items.length">
                             <tr>
                                 <td :colspan="store.headers.length" class="text-center">
-                                    영업자가 존재하지 않습니다.
+                                        결제모듈이 존재하지 않습니다. 
+                                        <br>
+                                        <br>
+                                        최초 사용자이시면 연동 정보 관리 - PG사 관리에서 PG사와 구간을 등록해주세요.
                                 </td>
                             </tr>
                         </tfoot>
