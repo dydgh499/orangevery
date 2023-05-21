@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { UserAbility } from '@/plugins/casl/AppAbility';
 import { useAppAbility } from '@/plugins/casl/useAppAbility';
-import axios from '@axios';
+import {axios, pay_token, com_token} from '@axios';
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant';
 import corp from '@corp';
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer';
@@ -53,20 +53,20 @@ const getAbilities = (level: number) : UserAbility[] => {
     }
     return auth;
 }
-console.log(corp)
 const login = () => {
     axios.post('api/v1/auth/sign-in', {brand_id: corp.id, user_name: user_name.value, user_pw: user_pw.value })
     .then(r => {
         const {access_token, user} = r.data
         const abilities = getAbilities(user['level']);
         ability.update(abilities);
+        pay_token.value = access_token
         localStorage.setItem('user', JSON.stringify(user))
-        localStorage.setItem('payvery-token', access_token)
         localStorage.setItem('abilities', JSON.stringify(abilities))
         // Redirect to `to` query if exist or redirect to index route
         router.replace(route.query.to ? String(route.query.to) : '/')
     })
     .catch(e => {
+        console.log(e)
         errors.value = e.response.data
     })
 }

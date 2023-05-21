@@ -1,65 +1,31 @@
-<script lang="ts" setup>
-import type { IUserModel } from '@/views/apps/user/types';
-import UserPrivacyOverview from '@/views/apps/user/view/UserDefaultOverview.vue';
-import UserMerchandiseOverview from '@/views/apps/user/view/UserMerchandiseOverview.vue';
 
-let submitType = {text: '제출'}
-let userModel : IUserModel;
+<script setup lang="ts">
+import UserOverview from '@/views/users/UserOverview.vue';
+import SalesforceOverview from '@/views/salesforces/SalesforceOverview.vue';
+import CreateForm from '@/views/utils/CreateForm.vue'
+import { useUpdateStore } from '@/views/salesforces/useMchtStore'
 
-const isDialogVisible = ref(false)
+const {path, item } = useUpdateStore()
 const tabs = [
-  { icon: 'tabler-user-check', title: '개인정보' },
-  { icon: 'ph-buildings', title: '가맹점정보' },
-  { icon: 'tabler-currency-dollar', title: '영업자정보' },
+    { icon: 'tabler-man', title: '영업자정보' },
 ]
-const userTab = ref(null)
-
- 
+const id = ref<number>(0)
+const route = useRoute()
+    watchEffect(() => {
+    id.value = Number(route.params.id) || 0
+})
 </script>
-
 <template>
-  <VTabs v-model="userTab" class="v-tabs-pill">
-    <VTab v-for="tab in tabs" :key="tab.icon">
-      <VIcon :size="18" :icon="tab.icon" class="me-1" />
-      <span>{{ tab.title }}</span>
-    </VTab>
-  </VTabs>
-
-  <VWindow v-model="userTab" class="mt-6 disable-tab-transition" :touch="false">
-    <VWindowItem>
-      <UserPrivacyOverview :user="userModel" :submit="submitType"/>
-    </VWindowItem>
-    <VWindowItem>
-      <UserMerchandiseOverview />
-    </VWindowItem>
-  </VWindow>
-
-  
-  <VDialog v-if="isDialogVisible"
-        v-model="isDialogVisible"
-        width="500"
-      >
-        <!-- Activator -->
-        <template #activator="{ props }">
-          <VBtn v-bind="props">
-            Click Me
-          </VBtn>
-        </template>
-
-        <!-- Dialog close btn -->
-        <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
-
-        <!-- Dialog Content -->
-        <VCard title="Privacy Policy">
-          <VCardText>
-            Bear claw pastry cotton candy jelly toffee. Pudding chocolate cake shortbread bonbon biscuit sweet. Lemon drops cupcake muffin brownie fruitcake. Pastry pastry tootsie roll jujubes chocolate cake gummi bears muffin pudding caramels. Jujubes lollipop gummies croissant shortbread. Cupcake dessert marzipan topping gingerbread apple pie chupa chups powder. Cake croissant halvah candy canes gummies.
-          </VCardText>
-
-          <VCardText class="d-flex justify-end">
-            <VBtn @click="isDialogVisible = false">
-              I accept
-            </VBtn>
-          </VCardText>
-        </VCard>
-      </VDialog>
+    <section>
+        <CreateForm :id="id" :path="path" :tabs="tabs" :item="item">
+            <template #view>
+                <VWindowItem>
+                    <UserOverview :item="item" :id="id" />
+                    <SalesforceOverview :item="item" />
+                </VWindowItem>
+                <VWindowItem>
+                </VWindowItem>
+            </template>
+        </CreateForm>
+    </section>
 </template>

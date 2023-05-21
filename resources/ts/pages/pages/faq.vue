@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FaqCategory } from '@/@fake-db/types'
 import sittingGirlWithLaptop from '@images/illustrations/sitting-girl-with-laptop.png'
-import axios from '@axios'
+import {axios} from '@axios'
 import AppSearchHeader from '@core/components/AppSearchHeader.vue'
 
 const faqSearchQuery = ref('')

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import axios from '@axios';
+import {axios} from '@axios';
 
 const visible = ref(false)
 axios.interceptors.request.use((config) => {

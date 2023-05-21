@@ -1,6 +1,6 @@
+import { axios } from '@axios'
 import { defineStore } from 'pinia'
 import type { ProjectParams } from './types'
-import axios from '@axios'
 
 export const useProjectStore = defineStore('ProjectStore', {
   actions: {

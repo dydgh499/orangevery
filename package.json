@@ -12,6 +12,7 @@
     "@casl/ability": "^6.2.0",
     "@casl/vue": "^2.2.0",
     "@floating-ui/dom": "1.0.4",
+    "@ssthouse/vue3-tree-chart": "^0.2.6",
     "@tabler/icons": "^1.97.0",
     "@vueuse/core": "^9.5.0",
     "@vueuse/math": "^9.5.0",

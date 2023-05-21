@@ -1,9 +1,6 @@
 import { Filter, Pagenation, SearchParams } from '@/views/types';
-import axios from '@axios';
+import { axios } from '@axios';
 import * as XLSX from 'xlsx';
-
-
-
 
 export function Searcher<T>(_path: string, _type: T) {
     const headers   = ref<Filter[]>(JSON.parse(localStorage.getItem(_path) || "[]"))
@@ -18,7 +15,8 @@ export function Searcher<T>(_path: string, _type: T) {
     const alert     = ref<any>(null)
     const snackbar  = ref<any>(null)
     const filter    = ref<any>(null)
-
+    const errorHandler = <any>(inject('$errorHandler'))
+    
     function setSearchParams<SearchParams>() {
         const date = new Date()
         const s_dt = new Date(date.getFullYear(), date.getMonth(), 1)
@@ -44,7 +42,7 @@ export function Searcher<T>(_path: string, _type: T) {
             return r
         } catch (e: any) {
             snackbar.value.show(e.response.data.message, 'error')
-            return app?.appContext.config.globalProperties.$errorHandler(e);
+            return errorHandler(e);
         }
     }
     function create() {

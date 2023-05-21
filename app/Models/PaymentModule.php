@@ -12,10 +12,12 @@ use DateTimeInterface;
 class PaymentModule extends Model
 {
     use HasFactory;
-    protected   $table        = 'payment_modules';
-    protected   $primaryKey   = 'id';
-    protected   $guarded      = [];
-
+    protected   $table      = 'payment_modules';
+    protected   $primaryKey = 'id';
+    protected   $guarded    = [];
+    protected   $hidden     = [
+        'brand_id',
+    ];
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format("Y-m-d H:i:s");

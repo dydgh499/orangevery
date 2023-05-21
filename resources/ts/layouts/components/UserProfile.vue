@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { initialAbility } from '@/plugins/casl/ability';
 import { useAppAbility } from '@/plugins/casl/useAppAbility';
-import axios from '@axios';
+import {axios} from '@axios';
 import { getRating } from '@layouts/utils';
 
 const router = useRouter()

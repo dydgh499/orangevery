@@ -14,7 +14,19 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind(SalesforceController::class, Salesforce::class);
-        $this->app->bind(PaymentModuleController::class, PaymentModule::class);        
+        $this->app->bind(PaymentModuleController::class, PaymentModule::class);
+        $this->app->bind(PaymentGatewayController::class, function ($app) {
+            return new PaymentGatewayController(
+                $app->make(PaymentGateway::class),
+                $app->make(PaymentSection::class),
+            );
+        });
+        $this->app->bind(SalesforceController::class, function ($app) {
+            return new SalesforceController(
+                $app->make(Salesforce::class),
+                $app->make(SFFeeChangeHistory::class),
+            );
+        });
     }
 
     /**

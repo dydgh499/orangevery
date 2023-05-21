@@ -1,6 +1,5 @@
 import { Searcher } from '@/views/searcher';
 import type { Merchandise } from '@/views/types';
-import { Updater } from '@/views/updater';
 
 
 export const useSearchStore = defineStore('mchtSearchStore', () => {    
@@ -10,7 +9,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
         store.setHeader('NO.', 'id')
         store.setHeader('상위 영업자 ID/수수료', 'group_name')
         store.setHeader('가맹점 ID/수수료', 'user_name')
-        store.setHeader('보유금액 수수료', 'hold_amt_fee')
+        store.setHeader('보유금액 수수료', 'hold_fee')
         store.setHeader('상호', 'mcht_name')
         store.setHeader('대표자명', 'nick_name')
         store.setHeader('연락처', 'phone_num')
@@ -30,30 +29,48 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
         const firstIndex = store.items.value.length ? ((store.params.page - 1) * store.params.page_size) + 1 : 0
         const lastIndex = store.items.value.length + ((store.params.page - 1) * store.params.page_size)
         return `총 ${store.pagenation.total_count}개 항목 중 ${firstIndex} ~ ${lastIndex}개 표시`
-      })
+    })
     return {
         store,
         pagenation,
         setHeaders,
     }
-});
+})
 
-
-export const useUpdateStore = defineStore('mchtUpdateStore', () => {    
-    const store = Updater<Merchandise>('merchandises', <Merchandise>({
+export const useUpdateStore = defineStore('mchtUpdateStore', () => {
+    const path  = 'merchandises'
+    const item  = reactive<Merchandise>({
         acct_bank_cd: '000',
         acct_bank_nm: '은행명',
-        passbook_img: '/images/img-preview.svg',
-        id_img: '/images/img-preview.svg',
-        contract_img: '/images/img-preview.svg',
-        bsin_lic_img: '/images/img-preview.svg',
         is_show_fee: false,
         use_dupe_trx: false,
         pay_day_limit: 0,
         pay_year_limit: 0,
         abnormal_trans_limit: 0,
-    }))
+        hold_fee: 0,
+        trx_fee: 0,
+        group_id: 0,
+        mcht_name: '',
+        id: 0,
+        created_at: undefined,
+        brand_id: 0,
+        user_name: '',
+        user_pw: '',
+        nick_name: '',
+        addr: '',
+        phone_num: '',
+        email: '',
+        resident_num: '',
+        business_num: '',
+        sector: '',
+        passbook_img: null,
+        id_img: null,
+        contract_img: null,
+        bsin_lic_img: null,
+        acct_num: '',
+        acct_nm: ''
+    })
     return {
-        store,
+        path, item
     }
-});
+})

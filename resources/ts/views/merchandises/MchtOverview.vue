@@ -1,28 +1,38 @@
 <script lang="ts" setup>
-import axios from '@axios';
+import {axios} from '@axios';
 import { requiredValidator } from '@validators';
 import type { MerchandisePropertie } from '@/views/types'
-import AlertDialog from '@/views/utils/AlertDialog.vue';
+import { useSalesHierarchicalStore } from '@/views/salesforces/useSalesStore'
 
 interface Props {
     item: MerchandisePropertie,
 }
 const props = defineProps<Props>()
-const alert = ref<any>(null)
-const salesforces = [{ sf_id: 1, sf_name: '테스트', sf_fee: 3.3 }];
-const salesforce = ref({ sf_id: 0, sf_name: '영업자 선택', sf_fee: 0 })
-//axios.get('/api/v1/util/salesforces')
 
-async function directFeeChange() {
+const alert = inject('alert');
+const snackbar = inject('snackbar');
+const errorHandler = inject('$errorHandler');
+
+const salesforce = ref({})
+const { hierarchical, flattened } = useSalesHierarchicalStore()
+
+props.item.is_show_fee = Boolean(props.item.is_show_fee)
+props.item.use_dupe_trx = Boolean(props.item.use_dupe_trx)
+
+const directFeeChange = async() => {
     if (await alert.value.show('정말 즉시적용하시겠습니까?')) {
 
     }
 }
-async function bookFeeChange() {
+const bookFeeChange = async() => {
     if (await alert.value.show('정말 예약적용하시겠습니까? 명일 00시에 반영됩니다.')) {
 
     }
 }
+watchEffect(() => {
+    const sf_idx = flattened.findIndex(item => item.id === props.item.group_id)
+    salesforce.value = sf_idx == -1 ? { id: props.item.group_id, user_name: '영업자 선택', trx_fee:0} : flattened[sf_idx]
+})
 </script>
 
 <template>
@@ -110,11 +120,10 @@ async function bookFeeChange() {
                                 </VCol>
 
                                 <VCol cols="12" md="5">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="salesforces"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
                                         prepend-inner-icon="tabler-man" label="상위 영업자 선택"
-                                        :hint="`수수료율: ${salesforce.sf_fee}%`" item-title="sf_name" item-value="sf_id"
+                                        :hint="`수수료율: ${(salesforce.trx_fee*100).toFixed(3)}%`" item-title="user_name" item-value="id"
                                         persistent-hint return-object single-line />
-
                                 </VCol>
                                 <VCol cols="12" md="4"
                                     style="display: flex; flex-direction: row; justify-content: space-between;">
@@ -237,5 +246,4 @@ async function bookFeeChange() {
         </VCol>
         <!-- 👉 submit -->
     </VRow>
-    <AlertDialog ref="alert"/>
 </template>

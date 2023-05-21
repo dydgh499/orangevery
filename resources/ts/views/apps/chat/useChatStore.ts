@@ -1,6 +1,6 @@
-import type { ActiveChat } from './useChat'
 import type { ChatContact, ChatContactWithChat, ChatMessage, ChatOut } from '@/@fake-db/types'
-import axios from '@axios'
+import { axios } from '@axios'
+import type { ActiveChat } from './useChat'
 
 interface State {
   chatsContacts: ChatContactWithChat[]

@@ -7,6 +7,7 @@ import layoutsPlugin from '@/plugins/layouts'
 import vuetify from '@/plugins/vuetify'
 import { loadFonts } from '@/plugins/webfontloader'
 import router from '@/router'
+import { pay_token } from '@axios'
 import { abilitiesPlugin } from '@casl/vue'
 import '@core-scss/template/index.scss'
 import '@styles/styles.scss'
@@ -24,14 +25,16 @@ declare module '@vue/runtime-core' {
 
 // Create vue app
 const app = createApp(App)
-
-app.config.globalProperties.$errorHandler = (e: any): any => {
-    console.log(e)
+app.provide('$errorHandler', function(e: any) {
     if(e.response.status == 401 || e.response.status == 403) {
+        pay_token.value = '';
         localStorage.removeItem('payvery-token')
-        router.replace('login')
+        router.replace('/login')
     }
     return e.response
+});
+
+app.config.globalProperties.$errorHandler = (e: any): any => {
 };
 app.config.globalProperties.$formatDate = (date: Date): string => {
     const year = date.getFullYear()

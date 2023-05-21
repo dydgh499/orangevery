@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Models\Salesforce;
+use App\Models\SFFeeChangeHistory;
+
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
@@ -14,13 +16,13 @@ use App\Http\Controllers\Controller;
 class SalesforceController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $salesforces;
+    protected $salesforces, $fee_histories;
 
-    public function __construct(Salesforce $salesforces)
+    public function __construct(Salesforce $salesforces, SFFeeChangeHistory $fee_histories)
     {
-        $this->salesforces = $salesforces;
-        $this->imgs = [
-        ];
+        $this->salesforces  = $salesforces;
+        $this->fee_histories = $fee_histories;
+        $this->imgs = [];
     }
 
     /**
@@ -33,8 +35,7 @@ class SalesforceController extends Controller
     public function index(IndexRequest $request)
     {
         $search = $request->input('search', '');
-        $query = $this->salesforces
-            ->where('brand_id', $request->user()->brand_id)
+        $query = $this->salesforces->where('brand_id', $request->user()->brand_id)
             ->where('user_name', 'like', "%$search%");
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
@@ -128,90 +129,21 @@ class SalesforceController extends Controller
             return $this->response(951);
     }
 
-    /**
-     * 패스워드 변경
-     *
-     * 가맹점 이상 가능
-     *
-     * @urlParam id integer required 유저 PK
-     * @bodyParam new_user_pw integer required 새로운 패스워드 번호
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function setPassword(Request $request, $id)
+    public function hierarchicalDown(Request $request)
     {
-        return $this->__setPassword($this->salesforces, $request, $id);
+        $root = $this->salesforces->whereNull('parent_id')->with('children')->get(['id', 'parent_id', 'user_name', 'trx_fee']);
+        return $this->response(0, $root);
     }
 
-    private function __storesValidate($jsons, $mchts)
+    public function hierarchicalUp(Request $request)
     {
-        $result = [];
-        $result['fail'] = $this->existenceMerchandiseValidate($mchts, $jsons);
-        if(count($result['fail']) == 0)
-            $result['code'] = 0;
-        else
+        if($request->group_id != 0)
         {
-            $result['code'] = 1000;
-            $result['msg'] = __('validation.not_found', ['attribute'=>__('validation.attributes.partner_name')]);
-
-        }
-        return $result;
-    }
-
-    /**
-     * 대량등록 검증
-     *
-     * 마스터 이상 가능
-     */
-    public function storesValidate(MerchandiseStoresForm $request)
-    {
-        $mchts = Merchandise::where('brand_id', $request->user()->brand_id)->get(['id', 'user_name'])->toArray();
-        $result = $this->__storesValidate($request->all(), $mchts);
-        if($result['code'] == 0)
-            return $this->response($result['code']);
-        else
-            return $this->extendResponse($result['code'], $result['msg'], $result['fail']);
-    }
-
-    /**
-     * 대량등록
-     *
-     * 마스터 이상 가능
-     */
-    public function stores(MerchandiseStoresForm $request)
-    {
-        $brand_id = $request->user()->brand_id;
-        $jsons  = $request->all();
-
-        $mchts = Merchandise::where('brand_id', $brand_id)->get(['id', 'user_name'])->toArray();
-        $result = $this->__storesValidate($jsons, $mchts);
-        if($result['code'] == 0)
-        {
-            $salesforces = [];
-            $mytime     = Carbon::now();
-            $cur_dttm   = $mytime->toDateTimeString();
-
-            for($i=0; $i <count($jsons); $i++)
-            {
-                $merchandise = $jsons[$i];
-                $merchandise['brand_id'] = $brand_id;
-                $merchandise['group_id'] = 0;
-                $merchandise['profile_img'] = '';
-                $merchandise['user_pw']     = Hash::make($merchandise['user_pw']);
-                $merchandise['birth_date']  = isset($jsons[$i]['birth_date']) ? $jsons[$i]['birth_date'] : '1900-01-01';
-                $merchandise['created_at']  = $cur_dttm;
-                $merchandise['updated_at']  = $cur_dttm;
-                array_push($salesforces, $merchandise);
-
-            }
-            $res = $this->manyInsert($this->salesforces, $salesforces);
-            return $this->response($res ? 1 : 990);
+            $salesforces = $this->salesforces->with('ancestors')->find($request->group_id);
+            return $this->response(0, $salesforces->ancestors);
         }
         else
-            return $this->extendResponse($result['code'], $result['msg'], $result['fail']);
+            return $this->response(0, []);
     }
 
-    public function hierarchical(Request $request)
-    {
-
-    }
 }

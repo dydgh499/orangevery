@@ -14,7 +14,7 @@ export default [
     icon: { icon: 'tabler-user' },
     children: [
         { title: 'Sf list', to: 'salesforces'},
-        { title: 'Unders treeview', to: 'under-treeview'},
+        { title: 'Unders treeview', to: 'treeview'},
         //{ title: 'Calculate', to: 'calculates' },
     ]
   },

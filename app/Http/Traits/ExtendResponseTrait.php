@@ -24,14 +24,7 @@ trait ExtendResponseTrait
         }
         return Response::json(['code'=>$code, 'message'=>$msg], $http_code);        
     }
-    public function errorResponse($errors, $http_code=409)
-    {
-        return Response::json(['errors'=>$errors], $http_code);
-    }
-    public function clearResponse($data, $http_code=200)
-    {
-        return Response::json($data, $http_code);
-    }
+    
     public function response($code, $data=[])
     {
         switch($code)

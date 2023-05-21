@@ -130,17 +130,4 @@ trait ManagerTrait
 
         return $auth;
     }
-
-    public function __setPassword($db, $request, $id)
-    {
-        $validated = $request->validate(['new_user_pw'=>'required']);
-        $query = $db->where('id', $id);
-        if($query->first())
-        {
-            $res = $query->update(['user_pw' => Hash::make($request->new_user_pw)]);
-            return $this->response($res ? 1 : 990);
-        }
-        else
-            return $this->response(1000);
-    }
 }

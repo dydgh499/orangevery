@@ -9,7 +9,7 @@ import authV2MaskLight from '@images/pages/misc-mask-light.png'
 import { VForm } from 'vuetify/components'
 
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
-import axios from '@axios'
+import {axios} from '@axios'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'

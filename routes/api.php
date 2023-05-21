@@ -8,6 +8,7 @@ use App\Http\Controllers\Manager\OperatorController;
 use App\Http\Controllers\Manager\MerchandiseController;
 use App\Http\Controllers\Manager\SalesforceController;
 use App\Http\Controllers\Manager\PaymentModuleController;
+use App\Http\Controllers\Manager\PaymentGatewayController;
 use App\Http\Controllers\Manager\PaymentSectionController;
 use App\Http\Controllers\Manager\NoticeController;
 
@@ -33,11 +34,20 @@ Route::prefix('v1')->middleware('log.route')->group(function()
         Route::middleware('auth:sanctum')->post('ok', [AuthController::class, 'ok']);
     });
     Route::prefix('manager')->middleware('auth:sanctum')->group(function() {
+        Route::prefix('pay-gateways')->group(function() {
+            Route::get('detail', [PaymentGatewayController::class, 'detail']);
+        });
+        Route::prefix('salesforces')->group(function() {
+            Route::get('hierarchical-down', [SalesforceController::class, 'hierarchicalDown']);
+            Route::get('hierarchical-up', [SalesforceController::class, 'hierarchicalUp']);
+        });
+
         Route::apiResource('brands', BrandController::class);
         Route::apiResource('operators', OperatorController::class);
         Route::apiResource('merchandises', MerchandiseController::class);
         Route::apiResource('salesforces', SalesforceController::class);
         Route::apiResource('pay-modules', PaymentModuleController::class);
+        Route::apiResource('pay-gateways', PaymentGatewayController::class);
         Route::apiResource('pay-sections', PaymentSectionController::class);
         Route::apiResource('notices', NoticeController::class);
     });
