@@ -6,7 +6,7 @@ export default [
     children: [
       { title: 'Md list', to: 'merchandises' },
       { title: 'Paymodule management', to: 'pay-modules'},
-      { title: 'Calculate', to: 'calculates' },
+      { title: 'Calculate', to: 'md-calculates' },
     ]
   },
   {
@@ -15,6 +15,7 @@ export default [
     children: [
         { title: 'Sf list', to: 'salesforces'},
         { title: 'Unders treeview', to: 'treeview'},
+        { title: 'Calculate', to: 'sf-calculates' },
         //{ title: 'Calculate', to: 'calculates' },
     ]
   },

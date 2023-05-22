@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/pay-modules/usePayModStore'
+import { useSearchStore } from '@/views/pay-modules/useStore'
 import BaseIndexOverview from '@/views/utils/BaseIndexOverview.vue';
 
-const { store, pagenation, setHeaders } = useSearchStore()
+const { store, setHeaders } = useSearchStore()
 provide('store', store)
-provide('pagenation', pagenation)
 provide('setHeaders', setHeaders)
 
 const metas = [

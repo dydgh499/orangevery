@@ -6,6 +6,7 @@ import { injectionKeyIsVerticalNavHovered, useLayouts } from '@layouts'
 import { VerticalNavGroup, VerticalNavLink, VerticalNavSectionTitle } from '@layouts/components'
 import { config } from '@layouts/config'
 import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '@layouts/types'
+import { useUpdateStore } from '@/views/brands/useStore'
 
 interface Props {
   tag?: string | Component
@@ -17,6 +18,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   tag: 'aside',
 })
+
+const {path, item } = useUpdateStore()
 
 const refNav = ref()
 

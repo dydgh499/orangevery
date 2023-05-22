@@ -1,33 +1,30 @@
 <script setup lang="ts">
-import { useSalesHierarchicalStore } from '@/views/salesforces/useSalesStore'
-import LoadingDialog from '@/views/utils/LoadingDialog.vue';
+import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
 import SearchFilterDialog from '@/views/utils/SearchFilterDialog.vue';
-import AlertDialog from '@/views/utils/AlertDialog.vue';
-import Snackbar from '@/views/utils/Snackbar.vue';
 
 interface Props {
     placeholder: string,
-    metas: object[],
+    metas: any[],
 }
-const props = defineProps<Props>();0
+const props = defineProps<Props>();
 const { hierarchical, flattened } = useSalesHierarchicalStore()
 
 const store = <any>(inject('store'))
-const pagenation = <any>(inject('pagenation'))
 const setHeaders = <any>(inject('setHeaders'))
 
-const alert = ref(null)
 const filter = ref(null)
-const snackbar = ref(null)
 onMounted(() => {
-    store.alert = alert.value
     store.filter = filter.value
-    store.snackbar = snackbar.value
     setHeaders()
     watchEffect(() => {
         store.setTable()
     })
 });
+const pagenation = computed(() => {
+    const firstIndex = store.items.length ? ((store.params.page - 1) * store.params.page_size) + 1 : 0
+    const lastIndex = store.items.length + ((store.params.page - 1) * store.params.page_size)
+    return `총 ${store.pagenation.total_count}개 항목 중 ${firstIndex} ~ ${lastIndex}개 표시`
+})
 // 👉 Store
 const salesforce = ref({trx_fee:0, user_name:'영업자 선택'})
 </script>
@@ -64,7 +61,7 @@ const salesforce = ref({trx_fee:0, user_name:'영업자 선택'})
                                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
                                         prepend-inner-icon="tabler-man" label="영업자 선택"
                                         :hint="`수수료율: ${(salesforce.trx_fee*100).toFixed(3)}%`" item-title="user_name" item-value="id"
-                                        persistent-hint return-object single-line 
+                                        persistent-hint single-line 
                                 />
                             </VCol>
                         </VRow>
@@ -144,7 +141,7 @@ const salesforce = ref({trx_fee:0, user_name:'영업자 선택'})
                         </tbody>
 
                         <!-- 👉 table footer  -->
-                        <tfoot v-show="!store.items.length">
+                        <tfoot v-show="!Boolean(store.items.length || false)">
                             <tr>
                                 <td :colspan="store.headers.length" class="text-center">
                                     검색 결과가 없습니다.
@@ -164,9 +161,6 @@ const salesforce = ref({trx_fee:0, user_name:'영업자 선택'})
                 </VCard>
             </VCol>
         </VRow>
-        <Snackbar ref="snackbar" />
-        <AlertDialog ref="alert" />
-        <LoadingDialog ref="loading" />
         <SearchFilterDialog ref="filter" :headers="store.headers" />
     </section>
 </template>

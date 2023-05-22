@@ -14,60 +14,57 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
 // @layouts plugin
 import { VerticalNavLayout } from '@layouts'
 
+import AlertDialog from '@/views/utils/AlertDialog.vue';
+import Snackbar from '@/views/utils/Snackbar.vue';
+import LoadingDialog from '@/views/utils/LoadingDialog.vue';
+
+const alert = ref(null)
+const snackbar = ref(null)
+
+provide('alert', alert)
+provide('snackbar', snackbar)
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
 </script>
 
 <template>
-  <VerticalNavLayout
-    :nav-items="navItems"
-  >
-    <!-- 👉 navbar -->
-    <template #navbar="{ toggleVerticalOverlayNavActive }">
-      <div class="d-flex h-100 align-center">
-        <VBtn
-          v-if="isLessThanOverlayNavBreakpoint(windowWidth)"
-          icon
-          variant="text"
-          color="default"
-          class="ms-n3"
-          size="small"
-          @click="toggleVerticalOverlayNavActive(true)"
-        >
-          <VIcon
-            icon="tabler-menu-2"
-            size="24"
-          />
-        </VBtn>
+    <VerticalNavLayout :nav-items="navItems">
+        <!-- 👉 navbar -->
+        <template #navbar="{ toggleVerticalOverlayNavActive }">
+            <div class="d-flex h-100 align-center">
+                <VBtn v-if="isLessThanOverlayNavBreakpoint(windowWidth)" icon variant="text" color="default" class="ms-n3"
+                    size="small" @click="toggleVerticalOverlayNavActive(true)">
+                    <VIcon icon="tabler-menu-2" size="24" />
+                </VBtn>
 
-        <NavSearchBar class="ms-lg-n3" />
+                <NavSearchBar class="ms-lg-n3" />
 
-        <VSpacer />
+                <VSpacer />
 
-        <NavBarI18n />
-        <NavbarThemeSwitcher />
-        <NavbarShortcuts />
-        <NavBarNotifications class="me-2" />
-        <UserProfile />
-      </div>
-    </template>
+                <NavBarI18n />
+                <NavbarThemeSwitcher />
+                <NavbarShortcuts />
+                <NavBarNotifications class="me-2" />
+                <UserProfile />
+            </div>
+        </template>
 
-    <!-- 👉 Pages -->
-    <RouterView v-slot="{ Component }">
-      <Transition
-        :name="appRouteTransition"
-        mode="out-in"
-      >
-        <Component :is="Component" />
-      </Transition>
-    </RouterView>
+        <!-- 👉 Pages -->
+        <RouterView v-slot="{ Component }">
+            <Transition :name="appRouteTransition" mode="out-in">
+                <Component :is="Component" />
+            </Transition>
+            <Snackbar ref="snackbar" />
+            <AlertDialog ref="alert" />
+            <LoadingDialog ref="loading" />
+        </RouterView>
 
-    <!-- 👉 Footer -->
-    <template #footer>
-      <Footer />
-    </template>
+        <!-- 👉 Footer -->
+        <template #footer>
+            <Footer />
+        </template>
 
-    <!-- 👉 Customizer -->
-    <TheCustomizer />
-  </VerticalNavLayout>
+        <!-- 👉 Customizer -->
+        <TheCustomizer />
+    </VerticalNavLayout>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/merchandises/useStore'
+import { useSearchStore } from '@/views/brands/useStore'
 import BaseIndexOverview from '@/views/utils/BaseIndexOverview.vue';
 
 const { store, setHeaders } = useSearchStore()
@@ -42,7 +42,7 @@ const metas = [
 ]
 </script>
 <template>
-    <BaseIndexOverview :placeholder="`ID, 상호, 대표자명 검색`" :metas="metas">
-        <template #name>가맹점</template>
+    <BaseIndexOverview :placeholder="`DNS 검색`" :metas="metas">
+        <template #name>서비스</template>
     </BaseIndexOverview>
 </template>

@@ -2,8 +2,9 @@
 import { useSearchStore } from '@/views/merchandises/useStore'
 import BaseIndexOverview from '@/views/utils/BaseIndexOverview.vue';
 
-const { store, setHeaders } = useSearchStore()
+const { store, pagenation, setHeaders } = useSearchStore()
 provide('store', store)
+provide('pagenation', pagenation)
 provide('setHeaders', setHeaders)
 
 const metas = [

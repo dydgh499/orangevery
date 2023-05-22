@@ -3,6 +3,7 @@
 import { businessNumValidator, emailValidator, lengthValidatorV2, passwordValidator, requiredValidator } from '@validators';
 import type { UserPropertie } from '@/views/types'
 import FileInput from '@/views/utils/FileInput.vue';
+import CreateHalfVCol from '@/views/utils/CreateHalfVCol.vue';
 
 interface Props {
     item: UserPropertie,
@@ -55,7 +56,6 @@ watchEffect(() => {
 })
 </script>
 <template>
-
     <VRow class="match-height">
         <!-- 👉 개인정보 -->
         <VCol cols="12" md="6">
@@ -64,148 +64,100 @@ watchEffect(() => {
                     <VCardTitle>기본정보</VCardTitle>
                     <VRow class="pt-5">
                         <!-- 👉 Email -->
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label for="emailHorizontalIcons">아이디</label>
-                                </VCol>
-
-                                <VCol cols="12" md="9">
-                                    <VTextField id="emailHorizontalIcons" v-model="props.item.user_name"
-                                        prepend-inner-icon="tabler-mail" placeholder="ID로 사용됩니다." persistent-placeholder
-                                        :rules="[requiredValidator, emailValidator]" maxlength="30" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
+                        <CreateHalfVCol>
+                            <template #name>아이디</template>
+                            <template #input>
+                                <VTextField v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
+                                    placeholder="ID로 사용됩니다." persistent-placeholder
+                                    :rules="[requiredValidator, emailValidator]" maxlength="30" />
+                            </template>
+                        </CreateHalfVCol>
                         <!-- 👉 Password -->
-                        <VCol cols="12" v-if="props.id == 0">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label for="passwordHorizontalIcons">패스워드</label>
-                                </VCol>
-
-                                <VCol cols="12" md="9">
-                                    <VTextField id="passwordHorizontalIcons" v-model="props.item.user_pw" counter
-                                        prepend-inner-icon="tabler-lock" :rules="[requiredValidator, passwordValidator]"
-                                        :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
-                                        :type="is_show ? 'text' : 'password'" placeholder="소문자,대문자,특수문자로 이루어진 8자 이상 문자열"
-                                        persistent-placeholder @click:append-inner="is_show = !is_show" autocomplete />
-                                </VCol>
-                            </VRow>
-                        </VCol>
+                        <CreateHalfVCol v-if="props.id == 0">
+                            <template #name>패스워드</template>
+                            <template #input>
+                                <VTextField v-model="props.item.user_pw" counter prepend-inner-icon="tabler-lock"
+                                    :rules="[requiredValidator, passwordValidator]"
+                                    :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
+                                    :type="is_show ? 'text' : 'password'" placeholder="소문자,대문자,특수문자로 이루어진 8자 이상 문자열"
+                                    persistent-placeholder @click:append-inner="is_show = !is_show" autocomplete />
+                            </template>
+                        </CreateHalfVCol>
                         <!-- 👉 대표자명 -->
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label for="nickNameHorizontalIcons">대표자명</label>
-                                </VCol>
-                                <VCol cols="12" md="9">
-                                    <VTextField id="nickNameHorizontalIcons" v-model="props.item.nick_name"
-                                        prepend-inner-icon="tabler-user" placeholder="사용자명으로 사용됩니다."
-                                        persistent-placeholder />
-                                </VCol>
-                            </VRow>
-                        </VCol>
+                        <CreateHalfVCol>
+                            <template #name>대표자명</template>
+                            <template #input>
+                                <VTextField id="nickNameHorizontalIcons" v-model="props.item.nick_name"
+                                    prepend-inner-icon="tabler-user" placeholder="사용자명으로 사용됩니다." persistent-placeholder />
+                            </template>
+                        </CreateHalfVCol>
                         <!-- 👉 Address -->
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label for="addressHorizontalIcons">주소</label>
-                                </VCol>
-                                <VCol cols="12" md="9">
-                                    <VTextField id="addressHorizontalIcons" v-model="props.item.addr"
-                                        prepend-inner-icon="tabler-map-pin" placeholder="주소 입력" persistent-placeholder
-                                        maxlength="200"
-                                        />
-                                </VCol>
-                            </VRow>
-                        </VCol>
+                        <CreateHalfVCol>
+                            <template #name>주소</template>
+                            <template #input>
+                                <VTextField id="addressHorizontalIcons" v-model="props.item.addr"
+                                    prepend-inner-icon="tabler-map-pin" placeholder="주소 입력" persistent-placeholder
+                                    maxlength="200" />
+                            </template>
+                        </CreateHalfVCol>
                         <!-- 👉 Mobile -->
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label for="mobileHorizontalIcons">휴대폰번호</label>
-                                </VCol>
-
-                                <VCol cols="12" md="9">
-                                    <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="number"
-                                        prepend-inner-icon="tabler-device-mobile" placeholder="숫자만 입력해주세요."
-                                        persistent-placeholder 
-                                    />
-                                </VCol>
-                            </VRow>
-                        </VCol>
+                        <CreateHalfVCol>
+                            <template #name>휴대폰번호</template>
+                            <template #input>
+                                <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="number"
+                                    prepend-inner-icon="tabler-device-mobile" placeholder="숫자만 입력해주세요."
+                                    persistent-placeholder />
+                            </template>
+                        </CreateHalfVCol>
                         <!-- 👉 사업자 번호 -->
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label for="businessHorizontalIcons">사업자번호</label>
-                                </VCol>
-
-                                <VCol cols="12" md="9">
-                                    <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="number"
-                                        prepend-inner-icon="ic-outline-business-center" placeholder="숫자만 입력해주세요."
-                                        persistent-placeholder
-                                        :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
+                        <CreateHalfVCol>
+                            <template #name>사업자번호</template>
+                            <template #input>
+                                <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="number"
+                                    prepend-inner-icon="ic-outline-business-center" placeholder="숫자만 입력해주세요."
+                                    persistent-placeholder
+                                    :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
+                            </template>
+                        </CreateHalfVCol>
                         <!-- 👉 주민등록 번호 -->
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label for="residentHorizontalIcons">주민등록번호</label>
-                                </VCol>
-                                <VCol cols="12" md="9" class="">
-                                    <VTextField id="residentFirstHorizontalIcons" v-model="props.item.resident_num"
-                                        type="text" counter prepend-inner-icon="carbon-identification" placeholder="앞자리 입력"
-                                        persistent-placeholder
-                                        :rules="[requiredValidator, lengthValidatorV2(props.item.resident_num, 13)]"
-                                        maxlength="13" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
+                        <CreateHalfVCol>
+                            <template #name>주민등록번호</template>
+                            <template #input>
+                                <VTextField id="residentFirstHorizontalIcons" v-model="props.item.resident_num" type="text"
+                                    counter prepend-inner-icon="carbon-identification" placeholder="앞자리 입력"
+                                    persistent-placeholder
+                                    :rules="[requiredValidator, lengthValidatorV2(props.item.resident_num, 13)]"
+                                    maxlength="13" />
+                            </template>
+                        </CreateHalfVCol>
                     </VRow>
                 </VCardItem>
                 <VCardItem>
                     <VCardTitle>은행정보</VCardTitle>
                     <VRow class="pt-5">
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label for="acctNumHorizontalIcons">계좌번호</label>
-                                </VCol>
-                                <VCol cols="12" md="9">
-                                    <VTextField id="acctNumHorizontalIcons" type="number" v-model="props.item.acct_num"
-                                        prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력"
-                                        persistent-placeholder />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label for="acctNmHorizontalIcons">예금주</label>
-                                </VCol>
-                                <VCol cols="12" md="9">
-                                    <VTextField id="acctNmHorizontalIcons" v-model="props.item.acct_nm"
-                                        prepend-inner-icon="tabler-user" placeholder="예금주 입력" persistent-placeholder />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label for="acctNmHorizontalIcons">은행</label>
-                                </VCol>
-                                <VCol cols="12" md="9">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bank" :items="banks"
-                                        prepend-inner-icon="ph-buildings" label="은행 선택"
-                                        :hint="`${bank.title}, 은행 코드: ${bank.code} `" item-title="title" item-value="code"
-                                        persistent-hint return-object single-line />
-                                </VCol>
-                            </VRow>
-                        </VCol>
+                        <CreateHalfVCol>
+                            <template #name>계좌번호</template>
+                            <template #input>
+                                <VTextField id="acctNumHorizontalIcons" type="number" v-model="props.item.acct_num"
+                                    prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력" persistent-placeholder />
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol>
+                            <template #name>예금주</template>
+                            <template #input>
+                                <VTextField id="acctNmHorizontalIcons" v-model="props.item.acct_nm"
+                                    prepend-inner-icon="tabler-user" placeholder="예금주 입력" persistent-placeholder />
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol>
+                            <template #name>은행</template>
+                            <template #input>
+                                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bank" :items="banks"
+                                    prepend-inner-icon="ph-buildings" label="은행 선택"
+                                    :hint="`${bank.title}, 은행 코드: ${bank.code} `" item-title="title" item-value="code"
+                                    persistent-hint return-object single-line />
+                            </template>
+                        </CreateHalfVCol>
                     </VRow>
                 </VCardItem>
             </VCard>
@@ -218,10 +170,7 @@ watchEffect(() => {
                     <VRow class="pt-5">
                         <VCol cols="12" v-for="file in images" :key=file.label>
                             <VRow no-gutters>
-                                <FileInput
-                                    :file="file.file"
-                                    :label="file.label"
-                                >
+                                <FileInput :file="file.file" :label="file.label">
                                 </FileInput>
                             </VRow>
                         </VCol>
@@ -231,24 +180,4 @@ watchEffect(() => {
         </VCol>
     </VRow>
 </template>
-<style lang="scss">
-.preview {
-  border: 2px solid rgb(238, 238, 238);
-  border-radius: 0.5em;
-  margin-block: 0;
-  margin-inline: 0.5em;
-}
-
-.preview:hover {
-  border: 2px solid rgb(200, 200, 200);
-  cursor: pointer;
-}
-
-@media only screen and (max-device-width: 960px) {
-  .preview {
-    margin-block: 0.5em;
-    margin-inline: 0;
-  }
-}
-</style>
   

@@ -1,7 +1,7 @@
 import type { Classification, PayGateway, PaySection } from '@/views/types';
 import { axios } from '@axios';
 
-export const usePayGatewayStore = defineStore('payGatewayStore', () => {
+export const useStore = defineStore('payGatewayStore', () => {
     const pgs = ref<PayGateway[]>([])
     const pss = ref<PaySection[]>([])
     const ternimals   = ref<Classification[]>([])
@@ -20,10 +20,8 @@ export const usePayGatewayStore = defineStore('payGatewayStore', () => {
         }
         catch(e) {
             errorHandler(e)
-
         }
     })
-
     return {
         pgs, pss, ternimals, pay_conds, cus_filters,
     }

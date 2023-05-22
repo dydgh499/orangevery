@@ -14,6 +14,15 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
 import { HorizontalNavLayout } from '@layouts'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 
+import AlertDialog from '@/views/utils/AlertDialog.vue';
+import Snackbar from '@/views/utils/Snackbar.vue';
+import LoadingDialog from '@/views/utils/LoadingDialog.vue';
+
+const alert = ref(null)
+const snackbar = ref(null)
+
+provide('alert', alert)
+provide('snackbar', snackbar)
 const { appRouteTransition } = useThemeConfig()
 </script>
 
@@ -54,6 +63,9 @@ const { appRouteTransition } = useThemeConfig()
           :is="Component"
           :key="route.path"
         />
+            <Snackbar ref="snackbar" />
+            <AlertDialog ref="alert" />
+            <LoadingDialog ref="loading" />
       </Transition>
     </RouterView>
 

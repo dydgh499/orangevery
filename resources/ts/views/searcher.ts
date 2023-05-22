@@ -3,6 +3,12 @@ import { axios } from '@axios';
 import * as XLSX from 'xlsx';
 
 export function Searcher<T>(_path: string, _type: T) {
+    const filter    = ref<any>(null)
+    const alert     = <any>(inject('alert'))
+    const snackbar  = <any>(inject('snackbar'))
+    const errorHandler = <any>(inject('$errorHandler'))
+    const formatDate = <any>(inject('$formatDate'))    
+    // -----------------------------
     const headers   = ref<Filter[]>(JSON.parse(localStorage.getItem(_path) || "[]"))
     // -----------------------------
     const app       = getCurrentInstance()
@@ -11,22 +17,16 @@ export function Searcher<T>(_path: string, _type: T) {
     const router    = useRouter()
     const params    = reactive<SearchParams>(setSearchParams())
     const pagenation = reactive<Pagenation>({total_count:0, total_page:1})
-    // -----------------------------
-    const alert     = ref<any>(null)
-    const snackbar  = ref<any>(null)
-    const filter    = ref<any>(null)
-    const errorHandler = <any>(inject('$errorHandler'))
-    
+
+
     function setSearchParams<SearchParams>() {
         const date = new Date()
-        const s_dt = new Date(date.getFullYear(), date.getMonth(), 1)
-        const e_dt = new Date(date.getFullYear(), date.getMonth() + 1, 0)
         return <SearchParams>({
             page:1, 
             page_size:10, 
             search: '',
-            s_dt: app?.appContext.config.globalProperties.$formatDate(s_dt), 
-            e_dt: app?.appContext.config.globalProperties.$formatDate(e_dt)
+            s_dt: formatDate(new Date(date.getFullYear(), date.getMonth(), 1)), 
+            e_dt: formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0)),
         })
     }    
 
@@ -68,7 +68,7 @@ export function Searcher<T>(_path: string, _type: T) {
             let l_page = data.total / params.page_size
             items.value = data.content
             pagenation.total_count = data.total
-            pagenation.total_page = l_page > Math.floor(l_page) ? l_page + 1 : l_page
+            pagenation.total_page = parseInt(String(l_page > Math.floor(l_page) ? l_page + 1 : l_page))
         }
     }
 

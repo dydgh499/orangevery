@@ -155,5 +155,8 @@
     "Service": "서비스",
     "Notice": "공지사항",
     "Log management": "로그 관리",
-    "Service management": "서비스 관리"
+    "Service management": "서비스 관리",
+    "PG management": "PG사 관리",
+    "Operation management": "운영 관리",
+    "Operator management": "직원 및 본사 관리"
 }

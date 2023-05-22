@@ -33,15 +33,12 @@ app.provide('$errorHandler', function(e: any) {
     }
     return e.response
 });
-
-app.config.globalProperties.$errorHandler = (e: any): any => {
-};
-app.config.globalProperties.$formatDate = (date: Date): string => {
+app.provide('$formatDate', function(date: Date) {
     const year = date.getFullYear()
     const month = String(date.getMonth() + 1).padStart(2, '0')
     const day = String(date.getDate()).padStart(2, '0')
     return `${year}-${month}-${day}`;
-}
+});
 
 // Use plugins
 app.use(vuetify)

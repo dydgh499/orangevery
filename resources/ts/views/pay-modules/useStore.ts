@@ -24,15 +24,8 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         store.setHeader('생성시간', 'created_at')
         store.setHeader('업데이트시간', 'updated_at')    
     }
-    
-    const pagenation = computed(() => {
-        const firstIndex = store.items.value.length ? ((store.params.page - 1) * store.params.page_size) + 1 : 0
-        const lastIndex = store.items.value.length + ((store.params.page - 1) * store.params.page_size)
-        return `총 ${store.pagenation.total_count}개 항목 중 ${firstIndex} ~ ${lastIndex}개 표시`
-      })
     return {
         store,
-        pagenation,
         setHeaders,
     }
 });

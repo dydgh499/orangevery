@@ -4,7 +4,7 @@ import UserOverview from '@/views/users/UserOverview.vue';
 import MchtOverview from '@/views/merchandises/MchtOverview.vue';
 import PayModuleOverview from '@/views/pay-modules/PayModuleOverview.vue';
 import CreateForm from '@/views/utils/CreateForm.vue'
-import { useUpdateStore } from '@/views/merchandises/useMchtStore'
+import { useUpdateStore } from '@/views/merchandises/useStore'
 const {path, item } = useUpdateStore()
 const tabs = [
     { icon: 'tabler-user-check', title: '개인정보' },

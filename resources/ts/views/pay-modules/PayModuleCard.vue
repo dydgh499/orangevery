@@ -1,11 +1,10 @@
 <script lang="ts" setup>
 import { axios } from '@axios';
 import { requiredValidator } from '@validators';
-import type { MerchandisePropertie } from '@/views/types'
-import AlertDialog from '@/views/utils/AlertDialog.vue';
-import type { PayModule, PayGateway, PaySection, Classification } from '@/views/types'
-import { usePayGatewayStore } from '@/views/pay-gateways/usePayGatewayStore';
-import { useSalesHierarchicalStore } from '@/views/salesforces/useSalesStore'
+import type { PayModule } from '@/views/types'
+import { VForm } from 'vuetify/components';
+import { useStore } from '@/views/pay-gateways/useStore';
+import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
 
 interface Props {
     item: PayModule,
@@ -27,7 +26,7 @@ const installments = [
     { id: 9, title: "9개월" }, { id: 10, title: "10개월" },
     { id: 11, title: "11개월" }, { id: 12, title: "12개월" },
 ]
-const { pgs, pss, pay_conds, ternimals } = usePayGatewayStore()
+const { pgs, pss, pay_conds, ternimals } = useStore()
 const md = ref<number>(3)
 
 onMounted(() => {
@@ -38,7 +37,7 @@ onMounted(() => {
 
     props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
     props.item.ps_id = props.item.ps_id == 0 ? null : props.item.ps_id
-    props.item.widthdraw_id = props.item.widthdraw_id == 0 ? null : props.item.widthdraw_id
+    props.item.withdraw_id = props.item.withdraw_id == 0 ? null : props.item.withdraw_id
     props.item.terminal_id = props.item.terminal_id == 0 ? null : props.item.terminal_id
 })
 
@@ -390,7 +389,7 @@ function update() {
                         <!-- 👉 비고 -->
                         <VRow>
                             <VCol>
-                                <VTextarea v-model="props.item.note" counter label="비고(명칭)" />
+                                <VTextarea v-model="props.item.note" counter label="비고(명칭)" prepend-inner-icon="twemoji-spiral-notepad"/>
                             </VCol>
                         </VRow>
                         <VRow>

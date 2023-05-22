@@ -3,7 +3,7 @@ import type { MerchandiseProperties } from '@/@fake-db/types';
 import { useSalesforceListStore } from '@/views/salesforces/salesforceMoudleListStore';
 import VueTree from "@ssthouse/vue3-tree-chart";
 import "@ssthouse/vue3-tree-chart/dist/vue3-tree-chart.css";
-import { useSalesHierarchicalStore } from '@/views/salesforces/useSalesStore'
+import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
 
 const { hierarchical, flattened } = useSalesHierarchicalStore()
 const salesforce = ref({ trx_fee: 0, user_name: '영업자 선택' })

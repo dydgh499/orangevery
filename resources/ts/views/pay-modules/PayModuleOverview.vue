@@ -3,7 +3,7 @@ import { axios } from '@axios';
 import type { PayModule, Merchandise } from '@/views/types'
 import PayModuleCard from '@/views/pay-modules/PayModuleCard.vue';
 import { SearchParams } from '@/views/types';
-import { useSalesHierarchicalStore } from '@/views/salesforces/useSalesStore'
+import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
 
 interface Props {
     item: Merchandise,
@@ -13,17 +13,18 @@ const props = defineProps<Props>();
 const { flattenUp } = useSalesHierarchicalStore()
 const pay_modules       = reactive<PayModule[]>([]);
 const new_pay_modules   = reactive<PayModule[]>([]);
-const ancestors = ref<object[]>([]);
+const ancestors     = ref<object[]>([]);
+const formatDate    = <any>(inject('$formatDate'))
 
 onMounted(async () => {
-    let params = <SearchParams>({
+    let search = <SearchParams>({
         page: 1,
         page_size: 10000,
         search: '',
-        s_dt: getCurrentInstance().appContext.config.globalProperties.$formatDate(new Date(2000, 1, 1)),
-        e_dt: getCurrentInstance().appContext.config.globalProperties.$formatDate(new Date(2999, 1, 1))
+        s_dt: formatDate(new Date(2000, 1, 1)),
+        e_dt: formatDate(new Date(2999, 1, 1))
     })
-    params['mcht_id'] = props.item.id;
+    const params = Object.assign({}, search, {'mcht_id': props.item.id});
     axios.get('/api/v1/manager/pay-modules', { params: params })
     .then(r => {
         Object.assign(pay_modules, r.data.content as PayModule[])
@@ -51,7 +52,7 @@ function addNewPaymodule() {
 </script>
 <template>
     <PayModuleCard v-for="item in pay_modules" :key="item.id" style="margin-top: 1em;" :item="item" :ancestors="ancestors"/>
-    <PayModuleCard v-for="item in new_pay_modules" :key="i" style="margin-top: 1em;" :item="item" :ancestors="ancestors"/>
+    <PayModuleCard v-for="(item, index) in new_pay_modules" :key="index" style="margin-top: 1em;" :item="item" :ancestors="ancestors"/>
     <!-- 👉 submit -->
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">

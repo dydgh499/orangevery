@@ -1,16 +1,18 @@
 <script lang="ts" setup>
 import {axios} from '@axios';
-import { requiredValidator } from '@validators';
+import { requiredValidator, nullValidator } from '@validators';
 import type { MerchandisePropertie } from '@/views/types'
-import { useSalesHierarchicalStore } from '@/views/salesforces/useSalesStore'
+import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
+import CreateHalfVCol from '@/views/utils/CreateHalfVCol.vue';
 
 interface Props {
     item: MerchandisePropertie,
 }
 const props = defineProps<Props>()
 
-const alert = inject('alert');
-const snackbar = inject('snackbar');
+
+const alert     = <any>(inject('alert'))
+const snackbar  = <any>(inject('snackbar'))
 const errorHandler = inject('$errorHandler');
 
 const salesforce = ref({})
@@ -44,20 +46,15 @@ watchEffect(() => {
                     <VCardTitle>가맹점정보</VCardTitle>
                     <VRow class="pt-5">
                         <!-- 👉 Email -->
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label for="nameHorizontalIcons">상호</label>
-                                </VCol>
-
-                                <VCol cols="12" md="9">
-                                    <VTextField id="nameHorizontalIcons" v-model="props.item.mcht_name"
+                        <CreateHalfVCol>
+                            <template #name>상호</template>
+                            <template #input>
+                                <VTextField id="nameHorizontalIcons" v-model="props.item.mcht_name"
                                         prepend-inner-icon="tabler-building-store" placeholder="상호를 입력해주세요"
                                         persistent-placeholder :rules="[requiredValidator]" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <!-- 👉 수수료율 -->
+                            </template>
+                        </CreateHalfVCol>
+                        <!-- 👉 수수료율 -->                    
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
@@ -123,7 +120,7 @@ watchEffect(() => {
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
                                         prepend-inner-icon="tabler-man" label="상위 영업자 선택"
                                         :hint="`수수료율: ${(salesforce.trx_fee*100).toFixed(3)}%`" item-title="user_name" item-value="id"
-                                        persistent-hint return-object single-line />
+                                        persistent-hint single-line return-object />
                                 </VCol>
                                 <VCol cols="12" md="4"
                                     style="display: flex; flex-direction: row; justify-content: space-between;">

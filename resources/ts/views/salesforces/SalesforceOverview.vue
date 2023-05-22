@@ -2,15 +2,14 @@
 import {axios} from '@axios';
 import { requiredValidator } from '@validators';
 import type { SalesforcePropertie } from '@/views/types'
-import AlertDialog from '@/views/utils/AlertDialog.vue';
 
 interface Props {
     item: SalesforcePropertie,
 }
 const props = defineProps<Props>()
 
-const alert = inject('alert');
-const snackbar = inject('snackbar');
+const alert     = <any>(inject('alert'))
+const snackbar  = <any>(inject('snackbar'))
 const errorHandler = inject('$errorHandler');
 
 async function directFeeChange() {
@@ -109,5 +108,4 @@ async function bookFeeChange() {
         </VCol>
         <!-- 👉 submit -->
     </VRow>
-    <AlertDialog ref="alert"/>
 </template>

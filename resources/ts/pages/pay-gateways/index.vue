@@ -1,52 +1,24 @@
+
 <script setup lang="ts">
+import PayGatewayOverview from '@/views/pay-gateways/PayGatewayOverview.vue';
+import CreateForm from '@/views/utils/CreateForm.vue'
+import corp from '@corp';
+import type { Tab } from '@/views/types'
 
-import { useSearchStore } from '@/views/pay-modules/usePayModStore'
-import BaseIndexOverview from '@/views/utils/BaseIndexOverview.vue';
-
-// 👉 Store
-const {store, pagenation, setHeaders} = useSearchStore()
-provide('store', store)
-provide('pagenation', pagenation)
-provide('setHeaders', setHeaders)
-
-const metas = [
-    {
-        icon: 'tabler-user',
-        color: 'primary',
-        title: '금월 추가된 가맹점',
-        stats: '21,459',
-        percentage: +29,
-        subtitle: 'Total Users',
-    },
-    {
-        icon: 'tabler-user-plus',
-        color: 'error',
-        title: '금주 추가된 가맹점',
-        stats: '4,567',
-        percentage: +18,
-        subtitle: 'Last week analytics',
-    },
-    {
-        icon: 'tabler-user-check',
-        color: 'success',
-        title: '금월 감소한 가맹점',
-        stats: '19,860',
-        percentage: -14,
-        subtitle: 'Last week analytics',
-    },
-    {
-        icon: 'tabler-user-exclamation',
-        color: 'warning',
-        title: '금주 감소한 가맹점',
-        stats: '237',
-        percentage: +42,
-        subtitle: 'Last week analytics',
-    },
-]
-
+const tabs = <Tab[]>([
+    { icon: 'ph-buildings', title: 'PG사 정보' },
+])
+const path = 'pay-gateways'
+const id = ref<number>(corp.id) //brand_id
 </script>
 <template>
-    <BaseIndexOverview :placeholder="`MID, TID 검색`" :metas="metas">
-        <template #name>결제모듈</template>
-    </BaseIndexOverview>
+    <section>
+        <CreateForm :id="id" :path="path" :tabs="tabs" :item="[]">
+            <template #view>
+                <VWindowItem>
+                    <PayGatewayOverview :id="id" />
+                </VWindowItem>
+            </template>
+        </CreateForm>
+    </section>
 </template>
