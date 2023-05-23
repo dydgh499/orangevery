@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { RegisterResponse } from '@/@fake-db/types'
+import type { RegisterResponse } from '@/views/types';
 import authV2RegisterIllustrationBorderedDark from '@images/pages/auth-v2-register-illustration-bordered-dark.png'
 import authV2RegisterIllustrationBorderedLight from '@images/pages/auth-v2-register-illustration-bordered-light.png'
 import authV2RegisterIllustrationDark from '@images/pages/auth-v2-register-illustration-dark.png'

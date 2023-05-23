@@ -1,41 +1,62 @@
 export default [
   { heading: 'Transaction' },
   {
-    title: 'Sales management',
-    icon: { icon: 'ic-outline-payments' },
-    to: 'apps-transaction-sales-management',
-  },
-  {
-    title: 'Settlement management',
-    icon: { icon: 'tabler-calculator' },
-    to: 'apps-transaction-settlement-management',
-  },
-  {
-    title: 'Settlement details',
-    icon: { icon: 'tabler:calendar-time' },
-    to: 'apps-transaction-settlement-details',
-  },
-  {
     title: 'Payment',
     icon: { icon: 'fluent-payment-32-regular' },
     children: [
       {
         title: 'Hand payment',
-        to: 'apps-transaction-settlement-details',
+        to: 'transactions-hand',
       },
       {
         title: 'Auth payment',
-        to: 'apps-transaction-settlement-details',
+        to: 'transactions-auth',
       },
       {
         title: 'Simple payment',
-        to: 'apps-transaction-settlement-details',
+        to: 'transactions-simple',
+      },
+      {
+        title: 'Cancel payment',
+        to: 'transactions-cancel',
       },
     ]
   },
   {
+    title: 'transactions-management',
+    icon: { icon: 'ic-outline-payments' },
+    to: 'transactions',
+  },
+  {
+    title: 'settlements',
+    icon: { icon: 'tabler-calculator' },
+    children: [
+        {
+          title: 'merchandise-settlements',
+          to: 'transactions-settlements-merchandise',
+        },
+        {
+          title: 'salesforce-settlements',
+          to: 'transactions-settlements-salesforce',
+        },
+      ]
+  },  {
+    title: 'settlements-histories',
+    icon: { icon: 'tabler:calendar-time' },
+    children: [
+        {
+            title: 'merchandise-settlements-histories',
+            to: 'transactions-settlements-histories-merchandise',
+          },
+          {
+            title: 'salesforce-settlements-histories',
+            to: 'transactions-settlements-histories-salesforce',
+          },
+      ]
+  },
+  {
     title: 'Abnormal transaction',
     icon: { icon: 'jam-triangle-danger' },
-    to: 'apps-transaction-settlement-details',
+    to: 'transactions-dangers',
   },
 ]

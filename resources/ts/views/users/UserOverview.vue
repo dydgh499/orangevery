@@ -113,8 +113,8 @@ watchEffect(() => {
                         <CreateHalfVCol>
                             <template #name>사업자번호</template>
                             <template #input>
-                                <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="number"
-                                    prepend-inner-icon="ic-outline-business-center" placeholder="숫자만 입력해주세요."
+                                <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
+                                    prepend-inner-icon="ic-outline-business-center" placeholder="사업자번호 입력"
                                     persistent-placeholder
                                     :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
                             </template>

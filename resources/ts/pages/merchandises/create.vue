@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import UserOverview from '@/views/users/UserOverview.vue';
 import MchtOverview from '@/views/merchandises/MchtOverview.vue';
-import PayModuleOverview from '@/views/pay-modules/PayModuleOverview.vue';
+import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOverview.vue';
 import CreateForm from '@/views/utils/CreateForm.vue'
 import { useUpdateStore } from '@/views/merchandises/useStore'
 import type { Tab } from '@/views/types'

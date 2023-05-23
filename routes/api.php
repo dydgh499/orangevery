@@ -34,21 +34,27 @@ Route::prefix('v1')->middleware('log.route')->group(function()
         Route::middleware('auth:sanctum')->post('ok', [AuthController::class, 'ok']);
     });
     Route::prefix('manager')->middleware('auth:sanctum')->group(function() {
-        Route::prefix('pay-gateways')->group(function() {
-            Route::get('detail', [PaymentGatewayController::class, 'detail']);
+        Route::prefix('services')->group(function() {
+            Route::prefix('pay-gateways')->group(function() {
+                Route::get('detail', [PaymentGatewayController::class, 'detail']);
+            });
+            Route::apiResource('brands', BrandController::class);
+            Route::apiResource('operators', OperatorController::class);
+            Route::apiResource('pay-gateways', PaymentGatewayController::class);
+            Route::apiResource('pay-sections', PaymentSectionController::class);
         });
+
         Route::prefix('salesforces')->group(function() {
             Route::get('hierarchical-down', [SalesforceController::class, 'hierarchicalDown']);
             Route::get('hierarchical-up', [SalesforceController::class, 'hierarchicalUp']);
         });
-
-        Route::apiResource('brands', BrandController::class);
-        Route::apiResource('operators', OperatorController::class);
-        Route::apiResource('merchandises', MerchandiseController::class);
         Route::apiResource('salesforces', SalesforceController::class);
-        Route::apiResource('pay-modules', PaymentModuleController::class);
-        Route::apiResource('pay-gateways', PaymentGatewayController::class);
-        Route::apiResource('pay-sections', PaymentSectionController::class);
+
+        Route::prefix('merchandises')->group(function() {
+            Route::apiResource('pay-modules', PaymentModuleController::class);
+        });
+        
+        Route::apiResource('merchandises', MerchandiseController::class);
         Route::apiResource('notices', NoticeController::class);
     });
 });

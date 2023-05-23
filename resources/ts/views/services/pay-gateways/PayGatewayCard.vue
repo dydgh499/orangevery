@@ -1,0 +1,204 @@
+<script lang="ts" setup>
+import { axios } from '@axios';
+import { businessNumValidator, requiredValidator } from '@validators';
+import type { PayGateway, PaySection } from '@/views/types'
+import { VForm } from 'vuetify/components';
+import { useStore } from '@/views/services/pay-gateways/useStore';
+import PaySectionTr from '@/views/services/pay-gateways/PaySectionTr.vue';
+import corp from '@corp'
+import type { InjectionKey, Plugin, Ref } from 'vue'
+
+interface Props {
+    item: PayGateway,
+}
+const vForm = ref<VForm>()
+const props = defineProps<Props>()
+
+const { pss, pg_types } = useStore()
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+const new_pss = reactive<PaySection[]>([])
+
+const addNewSection = () => {
+    new_pss.push({
+        id: 0,
+        brand_id: corp.brand_id,
+        pg_id: props.item.id,
+        name: '',
+        trx_fee: 0,
+        is_use: true,
+    })
+}
+const update = async () => {
+    const is_valid = await vForm.value?.validate();
+    let up_type = props.item.id != 0 ? '수정' : '생성';
+
+    if (is_valid?.valid && await alert.value.show('정말 ' + up_type + '하시겠습니까?')) {
+        let url = '/api/v1/pay-modules'
+        url += props.item.id ? "/" + props.item.id : ""
+        axios.post(url, props.item)
+            .then(r => { snackbar.value.show('성공하였습니다', 'primary') })
+            .catch(e => { snackbar.value.show(e.response.data.message, 'error') })
+    }
+}
+
+watchEffect(() => {
+    console.log(props.item.pg_type)
+    if (props.item.pg_type != 0 && props.item.pg_type != null) {
+        const idx = pg_types.findIndex(item => item.id == props.item.pg_type)
+        if (idx != null) {
+            props.item.addr = pg_types[idx].addr
+            props.item.rep_nm = pg_types[idx].rep_nm
+            props.item.company_nm = pg_types[idx].company_nm
+            props.item.business_num = pg_types[idx].business_num
+            props.item.phone_num = pg_types[idx].phone_num
+        }
+    }
+})
+const filterPss = computed(() => {
+    if (props.item.id != 0) {
+        const filter = pss.filter(item => {
+            return item.pg_id == props.item.id;
+        })
+        return filter
+    }
+    else
+        return []
+})
+
+</script>
+<template>
+    <AppCardActions action-collapsed :title="props.item.pg_nm" :collapsed="true">
+        <VDivider />
+        <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
+            <VCol cols="12" md="5">
+                <VCardItem>
+                    <VForm ref="vForm">
+                        <VCardTitle style="margin-bottom: 1em;">PG사 정보</VCardTitle>
+                        <VRow class="pt-3">
+                            <VCol>
+                                <label>PG사 선택</label>
+                            </VCol>
+                            <VCol>
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_type" :items="pg_types"
+                                    prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="name" item-value="id"
+                                    single-line />
+                            </VCol>
+                        </VRow>
+                        <VRow class="pt-3">
+                            <VCol>
+                                <label>별칭</label>
+                            </VCol>
+                            <VCol>
+                                <VTextField type="text" v-model="props.item.pg_nm" prepend-inner-icon="tabler-table-alias"
+                                    placeholder="별칭 입력" persistent-placeholder />
+                            </VCol>
+                        </VRow>
+                        <VRow class="pt-3">
+                            <VCol>
+                                <label>대표자명</label>
+                            </VCol>
+                            <VCol>
+                                <VTextField type="text" v-model="props.item.rep_nm" prepend-inner-icon="tabler-user"
+                                    placeholder="대표자명 입력" persistent-placeholder />
+                            </VCol>
+                        </VRow>
+                        <VRow class="pt-3">
+                            <VCol>
+                                <label>상호명</label>
+                            </VCol>
+                            <VCol>
+                                <VTextField type="text" v-model="props.item.company_nm"
+                                    prepend-inner-icon="tabler-building-store" placeholder="상호명 입력"
+                                    persistent-placeholder />
+                            </VCol>
+                        </VRow>
+                        <VRow class="pt-3">
+                            <VCol>
+                                <label>사업자번호</label>
+                            </VCol>
+                            <VCol>
+                                <VTextField v-model="props.item.business_num" type="text"
+                                    prepend-inner-icon="ic-outline-business-center" placeholder="사업자번호 입력"
+                                    persistent-placeholder
+                                    :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
+
+                            </VCol>
+                        </VRow>
+                        <VRow class="pt-3">
+                            <VCol>
+                                <label>휴대폰번호</label>
+                            </VCol>
+                            <VCol>
+                                <VTextField v-model="props.item.phone_num" type="text"
+                                    prepend-inner-icon="tabler-device-mobile" placeholder="숫자만 입력해주세요."
+                                    persistent-placeholder />
+
+                            </VCol>
+                        </VRow>
+                        <VRow class="pt-3">
+                            <VCol>
+                                <label>주소</label>
+                            </VCol>
+                            <VCol>
+                                <VTextField v-model="props.item.addr" prepend-inner-icon="tabler-map-pin"
+                                    placeholder="주소 입력" persistent-placeholder maxlength="200" />
+                            </VCol>
+                        </VRow>
+                        <VRow>
+                            <VCol class="d-flex gap-4 pt-10">
+                                <VBtn type="button" style="margin-left: auto;" @click="update()">
+                                    <div v-if="Boolean(props.item.id == 0)">
+                                        추가
+                                        <VIcon end icon="tabler-plus" />
+                                    </div>
+                                    <div v-else>
+                                        수정
+                                        <VIcon end icon="tabler-checkbox" />
+                                    </div>
+                                </VBtn>
+                            </VCol>
+                        </VRow>
+                    </VForm>
+                </VCardItem>
+            </VCol>
+            <VDivider :vertical="$vuetify.display.mdAndUp" />
+            <VCol cols="12" md="7">
+                <VCardItem>
+                    <VCardTitle style="margin-bottom: 1em;">상세구간 테이블(영중소 등)</VCardTitle>
+                    <VTable style="text-align: center;">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="text-align: center;">No.</th>
+                                <th scope="col" style="text-align: center;">구간명</th>
+                                <th scope="col" style="text-align: center;">거래 수수료율</th>
+                                <th scope="col" style="text-align: center;">추가/수정</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <PaySectionTr v-for="(ps, index) in filterPss" :key="index" :item="ps" :index="index">
+                            </PaySectionTr>
+                            <PaySectionTr v-for="(ps, index) in new_pss" :key="index" :item="ps" :index="index">
+                            </PaySectionTr>
+                        </tbody>
+                        <tfoot v-show="Boolean(props.item.id == 0)">
+                            <tr>
+                                <td colspan="4" class="text-center">
+                                    PG사를 추가하신 후에 상세구간 테이블을 설정할 수 있습니다.
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </VTable>
+                    <VRow v-show="Boolean(props.item.id != 0)">
+                        <VCol class="d-flex gap-4 pt-10">
+                            <VBtn type="button" style="margin-left: auto;" @click="addNewSection()">
+                                구간 추가
+                                <VIcon end icon="tabler-plus" />
+                            </VBtn>
+                        </VCol>
+                    </VRow>
+                </VCardItem>
+            </VCol>
+        </div>
+    </AppCardActions>
+</template>

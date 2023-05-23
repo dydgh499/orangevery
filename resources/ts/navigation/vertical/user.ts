@@ -1,22 +1,19 @@
 export default [
   { heading: 'User information' },
   {
-    title: 'Md management',
+    title: 'merchandises-management',
     icon: { icon: 'tabler-user' },
     children: [
-      { title: 'Md list', to: 'merchandises' },
-      { title: 'Paymodule management', to: 'pay-modules'},
-      { title: 'Calculate', to: 'md-calculates' },
+      { title: 'merchandises', to: 'merchandises' },
+      { title: 'paymodule-management', to: 'merchandises-pay-modules'},
     ]
   },
   {
-    title: 'Sf management',
+    title: 'salesforce-management',
     icon: { icon: 'tabler-user' },
     children: [
-        { title: 'Sf list', to: 'salesforces'},
-        { title: 'Unders treeview', to: 'treeview'},
-        { title: 'Calculate', to: 'sf-calculates' },
-        //{ title: 'Calculate', to: 'calculates' },
+        { title: 'salesforces', to: 'salesforces'},
+        { title: 'treeview', to: 'salesforces-treeview'},
     ]
   },
 ]

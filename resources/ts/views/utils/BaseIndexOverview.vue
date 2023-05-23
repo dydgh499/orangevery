@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
 import SearchFilterDialog from '@/views/utils/SearchFilterDialog.vue';
 
 interface Props {
@@ -7,10 +6,11 @@ interface Props {
     metas: any[],
 }
 const props = defineProps<Props>();
-const { hierarchical, flattened } = useSalesHierarchicalStore()
 
 const store = <any>(inject('store'))
 const setHeaders = <any>(inject('setHeaders'))
+
+console.log(store.items)
 
 const filter = ref(null)
 onMounted(() => {
@@ -26,7 +26,6 @@ const pagenation = computed(() => {
     return `총 ${store.pagenation.total_count}개 항목 중 ${firstIndex} ~ ${lastIndex}개 표시`
 })
 // 👉 Store
-const salesforce = ref({trx_fee:0, user_name:'영업자 선택'})
 </script>
 <template>
     <section>
@@ -56,14 +55,7 @@ const salesforce = ref({trx_fee:0, user_name:'영업자 선택'})
                     <!-- 👉 Filters -->
                     <VCardText>
                         <VRow>
-                            <!-- 👉 Select Plan -->
-                            <VCol cols="12" sm="2">
-                                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
-                                        prepend-inner-icon="tabler-man" label="영업자 선택"
-                                        :hint="`수수료율: ${(salesforce.trx_fee*100).toFixed(3)}%`" item-title="user_name" item-value="id"
-                                        persistent-hint single-line 
-                                />
-                            </VCol>
+                            <slot name="options"></slot>
                         </VRow>
                     </VCardText>
                     <VDivider />
@@ -113,7 +105,7 @@ const salesforce = ref({trx_fee:0, user_name:'영업자 선택'})
                         <!-- 👉 table head -->
                         <thead>
                             <tr>
-                                <th v-for="header in store.headers" :key="header.ko" scope="col" v-show="!header.hidden">
+                                <th v-for="(header, index) in store.headers" :key="index" scope="col" v-show="!header.hidden">
                                     {{ header.ko }}
                                 </th>
                                 <th scope="col">수정/삭제</th>

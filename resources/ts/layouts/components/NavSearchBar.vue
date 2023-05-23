@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { SearchHeader, SearchItem } from '@/@fake-db/types';
+import { SearchHeader, SearchItem } from '@/views/types';
 import {axios} from '@axios';
 import { useThemeConfig } from '@core/composable/useThemeConfig';
 

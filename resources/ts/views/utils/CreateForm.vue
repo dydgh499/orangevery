@@ -15,12 +15,9 @@ const props = defineProps<Props>()
 
 const url = ref('/api/v1/manager/' + props.path + '/' + props.id)
 const tab = ref(0);
-const alert     = <any>(inject('alert'))
-const snackbar  = <any>(inject('snackbar'))
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
 const vForm = ref<VForm>()
-
-const errorHandler = <any>(inject('$errorHandler'));
-
 
 const get = (uri: string) => {
     axios.get(uri)
@@ -28,8 +25,7 @@ const get = (uri: string) => {
             Object.assign(props.item, r.data);
         })
         .catch(e => {
-            snackbar.value.show(e.response.data.message, 'primary')
-            const res = errorHandler(e);
+            snackbar.value.show(e.response.data.message, 'error')
         })
 }
 const update = async () => {
@@ -42,16 +38,11 @@ const update = async () => {
             method: 'post',
             data: props.item,
         })
-            .then(r => {
-                snackbar.value.show('성공하였습니다.', 'success')
-            })
-            .catch(e => {
-                snackbar.value.show(e.response.data.message, 'primary')
-                const res = errorHandler(e);
-            })
+        .then(r => { snackbar.value.show('성공하였습니다.', 'success') })
+        .catch(e => { snackbar.value.show(e.response.data.message, 'error') })
     }
     else
-        snackbar.value.show(up_type + '조건에 맞지않는 필드가 존재합니다.', 'primary')
+        snackbar.value.show(up_type + '조건에 맞지않는 필드가 존재합니다.', 'warning')
 }
 const disabledConditions = (index: number) => {
     return index == 2 && props.id == 0 && props.path == 'merchandises'

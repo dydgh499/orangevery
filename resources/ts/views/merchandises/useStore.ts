@@ -1,5 +1,6 @@
 import { Searcher } from '@/views/searcher';
 import type { Merchandise } from '@/views/types';
+import corp from '@corp';
 
 
 export const useSearchStore = defineStore('mchtSearchStore', () => {    
@@ -44,9 +45,8 @@ export const useUpdateStore = defineStore('mchtUpdateStore', () => {
         trx_fee: 0,
         group_id: 0,
         mcht_name: '',
-        id: 0,
-        created_at: undefined,
-        brand_id: 0,
+        created_at: null,
+        brand_id: corp.brand_id,
         user_name: '',
         user_pw: '',
         nick_name: '',

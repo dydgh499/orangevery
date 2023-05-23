@@ -12,7 +12,7 @@ export function Searcher<T>(_path: string, _type: T) {
     const headers   = ref<Filter[]>(JSON.parse(localStorage.getItem(_path) || "[]"))
     // -----------------------------
     const app       = getCurrentInstance()
-    const path      = _path;
+    const path      = _path
     const items     = ref<T[]>([])
     const router    = useRouter()
     const params    = reactive<SearchParams>(setSearchParams())
@@ -46,10 +46,10 @@ export function Searcher<T>(_path: string, _type: T) {
         }
     }
     function create() {
-        router.push('/' + path + '/create')
+        router.push('/'+ path + '/create')
     }
     function edit(id: number=0) {
-        router.push('/' + path + '/edit/'+id)
+        router.push('/'+ path + '/edit/'+id)
     }
     async function remove(id: number) {
         if(await alert.value.show('정말 삭제하시겠습니까? 삭제하신 정보는 복구하실 수 없습니다.'))

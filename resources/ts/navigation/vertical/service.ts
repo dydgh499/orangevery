@@ -8,32 +8,32 @@ export default [
         children: [
             {
                 title: 'Service management',
-                to: 'brands',
+                to: 'services-brands',
             },
             {
 
                 title: 'PG management',
-                to: 'pay-gateways',
+                to: 'services-pay-gateways',
             },
             {
                 title: 'Operator management',
-                to: 'operators',
+                to: 'services-operators',
             },
         ]
     },
     {
         title: 'Notice',
         icon: { icon: 'fe-notice-active' },
-        to: 'apps-service-notice-management',
+        to: 'posts',
     },
     {
         title: 'Log management',
         icon: { icon: 'mingcute-history-line' },
-        to: 'apps-service-log-management',
+        to: 'merchandises',
     },
     {
         title: 'Calendar',
         icon: { icon: 'tabler-calendar' },
-        to: 'apps-calendar',
+        to: 'calendars',
     },
 ]
