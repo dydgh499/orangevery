@@ -42,7 +42,7 @@ const metas = [
 ]
 </script>
 <template>
-    <BaseIndexOverview :placeholder="`MID, TID 검색`" :metas="metas">
+    <BaseIndexOverview :placeholder="`MID, TID 검색`" :metas="metas" :add="true" :update="true">
         <template #option></template>
         <template #name>결제모듈</template>
     </BaseIndexOverview>

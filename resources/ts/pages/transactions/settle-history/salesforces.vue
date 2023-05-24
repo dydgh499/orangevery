@@ -45,7 +45,7 @@ const metas = [
 ]
 </script>
 <template>
-    <BaseIndexOverview :placeholder="`ID, 상호, 대표자명 검색`" :metas="metas">
+    <BaseIndexOverview :placeholder="`ID, 상호, 대표자명 검색`" :metas="metas" :add="true" :update="true">
         <template #options>
             <VCol cols="12" sm="2">
                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"

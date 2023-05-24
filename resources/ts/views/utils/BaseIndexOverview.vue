@@ -1,19 +1,21 @@
 <script setup lang="ts">
 import SearchFilterDialog from '@/views/utils/SearchFilterDialog.vue';
+import BaseIndexChart from '@/views/utils/BaseIndexChart.vue';
 
 interface Props {
     placeholder: string,
     metas: any[],
+    add: boolean,
+    update: boolean,
 }
 const props = defineProps<Props>();
 
 const store = <any>(inject('store'))
 const setHeaders = <any>(inject('setHeaders'))
 
-console.log(store.items)
-
 const filter = ref(null)
 onMounted(() => {
+console.log(store.headers)
     store.filter = filter.value
     setHeaders()
     watchEffect(() => {
@@ -30,26 +32,8 @@ const pagenation = computed(() => {
 <template>
     <section>
         <VRow>
-            <VCol v-for="meta in props.metas" :key="meta.title" cols="12" sm="6" lg="3">
-                <VCard>
-                    <VCardText class="d-flex justify-space-between">
-                        <div>
-                            <span>{{ meta.title }}</span>
-                            <div class="d-flex align-center gap-2 my-1">
-                                <h6 class="text-h6">
-                                    {{ meta.stats }}
-                                </h6>
-                                <span :class="meta.percentage > 0 ? 'text-success' : 'text-error'">({{ meta.percentage
-                                }}%)</span>
-                            </div>
-                            <span>{{ meta.subtitle }}</span>
-                        </div>
-
-                        <VAvatar rounded variant="tonal" :color="meta.color" :icon="meta.icon" />
-                    </VCardText>
-                </VCard>
-            </VCol>
-
+            <BaseIndexChart :metas="props.metas">
+            </BaseIndexChart>
             <VCol cols="12">
                 <VCard title="검색 옵션">
                     <!-- 👉 Filters -->
@@ -92,7 +76,7 @@ const pagenation = computed(() => {
                                     엑셀 추출
                                 </VBtn>
                                 <!-- 👉 Add user button -->
-                                <VBtn prepend-icon="tabler-plus" @click="store.create()">
+                                <VBtn prepend-icon="tabler-plus" @click="store.create()" v-if="props.add">
                                     <slot name="name"></slot> 추가
                                 </VBtn>
                             </div>
@@ -108,7 +92,7 @@ const pagenation = computed(() => {
                                 <th v-for="(header, index) in store.headers" :key="index" scope="col" v-show="!header.hidden">
                                     {{ header.ko }}
                                 </th>
-                                <th scope="col">수정/삭제</th>
+                                <th scope="col" v-if="props.update">수정/삭제</th>
                             </tr>
                         </thead>
                         <!-- 👉 table body -->
@@ -120,7 +104,7 @@ const pagenation = computed(() => {
                                     </span>
                                 </td>
                                 <!-- 👉 Actions -->
-                                <td class="text-center" style="width: 5rem;">
+                                <td class="text-center" style="width: 5rem;" v-if="props.update">
                                     <VBtn icon size="x-small" color="default" variant="text" @click="store.edit(user.id)">
                                         <VIcon size="22" icon="tabler-edit" />
                                     </VBtn>
@@ -146,7 +130,6 @@ const pagenation = computed(() => {
                         <span class="text-sm text-disabled">
                             {{ pagenation }}
                         </span>
-
                         <VPagination v-model="store.params.page" size="small" :total-visible="10"
                             :length="store.pagenation.total_page" />
                     </VCardText>
@@ -156,17 +139,3 @@ const pagenation = computed(() => {
         <SearchFilterDialog ref="filter" :headers="store.headers" />
     </section>
 </template>
-
-<style lang="scss">
-.app-user-search-filter {
-  inline-size: 31.6rem;
-}
-
-.text-capitalize {
-  text-transform: capitalize;
-}
-
-.user-list-name:not(:hover) {
-  color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
-}
-</style>

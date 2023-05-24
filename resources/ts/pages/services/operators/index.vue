@@ -42,7 +42,7 @@ const metas = [
 ]
 </script>
 <template>
-    <BaseIndexOverview :placeholder="`ID, 성명 검색`" :metas="metas">
+    <BaseIndexOverview :placeholder="`ID, 성명 검색`" :metas="metas" :add="true" :update="true">
         <template #option></template>
         <template #name>직원 및 본사</template>
     </BaseIndexOverview>

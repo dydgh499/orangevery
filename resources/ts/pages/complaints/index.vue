@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/posts/useStore'
+import { useSearchStore } from '@/views/complaints/useStore'
 import BaseIndexOverview from '@/views/utils/BaseIndexOverview.vue';
 
 const { store, setHeaders } = useSearchStore()
@@ -9,9 +9,9 @@ provide('setHeaders', setHeaders)
 const metas = []
 </script>
 <template>
-    <BaseIndexOverview :placeholder="`제목 검색`" :metas="metas" :add="true" :update="true">
+    <BaseIndexOverview :placeholder="`TID 검색`" :metas="metas" :add="true" :update="true">
         <template #options>
         </template>
-        <template #name>게시글</template>
+        <template #name>민원</template>
     </BaseIndexOverview>
 </template>

@@ -1,8 +1,8 @@
 
 <script setup lang="ts">
-import PayModuleCard from '@/views/pay-modules/PayModuleCard.vue';
-import CreateForm from '@/views/utils/CreateForm.vue'
+import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue';
 import { useUpdateStore } from '@/views/merchandises/pay-modules/useStore'
+import CreateForm from '@/views/utils/CreateForm.vue'
 import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
 
 const { flattenUp } = useSalesHierarchicalStore()

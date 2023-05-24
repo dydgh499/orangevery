@@ -28,29 +28,29 @@ export default [
     to: 'transactions',
   },
   {
-    title: 'settlements',
+    title: 'settle',
     icon: { icon: 'tabler-calculator' },
     children: [
         {
-          title: 'merchandise-settlements',
-          to: 'transactions-settlements-merchandise',
+          title: 'merchandise-settle',
+          to: 'transactions-settle-merchandises',
         },
         {
-          title: 'salesforce-settlements',
-          to: 'transactions-settlements-salesforce',
+          title: 'salesforce-settle',
+          to: 'transactions-settle-salesforces',
         },
       ]
   },  {
-    title: 'settlements-histories',
+    title: 'settle-history',
     icon: { icon: 'tabler:calendar-time' },
     children: [
         {
-            title: 'merchandise-settlements-histories',
-            to: 'transactions-settlements-histories-merchandise',
+            title: 'merchandise-settle-history',
+            to: 'transactions-settle-history-merchandises',
           },
           {
-            title: 'salesforce-settlements-histories',
-            to: 'transactions-settlements-histories-salesforce',
+            title: 'salesforce-settle-history',
+            to: 'transactions-settle-history-salesforces',
           },
       ]
   },

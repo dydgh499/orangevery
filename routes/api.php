@@ -26,8 +26,7 @@ use App\Http\Controllers\Manager\NoticeController;
 */
 
 
-Route::prefix('v1')->middleware('log.route')->group(function()
-{
+Route::prefix('v1')->middleware('log.route')->group(function() {
     Route::prefix('auth')->group(function() {
         Route::post('sign-in', [AuthController::class, 'signin']);
         Route::middleware('auth:sanctum')->post('sign-out', [AuthController::class, 'signout']);
@@ -53,8 +52,16 @@ Route::prefix('v1')->middleware('log.route')->group(function()
         Route::prefix('merchandises')->group(function() {
             Route::apiResource('pay-modules', PaymentModuleController::class);
         });
-        
+        Route::prefix('transactions')->group(function() {
+            Route::apiResource('dangers', NoticeController::class);
+            Route::apiResource('settle/merchandises', NoticeController::class);
+            Route::apiResource('settle/salesforces', NoticeController::class);
+            Route::apiResource('settle-history/merchandises', NoticeController::class);
+            Route::apiResource('settle-history/salesforces', NoticeController::class);
+        });
+        Route::apiResource('transactions', NoticeController::class);
         Route::apiResource('merchandises', MerchandiseController::class);
-        Route::apiResource('notices', NoticeController::class);
+        Route::apiResource('posts', NoticeController::class);
     });
+    Route::post('upload-image', [PaymentGatewayController::class, 'detail']);
 });

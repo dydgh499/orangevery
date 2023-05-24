@@ -10,12 +10,12 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
         store.setHeader('LOGO', 'user_name')
         store.setHeader('회사명', 'company_nm')
         store.setHeader('대표자명', 'mcht_name')
-        store.setHeader('휴대폰 번호', 'phone_num')
+        store.setHeader('연락처', 'phone_num')
         store.setHeader('옵션', 'pv_options')
         store.setHeader('비고', 'note')
         store.setHeader('마지막 입금일', 'last_dpst_at')
         store.setHeader('생성시간', 'created_at')
-        store.setHeader('업데이트시간', 'updated_at')        
+        store.setHeader('업데이트시간', 'updated_at')
     }
     return {
         store,

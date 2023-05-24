@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->integer('group_id')->default(0)->comment('GID');
-            $table->string('phone', 30)->comment('ID(휴대폰 번호)');
+            $table->string('phone', 30)->comment('ID(연락처)');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('phone_verified_at')->nullable();

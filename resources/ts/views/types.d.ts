@@ -43,6 +43,20 @@ export interface Tab {
     title: string,
 }
 //----------------- 검색 -------------
+export interface Bank {
+    acct_bank_nm: string,
+    acct_bank_cd: string,
+    acct_num: string,
+    acct_nm: string,
+}
+
+export interface Contract {
+    passbook_img: File | null,
+    id_img: File | null,
+    contract_img: File | null,
+    bsin_lic_img: File | null,
+}
+
 export interface BasePropertie {
     id: number,
     brand_id: number,
@@ -53,21 +67,12 @@ export interface BasePropertie {
     created_at: datetime | null,
     updated_at: datetime | null,
 }
-
-export interface UserPropertie extends BaseProperties {
+export interface UserPropertie extends BasePropertie, Bank, Contract {
     addr: string,
     email: string,
     resident_num: string,
     business_num: string,
     sector: string,
-    passbook_img: File | null,
-    id_img: File | null,
-    contract_img: File | null,
-    bsin_lic_img: File | null,
-    acct_num: string,
-    acct_nm: string,
-    acct_bank_nm: string,
-    acct_bank_cd: string,
 }
 
 export interface MerchandisePropertie {
@@ -195,6 +200,8 @@ export interface Transaction {
     //
     sf_fee_id: number,
     sf_name: number,
+    sf_fee: number,
+    total_sf_fee: number,
     //
     pmod_id: number,
     custom_filter_id: number,
@@ -234,23 +241,127 @@ export interface Transaction {
 export interface Danger {
     id: number,
     mcht_id: number,
+    mcht_name: string,
+    sales_name:string,
     tran_id: number,
     trx_type: number,
+    item_nm: string,
     mid: string,
+    cat_id: string,
+    ord_num: string,
+    trx_id: string,
+    ori_trx_id: string,
     withdraw_id: number,
     withdraw_fee: float,
-    cat_id: string,
     card_nm: string,
     card_num: string,
     installment: string,
     danger_type: number,
     danger_check: boolean,
-    ps_id: number,
-    ps_name: string,
+    pg_id: number,
+    pg_name: string,
     ps_id: number,
     ps_name: string,
     trx_dttm: Date,
     cxl_dttm: Date,
+    is_cancel:boolean,
     updated_at:datetime,
     created_at: datetime,
+}
+
+export interface Settle extends Bank {
+    sales_amount: number,
+    total_profit: number,
+
+    appr_count: number,
+    appr_amount: number,
+    appr_trx_fee: number,
+    appr_dpst_fee: number,
+    appr_holding_fee: number,
+
+    cxl_count: number,
+    cxl_amount: number,
+    cxl_trx_fee: number,
+    cxl_dpst_fee: number,
+    cxl_holding_fee: number,
+    
+    deduction_amount: number,         // 차감완료 금액
+    deduction_extra_amount:number,    // 추가 차감금
+    deduction_complate_amount:number, // 차감 완료금        
+
+    comm_amount:number,         // 통신비
+    settle_amount:number,       // 정산금액
+    deposit_amount:number,      // 입금금액
+    transfer_amount: string,    // 이체금액
+
+    rep_nm: string,
+    phone_num: string,
+    resident_num: string,
+    business_num: string,
+    sector: string,
+    addr: string,
+}
+export interface SettleMerchandise extends Settle{
+    id: number,
+    mcht_id: number,
+    mcht_name: string,
+    sales_id: number,
+    sales_name: string,
+}
+
+export interface SettleSalesforce extends Settle{
+    id: number,
+    sales_id: number,
+    sales_name: string,
+    parent_id: number,
+    parent_name: string,
+}
+
+export interface SettlesHistories extends Bank{
+    id: number,
+    settle_amount: number,
+    settle_dt: Date,
+    deposit_dt: Date,
+    apply_s_dt: Date,
+    apply_e_dt: Date,
+    status: Boolean,
+}
+
+export interface SettlesHistoriesMerchandise {
+    mcht_id: number
+    mcht_name: string,
+}
+
+export interface SettlesHistoriesSalesforce {
+    sales_id: number
+    sales_name: string,
+}
+
+export interface Post {
+    id: number,
+    brand_id: number,
+    title: string,
+    content: string,
+    type:number,
+    user_id: number,
+    parent_id: number | null,
+    depth: number,
+}
+
+export interface Complaint {
+    id: number,
+    brand_id: number,
+    tid: string,
+    cust_nm: string,
+    appr_dt: Date | null,
+    appr_num: string,
+    phone_num: string,
+    hand_cust_nm: string,
+    hand_phone_num: string,
+    issuer: string,
+    pg_id: string,
+    type: number,
+    entry_path: string,
+    is_deposit: string,
+    note: string,
 }

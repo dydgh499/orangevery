@@ -143,7 +143,7 @@ return [
         'og_img'    => '오픈 그래프 이미지',
         'og_description'=> '메타태그 오픈그래프 내용',
         'ceo_nm'    => '대표자명',
-        'phone_num' => '휴대폰 번호',
+        'phone_num' => '연락처',
         'fax_num'   => '팩스번호',
         'template_id'   => '템플릿 ID',
         'theme_css' => 'JSON 포멧의 CSS',

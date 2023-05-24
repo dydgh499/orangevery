@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import PayModuleCard from '@/views/pay-modules/PayModuleCard.vue';
+import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue';
 import CreateForm from '@/views/utils/CreateForm.vue'
 import { useUpdateStore } from '@/views/merchandises/pay-modules/useStore'
 

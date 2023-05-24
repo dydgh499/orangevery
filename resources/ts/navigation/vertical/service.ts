@@ -27,6 +27,11 @@ export default [
         to: 'posts',
     },
     {
+        title: 'Complaint',
+        icon: { icon: 'ic-round-sentiment-dissatisfied' },
+        to: 'complaints',
+    },
+    {
         title: 'Log management',
         icon: { icon: 'mingcute-history-line' },
         to: 'merchandises',

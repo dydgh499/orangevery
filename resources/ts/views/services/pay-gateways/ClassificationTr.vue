@@ -19,7 +19,7 @@ const update = async () => {
     let up_type = props.item.id != 0 ? '수정' : '생성';
 
     if (is_valid?.valid && await alert.value.show('정말 ' + up_type + '하시겠습니까?')) {
-        let url = '/api/v1/classifications'
+        let url = '/api/v1/services/classifications'
         url += props.item.id ? "/" + props.item.id : ""
         axios.post(url, props.item)
             .then(r => { snackbar.value.show('성공하였습니다', 'primary') })
@@ -28,7 +28,7 @@ const update = async () => {
 }
 const remove = async () => {
     if (await alert.value.show('정말 삭제하시겠습니까?')) {
-        let url = '/api/v1/classifications/' + props.item.id
+        let url = '/api/v1/services/classifications/' + props.item.id
         axios.delete(url)
             .then(r => { snackbar.value.show('성공하였습니다', 'primary') })
             .catch(e => { snackbar.value.show(e.response.data.message, 'error') })

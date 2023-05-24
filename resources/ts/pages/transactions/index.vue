@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
-import { useSearchStore } from '@/views/merchandises/useStore'
 import BaseIndexOverview from '@/views/utils/BaseIndexOverview.vue';
+import { useSearchStore } from '@/views/transactions/useStore';
 
-const { store, setHeaders } = useSearchStore()
+const {store, setHeaders} = useSearchStore()
 const { flattened } = useSalesHierarchicalStore()
 provide('store', store)
 provide('setHeaders', setHeaders)
@@ -45,7 +45,7 @@ const metas = [
 ]
 </script>
 <template>
-    <BaseIndexOverview :placeholder="`ID, 상호, 대표자명 검색`" :metas="metas">
+    <BaseIndexOverview :placeholder="`MID, TID, 거래번호 검색`" :metas="metas" :add="false" :update="true">
         <template #options>
             <VCol cols="12" sm="2">
                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
@@ -55,6 +55,7 @@ const metas = [
                 />
             </VCol>
         </template>
-        <template #name>가맹점</template>
+        <template #name></template>
     </BaseIndexOverview>
 </template>
+

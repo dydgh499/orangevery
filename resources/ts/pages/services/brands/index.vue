@@ -42,7 +42,7 @@ const metas = [
 ]
 </script>
 <template>
-    <BaseIndexOverview :placeholder="`DNS 검색`" :metas="metas">
+    <BaseIndexOverview :placeholder="`DNS 검색`" :metas="metas" :add="true" :update="true">
         <template #name>서비스</template>
     </BaseIndexOverview>
 </template>
