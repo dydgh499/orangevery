@@ -45,7 +45,6 @@ export const useUpdateStore = defineStore('mchtUpdateStore', () => {
         trx_fee: 0,
         group_id: 0,
         mcht_name: '',
-        created_at: null,
         brand_id: corp.brand_id,
         user_name: '',
         user_pw: '',
@@ -61,7 +60,10 @@ export const useUpdateStore = defineStore('mchtUpdateStore', () => {
         contract_img: null,
         bsin_lic_img: null,
         acct_num: '',
-        acct_nm: ''
+        acct_nm: '',
+        id: 0,
+        created_at: null,
+        updated_at: null
     })
     return {
         path, item

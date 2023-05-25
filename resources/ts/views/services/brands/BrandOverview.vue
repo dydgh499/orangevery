@@ -48,7 +48,7 @@ watchEffect(() => {
                 <VCardItem>
                     <VCardTitle>운영정보</VCardTitle>
                     <VRow class="pt-5">
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>도메인</template>
                             <template #input>
                                 <VTextField v-model="props.item.dns"
@@ -56,7 +56,7 @@ watchEffect(() => {
                                     persistent-placeholder :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>운영사명</template>
                             <template #input>
                                 <VTextField v-model="props.item.name"
@@ -64,7 +64,7 @@ watchEffect(() => {
                                     persistent-placeholder :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>회사명</template>
                             <template #input>
                                 <VTextField v-model="props.item.company_nm"
@@ -73,7 +73,7 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 대표자명 -->
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>대표자명</template>
                             <template #input>
                                 <VTextField id="nickNameHorizontalIcons" v-model="props.item.ceo_nm"
@@ -82,7 +82,7 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Address -->
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>주소</template>
                             <template #input>
                                 <VTextField id="addressHorizontalIcons" v-model="props.item.addr"
@@ -91,7 +91,7 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Mobile -->
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>휴대폰번호</template>
                             <template #input>
                                 <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="number"
@@ -100,11 +100,11 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 사업자 번호 -->
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>사업자번호</template>
                             <template #input>
-                                <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="number"
-                                    prepend-inner-icon="ic-outline-business-center" placeholder="숫자만 입력해주세요."
+                                <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
+                                    prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
                                     persistent-placeholder
                                     :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
                             </template>

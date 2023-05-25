@@ -19,6 +19,11 @@ export default [
                 title: 'Operator management',
                 to: 'services-operators',
             },
+            {
+                title: 'Bulk registration',
+                to: 'services-bulk-registration',
+                
+            },
         ]
     },
     {
@@ -30,11 +35,6 @@ export default [
         title: 'Complaint',
         icon: { icon: 'ic-round-sentiment-dissatisfied' },
         to: 'complaints',
-    },
-    {
-        title: 'Log management',
-        icon: { icon: 'mingcute-history-line' },
-        to: 'merchandises',
     },
     {
         title: 'Calendar',

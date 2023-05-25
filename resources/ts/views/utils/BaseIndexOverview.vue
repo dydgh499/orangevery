@@ -15,7 +15,6 @@ const setHeaders = <any>(inject('setHeaders'))
 
 const filter = ref(null)
 onMounted(() => {
-console.log(store.headers)
     store.filter = filter.value
     setHeaders()
     watchEffect(() => {

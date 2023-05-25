@@ -1,5 +1,5 @@
 import { Searcher } from '@/views/searcher';
-import type { Brand } from '@/views/types';
+import type { Brand, FreeOption, PaidOption, ThemaCSS } from '@/views/types';
 
 export const useSearchStore = defineStore('brandSearchStore', () => {    
     const store = Searcher<Brand>('services/brands', <Brand>({}))
@@ -30,7 +30,6 @@ export const useUpdateStore = defineStore('brandUpdateStore', () => {
         id: 0,
         dns: '',
         name: '',
-        thme_css: '',
         logo_img: null,
         dark_logo_img: null,
         favicon_img: null,
@@ -48,10 +47,42 @@ export const useUpdateStore = defineStore('brandUpdateStore', () => {
         business_num: '',
         phone_num: '',
         fax_num: '',
-        pv_options: '[]',
         last_dpst_at: null,
         updated_at: null,
         created_at: null,
+        deposit_day: undefined,
+        deposit_amount: undefined,
+        pv_options: {
+            free: reactive<FreeOption>({
+                use_devloper: false,
+                use_hand_pay: false,
+                use_auth_pay: false,
+                use_simple_pay: false,
+                sales_slip: {
+                    merchandise: {
+                        rep_nm: '',
+                        phone_num: '',
+                        resident_num: '',
+                        business_num: '',
+                        addr: ''
+                    }
+                }
+            }),
+            paid: reactive<PaidOption>({
+                use_acct_verification: false,
+                use_hand_pay_drct: false,
+                use_hand_pay_sms: false,
+                use_realtime_deposit: false,
+                use_issuer_filter: false,
+                use_dup_pay_validation: false,
+                use_forb_pay_time: false,
+                use_pay_limit: false,
+                subsidiary_use_control: false
+            })
+        },
+        thema_css: reactive<ThemaCSS>({
+            main_color: '#5E35B1FF',
+        })
     })    
     return {
         path, item

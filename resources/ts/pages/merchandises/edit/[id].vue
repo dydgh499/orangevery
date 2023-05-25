@@ -8,7 +8,7 @@ import { useUpdateStore } from '@/views/merchandises/useStore'
 const {path, item } = useUpdateStore()
 const tabs = [
     { icon: 'tabler-user-check', title: '개인정보' },
-    { icon: 'ph-buildings', title: '가맹점정보' },
+    { icon: 'tabler-building-store', title: '가맹점정보' },
     { icon: 'ic-outline-send-to-mobile', title: '결제모듈정보' },
 ]
 const id    = ref<number>(0)

@@ -26,6 +26,8 @@ const banks = [
     { code: "071", title: "우체국" }, { code: "076", title: "신용보증기금" }, { code: "077", title: "기술신용보증기금" },
     { code: "081", title: "하나은행" }, { code: "088", title: "신한은행" }, { code: "089", title: "케이뱅크" },
     { code: "090", title: "카카오뱅크" }, { code: "092", title: "토스뱅크" }, { code: "238", title: "(구)미래에셋증권" },
+    { code: "240", title: "삼성증권"}, { code: "243", title: "한국투자증권"}, { code: '287', title: '메리츠종합금융증권'}, 
+    { code: "288", title: "카카오페이증권"}, { code: "328", title: "페퍼저축은행"}
 ]
 //--
 const is_show = ref(false)
@@ -64,7 +66,7 @@ watchEffect(() => {
                     <VCardTitle>기본정보</VCardTitle>
                     <VRow class="pt-5">
                         <!-- 👉 Email -->
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>아이디</template>
                             <template #input>
                                 <VTextField v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
@@ -73,7 +75,7 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Password -->
-                        <CreateHalfVCol v-if="props.id == 0">
+                        <CreateHalfVCol :mdl="3" :mdr="9" v-if="props.id == 0">
                             <template #name>패스워드</template>
                             <template #input>
                                 <VTextField v-model="props.item.user_pw" counter prepend-inner-icon="tabler-lock"
@@ -84,7 +86,7 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 대표자명 -->
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>대표자명</template>
                             <template #input>
                                 <VTextField id="nickNameHorizontalIcons" v-model="props.item.nick_name"
@@ -92,7 +94,7 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Address -->
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>주소</template>
                             <template #input>
                                 <VTextField id="addressHorizontalIcons" v-model="props.item.addr"
@@ -101,7 +103,7 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Mobile -->
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>휴대폰번호</template>
                             <template #input>
                                 <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="number"
@@ -110,7 +112,7 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 사업자 번호 -->
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>사업자번호</template>
                             <template #input>
                                 <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
@@ -120,7 +122,7 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 주민등록 번호 -->
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>주민등록번호</template>
                             <template #input>
                                 <VTextField id="residentFirstHorizontalIcons" v-model="props.item.resident_num" type="text"
@@ -135,21 +137,21 @@ watchEffect(() => {
                 <VCardItem>
                     <VCardTitle>은행정보</VCardTitle>
                     <VRow class="pt-5">
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>계좌번호</template>
                             <template #input>
                                 <VTextField id="acctNumHorizontalIcons" type="number" v-model="props.item.acct_num"
                                     prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력" persistent-placeholder />
                             </template>
                         </CreateHalfVCol>
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>예금주</template>
                             <template #input>
                                 <VTextField id="acctNmHorizontalIcons" v-model="props.item.acct_nm"
                                     prepend-inner-icon="tabler-user" placeholder="예금주 입력" persistent-placeholder />
                             </template>
                         </CreateHalfVCol>
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>은행</template>
                             <template #input>
                                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bank" :items="banks"

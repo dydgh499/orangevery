@@ -11,11 +11,11 @@ interface Props {
     item: Brand,
 }
 
-const vuetifyTheme = useTheme()
 const props = defineProps<Props>()
 
+const vuetifyTheme = useTheme()
 const currentThemeName = vuetifyTheme.name.value
-const color = ref<string>(vuetifyTheme.themes.value[currentThemeName].colors.primary)
+const color = ref(props.item.thema_css.main_color)
 
 const images = [
     {
@@ -38,6 +38,7 @@ watchEffect(() => {
 })
 watchEffect(() => {
     vuetifyTheme.themes.value[currentThemeName].colors.primary = color.value
+    props.item.thema_css.main_color = color.value
 })
 </script>
 <template>
@@ -59,7 +60,7 @@ watchEffect(() => {
                         <VCol md="6">
                             <VCol>
                                 <VRow>
-                                    <CreateHalfVCol>
+                                    <CreateHalfVCol :mdl="3" :mdr="9">
                                         <template #name><span></span>테마 색상</template>
                                         <template #input>
                                             <VColorPicker v-model="color" show-swatches swatches-max-height="360px" />

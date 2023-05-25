@@ -1,5 +1,25 @@
 import { Searcher } from '@/views/searcher';
-import type { Complaint } from '@/views/types';
+import type { Complaint, Options } from '@/views/types';
+
+export const issuers = <Options[]>[
+    { id: 1, title: '비씨' }, { id: 2, title: '국민' }, { id: 3, title: '하나' },
+    { id: 4, title: '삼성' }, { id: 6, title: '신한' }, { id: 7, title: '현대' },
+    { id: 8, title: '롯데' }, { id: 11, title: '시티' }, { id: 12, title: '농협' },
+    { id: 13, title: '수협' }, { id: 15, title: '우리' }, { id: 21, title: '광주' },
+    { id: 22, title: '전북' }, { id: 23, title: '제주' }, { id: 25, title: '해외비자' },
+    { id: 26, title: '해외마스터' }, { id: 27, title: '해외다이너스' }, { id: 28, title: '해외AMAX' },
+    { id: 29, title: '해외JCB' }, { id: 30, title: '해외' }, { id: 32, title: '우체국' }, { id: 33, title: 'MG새마을체크' },
+    { id: 34, title: '중국은행체크' }, { id: 38, title: '은련' }, { id: 41, title: '신협' },
+    { id: 42, title: '저축은행' }, { id: 43, title: 'KDB산업' }, { id: 44, title: '카카오뱅크' },
+    { id: 45, title: '케이뱅크' }, { id: 46, title: '카카오머니' }, { id: 47, title: '강원' },
+    { id: 48, title: 'UNIONPAY' }, { id: 238, title: '(구)미래에셋증권' }, { id: 243, title: '한국투자증권' },
+    { id: 288, title: '카카오페이증권' },
+]
+
+export const complaint_types = <Options[]>[
+    { id: 1, title: '유사수신' }, { id: 2, title: '유사투자' },
+    { id: 3, title: '단순소명' }, { id: 4, title: '기타' },
+]
 
 export const useSearchStore = defineStore('complaintSearchStore', () => {
     const store = Searcher<Complaint>('complaints', <Complaint>({}))
@@ -28,8 +48,8 @@ export const useSearchStore = defineStore('complaintSearchStore', () => {
 })
 
 export const useUpdateStore = defineStore('complaintUpdateStore', () => {
-    const path  = 'complaints'
-    const item  = reactive<Complaint>({
+    const path = 'complaints'
+    const item = reactive<Complaint>({
         id: 0,
         brand_id: 0,
         tid: '',
@@ -39,11 +59,11 @@ export const useUpdateStore = defineStore('complaintUpdateStore', () => {
         phone_num: '',
         hand_cust_nm: '',
         hand_phone_num: '',
-        issuer_id: '',
-        type:0,
-        pg_id: '',
+        issuer_id: null,
+        type: null,
+        pg_id: null,
         entry_path: '',
-        is_deposit: '',
+        is_deposit: false,
         note: ''
     })
     return {

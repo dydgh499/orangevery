@@ -3,16 +3,11 @@ import type { Post } from '@/views/types'
 import { requiredValidator, nullValidator } from '@validators';
 import Editor from '@/views/utils/Editor.vue';
 import CreateHalfVCol from '@/views/utils/CreateHalfVCol.vue';
+import type { Options } from '@/views/types'
 
 interface Props {
     item: Post,
 }
-
-interface Options {
-    id: number,
-    title:string,
-}
-
 const props = defineProps<Props>()
 
 const types = <Options[]>([
@@ -30,17 +25,17 @@ const types = <Options[]>([
                 <VCardItem>
                     <VCardTitle>게시글 작성</VCardTitle>
                     <VRow class="pt-5">
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="2" :mdr="10">
                             <template #name>제목</template>
                             <template #input>
                                 <VTextField id="nameHorizontalIcons" v-model="props.item.title"
-                                    prepend-inner-icon="material-symbols-subtitles" placeholder="제목을 입력해주세요"
+                                    prepend-inner-icon="ic-round-subtitles" placeholder="제목을 입력해주세요"
                                     persistent-placeholder :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
                     <VRow class="pt-5">
-                        <CreateHalfVCol style='margin-bottom: 4em;'>
+                        <CreateHalfVCol :mdl="2" :mdr="10" style='margin-bottom: 4em;'>
                             <template #name>내용</template>
                             <template #input>
                                 <Editor :content="toRef(props.item, 'content')"></Editor>
@@ -51,7 +46,7 @@ const types = <Options[]>([
                         <VCol md="8">
                         </VCol>
                         <VCol md="4" style="padding: 0;">
-                            <CreateHalfVCol>
+                            <CreateHalfVCol :mdl="3" :mdr="9">
                                 <template #name></template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.type"

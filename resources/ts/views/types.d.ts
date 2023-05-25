@@ -17,6 +17,10 @@ export interface RegisterResponse {
     abilities: UserAbility[]
   }
 //------------------------------
+interface Options {
+    id: number,
+    title: string,
+}
 export interface ErrorResponse {
     message: string,
 }
@@ -157,11 +161,42 @@ export interface Classification {
     type: number,
 }
 
+interface FreeOption {
+    use_devloper: boolean,
+    use_hand_pay: boolean,
+    use_auth_pay: boolean,
+    use_simple_pay: boolean,
+    sales_slip: {
+        merchandise: {
+            rep_nm: string,
+            phone_num: string,
+            resident_num: string,
+            business_num: string,
+            addr: string,
+        }
+    }
+}
+interface PaidOption {
+    use_acct_verification: boolean, // 예금주 검증
+    use_hand_pay_drct: boolean, // 수기결제 직접입력(가맹점)
+    use_hand_pay_sms: boolean, // 수기결제 SMS
+    use_realtime_deposit: boolean,  // 실시간 결제모듈
+    use_issuer_filter: boolean, // 카드사 필터링
+    use_dup_pay_validation: boolean,    // 중복결제 검증 사용 여부
+    use_forb_pay_time: boolean,   // 결제금지시간 지정 사용 여부
+    use_pay_limit: boolean,   // 결제한도 지정 사용 여부
+    subsidiary_use_control: boolean, // 하위 영업자 전산 사용 ON/OFF
+}
+interface ThemaCSS {
+    main_color: string,
+}
+
+
 export interface Brand {
     id: number,
     dns: string,
     name:string,
-    thme_css: string,
+    thema_css: ThemaCSS,
     // 운영 이미지
     logo_img: File | null,
     dark_logo_img: File | null,
@@ -183,7 +218,12 @@ export interface Brand {
     business_num: string,
     phone_num: string,
     fax_num: string,
-    pv_options: string,
+    pv_options: {
+        free: FreeOption,
+        paid: PaidOption,
+    },
+    deposit_day: integer,
+    deposit_amount: integer,    
     last_dpst_at: datetime,
     updated_at:datetime,
     created_at: datetime,
@@ -294,11 +334,11 @@ export interface Settle extends Bank {
     deposit_amount:number,      // 입금금액
     transfer_amount: string,    // 이체금액
 
+    sector: string,
     rep_nm: string,
     phone_num: string,
     resident_num: string,
     business_num: string,
-    sector: string,
     addr: string,
 }
 export interface SettleMerchandise extends Settle{
@@ -358,10 +398,42 @@ export interface Complaint {
     phone_num: string,
     hand_cust_nm: string,
     hand_phone_num: string,
-    issuer: string,
-    pg_id: string,
-    type: number,
+    issuer_id: number | null,
+    pg_id: number | null,
+    type: number | null,
     entry_path: string,
-    is_deposit: string,
+    is_deposit: boolean,
     note: string,
+}
+
+export interface FeeChangeHistory {
+    id: number,
+    brand_id: number,
+    trx_fee: float,
+    created_at: Date,
+    ie_use: boolean,
+    change_status: boolean,
+}
+
+export interface MchtFeeChangeHistory extends FeeChangeHistory {
+    mcht_id: number,
+    hold_fee: float,
+    sales_name: string,
+}
+
+
+export interface SalesFeeChangeHistory extends FeeChangeHistory {
+    sales_id: number,
+    tax_type: number,
+    sales_name: string,
+}
+
+export interface NotiSendHistory {
+    id: number,
+    trans_id: number,
+    http_code: number,
+    retry_count: number,
+    message: string,
+    send_url: string,
+    created_at: datetime | null,
 }

@@ -22,7 +22,7 @@ const is_show = ref(false)
                     <VCardTitle>기본정보</VCardTitle>
                     <VRow class="pt-5">
                         <!-- 👉 Email -->
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>아이디</template>
                             <template #input>
                                 <VTextField v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
@@ -31,7 +31,7 @@ const is_show = ref(false)
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Password -->
-                        <CreateHalfVCol v-if="props.id == 0">
+                        <CreateHalfVCol  :mdl="3" :mdr="9" v-if="props.id == 0">
                             <template #name>패스워드</template>
                             <template #input>
                                 <VTextField v-model="props.item.user_pw" counter prepend-inner-icon="tabler-lock"
@@ -42,7 +42,7 @@ const is_show = ref(false)
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 대표자명 -->
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>대표자명</template>
                             <template #input>
                                 <VTextField v-model="props.item.nick_name"
@@ -52,7 +52,7 @@ const is_show = ref(false)
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Mobile -->
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>휴대폰번호</template>
                             <template #input>
                                 <VTextField v-model="props.item.phone_num" type="number"
@@ -61,7 +61,7 @@ const is_show = ref(false)
                                     persistent-placeholder />
                             </template>
                         </CreateHalfVCol>
-                        <CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>관리자 등급</template>
                             <template #input>
                                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.level" :items="operator_levels"

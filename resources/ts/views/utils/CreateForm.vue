@@ -51,7 +51,8 @@ const hideConditions = () => {
     const cond_1 = tab.value == 2 && props.path == 'merchandises' ? false : true;
     const cond_2 = props.path == 'pay-modules' ? false : true;
     const cond_3 = props.path == 'pay-gateways' ? false : true;
-    return cond_1 && cond_2 && cond_3
+    const cond_4 = props.path == 'services/bulk-registration' ? false : true;
+    return cond_1 && cond_2 && cond_3 && cond_4
 }
 
 watchEffect(() => {
@@ -70,14 +71,12 @@ watchEffect(() => {
             <span>{{ t.title }}</span>
         </VTab>
     </VTabs>
-
+    <slot name="additional_explaination"></slot>
     <VForm ref="vForm" class="mt-5">
         <VWindow v-model="tab">
             <slot name="view"></slot>
         </VWindow>
     </VForm>
-    <!-- 👉 submit -->
-
     <VCard style="margin-top: 1em;" slot="button" v-show="hideConditions()">
         <VCol class="d-flex gap-4">
             <VBtn type="button" style="margin-left: auto;" @click="update()">
@@ -89,6 +88,5 @@ watchEffect(() => {
                 <VIcon end icon="tabler-arrow-back" />
             </VBtn>
         </VCol>
-
     </VCard>
 </template>

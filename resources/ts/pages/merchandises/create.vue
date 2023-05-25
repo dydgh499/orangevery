@@ -3,9 +3,11 @@
 import UserOverview from '@/views/users/UserOverview.vue';
 import MchtOverview from '@/views/merchandises/MchtOverview.vue';
 import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOverview.vue';
-import CreateForm from '@/views/utils/CreateForm.vue'
+
 import { useUpdateStore } from '@/views/merchandises/useStore'
+import CreateForm from '@/views/utils/CreateForm.vue'
 import type { Tab } from '@/views/types'
+
 const {path, item } = useUpdateStore()
 const tabs = <Tab[]>([
     { icon: 'tabler-user-check', title: '개인정보' },

@@ -11,8 +11,29 @@ const vehicules = {
     children: hierarchical,
     identifier: 'id'
 }
+const tree = ref();
+const treeConfig = { nodeWidth: 80, nodeHeight: 80, levelHeight: 120 }
 
-const treeConfig = { nodeWidth: 120, nodeHeight: 80, levelHeight: 200 }
+const handleScroll = (event:any) => {
+  // 마우스 스크롤 이벤트 핸들러
+  const deltaY = event.deltaY;
+  if (deltaY > 0) {
+    // 아래로 스크롤
+    tree.value.zoomOut()
+  } else if (deltaY < 0) {
+    // 위로 스크롤
+    tree.value.zoomIn()
+  }
+};
+
+onMounted(() => {
+  // 컴포넌트 마운트 후에 이벤트 리스너 등록
+  tree.value.$el.addEventListener('wheel', handleScroll);
+});
+onUnmounted(() => {
+  // 컴포넌트 언마운트 시 이벤트 리스너 해제
+  tree.value.$el.removeEventListener('wheel', handleScroll);
+});
 </script>
 
 <template>
@@ -37,12 +58,29 @@ const treeConfig = { nodeWidth: 120, nodeHeight: 80, levelHeight: 200 }
 
                     <VDivider />
                     <VCardText>
-                        <vue-tree style="width: 100%; height: 800px;" :dataset="vehicules" :config="treeConfig"
-                            linkStyle="straight">
+                        <VCol cols="12" sm="10">
+                                <div>
+                                    <VBtn type="button" @click="tree.zoomIn()">
+                                        확대
+                                    <VIcon end icon="tabler-plus" />
+                                    </VBtn>
+                                    <VBtn type="button" style="margin-left: 1em;" variant="tonal" @click="tree.zoomOut()">
+                                        축소
+                                        <VIcon end icon="tabler-minus" />
+                                    </VBtn>
+                                    <VBtn type="button" style="margin-left: 1em;" variant="tonal" @click="tree.restoreScale()">
+                                        원래대로
+                                        <VIcon end icon="tabler-line-height" />
+                                    </VBtn>
+                                </div>
+                            </VCol>
+                        <vue-tree style="width: 100%; height: 500px;" :dataset="vehicules" :config="treeConfig"
+                            linkStyle="curve" ref="tree">
                             <template v-slot:node="{ node, collapsed }">
-                                <div class="rich-media-node" :style="{ border: collapsed ? '2px solid grey' : '' }">
+                                <div class="rich-media-node" :style="{ border: collapsed ? '1px solid grey' : '' }">
                                     <span style="padding: 4px 0; font-weight: bold;">{{ node.user_name }}</span>
-                                    <span style="padding: 4px 0; font-weight: bold;">{{ node.trx_fee }}</span>
+                                    <span style="padding: 4px 0; font-weight: bold;">{{ (node.trx_fee * 100).toFixed(3)
+                                    }}%</span>
                                 </div>
                             </template>
                         </vue-tree>
@@ -61,14 +99,21 @@ const treeConfig = { nodeWidth: 120, nodeHeight: 80, levelHeight: 200 }
 }
 
 .rich-media-node {
-  display: flex;
+  position: relative;
+  z-index: 0;
+  display: inline-flex;
+  overflow: hidden;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 8px;
-  border-radius: 4px;
-  background-color: #f7c616;
-  color: white;
-  inline-size: 80px;
+  padding: 16px;
+  border-radius: 12px;
+  background-color: rgb(255, 255, 255);
+  background-image: none;
+  box-shadow: rgba(145, 158, 171, 20%) 0 0 2px 0, rgba(145, 158, 171, 12%) 0 12px 24px -4px;
+  color: rgb(33, 43, 54);
+  font-size: 12px;
+  min-inline-size: 100px;
+  text-align: start;
+  text-transform: capitalize;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
 </style>

@@ -25,7 +25,6 @@ use App\Http\Controllers\Manager\NoticeController;
 |
 */
 
-
 Route::prefix('v1')->middleware('log.route')->group(function() {
     Route::prefix('auth')->group(function() {
         Route::post('sign-in', [AuthController::class, 'signin']);
@@ -42,16 +41,6 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('pay-gateways', PaymentGatewayController::class);
             Route::apiResource('pay-sections', PaymentSectionController::class);
         });
-
-        Route::prefix('salesforces')->group(function() {
-            Route::get('hierarchical-down', [SalesforceController::class, 'hierarchicalDown']);
-            Route::get('hierarchical-up', [SalesforceController::class, 'hierarchicalUp']);
-        });
-        Route::apiResource('salesforces', SalesforceController::class);
-
-        Route::prefix('merchandises')->group(function() {
-            Route::apiResource('pay-modules', PaymentModuleController::class);
-        });
         Route::prefix('transactions')->group(function() {
             Route::apiResource('dangers', NoticeController::class);
             Route::apiResource('settle/merchandises', NoticeController::class);
@@ -59,6 +48,17 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('settle-history/merchandises', NoticeController::class);
             Route::apiResource('settle-history/salesforces', NoticeController::class);
         });
+        Route::prefix('salesforces')->group(function() {
+            Route::apiResource('fee-change-histories', PaymentModuleController::class);      
+            Route::get('hierarchical-down', [SalesforceController::class, 'hierarchicalDown']);
+            Route::get('hierarchical-up', [SalesforceController::class, 'hierarchicalUp']);
+        });
+        Route::prefix('merchandises')->group(function() {
+            Route::apiResource('pay-modules', PaymentModuleController::class);
+            Route::apiResource('fee-change-histories', PaymentModuleController::class);       
+            Route::apiResource('noti-send-histories', PaymentModuleController::class);     
+        });
+        Route::apiResource('salesforces', SalesforceController::class);
         Route::apiResource('transactions', NoticeController::class);
         Route::apiResource('merchandises', MerchandiseController::class);
         Route::apiResource('posts', NoticeController::class);

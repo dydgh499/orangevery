@@ -24,6 +24,7 @@ export const useUpdateStore = defineStore('postUpdateStore', () => {
         brand_id: 0,
         title: '',
         content: '',
+        type:0,
         user_id: 0,
         parent_id: null,
         depth: 0
