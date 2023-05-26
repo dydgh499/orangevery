@@ -114,7 +114,7 @@ const headerValues = computed(() => {
       >
         <!-- SECTION Theming -->
         <CustomizerSection
-          title="THEMING"
+          title="테마"
           :divider="false"
         >
           <!-- 👉 Skin -->
@@ -157,6 +157,7 @@ const headerValues = computed(() => {
           </div>
 
           <!-- 👉 Primary color -->
+          <!--
           <h6 class="mt-3 text-base font-weight-regular">
             테마 색상
           </h6>
@@ -179,6 +180,7 @@ const headerValues = computed(() => {
               </VFadeTransition>
             </div>
           </div>
+          -->
         </CustomizerSection>
         <!-- !SECTION -->
 
@@ -215,6 +217,7 @@ const headerValues = computed(() => {
             />
           </VRadioGroup>
           <!-- 👉 Footer Type -->
+          <!--
           <h6 class="mt-3 text-base font-weight-regular">
             푸터 타입
           </h6>
@@ -229,7 +232,9 @@ const headerValues = computed(() => {
               :value="val"
             />
           </VRadioGroup>
+            -->
           <!-- 👉 Navbar blur -->
+          <br>
           <div class="d-flex align-center justify-space-between">
             <VLabel
               for="customizer-navbar-blur"
@@ -249,7 +254,7 @@ const headerValues = computed(() => {
         <!-- !SECTION -->
 
         <!-- SECTION Menu -->
-        <CustomizerSection title="MENU">          
+        <CustomizerSection title="메뉴">          
           <!-- 👉 Collapsed Menu -->
           <div
             v-if="appContentLayoutNav === AppContentLayoutNav.Vertical"
@@ -273,8 +278,9 @@ const headerValues = computed(() => {
         <!-- !SECTION -->
 
         <!-- SECTION MISC -->
-        <CustomizerSection title="MISC">
           <!-- 👉 Route Transition -->
+          <!--
+          <CustomizerSection title="MISC">
           <div class="mt-6">
             <VRow>
               <VCol
@@ -302,6 +308,7 @@ const headerValues = computed(() => {
             </VRow>
           </div>
         </CustomizerSection>
+        -->
         <!-- !SECTION -->
       </PerfectScrollbar>
     </VNavigationDrawer>

@@ -2,7 +2,7 @@ import { Searcher } from '@/views/searcher';
 import type { SettlesHistoriesMerchandise } from '@/views/types';
 
 export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', () => {    
-    const store = Searcher<SettlesHistoriesMerchandise>('transactions/settles-history/merchandises', <SettlesHistoriesMerchandise>({}))
+    const store = Searcher<SettlesHistoriesMerchandise>('transactions/settle-history/merchandises', <SettlesHistoriesMerchandise>({}))
 
     function setHeaders() {
         store.setHeader('NO.', 'id')

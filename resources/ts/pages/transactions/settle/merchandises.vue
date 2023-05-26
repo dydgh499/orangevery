@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
-import { useSearchStore } from '@/views/transactions/settle-history/useMerchandiseStore'
+import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
 import BaseIndexOverview from '@/views/utils/BaseIndexOverview.vue';
 
 const { store, setHeaders } = useSearchStore()

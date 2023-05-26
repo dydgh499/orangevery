@@ -20,7 +20,7 @@ export const { themeConfig, layoutConfig } = defineThemeConfig({
     theme: 'light',
     isRtl: false,
     skin: Skins.Default,
-    routeTransition: RouteTransitions.Fade,
+    routeTransition: RouteTransitions['Scroll Y'],
     iconRenderer: VIcon,
   },
   navbar: {

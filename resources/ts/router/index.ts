@@ -1,8 +1,9 @@
-import { axios, pay_token } from '@axios'
-import { canNavigate } from '@layouts/plugins/casl'
-import { setupLayouts } from 'virtual:generated-layouts'
-import { createRouter, createWebHistory } from 'vue-router'
-import routes from '~pages'
+import { axios, pay_token, user_info } from '@axios';
+import { canNavigate } from '@layouts/plugins/casl';
+import { setupLayouts } from 'virtual:generated-layouts';
+import { createRouter, createWebHistory } from 'vue-router';
+
+import routes from '~pages';
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -13,13 +14,15 @@ const router = createRouter({
             redirect: to => {
                 const isLoggedIn = pay_token.value != ''
                 console.log(isLoggedIn)
-                const user = JSON.parse(localStorage.getItem('user') || '{}')
                 const roles = [10, 15, 20, 30, 35, 40, 50]
 
-                if (roles.includes(user ? user.level : 0) && isLoggedIn)
+                if (roles.includes(user_info.value ? user_info.value.level : 0) && isLoggedIn)
                     return { name: 'dashboards-home' }
                 else
+                {
+                    console.log(user_info.value)
                     return { name: 'login', query: to.query }
+                }
             },
         },
         {

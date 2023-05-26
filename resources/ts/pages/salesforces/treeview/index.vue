@@ -2,6 +2,7 @@
 import VueTree from "@ssthouse/vue3-tree-chart";
 import "@ssthouse/vue3-tree-chart/dist/vue3-tree-chart.css";
 import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
+import { useTheme } from 'vuetify'
 
 const { hierarchical, flattened } = useSalesHierarchicalStore()
 const salesforce = ref({ trx_fee: 0, user_name: '영업자 선택' })
@@ -32,7 +33,8 @@ onMounted(() => {
 });
 onUnmounted(() => {
   // 컴포넌트 언마운트 시 이벤트 리스너 해제
-  tree.value.$el.removeEventListener('wheel', handleScroll);
+    if(tree.value != null)
+      tree.value.$el.removeEventListener('wheel', handleScroll);
 });
 </script>
 
@@ -116,4 +118,5 @@ onUnmounted(() => {
   text-transform: capitalize;
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 }
+
 </style>

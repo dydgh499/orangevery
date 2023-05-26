@@ -6,7 +6,7 @@ import layoutsPlugin from '@/plugins/layouts'
 import vuetify from '@/plugins/vuetify'
 import { loadFonts } from '@/plugins/webfontloader'
 import router from '@/router'
-import { pay_token } from '@axios'
+import { com_token, pay_token, user_info } from '@axios'
 import { abilitiesPlugin } from '@casl/vue'
 import '@core-scss/template/index.scss'
 import '@styles/styles.scss'
@@ -27,7 +27,8 @@ const app = createApp(App)
 app.provide('$errorHandler', function(e: any) {
     if(e.response.status == 401 || e.response.status == 403) {
         pay_token.value = '';
-        localStorage.removeItem('payvery-token')
+        com_token.value = '';
+        user_info.value = {}
         router.replace('/login')
     }
     return e.response

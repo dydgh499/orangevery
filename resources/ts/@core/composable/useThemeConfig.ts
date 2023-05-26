@@ -72,8 +72,7 @@ export const useThemeConfig = () => {
     },
     set(value: typeof themeConfig.app.routeTransition.value) {
       themeConfig.app.routeTransition.value = value
-      localStorage.setItem(`Scroll Y Reverse-transition`, 'scroll-y-reverse-transition')
-      //localStorage.setItem(`${themeConfig.app.title}-transition`, value)
+      localStorage.setItem(`${themeConfig.app.title}-transition`, value)
     },
   })
 

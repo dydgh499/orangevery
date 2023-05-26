@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { UserAbility } from '@/plugins/casl/AppAbility';
 import { useAppAbility } from '@/plugins/casl/useAppAbility';
-import {axios, pay_token, com_token} from '@axios';
+import {axios, pay_token, user_info} from '@axios';
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant';
 import corp from '@corp';
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer';
@@ -59,8 +59,9 @@ const login = () => {
         const {access_token, user} = r.data
         const abilities = getAbilities(user['level']);
         ability.update(abilities);
+        
         pay_token.value = access_token
-        localStorage.setItem('user', JSON.stringify(user))
+        user_info.value = user
         localStorage.setItem('abilities', JSON.stringify(abilities))
         // Redirect to `to` query if exist or redirect to index route
         router.replace(route.query.to ? String(route.query.to) : '/')
@@ -181,7 +182,7 @@ const onSubmit = () => {
                 <span>새로운 고객이신가요?</span>
                 <RouterLink
                   class="text-primary ms-2"
-                  :to="{ name: 'register' }"
+                  :to="{ name: '' }"
                 >
                   회원가입
                 </RouterLink>

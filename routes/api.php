@@ -57,7 +57,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('pay-modules', PaymentModuleController::class);
             Route::apiResource('fee-change-histories', PaymentModuleController::class);       
             Route::apiResource('noti-send-histories', PaymentModuleController::class);     
-        });
+        });        
+        Route::apiResource('complaints', NoticeController::class);
         Route::apiResource('salesforces', SalesforceController::class);
         Route::apiResource('transactions', NoticeController::class);
         Route::apiResource('merchandises', MerchandiseController::class);
