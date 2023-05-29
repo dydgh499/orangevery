@@ -16,16 +16,13 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="{{ $json['name'] }}">
   <meta name="theme-color" content="{{ $json['color'] }}">
-  <meta name="comagain-csrf-token" content="{{ $json['com_csrf_token'] }}" id='comagain-csrf-token'>
   <link rel="apple-touch-icon" sizes="180x180" href="{{ $json['favicon_img'] }}">
   <link rel="stylesheet" type="text/css" href="/loader.css" />
   @vite(['resources/ts/main.ts'])
 </head>
 <style>
-  #load-default {
-    min-width: 78px;
-    min-height: 58px;
-    line-height: 0;
+  #load-custom {
+    max-height: 80px;
     color : {{ $json['color'] }};
   }
 </style>
@@ -33,7 +30,7 @@
   <div id="app">
     <div id="loading-bg">
       <div class="loading-logo">
-        <img src="{{ $json['logo_img'] }}" alt="Logo" onerror="document.querySelector('#load-custom').style['display'] = 'none'; document.querySelector('#load-default').style['display'] = 'block';" id='load-custom'/>
+        <img src="{{ $json['logo_img'] }}" alt="Logo" onerror="loadRenderLoadingSvg()" id='load-custom'/>
         <div style="display:none;" alt="Logo" id='load-default'>
             <svg width="34" height="24" viewBox="0 0 34 24" fill="none" xmlns="http://www.w3.org/2000/svg" style='width: 100%;height: 100%;'>
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M0.00183571 0.3125V7.59485C0.00183571 7.59485 -0.141502 9.88783 2.10473 11.8288L14.5469 23.6837L21.0172 23.6005L19.9794 10.8126L17.5261 7.93369L9.81536 0.3125H0.00183571Z" fill="currentColor" style='opacity: 0.68;'></path>
@@ -52,10 +49,14 @@
   </div>
   
     <script>
+        const loadRenderLoadingSvg = () => {
+            document.querySelector('#load-custom').style['display'] = 'none';
+            document.querySelector('#load-default').style['display'] = 'block';
+        }
         //const primaryColor = localStorage.getItem('Vuexy-initial-loader-color') || '#EA5455';
         //const loaderColor = "{{ $json['color'] }}" || '#FFFFFF';
 
-        const loaderColor = localStorage.getItem('Vuexy-initial-loader-bg') || '#FFFFFF';
+        const loaderColor = localStorage.getItem('-initial-loader-bg') || '#FFFFFF';
         const primaryColor = "{{ $json['color'] }}" || '#EA5455';
 
         window.corp = {!! json_encode($json, true) !!};

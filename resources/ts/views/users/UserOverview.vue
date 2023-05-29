@@ -26,36 +26,13 @@ const banks = [
     { code: "071", title: "우체국" }, { code: "076", title: "신용보증기금" }, { code: "077", title: "기술신용보증기금" },
     { code: "081", title: "하나은행" }, { code: "088", title: "신한은행" }, { code: "089", title: "케이뱅크" },
     { code: "090", title: "카카오뱅크" }, { code: "092", title: "토스뱅크" }, { code: "238", title: "(구)미래에셋증권" },
-    { code: "240", title: "삼성증권"}, { code: "243", title: "한국투자증권"}, { code: '287', title: '메리츠종합금융증권'}, 
-    { code: "288", title: "카카오페이증권"}, { code: "328", title: "페퍼저축은행"}
+    { code: "240", title: "삼성증권" }, { code: "243", title: "한국투자증권" }, { code: '287', title: '메리츠종합금융증권' },
+    { code: "288", title: "카카오페이증권" }, { code: "328", title: "페퍼저축은행" }
 ]
 //--
 const is_show = ref(false)
-const images = [
-    {
-        file: ref(props.item.passbook_img),
-        label: '통장사본 업로드',
-    },
-    {
-        file: ref(props.item.id_img),
-        label: '신분증 업로드',
-    },
-    {
-        file: ref(props.item.contract_img),
-        label: '계약서 업로드',
-    },
-    {
-        file: ref(props.item.bsin_lic_img),
-        label: '사업자 등록증 업로드',
-    },
-]
 const bank = ref({ code: props.item.acct_bank_cd, title: props.item.acct_bank_nm })
-watchEffect(() => {
-    images[0].file.value = props.item.passbook_img
-    images[1].file.value = props.item.id_img
-    images[2].file.value = props.item.contract_img
-    images[3].file.value = props.item.bsin_lic_img
-})
+
 </script>
 <template>
     <VRow class="match-height">
@@ -170,10 +147,28 @@ watchEffect(() => {
                 <VCardItem>
                     <VCardTitle>계약파일</VCardTitle>
                     <VRow class="pt-5">
-                        <VCol cols="12" v-for="file in images" :key=file.label>
+                        <VCol cols="12">
                             <VRow no-gutters>
-                                <FileInput :file="file.file" :label="file.label">
-                                </FileInput>
+                                <FileInput :file="props.item.passbook_file" :label="`통장사본 업로드`"
+                                    :preview="props.item.passbook_img" @update:file="props.item.passbook_file = $event" />
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <FileInput :file="props.item.id_file" :label="`신분증 업로드`" :preview="props.item.id_img"
+                                    @update:file="props.item.id_file = $event" />
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <FileInput :file="props.item.contract_file" :label="`계약서 업로드`"
+                                    :preview="props.item.contract_img" @update:file="props.item.contract_file = $event" />
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <FileInput :file="props.item.bsin_lic_file" :label="`사업자 등록증 업로드`"
+                                    :preview="props.item.bsin_lic_img" @update:file="props.item.bsin_lic_file = $event" />
                             </VRow>
                         </VCol>
                     </VRow>

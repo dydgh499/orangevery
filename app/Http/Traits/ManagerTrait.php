@@ -74,6 +74,7 @@ trait ManagerTrait
 
     public function saveImages($request, $data, $imgs)
     {
+        $cols    = $imgs['cols'];
         $params  = $imgs['params'];
         $folders = $imgs['folders'];
         $sizes   = $imgs['sizes'];
@@ -93,7 +94,7 @@ trait ManagerTrait
                 if(!file_exists($folder))
                     mkdir($folder, 755, true);
 
-                $data[$params[$i]] = $is_webp ? $this->saveWebp($img, $folder, $folders[$i], $sizes[$i]) : $this->saveImage($img, $folder, $folders[$i], $sizes[$i]);
+                $data[$cols[$i]] = $is_webp ? $this->saveWebp($img, $folder, $folders[$i], $sizes[$i]) : $this->saveImage($img, $folder, $folders[$i], $sizes[$i]);
             }
         }
         return $data;

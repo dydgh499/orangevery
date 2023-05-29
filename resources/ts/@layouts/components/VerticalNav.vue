@@ -41,7 +41,6 @@ const resolveNavItemComponent = (item: NavLink | NavSectionTitle | NavGroup) => 
 
   return VerticalNavLink
 }
-
 /*
   ℹ️ Close overlay side when route is changed
   Close overlay vertical nav when link is clicked
@@ -81,7 +80,7 @@ const handleNavScroll = (evt: Event) => {
           to="/"
           class="app-logo d-flex align-center gap-x-3 app-title-wrapper"
         >
-          <VNodeRenderer :nodes="config.app.logo" />
+            <VNodeRenderer :nodes="config.app.logo" />
 
           <Transition name="vertical-nav-app-title">
             <h1

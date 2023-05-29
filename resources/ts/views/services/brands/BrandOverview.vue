@@ -4,7 +4,8 @@ import { businessNumValidator, nullValidator, requiredValidator } from '@validat
 import type { Brand } from '@/views/types'
 import FileInput from '@/views/utils/FileInput.vue';
 import CreateHalfVCol from '@/views/utils/CreateHalfVCol.vue';
-
+import { themeConfig } from '@themeConfig'
+import { config } from '@layouts/config'
 
 interface Props {
     item: Brand,
@@ -15,29 +16,10 @@ const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = inject('$errorHandler');
-const images = [
-    {
-        file: ref(props.item.passbook_img),
-        label: '통장사본 업로드',
-    },
-    {
-        file: ref(props.item.id_img),
-        label: '신분증 업로드',
-    },
-    {
-        file: ref(props.item.contract_img),
-        label: '계약서 업로드',
-    },
-    {
-        file: ref(props.item.bsin_lic_img),
-        label: '사업자 등록증 업로드',
-    },
-]
+
 watchEffect(() => {
-    images[0].file.value = props.item.passbook_img
-    images[1].file.value = props.item.id_img
-    images[2].file.value = props.item.contract_img
-    images[3].file.value = props.item.bsin_lic_img
+    config.app.title = props.item.name
+    themeConfig.app.title = props.item.name
 })
 </script>
 <template>
@@ -51,25 +33,22 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>도메인</template>
                             <template #input>
-                                <VTextField v-model="props.item.dns"
-                                    prepend-inner-icon="tabler-world-www" placeholder="도메인을 입력해주세요"
-                                    persistent-placeholder :rules="[requiredValidator]" />
+                                <VTextField v-model="props.item.dns" prepend-inner-icon="tabler-world-www"
+                                    placeholder="도메인을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>운영사명</template>
                             <template #input>
-                                <VTextField v-model="props.item.name"
-                                    prepend-inner-icon="twemoji-desktop-computer" placeholder="운영사명을 입력해주세요"
-                                    persistent-placeholder :rules="[requiredValidator]" />
+                                <VTextField v-model="props.item.name" prepend-inner-icon="twemoji-desktop-computer"
+                                    placeholder="운영사명을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>회사명</template>
                             <template #input>
-                                <VTextField v-model="props.item.company_nm"
-                                    prepend-inner-icon="ph-buildings" placeholder="회사명을 입력해주세요"
-                                    persistent-placeholder :rules="[requiredValidator]" />
+                                <VTextField v-model="props.item.company_nm" prepend-inner-icon="ph-buildings"
+                                    placeholder="회사명을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 대표자명 -->
@@ -110,7 +89,8 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                         <VCol>
-                            <VTextarea v-model="props.item.note" counter label="메모사항" prepend-inner-icon="twemoji-spiral-notepad"/>
+                            <VTextarea v-model="props.item.note" counter label="메모사항"
+                                prepend-inner-icon="twemoji-spiral-notepad" />
                         </VCol>
                         <VDivider />
                     </VRow>
@@ -123,10 +103,28 @@ watchEffect(() => {
                 <VCardItem>
                     <VCardTitle>계약파일</VCardTitle>
                     <VRow class="pt-5">
-                        <VCol cols="12" v-for="file in images" :key=file.label>
+                        <VCol cols="12">
                             <VRow no-gutters>
-                                <FileInput :file="file.file" :label="file.label">
-                                </FileInput>
+                                <FileInput :file="props.item.passbook_file" :label="`통장사본 업로드`"
+                                    :preview="props.item.passbook_img" @update:file="props.item.passbook_file = $event" />
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <FileInput :file="props.item.id_file" :label="`신분증 업로드`" :preview="props.item.id_img"
+                                    @update:file="props.item.id_file = $event" />
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <FileInput :file="props.item.contract_file" :label="`계약서 업로드`"
+                                    :preview="props.item.contract_img" @update:file="props.item.contract_file = $event" />
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <FileInput :file="props.item.bsin_lic_file" :label="`사업자 등록증 업로드`"
+                                    :preview="props.item.bsin_lic_img" @update:file="props.item.bsin_lic_file = $event" />
                             </VRow>
                         </VCol>
                     </VRow>
@@ -134,5 +132,4 @@ watchEffect(() => {
             </VCard>
         </VCol>
         <!-- 👉 submit -->
-    </VRow>
-</template>
+</VRow></template>

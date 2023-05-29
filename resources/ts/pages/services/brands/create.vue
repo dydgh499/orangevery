@@ -6,7 +6,7 @@ import BrandOptionOverview from '@/views/services/brands/BrandOptionOverview.vue
 import CreateForm from '@/views/utils/CreateForm.vue'
 import { useUpdateStore } from '@/views/services/brands/useStore'
 import type { Tab } from '@/views/types'
-const {path, item } = useUpdateStore()
+const { path, item } = useUpdateStore()
 const tabs = <Tab[]>([
     { icon: 'ph-buildings', title: '운영사정보' },
     { icon: 'tabler-color-filter', title: '테마디자인' },
@@ -25,7 +25,8 @@ const id = ref<number>(0)
                     <BrandDesignOverview :item="item" />
                 </VWindowItem>
                 <VWindowItem>
-                    <BrandOptionOverview :item="item" />
+                    <BrandOptionOverview :item="item.pv_options" :deposit_day="item.deposit_day"
+                        :deposit_amount="item.deposit_amount" />
                 </VWindowItem>
             </template>
         </CreateForm>

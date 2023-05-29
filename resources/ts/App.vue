@@ -5,7 +5,6 @@ import { hexToRgb } from '@layouts/utils';
 import { themeConfig } from '@themeConfig';
 import { useTheme } from 'vuetify'
 
-//themeConfig.app.logo = corp.logo_img;
 const vuetifyTheme = useTheme()
 const currentThemeName = vuetifyTheme.name.value
 vuetifyTheme.themes.value[currentThemeName].colors.primary = corp.color
@@ -13,8 +12,7 @@ themeConfig.app.title = corp.name;
 
 const { syncInitialLoaderTheme, syncVuetifyThemeWithTheme: syncConfigThemeWithVuetifyTheme, isAppRtl } = useThemeConfig()
 const { global } = useTheme()
-//global.current.value.colors.primary = corp.color;
-// ℹ️ Sync current theme with initial loader theme
+
 syncInitialLoaderTheme()
 syncConfigThemeWithVuetifyTheme()
 </script>

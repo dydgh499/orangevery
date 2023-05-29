@@ -2,8 +2,12 @@
 
 const props = defineProps({
     file: {
-        type: Object,
-        required: true,
+        type: File,
+        required: false,
+    },    
+    preview: {
+        type: String,
+        required: false,
     },
     name: {
         type: Object,
@@ -15,31 +19,21 @@ const props = defineProps({
     },
 })
 
-const file = ref();
-const priview = ref<string>('/images/img-preview.svg')
+const files = ref(props.file)
+const preview = ref<string>(props.preview == undefined ? '/images/img-preview.svg' : props.preview)
 
-const handleFileChange = (event: Event) => {
-    const inputElement = event.target as HTMLInputElement;
-    if (inputElement.files && inputElement.files.length > 0) {
-        priview.value = URL.createObjectURL(inputElement.files[0]);
-    }
-}
+const emits = defineEmits(['update:file']);
 watchEffect(() => {
-    if (file.value != null)
-        props.file.value = file.value;
-})
-watchEffect(() => {
-    if (typeof props.file.value == 'string') {
-        priview.value = props.file.value
-    }
-    if (props.file.value == null || props.file.value.length == 0) {
-        priview.value = '/images/img-preview.svg'
+    if(files.value != undefined)
+    {
+        preview.value = files.value.length ? URL.createObjectURL(files.value[0]) : '/images/img-preview.svg'
+        emits('update:file', files.value ? files.value[0] : files.value)
     }
 })
 </script>
 <template>
     <VCol md="6">
-        <VFileInput accept="image/*" v-model="file" :label="`미리보기 이미지(1260px * 630px)`" @change="handleFileChange"
+        <VFileInput accept="image/*" v-model="files" :label="`미리보기 이미지(1260px * 630px)`"
             prepend-icon="tabler-camera-up">
             <template #selection="{ fileNames }">
                 <template v-for="fileName in fileNames" :key="fileName">
@@ -55,7 +49,7 @@ watchEffect(() => {
     </VCol>
     <VCol md="6">
         <div class="preview-box">
-            <div class="preview-image-box" :style="`background-image: url(${priview});`">
+            <div class="preview-image-box" :style="`background-image: url(${preview});`">
             </div>
             <div class="preview-text-box">
                 <p class="title">{{ props.name.value }}</p>

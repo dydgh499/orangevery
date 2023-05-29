@@ -1,9 +1,9 @@
+import { useLayouts } from '@layouts'
 import type { InjectionKey, Plugin, Ref } from 'vue'
 import { useDynamicVhCssProperty } from './composable/useDynamicVhCssProperty'
 import { config } from './config'
 import { ContentWidth } from './enums'
 import type { UserConfig } from './types'
-import { useLayouts } from '@layouts'
 
 const { _setAppDir } = useLayouts()
 
@@ -22,6 +22,7 @@ export const createLayouts = (userConfig: UserConfig): Plugin => {
 
   config.app.title = userConfig.app.title
   config.app.logo = userConfig.app.logo
+
   config.app.contentWidth.value = localStorageContentWidth || userConfig.app.contentWidth
   config.app.contentLayoutNav.value = userConfig.app.contentLayoutNav
   config.app.overlayNavFromBreakpoint = userConfig.app.overlayNavFromBreakpoint

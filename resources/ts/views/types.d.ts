@@ -55,10 +55,14 @@ export interface Bank {
 }
 
 export interface Contract {
-    passbook_img: File | null,
-    id_img: File | null,
-    contract_img: File | null,
-    bsin_lic_img: File | null,
+    id_img: string | null,
+    passbook_img: string | null,
+    contract_img: string | null,
+    bsin_lic_img: string | null,
+    id_file: File | undefined,
+    passbook_file: File | undefined,
+    contract_file: File | undefined,
+    bsin_lic_file: File | undefined,
 }
 
 export interface BasePropertie {
@@ -187,26 +191,23 @@ interface PaidOption {
     use_pay_limit: boolean,   // 결제한도 지정 사용 여부
     subsidiary_use_control: boolean, // 하위 영업자 전산 사용 ON/OFF
 }
-interface ThemaCSS {
+interface ThemeCSS {
     main_color: string,
 }
 
 
-export interface Brand {
+export interface Brand extends Contract{
     id: number,
     dns: string,
     name:string,
-    thema_css: ThemaCSS,
+    theme_css: ThemeCSS,
     // 운영 이미지
-    logo_img: File | null,
-    dark_logo_img: File | null,
-    favicon_img: File | null,
-    og_img: File | null,
-    // 계약 이미지
-    passbook_img: File | null,
-    id_img: File | null,
-    contract_img: File | null,
-    bsin_lic_img: File | null,
+    logo_img: string | null,
+    favicon_img: string | null,
+    og_img:string | null,
+    logo_file: File | undefined,
+    favicon_file: File | undefined,
+    og_file: File | undefined,
     // 운영 정보
     og_description: string,
     note: string,
@@ -222,8 +223,8 @@ export interface Brand {
         free: FreeOption,
         paid: PaidOption,
     },
-    deposit_day: integer,
-    deposit_amount: integer,    
+    deposit_day: number,
+    deposit_amount: number,    
     last_dpst_at: datetime,
     updated_at:datetime,
     created_at: datetime,

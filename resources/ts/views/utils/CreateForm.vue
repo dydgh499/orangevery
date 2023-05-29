@@ -4,6 +4,7 @@
 import { axios } from '@axios';
 import { VForm } from 'vuetify/components';
 import type { Tab } from '@/views/types'
+import router from '@/router';
 
 interface Props {
     id: number | string,
@@ -21,32 +22,68 @@ const vForm = ref<VForm>()
 
 const get = (uri: string) => {
     axios.get(uri)
-        .then(r => {
-            Object.assign(props.item, r.data);
-        })
-        .catch(e => {
-            snackbar.value.show(e.response.data.message, 'error')
-        })
+        .then(r => { Object.assign(props.item, r.data); })
+        .catch(e => { snackbar.value.show(e.response.data.message, 'error') })
 }
+
+const getParams = (formData: FormData, data: any, parentKey = '') => {
+    for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+            const value = data[key];
+            const formKey = parentKey ? `${parentKey}[${key}]` : key;
+
+            if (value instanceof File)  // 파일 객체인 경우 직접 추가
+                formData.append(formKey, value);
+            else if (value instanceof Date)// 날짜 객체인 경우 ISO 8601 형식으로 변환하여 추가                    
+                formData.append(formKey, value.toISOString());
+            else if (value instanceof Object && value !== null) // 객체인 경우 재귀 호출을 통해 중첩된 속성 처리                   
+                getParams(formData, value, formKey);
+            else if (value != null)// 기본 타입인 경우 문자열로 변환하여 추가
+                formData.append(formKey, value);
+        }
+    }
+}
+
 const update = async () => {
     const is_valid = await vForm.value?.validate();
-    let up_type = props.id != 0 ? '수정' : '생성';
-    if (is_valid?.valid && await alert.value.show('정말 ' + up_type + '하시겠습니까?')) {
-        axios({
-            headers: { "Content-Type": "multipart/form-data", },
-            url: url.value,
-            method: 'post',
-            data: props.item,
-        })
-        .then(r => { snackbar.value.show('성공하였습니다.', 'success') })
-        .catch(e => { snackbar.value.show(e.response.data.message, 'error') })
+    if (is_valid?.valid && await alert.value.show('정말 ' + (props.id != 0 ? '수정' : '생성') + '하시겠습니까?')) {
+        try {
+            const formData = new FormData();
+            getParams(formData, props.item)
+
+            const params = {
+                url: url.value,
+                data: formData,
+                method: props.id != 0 ? 'put' : 'post',
+                headers: { 'Content-Type': "multipart/form-data", }
+            };
+            const res = await axios(params);
+            snackbar.value.show('성공하였습니다.', 'success')
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+        }
     }
     else
-        snackbar.value.show(up_type + '조건에 맞지않는 필드가 존재합니다.', 'warning')
+        snackbar.value.show((props.id != 0 ? '수정' : '생성') + '조건에 맞지않는 필드가 존재합니다.', 'warning')
 }
+const remove = async () => {
+    if (await alert.value.show('정말 삭제하시겠습니까?')) {
+        try {
+            const res = await axios.delete(url.value)
+            snackbar.value.show('성공하였습니다.', 'success')
+            setTimeout(function () { router.replace('/' + props.path) }, 1000);
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+        }
+    }
+}
+
 const disabledConditions = (index: number) => {
     return index == 2 && props.id == 0 && props.path == 'merchandises'
 }
+
 const hideConditions = () => {
     const cond_1 = tab.value == 2 && props.path == 'merchandises' ? false : true;
     const cond_2 = props.path == 'pay-modules' ? false : true;
@@ -83,9 +120,13 @@ watchEffect(() => {
                 {{ props.id == 0 ? "추가" : "수정" }}
                 <VIcon end icon="tabler-checkbox" />
             </VBtn>
-            <VBtn color="secondary" variant="tonal" @click="vForm?.reset()">
+            <VBtn type="button" color="secondary" variant="tonal" @click="vForm?.reset()">
                 리셋
                 <VIcon end icon="tabler-arrow-back" />
+            </VBtn>
+            <VBtn type="button" color="error" v-if="props.id" @click="remove()">
+                삭제
+                <VIcon size="22" icon="tabler-trash" />
             </VBtn>
         </VCol>
     </VCard>

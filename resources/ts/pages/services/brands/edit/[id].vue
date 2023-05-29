@@ -30,7 +30,8 @@ watchEffect(() => {
                     <BrandDesignOverview :item="item" />
                 </VWindowItem>
                 <VWindowItem>
-                    <BrandOptionOverview :item="item" />
+                    <BrandOptionOverview :item="item.pv_options" :deposit_day="item.deposit_day"
+                        :deposit_amount="item.deposit_amount" />
                 </VWindowItem>
             </template>
         </CreateForm>

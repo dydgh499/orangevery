@@ -9,7 +9,6 @@ export const axios = axiosIns.create({
   // ================================  timeout: 3000,
   headers: {
     'Authorization': `Bearer ${pay_token.value}`,
-    'X-COM-Authorization': `Comagain ${com_token.value}`,
     'Accept': 'application/json',
     "Content-Type": "application/json",
   },
@@ -19,7 +18,6 @@ export const axios = axiosIns.create({
 axios.interceptors.request.use((config:any) => {
     // 해당 Interceptor에서 헤더를 설정하기 전에 pay_token.value를 사용하여 헤더 값을 동적으로 설정합니다.
     config.headers['Authorization'] = `Bearer ${pay_token.value}`;
-    config.headers['X-COM-Authorization'] = `Comagain ${com_token.value}`
     return config;
 });
 

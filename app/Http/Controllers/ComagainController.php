@@ -52,30 +52,4 @@ class ComagainController extends Controller
         $res = Http::withHeaders($this->headers)->delete($this->url."/$id", $request);
         return response($res, $res->status());
     }
-
-    public function domain(Request $request)
-    {
-        $url    = env('COMAGAIN_BACK_URL', 'http://localhost:8000');
-        $host   = env('APP_ENV') == "local" ? "localhost" : $_SERVER['HTTP_HOST'];
-        $res    = Http::get("$url/api/v1/auth/domain?dns=$host");
-        if($res->status() == 200)
-        {
-            $json = $res->json();
-            $cookies = $res->cookies()->toArray();
-            $com_csrf_token = '';
-            for($i=0; $i<count($cookies); $i++)
-            {
-                if($cookies[$i]['Name'] === 'COM-XSRF-TOKEN')
-                {
-                    $com_csrf_token = $cookies[$i]['Value'];
-                    break;
-                }
-            }
-            $json['css']   = json_decode($json['theme_css'], true);
-            $json['color'] = isset($json['css']['main_color']) ? $json['css']['main_color'] : "#7367F0";
-            $json['com_csrf_token'] = $com_csrf_token;
-            return response(view('application', ['json' => $json]))
-                ->withCookie('XSRF-TOKEN', $json['com_csrf_token']);
-        }
-    }
 }

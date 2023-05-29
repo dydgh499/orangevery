@@ -4,8 +4,146 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3472745e5138016652aff727fab0ad6e",
+    "content-hash": "75a0231bf856ea4375dbad80a8c16b44",
     "packages": [
+        {
+            "name": "arcanedev/log-viewer",
+            "version": "9.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ARCANEDEV/LogViewer.git",
+                "reference": "ba0c14ef65c93fae6745ff0607a14d83d39e3faa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ARCANEDEV/LogViewer/zipball/ba0c14ef65c93fae6745ff0607a14d83d39e3faa",
+                "reference": "ba0c14ef65c93fae6745ff0607a14d83d39e3faa",
+                "shasum": ""
+            },
+            "require": {
+                "arcanedev/support": "^9.0",
+                "ext-json": "*",
+                "php": "^8.0",
+                "psr/log": "^1.0|^2.0|^3.0"
+            },
+            "require-dev": {
+                "laravel/framework": "^9.0",
+                "mockery/mockery": "^1.4.4",
+                "orchestra/testbench-core": "^7.0",
+                "phpunit/phpunit": "^9.5.10"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "10.x-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Arcanedev\\LogViewer\\LogViewerServiceProvider",
+                        "Arcanedev\\LogViewer\\Providers\\DeferredServicesProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "helpers.php"
+                ],
+                "psr-4": {
+                    "Arcanedev\\LogViewer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "ARCANEDEV",
+                    "email": "arcanedev.maroc@gmail.com",
+                    "homepage": "https://github.com/arcanedev-maroc",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Provides a Log Viewer for Laravel",
+            "homepage": "https://github.com/ARCANEDEV/LogViewer",
+            "keywords": [
+                "arcanedev",
+                "arcanesoft",
+                "laravel",
+                "log",
+                "log viewer",
+                "log-viewer",
+                "logviewer"
+            ],
+            "support": {
+                "issues": "https://github.com/ARCANEDEV/LogViewer/issues",
+                "source": "https://github.com/ARCANEDEV/LogViewer/tree/9.0.0"
+            },
+            "time": "2022-02-10T21:20:19+00:00"
+        },
+        {
+            "name": "arcanedev/support",
+            "version": "9.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ARCANEDEV/Support.git",
+                "reference": "046d87b2d638cd0687b4ba06991947df2422970d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ARCANEDEV/Support/zipball/046d87b2d638cd0687b4ba06991947df2422970d",
+                "reference": "046d87b2d638cd0687b4ba06991947df2422970d",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^9.0",
+                "illuminate/support": "^9.0",
+                "php": "^8.0.2"
+            },
+            "require-dev": {
+                "laravel/framework": "^9.0",
+                "orchestra/testbench-core": "^7.0",
+                "phpunit/phpunit": "^9.5.8"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-develop": "10.x-dev"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "helpers.php"
+                ],
+                "psr-4": {
+                    "Arcanedev\\Support\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "ARCANEDEV",
+                    "email": "arcanedev.maroc@gmail.com",
+                    "homepage": "https://github.com/arcanedev-maroc"
+                }
+            ],
+            "description": "ARCANEDEV Support Helpers",
+            "homepage": "https://github.com/ARCANEDEV/Support",
+            "keywords": [
+                "arcanedev",
+                "arcanesoft",
+                "laravel",
+                "support"
+            ],
+            "support": {
+                "issues": "https://github.com/ARCANEDEV/Support/issues",
+                "source": "https://github.com/ARCANEDEV/Support/tree/9.0.0"
+            },
+            "time": "2022-02-10T19:52:50+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.11.0",
@@ -979,6 +1117,158 @@
                 }
             ],
             "time": "2021-10-07T12:57:01+00:00"
+        },
+        {
+            "name": "illuminatech/multipart-middleware",
+            "version": "1.1.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminatech/multipart-middleware.git",
+                "reference": "254c31b7114c69076662846d5ee012acc0b42408"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminatech/multipart-middleware/zipball/254c31b7114c69076662846d5ee012acc0b42408",
+                "reference": "254c31b7114c69076662846d5ee012acc0b42408",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "^6.0 || ^7.0 || ^8.0 || ^9.0 || ^10.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.5 || ^8.0 || ^9.3 || ^10.0.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminatech\\MultipartMiddleware\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
+                }
+            ],
+            "description": "'multipart/form-data' parser middleware for Laravel",
+            "keywords": [
+                "file",
+                "laravel",
+                "middleware",
+                "multipart",
+                "parser",
+                "request",
+                "upload"
+            ],
+            "support": {
+                "issues": "https://github.com/illuminatech/multipart-middleware/issues",
+                "source": "https://github.com/illuminatech/multipart-middleware",
+                "wiki": "https://github.com/illuminatech/multipart-middleware/wiki"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/klimov-paul",
+                    "type": "github"
+                },
+                {
+                    "url": "https://www.patreon.com/klimov_paul",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2023-05-18T12:32:20+00:00"
+        },
+        {
+            "name": "intervention/image",
+            "version": "2.7.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Intervention/image.git",
+                "reference": "04be355f8d6734c826045d02a1079ad658322dad"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Intervention/image/zipball/04be355f8d6734c826045d02a1079ad658322dad",
+                "reference": "04be355f8d6734c826045d02a1079ad658322dad",
+                "shasum": ""
+            },
+            "require": {
+                "ext-fileinfo": "*",
+                "guzzlehttp/psr7": "~1.1 || ^2.0",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9.2",
+                "phpunit/phpunit": "^4.8 || ^5.7 || ^7.5.15"
+            },
+            "suggest": {
+                "ext-gd": "to use GD library based image processing.",
+                "ext-imagick": "to use Imagick based image processing.",
+                "intervention/imagecache": "Caching extension for the Intervention Image library"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.4-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Intervention\\Image\\ImageServiceProvider"
+                    ],
+                    "aliases": {
+                        "Image": "Intervention\\Image\\Facades\\Image"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Intervention\\Image\\": "src/Intervention/Image"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Oliver Vogel",
+                    "email": "oliver@intervention.io",
+                    "homepage": "https://intervention.io/"
+                }
+            ],
+            "description": "Image handling and manipulation library with support for Laravel integration",
+            "homepage": "http://image.intervention.io/",
+            "keywords": [
+                "gd",
+                "image",
+                "imagick",
+                "laravel",
+                "thumbnail",
+                "watermark"
+            ],
+            "support": {
+                "issues": "https://github.com/Intervention/image/issues",
+                "source": "https://github.com/Intervention/image/tree/2.7.2"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/interventionio",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/Intervention",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-05-21T17:30:32+00:00"
         },
         {
             "name": "kalnoy/nestedset",
@@ -2265,84 +2555,6 @@
             "time": "2023-02-08T01:06:31+00:00"
         },
         {
-            "name": "opcodesio/log-viewer",
-            "version": "v2.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/opcodesio/log-viewer.git",
-                "reference": "eed37452d580e8929045e34dc7016420d9bd9bcd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/opcodesio/log-viewer/zipball/eed37452d580e8929045e34dc7016420d9bd9bcd",
-                "reference": "eed37452d580e8929045e34dc7016420d9bd9bcd",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/contracts": "^8.0|^9.0|^10.0",
-                "php": "^8.0"
-            },
-            "conflict": {
-                "arcanedev/log-viewer": "^8.0"
-            },
-            "require-dev": {
-                "guzzlehttp/guzzle": "^7.2",
-                "itsgoingd/clockwork": "^5.1",
-                "laravel/pint": "^1.0",
-                "nunomaduro/collision": "^6.0",
-                "orchestra/testbench": "^7.6|^8.0",
-                "pestphp/pest": "^1.21",
-                "pestphp/pest-plugin-laravel": "^1.1",
-                "phpunit/phpunit": "^9.5",
-                "spatie/test-time": "^1.3"
-            },
-            "suggest": {
-                "guzzlehttp/guzzle": "Required for multi-host support. ^7.2"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Opcodes\\LogViewer\\LogViewerServiceProvider"
-                    ],
-                    "aliases": {
-                        "LogViewer": "Opcodes\\LogViewer\\Facades\\LogViewer"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Opcodes\\LogViewer\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Arunas Skirius",
-                    "email": "arukomp@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Fast and easy-to-use log viewer for your Laravel application",
-            "homepage": "https://github.com/opcodesio/log-viewer",
-            "keywords": [
-                "arukompas",
-                "better-log-viewer",
-                "laravel",
-                "log viewer",
-                "logs",
-                "opcodesio"
-            ],
-            "support": {
-                "issues": "https://github.com/opcodesio/log-viewer/issues",
-                "source": "https://github.com/opcodesio/log-viewer/tree/v2.4.0"
-            },
-            "time": "2023-03-31T07:50:32+00:00"
-        },
-        {
             "name": "phpoption/phpoption",
             "version": "1.9.1",
             "source": {
@@ -2416,6 +2628,64 @@
                 }
             ],
             "time": "2023-02-25T19:38:58+00:00"
+        },
+        {
+            "name": "predis/predis",
+            "version": "v2.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/predis/predis.git",
+                "reference": "a77a43913a74f9331f637bb12867eb8e274814e5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/predis/predis/zipball/a77a43913a74f9331f637bb12867eb8e274814e5",
+                "reference": "a77a43913a74f9331f637bb12867eb8e274814e5",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2 || ^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.3",
+                "phpstan/phpstan": "^1.9",
+                "phpunit/phpunit": "^8.0 || ~9.4.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Predis\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Till Krüss",
+                    "homepage": "https://till.im",
+                    "role": "Maintainer"
+                }
+            ],
+            "description": "A flexible and feature-complete Redis client for PHP.",
+            "homepage": "http://github.com/predis/predis",
+            "keywords": [
+                "nosql",
+                "predis",
+                "redis"
+            ],
+            "support": {
+                "issues": "https://github.com/predis/predis/issues",
+                "source": "https://github.com/predis/predis/tree/v2.1.2"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/tillkruss",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-03-02T18:32:04+00:00"
         },
         {
             "name": "psr/container",

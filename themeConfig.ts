@@ -1,9 +1,9 @@
 import { breakpointsVuetify } from '@vueuse/core'
 
+import corp from '@corp'
 import { VIcon } from 'vuetify/components'
 
 // ❗ Logo SVG must be imported with ?raw suffix
-import logo from '@images/logo.svg?raw'
 
 import { defineThemeConfig } from '@core'
 import { RouteTransitions, Skins } from '@core/enums'
@@ -11,11 +11,11 @@ import { AppContentLayoutNav, ContentWidth, FooterType, NavbarType } from '@layo
 
 export const { themeConfig, layoutConfig } = defineThemeConfig({
   app: {
-    title: 'Redvery',
-    logo: h('div', { innerHTML: logo, style: 'line-height:0; color: rgb(var(--v-global-theme-primary))' }),
+    title: corp.name,
+    logo: h('img', { src: corp.logo_img, style: 'color: rgb(var(--v-global-theme-primary)); max-width: 38px; max-height: 40px; min-width: 10px; min-height: 10px;' }),
     contentWidth: ContentWidth.Boxed,
     contentLayoutNav: AppContentLayoutNav.Vertical,
-    overlayNavFromBreakpoint: breakpointsVuetify.md + 16, // 16 for scrollbar. Docs: https://next.vuetifyjs.com/en/features/display-and-platform/
+    overlayNavFromBreakpoint: breakpointsVuetify.md + 16, // 16 for scro
     enableI18n: true,
     theme: 'light',
     isRtl: false,

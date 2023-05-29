@@ -14,7 +14,6 @@ declare module '@vue/runtime-core' {
     AppOtpInput: typeof import('./resources/ts/@core/components/AppOtpInput.vue')['default']
     AppPricing: typeof import('./resources/ts/@core/components/AppPricing.vue')['default']
     AppSearchHeader: typeof import('./resources/ts/@core/components/AppSearchHeader.vue')['default']
-    BuyNow: typeof import('./resources/ts/@core/components/BuyNow.vue')['default']
     CardAddEditDialog: typeof import('./resources/ts/@core/components/CardAddEditDialog.vue')['default']
     CardStatisticsHorizontal: typeof import('./resources/ts/@core/components/CardStatisticsHorizontal.vue')['default']
     CardStatisticsVertical: typeof import('./resources/ts/@core/components/CardStatisticsVertical.vue')['default']

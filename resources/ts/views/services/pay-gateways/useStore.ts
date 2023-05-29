@@ -25,6 +25,7 @@ export const useStore = defineStore('payGatewayStore', () => {
     onMounted(async () => {
         try {
             const r = await axios.get('/api/v1/manager/services/pay-gateways/detail')
+            pgs.value = r.data.pay_gateways as PayGateway[]
             Object.assign(pgs.value, r.data.pay_gateways)
             Object.assign(pss.value, r.data.pay_sections)
             Object.assign(ternimals.value, r.data.ternimals)

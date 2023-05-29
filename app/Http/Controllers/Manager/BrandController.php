@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Manager;
 use App\Models\Brand;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Requests\Manager\BrandForm;
+use App\Http\Requests\Manager\BrandRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
 use Illuminate\Http\Request;
@@ -27,9 +27,22 @@ class BrandController extends Controller
     {
         $this->brands = $brands;
         $this->imgs = [
-            'params'    => ['logo_img', 'favicon_img', 'passbook_img', 'contract_img', 'id_img', 'og_img', 'bsin_lic_img'],
-            'folders'   => ['logos', 'favicons', 'passbooks', 'contracts', 'ids', 'ogs', 'bsin_lic'],
-            'sizes'     => [512, 32, 500, 500, 500, 1200],
+            'params'    => [
+                'logo_file', 'favicon_file', 'passbook_file',
+                'contract_file', 'id_file', 'og_file', 'bsin_lic_file',
+            ],
+            'cols'  => [
+                'logo_img', 'favicon_img', 'passbook_img',
+                'contract_img', 'id_img', 'og_img', 'bsin_lic_img',
+            ],
+            'folders'   => [
+                'logos', 'favicons', 'passbooks',
+                'contracts', 'ids', 'ogs', 'bsin_lic', 'map_marker'
+            ],
+            'sizes'     => [
+                512, 32, 500,
+                500, 500, 1200, 500
+            ],
         ];
     }
 
@@ -45,7 +58,7 @@ class BrandController extends Controller
         $search     = $request->input('search', '');
         $brand_id   = $request->user()->brand_id;
 
-        if($this->isMainBrand($request))
+        if(isMainBrand($request->user()->brand_id) && $request->user()->tokenCan(50))
             $query = $this->brands;
         else
             $query = $this->brands->where('id', $brand_id);
@@ -62,13 +75,10 @@ class BrandController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(BrandForm $request)
+    public function store(BrandRequest $request)
     {
         if($request->user()->tokenCan(50))
         {
-            if($request->has('point_rate'))
-            $validated = $request->validate(['point_rate'=>'max:100']);
-
             $data = $request->data();
             $data = $this->saveImages($request, $data, $this->imgs);
             $result = $this->brands->create($data);
@@ -105,19 +115,15 @@ class BrandController extends Controller
      * @urlParam id integer required 브랜드 PK
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(BrandForm $request, $id)
+    public function update(BrandRequest $request, $id)
     {
-        if($request->has('point_rate'))
-            $validated = $request->validate(['point_rate'=>'max:100']);
-
         if($this->authCheck($request->user(), $id, 45))
         {
             $data = $request->data();
             $data = $this->saveImages($request, $data, $this->imgs);
-
+            
             $query  = $this->brands->where('id', $id);
             $result = $query->update($data);
-
             $brand = Redis::set($request->dns, json_encode($query->first()->toArray()));
 
             return $this->response($result ? 1 : 990);

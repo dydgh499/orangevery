@@ -5,23 +5,22 @@ namespace App\Http\Requests\Manager;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
 
+
 class BrandRequest extends FormRequest
 {
     use FormRequestTrait;
-
     public function __construct()
     {
         $this->keys = [
             'name',
             'dns',
-            'logo_img',
-            'favicon_img',
-            'passbook_img',
-            'contract_img',
-            'id_img',
-            'og_img',
+            'logo_file',
+            'favicon_file',
+            'passbook_file',
+            'contract_file',
+            'id_file',
+            'og_file',
             'og_description',
-            'map_marker_img',
             'ceo_nm',
             'addr',
             'phone_num',
@@ -30,17 +29,10 @@ class BrandRequest extends FormRequest
             'company_nm',
             'pvcy_rep_nm',
             'business_num',
+            'deposit_day',
+            'deposit_amount',
             'fax_num',
-            'stamp_flag',
-            'point_flag',
-            'stamp_max_size',
-            'stamp_save_count',
-            'coupon_model_id',
-            'point_rate',
-            'point_min_amount',
-            'mbr_type',
-            'guide_type',
-            'options',
+            'pv_options',
         ];
     }
 
@@ -59,14 +51,21 @@ class BrandRequest extends FormRequest
         $sub = [
             'name'  => 'string|required',
             'dns'   => 'string|required',
-            'logo_img'    => 'file|mimes:jpg,bmp,png,jpeg,webp,svg',
-            'favicon_img' => 'file|mimes:jpg,bmp,png,jpeg,webp,ico,svg',
-            'passbook_img'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
-            'contract_img'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
-            'id_img'        => 'file|mimes:jpg,bmp,png,jpeg,webp',
-            'og_img'        => 'file|mimes:jpg,bmp,png,jpeg,webp',
-            'map_marker_img' => 'file|mimes:jpg,bmp,png,jpeg,webp,svg',
-            'options'       => 'string|required',
+            'logo_file'    => 'file|mimes:svg',
+            'favicon_file' => 'file|mimes:ico,svg,jpg,bmp,png,jpeg,webp',
+            'passbook_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
+            'contract_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
+            'id_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp',
+            'og_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp',
+            'pv_options'    => 'required',
+            'ceo_nm'        => 'string|required',
+            'company_nm'    => 'string|required',
+            'phone_num'     => 'string|required',
+            'addr'          => 'string|required',
+            'business_num'  => 'string|required',
+            'deposit_day'   => 'required',
+            'deposit_amount' => 'required',
+
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -76,54 +75,65 @@ class BrandRequest extends FormRequest
         return $this->getAttributes($this->keys);
     }
 
+    protected function prepareForValidation()
+    {
+        if ($this->has('pv_options')) 
+        {
+            $pvOptions = $this->input('pv_options');    
+            $pvOptions = $this->convertToBoolean($pvOptions);
+            $this->merge(['pv_options' => $pvOptions]);
+        }
+    }
+
+    protected function convertToBoolean($data)
+    {
+        if (is_array($data)) 
+        {
+            foreach ($data as $key => $value) {
+                $data[$key] = $this->convertToBoolean($value);
+            }
+        } 
+        else 
+        {
+            if ($data === 'true')
+                $data = true;
+            else if ($data === 'false')
+                $data = false;
+        }
+        return $data;
+    }
+
     public function bodyParameters()
     {
         $params = $this->getDocsParameters($this->keys);
-        $params['coupon_model_id']['description'] .= '(기본 0)';
-        $params['logo_img']['description']      .= '(max-width:256px 이상은 리사이징)';
-        $params['favicon_img']['description']   .= '(max-width:32px 이상은 리사이징)';
-        $params['passbook_img']['description']  .= '(max-width:500px 이상은 리사이징)';
-        $params['contract_img']['description']  .= '(max-width:500px 이상은 리사이징)';
-        $params['stamp_flag']['description']    .= '(1=사용, 0=미사용)';
-        $params['point_flag']['description']    .= '(1=사용, 0=미사용)';
-        $params['id_img']['description']    .= '(max-width:500px 이상은 리사이징)';
-        $params['og_img']['description']    .= '(max-width:1200px 이상은 리사이징)';
-        $params['map_marker_img']['description'] .= '(max-width:60px 이상은 리사이징)';
+        $params['logo_file']['description']      .= '(max-width:256px 이상은 리사이징)';
+        $params['favicon_file']['description']   .= '(max-width:32px 이상은 리사이징)';
+        $params['passbook_file']['description']  .= '(max-width:500px 이상은 리사이징)';
+        $params['contract_file']['description']  .= '(max-width:500px 이상은 리사이징)';
+        $params['id_file']['description']    .= '(max-width:500px 이상은 리사이징)';
+        $params['og_file']['description']    .= '(max-width:1200px 이상은 리사이징)';
         $params['theme_css']['description'] .= '(테마 CSS 내용 작성)';
         $params['name']['description']      .= '(브랜드명)';
-        $params['mbr_type']['description']  .= '(1=모든 가맹점에서 사용, 0=유입된 가맹점에서만 사용)';
-        $params['mbr_type']['example']  = '0';
-        $params['guide_type']['description'] .= '(1=일반형, 0=친화적)';
-        $params['guide_type']['example']  = '0';
         return $params;
     }
 
     public function data()
     {
         $data = [
-            'dns'       => $this->input('dns'),
-            'name'      => $this->input('name'),
-            'theme_css'     => $this->input('theme_css', ''),
-            'company_nm'    => $this->input('company_nm', ''),
-            'pvcy_rep_nm'   => $this->input('pvcy_rep_nm', ''),
-            'og_description'   => $this->input('og_description', ''),
-            'ceo_nm'    => $this->input('ceo_nm', ''),
-            'addr'      => $this->input('addr', ''),
-            'fax_num'       => $this->input('fax_num', ''),
-            'business_num'  => $this->input('business_num', ''),
-            'phone_num'     => $this->input('phone_num', ''),
-            'fax_num'       => $this->input('fax_num', ''),
-            'stamp_flag'     => (boolean)$this->input('stamp_flag', 0),
-            'point_flag'     => (boolean)$this->input('point_flag', 0),
-            'stamp_max_size' => (int)$this->input('stamp_max_size', 10),
-            'stamp_save_count'  => (int)$this->input('stamp_save_count', 0),
-            'coupon_model_id'   => (int)$this->input('coupon_model_id', 0),
-            'point_rate'        => (int)$this->input('point_rate', 0),
-            'point_min_amount'  => (int)$this->input('point_min_amount', 0),
-            'mbr_type'  => (int)$this->input('mbr_type', 0),
-            'guide_type'=> (int)$this->input('guide_type', 0),
-            'options'   => $this->input('options', '[]'),
+            'dns' => $this->dns,
+            'name' => $this->name,
+            'ceo_nm' => $this->ceo_nm,
+            'company_nm'    => $this->company_nm,
+            'phone_num'     => $this->phone_num,
+            'addr'          => $this->addr,
+            'business_num'  => $this->business_num,
+            'og_description' => $this->input('og_description', ''),        
+            'deposit_day'   => $this->deposit_day,
+            'deposit_amount'   => $this->deposit_amount,
+            'note'  => $this->input('note', ''),
         ];
+        $data['pv_options'] = json_encode($this->pv_options, true);
+        $data['theme_css']  = json_encode($this->theme_css, true);
         return $data;
     }
 }

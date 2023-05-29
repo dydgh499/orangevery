@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ComagainController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +22,4 @@ Route::get('clear', function() {
     return "Cleared!";
 });
 
-Route::get('{any}', [ComagainController::class, 'domain'])->where('any','.*');
+Route::get('{any}', [AuthController::class, 'domain'])->where('any','.*');
