@@ -3,6 +3,7 @@
 const props = defineProps({
     preview: {
         type: String,
+        default: '/icons/img-preview.svg',
         required: true,
     },
     style: {

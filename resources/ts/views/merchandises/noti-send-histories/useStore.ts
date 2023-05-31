@@ -12,6 +12,7 @@ export const useSearchStore = defineStore('notiSendHistorySearchStore', () => {
         store.setHeader('내용', 'message')
         store.setHeader('발송 URL', 'send_url')
         store.setHeader('발송시간', 'created_at')
+        store.sortHeader()
     }
     return {
         store,

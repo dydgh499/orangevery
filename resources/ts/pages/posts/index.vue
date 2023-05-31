@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/posts/useStore'
-import BaseIndexOverview from '@/views/utils/BaseIndexOverview.vue';
+import BaseIndexOverview from '@/layouts/lists/BaseIndexOverview.vue';
 
 const { store, setHeaders } = useSearchStore()
 provide('store', store)

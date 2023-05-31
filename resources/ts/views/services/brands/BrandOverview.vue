@@ -2,8 +2,8 @@
 import { axios } from '@axios';
 import { businessNumValidator, nullValidator, requiredValidator } from '@validators';
 import type { Brand } from '@/views/types'
-import FileInput from '@/views/utils/FileInput.vue';
-import CreateHalfVCol from '@/views/utils/CreateHalfVCol.vue';
+import FileInput from '@/layouts/utils/FileInput.vue';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { themeConfig } from '@themeConfig'
 import { config } from '@layouts/config'
 

@@ -234,6 +234,7 @@ watch(isVerticalNavMini(windowWidth, isVerticalNavHovered), val => {
           v-for="child in item.children"
           :key="child.title"
           :item="child"
+          :style="`margin-left:1em;`"
         />
       </ul>
     </TransitionExpand>

@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import OperatorOverview from '@/views/services/operators/OperatorOverview.vue';
 import { useUpdateStore } from '@/views/services/operators/useStore'
-import CreateForm from '@/views/utils/CreateForm.vue'
+import CreateForm from '@/layouts/utils/CreateForm.vue'
 import type { Tab } from '@/views/types'
 const {path, item } = useUpdateStore()
 const tabs = <Tab[]>([

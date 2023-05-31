@@ -3,7 +3,7 @@
 import BrandOverview from '@/views/services/brands/BrandOverview.vue';
 import BrandDesignOverview from '@/views/services/brands/BrandDesignOverview.vue';
 import BrandOptionOverview from '@/views/services/brands/BrandOptionOverview.vue';
-import CreateForm from '@/views/utils/CreateForm.vue'
+import CreateForm from '@/layouts/utils/CreateForm.vue'
 import { useUpdateStore } from '@/views/services/brands/useStore'
 import type { Tab } from '@/views/types'
 const { path, item } = useUpdateStore()
@@ -25,8 +25,7 @@ const id = ref<number>(0)
                     <BrandDesignOverview :item="item" />
                 </VWindowItem>
                 <VWindowItem>
-                    <BrandOptionOverview :item="item.pv_options" :deposit_day="item.deposit_day"
-                        :deposit_amount="item.deposit_amount" />
+                    <BrandOptionOverview :item="item.pv_options" :brand="item" />
                 </VWindowItem>
             </template>
         </CreateForm>

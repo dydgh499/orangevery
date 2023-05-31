@@ -3,7 +3,7 @@ import { axios } from '@axios';
 import type { PayModule, Merchandise } from '@/views/types'
 import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue';
 import { SearchParams } from '@/views/types';
-import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import corp from '@corp'
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 }
 const props = defineProps<Props>();
 
-const { flattenUp } = useSalesHierarchicalStore()
+const { flattenUp } = useSalesFilterStore()
 const pay_modules       = reactive<PayModule[]>([]);
 const new_pay_modules   = reactive<PayModule[]>([]);
 const ancestors     = ref<object[]>([]);

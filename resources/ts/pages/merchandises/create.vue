@@ -5,7 +5,7 @@ import MchtOverview from '@/views/merchandises/MchtOverview.vue';
 import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOverview.vue';
 
 import { useUpdateStore } from '@/views/merchandises/useStore'
-import CreateForm from '@/views/utils/CreateForm.vue'
+import CreateForm from '@/layouts/utils/CreateForm.vue'
 import type { Tab } from '@/views/types'
 
 const {path, item } = useUpdateStore()
@@ -24,7 +24,7 @@ const id = ref<number>(0)
                     <UserOverview :item="item" :id="id" />
                 </VWindowItem>
                 <VWindowItem>
-                    <MchtOverview :item="item" />
+                    <MchtOverview :item="item" :pv_options="item.pv_options"/>
                 </VWindowItem>
                 <VWindowItem>
                     <PayModuleOverview :item="item" />

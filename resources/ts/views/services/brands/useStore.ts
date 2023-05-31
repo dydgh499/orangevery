@@ -4,7 +4,6 @@ import type { Brand, FreeOption, PaidOption, ThemeCSS } from '@/views/types';
 export const useSearchStore = defineStore('brandSearchStore', () => {
     const store = Searcher<Brand>('services/brands', <Brand>({}))
     setHeaders()
-    setExtraHeaders()
 
     function setHeaders() {
         store.setHeader('NO.', 'id')
@@ -12,26 +11,24 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
         store.setHeader('LOGO', 'logo_img')
         store.setHeader('테마색상', 'main_color')
         store.setHeader('회사명', 'company_nm')
-        store.setHeader('대표자명', 'mcht_name')
+        store.setHeader('대표자명', 'ceo_nm')
         store.setHeader('연락처', 'phone_num')
         store.setHeader('비고', 'note')
         store.setHeader('마지막 입금일', 'last_dpst_at')
-    }
-    function setExtraHeaders() {
-        store.setExtraHeader('개발사 사용여부', 'pv_options.free.use_devloper')
-        store.setExtraHeader('수기 사용여부', 'pv_options.free.use_hand_pay')
-        store.setExtraHeader('인증 사용여부', 'pv_options.free.use_auth_pay')
-        store.setExtraHeader('간편 사용여부', 'pv_options.free.use_simple_pay')
-        store.setExtraHeader('입금일', 'deposit_day')
-        store.setExtraHeader('입금액', 'deposit_amount')
-        store.setExtraHeader('마지막 입금일', 'last_dpst_at')
-        store.setExtraHeader('생성시간', 'created_at')
-        store.setExtraHeader('업데이트시간', 'updated_at')
+        store.setHeader('개발사 사용여부', 'pv_options.free.use_devloper')
+        store.setHeader('수기 사용여부', 'pv_options.free.use_hand_pay')
+        store.setHeader('인증 사용여부', 'pv_options.free.use_auth_pay')
+        store.setHeader('간편 사용여부', 'pv_options.free.use_simple_pay')
+        store.setHeader('입금일', 'deposit_day')
+        store.setHeader('입금액', 'deposit_amount')
+        store.setHeader('마지막 입금일', 'last_dpst_at')
+        store.setHeader('생성시간', 'created_at')
+        store.setHeader('업데이트시간', 'updated_at')        
+        store.sortHeader()
     }
     return {
         store,
         setHeaders,
-        setExtraHeaders,
     }
 })
 

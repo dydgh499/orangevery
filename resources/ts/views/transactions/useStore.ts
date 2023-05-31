@@ -10,7 +10,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         store.setHeader('가맹점 상호/수수료', 'mcht_name') //trx_fee
         store.setHeader('영업점 ID/수수료', 'sales_name')   //trx_fee
         store.setHeader('거래수수료', 'withdraw_fee')
-        store.setHeader('보유금액 수수료', 'hold_fee')
+        store.setHeader('유보금 수수료', 'hold_fee')
         store.setHeader('거래 타입', 'trx_type')
         store.setHeader('거래 금액', 'amount')
         store.setHeader('구매자명', 'buyer_nm')

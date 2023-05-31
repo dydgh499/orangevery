@@ -18,6 +18,7 @@ class BrandRequest extends FormRequest
             'favicon_file',
             'passbook_file',
             'contract_file',
+            'bsin_lic_file',
             'id_file',
             'og_file',
             'og_description',
@@ -55,6 +56,7 @@ class BrandRequest extends FormRequest
             'favicon_file' => 'file|mimes:ico,svg,jpg,bmp,png,jpeg,webp',
             'passbook_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
             'contract_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
+            'bsin_lic_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
             'id_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp',
             'og_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp',
             'pv_options'    => 'required',
@@ -110,6 +112,7 @@ class BrandRequest extends FormRequest
         $params['favicon_file']['description']   .= '(max-width:32px 이상은 리사이징)';
         $params['passbook_file']['description']  .= '(max-width:500px 이상은 리사이징)';
         $params['contract_file']['description']  .= '(max-width:500px 이상은 리사이징)';
+        $params['bsin_lic_file']['description']  .= '(max-width:500px 이상은 리사이징)';
         $params['id_file']['description']    .= '(max-width:500px 이상은 리사이징)';
         $params['og_file']['description']    .= '(max-width:1200px 이상은 리사이징)';
         $params['theme_css']['description'] .= '(테마 CSS 내용 작성)';

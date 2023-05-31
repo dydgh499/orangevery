@@ -21,11 +21,16 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:10, name:'코리아결제시스템', rep_nm:'박형석', company_nm:'(주)코리아결제시스템', business_num:'117-81-85188', phone_num:'02-6953-6010', addr:'서울 강남구 도산대로1길 40 (신사동) 201호'},
         {id:11, name:'더페이원', rep_nm:'이일호', company_nm:'(주)더페이원', business_num:'860-87-00645', phone_num:'1670-1915', addr:'서울 송파구 송파대로 201 B동 1621~2호 (문정동, 테라타워2)'},
         {id:12, name:'이지피쥐', rep_nm:'김도형', company_nm:'주식회사 이지피쥐', business_num:'635-81-00256', phone_num:'02-1522-3434', addr:'서울 강남구 도산대로 157 (신사동) 신웅타워2 15층'},
+        {id:13, name:'CM페이', rep_nm:'', company_nm:'씨엠컴퍼니 주식회사', business_num:'', phone_num:'', addr:''},
     ]
     onMounted(async () => {
         try {
             const r = await axios.get('/api/v1/manager/services/pay-gateways/detail')
-            pgs.value = r.data.pay_gateways as PayGateway[]
+            r.data.pay_gateways.unshift({id:null, pg_nm: 'PG사 선택'})
+            r.data.pay_sections.unshift({id:null, name: '구간 선택'})
+            r.data.ternimals.unshift({id:null, name: '단말기 선택'})
+            r.data.pay_conditions.unshift({id:null, name: '결제조건 선택'})
+            r.data.custom_filters.unshift({id:null, name: '커스텀 필터 선택'})
             Object.assign(pgs.value, r.data.pay_gateways)
             Object.assign(pss.value, r.data.pay_sections)
             Object.assign(ternimals.value, r.data.ternimals)
@@ -36,7 +41,25 @@ export const useStore = defineStore('payGatewayStore', () => {
             errorHandler(e)
         }
     })
+    const setFee = (items: PaySection[], id: number | null) => {
+        if(id != null)
+        {
+            const item = items.find(item => item.id === id)
+            return item != undefined ? "수수료율: " + (item.trx_fee * 100).toFixed(3) + "%" : ''    
+        }
+        else
+            return '';
+    }
+    const setAmount = (items: Classification[], id: number | null) => {
+        if(id != null)
+        {
+            const item = items.find(item => item.id === id)
+            return item != undefined && item != null ? "이용 수수료: " + item.trx_fee + "₩" : ''    
+        }
+        else
+            return '';
+    }
     return {
-        pgs, pss, ternimals, pay_conds, cus_filters, pg_types
+        pgs, pss, ternimals, pay_conds, cus_filters, pg_types, setFee, setAmount
     }
 })

@@ -18,6 +18,7 @@ export const useSearchStore = defineStore('operatorSearchStore', () => {
         store.setHeader('등급', 'level')
         store.setHeader('생성시간', 'created_at')
         store.setHeader('업데이트시간', 'updated_at')
+        store.sortHeader()
     }
     return {
         store,

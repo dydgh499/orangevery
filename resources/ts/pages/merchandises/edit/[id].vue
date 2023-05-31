@@ -3,7 +3,7 @@
 import UserOverview from '@/views/users/UserOverview.vue';
 import MchtOverview from '@/views/merchandises/MchtOverview.vue';
 import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOverview.vue';
-import CreateForm from '@/views/utils/CreateForm.vue'
+import CreateForm from '@/layouts/utils/CreateForm.vue'
 import { useUpdateStore } from '@/views/merchandises/useStore'
 const {path, item } = useUpdateStore()
 const tabs = [
@@ -25,7 +25,7 @@ watchEffect(() => {
                     <UserOverview :item="item" :id="id" />
                 </VWindowItem>
                 <VWindowItem>
-                    <MchtOverview :item="item" />
+                    <MchtOverview :item="item" :pv_options="item.pv_options"/>
                 </VWindowItem>
                 <VWindowItem>
                     <PayModuleOverview :item="item" />

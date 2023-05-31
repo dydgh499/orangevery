@@ -23,6 +23,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         store.setHeader('출고상태', 'ship_out_stat')
         store.setHeader('생성시간', 'created_at')
         store.setHeader('업데이트시간', 'updated_at')    
+        store.sortHeader()
     }
     return {
         store,
@@ -58,7 +59,8 @@ export const useUpdateStore = defineStore('payModUpdateStore', () => {
         use_saleslip_sell: false,
         installment: 0,
         note: '비고'
-    }) 
+    })
+    //카드사 필터 및 다른 필터옵션들
     return {
         path, item
     }

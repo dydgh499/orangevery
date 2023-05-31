@@ -2,9 +2,9 @@
 import { axios } from '@axios';
 import { nullValidator, requiredValidator } from '@validators';
 import type { Brand } from '@/views/types'
-import FileLogoInput from '@/views/utils/FileLogoInput.vue';
-import KakaotalkPreview from '@/views/utils/KakaotalkPreview.vue';
-import CreateHalfVCol from '@/views/utils/CreateHalfVCol.vue';
+import FileLogoInput from '@/layouts/utils/FileLogoInput.vue';
+import KakaotalkPreview from '@/layouts/utils/KakaotalkPreview.vue';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { useTheme } from 'vuetify'
 import { config } from '@layouts/config'
 

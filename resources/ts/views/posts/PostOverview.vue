@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import type { Post } from '@/views/types'
 import { requiredValidator, nullValidator } from '@validators';
-import Editor from '@/views/utils/Editor.vue';
-import CreateHalfVCol from '@/views/utils/CreateHalfVCol.vue';
+import Editor from '@/layouts/utils/Editor.vue';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import type { Options } from '@/views/types'
 
 interface Props {

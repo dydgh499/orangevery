@@ -24,12 +24,34 @@ interface Options {
 export interface ErrorResponse {
     message: string,
 }
+
+export interface CustomFilter {
+    pg_id: number | null,
+    ps_id: number | null,
+    pay_cond_id: number | null,
+    ternimal_id: number | null,
+    custom_id: number | null,
+}
+
+export interface SalesForceFilter {
+    sales: [
+        number | null, 
+        number | null, 
+        number | null, 
+        number | null, 
+        number | null, 
+        number | null, 
+    ]
+}
+
 export interface SearchParams {
     page: number,
     page_size: number,
     s_dt: Date,
     e_dt: Date,
     search: string,
+    custom: CustomFilter,
+    sales: SalesForceFilter,
 }
 
 export interface Pagenation {
@@ -37,9 +59,11 @@ export interface Pagenation {
     total_page: number,
 }
 export interface Filter {
-    key: string,
-    ko: string,
-    hidden: boolean,
+    [key: string ]: {
+        ko: string,
+        hidden: boolean,  
+        idx: number,  
+    };
 }
 
 export interface Tab {
@@ -77,27 +101,43 @@ export interface BasePropertie {
 }
 export interface UserPropertie extends BasePropertie, Bank, Contract {
     addr: string,
-    email: string,
     resident_num: string,
     business_num: string,
     sector: string,
 }
 
-export interface MerchandisePropertie {
-    group_id: number,
-    mcht_name: string,
-    trx_fee: float,
-    hold_fee: float,
+export interface MchtOption {
     abnormal_trans_limit: number,
     pay_day_limit: number,
+    pay_month_limit: number,
     pay_year_limit: number,
-    use_dupe_trx: boolean,
+    pay_dupe_limit: number,
     is_show_fee: boolean,
+}
+export interface MerchandisePropertie {
+    sales5_id: number | null,
+    sales5_fee: float,
+    sales4_id: number | null,
+    sales4_fee: float,
+    sales3_id: number | null,
+    sales3_fee: float,
+    sales2_id: number | null,
+    sales2_fee: float,
+    sales1_id: number | null,
+    sales1_fee: float,
+    sales0_id: number | null,
+    sales0_fee: float,
+    mcht_name: string,
+    sector: string,
+    trx_fee: float,
+    hold_fee: float,
+    enabled: boolean,
+    pv_options: MchtOption,
 }
 
 export interface SalesforcePropertie {
     tax_type: number,
-    trx_fee: float,
+    sector: string,
 }
 
 export interface Merchandise extends MerchandisePropertie, UserPropertie {}

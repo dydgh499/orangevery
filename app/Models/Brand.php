@@ -28,11 +28,7 @@ class Brand extends Model
         'point_min_amount',
         'point_rate',
     ];
-    protected $casts = [
-        'user_id' => "int",
-        'mcht_id' => "int",
-    ];
-
+    
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format("Y-m-d H:i:s");

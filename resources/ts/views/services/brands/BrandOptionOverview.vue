@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
 import { requiredValidator, nullValidator } from '@validators';
-import type { FreeOption, PaidOption } from '@/views/types'
-import CreateHalfVCol from '@/views/utils/CreateHalfVCol.vue';
-import BooleanRadio from '@/views/utils/BooleanRadio.vue';
+import type { FreeOption, PaidOption, Brand } from '@/views/types'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
 import { InternalPageResolvers } from 'vite-plugin-pages';
 
 interface Props {
@@ -11,8 +11,7 @@ interface Props {
         free: FreeOption,
         paid: PaidOption,
     },
-    deposit_day: number,
-    deposit_amount: number,   
+    brand: Brand,
 }
 const props = defineProps<Props>()
 
@@ -108,7 +107,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span></span>입금일</template>
                             <template #input>
-                                <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.deposit_day"
+                                <VTextField prepend-inner-icon="tabler-calendar" v-model="props.brand.deposit_day"
                                     type="number" :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
@@ -117,7 +116,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span></span>입금액</template>
                             <template #input>
-                                <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.deposit_amount"
+                                <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.brand.deposit_amount"
                                     type="number" :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>

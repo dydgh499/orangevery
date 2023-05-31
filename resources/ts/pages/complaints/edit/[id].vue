@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import CreateForm from '@/views/utils/CreateForm.vue'
+import CreateForm from '@/layouts/utils/CreateForm.vue'
 import ComplaintOverview from '@/views/complaints/ComplaintOverview.vue';
 import { useUpdateStore } from '@/views/complaints/useStore'
 import type { Tab } from '@/views/types'

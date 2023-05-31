@@ -82,16 +82,12 @@ class AuthController extends Controller
      * @queryParam brand_id integer required 브랜드 ID Example: 1
      * @return \Illuminate\Http\JsonResponse
      */
-    public function signIn(LoginForm $request)
+    public function signIn(LoginRequest $request)
     {
-        $brand  = Brand::where('id', $request->brand_id)->first(['mbr_type', 'guide_type'])->toArray();
+        $brand  = Brand::where('id', $request->brand_id)->first(['mbr_type', 'guide_type']);
         $result = $this->__signIn(new Operator(), $request);     // check operator
         if($result['result'] == 1)
             return $this->response(0, $result['user']->loginInfo($result['user']->level, $brand));
-
-        $result = $this->__signIn(new Merchandise(), $request);  // check mcht
-        if($result['result'] == 1)
-            return $this->response(0, $result['user']->loginInfo(10, $brand));
 
         $result = $this->__signIn(new Salesforce(), $request);  // check salesforce
         if($result['result'] == 1)
@@ -185,7 +181,7 @@ class AuthController extends Controller
         else
         {
             return DB::transaction(function () use($request) {
-                $res = Brand::create(['name'=>$request->name, 'dns'=>$request->dns, 'brand_type'=>0]);
+                $res = Brand::create(['name'=>$request->name, 'dns'=>$request->dns]);
                 $res = Operator::create([
                     'brand_id'  => $res->id,
                     'user_name' => $request->user_name,

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
-import BaseIndexOverview from '@/views/utils/BaseIndexOverview.vue';
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import BaseIndexOverview from '@/layouts/lists/BaseIndexOverview.vue';
 import { useSearchStore } from '@/views/transactions/useStore';
 
 const {store, setHeaders} = useSearchStore()
-const { flattened } = useSalesHierarchicalStore()
+const { flattened } = useSalesFilterStore()
 provide('store', store)
 provide('setHeaders', setHeaders)
 

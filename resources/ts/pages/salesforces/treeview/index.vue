@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import VueTree from "@ssthouse/vue3-tree-chart";
 import "@ssthouse/vue3-tree-chart/dist/vue3-tree-chart.css";
-import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useTheme } from 'vuetify'
 
-const { hierarchical, flattened } = useSalesHierarchicalStore()
+const { hierarchical, flattened } = useSalesFilterStore()
 const salesforce = ref({ trx_fee: 0, user_name: '영업자 선택' })
 const search = ref('')
 const vehicules = {

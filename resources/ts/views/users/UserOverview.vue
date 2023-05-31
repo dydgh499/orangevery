@@ -2,8 +2,8 @@
 
 import { businessNumValidator, emailValidator, lengthValidatorV2, passwordValidator, requiredValidator } from '@validators';
 import type { UserPropertie } from '@/views/types'
-import FileInput from '@/views/utils/FileInput.vue';
-import CreateHalfVCol from '@/views/utils/CreateHalfVCol.vue';
+import FileInput from '@/layouts/utils/FileInput.vue';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 
 interface Props {
     item: UserPropertie,

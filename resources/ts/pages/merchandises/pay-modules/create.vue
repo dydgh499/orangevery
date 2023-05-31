@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue';
-import CreateForm from '@/views/utils/CreateForm.vue'
+import CreateForm from '@/layouts/utils/CreateForm.vue'
 import { useUpdateStore } from '@/views/merchandises/pay-modules/useStore'
 
 const { path, item } = useUpdateStore()

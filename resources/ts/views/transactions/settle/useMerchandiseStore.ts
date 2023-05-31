@@ -14,13 +14,13 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         store.setHeader('금액', 'appr_amount')
         store.setHeader('거래 수수료', 'appr_trx_fee')
         store.setHeader('입금 수수료', 'appr_dpst_fee')
-        store.setHeader('보유금액 수수료', 'appr_holding_fee')
+        store.setHeader('유보금 수수료', 'appr_holding_fee')
 
         store.setHeader('개수', 'cxl_count')
         store.setHeader('금액', 'cxl_amount')
         store.setHeader('거래 수수료', 'cxl_trx_fee')
         store.setHeader('입금 수수료', 'cxl_dpst_fee')
-        store.setHeader('보유금액 수수료', 'cxl_holding_fee')
+        store.setHeader('유보금 수수료', 'cxl_holding_fee')
 
         store.setHeader('차감완료', 'deduction_amount')
         store.setHeader('추가차감', 'deduction_extra_amount')

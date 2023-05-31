@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Filter } from '@/views/types';
 interface Props {
-    headers  : Filter[],
+    headers  : Filter,
 }
 const props = defineProps<Props>()
 const visible = ref(false)
@@ -26,8 +26,8 @@ defineExpose({
                 <VCol>
 
                     <VCheckbox
-                        v-for="header in props.headers"
-                        :key="Object.keys(header)[0]"
+                        v-for="(header, index) in props.headers"
+                        :key="index"
                         v-model="header.hidden"
                         :label="header.ko"
                         true-icon="tabler-circle-x"

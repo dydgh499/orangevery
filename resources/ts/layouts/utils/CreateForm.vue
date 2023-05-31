@@ -18,12 +18,16 @@ const url = ref('/api/v1/manager/' + props.path + '/' + props.id)
 const tab = ref(0);
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
+const errorHandler = <any>(inject('$errorHandler'))
 const vForm = ref<VForm>()
 
 const get = (uri: string) => {
     axios.get(uri)
         .then(r => { Object.assign(props.item, r.data); })
-        .catch(e => { snackbar.value.show(e.response.data.message, 'error') })
+        .catch(e => { 
+            snackbar.value.show(e.response.data.message, 'error') 
+            const r = errorHandler(e)
+        })
 }
 
 const getParams = (formData: FormData, data: any, parentKey = '') => {
@@ -59,9 +63,11 @@ const update = async () => {
             };
             const res = await axios(params);
             snackbar.value.show('성공하였습니다.', 'success')
+            setTimeout(function () { router.replace('/' + props.path) }, 1000);
         }
         catch (e: any) {
             snackbar.value.show(e.response.data.message, 'error')
+            const r = errorHandler(e)
         }
     }
     else
@@ -76,6 +82,7 @@ const remove = async () => {
         }
         catch (e: any) {
             snackbar.value.show(e.response.data.message, 'error')
+            const r = errorHandler(e);
         }
     }
 }

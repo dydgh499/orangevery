@@ -129,21 +129,15 @@ class SalesforceController extends Controller
             return $this->response(951);
     }
 
-    public function hierarchicalDown(Request $request)
+    public function classification(Request $request)
     {
-        $root = $this->salesforces->whereNull('parent_id')->with('children')->get(['id', 'parent_id', 'user_name', 'trx_fee']);
-        return $this->response(0, $root);
-    }
-
-    public function hierarchicalUp(Request $request)
-    {
-        if($request->group_id != 0)
+        $data = [];
+        $grouped = $this->salesforces->where('brand_id', $request->user()->brand_id)->get(['id', 'nick_name', 'class'])->groupBy('class');        
+        for($i=0; $i<6; $i++)
         {
-            $salesforces = $this->salesforces->with('ancestors')->find($request->group_id);
-            return $this->response(0, $salesforces->ancestors);
+            $data["class_$i"] = isset($grouped[$i]) ? $grouped[$i] : [];
         }
-        else
-            return $this->response(0, []);
+        return $this->response(0, $data);
     }
 
 }

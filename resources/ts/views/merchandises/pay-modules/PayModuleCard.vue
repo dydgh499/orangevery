@@ -4,9 +4,9 @@ import { requiredValidator } from '@validators';
 import type { PayModule, Classification, PaySection, Options } from '@/views/types'
 import { VForm } from 'vuetify/components';
 import { useStore } from '@/views/services/pay-gateways/useStore';
-import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
-import BooleanRadio from '@/views/utils/BooleanRadio.vue';
-import CreateHalfVCol from '@/views/utils/CreateHalfVCol.vue';
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 
 
 interface Props {
@@ -20,7 +20,7 @@ const props = defineProps<Props>();
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 
-const { hierarchical, flattened } = useSalesHierarchicalStore()
+const { hierarchical, flattened } = useSalesFilterStore()
 
 const module_types = <Options[]>([
     { id: 0, title: "단말기" }, { id: 1, title: "수기결제" },

@@ -1,42 +1,28 @@
 <script lang="ts" setup>
 import { axios } from '@axios';
 import { requiredValidator, nullValidator } from '@validators';
-import type { MerchandisePropertie } from '@/views/types'
-import BooleanRadio from '@/views/utils/BooleanRadio.vue';
-import CreateHalfVCol from '@/views/utils/CreateHalfVCol.vue';
-import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
-
+import type { Merchandise, MchtOption } from '@/views/types'
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue';
 interface Props {
-    item: MerchandisePropertie,
+    item: Merchandise,
+    pv_options: MchtOption,
 }
 const props = defineProps<Props>()
+const { sales } = useSalesFilterStore()
 
-const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
-const errorHandler = inject('$errorHandler');
-
-const salesforce = ref({})
-const { hierarchical, flattened } = useSalesHierarchicalStore()
-
-props.item.is_show_fee = Boolean(props.item.is_show_fee)
-props.item.use_dupe_trx = Boolean(props.item.use_dupe_trx)
-
-const directFeeChange = async () => {
-    if (await alert.value.show('정말 즉시적용하시겠습니까?')) {
-
-    }
-}
-const bookFeeChange = async () => {
-    if (await alert.value.show('정말 예약적용하시겠습니까? 명일 00시에 반영됩니다.')) {
-
-    }
-}
-watchEffect(() => {
-    const sf_idx = flattened.findIndex(item => item.id === props.item.group_id)
-    salesforce.value = sf_idx == -1 ? { id: props.item.group_id, user_name: '영업자 선택', trx_fee: 0 } : flattened[sf_idx]
+onMounted(() => {
+    props.pv_options.is_show_fee = Boolean(props.pv_options.is_show_fee)
+    props.item.sales0_id = props.item.sales0_id == 0 ? null : props.item.sales0_id
+    props.item.sales1_id = props.item.sales1_id == 0 ? null : props.item.sales1_id
+    props.item.sales2_id = props.item.sales2_id == 0 ? null : props.item.sales2_id
+    props.item.sales3_id = props.item.sales3_id == 0 ? null : props.item.sales3_id
+    props.item.sales4_id = props.item.sales4_id == 0 ? null : props.item.sales4_id
+    props.item.sales5_id = props.item.sales5_id == 0 ? null : props.item.sales5_id
 })
 </script>
-
 <template>
     <VRow class="match-height">
         <!-- 👉 개인정보 -->
@@ -45,12 +31,19 @@ watchEffect(() => {
                 <VCardItem>
                     <VCardTitle>가맹점정보</VCardTitle>
                     <VRow class="pt-5">
-                        <!-- 👉 Email -->
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>상호</template>
                             <template #input>
-                                <VTextField id="nameHorizontalIcons" v-model="props.item.mcht_name"
+                                <VTextField v-model="props.item.mcht_name"
                                     prepend-inner-icon="tabler-building-store" placeholder="상호를 입력해주세요"
+                                    persistent-placeholder :rules="[requiredValidator]" />
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
+                            <template #name>업종</template>
+                            <template #input>
+                                <VTextField v-model="props.item.sector"
+                                    prepend-inner-icon="tabler-building-store" placeholder="업종을 입력해주세요"
                                     persistent-placeholder :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
@@ -60,48 +53,28 @@ watchEffect(() => {
                                 <VCol cols="12" md="3">
                                     <label for="feesRateHorizontalIcons">거래 수수료율</label>
                                 </VCol>
-                                <VCol cols="12" md="5">
+                                <VCol cols="12" :md="props.item.id ? 6 : 9">
                                     <VTextField id="feesRateHorizontalIcons" v-model="props.item.trx_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
-                                <VCol cols="12" md="4"
-                                    style="display: flex; flex-direction: row; justify-content: space-between;">
-                                    <VBtn type="submit" size="small" variant="tonal" @click="directFeeChange()"
-                                        style='flex-grow: 1; margin: 0.25em 0.5em;'>
-                                        즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
-                                    </VBtn>
-                                    <VBtn type="submit" size="small" variant="tonal" color="secondary"
-                                        @click="bookFeeChange()" style='flex-grow: 1; margin: 0.25em 0.5em;'>
-                                        예약적용
-                                        <VIcon end icon="tabler-clock-up" />
-                                    </VBtn>
-                                </VCol>
+                                <FeeChangeBtn v-if="props.item.id" :class=-1 :sales_id="props.item.id"
+                                    :sales_fee="props.item.trx_fee">
+                                </FeeChangeBtn>
                             </VRow>
                         </VCol>
                         <!-- 👉 수수료율 -->
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
-                                    <label for="holdRateHorizontalIcons">보유금액 수수료율</label>
+                                    <label for="holdRateHorizontalIcons">유보금 수수료율</label>
                                 </VCol>
-                                <VCol cols="12" md="5">
+                                <VCol cols="12" :md="props.item.id ? 6 : 9">
                                     <VTextField id="holdRateHorizontalIcons" v-model="props.item.hold_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
-                                <VCol cols="12" md="4"
-                                    style="display: flex; flex-direction: row; justify-content: space-between;">
-                                    <VBtn type="submit" size="small" variant="tonal" @click="directFeeChange()"
-                                        style='flex-grow: 1; margin: 0.25em 0.5em;'>
-                                        즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
-                                    </VBtn>
-                                    <VBtn type="submit" size="small" variant="tonal" color="secondary"
-                                        @click="bookFeeChange()" style='flex-grow: 1; margin: 0.25em 0.5em;'>
-                                        예약적용
-                                        <VIcon end icon="tabler-clock-up" />
-                                    </VBtn>
-                                </VCol>
+                                <FeeChangeBtn v-if="props.item.id" :class=-2 :sales_id="props.item.id"
+                                    :sales_fee="props.item.hold_fee">
+                                </FeeChangeBtn>
                             </VRow>
                         </VCol>
 
@@ -109,28 +82,120 @@ watchEffect(() => {
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
-                                    <label for="salesforceHorizontalIcons">상위 영업자</label>
+                                    <label for="salesforceHorizontalIcons">지사/수수료율</label>
                                 </VCol>
-
-                                <VCol cols="12" md="5">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
-                                        prepend-inner-icon="tabler-man" label="상위 영업자 선택"
-                                        :hint="`수수료율: ${(salesforce.trx_fee * 100).toFixed(3)}%`" item-title="user_name"
-                                        item-value="id" persistent-hint single-line return-object />
+                                <VCol cols="12" :md="props.item.id ? 3 : 5">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales5_id"
+                                        :items="sales[5].value" prepend-inner-icon="tabler-man" label="지사 선택"
+                                        item-title="nick_name" item-value="id" />
                                 </VCol>
-                                <VCol cols="12" md="4"
-                                    style="display: flex; flex-direction: row; justify-content: space-between;">
-                                    <VBtn type="submit" size="small" variant="tonal" @click="directFeeChange()"
-                                        style='flex-grow: 1; margin: 0.25em 0.5em;'>
-                                        즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
-                                    </VBtn>
-                                    <VBtn type="submit" size="small" variant="tonal" color="secondary"
-                                        @click="bookFeeChange()" style='flex-grow: 1; margin: 0.25em 0.5em;'>
-                                        예약적용
-                                        <VIcon end icon="tabler-clock-up" />
-                                    </VBtn>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales5_fee" type="number"
+                                        suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
+                                <FeeChangeBtn v-if="props.item.id" :class=5 :sales_id="props.item.sales5_id"
+                                    :sales_fee="props.item.sales5_fee">
+                                </FeeChangeBtn>
+                            </VRow>
+                        </VCol>
+                        <!-- 👉 영업자 수수료율 -->
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <VCol cols="12" md="3">
+                                    <label for="salesforceHorizontalIcons">하위지사/수수료율</label>
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 5">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales4_id"
+                                        :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위지사 선택"
+                                        item-title="nick_name" item-value="id" />
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales4_fee" type="number"
+                                        suffix="%" :rules="[requiredValidator]" />
+                                </VCol>
+                                <FeeChangeBtn v-if="props.item.id" :class=4 :sales_id="props.item.sales4_id"
+                                    :sales_fee="props.item.sales4_fee">
+                                </FeeChangeBtn>
+                            </VRow>
+                        </VCol>
+                        <!-- 👉 영업자 수수료율 -->
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <VCol cols="12" md="3">
+                                    <label for="salesforceHorizontalIcons">총판/수수료율</label>
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 5">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales3_id"
+                                        :items="sales[5].value" prepend-inner-icon="tabler-man" label="총판 선택"
+                                        item-title="nick_name" item-value="id" />
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales3_fee" type="number"
+                                        suffix="%" :rules="[requiredValidator]" />
+                                </VCol>
+                                <FeeChangeBtn v-if="props.item.id" :class=3 :sales_id="props.item.sales3_id"
+                                    :sales_fee="props.item.sales3_fee">
+                                </FeeChangeBtn>
+                            </VRow>
+                        </VCol>
+                        <!-- 👉 영업자 수수료율 -->
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <VCol cols="12" md="3">
+                                    <label for="salesforceHorizontalIcons">하위총판/수수료율</label>
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 5">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales2_id"
+                                        :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위총판 선택"
+                                        item-title="nick_name" item-value="id" />
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales2_fee" type="number"
+                                        suffix="%" :rules="[requiredValidator]" />
+                                </VCol>
+                                <FeeChangeBtn v-if="props.item.id" :class=2 :sales_id="props.item.sales2_id"
+                                    :sales_fee="props.item.sales2_fee">
+                                </FeeChangeBtn>
+                            </VRow>
+                        </VCol>
+                        <!-- 👉 영업자 수수료율 -->
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <VCol cols="12" md="3">
+                                    <label for="salesforceHorizontalIcons">대리점/수수료율</label>
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 5">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales1_id"
+                                        :items="sales[5].value" prepend-inner-icon="tabler-man" label="대리점 선택"
+                                        item-title="nick_name" item-value="id" />
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales1_fee" type="number"
+                                        suffix="%" :rules="[requiredValidator]" />
+                                </VCol>
+                                <FeeChangeBtn v-if="props.item.id" :class=1 :sales_id="props.item.sales1_id"
+                                    :sales_fee="props.item.sales1_fee">
+                                </FeeChangeBtn>
+                            </VRow>
+                        </VCol>
+                        <!-- 👉 영업자 수수료율 -->
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <VCol cols="12" md="3">
+                                    <label for="salesforceHorizontalIcons">하위대리점/수수료율</label>
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 5">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales0_id"
+                                        :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위대리점 선택"
+                                        item-title="nick_name" item-value="id" />
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales0_fee" type="number"
+                                        suffix="%" :rules="[requiredValidator]" />
+                                </VCol>
+                                <FeeChangeBtn v-if="props.item.id" :class=0 :sales_id="props.item.sales0_id"
+                                    :sales_fee="props.item.sales0_fee">
+                                </FeeChangeBtn>
                             </VRow>
                         </VCol>
                         <VDivider />
@@ -150,7 +215,8 @@ watchEffect(() => {
                                     <label>가맹점 수수료율 노출</label>
                                 </VCol>
                                 <VCol cols="12" md="9">
-                                    <BooleanRadio :radio.sync="props.item.is_show_fee" @update:radio="props.item.is_show_fee=$event">
+                                    <BooleanRadio :radio.sync="props.pv_options.is_show_fee"
+                                        @update:radio="props.pv_options.is_show_fee = $event">
                                         <template #true>사용</template>
                                         <template #false>미사용</template>
                                     </BooleanRadio>
@@ -160,35 +226,48 @@ watchEffect(() => {
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
-                                    <label for="acctNumHorizontalIcons">중복결제 허용</label>
+                                    <label for="acctNumHorizontalIcons">중복결제 한도</label>
                                 </VCol>
                                 <VCol cols="12" md="9">
-                                    <BooleanRadio :radio.sync="props.item.use_dupe_trx" @update:radio="props.item.use_dupe_trx = $event">
-                                        <template #true>사용</template>
-                                        <template #false>미사용</template>
-                                    </BooleanRadio>
+                                    <VTextField prepend-inner-icon="tabler-currency-won"
+                                        v-model="props.pv_options.pay_dupe_limit" type="number"
+                                        :rules="[requiredValidator]" />
                                 </VCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
-                                    <label>결제 하루 한도</label>
+                                    <label>결제 일 한도</label>
                                 </VCol>
                                 <VCol cols="12" md="9">
-                                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_day_limit"
-                                        type="number" :rules="[requiredValidator]" />
+                                    <VTextField prepend-inner-icon="tabler-currency-won"
+                                        v-model="props.pv_options.pay_day_limit" type="number"
+                                        :rules="[requiredValidator]" />
                                 </VCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
-                                    <label>결제 1년 한도</label>
+                                    <label>결제 월 한도</label>
                                 </VCol>
                                 <VCol cols="12" md="9">
-                                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_year_limit"
-                                        type="number" :rules="[requiredValidator]" />
+                                    <VTextField prepend-inner-icon="tabler-currency-won"
+                                        v-model="props.pv_options.pay_month_limit" type="number"
+                                        :rules="[requiredValidator]" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <VCol cols="12" md="3">
+                                    <label>결제 년 한도</label>
+                                </VCol>
+                                <VCol cols="12" md="9">
+                                    <VTextField prepend-inner-icon="tabler-currency-won"
+                                        v-model="props.pv_options.pay_year_limit" type="number"
+                                        :rules="[requiredValidator]" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -199,16 +278,14 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol cols="12" md="9">
                                     <VTextField prepend-inner-icon="tabler-currency-won"
-                                        v-model="props.item.abnormal_trans_limit" type="number"
+                                        v-model="props.pv_options.abnormal_trans_limit" type="number"
                                         :rules="[requiredValidator]" />
                                 </VCol>
-                            </VRow>
-                        </VCol>
-                        <VDivider />
-                    </VRow>
-                </VCardItem>
-            </VCard>
-        </VCol>
-        <!-- 👉 submit -->
-    </VRow>
-</template>
+                        </VRow>
+                    </VCol>
+                    <VDivider />
+                </VRow>
+            </VCardItem>
+        </VCard>
+    </VCol>
+</VRow></template>

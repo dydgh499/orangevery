@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-import Preview from '@/views/utils/Preview.vue';
+import { themeConfig } from '@themeConfig'
+import { config } from '@layouts/config'
+import Preview from '@/layouts/utils/Preview.vue';
 
 const props = defineProps({
     file: {
@@ -16,13 +18,15 @@ const props = defineProps({
     },
 });
 const files = ref(props.file)
-console.log(props.preview)
 const preview = ref<string>('/icons/img-preview.svg')
 const previewStyle = `
     border: 2px solid rgb(238, 238, 238);
     border-radius: 0.5em;
-    margin-block: 0;
-    margin-inline: 0.5em;
+    float: inline-end;
+    margin-block-end: 0.5em;
+    margin-block-start: 0.5em;
+    margin-inline-start: auto;
+    max-inline-size: 10em;
 `;
 
 const emits = defineEmits(['update:file']);
@@ -38,20 +42,17 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VRow no-gutters>
-        <VCol cols="12" md="9">
-            <VFileInput accept="image/*" show-size v-model="files" :label="label" prepend-icon="tabler-paperclip" >
-                <template #selection="{ fileNames }">
+    <VCol>
+        <VFileInput accept="image/*" v-model="files" :label="props.label"
+            prepend-icon="tabler-camera-up">
+            <template #selection="{ fileNames }">
                 <template v-for="fileName in fileNames" :key="fileName">
                     <VChip label size="small" variant="outlined" color="primary" class="me-2">
                         {{ fileName }}
                     </VChip>
                 </template>
             </template>
-            </VFileInput>
-        </VCol>
-        <VCol cols="12" md="3">
-            <Preview :preview="preview" :style="`height: 1200px;`" :preview-style="previewStyle"></Preview>
-        </VCol>
-    </VRow>
+        </VFileInput>
+        <Preview :preview="preview" :style="`height: 512px;`" :preview-style="previewStyle"></Preview>
+    </VCol>
 </template>

@@ -2,7 +2,7 @@
 
 import { emailValidator, passwordValidator, requiredValidator } from '@validators';
 import type { Operator } from '@/views/types'
-import CreateHalfVCol from '@/views/utils/CreateHalfVCol.vue';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { operator_levels } from '@/views/services/operators/useStore'
 
 interface Props {

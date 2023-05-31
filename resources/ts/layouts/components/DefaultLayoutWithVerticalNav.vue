@@ -14,9 +14,9 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
 // @layouts plugin
 import { VerticalNavLayout } from '@layouts'
 
-import AlertDialog from '@/views/utils/AlertDialog.vue';
-import Snackbar from '@/views/utils/Snackbar.vue';
-import LoadingDialog from '@/views/utils/LoadingDialog.vue';
+import AlertDialog from '@/layouts/dialogs/AlertDialog.vue';
+import Snackbar from '@/layouts/snackbars/Snackbar.vue';
+import LoadingDialog from '@/layouts/dialogs/LoadingDialog.vue';
 
 const alert = ref(null)
 const snackbar = ref(null)

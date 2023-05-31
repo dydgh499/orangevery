@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import SearchFilterDialog from '@/views/utils/SearchFilterDialog.vue';
-import BaseIndexChart from '@/views/utils/BaseIndexChart.vue';
-import BaseIndexFilter from '@/views/utils/BaseIndexFilter.vue';
+import SearchFilterDialog from '@/layouts/dialogs/SearchFilterDialog.vue';
+import BaseIndexChart from '@/layouts/lists/BaseIndexChart.vue';
+import BaseIndexFilter from '@/layouts/lists/BaseIndexFilter.vue';
 
 interface Props {
     placeholder: string,

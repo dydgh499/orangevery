@@ -14,9 +14,9 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
 import { HorizontalNavLayout } from '@layouts'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 
-import AlertDialog from '@/views/utils/AlertDialog.vue';
-import Snackbar from '@/views/utils/Snackbar.vue';
-import LoadingDialog from '@/views/utils/LoadingDialog.vue';
+import AlertDialog from '@/layouts/dialogs/AlertDialog.vue';
+import Snackbar from '@/layouts/snackbars/Snackbar.vue';
+import LoadingDialog from '@/layouts/dialogs/LoadingDialog.vue';
 
 const alert = ref(null)
 const snackbar = ref(null)

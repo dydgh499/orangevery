@@ -1,13 +1,21 @@
 <script setup lang="ts">
-import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useSearchStore } from '@/views/salesforces/useStore'
-import BaseIndexOverview from '@/views/utils/BaseIndexOverview.vue';
+import BaseIndexOverview from '@/layouts/lists/BaseIndexOverview.vue';
 
 const {store, setHeaders} = useSearchStore()
-const { flattened } = useSalesHierarchicalStore()
+const { flattened } = useSalesFilterStore()
 provide('store', store)
 provide('setHeaders', setHeaders)
 
+/*
+지사
+하위지사
+총판
+하위총판
+대리점
+하위대리점
+*/
 const salesforce = ref({trx_fee:0, user_name:'영업자 선택'})
 const metas = [
     {

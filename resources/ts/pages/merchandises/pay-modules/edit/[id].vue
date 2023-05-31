@@ -2,10 +2,10 @@
 <script setup lang="ts">
 import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue';
 import { useUpdateStore } from '@/views/merchandises/pay-modules/useStore'
-import CreateForm from '@/views/utils/CreateForm.vue'
-import { useSalesHierarchicalStore } from '@/views/salesforces/useStore'
+import CreateForm from '@/layouts/utils/CreateForm.vue'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 
-const { flattenUp } = useSalesHierarchicalStore()
+const { flattenUp } = useSalesFilterStore()
 const { path, item } = useUpdateStore()
 const tabs = [
     { icon: 'ic-outline-send-to-mobile', title: '결제모듈정보' },

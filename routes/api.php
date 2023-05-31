@@ -49,9 +49,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('settle-history/salesforces', NoticeController::class);
         });
         Route::prefix('salesforces')->group(function() {
-            Route::apiResource('fee-change-histories', PaymentModuleController::class);      
-            Route::get('hierarchical-down', [SalesforceController::class, 'hierarchicalDown']);
-            Route::get('hierarchical-up', [SalesforceController::class, 'hierarchicalUp']);
+            Route::apiResource('fee-change-histories', PaymentModuleController::class);
+            Route::get('classification', [SalesforceController::class, 'classification']);
         });
         Route::prefix('merchandises')->group(function() {
             Route::apiResource('pay-modules', PaymentModuleController::class);

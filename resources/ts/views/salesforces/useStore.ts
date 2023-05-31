@@ -28,58 +28,30 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
     }
 })
 
-export const useSalesHierarchicalStore = defineStore('salesHierarchicalStore', () => {
-    const hierarchical = ref<any[]>([])
-    const flattened = ref<any[]>([])
+export const useSalesFilterStore = defineStore('salesFilterStore', () => {
+    const sales = Array.from({ length: 6 }, () => ref<any[]>([]));    
     const errorHandler = <any>(inject('$errorHandler'))
 
     onMounted(async () => {
-        const flattening = (items: any[]): any[] => {
-            let flattenedItems = []
-            for (const item of items) {
-                flattenedItems.push(item)
-                if (item.children)
-                    flattenedItems = flattenedItems.concat(flattening(item.children));
-            }
-            return flattenedItems;
-        }
-
-        try {
-            const r = await axios.get('/api/v1/manager/salesforces/hierarchical-down')
-            Object.assign(hierarchical.value, r.data)
-            Object.assign(flattened.value, flattening(hierarchical.value))
-        }
-        catch (e) {
-            const res = errorHandler(e)
-            console.log(res)
-        }
+        await classification()
     })
-    const hierarchicalUp = async (mcht_id: number) => {
+    const classification = async () => {
         try {
-            const r = await axios.get('/api/v1/manager/salesforces/hierarchical-up', { params: { group_id: mcht_id } })
-            return r.data   // 배열로 사용    
+            const id = 0;
+            const r = await axios.get('/api/v1/manager/salesforces/classification', { params: { id: id } })
+            const classes = ['하위대리점', '대리점', '하위총판', '총판', '하위지사', '지사']
+            for (let index = 0; index < sales.length; index++) {
+                r.data['class_'+index].unshift({id:null, nick_name: classes[index]+' 선택'})
+                sales[index].value = r.data['class_'+index]
+            }
         }
         catch (e) {
             const res = errorHandler(e)
             console.log(res)
         }
-    }
-    const flattenUp = async (mcht_id: number) => {
-        const flattening = (item: any): any[] => {
-            const flattenedAncestors: any[] = [];
-    
-            while (item !== null) {
-                flattenedAncestors.push(item);
-                item = item.ancestors;
-            }
-            return flattenedAncestors.reverse();
-        }
-
-        const r = await axios.get('/api/v1/manager/salesforces/hierarchical-up', { params: { group_id: mcht_id } })
-        return flattening(r.data)   // 배열로 사용
     }
     return {
-        hierarchical, flattened, hierarchicalUp, flattenUp
+        sales
     }
 })
 
@@ -88,16 +60,13 @@ export const useUpdateStore = defineStore('salesUpdateStore', () => {
     const item  = reactive<Salesforce>({
         id: 0,
         tax_type: 0,
-        trx_fee: undefined,
         created_at: undefined,
         brand_id: 0,
-        group_id: 0,
         user_name: '',
         user_pw: '',
         nick_name: '',
         addr: '',
         phone_num: '',
-        email: '',
         resident_num: '',
         business_num: '',
         sector: '',
@@ -108,7 +77,12 @@ export const useUpdateStore = defineStore('salesUpdateStore', () => {
         acct_num: '',
         acct_nm: '',
         acct_bank_nm: '',
-        acct_bank_cd: ''
+        acct_bank_cd: '',
+        updated_at: undefined,
+        id_file: undefined,
+        passbook_file: undefined,
+        contract_file: undefined,
+        bsin_lic_file: undefined
     })
     return {
         path, item

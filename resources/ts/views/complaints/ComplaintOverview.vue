@@ -2,8 +2,8 @@
 import { axios } from '@axios';
 import { requiredValidator, nullValidator } from '@validators';
 import type { Complaint, Options } from '@/views/types'
-import CreateHalfVCol from '@/views/utils/CreateHalfVCol.vue';
-import BooleanRadio from '@/views/utils/BooleanRadio.vue';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import { issuers, complaint_types } from '@/views/complaints/useStore';
 
