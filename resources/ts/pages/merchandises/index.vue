@@ -42,7 +42,7 @@ const metas = [
 ]
 </script>
 <template>
-    <BaseIndexView placeholder="가맹점명" :metas="metas" :add="true" add_name="가맹점">
+    <BaseIndexView placeholder="가맹점명 검색" :metas="metas" :add="true" add_name="가맹점">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" />
         </template>
@@ -56,9 +56,6 @@ const metas = [
                         #{{ user[key] }}
                     </span>
                     <span v-else-if="key == `user_name`" class="edit-link" @click="store.edit(user.id)">
-                        {{ user[key] }}
-                    </span>                    
-                    <span v-else-if="key == `mcht_name`" class="edit-link" @click="store.edit(user.id)">
                         {{ user[key] }}
                     </span>
                     <span v-else-if="key.includes('_fee')"> 

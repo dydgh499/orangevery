@@ -2,28 +2,23 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Models\Operator;
+use App\Models\Classification;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Requests\Manager\OperatorReqeust;
+use App\Http\Requests\Manager\ClassificationReqeust;
 use App\Http\Requests\Manager\IndexRequest;
-use Illuminate\Support\Facades\Hash;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-/**
- * @group Operator API
- *
- * 오퍼레이터 관리 메뉴에서 사용될 API 입니다. 본사 이상권한이 요구됩니다.
- */
-class OperatorController extends Controller
+
+class ClassificationController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
-    protected $operators;
+    protected $classifications;
 
-    public function __construct(Operator $operators)
+    public function __construct(Classification $classifications)
     {
-        $this->operators = $operators;
+        $this->classifications = $classifications;
         $this->imgs = [];
     }
 
@@ -34,7 +29,7 @@ class OperatorController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $query = $this->operators->where('brand_id', $request->user()->brand_id);
+        $query = $this->classifications->where('brand_id', $request->user()->brand_id);
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }
@@ -46,12 +41,10 @@ class OperatorController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(OperatorReqeust $request)
+    public function store(ClassificationReqeust $request)
     {
-        $validated = $request->validate(['user_pw'=>'required']);
         $user = $request->data();
-        $user['user_pw'] = Hash::make($request->input('user_pw'));
-        $res = $this->operators->create($user);
+        $res = $this->classifications->create($user);
         return $this->response($res ? 1 : 990);
     }
 
@@ -65,7 +58,7 @@ class OperatorController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $data = $this->operators->where('id', $id)->first();
+        $data = $this->classifications->where('id', $id)->first();
         return $data ? $this->response(0, $data) : $this->response(1000);
     }
 
@@ -77,10 +70,10 @@ class OperatorController extends Controller
      * @urlParam id integer required 유저 PK
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(OperatorReqeust $request, $id)
+    public function update(ClassificationReqeust $request, $id)
     {
         $data = $request->data();
-        $res = $this->operators->where('id', $id)->update($data);
+        $res = $this->classifications->where('id', $id)->update($data);
         return $this->response($res ? 1 : 990);
     }
 
@@ -92,7 +85,7 @@ class OperatorController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $res = $this->operators->where('id', $id)->update(['is_use'=>false]);
+        $res = $this->classifications->where('id', $id)->update(['is_use'=>false]);
         return $this->response($res ? 1 : 990);
     }
 }

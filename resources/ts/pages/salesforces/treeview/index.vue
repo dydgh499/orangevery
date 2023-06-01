@@ -5,7 +5,7 @@ import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useTheme } from 'vuetify'
 
 const { hierarchical, flattened } = useSalesFilterStore()
-const salesforce = ref({ trx_fee: 0, user_name: '영업자 선택' })
+const salesforce = ref({ trx_fee: 0, user_name: '영업점 선택' })
 const search = ref('')
 const vehicules = {
     user_name: '본사',
@@ -49,7 +49,7 @@ onUnmounted(() => {
                             <!-- 👉 Select Plan -->
                             <VCol cols="12" sm="2">
                                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
-                                    prepend-inner-icon="tabler-man" label="영업자 선택"
+                                    prepend-inner-icon="tabler-man" label="영업점 선택"
                                     :hint="`수수료율: ${(salesforce.trx_fee * 100).toFixed(3)}%`" item-title="user_name"
                                     item-value="id" persistent-hint return-object single-line />
                             </VCol>

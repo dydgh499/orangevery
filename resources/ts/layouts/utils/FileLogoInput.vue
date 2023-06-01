@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { themeConfig } from '@themeConfig'
-import { config } from '@layouts/config'
 import Preview from '@/layouts/utils/Preview.vue';
 
 const props = defineProps({

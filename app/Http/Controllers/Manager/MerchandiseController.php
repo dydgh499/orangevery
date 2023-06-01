@@ -7,9 +7,9 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\MerchandiseRequest;
 use App\Http\Requests\Manager\IndexRequest;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 /**
  * @group Merchandise API

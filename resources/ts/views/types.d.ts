@@ -91,7 +91,6 @@ export interface Contract {
 
 export interface BasePropertie {
     id: number,
-    brand_id: number,
     user_name: string,
     user_pw: string,
     nick_name: string,
@@ -136,8 +135,9 @@ export interface MerchandisePropertie {
 }
 
 export interface SalesforcePropertie {
-    tax_type: number,
     sector: string,
+    tax_type: number,
+    class: number,
 }
 
 export interface Merchandise extends MerchandisePropertie, UserPropertie {}
@@ -150,11 +150,10 @@ export interface Operator extends BasePropertie{
 
 export interface PayModule {
     id: number,
-    brand_id: number,
     mcht_id: number,
     pg_id: number | null,
     ps_id: number | null,
-    withdraw_id: number | null,
+    pay_cond_id: number | null,
     terminal_id: number | null,
     module_type: number,
     api_key: string,
@@ -164,7 +163,7 @@ export interface PayModule {
     serial_num: string,
     comm_pr: number,
     comm_calc_day: number,
-    comm_calc_id: number,
+    comm_calc_class: number,
     under_sales_amt: number,
     begin_dt: date,
     ship_out_dt: date,
@@ -178,7 +177,6 @@ export interface PayModule {
 
 export interface PayGateway {
     id: number,
-    brand_id: number,
     pg_type: number | null,
     pg_nm: string,
     rep_nm: string,
@@ -190,7 +188,6 @@ export interface PayGateway {
 
 export interface PaySection {
     id: number,
-    brand_id: number,
     pg_id: number,
     name: string,
     trx_fee: float,
@@ -199,7 +196,6 @@ export interface PaySection {
 
 export interface Classification {
     id: number,
-    brand_id: number,
     name: string,
     trx_fee: float,
     type: number,
@@ -229,7 +225,7 @@ interface PaidOption {
     use_dup_pay_validation: boolean,    // 중복결제 검증 사용 여부
     use_forb_pay_time: boolean,   // 결제금지시간 지정 사용 여부
     use_pay_limit: boolean,   // 결제한도 지정 사용 여부
-    subsidiary_use_control: boolean, // 하위 영업자 전산 사용 ON/OFF
+    subsidiary_use_control: boolean, // 하위 영업점 전산 사용 ON/OFF
 }
 interface ThemeCSS {
     main_color: string,
@@ -266,7 +262,7 @@ export interface Brand extends Contract{
     deposit_day: number,
     deposit_amount: number,    
     last_dpst_at: datetime,
-    updated_at:datetime,
+    updated_at: datetime,
     created_at: datetime,
 }
 
@@ -286,7 +282,7 @@ export interface Transaction {
     //
     pmod_id: number,
     custom_filter_id: number,
-    withdraw_id: number,
+    pay_cond_id: number,
     withdraw_fee: float,
     trx_fee: float,
     hold_fee: float,
@@ -332,7 +328,7 @@ export interface Danger {
     ord_num: string,
     trx_id: string,
     ori_trx_id: string,
-    withdraw_id: number,
+    pay_cond_id: number,
     withdraw_fee: float,
     card_nm: string,
     card_num: string,
@@ -420,7 +416,6 @@ export interface SettlesHistoriesSalesforce {
 
 export interface Post {
     id: number,
-    brand_id: number,
     title: string,
     content: string,
     type:number,
@@ -431,7 +426,6 @@ export interface Post {
 
 export interface Complaint {
     id: number,
-    brand_id: number,
     tid: string,
     cust_nm: string,
     appr_dt: Date | null,
@@ -449,7 +443,6 @@ export interface Complaint {
 
 export interface FeeChangeHistory {
     id: number,
-    brand_id: number,
     trx_fee: float,
     created_at: Date,
     ie_use: boolean,

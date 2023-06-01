@@ -26,11 +26,6 @@ export const useStore = defineStore('payGatewayStore', () => {
     onMounted(async () => {
         try {
             const r = await axios.get('/api/v1/manager/services/pay-gateways/detail')
-            r.data.pay_gateways.unshift({id:null, pg_nm: 'PG사 선택'})
-            r.data.pay_sections.unshift({id:null, name: '구간 선택'})
-            r.data.ternimals.unshift({id:null, name: '단말기 선택'})
-            r.data.pay_conditions.unshift({id:null, name: '결제조건 선택'})
-            r.data.custom_filters.unshift({id:null, name: '커스텀 필터 선택'})
             Object.assign(pgs.value, r.data.pay_gateways)
             Object.assign(pss.value, r.data.pay_sections)
             Object.assign(ternimals.value, r.data.ternimals)

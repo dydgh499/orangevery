@@ -1,27 +1,20 @@
 <script lang="ts" setup>
-import {axios} from '@axios';
-import { requiredValidator } from '@validators';
-import type { SalesforcePropertie } from '@/views/types'
+import type { Salesforce, Options } from '@/views/types'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import { requiredValidator, nullValidator } from '@validators';
 
 interface Props {
-    item: SalesforcePropertie,
+    item: Salesforce,
 }
 const props = defineProps<Props>()
-
-const alert     = <any>(inject('alert'))
-const snackbar  = <any>(inject('snackbar'))
-const errorHandler = inject('$errorHandler');
-
-async function directFeeChange() {
-    if (await alert.value.show('정말 즉시적용하시겠습니까?')) {
-
-    }
-}
-async function bookFeeChange() {
-    if (await alert.value.show('정말 예약적용하시겠습니까? 명일 00시에 반영됩니다.')) {
-
-    }
-}
+const classes = <Options[]>([
+    {id: 0, title: '하위대리점'},
+    {id: 1, title: '대리점'},
+    {id: 2, title: '하위총판'},
+    {id: 3, title: '총판'},
+    {id: 4, title: '하위지사'},
+    {id: 5, title: '지사'},
+])
 </script>
 <template>
     <VRow class="match-height">
@@ -29,16 +22,20 @@ async function bookFeeChange() {
         <VCol cols="12" md="12">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>영업자정보</VCardTitle>
-                    <VRow class="pt-5">
-                        <!-- 👉 Email -->
-                        <VCol cols="6">
-                            <VRow no-gutters>
-                                <VCol cols="6" md="3">
-                                    <label for="acctNumHorizontalIcons">정산 세율</label>
-                                </VCol>
-                                <VCol cols="6" md="9">
-                                    <VRadioGroup v-model="props.item.tax_type" inline>
+                    <VCardTitle>영업점정보</VCardTitle>
+                    <VRow class="pt-5">                        
+                        <CreateHalfVCol :mdl="3" :mdr="9">
+                            <template #name>업종</template>
+                            <template #input>
+                                <VTextField v-model="props.item.sector"
+                                    prepend-inner-icon="tabler-building-store" placeholder="업종을 입력해주세요"
+                                    persistent-placeholder :rules="[requiredValidator]" />
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
+                            <template #name>정산 세율</template>
+                            <template #input>
+                                <VRadioGroup v-model="props.item.tax_type" inline :rules="[nullValidator]">
                                         <VRadio :value="0">
                                             <template #label>
                                                 <span>
@@ -68,41 +65,19 @@ async function bookFeeChange() {
                                                 </span>
                                             </template>
                                         </VRadio>
-                                    </VRadioGroup>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>                    
-                    <VRow class="pt-5">
-                         <!-- 👉 수수료율 -->
-                         <VCol cols="6">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label for="feesRateHorizontalIcons">거래 수수료율</label>
-                                </VCol>
-                                <VCol cols="12" md="5">
-                                    <VTextField id="feesRateHorizontalIcons" v-model="props.item.trx_fee"
-                                        type="number" suffix="%" :rules="[requiredValidator]" />
-                                </VCol>
-                                <VCol cols="12" md="4"
-                                    style="display: flex; flex-direction: row; justify-content: space-between;">
-                                    <VBtn type="submit" size="small" variant="tonal" 
-                                        @click="directFeeChange()"
-                                        style='flex-grow: 1; margin: 0.25em 0.5em;'>
-                                        즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
-                                    </VBtn>
-                                    <VBtn type="submit" size="small" variant="tonal" color="secondary" 
-                                        @click="bookFeeChange()"
-                                        style='flex-grow: 1; margin: 0.25em 0.5em;'>
-                                        예약적용
-                                        <VIcon end icon="tabler-clock-up" />
-                                    </VBtn>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                       
+                                </VRadioGroup>
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
+                            <template #name>등급</template>
+                            <template #input>
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.class"
+                                        :items="classes" prepend-inner-icon="tabler-man" label="정산자 선택" item-title="title"
+                                        item-value="id" persistent-hint single-line :rules="[nullValidator]" 
+                                        :readonly="props.item.id != 0"/>
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>                       
                 </VCardItem>
             </VCard>
         </VCol>

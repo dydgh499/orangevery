@@ -1,22 +1,12 @@
 <script setup lang="ts">
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useSearchStore } from '@/views/salesforces/useStore'
-import BaseIndexOverview from '@/layouts/lists/BaseIndexOverview.vue';
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import { classes } from '@/views/salesforces/useStore';
 
-const {store, setHeaders} = useSearchStore()
-const { flattened } = useSalesFilterStore()
+const { store } = useSearchStore()
 provide('store', store)
-provide('setHeaders', setHeaders)
 
-/*
-지사
-하위지사
-총판
-하위총판
-대리점
-하위대리점
-*/
-const salesforce = ref({trx_fee:0, user_name:'영업자 선택'})
 const metas = [
     {
         icon: 'tabler-user',
@@ -51,18 +41,52 @@ const metas = [
         subtitle: 'Last week analytics',
     },
 ]
+
+const getSalesTypeColor = (_class: number) => {
+    const id = classes.find(item => item.id === _class)?.id
+    if(id == 0)
+        return "default"
+    else if(id == 1)
+        return "primary"
+    else if(id == 2)
+        return "success"
+    else if(id == 3)
+        return "info"
+    else if(id == 4)
+        return "warning"
+    else if(id == 5)
+        return "error"
+    else
+        return 'default';
+}
 </script>
 <template>
-    <BaseIndexOverview :placeholder="`ID, 대표자명 검색`" :metas="metas" :add="true" :update="true">
-        <template #options>
-            <VCol cols="12" sm="2">
-                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
-                        prepend-inner-icon="tabler-man" label="영업자 선택"
-                        :hint="`수수료율: ${(salesforce.trx_fee*100).toFixed(3)}%`" item-title="user_name" item-value="id"
-                        persistent-hint single-line 
-                />
-            </VCol>
+    <BaseIndexView placeholder="ID, 대표자명 검색" :metas="metas" :add="true" add_name="영업점">
+        <template #filter>
+            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" />
         </template>
-        <template #name>영업자</template>
-    </BaseIndexOverview>
+        <template #header>
+            <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden"> {{ header.ko }} </th>
+        </template>
+        <template #body>
+            <tr v-for="(user, index) in store.items" :key="index" style="height: 3.75rem;">
+                <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden"> 
+                    <span v-if="key == `id`" class="edit-link" @click="store.edit(user.id)">
+                        #{{ user[key] }}
+                    </span>
+                    <span v-else-if="key == 'user_name'" class="edit-link" @click="store.edit(user.id)">
+                        {{ user[key] }}
+                    </span>
+                    <span v-else-if="key == 'class'"> 
+                        <VChip :color="getSalesTypeColor(user[key])">
+                            {{ classes.find(item => item.id === user[key])?.title }}
+                        </VChip>
+                    </span>
+                    <span v-else> 
+                        {{ user[key] }} 
+                    </span>
+                </td>
+            </tr>
+        </template>
+    </BaseIndexView>
 </template>

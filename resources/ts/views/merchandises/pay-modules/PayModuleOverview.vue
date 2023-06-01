@@ -3,7 +3,6 @@ import { axios } from '@axios';
 import type { PayModule, Merchandise } from '@/views/types'
 import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue';
 import { SearchParams } from '@/views/types';
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import corp from '@corp'
 
 interface Props {
@@ -11,10 +10,8 @@ interface Props {
 }
 const props = defineProps<Props>();
 
-const { flattenUp } = useSalesFilterStore()
 const pay_modules       = reactive<PayModule[]>([]);
 const new_pay_modules   = reactive<PayModule[]>([]);
-const ancestors     = ref<object[]>([]);
 const formatDate    = <any>(inject('$formatDate'))
 const snackbar      = <any>(inject('snackbar'))
 
@@ -28,17 +25,10 @@ onMounted(async () => {
     })
     const params = Object.assign({}, search, {'mcht_id': props.item.id});
     axios.get('/api/v1/manager/merchandises/pay-modules', { params: params })
-    .then(r => {
-        Object.assign(pay_modules, r.data.content as PayModule[])
-    })
-    .catch(e => {
-        snackbar.value.show(e.response.data.message, 'error')
-    })
+    .then(r => { Object.assign(pay_modules, r.data.content as PayModule[]) })
+    .catch(e => { snackbar.value.show(e.response.data.message, 'error') })
 })
-watchEffect(async () => {
-    if(props.item.group_id != 0)
-        ancestors.value = await flattenUp(props.item.group_id)
-})
+
 function addNewPaymodule() {
     new_pay_modules.push({
         id: 0,
@@ -47,7 +37,7 @@ function addNewPaymodule() {
         pg_id: 0,
         ps_id: 0,
         terminal_id: 0,
-        withdraw_id: 0,
+        pay_cond_id: 0,
         module_type: 0,
         api_key: '',
         sub_key: '',
@@ -56,7 +46,7 @@ function addNewPaymodule() {
         serial_num: '',
         comm_pr: 0,
         comm_calc_day: 0,
-        comm_calc_id: 0,
+        comm_calc_class: 0,
         under_sales_amt: 0,
         begin_dt: undefined,
         ship_out_dt: undefined,
@@ -70,8 +60,8 @@ function addNewPaymodule() {
 }
 </script>
 <template>
-    <PayModuleCard v-for="item in pay_modules" :key="item.id" style="margin-top: 1em;" :item="item" :ancestors="ancestors"/>
-    <PayModuleCard v-for="(item, index) in new_pay_modules" :key="index" style="margin-top: 1em;" :item="item" :ancestors="ancestors"/>
+    <PayModuleCard v-for="(item, index) in pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :mchts='[]'/>
+    <PayModuleCard v-for="(item, index) in new_pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :mchts='[]'/>
     <!-- 👉 submit -->
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">

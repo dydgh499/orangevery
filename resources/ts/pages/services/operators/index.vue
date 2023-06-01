@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/services/operators/useStore'
-import BaseIndexOverview from '@/layouts/lists/BaseIndexOverview.vue';
+import { useSearchStore, operator_levels } from '@/views/services/operators/useStore'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 
-const { store, setHeaders } = useSearchStore()
+const { store } = useSearchStore()
 provide('store', store)
-provide('setHeaders', setHeaders)
 
 const metas = [
     {
@@ -40,10 +39,46 @@ const metas = [
         subtitle: 'Last week analytics',
     },
 ]
+const getLevelTypeColor = (level: number) => {
+    const id = operator_levels.find(item => item.id === level)?.id
+    if(id == 30)
+        return "default"
+    else if(id == 35)
+        return "primary"
+    else if(id == 40)
+        return "success"
+    else if(id == 50)
+        return "info"
+    else
+        return "error"
+}
 </script>
 <template>
-    <BaseIndexOverview :placeholder="`ID, 성명 검색`" :metas="metas" :add="true" :update="true">
-        <template #option></template>
-        <template #name>직원 및 본사</template>
-    </BaseIndexOverview>
+    <BaseIndexView placeholder="ID 및 성명 검색" :metas="metas" :add="true" add_name="운영자">
+    <template #filter>
+    </template>
+    <template #header>
+        <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden"> {{ header.ko }} </th>
+    </template>
+    <template #body>
+        <tr v-for="(user, index) in store.items" :key="index" style="height: 3.75rem;">
+            <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden"> 
+                <span v-if="key == `id`" class="edit-link" @click="store.edit(user.id)">
+                    #{{ user[key] }}
+                </span>
+                <span v-else-if="key == `user_name`" class="edit-link" @click="store.edit(user.id)">
+                    {{ user[key] }}
+                </span>
+                <span v-else-if="key == `level`">
+                    <VChip :color="getLevelTypeColor(user[key])">
+                        {{ operator_levels.find(item => item.id === user[key])?.name }}
+                    </VChip>
+                </span>
+                <span v-else> 
+                    {{ user[key] }} 
+                </span>
+            </td>
+        </tr>
+    </template>
+</BaseIndexView>
 </template>

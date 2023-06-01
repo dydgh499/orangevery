@@ -7,7 +7,8 @@ import { useUpdateStore } from '@/views/salesforces/useStore'
 
 const {path, item } = useUpdateStore()
 const tabs = [
-    { icon: 'tabler-man', title: '영업자정보' },
+    { icon: 'tabler-user-check', title: '개인정보' },
+    { icon: 'ph-buildings', title: '영업점정보' },
 ]
 const id = ref<number>(0)
 const route = useRoute()
@@ -21,9 +22,9 @@ const route = useRoute()
             <template #view>
                 <VWindowItem>
                     <UserOverview :item="item" :id="id" />
-                    <SalesforceOverview :item="item" />
                 </VWindowItem>
                 <VWindowItem>
+                    <SalesforceOverview :item="item" />
                 </VWindowItem>
             </template>
         </CreateForm>

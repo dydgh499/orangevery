@@ -78,7 +78,7 @@ onMounted(() => {
                             </VRow>
                         </VCol>
 
-                        <!-- 👉 영업자 수수료율 -->
+                        <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
@@ -98,7 +98,7 @@ onMounted(() => {
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
-                        <!-- 👉 영업자 수수료율 -->
+                        <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
@@ -118,7 +118,7 @@ onMounted(() => {
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
-                        <!-- 👉 영업자 수수료율 -->
+                        <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
@@ -138,7 +138,7 @@ onMounted(() => {
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
-                        <!-- 👉 영업자 수수료율 -->
+                        <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
@@ -158,7 +158,7 @@ onMounted(() => {
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
-                        <!-- 👉 영업자 수수료율 -->
+                        <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
@@ -178,7 +178,7 @@ onMounted(() => {
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
-                        <!-- 👉 영업자 수수료율 -->
+                        <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">

@@ -7,7 +7,7 @@ use App\Models\PaymentSection;
 use App\Models\Classification;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Traits\StoresTrait;
+use App\Http\Requests\Manager\PayGatewayRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
 use App\Http\Controllers\Controller;
@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 class PaymentGatewayController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, StoresTrait;
+    use ManagerTrait, ExtendResponseTrait;
     protected $pay_gateways, $pay_sections;
 
     public function __construct(PaymentGateway $pay_gateways, PaymentSection $pay_sections)
@@ -30,22 +30,10 @@ class PaymentGatewayController extends Controller
      *
      * 가맹점 이상 가능
      *
-     * @queryParam search string 검색어(mid, tid)
      */
     public function index(IndexRequest $request)
     {
-        $search = $request->input('search', '');
-        $query = $this->pay_gateways
-            ->where('brand_id', $request->user()->brand_id);
-
-        $query = $query->where(function ($query) use ($search) {
-            return $query->where('mid', 'like', "%$search%")
-                ->orWhere('tid', 'like', "%$search%");
-        });
-        
-        if($request->has('mcht_id'))
-            $query = $query->where('mcht_id', $request->mcht_id);
-
+        $query = $this->pay_gateways->where('brand_id', $request->user()->brand_id);
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }
@@ -58,27 +46,11 @@ class PaymentGatewayController extends Controller
      * @bodyParam user_pw string 유저 패스워드
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(MerchandiseForm $request)
+    public function store(PayGatewayRequest $request)
     {
-        if($request->user()->tokenCan(15))
-        {
-            $validated  = $request->validate(['user_pw'=>'required']);
-            $user = $this->pay_gateways
-                ->where('brand_id', $request->user()->brand_id)
-                ->where('user_name', $request->user_name)->first();
-            if(!$user)
-            {
-                $user = $request->data();
-                $user = $this->saveImages($request, $user, $this->imgs);
-                $user['user_pw'] = Hash::make($request->input('user_pw'));
-                $res = $this->pay_gateways->create($user);
-                return $this->response($res ? 1 : 990);
-            }
-            else
-                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
-        }
-        else
-            return $this->response(951);
+        $user = $request->data();
+        $res = $this->pay_gateways->create($user);
+        return $this->response($res ? 1 : 990);
     }
 
     /**
@@ -91,13 +63,8 @@ class PaymentGatewayController extends Controller
      */
     public function show(Request $request, $id)
     {
-        if($this->authCheck($request->user(), $id, 15))
-        {
-            $data = $this->pay_gateways->where('id', $id)->first();
-            return $data ? $this->response(0, $data) : $this->response(1000);
-        }
-        else
-            return $this->response(951);
+        $data = $this->pay_gateways->where('id', $id)->first();
+        return $data ? $this->response(0, $data) : $this->response(1000);
     }
 
     /**
@@ -108,17 +75,11 @@ class PaymentGatewayController extends Controller
      * @urlParam id integer required 유저 PK
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(MerchandiseForm $request, $id)
+    public function update(PayGatewayRequest $request, $id)
     {
-        if($this->authCheck($request->user(), $id, 15))
-        {
-            $data = $request->data();
-            $data = $this->saveImages($request, $data, $this->imgs);
-            $res = $this->pay_gateways->where('id', $id)->update($data);
-            return $this->response($res ? 1 : 990);
-        }
-        else
-            return $this->response(951);
+        $data = $request->data();
+        $res = $this->pay_gateways->where('id', $id)->update($data);
+        return $this->response($res ? 1 : 990);
     }
 
     /**
@@ -129,7 +90,7 @@ class PaymentGatewayController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        if($this->authCheck($request->user(), $id, 15))
+        if($this->authCheck($request->user(), $id, 35))
         {
             $res = $this->delete($this->pay_gateways->where('id', $id));
             return $this->response($res);
@@ -149,12 +110,11 @@ class PaymentGatewayController extends Controller
 
         $data = [
             'pay_gateways' => $this->pay_gateways->where('brand_id', $brand_id)->get(),
-            'pay_sections' => $this->pay_sections->where('brand_id', $brand_id)->get(),
+            'pay_sections' => $this->pay_sections->where('brand_id', $brand_id)->where('is_use', 1)->get(),
             'ternimals'    => isset($grouped[0]) ? $grouped[0] : [],
             'pay_conditions' => isset($grouped[1]) ? $grouped[1] : [],
             'custom_filters' => isset($grouped[2]) ? $grouped[2] : [],
         ];
         return $this->response(0, $data);
     }
-
 }

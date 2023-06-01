@@ -58,7 +58,7 @@ watchEffect(() => {
         </div>
     </VCol>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 .preview-box {
   border: 1px solid #e5e5e5;
   border-radius: 8px;

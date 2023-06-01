@@ -1,12 +1,10 @@
 <script lang="ts" setup>
-import { axios } from '@axios';
 import { businessNumValidator, requiredValidator } from '@validators';
 import type { PayGateway, PaySection } from '@/views/types'
 import { VForm } from 'vuetify/components';
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import PaySectionTr from '@/views/services/pay-gateways/PaySectionTr.vue';
-import corp from '@corp'
-import type { InjectionKey, Plugin, Ref } from 'vue'
+import { useRequestStore } from '@/views/request';
 
 interface Props {
     item: PayGateway,
@@ -14,36 +12,22 @@ interface Props {
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
 
-const { pss, pg_types } = useStore()
-const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
+const { pss, pg_types }  = useStore()
+const { update, remove } = useRequestStore()
+
 const new_pss = reactive<PaySection[]>([])
 
 const addNewSection = () => {
     new_pss.push({
         id: 0,
-        brand_id: corp.brand_id,
         pg_id: props.item.id,
         name: '',
         trx_fee: 0,
         is_use: true,
     })
 }
-const update = async () => {
-    const is_valid = await vForm.value?.validate();
-    let up_type = props.item.id != 0 ? '수정' : '생성';
-
-    if (is_valid?.valid && await alert.value.show('정말 ' + up_type + '하시겠습니까?')) {
-        let url = '/api/v1/pay-modules'
-        url += props.item.id ? "/" + props.item.id : ""
-        axios.post(url, props.item)
-            .then(r => { snackbar.value.show('성공하였습니다', 'primary') })
-            .catch(e => { snackbar.value.show(e.response.data.message, 'error') })
-    }
-}
 
 watchEffect(() => {
-    console.log(props.item.pg_type)
     if (props.item.pg_type != 0 && props.item.pg_type != null) {
         const idx = pg_types.findIndex(item => item.id == props.item.pg_type)
         if (idx != null) {
@@ -82,7 +66,7 @@ const filterPss = computed(() => {
                             <VCol>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_type" :items="pg_types"
                                     prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="name" item-value="id"
-                                    single-line />
+                                    single-line :rules="[requiredValidator]" />
                             </VCol>
                         </VRow>
                         <VRow class="pt-3">
@@ -91,7 +75,7 @@ const filterPss = computed(() => {
                             </VCol>
                             <VCol>
                                 <VTextField type="text" v-model="props.item.pg_nm" prepend-inner-icon="tabler-table-alias"
-                                    placeholder="별칭 입력" persistent-placeholder />
+                                    placeholder="별칭 입력" persistent-placeholder :rules="[requiredValidator]" />
                             </VCol>
                         </VRow>
                         <VRow class="pt-3">
@@ -100,7 +84,7 @@ const filterPss = computed(() => {
                             </VCol>
                             <VCol>
                                 <VTextField type="text" v-model="props.item.rep_nm" prepend-inner-icon="tabler-user"
-                                    placeholder="대표자명 입력" persistent-placeholder />
+                                    placeholder="대표자명 입력" persistent-placeholder :rules="[requiredValidator]" />
                             </VCol>
                         </VRow>
                         <VRow class="pt-3">
@@ -110,7 +94,7 @@ const filterPss = computed(() => {
                             <VCol>
                                 <VTextField type="text" v-model="props.item.company_nm"
                                     prepend-inner-icon="tabler-building-store" placeholder="상호명 입력"
-                                    persistent-placeholder />
+                                    persistent-placeholder :rules="[requiredValidator]"/>
                             </VCol>
                         </VRow>
                         <VRow class="pt-3">
@@ -132,7 +116,7 @@ const filterPss = computed(() => {
                             <VCol>
                                 <VTextField v-model="props.item.phone_num" type="text"
                                     prepend-inner-icon="tabler-device-mobile" placeholder="숫자만 입력해주세요."
-                                    persistent-placeholder />
+                                    persistent-placeholder :rules="[requiredValidator]" />
 
                             </VCol>
                         </VRow>
@@ -142,20 +126,18 @@ const filterPss = computed(() => {
                             </VCol>
                             <VCol>
                                 <VTextField v-model="props.item.addr" prepend-inner-icon="tabler-map-pin"
-                                    placeholder="주소 입력" persistent-placeholder maxlength="200" />
+                                    placeholder="주소 입력" persistent-placeholder maxlength="200" :rules="[requiredValidator]" />
                             </VCol>
                         </VRow>
                         <VRow>
                             <VCol class="d-flex gap-4 pt-10">
-                                <VBtn type="button" style="margin-left: auto;" @click="update()">
-                                    <div v-if="Boolean(props.item.id == 0)">
-                                        추가
-                                        <VIcon end icon="tabler-plus" />
-                                    </div>
-                                    <div v-else>
-                                        수정
-                                        <VIcon end icon="tabler-checkbox" />
-                                    </div>
+                                <VBtn type="button" style="margin-left: auto;" @click="update('/services/pay-gateways', props.item.id, props.item, vForm)">
+                                    {{ props.item.id == 0 ? "추가" : "수정" }}
+                                    <VIcon end icon="tabler-checkbox" />
+                                </VBtn>
+                                <VBtn type="button" color="error" v-if="props.item.id" @click="remove('/services/pay-gateways', props.item.id)">
+                                    삭제
+                                    <VIcon end icon="tabler-trash" />
                                 </VBtn>
                             </VCol>
                         </VRow>

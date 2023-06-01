@@ -3,7 +3,6 @@ namespace App\Http\Traits;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-use Illuminate\Support\Facades\Hash;
 
 trait ManagerTrait
 {

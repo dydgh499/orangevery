@@ -10,9 +10,12 @@ use App\Http\Controllers\Manager\SalesforceController;
 use App\Http\Controllers\Manager\PaymentModuleController;
 use App\Http\Controllers\Manager\PaymentGatewayController;
 use App\Http\Controllers\Manager\PaymentSectionController;
+use App\Http\Controllers\Manager\ClassificationController;
 use App\Http\Controllers\Manager\NoticeController;
 
-
+use App\Http\Controllers\Manager\DangerController;
+use App\Http\Controllers\Manager\SettleController;
+use App\Http\Controllers\Manager\SettleHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,23 +43,24 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('operators', OperatorController::class);
             Route::apiResource('pay-gateways', PaymentGatewayController::class);
             Route::apiResource('pay-sections', PaymentSectionController::class);
+            Route::apiResource('classifications', ClassificationController::class);
         });
         Route::prefix('transactions')->group(function() {
-            Route::apiResource('dangers', NoticeController::class);
-            Route::apiResource('settle/merchandises', NoticeController::class);
-            Route::apiResource('settle/salesforces', NoticeController::class);
-            Route::apiResource('settle-history/merchandises', NoticeController::class);
-            Route::apiResource('settle-history/salesforces', NoticeController::class);
+            Route::get('dangers', [DangerController::class, 'index']);
+            Route::get('settle/merchandises', [SettleController::class, 'index']);
+            Route::get('settle/salesforces', [SettleController::class, 'index']);
+            Route::get('settle-history/merchandises', [SettleHistoryController::class, 'index']);
+            Route::get('settle-history/salesforces', [SettleHistoryController::class, 'index']);
         });
         Route::prefix('salesforces')->group(function() {
             Route::apiResource('fee-change-histories', PaymentModuleController::class);
             Route::get('classification', [SalesforceController::class, 'classification']);
         });
         Route::prefix('merchandises')->group(function() {
-            Route::apiResource('pay-modules', PaymentModuleController::class);
-            Route::apiResource('fee-change-histories', PaymentModuleController::class);       
-            Route::apiResource('noti-send-histories', PaymentModuleController::class);     
-        });        
+            Route::apiResource('pay-modules', PaymentModuleController::class);   
+            Route::get('fee-change-histories', [PaymentModuleController::class, 'index']);       
+            Route::get('noti-send-histories', [PaymentModuleController::class, 'index']);     
+        });
         Route::apiResource('complaints', NoticeController::class);
         Route::apiResource('salesforces', SalesforceController::class);
         Route::apiResource('transactions', NoticeController::class);

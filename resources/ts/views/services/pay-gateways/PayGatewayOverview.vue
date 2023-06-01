@@ -3,17 +3,11 @@ import type { PayGateway } from '@/views/types'
 import PayGatewayCard from '@/views/services/pay-gateways/PayGatewayCard.vue';
 import { useStore } from '@/views/services/pay-gateways/useStore'
 
-interface Props {
-    brand_id: number,
-}
-const {pgs, pss, ternimals, pay_conds, cus_filters } = useStore()
-
-const props = defineProps<Props>();
+const {pgs } = useStore()
 const new_pay_gateways = reactive<PayGateway[]>([]);
 const addNewPG = () => {
     new_pay_gateways.push({
         id: 0,
-        brand_id: props.brand_id,
         pg_type: null,
         pg_nm: '',
         rep_nm: '',

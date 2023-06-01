@@ -11,12 +11,11 @@ use Carbon\Carbon;
 use DateTimeInterface;
 use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
-use Kalnoy\Nestedset\NodeTrait;
 use App\Models\SFFeeChangeHistory;
 
 class Salesforce extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, AuthTrait, NodeTrait;
+    use HasApiTokens, HasFactory, Notifiable, AuthTrait;
 
     protected   $table          = 'salesforces';
     protected   $primaryKey     = 'id';

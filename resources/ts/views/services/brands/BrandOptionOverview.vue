@@ -1,10 +1,9 @@
 <script setup lang="ts">
 
-import { requiredValidator, nullValidator } from '@validators';
+import { requiredValidator } from '@validators';
 import type { FreeOption, PaidOption, Brand } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
-import { InternalPageResolvers } from 'vite-plugin-pages';
 
 interface Props {
     item: {
@@ -15,7 +14,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-// 화면 타입은 영업자 개별 선택
+// 화면 타입은 영업점 개별 선택
 </script>
 <template>
     <VRow class="match-height">

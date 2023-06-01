@@ -12,11 +12,6 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-
-const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
-const errorHandler = inject('$errorHandler');
-
 watchEffect(() => {
     config.app.title = props.item.name
     themeConfig.app.title = props.item.name

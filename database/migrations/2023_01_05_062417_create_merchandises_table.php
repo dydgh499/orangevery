@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('merchandises', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->comment('유저 FK'); 
-            $table->integer('withdraw_id')->default(0);
+            $table->integer('pay_cond_id')->default(0);
             $table->integer('pg_id')->default(0);
             $table->integer('pg_section_id')->default(0);
             $table->integer('abnormal_transaction_limit')->default(5000000)->comment('이상거래 한도');

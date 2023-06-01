@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Models\Salesforce;
-use App\Models\SFFeeChangeHistory;
-
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
+
+use App\Http\Requests\Manager\SalesforceRequest;
 use App\Http\Requests\Manager\IndexRequest;
+use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,13 +17,25 @@ use App\Http\Controllers\Controller;
 class SalesforceController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $salesforces, $fee_histories;
+    protected $salesforces;
 
-    public function __construct(Salesforce $salesforces, SFFeeChangeHistory $fee_histories)
+    public function __construct(Salesforce $salesforces)
     {
         $this->salesforces  = $salesforces;
-        $this->fee_histories = $fee_histories;
-        $this->imgs = [];
+        $this->imgs = [
+            'params'    => [
+                'contract_file', 'id_file', 'passbook_file', 'bsin_lic_file',
+            ],
+            'cols'  => [
+                'contract_img', 'id_img', 'passbook_img', 'bsin_lic_img',
+            ],
+            'folders'   => [
+                'contracts', 'ids', 'passbooks', 'bsin_lic'
+            ],
+            'sizes'     => [
+                500, 500, 500, 500
+            ],
+        ];
     }
 
     /**
@@ -49,7 +62,7 @@ class SalesforceController extends Controller
      * @bodyParam user_pw string 유저 패스워드
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(MerchandiseForm $request)
+    public function store(SalesforceRequest $request)
     {
         if($request->user()->tokenCan(15))
         {
@@ -99,7 +112,7 @@ class SalesforceController extends Controller
      * @urlParam id integer required 유저 PK
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(MerchandiseForm $request, $id)
+    public function update(SalesforceRequest $request, $id)
     {
         if($this->authCheck($request->user(), $id, 15))
         {

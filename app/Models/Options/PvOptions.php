@@ -30,7 +30,7 @@
     class PaidOption 
     {
         public $use_dup_pay_validation = false; // 중복결제 검증 사용 여부
-        public $subsidiary_use_control = false; // 하위 영업자 전산 사용 ON/OFF
+        public $subsidiary_use_control = false; // 하위 영업점 전산 사용 ON/OFF
         public $use_acct_verification = false;  // 예금주 검증
         public $use_realtime_deposit = false;   // 실시간 결제모듈
         public $use_hand_pay_drct = false;      // 수기결제 직접입력(가맹점)

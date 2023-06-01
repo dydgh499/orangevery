@@ -7,7 +7,7 @@ const props = defineProps({
         required: false,
     },
     preview: {
-        type: String,
+        type: String || null,
         default: '/icons/img-preview.svg',
         required: false,
     },

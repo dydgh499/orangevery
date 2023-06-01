@@ -3,8 +3,6 @@ import type { Brand, FreeOption, PaidOption, ThemeCSS } from '@/views/types';
 
 export const useSearchStore = defineStore('brandSearchStore', () => {
     const store = Searcher<Brand>('services/brands', <Brand>({}))
-    setHeaders()
-
     function setHeaders() {
         store.setHeader('NO.', 'id')
         store.setHeader('DNS', 'dns')
@@ -26,9 +24,9 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
         store.setHeader('업데이트시간', 'updated_at')        
         store.sortHeader()
     }
+    setHeaders()
     return {
         store,
-        setHeaders,
     }
 })
 

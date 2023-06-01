@@ -1,26 +1,24 @@
 import { Searcher } from '@/views/searcher';
 import { MchtOption, Merchandise } from '@/views/types';
-import corp from '@corp';
-
 
 export const useSearchStore = defineStore('mchtSearchStore', () => {    
     const store = Searcher<Merchandise>('merchandises', <Merchandise>({}))
     function setHeaders() {
         store.setHeader('NO.', 'id')
         store.setHeader('지사 ID', 'sales5_name')
-        store.setHeader('수수료', 'sales5_fee')
+        store.setHeader('수수료 ', 'sales5_fee')
         store.setHeader('하위지사 ID', 'sales4_name')
-        store.setHeader('수수료', 'sales4_fee')
+        store.setHeader('수수료  ', 'sales4_fee')
         store.setHeader('총판 ID', 'sales3_name')
-        store.setHeader('수수료', 'sales3_fee')
+        store.setHeader('수수료   ', 'sales3_fee')
         store.setHeader('하위총판 ID', 'sales2_name')
-        store.setHeader('수수료', 'sales2_fee')
+        store.setHeader('수수료    ', 'sales2_fee')
         store.setHeader('대리점 ID', 'sales1_name')
-        store.setHeader('수수료', 'sales1_fee')
+        store.setHeader('수수료     ', 'sales1_fee')
         store.setHeader('하위대리점 ID', 'sales0_name')
-        store.setHeader('수수료', 'sales0_fee')
+        store.setHeader('수수료      ', 'sales0_fee')
         store.setHeader('가맹점 ID', 'user_name')
-        store.setHeader('수수료', 'trx_fee')
+        store.setHeader('수수료       ', 'trx_fee')
         store.setHeader('유보금 수수료', 'hold_fee')
         store.setHeader('상호', 'mcht_name')
         store.setHeader('대표자명', 'nick_name')
@@ -51,7 +49,6 @@ export const useUpdateStore = defineStore('mchtUpdateStore', () => {
         hold_fee: 0,
         trx_fee: 0,
         mcht_name: '',
-        brand_id: corp.brand_id,
         user_name: '',
         user_pw: '',
         nick_name: '',

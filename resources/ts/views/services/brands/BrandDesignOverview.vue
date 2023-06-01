@@ -1,12 +1,9 @@
 <script lang="ts" setup>
-import { axios } from '@axios';
-import { nullValidator, requiredValidator } from '@validators';
 import type { Brand } from '@/views/types'
 import FileLogoInput from '@/layouts/utils/FileLogoInput.vue';
 import KakaotalkPreview from '@/layouts/utils/KakaotalkPreview.vue';
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { useTheme } from 'vuetify'
-import { config } from '@layouts/config'
 
 interface Props {
     item: Brand,

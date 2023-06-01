@@ -3,12 +3,8 @@ import type { Classification } from '@/views/types'
 import ClassificationTr from '@/views/services/pay-gateways/ClassificationTr.vue';
 import { useStore } from '@/views/services/pay-gateways/useStore'
 
-interface Props {
-    brand_id: number,
-}
 const { ternimals, pay_conds, cus_filters } = useStore()
 
-const props = defineProps<Props>();
 
 const new_terminals = reactive<Classification[]>([]);
 const new_pay_conds = reactive<Classification[]>([]);
@@ -17,7 +13,7 @@ const addNewClassification = (items: Classification[], type: number) => {
     items.push(<Classification>(
         {
             id: 0,
-            brand_id: props.brand_id,
+            trx_fee:0,
             type: type,
         }
     ))
@@ -110,7 +106,8 @@ const addNewClassification = (items: Classification[], type: number) => {
                     </VTable>
                     <VRow>
                         <VCol class="d-flex gap-4 pt-10">
-                            <VBtn type="button" style="margin-left: auto;" @click="addNewClassification(new_cus_filters, 2)">
+                            <VBtn type="button" style="margin-left: auto;"
+                                @click="addNewClassification(new_cus_filters, 2)">
                                 커스텀 필터 추가
                                 <VIcon end icon="tabler-plus" />
                             </VBtn>

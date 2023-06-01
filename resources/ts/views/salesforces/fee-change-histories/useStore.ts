@@ -6,7 +6,7 @@ export const useSearchStore = defineStore('salesFeeHistorySearchStore', () => {
 
     function setHeaders() {
         store.setHeader('NO.', 'id')
-        store.setHeader('영업자명', 'sales_name')
+        store.setHeader('영업점명', 'sales_name')
         store.setHeader('변경된 수수료', 'trx_fee')
         store.setHeader('변경된 정산세율 타입', 'hold_fee')
         store.setHeader('변경상태', 'change_status')

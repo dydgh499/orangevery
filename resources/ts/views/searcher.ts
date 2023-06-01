@@ -16,15 +16,15 @@ const setSearchParams = <SearchParams>(formatDate: any) => {
 }
 const excelprint = (headers:Filter, data:any, today:string, path:string) => {
     const rows = []
-    const keys = Object.keys(headers.value) as Array<keyof Filter>;
+    const keys = Object.keys(headers) as Array<keyof Filter>;
+    console.log(keys)
     for (let i = 0; i < data.length; i++) {
         let row: Record<string, any> = {}
-        let _keys: string[] = Object.keys(data[i])
-        for (let j = 0; j < _keys.length; j++) {
-            let idx = keys.indexOf(_keys[j])
+        for (let j = 0; j < keys.length; j++) {
+            let idx = keys.indexOf(keys[j])
             if (idx > -1) {
-                let key = headers[_keys[j]].ko
-                row[key] = data[i][_keys[j]]
+                let key = headers[keys[j]].ko
+                row[key] = data[i][keys[j]]
             }
         }
         rows.push(row)
@@ -54,17 +54,20 @@ export function Searcher<T>(_path: string, _type: T) {
   
     const setHeader = (ko: string, _key: string) => {
         if (_key in headers.value)
+        {
+            headers.value[_key].ko = ko
             headers.value[_key].idx = header_count++
+        }
         else
             headers.value[_key] = { ko: ko, hidden: false, idx: header_count++ }
     }
     const sortHeader = () => {
         const keys = Object.keys(headers.value).sort((a, b) => headers.value[a].idx - headers.value[b].idx);
-        let sortedObj = {};
+        let sorted = {};
         for(let key of keys) {
-            sortedObj[key] = headers.value[key];
+            sorted[key] = headers.value[key];
         }
-        headers.value = sortedObj
+        headers.value = sorted
     }
     const get = async (params: any) => {
         try {

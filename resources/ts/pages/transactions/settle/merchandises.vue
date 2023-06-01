@@ -8,7 +8,7 @@ const { flattened } = useSalesFilterStore()
 provide('store', store)
 provide('setHeaders', setHeaders)
 
-const salesforce = ref({trx_fee:0, user_name:'영업자 선택'})
+const salesforce = ref({trx_fee:0, user_name:'영업점 선택'})
 const metas = []
 </script>
 <template>
@@ -16,7 +16,7 @@ const metas = []
         <template #options>
             <VCol cols="12" sm="2">
                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
-                        prepend-inner-icon="tabler-man" label="영업자 선택"
+                        prepend-inner-icon="tabler-man" label="영업점 선택"
                         :hint="`수수료율: ${(salesforce.trx_fee*100).toFixed(3)}%`" item-title="user_name" item-value="id"
                         persistent-hint single-line 
                 />

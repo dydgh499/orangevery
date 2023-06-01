@@ -21,12 +21,6 @@ class AppServiceProvider extends ServiceProvider
                 $app->make(PaymentSection::class),
             );
         });
-        $this->app->bind(SalesforceController::class, function ($app) {
-            return new SalesforceController(
-                $app->make(Salesforce::class),
-                $app->make(SFFeeChangeHistory::class),
-            );
-        });
     }
 
     /**
