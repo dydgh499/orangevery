@@ -59,4 +59,9 @@ export default [
     icon: { icon: 'jam-triangle-danger' },
     to: 'transactions-dangers',
   },
+  {
+    title: 'Fail transaction',
+    icon: { icon: 'carbon:ai-status-failed' },
+    to: 'transactions-fails',
+  },
 ]

@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useSearchStore } from '@/views/merchandises/fee-change-histories/useStore'
-import BaseIndexOverview from '@/layouts/lists/BaseIndexOverview.vue';
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 
-const { store, setHeaders } = useSearchStore()
-const { flattened } = useSalesFilterStore()
+const { store } = useSearchStore()
 provide('store', store)
-provide('setHeaders', setHeaders)
 
-const salesforce = ref({trx_fee:0, user_name:'영업점 선택'})
 const metas = [
     {
         icon: 'tabler-user',
@@ -45,16 +41,33 @@ const metas = [
 ]
 </script>
 <template>
-    <BaseIndexOverview :placeholder="`가맹점명 검색`" :metas="metas" :add="false" :update="false">
-        <template #options>
-            <VCol cols="12" sm="2">
-                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
-                        prepend-inner-icon="tabler-man" label="영업점 선택"
-                        :hint="`수수료율: ${(salesforce.trx_fee*100).toFixed(3)}%`" item-title="user_name" item-value="id"
-                        persistent-hint single-line 
-                />
-            </VCol>
+    <BaseIndexView placeholder="가맹점명 검색" :metas="metas" :add="false" add_name="가맹점">
+        <template #filter>
         </template>
-        <template #name></template>
-    </BaseIndexOverview>
+        <template #header>
+            <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden"> {{ header.ko }} </th>
+        </template>
+        <template #body>
+            <tr v-for="(user, index) in store.items" :key="index" style="height: 3.75rem;">
+                <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden"> 
+                    <span v-if="key == `id`" class="edit-link">
+                        #{{ user[key] }}
+                    </span>
+                    <span v-else-if="key == `change_status`">
+                        <VChip :color="store.booleanTypeColor(user[key])">
+                            {{ user[key] ? '변경예약' : '변경완료' }}
+                        </VChip>
+                    </span>
+                    <span v-else-if="key.includes('_fee')"> 
+                        <VChip>
+                            {{ user[key] }} %
+                        </VChip>
+                    </span>
+                    <span v-else> 
+                        {{ user[key] }} 
+                    </span>
+                </td>
+            </tr>
+        </template>
+    </BaseIndexView>
 </template>

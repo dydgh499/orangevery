@@ -9,6 +9,10 @@ const tabs = <Tab[]>([
     { icon: 'tabler-user-check', title: '민원 정보' },
 ])
 const id = ref<number>(0)
+const route = useRoute()
+watchEffect(() => {
+    id.value = Number(route.params.id) || 0
+})
 </script>
 <template>
     <section>

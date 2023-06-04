@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Manager;
+namespace App\Http\Controllers\Log;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -16,6 +16,12 @@ class SettleHistoryController extends Controller
     
     public function index(IndexRequest $request)
     {
-        return [];
+        $search = $request->input('search', '');
+        $query  = $this->posts
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('title', 'like', "%$search%");
+
+        $data = $this->getIndexData($request, $query);
+        return $this->response(0, $data);
     }
 }

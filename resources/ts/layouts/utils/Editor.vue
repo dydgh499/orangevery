@@ -6,11 +6,10 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { axios } from '@axios';
 
 interface Props {
-    content: Object
+    content: String
 }
 const props = defineProps<Props>();
 const snackbar = <any>(inject('snackbar'))
-
 const modules = [
     {
         name: 'blotFormatter',
@@ -46,10 +45,13 @@ const modules = [
     }
 ]
 
+const content = ref(props.content)
+const emits = defineEmits(['update:content']);
 watchEffect(() => {
-    console.log(props.content)
+    if(content.value != null)
+        emits('update:content', content.value)
 })
 </script>
 <template>
-    <QuillEditor v-model="props.content" :modules="modules" theme="snow" toolbar="full" placeholder="게시글 내용을 작성하세요."/>
+    <QuillEditor v-model:content="content" contentType="html" :modules="modules" theme="snow" toolbar="full" placeholder="게시글 내용을 작성하세요."/>
 </template>

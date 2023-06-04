@@ -23,9 +23,9 @@ export const complaint_types = <Options[]>[
 
 export const useSearchStore = defineStore('complaintSearchStore', () => {
     const store = Searcher<Complaint>('complaints', <Complaint>({}))
-
     function setHeaders() {
-        store.setHeader('NO.', 'id')
+        store.setHeader('NO.', 'id')        
+        store.setHeader('가맹점 상호', 'mcht_name')
         store.setHeader('TID', 'tid')
         store.setHeader('고객명', 'cust_nm')
         store.setHeader('승인일', 'appr_dt')
@@ -33,17 +33,18 @@ export const useSearchStore = defineStore('complaintSearchStore', () => {
         store.setHeader('연락처', 'phone_num')
         store.setHeader('수기작성성함', 'hand_cust_nm')
         store.setHeader('수기작성연락처', 'hand_phone_num')
-        store.setHeader('발급사', 'issuer_name')
+        store.setHeader('발급사', 'issuer_id')
         store.setHeader('PG사', 'pg_name')
         store.setHeader('민원타입', 'type')
         store.setHeader('인입경로', 'entry_path')
-        store.setHeader('입금상태', 'dpst_status')
+        store.setHeader('입금상태', 'is_deposit')
         store.setHeader('생성시간', 'created_at')
         store.setHeader('업데이트시간', 'updated_at')
+        store.sortHeader()
     }
+    setHeaders()
     return {
         store,
-        setHeaders,
     }
 })
 
@@ -51,7 +52,7 @@ export const useUpdateStore = defineStore('complaintUpdateStore', () => {
     const path = 'complaints'
     const item = reactive<Complaint>({
         id: 0,
-        brand_id: 0,
+        mcht_id: null,
         tid: '',
         cust_nm: '',
         appr_dt: null,
@@ -64,7 +65,9 @@ export const useUpdateStore = defineStore('complaintUpdateStore', () => {
         pg_id: null,
         entry_path: '',
         is_deposit: false,
-        note: ''
+        note: '',
+        mcht_name: null,
+        pg_name: null
     })
     return {
         path, item

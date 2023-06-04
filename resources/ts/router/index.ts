@@ -26,12 +26,12 @@ const router = createRouter({
             },
         },
         {
-            path: '/pages/user-profile',
-            redirect: () => ({ name: 'pages-user-profile-tab', params: { tab: 'profile' } }),
+            path: '/merchandises/terminals/edit/:id',
+            redirect: to => { return `/merchandises/pay-modules/edit/${to.params.id}` }
         },
         {
-            path: '/pages/account-settings',
-            redirect: () => ({ name: 'pages-account-settings-tab', params: { tab: 'account' } }),
+            path: '/merchandises/terminals/create',
+            redirect: to => { return `/merchandises/pay-modules/create` }
         },
         {
             path: '/dashboards/home',

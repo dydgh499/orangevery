@@ -1,21 +1,8 @@
 import { Searcher } from '@/views/searcher';
-import type { Options, PayModule } from '@/views/types';
-
-export const module_types = <Options[]>([
-    { id: 0, title: "단말기" }, { id: 1, title: "수기결제" },
-    { id: 2, title: "인증결제" }, { id: 3, title: "간편결제" },
-])
-export const installments = <Options[]>([
-    { id: 0, title: "일시불" }, { id: 2, title: "2개월" },
-    { id: 3, title: "3개월" }, { id: 4, title: "4개월" },
-    { id: 5, title: "5개월" }, { id: 6, title: "6개월" },
-    { id: 7, title: "7개월" }, { id: 8, title: "8개월" },
-    { id: 9, title: "9개월" }, { id: 10, title: "10개월" },
-    { id: 11, title: "11개월" }, { id: 12, title: "12개월" },
-])
+import type { PayModule } from '@/views/types';
 
 export const useSearchStore = defineStore('payModSearchStore', () => {    
-    const store = Searcher<PayModule>('merchandises/pay-modules', <PayModule>({}))
+    const store = Searcher<PayModule>('merchandises/terminals', <PayModule>({}))
     function setHeaders() {
         store.setHeader('NO.', 'id')
         store.setHeader('별칭', 'note')
@@ -26,6 +13,15 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         store.setHeader('MID', 'mid')
         store.setHeader('TID', 'tid')
         store.setHeader('할부한도', 'installment')
+        store.setHeader('단말기 타입', 'terminal_id')        
+        store.setHeader('시리얼 번호', 'serial_num')
+        store.setHeader('통신비', 'comm_pr')
+        store.setHeader('통신비 정산일', 'comm_calc_day')
+        store.setHeader('통신비 정산주체', 'comm_calc_class')
+        store.setHeader('매출미달 차감금', 'under_sales_amt')
+        store.setHeader('개통일', 'begin_dt')
+        store.setHeader('출고일', 'ship_out_dt')
+        store.setHeader('출고상태', 'ship_out_stat')
         store.setHeader('생성시간', 'created_at')
         store.setHeader('업데이트시간', 'updated_at')    
         store.sortHeader()

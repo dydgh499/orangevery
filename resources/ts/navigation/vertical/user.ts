@@ -5,6 +5,7 @@ export default [
         icon: { icon: 'tabler-user' },
         children: [
             { title: 'merchandises', to: 'merchandises' },
+            { title: 'terminal-management', to: 'merchandises-terminals' },
             { title: 'paymodule-management', to: 'merchandises-pay-modules' },
             {
                 title: 'Fee change history management',

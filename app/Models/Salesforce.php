@@ -11,7 +11,6 @@ use Carbon\Carbon;
 use DateTimeInterface;
 use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\SFFeeChangeHistory;
 
 class Salesforce extends Authenticatable
 {

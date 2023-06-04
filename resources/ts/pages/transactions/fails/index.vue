@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/transactions/dangers/useStore';
+import { useSearchStore } from '@/views/transactions/fails/useStore';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 
 const {store} = useSearchStore()
@@ -41,7 +41,7 @@ const metas = [
 ]
 </script>
 <template>
-    <BaseIndexView placeholder="MID, TID, 승인번호 검색" :metas="metas" :add="false" add_name="이상거래">
+    <BaseIndexView placeholder="가맹점명, 실패 메세지 검색" :metas="metas" :add="false" add_name="결제실패">
         <template #filter>
         </template>
         <template #header>

@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useSearchStore } from '@/views/merchandises/noti-send-histories/useStore'
-import BaseIndexOverview from '@/layouts/lists/BaseIndexOverview.vue';
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 
-const { store, setHeaders } = useSearchStore()
-const { flattened } = useSalesFilterStore()
+const { store } = useSearchStore()
 provide('store', store)
-provide('setHeaders', setHeaders)
 
-const salesforce = ref({trx_fee:0, user_name:'영업점 선택'})
 const metas = [
     {
         icon: 'tabler-user',
@@ -43,18 +39,36 @@ const metas = [
         subtitle: 'Last week analytics',
     },
 ]
+const getComplainTypeColor = (http_code: number) => {
+    return http_code >= 200 && http_code <= 299 ? 'success' : 'error'
+}
 </script>
 <template>
-    <BaseIndexOverview :placeholder="`발송 URL 검색`" :metas="metas" :add="false" :update="false">
-        <template #options>
-            <VCol cols="12" sm="2">
-                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
-                        prepend-inner-icon="tabler-man" label="영업점 선택"
-                        item-title="user_name" item-value="id"
-                        persistent-hint single-line 
-                />
-            </VCol>
+    <BaseIndexView placeholder="발송 URL 검색" :metas="metas" :add="false" add_name="가맹점">
+        <template #filter>
         </template>
-        <template #name></template>
-    </BaseIndexOverview>
+        <template #header>
+            <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden"> {{ header.ko }} </th>
+        </template>
+        <template #body>
+            <tr v-for="(user, index) in store.items" :key="index" style="height: 3.75rem;">
+                <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden"> 
+                    <span v-if="key == `id`" class="edit-link">
+                        #{{ user[key] }}
+                    </span>
+                    <span v-else-if="key == `trans_id`" class="edit-link">
+                        #{{ user[key] }}
+                    </span>
+                    <span v-else-if="key == `http_code`">
+                        <VChip :color="getComplainTypeColor(Number(user[key]))">
+                            {{ user[key]  }}
+                        </VChip>
+                    </span>
+                    <span v-else> 
+                        {{ user[key] }} 
+                    </span>
+                </td>
+            </tr>
+        </template>
+    </BaseIndexView>
 </template>

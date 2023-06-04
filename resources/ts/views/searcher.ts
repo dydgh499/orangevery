@@ -17,7 +17,7 @@ const setSearchParams = <SearchParams>(formatDate: any) => {
 const excelprint = (headers:Filter, data:any, today:string, path:string) => {
     const rows = []
     const keys = Object.keys(headers) as Array<keyof Filter>;
-    console.log(keys)
+
     for (let i = 0; i < data.length; i++) {
         let row: Record<string, any> = {}
         for (let j = 0; j < keys.length; j++) {
@@ -38,7 +38,6 @@ const excelprint = (headers:Filter, data:any, today:string, path:string) => {
 
 export function Searcher<T>(_path: string, _type: T) {
     const filter = ref<any>(null)
-    const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
     const formatDate = <any>(inject('$formatDate'))
     const errorHandler = <any>(inject('$errorHandler'))
@@ -49,6 +48,7 @@ export function Searcher<T>(_path: string, _type: T) {
     const items = ref<T[]>([])
     const router = useRouter()
     const params = reactive<SearchParams>(setSearchParams(formatDate))
+    const extra_params = <any>({})
     const pagenation = reactive<Pagenation>({ total_count: 0, total_page: 1 })
     let header_count = 0;
   
@@ -63,15 +63,18 @@ export function Searcher<T>(_path: string, _type: T) {
     }
     const sortHeader = () => {
         const keys = Object.keys(headers.value).sort((a, b) => headers.value[a].idx - headers.value[b].idx);
-        let sorted = {};
+        let sorted = <any>({});
         for(let key of keys) {
             sorted[key] = headers.value[key];
         }
         headers.value = sorted
     }
-    const get = async (params: any) => {
+    const get = async () => {
+        const p = Object.assign(params, extra_params)
+        console.log(p)
+
         try {
-            const r = await axios.get('/api/v1/manager/' + path, { params: params })
+            const r = await axios.get('/api/v1/manager/' + path, { params: p })
             return r
         } catch (e: any) {
             snackbar.value.show(e.response.data.message, 'error')
@@ -84,16 +87,9 @@ export function Searcher<T>(_path: string, _type: T) {
     const edit = (id: number = 0) => {
         router.push('/' + path + '/edit/' + id)
     }
-    const remove = async (id: number) => {
-        if (await alert.value.show('정말 삭제하시겠습니까? 삭제하신 정보는 복구하실 수 없습니다.')) {
-            //const r = await axios.delete('/api/v1/manager/'+path.value+'/'+focus_id.value, {params:params})
-            await setTable()
-            snackbar.value.show('삭제되었습니다.', 'primary')
-        }
-    }
+    
     const setTable = async () => {
-        const p = params
-        const r = await get(p)
+        const r = await get()
         if (r.status == 200) {
             const data = r.data
             let l_page = data.total / params.page_size
@@ -106,11 +102,16 @@ export function Searcher<T>(_path: string, _type: T) {
     const excel = async () => {
         const dt    = new Date()
         const today = formatDate(new Date(dt.getFullYear(), dt.getMonth(), dt.getDay()))
-        const r = await get(params)
+        const r = await get()
         if (r.status == 200) {
             excelprint(headers.value, r.data.content, today, path)
         }
     }
+
+    const booleanTypeColor = (type: boolean | null) => {
+        return Boolean(type) ? "default" : "success";
+    };
+    
     const pagenationCouputed = computed(() => {
         const firstIndex = items.value.length ? ((params.page - 1) * params.page_size) + 1 : 0
         const lastIndex = items.value.length + ((params.page - 1) * params.page_size)
@@ -125,9 +126,9 @@ export function Searcher<T>(_path: string, _type: T) {
     })
     return {
         headers, setTable,
-        items, params, pagenation,
-        create, edit, remove,
-        excel, setHeader, sortHeader,
-        alert, snackbar, filter, pagenationCouputed
+        items, params, extra_params, pagenation,
+        create, edit,
+        excel, setHeader, sortHeader, booleanTypeColor,
+        filter, pagenationCouputed
     }
 }

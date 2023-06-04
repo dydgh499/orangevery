@@ -53,7 +53,7 @@ onMounted(() => {
                                 <VCol cols="12" md="3">
                                     <label for="feesRateHorizontalIcons">거래 수수료율</label>
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 6 : 9">
+                                <VCol cols="12" :md="props.item.id ? 5 : 9">
                                     <VTextField id="feesRateHorizontalIcons" v-model="props.item.trx_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
@@ -68,7 +68,7 @@ onMounted(() => {
                                 <VCol cols="12" md="3">
                                     <label for="holdRateHorizontalIcons">유보금 수수료율</label>
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 6 : 9">
+                                <VCol cols="12" :md="props.item.id ? 5 : 9">
                                     <VTextField id="holdRateHorizontalIcons" v-model="props.item.hold_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
@@ -89,7 +89,7 @@ onMounted(() => {
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="지사 선택"
                                         item-title="nick_name" item-value="id" />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                <VCol cols="12" :md="props.item.id ? 2 : 4">
                                     <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales5_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
@@ -109,7 +109,7 @@ onMounted(() => {
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위지사 선택"
                                         item-title="nick_name" item-value="id" />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                <VCol cols="12" :md="props.item.id ? 2 : 4">
                                     <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales4_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
@@ -129,7 +129,7 @@ onMounted(() => {
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="총판 선택"
                                         item-title="nick_name" item-value="id" />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                <VCol cols="12" :md="props.item.id ? 2 : 4">
                                     <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales3_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
@@ -149,7 +149,7 @@ onMounted(() => {
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위총판 선택"
                                         item-title="nick_name" item-value="id" />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                <VCol cols="12" :md="props.item.id ? 2 : 4">
                                     <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales2_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
@@ -169,7 +169,7 @@ onMounted(() => {
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="대리점 선택"
                                         item-title="nick_name" item-value="id" />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                <VCol cols="12" :md="props.item.id ? 2 : 4">
                                     <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales1_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
@@ -189,7 +189,7 @@ onMounted(() => {
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위대리점 선택"
                                         item-title="nick_name" item-value="id" />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                <VCol cols="12" :md="props.item.id ? 2 : 4">
                                     <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales0_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>

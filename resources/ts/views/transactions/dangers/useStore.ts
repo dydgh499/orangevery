@@ -7,8 +7,8 @@ export const useSearchStore = defineStore('dangerSearchStore', () => {
     function setHeaders() {
         store.setHeader('NO.', 'id')
         store.setHeader('가맹점 상호', 'mcht_name')
-        store.setHeader('영업점 ID', 'sales_name')
         store.setHeader('거래 타입', 'trx_type')
+        store.setHeader('거래금액', 'amount')
         store.setHeader('상품명', 'item_nm')
         store.setHeader('주문번호', 'ord_num')
         store.setHeader('거래번호', 'trx_id')
@@ -16,20 +16,21 @@ export const useSearchStore = defineStore('dangerSearchStore', () => {
         store.setHeader('MID', 'mid')
         store.setHeader('TID', 'cat_id')
         store.setHeader('거래수수료', 'withdraw_fee')
-        store.setHeader('발급사', 'card_nm')
+        store.setHeader('발급사', 'issuer')
+        store.setHeader('매입사', 'acquirer')
         store.setHeader('카드번호', 'card_num')
+        store.setHeader('승인번호', 'appr_num')
         store.setHeader('할부', 'installment')
-        store.setHeader('주소', 'danger_type')
-        store.setHeader('은행', 'danger_check')
-        store.setHeader('PG사', 'pg_name')
-        store.setHeader('구간', 'ps_name')
         store.setHeader('거래시간', 'trx_dttm')
-        store.setHeader('취소시간', 'cxl_dttm')
-        store.setHeader('취소여부', 'is_cancel')
-        store.setHeader('생성시간', 'created_at')  
+        store.setHeader('구매자명', 'buyer_nm')
+        store.setHeader('구매자 연락처', 'buyer_phone')
+        store.setHeader('이상거래 타입', 'danger_type')
+        store.setHeader('확인 여부', 'danger_check')
+        store.setHeader('생성시간', 'created_at')
+        store.sortHeader()
     }
+    setHeaders()
     return {
         store,
-        setHeaders,
     }
 })

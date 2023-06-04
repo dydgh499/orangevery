@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { axios } from '@axios';
 import { requiredValidator, nullValidator } from '@validators';
-import type { Complaint, Options } from '@/views/types'
+import type { Complaint, Merchandise, SearchParams } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
 import { useStore } from '@/views/services/pay-gateways/useStore';
@@ -13,14 +13,24 @@ interface Props {
 
 const props = defineProps<Props>()
 const { pgs } = useStore()
+const mchts = ref<Merchandise[]>([])
 
-
-const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
-const errorHandler = inject('$errorHandler');
-
+const setMchts = () => {
+    let search = <SearchParams><unknown>({
+        page: 1,
+        page_size: 10000,
+        search: '',
+        s_dt: '2000-01-01',
+        e_dt: '2999-12-31',
+    })
+    axios.get('/api/v1/manager/merchandises', { params: search })
+        .then(r => { Object.assign(mchts.value, r.data.content as Merchandise[]) })
+        .catch(e => { console.log(e) })
+}
+setMchts()
 onMounted(() => {
     props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
+    props.item.is_deposit = Boolean(props.item.is_deposit)
 })
 </script>
 <template>
@@ -75,6 +85,14 @@ onMounted(() => {
                 <VCardItem>
                     <VCardTitle>민원정보</VCardTitle>
                     <CreateHalfVCol :mdl="3" :mdr="9">
+                            <template #name>가맹점 선택</template>
+                            <template #input>
+                                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id"
+                                        :items="mchts" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
+                                        item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] />
+                            </template>
+                        </CreateHalfVCol>
+                    <CreateHalfVCol :mdl="3" :mdr="9">
                         <template #name>TID</template>
                         <template #input>
                             <VTextField v-model="props.item.tid" prepend-inner-icon="jam-key-f"
@@ -86,7 +104,7 @@ onMounted(() => {
                         <template #input>
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.type" :items="complaint_types"
                                 prepend-inner-icon="ic-round-sentiment-dissatisfied" label="민원 타입 선택" item-title="title" item-value="id"
-                                single-line />
+                                single-line :rules="[nullValidator]" />
                         </template>
                     </CreateHalfVCol>
                     <CreateHalfVCol :mdl="3" :mdr="9">
@@ -108,7 +126,7 @@ onMounted(() => {
                         <template #input>
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.issuer_id" :items="issuers"
                                 prepend-inner-icon="tabler-building-fortress" label="발급사 선택" item-title="title" item-value="id"
-                                single-line />
+                                single-line :rules="[nullValidator]" />
                         </template>
                     </CreateHalfVCol>
                     <CreateHalfVCol :mdl="3" :mdr="9">
@@ -116,7 +134,7 @@ onMounted(() => {
                         <template #input>
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_id" :items="pgs"
                                 prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_nm" item-value="id"
-                                single-line />
+                                single-line :rules="[nullValidator]"/>
                         </template>
                     </CreateHalfVCol>
                     <CreateHalfVCol :mdl="3" :mdr="9">
@@ -129,7 +147,7 @@ onMounted(() => {
                     <CreateHalfVCol :mdl="3" :mdr="9">
                         <template #name>입금상태</template>
                         <template #input>
-                            <BooleanRadio :radio="props.item.is_deposit" @update:radio="props.item.is_deposit = $event">
+                            <BooleanRadio :radio="props.item.is_deposit" @update:radio="props.item.is_deposit = $event" :rules="[nullValidator]">
                                 <template #true>입금</template>
                                 <template #false>미입금</template>
                             </BooleanRadio>

@@ -318,8 +318,6 @@ export interface Transaction {
 export interface Danger {
     id: number,
     mcht_id: number,
-    mcht_name: string,
-    sales_name:string,
     tran_id: number,
     trx_type: number,
     item_nm: string,
@@ -344,6 +342,19 @@ export interface Danger {
     is_cancel:boolean,
     updated_at:datetime,
     created_at: datetime,
+}
+export interface FailTransaction {
+    id: number,
+    mcht_id: number,
+    pg_id: number,
+    ps_id: number,
+    pmod_id: number,
+    pay_cond_id: number,
+    trx_dt: Date,
+    trx_tm: Time,
+    amount: number,
+    resuld_cd: string,
+    result_msg: string,
 }
 
 export interface Settle extends Bank {
@@ -419,13 +430,14 @@ export interface Post {
     title: string,
     content: string,
     type:number,
-    user_id: number,
+    writer: string,
     parent_id: number | null,
-    depth: number,
 }
 
 export interface Complaint {
     id: number,
+    mcht_id: number | null,
+    mcht_name: string | null,
     tid: string,
     cust_nm: string,
     appr_dt: Date | null,
@@ -435,6 +447,7 @@ export interface Complaint {
     hand_phone_num: string,
     issuer_id: number | null,
     pg_id: number | null,
+    pg_name: string | null,
     type: number | null,
     entry_path: string,
     is_deposit: boolean,
@@ -443,23 +456,23 @@ export interface Complaint {
 
 export interface FeeChangeHistory {
     id: number,
-    trx_fee: float,
+    mcht_id: number,
+    bf_trx_fee: float,
+    aft_trx_fee: float,
     created_at: Date,
-    ie_use: boolean,
     change_status: boolean,
 }
 
 export interface MchtFeeChangeHistory extends FeeChangeHistory {
-    mcht_id: number,
-    hold_fee: float,
-    sales_name: string,
+    bf_hold_fee: float,
+    aft_hold_fee: float,    
 }
 
 
 export interface SalesFeeChangeHistory extends FeeChangeHistory {
-    sales_id: number,
-    tax_type: number,
-    sales_name: string,
+    bf_sales_id: number,
+    aft_sales_id: number,
+    class: number,
 }
 
 export interface NotiSendHistory {

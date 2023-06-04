@@ -29,18 +29,23 @@ class PaymentModuleController extends Controller
      * 가맹점 이상 가능
      *
      * @queryParam search string 검색어(mid, tid)
+     * @queryParam module_type integer 모듈타입(0,1,2,3,4)
      */
     public function index(IndexRequest $request)
     {
+        $module_type = $request->input('module_type', '');
         $search = $request->input('search', '');
-        $query = $this->payModules
+        $query  = $this->payModules
             ->where('brand_id', $request->user()->brand_id);
+
+        if($module_type != '')
+            $query = $query->where('module_type', $module_type);
 
         $query = $query->where(function ($query) use ($search) {
             return $query->where('mid', 'like', "%$search%")
                 ->orWhere('tid', 'like', "%$search%");
         });
-        
+
         if($request->has('mcht_id'))
             $query = $query->where('mcht_id', $request->mcht_id);
 

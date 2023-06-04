@@ -79,24 +79,6 @@ class MerchandiseRequest extends FormRequest
         }
     }
 
-    protected function convertToBoolean($data)
-    {
-        if (is_array($data)) 
-        {
-            foreach ($data as $key => $value) {
-                $data[$key] = $this->convertToBoolean($value);
-            }
-        } 
-        else 
-        {
-            if ($data === 'true')
-                $data = true;
-            else if ($data === 'false')
-                $data = false;
-        }
-        return $data;
-    }
-
     public function bodyParameters()
     {
         $params = $this->getDocsParameters($this->keys);

@@ -235,8 +235,9 @@ const filterPgs = computed(() => {
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>정산일</template>
                                 <template #input>
-                                    <AppDateTimePicker v-model="props.item.comm_calc_day"
-                                        prepend-inner-icon="ic-baseline-calendar-today" label="정산일 입력" single-line />
+                                    <VTextField v-model="props.item.comm_calc_day"
+                                    :rules="[v => (v >= 0 && v <= 31) || '0~31 사이의 값을 입력해주세요']"
+                                    label="정산일 입력" suffix="일" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

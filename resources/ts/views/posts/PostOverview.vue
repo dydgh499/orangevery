@@ -3,18 +3,12 @@ import type { Post } from '@/views/types'
 import { requiredValidator, nullValidator } from '@validators';
 import Editor from '@/layouts/utils/Editor.vue';
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
-import type { Options } from '@/views/types'
+import { types } from '@/views/posts/useStore'
 
 interface Props {
     item: Post,
 }
 const props = defineProps<Props>()
-
-const types = <Options[]>([
-    { id: 0, title: "공지사항" }, 
-    { id: 2, title: "FAQ" },
-    { id: 2, title: "1:1 문의" },
-])
 
 </script>
 <template>
@@ -38,7 +32,7 @@ const types = <Options[]>([
                         <CreateHalfVCol :mdl="2" :mdr="10" style='margin-bottom: 4em;'>
                             <template #name>내용</template>
                             <template #input>
-                                <Editor :content="toRef(props.item, 'content')"></Editor>
+                                <Editor :content="props.item.content" @update:content="props.item.content = $event"></Editor>
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -50,7 +44,8 @@ const types = <Options[]>([
                                 <template #name></template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.type"
-                                    :items="types" prepend-inner-icon="fxemoji-notepage" label="게시글 타입 선택" />
+                                    :items="types" prepend-inner-icon="fxemoji-notepage" label="게시글 타입 선택" 
+                                    item-title="title" item-value="id" />
                                 </template>
                             </CreateHalfVCol>
                         </VCol>

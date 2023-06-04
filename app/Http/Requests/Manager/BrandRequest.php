@@ -79,30 +79,12 @@ class BrandRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        if ($this->has('pv_options')) 
+        if ($this->has('is_deposit')) 
         {
             $pvOptions = $this->input('pv_options');    
             $pvOptions = $this->convertToBoolean($pvOptions);
             $this->merge(['pv_options' => $pvOptions]);
         }
-    }
-
-    protected function convertToBoolean($data)
-    {
-        if (is_array($data)) 
-        {
-            foreach ($data as $key => $value) {
-                $data[$key] = $this->convertToBoolean($value);
-            }
-        } 
-        else 
-        {
-            if ($data === 'true')
-                $data = true;
-            else if ($data === 'false')
-                $data = false;
-        }
-        return $data;
     }
 
     public function bodyParameters()

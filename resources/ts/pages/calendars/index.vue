@@ -1,60 +1,173 @@
 <script setup lang="ts">
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { useSearchStore } from '@/views/merchandises/useStore'
-import BaseIndexOverview from '@/layouts/lists/BaseIndexOverview.vue';
+import '@fullcalendar/core/vdom' // solves problem with Vite
 
-const { store, setHeaders } = useSearchStore()
-const { flattened } = useSalesFilterStore()
-provide('store', store)
-provide('setHeaders', setHeaders)
+// Local imports
 
-const salesforce = ref({trx_fee:0, user_name:'영업점 선택'})
-const metas = [
-    {
-        icon: 'tabler-user',
-        color: 'primary',
-        title: '금월 추가된 가맹점',
-        stats: '21,459',
-        percentage: +29,
-        subtitle: 'Total Users',
-    },
-    {
-        icon: 'tabler-user-plus',
-        color: 'error',
-        title: '금주 추가된 가맹점',
-        stats: '4,567',
-        percentage: +18,
-        subtitle: 'Last week analytics',
-    },
-    {
-        icon: 'tabler-user-check',
-        color: 'success',
-        title: '금월 감소한 가맹점',
-        stats: '19,860',
-        percentage: -14,
-        subtitle: 'Last week analytics',
-    },
-    {
-        icon: 'tabler-user-exclamation',
-        color: 'warning',
-        title: '금주 감소한 가맹점',
-        stats: '237',
-        percentage: +42,
-        subtitle: 'Last week analytics',
-    },
-]
+import FullCalendar from '@fullcalendar/vue3'
+import { blankEvent, useCalendar } from '@/views/calendar/useCalendar'
+import { useCalendarStore } from '@/views/calendar/useCalendarStore'
+import { useResponsiveLeftSidebar } from '@core/composable/useResponsiveSidebar'
+
+// Components
+import CalendarEventHandler from '@/views/calendar/CalendarEventHandler.vue'
+
+// 👉 Store
+const store = useCalendarStore()
+
+// 👉 Event
+const event = ref(structuredClone(blankEvent))
+const isEventHandlerSidebarActive = ref(false)
+
+watch(isEventHandlerSidebarActive, val => {
+  if (!val)
+    event.value = structuredClone(blankEvent)
+})
+
+const { isLeftSidebarOpen } = useResponsiveLeftSidebar()
+
+// 👉 useCalendar
+const { refCalendar, calendarOptions, addEvent, updateEvent, removeEvent, jumpToDate } = useCalendar(event, isEventHandlerSidebarActive, isLeftSidebarOpen)
+
+// SECTION Sidebar
+// 👉 Check all
+const checkAll = computed({
+  /*
+    GET: Return boolean `true` => if length of options matches length of selected filters => Length matches when all events are selected
+    SET: If value is `true` => then add all available options in selected filters => Select All
+          Else if => all filters are selected (by checking length of both array) => Empty Selected array  => Deselect All
+  */
+  get: () => store.selectedCalendars.length === store.availableCalendars.length,
+  set: val => {
+    if (val)
+      store.selectedCalendars = store.availableCalendars.map(i => i.label)
+
+    else if (store.selectedCalendars.length === store.availableCalendars.length)
+      store.selectedCalendars = []
+  },
+})
+
+// !SECTION
 </script>
+
 <template>
-    <BaseIndexOverview :placeholder="`ID, 상호, 대표자명 검색`" :metas="metas" :add="false" :update="false">
-        <template #options>
-            <VCol cols="12" sm="2">
-                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
-                        prepend-inner-icon="tabler-man" label="영업점 선택"
-                        :hint="`수수료율: ${(salesforce.trx_fee*100).toFixed(3)}%`" item-title="user_name" item-value="id"
-                        persistent-hint single-line 
-                />
-            </VCol>
-        </template>
-        <template #name>가맹점</template>
-    </BaseIndexOverview>
+  <div>
+    <VCard>
+      <!-- `z-index: 0` Allows overlapping vertical nav on calendar -->
+      <VLayout style="z-index: 0;">
+        <!-- 👉 Navigation drawer -->
+        <VNavigationDrawer
+          v-model="isLeftSidebarOpen"
+          width="292"
+          absolute
+          touchless
+          location="start"
+          class="calendar-add-event-drawer"
+          :temporary="$vuetify.display.mdAndDown"
+        >
+          <div style="margin: 1.4rem;">
+            <VBtn
+              block
+              prepend-icon="tabler-plus"
+              @click="isEventHandlerSidebarActive = true"
+            >
+              Add event
+            </VBtn>
+          </div>
+
+          <VDivider />
+
+          <div class="d-flex align-center justify-center pa-2 mb-3">
+            <AppDateTimePicker
+              :model-value="new Date().toJSON().slice(0, 10)"
+              label="Inline"
+              :config="{ inline: true }"
+              class="calendar-date-picker"
+              @input="jumpToDate($event.target.value)"
+            />
+          </div>
+
+          <VDivider />
+          <div class="pa-7">
+            <p class="text-sm text-uppercase text-disabled mb-3">
+              FILTER
+            </p>
+
+            <div class="d-flex flex-column calendars-checkbox">
+              <VCheckbox
+                v-model="checkAll"
+                label="View all"
+              />
+              <VCheckbox
+                v-for="calendar in store.availableCalendars"
+                :key="calendar.label"
+                v-model="store.selectedCalendars"
+                :value="calendar.label"
+                :color="calendar.color"
+                :label="calendar.label"
+              />
+            </div>
+          </div>
+        </VNavigationDrawer>
+
+        <VMain>
+          <VCard flat>
+            <FullCalendar
+              ref="refCalendar"
+              :options="calendarOptions"
+            />
+          </VCard>
+        </VMain>
+      </VLayout>
+    </VCard>
+    <CalendarEventHandler
+      v-model:isDrawerOpen="isEventHandlerSidebarActive"
+      :event="event"
+      @add-event="addEvent"
+      @update-event="updateEvent"
+      @remove-event="removeEvent"
+    />
+  </div>
 </template>
+
+<style lang="scss">
+@use "@core-scss/template/libs/full-calendar";
+
+.calendars-checkbox {
+  .v-label {
+    color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
+    opacity: var(--v-high-emphasis-opacity);
+  }
+}
+
+.calendar-add-event-drawer {
+  &.v-navigation-drawer {
+    border-end-start-radius: 0.375rem;
+    border-start-start-radius: 0.375rem;
+  }
+}
+
+.calendar-date-picker {
+  display: none;
+
+  +.flatpickr-input {
+    +.flatpickr-calendar.inline {
+      border: none;
+      box-shadow: none;
+
+      .flatpickr-months {
+        border-block-end: none;
+      }
+    }
+  }
+}
+</style>
+
+<style lang="scss" scoped>
+.v-layout {
+  overflow: visible !important;
+
+  .v-card {
+    overflow: visible;
+  }
+}
+</style>
