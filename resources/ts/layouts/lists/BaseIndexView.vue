@@ -2,7 +2,6 @@
 import SearchFilterDialog from '@/layouts/dialogs/SearchFilterDialog.vue';
 import BaseIndexChart from '@/layouts/lists/BaseIndexChart.vue';
 import BaseIndexFilter from '@/layouts/lists/BaseIndexFilter.vue';
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 
 interface Props {
     placeholder: string,
@@ -20,6 +19,11 @@ onMounted(() => {
     watchEffect(() => {
         store.setTable()
     })
+    watch(() => store.params.search, (newSearch, oldSearch) => {
+    if (newSearch !== oldSearch) {
+        store.setTable();
+    }
+    }, { deep: false });
 });
 </script>
 <template>

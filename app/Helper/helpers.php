@@ -15,11 +15,6 @@
         return $request->user()->tokenCan(15) == false ? true : false;
     }
 
-    function isMbrOnlyMcht($request)
-    {
-        return $request->user()->tokenCan('mbr_only_mcht') ? true : false;
-    }
-
     function httpSender($type, $url, $params, $headers=[], $retry=0)
     {
         $log = [
@@ -90,4 +85,60 @@
         }
         else
             return json_decode($brand, true);
+    }
+
+    function globalPGFilter($query, $request, $parent_table='')
+    {
+        $parent_table = $parent_table != "" ? $parent_table."." : "";
+        if($request->pg_id)
+            $query = $query->where($parent_table.'pg_id', $request->pg_id);
+        if($request->ps_id)
+            $query = $query->where($parent_table.'ps_id', $request->ps_id);
+        if($request->pay_cond_id)
+            $query = $query->where($parent_table.'pay_cond_id', $request->pay_cond_id);
+        if($request->terminal_id)
+            $query = $query->where($parent_table.'terminal_id', $request->terminal_id);
+        return $query;
+    }
+
+    function globalSalesFilter($query, $request, $parent_table)
+    {
+        $parent_table = $parent_table != "" ? $parent_table."." : "";
+        if($request->sales0_id)
+            $query = $query->where($parent_table.'sales0_id', $request->sales0_id);
+        if($request->sales1_id)
+            $query = $query->where($parent_table.'sales1_id', $request->sales1_id);
+        if($request->sales2_id)
+            $query = $query->where($parent_table.'sales2_id', $request->sales2_id);
+        if($request->sales3_id)
+            $query = $query->where($parent_table.'sales3_id', $request->sales3_id);
+        if($request->sales4_id)
+            $query = $query->where($parent_table.'sales4_id', $request->sales4_id);
+        if($request->sales5_id)
+            $query = $query->where($parent_table.'sales5_id', $request->sales5_id);
+        if($request->custom_id)
+            $query = $query->where($parent_table.'custom_id', $request->custom_id);
+
+        return $query;
+    }
+
+    function globalLevelByIndex($level)
+    {
+        switch($level)
+        {
+            case 13:
+                return 0;
+            case 15:
+                return 1;
+            case 17:
+                return 2;
+            case 20:
+                return 3;
+            case 25:
+                return 4;
+            case 30:
+                return 5;
+            default:
+                return 0;
+        }
     }

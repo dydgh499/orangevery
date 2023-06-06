@@ -4,6 +4,8 @@ namespace App\Http\Requests\Manager;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
+use App\Models\Options\PvOptions;
+use App\Models\Options\ThemeCSS;
 
 
 class BrandRequest extends FormRequest
@@ -79,7 +81,7 @@ class BrandRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        if ($this->has('is_deposit')) 
+        if ($this->has('pv_options')) 
         {
             $pvOptions = $this->input('pv_options');    
             $pvOptions = $this->convertToBoolean($pvOptions);
@@ -117,8 +119,8 @@ class BrandRequest extends FormRequest
             'deposit_amount'   => $this->deposit_amount,
             'note'  => $this->input('note', ''),
         ];
-        $data['pv_options'] = json_encode($this->pv_options, true);
-        $data['theme_css']  = json_encode($this->theme_css, true);
+        $data['pv_options'] = json_encode($this->pv_options); 
+        $data['theme_css']  = json_encode($this->theme_css);
         return $data;
     }
 }

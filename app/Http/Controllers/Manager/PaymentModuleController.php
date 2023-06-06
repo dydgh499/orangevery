@@ -35,21 +35,25 @@ class PaymentModuleController extends Controller
     {
         $module_type = $request->input('module_type', '');
         $search = $request->input('search', '');
-        $query  = $this->payModules
-            ->where('brand_id', $request->user()->brand_id);
 
+        $query = $this->payModules->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id');
+        $query = globalPGFilter($query, $request, 'payment_modules');
+        $query = globalSalesFilter($query, $request, 'merchandises');       
+
+        $query = $query->where('payment_modules.brand_id', $request->user()->brand_id);
         if($module_type != '')
-            $query = $query->where('module_type', $module_type);
+            $query = $query->where('payment_modules.module_type', $module_type);
 
         $query = $query->where(function ($query) use ($search) {
-            return $query->where('mid', 'like', "%$search%")
-                ->orWhere('tid', 'like', "%$search%");
+            return $query->where('payment_modules.mid', 'like', "%$search%")
+                ->orWhere('payment_modules.tid', 'like', "%$search%")
+                ->orWhere('merchandises.mcht_name', 'like', "%$search%");
         });
 
         if($request->has('mcht_id'))
             $query = $query->where('mcht_id', $request->mcht_id);
 
-        $data = $this->getIndexData($request, $query);
+        $data = $this->getIndexData($request, $query, 'payment_modules.id', ['payment_modules.*', 'merchandises.mcht_name'], 'payment_modules.created_at');
         return $this->response(0, $data);
     }
 

@@ -1,20 +1,13 @@
 <script lang="ts" setup>
-import type { Salesforce, Options } from '@/views/types'
+import type { Salesforce } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { requiredValidator, nullValidator } from '@validators';
+import { salesLevels } from '@/views/salesforces/useStore'
 
 interface Props {
     item: Salesforce,
 }
 const props = defineProps<Props>()
-const classes = <Options[]>([
-    {id: 0, title: '하위대리점'},
-    {id: 1, title: '대리점'},
-    {id: 2, title: '하위총판'},
-    {id: 3, title: '총판'},
-    {id: 4, title: '하위지사'},
-    {id: 5, title: '지사'},
-])
 </script>
 <template>
     <VRow class="match-height">
@@ -71,8 +64,8 @@ const classes = <Options[]>([
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>등급</template>
                             <template #input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.class"
-                                        :items="classes" prepend-inner-icon="tabler-man" label="정산자 선택" item-title="title"
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
+                                        :items="salesLevels" prepend-inner-icon="tabler-man" label="정산자 선택" item-title="title"
                                         item-value="id" persistent-hint single-line :rules="[nullValidator]" 
                                         :readonly="props.item.id != 0"/>
                             </template>

@@ -14,6 +14,7 @@ use App\Http\Controllers\Manager\PaymentSectionController;
 use App\Http\Controllers\Manager\ClassificationController;
 use App\Http\Controllers\Manager\PostController;
 use App\Http\Controllers\Manager\ComplaintController;
+use App\Http\Controllers\Manager\TransactionController;
 
 
 use App\Http\Controllers\Manager\SettleController;
@@ -66,13 +67,14 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::prefix('merchandises')->group(function() {            
             Route::get('terminals', [TerminalController::class, 'index']);   
             Route::apiResource('pay-modules', PaymentModuleController::class);   
+            Route::post('fee-change-histories/{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
             Route::get('noti-send-histories', [NotiSendHistoryController::class, 'index']);
             Route::get('noti-send-histories/detail/{trans_id}', [NotiSendHistoryController::class, 'detail']);
         });
         Route::apiResource('complaints', ComplaintController::class);
         Route::apiResource('salesforces', SalesforceController::class);
-        Route::apiResource('transactions', PostController::class);
+        Route::apiResource('transactions', TransactionController::class);
         Route::apiResource('merchandises', MerchandiseController::class);
         Route::apiResource('posts', PostController::class);
     });

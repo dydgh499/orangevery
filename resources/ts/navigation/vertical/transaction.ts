@@ -1,26 +1,35 @@
+import corp from '@corp'
+
+let payment_child = []
+if (corp.pv_options.free.use_hand_pay) {
+    payment_child.push({
+        title: 'Hand payment',
+        to: 'transactions-hand',
+      })    
+}
+if (corp.pv_options.free.use_auth_pay) {
+    payment_child.push({
+        title: 'Auth payment',
+        to: 'transactions-auth',
+    })
+}
+if (corp.pv_options.free.use_simple_pay) {
+    payment_child.push({
+        title: 'Simple payment',
+        to: 'transactions-simple',
+    })
+}
+payment_child.push({
+    title: 'Cancel payment',
+    to: 'transactions-cancel',
+})
+
 export default [
   { heading: 'Transaction' },
   {
     title: 'Payment',
     icon: { icon: 'fluent-payment-32-regular' },
-    children: [
-      {
-        title: 'Hand payment',
-        to: 'transactions-hand',
-      },
-      {
-        title: 'Auth payment',
-        to: 'transactions-auth',
-      },
-      {
-        title: 'Simple payment',
-        to: 'transactions-simple',
-      },
-      {
-        title: 'Cancel payment',
-        to: 'transactions-cancel',
-      },
-    ]
+    children: payment_child
   },
   {
     title: 'transactions-management',

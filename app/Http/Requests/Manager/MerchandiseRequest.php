@@ -30,6 +30,7 @@ class MerchandiseRequest extends FormRequest
             'acct_nm',
             'phone_num',
             'pv_options',
+            'custom_id',
         ];
     }
 
@@ -103,28 +104,9 @@ class MerchandiseRequest extends FormRequest
             'acct_bank_cd' => $this->acct_bank_cd,
             'acct_num' => $this->input('acct_num', ''),
             'acct_nm' => $this->input('acct_nm', ''),
-            'sales0_id' => $this->input('sales0_id', 0),
-            'sales1_id' => $this->input('sales1_id', 0),
-            'sales2_id' => $this->input('sales2_id', 0),
-            'sales3_id' => $this->input('sales3_id', 0),
-            'sales4_id' => $this->input('sales4_id', 0),
-            'sales5_id' => $this->input('sales5_id', 0),
-            'hold_fee'  => $this->input('hold_fee', 0)/100,
-            'trx_fee'  => $this->input('trx_fee', 0)/100,
-            'sales0_fee' => $this->input('sales0_fee', 0)/100,
-            'sales1_fee' => $this->input('sales1_fee', 0)/100,
-            'sales2_fee' => $this->input('sales2_fee', 0)/100,
-            'sales3_fee' => $this->input('sales3_fee', 0)/100,
-            'sales4_fee' => $this->input('sales4_fee', 0)/100,
-            'sales5_fee' => $this->input('sales5_fee', 0)/100,
-        ];        
-        $data['sales0_id'] = $data['sales0_id'] == null ? 0 : $data['sales0_id'];
-        $data['sales1_id'] = $data['sales1_id'] == null ? 0 : $data['sales1_id'];
-        $data['sales2_id'] = $data['sales2_id'] == null ? 0 : $data['sales2_id'];
-        $data['sales3_id'] = $data['sales3_id'] == null ? 0 : $data['sales3_id'];
-        $data['sales4_id'] = $data['sales4_id'] == null ? 0 : $data['sales4_id'];
-        $data['sales5_id'] = $data['sales5_id'] == null ? 0 : $data['sales5_id'];
-        $data['pv_options'] = json_encode($this->pv_options, true);
+            'custom_id' => $this->custom_id,
+        ];
+        $data['pv_options'] = json_encode($this->pv_options);
         return $data;
     }
 }

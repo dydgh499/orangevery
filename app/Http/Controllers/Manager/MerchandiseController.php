@@ -51,16 +51,19 @@ class MerchandiseController extends Controller
     {
         $cols = ['merchandises.*'];
         $search = $request->input('search', '');
-        $query = $this->merchandises->where('merchandises.user_name', 'like', "%$search%");
 
-        array_push($cols, 'brands.name as brand_name');
-        $query = $query->join('brands','merchandises.brand_id', 'brands.id');
+        $query = $this->merchandises->leftJoin('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id');
+        $query = globalPGFilter($query, $request, 'payment_modules');
+        $query = globalSalesFilter($query, $request, 'merchandises');       
+        $query = $query
+            ->where('merchandises.brand_id', $request->user()->brand_id)
+            ->where('merchandises.mcht_name', 'like', "%$search%");
 
         if(isMerchandise($request))
             $query = $query->where('merchandises.id', $request->user()->id);
         $query = $query->with(['sales0', 'sales1', 'sales2', 'sales3', 'sales4', 'sales5']);
-
-        $data = $this->getIndexData($request, $query, 'merchandises.ID', $cols, 'merchandises.created_at');
+        $query = $query->groupBy('merchandises.id');
+        $data = $this->getIndexData($request, $query, 'merchandises.id', $cols, 'merchandises.created_at', true);
         return $this->response(0, $data);
     }
 
@@ -84,6 +87,21 @@ class MerchandiseController extends Controller
             if(!$user)
             {
                 $user = $request->data();
+                $user['sales0_id'] = $request->input('sales0_id', 0);
+                $user['sales1_id'] = $request->input('sales1_id', 0);
+                $user['sales2_id'] = $request->input('sales2_id', 0);
+                $user['sales3_id'] = $request->input('sales3_id', 0);
+                $user['sales4_id'] = $request->input('sales4_id', 0);
+                $user['sales5_id'] = $request->input('sales5_id', 0);
+                $user['hold_fee']  = $request->input('hold_fee', 0)/100;
+                $user['trx_fee']    = $request->input('trx_fee', 0)/100;
+                $user['sales0_fee'] = $request->input('sales0_fee', 0)/100;
+                $user['sales1_fee'] = $request->input('sales1_fee', 0)/100;
+                $user['sales2_fee'] = $request->input('sales2_fee', 0)/100;
+                $user['sales3_fee'] = $request->input('sales3_fee', 0)/100;
+                $user['sales4_fee'] = $request->input('sales4_fee', 0)/100;
+                $user['sales5_fee'] = $request->input('sales5_fee', 0)/100;
+
                 $user = $this->saveImages($request, $user, $this->imgs);
                 $user['user_pw'] = Hash::make($request->input('user_pw'));
                 $user['location'] = $this->merchandises->setLocation(0, 0);

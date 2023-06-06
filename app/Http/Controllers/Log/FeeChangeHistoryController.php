@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Log;
 
 use App\Models\Logs\MChtFeeChangeHistory;
 use App\Models\Logs\SfFeeChangeHistory;
+use App\Models\Merchandise;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
+use Illuminate\Support\Facades\DB;
 
 
 class FeeChangeHistoryController extends Controller
@@ -47,5 +50,94 @@ class FeeChangeHistoryController extends Controller
         $query = $query->with(['bfSales', 'aftSales']);
         $data = $this->getIndexData($request, $query, 'sf_fee_change_histories.id', ['sf_fee_change_histories.*', 'merchandises.mcht_name'], 'sf_fee_change_histories.created_at');
         return $this->response(0, $data);
+    }
+
+    private function getMchtResource($request, $mcht, $data)
+    {
+        $udpt_data = [];
+        $bf_trx_fee = $mcht->trx_fee/100;
+        $aft_trx_fee = $request->trx_fee/100;
+        $bf_hold_fee = $mcht->hold_fee/100;
+        $aft_hold_fee = $request->hold_fee/100;
+
+        $data['bf_trx_fee']  = $bf_trx_fee;
+        $data['aft_trx_fee'] = $aft_trx_fee;
+        $udpt_data['trx_fee'] = $aft_trx_fee;
+
+        $data['bf_hold_fee'] = $bf_hold_fee;
+        $data['aft_hold_fee'] = $aft_hold_fee;
+        $udpt_data['hold_fee'] = $aft_hold_fee;
+
+        return [
+            'history' => $data,
+            'update'  => $udpt_data
+        ];
+    }
+
+    private function getSalesResource($request, $mcht, $data)
+    {
+        $udpt_data  = [];
+        $data       = [];
+        $data['level'] = $request->level;
+        $idx  = globalLevelByIndex($data['level']);
+        $mcht = json_decode(json_encode($mcht), true);
+        $sales_key = [
+            'sales_fee' => 'sales'.$idx.'_fee',
+            'sales_id'  => 'sales'.$idx.'_id',
+        ];
+        
+        $bf_trx_fee = $mcht[$sales_key['sales_fee']]/100;
+        $aft_trx_fee = $request->sales_fee/100;
+        $bf_sales_id = $mcht[$sales_key['sales_id']];
+        $aft_sales_id = $request->sales_id;
+
+        $data['bf_trx_fee']     = $bf_trx_fee;
+        $data['aft_trx_fee']    = $aft_trx_fee;
+        $udpt_data[$sales_key['sales_fee']] = $aft_trx_fee;
+
+        $data['bf_sales_id'] = $bf_sales_id;
+        $data['aft_sales_id'] = $aft_sales_id;
+        $udpt_data[$sales_key['sales_id']] = $aft_sales_id;
+        
+        return [
+            'history' => $data,
+            'update'  => $udpt_data
+        ];
+    }
+
+    public function apply(Request $request, $user, $type)
+    {  
+        $change_status = $type == 'direct-apply' ? 1 : 0;
+        $data = [
+            'mcht_id'   => $request->mcht_id,
+            'brand_id'  => $request->user()->brand_id,
+            'change_status' => $change_status,
+        ];
+        $mchts  = new Merchandise();
+        $mcht   = $mchts->where('id', $request->mcht_id)->first();
+        if($mcht)
+        {
+            if($user == 'merchandises')
+            {
+                $resource = $this->getMchtResource($request, $mcht, $data);
+                $orm = $this->mcht_fee_histories;
+            }
+            else
+            {
+                $resource = $this->getSalesResource($request, $mcht, $data);
+                $orm = $this->sf_fee_histories;
+
+            }
+            
+            $res = DB::transaction(function () use($orm, $resource, $mchts) {
+                $res = $orm->create($resource['history']);
+                if($resource['history']['change_status'] == true)
+                    $mchts->where('id', $resource['history']['mcht_id'])->update($resource['update']);
+                return true;
+            }, 3);
+            return $this->response(0);
+        }
+        else
+            return $this->response(1000);
     }
 }

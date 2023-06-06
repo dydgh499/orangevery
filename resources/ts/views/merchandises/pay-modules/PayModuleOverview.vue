@@ -3,7 +3,6 @@ import { axios } from '@axios';
 import type { PayModule, Merchandise } from '@/views/types'
 import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue';
 import { SearchParams } from '@/views/types';
-import corp from '@corp'
 
 interface Props {
     item: Merchandise,
@@ -32,7 +31,6 @@ onMounted(async () => {
 function addNewPaymodule() {
     new_pay_modules.push({
         id: 0,
-        brand_id: corp.brand_id,
         mcht_id: props.item.id,
         pg_id: 0,
         ps_id: 0,

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/salesforces/fee-change-histories/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import { allLevels } from '@/views/salesforces/useStore';
 
 const { store } = useSearchStore()
 provide('store', store)
@@ -53,6 +54,9 @@ const metas = [
                     <span v-if="key == `id`" class="edit-link">
                         #{{ user[key] }}
                     </span>
+                    <span v-else-if="key == `class`">
+                        {{ allLevels.find(item => item.id === user[key])?.title }}
+                    </span>
                     <span v-else-if="key == `change_status`">
                         <VChip :color="store.booleanTypeColor(user[key])">
                             {{ user[key] ? '변경예약' : '변경완료' }}
@@ -60,7 +64,7 @@ const metas = [
                     </span>
                     <span v-else-if="key.includes('_fee')"> 
                         <VChip>
-                            {{ user[key] }} %
+                            {{ user[key] + "%" }}
                         </VChip>
                     </span>
                     <span v-else> 

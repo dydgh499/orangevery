@@ -7,6 +7,7 @@ export const useSearchStore = defineStore('salesFeeHistorySearchStore', () => {
     function setHeaders() {
         store.setHeader('NO.', 'id')
         store.setHeader('가맹점명', 'mcht_name')
+        store.setHeader('등급', 'level')
         store.setHeader('이전 영업점', 'bf_sales_name')
         store.setHeader('변경 영업점', 'aft_sales_name')
         store.setHeader('이전 수수료', 'bf_trx_fee')

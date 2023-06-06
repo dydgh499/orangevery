@@ -1,17 +1,19 @@
 <script lang="ts" setup>
-import { axios } from '@axios';
 import { requiredValidator, nullValidator } from '@validators';
 import type { Merchandise, MchtOption } from '@/views/types'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue';
+import { useStore } from '@/views/services/pay-gateways/useStore';
+
 interface Props {
     item: Merchandise,
     pv_options: MchtOption,
 }
 const props = defineProps<Props>()
 const { sales } = useSalesFilterStore()
+const { cus_filters } = useStore()
 
 onMounted(() => {
     props.pv_options.is_show_fee = Boolean(props.pv_options.is_show_fee)
@@ -51,29 +53,17 @@ onMounted(() => {
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
-                                    <label for="feesRateHorizontalIcons">거래 수수료율</label>
+                                    <label>거래/유보금 수수료율</label>
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 5 : 9">
-                                    <VTextField id="feesRateHorizontalIcons" v-model="props.item.trx_fee" type="number"
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.trx_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :class=-1 :sales_id="props.item.id"
-                                    :sales_fee="props.item.trx_fee">
-                                </FeeChangeBtn>
-                            </VRow>
-                        </VCol>
-                        <!-- 👉 수수료율 -->
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label for="holdRateHorizontalIcons">유보금 수수료율</label>
-                                </VCol>
-                                <VCol cols="12" :md="props.item.id ? 5 : 9">
-                                    <VTextField id="holdRateHorizontalIcons" v-model="props.item.hold_fee" type="number"
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.hold_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :class=-2 :sales_id="props.item.id"
-                                    :sales_fee="props.item.hold_fee">
+                                <FeeChangeBtn v-if="props.item.id" :level=-1 :item="props.item">
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
@@ -82,19 +72,18 @@ onMounted(() => {
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
-                                    <label for="salesforceHorizontalIcons">지사/수수료율</label>
+                                    <label>지사/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 5">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales5_id"
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="지사 선택"
                                         item-title="nick_name" item-value="id" />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 2 : 4">
-                                    <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales5_fee" type="number"
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.sales5_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :class=5 :sales_id="props.item.sales5_id"
-                                    :sales_fee="props.item.sales5_fee">
+                                <FeeChangeBtn v-if="props.item.id" :level=5 :item="props.item">
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
@@ -109,12 +98,11 @@ onMounted(() => {
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위지사 선택"
                                         item-title="nick_name" item-value="id" />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 2 : 4">
-                                    <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales4_fee" type="number"
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.sales4_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :class=4 :sales_id="props.item.sales4_id"
-                                    :sales_fee="props.item.sales4_fee">
+                                <FeeChangeBtn v-if="props.item.id" :level=4 :item="props.item">
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
@@ -129,12 +117,11 @@ onMounted(() => {
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="총판 선택"
                                         item-title="nick_name" item-value="id" />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 2 : 4">
-                                    <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales3_fee" type="number"
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.sales3_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :class=3 :sales_id="props.item.sales3_id"
-                                    :sales_fee="props.item.sales3_fee">
+                                <FeeChangeBtn v-if="props.item.id" :level=3 :item="props.item">
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
@@ -149,12 +136,11 @@ onMounted(() => {
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위총판 선택"
                                         item-title="nick_name" item-value="id" />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 2 : 4">
-                                    <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales2_fee" type="number"
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.sales2_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :class=2 :sales_id="props.item.sales2_id"
-                                    :sales_fee="props.item.sales2_fee">
+                                <FeeChangeBtn v-if="props.item.id" :level=2 :item="props.item">
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
@@ -169,12 +155,11 @@ onMounted(() => {
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="대리점 선택"
                                         item-title="nick_name" item-value="id" />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 2 : 4">
-                                    <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales1_fee" type="number"
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.sales1_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :class=1 :sales_id="props.item.sales1_id"
-                                    :sales_fee="props.item.sales1_fee">
+                                <FeeChangeBtn v-if="props.item.id" :level=1 :item="props.item">
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
@@ -189,12 +174,11 @@ onMounted(() => {
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위대리점 선택"
                                         item-title="nick_name" item-value="id" />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 2 : 4">
-                                    <VTextField id="holdRateHorizontalIcons" v-model="props.item.sales0_fee" type="number"
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.sales0_fee" type="number"
                                         suffix="%" :rules="[requiredValidator]" />
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :class=0 :sales_id="props.item.sales0_id"
-                                    :sales_fee="props.item.sales0_fee">
+                                <FeeChangeBtn v-if="props.item.id" :level=0 :item="props.item">
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
@@ -209,6 +193,19 @@ onMounted(() => {
                 <VCardItem>
                     <VCardTitle>옵션정보</VCardTitle>
                     <VRow class="pt-5">
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <VCol cols="12" md="3">
+                                    <label>커스텀 필터</label>
+                                </VCol>
+                                <VCol cols="12" md="9">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.custom_id" :items="[{id:null, name:'커스텀 필터 선택'}].concat(cus_filters)"
+                                        prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name" item-value="id"
+                                        persistent-hint />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">

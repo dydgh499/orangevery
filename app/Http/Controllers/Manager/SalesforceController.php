@@ -50,6 +50,8 @@ class SalesforceController extends Controller
         $search = $request->input('search', '');
         $query = $this->salesforces->where('brand_id', $request->user()->brand_id)
             ->where('user_name', 'like', "%$search%");
+        if($request->has('level') && $request->level >= 0)
+            $query = $query->where('level', $request->level);
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }
@@ -145,10 +147,12 @@ class SalesforceController extends Controller
     public function classification(Request $request)
     {
         $data = [];
-        $grouped = $this->salesforces->where('brand_id', $request->user()->brand_id)->get(['id', 'nick_name', 'class'])->groupBy('class');        
-        for($i=0; $i<6; $i++)
+        $levels = [13,15,17,20,25,30];
+        $grouped = $this->salesforces->where('brand_id', $request->user()->brand_id)->get(['id', 'nick_name', 'level'])->groupBy('level');        
+        for($i=0; $i<count($levels); $i++)
         {
-            $data["class_$i"] = isset($grouped[$i]) ? $grouped[$i] : [];
+            $level = $levels[$i];
+            $data["level_$level"] = isset($grouped[$level]) ? $grouped[$level] : [];
         }
         return $this->response(0, $data);
     }

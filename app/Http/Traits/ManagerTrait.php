@@ -3,10 +3,20 @@ namespace App\Http\Traits;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\DB;
 
 trait ManagerTrait
 {
-    public function getIndexData($request, $query, $index_col='id', $cols=[], $date="created_at")
+    function sql($query) {
+        $sql = $query->toSql();
+        $bindings = $query->getBindings();
+        foreach ($bindings as $binding) {
+            $value = is_numeric($binding) ? $binding : "'".str_replace("'", "\'", $binding)."'";
+            $sql = preg_replace('/\?/', $value, $sql, 1);
+        }
+        echo $sql;
+    }
+    public function getIndexData($request, $query, $index_col='id', $cols=[], $date="created_at", $is_group=false)
     {
         $page      = $request->input('page');
         $page_size = $request->input('page_size');
@@ -28,8 +38,12 @@ trait ManagerTrait
         if($min != NULL)
         {
             $con_query = $query->where($index_col, '>=', $min);
-            $res['total']   = $query->count();
-            // order by after get total count
+            if($is_group)
+                $res['total']   = $con_query->get([$index_col])->count();
+            else
+                $res['total']   = $query->count();
+
+
             $con_query = $con_query->orderBy($index_col, 'desc')->offset($sp)->limit($page_size);
             $res['content'] = count($cols) ? $con_query->get($cols) : $con_query->get();
         }

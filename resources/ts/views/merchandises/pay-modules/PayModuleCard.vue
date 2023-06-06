@@ -4,7 +4,7 @@ import { requiredValidator, nullValidator } from '@validators';
 import type { PayModule, Merchandise } from '@/views/types'
 import { VForm } from 'vuetify/components';
 import { module_types, installments } from '@/views/merchandises/pay-modules/useStore';
-import { classes } from '@/views/salesforces/useStore';
+import { allLevels } from '@/views/salesforces/useStore';
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
@@ -246,8 +246,8 @@ const filterPgs = computed(() => {
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>정산주체</template>
                                 <template #input>
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.comm_calc_class"
-                                        :items="classes" prepend-inner-icon="tabler-man" label="정산자 선택" item-title="title"
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.comm_calc_level"
+                                        :items="allLevels" prepend-inner-icon="tabler-man" label="정산자 선택" item-title="title"
                                         item-value="id" persistent-hint single-line />
                                 </template>
                             </CreateHalfVCol>

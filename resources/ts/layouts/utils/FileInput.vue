@@ -51,7 +51,7 @@ watchEffect(() => {
             </VFileInput>
         </VCol>
         <VCol cols="12" md="3">
-            <Preview :preview="preview" :style="`height: 1200px;`" :preview-style="previewStyle"></Preview>
+            <Preview :preview="preview" :style="``" :preview-style="previewStyle"></Preview>
         </VCol>
     </VRow>
 </template>

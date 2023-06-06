@@ -8,6 +8,7 @@ interface Props {
     pay_cond: boolean,
     terminal: boolean,
     cus_filter: boolean,
+    sales: boolean,
 }
 const props = defineProps<Props>();
 </script>
@@ -17,7 +18,10 @@ const props = defineProps<Props>();
         <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
             <VCol cols="12" md="6">
                 <VCardText style="padding: 1em;">
-                    <BaseIndexSalesFilter>
+                    <BaseIndexSalesFilter :is_use="sales">
+                        <template #extra_left>
+                            <slot name="extra_left"></slot>
+                        </template>
                     </BaseIndexSalesFilter>
                 </VCardText>
             </VCol>

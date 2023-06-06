@@ -28,7 +28,7 @@ const store = <any>(inject('store'))
                 <VRow no-gutters justify="end">
                     <VCol>
                         <div class="d-inline-flex align-center flex-wrap gap-4 justify-content-evenly float-right">
-                            <VTextField v-model="store.params.search" :placeholder="`${props.placeholder}`"
+                            <VTextField v-model="store.search" :placeholder="`${props.placeholder}`"
                                 density="compact" prepend-inner-icon="tabler:search" class="search-input" />
                             <VBtn prepend-icon="tabler:search" @click="store.setTable()">
                                 검색

@@ -23,12 +23,12 @@ const zoomIn = () => {
 </script>
 <template>
     <VImg rounded :src="props.preview" class="preview" @click="zoomIn()" :style="props.previewStyle"/>
-    <VDialog v-model="visable">
+    <VDialog v-model="visable" persistent class="v-dialog-sm" :style='props.style'>
         <!-- Dialog close btn -->
         <DialogCloseBtn @click="visable = !visable" />
         <!-- Dialog Content -->
         <VCard>
-            <VImg rounded :src="props.preview" :style='props.style'></VImg>
+            <VImg rounded :src="props.preview"></VImg>
         </VCard>
     </VDialog>
 </template>

@@ -54,13 +54,13 @@ const metas = [
                         #{{ user[key] }}
                     </span>
                     <span v-else-if="key == `change_status`">
-                        <VChip :color="store.booleanTypeColor(user[key])">
+                        <VChip :color="store.booleanTypeColor(user[key])" >
                             {{ user[key] ? '변경예약' : '변경완료' }}
                         </VChip>
                     </span>
                     <span v-else-if="key.includes('_fee')"> 
                         <VChip>
-                            {{ user[key] }} %
+                            {{ user[key] + "%" }}
                         </VChip>
                     </span>
                     <span v-else> 

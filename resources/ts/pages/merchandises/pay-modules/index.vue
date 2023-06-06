@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { classes } from '@/views/salesforces/useStore';
 import { module_types, installments } from '@/views/merchandises/pay-modules/useStore';
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 
-const { pgs, pss, pay_conds, ternimals } = useStore()
+const { pgs, pss, pay_conds } = useStore()
 
 const { store } = useSearchStore()
 provide('store', store)
@@ -63,9 +62,9 @@ const getMouduleTypeColor = (id: number) => {
 }
 </script>
 <template>
-    <BaseIndexView placeholder="MID, TID 검색" :metas="metas" :add="true" add_name="결제모듈">
+    <BaseIndexView placeholder="MID, TID, 가맹점 상호 검색" :metas="metas" :add="true" add_name="결제모듈">
         <template #filter>
-            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" />
+            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" :sales="true" />
         </template>
         <template #header>
             <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden"> {{ header.ko }} </th>
@@ -97,15 +96,6 @@ const getMouduleTypeColor = (id: number) => {
                     <span v-else-if="key == 'pay_cond_id'"> 
                         {{ pay_conds.find(item => item.id === user[key])?.name }}
                     </span>
-                    <span v-else-if="key == 'terminal_id'"> 
-                        {{ ternimals.find(item => item.id === user[key])?.name }}
-                    </span>
-                    <span v-else-if="key == 'comm_pr'"> 
-                        {{ user[key].toLocaleString() }}
-                    </span>    
-                    <span v-else-if="key == 'comm_calc_class'"> 
-                        {{ classes.find(item => item.id === user[key])?.title }}
-                    </span>    
                     <span v-else> 
                         {{ user[key] }} 
                     </span>

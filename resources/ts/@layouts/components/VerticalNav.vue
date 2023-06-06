@@ -6,7 +6,6 @@ import { injectionKeyIsVerticalNavHovered, useLayouts } from '@layouts'
 import { VerticalNavGroup, VerticalNavLink, VerticalNavSectionTitle } from '@layouts/components'
 import { config } from '@layouts/config'
 import type { NavGroup, NavLink, NavSectionTitle, VerticalNavItems } from '@layouts/types'
-import { useUpdateStore } from '@/views/services/brands/useStore'
 
 interface Props {
   tag?: string | Component
@@ -18,8 +17,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   tag: 'aside',
 })
-
-const {path, item } = useUpdateStore()
 
 const refNav = ref()
 
@@ -57,12 +54,14 @@ const updateIsVerticalNavScrolled = (val: boolean) => isVerticalNavScrolled.valu
 const handleNavScroll = (evt: Event) => {
   isVerticalNavScrolled.value = (evt.target as HTMLElement).scrollTop > 0
 }
+
 </script>
 
 <template>
   <Component
     :is="props.tag"
     ref="refNav"
+    style="border-right: 1px dashed rgba(145, 158, 171, 20%);"
     class="layout-vertical-nav"
     :class="[
       {
@@ -94,19 +93,21 @@ const handleNavScroll = (evt: Event) => {
         <!-- 👉 Vertical nav actions -->
         <!-- Show toggle collapsible in >md and close button in <md -->
         <template v-if="!isLessThanOverlayNavBreakpoint(windowWidth)">
+            <!-- not visiable -->
           <Component
             :is="config.app.iconRenderer || 'div'"
             v-show="isCollapsed && !hideTitleAndIcon"
-            class="header-action"
             v-bind="config.icons.verticalNavUnPinned"
             @click="isCollapsed = !isCollapsed"
+            class="header-arrow"
           />
-          <Component
+            <!-- visiable -->
+            <Component
             :is="config.app.iconRenderer || 'div'"
             v-show="!isCollapsed && !hideTitleAndIcon"
-            class="header-action"
             v-bind="config.icons.verticalNavPinned"
             @click="isCollapsed = !isCollapsed"
+            class="header-arrow active"
           />
         </template>
         <template v-else>
@@ -209,4 +210,14 @@ const handleNavScroll = (evt: Event) => {
     }
   }
 }
+
+.header-arrow {
+  position: absolute;
+  border: 1px dashed rgba(145, 158, 171, 20%);
+  border-radius: 50%;
+  background-color: rgb(var(--v-theme-surface));
+  font-size: 22px;
+  inset-inline-start: 11.3em;
+}
+
 </style>

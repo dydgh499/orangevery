@@ -18,6 +18,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     const store = Searcher<PayModule>('merchandises/pay-modules', <PayModule>({}))
     function setHeaders() {
         store.setHeader('NO.', 'id')
+        store.setHeader('가맹점 상호', 'mcht_name')
         store.setHeader('별칭', 'note')
         store.setHeader('모듈타입', 'module_type')
         store.setHeader('PG사명', 'pg_id')
@@ -53,7 +54,7 @@ export const useUpdateStore = defineStore('payModUpdateStore', () => {
         serial_num: '',
         comm_pr: 0,
         comm_calc_day: 1,
-        comm_calc_class: -1,
+        comm_calc_level: 10,
         under_sales_amt: 0,
         begin_dt: undefined,
         ship_out_dt: undefined,

@@ -2,7 +2,7 @@
 import { useSearchStore } from '@/views/salesforces/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
-import { classes } from '@/views/salesforces/useStore';
+import { salesLevels } from '@/views/salesforces/useStore';
 
 const { store } = useSearchStore()
 provide('store', store)
@@ -43,7 +43,7 @@ const metas = [
 ]
 
 const getSalesTypeColor = (_class: number) => {
-    const id = classes.find(item => item.id === _class)?.id
+    const id = salesLevels.find(item => item.id === _class)?.id
     if(id == 0)
         return "default"
     else if(id == 1)
@@ -63,7 +63,14 @@ const getSalesTypeColor = (_class: number) => {
 <template>
     <BaseIndexView placeholder="ID, 대표자명 검색" :metas="metas" :add="true" add_name="영업점">
         <template #filter>
-            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" />
+            <BaseIndexFilterCard :pg="false" :ps="false" :pay_cond="false" :terminal="false" :cus_filter="false" :sales="false">
+                <template #extra_left>
+                    <VCol cols="12" sm="3">
+                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="[{id:null, title:'등급 선택'}].concat(salesLevels)"
+                            :label="`등급 선택`" item-title="title" item-value="id"/>
+                    </VCol>
+                </template>
+            </BaseIndexFilterCard>
         </template>
         <template #header>
             <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden"> {{ header.ko }} </th>
@@ -77,13 +84,13 @@ const getSalesTypeColor = (_class: number) => {
                     <span v-else-if="key == 'user_name'" class="edit-link" @click="store.edit(user.id)">
                         {{ user[key] }}
                     </span>
-                    <span v-else-if="key == 'class'"> 
+                    <span v-else-if="key == 'level'"> 
                         <VChip :color="getSalesTypeColor(user[key])">
-                            {{ classes.find(item => item.id === user[key])?.title }}
+                            {{ salesLevels.find(item => item.id === user[key])?.title }}
                         </VChip>
                     </span>
                     <span v-else> 
-                        {{ user[key] }} 
+                        {{ user[key] }}
                     </span>
                 </td>
             </tr>

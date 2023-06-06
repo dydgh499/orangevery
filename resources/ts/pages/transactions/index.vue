@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import BaseIndexOverview from '@/layouts/lists/BaseIndexOverview.vue';
+import { module_types, installments } from '@/views/merchandises/pay-modules/useStore';
 import { useSearchStore } from '@/views/transactions/useStore';
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
+import { allLevels } from '@/views/salesforces/useStore';
 
-const {store, setHeaders} = useSearchStore()
-const { flattened } = useSalesFilterStore()
+const {store } = useSearchStore()
+const { pgs, pss, pay_conds } = useStore()
+
 provide('store', store)
-provide('setHeaders', setHeaders)
 
-const salesforce = ref({trx_fee:0, user_name:'영업점 선택'})
+store.params.level = 10
 const metas = [
     {
         icon: 'tabler-user',
@@ -43,19 +46,75 @@ const metas = [
         subtitle: 'Last week analytics',
     },
 ]
+const getMouduleTypeColor = (id: number) => {
+    const module_id = module_types.find(item => item.id === id)?.id
+    if(module_id == 0)
+        return "default"
+    else if(module_id == 1)
+        return "primary"
+    else if(module_id == 2)
+        return "success"
+    else if(module_id == 3)
+        return "info"
+    else if(module_id == 4)
+        return "warning"
+    else
+        return "error"
+}
 </script>
 <template>
-    <BaseIndexOverview :placeholder="`MID, TID, 거래번호 검색`" :metas="metas" :add="false" :update="true">
-        <template #options>
-            <VCol cols="12" sm="2">
-                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
-                        prepend-inner-icon="tabler-man" label="영업점 선택"
-                        :hint="`수수료율: ${(salesforce.trx_fee*100).toFixed(3)}%`" item-title="user_name" item-value="id"
-                        persistent-hint single-line 
-                />
-            </VCol>
+    <BaseIndexView placeholder="가맹점 상호 검색" :metas="metas" :add="true" add_name="가맹점">
+        <template #filter>
+            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true"  :sales="true">
+            <template #extra_left>
+                <VCol cols="12" sm="3">
+                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="allLevels"
+                        :label="`등급 선택`" item-title="title" item-value="id"/>
+                </VCol>
+            </template>
+            </BaseIndexFilterCard>
         </template>
-        <template #name></template>
-    </BaseIndexOverview>
+        <template #header>
+            <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden"> {{ header.ko }} </th>
+        </template>
+        <template #body>
+            <tr v-for="(user, index) in store.items" :key="index" style="height: 3.75rem;">
+                <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden"> 
+                    <span v-if="key == `id`" class="edit-link">
+                        #{{ user[key] }}
+                    </span>
+                    <span v-else-if="key.includes('_fee')"> 
+                        <VChip>
+                            {{ user[key] }} %
+                        </VChip>
+                    </span>
+                    <span v-else-if="key.includes('_fee')"> 
+                        <VChip>
+                            {{ user[key] }} %
+                        </VChip>
+                    </span>
+                    <span v-else-if="key == 'module_type'"> 
+                        <VChip :color="getMouduleTypeColor(user[key])">
+                            {{ module_types.find(item => item.id === user[key])?.title }}
+                        </VChip>
+                    </span>
+                    <span v-else-if="key == 'installment'"> 
+                        {{ installments.find(item => item.id === user[key])?.title }}
+                    </span>
+                    <span v-else-if="key == 'pg_id'"> 
+                        {{ pgs.find(item => item.id === user[key])?.pg_nm }}
+                    </span>
+                    <span v-else-if="key == 'ps_id'"> 
+                        {{ pss.find(item => item.id === user[key])?.name }}
+                    </span>
+                    <span v-else-if="key == 'pay_cond_id'"> 
+                        {{ pay_conds.find(item => item.id === user[key])?.name }}
+                    </span>
+                    <span v-else> 
+                        {{ user[key] }} 
+                    </span>
+                </td>
+            </tr>
+        </template>
+    </BaseIndexView>
 </template>
-

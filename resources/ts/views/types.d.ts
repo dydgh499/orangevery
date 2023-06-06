@@ -11,16 +11,12 @@ export type SearchHeader = {
     header: string
     title:string
 }
-export interface RegisterResponse {
-    accessToken: string
-    userData: AuthUserOut
-    abilities: UserAbility[]
-  }
 //------------------------------
-interface Options {
+export interface Options {
     id: number,
     title: string,
 }
+
 export interface ErrorResponse {
     message: string,
 }
@@ -29,19 +25,17 @@ export interface CustomFilter {
     pg_id: number | null,
     ps_id: number | null,
     pay_cond_id: number | null,
-    ternimal_id: number | null,
+    terminal_id: number | null,
     custom_id: number | null,
 }
 
 export interface SalesForceFilter {
-    sales: [
-        number | null, 
-        number | null, 
-        number | null, 
-        number | null, 
-        number | null, 
-        number | null, 
-    ]
+    sales5_id: number | null,
+    sales4_id: number | null,
+    sales3_id: number | null,
+    sales2_id: number | null,
+    sales1_id: number | null,
+    sales0_id: number | null,
 }
 
 export interface SearchParams {
@@ -49,7 +43,6 @@ export interface SearchParams {
     page_size: number,
     s_dt: Date,
     e_dt: Date,
-    search: string,
     custom: CustomFilter,
     sales: SalesForceFilter,
 }
@@ -131,13 +124,14 @@ export interface MerchandisePropertie {
     trx_fee: float,
     hold_fee: float,
     enabled: boolean,
+    custom_id: number | null,
     pv_options: MchtOption,
 }
 
 export interface SalesforcePropertie {
     sector: string,
     tax_type: number,
-    class: number,
+    level: number,
 }
 
 export interface Merchandise extends MerchandisePropertie, UserPropertie {}
@@ -163,7 +157,7 @@ export interface PayModule {
     serial_num: string,
     comm_pr: number,
     comm_calc_day: number,
-    comm_calc_class: number,
+    comm_calc_level: number,
     under_sales_amt: number,
     begin_dt: date,
     ship_out_dt: date,
@@ -176,9 +170,9 @@ export interface PayModule {
 }
 
 export interface PayGateway {
-    id: number,
+    id: number | null,
     pg_type: number | null,
-    pg_nm: string,
+    pg_nm: string | null,
     rep_nm: string,
     company_nm: string,
     business_num: string,
@@ -232,7 +226,7 @@ interface ThemeCSS {
 }
 
 
-export interface Brand extends Contract{
+export interface Brand extends Contract {
     id: number,
     dns: string,
     name:string,
@@ -270,34 +264,45 @@ export interface Transaction {
     id: number,
     brand_id: number,
     mcht_id: number,
-    pg_id: number,
-    pg_name: string,
-    ps_id: number,
-    ps_name: string,
-    //
-    sf_fee_id: number,
-    sf_name: number,
-    sf_fee: number,
-    total_sf_fee: number,
-    //
-    pmod_id: number,
-    custom_filter_id: number,
-    pay_cond_id: number,
-    withdraw_fee: float,
+
+    sales5_id: number | null,
+    sales5_fee: float,
+    sales4_id: number | null,
+    sales4_fee: float,
+    sales3_id: number | null,
+    sales3_fee: float,
+    sales2_id: number | null,
+    sales2_fee: float,
+    sales1_id: number | null,
+    sales1_fee: float,
+    sales0_id: number | null,
+    sales0_fee: float,
+    custom_id: number,
+    custom_fee: float,
     trx_fee: float,
     hold_fee: float,
+    mid: string,
+    cat_id: string,
+    //    
+    module_type: number,
+    pg_id: number,
+    pmod_id: number,
+    ps_id: number,
+    pay_cond_id: number,
+    terminal_id: number,
+    //
+    ps_fee: Float,
+    pay_cond_fee: float,
+    terminal_fee: float,
+    //
     trx_dt: Date,
     trx_tm: Date,
     cxl_dt: Date,
-    trx_tm: Date,
-    trx_dttm: Date,
-    cxl_dttm: Date,
+    cxl_tm: Date,
     is_cancel: boolean,
     amount: number,
-    trx_type: number,
     ord_num: string,
     trx_id: string,
-    cat_id: string,
     //
     ori_trx_id: string,
     //
@@ -327,7 +332,8 @@ export interface Danger {
     trx_id: string,
     ori_trx_id: string,
     pay_cond_id: number,
-    withdraw_fee: float,
+    pay_cond_fee: float,
+    
     card_nm: string,
     card_num: string,
     installment: string,
@@ -472,7 +478,7 @@ export interface MchtFeeChangeHistory extends FeeChangeHistory {
 export interface SalesFeeChangeHistory extends FeeChangeHistory {
     bf_sales_id: number,
     aft_sales_id: number,
-    class: number,
+    level: number,
 }
 
 export interface NotiSendHistory {

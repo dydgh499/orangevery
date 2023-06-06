@@ -15,7 +15,7 @@ export const useSearchStore = defineStore('dangerSearchStore', () => {
         store.setHeader('원거래번호', 'ori_trx_id')
         store.setHeader('MID', 'mid')
         store.setHeader('TID', 'cat_id')
-        store.setHeader('거래수수료', 'withdraw_fee')
+        store.setHeader('거래수수료', 'pay_cond_fee')
         store.setHeader('발급사', 'issuer')
         store.setHeader('매입사', 'acquirer')
         store.setHeader('카드번호', 'card_num')

@@ -42,9 +42,9 @@ const metas = [
 ]
 </script>
 <template>
-    <BaseIndexView placeholder="가맹점명 검색" :metas="metas" :add="true" add_name="가맹점">
+    <BaseIndexView placeholder="가맹점 상호 검색" :metas="metas" :add="true" add_name="가맹점">
         <template #filter>
-            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" />
+            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true"  :sales="true"/>
         </template>
         <template #header>
             <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden"> {{ header.ko }} </th>

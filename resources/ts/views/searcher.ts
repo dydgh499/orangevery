@@ -1,4 +1,4 @@
-import { CustomFilter, Filter, Pagenation, SalesForceFilter, SearchParams } from '@/views/types';
+import { Filter, Pagenation, SearchParams } from '@/views/types';
 import { axios } from '@axios';
 import * as XLSX from 'xlsx';
 
@@ -7,11 +7,8 @@ const setSearchParams = <SearchParams>(formatDate: any) => {
     return <SearchParams>({
         page: 1,
         page_size: 10,
-        search: '',
         s_dt: formatDate(new Date(date.getFullYear(), date.getMonth(), 1)),
         e_dt: formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0)),
-        sales: <SalesForceFilter><unknown>([]),
-        custom: <CustomFilter><unknown>([]),
     })
 }
 const excelprint = (headers:Filter, data:any, today:string, path:string) => {
@@ -48,7 +45,8 @@ export function Searcher<T>(_path: string, _type: T) {
     const items = ref<T[]>([])
     const router = useRouter()
     const params = reactive<SearchParams>(setSearchParams(formatDate))
-    const extra_params = <any>({})
+    const search = ref<string>('')
+    
     const pagenation = reactive<Pagenation>({ total_count: 0, total_page: 1 })
     let header_count = 0;
   
@@ -70,9 +68,7 @@ export function Searcher<T>(_path: string, _type: T) {
         headers.value = sorted
     }
     const get = async () => {
-        const p = Object.assign(params, extra_params)
-        console.log(p)
-
+        const p = Object.assign(params, {search: search})
         try {
             const r = await axios.get('/api/v1/manager/' + path, { params: p })
             return r
@@ -126,7 +122,7 @@ export function Searcher<T>(_path: string, _type: T) {
     })
     return {
         headers, setTable,
-        items, params, extra_params, pagenation,
+        items, params, search, pagenation,
         create, edit,
         excel, setHeader, sortHeader, booleanTypeColor,
         filter, pagenationCouputed
