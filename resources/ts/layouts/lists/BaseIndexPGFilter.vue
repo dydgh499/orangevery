@@ -32,24 +32,25 @@ const filterPgs = computed(() => {
 <template>
     <VRow>
         <VCol cols="12" sm="3" v-if="props.pg">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.pg_id" :items="[{id:null, pg_nm:'PG사 선택'}].concat(pgs)" label="PG사 선택"
-                item-title="pg_nm" item-value="id" />
+            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.pg_id"
+                :items="[{ id: null, pg_nm: 'PG사 선택' }].concat(pgs)" label="PG사 선택" item-title="pg_nm" item-value="id" />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.ps">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.ps_id" :items="[{id:null, name:'구간 선택'}].concat(filterPgs)"
-                label="구간 선택" item-title="name" item-value="id" />
+            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.ps_id"
+                :items="[{ id: null, name: '구간 선택' }].concat(filterPgs)" label="구간 선택" item-title="name" item-value="id" />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.pay_cond">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.pay_cond_id" :items="[{id:null, name:'결제조건 선택'}].concat(pay_conds)"
-                label="결제조건 선택" item-title="name" item-value="id" />
+            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.pay_cond_id"
+                :items="[{ id: null, name: '정산일 선택' }].concat(pay_conds)" label="정산일 선택" item-title="name" item-value="id" />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.terminal">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.terminal_id" :items="[{id:null, name:'단말기 선택'}].concat(ternimals)"
-                label="단말기 선택" item-title="name" item-value="id" />
+            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.terminal_id"
+                :items="[{ id: null, name: '단말기 선택' }].concat(ternimals)" label="단말기 선택" item-title="name" item-value="id" />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.cus_filter">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.custom_id" :items="[{id:null, name:'커스텀 필터 선택'}].concat(cus_filters)"
-                label="커스텀 필터" item-title="name" item-value="id" />
+            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.custom_id"
+                :items="[{ id: null, name: '커스텀 필터 선택' }].concat(cus_filters)" label="커스텀 필터" item-title="name"
+                item-value="id" />
         </VCol>
         <VCol cols="12" sm="3">
             <VSelect v-model="store.params.page_size" density="compact" variant="outlined"

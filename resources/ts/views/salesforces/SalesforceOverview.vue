@@ -8,6 +8,7 @@ interface Props {
     item: Salesforce,
 }
 const props = defineProps<Props>()
+const all_sales = salesLevels()
 </script>
 <template>
     <VRow class="match-height">
@@ -65,7 +66,7 @@ const props = defineProps<Props>()
                             <template #name>등급</template>
                             <template #input>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
-                                        :items="salesLevels" prepend-inner-icon="tabler-man" label="정산자 선택" item-title="title"
+                                        :items="all_sales" prepend-inner-icon="tabler-man" label="정산자 선택" item-title="title"
                                         item-value="id" persistent-hint single-line :rules="[nullValidator]" 
                                         :readonly="props.item.id != 0"/>
                             </template>

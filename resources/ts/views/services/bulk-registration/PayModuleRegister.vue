@@ -7,7 +7,7 @@ interface Props {
 const props = defineProps<Props>();
 const headers = [
 '가맹점 ID', '결제모듈 타입', '수기결제 타입', '할부한도', 'PG사', 
-'구간', '결제조건', 'API KEY', 'SUB EKY', 'MID', 'TID', 
+'구간', '정산일', 'API KEY', 'SUB EKY', 'MID', 'TID', 
 '매출전표 공급자 정보', '매출전표 판매자 정보', '비고', '단말기 타입', 
 '통신비', '정산일', '정산주체', '매출미달 차감금', '개통일', '출고일', '출고 상태'
 ]

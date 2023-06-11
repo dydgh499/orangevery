@@ -1,26 +1,36 @@
 import { Searcher } from '@/views/searcher';
 import type { Options, Salesforce } from '@/views/types';
 import { axios } from '@axios';
+import corp from '@corp';
 
-export const salesLevels = <Options[]>([
-    {id: 13, title: '하위대리점'},
-    {id: 15, title: '대리점'},
-    {id: 17, title: '하위총판'},
-    {id: 20, title: '총판'},
-    {id: 25, title: '하위지사'},
-    {id: 30, title: '지사'},
-])
-export const allLevels = <Options[]>([
-    {id: 10, title: '가맹점' },
-    {id: 13, title: '하위대리점'},
-    {id: 15, title: '대리점'},
-    {id: 17, title: '하위총판'},
-    {id: 20, title: '총판'},
-    {id: 25, title: '하위지사'},
-    {id: 30, title: '지사'},
-    {id: 40, title: '본사'},
-    {id: 50, title: '개발사'},
-])
+const levels = corp.pv_options.auth.levels
+
+export const salesLevels = () => {
+    const sales = <Options[]>([]);
+    if(levels.sales0_use)
+        sales.push({id: 13, title: levels.sales0_name})
+    if(levels.sales1_use)
+        sales.push({id: 15, title: levels.sales1_name})
+    if(levels.sales2_use)
+        sales.push({id: 17, title: levels.sales2_name})
+    if(levels.sales3_use)
+        sales.push({id: 20, title: levels.sales3_name})
+    if(levels.sales4_use)
+        sales.push({id: 25, title: levels.sales4_name})
+    if(levels.sales5_use)
+        sales.push({id: 30, title: levels.sales5_name})
+    return sales
+}
+
+export const allLevels = () => {
+    const sales = salesLevels()
+    sales.unshift({id: 10, title: '가맹점'})
+    sales.push({id: 40, title: '본사'})
+    if(levels.dev_use)
+        sales.push({id: 50, title: levels.dev_name})
+    return sales
+}
+
 export const useSearchStore = defineStore('salesSearchStore', () => {
     const store = Searcher<Salesforce>('salesforces', <Salesforce>({}))
 
@@ -55,10 +65,14 @@ export const useSalesFilterStore = defineStore('salesFilterStore', () => {
     })
     const classification = async () => {
         const r = await axios.get('/api/v1/manager/salesforces/classification')
-        for (let index = 0; index < salesLevels.length; index++) {
-            var level = salesLevels[index].id
-            var title = salesLevels[index].title
-            r.data['level_'+level].unshift({ id: null, nick_name: title+' 선택' })
+        const barnd_sales = salesLevels()
+        const keys = Object.keys(r.data);
+        for (let index = 0; index < keys.length; index++) {
+            var level = Number(keys[index].replace('level_', ''))
+            var temp = barnd_sales.find(item => item.id === level)
+            if(temp != undefined)
+                r.data[keys[index]].unshift({ id: null, nick_name: temp.title + ' 선택' })
+                
             sales[index].value = r.data['level_' + level]
         }
     }

@@ -55,7 +55,7 @@ const validate = () => {
                                     양식 업로드를 통해 정상적인 값으로 검증되면 
                                     <VBtn type="button" aria-readonly="" size="small">
                                         등록
-                                        <VIcon end icon="tabler-checkbox" />
+                                        <VIcon end icon="tabler-pencil" />
                                     </VBtn>   
                                     버튼이 활성화 됩니다.
                                 </div>
@@ -85,7 +85,7 @@ const validate = () => {
         <VCol class="d-flex gap-4">
             <VBtn type="button" style="margin-left: auto;" @click="">
                 등록
-                <VIcon end icon="tabler-checkbox" />
+                <VIcon end icon="tabler-pencil" />
             </VBtn>            
             <VBtn type="button" @click="formatUpload()">
                 양식 업로드

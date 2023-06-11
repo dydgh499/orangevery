@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { useSearchStore } from '@/views/transactions/settle/useSalesforceStore'
+import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
 import BaseIndexOverview from '@/layouts/lists/BaseIndexOverview.vue';
 
 const { store, setHeaders } = useSearchStore()

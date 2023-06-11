@@ -54,7 +54,7 @@ class MerchandiseController extends Controller
 
         $query = $this->merchandises->leftJoin('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id');
         $query = globalPGFilter($query, $request, 'payment_modules');
-        $query = globalSalesFilter($query, $request, 'merchandises');       
+        $query = globalSalesFilter($query, $request, 'merchandises');
         $query = $query
             ->where('merchandises.brand_id', $request->user()->brand_id)
             ->where('merchandises.mcht_name', 'like', "%$search%");

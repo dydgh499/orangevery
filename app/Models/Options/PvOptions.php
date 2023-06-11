@@ -3,7 +3,6 @@
 
     class FreeOption 
     {
-        public $use_devloper = false;
         public $use_hand_pay = false;
         public $use_auth_pay = false;
         public $use_simple_pay = false;
@@ -49,23 +48,53 @@
         }
     }
 
+    class AuthOption
+    {
+        public $levels = [
+            'dev_use'       =>  false,
+            'dev_name'      => '개발사',
+            'sales5_use'    => true,
+            'sales5_name'   => '지사',
+            'sales4_use'    => false,
+            'sales4_name'   => '하위지사',
+            'sales3_use'    => true,
+            'sales3_name'   => '총판',
+            'sales2_use'    => false,
+            'sales2_name'   => '하위총판',
+            'sales1_use'    => true,
+            'sales1_name'   => '대리점',
+            'sales0_use'    => false,
+            'sales0_name'   => '하위대리점'
+        ];
+
+        public function __construct(array $source)
+        {
+            foreach ($source as $property => $value) 
+            {
+                if (property_exists($this, $property)) 
+                    $this->$property = $value;
+            }
+        }
+    }
+
     class PvOptions
     {
         public FreeOption $free;
         public PaidOption $paid;
+        public AuthOption $auth;
 
         public function __construct(string $pv_options)
         {
             $json = json_decode($pv_options, true);
             $this->free = new FreeOption(isset($json['free']) ? $json['free'] : []);
             $this->paid = new PaidOption(isset($json['paid']) ? $json['paid'] : []);
+            $this->auth = new AuthOption(isset($json['auth']) ? $json['auth'] : []);
         }
     }
 
     class ThemeCSS 
     {
         public $main_color = '#6E34C5';
-
         public function __construct(string $theme_css)
         {
             $json = json_decode($theme_css, true);  

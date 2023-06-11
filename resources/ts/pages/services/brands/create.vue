@@ -3,15 +3,19 @@
 import BrandOverview from '@/views/services/brands/BrandOverview.vue';
 import BrandDesignOverview from '@/views/services/brands/BrandDesignOverview.vue';
 import BrandOptionOverview from '@/views/services/brands/BrandOptionOverview.vue';
+import BrandAuthOverview from '@/views/services/brands/BrandAuthOverview.vue';
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import { useUpdateStore } from '@/views/services/brands/useStore'
 import type { Tab } from '@/views/types'
+
 const { path, item } = useUpdateStore()
 const tabs = <Tab[]>([
     { icon: 'ph-buildings', title: '운영사정보' },
     { icon: 'tabler-color-filter', title: '테마디자인' },
     { icon: 'tabler-table-options', title: '추가옵션' },
+    { icon: 'carbon:two-factor-authentication', title: '권한옵션' },
 ])
+
 const id = ref<number>(0)
 </script>
 <template>
@@ -26,6 +30,9 @@ const id = ref<number>(0)
                 </VWindowItem>
                 <VWindowItem>
                     <BrandOptionOverview :item="item.pv_options" :brand="item" />
+                </VWindowItem>
+                <VWindowItem>
+                    <BrandAuthOverview :item="item.pv_options" :brand="item" />
                 </VWindowItem>
             </template>
         </CreateForm>

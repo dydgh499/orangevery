@@ -53,7 +53,7 @@ watchEffect(() => {
         <VCol class="d-flex gap-4">
             <VBtn type="button" style="margin-left: auto;" @click="formRequest('/'+props.path, Number(props.id), props.item, vForm)">
                 {{ props.id == 0 ? "추가" : "수정" }}
-                <VIcon end icon="tabler-checkbox" />
+                <VIcon end icon="tabler-pencil" />
             </VBtn>
             <VBtn type="button" color="secondary" variant="tonal" @click="vForm?.reset()">
                 리셋

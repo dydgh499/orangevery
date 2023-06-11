@@ -55,8 +55,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::prefix('transactions')->group(function() {
             Route::get('fails', [FailTransController::class, 'index']);
             Route::get('dangers', [DangerTransController::class, 'index']);
-            Route::get('settle/merchandises', [SettleController::class, 'index']);
-            Route::get('settle/salesforces', [SettleController::class, 'index']);
+            Route::get('settle/merchandises', [SettleController::class, 'merchandises']);
+            Route::get('settle/salesforces', [SettleController::class, 'salesforces']);
             Route::get('settle-history/merchandises', [SettleHistoryController::class, 'index']);
             Route::get('settle-history/salesforces', [SettleHistoryController::class, 'index']);
         });

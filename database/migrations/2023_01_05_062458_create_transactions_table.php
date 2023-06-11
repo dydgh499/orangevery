@@ -26,15 +26,15 @@ return new class extends Migration
             $table->integer('trans_type')->comment('거래 타입');
             $table->integer('trans_num')->default(0)->comment('거래번호');
             $table->integer('ori_trans_num')->default(0)->comment('원거래번호');
-            $table->string('card_nm', 100)->comment('거래 카드명');
+            $table->string('card_name', 100)->comment('거래 카드명');
             $table->string('card_num', 100)->comment('거래 카드번호');
             $table->integer('bank_cd')->comment('거래 은행코드');
             $table->string('bank_nm')->comment('거래 은행명');
             $table->string('appr_num')->comment('승인번호');
             $table->string('installment')->comment('할부');
-            $table->string('buyer_nm')->comment('구매자명');
+            $table->string('buyer_name')->comment('구매자명');
             $table->string('buyer_phone')->comment('구매자 휴대폰번호');
-            $table->string('item_nm')->comment('상품명');
+            $table->string('item_name')->comment('상품명');
             $table->string('result_msg')->default('')->comment('거래 내용');
             $table->timestamps();
         });

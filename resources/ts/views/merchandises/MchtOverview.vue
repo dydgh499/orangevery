@@ -6,6 +6,7 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue';
 import { useStore } from '@/views/services/pay-gateways/useStore';
+import corp from '@corp'
 
 interface Props {
     item: Merchandise,
@@ -14,6 +15,8 @@ interface Props {
 const props = defineProps<Props>()
 const { sales } = useSalesFilterStore()
 const { cus_filters } = useStore()
+
+const levels = corp.pv_options.auth.levels
 
 onMounted(() => {
     props.pv_options.is_show_fee = Boolean(props.pv_options.is_show_fee)
@@ -69,12 +72,12 @@ onMounted(() => {
                         </VCol>
 
                         <!-- 👉 영업점 수수료율 -->
-                        <VCol cols="12">
+                        <VCol cols="12" v-if="levels.sales5_use">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
-                                    <label>지사/수수료율</label>
+                                    <label>{{ levels.sales5_name }}/수수료율</label>
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 5">
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales5_id"
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="지사 선택"
                                         item-title="nick_name" item-value="id" />
@@ -88,12 +91,12 @@ onMounted(() => {
                             </VRow>
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
-                        <VCol cols="12">
+                        <VCol cols="12" v-if="levels.sales4_use">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
-                                    <label for="salesforceHorizontalIcons">하위지사/수수료율</label>
+                                    <label>{{ levels.sales4_name }}/수수료율</label>
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 5">
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales4_id"
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위지사 선택"
                                         item-title="nick_name" item-value="id" />
@@ -107,12 +110,12 @@ onMounted(() => {
                             </VRow>
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
-                        <VCol cols="12">
+                        <VCol cols="12"  v-if="levels.sales3_use">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
-                                    <label for="salesforceHorizontalIcons">총판/수수료율</label>
+                                    <label>{{ levels.sales3_name }}/수수료율</label>
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 5">
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales3_id"
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="총판 선택"
                                         item-title="nick_name" item-value="id" />
@@ -126,12 +129,12 @@ onMounted(() => {
                             </VRow>
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
-                        <VCol cols="12">
+                        <VCol cols="12" v-if="levels.sales2_use">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
-                                    <label for="salesforceHorizontalIcons">하위총판/수수료율</label>
+                                    <label>{{ levels.sales2_name }}/수수료율</label>
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 5">
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales2_id"
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위총판 선택"
                                         item-title="nick_name" item-value="id" />
@@ -145,12 +148,12 @@ onMounted(() => {
                             </VRow>
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
-                        <VCol cols="12">
+                        <VCol cols="12" v-if="levels.sales1_use">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
-                                    <label for="salesforceHorizontalIcons">대리점/수수료율</label>
+                                    <label>{{ levels.sales1_name }}/수수료율</label>
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 5">
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales1_id"
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="대리점 선택"
                                         item-title="nick_name" item-value="id" />
@@ -164,12 +167,12 @@ onMounted(() => {
                             </VRow>
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
-                        <VCol cols="12">
+                        <VCol cols="12" v-if="levels.sales0_use">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
-                                    <label for="salesforceHorizontalIcons">하위대리점/수수료율</label>
+                                    <label>{{ levels.sales0_name }}하위대리점/수수료율</label>
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 5">
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales0_id"
                                         :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위대리점 선택"
                                         item-title="nick_name" item-value="id" />

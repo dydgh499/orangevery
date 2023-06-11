@@ -99,7 +99,7 @@ const handleNavScroll = (evt: Event) => {
             v-show="isCollapsed && !hideTitleAndIcon"
             v-bind="config.icons.verticalNavUnPinned"
             @click="isCollapsed = !isCollapsed"
-            class="header-arrow"
+            class="header-arrow no-active"
           />
             <!-- visiable -->
             <Component
@@ -197,6 +197,12 @@ const handleNavScroll = (evt: Event) => {
     &:not(.hovered) {
       inline-size: variables.$layout-vertical-nav-collapsed-width;
     }
+
+    &.hovered {
+      .no-active {
+        inset-inline-start: 11.3em;
+      }
+    }
   }
 
   // 👉 Overlay nav
@@ -216,8 +222,17 @@ const handleNavScroll = (evt: Event) => {
   border: 1px dashed rgba(145, 158, 171, 20%);
   border-radius: 50%;
   background-color: rgb(var(--v-theme-surface));
+  block-size: 1em;
   font-size: 22px;
+  inline-size: 1em;
+}
+
+.active {
   inset-inline-start: 11.3em;
 }
 
+.no-active {
+  inset-inline-start: 0;
+  transition: all 0.25s ease;
+}
 </style>

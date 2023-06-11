@@ -26,12 +26,12 @@ class DangerTransController extends Controller
             'danger_transactions.*',
             'merchandises.mcht_name',
             'transactions.trx_type',
-            'transactions.item_nm',
+            'transactions.item_name',
             'transactions.ord_num',
             'transactions.trx_id',
             'transactions.ori_trx_id',
             'transactions.mid',
-            'transactions.cat_id',
+            'transactions.tid',
             'transactions.pay_cond_fee',
             'transactions.issuer',
             'transactions.acquirer',
@@ -40,7 +40,7 @@ class DangerTransController extends Controller
             'transactions.trx_dt',
             'transactions.trx_tm',
             'transactions.amount',
-            'transactions.buyer_nm',
+            'transactions.buyer_name',
             'transactions.danger_type',
         ];
         $search = $request->input('search', '');
@@ -53,7 +53,7 @@ class DangerTransController extends Controller
             return $query->where('merchandises.mcht_name', 'like', "%$search%")
                 ->orWhere('transactions.appr_num', 'like', "%$search%")
                 ->orWhere('transactions.mid', 'like', "%$search%")
-                ->orWhere('transactions.cat_id', 'like', "%$search%");
+                ->orWhere('transactions.tid', 'like', "%$search%");
         });
 
         $data = $this->getIndexData($request, $query, 'danger_transactions.id', $cols, 'danger_transactions.created_at');

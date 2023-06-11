@@ -23,7 +23,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         store.setHeader('모듈타입', 'module_type')
         store.setHeader('PG사명', 'pg_id')
         store.setHeader('구간', 'ps_id')
-        store.setHeader('결제조건', 'pay_cond_id')
+        store.setHeader('정산일', 'pay_cond_id')
         store.setHeader('MID', 'mid')
         store.setHeader('TID', 'tid')
         store.setHeader('할부한도', 'installment')

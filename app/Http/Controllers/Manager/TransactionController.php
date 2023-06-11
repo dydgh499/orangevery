@@ -14,11 +14,11 @@ use Illuminate\Http\Request;
 class TransactionController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
-    protected $transaction;
+    protected $transactions;
 
-    public function __construct(Transaction $transaction)
+    public function __construct(Transaction $transactions)
     {
-        $this->transaction = $transaction;
+        $this->transactions = $transactions;
     }
 
     /**
@@ -29,9 +29,11 @@ class TransactionController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $query = $this->transaction->where('brand_id', $request->user()->brand_id);
+        $query =  $this->transactions->where('transactions.brand_id', $request->user()->brand_id);
+        $query = globalPGFilter($query, $request, 'transactions');
+        $query = globalSalesFilter($query, $request, 'transactions');  
         $query = $query->with(['sales0', 'sales1', 'sales2', 'sales3', 'sales4', 'sales5', 'mcht']);
-        $data = $this->getIndexData($request, $query);
+        $data = $this->getIndexData($request, $query);        
         return $this->response(0, $data);
     }
 
@@ -46,7 +48,7 @@ class TransactionController extends Controller
     public function store(TransactionRequest $request)
     {
         $user = $request->data();
-        $res = $this->transaction->create($user);
+        $res = $this->transactions->create($user);
         return $this->response($res ? 1 : 990);
     }
 
@@ -60,7 +62,7 @@ class TransactionController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $data = $this->transaction->where('id', $id)->first();
+        $data = $this->transactions->where('id', $id)->first();
         return $data ? $this->response(0, $data) : $this->response(1000);
     }
 
@@ -75,7 +77,7 @@ class TransactionController extends Controller
     public function update(TransactionRequest $request, $id)
     {
         $data = $request->data();
-        $res = $this->transaction->where('id', $id)->update($data);
+        $res = $this->transactions->where('id', $id)->update($data);
         return $this->response($res ? 1 : 990);
     }
 
@@ -89,7 +91,7 @@ class TransactionController extends Controller
     {
         if($this->authCheck($request->user(), $id, 35))
         {
-            $res = $this->delete($this->transaction->where('id', $id));
+            $res = $this->delete($this->transactions->where('id', $id));
             return $this->response($res);
         }
         else

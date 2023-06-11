@@ -1,22 +1,43 @@
 import { Searcher } from '@/views/searcher';
 import { MchtOption, Merchandise } from '@/views/types';
+import corp from '@corp';
 
 export const useSearchStore = defineStore('mchtSearchStore', () => {    
     const store = Searcher<Merchandise>('merchandises', <Merchandise>({}))
+    const levels = corp.pv_options.auth.levels
+
     function setHeaders() {
         store.setHeader('NO.', 'id')
-        store.setHeader('지사 ID', 'sales5_name')
-        store.setHeader('수수료 ', 'sales5_fee')
-        store.setHeader('하위지사 ID', 'sales4_name')
-        store.setHeader('수수료  ', 'sales4_fee')
-        store.setHeader('총판 ID', 'sales3_name')
-        store.setHeader('수수료   ', 'sales3_fee')
-        store.setHeader('하위총판 ID', 'sales2_name')
-        store.setHeader('수수료    ', 'sales2_fee')
-        store.setHeader('대리점 ID', 'sales1_name')
-        store.setHeader('수수료     ', 'sales1_fee')
-        store.setHeader('하위대리점 ID', 'sales0_name')
-        store.setHeader('수수료      ', 'sales0_fee')
+        if(levels.sales5_use)
+        {
+            store.setHeader(levels.sales5_name+' ID', 'sales5_name')
+            store.setHeader('수수료 ', 'sales5_fee')    
+        }
+        if(levels.sales4_use)
+        {
+            store.setHeader(levels.sales4_name+' ID', 'sales4_name')
+            store.setHeader('수수료  ', 'sales4_fee')    
+        }
+        if(levels.sales3_use)
+        {
+            store.setHeader(levels.sales3_name+' ID', 'sales3_name')
+            store.setHeader('수수료   ', 'sales3_fee')    
+        }
+        if(levels.sales2_use)
+        {
+            store.setHeader(levels.sales2_name+' ID', 'sales2_name')
+            store.setHeader('수수료    ', 'sales2_fee')    
+        }
+        if(levels.sales1_use)
+        {
+            store.setHeader(levels.sales1_name+' ID', 'sales1_name')
+            store.setHeader('수수료     ', 'sales1_fee')    
+        }
+        if(levels.sales0_use)
+        {
+            store.setHeader(levels.sales0_name+' ID', 'sales0_name')
+            store.setHeader('수수료      ', 'sales0_fee')    
+        }
         store.setHeader('가맹점 ID', 'user_name')
         store.setHeader('수수료       ', 'trx_fee')
         store.setHeader('유보금 수수료', 'hold_fee')
@@ -90,7 +111,8 @@ export const useUpdateStore = defineStore('mchtUpdateStore', () => {
             pay_year_limit: 0,
             pay_dupe_limit: 0,
             is_show_fee: false,
-        })
+        }),
+        custom_id: null
     })
     return {
         path, item

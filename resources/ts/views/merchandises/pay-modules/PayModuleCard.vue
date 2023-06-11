@@ -17,6 +17,7 @@ interface Props {
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
 
+const all_levels = allLevels()
 const { update, remove } = useRequestStore()
 const { pgs, pss, pay_conds, ternimals, setFee, setAmount } = useStore()
 const md = ref<number>(3)
@@ -131,10 +132,10 @@ const filterPgs = computed(() => {
                         <!-- 👉 출금 ID -->
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>결제조건</template>
+                                <template #name>정산일</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pay_cond_id"
-                                        :items="pay_conds" prepend-inner-icon="ic-outline-send-to-mobile" label="결제조건 선택"
+                                        :items="pay_conds" prepend-inner-icon="ic-outline-send-to-mobile" label="정산일 선택"
                                         item-title="name" item-value="id" single-line persistent-hint
                                         :hint="`${setAmount(pay_conds, props.item.pay_cond_id)}`"
                                         :rules=[requiredValidator] />
@@ -247,7 +248,7 @@ const filterPgs = computed(() => {
                                 <template #name>정산주체</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.comm_calc_level"
-                                        :items="allLevels" prepend-inner-icon="tabler-man" label="정산자 선택" item-title="title"
+                                        :items="all_levels" prepend-inner-icon="tabler-man" label="정산자 선택" item-title="title"
                                         item-value="id" persistent-hint single-line />
                                 </template>
                             </CreateHalfVCol>
@@ -339,7 +340,7 @@ const filterPgs = computed(() => {
                             <VCol class="d-flex gap-4">
                                 <VBtn type="button" style="margin-left: auto;" @click="update('/merchandises/pay-modules', props.item.id, props.item, vForm)">
                                     {{ props.item.id == 0 ? "추가" : "수정" }}
-                                    <VIcon end icon="tabler-checkbox" />
+                                    <VIcon end icon="tabler-pencil" />
                                 </VBtn>
                                 <VBtn color="secondary" variant="tonal" @click="vForm?.reset()">
                                     리셋

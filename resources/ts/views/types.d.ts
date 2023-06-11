@@ -54,8 +54,8 @@ export interface Pagenation {
 export interface Filter {
     [key: string ]: {
         ko: string,
-        hidden: boolean,  
-        idx: number,  
+        hidden: boolean | null,
+        idx: number | null,
     };
 }
 
@@ -196,7 +196,6 @@ export interface Classification {
 }
 
 interface FreeOption {
-    use_devloper: boolean,
     use_hand_pay: boolean,
     use_auth_pay: boolean,
     use_simple_pay: boolean,
@@ -220,6 +219,25 @@ interface PaidOption {
     use_forb_pay_time: boolean,   // 결제금지시간 지정 사용 여부
     use_pay_limit: boolean,   // 결제한도 지정 사용 여부
     subsidiary_use_control: boolean, // 하위 영업점 전산 사용 ON/OFF
+
+}
+interface AuthOption {
+    levels: {
+        dev_use:boolean,
+        dev_name:string,
+        sales5_use:boolean,
+        sales5_name:string,
+        sales4_use:boolean,
+        sales4_name:string,
+        sales3_use:boolean,
+        sales3_name:string,
+        sales2_use:boolean,
+        sales2_name:string,
+        sales1_use:boolean,
+        sales1_name:string,
+        sales0_use:boolean,
+        sales0_name:string,
+    }
 }
 interface ThemeCSS {
     main_color: string,
@@ -252,6 +270,7 @@ export interface Brand extends Contract {
     pv_options: {
         free: FreeOption,
         paid: PaidOption,
+        auth: AuthOption,
     },
     deposit_day: number,
     deposit_amount: number,    
@@ -278,11 +297,10 @@ export interface Transaction {
     sales0_id: number | null,
     sales0_fee: float,
     custom_id: number,
-    custom_fee: float,
-    trx_fee: float,
+    mcht_fee: float,
     hold_fee: float,
     mid: string,
-    cat_id: string,
+    tid: string,
     //    
     module_type: number,
     pg_id: number,
@@ -293,7 +311,6 @@ export interface Transaction {
     //
     ps_fee: Float,
     pay_cond_fee: float,
-    terminal_fee: float,
     //
     trx_dt: Date,
     trx_tm: Date,
@@ -306,18 +323,16 @@ export interface Transaction {
     //
     ori_trx_id: string,
     //
-    card_nm: string,
+    card_name: string,
     card_num: string,
-    installment: string,
+    installment: number,
     //
     issuer: string,
     acquirer: string,
     appr_num: string,
-    buyer_nm: string,
+    buyer_name: string,
     buyer_phone: string,
-    item_nm: string,
-    danger_type: number,
-    danger_check: boolean,
+    item_name: string,
 }
 
 export interface Danger {
@@ -325,18 +340,18 @@ export interface Danger {
     mcht_id: number,
     tran_id: number,
     trx_type: number,
-    item_nm: string,
+    item_name: string,
     mid: string,
-    cat_id: string,
+    tid: string,
     ord_num: string,
     trx_id: string,
     ori_trx_id: string,
     pay_cond_id: number,
     pay_cond_fee: float,
     
-    card_nm: string,
+    card_name: string,
     card_num: string,
-    installment: string,
+    installment: number,
     danger_type: number,
     danger_check: boolean,
     pg_id: number,
@@ -366,23 +381,25 @@ export interface FailTransaction {
 export interface Settle extends Bank {
     sales_amount: number,
     total_profit: number,
-
-    appr_count: number,
-    appr_amount: number,
-    appr_trx_fee: number,
-    appr_dpst_fee: number,
-    appr_holding_fee: number,
-
-    cxl_count: number,
-    cxl_amount: number,
-    cxl_trx_fee: number,
-    cxl_dpst_fee: number,
-    cxl_holding_fee: number,
-    
-    deduction_amount: number,         // 차감완료 금액
-    deduction_extra_amount:number,    // 추가 차감금
-    deduction_complate_amount:number, // 차감 완료금        
-
+    appr: {
+        count: number,
+        amount: number,
+        trx_fee: number,
+        dpst_fee: number,
+        hold_fee: number,
+    },
+    cxl: {
+        count: number,
+        amount: number,
+        trx_fee: number,
+        dpst_fee: number,
+        hold_fee: number,        
+    },
+    deduction: {
+        amount: number,
+        extra_amount: number,
+        complate_amount: number,
+    },
     comm_amount:number,         // 통신비
     settle_amount:number,       // 정산금액
     deposit_amount:number,      // 입금금액

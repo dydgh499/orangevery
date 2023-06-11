@@ -82,8 +82,9 @@ onMounted(() => {
   font-weight: 900;
 }
 
-th,
-td {
+.list-square {
+  padding-block: 0;
+  padding-inline: 6px !important;
   text-align: center !important;
 }
 </style>

@@ -1,27 +1,70 @@
 <script setup lang="ts">
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
-import BaseIndexOverview from '@/layouts/lists/BaseIndexOverview.vue';
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 
-const { store, setHeaders } = useSearchStore()
-const { flattened } = useSalesFilterStore()
+const { store } = useSearchStore()
 provide('store', store)
-provide('setHeaders', setHeaders)
 
-const salesforce = ref({trx_fee:0, user_name:'영업점 선택'})
-const metas = []
+const metas = [
+    {
+        icon: 'tabler-user',
+        color: 'primary',
+        title: '금월 추가된 가맹점',
+        stats: '21,459',
+        percentage: +29,
+        subtitle: 'Total Users',
+    },
+    {
+        icon: 'tabler-user-plus',
+        color: 'error',
+        title: '금주 추가된 가맹점',
+        stats: '4,567',
+        percentage: +18,
+        subtitle: 'Last week analytics',
+    },
+    {
+        icon: 'tabler-user-check',
+        color: 'success',
+        title: '금월 감소한 가맹점',
+        stats: '19,860',
+        percentage: -14,
+        subtitle: 'Last week analytics',
+    },
+    {
+        icon: 'tabler-user-exclamation',
+        color: 'warning',
+        title: '금주 감소한 가맹점',
+        stats: '237',
+        percentage: +42,
+        subtitle: 'Last week analytics',
+    },
+]
 </script>
 <template>
-    <BaseIndexOverview :placeholder="`ID, 상호, 대표자명 검색`" :metas="metas" :add="false" :update="false">
-        <template #options>
-            <VCol cols="12" sm="2">
-                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
-                        prepend-inner-icon="tabler-man" label="영업점 선택"
-                        :hint="`수수료율: ${(salesforce.trx_fee*100).toFixed(3)}%`" item-title="user_name" item-value="id"
-                        persistent-hint single-line 
-                />
-            </VCol>
+    <BaseIndexView placeholder="가맹점 상호 검색" :metas="metas" :add="true" add_name="가맹점">
+        <template #filter>
+            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true"  :sales="true"/>
         </template>
-        <template #name></template>
-    </BaseIndexOverview>
+        <template #header>
+            <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden" class='list-square'>  {{ header.ko }} </th>
+        </template>
+        <template #body>
+            <tr v-for="(user, index) in store.items" :key="index" style="height: 3.75rem;">
+                <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden" class='list-square'>  
+                    <span v-if="key == `id`" class="edit-link" @click="store.edit(user.id)">
+                        #{{ user[key] }}
+                    </span>
+                    <span v-else-if="key.includes('_fee')"> 
+                        <VChip>
+                            {{ user[key] }} %
+                        </VChip>
+                    </span>
+                    <span v-else> 
+                        {{ user[key] }} 
+                    </span>
+                </td>
+            </tr>
+        </template>
+    </BaseIndexView>
 </template>

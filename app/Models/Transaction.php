@@ -19,21 +19,85 @@ class Transaction extends Model
     protected   $table      = 'transactions';
     protected   $primaryKey = 'id';
     protected   $appends    = [
+        'profit', 'trx_amount',
         'sales0_name', 'sales1_name', 
         'sales2_name', 'sales3_name', 
         'sales4_name', 'sales5_name', 
-        'ps_fee', 'pay_cond_fee', 
-        'terminal_fee', 'custom_fee',
         'user_name', 'mcht_name',
+        'trx_dttm', 'cxl_dttm',
     ];
     protected   $hidden     = [
         'sales0','sales1',
         'sales2','sales3',
         'sales4','sales5',
-        'mcht',
+        'mcht', 'trx_dt', 'trx_tm', 'cxl_dt', 'cxl_tm'
     ];
     protected   $guarded    = [];
 
+    public function getSalesProfit($type, $s_idx)
+    {
+        //가맹점, 하위대리점, 대리점, 하위총판, 총판, 하위지사, 지사
+        $sales  = ['mcht', 'sales0', 'sales1', 'sales2', 'sales3', 'sales4', 'sales5'];
+        $id     = $type."_id";
+        $fee    = $type."_fee";
+
+        for ($i=$s_idx; count($sales)-1 >= 0; $i--) 
+        { 
+            $sales_id   = $sales[$i]."_id";
+            $sales_fee  = $sales[$i]."_fee";
+            if($sales_id != 0)
+                return $this->amount * ($this[$fee] - $this[$sales_fee]);
+        }
+        return 0;
+    }
+
+    public function getProfit($level)
+    {
+        if($level == 10)
+        {   // 가맹점
+            $profit = $this->amount - ($this->amount * ($this->mcht_fee + $this->hold_fee));
+            $profit -= $this->pay_cond_fee;
+        }
+        else if($level > 10 && $level < 31)
+        {   // 영업자 
+            $idx = globalLevelByIndex($level);
+            $profit = $this->getSalesProfit('sales'.$idx, $idx);
+
+            $property = 'sales'.$idx;
+            $tax_type = $this[$property]->tax_type;
+
+            if($tax_type == 1)
+                $profit *= 0.967;
+            else if($tax_type == 2)
+                $profit *= 0.9;
+            else if($tax_type == 3)
+            {
+                $profit *= 0.9;
+                $profit *= 0.967;
+            }
+        }
+        else
+        {   // 본사 
+            $profit = $this->getSalesProfit('ps', 6);
+            $dev_profit = $profit * $this->dev_fee;
+            if($level == 50)
+                $profit = $dev_profit;
+            else if($level == 40)
+                $profit -= $dev_profit;
+        }
+        return round($profit);
+    }
+    //
+    public function getProfitAttribute()
+    {
+        return $this->getProfit(request()->level);
+    }
+
+    public function getTrxAmountAttribute()
+    {
+        return $this->amount - $this->profit;
+    }
+    
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format("Y-m-d H:i:s");
@@ -41,32 +105,32 @@ class Transaction extends Model
     //sales
     public function sales0()
     {
-        return $this->belongsTo(Salesforce::class, 'sales0_id')->select(['id', 'nick_name']);
+        return $this->belongsTo(Salesforce::class, 'sales0_id')->select(['id', 'nick_name', 'tax_type']);
     }
 
     public function sales1()
     {
-        return $this->belongsTo(Salesforce::class, 'sales1_id')->select(['id', 'nick_name']);
+        return $this->belongsTo(Salesforce::class, 'sales1_id')->select(['id', 'nick_name', 'tax_type']);
     }
 
     public function sales2()
     {
-        return $this->belongsTo(Salesforce::class, 'sales2_id')->select(['id', 'nick_name']);
+        return $this->belongsTo(Salesforce::class, 'sales2_id')->select(['id', 'nick_name', 'tax_type']);
     }
 
     public function sales3()
     {
-        return $this->belongsTo(Salesforce::class, 'sales3_id')->select(['id', 'nick_name']);
+        return $this->belongsTo(Salesforce::class, 'sales3_id')->select(['id', 'nick_name', 'tax_type']);
     }
 
     public function sales4()
     {
-        return $this->belongsTo(Salesforce::class, 'sales4_id')->select(['id', 'nick_name']);
+        return $this->belongsTo(Salesforce::class, 'sales4_id')->select(['id', 'nick_name', 'tax_type']);
     }
 
     public function sales5()
     {
-        return $this->belongsTo(Salesforce::class, 'sales5_id')->select(['id', 'nick_name']);
+        return $this->belongsTo(Salesforce::class, 'sales5_id')->select(['id', 'nick_name', 'tax_type']);
     }
     
     public function mcht()
@@ -113,88 +177,14 @@ class Transaction extends Model
     {
         return $this->sales5 ? $this->sales5->nick_name : null;
     }
-    
-    protected function Sales5Fee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
-
-    protected function Sales4Fee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
-
-    protected function Sales3Fee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
-
-    protected function Sales2Fee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
-
-    protected function Sales1Fee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
-
-    protected function Sales0Fee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
     //
-    protected function trxFee() : Attribute
+    public function getTrxDttmAttribute()
     {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
+        return $this->trx_dt." ".$this->trx_tm;
     }
-
-    protected function holdFee() : Attribute
+    
+    public function getCxlDttmAttribute()
     {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
-
-    protected function psFee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
-
-    protected function terminalFee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
-
-    protected function payCondFee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
-
-    protected function customFee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
+        return $this->cxl_dt." ".$this->cxl_tm;
     }
 }

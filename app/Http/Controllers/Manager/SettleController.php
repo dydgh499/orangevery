@@ -13,7 +13,17 @@ class SettleController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
     
-    public function index(IndexRequest $request)
+    public function __construct(Transaction $transactions)
+    {
+        $this->transactions = $transactions;
+    }
+
+    public function merchandises(IndexRequest $request)
+    {
+        return [];
+    }
+
+    public function salesforces(IndexRequest $request)
     {
         return [];
     }

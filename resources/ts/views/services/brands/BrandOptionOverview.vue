@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { requiredValidator } from '@validators';
-import type { FreeOption, PaidOption, Brand } from '@/views/types'
+import type { FreeOption, PaidOption, AuthOption, Brand } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
 
@@ -9,6 +9,7 @@ interface Props {
     item: {
         free: FreeOption,
         paid: PaidOption,
+        auth: AuthOption,
     },
     brand: Brand,
 }
@@ -23,15 +24,6 @@ const props = defineProps<Props>()
                 <VCardItem>
                     <VCardTitle>무료 옵션</VCardTitle>
                     <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name><span></span>개발사 사용여부</template>
-                            <template #input>
-                                <BooleanRadio :radio="item.free.use_hand_pay" @update:radio="item.free.use_hand_pay = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
-                            </template>
-                        </CreateHalfVCol>
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="3" :mdr="9">

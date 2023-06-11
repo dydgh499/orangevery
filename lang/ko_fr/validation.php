@@ -197,7 +197,7 @@ return [
         //order
         'prod_nm'   => '상품명',
         'prod_amt'  => '상품가격',
-        'card_nm'   => '카드사명',
+        'card_name'   => '카드명',
         'card_num'  => '카드번호',
         'status'    => '주문상태',
         'instmt'    => '할부',

@@ -36,10 +36,10 @@ const addNewClassification = (items: Classification[], type: number) => {
                             </tr>
                         </thead>
                         <tbody>
-                            <ClassificationTr v-for="(item, index) in pay_conds" :key="index" :item="item" :index="index">
+                            <ClassificationTr v-for="(item, index) in pay_conds" :key="index" :item="item" :index="index" :use_fee="true">
                             </ClassificationTr>
                             <ClassificationTr v-for="(item, index) in new_pay_conds" :key="index" :item="item"
-                                :index="index">
+                                :index="index" :use_fee="true">
                             </ClassificationTr>
                         </tbody>
                     </VTable>
@@ -64,14 +64,13 @@ const addNewClassification = (items: Classification[], type: number) => {
                             <tr>
                                 <th scope="col" style="text-align: center;">No.</th>
                                 <th scope="col" style="text-align: center;">단말기명</th>
-                                <th scope="col" style="text-align: center;">사용 수수료</th>
                                 <th scope="col" style="text-align: center;">추가/수정</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <ClassificationTr v-for="(item, index) in ternimals" :key="index" :item="item" :index="index">
+                            <ClassificationTr v-for="(item, index) in ternimals" :key="index" :item="item" :index="index" :use_fee="false">
                             </ClassificationTr>
-                            <ClassificationTr v-for="(item, index) in new_terminals" :key="index" :item="item"
+                            <ClassificationTr v-for="(item, index) in new_terminals" :key="index" :item="item" :use_fee="false"
                                 :index="index">
                             </ClassificationTr>
                         </tbody>
@@ -92,15 +91,14 @@ const addNewClassification = (items: Classification[], type: number) => {
                             <tr>
                                 <th scope="col" style="text-align: center;">No.</th>
                                 <th scope="col" style="text-align: center;">커스텀 필터명</th>
-                                <th scope="col" style="text-align: center;">사용 수수료</th>
                                 <th scope="col" style="text-align: center;">추가/수정</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <ClassificationTr v-for="(item, index) in cus_filters" :key="index" :item="item" :index="index">
+                            <ClassificationTr v-for="(item, index) in cus_filters" :key="index" :item="item" :index="index" :use_fee="false">
                             </ClassificationTr>
                             <ClassificationTr v-for="(item, index) in new_cus_filters" :key="index" :item="item"
-                                :index="index">
+                                :index="index" :use_fee="false">
                             </ClassificationTr>
                         </tbody>
                     </VTable>

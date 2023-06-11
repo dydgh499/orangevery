@@ -197,7 +197,7 @@ return [
         //order
         'prod_nm'   => '상품명',
         'prod_amt'  => '상품가격',
-        'card_nm'   => '카드사명',
+        'card_name'   => '카드명',
         'card_num'  => '카드번호',
         'status'    => '주문상태',
         'instmt'    => '할부',
@@ -239,7 +239,7 @@ return [
         //
         'pg_id' => 'PG사',
         'ps_id' => '구간',
-        'pay_cond_id' => '결제조건',
+        'pay_cond_id' => '정산일',
         'module_type' => '결제모듈 타입',
         'is_old_auth' => '비인증/구인증 여부',
         'use_saleslip_prov' => '매출전표 공급자 정보',

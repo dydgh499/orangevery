@@ -24,11 +24,11 @@ const getComplainTypeColor = (type: number | null) => {
         <template #filter>
         </template>
         <template #header>
-            <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden"> {{ header.ko }} </th>
+            <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden" class='list-square'>  {{ header.ko }} </th>
         </template>
         <template #body>
             <tr v-for="(user, index) in store.items" :key="index" style="height: 3.75rem;">
-                <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden">
+                <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden" class='list-square'> 
                     <span v-if="key == 'id'" class="edit-link" @click="store.edit(user.id)">
                         #{{ user[key] }}
                     </span>

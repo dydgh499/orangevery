@@ -41,9 +41,9 @@ const metas = [
         subtitle: 'Last week analytics',
     },
 ]
-
+const all_sales = salesLevels()
 const getSalesTypeColor = (_class: number) => {
-    const id = salesLevels.find(item => item.id === _class)?.id
+    const id = all_sales.find(item => item.id === _class)?.id
     if(id == 0)
         return "default"
     else if(id == 1)
@@ -66,18 +66,18 @@ const getSalesTypeColor = (_class: number) => {
             <BaseIndexFilterCard :pg="false" :ps="false" :pay_cond="false" :terminal="false" :cus_filter="false" :sales="false">
                 <template #extra_left>
                     <VCol cols="12" sm="3">
-                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="[{id:null, title:'등급 선택'}].concat(salesLevels)"
+                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="[{id:null, title:'등급 선택'}].concat(salesLevels())"
                             :label="`등급 선택`" item-title="title" item-value="id"/>
                     </VCol>
                 </template>
             </BaseIndexFilterCard>
         </template>
         <template #header>
-            <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden"> {{ header.ko }} </th>
+            <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden" class='list-square'>  {{ header.ko }} </th>
         </template>
         <template #body>
             <tr v-for="(user, index) in store.items" :key="index" style="height: 3.75rem;">
-                <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden"> 
+                <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden" class='list-square'>  
                     <span v-if="key == `id`" class="edit-link" @click="store.edit(user.id)">
                         #{{ user[key] }}
                     </span>
@@ -86,7 +86,7 @@ const getSalesTypeColor = (_class: number) => {
                     </span>
                     <span v-else-if="key == 'level'"> 
                         <VChip :color="getSalesTypeColor(user[key])">
-                            {{ salesLevels.find(item => item.id === user[key])?.title }}
+                            {{ all_sales.find(item => item.id === user[key])?.title }}
                         </VChip>
                     </span>
                     <span v-else> 

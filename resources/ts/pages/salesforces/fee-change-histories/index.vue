@@ -40,22 +40,23 @@ const metas = [
         subtitle: 'Last week analytics',
     },
 ]
+const all_levels = allLevels()
 </script>
 <template>
     <BaseIndexView placeholder="가맹점명 검색" :metas="metas" :add="false" add_name="가맹점">
         <template #filter>
         </template>
         <template #header>
-            <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden"> {{ header.ko }} </th>
+            <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden" class='list-square'>  {{ header.ko }} </th>
         </template>
         <template #body>
             <tr v-for="(user, index) in store.items" :key="index" style="height: 3.75rem;">
-                <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden"> 
+                <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden" class='list-square'>  
                     <span v-if="key == `id`" class="edit-link">
                         #{{ user[key] }}
                     </span>
                     <span v-else-if="key == `class`">
-                        {{ allLevels.find(item => item.id === user[key])?.title }}
+                        {{ all_levels.find(item => item.id === user[key])?.title }}
                     </span>
                     <span v-else-if="key == `change_status`">
                         <VChip :color="store.booleanTypeColor(user[key])">

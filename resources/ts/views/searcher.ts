@@ -50,6 +50,7 @@ export function Searcher<T>(_path: string, _type: T) {
     const pagenation = reactive<Pagenation>({ total_count: 0, total_page: 1 })
     let header_count = 0;
   
+
     const setHeader = (ko: string, _key: string) => {
         if (_key in headers.value)
         {
@@ -57,7 +58,7 @@ export function Searcher<T>(_path: string, _type: T) {
             headers.value[_key].idx = header_count++
         }
         else
-            headers.value[_key] = { ko: ko, hidden: false, idx: header_count++ }
+            headers.value[_key] = { ko: ko, hidden: false, idx: header_count++}
     }
     const sortHeader = () => {
         const keys = Object.keys(headers.value).sort((a, b) => headers.value[a].idx - headers.value[b].idx);

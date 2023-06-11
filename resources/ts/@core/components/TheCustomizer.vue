@@ -264,7 +264,7 @@ const headerValues = computed(() => {
               for="customizer-menu-collapsed"
               class="text-high-emphasis"
             >
-              메뉴 확장
+              메뉴 축소
             </VLabel>
             <div>
               <VSwitch

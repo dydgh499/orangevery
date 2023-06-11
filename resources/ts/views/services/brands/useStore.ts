@@ -1,9 +1,9 @@
 import { Searcher } from '@/views/searcher';
-import type { Brand, FreeOption, PaidOption, ThemeCSS } from '@/views/types';
+import type { AuthOption, Brand, FreeOption, PaidOption, ThemeCSS } from '@/views/types';
 
 export const useSearchStore = defineStore('brandSearchStore', () => {
     const store = Searcher<Brand>('services/brands', <Brand>({}))
-    function setHeaders() {
+    const setHeaders = () => {
         store.setHeader('NO.', 'id')
         store.setHeader('DNS', 'dns')
         store.setHeader('LOGO', 'logo_img')
@@ -83,7 +83,25 @@ export const useUpdateStore = defineStore('brandUpdateStore', () => {
                 use_dup_pay_validation: false,
                 use_forb_pay_time: false,
                 use_pay_limit: false,
-                subsidiary_use_control: false
+                subsidiary_use_control: false,
+            }),
+            auth: reactive<AuthOption>({
+                levels: {
+                    dev_use: false,
+                    dev_name: '개발사',
+                    sales5_use: true,
+                    sales5_name: '지사',
+                    sales4_use: false,
+                    sales4_name: '하위지사',
+                    sales3_use: true,
+                    sales3_name: '총판',
+                    sales2_use: false,
+                    sales2_name: '하위총판',
+                    sales1_use: true,
+                    sales1_name: '대리점',
+                    sales0_use: false,
+                    sales0_name: '하위대리점'
+                }
             })
         },
         theme_css: reactive<ThemeCSS>({
