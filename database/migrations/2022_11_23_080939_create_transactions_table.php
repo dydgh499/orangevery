@@ -1,0 +1,97 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateTransactionsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('transactions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->foreignId('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
+            $table->float('dev_fee', 8, 5)->default(0)->comment('개발사 거래 수수료');
+            $table->date('dv_settle_dt')->nullable()->comment('개발사 정산일');
+            //
+            $table->integer('sales5_id')->default(0)->comment('지사 수수료');
+            $table->float('sales5_fee', 8, 5)->default(0)->comment('지사 수수료');
+            $table->date('sales5_settle_dt')->nullable()->comment('지사 정산일');
+            //
+            $table->integer('sales4_id')->default(0)->comment('하위 지사 수수료');
+            $table->float('sales4_fee', 8, 5)->default(0)->comment('하위 지사 수수료');
+            $table->date('sales4_settle_dt')->nullable()->comment('하위 지사 정산일');
+            //
+            $table->integer('sales3_id')->default(0)->comment('총판 수수료');
+            $table->float('sales3_fee', 8, 5)->default(0)->comment('총판 수수료');
+            $table->date('sales3_settle_dt')->nullable()->comment('총판 정산일');
+            //
+            $table->integer('sales2_id')->default(0)->comment('하위 총판 수수료');
+            $table->float('sales2_fee', 8, 5)->default(0)->comment('하위 총판 수수료');
+            $table->date('sales2_settle_dt')->nullable()->comment('하위 총판 정산일');
+            //
+            $table->integer('sales1_id')->default(0)->comment('대리점 수수료');
+            $table->float('sales1_fee', 8, 5)->default(0)->comment('대리점 수수료');
+            $table->date('sales1_settle_dt')->nullable()->comment('대리점 정산일');
+            //
+            $table->integer('sales0_id')->default(0)->comment('하위 대리점 수수료');
+            $table->float('sales0_fee', 8, 5)->default(0)->comment('하위 대리점 거래 수수료');
+            $table->date('sales0_settle_dt')->nullable()->comment('하위 대리점 정산일');
+            //
+            $table->integer('pg_id')->default(0)->comment('PG사 id');
+            $table->integer('ps_id')->default(0)->comment('PG사 구간 id');
+            $table->float('ps_fee', 8, 5)->default(0)->comment('PG사 구간 수수료');
+            $table->integer('pmod_id')->default(0)->comment('pay module ID (단말기 ID)');
+            $table->integer('custom_id')->nullable()->default(0)->comment('커스텀 필터 ID');
+            $table->integer('terminal_id')->nullable()->default(0)->comment('단말기 타입 ID');
+            //            
+            $table->float('mcht_fee', 8, 5)->comment('가맹점 수수료');
+            $table->float('hold_fee', 8, 5)->comment('보유금액 수수료');      
+            $table->tinyInteger('mcht_settle_type')->comment('가맹점 정산타입(D+1, D+2 ..)');
+            $table->smallInteger('mcht_settle_fee')->default(0)->comment('가맹점 정산 수수료');
+            $table->date('mcht_settle_dt')->nullable()->comment('정산일');      
+            //
+            $table->date('trx_dt')->comment('거래 날짜');
+            $table->time('trx_tm')->comment('거래 시간');
+            $table->date('cxl_dt')->nullable()->comment('취소 날짜');
+            $table->time('cxl_tm')->nullable()->comment('취소 시간');
+            $table->boolean('is_cancel')->default(false)->comment('취소 여부');
+            $table->integer('amount')->comment('거래 금액');
+            $table->tinyInteger('module_type')->comment('모듈 타입(0=단말기, 1=수기, 2=인증, 3=간편)');
+            $table->string('ord_num', 100)->default('')->comment('주문번호');
+            $table->string('mid', 100)->index()->default('')->comment('MID');
+            $table->string('tid', 100)->index()->default('')->comment('단말기 ID');
+            $table->string('trx_id', 100)->index()->default('')->comment('거래번호');
+            $table->string('ori_trx_id', 100)->nullable()->comment('원거래번호');
+            $table->string('card_name', 100)->comment('거래 카드명');
+            $table->string('card_num', 100)->comment('거래 카드번호');
+            $table->string('issuer')->nullable()->comment('발급사');
+            $table->string('acquirer')->nullable()->comment('매입사');
+            $table->integer('appr_num')->index()->comment('승인번호'); // 왼쪽 0 정렬
+            $table->tinyInteger('installment')->default(0)->comment('할부');
+            $table->string('buyer_name')->nullable()->comment('구매자명');
+            $table->string('buyer_phone')->nullable()->comment('구매자 휴대폰번호');
+            $table->string('item_name')->nullable()->comment('상품명');
+            $table->boolean('is_delete')->default(false)->comment('삭제 여부');
+            $table->timestamps();
+
+            $table->unique(['mcht_id', 'is_cancel', 'trx_id'], 'duplicate_unique_key');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('transactions');
+    }
+}

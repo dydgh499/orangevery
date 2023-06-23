@@ -1,54 +1,87 @@
+import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
-import type { SettleMerchandise } from '@/views/types';
 
 export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {    
-    const store = Searcher<SettleMerchandise>('transactions/settle/merchandises', <SettleMerchandise>({}))
+    const store = Searcher('transactions/settle/merchandises')
+    const head  = Header('transactions/settle/merchandises', '가맹점 정산관리')
+    const setHeaders = () => {
+        const headers = {
+            'id': 'NO.',
+            'user_name' : '가맹점 ID',
+            'mcht_name' : '상호',
+            'appr' : {
+                'count' :  '매출건수',
+                'amount' :  '금액',
+                'trx_amount' :  '거래 수수료',
+                'pay_cond_amount' : '입금 수수료',
+                'hold_amount': '유보금',
+                'profit': '정산액',
+            },
+            'cxl' : {
+                'count' :  '매출건수',
+                'amount' :  '금액',
+                'trx_amount' :  '거래 수수료',
+                'pay_cond_amount' :  '입금 수수료',
+                'hold_amount': '유보금',
+                'profit': '정산액',
+            },
+            'count' :  '매출건수',
+            'amount' :  '금액',
+            'trx_amount' :  '거래 수수료',
+            'pay_cond_amount' :  '입금 수수료',
+            'hold_amount': '유보금',
+            'profit': '정산액',
+            'deduction' : {
+                'input' : '추가차감입력',
+                'amount': '차감완료금',
+            },
+            'terminal': {
+                'amount': '통신비',
+            },
+            'settle': {
+                'amount': '정산금액',
+                'deposit': '입금금액',
+                'transfer': '이체금액',
+            },
+            'acct_bank_nm': '은행',
+            'acct_bank_cd': '은행코드',
+            'acct_nm': '예금주',
+            'acct_num': '계좌번호',
+            'nick_name': '대표자명',
+            'phone_num': '연락처',
+            'resident_num': '사업자등록번호',
+            'business_num': '주민등록번호',
+            'sector': '업종',
+            'addr': '주소',
+            'extra_col': '더보기',
+        };
+        head.main_headers.value = [
+            '가맹점 정보',
+            '승인',
+            '취소',
+            '매출',
+            '추가차감',
+            '단말기',
+            '정산금',
+            '은행정보',
+        ];
+        head.headers.value = head.initHeader(headers, {})
+        head.flat_headers.value = head.setFlattenHeaders()
 
-    function setHeaders() {
-        store.setHeader('NO.', 'id')
-        store.setHeader('가맹점 ID', 'user_name')
-        store.setHeader('상호', 'mcht_name')
-        store.setHeader('입금 수수료', 'pay_cond_price')
-        store.setHeader('유보금 수수료', 'hold_fee')
+    }
+    const exporter = async (type: number) => {      
+        const r = await store.get(store.getAllDataFormat())
+        let convert = r.data.content;
+        for (let index = 0; index <convert.length; index++) 
+        {
         
-        store.setHeader('매출건수', 'appr.count')
-        store.setHeader('총승인액', 'appr.amount')
-        store.setHeader('수수료', 'appr.trx_fee')
-        store.setHeader('입금 수수료', 'appr.dpst_fee')
-        store.setHeader('보유금액 수수료', 'appr.hold_fee')
-        
-        store.setHeader('취소건수', 'cxl.count')
-        store.setHeader('총취소액', 'cxl.amount')
-        store.setHeader('수수료', 'cxl.trx_fee')
-        store.setHeader('입금 수수료', 'cxl.dpst_fee')
-        store.setHeader('보유금액 수수료', 'cxl.hold_fee')
-        
-        store.setHeader('총매출액', 'sales_amount')
-        store.setHeader('총정산액', 'total_profit')
-        
-        store.setHeader('추가차감금', 'deduction.amount')
-        store.setHeader('추가차감', 'deduction.amount_input')
-        store.setHeader('차감완료금', 'deduction.complate_amount')
-                
-        store.setHeader('통신비', 'comm_amount')
-        store.setHeader('정산금액', 'settle_amount')
-        store.setHeader('입금금액', 'deposit_amount')
-        store.setHeader('이체금액', 'transfer_amount')
-        
-        store.setHeader('은행', 'acct_bank_nm')
-        store.setHeader('은행코드', 'acct_bank_cd')
-        store.setHeader('예금주', 'acct_nm')
-        store.setHeader('계좌번호', 'acct_num')
-        store.setHeader('대표자명', 'nick_name')
-        store.setHeader('연락처', 'phone_num')
-        store.setHeader('사업자등록번호', 'resident_num')
-        store.setHeader('주민등록번호', 'business_num')
-        store.setHeader('업종', 'sector')
-        store.setHeader('주소', 'addr')
-        store.sortHeader()
+        }
+        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)        
     }
     setHeaders()
     return {
         store,
+        head,
+        exporter,
     }
 })

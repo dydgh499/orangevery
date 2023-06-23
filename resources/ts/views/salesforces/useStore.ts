@@ -1,9 +1,26 @@
+import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import type { Options, Salesforce } from '@/views/types';
 import { axios } from '@axios';
 import corp from '@corp';
 
 const levels = corp.pv_options.auth.levels
+
+export const settleDays = () => {
+    return <Options[]>([
+        {id:0, title:'일요일'}, {id:1, title:'월요일'},
+        {id:2, title:'화요일'}, {id:3, title:'수요일'},
+        {id:4, title:'목요일'}, {id:5, title:'금요일'},
+        {id:6, title:'토요일'}, 
+    ])    
+}
+
+export const settleCycles = () => {
+    return <Options[]>([
+        {id:0, title:'하루씩 정산'}, {id:7, title:'1주일씩 정산'},
+        {id:14, title:'2주일씩 정산'}, {id:30, title:'한달씩 정산(30일)'},
+    ])
+}
 
 export const salesLevels = () => {
     const sales = <Options[]>([]);
@@ -24,37 +41,50 @@ export const salesLevels = () => {
 
 export const allLevels = () => {
     const sales = salesLevels()
-    sales.unshift({id: 10, title: '가맹점'})
-    sales.push({id: 40, title: '본사'})
+    sales.unshift(<Options>({id: 10, title: '가맹점'}))
+    sales.push(<Options>({id: 40, title: '본사'}))
     if(levels.dev_use)
-        sales.push({id: 50, title: levels.dev_name})
+        sales.push(<Options>({id: 50, title: levels.dev_name}))
     return sales
 }
 
 export const useSearchStore = defineStore('salesSearchStore', () => {
-    const store = Searcher<Salesforce>('salesforces', <Salesforce>({}))
-
-    function setHeaders() {
-        store.setHeader('NO.', 'id')
-        store.setHeader('등급', 'level')
-        store.setHeader('영업점 ID', 'user_name')
-        store.setHeader('대표자명', 'nick_name')
-        store.setHeader('연락처', 'phone_num')
-        store.setHeader('사업자등록번호', 'resident_num')
-        store.setHeader('주민등록번호', 'business_num')
-        store.setHeader('업종', 'sector')
-        store.setHeader('주소', 'addr')
-        store.setHeader('은행', 'acct_bank_nm')
-        store.setHeader('은행코드', 'acct_bank_cd')
-        store.setHeader('예금주', 'acct_nm')
-        store.setHeader('계좌번호', 'acct_num')
-        store.setHeader('생성시간', 'created_at')
-        store.setHeader('업데이트시간', 'updated_at')
-        store.sortHeader()
+    const store = Searcher('salesforces')
+    const head  = Header('salesforces', '결제모듈 관리')
+    const headers: Record<string, string> = {
+        'id' : 'NO.',
+        'level' : '등급',
+        'user_name' : '영업점 ID',
+        'nick_name' : '대표자명',
+        'phone_num' : '연락처',
+        'resident_num' : '사업자등록번호',
+        'business_num' : '주민등록번호',
+        'sector' : '업종',
+        'addr' : '주소',
+        'acct_bank_nm' : '은행',
+        'acct_bank_cd' : '은행코드',
+        'acct_nm' : '예금주',
+        'acct_num' : '계좌번호',
+        'created_at' : '생성시간',
+        'updated_at' : '업데이트시간',
     }
-    setHeaders()
+    head.main_headers.value = [];
+    head.headers.value = head.initHeader(headers, {})
+    head.flat_headers.value = head.setFlattenHeaders()
+    
+    const exporter = async (type: number) => {      
+        const r = await store.get(store.getAllDataFormat())
+        let convert = r.data.content;
+        for (let index = 0; index <convert.length; index++) 
+        {
+        
+        }
+        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)        
+    }
     return {
         store,
+        head,
+        exporter,
     }
 })
 
@@ -85,7 +115,7 @@ export const useUpdateStore = defineStore('salesUpdateStore', () => {
     const path = 'salesforces'
     const item = reactive<Salesforce>({
         id: 0,
-        tax_type: 0,
+        settle_tax_type: 0,
         created_at: undefined,
         user_name: '',
         user_pw: '',
@@ -109,6 +139,8 @@ export const useUpdateStore = defineStore('salesUpdateStore', () => {
         contract_file: undefined,
         bsin_lic_file: undefined,
         level: 13,
+        settle_cycle: 0,
+        settle_day: 0
     })
     return {
         path, item

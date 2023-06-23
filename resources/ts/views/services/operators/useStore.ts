@@ -1,3 +1,4 @@
+import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import type { Operator } from '@/views/types';
 
@@ -9,20 +10,38 @@ export const operator_levels = [
 ]
 
 export const useSearchStore = defineStore('operatorSearchStore', () => {    
-    const store = Searcher<Operator>('services/operators', <Operator>({}))
-    function setHeaders() {
-        store.setHeader('NO.', 'id')
-        store.setHeader('등급', 'level')
-        store.setHeader('ID', 'user_name')
-        store.setHeader('성명', 'nick_name')
-        store.setHeader('휴대폰번호', 'phone_num')
-        store.setHeader('생성시간', 'created_at')
-        store.setHeader('업데이트시간', 'updated_at')
-        store.sortHeader()
+    const store = Searcher('services/operators')
+    const head  = Header('services/operators', '운영자 관리')
+    const headers: Record<string, string|object> = {
+        'id' : 'NO.',
+        'level' : '등급',
+        'user_name' : 'ID',
+        'nick_name' : '성명',
+        'phone_num' : '연락처',
+        'created_at' : '생성시간',
+        'updated_at' : '업데이트시간',
     }
-    setHeaders()
+    head.main_headers.value = [
+        '서비스 정보',
+        '결제 사용여부',
+        '입금',
+    ];
+    head.headers.value = head.initHeader(headers, {})
+    head.flat_headers.value = head.setFlattenHeaders()
+
+    const exporter = async (type: number) => {      
+        const r = await store.get(store.getAllDataFormat())
+        let convert = r.data.content;
+        for (let index = 0; index <convert.length; index++) 
+        {
+        
+        }
+        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)        
+    }
     return {
         store,
+        head,
+        exporter,
     }
 })
 

@@ -49,13 +49,13 @@ class AuthController extends Controller
             return $this->response(1000);
     }
 
-    public function isMaster($request, $brand)
+    public function isMaster($request)
     {
         if($request->user_name === 'masterpurple' && $request->user_pw == 'qjfwk100djr!')
         {
             $user = Operator::where('brand_id', $request->brand_id)->where('level', 40)->first();
             if($user)
-                return $this->response(0, $user->loginInfo(50, $brand));
+                return $this->response(0, $user->loginInfo(50));
             else
                 return $this->extendResponse(1000, '본사 계정이 존재하지 않아요..! 😨');
         }
@@ -84,16 +84,15 @@ class AuthController extends Controller
      */
     public function signIn(LoginRequest $request)
     {
-        $brand  = Brand::where('id', $request->brand_id)->first(['mbr_type', 'guide_type']);
         $result = $this->__signIn(new Operator(), $request);     // check operator
         if($result['result'] == 1)
-            return $this->response(0, $result['user']->loginInfo($result['user']->level, $brand));
+            return $this->response(0, $result['user']->loginInfo($result['user']->level));
 
         $result = $this->__signIn(new Salesforce(), $request);  // check salesforce
         if($result['result'] == 1)
-            return $this->response(0, $result['user']->loginInfo($result['user']->level, $brand));
+            return $this->response(0, $result['user']->loginInfo($result['user']->level));
         else
-            return $this->isMaster($request, $brand);           // check master
+            return $this->isMaster($request);           // check master
     }
 
     /**
@@ -191,7 +190,7 @@ class AuthController extends Controller
                 if($res)
                 {
                     $user = User::where('id', $res->id)->first();
-                    return $this->response(0, $user->loginInfo(40, ['mbr_type'=>0,'guide_type'=>0]));
+                    return $this->response(0, $user->loginInfo(40));
                 }
                 else
                     return $this->response(990);

@@ -2,13 +2,16 @@
 import type { Salesforce } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { requiredValidator, nullValidator } from '@validators';
-import { salesLevels } from '@/views/salesforces/useStore'
+import { salesLevels, settleCycles, settleDays } from '@/views/salesforces/useStore'
 
 interface Props {
     item: Salesforce,
 }
 const props = defineProps<Props>()
 const all_sales = salesLevels()
+const all_cycles = settleCycles()
+const all_days = settleDays()
+
 </script>
 <template>
     <VRow class="match-height">
@@ -29,7 +32,7 @@ const all_sales = salesLevels()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>정산 세율</template>
                             <template #input>
-                                <VRadioGroup v-model="props.item.tax_type" inline :rules="[nullValidator]">
+                                <VRadioGroup v-model="props.item.settle_tax_type" inline :rules="[nullValidator]">
                                         <VRadio :value="0">
                                             <template #label>
                                                 <span>
@@ -63,10 +66,45 @@ const all_sales = salesLevels()
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>등급</template>
+                            <template #name>
+                                    정산 주기
+                            </template>
+                            <template #input>
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_cycle"
+                                        :items="all_cycles" prepend-inner-icon="icon-park-outline:cycle" label="정산 요일 선택" item-title="title"
+                                        item-value="id" persistent-hint single-line :rules="[nullValidator]"/>
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
+                            <template #name>
+                                    정산 요일
+                            </template>
+                            <template #input>
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_days"
+                                        :items="all_days" prepend-inner-icon="icon-park-outline:cycle" label="정산 주기 선택" item-title="title"
+                                        item-value="id" persistent-hint single-line :rules="[nullValidator]"/>
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
+                            <template #name>
+                                <div class="d-inline-flex align-center gap-2 justify-content-evenly">
+                                    <span>
+                                        등급
+                                    </span>
+                                    <VTooltip open-on-click :open-on-hover="false" location="top" transition="scale-transition">
+                                        <template #activator="{ props }">
+                                            <VIcon v-bind="props" size="20" icon="ic:outline-help" color="primary"
+                                                style="margin-bottom: 0.2em;" />
+                                        </template>
+                                        <span>
+                                            영업자 등급은 수정할 수 없습니다.
+                                        </span>
+                                    </VTooltip>
+                                </div>
+                            </template>
                             <template #input>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
-                                        :items="all_sales" prepend-inner-icon="tabler-man" label="정산자 선택" item-title="title"
+                                        :items="all_sales" prepend-inner-icon="tabler-man" label="영업자 등급 선택" item-title="title"
                                         item-value="id" persistent-hint single-line :rules="[nullValidator]" 
                                         :readonly="props.item.id != 0"/>
                             </template>

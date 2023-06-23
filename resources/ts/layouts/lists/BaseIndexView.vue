@@ -8,14 +8,16 @@ interface Props {
     metas: any[],
     add: boolean,
     add_name: string,
+    is_range_date: boolean
 }
 const props = defineProps<Props>();
 
 const store = <any>(inject('store'))
+const head = <any>(inject('head'))
 const filter = ref(null)
 
 onMounted(() => {
-    store.filter = filter.value
+    head.filter = filter.value
     watchEffect(() => {
         store.setTable()
     })
@@ -35,13 +37,15 @@ onMounted(() => {
                 <slot name="filter"></slot>
                 <br>
                 <VCard>
-                    <BaseIndexFilter :placeholder="props.placeholder" :add="props.add" :add_name="props.add_name">
+                    <BaseIndexFilter :placeholder="props.placeholder" :add="props.add" :add_name="props.add_name" :is_range_date="props.is_range_date">
                     </BaseIndexFilter>
                     <VDivider />
                     <VTable class="text-no-wrap">
                         <!-- 👉 table head -->
                         <thead>
+                                <slot name="headers"></slot>
                             <tr>
+                                <slot name="content-header"></slot>
                                 <slot name="header"></slot>
                             </tr>
                         </thead>
@@ -50,9 +54,9 @@ onMounted(() => {
                             <slot name="body"></slot>
                         </tbody>
                         <!-- 👉 table footer  -->
-                        <tfoot v-show="!Boolean(store.items.length || false)">
+                        <tfoot v-show="!Boolean(store.items.length)">
                             <tr>
-                                <td :colspan="Object.keys(store.headers).length">
+                                <td :colspan="Object.keys(head.flat_headers).length" style="text-align: center;">
                                     검색 결과가 없습니다.
                                 </td>
                             </tr>
@@ -69,7 +73,7 @@ onMounted(() => {
                 </VCard>
             </VCol>
         </VRow>
-        <SearchFilterDialog ref="filter" :headers="store.headers" />
+        <SearchFilterDialog ref="filter" />
     </section>
 </template>
 <style lang="scss">

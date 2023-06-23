@@ -29,11 +29,13 @@ class TransactionController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $query =  $this->transactions->where('transactions.brand_id', $request->user()->brand_id);
-        $query = globalPGFilter($query, $request, 'transactions');
-        $query = globalSalesFilter($query, $request, 'transactions');  
+        $query =  $this->transactions->where('brand_id', $request->user()->brand_id);
+        $query = globalPGFilter($query, $request);
+        $query = globalSalesFilter($query, $request);
+        $query = globalAuthFilter($query, $request);
+
         $query = $query->with(['sales0', 'sales1', 'sales2', 'sales3', 'sales4', 'sales5', 'mcht']);
-        $data = $this->getIndexData($request, $query);        
+        $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }
 

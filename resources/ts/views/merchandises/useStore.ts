@@ -1,64 +1,83 @@
+import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import { MchtOption, Merchandise } from '@/views/types';
 import corp from '@corp';
 
 export const useSearchStore = defineStore('mchtSearchStore', () => {    
-    const store = Searcher<Merchandise>('merchandises', <Merchandise>({}))
+    const store = Searcher('merchandises')
+    const head  = Header('merchandises', '가맹점 관리')
     const levels = corp.pv_options.auth.levels
 
-    function setHeaders() {
-        store.setHeader('NO.', 'id')
+    const setHeaders = () => {
+        const headers: Record<string, string> = {
+            'id' : 'NO.',
+        }
         if(levels.sales5_use)
         {
-            store.setHeader(levels.sales5_name+' ID', 'sales5_name')
-            store.setHeader('수수료 ', 'sales5_fee')    
+            headers['sales5_name'] = levels.sales5_name+' ID'
+            headers['sales5_fee'] = '수수료'
         }
         if(levels.sales4_use)
         {
-            store.setHeader(levels.sales4_name+' ID', 'sales4_name')
-            store.setHeader('수수료  ', 'sales4_fee')    
+            headers['sales4_name'] = levels.sales4_name+' ID'
+            headers['sales4_fee'] = '수수료'
         }
         if(levels.sales3_use)
         {
-            store.setHeader(levels.sales3_name+' ID', 'sales3_name')
-            store.setHeader('수수료   ', 'sales3_fee')    
+            headers['sales3_name'] = levels.sales3_name+' ID'
+            headers['sales3_fee'] = '수수료'
         }
         if(levels.sales2_use)
         {
-            store.setHeader(levels.sales2_name+' ID', 'sales2_name')
-            store.setHeader('수수료    ', 'sales2_fee')    
+            headers['sales2_name'] = levels.sales2_name+' ID'
+            headers['sales2_fee'] = '수수료'
         }
         if(levels.sales1_use)
         {
-            store.setHeader(levels.sales1_name+' ID', 'sales1_name')
-            store.setHeader('수수료     ', 'sales1_fee')    
+            headers['sales1_name'] = levels.sales1_name+' ID'
+            headers['sales1_fee'] = '수수료'
         }
         if(levels.sales0_use)
         {
-            store.setHeader(levels.sales0_name+' ID', 'sales0_name')
-            store.setHeader('수수료      ', 'sales0_fee')    
+            headers['sales0_name'] = levels.sales0_name+' ID'
+            headers['sales0_fee'] = '수수료'
         }
-        store.setHeader('가맹점 ID', 'user_name')
-        store.setHeader('수수료       ', 'trx_fee')
-        store.setHeader('유보금 수수료', 'hold_fee')
-        store.setHeader('상호', 'mcht_name')
-        store.setHeader('대표자명', 'nick_name')
-        store.setHeader('연락처', 'phone_num')
-        store.setHeader('사업자등록번호', 'resident_num')
-        store.setHeader('주민등록번호', 'business_num')
-        store.setHeader('업종', 'sector')
-        store.setHeader('주소', 'addr')
-        store.setHeader('은행', 'acct_bank_nm')
-        store.setHeader('은행코드', 'acct_bank_cd')
-        store.setHeader('예금주', 'acct_nm')
-        store.setHeader('계좌번호', 'acct_num')
-        store.setHeader('생성시간', 'created_at')
-        store.setHeader('업데이트시간', 'updated_at')
-        store.sortHeader()
+        headers['user_name'] = '가맹점 ID'
+        headers['trx_fee'] = '수수료'
+        headers['hold_fee'] = '유보금 수수료'
+        headers['mcht_name'] = '상호'
+        headers['nick_name'] = '대표자명'
+        headers['phone_num'] = '연락처'
+        headers['resident_num'] = '사업자등록번호'
+        headers['business_num'] = '주민등록번호'
+
+        headers['sector'] = '업종'
+        headers['addr'] = '주소'
+        headers['acct_bank_nm'] = '은행'
+        headers['acct_bank_cd'] = '은행코드'
+        headers['acct_nm'] = '예금주'
+        headers['acct_num'] = '계좌번호'
+        headers['created_at'] = '계좌번호'
+        headers['updated_at'] = '업데이트시간'
+        
+        head.main_headers.value = [];
+        head.headers.value = head.initHeader(headers, {})
+        head.flat_headers.value = head.setFlattenHeaders()
+    }
+    const exporter = async (type: number) => {      
+        const r = await store.get(store.getAllDataFormat())
+        let convert = r.data.content;
+        for (let index = 0; index <convert.length; index++) 
+        {
+        
+        }
+        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)        
     }
     setHeaders()
     return {
         store,
+        head,
+        exporter,
     }
 })
 

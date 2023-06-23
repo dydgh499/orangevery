@@ -19,7 +19,7 @@ class Transaction extends Model
     protected   $table      = 'transactions';
     protected   $primaryKey = 'id';
     protected   $appends    = [
-        'profit', 'trx_amount',
+        'profit', 'trx_amount', 'hold_amount',
         'sales0_name', 'sales1_name', 
         'sales2_name', 'sales3_name', 
         'sales4_name', 'sales5_name', 
@@ -56,7 +56,7 @@ class Transaction extends Model
         if($level == 10)
         {   // 가맹점
             $profit = $this->amount - ($this->amount * ($this->mcht_fee + $this->hold_fee));
-            $profit -= $this->pay_cond_fee;
+            $profit -= $this->settle_fee;
         }
         else if($level > 10 && $level < 31)
         {   // 영업자 
@@ -64,13 +64,13 @@ class Transaction extends Model
             $profit = $this->getSalesProfit('sales'.$idx, $idx);
 
             $property = 'sales'.$idx;
-            $tax_type = $this[$property]->tax_type;
+            $settle_tax_type = $this[$property]->settle_tax_type;
 
-            if($tax_type == 1)
+            if($settle_tax_type == 1)
                 $profit *= 0.967;
-            else if($tax_type == 2)
+            else if($settle_tax_type == 2)
                 $profit *= 0.9;
-            else if($tax_type == 3)
+            else if($settle_tax_type == 3)
             {
                 $profit *= 0.9;
                 $profit *= 0.967;
@@ -98,6 +98,14 @@ class Transaction extends Model
         return $this->amount - $this->profit;
     }
     
+    public function getHoldAmountAttribute()
+    {
+        if(request()->level == 10)
+            return round($this->amount * $this->hold_fee);
+        else
+            return 0;        
+    }
+
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format("Y-m-d H:i:s");
@@ -105,32 +113,32 @@ class Transaction extends Model
     //sales
     public function sales0()
     {
-        return $this->belongsTo(Salesforce::class, 'sales0_id')->select(['id', 'nick_name', 'tax_type']);
+        return $this->belongsTo(Salesforce::class, 'sales0_id')->select(['id', 'nick_name', 'settle_tax_type']);
     }
 
     public function sales1()
     {
-        return $this->belongsTo(Salesforce::class, 'sales1_id')->select(['id', 'nick_name', 'tax_type']);
+        return $this->belongsTo(Salesforce::class, 'sales1_id')->select(['id', 'nick_name', 'settle_tax_type']);
     }
 
     public function sales2()
     {
-        return $this->belongsTo(Salesforce::class, 'sales2_id')->select(['id', 'nick_name', 'tax_type']);
+        return $this->belongsTo(Salesforce::class, 'sales2_id')->select(['id', 'nick_name', 'settle_tax_type']);
     }
 
     public function sales3()
     {
-        return $this->belongsTo(Salesforce::class, 'sales3_id')->select(['id', 'nick_name', 'tax_type']);
+        return $this->belongsTo(Salesforce::class, 'sales3_id')->select(['id', 'nick_name', 'settle_tax_type']);
     }
 
     public function sales4()
     {
-        return $this->belongsTo(Salesforce::class, 'sales4_id')->select(['id', 'nick_name', 'tax_type']);
+        return $this->belongsTo(Salesforce::class, 'sales4_id')->select(['id', 'nick_name', 'settle_tax_type']);
     }
 
     public function sales5()
     {
-        return $this->belongsTo(Salesforce::class, 'sales5_id')->select(['id', 'nick_name', 'tax_type']);
+        return $this->belongsTo(Salesforce::class, 'sales5_id')->select(['id', 'nick_name', 'settle_tax_type']);
     }
     
     public function mcht()
@@ -186,5 +194,12 @@ class Transaction extends Model
     public function getCxlDttmAttribute()
     {
         return $this->cxl_dt." ".$this->cxl_tm;
+    }
+    
+    protected function apprNum() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => sprintf('%08d', $value),
+        );
     }
 }

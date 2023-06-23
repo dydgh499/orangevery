@@ -1,3 +1,4 @@
+import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import type { Complaint, Options } from '@/views/types';
 
@@ -22,29 +23,45 @@ export const complaint_types = <Options[]>[
 ]
 
 export const useSearchStore = defineStore('complaintSearchStore', () => {
-    const store = Searcher<Complaint>('complaints', <Complaint>({}))
-    function setHeaders() {
-        store.setHeader('NO.', 'id')        
-        store.setHeader('가맹점 상호', 'mcht_name')
-        store.setHeader('TID', 'tid')
-        store.setHeader('고객명', 'cust_nm')
-        store.setHeader('승인일', 'appr_dt')
-        store.setHeader('승인번호', 'appr_num')
-        store.setHeader('연락처', 'phone_num')
-        store.setHeader('수기작성성함', 'hand_cust_nm')
-        store.setHeader('수기작성연락처', 'hand_phone_num')
-        store.setHeader('발급사', 'issuer_id')
-        store.setHeader('PG사', 'pg_name')
-        store.setHeader('민원타입', 'type')
-        store.setHeader('인입경로', 'entry_path')
-        store.setHeader('입금상태', 'is_deposit')
-        store.setHeader('생성시간', 'created_at')
-        store.setHeader('업데이트시간', 'updated_at')
-        store.sortHeader()
+    const store = Searcher('complaints')
+    const head  = Header('services/brands', '서비스 관리')
+    const headers: Record<string, string|object> = {
+        'id' : 'NO.',
+        'mcht_name' : '가맹점 상호',
+        'tid' : 'TID',
+        'cust_nm' : '고객명',
+        'appr_dt' : '승인일',
+        'appr_num' : '승인번호',
+        'phone_num' : '연락처',
+        'hand_cust_nm' : '수기작성성함',
+        'hand_phone_num' : '수기작성연락처',
+        'issuer_id' : '발급사',
+        'pg_name': 'PG사',
+        'type': '민원타입',
+        'is_deposit': '입금상태',
+        'entry_path': '인입경로',
+        'created_at' : '생성시간',
+        'updated_at' : '업데이트시간',
     }
-    setHeaders()
+    head.main_headers.value = [
+    ];
+    head.headers.value = head.initHeader(headers, {})
+    head.flat_headers.value = head.setFlattenHeaders()
+
+    const exporter = async (type: number) => {      
+        const r = await store.get(store.getAllDataFormat())
+        const datas = r.data.content;
+        for (let i = 0; i <datas.length; i++) {
+            datas[i]['type'] = complaint_types.find(types => types.id === datas[i]['type'])?.title
+            datas[i]['issuer_id'] = issuers.find(issuer => issuer.id === datas[i]['issuer_id'])?.title
+            datas[i]['is_deposit'] = datas[i]['is_deposit'] ? '입금' : '미입금'
+        }
+        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
+    }
     return {
         store,
+        head,
+        exporter,
     }
 })
 

@@ -44,7 +44,7 @@ trait ManagerTrait
                 $res['total']   = $query->count();
 
 
-            $con_query = $con_query->orderBy($index_col, 'desc')->offset($sp)->limit($page_size);
+            $con_query = $con_query->orderBy($date, 'desc')->offset($sp)->limit($page_size);
             $res['content'] = count($cols) ? $con_query->get($cols) : $con_query->get();
         }
         else
@@ -127,7 +127,7 @@ trait ManagerTrait
                         Storage::disk('public')->delete($path);
                 }
             }
-            $res = $query->delete();
+            $res = $query->update(['is_delete' => true]);
             return $res ? 4 : 990;
         }
         else

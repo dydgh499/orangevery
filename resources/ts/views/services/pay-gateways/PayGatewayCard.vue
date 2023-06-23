@@ -23,7 +23,7 @@ const addNewSection = () => {
         pg_id: props.item.id,
         name: '',
         trx_fee: 0,
-        is_use: true,
+        is_delete: true,
     })
 }
 

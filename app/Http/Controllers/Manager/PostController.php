@@ -103,11 +103,11 @@ class PostController extends Controller
         return $this->response($result);
     }
 
-    public function uploadImage(Request $request)
+    public function upload(Request $request)
     {
         $data = [];
         $imgs = [
-            'params'    => ['image'],
+            'params'    => ['file'],
             'cols'      => ['url'],
             'folders'   => ['posts'],
             'sizes'     => [ 1980],

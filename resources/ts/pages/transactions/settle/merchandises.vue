@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
+import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
+import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 
-const { store } = useSearchStore()
+
+const { store, head, exporter } = useSearchStore()
 provide('store', store)
+provide('head', head)
+provide('exporter', exporter)
 
 const metas = [
     {
@@ -40,30 +45,106 @@ const metas = [
         subtitle: 'Last week analytics',
     },
 ]
+store.params.level = 10 // taransaction model에서 필수
+
+const getSettleStyle = (parent_key: string) => {
+    if (parent_key === 'appr')
+        return 'color: blue;';
+    else if (parent_key === 'cxl')
+        return 'color: red;';
+    else if (parent_key === 'settle')
+        return 'font-weight: bold;';
+    else
+        return ''; // 기본 스타일 또는 다른 스타일을 지정하고 싶은 경우 여기에 작성
+}
+
 </script>
 <template>
-    <BaseIndexView placeholder="가맹점 상호 검색" :metas="metas" :add="true" add_name="가맹점">
+    <BaseIndexView placeholder="가맹점 상호 검색" :metas="metas" :add="false" add_name="정산" :is_range_date="false">
         <template #filter>
-            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true"  :sales="true"/>
+            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" :sales="true" />
         </template>
-        <template #header>
-            <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden" class='list-square'>  {{ header.ko }} </th>
+        <template #headers>
+            <tr>
+                <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index" class='list-square'>
+                    <span>
+                        {{ head.main_headers[index] }}
+                    </span>
+                </th>
+            </tr>
+            <tr>
+                <th v-for="(header, key) in head.flat_headers" :key="key" v-show="!header.hidden" class='list-square'>
+                    <template v-if="key == 'deduction.input'">
+                        <div class="d-inline-flex align-center gap-2 justify-content-evenly">
+                            <span>
+                                {{ header.ko }}
+                            </span>
+                            <VTooltip open-on-click :open-on-hover="false" location="top" transition="scale-transition">
+                                <template #activator="{ props }">
+                                    <VIcon v-bind="props" size="20" icon="ic:outline-help" color="primary"
+                                        style="margin-bottom: 0.2em;" />
+                                </template>
+                                <span>
+                                    차감이 아닌 추가금 설정을 하시러면 금액 앞에 "-"(마이너스 기호)를 입력 후 차감버튼을 클릭해주세요.
+                                </span>
+                            </VTooltip>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <span>
+                            {{ header.ko }}
+                        </span>
+                    </template>
+                </th>
+            </tr>
         </template>
         <template #body>
-            <tr v-for="(user, index) in store.items" :key="index" style="height: 3.75rem;">
-                <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden" class='list-square'>  
-                    <span v-if="key == `id`" class="edit-link" @click="store.edit(user.id)">
-                        #{{ user[key] }}
-                    </span>
-                    <span v-else-if="key.includes('_fee')"> 
-                        <VChip>
-                            {{ user[key] }} %
-                        </VChip>
-                    </span>
-                    <span v-else> 
-                        {{ user[key] }} 
-                    </span>
-                </td>
+            <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
+                <template v-for="(_header, _key, _index) in head.headers" :key="_index">
+                    <template v-if="head.getDepth(_header, 0) != 1">
+                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="!__header.hidden" class='list-square'>
+                            <span v-if="_key == 'deduction' && (__key as string) == 'input'">
+                                <AddDeductBtn :id="item['id']" :name="item['mcht_name']" :is_mcht="true">
+                                </AddDeductBtn>
+                            </span>
+                            <span v-else :style="getSettleStyle(_key as string)">
+                                {{ (item[_key][__key] as number).toLocaleString() }}
+                            </span>
+                        </td>
+                    </template>
+                    <template v-else>
+                        <td v-show="!_header.hidden" class='list-square'>
+                            <span v-if="_key === 'id'" class="edit-link">
+                                #{{ item[_key] }}
+                            </span>
+                            <span v-else-if="_key === 'count'" style="font-weight: bold;">
+                                {{ (item[_key] as number).toLocaleString() }}
+                            </span>
+                            <span v-else-if="_key === 'amount'" style="font-weight: bold;">
+                                {{ (item[_key] as number).toLocaleString() }}
+                            </span>
+                            <span v-else-if="_key === 'trx_amount'" style="font-weight: bold;">
+                                {{ (item[_key] as number).toLocaleString() }}
+                            </span>
+                            <span v-else-if="_key === 'pay_cond_amount'" style="font-weight: bold;">
+                                {{ (item[_key] as number).toLocaleString() }}
+                            </span>
+                            <span v-else-if="_key === 'hold_amount'" style="font-weight: bold;">
+                                {{ (item[_key] as number).toLocaleString() }}
+                            </span>
+                            <span v-else-if="_key === 'profit'" style="font-weight: bold;">
+                                {{ (item[_key] as number).toLocaleString() }}
+                            </span>
+                            <span v-else-if="_key === 'extra_col'">
+                                <ExtraMenu :id="item['id']" :name="item['mcht_name']" :is_mcht="true" :item="item">
+                                </ExtraMenu>
+                            </span>
+                            <span v-else>
+                                {{ item[_key] }}
+                            </span>
+                        </td>
+                    </template>
+                </template>
             </tr>
         </template>
     </BaseIndexView>

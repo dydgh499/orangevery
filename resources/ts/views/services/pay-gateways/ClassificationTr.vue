@@ -7,7 +7,7 @@ import { useRequestStore } from '@/views/request';
 interface Props {
     item: Classification,
     index: number,
-    use_fee: boolean,
+    base_count: number,
 }
 const props = defineProps<Props>()
 const vForm = ref<VForm>()
@@ -16,24 +16,13 @@ const { update, remove } = useRequestStore()
 </script>
 <template>
     <tr scope="col">
-        <td style="width: 10%;">{{ index + 1 }}</td>
+        <td style="width: 10%;">{{ index + + props.base_count + 1 }}</td>
         <td style="width: 35%;">
             <VForm ref='vForm'>
                 <VCol cols="12">
                     <VRow no-gutters>
                         <VTextField v-model="props.item.name" prepend-inner-icon="mdi-vector-intersection"
                             placeholder="구간명 입력" persistent-placeholder :rules="[requiredValidator]"
-                            style="display: inline-block;" />
-                    </VRow>
-                </VCol>
-            </VForm>
-        </td>
-        <td style="width: 35%;" v-if="props.use_fee">
-            <VForm ref='vForm'>
-                <VCol cols="12">
-                    <VRow no-gutters>
-                        <VTextField v-model="props.item.trx_fee" prepend-inner-icon="tabler-currency-won"
-                            placeholder="수수료 입력" persistent-placeholder :rules="[requiredValidator]"
                             style="display: inline-block;" />
                     </VRow>
                 </VCol>

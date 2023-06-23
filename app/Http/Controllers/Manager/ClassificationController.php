@@ -85,7 +85,7 @@ class ClassificationController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $res = $this->classifications->where('id', $id)->update(['is_use'=>false]);
+        $res = $this->classifications->where('id', $id)->update(['is_delete'=>true]);
         return $this->response($res ? 1 : 990);
     }
 }

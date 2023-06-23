@@ -23,11 +23,10 @@ const modules = [
             upload(file: any) {
                 return new Promise((resolve, reject) => {
                     const formData = new FormData();
-                    console.log(file)
-                    formData.append("image", file);
+                    formData.append("file", file);
                     axios({
                         headers: { "Content-Type": "multipart/form-data", },
-                        url: '/api/v1/upload-image',
+                        url: '/api/v1/upload',
                         method: 'post',
                         data: formData,
                     })

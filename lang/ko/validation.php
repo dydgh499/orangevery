@@ -239,7 +239,7 @@ return [
         //
         'pg_id' => 'PG사',
         'ps_id' => '구간',
-        'pay_cond_id' => '정산일',
+        'settle_type' => '정산일',
         'module_type' => '결제모듈 타입',
         'is_old_auth' => '비인증/구인증 여부',
         'use_saleslip_prov' => '매출전표 공급자 정보',

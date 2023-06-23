@@ -1,50 +1,84 @@
+import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
-import type { SettleSalesforce } from '@/views/types';
 
-export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {    
-    const store = Searcher<SettleSalesforce>('transactions/settle/salesforces', <SettleSalesforce>({}))
+export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
+    const store = Searcher('transactions/settle/salesforces')
+    const head  = Header('transactions/settle/salesforces', '영업점 정산관리')
+    const setHeaders = () => {
+        const headers = {
+            'id': 'NO.',
+            'user_name' : '영업점 ID',
+            'level' : '등급',
+            'appr' : {
+                'count' :  '매출건수',
+                'amount' :  '금액',
+                'trx_amount' :  '거래 수수료',
+                'pay_cond_amount' :  '입금 수수료',
+                'profit': '정산액',
+            },
+            'cxl' : {
+                'count' :  '매출건수',
+                'amount' :  '금액',
+                'trx_amount' :  '거래 수수료',
+                'pay_cond_amount' :  '입금 수수료',
+                'profit': '정산액',
+            },
+            'count' :  '매출건수',
+            'amount' :  '금액',
+            'trx_amount' :  '거래 수수료',
+            'pay_cond_amount' :  '입금 수수료',
+            'profit': '정산액',
+            'deduction' : {
+                'input' : '추가차감입력',
+                'amount': '차감완료금',
+            },
+            'terminal': {
+                'amount': '통신비',
+            },
+            'settle': {
+                'amount': '정산금액',
+                'deposit': '입금금액',
+                'transfer': '이체금액',
+            },
+            'acct_bank_nm': '은행',
+            'acct_bank_cd': '은행코드',
+            'acct_nm': '예금주',
+            'acct_num': '계좌번호',
+            'nick_name': '대표자명',
+            'phone_num': '연락처',
+            'resident_num': '사업자등록번호',
+            'business_num': '주민등록번호',
+            'sector': '업종',
+            'addr': '주소',
+            'extra_col': '더보기',
+        };
+        head.main_headers.value = [
+            '가맹점 정보',
+            '승인',
+            '취소',
+            '매출',
+            '추가차감',
+            '단말기',
+            '정산금',
+            '은행정보',
+        ];
+        head.headers.value = head.initHeader(headers, {})
+        head.flat_headers.value = head.setFlattenHeaders()
 
-    function setHeaders() {
-        store.setHeader('NO.', 'id')
-        store.setHeader('영업점명', 'mcht_name')
-        store.setHeader('상위 영업점 ID', 'sales_name')
-        store.setHeader('매출액', 'sales_amount')
-        store.setHeader('정산액', 'total_profit')
-        store.setHeader('개수', 'appr_count')
-        store.setHeader('금액', 'appr_amount')
-        store.setHeader('거래 수수료', 'appr_trx_fee')
-        store.setHeader('입금 수수료', 'appr_dpst_fee')
-        store.setHeader('유보금 수수료', 'appr_holding_fee')
-
-        store.setHeader('개수', 'cxl_count')
-        store.setHeader('금액', 'cxl_amount')
-        store.setHeader('거래 수수료', 'cxl_trx_fee')
-        store.setHeader('입금 수수료', 'cxl_dpst_fee')
-        store.setHeader('유보금 수수료', 'cxl_holding_fee')
-
-        store.setHeader('차감완료', 'deduction_amount')
-        store.setHeader('추가차감', 'deduction_extra_amount')
-        store.setHeader('차감완료금', 'deduction_complate_amount')
-
-        store.setHeader('통신비', 'comm_amount')
-        store.setHeader('정산금액', 'settle_amount')
-        store.setHeader('입금금액', 'deposit_amount')
-        store.setHeader('이체금액', 'transfer_amount')
-
-        store.setHeader('은행', 'acct_bank_nm')
-        store.setHeader('은행코드', 'acct_bank_cd')
-        store.setHeader('계좌번호', 'acct_num')
-        store.setHeader('예금주', 'acct_nm')
-        store.setHeader('연락처', 'phone_num')
-        store.setHeader('사업자등록번호', 'resident_num')
-        store.setHeader('주민등록번호', 'business_num')
-        store.setHeader('업종', 'sector')
-        store.setHeader('주소', 'addr')
-        store.setHeader('생성시간', 'created_at')
-        store.setHeader('업데이트시간', 'updated_at')
     }
+    const exporter = async (type: number) => {      
+        const r = await store.get(store.getAllDataFormat())
+        let convert = r.data.content;
+        for (let index = 0; index <convert.length; index++) 
+        {
+        
+        }
+        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)        
+    }
+    setHeaders()
     return {
         store,
-        setHeaders,
+        head,
+        exporter,
     }
 })

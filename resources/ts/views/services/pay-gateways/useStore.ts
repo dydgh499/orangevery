@@ -4,8 +4,7 @@ import { axios } from '@axios';
 export const useStore = defineStore('payGatewayStore', () => {
     const pgs = ref<PayGateway[]>([])
     const pss = ref<PaySection[]>([])
-    const ternimals   = ref<Classification[]>([])
-    const pay_conds   = ref<Classification[]>([])
+    const terminals   = ref<Classification[]>([])
     const cus_filters = ref<Classification[]>([])
     const errorHandler = <any>(inject('$errorHandler'))
     const pg_types = [
@@ -23,13 +22,31 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:12, name:'이지피쥐', rep_nm:'김도형', company_nm:'주식회사 이지피쥐', business_num:'635-81-00256', phone_num:'02-1522-3434', addr:'서울 강남구 도산대로 157 (신사동) 신웅타워2 15층'},
         {id:13, name:'CM페이', rep_nm:'', company_nm:'씨엠컴퍼니 주식회사', business_num:'', phone_num:'', addr:''},
     ]
+
+    const settle_types = [
+        {id:-1, name:'실시간'}, //{id:0, name:'D+0'},
+        {id:0, name:'D+1'}, {id:1, name:'D+2'},
+        {id:2, name:'D+3'}, {id:3, name:'D+4'},
+        {id:4, name:'D+5'}, {id:5, name:'D+6'},
+        {id:6, name:'D+7'}, {id:7, name:'D+8'},
+        {id:8, name:'D+9'}, {id:9, name:'D+10'},
+        {id:10, name:'D+11'}, {id:11, name:'D+12'},
+        {id:12, name:'D+13'}, {id:13, name:'D+14'},
+        {id:14, name:'D+15'}, {id:15, name:'D+16'},
+        {id:16, name:'D+17'}, {id:17, name:'D+18'},
+        {id:18, name:'D+19'}, {id:19, name:'D+20'},
+        {id:20, name:'D+21'}, {id:21, name:'D+22'},
+        {id:22, name:'D+23'}, {id:23, name:'D+24'},
+        {id:24, name:'D+25'}, {id:25, name:'D+26'},
+        {id:26, name:'D+27'}, {id:27, name:'D+28'},
+        {id:28, name:'D+29'}, {id:29, name:'D+30'},
+    ]
     onMounted(async () => {
         try {
             const r = await axios.get('/api/v1/manager/services/pay-gateways/detail')
             Object.assign(pgs.value, r.data.pay_gateways)
             Object.assign(pss.value, r.data.pay_sections)
-            Object.assign(ternimals.value, r.data.ternimals)
-            Object.assign(pay_conds.value, r.data.pay_conditions)
+            Object.assign(terminals.value, r.data.terminals)
             Object.assign(cus_filters.value, r.data.custom_filters)
         }
         catch(e) {
@@ -49,12 +66,12 @@ export const useStore = defineStore('payGatewayStore', () => {
         if(id != null)
         {
             const item = items.find(item => item.id === id)
-            return item != undefined && item != null ? "이용 수수료: " + item.trx_fee + "₩" : ''    
+            return item != undefined && item != null ? "이용 수수료: " + "₩" : ''    
         }
         else
             return '';
     }
     return {
-        pgs, pss, ternimals, pay_conds, cus_filters, pg_types, setFee, setAmount
+        pgs, pss, terminals, settle_types, cus_filters, pg_types, setFee, setAmount
     }
 })

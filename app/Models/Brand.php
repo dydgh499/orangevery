@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use DateTimeInterface;
 use App\Models\Options\PvOptions;
 use App\Models\Options\ThemeCSS;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use DateTimeInterface;
 
 class Brand extends Model
 {
@@ -15,19 +15,7 @@ class Brand extends Model
     protected   $table        = 'brands';
     protected   $primaryKey   = 'id';
     protected   $guarded      = [];
-    protected   $hidden = [
-        'options',
-        'coupon_flag',
-        'coupon_model_id',
-        'stamp_flag',
-        'stamp_max_size',
-        'stamp_save_count',
-        'guide_type',
-        'map_marker_img',
-        'point_flag',
-        'point_min_amount',
-        'point_rate',
-    ];
+    protected   $hidden = [];
     
     protected function serializeDate(DateTimeInterface $date)
     {

@@ -1,24 +1,41 @@
+import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
-import type { SalesFeeChangeHistory } from '@/views/types';
 
 export const useSearchStore = defineStore('salesFeeHistorySearchStore', () => {
-    const store = Searcher<SalesFeeChangeHistory>('salesforces/fee-change-histories', <SalesFeeChangeHistory>({}))
+    const store = Searcher('salesforces/fee-change-histories')
+    const head  = Header('salesforces/fee-change-histories', '영업점 수수료율 변경이력')
 
-    function setHeaders() {
-        store.setHeader('NO.', 'id')
-        store.setHeader('가맹점명', 'mcht_name')
-        store.setHeader('등급', 'level')
-        store.setHeader('이전 영업점', 'bf_sales_name')
-        store.setHeader('변경 영업점', 'aft_sales_name')
-        store.setHeader('이전 수수료', 'bf_trx_fee')
-        store.setHeader('변경 수수료', 'aft_trx_fee')
-        store.setHeader('변경상태', 'change_status')
-        store.setHeader('생성시간', 'created_at')
-        store.setHeader('업데이트시간', 'updated_at')
-        store.sortHeader()
+    const headers: Record<string, string> = {
+        'id' : 'NO.',
+        'user_name' : '영업점 상호',
+        'level': '등급',
+        'note' : '별칭',
+        'module_type' : '모듈타입',
+        'pg_id' : 'PG사명',
+        'ps_id' : '구간',
+        'settle_type' : '정산일',
+        'mid' : 'MID',
+        'tid' : 'TID',
+        'installment' : '할부한도',
+        'created_at' : '생성시간',
+        'updated_at' : '업데이트시간',
     }
-    setHeaders()
+    head.main_headers.value = [];
+    head.headers.value = head.initHeader(headers, {})
+    head.flat_headers.value = head.setFlattenHeaders()
+
+    const exporter = async (type: number) => {      
+        const r = await store.get(store.getAllDataFormat())
+        let convert = r.data.content;
+        for (let index = 0; index <convert.length; index++) 
+        {
+        
+        }
+        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)        
+    }
     return {
         store,
+        head,
+        exporter,
     }
 })

@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Merchandise;
+use App\Models\MchtFeeChangeHistory;
 
 class MerchandiseSeeder extends Seeder
 {
@@ -14,6 +15,6 @@ class MerchandiseSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $res = Merchandise::factory()->count(20)->create();
     }
 }

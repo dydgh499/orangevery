@@ -24,7 +24,7 @@ export interface ErrorResponse {
 export interface CustomFilter {
     pg_id: number | null,
     ps_id: number | null,
-    pay_cond_id: number | null,
+    settle_type: number | null,
     terminal_id: number | null,
     custom_id: number | null,
 }
@@ -51,14 +51,14 @@ export interface Pagenation {
     total_count: number,
     total_page: number,
 }
-export interface Filter {
-    [key: string ]: {
-        ko: string,
-        hidden: boolean | null,
-        idx: number | null,
-    };
+export interface FilterItem {
+    ko: string;
+    hidden: boolean | null;
+    idx: number | null;
 }
-
+export interface Filter {
+    [key: string]: Filter | FilterItem;
+}
 export interface Tab {
     icon: string,
     title: string,
@@ -130,7 +130,9 @@ export interface MerchandisePropertie {
 
 export interface SalesforcePropertie {
     sector: string,
-    tax_type: number,
+    settle_tax_type: number,
+    settle_cycle: number,
+    settle_day: number,
     level: number,
 }
 
@@ -147,7 +149,8 @@ export interface PayModule {
     mcht_id: number,
     pg_id: number | null,
     ps_id: number | null,
-    pay_cond_id: number | null,
+    settle_type: number | null,
+    settle_fee: number | null,
     terminal_id: number | null,
     module_type: number,
     api_key: string,
@@ -155,8 +158,8 @@ export interface PayModule {
     mid: string,
     tid: string,
     serial_num: string,
-    comm_pr: number,
-    comm_calc_day: number,
+    comm_settle_fee: number,
+    comm_settle_type: number,
     comm_calc_level: number,
     under_sales_amt: number,
     begin_dt: date,
@@ -185,13 +188,12 @@ export interface PaySection {
     pg_id: number,
     name: string,
     trx_fee: float,
-    is_use: boolean,
+    is_delete: boolean,
 }
 
 export interface Classification {
     id: number,
     name: string,
-    trx_fee: float,
     type: number,
 }
 
@@ -286,16 +288,28 @@ export interface Transaction {
 
     sales5_id: number | null,
     sales5_fee: float,
+    sales5_settle_dt: Date,
     sales4_id: number | null,
+
     sales4_fee: float,
+    sales4_settle_dt: Date,
     sales3_id: number | null,
+
     sales3_fee: float,
+    sales3_settle_dt: Date,
     sales2_id: number | null,
+
     sales2_fee: float,
+    sales2_settle_dt: Date,
     sales1_id: number | null,
+
     sales1_fee: float,
+    sales1_settle_dt: Date,
     sales0_id: number | null,
+
     sales0_fee: float,
+    sales0_settle_dt: Date,
+
     custom_id: number,
     mcht_fee: float,
     hold_fee: float,
@@ -306,11 +320,12 @@ export interface Transaction {
     pg_id: number,
     pmod_id: number,
     ps_id: number,
-    pay_cond_id: number,
+    settle_type: number,
     terminal_id: number,
     //
     ps_fee: Float,
-    pay_cond_fee: float,
+    mcht_settle_type: number,
+    mcht_settle_fee: number, 
     //
     trx_dt: Date,
     trx_tm: Date,
@@ -346,8 +361,8 @@ export interface Danger {
     ord_num: string,
     trx_id: string,
     ori_trx_id: string,
-    pay_cond_id: number,
-    pay_cond_fee: float,
+    settle_type: number,
+    settle_fee: float,
     
     card_name: string,
     card_num: string,
@@ -370,7 +385,7 @@ export interface FailTransaction {
     pg_id: number,
     ps_id: number,
     pmod_id: number,
-    pay_cond_id: number,
+    settle_type: number,
     trx_dt: Date,
     trx_tm: Time,
     amount: number,
@@ -379,32 +394,39 @@ export interface FailTransaction {
 }
 
 export interface Settle extends Bank {
-    sales_amount: number,
-    total_profit: number,
+    user_name: string,
+    count: number,
+    amount: number,
+    trx_amount: number,
+    profit: number,
     appr: {
         count: number,
         amount: number,
-        trx_fee: number,
-        dpst_fee: number,
-        hold_fee: number,
+        trx_amount: number,
+        pay_cond_amount: number,
+        hold_amount: number,
+        profit: number,
     },
     cxl: {
         count: number,
         amount: number,
-        trx_fee: number,
-        dpst_fee: number,
-        hold_fee: number,        
+        trx_amount: number,
+        pay_cond_amount: number,
+        hold_amount: number,
+        profit: number,  
     },
     deduction: {
         amount: number,
-        extra_amount: number,
         complate_amount: number,
     },
-    comm_amount:number,         // 통신비
-    settle_amount:number,       // 정산금액
-    deposit_amount:number,      // 입금금액
-    transfer_amount: string,    // 이체금액
-
+    settle: {
+        amount:number,       // 정산금액
+        deposit:number,      // 입금금액
+        transfer: string,    // 이체금액    
+    },
+    terminal: {
+        amount: number,
+    },
     sector: string,
     rep_nm: string,
     phone_num: string,

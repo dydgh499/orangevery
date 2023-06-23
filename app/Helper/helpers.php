@@ -12,7 +12,19 @@
 
     function isMerchandise($request)
     {
-        return $request->user()->tokenCan(15) == false ? true : false;
+        return $request->user()->tokenCan(13) == false ? true : false;
+    }
+    
+    function isSalesforce($request)
+    {
+        $cond_1 = $request->user()->tokenCan(13) == true;
+        $cond_2 = $request->user()->tokenCan(35) == false;
+        return $cond_1 && $cond_2;
+    }
+
+    function isOrderator($request)
+    {
+        return $request->user()->tokenCan(35);
     }
 
     function httpSender($type, $url, $params, $headers=[], $retry=0)
@@ -75,7 +87,7 @@
             if($brand)
             {
                 $res = Redis::set($request->dns, json_encode($brand));
-                return $brand;
+                return json_decode(json_encode($brand), true);
             }
             else
             {
@@ -87,6 +99,27 @@
             return json_decode($brand, true);
     }
 
+    function globalAuthFilter($query, $request, $parent_table='')
+    {
+        if(isMerchandise($request))
+        {   // 가맹점
+            $col = $parent_table == 'merchandises' ? "id" : 'mcht_id';
+            $query = $query->where($parent_table.".".$col,  $request->user()->id);
+        }
+        else if(isSalesforce($request))
+        {   // 영업자
+            $idx = globalLevelByIndex($request->user()->level);
+            $query = $query->where($parent_table."sales".$idx."_id",  $request->user()->id);
+        }
+        else if(isOrderator($request))
+        {   // all
+
+        }
+        else
+            throw new Exception('알 수 없는 등급');
+        return $query;
+    }
+
     function globalPGFilter($query, $request, $parent_table='')
     {
         $parent_table = $parent_table != "" ? $parent_table."." : "";
@@ -94,14 +127,14 @@
             $query = $query->where($parent_table.'pg_id', $request->pg_id);
         if($request->ps_id)
             $query = $query->where($parent_table.'ps_id', $request->ps_id);
-        if($request->pay_cond_id)
-            $query = $query->where($parent_table.'pay_cond_id', $request->pay_cond_id);
+        if($request->settle_type)
+            $query = $query->where($parent_table.'settle_type', $request->settle_type);
         if($request->terminal_id)
             $query = $query->where($parent_table.'terminal_id', $request->terminal_id);
         return $query;
     }
 
-    function globalSalesFilter($query, $request, $parent_table)
+    function globalSalesFilter($query, $request, $parent_table='')
     {
         $parent_table = $parent_table != "" ? $parent_table."." : "";
         if($request->sales0_id)

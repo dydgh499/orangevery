@@ -98,6 +98,6 @@ export const useRequestStore = defineStore('requestStore', () => {
             })
     }
 
-    return { formRequest, update, remove, setOneObject }
+    return { formRequest, update, remove, setOneObject, request }
 })
 

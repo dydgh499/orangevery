@@ -1,3 +1,4 @@
+import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import type { Options, PayModule } from '@/views/types';
 
@@ -15,25 +16,39 @@ export const installments = <Options[]>([
 ])
 
 export const useSearchStore = defineStore('payModSearchStore', () => {    
-    const store = Searcher<PayModule>('merchandises/pay-modules', <PayModule>({}))
-    function setHeaders() {
-        store.setHeader('NO.', 'id')
-        store.setHeader('가맹점 상호', 'mcht_name')
-        store.setHeader('별칭', 'note')
-        store.setHeader('모듈타입', 'module_type')
-        store.setHeader('PG사명', 'pg_id')
-        store.setHeader('구간', 'ps_id')
-        store.setHeader('정산일', 'pay_cond_id')
-        store.setHeader('MID', 'mid')
-        store.setHeader('TID', 'tid')
-        store.setHeader('할부한도', 'installment')
-        store.setHeader('생성시간', 'created_at')
-        store.setHeader('업데이트시간', 'updated_at')    
-        store.sortHeader()
+    const store = Searcher('merchandises/pay-modules')
+    const head  = Header('merchandises/pay-modules', '결제모듈 관리')
+
+    const headers: Record<string, string> = {
+        'id' : 'NO.',
+        'mcht_name' : '가맹점 상호',
+        'note' : '별칭',
+        'module_type' : '모듈타입',
+        'pg_id' : 'PG사명',
+        'ps_id' : '구간',
+        'settle_type' : '정산일',
+        'mid' : 'MID',
+        'tid' : 'TID',
+        'installment' : '할부한도',
+        'created_at' : '생성시간',
+        'updated_at' : '업데이트시간',
     }
-    setHeaders()
+    head.main_headers.value = [];
+    head.headers.value = head.initHeader(headers, {})
+    head.flat_headers.value = head.setFlattenHeaders()
+    
+    const exporter = async (type: number) => {      
+        const r = await store.get(store.getAllDataFormat())
+        let convert = r.data.content;
+        for (let index = 0; index <convert.length; index++) {
+        
+        }
+        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)        
+    }
     return {
         store,
+        head,
+        exporter,
     }
 });
 
@@ -45,15 +60,15 @@ export const useUpdateStore = defineStore('payModUpdateStore', () => {
         pg_id: 0,
         ps_id: 0,
         terminal_id: 0,
-        pay_cond_id: 0,
+        settle_type: 0,
         module_type: 0,
         api_key: '',
         sub_key: '',
         mid: '',
         tid: '',
         serial_num: '',
-        comm_pr: 0,
-        comm_calc_day: 1,
+        comm_settle_fee: 0,
+        comm_settle_type: 1,
         comm_calc_level: 10,
         under_sales_amt: 0,
         begin_dt: undefined,
@@ -63,7 +78,8 @@ export const useUpdateStore = defineStore('payModUpdateStore', () => {
         use_saleslip_prov: false,
         use_saleslip_sell: false,
         installment: 0,
-        note: '비고'
+        note: '비고',
+        settle_prem: null
     })
     //카드사 필터 및 다른 필터옵션들
     return {

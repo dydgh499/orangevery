@@ -19,13 +19,13 @@ const props = defineProps<Props>()
 
 const all_levels = allLevels()
 const { update, remove } = useRequestStore()
-const { pgs, pss, pay_conds, ternimals, setFee, setAmount } = useStore()
+const { pgs, pss, settle_types, terminals, setFee, setAmount } = useStore()
 const md = ref<number>(3)
 
 onMounted(() => {
     props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
     props.item.ps_id = props.item.ps_id == 0 ? null : props.item.ps_id
-    props.item.pay_cond_id = props.item.pay_cond_id == 0 ? null : props.item.pay_cond_id
+    props.item.settle_type = props.item.settle_type == 0 ? null : props.item.settle_type
     props.item.terminal_id = props.item.terminal_id == 0 ? null : props.item.terminal_id
 })
 
@@ -129,16 +129,24 @@ const filterPgs = computed(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <!-- 👉 출금 ID -->
+                        <!-- 👉 정산일 -->
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>정산일</template>
                                 <template #input>
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pay_cond_id"
-                                        :items="pay_conds" prepend-inner-icon="ic-outline-send-to-mobile" label="정산일 선택"
-                                        item-title="name" item-value="id" single-line persistent-hint
-                                        :hint="`${setAmount(pay_conds, props.item.pay_cond_id)}`"
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type"
+                                        :items="settle_types" prepend-inner-icon="ic-outline-send-to-mobile" label="정산일 선택"
+                                        item-title="name" item-value="id"
                                         :rules=[requiredValidator] />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow class="pt-3">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>입금 수수료</template>
+                                <template #input>
+                                    <VTextField v-model="props.item.settle_prem" type="number"
+                                        suffix="₩" :rules="[requiredValidator]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -214,9 +222,9 @@ const filterPgs = computed(() => {
                                 <template #name>단말기 타입</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.terminal_id"
-                                        :items="ternimals" prepend-inner-icon="ic-outline-send-to-mobile" label="단말기 선택"
+                                        :items="terminals" prepend-inner-icon="ic-outline-send-to-mobile" label="단말기 선택"
                                         item-title="name" item-value="id" single-line persistent-hint
-                                        :hint="`${setAmount(ternimals, props.item.terminal_id)}`" />
+                                        :hint="`${setAmount(terminals, props.item.terminal_id)}`" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -225,7 +233,7 @@ const filterPgs = computed(() => {
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>통신비</template>
                                 <template #input>
-                                    <VTextField type="number" v-model="props.item.comm_pr"
+                                    <VTextField type="number" v-model="props.item.comm_settle_fee"
                                         prepend-inner-icon="tabler-currency-won" placeholder="통신비 입력"
                                         persistent-placeholder />
                                 </template>
@@ -236,7 +244,7 @@ const filterPgs = computed(() => {
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>정산일</template>
                                 <template #input>
-                                    <VTextField v-model="props.item.comm_calc_day"
+                                    <VTextField v-model="props.item.comm_settle_type"
                                     :rules="[v => (v >= 0 && v <= 31) || '0~31 사이의 값을 입력해주세요']"
                                     label="정산일 입력" suffix="일" />
                                 </template>

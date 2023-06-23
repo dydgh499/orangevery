@@ -3,8 +3,10 @@ import { useSearchStore } from '@/views/complaints/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 import { issuers, complaint_types } from '@/views/complaints/useStore';
 
-const { store } = useSearchStore()
+const { store, head, exporter } = useSearchStore()
 provide('store', store)
+provide('head', head)
+provide('exporter', exporter)
 
 const metas = []
 const getComplainTypeColor = (type: number | null) => {
@@ -20,36 +22,57 @@ const getComplainTypeColor = (type: number | null) => {
 }
 </script>
 <template>
-    <BaseIndexView placeholder="TID 검색" :metas="[]" :add="true" add_name="민원">
+    <BaseIndexView placeholder="TID 검색" :metas="[]" :add="true" add_name="민원" :is_range_date="true">
         <template #filter>
         </template>
-        <template #header>
-            <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden" class='list-square'>  {{ header.ko }} </th>
+        <template #headers>
+            <tr>
+                <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
+                    class='list-square'>
+                    <span>
+                        {{ head.main_headers[index] }}
+                    </span>
+                </th>
+            </tr>
+            <tr>
+                <th v-for="(header, key) in head.flat_headers" :key="key" v-show="!header.hidden" class='list-square'>
+                    <span>
+                        {{ header.ko }}
+                    </span>
+                </th>
+            </tr>
         </template>
         <template #body>
-            <tr v-for="(user, index) in store.items" :key="index" style="height: 3.75rem;">
-                <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden" class='list-square'> 
-                    <span v-if="key == 'id'" class="edit-link" @click="store.edit(user.id)">
-                        #{{ user[key] }}
-                    </span>
-                    <span v-else-if="key == `type`">
-                        <VChip :color="getComplainTypeColor(user[key])">
-                            {{ complaint_types.find(item => item.id === user[key])?.title }}
-                        </VChip>
-                    </span>
-                    <span v-else-if="key == `issuer_id`">
-                            {{ issuers.find(item => item.id === user[key])?.title }}
-                    </span>
-                    <span v-else-if="key == `is_deposit`">
-                        <VChip :color="store.booleanTypeColor(!user[key])">
-                            {{ user[key] ? '입금' : '미입금' }}
-                        </VChip>
-                    </span>
-                    <span v-else>
-                        {{ user[key] }}
-                    </span>
-                </td>
+            <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
+                <template v-for="(_header, _key, _index) in head.headers" :key="_index">
+                    <template v-if="head.getDepth(_header, 0) != 1">
+                    </template>
+                    <template v-else>
+                        <td v-show="!_header.hidden" class='list-square'>
+                            <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
+                                #{{ item[_key] }}
+                            </span>
+                            <span v-else-if="_key == `type`">
+                                <VChip :color="getComplainTypeColor(item[_key])">
+                                    {{ complaint_types.find(types => types.id === item[_key])?.title }}
+                                </VChip>
+                            </span>
+                            <span v-else-if="_key == `issuer_id`">
+                                {{ issuers.find(issuer => issuer.id === item[_key])?.title }}
+                            </span>
+                            <span v-else-if="_key == `is_deposit`">
+                                <VChip :color="store.booleanTypeColor(!item[_key])">
+                                    {{ item[_key] ? '입금' : '미입금' }}
+                                </VChip>
+                            </span>
+                            <span v-else>
+                                {{ item[_key] }}
+                            </span>
+                        </td>
+                    </template>
+                </template>
             </tr>
+
         </template>
     </BaseIndexView>
 </template>

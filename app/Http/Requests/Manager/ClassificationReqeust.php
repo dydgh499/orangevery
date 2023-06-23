@@ -57,7 +57,7 @@ class ClassificationReqeust extends FormRequest
             $data[$key] = $this->input($key, '');
         }
         $data['brand_id'] = $this->user()->brand_id;
-        $data['is_use'] = true;
+        $data['is_delete'] = true;
         return $data;
     }
 }

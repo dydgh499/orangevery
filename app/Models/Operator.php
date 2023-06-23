@@ -27,7 +27,6 @@ class Operator extends Authenticatable
         'updated_at' => "datetime:Y-m-d H:m:s",
     ];
 
-
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format("Y-m-d H:i:s");

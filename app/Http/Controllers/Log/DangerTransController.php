@@ -32,7 +32,7 @@ class DangerTransController extends Controller
             'transactions.ori_trx_id',
             'transactions.mid',
             'transactions.tid',
-            'transactions.pay_cond_fee',
+            'transactions.settle_fee',
             'transactions.issuer',
             'transactions.acquirer',
             'transactions.card_num',

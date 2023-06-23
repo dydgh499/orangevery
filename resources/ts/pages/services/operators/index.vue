@@ -2,8 +2,10 @@
 import { useSearchStore, operator_levels } from '@/views/services/operators/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 
-const { store } = useSearchStore()
+const { store, head, exporter } = useSearchStore()
 provide('store', store)
+provide('head', head)
+provide('exporter', exporter)
 
 const metas = [
     {
@@ -41,44 +43,64 @@ const metas = [
 ]
 const getLevelTypeColor = (level: number) => {
     const id = operator_levels.find(item => item.id === level)?.id
-    if(id == 30)
+    if (id == 30)
         return "default"
-    else if(id == 35)
+    else if (id == 35)
         return "primary"
-    else if(id == 40)
+    else if (id == 40)
         return "success"
-    else if(id == 50)
+    else if (id == 50)
         return "info"
     else
         return "error"
 }
 </script>
 <template>
-    <BaseIndexView placeholder="ID 및 성명 검색" :metas="metas" :add="true" add_name="운영자">
-    <template #filter>
-    </template>
-    <template #header>
-        <th v-for="(header, index) in store.headers" :key="index" v-show="!header.hidden" class='list-square'>  {{ header.ko }} </th>
-    </template>
-    <template #body>
-        <tr v-for="(user, index) in store.items" :key="index" style="height: 3.75rem;">
-            <td v-for="(header, key, index) in store.headers" :key="index" v-show="!header.hidden" class='list-square'>  
-                <span v-if="key == `id`" class="edit-link" @click="store.edit(user.id)">
-                    #{{ user[key] }}
-                </span>
-                <span v-else-if="key == `user_name`" class="edit-link" @click="store.edit(user.id)">
-                    {{ user[key] }}
-                </span>
-                <span v-else-if="key == `level`">
-                    <VChip :color="getLevelTypeColor(user[key])">
-                        {{ operator_levels.find(item => item.id === user[key])?.name }}
-                    </VChip>
-                </span>
-                <span v-else> 
-                    {{ user[key] }} 
-                </span>
-            </td>
-        </tr>
-    </template>
-</BaseIndexView>
+    <BaseIndexView placeholder="ID 및 성명 검색" :metas="metas" :add="true" add_name="운영자" :is_range_date="true">
+        <template #filter>
+        </template>
+        <template #headers>
+            <tr>
+                <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
+                    class='list-square'>
+                    <span>
+                        {{ head.main_headers[index] }}
+                    </span>
+                </th>
+            </tr>
+            <tr>
+                <th v-for="(header, key) in head.flat_headers" :key="key" v-show="!header.hidden" class='list-square'>
+                    <span>
+                        {{ header.ko }}
+                    </span>
+                </th>
+            </tr>
+        </template>
+        <template #body>
+            <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
+                <template v-for="(_header, _key, _index) in head.headers" :key="_index">
+                    <template v-if="head.getDepth(_header, 0) != 1">
+                    </template>
+                    <template v-else>
+                        <td v-show="!_header.hidden" class='list-square'>
+                            <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
+                                #{{ item[_key] }}
+                            </span>
+                            <span v-else-if="_key == `user_name`" class="edit-link" @click="store.edit(item['id'])">
+                                {{ item[_key] }}
+                            </span>
+                            <span v-else-if="_key == `level`">
+                                <VChip :color="getLevelTypeColor(item[_key])">
+                                    {{ operator_levels.find(level => level.id === item[_key])?.name }}
+                                </VChip>
+                            </span>
+                            <span v-else>
+                                {{ item[_key] }}
+                            </span>
+                        </td>
+                    </template>
+                </template>
+            </tr>
+        </template>
+    </BaseIndexView>
 </template>

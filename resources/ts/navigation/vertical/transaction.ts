@@ -50,16 +50,16 @@ export default [
         },
       ]
   },  {
-    title: 'settle-history',
+    title: 'settle-histories',
     icon: { icon: 'tabler:calendar-time' },
     children: [
         {
-            title: 'merchandise-settle-history',
-            to: 'transactions-settle-history-merchandises',
+            title: 'merchandise-settle-histories',
+            to: 'transactions-settle-histories-merchandises',
           },
           {
-            title: 'salesforce-settle-history',
-            to: 'transactions-settle-history-salesforces',
+            title: 'salesforce-settle-histories',
+            to: 'transactions-settle-histories-salesforces',
           },
       ]
   },

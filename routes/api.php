@@ -57,8 +57,12 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::get('dangers', [DangerTransController::class, 'index']);
             Route::get('settle/merchandises', [SettleController::class, 'merchandises']);
             Route::get('settle/salesforces', [SettleController::class, 'salesforces']);
-            Route::get('settle-history/merchandises', [SettleHistoryController::class, 'index']);
-            Route::get('settle-history/salesforces', [SettleHistoryController::class, 'index']);
+            Route::post('settle/merchandises/deduct', [SettleController::class, 'MchtDeduct']);
+            Route::post('settle/salesforces/deduct', [SettleController::class, 'SalesDeduct']);
+            Route::get('settle-histories/merchandises', [SettleHistoryController::class, 'indexMerchandise']);
+            Route::get('settle-histories/salesforces', [SettleHistoryController::class, 'indexSalesforce']);
+            Route::post('settle-histories/merchandises', [SettleHistoryController::class, 'createMerchandise']);
+            Route::post('settle-histories/salesforces', [SettleHistoryController::class, 'createSalesforce']);
         });
         Route::prefix('salesforces')->group(function() {
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
@@ -78,5 +82,5 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::apiResource('merchandises', MerchandiseController::class);
         Route::apiResource('posts', PostController::class);
     });
-    Route::post('upload-image', [PostController::class, 'uploadImage']);
+    Route::post('upload', [PostController::class, 'upload']);
 });

@@ -55,12 +55,11 @@ class MerchandiseController extends Controller
         $query = $this->merchandises->leftJoin('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id');
         $query = globalPGFilter($query, $request, 'payment_modules');
         $query = globalSalesFilter($query, $request, 'merchandises');
+        $query = globalAuthFilter($query, $request, 'merchandises');
         $query = $query
             ->where('merchandises.brand_id', $request->user()->brand_id)
             ->where('merchandises.mcht_name', 'like', "%$search%");
 
-        if(isMerchandise($request))
-            $query = $query->where('merchandises.id', $request->user()->id);
         $query = $query->with(['sales0', 'sales1', 'sales2', 'sales3', 'sales4', 'sales5']);
         $query = $query->groupBy('merchandises.id');
         $data = $this->getIndexData($request, $query, 'merchandises.id', $cols, 'merchandises.created_at', true);

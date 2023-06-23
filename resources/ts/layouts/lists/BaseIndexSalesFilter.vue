@@ -3,7 +3,7 @@ import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import corp from '@corp'
 
 interface Props {
-    is_use: boolean,
+    is_delete: boolean,
 }
 const props = defineProps<Props>();
 const store = <any>(inject('store'))
@@ -13,27 +13,27 @@ const levels = corp.pv_options.auth.levels
 </script>
 <template>
     <VRow>
-        <VCol cols="12" sm="3" v-if="levels.sales5_use && props.is_use">
+        <VCol cols="12" sm="3" v-if="levels.sales5_use && props.is_delete">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.sales5_id" :items="sales[5].value"
                 :label="levels.sales5_name + ' 선택'" item-title="nick_name" item-value="id"/>
         </VCol>
-        <VCol cols="12" sm="3" v-if="levels.sales4_use && props.is_use">
+        <VCol cols="12" sm="3" v-if="levels.sales4_use && props.is_delete">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.sales4_id" :items="sales[4].value"
                 :label="levels.sales4_name + ' 선택'" item-title="nick_name" item-value="id" />
         </VCol>
-        <VCol cols="12" sm="3" v-if="levels.sales3_use && props.is_use">
+        <VCol cols="12" sm="3" v-if="levels.sales3_use && props.is_delete">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.sales3_id" :items="sales[3].value"
                 :label="levels.sales3_name + ' 선택'" item-title="nick_name" item-value="id" />
         </VCol>
-        <VCol cols="12" sm="3" v-if="levels.sales2_use && props.is_use">
+        <VCol cols="12" sm="3" v-if="levels.sales2_use && props.is_delete">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.sales2_id" :items="sales[2].value"
                 :label="levels.sales2_name + ' 선택'" item-title="nick_name" item-value="id" />
         </VCol>
-        <VCol cols="12" sm="3" v-if="levels.sales1_use && props.is_use">
+        <VCol cols="12" sm="3" v-if="levels.sales1_use && props.is_delete">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.sales1_id" :items="sales[1].value"
                 :label="levels.sales1_name + ' 선택'" item-title="nick_name" item-value="id" />
         </VCol>
-        <VCol cols="12" sm="3" v-if="levels.sales0_use && props.is_use">
+        <VCol cols="12" sm="3" v-if="levels.sales0_use && props.is_delete">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.sales0_id" :items="sales[0].value"
                 :label="levels.sales0_name + ' 선택'" item-title="nick_name" item-value="id" />
         </VCol>

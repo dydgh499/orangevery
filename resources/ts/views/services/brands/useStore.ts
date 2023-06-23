@@ -1,32 +1,47 @@
+import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import type { AuthOption, Brand, FreeOption, PaidOption, ThemeCSS } from '@/views/types';
 
 export const useSearchStore = defineStore('brandSearchStore', () => {
-    const store = Searcher<Brand>('services/brands', <Brand>({}))
-    const setHeaders = () => {
-        store.setHeader('NO.', 'id')
-        store.setHeader('DNS', 'dns')
-        store.setHeader('LOGO', 'logo_img')
-        store.setHeader('테마색상', 'main_color')
-        store.setHeader('회사명', 'company_nm')
-        store.setHeader('대표자명', 'ceo_nm')
-        store.setHeader('연락처', 'phone_num')
-        store.setHeader('비고', 'note')
-        store.setHeader('마지막 입금일', 'last_dpst_at')
-        store.setHeader('개발사 사용여부', 'pv_options.free.use_devloper')
-        store.setHeader('수기 사용여부', 'pv_options.free.use_hand_pay')
-        store.setHeader('인증 사용여부', 'pv_options.free.use_auth_pay')
-        store.setHeader('간편 사용여부', 'pv_options.free.use_simple_pay')
-        store.setHeader('입금일', 'deposit_day')
-        store.setHeader('입금액', 'deposit_amount')
-        store.setHeader('마지막 입금일', 'last_dpst_at')
-        store.setHeader('생성시간', 'created_at')
-        store.setHeader('업데이트시간', 'updated_at')        
-        store.sortHeader()
+    const store = Searcher('services/brands')
+    const head  = Header('services/brands', '서비스 관리')
+    const headers: Record<string, string|object> = {
+        'id' : 'NO.',
+        'dns' : 'DNS',
+        'logo_img' : 'LOGO',
+        'main_color' : '테마색상',
+        'company_nm' : '회사명',
+        'ceo_nm' : '대표자명',
+        'phone_num' : '연락처',
+        'note' : '비고',
+        'deposit_day': '입금일',
+        'deposit_amount': '입금액',
+        'last_dpst_at': '마지막 입금일',
+        'created_at' : '생성시간',
+        'updated_at' : '업데이트시간',
     }
-    setHeaders()
+  
+    head.main_headers.value = [
+        '서비스 정보',
+        '결제 사용여부',
+        '입금',
+    ];
+    head.headers.value = head.initHeader(headers, {})
+    head.flat_headers.value = head.setFlattenHeaders()
+
+    const exporter = async (type: number) => {      
+        const r = await store.get(store.getAllDataFormat())
+        let convert = r.data.content;
+        for (let index = 0; index <convert.length; index++) 
+        {
+        
+        }
+        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)        
+    }
     return {
         store,
+        head,
+        exporter,
     }
 })
 
@@ -60,7 +75,6 @@ export const useUpdateStore = defineStore('brandUpdateStore', () => {
         deposit_amount: 1000000,
         pv_options: {
             free: reactive<FreeOption>({
-                use_devloper: false,
                 use_hand_pay: false,
                 use_auth_pay: false,
                 use_simple_pay: false,

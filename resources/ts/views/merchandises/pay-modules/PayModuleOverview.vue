@@ -20,7 +20,7 @@ onMounted(async () => {
         page_size: 10000,
         search: '',
         s_dt: formatDate(new Date(2000, 1, 1)),
-        e_dt: formatDate(new Date(2999, 1, 1))
+        e_dt: formatDate(new Date(2999, 1, 1)),
     })
     const params = Object.assign({}, search, {'mcht_id': props.item.id});
     axios.get('/api/v1/manager/merchandises/pay-modules', { params: params })
@@ -35,16 +35,17 @@ function addNewPaymodule() {
         pg_id: 0,
         ps_id: 0,
         terminal_id: 0,
-        pay_cond_id: 0,
+        settle_type: 0,
+        settle_fee: 0,
         module_type: 0,
         api_key: '',
         sub_key: '',
         mid: '',
         tid: '',
         serial_num: '',
-        comm_pr: 0,
-        comm_calc_day: 0,
-        comm_calc_class: 0,
+        comm_settle_fee: 0,
+        comm_settle_type: 0,
+        comm_calc_level: 0,
         under_sales_amt: 0,
         begin_dt: undefined,
         ship_out_dt: undefined,

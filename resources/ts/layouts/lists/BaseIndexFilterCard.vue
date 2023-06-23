@@ -18,7 +18,7 @@ const props = defineProps<Props>();
         <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
             <VCol cols="12" md="6">
                 <VCardText style="padding: 1em;">
-                    <BaseIndexSalesFilter :is_use="sales">
+                    <BaseIndexSalesFilter :is_delete="sales">
                         <template #extra_left>
                             <slot name="extra_left"></slot>
                         </template>

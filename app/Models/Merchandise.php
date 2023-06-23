@@ -11,8 +11,8 @@ use DateTimeInterface;
 use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Salesforce;
-
-use Illuminate\Support\Facades\DB;
+use App\Models\Transaction;
+use App\Models\Logs\SettleDeductMerchandise;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class MchtOptions
@@ -46,18 +46,16 @@ class Merchandise extends Authenticatable
     protected   $hidden     = [
         'user_pw',
         'location',
-        'stamp_flag',
-        'stamp_save_count',
-        'birth_date',
         'sales0','sales1','sales2','sales3','sales4','sales5',
     ];
     protected $guarded = [];
 
+    
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format("Y-m-d H:i:s");
     }
-
+    
     public function sales0()
     {
         return $this->belongsTo(Salesforce::class, 'sales0_id')->select(['id', 'nick_name']);
@@ -87,7 +85,23 @@ class Merchandise extends Authenticatable
     {
         return $this->belongsTo(Salesforce::class, 'sales5_id')->select(['id', 'nick_name']);
     }
+
+    public function transactions()
+    {
+        $query = $this->hasMany(Transaction::class, 'mcht_id')
+            ->whereNull('mcht_settle_dt')
+            ->select();
+        $query = globalPGFilter($query, request());
+        return $query;
+    }
     
+    function deducts()
+    {
+        return $this->hasMany(SettleDeductMerchandise::class, 'mcht_id')
+            ->where('deduct_dt', request()->dt)
+            ->select();
+    }
+
     public function getSales0NameAttribute()
     {
         return $this->sales0 ? $this->sales0->nick_name : null;
@@ -179,12 +193,5 @@ class Merchandise extends Authenticatable
         return new Attribute(
             get: fn ($value) => number_format($value * 100, 3),
         );
-    }
-    public function setLocation($x, $y)
-    {   // latitude, longitude
-        if(env('APP_ENV') == 'production')  //MS SQL 에서만 가능
-            return DB::raw("geometry::STGeomFromText('POINT($x $y)', 4326)");
-        else
-            return DB::raw("ST_GeomFromText('POINT($x $y)', 4326)");
     }
 }

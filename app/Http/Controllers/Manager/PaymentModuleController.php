@@ -39,6 +39,7 @@ class PaymentModuleController extends Controller
         $query = $this->payModules->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id');
         $query = globalPGFilter($query, $request, 'payment_modules');
         $query = globalSalesFilter($query, $request, 'merchandises');       
+        $query = globalAuthFilter($query, $request, 'merchandises');
 
         $query = $query->where('payment_modules.brand_id', $request->user()->brand_id);
         if($module_type != '')
@@ -49,9 +50,6 @@ class PaymentModuleController extends Controller
                 ->orWhere('payment_modules.tid', 'like', "%$search%")
                 ->orWhere('merchandises.mcht_name', 'like', "%$search%");
         });
-
-        if($request->has('mcht_id'))
-            $query = $query->where('mcht_id', $request->mcht_id);
 
         $data = $this->getIndexData($request, $query, 'payment_modules.id', ['payment_modules.*', 'merchandises.mcht_name'], 'payment_modules.created_at');
         return $this->response(0, $data);
