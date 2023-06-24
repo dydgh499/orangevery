@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+use DateTimeInterface;
 use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 
-use DateTimeInterface;
 use App\Models\Transaction;
-use App\Models\Logs\SettleDeductMerchandise;
+use App\Models\Logs\SettleDeductSalesforce;
+use App\Models\Logs\SettleHistorySalesforce;
 
 class Salesforce extends Authenticatable
 {
@@ -32,18 +33,19 @@ class Salesforce extends Authenticatable
 
     public function transactions()
     {
-        $idx = globalLevelByIndex(request()->level);
+        $idx = globalLevelByIndex(request()->level);        
         $query = $this->hasMany(Transaction::class, 'sales'.$idx."_id")
-            ->whereNull('sales'.$idx.'_settle_dt')
-            ->select();
+            ->where('brand_id', request()->user()->brand_id)
+            ->whereNull('sales'.$idx.'_settle_id');
         $query = globalPGFilter($query, request());
-        return $query;
+        return $query->select();
     }
     
-    function deducts()
+    public function deducts()
     {
-        return $this->hasMany(SettleDeductMerchandise::class, 'mcht_id')
-                ->where('deduct_dt', request()->dt)
-                ->select();
+        return $this->hasMany(SettleDeductSalesforce::class, 'sales_id')
+            ->where('brand_id', request()->user()->brand_id)
+            ->where('deduct_dt', request()->dt)
+            ->select();
     }
 }

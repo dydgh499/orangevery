@@ -20,16 +20,14 @@ const filterPgs = computed(() => {
     if (pss.length > 0) {
         if (filter.length > 0) {
             let item = pss.find(item => item.id === store.params.ps_id)
-            if (item != undefined && filter[0].pg_id != item.pg_id)
-            {
-                if(store.params.ps_id != null)
+            if (item != undefined && filter[0].pg_id != item.pg_id) {
+                if (store.params.ps_id != null)
                     store.params.ps_id = null
             }
         }
-        else
-        {
-            if(store.params.ps_id != null)
-                    store.params.ps_id = null            
+        else {
+            if (store.params.ps_id != null)
+                store.params.ps_id = null
         }
     }
     return filter
@@ -47,11 +45,13 @@ const filterPgs = computed(() => {
         </VCol>
         <VCol cols="12" sm="3" v-if="props.pay_cond">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_type"
-                :items="[{ id: null, name: '정산일 선택' }].concat(settle_types)" label="정산일 선택" item-title="name" item-value="id" />
+                :items="[{ id: null, name: '정산일 선택' }].concat(settle_types)" label="정산일 선택" item-title="name"
+                item-value="id" />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.terminal">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.terminal_id"
-                :items="[{ id: null, name: '단말기 선택' }].concat(terminals)" label="단말기 선택" item-title="name" item-value="id" />
+                :items="[{ id: null, name: '단말기 선택' }].concat(terminals)" label="단말기 선택" item-title="name"
+                item-value="id" />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.cus_filter">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.custom_id"

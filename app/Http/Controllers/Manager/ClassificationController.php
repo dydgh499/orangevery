@@ -29,7 +29,9 @@ class ClassificationController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $query = $this->classifications->where('brand_id', $request->user()->brand_id);
+        $query = $this->classifications
+            ->where('is_delete', false)
+            ->where('brand_id', $request->user()->brand_id);
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }

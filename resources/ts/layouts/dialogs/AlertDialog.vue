@@ -3,7 +3,6 @@
 const visible = ref(false)
 const msg = ref<string>()
 let resolveCallback: (isAgreed: boolean) => void;
-
 const show = (_msg: string): Promise<boolean> => {
     msg.value = _msg;
     visible.value = true;

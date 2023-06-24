@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('tid', 50)->default('')->comment('tid');
             $table->string('cust_nm', 50)->default('')->comment('고객명');
             $table->date('appr_dt')->default('1970-01-01')->comment('승인일');
-            $table->integer('appr_num')->index()->comment('승인번호'); // 왼쪽 0 정렬
+            $table->string('appr_num', 9)->comment('승인번호');
             $table->string('phone_num', 20)->default('')->comment('휴대폰 번호');
             $table->string('hand_cust_nm', 50)->default('')->comment('수기작성성함');
             $table->string('hand_phone_num', 20)->default('')->comment('수기작성연락처');

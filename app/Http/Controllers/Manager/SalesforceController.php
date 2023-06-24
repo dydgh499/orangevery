@@ -48,8 +48,11 @@ class SalesforceController extends Controller
     public function index(IndexRequest $request)
     {
         $search = $request->input('search', '');
-        $query = $this->salesforces->where('brand_id', $request->user()->brand_id)
+        $query = $this->salesforces
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
             ->where('user_name', 'like', "%$search%");
+            
         if($request->has('level') && $request->level >= 0)
             $query = $query->where('level', $request->level);
         $data = $this->getIndexData($request, $query);
@@ -148,7 +151,7 @@ class SalesforceController extends Controller
     {
         $data = [];
         $levels = [13,15,17,20,25,30];
-        $grouped = $this->salesforces->where('brand_id', $request->user()->brand_id)->get(['id', 'nick_name', 'level'])->groupBy('level');        
+        $grouped = $this->salesforces->where('brand_id', $request->user()->brand_id)->get(['id', 'user_name', 'level'])->groupBy('level');        
         for($i=0; $i<count($levels); $i++)
         {
             $level = $levels[$i];

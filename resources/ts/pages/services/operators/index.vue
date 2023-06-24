@@ -41,19 +41,6 @@ const metas = [
         subtitle: 'Last week analytics',
     },
 ]
-const getLevelTypeColor = (level: number) => {
-    const id = operator_levels.find(item => item.id === level)?.id
-    if (id == 30)
-        return "default"
-    else if (id == 35)
-        return "primary"
-    else if (id == 40)
-        return "success"
-    else if (id == 50)
-        return "info"
-    else
-        return "error"
-}
 </script>
 <template>
     <BaseIndexView placeholder="ID 및 성명 검색" :metas="metas" :add="true" add_name="운영자" :is_range_date="true">
@@ -90,8 +77,8 @@ const getLevelTypeColor = (level: number) => {
                                 {{ item[_key] }}
                             </span>
                             <span v-else-if="_key == `level`">
-                                <VChip :color="getLevelTypeColor(item[_key])">
-                                    {{ operator_levels.find(level => level.id === item[_key])?.name }}
+                                <VChip :color="store.getSelectIdColor(operator_levels.find(obj => obj.id === item[_key])?.id)">
+                                    {{ operator_levels.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
                             </span>
                             <span v-else>

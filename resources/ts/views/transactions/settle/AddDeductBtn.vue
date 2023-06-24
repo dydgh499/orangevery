@@ -22,7 +22,7 @@ const addDeduction = async () => {
         'dt' : store.params.dt
     };
     const page = props.is_mcht ? 'merchandises' : 'salesfoces';
-    if (await alert.value.show('정말 '+props.name+'을(를) 추가차감하시겠습니까?'))
+    if (await alert.value.show('정말 '+props.name+'님을(를) 추가차감하시겠습니까?'))
     {
         try {
             const r = await axios.post('/api/v1/manager/transactions/settle/'+page+'/deduct', params )

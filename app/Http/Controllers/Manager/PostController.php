@@ -38,6 +38,7 @@ class PostController extends Controller
         $search = $request->input('search', '');
         $query  = $this->posts
             ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
             ->where('title', 'like', "%$search%");
 
         $data = $this->getIndexData($request, $query);

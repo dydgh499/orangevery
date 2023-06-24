@@ -3,6 +3,7 @@ import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
 import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
 
 
@@ -57,7 +58,14 @@ const getSettleStyle = (parent_key: string) => {
     else
         return ''; // 기본 스타일 또는 다른 스타일을 지정하고 싶은 경우 여기에 작성
 }
-
+const isSalesCol = (key: string) => {
+    const sales_cols = ['count', 'amount', 'trx_amount', 'settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
+    for (let i = 0; i < sales_cols.length; i++) {
+        if(sales_cols[i] === key)
+            return true        
+    }
+    return false
+}
 </script>
 <template>
     <BaseIndexView placeholder="가맹점 상호 검색" :metas="metas" :add="false" add_name="정산" :is_range_date="false">
@@ -75,20 +83,8 @@ const getSettleStyle = (parent_key: string) => {
             <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="!header.hidden" class='list-square'>
                     <template v-if="key == 'deduction.input'">
-                        <div class="d-inline-flex align-center gap-2 justify-content-evenly">
-                            <span>
-                                {{ header.ko }}
-                            </span>
-                            <VTooltip open-on-click :open-on-hover="false" location="top" transition="scale-transition">
-                                <template #activator="{ props }">
-                                    <VIcon v-bind="props" size="20" icon="ic:outline-help" color="primary"
-                                        style="margin-bottom: 0.2em;" />
-                                </template>
-                                <span>
-                                    차감이 아닌 추가금 설정을 하시러면 금액 앞에 "-"(마이너스 기호)를 입력 후 차감버튼을 클릭해주세요.
-                                </span>
-                            </VTooltip>
-                        </div>
+                        <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)" :content="'차감이 아닌 추가금 설정을 하시러면 금액 앞에 -(마이너스 기호)를 입력 후 차감버튼을 클릭해주세요.'">
+                        </BaseQuestionTooltip>
                     </template>
                     <template v-else>
                         <span>
@@ -117,26 +113,11 @@ const getSettleStyle = (parent_key: string) => {
                             <span v-if="_key === 'id'" class="edit-link">
                                 #{{ item[_key] }}
                             </span>
-                            <span v-else-if="_key === 'count'" style="font-weight: bold;">
-                                {{ (item[_key] as number).toLocaleString() }}
-                            </span>
-                            <span v-else-if="_key === 'amount'" style="font-weight: bold;">
-                                {{ (item[_key] as number).toLocaleString() }}
-                            </span>
-                            <span v-else-if="_key === 'trx_amount'" style="font-weight: bold;">
-                                {{ (item[_key] as number).toLocaleString() }}
-                            </span>
-                            <span v-else-if="_key === 'pay_cond_amount'" style="font-weight: bold;">
-                                {{ (item[_key] as number).toLocaleString() }}
-                            </span>
-                            <span v-else-if="_key === 'hold_amount'" style="font-weight: bold;">
-                                {{ (item[_key] as number).toLocaleString() }}
-                            </span>
-                            <span v-else-if="_key === 'profit'" style="font-weight: bold;">
+                            <span v-else-if="isSalesCol(_key as string)" style="font-weight: bold;">
                                 {{ (item[_key] as number).toLocaleString() }}
                             </span>
                             <span v-else-if="_key === 'extra_col'">
-                                <ExtraMenu :id="item['id']" :name="item['mcht_name']" :is_mcht="true" :item="item">
+                                <ExtraMenu :name="item['mcht_name']" :is_mcht="true" :item="item">
                                 </ExtraMenu>
                             </span>
                             <span v-else>

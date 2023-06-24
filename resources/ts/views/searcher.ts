@@ -30,7 +30,10 @@ export function Searcher(path: string) {
     }
 
     const setTable = async () => {
-        const r = await get(Object.assign(params, { search: search }))
+        const p = cloneDeep(params)
+        p.search = search.value
+        
+        const r = await get(p)
         if (r.status == 200) {
             const data = r.data
             let l_page = data.total / params.page_size
@@ -41,6 +44,7 @@ export function Searcher(path: string) {
     }
     const getAllDataFormat = () => {
         const p = cloneDeep(params)
+        p.search = search.value
         p.page_size = 99999999
         p.page = 1
         return p
@@ -49,7 +53,23 @@ export function Searcher(path: string) {
     const booleanTypeColor = (type: boolean | null) => {
         return Boolean(type) ? "default" : "success";
     };
-
+    
+    const getSelectIdColor = (id: number | undefined) => {
+        if (id == 0)
+            return "default"
+        else if (id == 1)
+            return "primary"
+        else if (id == 2)
+            return "success"
+        else if (id == 3)
+            return "info"
+        else if (id == 4)
+            return "warning"
+        else if (id == 5)
+            return "error"
+        else
+            return 'default';
+    }
     const pagenationCouputed = computed(() => {
         const firstIndex = items.value.length ? ((params.page - 1) * params.page_size) + 1 : 0
         const lastIndex = items.value.length + ((params.page - 1) * params.page_size)
@@ -60,7 +80,7 @@ export function Searcher(path: string) {
         setTable,
         items, params, search, pagenation,
         create, edit,
-        get, booleanTypeColor, getAllDataFormat,
+        get, booleanTypeColor, getSelectIdColor, getAllDataFormat,
         pagenationCouputed
     }
 }

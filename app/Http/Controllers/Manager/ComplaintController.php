@@ -37,6 +37,7 @@ class ComplaintController extends Controller
     {
         $search = $request->input('search', '');
         $query  = $this->complaints
+            ->where('is_delete', false)
             ->where('brand_id', $request->user()->brand_id)
             ->where('tid', 'like', "%$search%");
         $query = $query->with(['mcht', 'pg']);

@@ -22,13 +22,19 @@ class FailTransController extends Controller
 
     public function index(IndexRequest $request)
     {
+        $cols = [
+            'fail_transactions.*', 
+            'merchandises.mcht_name',
+        ];
         $search = $request->input('search', '');
         $query  = $this->fail_transactions
-            ->join('merchandises', 'fail_transactions.mcht_id', '=', 'merchandises.id')
+            ->join('payment_modules', 'payment_modules.id', '=', 'fail_transactions.pmod_id')
+            ->join('merchandises', 'merchandises.id', '=', 'payment_modules.mcht_id')
             ->where('fail_transactions.brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
             ->where('merchandises.mcht_name', 'like', "%$search%");
 
-        $data = $this->getIndexData($request, $query, 'fail_transactions.id', ['mcht_fee_change_histories.*', 'merchandises.mcht_name'], 'fail_transactions.created_at');
+        $data = $this->getIndexData($request, $query, 'fail_transactions.id', $cols, 'fail_transactions.trx_dt');
         return $this->response(0, $data);
     }
 }

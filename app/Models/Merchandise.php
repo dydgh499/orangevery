@@ -13,6 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Models\Salesforce;
 use App\Models\Transaction;
 use App\Models\Logs\SettleDeductMerchandise;
+use App\Models\Logs\SettleHistoryMerchandise;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class MchtOptions
@@ -89,15 +90,16 @@ class Merchandise extends Authenticatable
     public function transactions()
     {
         $query = $this->hasMany(Transaction::class, 'mcht_id')
-            ->whereNull('mcht_settle_dt')
-            ->select();
+            ->where('brand_id', request()->user()->brand_id)
+            ->whereNull('mcht_settle_id');
         $query = globalPGFilter($query, request());
-        return $query;
+        return $query->select();
     }
     
-    function deducts()
+    public function deducts()
     {
         return $this->hasMany(SettleDeductMerchandise::class, 'mcht_id')
+            ->where('brand_id', request()->user()->brand_id)
             ->where('deduct_dt', request()->dt)
             ->select();
     }

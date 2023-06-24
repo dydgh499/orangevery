@@ -9,17 +9,6 @@ provide('head', head)
 provide('exporter', exporter)
 
 const metas = []
-const getComplainTypeColor = (type: number | null) => {
-    const id = complaint_types.find(item => item.id === type)?.id
-    if (id == 1)
-        return "default"
-    else if (id == 2)
-        return "primary"
-    else if (id == 3)
-        return "success"
-    else if (id == 4)
-        return "info"
-}
 </script>
 <template>
     <BaseIndexView placeholder="TID 검색" :metas="[]" :add="true" add_name="민원" :is_range_date="true">
@@ -53,7 +42,7 @@ const getComplainTypeColor = (type: number | null) => {
                                 #{{ item[_key] }}
                             </span>
                             <span v-else-if="_key == `type`">
-                                <VChip :color="getComplainTypeColor(item[_key])">
+                                <VChip :color="store.getSelectIdColor(complaint_types.find(types => types.id === item[_key])?.id)">
                                     {{ complaint_types.find(types => types.id === item[_key])?.title }}
                                 </VChip>
                             </span>

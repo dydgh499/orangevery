@@ -65,7 +65,7 @@ const is_show = ref(false)
                             <template #name>관리자 등급</template>
                             <template #input>
                                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.level" :items="operator_levels"
-                                    prepend-inner-icon="tabler-adjustments-up" label="등급 선택"  item-title="name" item-value="id"
+                                    prepend-inner-icon="tabler-adjustments-up" label="등급 선택"  item-title="title" item-value="id"
                                     single-line :rules="[requiredValidator]" :readonly="props.id != 0"/>
                             </template>
                         </CreateHalfVCol>

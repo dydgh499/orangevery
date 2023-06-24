@@ -41,9 +41,6 @@ const metas = [
         subtitle: 'Last week analytics',
     },
 ]
-const getComplainTypeColor = (http_code: number) => {
-    return http_code >= 200 && http_code <= 299 ? 'success' : 'error'
-}
 </script>
 <template>
     <BaseIndexView placeholder="발송 URL 검색" :metas="metas" :add="false" add_name="가맹점" :is_range_date="true">
@@ -85,7 +82,7 @@ const getComplainTypeColor = (http_code: number) => {
                                 #{{ item[_key] }}
                             </span>
                             <span v-else-if="_key == `http_code`">
-                                <VChip :color="getComplainTypeColor(Number(item[_key]))">
+                                <VChip :color="store.booleanTypeColor(item[_key] >= 200 && item[_key] <= 299)">
                                     {{ item[_key] }}
                                 </VChip>
                             </span>

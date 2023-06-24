@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Models\Transaction;
+use App\Models\Salesforce;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\TransactionRequest;
@@ -29,13 +30,34 @@ class TransactionController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $query =  $this->transactions->where('brand_id', $request->user()->brand_id);
+        $search = $request->input('search', '');
+        $query =  $this->transactions
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
+            ->where(function ($query) use ($search) {
+                return $query->where('mid', 'like', "%$search%")
+                    ->orWhere('tid', 'like', "%$search%")
+                    ->orWhere('trx_id', 'like', "%$search%")
+                    ->orWhere('appr_num', 'like', "%$search%");
+            });
         $query = globalPGFilter($query, $request);
         $query = globalSalesFilter($query, $request);
         $query = globalAuthFilter($query, $request);
 
+        if($request->has('mcht_settle_id'))
+            $query = $query->where('mcht_settle_id', $request->mcht_settle_id);
+
+        for ($i=0; $i < 6; $i++) { 
+            $col = 'sales'.$i.'_settle_id';
+            if($request->has($col))
+                $query = $query->where($col, $request->input($col));
+        }
+
         $query = $query->with(['sales0', 'sales1', 'sales2', 'sales3', 'sales4', 'sales5', 'mcht']);
         $data = $this->getIndexData($request, $query);
+        foreach($data['content'] as $content) {
+            $content->append(['total_trx_amount']);
+        }
         return $this->response(0, $data);
     }
 

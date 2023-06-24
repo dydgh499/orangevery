@@ -33,7 +33,9 @@ class PaymentGatewayController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $query = $this->pay_gateways->where('brand_id', $request->user()->brand_id);
+        $query = $this->pay_gateways
+            ->where('is_delete', false)
+            ->where('brand_id', $request->user()->brand_id);
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }

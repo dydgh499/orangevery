@@ -1,5 +1,8 @@
 import { Header } from '@/views/headers';
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore';
 import { Searcher } from '@/views/searcher';
+import { useStore } from '@/views/services/pay-gateways/useStore';
+import type { Transaction } from '@/views/types';
 import corp from '@corp';
 
 export const useSearchStore = defineStore('transSearchStore', () => {    
@@ -10,6 +13,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         'id': 'NO.',
         'module_type': '거래 타입',
     }
+    const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
     if(levels.sales5_use)
     {
         headers['sales5_name'] = levels.sales5_name+' ID'
@@ -46,8 +50,6 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['mcht_fee'] = '수수료'
     headers['hold_fee'] = '유보금 수수료'
 
-    headers['settle_type'] = '정산일 수수료'
-    headers['pay_cond_price'] = '입금 수수료'
     headers['pg_id'] = 'PG사 수수료'
     headers['ps_fee'] = '구간 수수료'
 
@@ -55,7 +57,10 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['terminal_id'] = '단말기타입'
     headers['amount'] = '거래 금액'
     headers['trx_amount'] = '거래 수수료'
-    headers['profit'] = '정산 수수료'
+    headers['hold_amount'] = '유보금'
+    headers['mcht_settle_fee'] = '입금 수수료'
+    headers['total_trx_amount'] = '총 거래 수수료'
+    headers['profit'] = '정산금'
 
     headers['trx_dttm'] = '거래 시간'
     headers['cxl_dttm'] = '취소 시간'
@@ -85,15 +90,23 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     
     const exporter = async (type: number) => {      
         const r = await store.get(store.getAllDataFormat())
-        let convert = r.data.content;
-        for (let index = 0; index <convert.length; index++) {
-        
+        printer(type, r.data.content)
+    }
+    const printer = (type:number, datas: Transaction[]) => {
+        for (let i = 0; i <datas.length; i++) {
+            datas[i]['module_type'] = module_types.find(module_type => module_type['id'] === datas[i]['module_type'])?.title as string
+            datas[i]['installment'] = installments.find(inst => inst['id'] === datas[i]['installment'])?.title as string
+            datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_nm as string
+            datas[i]['ps_id'] =  pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
+            datas[i]['settle_type'] = settle_types.find(settle_type => settle_type['id'] === datas[i]['settle_type'])?.name as string
+            datas[i]['terminal_id'] = terminals.find(terminal => terminal['id'] === datas[i]['terminal_id'])?.name as string
         }
-        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)        
+        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
     }
     return {
         store,
         head,
         exporter,
+        printer,
     }
 })

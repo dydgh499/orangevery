@@ -288,40 +288,40 @@ export interface Transaction {
 
     sales5_id: number | null,
     sales5_fee: float,
-    sales5_settle_dt: Date,
+    sales5_settle_id: Date,
     sales4_id: number | null,
 
     sales4_fee: float,
-    sales4_settle_dt: Date,
+    sales4_settle_id: Date,
     sales3_id: number | null,
 
     sales3_fee: float,
-    sales3_settle_dt: Date,
+    sales3_settle_id: Date,
     sales2_id: number | null,
 
     sales2_fee: float,
-    sales2_settle_dt: Date,
+    sales2_settle_id: Date,
     sales1_id: number | null,
 
     sales1_fee: float,
-    sales1_settle_dt: Date,
+    sales1_settle_id: Date,
     sales0_id: number | null,
 
     sales0_fee: float,
-    sales0_settle_dt: Date,
+    sales0_settle_id: Date,
 
-    custom_id: number,
+    custom_id: number | string,
     mcht_fee: float,
     hold_fee: float,
     mid: string,
     tid: string,
     //    
-    module_type: number,
-    pg_id: number,
-    pmod_id: number,
-    ps_id: number,
-    settle_type: number,
-    terminal_id: number,
+    module_type: number | string,
+    pg_id: number | string,
+    pmod_id: number | string,
+    ps_id: number | string,
+    settle_type: number | string,
+    terminal_id: number | string,
     //
     ps_fee: Float,
     mcht_settle_type: number,
@@ -340,7 +340,7 @@ export interface Transaction {
     //
     card_name: string,
     card_num: string,
-    installment: number,
+    installment: number | string,
     //
     issuer: string,
     acquirer: string,
@@ -352,72 +352,71 @@ export interface Transaction {
 
 export interface Danger {
     id: number,
-    mcht_id: number,
-    tran_id: number,
-    trx_type: number,
+    mcht_name: number,
+    trx_type: number | string,
     item_name: string,
-    mid: string,
-    tid: string,
+    amount: number,
     ord_num: string,
     trx_id: string,
     ori_trx_id: string,
-    settle_type: number,
-    settle_fee: float,
-    
-    card_name: string,
+    mid: string,
+    tid: string,
+    pg_id: number | string,
+    ps_id: number | string,
+    issuer: string,
+    acquirer: string,
     card_num: string,
-    installment: number,
-    danger_type: number,
-    danger_check: boolean,
-    pg_id: number,
-    pg_name: string,
-    ps_id: number,
-    ps_name: string,
     trx_dttm: Date,
-    cxl_dttm: Date,
-    is_cancel:boolean,
-    updated_at:datetime,
+    terminal_id: number | string
+    installment: number | string,
+    danger_type: number | string,
+    is_checked: boolean | string,
     created_at: datetime,
+    updated_at:datetime,
 }
 export interface FailTransaction {
     id: number,
-    mcht_id: number,
-    pg_id: number,
-    ps_id: number,
-    pmod_id: number,
-    settle_type: number,
-    trx_dt: Date,
-    trx_tm: Time,
+    mcht_name: string,
+    pg_id: number | string,
+    ps_id: number | string,
+    trx_type: number | string,
+    trx_dttm: Date,
     amount: number,
     resuld_cd: string,
     result_msg: string,
 }
 
 export interface Settle extends Bank {
+    id: number,
+    level: number,
     user_name: string,
+    mcht_name: string,
     count: number,
     amount: number,
     trx_amount: number,
+    settle_fee: number,
+    total_trx_amount: number,
     profit: number,
     appr: {
         count: number,
         amount: number,
         trx_amount: number,
-        pay_cond_amount: number,
         hold_amount: number,
+        settle_fee: number,
+        total_trx_amount: number,
         profit: number,
     },
     cxl: {
         count: number,
         amount: number,
         trx_amount: number,
-        pay_cond_amount: number,
         hold_amount: number,
+        settle_fee: number,
+        total_trx_amount: number,
         profit: number,  
     },
     deduction: {
         amount: number,
-        complate_amount: number,
     },
     settle: {
         amount:number,       // 정산금액
@@ -434,40 +433,27 @@ export interface Settle extends Bank {
     business_num: string,
     addr: string,
 }
-export interface SettleMerchandise extends Settle{
-    id: number,
-    mcht_id: number,
-    mcht_name: string,
-    sales_id: number,
-    sales_name: string,
-}
-
-export interface SettleSalesforce extends Settle{
-    id: number,
-    sales_id: number,
-    sales_name: string,
-    parent_id: number,
-    parent_name: string,
-}
 
 export interface SettlesHistories extends Bank{
     id: number,
+    mcht_id: number
+    mcht_name: string,    
+    sales_id: number,
+    level: number,
+    brand_id: number,
+    user_name: string,
     settle_amount: number,
+    deduct_amount: number,
+    appr_amount: number,
+    cxl_amount: number,
+    total_amount: number,
+    acct_nm: string,
+    acct_num: string,
+    acct_bank_nm: string,
+    acct_bank_cd: string,
     settle_dt: Date,
     deposit_dt: Date,
-    apply_s_dt: Date,
-    apply_e_dt: Date,
     status: Boolean,
-}
-
-export interface SettlesHistoriesMerchandise {
-    mcht_id: number
-    mcht_name: string,
-}
-
-export interface SettlesHistoriesSalesforce {
-    sales_id: number
-    sales_name: string,
 }
 
 export interface Post {
@@ -527,5 +513,5 @@ export interface NotiSendHistory {
     retry_count: number,
     message: string,
     send_url: string,
-    created_at: datetime | null,
+    created_at: datetime,
 }

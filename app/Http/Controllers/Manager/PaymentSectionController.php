@@ -29,7 +29,9 @@ class PaymentSectionController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $query = $this->pay_sections->where('brand_id', $request->user()->brand_id);
+        $query = $this->pay_sections
+                ->where('brand_id', $request->user()->brand_id)
+                ->where('is_delete', false);
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }

@@ -7,16 +7,6 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-
-const getPostTypeColor = (type: number) => {
-    const id = types.find(item => item.id === type)?.id
-    if (id == 0)
-        return "default"
-    else if (id == 1)
-        return "primary"
-    else if (id == 2)
-        return "success"
-}
 </script>
 <template>
     <BaseIndexView placeholder="게시글 검색" :metas="[]" :add="true" add_name="게시글" :is_range_date="true">
@@ -55,9 +45,9 @@ const getPostTypeColor = (type: number) => {
                                 #{{ item[_key] }}
                             </span>
                             <span v-else-if="_key == 'type'">
-                                <VChip :color="getPostTypeColor(user[key])">
-                            {{ types.find(item => item.id === user[key])?.title }}
-                        </VChip>
+                                <VChip :color="store.getSelectIdColor(types.find(obj => obj.id === item[_key])?.id)">
+                                    {{ types.find(obj => obj.id === item[_key])?.title }}
+                                </VChip>
                             </span>
                             <span v-else>
                                 {{ item[_key] }}

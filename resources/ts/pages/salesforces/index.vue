@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/salesforces/useStore'
-import { settleCycles } from '@/views/salesforces/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
-import { salesLevels } from '@/views/salesforces/useStore';
+import { salesLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
 
 const { store, head, exporter } = useSearchStore()
 const all_sales = salesLevels()
+const all_cycles = settleCycles()
+const all_days = settleDays()
+const tax_types = settleTaxTypes()
+
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
@@ -47,23 +50,7 @@ const metas = [
         subtitle: 'Last week analytics',
     },
 ]
-const getSalesTypeColor = (_class: number) => {
-    const id = all_sales.find(item => item.id === _class)?.id
-    if (id == 0)
-        return "default"
-    else if (id == 1)
-        return "primary"
-    else if (id == 2)
-        return "success"
-    else if (id == 3)
-        return "info"
-    else if (id == 4)
-        return "warning"
-    else if (id == 5)
-        return "error"
-    else
-        return 'default';
-}
+
 </script>
 <template>
     <BaseIndexView placeholder="ID, 대표자명 검색" :metas="metas" :add="true" add_name="영업점" :is_range_date="true">
@@ -79,7 +66,7 @@ const getSalesTypeColor = (_class: number) => {
                     <VCol cols="12" sm="3">
                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
                             :items="[{ id: null, title: '정산주기 선택' }].concat(settleCycles())" :label="`정산주기 선택`"
-                            item-title="name" item-value="id" />
+                            item-title="title" item-value="id" />
                     </VCol>
                 </template>
             </BaseIndexFilterCard>
@@ -120,8 +107,21 @@ const getSalesTypeColor = (_class: number) => {
                                 {{ item[_key] }}
                             </span>
                             <span v-else-if="_key == 'level'">
-                                <VChip :color="getSalesTypeColor(item[_key])">
+                                <VChip :color="store.getSelectIdColor(all_sales.find(obj => obj.id === item[_key])?.id)">
                                     {{ all_sales.find(sales => sales.id === item[_key])?.title }}
+                                </VChip>
+                            </span>
+                            <span v-else-if="_key == 'settle_cycle'">
+                                <VChip :color="store.getSelectIdColor(all_cycles.find(obj => obj.id === item[_key])?.id)">
+                                    {{ all_cycles.find(sales => sales.id === item[_key])?.title }}
+                                </VChip>
+                            </span>
+                            <span v-else-if="_key == 'settle_day'">
+                                    {{ all_days.find(sales => sales.id === item[_key])?.title }}
+                            </span>
+                            <span v-else-if="_key == 'settle_tax_type'">
+                                <VChip :color="store.getSelectIdColor(tax_types.find(obj => obj.id === item[_key])?.id)">
+                                    {{ tax_types.find(sales => sales.id === item[_key])?.title }}
                                 </VChip>
                             </span>
                             <span v-else>

@@ -1,12 +1,12 @@
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
-import type { Operator } from '@/views/types';
+import type { Operator, Options } from '@/views/types';
 
-export const operator_levels = [
-    {id:30, name:'스태프'},
-    {id:35, name:'본사'},
-    {id:40, name:'협력사'},
-    {id:50, name:'개발사'},
+export const operator_levels:Options[] = [
+    {id:30, title:'스태프'},
+    {id:35, title:'본사'},
+    {id:40, title:'협력사'},
+    {id:50, title:'개발사'},
 ]
 
 export const useSearchStore = defineStore('operatorSearchStore', () => {    

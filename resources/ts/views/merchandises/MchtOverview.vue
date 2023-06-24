@@ -39,17 +39,15 @@ onMounted(() => {
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>상호</template>
                             <template #input>
-                                <VTextField v-model="props.item.mcht_name"
-                                    prepend-inner-icon="tabler-building-store" placeholder="상호를 입력해주세요"
-                                    persistent-placeholder :rules="[requiredValidator]" />
+                                <VTextField v-model="props.item.mcht_name" prepend-inner-icon="tabler-building-store"
+                                    placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>업종</template>
                             <template #input>
-                                <VTextField v-model="props.item.sector"
-                                    prepend-inner-icon="tabler-building-store" placeholder="업종을 입력해주세요"
-                                    persistent-placeholder :rules="[requiredValidator]" />
+                                <VTextField v-model="props.item.sector" prepend-inner-icon="tabler-building-store"
+                                    placeholder="업종을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 수수료율 -->
@@ -59,12 +57,12 @@ onMounted(() => {
                                     <label>거래/유보금 수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.trx_fee" type="number"
-                                        suffix="%" :rules="[requiredValidator]" />
+                                    <VTextField v-model="props.item.trx_fee" type="number" suffix="%"
+                                        :rules="[requiredValidator]" />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.hold_fee" type="number"
-                                        suffix="%" :rules="[requiredValidator]" />
+                                    <VTextField v-model="props.item.hold_fee" type="number" suffix="%"
+                                        :rules="[requiredValidator]" />
                                 </VCol>
                                 <FeeChangeBtn v-if="props.item.id" :level=-1 :item="props.item">
                                 </FeeChangeBtn>
@@ -79,12 +77,13 @@ onMounted(() => {
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales5_id"
-                                        :items="sales[5].value" prepend-inner-icon="tabler-man" label="지사 선택"
-                                        item-title="nick_name" item-value="id" />
+                                        :items="[{ id: null, user_name: levels.sales5_name + ' 선택' }].concat(sales[5].value)"
+                                        prepend-inner-icon="tabler-man" label="지사 선택" item-title="user_name"
+                                        item-value="id" />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.sales5_fee" type="number"
-                                        suffix="%" :rules="[requiredValidator]" />
+                                    <VTextField v-model="props.item.sales5_fee" type="number" suffix="%"
+                                        :rules="[requiredValidator]" />
                                 </VCol>
                                 <FeeChangeBtn v-if="props.item.id" :level=5 :item="props.item">
                                 </FeeChangeBtn>
@@ -98,31 +97,33 @@ onMounted(() => {
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales4_id"
-                                        :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위지사 선택"
-                                        item-title="nick_name" item-value="id" />
+                                        :items="[{ id: null, user_name: levels.sales4_name + ' 선택' }].concat(sales[4].value)"
+                                        prepend-inner-icon="tabler-man" label="하위지사 선택" item-title="user_name"
+                                        item-value="id" />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.sales4_fee" type="number"
-                                        suffix="%" :rules="[requiredValidator]" />
+                                    <VTextField v-model="props.item.sales4_fee" type="number" suffix="%"
+                                        :rules="[requiredValidator]" />
                                 </VCol>
                                 <FeeChangeBtn v-if="props.item.id" :level=4 :item="props.item">
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
-                        <VCol cols="12"  v-if="levels.sales3_use">
+                        <VCol cols="12" v-if="levels.sales3_use">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
                                     <label>{{ levels.sales3_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales3_id"
-                                        :items="sales[5].value" prepend-inner-icon="tabler-man" label="총판 선택"
-                                        item-title="nick_name" item-value="id" />
+                                        :items="[{ id: null, user_name: levels.sales3_name + ' 선택' }].concat(sales[3].value)"
+                                        prepend-inner-icon="tabler-man" label="총판 선택" item-title="user_name"
+                                        item-value="id" />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.sales3_fee" type="number"
-                                        suffix="%" :rules="[requiredValidator]" />
+                                    <VTextField v-model="props.item.sales3_fee" type="number" suffix="%"
+                                        :rules="[requiredValidator]" />
                                 </VCol>
                                 <FeeChangeBtn v-if="props.item.id" :level=3 :item="props.item">
                                 </FeeChangeBtn>
@@ -136,12 +137,13 @@ onMounted(() => {
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales2_id"
-                                        :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위총판 선택"
-                                        item-title="nick_name" item-value="id" />
+                                        :items="[{ id: null, user_name: levels.sales2_name + ' 선택' }].concat(sales[2].value)"
+                                        prepend-inner-icon="tabler-man" label="하위총판 선택" item-title="user_name"
+                                        item-value="id" />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.sales2_fee" type="number"
-                                        suffix="%" :rules="[requiredValidator]" />
+                                    <VTextField v-model="props.item.sales2_fee" type="number" suffix="%"
+                                        :rules="[requiredValidator]" />
                                 </VCol>
                                 <FeeChangeBtn v-if="props.item.id" :level=2 :item="props.item">
                                 </FeeChangeBtn>
@@ -155,12 +157,13 @@ onMounted(() => {
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales1_id"
-                                        :items="sales[5].value" prepend-inner-icon="tabler-man" label="대리점 선택"
-                                        item-title="nick_name" item-value="id" />
+                                        :items="[{ id: null, user_name: levels.sales1_name + ' 선택' }].concat(sales[1].value)"
+                                        prepend-inner-icon="tabler-man" label="대리점 선택" item-title="user_name"
+                                        item-value="id" />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.sales1_fee" type="number"
-                                        suffix="%" :rules="[requiredValidator]" />
+                                    <VTextField v-model="props.item.sales1_fee" type="number" suffix="%"
+                                        :rules="[requiredValidator]" />
                                 </VCol>
                                 <FeeChangeBtn v-if="props.item.id" :level=1 :item="props.item">
                                 </FeeChangeBtn>
@@ -170,16 +173,17 @@ onMounted(() => {
                         <VCol cols="12" v-if="levels.sales0_use">
                             <VRow no-gutters>
                                 <VCol cols="12" md="3">
-                                    <label>{{ levels.sales0_name }}하위대리점/수수료율</label>
+                                    <label>{{ levels.sales0_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales0_id"
-                                        :items="sales[5].value" prepend-inner-icon="tabler-man" label="하위대리점 선택"
-                                        item-title="nick_name" item-value="id" />
+                                        :items="[{ id: null, user_name: levels.sales0_name + ' 선택' }].concat(sales[0].value)"
+                                        prepend-inner-icon="tabler-man" label="하위대리점 선택" item-title="user_name"
+                                        item-value="id" />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.sales0_fee" type="number"
-                                        suffix="%" :rules="[requiredValidator]" />
+                                    <VTextField v-model="props.item.sales0_fee" type="number" suffix="%"
+                                        :rules="[requiredValidator]" />
                                 </VCol>
                                 <FeeChangeBtn v-if="props.item.id" :level=0 :item="props.item">
                                 </FeeChangeBtn>
@@ -202,9 +206,10 @@ onMounted(() => {
                                     <label>커스텀 필터</label>
                                 </VCol>
                                 <VCol cols="12" md="9">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.custom_id" :items="[{id:null, name:'커스텀 필터 선택'}].concat(cus_filters)"
-                                        prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name" item-value="id"
-                                        persistent-hint />
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.custom_id"
+                                        :items="[{ id: null, name: '커스텀 필터 선택' }].concat(cus_filters)"
+                                        prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name"
+                                        item-value="id" persistent-hint />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -281,11 +286,11 @@ onMounted(() => {
                                         v-model="props.pv_options.abnormal_trans_limit" type="number"
                                         :rules="[requiredValidator]" />
                                 </VCol>
-                        </VRow>
-                    </VCol>
-                    <VDivider />
-                </VRow>
-            </VCardItem>
-        </VCard>
+                            </VRow>
+                        </VCol>
+                        <VDivider />
+                    </VRow>
+                </VCardItem>
+            </VCard>
     </VCol>
 </VRow></template>

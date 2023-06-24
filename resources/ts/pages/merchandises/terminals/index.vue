@@ -48,21 +48,6 @@ const metas = [
     },
 ]
 const all_levels = allLevels()
-const getMouduleTypeColor = (id: number) => {
-    const module_id = module_types.find(item => item['id'] === id)?.id
-    if (module_id == 0)
-        return "default"
-    else if (module_id == 1)
-        return "primary"
-    else if (module_id == 2)
-        return "success"
-    else if (module_id == 3)
-        return "info"
-    else if (module_id == 4)
-        return "warning"
-    else
-        return "error"
-}
 </script>
 <template>
     <BaseIndexView placeholder="MID, TID, 가맹점 상호 검색" :metas="metas" :add="true" add_name="단말기" :is_range_date="true">
@@ -106,8 +91,8 @@ const getMouduleTypeColor = (id: number) => {
                                 {{ item[_key] }}
                             </span>
                             <span v-else-if="_key == 'module_type'">
-                                <VChip :color="getMouduleTypeColor(item[_key])">
-                                    {{ module_types.find(module_type => module_type['id'] === item[_key])?.title }}
+                                <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
+                                    {{ module_types.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'installment'">

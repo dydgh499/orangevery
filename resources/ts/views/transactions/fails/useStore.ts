@@ -1,37 +1,43 @@
 import { Header } from '@/views/headers';
+import { module_types } from '@/views/merchandises/pay-modules/useStore';
 import { Searcher } from '@/views/searcher';
+import { useStore } from '@/views/services/pay-gateways/useStore';
+import type { FailTransaction } from '@/views/types';
+
 
 export const useSearchStore = defineStore('failSearchStore', () => {    
     const store = Searcher('transactions/fails')
     const head  = Header('transactions/fails', '결제실패 관리')
-
-    function setHeaders() {
-        const headers = {
-            'id': 'NO.',
-            'mcht_name': '가맹점 상호',
-            'result_cd': '실패 코드',
-            'result_msg': '실패 메세지',
-            'amount': '결제시도 금액',
-            'trx_type': 'PG사', // ??
-            'pmod_name': '결제모듈 별칭',
-            'trx_dttm': '결제시도시간',
-            'created_at': '생성시간',
-        }
-        head.main_headers.value = [
-        ];
-        head.headers.value = head.initHeader(headers, {})
-        head.flat_headers.value = head.setFlattenHeaders()
+    const { pgs, pss } = useStore()
+    const headers = {
+        'id': 'NO.',
+        'mcht_name': '가맹점 상호',
+        'pg_id' : 'PG사',
+        'ps_id' : '구간',
+        'trx_type': '거래타입',
+        'result_cd': '실패 코드',
+        'result_msg': '실패 메세지',
+        'amount': '결제시도 금액',
+        'trx_dttm': '결제시도시간',
+        'created_at': '생성시간',
     }
+    head.main_headers.value = [];
+    head.headers.value = head.initHeader(headers, {})
+    head.flat_headers.value = head.setFlattenHeaders()
+    
     const exporter = async (type: number) => {      
         const r = await store.get(store.getAllDataFormat())
-        let convert = r.data.content;
-        for (let index = 0; index <convert.length; index++) 
-        {
-        
-        }
-        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)        
+        printer(type, r.data.content)
     }
-    setHeaders()
+    
+    const printer = (type:number, datas: FailTransaction[]) => {
+        for (let i = 0; i <datas.length; i++) {
+            datas[i]['trx_type'] = module_types.find(module_type => module_type['id'] === datas[i]['trx_type'])?.title as string
+            datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_nm as string
+            datas[i]['ps_id'] =  pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
+        }
+        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
+    }
     return {
         store,
         head,

@@ -1,29 +1,45 @@
+import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
-import type { SettlesHistoriesMerchandise } from '@/views/types';
 
 export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', () => {    
-    const store = Searcher<SettlesHistoriesMerchandise>('transactions/settle-histories/merchandises', <SettlesHistoriesMerchandise>({}))
+    const store = Searcher('transactions/settle-histories/merchandises')
+    const head  = Header('transactions/settle-histories/merchandises', '가맹점 정산이력')
+    const headers = {
+        'id': 'NO.',
+        'user_name' : '가맹점 ID',
+        'mcht_name' : '상호',
+        'total_amount': '매출액',
+        'appr_amount': '승인액',
+        'cxl_amount': '취소액',
+        'deduct_amount': '추가차감액',
+        'settle_amount': '정산액',
+        'settle_dt': '정산일',
+        'deposit_dt': '입금일',
+        'deposit_status': '입금상태',
+        'acct_bank_nm': '은행',
+        'acct_bank_cd': '은행코드',
+        'acct_nm': '예금주',
+        'acct_num': '계좌번호',
+        'created_at': '생성시간',
+        'extra_col': '더보기',
+    };
+    head.main_headers.value = [];
+    head.headers.value = head.initHeader(headers, {})
+    head.flat_headers.value = head.setFlattenHeaders()
 
-    function setHeaders() {
-        store.setHeader('NO.', 'id')
-        store.setHeader('가맹점 상호', 'mcht_name')
-        store.setHeader('정산금액', 'settle_amount')
-
-        store.setHeader('정산일', 'settle_dt')
-        store.setHeader('입금일', 'deposit_dt')
-        store.setHeader('정산 적용 시작일', 'apply_s_dt')
-        store.setHeader('정산 적용 종료일', 'apply_e_dt')
-
-        store.setHeader('은행', 'acct_bank_nm')
-        store.setHeader('은행코드', 'acct_bank_cd')
-        store.setHeader('계좌번호', 'acct_num')
-        store.setHeader('예금주', 'acct_nm')
-        store.setHeader('상태', 'status')
-        store.setHeader('생성시간', 'created_at')
-        store.setHeader('업데이트시간', 'updated_at')
+    const exporter = async (type: number) => {      
+        const r = await store.get(store.getAllDataFormat())
+        let datas = r.data.content;
+        for (let i = 0; i <datas.length; i++) 
+        {
+            datas[i]['deposit_status'] = datas[i]['deposit_status'] ? '입금완료' : '미입금';
+        }
+        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }
+    
     return {
         store,
-        setHeaders,
+        head,
+        exporter,
     }
 })

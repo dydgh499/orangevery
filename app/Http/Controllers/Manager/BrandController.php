@@ -63,7 +63,9 @@ class BrandController extends Controller
         else
             $query = $this->brands->where('id', $brand_id);
 
-        $query  = $query->where('name', 'like', "%$search%");
+        $query  = $query
+            ->where('is_delete', false)
+            ->where('name', 'like', "%$search%");
         $data   = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }

@@ -79,7 +79,7 @@ class TransactionFactory extends Factory
     {
         $data = [];
         $ps = PaymentSection::where('id', $ps_id)->first();
-        $data['ps_fee']  = $ps->trx_fee;
+        $data['ps_fee']  = $ps->trx_fee/100;
         return $data;
     }
 
@@ -99,7 +99,7 @@ class TransactionFactory extends Factory
         {
             $trx = Transaction::all()->random();
             $data['is_cancel'] = true;
-            $data['cxl_dt'] = date('Y-m-d');
+            $data['cxl_dt'] = date('Y-m-23');
             $data['cxl_tm'] = date('H:i:s');
             $data['ori_trx_id'] = $trx->trx_id;
 
@@ -126,12 +126,12 @@ class TransactionFactory extends Factory
             $data['cxl_tm'] = null;
             $data['ori_trx_id'] = null;
             $data['amount'] = rand(100, 999999);
-            $data['trx_dt'] = date('Y-m-23');
+            $data['trx_dt'] = date('Y-m-22');
             $data['trx_tm'] = date('H:i:s');
             $data['ord_num']    = $this->faker->isbn10();
             $data['trx_id']     = $this->faker->unique->isbn13();
-            $data['card_name']  = '1234-56******-1234';
-            $data['card_num']   = $this->faker->randomNumber();
+            $data['card_name']  = $this->faker->randomNumber();
+            $data['card_num']   = '1234-56******-1234';
             $data['installment'] = rand(2, 11);
             $data['issuer']     = '비씨';
             $data['acquirer']   = '비씨';

@@ -34,51 +34,48 @@ class Transaction extends Model
     ];
     protected   $guarded    = [];
 
-    public function getSalesProfit($type, $s_idx)
-    {
-        //가맹점, 하위대리점, 대리점, 하위총판, 총판, 하위지사, 지사
-        $sales  = ['mcht', 'sales0', 'sales1', 'sales2', 'sales3', 'sales4', 'sales5'];
-        $id     = $type."_id";
-        $fee    = $type."_fee";
-
-        for ($i=$s_idx; count($sales)-1 >= 0; $i--) 
-        { 
-            $sales_id   = $sales[$i]."_id";
-            $sales_fee  = $sales[$i]."_fee";
-            if($sales_id != 0)
-                return $this->amount * ($this[$fee] - $this[$sales_fee]);
-        }
-        return 0;
-    }
-
     public function getProfit($level)
     {
+        $getSalesProfit = function($idx) {
+            $pks  = ['mcht_id', 'sales0_id','sales1_id','sales2_id','sales3_id','sales4_id','sales5_id','ps_id'];            
+            $fees = ['mcht_fee', 'sales0_fee', 'sales1_fee', 'sales2_fee','sales3_fee', 'sales4_fee', 'sales5_fee', 'ps_fee'];
+            $dest_fee = $fees[$idx+1];
+            for($i=$idx; count($fees)-1 > -1; $i--)
+            {
+                if($this[$pks[$i]] != 0)    // 하위 영업자 - 상위(나의) 영업자, 하위 영업자가 존재할 시, 존재안하면 더 하위로
+                    return $this->amount * ($this[$fees[$i]] - $this[$dest_fee]);
+            }    
+            return 0;
+        };
         if($level == 10)
         {   // 가맹점
             $profit = $this->amount - ($this->amount * ($this->mcht_fee + $this->hold_fee));
-            $profit -= $this->settle_fee;
+            $profit -= $this->mcht_settle_fee;
         }
         else if($level > 10 && $level < 31)
-        {   // 영업자 
-            $idx = globalLevelByIndex($level);
-            $profit = $this->getSalesProfit('sales'.$idx, $idx);
-
+        {   // 영업자
+            $idx    = globalLevelByIndex($level);
+            $profit = $getSalesProfit($idx);
             $property = 'sales'.$idx;
-            $settle_tax_type = $this[$property]->settle_tax_type;
-
-            if($settle_tax_type == 1)
-                $profit *= 0.967;
-            else if($settle_tax_type == 2)
-                $profit *= 0.9;
-            else if($settle_tax_type == 3)
+            switch($this[$property]->settle_tax_type)
             {
-                $profit *= 0.9;
-                $profit *= 0.967;
+                case 1:
+                    $profit *= 0.967;
+                    break;
+                case 2:
+                    $profit *= 0.9;
+                    break;
+                case 3:                               
+                    $profit *= 0.9;
+                    $profit *= 0.967;
+                    break;
+                default:
+                    break;
             }
         }
         else
         {   // 본사 
-            $profit = $this->getSalesProfit('ps', 6);
+            $profit = $getSalesProfit(6);
             $dev_profit = $profit * $this->dev_fee;
             if($level == 50)
                 $profit = $dev_profit;
@@ -87,19 +84,27 @@ class Transaction extends Model
         }
         return round($profit);
     }
-    //
+
     public function getProfitAttribute()
-    {
+    {   //정산액
         return $this->getProfit(request()->level);
     }
 
     public function getTrxAmountAttribute()
-    {
+    {   //거래 수수료        
+        if(request()->level == 10)
+            return round($this->amount * $this->mcht_fee);
+        else
+            return $this->amount - $this->profit;        
+    }
+
+    public function getTotalTrxAmountAttribute()
+    {   //총 거래 수수료(거래수수료 + 유보금 + 입금수수료)        
         return $this->amount - $this->profit;
     }
     
     public function getHoldAmountAttribute()
-    {
+    {   //유보금
         if(request()->level == 10)
             return round($this->amount * $this->hold_fee);
         else
@@ -200,6 +205,13 @@ class Transaction extends Model
     {
         return new Attribute(
             get: fn ($value) => sprintf('%08d', $value),
+        );
+    }
+
+    protected function mchtSettleFee() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => request()->level == 10 ? $value : 0,
         );
     }
 }

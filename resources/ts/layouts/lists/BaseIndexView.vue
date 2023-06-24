@@ -21,11 +21,6 @@ onMounted(() => {
     watchEffect(() => {
         store.setTable()
     })
-    watch(() => store.params.search, (newSearch, oldSearch) => {
-    if (newSearch !== oldSearch) {
-        store.setTable();
-    }
-    }, { deep: false });
 });
 </script>
 <template>

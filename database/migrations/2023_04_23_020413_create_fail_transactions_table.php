@@ -16,12 +16,10 @@ return new class extends Migration
         Schema::create('fail_transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-            $table->foreignId('mcht_id')->nullable()->comment('사용 가맹점 ID')->constrained('merchandises')->onDelete('SET NULL');
-            $table->integer('pg_id')->default(0)->comment('PG사 id');
-            $table->integer('ps_id')->default(0)->comment('PG사 구간 id');
             $table->integer('pmod_id')->default(0)->comment('pay module ID (단말기 ID)');
-            $table->integer('custom_id')->default(0)->comment('커스텀 필터 ID');
-            $table->integer('settle_type')->default(0)->comment('결제조건');
+            $table->integer('pg_id')->default(0)->comment('PG사 id');
+            $table->integer('ps_id')->default(0)->comment('구간 id');
+            $table->tinyInteger('trx_type')->default(0)->comment('거래타입');
             $table->date('trx_dt')->comment('거래 날짜');
             $table->time('trx_tm')->comment('거래 시간');
             $table->integer('amount')->comment('거래 금액');

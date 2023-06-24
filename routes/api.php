@@ -55,14 +55,25 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::prefix('transactions')->group(function() {
             Route::get('fails', [FailTransController::class, 'index']);
             Route::get('dangers', [DangerTransController::class, 'index']);
-            Route::get('settle/merchandises', [SettleController::class, 'merchandises']);
-            Route::get('settle/salesforces', [SettleController::class, 'salesforces']);
-            Route::post('settle/merchandises/deduct', [SettleController::class, 'MchtDeduct']);
-            Route::post('settle/salesforces/deduct', [SettleController::class, 'SalesDeduct']);
-            Route::get('settle-histories/merchandises', [SettleHistoryController::class, 'indexMerchandise']);
-            Route::get('settle-histories/salesforces', [SettleHistoryController::class, 'indexSalesforce']);
-            Route::post('settle-histories/merchandises', [SettleHistoryController::class, 'createMerchandise']);
-            Route::post('settle-histories/salesforces', [SettleHistoryController::class, 'createSalesforce']);
+
+            Route::prefix('settle')->group(function() {
+                Route::get('merchandises', [SettleController::class, 'merchandises']);
+                Route::post('merchandises/deduct', [SettleController::class, 'MchtDeduct']);
+
+                Route::get('salesforces', [SettleController::class, 'salesforces']);
+                Route::post('salesforces/deduct', [SettleController::class, 'SalesDeduct']);
+            });
+            Route::prefix('settle-histories')->group(function() {
+                Route::get('merchandises', [SettleHistoryController::class, 'indexMerchandise']);
+                Route::post('merchandises', [SettleHistoryController::class, 'createMerchandise']);
+                Route::delete('merchandises/{id}', [SettleHistoryController::class, 'deleteMerchandise']);
+                Route::post('merchandises/{id}/deposit', [SettleHistoryController::class, 'depositMerchandise']);
+
+                Route::get('salesforces', [SettleHistoryController::class, 'indexSalesforce']);
+                Route::post('salesforces', [SettleHistoryController::class, 'createSalesforce']);
+                Route::delete('salesforces/{id}', [SettleHistoryController::class, 'deleteSalesforce']);
+                Route::post('salesforces/{id}/deposit', [SettleHistoryController::class, 'depositSalesforce']);    
+            });
         });
         Route::prefix('salesforces')->group(function() {
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);

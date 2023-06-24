@@ -6,6 +6,25 @@ import corp from '@corp';
 
 const levels = corp.pv_options.auth.levels
 
+export const getLevelByIndex = (level:number) => {
+    switch(level) {
+        case 13:
+            return 0;
+        case 15:
+            return 1;
+        case 17:
+            return 2;
+        case 20:
+            return 3;
+        case 25:
+            return 4;
+        case 30:
+            return 5;
+        default:
+            return 0;
+    }
+}
+
 export const settleDays = () => {
     return <Options[]>([
         {id:0, title:'일요일'}, {id:1, title:'월요일'},
@@ -19,6 +38,13 @@ export const settleCycles = () => {
     return <Options[]>([
         {id:0, title:'하루씩 정산'}, {id:7, title:'1주일씩 정산'},
         {id:14, title:'2주일씩 정산'}, {id:30, title:'한달씩 정산(30일)'},
+    ])
+}
+
+export const settleTaxTypes = () => {
+    return <Options[]>([
+        {id:0, title:'세율 없음'}, {id:1, title:'3.3%'},
+        {id:2, title:'10%'}, {id:3, title:'10+3.3%'},
     ])
 }
 
@@ -55,6 +81,9 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
         'id' : 'NO.',
         'level' : '등급',
         'user_name' : '영업점 ID',
+        'settle_cycle' : '정산 주기',
+        'settle_day' : '정산 요일',
+        'settle_tax_type': '정산 세율',
         'nick_name' : '대표자명',
         'phone_num' : '연락처',
         'resident_num' : '사업자등록번호',
@@ -65,6 +94,7 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
         'acct_bank_cd' : '은행코드',
         'acct_nm' : '예금주',
         'acct_num' : '계좌번호',
+        'last_settle_dt': '마지막 정산일',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
     }
@@ -95,16 +125,11 @@ export const useSalesFilterStore = defineStore('salesFilterStore', () => {
     })
     const classification = async () => {
         const r = await axios.get('/api/v1/manager/salesforces/classification')
-        const barnd_sales = salesLevels()
         const keys = Object.keys(r.data);
-        for (let index = 0; index < keys.length; index++) {
-            var level = Number(keys[index].replace('level_', ''))
-            var temp = barnd_sales.find(item => item.id === level)
-            if(temp != undefined)
-                r.data[keys[index]].unshift({ id: null, nick_name: temp.title + ' 선택' })
-                
-            sales[index].value = r.data['level_' + level]
+        for (let index = 0; index < keys.length; index++) {           
+            sales[index].value = r.data[keys[index]]
         }
+        console.log(sales)
     }
     return {
         sales

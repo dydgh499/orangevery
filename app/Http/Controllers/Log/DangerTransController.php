@@ -32,7 +32,6 @@ class DangerTransController extends Controller
             'transactions.ori_trx_id',
             'transactions.mid',
             'transactions.tid',
-            'transactions.settle_fee',
             'transactions.issuer',
             'transactions.acquirer',
             'transactions.card_num',
@@ -49,6 +48,10 @@ class DangerTransController extends Controller
             ->join('transactions', 'danger_transactions.trans_id', '=', 'transactions.id')
             ->where('danger_transactions.brand_id', $request->user()->brand_id);
             
+        $query = globalPGFilter($query, $request, 'transactions');
+        $query = globalSalesFilter($query, $request, 'transactions');
+        $query = globalAuthFilter($query, $request, 'transactions');
+
         $query = $query->where(function ($query) use ($search) {
             return $query->where('merchandises.mcht_name', 'like', "%$search%")
                 ->orWhere('transactions.appr_num', 'like', "%$search%")

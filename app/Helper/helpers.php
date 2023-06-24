@@ -159,6 +159,8 @@
     {
         switch($level)
         {
+            case 10:
+                return -1;
             case 13:
                 return 0;
             case 15:
@@ -171,6 +173,10 @@
                 return 4;
             case 30:
                 return 5;
+            case 40:
+                return 6;
+            case 50;
+                return 6;
             default:
                 return 0;
         }

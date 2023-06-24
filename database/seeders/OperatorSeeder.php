@@ -25,12 +25,6 @@ class OperatorSeeder extends Seeder
         ]);
         Operator::create([
             'brand_id'  => 1,
-            'user_name' => 'master',
-            'user_pw'   => Hash::make('1234'),
-            'level'     => 50,
-        ]);
-        Operator::create([
-            'brand_id'  => 1,
             'user_name' => 'admin',
             'user_pw'   => Hash::make('1234'),
             'level'     => 40,

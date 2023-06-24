@@ -40,8 +40,8 @@ export const Header = (_path: string, file_name: string) => {
             return _depth;
     }
     const getColspans = () => {
-        let colspans = [];
-        let colspan = 0;
+        let colspans = []
+        let colspan = 0
         for (const key of Object.keys(headers.value)) {
             const val = headers.value[key]
             if (getDepth(val, 0) !== 1) {
@@ -59,10 +59,30 @@ export const Header = (_path: string, file_name: string) => {
         }
         return colspans;
     }
+    const getFullColspans = () => {
+        let colspans = []
+        let colspan = 0
+        for (const key of Object.keys(headers.value)) {
+            const val = headers.value[key]
+            if (getDepth(val, 0) !== 1) {
+                if (colspan != 0)
+                    colspans.push(colspan)
+                colspan = 0;
+                for (const sub_key of Object.keys(val)) {
+                    colspan += 1
+                }
+                colspans.push(colspan)
+                colspan = 0
+            }
+            else
+                colspan += 1
+        }
+        return colspans
+    }
     const getColspansComputed = computed(() => { return getColspans() })
 
     const setFlattenHeaders = (): Filter => {
-        let result = {};
+        const result: { [key: string]: any } = {};
         for (const key of Object.keys(headers.value)) {
             const val = headers.value[key]
             if (getDepth(val, 0) !== 1) {
@@ -90,11 +110,11 @@ export const Header = (_path: string, file_name: string) => {
         return _headers;
     };
 
-    const exportWorkSheet = (datas: object[]) => {
+    const exportWorkSheet = (datas: {[key: string]: any }[]) => {
         const getDatasToArray = () => {
             const results = [];
             for (let i = 0; i < datas.length; i++) {
-                const result = {};
+                const result: { [key: string]: string } = {}; 
                 for (const key of Object.keys(datas[i])) {
                     if (typeof datas[i][key] === 'object' && datas[i][key] !== null) {
                         for (const sub_key of Object.keys(datas[i][key])) {
@@ -112,10 +132,10 @@ export const Header = (_path: string, file_name: string) => {
             const header_1 = []
             const header_2 = []
             for (const key of Object.keys(main_headers.value)) {
-                header_1.push(main_headers.value[key]);
+                header_1.push(main_headers.value[key])
             }
             for (const key of Object.keys(flat_headers.value)) {
-                header_2.push(flat_headers.value[key].ko);
+                header_2.push(flat_headers.value[key].ko)
             }
             const total_header = [header_1, header_2]
             return total_header
@@ -200,7 +220,7 @@ export const Header = (_path: string, file_name: string) => {
 
     return {
         filter, headers, main_headers, flat_headers, initHeader,
-        setFlattenHeaders, getColspans, getColspansComputed, getDepth,
+        setFlattenHeaders, getColspans, getFullColspans, getColspansComputed, getDepth,
         exportToExcel, exportToPdf,
     }
 }

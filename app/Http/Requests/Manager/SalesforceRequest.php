@@ -22,6 +22,9 @@ class SalesforceRequest extends FormRequest
             'acct_nm',
             'addr',
             'phone_num',
+            'settle_tax_type',
+            'settle_cycle',
+            'settle_day',
         ];
     }
 
@@ -45,6 +48,9 @@ class SalesforceRequest extends FormRequest
             'business_num' => 'required',
             'acct_bank_nm' => 'required',
             'acct_bank_cd' => 'required',
+            'settle_tax_type' => 'required',
+            'settle_cycle' => 'required',
+            'settle_day' => 'required',
         ];
         return $this->getRules($this->keys, $sub);
     }

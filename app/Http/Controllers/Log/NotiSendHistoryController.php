@@ -25,6 +25,7 @@ class NotiSendHistoryController extends Controller
         $search = $request->input('search', '');
         $query  = $this->noti_send_histories
             ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
             ->where('send_url', 'like', "%$search%");
 
         $data = $this->getIndexData($request, $query);

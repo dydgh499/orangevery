@@ -34,7 +34,9 @@ class TerminalController extends Controller
     {
         $module_type = $request->input('module_type', '');
         $search = $request->input('search', '');
-        $query = $this->payModules->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id');
+        $query = $this->payModules
+            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+            ->where('payment_modules.is_delete', false);
         $query = globalPGFilter($query, $request, 'payment_modules');
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');

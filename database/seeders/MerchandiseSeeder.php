@@ -15,6 +15,6 @@ class MerchandiseSeeder extends Seeder
      */
     public function run()
     {
-        $res = Merchandise::factory()->count(20)->create();
+        $res = Merchandise::factory()->count(10)->create();
     }
 }

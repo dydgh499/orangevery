@@ -57,6 +57,7 @@ class MerchandiseController extends Controller
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
         $query = $query
+            ->where('merchandises.is_delete', false)
             ->where('merchandises.brand_id', $request->user()->brand_id)
             ->where('merchandises.mcht_name', 'like', "%$search%");
 

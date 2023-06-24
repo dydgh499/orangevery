@@ -19,7 +19,7 @@ use App\Http\Requests\Manager\IndexRequest;
 class SettleController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
-    protected $merchandises, $salesforces;
+    protected $merchandises, $salesforces, $cols;
 
     public function __construct(Merchandise $merchandises, Salesforce $salesforces)
     {
@@ -41,10 +41,11 @@ class SettleController extends Controller
             return [
                 'amount'        => $items->sum('amount'),
                 'count'         => $items->count(),
-                'trx_amount'      => $items->sum('trx_amount'),
-                'pay_cond_amount'  => $items->sum('settle_fee'),
-                'hold_amount'      => $items->sum('hold_amount'),
-                'profit'        => $items->sum('profit'),
+                'trx_amount'    => $items->sum('trx_amount'),
+                'hold_amount'   => $items->sum('hold_amount'),
+                'settle_fee'  => $items->sum('mcht_settle_fee'),
+                'total_trx_amount'=> $items->sum('total_trx_amount'),
+                'profit'    => $items->sum('profit'),
             ];
         };
         foreach($data['content'] as $content) {
@@ -62,7 +63,8 @@ class SettleController extends Controller
             $content->amount    = $content->appr['amount'] + $content->cxl['amount'];
             $content->count     = $content->appr['count'] + $content->cxl['count'];
             $content->trx_amount = $content->appr['trx_amount'] + $content->cxl['trx_amount'];
-            $content->pay_cond_amount = $content->appr['pay_cond_amount'] + $content->cxl['pay_cond_amount'];
+            $content->total_trx_amount = $content->appr['total_trx_amount'] + $content->cxl['total_trx_amount'];
+            $content->settle_fee = $content->appr['settle_fee'] + $content->cxl['settle_fee'];
             $content->hold_amount = $content->appr['hold_amount'] + $content->cxl['hold_amount'];
             $content->profit = $content->appr['profit'] + $content->cxl['profit'];
 
@@ -93,13 +95,14 @@ class SettleController extends Controller
 
         $query = $this->merchandises
             ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
             ->where('mcht_name', 'like', "%$search%");
+            
         $query = globalSalesFilter($query, $request);
         $query = globalAuthFilter($query, $request);
         $query = $query->with(['transactions' => function ($query) use ($date) {
             $query->whereRaw("trx_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)");
         }, 'deducts']);
-        
 
         $data = $this->getIndexData($request, $query, 'id', $cols);
         $data = $this->getSettleInformation($data); 
@@ -109,13 +112,14 @@ class SettleController extends Controller
     public function salesforces(IndexRequest $request)
     {
         $validated = $request->validate(['dt'=>'required|date']);
-        $cols   = array_merge($this->cols, ['nick_name']);
+        $cols   = array_merge($this->cols, ['nick_name','level', 'settle_cycle', 'settle_day', 'settle_tax_type', 'last_settle_dt']);
         $search = $request->input('search', '');
         $level  = $request->level;
         $date   = $request->dt;
 
         $query = $this->salesforces
             ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
             ->where('user_name', 'like', "%$search%")
             ->where('level', $level)
             ->where('settle_day', Carbon::parse($date)->dayOfWeek)
@@ -130,6 +134,7 @@ class SettleController extends Controller
             $query->whereRaw("trx_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)");
         }, 'deducts']);
         $data = $this->getIndexData($request, $query, 'id', $cols);
+        $data = $this->getSettleInformation($data); 
         return $this->response(0, $data);
     }
 
