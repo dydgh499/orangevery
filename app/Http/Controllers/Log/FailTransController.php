@@ -31,7 +31,7 @@ class FailTransController extends Controller
             ->join('payment_modules', 'payment_modules.id', '=', 'fail_transactions.pmod_id')
             ->join('merchandises', 'merchandises.id', '=', 'payment_modules.mcht_id')
             ->where('fail_transactions.brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
+            ->where('fail_transactions.is_delete', false)
             ->where('merchandises.mcht_name', 'like', "%$search%");
 
         $data = $this->getIndexData($request, $query, 'fail_transactions.id', $cols, 'fail_transactions.trx_dt');
