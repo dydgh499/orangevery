@@ -1,4 +1,5 @@
 import { Filter } from '@/views/types';
+import _ from 'lodash';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import * as XLSX from 'xlsx';
@@ -22,63 +23,54 @@ export const Header = (_path: string, file_name: string) => {
         }
         return result;
     }
-    const getDepth = (item: object, _depth: number) => {
-        if (typeof item === 'object') {
-            let max_depth = 0;
+    const getDepth = (item: object, _depth: number): number => {
+        if (_.isObject(item)) {
+            let maxDepth = 0;
             _depth++;
-            for (const _key of Object.keys(item)) {
-                const key = _key as keyof typeof item;
-                if (item[key] != null) {
-                    let dep = getDepth(item[key], _depth);
-                    if (dep > max_depth)
-                        max_depth = dep;
+            _.forEach(item, (value:any) => {
+                if (!_.isNull(value)) {
+                    const depth = getDepth(value, _depth);
+                    maxDepth = Math.max(maxDepth, depth);
                 }
-            }
-            return max_depth;
-        }
+            });
+            return maxDepth;
+        } 
         else
             return _depth;
-    }
-    const getColspans = () => {
-        let colspans = []
-        let colspan = 0
-        for (const key of Object.keys(headers.value)) {
-            const val = headers.value[key]
+    };
+    const getColspans = (): number[] => {
+        let colspans: number[] = [];
+        let colspan: number = 0;
+        _.forEach(headers.value, (val: any) => {
             if (getDepth(val, 0) !== 1) {
-                if (colspan != 0)
+                if (colspan !== 0)
                     colspans.push(colspan)
-                colspan = 0;
-                for (const sub_key of Object.keys(val)) {
-                    colspan += val[sub_key].hidden ? 0 : 1
-                }
-                colspans.push(colspan)
                 colspan = 0
-            }
+                const subColspan: number = _.reduce(val, (sum: number, subVal: any) => {
+                    return sum + (subVal.hidden ? 0 : 1)
+                }, 0)
+                colspans.push(subColspan)
+                colspan = 0
+            } 
             else
                 colspan += val.hidden ? 0 : 1
-        }
-        return colspans;
-    }
-    const getFullColspans = () => {
-        let colspans = []
-        let colspan = 0
-        for (const key of Object.keys(headers.value)) {
-            const val = headers.value[key]
-            if (getDepth(val, 0) !== 1) {
-                if (colspan != 0)
-                    colspans.push(colspan)
-                colspan = 0;
-                for (const sub_key of Object.keys(val)) {
-                    colspan += 1
-                }
-                colspans.push(colspan)
-                colspan = 0
-            }
-            else
-                colspan += 1
-        }
+        })
         return colspans
     }
+    const getFullColspans = () => {
+        let colspans: number[] = []
+        let colspan = 0
+        _.forEach(headers.value, (val:Filter) => {
+            if (getDepth(val, 0) !== 1) {
+                if (colspan !== 0) colspans.push(colspan)
+                colspans.push(_.keys(val).length)
+                colspan = 0
+            } 
+            else
+                colspan += 1
+        });
+        return colspans
+    };
     const getColspansComputed = computed(() => { return getColspans() })
 
     const setFlattenHeaders = (): Filter => {
@@ -95,26 +87,27 @@ export const Header = (_path: string, file_name: string) => {
         }
         return result;
     }
-
-
     const setHeader = (_headers: Filter): Filter => {
-        for (const key of Object.keys(_headers)) {
-            const val = headers.value[key]
-            if (getDepth(_headers[key], 0) === 1) {
-                if (key in headers.value)
-                    _headers[key].hidden = val.hidden
+        return _.transform(_headers, (result: Filter, val:any, key:string) => {
+            if (getDepth(val, 0) === 1 && key in headers.value) {
+                val.hidden = headers.value[key].hidden;
+            } else {
+                result[key] = setHeader(val as Filter);
             }
-            else
-                _headers[key] = setHeader(_headers[key] as Filter)
-        }
-        return _headers;
+        }, {});
     };
+    // ----- excel -----
+    const sortAndFilterByHeader = <T>(data: T, keys: string[]): T => {
+        const filteredData = _.pick(data, keys);
+        const orderedData = _.fromPairs(_.sortBy(_.toPairs(filteredData), ([key]:string) => keys.indexOf(key)));
+        return orderedData as T;
+    }
 
-    const exportWorkSheet = (datas: {[key: string]: any }[]) => {
+    const exportWorkSheet = (datas: { [key: string]: any }[]) => {
         const getDatasToArray = () => {
             const results = [];
             for (let i = 0; i < datas.length; i++) {
-                const result: { [key: string]: string } = {}; 
+                const result: { [key: string]: string } = {};
                 for (const key of Object.keys(datas[i])) {
                     if (typeof datas[i][key] === 'object' && datas[i][key] !== null) {
                         for (const sub_key of Object.keys(datas[i][key])) {
@@ -128,51 +121,30 @@ export const Header = (_path: string, file_name: string) => {
             }
             return results.map(obj => Object.values(obj));
         }
-        const getHeadersToArray = () => {
-            const header_1 = []
-            const header_2 = []
-            for (const key of Object.keys(main_headers.value)) {
-                header_1.push(main_headers.value[key])
-            }
-            for (const key of Object.keys(flat_headers.value)) {
-                header_2.push(flat_headers.value[key].ko)
-            }
-            const total_header = [header_1, header_2]
-            return total_header
-        }
-        const getExcelOptions = () => {
-            const header_2 = []
-            for (const key of Object.keys(flat_headers.value)) {
-                header_2.push(flat_headers.value[key].ko);
-            }
-            const colspans = getColspans()
-            const merge_cols: XLSX.Range[] = []
-            const widths: XLSX.ColInfo[] = []
-            // merge col
-            let s_idx = 0;
-            for (let i = 0; i < colspans.length; i++) {
-                merge_cols.push({ s: { r: 0, c: s_idx }, e: { r: 0, c: s_idx + colspans[i] - 1 } })
-                s_idx += colspans[i]
-            }
-            for (let i = 0; i < header_2.length; i++) {
-                widths.push({ width: 20 })
-            }
-            return { merge_cols, widths }
-        }
-        
+        const getHeadersToArray = (): any[][] => {
+            return [_.map(main_headers.value, (value: string| number) => value), _.map(flat_headers.value, (value:Filter) => value.ko)];
+        };
+        const getExcelOptions = (): { merge_cols: any[], widths: any[] } => {
+            const header_2 = _.map(flat_headers.value, (value: Filter) => value.ko);
+            const colspans = getColspans();
+            const merge_cols = _.map(colspans, (value:number, index:number) => ({ s: { r: 0, c: index }, e: { r: 0, c: index + value - 1 } }));
+            const widths = _.map(header_2, () => ({ width: 20 }));
+            return { merge_cols, widths };
+        };
+
         const contents = getDatasToArray()
         const total_headers = getHeadersToArray()
         const { merge_cols, widths } = getExcelOptions()
 
         const all_data = total_headers.concat(contents)
-        const ws:XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(all_data)
+        const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(all_data)
         ws['!merges'] = merge_cols
         ws['!cols'] = widths
-        
-        if(total_headers.length > 0) {
+
+        if (total_headers.length > 0) {
             for (let i = 0; i < merge_cols.length; i++) {
                 const cell = XLSX.utils.encode_cell(merge_cols[i].s);
-                if(total_headers[0].length >= i && ws[cell] != undefined)
+                if (total_headers[0].length >= i && ws[cell] != undefined)
                     ws[cell].v = total_headers[0][i]
             }
         }
@@ -219,7 +191,7 @@ export const Header = (_path: string, file_name: string) => {
     })
 
     return {
-        filter, headers, main_headers, flat_headers, initHeader,
+        filter, headers, main_headers, flat_headers, initHeader, sortAndFilterByHeader,
         setFlattenHeaders, getColspans, getFullColspans, getColspansComputed, getDepth,
         exportToExcel, exportToPdf,
     }

@@ -8,7 +8,7 @@ interface Props {
     metas: any[],
     add: boolean,
     add_name: string,
-    is_range_date: boolean
+    is_range_date: boolean | null
 }
 const props = defineProps<Props>();
 

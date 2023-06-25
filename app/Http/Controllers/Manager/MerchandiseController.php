@@ -40,16 +40,8 @@ class MerchandiseController extends Controller
         ];
     }
 
-    /**
-     * 목록출력
-     *
-     * 가맹점 이상 가능
-     *
-     * @queryParam search string 검색어(유저 ID)
-     */
-    public function index(IndexRequest $request)
+    private function get($request, $cols)
     {
-        $cols = ['merchandises.*'];
         $search = $request->input('search', '');
 
         $query = $this->merchandises->leftJoin('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id');
@@ -65,6 +57,19 @@ class MerchandiseController extends Controller
         $query = $query->groupBy('merchandises.id');
         $data = $this->getIndexData($request, $query, 'merchandises.id', $cols, 'merchandises.created_at', true);
         return $this->response(0, $data);
+    }
+
+    /**
+     * 목록출력
+     *
+     * 가맹점 이상 가능
+     *
+     * @queryParam search string 검색어(유저 ID)
+     */
+    public function index(IndexRequest $request)
+    {
+        $cols = ['merchandises.*'];
+        return $this->get($request, $cols);
     }
 
     /**
@@ -171,5 +176,32 @@ class MerchandiseController extends Controller
         }
         else
             return $this->response(951);
+    }
+
+    /**
+     * 전체목록출력
+     *
+     * 가맹점 이상 가능
+     *
+     * @queryParam search string 검색어(유저 ID)
+     */
+    public function all(Request $request)
+    {
+        $request->merge([
+            'page' => 1,
+            'page_size' => 99999999,
+        ]);
+        $cols = [
+            'merchandises.id', 'merchandises.mcht_name',
+            'merchandises.sales5_id', 'merchandises.sales5_fee',
+            'merchandises.sales4_id', 'merchandises.sales4_fee',
+            'merchandises.sales3_id', 'merchandises.sales3_fee',
+            'merchandises.sales2_id', 'merchandises.sales2_fee',
+            'merchandises.sales1_id', 'merchandises.sales1_fee',
+            'merchandises.sales0_id', 'merchandises.sales0_fee',
+            'merchandises.hold_fee', 'merchandises.trx_fee',
+            'merchandises.custom_id',
+        ];
+        return $this->get($request, $cols);
     }
 }

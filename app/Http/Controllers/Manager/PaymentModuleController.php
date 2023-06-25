@@ -23,6 +23,33 @@ class PaymentModuleController extends Controller
         $this->imgs = [];
     }
 
+    private function get($request, $cols)
+    {
+        $search = $request->input('search', '');
+        $query = $this->payModules
+            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+            ->where('payment_modules.brand_id', $request->user()->brand_id)
+            ->where('payment_modules.is_delete', false);
+            
+        $query = globalPGFilter($query, $request, 'payment_modules');
+        $query = globalSalesFilter($query, $request, 'merchandises');       
+        $query = globalAuthFilter($query, $request, 'merchandises');
+
+        if($request->has('mcht_id'))
+            $query = $query->where('payment_modules.mcht_id', $request->mcht_id);
+        if($request->has('module_type'))
+            $query = $query->where('payment_modules.module_type', $request->module_type);
+
+        $query = $query->where(function ($query) use ($search) {
+            return $query->where('payment_modules.mid', 'like', "%$search%")
+                ->orWhere('payment_modules.tid', 'like', "%$search%")
+                ->orWhere('merchandises.mcht_name', 'like', "%$search%");
+        });
+
+        $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
+        return $this->response(0, $data);
+    }
+
     /**
      * 목록출력
      *
@@ -33,29 +60,8 @@ class PaymentModuleController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $module_type = $request->input('module_type', '');
-        $search = $request->input('search', '');
-
-        $query = $this->payModules
-            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-            ->where('payment_modules.is_delete', false);
-            
-        $query = globalPGFilter($query, $request, 'payment_modules');
-        $query = globalSalesFilter($query, $request, 'merchandises');       
-        $query = globalAuthFilter($query, $request, 'merchandises');
-
-        $query = $query->where('payment_modules.brand_id', $request->user()->brand_id);
-        if($module_type != '')
-            $query = $query->where('payment_modules.module_type', $module_type);
-
-        $query = $query->where(function ($query) use ($search) {
-            return $query->where('payment_modules.mid', 'like', "%$search%")
-                ->orWhere('payment_modules.tid', 'like', "%$search%")
-                ->orWhere('merchandises.mcht_name', 'like', "%$search%");
-        });
-
-        $data = $this->getIndexData($request, $query, 'payment_modules.id', ['payment_modules.*', 'merchandises.mcht_name'], 'payment_modules.created_at');
-        return $this->response(0, $data);
+        $cols = ['payment_modules.*', 'merchandises.mcht_name'];
+        return $this->get($request, $cols);
     }
 
     /**
@@ -131,5 +137,29 @@ class PaymentModuleController extends Controller
         }
         else
             return $this->response(951);
+    }
+
+    /**
+     * 전체목록출력
+     *
+     * 가맹점 이상 가능
+     *
+     * @queryParam search string 검색어(유저 ID)
+     */
+    public function all(Request $request)
+    {
+        $request->merge([
+            'page' => 1,
+            'page_size' => 99999999,
+        ]);
+        $cols = [
+            'payment_modules.id', 'payment_modules.mcht_id', 'payment_modules.installment',
+            'payment_modules.mid', 'payment_modules.tid', 'payment_modules.pg_id', 'payment_modules.ps_id',
+            'payment_modules.module_type', 'payment_modules.settle_fee', 'payment_modules.settle_type',
+            'payment_modules.terminal_id', 'payment_modules.note',
+        ];
+
+        
+        return $this->get($request, $cols);
     }
 }

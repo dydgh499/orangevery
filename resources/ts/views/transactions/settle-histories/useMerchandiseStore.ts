@@ -28,11 +28,12 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
     head.flat_headers.value = head.setFlattenHeaders()
 
     const exporter = async (type: number) => {      
+        const keys = Object.keys(headers);
         const r = await store.get(store.getAllDataFormat())
         let datas = r.data.content;
-        for (let i = 0; i <datas.length; i++) 
-        {
-            datas[i]['deposit_status'] = datas[i]['deposit_status'] ? '입금완료' : '미입금';
+        for (let i = 0; i < datas.length; i++) {
+
+            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }

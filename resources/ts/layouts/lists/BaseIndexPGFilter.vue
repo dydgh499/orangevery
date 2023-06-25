@@ -10,26 +10,14 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
+const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
 const store = <any>(inject('store'))
 
 const filterPgs = computed(() => {
     const filter = pss.filter(item => {
         return item.pg_id == store.params.pg_id;
     })
-    if (pss.length > 0) {
-        if (filter.length > 0) {
-            let item = pss.find(item => item.id === store.params.ps_id)
-            if (item != undefined && filter[0].pg_id != item.pg_id) {
-                if (store.params.ps_id != null)
-                    store.params.ps_id = null
-            }
-        }
-        else {
-            if (store.params.ps_id != null)
-                store.params.ps_id = null
-        }
-    }
+    store.params.ps_id = psFilter(filter, store.params.ps_id)
     return filter
 })
 </script>

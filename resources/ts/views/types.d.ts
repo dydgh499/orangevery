@@ -283,54 +283,62 @@ export interface Brand extends Contract {
 
 export interface Transaction {
     id: number,
-    brand_id: number,
-    mcht_id: number,
+    mcht_id: number | null,
 
+    sales5_name?: string,
     sales5_id: number | null,
     sales5_fee: float,
-    sales5_settle_id: Date,
+    sales5_settle_id: Date | null,
+    
+    sales4_name?: string,
     sales4_id: number | null,
-
     sales4_fee: float,
-    sales4_settle_id: Date,
+    sales4_settle_id: Date | null,
+
+    sales3_name?: string,
     sales3_id: number | null,
-
     sales3_fee: float,
-    sales3_settle_id: Date,
+    sales3_settle_id: Date | null,
+
+    sales2_name?: string,
     sales2_id: number | null,
-
     sales2_fee: float,
-    sales2_settle_id: Date,
+    sales2_settle_id: Date | null,
+
+    sales1_name?: string,
     sales1_id: number | null,
-
     sales1_fee: float,
-    sales1_settle_id: Date,
+    sales1_settle_id: Date | null,
+
+    sales0_name?: string,
     sales0_id: number | null,
-
     sales0_fee: float,
-    sales0_settle_id: Date,
+    sales0_settle_id: Date | null,
 
-    custom_id: number | string,
+    custom_id: number | string | null,
+    mcht_name?: string,
     mcht_fee: float,
     hold_fee: float,
     mid: string,
     tid: string,
     //    
-    module_type: number | string,
-    pg_id: number | string,
-    pmod_id: number | string,
-    ps_id: number | string,
-    settle_type: number | string,
-    terminal_id: number | string,
+    module_type: number | string | null,
+    pg_id: number | string | null,
+    pmod_id: number | string | null,
+    ps_id: number | string | null,
+    terminal_id: number | string | null,
     //
     ps_fee: Float,
-    mcht_settle_type: number,
+    mcht_settle_type: number | null,
     mcht_settle_fee: number, 
+    mcht_settle_id: Date | null,
     //
-    trx_dt: Date,
-    trx_tm: Date,
-    cxl_dt: Date,
-    cxl_tm: Date,
+    trx_dt: Date | null,
+    trx_tm: Date | null,
+    cxl_dt: Date | null,
+    cxl_tm: Date | null,
+    trx_dttm?: Date,
+    cxl_dttm?: Date,
     is_cancel: boolean,
     amount: number,
     ord_num: string,
@@ -338,9 +346,8 @@ export interface Transaction {
     //
     ori_trx_id: string,
     //
-    card_name: string,
     card_num: string,
-    installment: number | string,
+    installment: number | string | null,
     //
     issuer: string,
     acquirer: string,
@@ -348,12 +355,18 @@ export interface Transaction {
     buyer_name: string,
     buyer_phone: string,
     item_name: string,
+    //
+    nick_name?: string,
+    addr?: string,
+    detail_addr?: string,
+    resident_num?: string,
+    business_num?: string,
 }
 
 export interface Danger {
     id: number,
     mcht_name: number,
-    trx_type: number | string,
+    module_type: number | string,
     item_name: string,
     amount: number,
     ord_num: string,
@@ -379,7 +392,7 @@ export interface FailTransaction {
     mcht_name: string,
     pg_id: number | string,
     ps_id: number | string,
-    trx_type: number | string,
+    module_type: number | string,
     trx_dttm: Date,
     amount: number,
     resuld_cd: string,
@@ -440,7 +453,6 @@ export interface SettlesHistories extends Bank{
     mcht_name: string,    
     sales_id: number,
     level: number,
-    brand_id: number,
     user_name: string,
     settle_amount: number,
     deduct_amount: number,
@@ -476,7 +488,7 @@ export interface Complaint {
     phone_num: string,
     hand_cust_nm: string,
     hand_phone_num: string,
-    issuer_id: number | null,
+    issuer: number | null,
     pg_id: number | null,
     pg_name: string | null,
     type: number | null,

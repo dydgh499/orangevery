@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('phone_num', 20)->default('')->comment('휴대폰 번호');
             $table->string('hand_cust_nm', 50)->default('')->comment('수기작성성함');
             $table->string('hand_phone_num', 20)->default('')->comment('수기작성연락처');
-            $table->integer('issuer_id')->default(0)->comment('발급사 ID');
+            $table->string('issuer')->default('')->comment('발급사');
             $table->integer('pg_id')->default(0)->comment('PG사');
             $table->tinyInteger('type')->default(0)->comment('민원타입');
             $table->string('entry_path', 50)->default('')->comment('인입경로');

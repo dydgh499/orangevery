@@ -11,7 +11,7 @@ export const useSearchStore = defineStore('dangerSearchStore', () => {
     const headers = {
         'id': 'NO.',
         'mcht_name': '가맹점 상호',
-        'trx_type': '거래 타입',
+        'module_type': '거래 타입',
         'item_name': '상품명',
         'amount': '거래금액',
         'ord_num': '주문번호',
@@ -43,14 +43,16 @@ export const useSearchStore = defineStore('dangerSearchStore', () => {
     }
     
     const printer = (type:number, datas: Danger[]) => {
+        const keys = Object.keys(headers);
         for (let i = 0; i <datas.length; i++) {
-            datas[i]['trx_type'] = module_types.find(module_type => module_type['id'] === datas[i]['trx_type'])?.title as string
+            datas[i]['module_type'] = module_types.find(module_type => module_type['id'] === datas[i]['module_type'])?.title as string
             datas[i]['installment'] = installments.find(inst => inst['id'] === datas[i]['installment'])?.title as string
             datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_nm as string
             datas[i]['ps_id'] =  pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
             datas[i]['terminal_id'] = terminals.find(terminal => terminal['id'] === datas[i]['terminal_id'])?.name as string
             datas[i]['is_checked'] = datas[i]['is_checked'] ? '확인' : '미확인'
             datas[i]['danger_type'] = datas[i]['danger_type'] ? '한도초과' : '중복결제'
+            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
     }

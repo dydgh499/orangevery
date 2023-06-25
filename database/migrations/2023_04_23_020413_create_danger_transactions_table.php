@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->foreignId('mcht_id')->nullable()->comment('사용 가맹점 ID')->constrained('merchandises')->onDelete('SET NULL');
             $table->integer('trans_id')->comment('거래 ID');
+            $table->tinyInteger('module_type')->default(0)->comment('거래타입');
             $table->tinyInteger('danger_type')->default(0)->comment('이상 거래 타입');
             $table->boolean('is_checked')->default(false)->comment('확인 여부');
             $table->timestamps();

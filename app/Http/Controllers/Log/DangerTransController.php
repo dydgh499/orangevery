@@ -25,7 +25,7 @@ class DangerTransController extends Controller
         $cols = [
             'danger_transactions.*',
             'merchandises.mcht_name',
-            'transactions.trx_type',
+            'transactions.module_type',
             'transactions.item_name',
             'transactions.ord_num',
             'transactions.trx_id',

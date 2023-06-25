@@ -23,14 +23,14 @@ class Transaction extends Model
         'sales0_name', 'sales1_name', 
         'sales2_name', 'sales3_name', 
         'sales4_name', 'sales5_name', 
-        'user_name', 'mcht_name',
+        'user_name', 'mcht_name', 'nick_name', 'addr', 'detail_addr', 'resident_num', 'business_num',
         'trx_dttm', 'cxl_dttm',
     ];
     protected   $hidden     = [
         'sales0','sales1',
         'sales2','sales3',
         'sales4','sales5',
-        'mcht', 'trx_dt', 'trx_tm', 'cxl_dt', 'cxl_tm'
+        'mcht',
     ];
     protected   $guarded    = [];
 
@@ -148,19 +148,47 @@ class Transaction extends Model
     
     public function mcht()
     {
-        return $this->belongsTo(Merchandise::class, 'mcht_id')->select(['id', 'mcht_name', 'user_name']);
+        return $this->belongsTo(Merchandise::class, 'mcht_id')->select([
+            'id', 'mcht_name', 'user_name', 'nick_name',
+            'addr', 'detail_addr', 'resident_num', 'business_num',
+        ]);
     }
-
+    // mcht
     public function getMchtNameAttribute()
     {
         return $this->mcht ? $this->mcht->mcht_name : null;
+    }
+
+    public function getNickNameAttribute()
+    {
+        return $this->mcht ? $this->mcht->mcht_name : null;
+    }
+
+    public function getAddrAttribute()
+    {
+        return $this->mcht ? $this->mcht->addr : null;
+    }
+
+    public function getDetailAddrAttribute()
+    {
+        return $this->mcht ? $this->mcht->detail_addr : null;
+    }
+
+    public function getResidentNumAttribute()
+    {
+        return $this->mcht ? $this->mcht->resident_num : null;
+    }
+
+    public function getbusinessNumAttribute()
+    {
+        return $this->mcht ? $this->mcht->business_num : null;
     }
 
     public function getUserNameAttribute()
     {
         return $this->mcht ? $this->mcht->user_name : null;
     }
-
+    //
     public function getSales0NameAttribute()
     {
         return $this->sales0 ? $this->sales0->nick_name : null;

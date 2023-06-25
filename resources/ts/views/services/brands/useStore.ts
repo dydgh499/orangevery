@@ -29,14 +29,15 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
 
-    const exporter = async (type: number) => {      
+    const exporter = async (type: number) => {
+        const keys = Object.keys(headers);
         const r = await store.get(store.getAllDataFormat())
-        let convert = r.data.content;
-        for (let index = 0; index <convert.length; index++) 
-        {
-        
+        let datas = r.data.content;
+        for (let i = 0; i < datas.length; i++) {
+
+            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)        
+        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }
     return {
         store,

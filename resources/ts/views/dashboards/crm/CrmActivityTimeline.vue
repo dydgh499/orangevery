@@ -48,14 +48,13 @@ import avatar2 from '@images/avatars/avatar-2.png'
           <!-- 👉 Header -->
           <div class="d-flex justify-space-between">
             <h6 class="text-base font-weight-semibold me-3">
-              Client Meeting
+              관리자 로그인
             </h6>
             <span class="text-sm text-disabled">Today</span>
           </div>
 
           <!-- 👉 Content -->
           <p class="mb-1">
-            Project meeting with john @10:15am
           </p>
           <div class="d-flex align-center">
             <VAvatar
@@ -64,9 +63,9 @@ import avatar2 from '@images/avatars/avatar-2.png'
             />
             <div>
               <p class="font-weight-semibold mb-0">
-                Lester McCarthy (Client)
+                홍길동
               </p>
-              <span>CEO of Infibeam</span>
+              <span>CEO</span>
             </div>
           </div>
         </VTimelineItem>
@@ -78,14 +77,14 @@ import avatar2 from '@images/avatars/avatar-2.png'
           <!-- 👉 Header -->
           <div class="d-flex justify-space-between">
             <h6 class="text-base font-weight-semibold me-3">
-              Create a new project for client
+              가맹점 등록
             </h6>
             <span class="text-sm text-disabled">2 Day Ago</span>
           </div>
 
           <!-- 👉 Content -->
           <p class="mb-1">
-            Add files to new design folder
+            하위 관리자 1
           </p>
         </VTimelineItem>
 
@@ -96,45 +95,19 @@ import avatar2 from '@images/avatars/avatar-2.png'
           <!-- 👉 Header -->
           <div class="d-flex justify-space-between">
             <h6 class="text-base font-weight-semibold me-3">
-              Shared 2 New Project Files
+              영업점 수수료 변경
             </h6>
             <span class="text-sm text-disabled">6 Day Ago</span>
           </div>
 
           <!-- 👉 Content -->
           <p class="mb-1">
-            <span class="me-2">Sent by Mollie Dixon</span>
+            <span class="me-2">하위 관리자 2</span>
             <VAvatar
               :image="avatar2"
               size="20"
             />
           </p>
-          <div class="d-flex align-center">
-            <a
-              href="#"
-              class="d-flex align-center me-4"
-            >
-              <VIcon
-                start
-                size="18"
-                color="warning"
-                icon="tabler-file-description"
-              />
-              <h6 class="font-weight-semibold text-base">App Guidelines</h6>
-            </a>
-            <a
-              href="#"
-              class="d-flex align-center"
-            >
-              <VIcon
-                start
-                size="18"
-                color="success"
-                icon="tabler-table"
-              />
-              <h6 class="font-weight-semibold text-base">Testing Results</h6>
-            </a>
-          </div>
         </VTimelineItem>
 
         <VTimelineItem
@@ -144,14 +117,14 @@ import avatar2 from '@images/avatars/avatar-2.png'
           <!-- 👉 Header -->
           <div class="d-flex justify-space-between">
             <h6 class="text-base font-weight-semibold me-3">
-              Project status updated
+              단말기 등록
             </h6>
             <span class="text-sm text-disabled">10 Day Ago</span>
           </div>
 
           <!-- 👉 Content -->
           <p class="mb-1">
-            Ecommerce iOS App Completed
+            하위 관리자 3
           </p>
         </VTimelineItem>
       </VTimeline>

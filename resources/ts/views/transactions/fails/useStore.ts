@@ -14,7 +14,7 @@ export const useSearchStore = defineStore('failSearchStore', () => {
         'mcht_name': '가맹점 상호',
         'pg_id' : 'PG사',
         'ps_id' : '구간',
-        'trx_type': '거래타입',
+        'module_type': '거래타입',
         'result_cd': '실패 코드',
         'result_msg': '실패 메세지',
         'amount': '결제시도 금액',
@@ -31,10 +31,12 @@ export const useSearchStore = defineStore('failSearchStore', () => {
     }
     
     const printer = (type:number, datas: FailTransaction[]) => {
+        const keys = Object.keys(headers);
         for (let i = 0; i <datas.length; i++) {
-            datas[i]['trx_type'] = module_types.find(module_type => module_type['id'] === datas[i]['trx_type'])?.title as string
+            datas[i]['module_type'] = module_types.find(module_type => module_type['id'] === datas[i]['module_type'])?.title as string
             datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_nm as string
             datas[i]['ps_id'] =  pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
+            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
     }

@@ -87,6 +87,20 @@ class TransactionController extends Controller
     public function show(Request $request, $id)
     {
         $data = $this->transactions->where('id', $id)->first();
+        if($data)
+        {
+            $data->ps_fee = number_format($data->ps_fee * 100, 3);
+            $data->mcht_fee = number_format($data->mcht_fee * 100, 3);
+            $data->hold_fee = number_format($data->hold_fee * 100, 3);
+            $data->sales5_fee = number_format($data->sales5_fee * 100, 3);
+            $data->sales4_fee = number_format($data->sales4_fee * 100, 3);
+            $data->sales3_fee = number_format($data->sales3_fee * 100, 3);
+            $data->sales2_fee = number_format($data->sales2_fee * 100, 3);
+            $data->sales1_fee = number_format($data->sales1_fee * 100, 3);
+            $data->sales0_fee = number_format($data->sales0_fee * 100, 3);
+        }
+        else
+            return $this->response(1000);
         return $data ? $this->response(0, $data) : $this->response(1000);
     }
 

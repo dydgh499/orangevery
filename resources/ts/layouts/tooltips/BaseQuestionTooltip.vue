@@ -17,9 +17,7 @@ const props = defineProps<Props>()
             <template #activator="{ props }">
                 <VIcon v-bind="props" size="20" icon="ic:outline-help" color="primary" style="margin-bottom: 0.2em;" />
             </template>
-            <span>
-                {{ props.content }}
-            </span>
+            <span v-html="props.content"></span>
         </VTooltip>
     </div>
 </template>

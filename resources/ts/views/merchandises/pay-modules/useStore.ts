@@ -1,5 +1,6 @@
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
+import { useStore } from '@/views/services/pay-gateways/useStore';
 import type { Options, PayModule } from '@/views/types';
 
 export const module_types = <Options[]>([
@@ -14,7 +15,22 @@ export const installments = <Options[]>([
     { id: 9, title: "9개월" }, { id: 10, title: "10개월" },
     { id: 11, title: "11개월" }, { id: 12, title: "12개월" },
 ])
-
+export const payModFilter = (all_pay_modules:PayModule[], filter:PayModule[], pmod_id:number|null) => {
+    if (all_pay_modules.length > 0) {
+        if (filter.length > 0) {
+            let item = all_pay_modules.find((item:PayModule) => item.id === pmod_id)
+            if (item != undefined && filter[0].mcht_id != item.mcht_id) {
+                if (pmod_id != null)
+                    pmod_id = null
+            }
+        }
+        else {
+            if (pmod_id != null)
+                pmod_id = null
+        }
+    }
+    return pmod_id
+}
 export const useSearchStore = defineStore('payModSearchStore', () => {    
     const store = Searcher('merchandises/pay-modules')
     const head  = Header('merchandises/pay-modules', '결제모듈 관리')
@@ -36,14 +52,22 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
-    
-    const exporter = async (type: number) => {      
+    const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
+
+    const exporter = async (type: number) => {
+        const keys = Object.keys(headers);
         const r = await store.get(store.getAllDataFormat())
-        let convert = r.data.content;
-        for (let index = 0; index <convert.length; index++) {
-        
+        let datas = r.data.content;
+        for (let i = 0; i < datas.length; i++) {
+            datas[i]['module_type'] = module_types.find(module_type => module_type['id'] === datas[i]['module_type'])?.title as string
+            datas[i]['installment'] = installments.find(inst => inst['id'] === datas[i]['installment'])?.title as string
+            datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_nm as string
+            datas[i]['ps_id'] =  pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
+            datas[i]['settle_type'] = settle_types.find(settle_type => settle_type['id'] === datas[i]['settle_type'])?.name as string
+
+            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)        
+        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }
     return {
         store,

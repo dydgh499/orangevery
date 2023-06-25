@@ -182,7 +182,7 @@ const chartOptions = computed(() => {
 
         <div>
           <h5 class="text-h5 mb-1">
-            $4,673
+            400,673,000 ￦
           </h5>
           <VChip
             label

@@ -9,7 +9,7 @@ provide('exporter', exporter)
 
 </script>
 <template>
-    <BaseIndexView placeholder="게시글 검색" :metas="[]" :add="true" add_name="게시글" :is_range_date="true">
+    <BaseIndexView placeholder="게시글 검색" :metas="[]" :add="true" add_name="게시글" :is_range_date="null">
         <template #filter>
         </template>
         <template #headers>
@@ -33,7 +33,8 @@ provide('exporter', exporter)
             <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
-                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="!__header.hidden" class='list-square'>
+                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="!__header.hidden"
+                            class='list-square'>
                             <span>
                                 {{ item[_key][__key] }}
                             </span>

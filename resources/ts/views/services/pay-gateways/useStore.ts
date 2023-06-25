@@ -71,7 +71,23 @@ export const useStore = defineStore('payGatewayStore', () => {
         else
             return '';
     }
+    const psFilter = (filter:PaySection[], ps_id:number|null) => {
+        if (pss.value.length > 0) {
+            if (filter.length > 0) {
+                let item = pss.value.find((item:PaySection) => item.id === ps_id)
+                if (item != undefined && filter[0].pg_id != item.pg_id) {
+                    if (ps_id != null)
+                        ps_id = null
+                }
+            }
+            else {
+                if (ps_id != null)
+                    ps_id = null
+            }
+        }
+        return ps_id
+    }
     return {
-        pgs, pss, terminals, settle_types, cus_filters, pg_types, setFee, setAmount
+        pgs, pss, terminals, settle_types, cus_filters, pg_types, psFilter, setFee, setAmount
     }
 })

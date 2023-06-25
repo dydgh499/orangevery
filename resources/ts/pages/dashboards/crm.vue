@@ -24,7 +24,7 @@ const simpleStatisticsDemoCards = [
     color: 'info',
     title: 'Total Sales',
     subTitle: 'Last week',
-    stat: '$4,673',
+    stat: '400,673,000 ￦',
     change: '+25.2%',
   },
 ]

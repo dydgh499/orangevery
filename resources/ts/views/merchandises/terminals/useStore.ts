@@ -1,47 +1,56 @@
 import { Header } from '@/views/headers';
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore';
 import { Searcher } from '@/views/searcher';
+import { useStore } from '@/views/services/pay-gateways/useStore';
 
-export const useSearchStore = defineStore('terminalSearchStore', () => {    
+export const useSearchStore = defineStore('terminalSearchStore', () => {
     const store = Searcher('merchandises/terminals')
-    const head  = Header('merchandises/terminals', '단말기 관리')
-    const setHeaders = () => {
-        const headers: Record<string, string> = {
-            'id' : 'NO.',
-            'mcht_name' : '가맹점 상호',
-            'note' : '별칭',
-            'module_type' : '모듈타입',
-            'pg_id' : 'PG사명',
-            'ps_id' : '구간',
-            'settle_type' : '정산일',
-            'mid' : 'MID',
-            'tid' : 'TID',
-            'installment' : '할부한도',
-            'terminal_id' : '단말기 타입',
-            'serial_num' : '시리얼 번호',
-            'comm_settle_fee' : '통신비',
-            'comm_settle_type' : '통신비 정산일',
-            'comm_calc_level' : '통신비 정산주체',
-            'under_sales_amt' : '매출미달 차감금',
-            'begin_dt' : '개통일',
-            'ship_out_dt' : '출고일',
-            'ship_out_stat' : '출고상태',
-            'created_at' : '생성시간',
-            'updated_at' : '업데이트시간',
-        }
-        head.main_headers.value = [];
-        head.headers.value = head.initHeader(headers, {})
-        head.flat_headers.value = head.setFlattenHeaders()
+    const head = Header('merchandises/terminals', '단말기 관리')
+    const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
+
+    const headers: Record<string, string> = {
+        'id': 'NO.',
+        'mcht_name': '가맹점 상호',
+        'note': '별칭',
+        'module_type': '모듈타입',
+        'pg_id': 'PG사명',
+        'ps_id': '구간',
+        'settle_type': '정산일',
+        'mid': 'MID',
+        'tid': 'TID',
+        'installment': '할부한도',
+        'terminal_id': '단말기 타입',
+        'serial_num': '시리얼 번호',
+        'comm_settle_fee': '통신비',
+        'comm_settle_type': '통신비 정산일',
+        'comm_calc_level': '통신비 정산주체',
+        'under_sales_amt': '매출미달 차감금',
+        'begin_dt': '개통일',
+        'ship_out_dt': '출고일',
+        'ship_out_stat': '출고상태',
+        'created_at': '생성시간',
+        'updated_at': '업데이트시간',
     }
-    const exporter = async (type: number) => {      
+    head.main_headers.value = [];
+    head.headers.value = head.initHeader(headers, {})
+    head.flat_headers.value = head.setFlattenHeaders()
+
+    const exporter = async (type: number) => {
+        const keys = Object.keys(headers);
         const r = await store.get(store.getAllDataFormat())
-        let convert = r.data.content;
-        for (let i = 0; i <convert.length; i++) 
-        {
-            
+        let datas = r.data.content;
+        for (let i = 0; i < datas.length; i++) {
+            datas[i]['module_type'] = module_types.find(module_type => module_type['id'] === datas[i]['module_type'])?.title as string
+            datas[i]['installment'] = installments.find(inst => inst['id'] === datas[i]['installment'])?.title as string
+            datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_nm as string
+            datas[i]['ps_id'] =  pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
+            datas[i]['settle_type'] = settle_types.find(settle_type => settle_type['id'] === datas[i]['settle_type'])?.name as string
+            datas[i]['terminal_id'] = terminals.find(terminal => terminal['id'] === datas[i]['terminal_id'])?.name as string
+
+            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)        
+        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }
-    setHeaders()
     return {
         store,
         head,

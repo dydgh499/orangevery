@@ -2,7 +2,9 @@
 import { module_types, installments } from '@/views/merchandises/pay-modules/useStore';
 import { useSearchStore } from '@/views/transactions/useStore';
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import ExtraMenu from '@/views/transactions/ExtraMenu.vue';
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue';
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
 import { allLevels } from '@/views/salesforces/useStore';
@@ -12,7 +14,9 @@ const { store, head, exporter } = useSearchStore()
 
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 const all_levels = allLevels()
+const salesSilp = ref(null)
 
+provide('salesSilp', salesSilp)
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
@@ -119,7 +123,7 @@ const isSalesCol = (key: string) => {
                     </template>
                     <template v-else>
                         <td v-show="!_header.hidden" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
-                            <span v-if="_key == 'id'" class="edit-link">
+                            <span v-if="_key == 'id'" class="edit-link" @click="store.edit(item['id'])">
                                 #{{ item[_key] }}
                             </span>
                             <span v-else-if="_key == 'module_type'">
@@ -142,12 +146,12 @@ const isSalesCol = (key: string) => {
                             <span v-else-if="_key == 'terminal_id'">
                                 {{ terminals.find(terminal => terminal['id'] === item[_key])?.name }}
                             </span>
-                            <span v-else-if="isSalesCol(_key)">
+                            <span v-else-if="isSalesCol(_key as string)">
                                 {{ Number(item[_key]).toLocaleString() }}
                             </span>
                             <span v-else-if="_key.toString().includes('_fee') && _key != 'mcht_settle_fee'">
                                 <VChip>
-                                    {{ (item[_key] * 100).toFixed(4) }} %
+                                    {{ (item[_key] * 100).toFixed(3) }} %
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'pay_cond_price'">
@@ -157,31 +161,7 @@ const isSalesCol = (key: string) => {
                                 {{ cus_filters.find(cus => cus.id === item[_key])?.name }}
                             </span>
                             <span v-else-if="_key == 'extra_col'">
-                                <VBtn icon size="x-small" color="default" variant="text">
-                                    <VIcon size="22" icon="tabler-dots-vertical" />
-                                    <VMenu activator="parent">
-                                        <VList>
-                                            <VListItem value="saleslip" @click="">
-                                                <template #prepend>
-                                                    <VIcon size="24" class="me-3" icon="tabler:receipt" />
-                                                </template>
-                                                <VListItemTitle>매출전표</VListItemTitle>
-                                            </VListItem>
-                                            <VListItem value="complaint" @click="">
-                                                <template #prepend>
-                                                    <VIcon size="24" class="me-3" icon="ic-round-sentiment-dissatisfied" />
-                                                </template>
-                                                <VListItemTitle>민원처리</VListItemTitle>
-                                            </VListItem>
-                                            <VListItem value="complaint" @click="">
-                                                <template #prepend>
-                                                    <VIcon size="24" class="me-3" icon="tabler:device-tablet-cancel" />
-                                                </template>
-                                                <VListItemTitle>취소매출생성</VListItemTitle>
-                                            </VListItem>
-                                        </VList>
-                                    </VMenu>
-                                </VBtn>
+                                <ExtraMenu :item="item"></ExtraMenu>
                             </span>
                             <span v-else>
                                 {{ item[_key] }}
@@ -192,4 +172,5 @@ const isSalesCol = (key: string) => {
             </tr>
         </template>
     </BaseIndexView>
+    <SalesSlipDialog ref="salesSilp"/>
 </template>

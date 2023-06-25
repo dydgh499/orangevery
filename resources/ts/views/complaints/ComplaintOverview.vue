@@ -5,7 +5,7 @@ import type { Complaint, Merchandise, SearchParams } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
 import { useStore } from '@/views/services/pay-gateways/useStore';
-import { issuers, complaint_types } from '@/views/complaints/useStore';
+import { complaint_types } from '@/views/complaints/useStore';
 
 interface Props {
     item: Complaint,
@@ -124,9 +124,8 @@ onMounted(() => {
                     <CreateHalfVCol :mdl="3" :mdr="9">
                         <template #name>발급사</template>
                         <template #input>
-                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.issuer_id" :items="issuers"
-                                prepend-inner-icon="tabler-building-fortress" label="발급사 선택" item-title="title" item-value="id"
-                                single-line :rules="[nullValidator]" />
+                            <VTextField v-model="props.item.issuer" prepend-inner-icon="tabler-building-fortress"
+                                placeholder="4723124" persistent-placeholder :rules="[requiredValidator]" />
                         </template>
                     </CreateHalfVCol>
                     <CreateHalfVCol :mdl="3" :mdr="9">

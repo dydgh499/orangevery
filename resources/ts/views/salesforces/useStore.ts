@@ -77,6 +77,11 @@ export const allLevels = () => {
 export const useSearchStore = defineStore('salesSearchStore', () => {
     const store = Searcher('salesforces')
     const head  = Header('salesforces', '결제모듈 관리')
+    const all_sales = salesLevels()
+    const all_cycles = settleCycles()
+    const all_days = settleDays()
+    const tax_types = settleTaxTypes()
+    
     const headers: Record<string, string> = {
         'id' : 'NO.',
         'level' : '등급',
@@ -102,14 +107,19 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
     
-    const exporter = async (type: number) => {      
+    const exporter = async (type: number) => {
+        const keys = Object.keys(headers);
         const r = await store.get(store.getAllDataFormat())
-        let convert = r.data.content;
-        for (let index = 0; index <convert.length; index++) 
-        {
-        
+        let datas = r.data.content;
+        for (let i = 0; i < datas.length; i++) {
+            datas[i]['level'] = all_sales.find(obj => obj['id'] === datas[i]['level'])?.title as string
+            datas[i]['settle_cycle'] = all_cycles.find(obj => obj['id'] === datas[i]['settle_cycle'])?.title as string
+            datas[i]['settle_day'] = all_days.find(obj => obj['id'] === datas[i]['settle_day'])?.title as string
+            datas[i]['settle_tax_type'] = tax_types.find(obj => obj['id'] === datas[i]['settle_tax_type'])?.title as string
+
+            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)        
+        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }
     return {
         store,
@@ -129,7 +139,6 @@ export const useSalesFilterStore = defineStore('salesFilterStore', () => {
         for (let index = 0; index < keys.length; index++) {           
             sales[index].value = r.data[keys[index]]
         }
-        console.log(sales)
     }
     return {
         sales

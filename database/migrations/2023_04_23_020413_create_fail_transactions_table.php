@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('pmod_id')->default(0)->comment('pay module ID (단말기 ID)');
             $table->integer('pg_id')->default(0)->comment('PG사 id');
             $table->integer('ps_id')->default(0)->comment('구간 id');
-            $table->tinyInteger('trx_type')->default(0)->comment('거래타입');
+            $table->tinyInteger('module_type')->default(0)->comment('거래타입');
             $table->date('trx_dt')->comment('거래 날짜');
             $table->time('trx_tm')->comment('거래 시간');
             $table->integer('amount')->comment('거래 금액');

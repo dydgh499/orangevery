@@ -80,7 +80,7 @@ const metas = [
                             <span v-if="_key === 'id'" class="edit-link">
                                 #{{ item[_key] }}
                             </span>
-                            <span v-else-if="_key.includes('amount')" style="font-weight: bold;">
+                            <span v-else-if="(_key).toString().includes('amount')" style="font-weight: bold;">
                                 {{ (item[_key] as number).toLocaleString() }}
                             </span>
                             <span v-else-if="_key === 'deposit_status'">

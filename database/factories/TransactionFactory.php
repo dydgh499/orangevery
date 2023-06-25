@@ -108,7 +108,6 @@ class TransactionFactory extends Factory
             $data['trx_tm'] = $trx->trx_tm;
             $data['ord_num']    = $trx->ord_num;
             $data['trx_id']     = $trx->trx_id;
-            $data['card_name']  = $trx->card_name;
             $data['card_num']   = $trx->card_num;
             $data['installment'] = $trx->installment;
             $data['issuer']     = $trx->issuer;
@@ -130,7 +129,6 @@ class TransactionFactory extends Factory
             $data['trx_tm'] = date('H:i:s');
             $data['ord_num']    = $this->faker->isbn10();
             $data['trx_id']     = $this->faker->unique->isbn13();
-            $data['card_name']  = $this->faker->randomNumber();
             $data['card_num']   = '1234-56******-1234';
             $data['installment'] = rand(2, 11);
             $data['issuer']     = '비씨';

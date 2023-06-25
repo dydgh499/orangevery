@@ -11,6 +11,36 @@ class TransactionRequest extends FormRequest
     public function __construct()
     {
         $this->keys = [
+            'mcht_id',
+            'sales5_id', 'sales5_fee',
+            'sales4_id', 'sales4_fee',
+            'sales3_id', 'sales3_fee',
+            'sales2_id', 'sales2_fee',
+            'sales1_id', 'sales1_fee',
+            'sales0_id', 'sales0_fee',
+            'custom_id', 'mcht_fee', 'hold_fee',
+            'mid','tid',
+            'module_type',
+            'pg_id', 'pmod_id', 'ps_id',
+            'terminal_id',
+            'ps_fee',
+            'mcht_settle_fee', 'mcht_settle_type',
+            'trx_dt',
+            'trx_tm',
+            'amount',
+            'ord_num',
+            'trx_id',
+            'card_num',
+            'installment',
+            'issuer',
+            'acquirer',
+            'appr_num',
+            'cxl_dt', 
+            'cxl_tm', 
+            'ori_trx_id',   //
+            'buyer_name',   //
+            'buyer_phone',  //
+            'item_name',    //
         ];
     }
 
@@ -20,13 +50,32 @@ class TransactionRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
+     * Get the validation rules that apply to the this.
      *
      * @return array
      */
     public function rules()
     {
         $sub = [
+            'mcht_id' => 'required',
+            'sales5_id' => 'required', 'sales5_fee' => 'required',
+            'sales4_id' => 'required', 'sales4_fee' => 'required',
+            'sales3_id' => 'required', 'sales3_fee' => 'required',
+            'sales2_id' => 'required', 'sales2_fee' => 'required',
+            'sales1_id' => 'required', 'sales1_fee' => 'required',
+            'sales0_id' => 'required', 'sales0_fee' => 'required',
+            'custom_id' => 'required', 'mcht_fee' => 'required', 'hold_fee' => 'required',
+            'module_type' => 'required',
+            'pg_id' => 'required', 'pmod_id' => 'required', 'ps_id' => 'required', 'ps_fee' => 'required',
+            'mcht_settle_fee' => 'required', 'mcht_settle_type'=> 'required',
+            'trx_dt' => 'required', 'trx_tm' => 'required',
+            'amount' => 'required',
+            'ord_num' => 'required',
+            'trx_id' => 'required',
+            'card_num' => 'required',
+            'installment' => 'required',
+            'issuer', 'acquirer' => 'required',
+            'appr_num' => 'required',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -48,6 +97,20 @@ class TransactionRequest extends FormRequest
             $key = $this->keys[$i];
             $data[$key] = $this->input($key, '');
         }
+        $data['ps_fee']  = $this->input('ps_fee', 0)/100;
+        $data['hold_fee']  = $this->input('hold_fee', 0)/100;
+        $data['mcht_fee']    = $this->input('mcht_fee', 0)/100;
+        $data['sales0_fee'] = $this->input('sales0_fee', 0)/100;
+        $data['sales1_fee'] = $this->input('sales1_fee', 0)/100;
+        $data['sales2_fee'] = $this->input('sales2_fee', 0)/100;
+        $data['sales3_fee'] = $this->input('sales3_fee', 0)/100;
+        $data['sales4_fee'] = $this->input('sales4_fee', 0)/100;
+        $data['sales5_fee'] = $this->input('sales5_fee', 0)/100;
+
+        
+        $data['cxl_dt'] = $data['cxl_dt'] == '' ? null : $data['cxl_dt'];
+        $data['cxl_tm'] = $data['cxl_tm'] == '' ? null : $data['cxl_tm'];
+        $data['is_cancel'] = $data['cxl_dt'] == null ? false : true;
         return $data;
     }
 }

@@ -2,7 +2,6 @@
 import { axios } from '@axios';
 import type { PayModule, Merchandise } from '@/views/types'
 import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue';
-import { SearchParams } from '@/views/types';
 
 interface Props {
     item: Merchandise,
@@ -11,18 +10,10 @@ const props = defineProps<Props>();
 
 const pay_modules       = reactive<PayModule[]>([]);
 const new_pay_modules   = reactive<PayModule[]>([]);
-const formatDate    = <any>(inject('$formatDate'))
 const snackbar      = <any>(inject('snackbar'))
 
 onMounted(async () => {
-    let search = <SearchParams>({
-        page: 1,
-        page_size: 10000,
-        search: '',
-        s_dt: formatDate(new Date(2000, 1, 1)),
-        e_dt: formatDate(new Date(2999, 1, 1)),
-    })
-    const params = Object.assign({}, search, {'mcht_id': props.item.id});
+    const params = {'mcht_id': props.item.id};
     axios.get('/api/v1/manager/merchandises/pay-modules', { params: params })
     .then(r => { Object.assign(pay_modules, r.data.content as PayModule[]) })
     .catch(e => { snackbar.value.show(e.response.data.message, 'error') })

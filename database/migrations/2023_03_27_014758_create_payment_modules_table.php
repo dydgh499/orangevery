@@ -35,7 +35,7 @@ return new class extends Migration
             $table->integer('under_sales_amt')->default(0)->comment('매출미달 차감금');
             $table->date('begin_dt')->nullable()->comment('개통일');
             $table->date('ship_out_dt')->nullable()->comment('출고일');
-            $table->boolean('ship_out_stat')->nullable()->comment('출고 상태');
+            $table->tinyInteger('ship_out_stat')->nullable()->comment('출고 상태(0=공단말기, 1=입고, 2=출고, 3=해지)');
             //-------------------------- 3
             $table->integer('rt_id')->nullable()->comment('실시간 이체 ID');
             $table->tinyInteger('rt_trx_delay')->nullable()->comment('실시간 이체 딜레이(15,30,45,60)');

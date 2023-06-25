@@ -22,7 +22,6 @@ export default [
         icon: { icon: 'tabler-user' },
         children: [
             { title: 'salesforces', to: 'salesforces' },
-            { title: 'treeview', to: 'salesforces-treeview' },
             {
                 title: 'Fee change history management',
                 to: 'salesforces-fee-change-histories',

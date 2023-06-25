@@ -4,7 +4,7 @@ import { Searcher } from '@/views/searcher';
 export const useSearchStore = defineStore('notiSendHistorySearchStore', () => {
     const store = Searcher('merchandises/noti-send-histories')
     const head  = Header('merchandises/noti-send-histories', '노티 발송이력 관리')
-    const setHeaders = () => {
+
         const headers: Record<string, string> = {
             'id': 'NO.',
             'trans_id': '거래 고유번호',
@@ -17,17 +17,19 @@ export const useSearchStore = defineStore('notiSendHistorySearchStore', () => {
         head.main_headers.value = [];
         head.headers.value = head.initHeader(headers, {})
         head.flat_headers.value = head.setFlattenHeaders()
-    }
+    
 
     const exporter = async (type: number) => {
+        const keys = Object.keys(headers);
         const r = await store.get(store.getAllDataFormat())
-        let convert = r.data.content;
-        for (let i = 0; i < convert.length; i++) {
+        let datas = r.data.content;
+        for (let i = 0; i < datas.length; i++) {
 
+            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
-        type == 1 ? head.exportToExcel(convert) : head.exportToPdf(convert)
+        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }
-    setHeaders()
+
     return {
         store,
         head,

@@ -19,7 +19,7 @@ const props = defineProps<Props>()
 
 const all_levels = allLevels()
 const { update, remove } = useRequestStore()
-const { pgs, pss, settle_types, terminals, setFee, setAmount } = useStore()
+const { pgs, pss, settle_types, terminals, psFilter, setFee, setAmount } = useStore()
 const md = ref<number>(3)
 
 onMounted(() => {
@@ -35,18 +35,8 @@ watchEffect(() => {
 })
 
 const filterPgs = computed(() => {
-    const filter = pss.filter(item => {
-        return item.pg_id == props.item.pg_id;
-    })
-    if (pss.length > 0) {
-        if (filter.length > 0) {
-            let item = pss.find(item => item.id === props.item.ps_id)
-            if (item != undefined && filter[0].pg_id != item.pg_id)
-                props.item.ps_id = null
-        }
-        else
-            props.item.ps_id = null
-    }
+    const filter = pss.filter(item => { return item.pg_id == props.item.pg_id })
+    props.item.ps_id = psFilter(filter, props.item.ps_id)
     return filter
 })
 
@@ -102,7 +92,7 @@ const filterPgs = computed(() => {
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.installment"
                                         :items="installments" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
-                                        label="결제모듈 선택" item-title="title" item-value="id" single-line />
+                                        label="할부한도 선택" item-title="title" item-value="id" single-line />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

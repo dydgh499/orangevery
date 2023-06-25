@@ -11,25 +11,23 @@ const head  = <any>(inject('head'))
 const exporter = <any>(inject('exporter'))
 const formatDate = <any>(inject('$formatDate'))
 
-if(props.is_range_date == true)
-{
+if(props.is_range_date == null) {
+
+}
+else if(props.is_range_date == true) {
     const date = new Date()
     store.params.s_dt = formatDate(new Date(date.getFullYear(), date.getMonth(), 1))
     store.params.e_dt = formatDate(new Date(date.getFullYear(), date.getMonth() + 1, 0))
 }
 else if(props.is_range_date == false)
     store.params.dt = formatDate(new Date())
-else
-{
-    
-}
 </script>
 <template>
     <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
         <VCol cols="12" md="6">
             <VCardText style="padding: 1em;">
                 <VRow>
-                    <template v-if="props.is_range_date">
+                    <template v-if="props.is_range_date == true">
                         <VCol cols="12" sm="3">
                             <AppDateTimePicker v-model="store.params.s_dt" prepend-inner-icon="ic-baseline-calendar-today"
                                 label="검색 시작일" />
@@ -39,7 +37,7 @@ else
                                 label="검색 종료일" />
                         </VCol>
                     </template>
-                    <template v-else>
+                    <template v-else-if="props.is_range_date == false">
                         <VCol cols="12" sm="3">
                             <AppDateTimePicker v-model="store.params.dt" prepend-inner-icon="ic-baseline-calendar-today"
                                 label="검색일" />

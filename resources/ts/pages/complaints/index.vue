@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/complaints/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
-import { issuers, complaint_types } from '@/views/complaints/useStore';
+import { complaint_types } from '@/views/complaints/useStore';
 
 const { store, head, exporter } = useSearchStore()
 provide('store', store)
@@ -11,7 +11,7 @@ provide('exporter', exporter)
 const metas = []
 </script>
 <template>
-    <BaseIndexView placeholder="TID 검색" :metas="[]" :add="true" add_name="민원" :is_range_date="true">
+    <BaseIndexView placeholder="TID 검색" :metas="[]" :add="true" add_name="민원" :is_range_date="null">
         <template #filter>
         </template>
         <template #headers>
@@ -45,9 +45,6 @@ const metas = []
                                 <VChip :color="store.getSelectIdColor(complaint_types.find(types => types.id === item[_key])?.id)">
                                     {{ complaint_types.find(types => types.id === item[_key])?.title }}
                                 </VChip>
-                            </span>
-                            <span v-else-if="_key == `issuer_id`">
-                                {{ issuers.find(issuer => issuer.id === item[_key])?.title }}
                             </span>
                             <span v-else-if="_key == `is_deposit`">
                                 <VChip :color="store.booleanTypeColor(!item[_key])">

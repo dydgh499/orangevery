@@ -24,7 +24,7 @@ const simpleStatisticsDemoCards = [
     color: 'info',
     title: 'Total Sales',
     subTitle: 'Last week',
-    stat: '$4,673',
+    stat: '400,673,000 ￦',
     change: '+25.2%',
   },
 ]
@@ -114,28 +114,36 @@ const simpleStatisticsDemoCards = [
     </VCol>
 
     <!-- 👉 Browser States -->
+    <!--
+
     <VCol
       cols="12"
       md="4"
     >
       <CrmBrowserStates />
     </VCol>
+    -->
 
     <!-- 👉 Project Status -->
+    <!--
     <VCol
       cols="12"
       md="4"
     >
       <CrmProjectStatus />
     </VCol>
-
+    -->
     <!-- 👉 Active Project -->
+    <!--
     <VCol
       cols="12"
       md="4"
     >
       <CrmActiveProject />
     </VCol>
+
+
+    -->
 
     <!-- 👉 Recent Transaction -->
     <VCol

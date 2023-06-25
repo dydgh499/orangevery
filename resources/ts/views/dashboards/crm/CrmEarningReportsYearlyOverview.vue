@@ -100,7 +100,7 @@ const chartConfigs = computed(() => {
           labels: {
             offsetX: -15,
             formatter(val: number) {
-              return `$${parseInt(val / 1)}k`
+              return `${parseInt(val / 1)}k`
             },
             style: {
               fontSize: '14px',
@@ -240,7 +240,7 @@ const chartConfigs = computed(() => {
           labels: {
             offsetX: -15,
             formatter(val: number) {
-              return `$${parseInt(val / 1)}k`
+              return `${parseInt(val / 1)}k`
             },
             style: {
               fontSize: '14px',
@@ -379,7 +379,7 @@ const chartConfigs = computed(() => {
           labels: {
             offsetX: -15,
             formatter(val: unknown) {
-              return `$${parseInt(val / 1)}k`
+              return `${parseInt(val / 1)}k`
             },
             style: {
               fontSize: '14px',
@@ -518,7 +518,7 @@ const chartConfigs = computed(() => {
           labels: {
             offsetX: -15,
             formatter(val: number) {
-              return `$${parseInt(val / 1)}k`
+              return `${parseInt(val / 1)}k`
             },
             style: {
               fontSize: '14px',

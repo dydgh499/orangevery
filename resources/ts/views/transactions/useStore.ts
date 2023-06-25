@@ -13,7 +13,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         'id': 'NO.',
         'module_type': '거래 타입',
     }
-    const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
+    const { pgs, pss, terminals } = useStore()
     if(levels.sales5_use)
     {
         headers['sales5_name'] = levels.sales5_name+' ID'
@@ -71,7 +71,6 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['acquirer'] = '발행사'
 
     headers['card_num'] = '카드번호'
-    headers['card_name'] = '카드명'
     headers['buyer_name'] = '구매자명'
     headers['buyer_phone'] = '구매자 연락처'
     
@@ -93,13 +92,31 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         printer(type, r.data.content)
     }
     const printer = (type:number, datas: Transaction[]) => {
+        const keys = Object.keys(headers);
         for (let i = 0; i <datas.length; i++) {
             datas[i]['module_type'] = module_types.find(module_type => module_type['id'] === datas[i]['module_type'])?.title as string
             datas[i]['installment'] = installments.find(inst => inst['id'] === datas[i]['installment'])?.title as string
             datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_nm as string
             datas[i]['ps_id'] =  pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
-            datas[i]['settle_type'] = settle_types.find(settle_type => settle_type['id'] === datas[i]['settle_type'])?.name as string
             datas[i]['terminal_id'] = terminals.find(terminal => terminal['id'] === datas[i]['terminal_id'])?.name as string
+
+            if(levels.sales5_use)
+                datas[i]['sales5_fee'] = (datas[i]['sales5_fee'] * 100).toFixed(3)
+            if(levels.sales4_use)
+                datas[i]['sales4_fee'] = (datas[i]['sales4_fee'] * 100).toFixed(3)
+            if(levels.sales3_use)
+                datas[i]['sales3_fee'] = (datas[i]['sales3_fee'] * 100).toFixed(3)
+            if(levels.sales2_use)
+                datas[i]['sales2_fee'] = (datas[i]['sales2_fee'] * 100).toFixed(3)
+            if(levels.sales1_use)
+                datas[i]['sales1_fee'] = (datas[i]['sales1_fee'] * 100).toFixed(3)
+            if(levels.sales0_use)
+                datas[i]['sales0_fee'] = (datas[i]['sales0_fee'] * 100).toFixed(3)
+
+            datas[i]['mcht_fee'] = (datas[i]['mcht_fee'] * 100).toFixed(3)
+            datas[i]['hold_fee'] = (datas[i]['hold_fee'] * 100).toFixed(3)
+            datas[i]['ps_fee'] = (datas[i]['ps_fee'] * 100).toFixed(3)
+            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
     }
@@ -108,5 +125,65 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         head,
         exporter,
         printer,
+    }
+})
+
+export const useUpdateStore = defineStore('transUpdateStore', () => {
+    const path = 'transactions'
+    const item = reactive<Transaction>({
+        id: 0,
+        mcht_id: null,
+        sales5_id: null,
+        sales5_fee: undefined,
+        sales5_settle_id: null,
+        sales4_id: null,
+        sales4_fee: undefined,
+        sales4_settle_id: null,
+        sales3_id: null,
+        sales3_fee: undefined,
+        sales3_settle_id: null,
+        sales2_id: null,
+        sales2_fee: undefined,
+        sales2_settle_id: null,
+        sales1_id: null,
+        sales1_fee: undefined,
+        sales1_settle_id: null,
+        sales0_id: null,
+        sales0_fee: undefined,
+        sales0_settle_id: null,
+        custom_id: null,
+        mcht_fee: undefined,
+        hold_fee: undefined,
+        mcht_settle_id: null,
+        mid: '',
+        tid: '',
+        module_type: null,
+        pg_id: null,
+        pmod_id: null,
+        ps_id: null,
+        terminal_id: null,
+        ps_fee: undefined,
+        mcht_settle_type: null,
+        mcht_settle_fee: 0,
+        trx_dt: null,
+        trx_tm: null,
+        cxl_dt: null,
+        cxl_tm: null,
+        is_cancel: false,
+        amount: 0,
+        ord_num: '',
+        trx_id: '',
+        ori_trx_id: '',
+        card_num: '',
+        installment: null,
+        issuer: '',
+        acquirer: '',
+        appr_num: '',
+        buyer_name: '',
+        buyer_phone: '',
+        item_name: '',
+    })  
+    return {
+        path, item
     }
 })
