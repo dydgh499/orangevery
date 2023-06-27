@@ -17,6 +17,9 @@ import { VerticalNavLayout } from '@layouts'
 import AlertDialog from '@/layouts/dialogs/AlertDialog.vue';
 import Snackbar from '@/layouts/snackbars/Snackbar.vue';
 import LoadingDialog from '@/layouts/dialogs/LoadingDialog.vue';
+import { axios, pay_token, user_info } from '@axios';
+import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
+import { config } from '@layouts/config'
 
 const alert = ref(null)
 const snackbar = ref(null)
@@ -37,13 +40,14 @@ const { width: windowWidth } = useWindowSize()
                     <VIcon icon="tabler-menu-2" size="24" />
                 </VBtn>
 
-                <NavSearchBar class="ms-lg-n3" />
-
+                <div v-if="isLessThanOverlayNavBreakpoint(windowWidth)" style="display: flex;">
+                    <VNodeRenderer :nodes="config.app.logo" />
+                </div>
+                <div v-else>
+                    <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>님 안녕하세요!
+                </div>
                 <VSpacer />
-
-                <NavBarI18n />
                 <NavbarThemeSwitcher />
-                <NavbarShortcuts />
                 <NavBarNotifications class="me-2" />
                 <UserProfile />
             </div>

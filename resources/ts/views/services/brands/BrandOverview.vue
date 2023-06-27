@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { axios } from '@axios';
-import { businessNumValidator, nullValidator, requiredValidator } from '@validators';
+import { businessNumValidator, requiredValidator } from '@validators';
 import type { Brand } from '@/views/types'
 import FileInput from '@/layouts/utils/FileInput.vue';
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';

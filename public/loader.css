@@ -21,6 +21,12 @@ html {
   inset-inline-start: calc(50% - 45px);
 }
 
+@media (max-width: 500px) {
+  .loading-logo {
+    margin-block-start: -3em;
+  }
+}
+
 .loading {
   position: absolute;
   box-sizing: border-box;

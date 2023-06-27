@@ -33,18 +33,6 @@ const vuetifyTheme = useTheme()
 const initialThemeColors = JSON.parse(JSON.stringify(vuetifyTheme.current.value.colors))
 const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'error']
 
-// ℹ️ It will set primary color for current theme only
-const setPrimaryColor = (color: string) => {
-  const currentThemeName = vuetifyTheme.name.value
-
-  vuetifyTheme.themes.value[currentThemeName].colors.primary = color
-
-  // ℹ️ We need to store this color value in localStorage so vuetify plugin can pick on next reload
-  localStorage.setItem(`${themeConfig.app.title}-${currentThemeName}ThemePrimaryColor`, color)
-
-  // ℹ️ Update initial loader color
-  localStorage.setItem(`${themeConfig.app.title}-initial-loader-color`, color)
-}
 
 /*
   ℹ️ This will return static color for first indexed color based on theme
@@ -155,32 +143,6 @@ const headerValues = computed(() => {
               />
             </div>
           </div>
-
-          <!-- 👉 Primary color -->
-          <!--
-          <h6 class="mt-3 text-base font-weight-regular">
-            테마 색상
-          </h6>
-          <div class="d-flex gap-x-4 mt-2">
-            <div
-              v-for="(color, index) in colors"
-              :key="color"
-              style="width: 2.5rem; height: 2.5rem; border-radius: 0.5rem; transition: all 0.25s ease;"
-              :style="{ backgroundColor: getBoxColor(initialThemeColors[color], index) }"
-              class="cursor-pointer d-flex align-center justify-center"
-              :class="{ 'elevation-4': vuetifyTheme.current.value.colors.primary === getBoxColor(initialThemeColors[color], index) }"
-              @click="setPrimaryColor(getBoxColor(initialThemeColors[color], index))"
-            >
-              <VFadeTransition>
-                <VIcon
-                  v-show="vuetifyTheme.current.value.colors.primary === (getBoxColor(initialThemeColors[color], index))"
-                  icon="tabler-check"
-                  color="white"
-                />
-              </VFadeTransition>
-            </div>
-          </div>
-          -->
         </CustomizerSection>
         <!-- !SECTION -->
 

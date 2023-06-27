@@ -10,8 +10,15 @@ const tabs = <Tab[]>([
 ])
 const id = ref<number>(0)
 const route = useRoute()
-    watchEffect(() => {
+watchEffect(() => {
     id.value = Number(route.params.id) || 0
+    item.pg_id =  Number(route.query.pg_id) || null
+    item.appr_num =  route.query.appr_num as string
+    item.appr_dt =  new Date(route.query.appr_dt as string)
+    item.cust_nm =  route.query.cust_nm as string
+    item.mcht_id =  Number(route.query.mcht_id) || null
+    item.phone_num =  route.query.phone_num as string
+    item.tid =  route.query.tid as string
 })
 </script>
 <template>

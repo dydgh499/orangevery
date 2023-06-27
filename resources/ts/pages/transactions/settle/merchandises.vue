@@ -61,8 +61,8 @@ const getSettleStyle = (parent_key: string) => {
 const isSalesCol = (key: string) => {
     const sales_cols = ['count', 'amount', 'trx_amount', 'settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
     for (let i = 0; i < sales_cols.length; i++) {
-        if(sales_cols[i] === key)
-            return true        
+        if (sales_cols[i] === key)
+            return true
     }
     return false
 }
@@ -74,7 +74,8 @@ const isSalesCol = (key: string) => {
         </template>
         <template #headers>
             <tr>
-                <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index" class='list-square'>
+                <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
+                    class='list-square'>
                     <span>
                         {{ head.main_headers[index] }}
                     </span>
@@ -83,7 +84,8 @@ const isSalesCol = (key: string) => {
             <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="!header.hidden" class='list-square'>
                     <template v-if="key == 'deduction.input'">
-                        <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)" :content="'차감이 아닌 추가금 설정을 하시러면 금액 앞에 -(마이너스 기호)를 입력 후 차감버튼을 클릭해주세요.'">
+                        <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
+                            :content="'차감이 아닌 추가금 설정을 하시러면 금액 앞에 -(마이너스 기호)를 입력 후 차감버튼을 클릭해주세요.'">
                         </BaseQuestionTooltip>
                     </template>
                     <template v-else>
@@ -98,7 +100,8 @@ const isSalesCol = (key: string) => {
             <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
-                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="!__header.hidden" class='list-square'>
+                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="!__header.hidden"
+                            class='list-square'>
                             <span v-if="_key == 'deduction' && (__key as string) == 'input'">
                                 <AddDeductBtn :id="item['id']" :name="item['mcht_name']" :is_mcht="true">
                                 </AddDeductBtn>

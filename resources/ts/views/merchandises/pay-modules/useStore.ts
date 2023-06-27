@@ -80,7 +80,7 @@ export const useUpdateStore = defineStore('payModUpdateStore', () => {
     const path  = 'merchandises/pay-modules'
     const item  = reactive<PayModule>({
         id: 0,
-        mcht_id: 0,
+        mcht_id: null,
         pg_id: 0,
         ps_id: 0,
         terminal_id: 0,
@@ -103,7 +103,7 @@ export const useUpdateStore = defineStore('payModUpdateStore', () => {
         use_saleslip_sell: false,
         installment: 0,
         note: '비고',
-        settle_prem: null
+        settle_fee: null
     })
     //카드사 필터 및 다른 필터옵션들
     return {

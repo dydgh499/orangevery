@@ -4,6 +4,7 @@ import FileLogoInput from '@/layouts/utils/FileLogoInput.vue';
 import KakaotalkPreview from '@/layouts/utils/KakaotalkPreview.vue';
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { useTheme } from 'vuetify'
+import { themeConfig } from '@themeConfig'
 
 interface Props {
     item: Brand,
@@ -12,14 +13,25 @@ interface Props {
 const props = defineProps<Props>()
 
 const vuetifyTheme = useTheme()
-const currentThemeName = vuetifyTheme.name.value
 const color = ref(props.item.theme_css.main_color)
 
+const setPrimaryColor = (color: string) => {
+    //const currentThemeName = vuetifyTheme.name.value
+    // ℹ️ We need to store this color value in localStorage so vuetify plugin can pick on next reload
+    localStorage.setItem(`${themeConfig.app.title}-lightThemePrimaryColor`, color)
+    localStorage.setItem(`${themeConfig.app.title}-darkThemePrimaryColor`, color)
+    vuetifyTheme.themes.value['light'].colors.primary = color
+    vuetifyTheme.themes.value['dark'].colors.primary = color
+
+    props.item.theme_css.main_color = color  
+    // ℹ️ Update initial loader color
+    localStorage.setItem(`${themeConfig.app.title}-initial-loader-color`, color)
+}
+const moveNewTap = (url: string) => {
+    window.open(url)
+}
 watchEffect(() => {
-    vuetifyTheme.themes.value[currentThemeName].colors.primary = color.value
-    props.item.theme_css.main_color = color.value
-})
-watchEffect(() => {
+    setPrimaryColor(color.value)
 })
 </script>
 <template>
@@ -34,12 +46,34 @@ watchEffect(() => {
                             <VCol>
                                 <VRow no-gutters>
                                     <FileLogoInput :file="props.item.logo_file" :preview="props.item.logo_img"
-                                        :label="'로고 이미지(*.svg)'" @update:file="props.item.logo_file = $event" />
+                                        :label="'로고 이미지(*.svg)'" @update:file="props.item.logo_file = $event" :validates="['svg']"/>
                                 </VRow>
                                 <VRow no-gutters>
                                     <FileLogoInput :file="props.item.favicon_file" :preview="props.item.favicon_img"
-                                        :label="'파비콘 이미지(*.ico)'" @update:file="props.item.favicon_file = $event" />
+                                        :label="'파비콘 이미지(*.ico)'" @update:file="props.item.favicon_file = $event" :validates="['ico']"/>
                                 </VRow>
+                            </VCol>
+                            <VCol>
+                                <div class="d-inline-flex align-center flex-wrap gap-4 justify-content-evenly float-right">
+                                    <VBtn variant="tonal" @click="moveNewTap('https://convertio.co/kr/png-svg/')">
+                                        SVG 추출하러 가기
+                                        <VTooltip
+                                            activator="parent"
+                                            location="top"
+                                        >
+                                        홈페이지의 이미지 품질을 위해 로고 이미지는 *.SVG 파일만 지원합니다.
+                                        </VTooltip>
+                                    </VBtn>
+                                    <VBtn variant="tonal" color="secondary" @click="moveNewTap('https://convertio.co/kr/png-ico/')">
+                                        ICO 추출하러 가기
+                                        <VTooltip
+                                            activator="parent"
+                                            location="top"
+                                        >
+                                        웹 표준과 브라우저 호환성을 위해 파비콘 이미지는 *.ico 파일만 지원합니다.
+                                        </VTooltip>
+                                    </VBtn>
+                                </div>
                             </VCol>
                         </VCol>
                         <VCol md="6">

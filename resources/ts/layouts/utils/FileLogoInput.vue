@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import Preview from '@/layouts/utils/Preview.vue';
+import { extensionValidator } from '@validators';
 
 const props = defineProps({
     file: {
@@ -14,6 +15,10 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    validates : {
+        type: Array,
+        required: true,
+    }
 });
 const files = ref(props.file)
 const preview = ref<string>('/icons/img-preview.svg')
@@ -38,10 +43,14 @@ watchEffect(() => {
 watchEffect(() => {
     preview.value = props.preview
 })
+
+const extentionRule = computed(() => {
+    return (value: File[]) => extensionValidator(value, props.validates);
+})
 </script>
 <template>
     <VCol>
-        <VFileInput accept="image/*" v-model="files" :label="props.label"
+        <VFileInput accept="image/*" v-model="files" :label="props.label" :rules="[extentionRule]"
             prepend-icon="tabler-camera-up">
             <template #selection="{ fileNames }">
                 <template v-for="fileName in fileNames" :key="fileName">

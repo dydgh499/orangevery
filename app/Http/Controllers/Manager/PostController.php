@@ -7,6 +7,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\PostRequest;
 use App\Http\Requests\Manager\IndexRequest;
+use Carbon\Carbon;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -39,9 +40,14 @@ class PostController extends Controller
         $query  = $this->posts
             ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
-            ->where('title', 'like', "%$search%");
+            ->where('title', 'like', "%$search%")
+            ->whereNull('parent_id')
+            ->with(['replies']);
 
-        $data = $this->getIndexData($request, $query);
+        if($request->type)
+            $query = $query->where('type', $request->type);
+
+        $data = $this->getIndexData($request, $query, 'id', $this->posts->cols, 'updated_at');
         return $this->response(0, $data);
 
     }
@@ -55,10 +61,20 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
+        $u_res = true;
         $data = $request->data();
+
         $data['writer'] = $request->user()->user_name;
-        $res  = $this->posts->create($data);
-        return $this->response($res ? 1 : 990);
+        $data['level'] = $request->user()->level;
+        $i_res = $this->posts->create($data);
+
+        if($data['parent_id'] != null)
+        {
+            $u_res = $this->posts
+                ->where('id', $data['parent_id'])
+                ->update(['is_reply' => true]);
+        }
+        return $this->response($i_res && $u_res ? 1 : 990);
     }
 
     /**
@@ -104,6 +120,13 @@ class PostController extends Controller
         return $this->response($result);
     }
 
+    /**
+     * 이미지 단일 업로드
+     *
+     * 게시글에 사용할 이미지를 등록합니다.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function upload(Request $request)
     {
         $data = [];
@@ -114,6 +137,32 @@ class PostController extends Controller
             'sizes'     => [ 1980],
         ];
         $data = $this->saveImages($request, $data, $imgs);
+        return $this->response(0, $data);
+    }
+    
+    /**
+     * 최근 게시글 불러오기
+     *
+     * 업데이트 기준 3일이내 게시글들의 제목과 id를 불러옵니다. (최대 5개)
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function recent(Request $request)
+    {
+        $request->merge([
+            'page' => 1,
+            'page_size' => 5,
+        ]);
+        $cur = Carbon::now()->subDays(3)->format('Y-m-d H:i:s');
+        $query  = $this->posts
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('is_reply', false)
+            ->where('type', 2)
+            ->where('level', '<', 35)
+            ->where('is_delete', false)
+            ->where('updated_at', '>', $cur);
+
+        $data = $this->getIndexData($request, $query, 'id', $this->posts->cols, 'updated_at');
         return $this->response(0, $data);
     }
 }

@@ -8,12 +8,14 @@ const router = useRouter()
 const ability = useAppAbility()
 
 let mylink = '';
-if(user_info.level == 10)
-    mylink = 'merchandises/'+user_info.id;
-else if(user_info.level <= 30)
-    mylink = 'salesforces/'+user_info.id;
-else if(user_info.level <= 45)
-    mylink = 'operators/'+user_info.id;
+if (user_info.level == 10)
+    mylink = 'merchandises/' + user_info.id;
+else if (user_info.level <= 30)
+    mylink = 'salesforces/' + user_info.id;
+else if (user_info.level <= 45)
+    mylink = 'operators/' + user_info.id;
+
+const avartar_num = Math.floor(Math.random() * 25) + 1;
 
 const logout = async () => {
     await axios.get('/api/v1/auth/sign-out', {})
@@ -31,8 +33,7 @@ const logout = async () => {
 <template>
     <VBadge dot location="bottom right" offset-x="3" offset-y="3" bordered color="success">
         <VAvatar class="cursor-pointer" color="primary" variant="tonal">
-            <VImg v-if="user_info && user_info.profile_img" :src="user_info.profile_img" />
-            <VIcon v-else icon="tabler-user" />
+            <VImg :src="'/images/avatars/avatar_' + avartar_num + '.jpg'" />
 
             <!-- SECTION Menu -->
             <VMenu activator="parent" width="230" location="bottom end" offset="14px">
@@ -43,8 +44,7 @@ const logout = async () => {
                             <VListItemAction start>
                                 <VBadge dot location="bottom right" offset-x="3" offset-y="3" color="success">
                                     <VAvatar color="primary" variant="tonal">
-                                        <VImg v-if="user_info && user_info.profile_img" :src="user_info.profile_img" />
-                                        <VIcon v-else icon="tabler-user" />
+                                        <VImg :src="'/images/avatars/avatar_' + avartar_num + '.jpg'" />
                                     </VAvatar>
                                 </VBadge>
                             </VListItemAction>
@@ -58,21 +58,17 @@ const logout = async () => {
 
                     <VDivider class="my-2" />
 
-                <div v-if="user_info.level < 50">
-                    <VListItem :to="{ name: mylink, params: { id: 21 } }">
-                    <template #prepend>
-                    <VIcon
-                        class="me-2"
-                        icon="tabler-user"
-                        size="22"
-                    />
-                    </template>
+                    <div v-if="user_info.level < 50">
+                        <VListItem :to="{ name: mylink, params: { id: 21 } }">
+                            <template #prepend>
+                                <VIcon class="me-2" icon="tabler-user" size="22" />
+                            </template>
 
-                    <VListItemTitle>Profile</VListItemTitle>
-                </VListItem>
-                <!-- Divider -->
-                <VDivider class="my-2" />
-                </div>
+                            <VListItemTitle>Profile</VListItemTitle>
+                        </VListItem>
+                        <!-- Divider -->
+                        <VDivider class="my-2" />
+                    </div>
 
                     <!-- 👉 Logout -->
                     <VListItem link @click="logout">

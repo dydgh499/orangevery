@@ -56,7 +56,7 @@ const metas = [
                 <template #extra_left>
                     <VCol cols="12" sm="3">
                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.level"
-                            :items="[{ id: null, title: '등급 선택' }].concat(salesLevels())" :label="`등급 선택`"
+                            :items="[{ id: null, title: '전체' }].concat(salesLevels())" :label="`등급 선택`"
                             item-title="title" item-value="id" />
                     </VCol>
                 </template>

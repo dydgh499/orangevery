@@ -107,10 +107,11 @@ class TransactionRequest extends FormRequest
         $data['sales4_fee'] = $this->input('sales4_fee', 0)/100;
         $data['sales5_fee'] = $this->input('sales5_fee', 0)/100;
 
-        
+        $data['brand_id'] = $this->user()->brand_id;
         $data['cxl_dt'] = $data['cxl_dt'] == '' ? null : $data['cxl_dt'];
         $data['cxl_tm'] = $data['cxl_tm'] == '' ? null : $data['cxl_tm'];
         $data['is_cancel'] = $data['cxl_dt'] == null ? false : true;
+        $data['ori_trx_id'] = $data['cxl_dt'] == null ? null : $data['trx_id'];
         return $data;
     }
 }

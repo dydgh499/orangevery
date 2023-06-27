@@ -124,3 +124,14 @@ export const alphaDashValidator = (value: unknown) => {
 export const businessNumValidator = (value: string) => {
     return /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/.test(value) || '유효한 사업자 번호를 입력하세요.'
 }
+
+export const extensionValidator = (files: File[], values: string[]) => {
+    if (files.length == 0)
+        return true
+    else {
+        const file = files[0];
+        const fileExtension = file.name.split('.').pop()?.toLowerCase() || '';
+        const isValid = values.includes(fileExtension);
+        return isValid ? true : `확장자는 ${values.join(',')}만 등록 가능합니다.`;    
+    }
+}

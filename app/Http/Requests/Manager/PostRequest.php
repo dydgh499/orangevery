@@ -17,6 +17,7 @@ class PostRequest extends FormRequest
             'title',
             'content',
             'type',
+            'is_reply',
         ];
     }
 
@@ -33,9 +34,9 @@ class PostRequest extends FormRequest
     public function rules()
     {
         $sub = [
-            'parent_id' => 'required',
             'title' => 'required',
             'content' => 'required',
+            'is_reply' => 'required',
             'type' => 'required',
         ];
         return $this->getRules($this->keys, $sub);
@@ -52,6 +53,14 @@ class PostRequest extends FormRequest
         return $params;
     }
 
+    protected function prepareForValidation()
+    {
+        if ($this->has('is_reply')) 
+        {
+            $this->merge(['is_reply' => $this->convertToBoolean($this->input('is_reply'))]);
+        }
+    }
+
     public function data()
     {
         $data = [];
@@ -60,6 +69,8 @@ class PostRequest extends FormRequest
             $key = $this->keys[$i];
             $data[$key] = $this->input($key, '');
         }
+        $data['parent_id'] = $data['parent_id'] == '' ? null : $data['parent_id'];
+        $data['parent_id'] = $data['parent_id'] == 'NaN' ? null : $data['parent_id'];
         $data['brand_id'] = $this->user()->brand_id;
         return $data;
     }

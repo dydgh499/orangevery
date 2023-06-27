@@ -16,6 +16,7 @@ export const useSearchStore = defineStore('postSearchStore', () => {
         'type' : '타입',
         'writer' : '작성자',
         'title' : '제목',
+        'reply' : '답변',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
     }
@@ -48,8 +49,9 @@ export const useUpdateStore = defineStore('postUpdateStore', () => {
         title: '',
         content: '',
         type: 0,
-        parent_id: 0,
-        writer: ''
+        parent_id: null,
+        writer: '',
+        is_reply: false
     })
     return {
         path, item

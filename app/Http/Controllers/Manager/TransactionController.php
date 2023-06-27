@@ -8,6 +8,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\TransactionRequest;
 use App\Http\Requests\Manager\IndexRequest;
+use Illuminate\Database\QueryException;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -71,8 +72,8 @@ class TransactionController extends Controller
      */
     public function store(TransactionRequest $request)
     {
-        $user = $request->data();
-        $res = $this->transactions->create($user);
+        $data = $request->data();
+        $res = $this->transactions->create($data);
         return $this->response($res ? 1 : 990);
     }
 
@@ -134,5 +135,39 @@ class TransactionController extends Controller
         }
         else
             return $this->response(951);
+    }
+
+    /**
+     * 취소매출 생성
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function cancel(TransactionRequest $request)
+    {
+        $data = $request->data();
+        // TransactionRequest 에서 100을 먼저 나눠서 가져오기 떄문에 다시가져옴
+        $data['ps_fee']  = $request->input('ps_fee', 0);
+        $data['hold_fee']  = $request->input('hold_fee', 0);
+        $data['mcht_fee']    = $request->input('mcht_fee', 0);
+        $data['sales0_fee'] = $request->input('sales0_fee', 0);
+        $data['sales1_fee'] = $request->input('sales1_fee', 0);
+        $data['sales2_fee'] = $request->input('sales2_fee', 0);
+        $data['sales3_fee'] = $request->input('sales3_fee', 0);
+        $data['sales4_fee'] = $request->input('sales4_fee', 0);
+        $data['sales5_fee'] = $request->input('sales5_fee', 0);
+        try 
+        {
+            $res = $this->transactions->create($data);
+            return $this->response(1);
+        }
+        catch(QueryException $ex)
+        {
+            $msg = $ex->getMessage();
+            if(str_contains($msg, 'Duplicate entry'))
+                $msg = '이미 같은 거래번호의 취소매출이 존재합니다.';
+                
+            return $this->extendResponse(990, $msg);
+        }
+        
     }
 }

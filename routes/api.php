@@ -42,6 +42,10 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::middleware('auth:sanctum')->post('ok', [AuthController::class, 'ok']);
     });
     Route::prefix('manager')->middleware('auth:sanctum')->group(function() {
+        Route::prefix('posts')->group(function() {
+            Route::get('recent', [PostController::class, 'recent']);
+            Route::post('upload', [PostController::class, 'upload']);    
+        });
         Route::prefix('services')->group(function() {
             Route::prefix('pay-gateways')->group(function() {
                 Route::get('detail', [PaymentGatewayController::class, 'detail']);
@@ -55,7 +59,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::prefix('transactions')->group(function() {
             Route::get('fails', [FailTransController::class, 'index']);
             Route::get('dangers', [DangerTransController::class, 'index']);
-
+            Route::post('cancel', [TransactionController::class, 'cancel']);
+            
             Route::prefix('settle')->group(function() {
                 Route::get('merchandises', [SettleController::class, 'merchandises']);
                 Route::post('merchandises/deduct', [SettleController::class, 'MchtDeduct']);
@@ -97,5 +102,4 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::apiResource('merchandises', MerchandiseController::class);
         Route::apiResource('posts', PostController::class);
     });
-    Route::post('upload', [PostController::class, 'upload']);
 });

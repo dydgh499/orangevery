@@ -46,12 +46,12 @@ const isSalesCol = (key: string) => {
                 <template #extra_left>
                     <VCol cols="12" sm="3">
                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.level"
-                            :items="salesLevels()" :label="`등급 선택`"
+                            :items="salesLevels()" :label="`전체`"
                             item-title="title" item-value="id" />
                     </VCol>
                     <VCol cols="12" sm="3">
                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
-                            :items="[{ id: null, title: '정산주기 선택' }].concat(settleCycles())" :label="`정산주기 선택`"
+                            :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`정산주기 선택`"
                             item-title="title" item-value="id" />
                     </VCol>
                 </template>

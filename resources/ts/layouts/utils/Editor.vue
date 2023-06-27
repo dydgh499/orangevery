@@ -26,7 +26,7 @@ const modules = [
                     formData.append("file", file);
                     axios({
                         headers: { "Content-Type": "multipart/form-data", },
-                        url: '/api/v1/upload',
+                        url: '/api/v1/manager/posts/upload',
                         method: 'post',
                         data: formData,
                     })

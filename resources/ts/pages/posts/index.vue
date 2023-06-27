@@ -1,47 +1,43 @@
 <script setup lang="ts">
 import { useSearchStore, types } from '@/views/posts/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import PostReplyView from '@/views/posts/PostReplyView.vue';
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
 
 const { store, head, exporter } = useSearchStore()
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+const router = useRouter()
 
 </script>
 <template>
     <BaseIndexView placeholder="게시글 검색" :metas="[]" :add="true" add_name="게시글" :is_range_date="null">
         <template #filter>
+            <BaseIndexFilterCard :pg="false" :ps="false" :pay_cond="false" :terminal="false" :cus_filter="false"
+                :sales="false">
+                <template #extra_left>
+                    <VCol cols="12" sm="3">
+                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.type" :items="[{ id: null, title: '전체' }].concat(types)"
+                            prepend-inner-icon="fxemoji-notepage" label="게시글 타입" item-title="title" item-value="id" />
+                    </VCol>
+                </template>
+            </BaseIndexFilterCard>
         </template>
         <template #headers>
             <tr>
-                <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
-                    class='list-square'>
-                    <span>
-                        {{ head.main_headers[index] }}
-                    </span>
-                </th>
-            </tr>
-            <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="!header.hidden" class='list-square'>
-                    <span>
+                    <span :class="key === 'title' ? 'title' : ''">
                         {{ header.ko }}
                     </span>
                 </th>
             </tr>
         </template>
         <template #body>
-            <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
-                <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                    <template v-if="head.getDepth(_header, 0) != 1">
-                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="!__header.hidden"
-                            class='list-square'>
-                            <span>
-                                {{ item[_key][__key] }}
-                            </span>
-                        </td>
-                    </template>
-                    <template v-else>
-                        <td v-show="!_header.hidden" class='list-square'>
+            <template v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
+                <tr>
+                    <template v-for="(_header, _key, _index) in head.headers" :key="_index">
+                        <td v-show="!_header.hidden" :class="_key == 'title' ? 'list-square title' : 'list-square'">
                             <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
                                 #{{ item[_key] }}
                             </span>
@@ -50,13 +46,31 @@ provide('exporter', exporter)
                                     {{ types.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
                             </span>
+                            <span v-else-if="_key == 'title'">
+                                {{ item[_key] }}
+                            </span>
+                            <span v-else-if="_key == 'reply'">
+                                <VBtn size="small" type="button"
+                                    @click="router.push('/posts/reply?parent_id=' + item['id'])">
+                                    <span>답변하기</span>
+                                    <VIcon end icon="tabler-pencil" />
+                                </VBtn>
+                            </span>
                             <span v-else>
                                 {{ item[_key] }}
                             </span>
                         </td>
                     </template>
-                </template>
-            </tr>
+                </tr>
+                <PostReplyView v-for="(reply, _index) in item.replies" :key="_index" :post="reply" :depth="1">
+                </PostReplyView>
+            </template>
         </template>
     </BaseIndexView>
 </template>
+<style scoped>
+.title {
+  inline-size: 100em;
+  text-align: start !important;
+}
+</style>

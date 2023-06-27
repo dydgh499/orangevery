@@ -146,7 +146,7 @@ export interface Operator extends BasePropertie{
 
 export interface PayModule {
     id: number,
-    mcht_id: number,
+    mcht_id: number | null,
     pg_id: number | null,
     ps_id: number | null,
     settle_type: number | null,
@@ -474,7 +474,9 @@ export interface Post {
     content: string,
     type:number,
     writer: string,
+    replies?: object[],
     parent_id: number | null,
+    is_reply: boolean,
 }
 
 export interface Complaint {

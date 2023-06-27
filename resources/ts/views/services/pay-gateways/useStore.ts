@@ -57,7 +57,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         if(id != null)
         {
             const item = items.find(item => item.id === id)
-            return item != undefined ? "수수료율: " + (item.trx_fee * 100).toFixed(3) + "%" : ''    
+            return item != undefined ? "수수료율: " + (item.trx_fee * 1).toFixed(3) + "%" : ''    
         }
         else
             return '';
