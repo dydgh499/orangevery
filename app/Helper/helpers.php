@@ -4,6 +4,7 @@
     use Illuminate\Http\Client\ConnectionException;
     use Illuminate\Support\Facades\Redis;
     use App\Models\Brand;
+    use App\Models\Salesforce;
 
     function isMainBrand($brand_id)
     {
@@ -101,14 +102,15 @@
 
     function globalAuthFilter($query, $request, $parent_table='')
     {
+        $parent_table = $parent_table != "" ? $parent_table."." : "";
         if(isMerchandise($request))
         {   // 가맹점
             $col = $parent_table == 'merchandises' ? "id" : 'mcht_id';
-            $query = $query->where($parent_table.".".$col,  $request->user()->id);
+            $query = $query->where($parent_table.$col,  $request->user()->id);
         }
         else if(isSalesforce($request))
         {   // 영업자
-            $idx = globalLevelByIndex($request->user()->level);
+            $idx = globalLevelByIndex($request->user()->level);            
             $query = $query->where($parent_table."sales".$idx."_id",  $request->user()->id);
         }
         else if(isOrderator($request))
@@ -180,4 +182,58 @@
             default:
                 return 0;
         }
+    }
+
+    function globalGetUniqueIdsBySalesIds($contents)
+    {
+        return collect($contents)->flatMap(function ($content) {
+            return [
+                $content->sales0_id, $content->sales1_id, $content->sales2_id,
+                $content->sales3_id, $content->sales4_id, $content->sales5_id,
+            ];
+        })->unique();
+    }
+
+    function globalGetSalesByIds($sales_ids)
+    {        
+        $salesforces = Salesforce::whereIn('id', $sales_ids)->get(['id', 'nick_name', 'settle_tax_type']);
+        return globalGetIndexingByCollection($salesforces);
+    }
+
+    function globalGetIndexingByCollection($salesforces)
+    {        
+        $sales_index_by_ids = [];
+        foreach ($salesforces as $salesforce) {
+            $sales_index_by_ids[$salesforce->id] = $salesforce;
+        }
+        return $sales_index_by_ids;
+    }
+
+    function mappingSalesInfo($content, $sales_index_by_ids, $sales_id, $idx)
+    {
+        $sales = 'sales'.$idx;
+        if(isset($sales_index_by_ids[$sales_id]))
+        {
+            $content[$sales] = $sales_index_by_ids[$sales_id];
+            $content[$sales."_name"] = $sales_index_by_ids[$sales_id]->nick_name;
+        }
+        else
+        {
+            $content[$sales] = null;
+            $content[$sales."_name"] = '삭제된 영업자';
+        }
+        return $content;
+    }
+
+    function globalMappingSales($sales_index_by_ids, $contents)
+    {
+        foreach ($contents as $content) {
+            $content = mappingSalesInfo($content, $sales_index_by_ids, $content->sales0_id, 0);
+            $content = mappingSalesInfo($content, $sales_index_by_ids, $content->sales1_id, 1);
+            $content = mappingSalesInfo($content, $sales_index_by_ids, $content->sales2_id, 2);
+            $content = mappingSalesInfo($content, $sales_index_by_ids, $content->sales3_id, 3);
+            $content = mappingSalesInfo($content, $sales_index_by_ids, $content->sales4_id, 4);
+            $content = mappingSalesInfo($content, $sales_index_by_ids, $content->sales5_id, 5);
+        }
+        return $contents;
     }

@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import { initialAbility } from '@/plugins/casl/ability';
-import { useAppAbility } from '@/plugins/casl/useAppAbility';
-import { axios, pay_token, user_info } from '@axios';
-import { getRating } from '@layouts/utils';
+import { initialAbility } from '@/plugins/casl/ability'
+import { useAppAbility } from '@/plugins/casl/useAppAbility'
+import { axios, pay_token, user_info } from '@axios'
+import { getRating } from '@layouts/utils'
 
 const router = useRouter()
 const ability = useAppAbility()
 
-let mylink = '';
-if (user_info.level == 10)
-    mylink = 'merchandises/' + user_info.id;
-else if (user_info.level <= 30)
-    mylink = 'salesforces/' + user_info.id;
-else if (user_info.level <= 45)
-    mylink = 'operators/' + user_info.id;
+let mylink = ''
+if (user_info.value.level == 10)
+    mylink = '/merchandises/edit/' + user_info.value.id;
+else if (user_info.value.level <= 30)
+    mylink = '/salesforces/edit/' + user_info.value.id;
+else if (user_info.value.level <= 45)
+    mylink = '/operators/edit/' + user_info.value.id;
 
 const avartar_num = Math.floor(Math.random() * 25) + 1;
 
@@ -58,17 +58,17 @@ const logout = async () => {
 
                     <VDivider class="my-2" />
 
-                    <div v-if="user_info.level < 50">
-                        <VListItem :to="{ name: mylink, params: { id: 21 } }">
+                    <router-link :to="mylink" class="custom-link">
+                        <VListItem>
                             <template #prepend>
                                 <VIcon class="me-2" icon="tabler-user" size="22" />
                             </template>
 
                             <VListItemTitle>Profile</VListItemTitle>
                         </VListItem>
+                    </router-link>
                         <!-- Divider -->
                         <VDivider class="my-2" />
-                    </div>
 
                     <!-- 👉 Logout -->
                     <VListItem link @click="logout">
@@ -84,3 +84,9 @@ const logout = async () => {
         </VAvatar>
     </VBadge>
 </template>
+<style lang="scss" scoped>
+.custom-link {
+  color: inherit;
+  text-decoration: none;
+}
+</style>

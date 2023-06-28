@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import SearchFilterDialog from '@/layouts/dialogs/SearchFilterDialog.vue';
-import BaseIndexChart from '@/layouts/lists/BaseIndexChart.vue';
-import BaseIndexFilter from '@/layouts/lists/BaseIndexFilter.vue';
+import SearchFilterDialog from '@/layouts/dialogs/SearchFilterDialog.vue'
+import BaseIndexChart from '@/layouts/lists/BaseIndexChart.vue'
+import BaseIndexFilter from '@/layouts/lists/BaseIndexFilter.vue'
 
 interface Props {
     placeholder: string,
@@ -71,7 +71,7 @@ onMounted(() => {
         <SearchFilterDialog ref="filter" />
     </section>
 </template>
-<style lang="scss" scoped>
+<style lang="scss">
 .list-square {
   padding-block: 0;
   padding-inline: 6px !important;

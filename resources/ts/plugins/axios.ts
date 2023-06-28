@@ -1,4 +1,4 @@
-import axiosIns from 'axios';
+import axiosIns from 'axios'
 
 export const com_token  = ref<string>()
 export const pay_token  = ref<string>(localStorage.getItem('payvery-token') || '')

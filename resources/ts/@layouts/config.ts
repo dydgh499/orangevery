@@ -1,7 +1,7 @@
-import corp from '@corp';
-import { AppContentLayoutNav, ContentWidth, FooterType, NavbarType } from '@layouts/enums';
-import type { Config } from '@layouts/types';
-import { breakpointsVuetify } from '@vueuse/core';
+import corp from '@corp'
+import { AppContentLayoutNav, ContentWidth, FooterType, NavbarType } from '@layouts/enums'
+import type { Config } from '@layouts/types'
+import { breakpointsVuetify } from '@vueuse/core'
 
 export const config: Config = {
   app: {

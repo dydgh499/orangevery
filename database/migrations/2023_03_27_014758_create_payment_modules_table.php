@@ -36,16 +36,24 @@ return new class extends Migration
             $table->date('begin_dt')->nullable()->comment('개통일');
             $table->date('ship_out_dt')->nullable()->comment('출고일');
             $table->tinyInteger('ship_out_stat')->nullable()->comment('출고 상태(0=공단말기, 1=입고, 2=출고, 3=해지)');
-            //-------------------------- 3
-            $table->integer('rt_id')->nullable()->comment('실시간 이체 ID');
-            $table->tinyInteger('rt_trx_delay')->nullable()->comment('실시간 이체 딜레이(15,30,45,60)');
-            $table->tinyInteger('rt_cxl_type')->nullable()->comment('실시간 취소타입(0=취소금지, 1=이체시간 -5분)');
+            //-------------------------- 4
+            $table->integer('fin_id')->nullable()->comment('실시간 이체 ID');
+            $table->tinyInteger('fin_trx_delay')->nullable()->comment('실시간 이체 딜레이(15,30,45,60)');
             //-------------------------- option
+            $table->tinyInteger('cxl_type')->default(2)->comment('취소타입(0=취소금지, 1=이체시간 -5분, 2=당일허용)');
             $table->boolean('is_old_auth')->default(false)->comment('수기결제 타입(0=비인증, 1=구인증)');
-            $table->boolean('use_saleslip_prov')->default(false)->comment('매출전표 공급자 사용 여부(0=사용, 1=본사)');
-            $table->boolean('use_saleslip_sell')->default(false)->comment('매출전표 판매자 사용 여부(0=사용, 1=본사)');
+            $table->boolean('show_easy_view')->default(true)->comment('간편보기 결제창 사용(0=미사용, 1=사용)');
+            
             $table->tinyInteger('installment')->default(0)->comment('할부 한도(0~12)');
-            $table->string('note', 200)->default('')->comment('비고');
+            $table->tinyInteger('pay_dupe_limit')->default(0)->comment('중복결제 허용회수');
+            $table->integer('abnormal_trans_limit')->default(0)->comment('이상거래 한도(단위:만원)');
+            $table->integer('pay_year_limit')->default(0)->comment('결제 연 한도(단위:만원)');
+            $table->integer('pay_month_limit')->default(0)->comment('결제 월 한도(단위:만원)');
+            $table->integer('pay_day_limit')->default(0)->comment('결제 일 한도(단위:만원)');
+            $table->time('pay_disable_s_tm')->nullable()->comment('결제 금지 시작 시간');
+            $table->time('pay_disable_e_tm')->nullable()->comment('결제 금지 종료 시간');
+
+            $table->string('note', 200)->default('')->comment('별칭');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });

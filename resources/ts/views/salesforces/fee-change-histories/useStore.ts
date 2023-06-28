@@ -1,5 +1,5 @@
-import { Header } from '@/views/headers';
-import { Searcher } from '@/views/searcher';
+import { Header } from '@/views/headers'
+import { Searcher } from '@/views/searcher'
 
 export const useSearchStore = defineStore('salesFeeHistorySearchStore', () => {
     const store = Searcher('salesforces/fee-change-histories')

@@ -71,6 +71,10 @@ class SettleHistoryController extends Controller
                 ->join('salesforces', 'settle_histories_salesforces.sales_id', 'salesforces.id')
                 ->where('settle_histories_salesforces.is_delete', false)
                 ->where('salesforces.user_name', 'like', "%$search%");
+
+        if(isSalesforce($request) && $request->level == $request->user()->level)
+            $query = $query->where('salesforces.id', $request->user()->id);
+
         $data = $this->getIndexData($request, $query, 'settle_histories_salesforces.id', $cols, 'settle_histories_salesforces.settle_dt');
         return $this->response(0, $data);
     }
@@ -99,7 +103,7 @@ class SettleHistoryController extends Controller
 
             $c_res = $this->settle_sales_hist->create($data);
             $u_res = $this->SetTransSettle($request, $target_id, $target_settle_id, $c_res->id);
-            $s_res = Salesforce::find($request->id)->update('last_settle_dt', $request->dt);
+            $s_res = Salesforce::find($request->id)->update(['last_settle_dt' => $request->dt]);
             return $this->response($c_res && $u_res && $s_res ? 1 : 990);
         });
     }

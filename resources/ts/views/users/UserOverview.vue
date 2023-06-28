@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 
-import { businessNumValidator, emailValidator, lengthValidatorV2, passwordValidator, requiredValidator } from '@validators';
+import { businessNumValidator, lengthValidatorV2, requiredValidator, nullValidator } from '@validators'
 import type { UserPropertie } from '@/views/types'
-import FileInput from '@/layouts/utils/FileInput.vue';
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
-import { banks } from '@/views/users/useStore';
+import FileInput from '@/layouts/utils/FileInput.vue'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { banks } from '@/views/users/useStore'
 interface Props {
     item: UserPropertie,
     id: number | string,
@@ -12,11 +12,11 @@ interface Props {
 const props = defineProps<Props>();
 
 const is_show = ref(false)
-const bank  = ref({ code: props.item.acct_bank_cd, title: props.item.acct_bank_nm })
+const bank = ref({ code: props.item.acct_bank_code, title: props.item.acct_bank_name })
 
 watchEffect(() => {
-    props.item.acct_bank_cd = bank.value.code
-    props.item.acct_bank_nm = bank.value.title
+    props.item.acct_bank_code = bank.value.code
+    props.item.acct_bank_name = bank.value.title
 })
 </script>
 <template>
@@ -32,8 +32,8 @@ watchEffect(() => {
                             <template #name>아이디</template>
                             <template #input>
                                 <VTextField v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
-                                    placeholder="ID로 사용됩니다." persistent-placeholder
-                                    :rules="[requiredValidator, emailValidator]" maxlength="30" />
+                                    placeholder="아이디 입력" persistent-placeholder :rules="[requiredValidator]"
+                                    maxlength="30" />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Password -->
@@ -41,10 +41,10 @@ watchEffect(() => {
                             <template #name>패스워드</template>
                             <template #input>
                                 <VTextField v-model="props.item.user_pw" counter prepend-inner-icon="tabler-lock"
-                                    :rules="[requiredValidator, passwordValidator]"
+                                    :rules="[requiredValidator]"
                                     :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
-                                    :type="is_show ? 'text' : 'password'" placeholder="소문자,대문자,특수문자로 이루어진 8자 이상 문자열"
-                                    persistent-placeholder @click:append-inner="is_show = !is_show" autocomplete />
+                                    :type="is_show ? 'text' : 'password'" persistent-placeholder
+                                    @click:append-inner="is_show = !is_show" autocomplete />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 대표자명 -->
@@ -52,7 +52,7 @@ watchEffect(() => {
                             <template #name>대표자명</template>
                             <template #input>
                                 <VTextField id="nickNameHorizontalIcons" v-model="props.item.nick_name"
-                                    prepend-inner-icon="tabler-user" placeholder="사용자명으로 사용됩니다." persistent-placeholder />
+                                    prepend-inner-icon="tabler-user" placeholder="대표자명 입력" persistent-placeholder />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Address -->
@@ -109,17 +109,18 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>예금주</template>
                             <template #input>
-                                <VTextField id="acctNmHorizontalIcons" v-model="props.item.acct_nm"
+                                <VTextField id="acctNmHorizontalIcons" v-model="props.item.acct_name"
                                     prepend-inner-icon="tabler-user" placeholder="예금주 입력" persistent-placeholder />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>은행</template>
                             <template #input>
-                                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bank" :items="banks"
-                                    prepend-inner-icon="ph-buildings" label="은행 선택"
-                                    :hint="`${bank.title}, 은행 코드: ${bank.code} `" item-title="title" item-value="code"
-                                    persistent-hint return-object single-line />
+                                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bank"
+                                    :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
+                                    label="은행 선택" :hint="`${bank.title}, 은행 코드: ${bank.code ? bank.code : '000'} `"
+                                    item-title="title" item-value="code" persistent-hint return-object single-line
+                                    :rules="[nullValidator]" create />
                             </template>
                         </CreateHalfVCol>
                     </VRow>

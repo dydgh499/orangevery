@@ -71,7 +71,7 @@ const getTitleStatus = computed(() => {
     </VBadge>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .notification-section {
   padding: 14px !important;
 }

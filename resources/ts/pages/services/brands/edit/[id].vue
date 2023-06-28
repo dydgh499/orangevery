@@ -1,9 +1,9 @@
 
 <script setup lang="ts">
-import BrandOverview from '@/views/services/brands/BrandOverview.vue';
-import BrandDesignOverview from '@/views/services/brands/BrandDesignOverview.vue';
-import BrandOptionOverview from '@/views/services/brands/BrandOptionOverview.vue';
-import BrandAuthOverview from '@/views/services/brands/BrandAuthOverview.vue';
+import BrandOverview from '@/views/services/brands/BrandOverview.vue'
+import BrandDesignOverview from '@/views/services/brands/BrandDesignOverview.vue'
+import BrandOptionOverview from '@/views/services/brands/BrandOptionOverview.vue'
+import BrandAuthOverview from '@/views/services/brands/BrandAuthOverview.vue'
 import { useUpdateStore } from '@/views/services/brands/useStore'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import type { Tab } from '@/views/types'

@@ -1,9 +1,9 @@
 a
 <script setup lang="ts">
 
-import { VForm } from 'vuetify/components';
+import { VForm } from 'vuetify/components'
 import type { Tab } from '@/views/types'
-import { useRequestStore } from '@/views/request';
+import { useRequestStore } from '@/views/request'
 
 
 interface Props {

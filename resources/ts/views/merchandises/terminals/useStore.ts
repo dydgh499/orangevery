@@ -1,20 +1,26 @@
-import { Header } from '@/views/headers';
-import { installments, module_types } from '@/views/merchandises/pay-modules/useStore';
-import { Searcher } from '@/views/searcher';
-import { useStore } from '@/views/services/pay-gateways/useStore';
+import { Header } from '@/views/headers'
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
+import { Searcher } from '@/views/searcher'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import { user_info } from '@axios'
 
 export const useSearchStore = defineStore('terminalSearchStore', () => {
     const store = Searcher('merchandises/terminals')
     const head = Header('merchandises/terminals', '단말기 관리')
     const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
-    const headers: Record<string, string> = {
+    const headers1: Record<string, string> = {
         'id': 'NO.',
         'mcht_name': '가맹점 상호',
         'note': '별칭',
         'module_type': '모듈타입',
-        'pg_id': 'PG사명',
-        'ps_id': '구간',
+    }
+    if(user_info.value >= 35)
+    {
+        headers1['pg_id'] = 'PG사명'
+        headers1['ps_id'] = '구간'
+    }
+    const headers2: Record<string, string> = {
         'settle_type': '정산일',
         'mid': 'MID',
         'tid': 'TID',
@@ -30,7 +36,12 @@ export const useSearchStore = defineStore('terminalSearchStore', () => {
         'ship_out_stat': '출고상태',
         'created_at': '생성시간',
         'updated_at': '업데이트시간',
+    }    
+    const headers = {
+        ...headers1,
+        ...headers2,
     }
+
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()

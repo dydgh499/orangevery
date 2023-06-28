@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { module_types, installments } from '@/views/merchandises/pay-modules/useStore';
-import { useSearchStore } from '@/views/transactions/useStore';
+import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
+import { useSearchStore } from '@/views/transactions/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import ExtraMenu from '@/views/transactions/ExtraMenu.vue';
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
-import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue';
-import CancelTransDialog from '@/layouts/dialogs/CancelTransDialog.vue';
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
-import { allLevels } from '@/views/salesforces/useStore';
+import ExtraMenu from '@/views/transactions/ExtraMenu.vue'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
+import CancelTransDialog from '@/layouts/dialogs/CancelTransDialog.vue'
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { allLevels } from '@/views/salesforces/useStore'
+import { user_info } from '@axios'
 import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
@@ -72,14 +73,14 @@ const isSalesCol = (key: string) => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="MID, TID, 승인번호, 거래번호 검색" :metas="metas" :add="true" add_name="매출" :is_range_date="true">
+        <BaseIndexView placeholder="MID, TID, 승인번호, 거래번호 검색" :metas="metas" :add="user_info.level >= 35" add_name="매출" :is_range_date="true">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true"
                     :sales="true">
                     <template #extra_left>
                         <VCol cols="12" sm="3">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="all_levels"
-                                :label="`등급 선택`" item-title="title" item-value="id" />
+                                :label="`등급 선택`" item-title="title" item-value="id" create />
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>

@@ -1,17 +1,20 @@
 <script lang="ts" setup>
-import DialogHalfVCol from '@/layouts/utils/DialogHalfVCol.vue';
+import DialogHalfVCol from '@/layouts/utils/DialogHalfVCol.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { installments } from '@/views/merchandises/pay-modules/useStore';
-import type { Transaction, PayGateway } from '@/views/types'
+import { installments } from '@/views/merchandises/pay-modules/useStore'
+import type { SalesSlip, PayGateway } from '@/views/types'
 import html2canvas from "html2canvas"
 import cancel from '@images/salesslip/cancel.png'
+
+
+
 
 //이미지로 복사기능
 const { pgs } = useStore()
 
 const snackbar  = <any>(inject('snackbar'))
 const visible   = ref(false)
-const trans     = ref<Transaction>()
+const trans     = ref<SalesSlip>()
 const pg    = ref<PayGateway>()
 const card  = ref(null)
 const thickness = ref(3);
@@ -34,13 +37,13 @@ const copySalesSlip = () => {
         })
     }
 }
-const show = (item: Transaction) => {
+const show = (item: SalesSlip) => {
     trans.value = item
     pg.value = pgs.find(pg => pg['id'] === item.pg_id)
     visible.value = true
 }
 const cancelColor = computed(() => {
-    return trans.value?.is_cancel ? 'text-decoration: line-through;' : '';
+    return trans.value?.is_cancel ? 'text-decoration: line-through;' : ''
 })
 
 onMounted(() => {
@@ -134,24 +137,24 @@ defineExpose({
                         </template>
                     </DialogHalfVCol>
                     <VCol class="text-primary font-weight-bold v-col-custom">
-                        공급자(가맹점) 정보
+                        판매자(가맹점) 정보
                     </VCol>
                     <VDivider :thickness="thickness" class="mb-2" />
                     <DialogHalfVCol class="cell">
                         <template #name>상호</template>
-                        <template #input>{{ trans?.mcht_name }}</template>
+                        <template #input>{{ trans?.mcht.use_saleslip_sell ?  pg?.company_nm : trans?.mcht_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>사업자번호</template>
-                        <template #input>{{ trans?.business_num }}</template>
+                        <template #input>{{ trans?.mcht.use_saleslip_sell ? pg?.business_num : trans?.business_num }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>대표자명</template>
-                        <template #input>{{ trans?.nick_name }}</template>
+                        <template #input>{{ trans?.mcht.use_saleslip_sell ? pg?.rep_nm : trans?.nick_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>주소</template>
-                        <template #input>{{ trans?.addr + " " + trans?.detail_addr as string }}</template>
+                        <template #input>{{ trans?.mcht.use_saleslip_sell ? pg?.addr : trans?.addr}}</template>
                     </DialogHalfVCol>
                     <VCol class="text-primary font-weight-bold v-col-custom">
                         공급자(결제대행사) 정보
@@ -159,19 +162,19 @@ defineExpose({
                     <VDivider :thickness="thickness" class="mb-2" />
                     <DialogHalfVCol class="cell">
                         <template #name>상호</template>
-                        <template #input>{{ pg?.company_nm }}</template>
+                        <template #input>{{ trans?.mcht.use_saleslip_prov ? pg?.company_nm : trans?.mcht_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>사업자번호</template>
-                        <template #input>{{ pg?.business_num }}</template>
+                        <template #input>{{ trans?.mcht.use_saleslip_prov ? pg?.business_num : trans?.business_num }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>대표자명</template>
-                        <template #input>{{ pg?.rep_nm }}</template>
+                        <template #input>{{ trans?.mcht.use_saleslip_prov ? pg?.rep_nm : trans?.nick_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell mb-2">
                         <template #name>주소</template>
-                        <template #input>{{ pg?.addr }}</template>
+                        <template #input>{{trans?.mcht.use_saleslip_prov ?  pg?.addr : trans?.addr }}</template>
                     </DialogHalfVCol>
                     <VDivider :thickness="1" />
                     <VCol style="font-size: 0.9em;">

@@ -1,14 +1,14 @@
 
 <script setup lang="ts">
-import corp from '@corp';
+import corp from '@corp'
 import type { Tab } from '@/views/types'
 
-import SalesforceRegister from '@/views/services/bulk-registration/SalesforceRegister.vue';
-import MerchandiseRegister from '@/views/services/bulk-registration/MerchandiseRegister.vue';
-import PayModuleRegister from '@/views/services/bulk-registration/PayModuleRegister.vue';
+import SalesforceRegister from '@/views/services/bulk-registration/SalesforceRegister.vue'
+import MerchandiseRegister from '@/views/services/bulk-registration/MerchandiseRegister.vue'
+import PayModuleRegister from '@/views/services/bulk-registration/PayModuleRegister.vue'
 
 import CreateForm from '@/layouts/utils/CreateForm.vue'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 
 const tabs = <Tab[]>([
     { icon: 'tabler-user', title: '영업점 등록' },

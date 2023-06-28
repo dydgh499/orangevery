@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import type { Brand } from '@/views/types'
-import FileLogoInput from '@/layouts/utils/FileLogoInput.vue';
-import KakaotalkPreview from '@/layouts/utils/KakaotalkPreview.vue';
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import FileLogoInput from '@/layouts/utils/FileLogoInput.vue'
+import KakaotalkPreview from '@/layouts/utils/KakaotalkPreview.vue'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { useTheme } from 'vuetify'
 import { themeConfig } from '@themeConfig'
 
@@ -46,11 +46,11 @@ watchEffect(() => {
                             <VCol>
                                 <VRow no-gutters>
                                     <FileLogoInput :file="props.item.logo_file" :preview="props.item.logo_img"
-                                        :label="'로고 이미지(*.svg)'" @update:file="props.item.logo_file = $event" :validates="['svg']"/>
+                                        :label="'로고 이미지(85 * 85px *.svg)'" @update:file="props.item.logo_file = $event" :validates="['svg']"/>
                                 </VRow>
                                 <VRow no-gutters>
                                     <FileLogoInput :file="props.item.favicon_file" :preview="props.item.favicon_img"
-                                        :label="'파비콘 이미지(*.ico)'" @update:file="props.item.favicon_file = $event" :validates="['ico']"/>
+                                        :label="'파비콘 이미지(32 * 32px*.ico)'" @update:file="props.item.favicon_file = $event" :validates="['ico']"/>
                                 </VRow>
                             </VCol>
                             <VCol>

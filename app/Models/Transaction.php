@@ -20,21 +20,14 @@ class Transaction extends Model
     protected   $primaryKey = 'id';
     protected   $appends    = [
         'profit', 'trx_amount', 'hold_amount',
-        'sales0_name', 'sales1_name', 
-        'sales2_name', 'sales3_name', 
-        'sales4_name', 'sales5_name', 
-        'user_name', 'mcht_name', 'nick_name', 'addr', 'detail_addr', 'resident_num', 'business_num',
+        'user_name', 'mcht_name', 'nick_name', 'addr', 'resident_num', 'business_num',
         'trx_dttm', 'cxl_dttm',
     ];
-    protected   $hidden     = [
-        'sales0','sales1',
-        'sales2','sales3',
-        'sales4','sales5',
-        'mcht',
-    ];
+    protected   $hidden     = ['sales0', 'sales1', 'sales2', 'sales3', 'sales4', 'sales5'];
     protected   $guarded    = [];
+    protected   $feeFormatting = false;
 
-    public function getProfit($level)
+    private function getProfit($level)
     {
         $getSalesProfit = function($idx) {
             $pks  = ['mcht_id', 'sales0_id','sales1_id','sales2_id','sales3_id','sales4_id','sales5_id','ps_id'];            
@@ -115,42 +108,14 @@ class Transaction extends Model
     {
         return $date->format("Y-m-d H:i:s");
     }
-    //sales
-    public function sales0()
-    {
-        return $this->belongsTo(Salesforce::class, 'sales0_id')->select(['id', 'nick_name', 'settle_tax_type']);
-    }
-
-    public function sales1()
-    {
-        return $this->belongsTo(Salesforce::class, 'sales1_id')->select(['id', 'nick_name', 'settle_tax_type']);
-    }
-
-    public function sales2()
-    {
-        return $this->belongsTo(Salesforce::class, 'sales2_id')->select(['id', 'nick_name', 'settle_tax_type']);
-    }
-
-    public function sales3()
-    {
-        return $this->belongsTo(Salesforce::class, 'sales3_id')->select(['id', 'nick_name', 'settle_tax_type']);
-    }
-
-    public function sales4()
-    {
-        return $this->belongsTo(Salesforce::class, 'sales4_id')->select(['id', 'nick_name', 'settle_tax_type']);
-    }
-
-    public function sales5()
-    {
-        return $this->belongsTo(Salesforce::class, 'sales5_id')->select(['id', 'nick_name', 'settle_tax_type']);
-    }
     
     public function mcht()
     {
         return $this->belongsTo(Merchandise::class, 'mcht_id')->select([
             'id', 'mcht_name', 'user_name', 'nick_name',
-            'addr', 'detail_addr', 'resident_num', 'business_num',
+            'addr', 'resident_num', 'business_num', 
+            'use_saleslip_prov', 'use_saleslip_sell',
+            'show_fee_easy_view',
         ]);
     }
     // mcht
@@ -169,11 +134,6 @@ class Transaction extends Model
         return $this->mcht ? $this->mcht->addr : null;
     }
 
-    public function getDetailAddrAttribute()
-    {
-        return $this->mcht ? $this->mcht->detail_addr : null;
-    }
-
     public function getResidentNumAttribute()
     {
         return $this->mcht ? $this->mcht->resident_num : null;
@@ -188,37 +148,7 @@ class Transaction extends Model
     {
         return $this->mcht ? $this->mcht->user_name : null;
     }
-    //
-    public function getSales0NameAttribute()
-    {
-        return $this->sales0 ? $this->sales0->nick_name : null;
-    }
-
-    public function getSales1NameAttribute()
-    {
-        return $this->sales1 ? $this->sales1->nick_name : null;
-    }
-
-    public function getSales2NameAttribute()
-    {
-        return $this->sales2 ? $this->sales2->nick_name : null;
-    }
-
-    public function getSales3NameAttribute()
-    {
-        return $this->sales3 ? $this->sales3->nick_name : null;
-    }
-    
-    public function getSales4NameAttribute()
-    {
-        return $this->sales4 ? $this->sales4->nick_name : null;
-    }
-
-    public function getSales5NameAttribute()
-    {
-        return $this->sales5 ? $this->sales5->nick_name : null;
-    }
-    //
+    // trans
     public function getTrxDttmAttribute()
     {
         return $this->trx_dt." ".$this->trx_tm;
@@ -229,13 +159,6 @@ class Transaction extends Model
         return $this->cxl_dt." ".$this->cxl_tm;
     }
     
-    protected function apprNum() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => sprintf('%08d', $value),
-        );
-    }
-
     protected function mchtSettleFee() : Attribute
     {
         return new Attribute(

@@ -26,8 +26,8 @@ declare module '@vue/runtime-core' {
 const app = createApp(App)
 app.provide('$errorHandler', function(e: any) {
     if(e.response.status == 401 || e.response.status == 403) {
-        pay_token.value = '';
-        com_token.value = '';
+        pay_token.value = ''
+        com_token.value = ''
         user_info.value = {}
         router.replace('/login')
     }

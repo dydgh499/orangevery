@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import page401 from '@images/pages/401.png';
-import miscMaskDark from '@images/pages/misc-mask-dark.png';
-import miscMaskLight from '@images/pages/misc-mask-light.png';
+import page401 from '@images/pages/401.png'
+import miscMaskDark from '@images/pages/misc-mask-dark.png'
+import miscMaskLight from '@images/pages/misc-mask-light.png'
 
-import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant';
+import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 
 const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
 </script>

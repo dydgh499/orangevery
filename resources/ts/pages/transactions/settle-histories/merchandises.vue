@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/transactions/settle-histories/useMerchandiseStore'
 import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue'
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 
 const { store, head, exporter } = useSearchStore()
 provide('store', store)

@@ -1,6 +1,8 @@
-import { Header } from '@/views/headers';
-import { Searcher } from '@/views/searcher';
-import type { Options, Post } from '@/views/types';
+import { Header } from '@/views/headers'
+import { Searcher } from '@/views/searcher'
+import type { Options, Post } from '@/views/types'
+import { user_info } from '@axios'
+
 
 export const types = <Options[]>([
     { id: 0, title: "공지사항" }, 
@@ -11,16 +13,23 @@ export const types = <Options[]>([
 export const useSearchStore = defineStore('postSearchStore', () => {
     const store = Searcher('posts')
     const head  = Header('posts', '공지사항')
-    const headers: Record<string, string> = {
+    const headers1: Record<string, string> = {
         'id' : 'NO.',
         'type' : '타입',
         'writer' : '작성자',
         'title' : '제목',
-        'reply' : '답변',
+    }
+    if(user_info.value.level >= 35)
+        headers1['reply'] = '답변'
+
+    const headers2: Record<string, string> = {
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
     }
- 
+    const headers: Record<string, string> = {
+        ...headers1,
+        ...headers2
+    }
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()

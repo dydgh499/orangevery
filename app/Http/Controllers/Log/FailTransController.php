@@ -34,6 +34,10 @@ class FailTransController extends Controller
             ->where('fail_transactions.is_delete', false)
             ->where('merchandises.mcht_name', 'like', "%$search%");
 
+        $query = globalPGFilter($query, $request, 'payment_modules');
+        $query = globalSalesFilter($query, $request, 'merchandises');
+        $query = globalAuthFilter($query, $request, 'merchandises');
+
         $data = $this->getIndexData($request, $query, 'fail_transactions.id', $cols, 'fail_transactions.trx_dt');
         return $this->response(0, $data);
     }

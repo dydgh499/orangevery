@@ -2,7 +2,7 @@
 
 import { emailValidator, passwordValidator, requiredValidator } from '@validators';
 import type { Operator } from '@/views/types'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { operator_levels } from '@/views/services/operators/useStore'
 
 interface Props {
@@ -31,7 +31,7 @@ const is_show = ref(false)
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Password -->
-                        <CreateHalfVCol  :mdl="3" :mdr="9" v-if="props.id == 0">
+                        <CreateHalfVCol :mdl="3" :mdr="9" v-if="props.id == 0">
                             <template #name>패스워드</template>
                             <template #input>
                                 <VTextField v-model="props.item.user_pw" counter prepend-inner-icon="tabler-lock"
@@ -45,10 +45,8 @@ const is_show = ref(false)
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>대표자명</template>
                             <template #input>
-                                <VTextField v-model="props.item.nick_name"
-                                    prepend-inner-icon="tabler-user" placeholder="사용자명으로 사용됩니다." 
-                                    :rules="[requiredValidator]"
-                                    persistent-placeholder />
+                                <VTextField v-model="props.item.nick_name" prepend-inner-icon="tabler-user"
+                                    placeholder="사용자명으로 사용됩니다." :rules="[requiredValidator]" persistent-placeholder />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Mobile -->
@@ -57,16 +55,16 @@ const is_show = ref(false)
                             <template #input>
                                 <VTextField v-model="props.item.phone_num" type="number"
                                     prepend-inner-icon="tabler-device-mobile" placeholder="숫자만 입력해주세요."
-                                    :rules="[requiredValidator]"
-                                    persistent-placeholder />
+                                    :rules="[requiredValidator]" persistent-placeholder />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>관리자 등급</template>
                             <template #input>
-                                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.level" :items="operator_levels"
-                                    prepend-inner-icon="tabler-adjustments-up" label="등급 선택"  item-title="title" item-value="id"
-                                    single-line :rules="[requiredValidator]" :readonly="props.id != 0"/>
+                                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
+                                    :items="operator_levels" prepend-inner-icon="tabler-adjustments-up" label="등급 선택"
+                                    item-title="title" item-value="id" single-line :rules="[requiredValidator]"
+                                    :readonly="props.id != 0" create />
                             </template>
                         </CreateHalfVCol>
                     </VRow>

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { Classification } from '@/views/types'
-import ClassificationTr from '@/views/services/pay-gateways/ClassificationTr.vue';
+import ClassificationTr from '@/views/services/pay-gateways/ClassificationTr.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 
 const { terminals, cus_filters } = useStore()

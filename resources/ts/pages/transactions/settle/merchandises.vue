@@ -2,9 +2,9 @@
 import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
 import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 
 
 const { store, head, exporter } = useSearchStore()
@@ -50,13 +50,13 @@ store.params.level = 10 // taransaction model에서 필수
 
 const getSettleStyle = (parent_key: string) => {
     if (parent_key === 'appr')
-        return 'color: blue;';
+        return 'color: blue;'
     else if (parent_key === 'cxl')
-        return 'color: red;';
+        return 'color: red;'
     else if (parent_key === 'settle')
-        return 'font-weight: bold;';
+        return 'font-weight: bold;'
     else
-        return ''; // 기본 스타일 또는 다른 스타일을 지정하고 싶은 경우 여기에 작성
+        return '' // 기본 스타일 또는 다른 스타일을 지정하고 싶은 경우 여기에 작성
 }
 const isSalesCol = (key: string) => {
     const sales_cols = ['count', 'amount', 'trx_amount', 'settle_fee', 'hold_amount', 'total_trx_amount', 'profit']

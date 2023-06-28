@@ -91,6 +91,10 @@ class AuthController extends Controller
         $result = $this->__signIn(new Salesforce(), $request);  // check salesforce
         if($result['result'] == 1)
             return $this->response(0, $result['user']->loginInfo($result['user']->level));
+
+        $result = $this->__signIn(new Merchandise(), $request);  // check Merchandise
+        if($result['result'] == 1)
+            return $this->response(0, $result['user']->loginInfo($result['user']->level));
         else
             return $this->isMaster($request);           // check master
     }

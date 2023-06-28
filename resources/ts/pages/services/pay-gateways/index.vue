@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
-import PayGatewayOverview from '@/views/services/pay-gateways/PayGatewayOverview.vue';
-import ClassificationOverview from '@/views/services/pay-gateways/ClassificationOverview.vue';
+import PayGatewayOverview from '@/views/services/pay-gateways/PayGatewayOverview.vue'
+import ClassificationOverview from '@/views/services/pay-gateways/ClassificationOverview.vue'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import type { Tab } from '@/views/types'
 

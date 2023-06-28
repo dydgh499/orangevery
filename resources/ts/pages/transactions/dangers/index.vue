@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/transactions/dangers/useStore';
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import { useSearchStore } from '@/views/transactions/dangers/useStore'
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 
 const { store, head, exporter } = useSearchStore()
 provide('store', store)

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { module_types, installments } from '@/views/merchandises/pay-modules/useStore';
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 
 const { pgs, pss, settle_types } = useStore()
 

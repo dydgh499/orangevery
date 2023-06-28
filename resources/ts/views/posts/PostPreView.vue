@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import type { Post } from '@/views/types'
-import { requiredValidator } from '@validators';
-import Editor from '@/layouts/utils/Editor.vue';
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import { requiredValidator } from '@validators'
+import Editor from '@/layouts/utils/Editor.vue'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { types } from '@/views/posts/useStore'
-import { axios } from '@axios';
+import { axios } from '@axios'
 
 interface Props {
     item: Post,

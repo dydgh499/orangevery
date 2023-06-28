@@ -1,10 +1,14 @@
-import { Header } from '@/views/headers';
-import { Searcher } from '@/views/searcher';
+import { Header } from '@/views/headers'
+import { Searcher } from '@/views/searcher'
+import type { DeductionHeader } from '@/views/types'
+import { user_info } from '@axios'
+
+
 
 export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {    
     const store = Searcher('transactions/settle/merchandises')
     const head  = Header('transactions/settle/merchandises', '가맹점 정산관리')
-    const headers = {
+    const headers1 = {
         'id': 'NO.',
         'user_name' : '가맹점 ID',
         'mcht_name' : '상호',
@@ -33,10 +37,14 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         'settle_fee' :  '입금 수수료',
         'total_trx_amount': '총 거래 수수료',
         'profit': '정산액',
-        'deduction' : {
-            'input' : '추가차감입력',
-            'amount': '차감완료금',
-        },
+    }
+    const headers2:DeductionHeader = {'deduction': {}}
+    if(user_info.value.level >= 35) {
+        headers2['deduction']['input'] = '추가차감입력'
+    }
+    headers2['deduction']['amount'] = '차감완료금'
+
+    const headers3:Record<string, string | object> = {
         'terminal': {
             'amount': '통신비',
         },
@@ -45,9 +53,9 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
             'deposit': '입금금액',
             'transfer': '이체금액',
         },
-        'acct_bank_nm': '은행',
-        'acct_bank_cd': '은행코드',
-        'acct_nm': '예금주',
+        'acct_bank_name': '은행',
+        'acct_bank_code': '은행코드',
+        'acct_name': '예금주',
         'acct_num': '계좌번호',
         'nick_name': '대표자명',
         'phone_num': '연락처',
@@ -55,8 +63,11 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         'business_num': '주민등록번호',
         'sector': '업종',
         'addr': '주소',
-        'extra_col': '더보기',
     };
+    if(user_info.value.level >= 35) {
+        headers3['extra_col'] = '더보기'
+    }
+    
     head.main_headers.value = [
         '가맹점 정보',
         '승인',
@@ -66,6 +77,11 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         '단말기',
         '정산금',
     ];
+    const headers = {
+        ...headers1,
+        ...headers2,
+        ...headers3,
+    }
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
     

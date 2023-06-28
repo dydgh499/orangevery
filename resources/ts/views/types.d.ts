@@ -65,10 +65,10 @@ export interface Tab {
 }
 //----------------- 검색 -------------
 export interface Bank {
-    acct_bank_nm: string,
-    acct_bank_cd: string,
+    acct_bank_name: string,
+    acct_bank_code: string | null,
     acct_num: string,
-    acct_nm: string,
+    acct_name: string,
 }
 
 export interface Contract {
@@ -98,14 +98,6 @@ export interface UserPropertie extends BasePropertie, Bank, Contract {
     sector: string,
 }
 
-export interface MchtOption {
-    abnormal_trans_limit: number,
-    pay_day_limit: number,
-    pay_month_limit: number,
-    pay_year_limit: number,
-    pay_dupe_limit: number,
-    is_show_fee: boolean,
-}
 export interface MerchandisePropertie {
     sales5_id: number | null,
     sales5_fee: float,
@@ -123,9 +115,12 @@ export interface MerchandisePropertie {
     sector: string,
     trx_fee: float,
     hold_fee: float,
+    // option
     enabled: boolean,
     custom_id: number | null,
-    pv_options: MchtOption,
+    use_saleslip_prov: boolean,
+    use_saleslip_sell: boolean,
+    show_fee_easy_view: boolean,
 }
 
 export interface SalesforcePropertie {
@@ -165,10 +160,16 @@ export interface PayModule {
     begin_dt: date,
     ship_out_dt: date,
     ship_out_stat: boolean,
-    is_old_auth: boolean,
-    use_saleslip_prov: boolean,
-    use_saleslip_sell: boolean,
+    is_old_auth: boolean,    
     installment: number,
+    pay_dupe_limit:number,
+    abnormal_trans_limit: number,
+    pay_year_limit: number,
+    pay_month_limit: number,
+    pay_day_limit: number,
+    pay_disable_s_tm: date,
+    pay_disable_e_tm: date,
+    show_easy_view: boolean,
     note: string,
 }
 
@@ -184,7 +185,7 @@ export interface PayGateway {
 }
 
 export interface PaySection {
-    id: number,
+    id: number | null,
     pg_id: number,
     name: string,
     trx_fee: float,
@@ -192,7 +193,7 @@ export interface PaySection {
 }
 
 export interface Classification {
-    id: number,
+    id: number | null,
     name: string,
     type: number,
 }
@@ -281,6 +282,13 @@ export interface Brand extends Contract {
     created_at: datetime,
 }
 
+export interface DeductionHeader {
+    deduction: {
+        input?: string;
+        amount?: string;
+    };
+};
+
 export interface Transaction {
     id: number,
     mcht_id: number | null,
@@ -358,9 +366,23 @@ export interface Transaction {
     //
     nick_name?: string,
     addr?: string,
-    detail_addr?: string,
     resident_num?: string,
     business_num?: string,
+}
+
+export interface SalesSlip extends Transaction{
+    mcht: {
+       addr: string, 
+       business_num: string, 
+       id: string, 
+       mcht_name: string, 
+       nick_name: string, 
+       resident_num: string, 
+       show_fee_easy_view: string, 
+       use_saleslip_prov: boolean, 
+       use_saleslip_sell: boolean, 
+       user_name: string, 
+    }
 }
 
 export interface Danger {
@@ -459,10 +481,10 @@ export interface SettlesHistories extends Bank{
     appr_amount: number,
     cxl_amount: number,
     total_amount: number,
-    acct_nm: string,
+    acct_name: string,
     acct_num: string,
-    acct_bank_nm: string,
-    acct_bank_cd: string,
+    acct_bank_name: string,
+    acct_bank_code: string,
     settle_dt: Date,
     deposit_dt: Date,
     status: Boolean,

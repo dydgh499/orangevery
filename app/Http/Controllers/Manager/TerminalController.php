@@ -37,6 +37,7 @@ class TerminalController extends Controller
         $query = $this->payModules
             ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
             ->where('payment_modules.is_delete', false);
+
         $query = globalPGFilter($query, $request, 'payment_modules');
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
@@ -48,6 +49,7 @@ class TerminalController extends Controller
         $query = $query->where(function ($query) use ($search) {
             return $query->where('payment_modules.mid', 'like', "%$search%")
                 ->orWhere('payment_modules.tid', 'like', "%$search%")
+                ->orWhere('payment_modules.serial_num', 'like', "%$search%")
                 ->orWhere('merchandises.mcht_name', 'like', "%$search%");
         });
 

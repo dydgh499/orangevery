@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import BaseIndexSalesFilter from '@/layouts/lists/BaseIndexSalesFilter.vue';
-import BaseIndexPGFilter from '@/layouts/lists/BaseIndexPGFilter.vue';
+import BaseIndexSalesFilter from '@/layouts/lists/BaseIndexSalesFilter.vue'
+import BaseIndexPGFilter from '@/layouts/lists/BaseIndexPGFilter.vue'
 
 interface Props {
     pg: boolean,
@@ -18,7 +18,7 @@ const props = defineProps<Props>();
         <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
             <VCol cols="12" md="6">
                 <VCardText style="padding: 1em;">
-                    <BaseIndexSalesFilter :is_delete="sales">
+                    <BaseIndexSalesFilter :show="sales">
                         <template #extra_left>
                             <slot name="extra_left"></slot>
                         </template>

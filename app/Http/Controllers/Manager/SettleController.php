@@ -26,9 +26,9 @@ class SettleController extends Controller
         $this->merchandises = $merchandises;
         $this->salesforces = $salesforces;
         $this->cols = [
-            'id', 'user_name', 'addr', 'detail_addr',
+            'id', 'user_name', 'addr',
             'phone_num', 'sector', 'business_num', 'resident_num',
-            "acct_num", "acct_nm", "acct_bank_nm", "acct_bank_cd",
+            "acct_num", "acct_name", "acct_bank_name", "acct_bank_code",
         ];
     }
 
@@ -101,7 +101,13 @@ class SettleController extends Controller
         $query = globalSalesFilter($query, $request);
         $query = globalAuthFilter($query, $request);
         $query = $query->with(['transactions' => function ($query) use ($date) {
-            $query->whereRaw("trx_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)");
+            $query->where(function ($query) use ($date) {   // 승인이면서 D+1 적용
+                $query->whereRaw("trx_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)")
+                    ->where('is_cancel', false);
+            })->orWhere(function ($query) use ($date) {     // 취소이면서 D+1 적용
+                $query->whereRaw("cxl_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)")
+                    ->where('is_cancel', true);
+            });
         }, 'deducts']);
 
         $data = $this->getIndexData($request, $query, 'id', $cols);
@@ -121,19 +127,45 @@ class SettleController extends Controller
             ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
             ->where('user_name', 'like', "%$search%")
-            ->where('level', $level)
-            ->where('settle_day', Carbon::parse($date)->dayOfWeek)
-            ->whereRaw("'$date' > DATE_ADD(COALESCE(last_settle_dt, '2000-01-01'), INTERVAL(settle_cycle) DAY)");
+            ->where('level', $level);
+
+        if(isSalesforce($request))
+            $query = $query->where('id', $request->user()->id);
         if($request->settle_cycle)
             $query = $query->where('settle_cycle', $request->settle_cycle);
-
-        $query = globalSalesFilter($query, $request);
-        $query = globalAuthFilter($query, $request);
-        
+        if(Carbon::parse($date)->isLastOfMonth()) 
+        { // 조회 일이 말일이면 settle_cycle 28인 영업자도 조회
+            $query = $query->where(function ($query) use ($date) {
+                $query->where('settle_day', Carbon::parse($date)->dayOfWeek)
+                    ->orWhereNull('settle_day');
+            });            
+        }
+        else
+        { // 말일이 아니라면 settle_cycle 28인 영업자는 제외
+            $query = $query
+                ->where('settle_day', Carbon::parse($date)->dayOfWeek)
+                ->where('settle_cycle', '!=', 28);
+        }
+        $query = $query->whereRaw("'$date' > DATE_ADD(COALESCE(last_settle_dt, '2000-01-01'), INTERVAL(settle_cycle) DAY)");
         $query = $query->with(['transactions' => function ($query) use ($date) {
-            $query->whereRaw("trx_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)");
+            $query->where(function ($query) use ($date) {   // 승인이면서 D+1 적용
+                $query->whereRaw("trx_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)")
+                    ->where('is_cancel', false);
+            })->orWhere(function ($query) use ($date) {     // 취소이면서 D+1 적용
+                $query->whereRaw("cxl_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)")
+                    ->where('is_cancel', true);
+            });
         }, 'deducts']);
+
         $data = $this->getIndexData($request, $query, 'id', $cols);
+
+        $salesforces = globalGetIndexingByCollection($data['content']);
+        foreach($data['content'] as $content)
+        {
+            $content->transactions = globalMappingSales($salesforces, $content->transactions);
+        }
+
+
         $data = $this->getSettleInformation($data); 
         return $this->response(0, $data);
     }

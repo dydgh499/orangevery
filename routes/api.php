@@ -47,9 +47,9 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::post('upload', [PostController::class, 'upload']);    
         });
         Route::prefix('services')->group(function() {
-            Route::prefix('pay-gateways')->group(function() {
-                Route::get('detail', [PaymentGatewayController::class, 'detail']);
-            });
+            Route::get('pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
+            Route::post('operators/password-change', [OperatorController::class, 'passwordChange']);
+
             Route::apiResource('brands', BrandController::class);
             Route::apiResource('operators', OperatorController::class);
             Route::apiResource('pay-gateways', PaymentGatewayController::class);
@@ -83,11 +83,12 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::prefix('salesforces')->group(function() {
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
             Route::get('classification', [SalesforceController::class, 'classification']);
+            Route::post('password-change', [SalesforceController::class, 'passwordChange']);
         });
         Route::prefix('merchandises')->group(function() {
             Route::get('all', [MerchandiseController::class, 'all']);   
             Route::get('terminals', [TerminalController::class, 'index']);   
-
+            Route::post('password-change', [MerchandiseController::class, 'passwordChange']);
             Route::get('pay-modules/all', [PaymentModuleController::class, 'all']);     
             Route::apiResource('pay-modules', PaymentModuleController::class); 
 

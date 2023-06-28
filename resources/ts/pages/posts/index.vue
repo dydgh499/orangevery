@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useSearchStore, types } from '@/views/posts/useStore'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
-import PostReplyView from '@/views/posts/PostReplyView.vue';
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import PostReplyView from '@/views/posts/PostReplyView.vue'
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 
 const { store, head, exporter } = useSearchStore()
 provide('store', store)

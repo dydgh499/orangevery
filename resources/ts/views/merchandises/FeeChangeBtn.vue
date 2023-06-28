@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { axios } from '@axios';
+import { axios } from '@axios'
 import type { Merchandise } from '@/views/types'
 
 interface Props {

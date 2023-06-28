@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import type { Salesforce } from '@/views/types'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
-import { requiredValidator, nullValidator } from '@validators';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { requiredValidator, nullValidator } from '@validators'
 import { salesLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 
 interface Props {
     item: Salesforce,
@@ -51,7 +51,7 @@ const tax_types = settleTaxTypes()
                             </template>
                             <template #input>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_cycle"
-                                        :items="all_cycles" prepend-inner-icon="icon-park-outline:cycle" label="정산 요일 선택" item-title="title"
+                                        :items="all_cycles" prepend-inner-icon="icon-park-outline:cycle" label="정산 주기 선택" item-title="title"
                                         item-value="id" persistent-hint single-line :rules="[nullValidator]"/>
                             </template>
                         </CreateHalfVCol>
@@ -61,8 +61,8 @@ const tax_types = settleTaxTypes()
                             </template>
                             <template #input>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_day"
-                                        :items="all_days" prepend-inner-icon="icon-park-outline:cycle" label="정산 주기 선택" item-title="title"
-                                        item-value="id" persistent-hint single-line :rules="[nullValidator]"/>
+                                        :items="all_days" prepend-inner-icon="icon-park-outline:cycle" label="정산 요일 선택" item-title="title"
+                                        item-value="id" persistent-hint single-line />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="3" :mdr="9">

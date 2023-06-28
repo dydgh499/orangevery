@@ -1,13 +1,13 @@
+import { injectionKeyIsVerticalNavHovered } from '@layouts'
+import { config } from '@layouts/config'
 import type { MaybeRef } from '@vueuse/shared'
 import type { Ref } from 'vue'
 import { AppContentLayoutNav, NavbarType } from '../enums'
-import { config } from '@layouts/config'
-import { injectionKeyIsVerticalNavHovered } from '@layouts'
 
 export const useLayouts = () => {
   const navbarType = computed({
     get() {
-      return config.navbar.type.value
+      return config.navbar.type.value == null ? 'static' : config.navbar.type.value
     },
     set(value: typeof config.navbar.type.value) {
       config.navbar.type.value = value

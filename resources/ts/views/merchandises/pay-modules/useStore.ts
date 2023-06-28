@@ -1,11 +1,19 @@
-import { Header } from '@/views/headers';
-import { Searcher } from '@/views/searcher';
-import { useStore } from '@/views/services/pay-gateways/useStore';
-import type { Options, PayModule } from '@/views/types';
+import { Header } from '@/views/headers'
+import { Searcher } from '@/views/searcher'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import type { Options, PayModule } from '@/views/types'
+import { user_info } from '@axios'
+
+export const abnormal_trans_limits = <Options[]>([
+    { id: 0, title: "한도없음" }, { id: 1, title: "200만원" },
+    { id: 2, title: "300만원" }, { id: 3, title: "500만원" },
+])
 
 export const module_types = <Options[]>([
     { id: 0, title: "단말기" }, { id: 1, title: "수기결제" },
     { id: 2, title: "인증결제" }, { id: 3, title: "간편결제" },
+    /*{ id: 4, title: "실시간 이체" },*/
+    { id: 5, title: "비인증 단말기" },
 ])
 export const installments = <Options[]>([
     { id: 0, title: "일시불" }, { id: 2, title: "2개월" },
@@ -35,19 +43,28 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     const store = Searcher('merchandises/pay-modules')
     const head  = Header('merchandises/pay-modules', '결제모듈 관리')
 
-    const headers: Record<string, string> = {
+    const headers1: Record<string, string> = {
         'id' : 'NO.',
         'mcht_name' : '가맹점 상호',
         'note' : '별칭',
         'module_type' : '모듈타입',
-        'pg_id' : 'PG사명',
-        'ps_id' : '구간',
+    }
+    if(user_info.value >= 35)
+    {
+        headers1['pg_id'] = 'PG사명'
+        headers1['ps_id'] = '구간'
+    }
+    const headers2: Record<string, string> = {
         'settle_type' : '정산일',
         'mid' : 'MID',
         'tid' : 'TID',
         'installment' : '할부한도',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
+    }
+    const headers = {
+        ...headers1,
+        ...headers2,
     }
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})
@@ -99,11 +116,17 @@ export const useUpdateStore = defineStore('payModUpdateStore', () => {
         ship_out_dt: undefined,
         ship_out_stat: false,
         is_old_auth: false,
-        use_saleslip_prov: false,
-        use_saleslip_sell: false,
         installment: 0,
         note: '비고',
-        settle_fee: null
+        settle_fee: null,
+        pay_dupe_limit: 0,
+        abnormal_trans_limit: 0,
+        pay_year_limit: 0,
+        pay_month_limit: 0,
+        pay_day_limit: 0,
+        pay_disable_s_tm: null,
+        pay_disable_e_tm: null,
+        show_easy_view: false,
     })
     //카드사 필터 및 다른 필터옵션들
     return {

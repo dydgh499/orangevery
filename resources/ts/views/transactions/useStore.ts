@@ -1,9 +1,10 @@
-import { Header } from '@/views/headers';
-import { installments, module_types } from '@/views/merchandises/pay-modules/useStore';
-import { Searcher } from '@/views/searcher';
-import { useStore } from '@/views/services/pay-gateways/useStore';
-import type { Transaction } from '@/views/types';
-import corp from '@corp';
+import { Header } from '@/views/headers'
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
+import { Searcher } from '@/views/searcher'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import type { Transaction } from '@/views/types'
+import { user_info } from '@axios'
+import corp from '@corp'
 
 export const useSearchStore = defineStore('transSearchStore', () => {    
     const store = Searcher('transactions')
@@ -14,34 +15,28 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         'module_type': '거래 타입',
     }
     const { pgs, pss, terminals } = useStore()
-    if(levels.sales5_use)
-    {
-        headers['sales5_name'] = levels.sales5_name+' ID'
+    if (levels.sales5_use && user_info.value.level >= 30) {
+        headers['sales5_name'] = levels.sales5_name + ' ID'
         headers['sales5_fee'] = '수수료'
     }
-    if(levels.sales4_use)
-    {
-        headers['sales4_name'] = levels.sales4_name+' ID'
+    if (levels.sales4_use && user_info.value.level >= 25) {
+        headers['sales4_name'] = levels.sales4_name + ' ID'
         headers['sales4_fee'] = '수수료'
     }
-    if(levels.sales3_use)
-    {
-        headers['sales3_name'] = levels.sales3_name+' ID'
+    if (levels.sales3_use && user_info.value.level >= 20) {
+        headers['sales3_name'] = levels.sales3_name + ' ID'
         headers['sales3_fee'] = '수수료'
     }
-    if(levels.sales2_use)
-    {
-        headers['sales2_name'] = levels.sales2_name+' ID'
+    if (levels.sales2_use && user_info.value.level >= 17) {
+        headers['sales2_name'] = levels.sales2_name + ' ID'
         headers['sales2_fee'] = '수수료'
     }
-    if(levels.sales1_use)
-    {
-        headers['sales1_name'] = levels.sales1_name+' ID'
+    if (levels.sales1_use && user_info.value.level >= 15) {
+        headers['sales1_name'] = levels.sales1_name + ' ID'
         headers['sales1_fee'] = '수수료'
     }
-    if(levels.sales0_use)
-    {
-        headers['sales0_name'] = levels.sales0_name+' ID'
+    if (levels.sales0_use && user_info.value.level >= 13) {
+        headers['sales0_name'] = levels.sales0_name + ' ID'
         headers['sales0_fee'] = '수수료'
     }
 
@@ -50,8 +45,11 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['mcht_fee'] = '수수료'
     headers['hold_fee'] = '유보금 수수료'
 
-    headers['pg_id'] = 'PG사 수수료'
-    headers['ps_fee'] = '구간 수수료'
+    if(user_info.value >= 35)
+    {
+        headers['pg_id'] = 'PG사 수수료'
+        headers['ps_fee'] = '구간 수수료'
+    }
 
     headers['custom_id'] = '커스텀필터'
     headers['terminal_id'] = '단말기타입'
@@ -80,8 +78,10 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['ori_trx_id'] = '원거래번호'
 
     headers['created_at'] = '생성시간'
-    headers['extra_col'] = '더보기'
-    headers['ori_trx_id'] = '원거래번호'
+    headers['updated_at'] = '업데이트시간'
+    
+    if (user_info.value.level >= 35)
+        headers['extra_col'] = '더보기'
     
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})
@@ -101,21 +101,21 @@ export const useSearchStore = defineStore('transSearchStore', () => {
             datas[i]['terminal_id'] = terminals.find(terminal => terminal['id'] === datas[i]['terminal_id'])?.name as string
 
             if(levels.sales5_use)
-                datas[i]['sales5_fee'] = (datas[i]['sales5_fee'] * 100).toFixed(3)
+                datas[i]['sales5_fee'] = (datas[i]['sales5_fee'] * 100).toFixed(4)
             if(levels.sales4_use)
-                datas[i]['sales4_fee'] = (datas[i]['sales4_fee'] * 100).toFixed(3)
+                datas[i]['sales4_fee'] = (datas[i]['sales4_fee'] * 100).toFixed(4)
             if(levels.sales3_use)
-                datas[i]['sales3_fee'] = (datas[i]['sales3_fee'] * 100).toFixed(3)
+                datas[i]['sales3_fee'] = (datas[i]['sales3_fee'] * 100).toFixed(4)
             if(levels.sales2_use)
-                datas[i]['sales2_fee'] = (datas[i]['sales2_fee'] * 100).toFixed(3)
+                datas[i]['sales2_fee'] = (datas[i]['sales2_fee'] * 100).toFixed(4)
             if(levels.sales1_use)
-                datas[i]['sales1_fee'] = (datas[i]['sales1_fee'] * 100).toFixed(3)
+                datas[i]['sales1_fee'] = (datas[i]['sales1_fee'] * 100).toFixed(4)
             if(levels.sales0_use)
-                datas[i]['sales0_fee'] = (datas[i]['sales0_fee'] * 100).toFixed(3)
+                datas[i]['sales0_fee'] = (datas[i]['sales0_fee'] * 100).toFixed(4)
 
-            datas[i]['mcht_fee'] = (datas[i]['mcht_fee'] * 100).toFixed(3)
-            datas[i]['hold_fee'] = (datas[i]['hold_fee'] * 100).toFixed(3)
-            datas[i]['ps_fee'] = (datas[i]['ps_fee'] * 100).toFixed(3)
+            datas[i]['mcht_fee'] = (datas[i]['mcht_fee'] * 100).toFixed(4)
+            datas[i]['hold_fee'] = (datas[i]['hold_fee'] * 100).toFixed(4)
+            datas[i]['ps_fee'] = (datas[i]['ps_fee'] * 100).toFixed(4)
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        

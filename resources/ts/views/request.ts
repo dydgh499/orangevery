@@ -1,5 +1,5 @@
-import router from '@/router';
-import { axios } from '@axios';
+import router from '@/router'
+import { axios } from '@axios'
 
 export const useRequestStore = defineStore('requestStore', () => {
     const alert = <any>(inject('alert'))
@@ -42,7 +42,7 @@ export const useRequestStore = defineStore('requestStore', () => {
     const getBaseSendInfo = (base_url: string, id: number) => {
         let url = '/api/v1/manager' + base_url
         url += id ? "/" + id : ""
-        let reqType = id != 0 ? '수정' : '생성';
+        let reqType = id != 0 ? '수정' : '생성'
         return { url, reqType }
     }
 

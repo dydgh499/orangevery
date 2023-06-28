@@ -1,37 +1,39 @@
-import { Header } from '@/views/headers';
-import { Searcher } from '@/views/searcher';
-import { MchtOption, Merchandise } from '@/views/types';
-import corp from '@corp';
+import { Header } from '@/views/headers'
+import { Searcher } from '@/views/searcher'
+import { Merchandise } from '@/views/types'
+import { user_info } from '@axios'
+import corp from '@corp'
 
 export const useSearchStore = defineStore('mchtSearchStore', () => {
-    const store = Searcher('merchandises')
-    const head = Header('merchandises', '가맹점 관리')
-    const levels = corp.pv_options.auth.levels
+    const store     = Searcher('merchandises')
+    const head      = Header('merchandises', '가맹점 관리')
+    const levels    = corp.pv_options.auth.levels
+    const paid      = corp.pv_options.paid;
 
     const headers: Record<string, string> = {
         'id': 'NO.',
     }
-    if (levels.sales5_use) {
+    if (levels.sales5_use && user_info.value.level >= 30) {
         headers['sales5_name'] = levels.sales5_name + ' ID'
         headers['sales5_fee'] = '수수료'
     }
-    if (levels.sales4_use) {
+    if (levels.sales4_use && user_info.value.level >= 25) {
         headers['sales4_name'] = levels.sales4_name + ' ID'
         headers['sales4_fee'] = '수수료'
     }
-    if (levels.sales3_use) {
+    if (levels.sales3_use && user_info.value.level >= 20) {
         headers['sales3_name'] = levels.sales3_name + ' ID'
         headers['sales3_fee'] = '수수료'
     }
-    if (levels.sales2_use) {
+    if (levels.sales2_use && user_info.value.level >= 17) {
         headers['sales2_name'] = levels.sales2_name + ' ID'
         headers['sales2_fee'] = '수수료'
     }
-    if (levels.sales1_use) {
+    if (levels.sales1_use && user_info.value.level >= 15) {
         headers['sales1_name'] = levels.sales1_name + ' ID'
         headers['sales1_fee'] = '수수료'
     }
-    if (levels.sales0_use) {
+    if (levels.sales0_use && user_info.value.level >= 13) {
         headers['sales0_name'] = levels.sales0_name + ' ID'
         headers['sales0_fee'] = '수수료'
     }
@@ -46,13 +48,20 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
 
     headers['sector'] = '업종'
     headers['addr'] = '주소'
-    headers['acct_bank_nm'] = '은행'
-    headers['acct_bank_cd'] = '은행코드'
-    headers['acct_nm'] = '예금주'
+    headers['acct_bank_name'] = '은행'
+    headers['acct_bank_code'] = '은행코드'
+    headers['acct_name'] = '예금주'
     headers['acct_num'] = '계좌번호'
+    
+    if (paid.subsidiary_use_control)
+        headers['enabled'] = '전산사용여부'
+
     headers['created_at'] = '생성시간'
     headers['updated_at'] = '업데이트시간'
 
+    if (user_info.value.level >= 35)
+        headers['extra_col'] = '더보기'
+    
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
@@ -77,8 +86,8 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
 export const useUpdateStore = defineStore('mchtUpdateStore', () => {
     const path = 'merchandises'
     const item = reactive<Merchandise>({
-        acct_bank_cd: '000',
-        acct_bank_nm: '은행명',
+        acct_bank_code: null,
+        acct_bank_name: '은행명',
         hold_fee: 0,
         trx_fee: 0,
         mcht_name: '',
@@ -95,7 +104,7 @@ export const useUpdateStore = defineStore('mchtUpdateStore', () => {
         contract_img: null,
         bsin_lic_img: null,
         acct_num: '',
-        acct_nm: '',
+        acct_name: '',
         id: 0,
         created_at: null,
         updated_at: null,
@@ -103,28 +112,24 @@ export const useUpdateStore = defineStore('mchtUpdateStore', () => {
         passbook_file: undefined,
         contract_file: undefined,
         bsin_lic_file: undefined,
-        sales5_id: 0,
-        sales5_fee: undefined,
-        sales4_id: 0,
-        sales4_fee: undefined,
-        sales3_id: 0,
-        sales3_fee: undefined,
-        sales2_id: 0,
-        sales2_fee: undefined,
-        sales1_id: 0,
-        sales1_fee: undefined,
-        sales0_id: 0,
-        sales0_fee: undefined,
-        enabled: false,
-        pv_options: reactive<MchtOption>({
-            abnormal_trans_limit: 0,
-            pay_day_limit: 0,
-            pay_month_limit: 0,
-            pay_year_limit: 0,
-            pay_dupe_limit: 0,
-            is_show_fee: false,
-        }),
-        custom_id: null
+        sales5_id: null,
+        sales4_id: null,
+        sales3_id: null,
+        sales2_id: null,
+        sales1_id: null,
+        sales0_id: null,
+        sales5_fee: 0,
+        sales4_fee: 0,
+        sales3_fee: 0,
+        sales2_fee: 0,
+        sales1_fee: 0,
+        sales0_fee: 0,
+        // options
+        custom_id: null,
+        enabled: true,
+        use_saleslip_prov: false,
+        use_saleslip_sell: false,
+        show_fee_easy_view: false,
     })
     return {
         path, item

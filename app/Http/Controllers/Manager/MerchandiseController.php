@@ -43,7 +43,6 @@ class MerchandiseController extends Controller
     private function get($request, $cols)
     {
         $search = $request->input('search', '');
-
         $query = $this->merchandises->leftJoin('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id');
         $query = globalPGFilter($query, $request, 'payment_modules');
         $query = globalSalesFilter($query, $request, 'merchandises');
@@ -53,9 +52,16 @@ class MerchandiseController extends Controller
             ->where('merchandises.brand_id', $request->user()->brand_id)
             ->where('merchandises.mcht_name', 'like', "%$search%");
 
-        $query = $query->with(['sales0', 'sales1', 'sales2', 'sales3', 'sales4', 'sales5']);
         $query = $query->groupBy('merchandises.id');
         $data = $this->getIndexData($request, $query, 'merchandises.id', $cols, 'merchandises.created_at', true);
+
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
+        foreach($data['content'] as $content) 
+        {
+            $content->setFeeFormatting(true);
+        }
         return $this->response(0, $data);
     }
 
@@ -92,6 +98,7 @@ class MerchandiseController extends Controller
             if(!$user)
             {
                 $user = $request->data();
+                // 수수료율 정보는 추가시에만 적용되어야함
                 $user['sales0_id'] = $request->input('sales0_id', 0);
                 $user['sales1_id'] = $request->input('sales1_id', 0);
                 $user['sales2_id'] = $request->input('sales2_id', 0);
@@ -109,7 +116,6 @@ class MerchandiseController extends Controller
 
                 $user = $this->saveImages($request, $user, $this->imgs);
                 $user['user_pw'] = Hash::make($request->input('user_pw'));
-                $user['location'] = $this->merchandises->setLocation(0, 0);
                 $res = $this->merchandises->create($user);
                 return $this->response($res ? 1 : 990);
             }
@@ -133,6 +139,7 @@ class MerchandiseController extends Controller
         if($this->authCheck($request->user(), $id, 15))
         {
             $data = $this->merchandises->where('id', $id)->first();
+            $data->setFeeFormatting(true);
             return $data ? $this->response(0, $data) : $this->response(1000);
         }
         else
@@ -203,5 +210,14 @@ class MerchandiseController extends Controller
             'merchandises.custom_id',
         ];
         return $this->get($request, $cols);
+    }
+
+    public function passwordChange(Request $request)
+    {
+        $validated = $request->validate(['id'=>'required|integer', 'user_pw'=>'required']);
+        $res = $this->merchandises
+            ->where('id', $request->id)
+            ->update(['user_pw' => Hash::make($request->user_pw)]);
+        return $this->response($res ? 1 : 990);        
     }
 }

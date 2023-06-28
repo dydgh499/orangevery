@@ -95,4 +95,13 @@ class OperatorController extends Controller
         $res = $this->operators->where('id', $id)->update(['is_delete'=>false]);
         return $this->response($res ? 1 : 990);
     }
+
+    public function passwordChange(Request $request)
+    {
+        $validated = $request->validate(['id'=>'required|integer', 'user_pw'=>'required']);
+        $res = $this->operators
+            ->where('id', $request->id)
+            ->update(['user_pw' => Hash::make($request->user_pw)]);
+        return $this->response($res ? 1 : 990);
+    }
 }

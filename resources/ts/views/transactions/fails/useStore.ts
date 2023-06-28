@@ -1,8 +1,8 @@
-import { Header } from '@/views/headers';
-import { module_types } from '@/views/merchandises/pay-modules/useStore';
-import { Searcher } from '@/views/searcher';
-import { useStore } from '@/views/services/pay-gateways/useStore';
-import type { FailTransaction } from '@/views/types';
+import { Header } from '@/views/headers'
+import { module_types } from '@/views/merchandises/pay-modules/useStore'
+import { Searcher } from '@/views/searcher'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import type { FailTransaction } from '@/views/types'
 
 
 export const useSearchStore = defineStore('failSearchStore', () => {    

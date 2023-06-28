@@ -1,11 +1,11 @@
-import { Header } from '@/views/headers';
-import { Searcher } from '@/views/searcher';
+import { Header } from '@/views/headers'
+import { Searcher } from '@/views/searcher'
+import { user_info } from '@axios'
 
-
-export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', () => {    
+export const useSearchStore = defineStore('transSettlesHistorySalesSearchStore', () => {    
     const store = Searcher('transactions/settle-histories/salesforces')
     const head  = Header('transactions/settle-histories/salesforces', '영업점 정산이력')
-    const headers = {
+    const headers:Record<string, string | object> = {
         'id': 'NO.',
         'user_name' : '영업점 ID',
         'level' : '등급',
@@ -17,13 +17,16 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
         'settle_dt': '정산일',
         'deposit_dt': '입금일',
         'deposit_status': '입금상태',
-        'acct_bank_nm': '은행',
-        'acct_bank_cd': '은행코드',
-        'acct_nm': '예금주',
+        'acct_bank_name': '은행',
+        'acct_bank_code': '은행코드',
+        'acct_name': '예금주',
         'acct_num': '계좌번호',
         'created_at': '생성시간',
-        'extra_col': '더보기',
     };
+    if(user_info.value.level >= 35) {
+        headers['extra_col'] = '더보기'
+    }
+
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
@@ -33,7 +36,7 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
         const r = await store.get(store.getAllDataFormat())
         let datas = r.data.content;
         for (let i = 0; i <datas.length; i++) {
-            datas[i]['deposit_status'] = datas[i]['deposit_status'] ? '입금완료' : '미입금';
+            datas[i]['deposit_status'] = datas[i]['deposit_status'] ? '입금완료' : '미입금'
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)

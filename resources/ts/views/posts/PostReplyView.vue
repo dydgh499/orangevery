@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import type { Post } from '@/views/types'
 import { types } from '@/views/posts/useStore'
-import PostReplyView from '@/views/posts/PostReplyView.vue';
+import PostReplyView from '@/views/posts/PostReplyView.vue'
 
 interface Props {
     post: Post,

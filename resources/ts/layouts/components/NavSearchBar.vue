@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { SearchHeader, SearchItem } from '@/views/types';
-import {axios} from '@axios';
-import { useThemeConfig } from '@core/composable/useThemeConfig';
+import { SearchHeader, SearchItem } from '@/views/types'
+import {axios} from '@axios'
+import { useThemeConfig } from '@core/composable/useThemeConfig'
 
 interface Suggestion {
   icon: string

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { I18nLanguage } from '@layouts/types';
-import type { Anchor } from 'vuetify/lib/components';
+import type { I18nLanguage } from '@layouts/types'
+import type { Anchor } from 'vuetify/lib/components'
 
 const props = withDefaults(defineProps<Props>(), {
   location: 'bottom end',

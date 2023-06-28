@@ -16,10 +16,10 @@ class SalesforceRequest extends FormRequest
             'level',
             'resident_num',
             'business_num',
-            'acct_bank_nm',
-            'acct_bank_cd',
+            'acct_bank_name',
+            'acct_bank_code',
             'acct_num',
-            'acct_nm',
+            'acct_name',
             'addr',
             'phone_num',
             'settle_tax_type',
@@ -46,11 +46,10 @@ class SalesforceRequest extends FormRequest
             'level'     => 'required',
             'resident_num' => 'required',
             'business_num' => 'required',
-            'acct_bank_nm' => 'required',
-            'acct_bank_cd' => 'required',
+            'acct_bank_name' => 'required',
+            'acct_bank_code' => 'required',
             'settle_tax_type' => 'required',
             'settle_cycle' => 'required',
-            'settle_day' => 'required',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -73,7 +72,7 @@ class SalesforceRequest extends FormRequest
         for ($i=0; $i < count($this->keys) ; $i++)
         {
             $key = $this->keys[$i];
-            $data[$key] = $this->input($key, '');
+            $data[$key] = $this->input($key, null);
         }
         $data['brand_id'] = $this->user()->brand_id;
         $data['phone_num'] = $data['phone_num'] == '' ? 0 : $data['phone_num'];

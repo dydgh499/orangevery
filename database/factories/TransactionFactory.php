@@ -42,12 +42,10 @@ class TransactionFactory extends Factory
         ];
         $data = [];
         $data['mcht_id'] = $mcht['id'];
-        $data['mcht_fee'] = $mcht['trx_fee']/100;
+        $data['mcht_fee'] = $mcht['trx_fee'];
         for ($i=0; $i < count($keys) ; $i++)
         {
             $data[$keys[$i]] = $mcht[$keys[$i]];
-            if(strpos($keys[$i], '_fee') !== false)
-                $data[$keys[$i]] /= 100;
         }
         return $data;
     }

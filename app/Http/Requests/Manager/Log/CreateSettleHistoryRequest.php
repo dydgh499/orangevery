@@ -13,10 +13,10 @@ class CreateSettleHistoryRequest extends FormRequest
     {
         $this->keys = [
             'id',
-            'acct_nm', 
+            'acct_name', 
             'acct_num', 
-            'acct_bank_nm', 
-            'acct_bank_cd', 
+            'acct_bank_name', 
+            'acct_bank_code', 
             'total_amount',
             'cxl_amount', 
             'appr_amount', 
@@ -41,10 +41,10 @@ class CreateSettleHistoryRequest extends FormRequest
         $sub = [
             'id'        => 'required|integer',
             /*
-            'acct_nm'   => 'required', 
+            'acct_name'   => 'required', 
             'acct_num'  => 'required', 
-            'acct_bank_nm' => 'required', 
-            'acct_bank_cd' => 'required', 
+            'acct_bank_name' => 'required', 
+            'acct_bank_code' => 'required', 
             */
             'total_amount' => 'required|integer',
             'cxl_amount' => 'required|integer', 
@@ -77,10 +77,10 @@ class CreateSettleHistoryRequest extends FormRequest
         return [
             'brand_id' => $this->user()->brand_id,
             $target_id => $this->id,
-            'acct_nm' => $this->acct_nm,
+            'acct_name' => $this->acct_name,
             'acct_num' => $this->acct_num,
-            'acct_bank_nm' => $this->acct_bank_nm,
-            'acct_bank_cd' => $this->acct_bank_cd,
+            'acct_bank_name' => $this->acct_bank_name,
+            'acct_bank_code' => $this->acct_bank_code,
             'total_amount' => $this->total_amount,
             'cxl_amount' => $this->cxl_amount,
             'appr_amount' => $this->appr_amount,

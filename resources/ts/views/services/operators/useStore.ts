@@ -20,6 +20,7 @@ export const useSearchStore = defineStore('operatorSearchStore', () => {
         'phone_num' : '연락처',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
+        'extra_col' : '더보기',
     }
     head.main_headers.value = [
         '서비스 정보',

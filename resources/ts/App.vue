@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useThemeConfig } from '@core/composable/useThemeConfig';
-import corp from '@corp';
-import { hexToRgb } from '@layouts/utils';
-import { themeConfig } from '@themeConfig';
+import { useThemeConfig } from '@core/composable/useThemeConfig'
+import corp from '@corp'
+import { hexToRgb } from '@layouts/utils'
+import { themeConfig } from '@themeConfig'
 import { useTheme } from 'vuetify'
 
 const vuetifyTheme = useTheme()

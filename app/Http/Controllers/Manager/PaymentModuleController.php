@@ -76,6 +76,15 @@ class PaymentModuleController extends Controller
         if($request->user()->tokenCan(10))
         {
             $item = $request->data();
+            if($item['module_type'] == 0 && $item['serial_num'] != '')
+            {
+                $res = $this->payModules
+                    ->where('brand_id', $request->user()->brand_id)
+                    ->where('serial_num', $item['serial_num'])
+                    ->exists();
+                if($res)
+                    return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
+            }
             $res = $this->payModules->create($item);
             return $this->response($res ? 1 : 990);
         }
@@ -114,8 +123,18 @@ class PaymentModuleController extends Controller
     {
         if($this->authCheck($request->user(), $id, 15))
         {
-            $data = $request->data();
-            $res = $this->payModules->where('id', $id)->update($data);
+            $item = $request->data();
+            if($item['module_type'] == 0 && $item['serial_num'] != '')
+            {
+                $res = $this->payModules
+                    ->where('brand_id', $request->user()->brand_id)
+                    ->where('serial_num', $item['serial_num'])
+                    ->where('id', '!=', $id)
+                    ->exists();
+                if($res)
+                    return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
+            }
+            $res = $this->payModules->where('id', $id)->update($item);
             return $this->response($res ? 1 : 990);
         }
         else
@@ -158,8 +177,6 @@ class PaymentModuleController extends Controller
             'payment_modules.module_type', 'payment_modules.settle_fee', 'payment_modules.settle_type',
             'payment_modules.terminal_id', 'payment_modules.note',
         ];
-
-        
         return $this->get($request, $cols);
     }
 }

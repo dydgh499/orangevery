@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { Transaction } from '@/views/types'
 import { requiredValidator } from '@validators'
-import { cloneDeep } from 'lodash';
-import { axios } from '@axios';
+import { cloneDeep } from 'lodash'
+import { axios } from '@axios'
 
 const store = <any>(inject('store'))
 const alert = <any>(inject('alert'))

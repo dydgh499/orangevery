@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { PayGateway } from '@/views/types'
-import PayGatewayCard from '@/views/services/pay-gateways/PayGatewayCard.vue';
+import PayGatewayCard from '@/views/services/pay-gateways/PayGatewayCard.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 
 const {pgs } = useStore()

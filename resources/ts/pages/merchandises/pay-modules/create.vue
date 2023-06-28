@@ -1,10 +1,10 @@
 
 <script setup lang="ts">
-import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue';
+import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import { useUpdateStore } from '@/views/merchandises/pay-modules/useStore'
-import { Merchandise } from '@/views/types';
-import { axios } from '@axios';
+import { Merchandise } from '@/views/types'
+import { axios } from '@axios'
 
 const { path, item } = useUpdateStore()
 const tabs = [

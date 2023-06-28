@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import CreateForm from '@/layouts/utils/CreateForm.vue'
-import PostOverview from '@/views/posts/PostOverview.vue';
+import PostOverview from '@/views/posts/PostOverview.vue'
 import { useUpdateStore } from '@/views/posts/useStore'
 import type { Tab } from '@/views/types'
 const {path, item } = useUpdateStore()

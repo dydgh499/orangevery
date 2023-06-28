@@ -1,6 +1,6 @@
-import { Header } from '@/views/headers';
-import { Searcher } from '@/views/searcher';
-import type { Complaint, Options } from '@/views/types';
+import { Header } from '@/views/headers'
+import { Searcher } from '@/views/searcher'
+import type { Complaint, Options } from '@/views/types'
 
 export const complaint_types = <Options[]>[
     { id: 1, title: '유사수신' }, { id: 2, title: '유사투자' },

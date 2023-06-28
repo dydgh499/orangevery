@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { VForm } from 'vuetify/components';
+import { VForm } from 'vuetify/components'
 import type { Classification } from '@/views/types'
-import { requiredValidator } from '@validators';
-import { useRequestStore } from '@/views/request';
+import { requiredValidator } from '@validators'
+import { useRequestStore } from '@/views/request'
 
 interface Props {
     item: Classification,

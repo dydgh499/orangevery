@@ -1,17 +1,17 @@
-export default [
-    {
-        heading: 'Service'
-    },
-    {
+import { user_info } from '@axios'
+
+const operations = []
+const complaints = []
+if(user_info.value.level >= 35) {
+    operations.push({
         title: 'Operation management',
         icon: { icon: 'ph-buildings' },
-        children: [
+        children: [            
             {
                 title: 'Service management',
                 to: 'services-brands',
             },
             {
-
                 title: 'PG management',
                 to: 'services-pay-gateways',
             },
@@ -21,17 +21,11 @@ export default [
             },
             {
                 title: 'Bulk registration',
-                to: 'services-bulk-registration',
-                
+                to: 'services-bulk-registration',                
             },
         ]
-    },
-    {
-        title: 'Notice',
-        icon: { icon: 'fe-notice-active' },
-        to: 'posts',
-    },
-    {
+    })
+    complaints.push({
         title: 'Complaint',
         icon: { icon: 'ic-round-sentiment-dissatisfied' },
         to: 'complaints',
@@ -40,5 +34,15 @@ export default [
         title: 'Calendar',
         icon: { icon: 'tabler-calendar' },
         to: 'calendars',
+    })
+}
+export default [
+    { heading: 'Service' },
+    ...operations,
+    {
+        title: 'Notice',
+        icon: { icon: 'fe-notice-active' },
+        to: 'posts',
     },
+    ...complaints,
 ]

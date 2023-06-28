@@ -52,7 +52,10 @@ class SalesforceController extends Controller
             ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
             ->where('user_name', 'like', "%$search%");
-            
+
+        if(isSalesforce($request))
+            $query = $query->where('id', $request->user()->id);
+
         if($request->has('level') && $request->level >= 0)
             $query = $query->where('level', $request->level);
         $data = $this->getIndexData($request, $query);
@@ -150,14 +153,47 @@ class SalesforceController extends Controller
     public function classification(Request $request)
     {
         $data = [];
-        $levels = [13,15,17,20,25,30];
-        $grouped = $this->salesforces->where('brand_id', $request->user()->brand_id)->get(['id', 'user_name', 'level'])->groupBy('level');        
+        $levels = [];
+        if(isMerchandise($request))
+            return $this->response(951);
+        else
+        {
+            $_levels = [13,15,17,20,25,30];
+            for ($i=0; $i<count($_levels); $i++)
+            {
+                if($request->user()->level >= $_levels[$i])
+                    array_push($levels, $_levels[$i]);
+            }
+        }
+        $grouped = $this->salesforces
+                ->where('brand_id', $request->user()->brand_id)
+                ->get(['id', 'user_name', 'level'])
+                ->groupBy('level');
+
+        if(isSalesforce($request))
+        {
+            $my_level = $request->user()->level;
+            $my_id =  $request->user()->id;
+            $grouped[$my_level] = $grouped[$my_level]->filter(function($sales) use($my_id){
+                return $sales->id == $my_id;
+            })->values();
+        }
+
         for($i=0; $i<count($levels); $i++)
         {
             $level = $levels[$i];
             $data["level_$level"] = isset($grouped[$level]) ? $grouped[$level] : [];
         }
         return $this->response(0, $data);
+    }
+
+    public function passwordChange(Request $request)
+    {
+        $validated = $request->validate(['id'=>'required|integer', 'user_pw'=>'required']);
+        $res = $this->salesforces
+            ->where('id', $request->id)
+            ->update(['user_pw' => Hash::make($request->user_pw)]);
+        return $this->response($res ? 1 : 990);        
     }
 
 }

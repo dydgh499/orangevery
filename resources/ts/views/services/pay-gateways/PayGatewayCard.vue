@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { businessNumValidator, requiredValidator } from '@validators';
+import { businessNumValidator, requiredValidator } from '@validators'
 import type { PayGateway, PaySection } from '@/views/types'
-import { VForm } from 'vuetify/components';
-import { useStore } from '@/views/services/pay-gateways/useStore';
-import PaySectionTr from '@/views/services/pay-gateways/PaySectionTr.vue';
-import { useRequestStore } from '@/views/request';
+import { VForm } from 'vuetify/components'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import PaySectionTr from '@/views/services/pay-gateways/PaySectionTr.vue'
+import { useRequestStore } from '@/views/request'
 
 interface Props {
     item: PayGateway,

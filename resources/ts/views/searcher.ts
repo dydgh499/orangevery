@@ -1,6 +1,6 @@
-import { Pagenation } from '@/views/types';
-import { axios } from '@axios';
-import { cloneDeep } from 'lodash';
+import { Pagenation } from '@/views/types'
+import { axios, user_info } from '@axios'
+import { cloneDeep } from 'lodash'
 
 export function Searcher(path: string) {
     const snackbar = <any>(inject('snackbar'))
@@ -26,7 +26,8 @@ export function Searcher(path: string) {
         router.push('/' + path + '/create')
     }
     const edit = (id: number = 0) => {
-        router.push('/' + path + '/edit/' + id)
+        if(user_info.value.level > 30)
+            router.push('/' + path + '/edit/' + id)
     }
 
     const setTable = async () => {
@@ -68,7 +69,7 @@ export function Searcher(path: string) {
         else if (id == 5)
             return "error"
         else
-            return 'default';
+            return 'default'
     }
     const pagenationCouputed = computed(() => {
         const firstIndex = items.value.length ? ((params.page - 1) * params.page_size) + 1 : 0

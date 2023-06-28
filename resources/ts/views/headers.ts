@@ -1,8 +1,8 @@
-import { Filter } from '@/views/types';
-import _ from 'lodash';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from "pdfmake/build/vfs_fonts";
-import * as XLSX from 'xlsx';
+import { Filter } from '@/views/types'
+import _ from 'lodash'
+import pdfMake from 'pdfmake/build/pdfmake'
+import pdfFonts from "pdfmake/build/vfs_fonts"
+import * as XLSX from 'xlsx'
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 

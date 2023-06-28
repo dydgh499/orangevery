@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useSearchStore } from '@/views/merchandises/useStore'
-import BaseIndexOverview from '@/layouts/lists/BaseIndexOverview.vue';
+import BaseIndexOverview from '@/layouts/lists/BaseIndexOverview.vue'
 
 const { store, setHeaders } = useSearchStore()
 const { flattened } = useSalesFilterStore()
 provide('store', store)
 provide('setHeaders', setHeaders)
 
-const salesforce = ref({trx_fee:0, user_name:'영업점 선택'})
+const salesforce = ref({ trx_fee: 0, user_name: '영업점 선택' })
 const metas = [
     {
         icon: 'tabler-user',
@@ -49,10 +49,8 @@ const metas = [
         <template #options>
             <VCol cols="12" sm="2">
                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforce" :items="flattened"
-                        prepend-inner-icon="tabler-man" label="영업점 선택"
-                        :hint="`수수료율: ${(salesforce.trx_fee*100).toFixed(3)}%`" item-title="user_name" item-value="id"
-                        persistent-hint single-line 
-                />
+                    prepend-inner-icon="tabler-man" label="영업점 선택" :hint="`수수료율: ${(salesforce.trx_fee * 100).toFixed(3)}%`"
+                    item-title="user_name" item-value="id" persistent-hint single-line create />
             </VCol>
         </template>
         <template #name>가맹점</template>

@@ -50,6 +50,7 @@ const headerValues = computed(() => {
 
   return entries
 })
+console.log(FooterType)
 </script>
 
 <template>
@@ -194,7 +195,7 @@ const headerValues = computed(() => {
               :value="val"
             />
           </VRadioGroup>
-            -->
+          -->
           <!-- 👉 Navbar blur -->
           <br>
           <div class="d-flex align-center justify-space-between">

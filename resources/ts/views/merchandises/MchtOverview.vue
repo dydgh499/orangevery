@@ -1,32 +1,34 @@
 <script lang="ts" setup>
-import { requiredValidator, nullValidator } from '@validators';
-import type { Merchandise, MchtOption } from '@/views/types'
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import { requiredValidator, nullValidator } from '@validators'
+import type { Merchandise } from '@/views/types'
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue';
-import { useStore } from '@/views/services/pay-gateways/useStore';
+import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
+import { useStore } from '@/views/services/pay-gateways/useStore'
 import corp from '@corp'
 
 interface Props {
     item: Merchandise,
-    pv_options: MchtOption,
 }
 const props = defineProps<Props>()
 const { sales } = useSalesFilterStore()
 const { cus_filters } = useStore()
 
 const levels = corp.pv_options.auth.levels
-
-onMounted(() => {
-    props.pv_options.is_show_fee = Boolean(props.pv_options.is_show_fee)
-    props.item.sales0_id = props.item.sales0_id == 0 ? null : props.item.sales0_id
-    props.item.sales1_id = props.item.sales1_id == 0 ? null : props.item.sales1_id
-    props.item.sales2_id = props.item.sales2_id == 0 ? null : props.item.sales2_id
-    props.item.sales3_id = props.item.sales3_id == 0 ? null : props.item.sales3_id
-    props.item.sales4_id = props.item.sales4_id == 0 ? null : props.item.sales4_id
-    props.item.sales5_id = props.item.sales5_id == 0 ? null : props.item.sales5_id
+watchEffect(() => {
+    console.log(props.item)
+    props.item.sales0_fee = props.item.sales0_fee.toFixed(3)
+    props.item.sales1_fee = props.item.sales1_fee.toFixed(3)
+    props.item.sales2_fee = props.item.sales2_fee.toFixed(3)
+    props.item.sales3_fee = props.item.sales3_fee.toFixed(3)
+    props.item.sales4_fee = props.item.sales4_fee.toFixed(3)
+    props.item.sales5_fee = props.item.sales5_fee.toFixed(3)
+    props.item.trx_fee = props.item.trx_fee.toFixed(3)
+    props.item.hold_fee = props.item.hold_fee.toFixed(3)
 })
+console.log(props.item.enabled)
+console.log(props.item.show_fee_easy_view)
 </script>
 <template>
     <VRow class="match-height">
@@ -68,7 +70,6 @@ onMounted(() => {
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
-
                         <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales5_use">
                             <VRow no-gutters>
@@ -78,8 +79,8 @@ onMounted(() => {
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales5_id"
                                         :items="[{ id: null, user_name: '선택안함' }].concat(sales[5].value)"
-                                        prepend-inner-icon="tabler-man" label="지사 선택" item-title="user_name"
-                                        item-value="id" />
+                                        prepend-inner-icon="tabler-man" label="지사 선택" item-title="user_name" item-value="id"
+                                        create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales5_fee" type="number" suffix="%"
@@ -99,7 +100,7 @@ onMounted(() => {
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales4_id"
                                         :items="[{ id: null, user_name: '선택안함' }].concat(sales[4].value)"
                                         prepend-inner-icon="tabler-man" label="하위지사 선택" item-title="user_name"
-                                        item-value="id" />
+                                        item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales4_fee" type="number" suffix="%"
@@ -118,8 +119,8 @@ onMounted(() => {
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales3_id"
                                         :items="[{ id: null, user_name: '선택안함' }].concat(sales[3].value)"
-                                        prepend-inner-icon="tabler-man" label="총판 선택" item-title="user_name"
-                                        item-value="id" />
+                                        prepend-inner-icon="tabler-man" label="총판 선택" item-title="user_name" item-value="id"
+                                        create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales3_fee" type="number" suffix="%"
@@ -139,7 +140,7 @@ onMounted(() => {
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales2_id"
                                         :items="[{ id: null, user_name: '선택안함' }].concat(sales[2].value)"
                                         prepend-inner-icon="tabler-man" label="하위총판 선택" item-title="user_name"
-                                        item-value="id" />
+                                        item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales2_fee" type="number" suffix="%"
@@ -159,7 +160,7 @@ onMounted(() => {
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales1_id"
                                         :items="[{ id: null, user_name: '선택안함' }].concat(sales[1].value)"
                                         prepend-inner-icon="tabler-man" label="대리점 선택" item-title="user_name"
-                                        item-value="id" />
+                                        item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales1_fee" type="number" suffix="%"
@@ -179,7 +180,7 @@ onMounted(() => {
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales0_id"
                                         :items="[{ id: null, user_name: '선택안함' }].concat(sales[0].value)"
                                         prepend-inner-icon="tabler-man" label="하위대리점 선택" item-title="user_name"
-                                        item-value="id" />
+                                        item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales0_fee" type="number" suffix="%"
@@ -201,96 +202,79 @@ onMounted(() => {
                     <VCardTitle>옵션정보</VCardTitle>
                     <VRow class="pt-5">
                         <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label>커스텀 필터</label>
-                                </VCol>
-                                <VCol cols="12" md="9">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.custom_id"
-                                        :items="[{ id: null, name: '커스텀 필터 선택' }].concat(cus_filters)"
-                                        prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name"
-                                        item-value="id" persistent-hint />
-                                </VCol>
+                            <VRow>
+                                <CreateHalfVCol :mdl="3" :mdr="9">
+                                    <template #name>커스텀 필터</template>
+                                    <template #input>
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.custom_id"
+                                            :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)"
+                                            prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name"
+                                            item-value="id" persistent-hint create />
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
                         </VCol>
-
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label>가맹점 수수료율 노출</label>
-                                </VCol>
-                                <VCol cols="12" md="9">
-                                    <BooleanRadio :radio.sync="props.pv_options.is_show_fee"
-                                        @update:radio="props.pv_options.is_show_fee = $event">
-                                        <template #true>사용</template>
-                                        <template #false>미사용</template>
-                                    </BooleanRadio>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label for="acctNumHorizontalIcons">중복결제 한도</label>
-                                </VCol>
-                                <VCol cols="12" md="9">
-                                    <VTextField prepend-inner-icon="tabler-currency-won"
-                                        v-model="props.pv_options.pay_dupe_limit" type="number"
-                                        :rules="[requiredValidator]" />
-                                </VCol>
+                        <VCol cols="12" v-if="corp.pv_options.paid.subsidiary_use_control">
+                            <VRow>
+                                <CreateHalfVCol :mdl="3" :mdr="9">
+                                    <template #name>전산 사용상태</template>
+                                    <template #input>
+                                        <BooleanRadio :radio="Boolean(props.item.enabled)"
+                                            @update:radio="props.item.enabled = $event">
+                                            <template #true>ON</template>
+                                            <template #false>OFF</template>
+                                        </BooleanRadio>
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label>결제 일 한도</label>
-                                </VCol>
-                                <VCol cols="12" md="9">
-                                    <VTextField prepend-inner-icon="tabler-currency-won"
-                                        v-model="props.pv_options.pay_day_limit" type="number"
-                                        :rules="[requiredValidator]" />
-                                </VCol>
+                            <VRow>
+                                <CreateHalfVCol :mdl="3" :mdr="9">
+                                    <template #name>가맹점 수수료율 노출</template>
+                                    <template #input>
+                                        <BooleanRadio :radio="Boolean(props.item.show_fee_easy_view)"
+                                            @update:radio="props.item.show_fee_easy_view = $event">
+                                            <template #true>사용</template>
+                                            <template #false>미사용</template>
+                                        </BooleanRadio>
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
                         </VCol>
+                        <!-- 👉 매출전표 공급자 사용 여부 -->
                         <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label>결제 월 한도</label>
-                                </VCol>
-                                <VCol cols="12" md="9">
-                                    <VTextField prepend-inner-icon="tabler-currency-won"
-                                        v-model="props.pv_options.pay_month_limit" type="number"
-                                        :rules="[requiredValidator]" />
-                                </VCol>
+                            <VRow>
+                                <CreateHalfVCol :mdl="3" :mdr="9">
+                                    <template #name>매출전표 공급자 정보</template>
+                                    <template #input>
+                                        <BooleanRadio :radio="Boolean(props.item.use_saleslip_prov)"
+                                            @update:radio="props.item.use_saleslip_prov = $event">
+                                            <template #true>본사</template>
+                                            <template #false>가맹점</template>
+                                        </BooleanRadio>
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
                         </VCol>
+                        <!-- 👉 매출전표 판매자 사용 여부 -->
                         <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label>결제 년 한도</label>
-                                </VCol>
-                                <VCol cols="12" md="9">
-                                    <VTextField prepend-inner-icon="tabler-currency-won"
-                                        v-model="props.pv_options.pay_year_limit" type="number"
-                                        :rules="[requiredValidator]" />
-                                </VCol>
+                            <VRow>
+                                <CreateHalfVCol :mdl="3" :mdr="9">
+                                    <template #name>매출전표 판매자 정보</template>
+                                    <template #input>
+                                        <BooleanRadio :radio="Boolean(props.item.use_saleslip_sell)"
+                                            @update:radio="props.item.use_saleslip_sell = $event">
+                                            <template #true>본사</template>
+                                            <template #false>가맹점</template>
+                                        </BooleanRadio>
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="3">
-                                    <label>이상거래 금액 한도</label>
-                                </VCol>
-                                <VCol cols="12" md="9">
-                                    <VTextField prepend-inner-icon="tabler-currency-won"
-                                        v-model="props.pv_options.abnormal_trans_limit" type="number"
-                                        :rules="[requiredValidator]" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VDivider />
                     </VRow>
                 </VCardItem>
             </VCard>
-    </VCol>
-</VRow></template>
+        </VCol>
+    </VRow>
+</template>

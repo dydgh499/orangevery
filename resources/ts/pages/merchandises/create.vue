@@ -24,7 +24,7 @@ const id = ref<number>(0)
                     <UserOverview :item="item" :id="id" />
                 </VWindowItem>
                 <VWindowItem>
-                    <MchtOverview :item="item" :pv_options="item.pv_options"/>
+                    <MchtOverview :item="item"/>
                 </VWindowItem>
                 <VWindowItem>
                     <PayModuleOverview :item="item" />

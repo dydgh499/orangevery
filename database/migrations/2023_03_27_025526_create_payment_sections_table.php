@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->foreignId('pg_id')->nullable()->comment('PG FK')->constrained('payment_gateways')->onDelete('SET NULL');
             $table->string('name')->default('')->comment('구간명');
-            $table->float('trx_fee', 8, 5)->comment('거래 수수료');
+            $table->float('trx_fee', 6, 4)->comment('거래 수수료');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });

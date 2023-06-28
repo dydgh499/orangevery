@@ -2,10 +2,10 @@
 import { useSearchStore } from '@/views/transactions/settle/useSalesforceStore'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
 import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
-import { salesLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { salesLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 
 const { store, head, exporter } = useSearchStore()
 const all_sales = salesLevels()
@@ -22,19 +22,19 @@ store.params.level = all_sales[0].id
 
 const getSettleStyle = (parent_key: string) => {
     if (parent_key === 'appr')
-        return 'color: blue;';
+        return 'color: blue;'
     else if (parent_key === 'cxl')
-        return 'color: red;';
+        return 'color: red;'
     else if (parent_key === 'settle')
-        return 'font-weight: bold;';
+        return 'font-weight: bold;'
     else
-        return ''; // 기본 스타일 또는 다른 스타일을 지정하고 싶은 경우 여기에 작성
+        return '' // 기본 스타일 또는 다른 스타일을 지정하고 싶은 경우 여기에 작성
 }
 const isSalesCol = (key: string) => {
     const sales_cols = ['count', 'amount', 'trx_amount', 'settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
     for (let i = 0; i < sales_cols.length; i++) {
-        if(sales_cols[i] === key)
-            return true        
+        if (sales_cols[i] === key)
+            return true
     }
     return false
 }
@@ -45,21 +45,21 @@ const isSalesCol = (key: string) => {
             <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" :sales="true">
                 <template #extra_left>
                     <VCol cols="12" sm="3">
-                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.level"
-                            :items="salesLevels()" :label="`전체`"
-                            item-title="title" item-value="id" />
+                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="salesLevels()"
+                            :label="`전체`" item-title="title" item-value="id" create />
                     </VCol>
                     <VCol cols="12" sm="3">
                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
                             :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`정산주기 선택`"
-                            item-title="title" item-value="id" />
+                            item-title="title" item-value="id" create />
                     </VCol>
                 </template>
             </BaseIndexFilterCard>
         </template>
         <template #headers>
             <tr>
-                <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index" class='list-square'>
+                <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
+                    class='list-square'>
                     <span>
                         {{ head.main_headers[index] }}
                     </span>
@@ -68,7 +68,8 @@ const isSalesCol = (key: string) => {
             <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="!header.hidden" class='list-square'>
                     <template v-if="key == 'deduction.input'">
-                        <BaseQuestionTooltip :location="'top'" :text="header.ko" :content="'차감이 아닌 추가금 설정을 하시러면 금액 앞에 -(마이너스 기호)를 입력 후 차감버튼을 클릭해주세요.'">
+                        <BaseQuestionTooltip :location="'top'" :text="header.ko"
+                            :content="'차감이 아닌 추가금 설정을 하시러면 금액 앞에 -(마이너스 기호)를 입력 후 차감버튼을 클릭해주세요.'">
                         </BaseQuestionTooltip>
                     </template>
                     <template v-else>
@@ -83,7 +84,8 @@ const isSalesCol = (key: string) => {
             <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
-                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="!__header.hidden" class='list-square'>
+                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="!__header.hidden"
+                            class='list-square'>
                             <span v-if="_key == 'deduction' && (__key as string) == 'input'">
                                 <AddDeductBtn :id="item['id']" :name="item['user_name']" :is_mcht="false">
                                 </AddDeductBtn>
@@ -109,7 +111,7 @@ const isSalesCol = (key: string) => {
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'settle_day'">
-                                    {{ all_days.find(sales => sales.id === item[_key])?.title }}
+                                {{ all_days.find(sales => sales.id === item[_key])?.title }}
                             </span>
                             <span v-else-if="_key == 'settle_tax_type'">
                                 <VChip :color="store.getSelectIdColor(tax_types.find(obj => obj.id === item[_key])?.id)">

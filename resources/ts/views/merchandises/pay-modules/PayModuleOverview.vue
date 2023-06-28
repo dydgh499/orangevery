@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { axios } from '@axios';
+import { axios } from '@axios'
 import type { PayModule, Merchandise } from '@/views/types'
-import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue';
+import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue'
 
 interface Props {
     item: Merchandise,
@@ -14,7 +14,7 @@ const snackbar      = <any>(inject('snackbar'))
 
 onMounted(async () => {
     const params = {'mcht_id': props.item.id};
-    axios.get('/api/v1/manager/merchandises/pay-modules', { params: params })
+    axios.get('/api/v1/manager/merchandises/pay-modules/all', { params: params })
     .then(r => { Object.assign(pay_modules, r.data.content as PayModule[]) })
     .catch(e => { snackbar.value.show(e.response.data.message, 'error') })
 })

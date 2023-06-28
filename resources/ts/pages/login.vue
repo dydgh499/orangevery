@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { UserAbility } from '@/plugins/casl/AppAbility';
-import { useAppAbility } from '@/plugins/casl/useAppAbility';
-import {axios, pay_token, user_info} from '@axios';
-import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant';
-import corp from '@corp';
-import { VNodeRenderer } from '@layouts/components/VNodeRenderer';
-import { themeConfig } from '@themeConfig';
-import { requiredValidator } from '@validators';
-import { VForm } from 'vuetify/components';
+import { UserAbility } from '@/plugins/casl/AppAbility'
+import { useAppAbility } from '@/plugins/casl/useAppAbility'
+import {axios, pay_token, user_info} from '@axios'
+import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
+import corp from '@corp'
+import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
+import { themeConfig } from '@themeConfig'
+import { requiredValidator } from '@validators'
+import { VForm } from 'vuetify/components'
 
-import authV2LoginIllustrationBorderedDark from '@images/pages/auth-v2-login-illustration-bordered-dark.png';
-import authV2LoginIllustrationBorderedLight from '@images/pages/auth-v2-login-illustration-bordered-light.png';
-import authV2LoginIllustrationDark from '@images/pages/auth-v2-login-illustration-dark.png';
-import authV2LoginIllustrationLight from '@images/pages/auth-v2-login-illustration-light.png';
-import authV2MaskDark from '@images/pages/misc-mask-dark.png';
-import authV2MaskLight from '@images/pages/misc-mask-light.png';
+import authV2LoginIllustrationBorderedDark from '@images/pages/auth-v2-login-illustration-bordered-dark.png'
+import authV2LoginIllustrationBorderedLight from '@images/pages/auth-v2-login-illustration-bordered-light.png'
+import authV2LoginIllustrationDark from '@images/pages/auth-v2-login-illustration-dark.png'
+import authV2LoginIllustrationLight from '@images/pages/auth-v2-login-illustration-light.png'
+import authV2MaskDark from '@images/pages/misc-mask-dark.png'
+import authV2MaskLight from '@images/pages/misc-mask-light.png'
 
 const authThemeImg = useGenerateImageVariant(authV2LoginIllustrationLight, authV2LoginIllustrationDark, authV2LoginIllustrationBorderedLight, authV2LoginIllustrationBorderedDark, true)
 const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
@@ -57,7 +57,8 @@ const login = () => {
     axios.post('api/v1/auth/sign-in', {brand_id: corp.id, user_name: user_name.value, user_pw: user_pw.value })
     .then(r => {
         const {access_token, user} = r.data
-        const abilities = getAbilities(user['level']);
+        user['level'] = user['level'] == null ? 10 : user['level']
+        const abilities = getAbilities(user['level'])
         ability.update(abilities);
         
         pay_token.value = access_token

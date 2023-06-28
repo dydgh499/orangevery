@@ -24,30 +24,16 @@
     #load-custom {
       max-height: 80px;
     }
-  </style>
-  <script>
-    const loadRenderLoadingSvg = () => {
-        document.querySelector('#load-custom').style['display'] = 'none';
-        document.querySelector('#load-default').style['display'] = 'block';
+    .hidden {
+      display: none;
     }
-    //const primaryColor = localStorage.getItem('Vuexy-initial-loader-color') || '#EA5455';
-    //const loaderColor = "{{ $json['color'] }}" || '#FFFFFF';
-
-    const loaderColor = localStorage.getItem("{{ $json['name'] }}-initial-loader-bg") || '#FFFFFF';
-    const primaryColor = "{{ $json['color'] }}" || '#EA5455';
-    console.log("{{ $json['color'] }}")
-    window.corp = {!! json_encode($json, true) !!};
-    if (loaderColor)
-        document.documentElement.style.setProperty('--initial-loader-bg', loaderColor)
-    if (primaryColor)
-        document.documentElement.style.setProperty('--initial-loader-color', primaryColor)
-  </script>
+  </style>
   <body>
     <div id="app">
       <div id="loading-bg">
         <div class="loading-logo">
-          <img src="{{ $json['logo_img'] }}" alt="Logo" onerror="loadRenderLoadingSvg()" id='load-custom'/>
-          <div style="display:none;" alt="Logo" id='load-default'>
+          <img src="{{ $json['logo_img'] }}" alt="Logo" id='load-custom'/>
+          <div class="hidden" alt="Logo" id='load-default'>
             <!-- 로고 없을때 기본 페이베리 이미지 -->
               <img src="/logo.svg" alt="Logo" />
           </div>
@@ -61,3 +47,19 @@
     </div>
   </body>
 </html>
+
+<script>
+  document.getElementById('load-custom').onerror = function () {
+      document.getElementById('load-custom').classList.add('hidden');
+      document.getElementById('load-default').classList.remove('hidden');
+  }
+
+  const loaderColor = localStorage.getItem("{{ $json['name'] }}-initial-loader-bg") || '#FFFFFF';
+  const primaryColor = "{{ $json['color'] }}" || '#EA5455';
+
+  window.corp = {!! json_encode($json, true) !!};
+  if (loaderColor)
+      document.documentElement.style.setProperty('--initial-loader-bg', loaderColor)
+  if (primaryColor)
+      document.documentElement.style.setProperty('--initial-loader-color', primaryColor)
+</script>

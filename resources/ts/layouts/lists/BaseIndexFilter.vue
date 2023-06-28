@@ -97,4 +97,18 @@ else if(props.is_range_date == false)
     min-inline-size: 20.35rem;
   }
 }
+
+@media (max-width: 1500px) {
+  /* xs breakpoint in Vuetify */
+  .search-input {
+    min-inline-size: 10.35rem;
+  }
+}
+
+@media (max-width: 1000px) {
+  /* xs breakpoint in Vuetify */
+  .search-input {
+    min-inline-size: 6.35rem;
+  }
+}
 </style>

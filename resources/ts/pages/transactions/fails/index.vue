@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/transactions/fails/useStore';
+import { useSearchStore } from '@/views/transactions/fails/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 
 const { pgs, pss } = useStore()
 const { store, head, exporter } = useSearchStore()

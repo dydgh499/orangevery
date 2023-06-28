@@ -1,9 +1,9 @@
 <script setup lang="ts">
 
-import { requiredValidator } from '@validators';
+import { requiredValidator } from '@validators'
 import type { FreeOption, PaidOption, AuthOption, Brand } from '@/views/types'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 
 interface Props {
     item: {

@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import CreateForm from '@/layouts/utils/CreateForm.vue'
-import TransactionsOverview from '@/views/transactions/TransactionsOverview.vue';
+import TransactionsOverview from '@/views/transactions/TransactionsOverview.vue'
 import { useUpdateStore } from '@/views/transactions/useStore'
 import type { Tab } from '@/views/types'
 const {path, item } = useUpdateStore()

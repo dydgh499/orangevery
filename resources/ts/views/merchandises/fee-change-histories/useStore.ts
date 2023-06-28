@@ -1,5 +1,5 @@
-import { Header } from '@/views/headers';
-import { Searcher } from '@/views/searcher';
+import { Header } from '@/views/headers'
+import { Searcher } from '@/views/searcher'
 export const useSearchStore = defineStore('mchtFeeHistorySearchStore', () => {
     const store = Searcher('merchandises/fee-change-histories')
     const head  = Header('merchandises/pay-modules', '결제모듈 관리')

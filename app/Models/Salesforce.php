@@ -37,7 +37,11 @@ class Salesforce extends Authenticatable
         $query = $this->hasMany(Transaction::class, 'sales'.$idx."_id")
             ->where('brand_id', request()->user()->brand_id)
             ->whereNull('sales'.$idx.'_settle_id');
+
         $query = globalPGFilter($query, request());
+        $query = globalSalesFilter($query, request());
+        $query = globalAuthFilter($query, request());
+        
         return $query->select();
     }
     

@@ -2,8 +2,8 @@
 import { SettlesHistories } from '@/views/types'
 import { axios } from '@axios'
 import { getLevelByIndex } from '@/views/salesforces/useStore'
-import { useSearchStore } from '@/views/transactions/useStore';
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
+import { useSearchStore } from '@/views/transactions/useStore'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 
 interface Props {
     name: string,
@@ -21,7 +21,7 @@ const errorHandler = <any>(inject('$errorHandler'))
 
 const commonRequest = async (page: string, method: string) => {
     try {
-        const type = props.is_mcht ? 'merchandises' : 'salesfoces'
+        const type = props.is_mcht ? 'merchandises' : 'salesforces'
         const url = '/api/v1/manager/transactions/settle-histories/' + type + '/' + page
         const res = await axios({
             url: url,

@@ -54,9 +54,15 @@ class TransactionController extends Controller
                 $query = $query->where($col, $request->input($col));
         }
 
-        $query = $query->with(['sales0', 'sales1', 'sales2', 'sales3', 'sales4', 'sales5', 'mcht']);
+        $query = $query->with(['mcht']);
         $data = $this->getIndexData($request, $query);
-        foreach($data['content'] as $content) {
+
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
+
+        foreach($data['content'] as $content) 
+        {
             $content->append(['total_trx_amount']);
         }
         return $this->response(0, $data);

@@ -1,6 +1,6 @@
-import { Header } from '@/views/headers';
-import { Searcher } from '@/views/searcher';
-import type { AuthOption, Brand, FreeOption, PaidOption, ThemeCSS } from '@/views/types';
+import { Header } from '@/views/headers'
+import { Searcher } from '@/views/searcher'
+import type { AuthOption, Brand, FreeOption, PaidOption, ThemeCSS } from '@/views/types'
 
 export const useSearchStore = defineStore('brandSearchStore', () => {
     const store = Searcher('services/brands')

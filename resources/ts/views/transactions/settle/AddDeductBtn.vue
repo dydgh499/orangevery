@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { requiredValidator } from '@validators';
-import { axios } from '@axios';
+import { requiredValidator } from '@validators'
+import { axios } from '@axios'
 
 interface Props {
     id: number,
@@ -21,7 +21,7 @@ const addDeduction = async () => {
         'id': props.id,
         'dt': store.params.dt
     };
-    const page = props.is_mcht ? 'merchandises' : 'salesfoces';
+    const page = props.is_mcht ? 'merchandises' : 'salesforces'
     if (await alert.value.show('정말 ' + props.name + '님을(를) 추가차감하시겠습니까?')) {
         try {
             const r = await axios.post('/api/v1/manager/transactions/settle/' + page + '/deduct', params)

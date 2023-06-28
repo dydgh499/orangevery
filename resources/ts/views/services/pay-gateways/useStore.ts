@@ -1,5 +1,5 @@
-import type { Classification, PayGateway, PaySection } from '@/views/types';
-import { axios } from '@axios';
+import type { Classification, PayGateway, PaySection } from '@/views/types'
+import { axios } from '@axios'
 
 export const useStore = defineStore('payGatewayStore', () => {
     const pgs = ref<PayGateway[]>([])
@@ -60,16 +60,7 @@ export const useStore = defineStore('payGatewayStore', () => {
             return item != undefined ? "수수료율: " + (item.trx_fee * 1).toFixed(3) + "%" : ''    
         }
         else
-            return '';
-    }
-    const setAmount = (items: Classification[], id: number | null) => {
-        if(id != null)
-        {
-            const item = items.find(item => item.id === id)
-            return item != undefined && item != null ? "이용 수수료: " + "₩" : ''    
-        }
-        else
-            return '';
+            return ''
     }
     const psFilter = (filter:PaySection[], ps_id:number|null) => {
         if (pss.value.length > 0) {
@@ -88,6 +79,6 @@ export const useStore = defineStore('payGatewayStore', () => {
         return ps_id
     }
     return {
-        pgs, pss, terminals, settle_types, cus_filters, pg_types, psFilter, setFee, setAmount
+        pgs, pss, terminals, settle_types, cus_filters, pg_types, psFilter, setFee,
     }
 })

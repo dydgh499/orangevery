@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Settle } from '@/views/types'
-import { axios } from '@axios';
-import { cloneDeep } from 'lodash';
+import { axios } from '@axios'
+import { cloneDeep } from 'lodash'
 
 interface Props {
     name: string,
@@ -20,10 +20,10 @@ const settle = async () => {
         const params = cloneDeep(store.params)
         const p = {
             id: props.item.id,
-            acct_nm: props.item.acct_nm,
+            acct_name: props.item.acct_name,
             acct_num: props.item.acct_num,
-            acct_bank_cd: props.item.acct_bank_cd,
-            acct_bank_nm: props.item.acct_bank_nm,
+            acct_bank_code: props.item.acct_bank_code,
+            acct_bank_name: props.item.acct_bank_name,
             total_amount: props.item.amount,            // 총 매출액
             cxl_amount: props.item.cxl.amount,          // 총 취소액
             appr_amount: props.item.appr.amount,        // 총 승인액
@@ -34,7 +34,7 @@ const settle = async () => {
             settle_fee: props.is_mcht ? props.item.settle_fee : 0,
         };
         try {
-            const page = props.is_mcht ? 'merchandises' : 'salesfoces';
+            const page = props.is_mcht ? 'merchandises' : 'salesforces'
             const r = await axios.post('/api/v1/manager/transactions/settle-histories/' + page, Object.assign(params, p))
             snackbar.value.show('성공하였습니다.', 'success')
             store.setTable()

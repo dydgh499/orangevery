@@ -1,13 +1,15 @@
 <script lang="ts" setup>
-import { useRequestStore } from '@/views/request';
-import { requiredValidator, nullValidator } from '@validators';
+import { useRequestStore } from '@/views/request'
+import { requiredValidator, nullValidator } from '@validators'
 import type { PayModule, Merchandise } from '@/views/types'
-import { VForm } from 'vuetify/components';
-import { module_types, installments } from '@/views/merchandises/pay-modules/useStore';
-import { allLevels } from '@/views/salesforces/useStore';
+import { VForm } from 'vuetify/components'
+import { module_types, installments, abnormal_trans_limits } from '@/views/merchandises/pay-modules/useStore'
+import { allLevels } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import corp from '@corp'
 
 interface Props {
     item: PayModule,
@@ -19,7 +21,7 @@ const props = defineProps<Props>()
 
 const all_levels = allLevels()
 const { update, remove } = useRequestStore()
-const { pgs, pss, settle_types, terminals, psFilter, setFee, setAmount } = useStore()
+const { pgs, pss, settle_types, terminals, psFilter, setFee } = useStore()
 const md = ref<number>(3)
 
 onMounted(() => {
@@ -57,7 +59,7 @@ const filterPgs = computed(() => {
                                 <template #input>
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id"
                                         :items="props.mchts" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
-                                        item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] />
+                                        item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] create />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -73,7 +75,7 @@ const filterPgs = computed(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <!-- 👉 수기결제 타입(구인증, 비인증) -->
-                        <VRow class="pt-3" v-show="props.item.module_type == 1">
+                        <VRow class="pt-3" v-show="props.item.module_type == 1 || props.item.module_type == 5">
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>수기결제 타입</template>
                                 <template #input>
@@ -126,8 +128,7 @@ const filterPgs = computed(() => {
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type"
                                         :items="settle_types" prepend-inner-icon="ic-outline-send-to-mobile" label="정산일 선택"
-                                        item-title="name" item-value="id"
-                                        :rules=[requiredValidator] />
+                                        item-title="name" item-value="id" :rules=[requiredValidator] />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -135,8 +136,8 @@ const filterPgs = computed(() => {
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>입금 수수료</template>
                                 <template #input>
-                                    <VTextField v-model="props.item.settle_prem" type="number"
-                                        suffix="₩" :rules="[requiredValidator]" />
+                                    <VTextField v-model="props.item.settle_fee" type="number" suffix="₩"
+                                        :rules="[requiredValidator]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -188,18 +189,6 @@ const filterPgs = computed(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-
-                        <!-- 👉 시리얼 번호 -->
-                        <VRow class="pt-3" v-show="props.item.module_type == 0">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>시리얼번호</template>
-                                <template #input>
-                                    <VTextField type="text" v-model="props.item.serial_num"
-                                        prepend-inner-icon="ic-twotone-stay-primary-portrait" placeholder="시리얼번호 입력"
-                                        persistent-placeholder />
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
                     </VCardItem>
                 </VCol>
                 <VDivider :vertical="$vuetify.display.mdAndUp" v-show="props.item.module_type == 0" />
@@ -213,8 +202,18 @@ const filterPgs = computed(() => {
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.terminal_id"
                                         :items="terminals" prepend-inner-icon="ic-outline-send-to-mobile" label="단말기 선택"
-                                        item-title="name" item-value="id" single-line persistent-hint
-                                        :hint="`${setAmount(terminals, props.item.terminal_id)}`" />
+                                        item-title="name" item-value="id" single-line />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <!-- 👉 시리얼 번호 -->
+                        <VRow class="pt-3">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>시리얼번호</template>
+                                <template #input>
+                                    <VTextField type="text" v-model="props.item.serial_num"
+                                        prepend-inner-icon="ic-twotone-stay-primary-portrait" placeholder="시리얼번호 입력"
+                                        persistent-placeholder />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -235,8 +234,8 @@ const filterPgs = computed(() => {
                                 <template #name>정산일</template>
                                 <template #input>
                                     <VTextField v-model="props.item.comm_settle_type"
-                                    :rules="[v => (v >= 0 && v <= 31) || '0~31 사이의 값을 입력해주세요']"
-                                    label="정산일 입력" suffix="일" />
+                                        :rules="[v => (v >= 0 && v <= 31) || '0~31 사이의 값을 입력해주세요']" label="정산일 입력"
+                                        suffix="일" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -246,8 +245,8 @@ const filterPgs = computed(() => {
                                 <template #name>정산주체</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.comm_calc_level"
-                                        :items="all_levels" prepend-inner-icon="tabler-man" label="정산자 선택" item-title="title"
-                                        item-value="id" persistent-hint single-line />
+                                        :items="all_levels" prepend-inner-icon="tabler-man" label="정산자 선택"
+                                        item-title="title" item-value="id" persistent-hint single-line />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -301,28 +300,89 @@ const filterPgs = computed(() => {
                 <VCol cols="12" :md="md">
                     <VCardItem>
                         <VCardTitle style="margin-bottom: 1em;">옵션</VCardTitle>
-                        <!-- 👉 매출전표 공급자 사용 여부 -->
-                        <VRow>
+                        <VRow class="pt-3" v-if="corp.pv_options.paid.use_dup_pay_validation">
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>매출전표 공급자 정보</template>
+                                <template #name>
+                                    <BaseQuestionTooltip :location="'top'" :text="'이상거래 한도설정'"
+                                        :content="'설정 금액 이상으로 결제가 발생할 시, 이상거래 관리 목록에 추가됩니다.'">
+                                    </BaseQuestionTooltip>
+                                </template>
                                 <template #input>
-                                    <BooleanRadio :radio="Boolean(props.item.use_saleslip_prov)"
-                                        @update:radio="props.item.use_saleslip_prov = $event">
-                                        <template #true>본사</template>
-                                        <template #false>가맹점</template>
-                                    </BooleanRadio>
+                                    <VSelect v-model="props.item.abnormal_trans_limit" :items="abnormal_trans_limits"
+                                        prepend-inner-icon="jam-triangle-danger" label="이상거래 한도설정" item-title="title"
+                                        item-value="id" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <!-- 👉 매출전표 판매자 사용 여부 -->
-                        <VRow>
+                        <VRow class="pt-3" v-if="corp.pv_options.paid.use_dup_pay_validation">
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>매출전표 판매자 정보</template>
+                                <template #name>
+                                    <BaseQuestionTooltip :location="'top'" :text="'중복결제 허용회수'"
+                                        :content="'입력된 카드번호를 통해 중복해서 결제가되었는지 검증합니다.<br>0 입력 시 허용회수를 검증하지 않으며, <b>온라인 결제</b>만 적용 가능합니다.'">
+                                    </BaseQuestionTooltip>
+                                </template>
                                 <template #input>
-                                    <BooleanRadio :radio="Boolean(props.item.use_saleslip_sell)"
-                                        @update:radio="props.item.use_saleslip_prov = $event">
-                                        <template #true>본사</template>
-                                        <template #false>가맹점</template>
+                                    <VTextField v-model="props.item.pay_dupe_limit" label="중복결제 허용회수" type="number"
+                                        suffix="회 허용" :rules="[nullValidator]" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow class="pt-3" v-if="corp.pv_options.paid.use_pay_limit && props.item.module_type != 0">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>
+                                    <BaseQuestionTooltip :location="'top'" :text="'일 결제 한도'"
+                                        :content="'결제 한도 금액: 1,000,000원 = 100 입력(이하동일)<br><b>온라인 결제</b>만 적용 가능합니다.'">
+                                    </BaseQuestionTooltip>
+                                </template>
+                                <template #input>
+                                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_day_limit"
+                                        type="number" suffix="만원" :rules="[nullValidator]" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow class="pt-3" v-if="corp.pv_options.paid.use_pay_limit && props.item.module_type != 0">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>월 결제 한도</template>
+                                <template #input>
+                                    <VTextField prepend-inner-icon="tabler-currency-won"
+                                        v-model="props.item.pay_month_limit" type="number" suffix="만원"
+                                        :rules="[nullValidator]" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow class="pt-3" v-if="corp.pv_options.paid.use_pay_limit && props.item.module_type != 0">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>연 결제 한도</template>
+                                <template #input>
+                                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_year_limit"
+                                        type="number" suffix="만원" :rules="[nullValidator]" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow class="pt-3" v-if="corp.pv_options.paid.use_forb_pay_time && props.item.module_type != 0">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>
+                                    <BaseQuestionTooltip :location="'top'" :text="'결제금지 시간'"
+                                        :content="'해당 시간대에는 <b>온라인 결제</b>를 발생시킬 수 없습니다.'">
+                                    </BaseQuestionTooltip>
+                                </template>
+                                <template #input>
+                                    <div class="d-flex align-items-center flex-column">
+                                        <VTextField v-model="props.item.pay_disable_s_tm" type="time" />
+                                        <span class="text-center mx-auto">~</span>
+                                        <VTextField v-model="props.item.pay_disable_e_tm" type="time" />
+                                    </div>
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow class="pt-3" v-if="props.item.module_type != 0">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>간편보기 결제창 노출여부</template>
+                                <template #input>
+                                    <BooleanRadio :radio="Boolean(props.item.show_easy_view)"
+                                        @update:radio="props.item.show_easy_view = $event">
+                                        <template #true>노출</template>
+                                        <template #false>숨김</template>
                                     </BooleanRadio>
                                 </template>
                             </CreateHalfVCol>
@@ -330,13 +390,14 @@ const filterPgs = computed(() => {
                         <!-- 👉 비고 -->
                         <VRow>
                             <VCol>
-                                <VTextarea v-model="props.item.note" counter label="비고(별칭)"
+                                <VTextarea v-model="props.item.note" counter label="결제모듈 별칭"
                                     prepend-inner-icon="twemoji-spiral-notepad" />
                             </VCol>
                         </VRow>
                         <VRow>
                             <VCol class="d-flex gap-4">
-                                <VBtn type="button" style="margin-left: auto;" @click="update('/merchandises/pay-modules', props.item.id, props.item, vForm)">
+                                <VBtn type="button" style="margin-left: auto;"
+                                    @click="update('/merchandises/pay-modules', props.item.id, props.item, vForm)">
                                     {{ props.item.id == 0 ? "추가" : "수정" }}
                                     <VIcon end icon="tabler-pencil" />
                                 </VBtn>
@@ -344,7 +405,8 @@ const filterPgs = computed(() => {
                                     리셋
                                     <VIcon end icon="tabler-arrow-back" />
                                 </VBtn>
-                                <VBtn type="button" color="error" v-if="props.item.id" @click="remove('/merchandises/pay-modules', props.item.id)">
+                                <VBtn type="button" color="error" v-if="props.item.id"
+                                    @click="remove('/merchandises/pay-modules', props.item.id)">
                                     삭제
                                     <VIcon end icon="tabler-trash" />
                                 </VBtn>

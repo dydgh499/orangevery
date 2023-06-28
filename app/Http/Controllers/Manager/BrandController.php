@@ -40,7 +40,7 @@ class BrandController extends Controller
                 'contracts', 'ids', 'ogs', 'bsin_lic'
             ],
             'sizes'     => [
-                512, 32, 500,
+                85, 32, 500,
                 500, 500, 1200, 500
             ],
         ];

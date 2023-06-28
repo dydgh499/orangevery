@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Transaction } from '@/views/types'
+import type { SalesSlip } from '@/views/types'
 
 interface Props {
-    item: Transaction,
+    item: SalesSlip,
 }
 
 const props = defineProps<Props>()

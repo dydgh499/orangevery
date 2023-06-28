@@ -17,10 +17,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->foreignId('sales_id')->nullable()->comment('영업자 FK')->constrained('salesforces')->onDelete('SET NULL');
-            $table->string('acct_nm', 30)->nullable()->comment('예금주명');
+            $table->string('acct_name', 30)->nullable()->comment('예금주명');
             $table->string('acct_num', 20)->nullable()->comment('예금계좌번호');
-            $table->string('acct_bank_nm', 30)->nullable()->comment('은행명');
-            $table->string('acct_bank_cd', 3)->nullable()->comment('은행코드');
+            $table->string('acct_bank_name', 30)->nullable()->comment('은행명');
+            $table->string('acct_bank_code', 3)->nullable()->comment('은행코드');
             $table->tinyInteger('level')->comment('영업자 레벨');
             $table->integer('total_amount')->default(0)->comment('매출액');
             $table->integer('trx_amount')->default(0)->comment('거래 수수료');            

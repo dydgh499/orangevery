@@ -14,10 +14,10 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
 // @layouts plugin
 import { VerticalNavLayout } from '@layouts'
 
-import AlertDialog from '@/layouts/dialogs/AlertDialog.vue';
-import Snackbar from '@/layouts/snackbars/Snackbar.vue';
-import LoadingDialog from '@/layouts/dialogs/LoadingDialog.vue';
-import { axios, pay_token, user_info } from '@axios';
+import AlertDialog from '@/layouts/dialogs/AlertDialog.vue'
+import Snackbar from '@/layouts/snackbars/Snackbar.vue'
+import LoadingDialog from '@/layouts/dialogs/LoadingDialog.vue'
+import { axios, pay_token, user_info } from '@axios'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { config } from '@layouts/config'
 
