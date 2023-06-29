@@ -1,8 +1,8 @@
 
 <script setup lang="ts">
-import UserOverview from '@/views/users/UserOverview.vue';
-import MchtOverview from '@/views/merchandises/MchtOverview.vue';
-import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOverview.vue';
+import UserOverview from '@/views/users/UserOverview.vue'
+import MchtOverview from '@/views/merchandises/MchtOverview.vue'
+import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOverview.vue'
 
 import { useUpdateStore } from '@/views/merchandises/useStore'
 import CreateForm from '@/layouts/utils/CreateForm.vue'

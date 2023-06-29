@@ -219,12 +219,6 @@ return [
         'mcht_name' => '가맹점 상호',
         'mcht_user_name' => '가맹점 ID',
         'addr'  => '주소',
-        'stamp_flag'=> '스탬프 사용여부',
-        'point_flag'=> '포인트 사용여부',
-        'point_rate'=> '포인트 변환률',
-        'stamp_save_count' => '상품당 스탬프 저장개수',
-        'profile_img' => '프로필 이미지',
-        'partner_name'  => '협력사 아이디',
         //
         'tags' => '태그',
         'files' => '파일',

@@ -102,16 +102,16 @@
 
     function globalAuthFilter($query, $request, $parent_table='')
     {
-        $parent_table = $parent_table != "" ? $parent_table."." : "";
+        $table = $parent_table != "" ? $parent_table."." : "";
         if(isMerchandise($request))
         {   // 가맹점
             $col = $parent_table == 'merchandises' ? "id" : 'mcht_id';
-            $query = $query->where($parent_table.$col,  $request->user()->id);
+            $query = $query->where($table.$col,  $request->user()->id);
         }
         else if(isSalesforce($request))
         {   // 영업자
             $idx = globalLevelByIndex($request->user()->level);            
-            $query = $query->where($parent_table."sales".$idx."_id",  $request->user()->id);
+            $query = $query->where($table."sales".$idx."_id",  $request->user()->id);
         }
         else if(isOrderator($request))
         {   // all
@@ -124,35 +124,35 @@
 
     function globalPGFilter($query, $request, $parent_table='')
     {
-        $parent_table = $parent_table != "" ? $parent_table."." : "";
+        $table = $parent_table != "" ? $parent_table."." : "";
         if($request->pg_id)
-            $query = $query->where($parent_table.'pg_id', $request->pg_id);
+            $query = $query->where($table.'pg_id', $request->pg_id);
         if($request->ps_id)
-            $query = $query->where($parent_table.'ps_id', $request->ps_id);
+            $query = $query->where($table.'ps_id', $request->ps_id);
         if($request->settle_type)
-            $query = $query->where($parent_table.'settle_type', $request->settle_type);
+            $query = $query->where($table.'settle_type', $request->settle_type);
         if($request->terminal_id)
-            $query = $query->where($parent_table.'terminal_id', $request->terminal_id);
+            $query = $query->where($table.'terminal_id', $request->terminal_id);
         return $query;
     }
 
     function globalSalesFilter($query, $request, $parent_table='')
     {
-        $parent_table = $parent_table != "" ? $parent_table."." : "";
+        $table = $parent_table != "" ? $parent_table."." : "";
         if($request->sales0_id)
-            $query = $query->where($parent_table.'sales0_id', $request->sales0_id);
+            $query = $query->where($table.'sales0_id', $request->sales0_id);
         if($request->sales1_id)
-            $query = $query->where($parent_table.'sales1_id', $request->sales1_id);
+            $query = $query->where($table.'sales1_id', $request->sales1_id);
         if($request->sales2_id)
-            $query = $query->where($parent_table.'sales2_id', $request->sales2_id);
+            $query = $query->where($table.'sales2_id', $request->sales2_id);
         if($request->sales3_id)
-            $query = $query->where($parent_table.'sales3_id', $request->sales3_id);
+            $query = $query->where($table.'sales3_id', $request->sales3_id);
         if($request->sales4_id)
-            $query = $query->where($parent_table.'sales4_id', $request->sales4_id);
+            $query = $query->where($table.'sales4_id', $request->sales4_id);
         if($request->sales5_id)
-            $query = $query->where($parent_table.'sales5_id', $request->sales5_id);
+            $query = $query->where($table.'sales5_id', $request->sales5_id);
         if($request->custom_id)
-            $query = $query->where($parent_table.'custom_id', $request->custom_id);
+            $query = $query->where($table.'custom_id', $request->custom_id);
 
         return $query;
     }

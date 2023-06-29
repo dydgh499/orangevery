@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import { emailValidator, passwordValidator, requiredValidator } from '@validators';
+import { emailValidator, passwordValidator, requiredValidator } from '@validators'
 import type { Operator } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { operator_levels } from '@/views/services/operators/useStore'

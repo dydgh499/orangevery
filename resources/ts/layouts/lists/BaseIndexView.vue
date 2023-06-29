@@ -38,11 +38,7 @@ onMounted(() => {
                     <VTable class="text-no-wrap">
                         <!-- 👉 table head -->
                         <thead>
-                                <slot name="headers"></slot>
-                            <tr>
-                                <slot name="content-header"></slot>
-                                <slot name="header"></slot>
-                            </tr>
+                            <slot name="headers"></slot>
                         </thead>
                         <!-- 👉 table body -->
                         <tbody>
@@ -51,13 +47,13 @@ onMounted(() => {
                         <!-- 👉 table footer  -->
                         <tfoot v-show="!Boolean(store.items.length)">
                             <tr>
-                                <td :colspan="Object.keys(head.flat_headers).length" style="text-align: center;">
+                                <td :colspan="Object.keys(head.flat_headers).length" class='list-square' style="border: 0;">
                                     검색 결과가 없습니다.
                                 </td>
                             </tr>
                         </tfoot>
                     </VTable>
-                    <VDivider />
+                    <VDivider/>
                     <VCardText class="d-flex align-center flex-wrap justify-space-between gap-4 py-3 px-5">
                         <span class="text-sm text-disabled">
                             {{ store.pagenationCouputed }}

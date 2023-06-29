@@ -1,6 +1,6 @@
-import { Header } from '@/views/headers';
-import { Searcher } from '@/views/searcher';
-import type { Operator, Options } from '@/views/types';
+import { Header } from '@/views/headers'
+import { Searcher } from '@/views/searcher'
+import type { Operator, Options } from '@/views/types'
 
 export const operator_levels:Options[] = [
     {id:30, title:'스태프'},

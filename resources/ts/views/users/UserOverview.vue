@@ -18,6 +18,12 @@ watchEffect(() => {
     props.item.acct_bank_code = bank.value.code
     props.item.acct_bank_name = bank.value.title
 })
+watchEffect(() => {
+    if(props.item.id != 0) {
+        bank.value.code = props.item.acct_bank_code
+        bank.value.title = props.item.acct_bank_name
+    }
+})
 </script>
 <template>
     <VRow class="match-height">

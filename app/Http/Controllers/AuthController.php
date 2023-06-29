@@ -94,7 +94,7 @@ class AuthController extends Controller
 
         $result = $this->__signIn(new Merchandise(), $request);  // check Merchandise
         if($result['result'] == 1)
-            return $this->response(0, $result['user']->loginInfo($result['user']->level));
+            return $this->response(0, $result['user']->loginInfo(10));
         else
             return $this->isMaster($request);           // check master
     }

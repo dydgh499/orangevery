@@ -50,7 +50,6 @@ const headerValues = computed(() => {
 
   return entries
 })
-console.log(FooterType)
 </script>
 
 <template>

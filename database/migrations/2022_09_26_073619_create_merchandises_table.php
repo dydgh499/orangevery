@@ -62,7 +62,7 @@ class CreateMerchandisesTable extends Migration
             // option
             $table->integer('custom_id')->nullable()->comment('커스텀 필터');
             $table->boolean('enabled')->default(true)->comment('사용 여부(0=미사용, 1=사용)');
-            $table->boolean('use_saleslip_prov')->default(false)->comment('매출전표 공급자 사용 여부(0=사용, 1=본사)');
+            $table->boolean('use_saleslip_prov')->default(true)->comment('매출전표 공급자 사용 여부(0=사용, 1=본사)');
             $table->boolean('use_saleslip_sell')->default(false)->comment('매출전표 판매자 사용 여부(0=사용, 1=본사)');
             $table->boolean('show_fee_easy_view')->default(false)->comment('간편보기 수수료율 노출여부');
 

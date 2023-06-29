@@ -67,7 +67,7 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
+                    <VRow class="pt-5 pb-5">
                         <CreateHalfVCol :mdl="2" :mdr="10" style='margin-bottom: 4em;'>
                             <template #name>내용</template>
                             <template #input>

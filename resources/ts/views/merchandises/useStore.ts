@@ -43,8 +43,8 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     headers['mcht_name'] = '상호'
     headers['nick_name'] = '대표자명'
     headers['phone_num'] = '연락처'
-    headers['resident_num'] = '사업자등록번호'
-    headers['business_num'] = '주민등록번호'
+    headers['resident_num'] = '주민등록번호'
+    headers['business_num'] = '사업자등록번호'
 
     headers['sector'] = '업종'
     headers['addr'] = '주소'

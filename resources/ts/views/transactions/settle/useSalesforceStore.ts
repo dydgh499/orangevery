@@ -53,8 +53,8 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
         'acct_num': '계좌번호',
         'nick_name': '대표자명',
         'phone_num': '연락처',
-        'resident_num': '사업자등록번호',
-        'business_num': '주민등록번호',
+        'resident_num': '주민등록번호',
+        'business_num': '사업자등록번호',
         'sector': '업종',
         'addr': '주소',
     };

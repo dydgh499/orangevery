@@ -3,7 +3,7 @@ import { QuillEditor } from '@vueup/vue-quill'
 import BlotFormatter from 'quill-blot-formatter'
 import ImageUploader from 'quill-image-uploader'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { axios } from '@axios';
+import { axios } from '@axios'
 
 interface Props {
     content: String

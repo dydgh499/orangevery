@@ -107,7 +107,6 @@ export const lengthValidator = (value: unknown, length: number) => {
 export const lengthValidatorV2 = (value: unknown, length: number) => {
     if (isEmpty(value))
         return true
-
     return String(value).length === length || `${length}자 이어야 합니다.`
 }
 // 👉 Alpha-dash Validator

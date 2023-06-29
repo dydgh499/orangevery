@@ -3,6 +3,7 @@ import { useSearchStore, types } from '@/views/posts/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import PostReplyView from '@/views/posts/PostReplyView.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
+import ExtraMenu from '@/views/posts/ExtraMenu.vue'
 
 const { store, head, exporter } = useSearchStore()
 provide('store', store)
@@ -46,15 +47,12 @@ const router = useRouter()
                                     {{ types.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
                             </span>
-                            <span v-else-if="_key == 'title'">
+                            <span v-else-if="_key == 'title'" class="edit-link" @click="router.push('/posts/view/' + item['id'])">
                                 {{ item[_key] }}
                             </span>
-                            <span v-else-if="_key == 'reply'">
-                                <VBtn size="small" type="button"
-                                    @click="router.push('/posts/reply?parent_id=' + item['id'])">
-                                    <span>답변하기</span>
-                                    <VIcon end icon="tabler-pencil" />
-                                </VBtn>
+                            <span v-else-if="_key == 'extra_col'">
+                                <ExtraMenu :item="item">                                    
+                                </ExtraMenu>
                             </span>
                             <span v-else>
                                 {{ item[_key] }}
@@ -68,9 +66,12 @@ const router = useRouter()
         </template>
     </BaseIndexView>
 </template>
-<style scoped>
+<style>
 .title {
-  inline-size: 100em;
+  inline-size: 80em;
+  max-inline-size: 100em;
+  padding-block: 2em;
+  padding-inline: 0;
   text-align: start !important;
 }
 </style>

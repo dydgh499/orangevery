@@ -7,6 +7,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
+use App\Http\Requests\Manager\BulkRegister\BulkSalesforceRequest;
 use App\Http\Requests\Manager\SalesforceRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\Hash;
@@ -196,4 +197,32 @@ class SalesforceController extends Controller
         return $this->response($res ? 1 : 990);        
     }
 
+    public function bulkRegister(BulkSalesforceRequest $request)
+    {
+        $current = date('Y-m-d H:i:s');
+        $brand_id = $request->user()->brand_id;
+
+        $datas = $request->data();
+        $user_names = $datas->pluck('user_name')->values()->toArray();
+        $exist_sales = $this->salesforces
+                ->where('brand_id', $brand_id)
+                ->where('is_delete', false)
+                ->whereIn('user_name', $user_names)
+                ->pluck('user_name')->toArray();
+
+        if(count($exist_sales))
+            return $this->extendResponse(1000, join(',', $exist_sales).'는 이미 존재하는 아이디 입니다.');
+        else
+        {
+            $salesforces = $datas->map(function ($data) use($current, $brand_id) {
+                $data['user_pw'] = Hash::make($data['user_pw']);
+                $data['brand_id'] = $brand_id;
+                $data['created_at'] = $current;
+                $data['updated_at'] = $current;
+                return $data;
+            })->toArray();
+            $res = $this->manyInsert($this->salesforces, $salesforces);
+            return $this->response($res ? 1 : 990);
+        }
+    }
 }

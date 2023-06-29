@@ -42,10 +42,12 @@ const user_pw = ref('1234')
 const getAbilities = (level: number) : UserAbility[] => {
     let auth :UserAbility[] = [];
     switch (level)  {
-        case 0:     auth.push({action: 'manage', subject: 'Auth'}); break;
-        case 10:    auth.push({action: 'manage', subject: 'Auth'}); break;
+        case 10:    auth.push({action: 'manage', subject: 'all'}); break;
+        case 13:    auth.push({action: 'manage', subject: 'all'}); break;
         case 15:    auth.push({action: 'manage', subject: 'all'}); break;
+        case 17:    auth.push({action: 'manage', subject: 'all'}); break;
         case 20:    auth.push({action: 'manage', subject: 'all'}); break;
+        case 25:    auth.push({action: 'manage', subject: 'all'}); break;
         case 30:    auth.push({action: 'manage', subject: 'all'}); break;
         case 35:    auth.push({action: 'read', subject: 'all'}); break;
         case 40:    auth.push({action: 'manage', subject: 'all'}); break;
@@ -60,7 +62,6 @@ const login = () => {
         user['level'] = user['level'] == null ? 10 : user['level']
         const abilities = getAbilities(user['level'])
         ability.update(abilities);
-        
         pay_token.value = access_token
         user_info.value = user
         localStorage.setItem('abilities', JSON.stringify(abilities))

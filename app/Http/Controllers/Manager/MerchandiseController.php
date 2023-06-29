@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Manager;
 use App\Models\Merchandise;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\StoresTrait;
+
+use App\Http\Requests\Manager\BulkRegister\BulkMerchandiseRequest;
 use App\Http\Requests\Manager\MerchandiseRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +21,7 @@ use Illuminate\Http\Request;
  */
 class MerchandiseController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $merchandises;
     protected $imgs;
     public function __construct(Merchandise $merchandises)
@@ -219,5 +222,40 @@ class MerchandiseController extends Controller
             ->where('id', $request->id)
             ->update(['user_pw' => Hash::make($request->user_pw)]);
         return $this->response($res ? 1 : 990);        
+    }
+
+    public function bulkRegister(BulkMerchandiseRequest $request)
+    {
+        $current = date('Y-m-d H:i:s');
+        $brand_id = $request->user()->brand_id;
+        $datas = $request->data();
+
+        $getExistitems = function($datas, $brand_id, $col) {
+            $items = $datas->pluck($col)->values()->toArray();
+            return $this->merchandises
+                    ->where('brand_id', $brand_id)
+                    ->where('is_delete', false)
+                    ->whereIn($col, $items)
+                    ->pluck($col)->toArray();
+        };
+
+        $exist_names = $getExistitems($datas, $brand_id, 'user_name');
+        $exist_mchts = $getExistitems($datas, $brand_id, 'mcht_name');
+        if(count($exist_names))
+            return $this->extendResponse(1000, join(',', $exist_names).'는 이미 존재하는 아이디 입니다.');
+        else if(count($exist_names))
+            return $this->extendResponse(1000, join(',', $exist_mchts).'는 이미 존재하는 상호 입니다.');
+        else
+        {
+            $merchandises = $datas->map(function ($data) use($current, $brand_id) {
+                $data['user_pw'] = Hash::make($data['user_pw']);
+                $data['brand_id'] = $brand_id;
+                $data['created_at'] = $current;
+                $data['updated_at'] = $current;
+                return $data;
+            })->toArray();
+            $res = $this->manyInsert($this->merchandises, $merchandises);
+            return $this->response($res ? 1 : 990);
+        }
     }
 }

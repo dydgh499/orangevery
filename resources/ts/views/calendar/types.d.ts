@@ -1,5 +1,5 @@
-import { CalendarEvent } from '@/@fake-db/types';
-import type { Except } from 'type-fest';
+import { CalendarEvent } from '@/@fake-db/types'
+import type { Except } from 'type-fest'
 
 export interface Event extends CalendarEvent {
   extendedProps: {

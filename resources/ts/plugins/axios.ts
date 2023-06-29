@@ -1,7 +1,11 @@
-import axiosIns from 'axios'
+import axiosIns from 'axios';
 
-export const com_token  = ref<string>()
-export const pay_token  = ref<string>(localStorage.getItem('payvery-token') || '')
+interface userInfo {
+    id: number,
+    
+}
+
+export const pay_token  = ref<string>(localStorage.getItem('access-token') || '')
 export const user_info  = ref<any>(JSON.parse(localStorage.getItem('user_info') || '{}'))
 
 export const axios = axiosIns.create({
@@ -22,6 +26,6 @@ axios.interceptors.request.use((config:any) => {
 });
 
 watchEffect(() => {
-    localStorage.setItem('payvery-token', pay_token.value)
+    localStorage.setItem('access-token', pay_token.value)
     localStorage.setItem('user_info', JSON.stringify(user_info.value))
 })

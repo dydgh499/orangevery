@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/salesforces/fee-change-histories/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { allLevels } from '@/views/salesforces/useStore';
+import { allLevels } from '@/views/salesforces/useStore'
 
 const { store, head, exporter } = useSearchStore()
 provide('store', store)

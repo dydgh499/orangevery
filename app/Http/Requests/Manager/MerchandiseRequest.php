@@ -23,7 +23,6 @@ class MerchandiseRequest extends FormRequest
             'acct_num',
             'acct_name',
             'phone_num',
-            'custom_id',
             'enabled',
             'use_saleslip_prov',
             'use_saleslip_sell',
@@ -94,6 +93,7 @@ class MerchandiseRequest extends FormRequest
             $key = $this->keys[$i];
             $data[$key] = $this->input($key, '');
         }
+        $data['custom_id'] = $this->input('custom_id', null);
         return $data;
     }
 }

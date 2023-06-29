@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import Preview from '@/layouts/utils/Preview.vue';
-import { extensionValidator } from '@validators';
+import Preview from '@/layouts/utils/Preview.vue'
+import { extensionValidator } from '@validators'
 
 const props = defineProps({
     file: {

@@ -61,9 +61,6 @@ class SalesforceRequest extends FormRequest
     public function bodyParameters()
     {
         $params = $this->getDocsParameters($this->keys);
-        $params['point_flag']['description']    .= '(1=사용, 0=미사용)';
-        $params['stamp_flag']['description']    .= '(1=사용, 0=미사용)';
-        $params['profile_img']['description']   .= '(max-width: 120px, 이상은 리사이징)';
         return $params;
     }
     public function data()

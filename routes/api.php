@@ -84,12 +84,15 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
             Route::get('classification', [SalesforceController::class, 'classification']);
             Route::post('password-change', [SalesforceController::class, 'passwordChange']);
+            Route::post('bulk-register', [SalesforceController::class, 'bulkRegister']);
         });
         Route::prefix('merchandises')->group(function() {
             Route::get('all', [MerchandiseController::class, 'all']);   
             Route::get('terminals', [TerminalController::class, 'index']);   
             Route::post('password-change', [MerchandiseController::class, 'passwordChange']);
+            Route::post('bulk-register', [MerchandiseController::class, 'bulkRegister']);
             Route::get('pay-modules/all', [PaymentModuleController::class, 'all']);     
+            Route::post('pay-modules/bulk-register', [PaymentModuleController::class, 'bulkRegister']);
             Route::apiResource('pay-modules', PaymentModuleController::class); 
 
             Route::post('fee-change-histories/{user}/{type}', [FeeChangeHistoryController::class, 'apply']);

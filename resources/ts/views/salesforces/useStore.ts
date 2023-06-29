@@ -93,14 +93,14 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
         'settle_tax_type': '정산 세율',
         'nick_name' : '대표자명',
         'phone_num' : '연락처',
-        'resident_num' : '사업자등록번호',
-        'business_num' : '주민등록번호',
+        'resident_num' : '주민등록번호',
+        'business_num' : '사업자등록번호',
         'sector' : '업종',
         'addr' : '주소',
-        'acct_bank_name' : '은행',
-        'acct_bank_code' : '은행코드',
         'acct_name' : '예금주',
         'acct_num' : '계좌번호',
+        'acct_bank_name' : '은행',
+        'acct_bank_code' : '은행코드',
         'last_settle_dt': '마지막 정산일',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
@@ -132,7 +132,7 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
 })
 
 export const useSalesFilterStore = defineStore('salesFilterStore', () => {
-    const sales = Array.from({ length: 6 }, () => ref<any[]>([]));
+    const sales = Array.from({ length: 6 }, () => ref<any[]>([]))
     onMounted(async () => {
         await classification()
     })
@@ -144,7 +144,8 @@ export const useSalesFilterStore = defineStore('salesFilterStore', () => {
         }
     }
     return {
-        sales
+        sales,
+        classification,
     }
 })
 

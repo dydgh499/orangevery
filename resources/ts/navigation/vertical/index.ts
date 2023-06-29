@@ -5,4 +5,8 @@ import service from './service'
 import transaction from './transaction'
 import user from './user'
 
-export default [...home, ...user, ...transaction, ...service] as VerticalNavItems
+const combinedNavItems = computed(() => {
+    return [...home, ...user.value, ...transaction.value, ...service.value] as VerticalNavItems;
+});
+
+export default combinedNavItems;

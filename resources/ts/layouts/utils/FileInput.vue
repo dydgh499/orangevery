@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import Preview from '@/layouts/utils/Preview.vue';
+import Preview from '@/layouts/utils/Preview.vue'
 
 const props = defineProps({
     file: {

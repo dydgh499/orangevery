@@ -3,6 +3,7 @@
 import type { Post } from '@/views/types'
 import { types } from '@/views/posts/useStore'
 import PostReplyView from '@/views/posts/PostReplyView.vue'
+import ExtraMenu from '@/views/posts/ExtraMenu.vue'
 
 interface Props {
     post: Post,
@@ -29,18 +30,18 @@ provide('head', head)
                         {{ types.find(obj => obj.id === props.post[key])?.title }}
                     </VChip>
                 </span>
-                <span v-else-if="key == 'title'" :style="{ 'margin-left': `${props.depth * 20}px` }">
+                <span v-else-if="key == 'title'" :style="{ 'margin-left': `${props.depth * 20}px` }" class="edit-link"
+                    @click="router.push('/posts/view/' + props.post['id'])">
                     <VIcon icon="gridicons:reply" size="20" class="me-2" />
                     <span>
                         {{ props.post.title }}
                     </span>
                 </span>
-                <span v-else-if="key == 'reply'">
-                    <VBtn size="small" type="button" @click="router.push('/posts/reply?parent_id=' + props.post.id)">
-                        <span>답변하기</span>
-                        <VIcon end icon="tabler-pencil" />
-                    </VBtn>
+                <span v-else-if="_key == 'extra_col'">
+                    <ExtraMenu :item="props.post">
+                    </ExtraMenu>
                 </span>
+
                 <span v-else>
                     {{ props.post[key] }}
                 </span>
@@ -50,9 +51,4 @@ provide('head', head)
     <PostReplyView v-for="(reply, _idx) in post.replies" :key="_idx" :post="reply" :depth="++props.depth">
     </PostReplyView>
 </template>
-<style scoped>
-  .title {
-    inline-size: 15em;
-    text-align: start !important;
-  }
-</style>
+  

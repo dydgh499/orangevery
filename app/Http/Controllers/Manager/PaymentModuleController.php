@@ -179,4 +179,9 @@ class PaymentModuleController extends Controller
         ];
         return $this->get($request, $cols);
     }
+    
+    public function bulkRegister(Request $request)
+    {
+        
+    }
 }

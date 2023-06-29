@@ -2,8 +2,18 @@ import { axios, pay_token, user_info } from '@axios'
 import { canNavigate } from '@layouts/plugins/casl'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { createRouter, createWebHistory } from 'vue-router'
-
 import routes from '~pages'
+
+const getUserLevel = () => {
+    if(user_info.value) {
+        if(user_info.value.mcht_name) {
+            user_info.value.level = 10
+        }
+        return user_info.value.level
+    }
+    return 0
+}
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -13,14 +23,10 @@ const router = createRouter({
             path: '/',
             redirect: to => {
                 const isLoggedIn = pay_token.value != ''
-                console.log(isLoggedIn)
-                const roles = [10, 15, 20, 30, 35, 40, 50]
-
-                if (roles.includes(user_info.value ? user_info.value.level : 0) && isLoggedIn)
+                const userLevel = getUserLevel()
+                if (userLevel > 0 && isLoggedIn)
                     return { name: 'dashboards-home' }
-                else
-                {
-                    console.log(user_info.value)
+                else {
                     return { name: 'login', query: to.query }
                 }
             },
@@ -47,13 +53,12 @@ const router = createRouter({
 router.beforeEach(to => {
     const isLoggedIn = pay_token.value != ''
     axios.defaults.headers.common['Authorization'] = `Bearer ${pay_token.value}`;
-    console.log(to.meta.redirectIfLoggedIn)
+    
     if (canNavigate(to)) {
         if (to.meta.redirectIfLoggedIn && isLoggedIn)
             return '/'
     }
     else {
-        console.log(isLoggedIn)
         if (isLoggedIn)
             return { name: 'not-authorized' }
         else
