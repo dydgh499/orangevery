@@ -42,7 +42,7 @@ return new class extends Migration
             //-------------------------- option
             $table->tinyInteger('cxl_type')->default(2)->comment('취소타입(0=취소금지, 1=이체시간 -5분, 2=당일허용)');
             $table->boolean('is_old_auth')->default(false)->comment('수기결제 타입(0=비인증, 1=구인증)');
-            $table->boolean('show_easy_view')->default(true)->comment('간편보기 결제창 사용(0=미사용, 1=사용)');
+            $table->boolean('show_pay_view')->default(true)->comment('결제창 사용(0=미사용, 1=사용)');
             
             $table->tinyInteger('installment')->default(0)->comment('할부 한도(0~12)');
             $table->tinyInteger('pay_dupe_limit')->default(0)->comment('중복결제 허용회수');

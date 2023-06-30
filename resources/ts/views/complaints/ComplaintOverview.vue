@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { axios } from '@axios'
+import { useMchtFilterStore } from '@/views/merchandises/useStore'
 import { requiredValidator, nullValidator } from '@validators'
 import type { Complaint, Merchandise } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { complaint_types } from '@/views/complaints/useStore'
+import { axios } from '@axios'
 
 interface Props {
     item: Complaint,
@@ -13,14 +14,8 @@ interface Props {
 
 const props = defineProps<Props>()
 const { pgs } = useStore()
-const mchts = ref<Merchandise[]>([])
 
-const setMchts = () => {
-    axios.get('/api/v1/manager/merchandises/all')
-        .then(r => { Object.assign(mchts.value, r.data.content as Merchandise[]) })
-        .catch(e => { console.log(e) })
-}
-setMchts()
+const { merchandises } = useMchtFilterStore()
 onMounted(() => {
     props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
     props.item.is_deposit = Boolean(props.item.is_deposit)
@@ -37,7 +32,7 @@ onMounted(() => {
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>고객명</template>
                             <template #input>
-                                <VTextField v-model="props.item.cust_nm" prepend-inner-icon="tabler-user"
+                                <VTextField v-model="props.item.cust_name" prepend-inner-icon="tabler-user"
                                     placeholder="고객명을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
@@ -52,7 +47,7 @@ onMounted(() => {
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>수기작성성함</template>
                             <template #input>
-                                <VTextField v-model="props.item.hand_cust_nm" prepend-inner-icon="tabler-user"
+                                <VTextField v-model="props.item.hand_cust_name" prepend-inner-icon="tabler-user"
                                     placeholder="수기작성성함을 입력해주세요" persistent-placeholder />
                             </template>
                         </CreateHalfVCol>
@@ -81,7 +76,7 @@ onMounted(() => {
                     <CreateHalfVCol :mdl="3" :mdr="9">
                         <template #name>가맹점 선택</template>
                         <template #input>
-                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id" :items="mchts"
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id" :items="merchandises"
                                 prepend-inner-icon="tabler-building-store" label="가맹점 선택" item-title="mcht_name"
                                 item-value="id" single-line :rules=[nullValidator] create />
                         </template>
@@ -126,7 +121,7 @@ onMounted(() => {
                         <template #name>PG사</template>
                         <template #input>
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_id" :items="pgs"
-                                prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_nm" item-value="id"
+                                prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_name" item-value="id"
                                 single-line :rules="[nullValidator]" />
                         </template>
                     </CreateHalfVCol>

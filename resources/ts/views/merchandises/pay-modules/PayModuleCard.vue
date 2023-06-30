@@ -1,25 +1,26 @@
 <script lang="ts" setup>
+import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useRequestStore } from '@/views/request'
+import { useMchtFilterStore } from '@/views/merchandises/useStore'
 import { requiredValidator, nullValidator } from '@validators'
-import type { PayModule, Merchandise } from '@/views/types'
-import { VForm } from 'vuetify/components'
+import type { PayModule } from '@/views/types'
 import { module_types, installments, abnormal_trans_limits } from '@/views/merchandises/pay-modules/useStore'
 import { allLevels } from '@/views/salesforces/useStore'
-import { useStore } from '@/views/services/pay-gateways/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { VForm } from 'vuetify/components'
 import corp from '@corp'
 
 interface Props {
     item: PayModule,
     able_mcht_chanage: boolean,
-    mchts: Merchandise[],
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
 
 const all_levels = allLevels()
+const { merchandises } = useMchtFilterStore()
 const { update, remove } = useRequestStore()
 const { pgs, pss, settle_types, terminals, psFilter, setFee } = useStore()
 const md = ref<number>(3)
@@ -58,7 +59,7 @@ const filterPgs = computed(() => {
                                 <template #name>소유 가맹점</template>
                                 <template #input>
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id"
-                                        :items="props.mchts" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
+                                        :items="merchandises" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
                                         item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] create />
                                 </template>
                             </CreateHalfVCol>
@@ -104,7 +105,7 @@ const filterPgs = computed(() => {
                                 <template #name>PG사</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_id" :items="pgs"
-                                        prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_nm" item-value="id"
+                                        prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_name" item-value="id"
                                         single-line :rules=[requiredValidator] />
                                 </template>
                             </CreateHalfVCol>
@@ -377,10 +378,10 @@ const filterPgs = computed(() => {
                         </VRow>
                         <VRow class="pt-3" v-if="props.item.module_type != 0">
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>간편보기 결제창 노출여부</template>
+                                <template #name>결제창 노출여부</template>
                                 <template #input>
-                                    <BooleanRadio :radio="Boolean(props.item.show_easy_view)"
-                                        @update:radio="props.item.show_easy_view = $event">
+                                    <BooleanRadio :radio="Boolean(props.item.show_pay_view)"
+                                        @update:radio="props.item.show_pay_view = $event">
                                         <template #true>노출</template>
                                         <template #false>숨김</template>
                                     </BooleanRadio>

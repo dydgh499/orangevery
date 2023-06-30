@@ -1,7 +1,7 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { Merchandise } from '@/views/types'
-import { user_info } from '@axios'
+import { axios, user_info } from '@axios'
 import corp from '@corp'
 
 export const useSearchStore = defineStore('mchtSearchStore', () => {
@@ -129,9 +129,25 @@ export const useUpdateStore = defineStore('mchtUpdateStore', () => {
         enabled: true,
         use_saleslip_prov: false,
         use_saleslip_sell: false,
-        show_fee_easy_view: false,
+        is_show_fee: false,
     })
     return {
         path, item
+    }
+})
+
+export const useMchtFilterStore = defineStore('mchtFilterStore', () => {
+    const merchandises = ref<Merchandise[]>([])
+    onMounted(() => {
+        getAllMerchandises()
+    })
+    const getAllMerchandises = () => {
+        axios.get('/api/v1/manager/merchandises/all')
+        .then(r => { Object.assign(merchandises.value, r.data.content as Merchandise[]) })
+        .catch(e => { console.log(e) })
+    }
+    return {
+        merchandises,
+        getAllMerchandises,
     }
 })

@@ -24,6 +24,10 @@ const getAbilitiesMenu = computed(() => {
                     title: 'Bulk registration',
                     to: 'services-bulk-register',
                 },
+                {
+                    title: 'computational transfer',
+                    to: 'services-computational-transfer',
+                },
             ]
         })
         complaints.push({

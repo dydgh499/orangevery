@@ -32,7 +32,7 @@ class BulkSalesforceRequest extends FormRequest
 
     public function authorize()
     {
-        return $this->user()->tokenCan(10) ? true : false;
+        return $this->user()->tokenCan(35) ? true : false;
     }
 
     /**

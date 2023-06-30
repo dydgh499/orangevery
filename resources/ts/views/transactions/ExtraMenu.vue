@@ -17,7 +17,7 @@ const complaint = () => {
         appr_dt: props.item.trx_dt?.toString(),
         appr_num: props.item.appr_num,
         issuer: props.item.issuer,
-        cust_nm: props.item.buyer_name,
+        cust_name: props.item.buyer_name,
         phone_num: props.item.buyer_phone,
         tid: props.item.tid,
     }

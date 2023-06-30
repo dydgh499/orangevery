@@ -8,7 +8,7 @@
         public $use_simple_pay = false;
         public $sales_slip = [
             'merchandise' => [
-                'rep_nm' => '',
+                'rep_name' => '',
                 'phone_num' => '',
                 'resident_num' => '',
                 'business_num' => '',

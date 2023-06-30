@@ -4,42 +4,6 @@ use Illuminate\Support\Facades\DB;
 
 trait StoresTrait
 {
-    /*
-        존재 여부 확인
-     */
-    public function existenceValidate($items, $jsons, $json_col, $item_col, $require=true)
-    {
-        $fails = [];
-        for($i=0; $i<count($jsons); $i++)
-        {
-            if($require || $jsons[$i][$json_col] != "")
-            {
-                $idx = array_search($jsons[$i][$json_col], array_column($items, $item_col));
-                if($idx === false)
-                    array_push($fails, $i);
-            }
-        }
-        return count($fails) ? [$json_col => $fails] : [];
-    }
-
-    /*
-        미존재 여부 확인
-     */
-    public function existenceNotValidate($items, $jsons, $json_col, $item_col, $require=true)
-    {
-        $fails = [];
-        for($i=0; $i<count($jsons); $i++)
-        {
-            if($require || $jsons[$i][$json_col] != "")
-            {
-                $idx = array_search($jsons[$i][$json_col], array_column($items, $item_col));
-                if($idx !== false)
-                    array_push($fails, $i);
-            }
-        }
-        return count($fails) ? [$json_col => $fails] : [];
-    }
-
     public function manyInsert($orm, $datas)
     {
         $pieces = [];

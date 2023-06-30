@@ -19,7 +19,7 @@ watchEffect(() => {
         <CreateForm :id="id" :path="path" :tabs="tabs" :item="item">
             <template #view>
                 <VWindowItem>
-                    <PayModuleCard style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :mchts='[]' />
+                    <PayModuleCard style="margin-top: 1em;" :item="item" :able_mcht_chanage="false"/>
                 </VWindowItem>
             </template>
         </CreateForm>

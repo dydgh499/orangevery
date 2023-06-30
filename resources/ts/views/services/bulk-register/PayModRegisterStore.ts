@@ -9,7 +9,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         'mcht_name': '가맹점 상호(O)',
         'pg_id': 'PG사명(O)',
         'ps_id': '구간(O)',
-        'settle_type': '가맹점 정산일(O)',
+        'settle_type': '가맹점 정산타입(O)',
         'settle_fee': '정산 수수료(O)',
         'terminal_id': '단말기 종류(X)',
         'module_type': '결제모듈 타입(O)',
@@ -27,7 +27,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         'ship_out_stat': '단말기 출고상태(X)',
         'is_old_auth': '수기결제 여부(O)',
         'installment': '할부 한도(O)',
-        'show_easy_view': '간편보기 결제창 노출(X)',
+        'show_pay_view': '결제창 노출여부(X)',
         'abnormal_trans_limit': '이상거래 한도(X)',
         'note': '별칭(O)',
     };

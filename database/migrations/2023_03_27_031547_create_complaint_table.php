@@ -18,11 +18,11 @@ return new class extends Migration
             $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->foreignId('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
             $table->string('tid', 50)->default('')->comment('tid');
-            $table->string('cust_nm', 50)->default('')->comment('고객명');
+            $table->string('cust_name', 50)->default('')->comment('고객명');
             $table->date('appr_dt')->default('1970-01-01')->comment('승인일');
             $table->string('appr_num', 9)->comment('승인번호');
             $table->string('phone_num', 20)->default('')->comment('휴대폰 번호');
-            $table->string('hand_cust_nm', 50)->default('')->comment('수기작성성함');
+            $table->string('hand_cust_name', 50)->default('')->comment('수기작성성함');
             $table->string('hand_phone_num', 20)->default('')->comment('수기작성연락처');
             $table->string('issuer')->default('')->comment('발급사');
             $table->integer('pg_id')->default(0)->comment('PG사');

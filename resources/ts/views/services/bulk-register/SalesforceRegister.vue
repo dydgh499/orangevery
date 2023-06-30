@@ -6,7 +6,7 @@ import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { salesLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import type { Salesforce } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import BanksExplainDialog from '@/layouts/dialogs/BanksExplainDialog.vue'
+import BanksExplainDialog from '@/views/services/bulk-register/BanksExplainDialog.vue'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { Registration } from '@/views/registration'
 import { banks } from '@/views/users/useStore'
@@ -50,7 +50,6 @@ const getCyclesExplain = () => {
         content += '<b>' + all_cycles[i].title + '</b>' + "= " + all_cycles[i].id + ", "
     }
     return content
-
 }
 const getDaysExplain = () => {
     let content = ""
@@ -160,8 +159,9 @@ const validate = () => {
 }
 
 const salesRegister = async () => {
-    await bulkRegister('영업점', 'salesforces', saleses.value)
-    await classification()
+    const result = await bulkRegister('영업점', 'salesforces', saleses.value)
+    if(result)
+        await classification()
 }
 watchEffect(async () => {
     if (excel.value) {

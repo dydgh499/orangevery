@@ -6,9 +6,6 @@ import type { SalesSlip, PayGateway } from '@/views/types'
 import html2canvas from "html2canvas"
 import cancel from '@images/salesslip/cancel.png'
 
-
-
-
 //이미지로 복사기능
 const { pgs } = useStore()
 
@@ -142,7 +139,7 @@ defineExpose({
                     <VDivider :thickness="thickness" class="mb-2" />
                     <DialogHalfVCol class="cell">
                         <template #name>상호</template>
-                        <template #input>{{ trans?.mcht.use_saleslip_sell ?  pg?.company_nm : trans?.mcht_name }}</template>
+                        <template #input>{{ trans?.mcht.use_saleslip_sell ?  pg?.company_name : trans?.mcht_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>사업자번호</template>
@@ -150,7 +147,7 @@ defineExpose({
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>대표자명</template>
-                        <template #input>{{ trans?.mcht.use_saleslip_sell ? pg?.rep_nm : trans?.nick_name }}</template>
+                        <template #input>{{ trans?.mcht.use_saleslip_sell ? pg?.rep_name : trans?.nick_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>주소</template>
@@ -162,7 +159,7 @@ defineExpose({
                     <VDivider :thickness="thickness" class="mb-2" />
                     <DialogHalfVCol class="cell">
                         <template #name>상호</template>
-                        <template #input>{{ trans?.mcht.use_saleslip_prov ? pg?.company_nm : trans?.mcht_name }}</template>
+                        <template #input>{{ trans?.mcht.use_saleslip_prov ? pg?.company_name : trans?.mcht_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>사업자번호</template>
@@ -170,7 +167,7 @@ defineExpose({
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>대표자명</template>
-                        <template #input>{{ trans?.mcht.use_saleslip_prov ? pg?.rep_nm : trans?.nick_name }}</template>
+                        <template #input>{{ trans?.mcht.use_saleslip_prov ? pg?.rep_name : trans?.nick_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell mb-2">
                         <template #name>주소</template>

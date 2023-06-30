@@ -16,7 +16,6 @@ use App\Http\Controllers\Manager\PostController;
 use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Manager\TransactionController;
 
-
 use App\Http\Controllers\Manager\SettleController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\NotiSendHistoryController;
@@ -24,6 +23,7 @@ use App\Http\Controllers\Log\SettleHistoryController;
 use App\Http\Controllers\Log\DangerTransController;
 use App\Http\Controllers\Log\FailTransController;
 
+use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -105,5 +105,10 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::apiResource('transactions', TransactionController::class);
         Route::apiResource('merchandises', MerchandiseController::class);
         Route::apiResource('posts', PostController::class);
+        
     });
+});
+Route::prefix('v1')->group(function() {
+    Route::post('computational-transfer/login', [BeforeSystemController::class, 'login']);
+    Route::get('computational-transfer/register', [BeforeSystemController::class, 'register']);
 });

@@ -13,9 +13,9 @@ class PayGatewayRequest extends FormRequest
     {
         $this->keys = [
             'pg_type',
-            'pg_nm',
-            'rep_nm',
-            'company_nm',
+            'pg_name',
+            'rep_name',
+            'company_name',
             'business_num',
             'phone_num',
             'addr',
@@ -36,9 +36,9 @@ class PayGatewayRequest extends FormRequest
     {
         $sub = [
             'pg_type' => 'required',
-            'pg_nm' => 'required',
-            'rep_nm',
-            'company_nm',
+            'pg_name' => 'required',
+            'rep_name',
+            'company_name',
             'business_num',
             'phone_num',
             'addr',

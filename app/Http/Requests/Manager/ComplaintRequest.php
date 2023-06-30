@@ -14,11 +14,11 @@ class ComplaintRequest extends FormRequest
         $this->keys = [
             'mcht_id',
             'tid',
-            'cust_nm',
+            'cust_name',
             'appr_dt',
             'appr_num',
             'phone_num',
-            'hand_cust_nm',
+            'hand_cust_name',
             'hand_phone_num',
             'issuer',
             'pg_id',
@@ -44,7 +44,7 @@ class ComplaintRequest extends FormRequest
         $sub = [
             'mcht_id' => 'required',
             'tid' => 'required|string',
-            'cust_nm' => 'required|string',
+            'cust_name' => 'required|string',
             'appr_dt' => 'required|date',
             'appr_num' => 'required|string',
             'phone_num' => 'required',

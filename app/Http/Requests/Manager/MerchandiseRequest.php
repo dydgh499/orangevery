@@ -26,7 +26,7 @@ class MerchandiseRequest extends FormRequest
             'enabled',
             'use_saleslip_prov',
             'use_saleslip_sell',
-            'show_fee_easy_view',
+            'is_show_fee',
         ];
     }
 
@@ -53,7 +53,7 @@ class MerchandiseRequest extends FormRequest
             'enabled' => 'required|boolean',
             'use_saleslip_prov' => 'required|boolean',
             'use_saleslip_sell' => 'required|boolean',
-            'show_fee_easy_view' => 'required|boolean',
+            'is_show_fee' => 'required|boolean',
             'passbook_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
             'contract_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
             'bsin_lic_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
@@ -73,7 +73,7 @@ class MerchandiseRequest extends FormRequest
         $this->merge(['enabled' => $this->convertToBoolean($this->input('enabled'))]);
         $this->merge(['use_saleslip_prov' => $this->convertToBoolean($this->input('use_saleslip_prov'))]);
         $this->merge(['use_saleslip_sell' => $this->convertToBoolean($this->input('use_saleslip_sell'))]);
-        $this->merge(['show_fee_easy_view' => $this->convertToBoolean($this->input('show_fee_easy_view'))]);
+        $this->merge(['is_show_fee' => $this->convertToBoolean($this->input('is_show_fee'))]);
     }
 
     public function bodyParameters()

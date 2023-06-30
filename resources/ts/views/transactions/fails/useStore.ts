@@ -34,7 +34,7 @@ export const useSearchStore = defineStore('failSearchStore', () => {
         const keys = Object.keys(headers);
         for (let i = 0; i <datas.length; i++) {
             datas[i]['module_type'] = module_types.find(module_type => module_type['id'] === datas[i]['module_type'])?.title as string
-            datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_nm as string
+            datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_name as string
             datas[i]['ps_id'] =  pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }

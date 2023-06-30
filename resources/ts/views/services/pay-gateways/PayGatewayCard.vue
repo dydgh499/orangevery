@@ -32,8 +32,8 @@ watchEffect(() => {
         const idx = pg_types.findIndex(item => item.id == props.item.pg_type)
         if (idx != null) {
             props.item.addr = pg_types[idx].addr
-            props.item.rep_nm = pg_types[idx].rep_nm
-            props.item.company_nm = pg_types[idx].company_nm
+            props.item.rep_name = pg_types[idx].rep_name
+            props.item.company_name = pg_types[idx].company_name
             props.item.business_num = pg_types[idx].business_num
             props.item.phone_num = pg_types[idx].phone_num
         }
@@ -52,7 +52,7 @@ const filterPss = computed(() => {
 
 </script>
 <template>
-    <AppCardActions action-collapsed :title="props.item.pg_nm" :collapsed="true">
+    <AppCardActions action-collapsed :title="props.item.pg_name" :collapsed="true">
         <VDivider />
         <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
             <VCol cols="12" md="5">
@@ -74,7 +74,7 @@ const filterPss = computed(() => {
                                 <label>별칭</label>
                             </VCol>
                             <VCol>
-                                <VTextField type="text" v-model="props.item.pg_nm" prepend-inner-icon="tabler-table-alias"
+                                <VTextField type="text" v-model="props.item.pg_name" prepend-inner-icon="tabler-table-alias"
                                     placeholder="별칭 입력" persistent-placeholder :rules="[requiredValidator]" />
                             </VCol>
                         </VRow>
@@ -83,7 +83,7 @@ const filterPss = computed(() => {
                                 <label>대표자명</label>
                             </VCol>
                             <VCol>
-                                <VTextField type="text" v-model="props.item.rep_nm" prepend-inner-icon="tabler-user"
+                                <VTextField type="text" v-model="props.item.rep_name" prepend-inner-icon="tabler-user"
                                     placeholder="대표자명 입력" persistent-placeholder :rules="[requiredValidator]" />
                             </VCol>
                         </VRow>
@@ -92,7 +92,7 @@ const filterPss = computed(() => {
                                 <label>상호명</label>
                             </VCol>
                             <VCol>
-                                <VTextField type="text" v-model="props.item.company_nm"
+                                <VTextField type="text" v-model="props.item.company_name"
                                     prepend-inner-icon="tabler-building-store" placeholder="상호명 입력"
                                     persistent-placeholder :rules="[requiredValidator]"/>
                             </VCol>

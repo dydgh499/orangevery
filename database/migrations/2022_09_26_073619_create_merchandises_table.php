@@ -38,7 +38,9 @@ class CreateMerchandisesTable extends Migration
 
             $table->string('user_name', 30)->index()->comment('ID');
             $table->string('user_pw', 100)->comment('PW');
-            $table->string('nick_name', 30)->nullable()->comment('유저 닉네임');
+            $table->string('nick_name', 30)->nullable()->comment('유저명');
+            $table->string('rep_name', 30)->nullable()->comment('대표자명');
+            
             $table->string('profile_img')->nullable()->comment('프로필 이미지');
             $table->string('mcht_name', 100)->comment('가맹점명');
             $table->string('addr', 200)->nullable()->comment('가맹점 주소');
@@ -64,9 +66,8 @@ class CreateMerchandisesTable extends Migration
             $table->boolean('enabled')->default(true)->comment('사용 여부(0=미사용, 1=사용)');
             $table->boolean('use_saleslip_prov')->default(true)->comment('매출전표 공급자 사용 여부(0=사용, 1=본사)');
             $table->boolean('use_saleslip_sell')->default(false)->comment('매출전표 판매자 사용 여부(0=사용, 1=본사)');
-            $table->boolean('show_fee_easy_view')->default(false)->comment('간편보기 수수료율 노출여부');
-
-            //$table->string('pv_options', 1000)->default('[]')->comment('가맹점 옵션'); -> 삭제
+            $table->boolean('is_show_fee')->default(false)->comment('수수료율 노출여부');
+            $table->string('note', 100)->nullable()->comment('메모');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });

@@ -2,7 +2,7 @@ import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Options, PayModule } from '@/views/types'
-import { user_info } from '@axios'
+import { axios, user_info } from '@axios'
 
 export const abnormal_trans_limits = <Options[]>([
     { id: 0, title: "한도없음" }, { id: 1, title: "200만원" },
@@ -78,7 +78,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         for (let i = 0; i < datas.length; i++) {
             datas[i]['module_type'] = module_types.find(module_type => module_type['id'] === datas[i]['module_type'])?.title as string
             datas[i]['installment'] = installments.find(inst => inst['id'] === datas[i]['installment'])?.title as string
-            datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_nm as string
+            datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_name as string
             datas[i]['ps_id'] =  pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
             datas[i]['settle_type'] = settle_types.find(settle_type => settle_type['id'] === datas[i]['settle_type'])?.name as string
 
@@ -126,10 +126,26 @@ export const useUpdateStore = defineStore('payModUpdateStore', () => {
         pay_day_limit: 0,
         pay_disable_s_tm: null,
         pay_disable_e_tm: null,
-        show_easy_view: false,
+        show_pay_view: false,
     })
     //카드사 필터 및 다른 필터옵션들
     return {
         path, item
     }
 });
+
+export const usePayModFilterStore = defineStore('payModFilterStore', () => {
+    const pay_modules = ref<PayModule[]>([])
+    onMounted(() => {
+        getAllPayModules()
+    })
+    const getAllPayModules = () => {
+        axios.get('/api/v1/manager/merchandises/pay-modules/all')
+        .then(r => { Object.assign(pay_modules.value, r.data.content as PayModule[]) })
+        .catch(e => { console.log(e) })
+    }
+    return {
+        pay_modules,
+        getAllPayModules,
+    }
+})

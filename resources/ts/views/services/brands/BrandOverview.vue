@@ -41,7 +41,7 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>회사명</template>
                             <template #input>
-                                <VTextField v-model="props.item.company_nm" prepend-inner-icon="ph-buildings"
+                                <VTextField v-model="props.item.company_name" prepend-inner-icon="ph-buildings"
                                     placeholder="회사명을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
@@ -49,7 +49,7 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>대표자명</template>
                             <template #input>
-                                <VTextField id="nickNameHorizontalIcons" v-model="props.item.ceo_nm"
+                                <VTextField id="nickNameHorizontalIcons" v-model="props.item.ceo_name"
                                     prepend-inner-icon="tabler-user" placeholder="대표자명을 입력해주세요." persistent-placeholder
                                     :rules="[requiredValidator]" />
                             </template>

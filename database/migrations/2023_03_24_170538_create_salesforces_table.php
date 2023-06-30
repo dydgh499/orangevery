@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('user_name', 30)->index()->comment('ID');
             $table->string('user_pw', 100)->comment('PW');
             $table->string('nick_name', 30)->nullable()->comment('유저명');
+            $table->string('sales_name', 30)->nullable()->comment('영업점명');
             $table->string('addr', 150)->nullable()->comment('영업점 주소');
             $table->string('profile_img')->nullable()->comment('프로필 이미지');
             //
@@ -39,7 +40,10 @@ return new class extends Migration
             $table->tinyInteger('settle_tax_type')->default(0)->comment('정산 세율(0, 3.3, 10, 10+3.3)');
             $table->tinyInteger('settle_cycle')->default(0)->comment('정산 주기(1일, 일주일, 2주일, 한달(30일))');
             $table->tinyInteger('settle_day')->nullable()->comment('정산 요일(일,월,화,수,목~)');
-            $table->date('last_settle_dt')->nullable()->comment('마지막 정산일');            
+            $table->date('last_settle_dt')->nullable()->comment('마지막 정산일');
+            //
+            $table->boolean('view_type')->default(false)->comment('뷰 타입(0=간편보기, 1=상세보기)');
+            $table->string('note', 100)->nullable()->comment('메모');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });

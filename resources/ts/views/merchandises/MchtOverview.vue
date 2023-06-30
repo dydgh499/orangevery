@@ -28,7 +28,7 @@ watchEffect(() => {
     props.item.hold_fee = props.item.hold_fee.toFixed(3)
 })
 console.log(props.item.enabled)
-console.log(props.item.show_fee_easy_view)
+console.log(props.item.is_show_fee)
 </script>
 <template>
     <VRow class="match-height">
@@ -233,8 +233,8 @@ console.log(props.item.show_fee_easy_view)
                                 <CreateHalfVCol :mdl="3" :mdr="9">
                                     <template #name>가맹점 수수료율 노출</template>
                                     <template #input>
-                                        <BooleanRadio :radio="Boolean(props.item.show_fee_easy_view)"
-                                            @update:radio="props.item.show_fee_easy_view = $event">
+                                        <BooleanRadio :radio="Boolean(props.item.is_show_fee)"
+                                            @update:radio="props.item.is_show_fee = $event">
                                             <template #true>사용</template>
                                             <template #false>미사용</template>
                                         </BooleanRadio>

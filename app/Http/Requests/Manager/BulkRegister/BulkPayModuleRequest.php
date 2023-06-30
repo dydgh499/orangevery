@@ -16,28 +16,7 @@ class BulkPayModuleRequest extends FormRequest
             'pg_id',
             'ps_id',
             'settle_type',
-            'terminal_id',
             'module_type',
-            'api_key',
-            'sub_key',
-            'mid',
-            'tid',
-            'serial_num',
-            'comm_settle_fee',
-            'comm_settle_type',
-            'comm_calc_level',
-            'begin_dt',
-            'ship_out_dt',
-            'ship_out_stat',
-            'is_old_auth',
-            'pay_dupe_limit',
-            'abnormal_trans_limit',
-            'pay_year_limit',
-            'pay_month_limit',
-            'pay_day_limit',
-            'pay_disable_s_tm',
-            'pay_disable_e_tm',
-            'show_easy_view',
             'installment',
             'note',
         ];
@@ -56,46 +35,64 @@ class BulkPayModuleRequest extends FormRequest
     public function rules()
     {
         $sub = [
-            'mcht_id' => 'required',
-            'pg_id' => 'required',
-            'ps_id' => 'required',
-            'settle_type' => 'required',
-            'module_type' => 'required',
-            'is_old_auth' => 'required',
-            'pay_dupe_limit' => 'required',
-            'abnormal_trans_limit' => 'required',
-            'pay_year_limit' => 'required',
-            'pay_month_limit' => 'required',
-            'pay_day_limit' => 'required',
-            'show_easy_view' => 'required',
-            'installment' => 'required',
-            'note' => 'required',
+            '*' => 'required|array',
+            '*.mcht_id' => 'required',
+            '*.pg_id' => 'required',
+            '*.ps_id' => 'required',
+            '*.settle_type' => 'required',
+            '*.module_type' => 'required',
+            '*.installment' => 'required',
+            '*.begin_dt' => 'date|nullable',
+            '*.ship_out_dt' => 'date|nullable',
         ];
-        return $this->getRules($this->keys, $sub);
+        return $sub;
     }
-
-    public function attributes()
-    {
-        return $this->getAttributes($this->keys);
-    }
-
-    public function bodyParameters()
-    {
-        $params = $this->getDocsParameters($this->keys);
-        return $params;
-    }
+    
     public function data()
     {
-        $data = [];
-        for ($i=0; $i < count($this->keys) ; $i++)
-        {
-            $key = $this->keys[$i];
-            $data[$key] = $this->input($key, '');
+        $datas = [];
+        $_datas = $this->all();
+        for ($i=0; $i < count($_datas) ; $i++)
+        { 
+            $data = [];
+            for ($j=0; $j < count($this->keys) ; $j++) 
+            {
+                $key = $this->keys[$j];
+                $data[$key] = $_datas[$i][$key];
+            }
+            $data['api_key'] = isset($_datas[$i]['api_key']) ? $_datas[$i]['api_key'] : '';
+            $data['sub_key'] = isset($_datas[$i]['sub_key']) ? $_datas[$i]['sub_key'] : '';
+            $data['mid'] = isset($_datas[$i]['mid']) ? $_datas[$i]['mid'] : '';
+            $data['tid'] = isset($_datas[$i]['tid']) ? $_datas[$i]['tid'] : '';
+
+            if($data['module_type'] == 0)
+            {
+                $data['terminal_id'] = isset($_datas[$i]['terminal_id']) ? $_datas[$i]['terminal_id'] : 0;
+                $data['begin_dt'] = isset($_datas[$i]['begin_dt']) ? $_datas[$i]['begin_dt'] : null;
+                $data['ship_out_dt'] = isset($_datas[$i]['ship_out_dt']) ? $_datas[$i]['ship_out_dt'] : null;
+                $data['ship_out_stat'] = isset($_datas[$i]['ship_out_stat']) ? $_datas[$i]['ship_out_stat'] : null;
+                $data['comm_settle_fee'] = isset($_datas[$i]['comm_settle_fee']) ? $_datas[$i]['comm_settle_fee'] : 0;
+                $data['comm_settle_type'] = isset($_datas[$i]['comm_settle_type']) ? $_datas[$i]['comm_settle_type'] : 0;
+                $data['comm_calc_level'] = isset($_datas[$i]['comm_calc_level']) ? $_datas[$i]['comm_calc_level'] : 0;
+                $data['under_sales_amt'] = isset($_datas[$i]['under_sales_amt']) ? $_datas[$i]['under_sales_amt'] : 0;
+                $data['serial_num'] = isset($_datas[$i]['serial_num']) ? $_datas[$i]['serial_num'] : '';        
+            }
+            else if($data['module_type'] == 1 || $data['module_type'] == 5)
+            {
+                $data['is_old_auth'] = isset($_datas[$i]['is_old_auth']) ? $_datas[$i]['is_old_auth'] : 0;
+            }
+
+            $data['show_pay_view'] = isset($_datas[$i]['show_pay_view']) ? $_datas[$i]['show_pay_view'] : true;
+            $data['abnormal_trans_limit'] = isset($_datas[$i]['abnormal_trans_limit']) ? $_datas[$i]['abnormal_trans_limit'] : 0;
+            $data['pay_dupe_limit'] = isset($_datas[$i]['pay_dupe_limit']) ? $_datas[$i]['pay_dupe_limit'] : 0;
+            $data['pay_year_limit'] = isset($_datas[$i]['pay_year_limit']) ? $_datas[$i]['pay_year_limit'] : 0;
+            $data['pay_month_limit'] = isset($_datas[$i]['pay_month_limit']) ? $_datas[$i]['pay_month_limit'] : 0;
+            $data['pay_day_limit'] = isset($_datas[$i]['pay_day_limit']) ? $_datas[$i]['pay_day_limit'] : 0;
+
+            $data['pay_disable_s_tm'] = isset($_datas[$i]['pay_disable_s_tm']) ? $_datas[$i]['pay_disable_s_tm'] : null;
+            $data['pay_disable_e_tm'] = isset($_datas[$i]['pay_disable_e_tm']) ? $_datas[$i]['pay_disable_e_tm'] : null;
+            array_push($datas, $data);
         }
-        $data['brand_id'] = $this->user()->brand_id;
-        $data['terminal_id'] = $data['terminal_id'] == null ? 0 : $data['terminal_id'];
-        $data['begin_dt']    = $data['begin_dt'] == '' ? '1970-01-01' : $data['begin_dt'];
-        $data['ship_out_dt'] = $data['ship_out_dt'] == '' ? '1970-01-01' : $data['ship_out_dt'];
-        return $data;
+        return collect($datas);
     }
 }

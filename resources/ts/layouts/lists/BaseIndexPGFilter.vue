@@ -26,7 +26,7 @@ const filterPgs = computed(() => {
     <VRow>
         <VCol cols="12" sm="3" v-if="props.pg && user_info.level > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.pg_id"
-                :items="[{ id: null, pg_nm: '전체' }].concat(pgs)" label="PG사 선택" item-title="pg_nm" item-value="id" create />
+                :items="[{ id: null, pg_name: '전체' }].concat(pgs)" label="PG사 선택" item-title="pg_name" item-value="id" create />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.ps && user_info.level > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.ps_id"

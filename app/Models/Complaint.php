@@ -30,12 +30,12 @@ class Complaint extends Model
 
     public function pg()
     {
-        return $this->belongsTo(PaymentGateway::class, 'pg_id')->select(['id', 'pg_nm']);
+        return $this->belongsTo(PaymentGateway::class, 'pg_id')->select(['id', 'pg_name']);
     }
 
     public function getPgNameAttribute()
     {
-        return $this->pg ? $this->pg->pg_nm : null;
+        return $this->pg ? $this->pg->pg_name : null;
     }
     public function getMchtNameAttribute()
     {

@@ -6,7 +6,7 @@ import corp from '@corp'
     <!--
     <VRow>
         <VCol :cols="12" :md="6">
-            <span><b>회사명 </b>{{ corp.company_nm }}</span>
+            <span><b>회사명 </b>{{ corp.company_name }}</span>
             <span><b> 주소 </b>{{ corp.addr }}</span>
         </VCol>
         <VCol :cols="12" :md="6" class="text-md-end">

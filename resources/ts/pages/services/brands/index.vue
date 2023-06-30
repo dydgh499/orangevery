@@ -51,7 +51,7 @@ provide('exporter', exporter)
                             <span v-else-if="_key == `logo_img`" class="edit-link" @click="store.edit(item['id'])">
                                 <img :src="item.logo_img" style="max-height: 60px; padding: 0.3em;" />
                             </span>
-                            <span v-else-if="_key == `company_nm`" class="edit-link" @click="store.edit(item['id'])">
+                            <span v-else-if="_key == `company_name`" class="edit-link" @click="store.edit(item['id'])">
                                 {{ item[_key] }}
                             </span>
                             <span v-else-if="_key == `main_color`">

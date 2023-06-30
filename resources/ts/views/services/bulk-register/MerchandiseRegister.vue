@@ -6,8 +6,9 @@ import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { banks } from '@/views/users/useStore'
 import type { Merchandise } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import BanksExplainDialog from '@/layouts/dialogs/BanksExplainDialog.vue'
+import BanksExplainDialog from '@/views/services/bulk-register/BanksExplainDialog.vue'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
+import { useMchtFilterStore } from '@/views/merchandises/useStore'
 import { Registration } from '@/views/registration'
 
 interface extendMerchandise extends Merchandise {
@@ -17,6 +18,7 @@ interface extendMerchandise extends Merchandise {
 const { cus_filters } = useStore()
 const { sales } = useSalesFilterStore()
 const { head, headers, levels } = useRegisterStore()
+const { getAllMerchandises } = useMchtFilterStore()
 const { ExcelReader, isEmpty, openFilePicker, bulkRegister } = Registration()
 
 const snackbar = <any>(inject('snackbar'))
@@ -151,7 +153,9 @@ const validate = () => {
 }
 
 const mchtRegister = async () => {
-    bulkRegister('가맹점', 'merchandises', items.value)
+    const result = await bulkRegister('가맹점', 'merchandises', items.value)
+    if(result)
+        getAllMerchandises()
 }
 
 watchEffect(async () => {

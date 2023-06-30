@@ -14,16 +14,6 @@ const tabs = <Tab[]>([
     { icon: 'tabler-building-store', title: '가맹점 등록' },
     { icon: 'ic-outline-send-to-mobile', title: '결제모듈 등록' },
 ])
-const brand_id = ref<number>(corp.id) //brand_id
-const formatDownload = () => {
-
-}
-const formatUpload = () => {
-
-}
-const validate = () => {
-
-}
 
 </script>
 <template>

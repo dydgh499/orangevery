@@ -24,6 +24,6 @@ defineExpose({
     :timeout="3000"
     :color="color"
   >
-    {{ message }}
+  <span v-html="message"></span>
   </VSnackbar>
 </template>

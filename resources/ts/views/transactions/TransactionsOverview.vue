@@ -1,37 +1,25 @@
 <script lang="ts" setup>
-import { requiredValidator, lengthValidatorV2 } from '@validators'
-import type { Transaction, Merchandise, PayModule, PaySection, Options } from '@/views/types'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import corp from '@corp'
-import { axios } from '@axios'
-import { module_types, installments, payModFilter } from '@/views/merchandises/pay-modules/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { useMchtFilterStore } from '@/views/merchandises/useStore'
+import { usePayModFilterStore } from '@/views/merchandises/pay-modules/useStore'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { requiredValidator, lengthValidatorV2 } from '@validators'
+import type { Transaction, Merchandise, PayModule, PaySection, Options } from '@/views/types'
+import { module_types, installments, payModFilter } from '@/views/merchandises/pay-modules/useStore'
+import corp from '@corp'
 
 interface Props {
     item: Transaction,
 }
-const initMchtPayModInfo = () => {
-    axios.get('/api/v1/manager/merchandises/all')
-        .then(r => { merchandises.value = r.data.content as Merchandise[] })
-        .catch(e => { snackbar.value.show(e.response.data.message, 'error') })
-
-    axios.get('/api/v1/manager/merchandises/pay-modules/all')
-        .then(r => { pay_modules.value = r.data.content as PayModule[] })
-        .catch(e => { snackbar.value.show(e.response.data.message, 'error') })
-}
 
 const props = defineProps<Props>()
-const snackbar = <any>(inject('snackbar'))
-const { sales } = useSalesFilterStore()
 const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
-
+const { merchandises } = useMchtFilterStore()
+const { pay_modules } = usePayModFilterStore()
+const { sales } = useSalesFilterStore()
 const levels = corp.pv_options.auth.levels
-const merchandises = ref<Merchandise[]>([])
-const pay_modules = ref<PayModule[]>([])
-initMchtPayModInfo()
-
 
 const filterPgs = computed(() => {
     const filter = pss.filter(item => { return item.pg_id == props.item.pg_id })
@@ -40,13 +28,13 @@ const filterPgs = computed(() => {
     return filter
 })
 const filterPayMod = computed(() => {
-    const filter = pay_modules.value.filter((obj: PayModule) => { return obj.mcht_id == props.item.mcht_id })
-    props.item.pmod_id = payModFilter(pay_modules.value, filter, props.item.pmod_id as number)
+    const filter = pay_modules.filter((obj: PayModule) => { return obj.mcht_id == props.item.mcht_id })
+    props.item.pmod_id = payModFilter(pay_modules, filter, props.item.pmod_id as number)
     return filter
 })
 const filterInsts = computed(() => {
     if (props.item.pmod_id != null) {
-        const pmod = pay_modules.value.find((obj: PayModule) => obj.id == props.item.pmod_id)
+        const pmod = pay_modules.find((obj: PayModule) => obj.id == props.item.pmod_id)
         return installments.filter((obj: Options) => { return pmod && obj.id <= pmod.installment });
     }
     else
@@ -64,7 +52,7 @@ const initTrxAt = (is_trx: boolean) => {
 }
 const changePaymodEvent = () => {
     if (props.item.pmod_id != null) {
-        const pmod = pay_modules.value.find((obj: PayModule) => obj.id == props.item.pmod_id)
+        const pmod = pay_modules.find((obj: PayModule) => obj.id == props.item.pmod_id)
         if (pmod) {
             props.item.module_type = pmod.module_type
             props.item.terminal_id = pmod.terminal_id
@@ -79,7 +67,7 @@ const changePaymodEvent = () => {
 }
 const changeMchtEvent = () => {
     if (props.item.mcht_id != null) {
-        const mcht = merchandises.value.find((obj: Merchandise) => obj.id == props.item.mcht_id)
+        const mcht = merchandises.find((obj: Merchandise) => obj.id == props.item.mcht_id)
         if (mcht) {
             props.item.sales5_fee = mcht.sales5_fee
             props.item.sales4_fee = mcht.sales4_fee
@@ -321,7 +309,7 @@ const changeMchtEvent = () => {
                                     <template #name>PG사</template>
                                     <template #input>
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_id" :items="pgs"
-                                            prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_nm"
+                                            prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_name"
                                             item-value="id" single-line :rules=[requiredValidator] />
                                     </template>
                                 </CreateHalfVCol>

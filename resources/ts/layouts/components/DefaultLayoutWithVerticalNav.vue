@@ -23,9 +23,12 @@ import { config } from '@layouts/config'
 
 const alert = ref(null)
 const snackbar = ref(null)
+const loading = ref(null)
 
 provide('alert', alert)
 provide('snackbar', snackbar)
+provide('loading', loading)
+
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
 </script>

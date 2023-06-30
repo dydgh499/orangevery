@@ -115,7 +115,7 @@ class Transaction extends Model
             'id', 'mcht_name', 'user_name', 'nick_name',
             'addr', 'resident_num', 'business_num', 
             'use_saleslip_prov', 'use_saleslip_sell',
-            'show_fee_easy_view',
+            'is_show_fee',
         ]);
     }
     // mcht

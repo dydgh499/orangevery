@@ -37,7 +37,7 @@ class PayModuleRequest extends FormRequest
             'pay_day_limit',
             'pay_disable_s_tm',
             'pay_disable_e_tm',
-            'show_easy_view',
+            'show_pay_view',
             'installment',
             'note',
         ];
@@ -67,7 +67,7 @@ class PayModuleRequest extends FormRequest
             'pay_year_limit' => 'required',
             'pay_month_limit' => 'required',
             'pay_day_limit' => 'required',
-            'show_easy_view' => 'required',
+            'show_pay_view' => 'required',
             'installment' => 'required',
             'note' => 'required',
         ];

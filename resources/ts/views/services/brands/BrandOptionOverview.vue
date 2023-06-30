@@ -69,7 +69,7 @@ const props = defineProps<Props>()
                                 </VCol>
                                 <VCol cols="12" md="6">
                                     <VTextField prepend-inner-icon="tabler-user"
-                                        v-model="item.free.sales_slip.merchandise.rep_nm"
+                                        v-model="item.free.sales_slip.merchandise.rep_name"
                                         placeholder="대표자명을 입력해주세요." type="text" />
                                     <VTextField prepend-inner-icon="tabler-device-mobile"
                                         v-model="item.free.sales_slip.merchandise.phone_num"

@@ -16,6 +16,12 @@ axios.interceptors.response.use((response) => {
     visible.value = false
     return Promise.reject(error);
 });
+const show = (view:boolean) => {
+    visible.value = view;
+}
+defineExpose({
+    show
+});
 </script>
 <template>
     <VDialog

@@ -9,9 +9,9 @@ const addNewPG = () => {
     new_pay_gateways.push({
         id: 0,
         pg_type: null,
-        pg_nm: '',
-        rep_nm: '',
-        company_nm: '',
+        pg_name: '',
+        rep_name: '',
+        company_name: '',
         business_num: '',
         phone_num: '',
         addr:'',

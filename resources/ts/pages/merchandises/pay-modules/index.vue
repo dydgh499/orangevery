@@ -97,7 +97,7 @@ const metas = [
                                 {{ installments.find(inst => inst['id'] === item[_key])?.title }}
                             </span>
                             <span v-else-if="_key == 'pg_id'">
-                                {{ pgs.find(pg => pg['id'] === item[_key])?.pg_nm }}
+                                {{ pgs.find(pg => pg['id'] === item[_key])?.pg_name }}
                             </span>
                             <span v-else-if="_key == 'ps_id'">
                                 {{ pss.find(ps => ps['id'] === item[_key])?.name }}

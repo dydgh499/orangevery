@@ -20,7 +20,7 @@ onMounted(async () => {
 })
 
 function addNewPaymodule() {
-    new_pay_modules.push({
+    new_pay_modules.push(<PayModule>{
         id: 0,
         mcht_id: props.item.id,
         pg_id: 0,
@@ -38,20 +38,18 @@ function addNewPaymodule() {
         comm_settle_type: 0,
         comm_calc_level: 0,
         under_sales_amt: 0,
-        begin_dt: undefined,
-        ship_out_dt: undefined,
+        begin_dt: null,
+        ship_out_dt: null,
         ship_out_stat: false,
         is_old_auth: false,
-        use_saleslip_prov: false,
-        use_saleslip_sell: false,
         installment: 0,
         note: '비고'
     })
 }
 </script>
 <template>
-    <PayModuleCard v-for="(item, index) in pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :mchts='[]'/>
-    <PayModuleCard v-for="(item, index) in new_pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :mchts='[]'/>
+    <PayModuleCard v-for="(item, index) in pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false"/>
+    <PayModuleCard v-for="(item, index) in new_pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false"/>
     <!-- 👉 submit -->
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">

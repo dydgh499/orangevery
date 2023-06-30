@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Manager;
 use App\Models\PaymentModule;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\StoresTrait;
+
+use App\Http\Requests\Manager\BulkRegister\BulkPayModuleRequest;
 use App\Http\Requests\Manager\PayModuleRequest;
 use App\Http\Requests\Manager\IndexRequest;
-use App\Http\Traits\StoresTrait;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -180,8 +182,19 @@ class PaymentModuleController extends Controller
         return $this->get($request, $cols);
     }
     
-    public function bulkRegister(Request $request)
+    public function bulkRegister(BulkPayModuleRequest $request)
     {
-        
+        $current = date('Y-m-d H:i:s');
+        $brand_id = $request->user()->brand_id;
+        $datas = $request->data();
+
+        $payModules = $datas->map(function ($data) use($current, $brand_id) {
+            $data['brand_id'] = $brand_id;
+            $data['created_at'] = $current;
+            $data['updated_at'] = $current;
+            return $data;
+        })->toArray();
+        $res = $this->manyInsert($this->payModules, $payModules);
+        return $this->response($res ? 1 : 990);        
     }
 }
