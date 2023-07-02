@@ -12,7 +12,7 @@ import { AppContentLayoutNav, ContentWidth, FooterType, NavbarType } from '@layo
 export const { themeConfig, layoutConfig } = defineThemeConfig({
   app: {
     title: corp.name,
-    logo: h('img', { src: corp.logo_img, style: 'color: rgb(var(--v-global-theme-primary)); max-width: 38px; max-height: 40px; min-width: 10px; min-height: 10px;' }),
+    logo: h('img', { src: corp.logo_img, style: 'color: rgb(var(--v-global-theme-primary)); width: 45px;' }),
     contentWidth: ContentWidth.Boxed,
     contentLayoutNav: AppContentLayoutNav.Vertical,
     overlayNavFromBreakpoint: breakpointsVuetify.md + 16, // 16 for scro

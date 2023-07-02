@@ -10,11 +10,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
-use DateTimeInterface;
+use App\Http\Traits\Models\AttributeTrait;
 
 class Operator extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, AuthTrait;
+    use HasApiTokens, HasFactory, Notifiable, AuthTrait, AttributeTrait;
 
     protected   $table        = 'operators';
     protected   $primaryKey   = 'id';
@@ -26,9 +26,4 @@ class Operator extends Authenticatable
         'created_at' => "datetime:Y-m-d H:m:s",
         'updated_at' => "datetime:Y-m-d H:m:s",
     ];
-
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format("Y-m-d H:i:s");
-    }
 }

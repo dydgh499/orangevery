@@ -29,7 +29,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span></span>수기결제 사용여부</template>
                             <template #input>
-                                <BooleanRadio :radio="item.free.use_hand_pay" @update:radio="item.free.use_hand_pay = $event">
+                                <BooleanRadio :radio="props.item.free.use_hand_pay" @update:radio="props.item.free.use_hand_pay = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>
                                 </BooleanRadio>
@@ -40,7 +40,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span></span>인증결제 사용여부</template>
                             <template #input>
-                                <BooleanRadio :radio="item.free.use_auth_pay" @update:radio="item.free.use_auth_pay = $event">
+                                <BooleanRadio :radio="props.item.free.use_auth_pay" @update:radio="props.item.free.use_auth_pay = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>
                                 </BooleanRadio>
@@ -52,7 +52,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span></span>간편결제 사용여부</template>
                             <template #input>
-                                <BooleanRadio :radio="item.free.use_simple_pay" @update:radio="item.free.use_simple_pay = $event">
+                                <BooleanRadio :radio="props.item.free.use_simple_pay" @update:radio="props.item.free.use_simple_pay = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>
                                 </BooleanRadio>
@@ -68,20 +68,20 @@ const props = defineProps<Props>()
                                     </label>
                                 </VCol>
                                 <VCol cols="12" md="6">
+                                    <VTextField prepend-inner-icon="ph-buildings"
+                                        v-model="props.item.free.sales_slip.merchandise.comepany_name"
+                                        placeholder="회사명을 입력해주세요." type="text" class='pt-3' />
                                     <VTextField prepend-inner-icon="tabler-user"
-                                        v-model="item.free.sales_slip.merchandise.rep_name"
-                                        placeholder="대표자명을 입력해주세요." type="text" />
+                                        v-model="props.item.free.sales_slip.merchandise.rep_name"
+                                        placeholder="대표자명을 입력해주세요." type="text" class='pt-3' />
                                     <VTextField prepend-inner-icon="tabler-device-mobile"
-                                        v-model="item.free.sales_slip.merchandise.phone_num"
+                                        v-model="props.item.free.sales_slip.merchandise.phone_num"
                                         placeholder="연락처를 입력해주세요." type="text" class='pt-3' />
                                     <VTextField prepend-inner-icon="ic-outline-business-center"
-                                        v-model="item.free.sales_slip.merchandise.business_num"
+                                        v-model="props.item.free.sales_slip.merchandise.business_num"
                                         placeholder="사업자번호를 입력해주세요." type="text" class='pt-3' />
-                                    <VTextField prepend-inner-icon="carbon-identification"
-                                        v-model="item.free.sales_slip.merchandise.resident_num"
-                                        placeholder="주민등록번호를 입력해주세요." type="text" class='pt-3' />
                                     <VTextField prepend-inner-icon="tabler-map-pin"
-                                        v-model="item.free.sales_slip.merchandise.addr"
+                                        v-model="props.item.free.sales_slip.merchandise.addr"
                                         placeholder="주소를 입력해주세요." type="text" class='pt-3' />
                                 </VCol>
                             </VRow>
@@ -116,7 +116,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span></span>예금주 검증</template>
                             <template #input>
-                                <BooleanRadio :radio="item.paid.use_acct_verification" @update:radio="item.paid.use_acct_verification = $event">
+                                <BooleanRadio :radio="props.item.paid.use_acct_verification" @update:radio="props.item.paid.use_acct_verification = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>
                                 </BooleanRadio>
@@ -127,7 +127,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span></span>수기결제 직접입력(가맹점)</template>
                             <template #input>
-                                <BooleanRadio :radio="item.paid.use_hand_pay_drct" @update:radio="item.paid.use_hand_pay_drct = $event">
+                                <BooleanRadio :radio="props.item.paid.use_hand_pay_drct" @update:radio="props.item.paid.use_hand_pay_drct = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>
                                 </BooleanRadio>
@@ -138,7 +138,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span></span>수기결제 SMS</template>
                             <template #input>
-                                <BooleanRadio :radio="item.paid.use_hand_pay_sms" @update:radio="item.paid.use_hand_pay_sms = $event">
+                                <BooleanRadio :radio="props.item.paid.use_hand_pay_sms" @update:radio="props.item.paid.use_hand_pay_sms = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>
                                 </BooleanRadio>
@@ -149,7 +149,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span></span>실시간 결제모듈</template>
                             <template #input>
-                                <BooleanRadio :radio="item.paid.use_realtime_deposit">
+                                <BooleanRadio :radio="props.item.paid.use_realtime_deposit" @update:radio="props.item.paid.use_realtime_deposit = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>
                                 </BooleanRadio>
@@ -160,7 +160,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span></span>카드사 필터링</template>
                             <template #input>
-                                <BooleanRadio :radio="item.paid.use_issuer_filter" @update:radio="item.paid.use_issuer_filter = $event">
+                                <BooleanRadio :radio="props.item.paid.use_issuer_filter" @update:radio="props.item.paid.use_issuer_filter = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>
                                 </BooleanRadio>
@@ -171,7 +171,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span></span>중복결제 검증</template>
                             <template #input>
-                                <BooleanRadio :radio="item.paid.use_dup_pay_validation" @update:radio="item.paid.use_dup_pay_validation = $event">
+                                <BooleanRadio :radio="props.item.paid.use_dup_pay_validation" @update:radio="props.item.paid.use_dup_pay_validation = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>
                                 </BooleanRadio>
@@ -182,7 +182,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span></span>결제금지시간 지정</template>
                             <template #input>
-                                <BooleanRadio :radio="item.paid.use_forb_pay_time" @update:radio="item.paid.use_forb_pay_time = $event">
+                                <BooleanRadio :radio="props.item.paid.use_forb_pay_time" @update:radio="props.item.paid.use_forb_pay_time = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>
                                 </BooleanRadio>
@@ -193,7 +193,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span></span>결제한도 지정</template>
                             <template #input>
-                                <BooleanRadio :radio="item.paid.use_pay_limit" @update:radio="item.paid.use_pay_limit = $event">
+                                <BooleanRadio :radio="props.item.paid.use_pay_limit" @update:radio="props.item.paid.use_pay_limit = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>
                                 </BooleanRadio>
@@ -204,7 +204,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span></span>가맹점 전산 사용 ON/OFF</template>
                             <template #input>
-                                <BooleanRadio :radio="item.paid.subsidiary_use_control" @update:radio="item.paid.subsidiary_use_control = $event">
+                                <BooleanRadio :radio="props.item.paid.subsidiary_use_control" @update:radio="props.item.paid.subsidiary_use_control = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>
                                 </BooleanRadio>

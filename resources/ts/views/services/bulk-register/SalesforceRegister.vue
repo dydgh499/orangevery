@@ -26,47 +26,8 @@ const excel = ref()
 const saleses = ref<Salesforce[]>([])
 const is_clear = ref<boolean>(false)
 const banksExplain = ref()
+const levels = corp.pv_options.auth.levels
 
-const getLevelsExplain = () => {
-    let content = ""
-    const levels = corp.pv_options.auth.levels
-    if (levels.sales5_use)
-        content += '<b>' + levels.sales5_name + '</b>' + "= 30, "
-    if (levels.sales4_use)
-        content += '<b>' + levels.sales4_name + '</b>' + "= 25, "
-    if (levels.sales3_use)
-        content += '<b>' + levels.sales3_name + '</b>' + "= 20, "
-    if (levels.sales2_use)
-        content += '<b>' + levels.sales2_name + '</b>' + "= 17, "
-    if (levels.sales1_use)
-        content += '<b>' + levels.sales1_name + '</b>' + "= 15, "
-    if (levels.sales0_use)
-        content += '<b>' + levels.sales0_name + '</b>' + "= 13, "
-    return content
-}
-const getCyclesExplain = () => {
-    let content = ""
-    for (let i = 0; i < all_cycles.length; i++) {
-        content += '<b>' + all_cycles[i].title + '</b>' + "= " + all_cycles[i].id + ", "
-    }
-    return content
-}
-const getDaysExplain = () => {
-    let content = ""
-    for (let i = 0; i < all_days.length; i++) {
-        const day_id = all_days[i].id == null ? -1 : +all_days[i].id;
-        content += '<b>' + all_days[i].title + '</b>' + "= " + day_id + ", "
-    }
-    return content
-
-}
-const getTaxTypesExplain = () => {
-    let content = ""
-    for (let i = 0; i < tax_types.length; i++) {
-        content += '<b>' + tax_types[i].title + '</b>' + "= " + tax_types[i].id + ", "
-    }
-    return content
-}
 
 const validate = () => {
     for (let i = 0; i < saleses.value.length; i++) {
@@ -160,7 +121,7 @@ const validate = () => {
 
 const salesRegister = async () => {
     const result = await bulkRegister('영업점', 'salesforces', saleses.value)
-    if(result)
+    if (result)
         await classification()
 }
 watchEffect(async () => {
@@ -183,36 +144,67 @@ watchEffect(async () => {
                     엑셀 작성시 입력하실 내용에 매칭되는 숫자를 작성해주세요.
                 </VCol>
                 <VCol>
-                    컬럼 우측의 <b>O표시는 필수 입력값, X표시는 옵션 입력값</b>을 의미합니다.                    
+                    컬럼 우측의 <b>O표시는 필수 입력값, X표시는 옵션 입력값</b>을 의미합니다.
                 </VCol>
             </VCol>
             <CreateHalfVCol :mdl="6" :mdr="6">
                 <template #name>
                     <VCol>
-                        <b>등급 -> </b><span v-html="getLevelsExplain()"></span>
+                        <b>등급
+                            <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales5_use">
+                                {{ levels.sales5_name }} = 30
+                            </VChip>
+                            <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales4_use">
+                                {{ levels.sales4_name }} = 25
+                            </VChip>
+                            <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales3_use">
+                                {{ levels.sales3_name }} = 20
+                            </VChip>
+                            <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales2_use">
+                                {{ levels.sales2_name }} = 17
+                            </VChip>
+                            <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales1_use">
+                                {{ levels.sales1_name }} = 15
+                            </VChip>
+                            <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales1_use">
+                                {{ levels.sales1_name }} = 13
+                            </VChip>
+                        </b>
                     </VCol>
                     <VCol>
-                        <b>정산세율 -> </b><span v-html="getTaxTypesExplain()"></span>
+                        <b>정산세율
+                            <VChip color="primary" style="margin: 0.5em;" v-for="(tax_type, key) in tax_types" :key="key">
+                                {{ tax_type.title }} = {{ tax_type.id }}
+                            </VChip>
+                        </b>
                     </VCol>
                     <VCol>
-                        <b>정산주기 -> </b><span v-html="getCyclesExplain()"></span>
+                        <b>정산주기
+                            <VChip color="primary" style="margin: 0.5em;" v-for="(all_cycle, key) in all_cycles" :key="key">
+                                {{ all_cycle.title }} = {{ all_cycle.id }}
+                            </VChip>
+                        </b>
                     </VCol>
                     <VCol>
-                        <b>정산일 -> </b><span v-html="getDaysExplain()"></span>
+                        <b>정산일
+                            <VChip color="primary" style="margin: 0.5em;" v-for="(all_day, key) in all_days" :key="key">
+                                {{ all_day.title }} = {{ all_day.id != null ? all_day.id : -1 }}
+                            </VChip>
+                        </b>
                     </VCol>
                     <VCol>
-                        <b>입금은행명/은행코드 테이블 -> </b>
-                        <VBtn variant="tonal" @click="banksExplain.show()">
+                        <b>입금은행명/은행코드 테이블 </b>
+                        <VBtn size="small" color="success" variant="tonal" @click="banksExplain.show()" style="margin: 0.5em;">
                             상세정보 확인
                         </VBtn>
                     </VCol>
                 </template>
                 <template #input>
                     <VCol>
-                        <b>사업자등록번호 입력시 주의사항 -></b><span>정확한 사업자 번호 입력(예:123-13-12345)</span>
+                        <b>사업자등록번호 입력 주의사항: </b><span>정확한 사업자 번호 입력(예:123-13-12345)</span>
                     </VCol>
                     <VCol>
-                        <b>주민등록번호 입력시 주의사항 -></b><span>13자리 정수 입력(예:8001017654321)</span>
+                        <b>주민등록번호 입력 주의사항: </b><span>13자리 정수 입력(예:8001017654321)</span>
                     </VCol>
                 </template>
             </CreateHalfVCol>

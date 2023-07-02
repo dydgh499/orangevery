@@ -20,27 +20,27 @@ class CreateTransactionsTable extends Migration
             $table->float('dev_fee', 6, 4)->default(0)->comment('개발사 거래 수수료');
             $table->integer('dev_settle_id')->nullable()->comment('개발사 정산 ID');
             //
-            $table->integer('sales5_id')->default(0)->comment('지사 수수료');
+            $table->integer('sales5_id')->nullable()->comment('지사');
             $table->float('sales5_fee', 6, 4)->default(0)->comment('지사 수수료');
             $table->integer('sales5_settle_id')->nullable()->comment('지사 정산 ID');
             //
-            $table->integer('sales4_id')->default(0)->comment('하위 지사 수수료');
+            $table->integer('sales4_id')->nullable()->comment('하위 지사');
             $table->float('sales4_fee', 6, 4)->default(0)->comment('하위 지사 수수료');
             $table->integer('sales4_settle_id')->nullable()->comment('하위 지사 정산 ID');
             //
-            $table->integer('sales3_id')->default(0)->comment('총판 수수료');
+            $table->integer('sales3_id')->nullable()->comment('총판');
             $table->float('sales3_fee', 6, 4)->default(0)->comment('총판 수수료');
             $table->integer('sales3_settle_id')->nullable()->comment('총판 정산 ID');
             //
-            $table->integer('sales2_id')->default(0)->comment('하위 총판 수수료');
+            $table->integer('sales2_id')->nullable()->comment('하위 총판');
             $table->float('sales2_fee', 6, 4)->default(0)->comment('하위 총판 수수료');
             $table->integer('sales2_settle_id')->nullable()->comment('하위 총판 정산 ID');
             //
-            $table->integer('sales1_id')->default(0)->comment('대리점 수수료');
+            $table->integer('sales1_id')->nullable()->comment('대리점');
             $table->float('sales1_fee', 6, 4)->default(0)->comment('대리점 수수료');
             $table->integer('sales1_settle_id')->nullable()->comment('대리점 정산 ID');
             //
-            $table->integer('sales0_id')->default(0)->comment('하위 대리점 수수료');
+            $table->integer('sales0_id')->nullable()->comment('하위 대리점');
             $table->float('sales0_fee', 6, 4)->default(0)->comment('하위 대리점 거래 수수료');
             $table->integer('sales0_settle_id')->nullable()->comment('하위 대리점 정산 ID');
             //
@@ -70,13 +70,13 @@ class CreateTransactionsTable extends Migration
             $table->string('trx_id', 100)->index()->default('')->comment('거래번호');
             $table->string('ori_trx_id', 100)->nullable()->comment('원거래번호');
             $table->string('card_num', 100)->comment('거래 카드번호');
-            $table->string('issuer')->nullable()->comment('발급사');
-            $table->string('acquirer')->nullable()->comment('매입사');
+            $table->string('issuer', 20)->nullable()->comment('발급사');
+            $table->string('acquirer', 20)->nullable()->comment('매입사');
             $table->string('appr_num', 9)->comment('승인번호');
             $table->tinyInteger('installment')->default(0)->comment('할부');
-            $table->string('buyer_name')->nullable()->comment('구매자명');
-            $table->string('buyer_phone')->nullable()->comment('구매자 휴대폰번호');
-            $table->string('item_name')->nullable()->comment('상품명');
+            $table->string('buyer_name', 50)->nullable()->comment('구매자명');
+            $table->string('buyer_phone', 20)->nullable()->comment('구매자 휴대폰번호');
+            $table->string('item_name', 100)->nullable()->comment('상품명');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
 

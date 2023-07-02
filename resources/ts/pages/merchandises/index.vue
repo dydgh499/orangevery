@@ -4,6 +4,7 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
+import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { user_info } from '@axios'
 
 const { store, head, exporter } = useSearchStore()
@@ -51,10 +52,19 @@ const metas = [
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="가맹점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="가맹점" :is_range_date="true">
+        <BaseIndexView placeholder="가맹점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="가맹점"
+            :is_range_date="true">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true"
-                    :sales="true" />
+                    :sales="true">
+                    <template #extra_right>
+                        <VCol cols="12" sm="3">
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"
+                                :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 선택" item-title="title"
+                                item-value="id" />
+                        </VCol>
+                    </template>
+                </BaseIndexFilterCard>
             </template>
             <template #headers>
                 <tr>

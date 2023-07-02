@@ -39,6 +39,7 @@ class CreateBrandsTable extends Migration
             $table->tinyInteger('deposit_day')->default(1)->comment('입금일');
             $table->integer('deposit_amount')->default(0)->comment('입금액');
             $table->datetime('last_dpst_at')->default('1970-01-01')->comment('마지막 입금일');
+            $table->boolean('is_transfer')->default(false)->comment('전산 이전 여부');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });

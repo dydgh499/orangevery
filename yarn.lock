@@ -754,6 +754,11 @@
   "resolved" "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   "version" "0.0.29"
 
+"@types/lodash@^4.14.195":
+  "integrity" "sha512-Hwx9EUgdwf2GLarOjQp5ZH8ZmblzcbTBC2wtQWNKARBSxM9ezRIAUpeDTgoQRAFB0+8CNWXVA9+MaSOzOF3nPg=="
+  "resolved" "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.195.tgz"
+  "version" "4.14.195"
+
 "@types/mdast@^3.0.0":
   "integrity" "sha512-W864tg/Osz1+9f4lrGTZpCSO5/z4608eUp19tbozkq2HJK6i3z1kT0H9tlADXuYIb1YYOBByU4Jsqkk75q48qA=="
   "resolved" "https://registry.npmjs.org/@types/mdast/-/mdast-3.0.10.tgz"
@@ -5740,6 +5745,11 @@
   "integrity" "sha512-QSggYjeFv/L4jFSBQpX8NzrAvX0B+Ha6nDgxkTG8tEXxYOOTwKI4phRLe+B4f+REnkmg7hgPY24R0cixZJyXBg=="
   "resolved" "https://registry.npmjs.org/vue-chartjs/-/vue-chartjs-4.1.2.tgz"
   "version" "4.1.2"
+
+"vue-credit-card-validation@^1.0.5":
+  "integrity" "sha512-FtoIreB5H+MPzY54E087yt2XoH5D66mO5gTVZrBLbw6AT1gYfapv61kZdMKKQxD7IBzNZ+wfDDOG6rZVBGfHcg=="
+  "resolved" "https://registry.npmjs.org/vue-credit-card-validation/-/vue-credit-card-validation-1.0.5.tgz"
+  "version" "1.0.5"
 
 "vue-demi@*":
   "integrity" "sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A=="

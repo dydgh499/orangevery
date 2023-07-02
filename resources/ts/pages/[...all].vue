@@ -10,14 +10,14 @@ const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
 <template>
   <div class="misc-wrapper">
     <ErrorHeader
-      error-title="Page Not Found :("
-      error-description="We couldn't find the page you are looking for."
+      error-title="페이지를 찾을 수 없어요 :("
+      error-description="삭제 되거나 변경된 페이지 입니다."
     />
     <VBtn
       to="/"
       class="mb-12"
     >
-      Back to Home
+      홈으로 이동
     </VBtn>
 
     <!-- 👉 Image -->

@@ -130,6 +130,7 @@ export const useUpdateStore = defineStore('mchtUpdateStore', () => {
         use_saleslip_prov: false,
         use_saleslip_sell: false,
         is_show_fee: false,
+        note: ''
     })
     return {
         path, item

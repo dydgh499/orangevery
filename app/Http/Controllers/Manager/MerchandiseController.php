@@ -102,12 +102,12 @@ class MerchandiseController extends Controller
             {
                 $user = $request->data();
                 // 수수료율 정보는 추가시에만 적용되어야함
-                $user['sales0_id'] = $request->input('sales0_id', 0);
-                $user['sales1_id'] = $request->input('sales1_id', 0);
-                $user['sales2_id'] = $request->input('sales2_id', 0);
-                $user['sales3_id'] = $request->input('sales3_id', 0);
-                $user['sales4_id'] = $request->input('sales4_id', 0);
-                $user['sales5_id'] = $request->input('sales5_id', 0);
+                $user['sales0_id'] = $request->input('sales0_id', null);
+                $user['sales1_id'] = $request->input('sales1_id', null);
+                $user['sales2_id'] = $request->input('sales2_id', null);
+                $user['sales3_id'] = $request->input('sales3_id', null);
+                $user['sales4_id'] = $request->input('sales4_id', null);
+                $user['sales5_id'] = $request->input('sales5_id', null);
                 $user['hold_fee']  = $request->input('hold_fee', 0)/100;
                 $user['trx_fee']    = $request->input('trx_fee', 0)/100;
                 $user['sales0_fee'] = $request->input('sales0_fee', 0)/100;
@@ -210,7 +210,9 @@ class MerchandiseController extends Controller
             'merchandises.sales1_id', 'merchandises.sales1_fee',
             'merchandises.sales0_id', 'merchandises.sales0_fee',
             'merchandises.hold_fee', 'merchandises.trx_fee',
-            'merchandises.custom_id',
+            'merchandises.custom_id', 'merchandises.addr',
+            'merchandises.business_num', 'merchandises.resident_num',
+            'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell',
         ];
         return $this->get($request, $cols);
     }

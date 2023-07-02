@@ -30,6 +30,9 @@ const props = defineProps<Props>();
                 <VCardText style="padding: 1em;">
                     <BaseIndexPGFilter :pg="props.pg" :ps="props.ps" :pay_cond="props.pay_cond" :terminal="props.terminal"
                         :cus_filter="props.cus_filter">
+                        <template #extra_right>
+                            <slot name="extra_right"></slot>
+                        </template>
                     </BaseIndexPGFilter>
                 </VCardText>
             </VCol>

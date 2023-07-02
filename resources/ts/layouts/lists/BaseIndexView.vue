@@ -81,6 +81,7 @@ onMounted(() => {
 .edit-link {
   color: rgb(var(--v-global-theme-primary)) !important;
   cursor: pointer;
+  text-decoration: underline;
 }
 
 .edit-link:hover {

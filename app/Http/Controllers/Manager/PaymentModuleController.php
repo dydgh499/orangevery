@@ -173,12 +173,19 @@ class PaymentModuleController extends Controller
             'page' => 1,
             'page_size' => 99999999,
         ]);
-        $cols = [
-            'payment_modules.id', 'payment_modules.mcht_id', 'payment_modules.installment',
-            'payment_modules.mid', 'payment_modules.tid', 'payment_modules.pg_id', 'payment_modules.ps_id',
-            'payment_modules.module_type', 'payment_modules.settle_fee', 'payment_modules.settle_type',
-            'payment_modules.terminal_id', 'payment_modules.note',
-        ];
+        if($request->user()->tokenCan(13))
+        {
+            $cols = ['payment_modules.*'];
+        }
+        else
+        {
+            $cols = [
+                'payment_modules.id', 'payment_modules.mcht_id', 'payment_modules.installment',
+                'payment_modules.mid', 'payment_modules.tid', 'payment_modules.pg_id', 'payment_modules.ps_id',
+                'payment_modules.module_type', 'payment_modules.settle_fee', 'payment_modules.settle_type',
+                'payment_modules.terminal_id', 'payment_modules.note', 'payment_modules.is_old_auth', 'payment_modules.installment', 
+            ];    
+        }
         return $this->get($request, $cols);
     }
     
@@ -196,5 +203,24 @@ class PaymentModuleController extends Controller
         })->toArray();
         $res = $this->manyInsert($this->payModules, $payModules);
         return $this->response($res ? 1 : 990);        
+    }
+
+    public function salesSlip(Request $request, $id)
+    {
+        $cols = [
+            'merchandises.addr',
+            'merchandises.business_num',
+            'merchandises.resident_num',
+            'merchandises.mcht_name',
+            'merchandises.nick_name',
+            'merchandises.is_show_fee',
+            'merchandises.use_saleslip_prov',
+            'merchandises.use_saleslip_sell',
+        ];
+        $mcht = $this->payModules
+            ->join('merchandises', 'merchandises.id', '=', 'payment_modules.mcht_id')
+            ->where('payment_modules.id', $id)
+            ->first($cols);
+        return $this->response(0, $mcht);        
     }
 }

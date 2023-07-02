@@ -48,10 +48,10 @@ const filterPgs = computed(() => {
                 :items="[{ id: null, name: '전체' }].concat(cus_filters)" label="커스텀 필터" item-title="name" item-value="id"
                 create />
         </VCol>
+        <slot name="extra_right"></slot>
         <VCol cols="12" sm="3">
             <VSelect v-model="store.params.page_size" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50, 100, 200, 500, 1000]" label="표시 개수" />
+                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" />
         </VCol>
-        <slot name="extra_right_col"></slot>
     </VRow>
 </template>

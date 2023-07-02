@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->foreignId('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
-            $table->integer('pg_id')->default(0)->comment('PG사 id');
-            $table->integer('ps_id')->default(0)->comment('PG사 구간 id');
+            $table->integer('pg_id')->nullable()->comment('PG사 id');
+            $table->integer('ps_id')->nullable()->comment('PG사 구간 id');
             $table->integer('settle_type')->default(0)->comment('정산일(D+1, D+2 ..)');
             $table->smallInteger('settle_fee')->default(0)->comment('입금 수수료');
             $table->tinyInteger('module_type')->default(0)->comment('모듈 타입(0=단말기, 1=수기, 2=인증, 3=간편, 4=실시간 이체, 5=비인증 단말기)');
@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('tid', 50)->default('')->comment('tid');
             $table->string('serial_num', 50)->default('')->comment('serial num');
             //-------------------------- comm
-            $table->integer('terminal_id')->default(0)->comment('단말기 종류');
+            $table->integer('terminal_id')->nullable()->comment('단말기 종류');
             $table->smallInteger('comm_settle_fee')->default(0)->comment('통신비 입금 수수료');
             $table->tinyInteger('comm_settle_type')->default(0)->comment('통신비 정산일');
             $table->tinyInteger('comm_calc_level')->default(0)->comment('정산주체(sales id), -1=본인, 125=개발사, 128=본사');

@@ -21,6 +21,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:11, name:'더페이원', rep_name:'이일호', company_name:'(주)더페이원', business_num:'860-87-00645', phone_num:'1670-1915', addr:'서울 송파구 송파대로 201 B동 1621~2호 (문정동, 테라타워2)'},
         {id:12, name:'이지피쥐', rep_name:'김도형', company_name:'주식회사 이지피쥐', business_num:'635-81-00256', phone_num:'02-1522-3434', addr:'서울 강남구 도산대로 157 (신사동) 신웅타워2 15층'},
         {id:13, name:'CM페이', rep_name:'', company_name:'씨엠컴퍼니 주식회사', business_num:'', phone_num:'', addr:''},
+        {id:14, name: '키움페이', rep_name: '성백진', company_name: '(주)다우데이타', business_num: '220-81-01733', phone_num: '1588-5984', addr: '서울시 마포구 독막로 311 재화스퀘어 5층'},
     ]
 
     const settle_types = [

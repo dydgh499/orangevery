@@ -88,6 +88,7 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
         'id' : 'NO.',
         'level' : '등급',
         'user_name' : '영업점 ID',
+        'sales_name': '영업점 상호',
         'settle_cycle' : '정산 주기',
         'settle_day' : '정산 요일',
         'settle_tax_type': '정산 세율',
@@ -162,7 +163,6 @@ export const useUpdateStore = defineStore('salesUpdateStore', () => {
         phone_num: '',
         resident_num: '',
         business_num: '',
-        sector: '',
         passbook_img: null,
         id_img: null,
         contract_img: null,
@@ -178,7 +178,10 @@ export const useUpdateStore = defineStore('salesUpdateStore', () => {
         bsin_lic_file: undefined,
         level: 13,
         settle_cycle: 0,
-        settle_day: 0
+        settle_day: 0,
+        sales_name: '',
+        view_type: false,
+        note: '',
     })
     return {
         path, item

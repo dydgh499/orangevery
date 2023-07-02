@@ -17,7 +17,6 @@ const { cus_filters } = useStore()
 
 const levels = corp.pv_options.auth.levels
 watchEffect(() => {
-    console.log(props.item)
     props.item.sales0_fee = props.item.sales0_fee.toFixed(3)
     props.item.sales1_fee = props.item.sales1_fee.toFixed(3)
     props.item.sales2_fee = props.item.sales2_fee.toFixed(3)
@@ -27,8 +26,6 @@ watchEffect(() => {
     props.item.trx_fee = props.item.trx_fee.toFixed(3)
     props.item.hold_fee = props.item.hold_fee.toFixed(3)
 })
-console.log(props.item.enabled)
-console.log(props.item.is_show_fee)
 </script>
 <template>
     <VRow class="match-height">
@@ -39,7 +36,7 @@ console.log(props.item.is_show_fee)
                     <VCardTitle>가맹점정보</VCardTitle>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>상호</template>
+                            <template #name>가맹점 상호</template>
                             <template #input>
                                 <VTextField v-model="props.item.mcht_name" prepend-inner-icon="tabler-building-store"
                                     placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
@@ -78,8 +75,8 @@ console.log(props.item.is_show_fee)
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales5_id"
-                                        :items="[{ id: null, user_name: '선택안함' }].concat(sales[5].value)"
-                                        prepend-inner-icon="tabler-man" label="지사 선택" item-title="user_name" item-value="id"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[5].value)"
+                                        prepend-inner-icon="tabler-man" label="지사 선택" item-title="sales_name" item-value="id"
                                         create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
@@ -98,8 +95,8 @@ console.log(props.item.is_show_fee)
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales4_id"
-                                        :items="[{ id: null, user_name: '선택안함' }].concat(sales[4].value)"
-                                        prepend-inner-icon="tabler-man" label="하위지사 선택" item-title="user_name"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[4].value)"
+                                        prepend-inner-icon="tabler-man" label="하위지사 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
@@ -118,8 +115,8 @@ console.log(props.item.is_show_fee)
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales3_id"
-                                        :items="[{ id: null, user_name: '선택안함' }].concat(sales[3].value)"
-                                        prepend-inner-icon="tabler-man" label="총판 선택" item-title="user_name" item-value="id"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[3].value)"
+                                        prepend-inner-icon="tabler-man" label="총판 선택" item-title="sales_name" item-value="id"
                                         create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
@@ -138,8 +135,8 @@ console.log(props.item.is_show_fee)
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales2_id"
-                                        :items="[{ id: null, user_name: '선택안함' }].concat(sales[2].value)"
-                                        prepend-inner-icon="tabler-man" label="하위총판 선택" item-title="user_name"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[2].value)"
+                                        prepend-inner-icon="tabler-man" label="하위총판 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
@@ -158,8 +155,8 @@ console.log(props.item.is_show_fee)
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales1_id"
-                                        :items="[{ id: null, user_name: '선택안함' }].concat(sales[1].value)"
-                                        prepend-inner-icon="tabler-man" label="대리점 선택" item-title="user_name"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[1].value)"
+                                        prepend-inner-icon="tabler-man" label="대리점 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
@@ -178,8 +175,8 @@ console.log(props.item.is_show_fee)
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales0_id"
-                                        :items="[{ id: null, user_name: '선택안함' }].concat(sales[0].value)"
-                                        prepend-inner-icon="tabler-man" label="하위대리점 선택" item-title="user_name"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[0].value)"
+                                        prepend-inner-icon="tabler-man" label="하위대리점 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
@@ -190,7 +187,10 @@ console.log(props.item.is_show_fee)
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
-                        <VDivider />
+                        <VCol>
+                            <VTextarea v-model="props.item.note" counter label="메모사항"
+                                prepend-inner-icon="twemoji-spiral-notepad"  maxlength="100"/>
+                        </VCol>
                     </VRow>
                 </VCardItem>
             </VCard>

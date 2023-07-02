@@ -82,7 +82,7 @@ defineExpose({
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>거래상태</template>
-                        <template #input>{{ trans?.is_cancel ? "승인" : '취소' }}</template>
+                        <template #input>{{ trans?.is_cancel ? "취소" : '승인' }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>거래일시</template>

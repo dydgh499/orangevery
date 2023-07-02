@@ -54,6 +54,5 @@ class PaymentSection
             $this->payvery = $this->getPayvery($payvery_table, $brand_id, $this->current_time);
             $this->paywell_to_payvery = $this->connect($this->payvery, $this->paywell);
         }
-        return $res;
     }
 }

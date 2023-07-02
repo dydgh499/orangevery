@@ -8,9 +8,9 @@
         public $use_simple_pay = false;
         public $sales_slip = [
             'merchandise' => [
+                'comepany_name' => '',
                 'rep_name' => '',
                 'phone_num' => '',
-                'resident_num' => '',
                 'business_num' => '',
                 'addr' => '',
             ]
@@ -89,16 +89,6 @@
             $this->free = new FreeOption(isset($json['free']) ? $json['free'] : []);
             $this->paid = new PaidOption(isset($json['paid']) ? $json['paid'] : []);
             $this->auth = new AuthOption(isset($json['auth']) ? $json['auth'] : []);
-        }
-    }
-
-    class ThemeCSS 
-    {
-        public $main_color = '#6E34C5';
-        public function __construct(string $theme_css)
-        {
-            $json = json_decode($theme_css, true);  
-            $this->main_color = isset($json['main_color']) ? $json['main_color'] : '#6E34C5';
         }
     }
 ?>

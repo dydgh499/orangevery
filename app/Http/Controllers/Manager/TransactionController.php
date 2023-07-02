@@ -174,6 +174,40 @@ class TransactionController extends Controller
                 
             return $this->extendResponse(990, $msg);
         }
-        
+    }
+
+    public function handPay(Request $request)
+    {
+        $getYYMM = function($mmyy) {
+            if(mb_strlen($mmyy, 'utf-8') == 4)
+            {
+                $first 	= substr($mmyy, 0, 2);
+                $sec 	= substr($mmyy, 2, 2);
+                return $sec.$first;
+            }
+            else
+                return '';
+        };
+
+        $data = $request->all();
+        $data['yymm'] = $getYYMM($data['yymm']);
+
+        $res = post(env('NOTI_URL', 'http://localhost:81/api/v2/pay/hand'), $data);
+        if($res['body']['result_cd'] === "0000")
+            return $this->response(1, $res['body']);
+        else
+            return $this->extendResponse(1999, $res['body']['result_msg']);
+      
+    }
+
+    public function payCancel(Request $request)
+    {
+        $data = $request->all();
+        $res = post(env('NOTI_URL', 'http://localhost:81/api/v2/pay/cancel'), $data);
+        if($res['body']['result_cd'] === "0000")
+            return $this->response(1, $res['body']);
+        else
+            return $this->extendResponse(1999, $res['body']['result_msg']);
+
     }
 }

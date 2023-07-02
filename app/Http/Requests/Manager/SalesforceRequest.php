@@ -13,6 +13,8 @@ class SalesforceRequest extends FormRequest
         $this->keys = [
             'user_name',
             'nick_name',
+            'sales_name',
+            'view_type',
             'level',
             'resident_num',
             'business_num',
@@ -43,6 +45,8 @@ class SalesforceRequest extends FormRequest
         $sub = [
             'user_name' => 'required',
             'nick_name' => 'required',
+            'sales_name' => 'required',
+            'view_type' => 'required',
             'level'     => 'required',
             'resident_num' => 'required',
             'business_num' => 'required',
@@ -56,6 +60,14 @@ class SalesforceRequest extends FormRequest
     public function attributes()
     {
         return $this->getAttributes($this->keys);
+    }
+
+    protected function prepareForValidation()
+    {
+        if ($this->has('view_type')) 
+        {
+            $this->merge(['view_type' => $this->convertToBoolean($this->input('view_type'))]);
+        }
     }
 
     public function bodyParameters()

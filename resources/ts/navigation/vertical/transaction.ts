@@ -24,11 +24,6 @@ const getAbilitiesMenu = computed(() => {
             to: 'transactions-simple',
         })
     }
-    payments.push({
-        title: 'Cancel payment',
-        to: 'transactions-cancel',
-    })
-    
     if (user_info.value.level > 10) {
         settles.push({
             title: 'settle',

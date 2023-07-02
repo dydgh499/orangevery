@@ -74,6 +74,12 @@ watchEffect(() => {
                                         </VTooltip>
                                     </VBtn>
                                 </div>
+                                <br>
+                                <br>
+                                <br>
+                                <VCol>
+                                    <b>좌우상하 공백을 제거한 후 이미지들 등록해주세요.</b>
+                                </VCol>
                             </VCol>
                         </VCol>
                         <VCol md="6">

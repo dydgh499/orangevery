@@ -16,9 +16,9 @@ export interface Options {
     id: number,
     title: string,
 }
-
-export interface ErrorResponse {
-    message: string,
+export interface StringOptions {
+    id: string,
+    title: string,
 }
 
 export interface CustomFilter {
@@ -95,7 +95,6 @@ export interface UserPropertie extends BasePropertie, Bank, Contract {
     addr: string,
     resident_num: string,
     business_num: string,
-    sector: string,
 }
 
 export interface MerchandisePropertie {
@@ -127,14 +126,17 @@ export interface MerchandisePropertie {
     use_saleslip_prov: boolean,
     use_saleslip_sell: boolean,
     is_show_fee: boolean,
+    note: string,
 }
 
 export interface SalesforcePropertie {
-    sector: string,
+    sales_name: string,
     settle_tax_type: number,
     settle_cycle: number,
     settle_day: number | null,
     level: number,
+    view_type: boolean,
+    note: string,
 }
 
 export interface Merchandise extends MerchandisePropertie, UserPropertie {}
@@ -164,9 +166,9 @@ export interface PayModule {
     comm_settle_type: number,
     comm_calc_level: number,
     under_sales_amt: number,
-    begin_dt: date,
-    ship_out_dt: date,
-    ship_out_stat: boolean,
+    begin_dt: date | null,
+    ship_out_dt: date | null,
+    ship_out_stat: number | null,
     is_old_auth: boolean,    
     installment: number,
     pay_dupe_limit:number,
@@ -174,8 +176,8 @@ export interface PayModule {
     pay_year_limit: number,
     pay_month_limit: number,
     pay_day_limit: number,
-    pay_disable_s_tm: date,
-    pay_disable_e_tm: date,
+    pay_disable_s_tm: date | null,
+    pay_disable_e_tm: date | null,
     show_pay_view: boolean,
     note: string,
 }
@@ -211,9 +213,9 @@ interface FreeOption {
     use_simple_pay: boolean,
     sales_slip: {
         merchandise: {
+            comepany_name: string,
             rep_name: string,
             phone_num: string,
-            resident_num: string,
             business_num: string,
             addr: string,
         }
@@ -282,6 +284,7 @@ export interface Brand extends Contract {
         paid: PaidOption,
         auth: AuthOption,
     },
+    is_transfer: boolean,
     deposit_day: number,
     deposit_amount: number,    
     last_dpst_at: datetime,
@@ -381,11 +384,11 @@ export interface SalesSlip extends Transaction{
     mcht: {
        addr: string, 
        business_num: string, 
-       id: string, 
+       resident_num: string, 
+       id: number, 
        mcht_name: string, 
        nick_name: string, 
-       resident_num: string, 
-       is_show_fee: string, 
+       is_show_fee: boolean, 
        use_saleslip_prov: boolean, 
        use_saleslip_sell: boolean, 
        user_name: string, 
@@ -557,4 +560,39 @@ export interface NotiSendHistory {
     message: string,
     send_url: string,
     created_at: datetime,
+}
+
+export interface BasePay {
+    pmod_id: number,
+    amount: number,
+    item_name: string,
+    buyer_name: string,
+    installment: number,
+    phone: string,
+    only: boolean,
+    temp?: string,
+}
+
+export interface HandPay extends BasePay{
+    is_old_auth: boolean,
+    card_num: string,
+    yymm: string,
+    auth_num?: string,
+    card_pw?: string,
+}
+
+export interface AuthPay extends BasePay{
+    return_url: string,
+}
+
+export interface SimplehPay extends BasePay {
+    route: string,
+    return_url: string,
+}
+export interface CancelPay {
+    pmod_id: number,
+    amount: number,
+    trx_id: string,
+    only: boolean,
+    temp?: string,
 }

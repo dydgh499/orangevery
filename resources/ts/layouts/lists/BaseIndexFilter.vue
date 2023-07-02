@@ -62,7 +62,7 @@ else if(props.is_range_date == false)
             <VCardText style="padding: 1em;">
                 <VRow no-gutters justify="end">
                     <VCol>
-                        <div class="d-inline-flex align-center flex-wrap gap-4 justify-content-evenly float-right">
+                        <div class="d-inline-flex align-center flex-wrap gap-4 float-right">
                             <VTextField v-model="store.search" :placeholder="`${props.placeholder}`" density="compact"
                                 prepend-inner-icon="tabler:search" class="search-input" />
                             <VBtn prepend-icon="tabler:search" @click="store.setTable()">
@@ -85,10 +85,6 @@ else if(props.is_range_date == false)
 <style lang="scss">
 .search-input {
   min-inline-size: 13.35rem;
-}
-
-.justify-content-evenly {
-  justify-content: space-evenly;
 }
 
 @media (min-width: 2399px) {

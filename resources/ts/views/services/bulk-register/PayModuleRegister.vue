@@ -20,6 +20,14 @@ const { head, headers } = useRegisterStore()
 const { merchandises } = useMchtFilterStore()
 const { getAllPayModules } = usePayModFilterStore()
 const all_levels = allLevels()
+const auth_types: Options[] = [
+        { id: 0, title: '비인증',},
+        { id: 1, title: '구인증',},
+    ]
+const view_types: Options[] = [
+        { id: 0, title: '숨김',},
+        { id: 1, title: '노출',},
+    ]
 const { ExcelReader, isEmpty, openFilePicker, bulkRegister } = Registration()
 
 const snackbar = <any>(inject('snackbar'))
@@ -31,53 +39,6 @@ const is_clear = ref<boolean>(false)
 const settleTypeExplain = ref()
 const pgExplain = ref()
 
-const getTerminalsExplain = () => {
-    let content = ""
-    if (terminals.length == 0)
-        return '<b>"운영 관리 - PG사 관리"에서 단말기 타입 추가 후 입력 가능합니다.</b>'
-    else {
-        for (let i = 0; i < terminals.length; i++) {
-            content += '<b>' + terminals[i].name + '</b>' + "= " + terminals[i].id + ", "
-        }
-        return content
-    }
-}
-const getPayModulesExplain = () => {
-    let content = ""
-    for (let i = 0; i < module_types.length; i++) {
-        content += '<b>' + module_types[i].title + '</b>' + "= " + module_types[i].id + ", "
-    }
-    return content
-}
-const getOldAuthExplain = () => {
-    const auth_types: Options[] = [
-        { id: 0, title: '비인증',},
-        { id: 1, title: '구인증',},
-    ]
-    let content = ""
-    for (let i = 0; i < auth_types.length; i++) {
-        content += '<b>' + auth_types[i].title + '</b>' + "= " + auth_types[i].id + ", "
-    }
-    return content
-}
-const getEasyViewExplain = () => {
-    const auth_types: Options[] = [
-        { id: 0, title: '숨김',},
-        { id: 1, title: '노출',},
-    ]
-    let content = ""
-    for (let i = 0; i < auth_types.length; i++) {
-        content += '<b>' + auth_types[i].title + '</b>' + "= " + auth_types[i].id + ", "
-    }
-    return content
-}
-const getTerminalSettleLevelExplain = () => {
-    let content = ""
-    for (let i = 0; i < all_levels.length; i++) {
-        content += '<b>' + all_levels[i].title + '</b>' + "= " + all_levels[i].id + ", "
-    }
-    return content    
-}
 const validate = () => {
     for (let i = 0; i < items.value.length; i++) {
         const pg_id = pgs.find(item => item.id === items.value[i].pg_id)
@@ -171,42 +132,64 @@ watchEffect(async () => {
                 </VCol>
             </VCol>
             <CreateHalfVCol :mdl="6" :mdr="6">
-                <template #name>
+                <template #name>                    
                     <VCol>
-                        <b>PG사/구간명 -> </b>
-                        <VBtn variant="tonal" @click="pgExplain.show()">
+                        <b>가맹점/통신비 정산타입 </b>
+                        <VBtn size="small" color="success" variant="tonal" @click="settleTypeExplain.show()" style="margin: 0.5em;">
                             상세정보 확인
                         </VBtn>
-                    </VCol>
+                    </VCol>                    
                     <VCol>
-                        <b>가맹점/통신비 정산타입 -> </b>
-                        <VBtn variant="tonal" @click="settleTypeExplain.show()">
+                        <b>통신비 정산주체
+                            <VChip color="primary" style="margin: 0.5em;" v-for="(level, key) in all_levels" :key="key">
+                                {{ level.title }} = {{ level.id }}
+                            </VChip>
+                        </b>
+                    </VCol>    
+                    <VCol>
+                        <b>PG사/구간명 </b>
+                        <VBtn size="small" color="success" variant="tonal" @click="pgExplain.show()" style="margin: 0.5em;">
                             상세정보 확인
                         </VBtn>
-                    </VCol>
+                    </VCol>               
                     <VCol>
-                        <b>단말기 종류 -> </b><span v-html="getTerminalsExplain()"></span>
-                    </VCol>
+                        <b>결제모듈 타입
+                            <VChip color="primary" style="margin: 0.5em;" v-for="(module, key) in module_types" :key="key">
+                                {{ module.title }} = {{ module.id }}
+                            </VChip>
+                        </b>
+                    </VCol>                    
                     <VCol>
-                        <b>통신비 정산주체 -> </b><span v-html="getTerminalSettleLevelExplain()"></span>
-                    </VCol>
-                    
-                    <VCol>
-                        <b>결제모듈 타입 -> </b><span v-html="getPayModulesExplain()"></span>
-                    </VCol>
+                        <b>단말기 종류
+                            <VChip color="primary" style="margin: 0.5em;" v-for="(terminal, key) in terminals" :key="key">
+                                {{ terminal.name }} = {{ terminal.id }}
+                            </VChip>
+                            <span v-if="terminals.length == 0">
+                                "운영 관리 - PG사 관리"에서 커스텀 필터 추가 후 입력 가능합니다.
+                            </span>
+                        </b>
+                    </VCol> 
                 </template>
                 <template #input>
                     <VCol>
-                        <b>할부 한도 입력시 주의사항 -></b><span>숫자만 입력(예: 0,2,3,4...11)</span>
+                        <b>수기결제 여부
+                            <VChip color="primary" style="margin: 0.5em;" v-for="(auth, key) in auth_types" :key="key">
+                                {{ auth.title }} = {{ auth.id }}
+                            </VChip>
+                        </b>
+                    </VCol>
+                    <VCol>                        
+                        <b>결제창 노출여부(기본:노출) ->
+                            <VChip color="primary" style="margin: 0.5em;" v-for="(view, key) in view_types" :key="key">
+                                {{ view.title }} = {{ view.id }}
+                            </VChip>
+                        </b>
+                    </VCol>
+                    <VCol>
+                        <b>할부 한도 입력시 주의사항: </b><span>숫자만 입력(예: 0,2,3,4...11)</span>
                     </VCol>
                     <VCol v-if="corp.pv_options.paid.use_pay_limit">
-                        <b>결제 한도 입력시 주의사항 -></b><span>만원 단위로 숫자만 입력</span>
-                    </VCol>
-                    <VCol>
-                        <b>수기결제 여부 -> </b><span v-html="getOldAuthExplain()"></span>
-                    </VCol>
-                    <VCol>
-                        <b>결제창 노출여부(기본:노출) -></b><span v-html="getEasyViewExplain()"></span>
+                        <b>결제 한도 입력시 주의사항: </b><span>만원 단위로 숫자만 입력(예: 100만원=100)</span>
                     </VCol>
                 </template>
             </CreateHalfVCol>

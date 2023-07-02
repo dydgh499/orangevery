@@ -101,7 +101,6 @@ class TransactionFactory extends Factory
             $data['cxl_tm'] = date('H:i:s');
             $data['ori_trx_id'] = $trx->trx_id;
 
-            $data['amount'] = $trx->amount * -1;
             $data['trx_dt'] = $trx->trx_dt;
             $data['trx_tm'] = $trx->trx_tm;
             $data['ord_num']    = $trx->ord_num;
@@ -114,6 +113,7 @@ class TransactionFactory extends Factory
             $data['buyer_name'] = $trx->buyer_name;
             $data['buyer_phone'] = $trx->buyer_phone;
             $data['item_name']  = $trx->item_name;
+            $data['amount'] = $trx->amount * -1;
             $data['mcht_settle_fee']  = $data['mcht_settle_fee'] * -1;
         }
         else

@@ -7,17 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-use DateTimeInterface;
 use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 
 use App\Models\Transaction;
 use App\Models\Logs\SettleDeductSalesforce;
 use App\Models\Logs\SettleHistorySalesforce;
+use App\Http\Traits\Models\AttributeTrait;
 
 class Salesforce extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, AuthTrait;
+    use HasApiTokens, HasFactory, Notifiable, AuthTrait, AttributeTrait;
 
     protected   $table          = 'salesforces';
     protected   $primaryKey     = 'id';
@@ -25,11 +25,6 @@ class Salesforce extends Authenticatable
     protected   $hidden = [
         'user_pw',
     ];
-
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format("Y-m-d H:i:s");
-    }
 
     public function transactions()
     {

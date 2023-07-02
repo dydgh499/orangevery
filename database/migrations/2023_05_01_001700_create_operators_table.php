@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('user_name', 30)->index()->comment('ID');
             $table->string('user_pw', 100)->comment('PW');
             $table->string('nick_name', 30)->nullable()->comment('유저 닉네임');
-            $table->string('phone_num')->nullable()->comment('휴대폰 번호');
+            $table->string('phone_num',20)->nullable()->comment('휴대폰 번호');
             $table->tinyInteger('level')->default(0)->comment('유저 레벨');
             $table->string('profile_img')->nullable()->comment('프로필 이미지');
             $table->timestamps();

@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-use Carbon\Carbon;
-use DateTimeInterface;
 use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Salesforce;
@@ -15,10 +13,11 @@ use App\Models\Transaction;
 use App\Models\Logs\SettleDeductMerchandise;
 use App\Models\Logs\SettleHistoryMerchandise;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Http\Traits\Models\AttributeTrait;
 
 class Merchandise extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, AuthTrait;
+    use HasApiTokens, HasFactory, Notifiable, AuthTrait, AttributeTrait;
 
     protected   $table      = 'merchandises';
     protected   $primaryKey = 'id';
@@ -27,12 +26,6 @@ class Merchandise extends Authenticatable
     protected   $guarded    = [];    
     protected   $feeFormatting = false;
 
-    
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format("Y-m-d H:i:s");
-    }
-    
     public function transactions()
     {
         $query = $this->hasMany(Transaction::class, 'mcht_id')

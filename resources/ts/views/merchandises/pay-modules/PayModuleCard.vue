@@ -4,7 +4,7 @@ import { useRequestStore } from '@/views/request'
 import { useMchtFilterStore } from '@/views/merchandises/useStore'
 import { requiredValidator, nullValidator } from '@validators'
 import type { PayModule } from '@/views/types'
-import { module_types, installments, abnormal_trans_limits } from '@/views/merchandises/pay-modules/useStore'
+import { module_types, installments, abnormal_trans_limits, shipOutStats } from '@/views/merchandises/pay-modules/useStore'
 import { allLevels } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
@@ -234,9 +234,7 @@ const filterPgs = computed(() => {
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>정산일</template>
                                 <template #input>
-                                    <VTextField v-model="props.item.comm_settle_type"
-                                        :rules="[v => (v >= 0 && v <= 31) || '0~31 사이의 값을 입력해주세요']" label="정산일 입력"
-                                        suffix="일" />
+                                    <VTextField v-model="props.item.comm_settle_type" label="정산일 입력" suffix="일" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -287,11 +285,17 @@ const filterPgs = computed(() => {
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>출고상태</template>
                                 <template #input>
-                                    <BooleanRadio :radio="Boolean(props.item.ship_out_stat)"
-                                        @update:radio="props.item.ship_out_stat = $event">
-                                        <template #true>출고</template>
-                                        <template #false>입고</template>
-                                    </BooleanRadio>
+                                    <VRadioGroup
+                                        v-model="props.item.ship_out_stat"
+                                        inline
+                                    >
+                                        <VRadio
+                                            v-for="(shipOutStat, key) in shipOutStats"
+                                            :key="key"
+                                            :label="shipOutStat.title"
+                                            :value="shipOutStat.id"
+                                        />
+                                    </VRadioGroup>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

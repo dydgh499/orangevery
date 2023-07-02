@@ -73,13 +73,14 @@ const handleNavScroll = (evt: Event) => {
     ]"
   >
     <!-- 👉 Header -->
-    <div class="nav-header">
+    <div class="nav-header" style="width: 100%;">
       <slot name="nav-header">
         <RouterLink
           to="/"
           class="app-logo d-flex align-center gap-x-3 app-title-wrapper"
+          style="width: 15.5em; margin-left: 0.5em;"
         >
-            <VNodeRenderer :nodes="config.app.logo" />
+            <VNodeRenderer :nodes="config.app.logo" style="width: 45px;"/>
 
           <Transition name="vertical-nav-app-title">
             <h1
@@ -114,7 +115,7 @@ const handleNavScroll = (evt: Event) => {
           <Component
             :is="config.app.iconRenderer || 'div'"
             class="header-action"
-            v-bind="config.icons.close"
+            v-bind="config.icons.verticalNavUnPinned"
             @click="toggleIsOverlayNavActive(false)"
           />
         </template>
@@ -215,6 +216,15 @@ const handleNavScroll = (evt: Event) => {
       }
     }
   }
+}
+
+.mobile-header-arrow {
+  position: absolute;
+  border: 1px dashed rgba(145, 158, 171, 20%);
+  border-radius: 50%;
+  background-color: rgb(var(--v-theme-surface));
+  font-size: 1.5em;
+  margin-inline-start: 11.9em;
 }
 
 .header-arrow {

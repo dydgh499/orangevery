@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\PaymentGateway;
 use App\Models\Merchandise;
-use DateTimeInterface;
+use App\Http\Traits\Models\AttributeTrait;
 
 class Complaint extends Model
 {
-    use HasFactory;
+    use HasFactory, AttributeTrait;
     protected   $table      = 'complaints';
     protected   $primaryKey = 'id';
     protected   $appends    = ['mcht_name', 'pg_name'];
@@ -19,10 +19,7 @@ class Complaint extends Model
         'mcht', 
         'pg',
     ];
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format("Y-m-d H:i:s");
-    }
+    
     public function mcht()
     {
         return $this->belongsTo(Merchandise::class, 'mcht_id')->select(['id', 'mcht_name']);

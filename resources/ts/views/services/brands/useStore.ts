@@ -81,9 +81,9 @@ export const useUpdateStore = defineStore('brandUpdateStore', () => {
                 use_simple_pay: false,
                 sales_slip: {
                     merchandise: {
+                        comepany_name: '',
                         rep_name: '',
                         phone_num: '',
-                        resident_num: '',
                         business_num: '',
                         addr: ''
                     }
@@ -128,7 +128,8 @@ export const useUpdateStore = defineStore('brandUpdateStore', () => {
         id_file: undefined,
         passbook_file: undefined,
         contract_file: undefined,
-        bsin_lic_file: undefined
+        bsin_lic_file: undefined,
+        is_transfer: false
     })
 
 

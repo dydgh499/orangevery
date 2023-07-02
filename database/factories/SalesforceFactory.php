@@ -47,6 +47,7 @@ class SalesforceFactory extends Factory
         return [
             'brand_id'  => 1,
             'user_name' => $name,
+            'sales_name'=> $name,
             'nick_name' => $name,
             'user_pw'   => Hash::make('1234'), // password
             'level'     => $level,

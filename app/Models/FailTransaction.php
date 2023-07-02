@@ -4,14 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use DateTimeInterface;
+use App\Http\Traits\Models\AttributeTrait;
 
 class FailTransaction extends Model
 {
-    use HasFactory;
+    use HasFactory, AttributeTrait;
     
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format("Y-m-d H:i:s");
-    }
 }

@@ -22,7 +22,12 @@
   </head>
   <style>
     #load-custom {
-      max-height: 80px;
+      width: 80px;
+      height: 80px;
+    }
+    #load-default {
+      width: 80px;
+      height: 80px;
     }
     .hidden {
       display: none;

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import { businessNumValidator, lengthValidatorV2, requiredValidator, nullValidator } from '@validators'
+import { businessNumValidator, lengthValidatorV2, requiredValidator, nullValidator, integerValidator } from '@validators'
 import type { UserPropertie } from '@/views/types'
 import FileInput from '@/layouts/utils/FileInput.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
@@ -74,9 +74,9 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>휴대폰번호</template>
                             <template #input>
-                                <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="number"
+                                <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="text"
                                     prepend-inner-icon="tabler-device-mobile" placeholder="숫자만 입력해주세요."
-                                    persistent-placeholder />
+                                    persistent-placeholder :rules="[integerValidator]"/>
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 사업자 번호 -->
@@ -84,7 +84,7 @@ watchEffect(() => {
                             <template #name>사업자번호</template>
                             <template #input>
                                 <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
-                                    prepend-inner-icon="ic-outline-business-center" placeholder="사업자번호 입력"
+                                    prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
                                     persistent-placeholder
                                     :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
                             </template>
@@ -94,7 +94,7 @@ watchEffect(() => {
                             <template #name>주민등록번호</template>
                             <template #input>
                                 <VTextField id="residentFirstHorizontalIcons" v-model="props.item.resident_num" type="text"
-                                    counter prepend-inner-icon="carbon-identification" placeholder="앞자리 입력"
+                                    counter prepend-inner-icon="carbon-identification" placeholder="8001017654321"
                                     persistent-placeholder
                                     :rules="[requiredValidator, lengthValidatorV2(props.item.resident_num, 13)]"
                                     maxlength="13" />

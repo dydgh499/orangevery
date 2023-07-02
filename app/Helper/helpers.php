@@ -47,8 +47,7 @@
                 $res = Http::withHeaders($headers)->timeout(60)->get($url, $params);
 
             $code = $res->status();
-            if($code == 200)
-                $body = $res->json();
+            $body = $res->json();            
         }
         catch(ConnectionException $ex)
         {
@@ -83,21 +82,21 @@
     {
         $brand = Redis::get($request->dns);
         if($brand == null)
-        {
-            $brand = Brand::where('dns', $request->dns)->first();
-            if($brand)
-            {
-                $res = Redis::set($request->dns, json_encode($brand));
-                return json_decode(json_encode($brand), true);
-            }
-            else
-            {
-                $logs = ['ip'=>$request->ip(), 'method'=>$request->method(),'input'=>$request->all()];
-                return null;
-            }
-        }
+            return setBrandByDNS($request->dns);
         else
             return json_decode($brand, true);
+    }
+
+    function setBrandByDNS($dns)
+    {
+        $brand = Brand::where('dns', $dns)->first();
+        if($brand)
+        {
+            $res = Redis::set($dns, json_encode($brand));
+            return json_decode(json_encode($brand), true);
+        }
+        else
+            return null;
     }
 
     function globalAuthFilter($query, $request, $parent_table='')
@@ -133,6 +132,8 @@
             $query = $query->where($table.'settle_type', $request->settle_type);
         if($request->terminal_id)
             $query = $query->where($table.'terminal_id', $request->terminal_id);
+        if($request->module_type)
+            $query = $query->where($table.'module_type', $request->module_type);            
         return $query;
     }
 
@@ -196,7 +197,7 @@
 
     function globalGetSalesByIds($sales_ids)
     {        
-        $salesforces = Salesforce::whereIn('id', $sales_ids)->get(['id', 'nick_name', 'settle_tax_type']);
+        $salesforces = Salesforce::whereIn('id', $sales_ids)->get(['id', 'sales_name', 'settle_tax_type']);
         return globalGetIndexingByCollection($salesforces);
     }
 
@@ -214,13 +215,18 @@
         $sales = 'sales'.$idx;
         if(isset($sales_index_by_ids[$sales_id]))
         {
-            $content[$sales] = $sales_index_by_ids[$sales_id];
-            $content[$sales."_name"] = $sales_index_by_ids[$sales_id]->nick_name;
+            if(isset($sales_index_by_ids[$sales_id]))
+            {
+                $content[$sales] = $sales_index_by_ids[$sales_id];
+                $content[$sales."_name"] = $sales_index_by_ids[$sales_id]->sales_name;    
+            }
+            else
+                $content[$sales."_name"] = '삭제된 영업자';
         }
         else
         {
             $content[$sales] = null;
-            $content[$sales."_name"] = '삭제된 영업자';
+            $content[$sales."_name"] = '';
         }
         return $content;
     }

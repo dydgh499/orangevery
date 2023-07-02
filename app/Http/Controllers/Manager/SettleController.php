@@ -118,7 +118,7 @@ class SettleController extends Controller
     public function salesforces(IndexRequest $request)
     {
         $validated = $request->validate(['dt'=>'required|date']);
-        $cols   = array_merge($this->cols, ['nick_name','level', 'settle_cycle', 'settle_day', 'settle_tax_type', 'last_settle_dt']);
+        $cols   = array_merge($this->cols, ['sales_name', 'level', 'settle_cycle', 'settle_day', 'settle_tax_type', 'last_settle_dt']);
         $search = $request->input('search', '');
         $level  = $request->level;
         $date   = $request->dt;
@@ -126,7 +126,7 @@ class SettleController extends Controller
         $query = $this->salesforces
             ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
-            ->where('user_name', 'like', "%$search%")
+            ->where('sales_name', 'like', "%$search%")
             ->where('level', $level);
 
         if(isSalesforce($request))

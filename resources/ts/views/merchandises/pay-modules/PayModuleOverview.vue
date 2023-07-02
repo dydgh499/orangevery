@@ -40,10 +40,18 @@ function addNewPaymodule() {
         under_sales_amt: 0,
         begin_dt: null,
         ship_out_dt: null,
-        ship_out_stat: false,
+        ship_out_stat: null,
         is_old_auth: false,
         installment: 0,
-        note: '비고'
+        pay_dupe_limit:0,
+        abnormal_trans_limit: 0,
+        pay_year_limit: 0,
+        pay_month_limit: 0,
+        pay_day_limit: 0,
+        pay_disable_s_tm: null,
+        pay_disable_e_tm: null,
+        show_pay_view: true,
+        note: '비고',
     })
 }
 </script>

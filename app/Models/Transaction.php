@@ -4,18 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use DateTimeInterface;
 
 use App\Models\Salesforce;
 use App\Models\Merchandise;
 use App\Models\Classification;
 use App\Models\PaymentSection;
+use App\Http\Traits\Models\AttributeTrait;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Transaction extends Model
 {
-    use HasFactory;
+    use HasFactory, AttributeTrait;
     protected   $table      = 'transactions';
     protected   $primaryKey = 'id';
     protected   $appends    = [
@@ -102,11 +102,6 @@ class Transaction extends Model
             return round($this->amount * $this->hold_fee);
         else
             return 0;        
-    }
-
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format("Y-m-d H:i:s");
     }
     
     public function mcht()

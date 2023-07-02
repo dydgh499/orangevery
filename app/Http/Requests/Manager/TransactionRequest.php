@@ -58,12 +58,12 @@ class TransactionRequest extends FormRequest
     {
         $sub = [
             'mcht_id' => 'required',
-            'sales5_id' => 'required', 'sales5_fee' => 'required',
-            'sales4_id' => 'required', 'sales4_fee' => 'required',
-            'sales3_id' => 'required', 'sales3_fee' => 'required',
-            'sales2_id' => 'required', 'sales2_fee' => 'required',
-            'sales1_id' => 'required', 'sales1_fee' => 'required',
-            'sales0_id' => 'required', 'sales0_fee' => 'required',
+            'sales5_fee' => 'required',
+            'sales4_fee' => 'required',
+            'sales3_fee' => 'required',
+            'sales2_fee' => 'required',
+            'sales1_fee' => 'required',
+            'sales0_fee' => 'required',
             'custom_id' => 'required', 'mcht_fee' => 'required', 'hold_fee' => 'required',
             'module_type' => 'required',
             'pg_id' => 'required', 'pmod_id' => 'required', 'ps_id' => 'required', 'ps_fee' => 'required',
@@ -97,6 +97,15 @@ class TransactionRequest extends FormRequest
             $key = $this->keys[$i];
             $data[$key] = $this->input($key, '');
         }
+        $data['amount'] = abs($data['amount']);
+        $data['mcht_settle_fee']  = abs($data['mcht_settle_fee']);
+        
+        $user['sales0_id'] = $this->input('sales0_id', null);
+        $data['sales1_id'] = $this->input('sales1_id', null);
+        $data['sales2_id'] = $this->input('sales2_id', null);
+        $data['sales3_id'] = $this->input('sales3_id', null);
+        $data['sales4_id'] = $this->input('sales4_id', null);
+        $data['sales5_id'] = $this->input('sales5_id', null);
         $data['ps_fee']  = $this->input('ps_fee', 0)/100;
         $data['hold_fee']  = $this->input('hold_fee', 0)/100;
         $data['mcht_fee']    = $this->input('mcht_fee', 0)/100;
@@ -112,6 +121,12 @@ class TransactionRequest extends FormRequest
         $data['cxl_tm'] = $data['cxl_tm'] == '' ? null : $data['cxl_tm'];
         $data['is_cancel'] = $data['cxl_dt'] == null ? false : true;
         $data['ori_trx_id'] = $data['cxl_dt'] == null ? null : $data['trx_id'];
+
+        if($data['is_cancel'])
+        {
+            $data['amount'] *= -1;
+            $data['mcht_settle_fee'] *= -1;
+        }
         return $data;
     }
 }

@@ -39,9 +39,9 @@ class Merchandise
                 ->where('DNS_PK', $before_brand_id)
                 ->orderby('user.PK', 'DESC')
                 ->get();
-        $privacys = $this->getPaywellPrivacy($paywell, $mchts);
+        $privacys = $this->getPaywellPrivacy($paywell, $mchts, 'USER_PK');
         foreach($mchts as $mcht) {
-            $privacy = $privacys->first(function($item) use ($mcht) {return $item->USER_PK == $mcht->PK;});
+            $privacy = $privacys->first(function($item) use ($mcht) {return $item->USER_PK == $mcht->USER_PK;});
             $item = [
                 'brand_id'  => $brand_id,
                 'user_name' => $mcht->ID,
@@ -56,25 +56,25 @@ class Merchandise
                 'acct_num'  => $privacy ? $privacy->ACCT_NUM : null,
                 'acct_name'  => $privacy ? $privacy->ACCT_NM : null,
                 'acct_bank_name'  => $privacy ? $privacy->ACCT_BANK : null,
-                'acct_bank_code'  => $privacy ? $privacy->ACCT_BANK_CD : null,
+                'acct_bank_code'  => $privacy ? sprintf("%03d", (int)$privacy->ACCT_BANK_CD) : null,
                 'passbook_img'  => null,
-                'id_img'  => $privacy ? $privacy->ID_NUM_IMG : null,
-                'contract_img'  => $privacy ? $privacy->CTRT_IMG : null,
-                'bsin_lic_img'  => $privacy ? $privacy->BUSINESS_IMG : null,
-                'sales1_id' => $mcht->AGCY_PK ? $this->paywell_to_payvery_sales[$mcht->AGCY_PK] : 0,
-                'sales2_id' => $mcht->DIST_PK ? $this->paywell_to_payvery_sales[$mcht->DIST_PK] : 0,
-                'sales3_id' => $mcht->BRANCH_PK ? $this->paywell_to_payvery_sales[$mcht->BRANCH_PK] : 0,
-                'sales4_id' => $mcht->SLSFC_PK ? $this->paywell_to_payvery_sales[$mcht->SLSFC_PK] : 0,
+                'id_img'  => $privacy ? 'https://paywell.pe.kr'.$privacy->ID_NUM_IMG : null,
+                'contract_img'  => $privacy ? 'https://paywell.pe.kr'.$privacy->CTRT_IMG : null,
+                'bsin_lic_img'  => $privacy ? 'https://paywell.pe.kr'.$privacy->BUSINESS_IMG : null,
+                'sales1_id' => $mcht->AGCY_PK ? $this->paywell_to_payvery_sales[$mcht->AGCY_PK] : null,
+                'sales2_id' => $mcht->DIST_PK ? $this->paywell_to_payvery_sales[$mcht->DIST_PK] : null,
+                'sales3_id' => $mcht->BRANCH_PK ? $this->paywell_to_payvery_sales[$mcht->BRANCH_PK] : null,
+                'sales4_id' => $mcht->SLSFC_PK ? $this->paywell_to_payvery_sales[$mcht->SLSFC_PK] : null,
                 'sales1_fee' => $mcht->AGCY_FEE,
                 'sales2_fee' => $mcht->DIST_FEE,
                 'sales3_fee' => $mcht->BRANCH_FEE,
                 'sales4_fee' => $mcht->SLSFC_FEE,
-                'hold_fee' => $mcht->MD_FEE,
-                'trx_fee' => $mcht->HOLD_AMT_FEE,
-                'custom_id' => $mcht->CST_FL ? $this->paywell_to_payvery_cls[$mcht->CST_FL] : 0,
-                'use_saleslip_prov' => $mcht->USE_SALESLIP_HEAD_INFO,
-                'use_saleslip_sell' => $mcht->USE_SALESLIP_SELLER_INFO,
-                'is_show_fee' => $mcht->IS_SHOW_FEE,
+                'hold_fee' => $mcht->HOLD_AMT_FEE,
+                'trx_fee' => $mcht->MD_FEE,
+                'custom_id' => $mcht->CST_FL ? $this->paywell_to_payvery_cls[$mcht->CST_FL] : null,
+                'use_saleslip_prov' => (boolean)$mcht->USE_SALESLIP_HEAD_INFO,
+                'use_saleslip_sell' => (boolean)$mcht->USE_SALESLIP_SELLER_INFO,
+                'is_show_fee' => (boolean)$mcht->IS_SHOW_FEE,
                 'note'      => $mcht->NOTE,
                 'USER_PK' => $mcht->USER_PK,
                 'created_at' => $this->current_time,
@@ -94,6 +94,5 @@ class Merchandise
             $this->payvery = $this->getPayvery($payvery_table, $brand_id, $this->current_time);
             $this->paywell_to_payvery = $this->connect($this->payvery, $this->paywell, 'USER_PK');
         }
-        return $res;
     }
 }

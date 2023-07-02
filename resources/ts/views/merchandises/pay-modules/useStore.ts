@@ -1,8 +1,12 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import type { Options, PayModule } from '@/views/types'
+import type { Options, PayModule, StringOptions } from '@/views/types'
 import { axios, user_info } from '@axios'
+
+export const simplePays = <StringOptions[]>([
+    { id: "KAKAO", title: "카카오" }, { id: "NAVER", title: "네이버" },
+])
 
 export const abnormal_trans_limits = <Options[]>([
     { id: 0, title: "한도없음" }, { id: 1, title: "200만원" },
@@ -22,6 +26,11 @@ export const installments = <Options[]>([
     { id: 7, title: "7개월" }, { id: 8, title: "8개월" },
     { id: 9, title: "9개월" }, { id: 10, title: "10개월" },
     { id: 11, title: "11개월" }, { id: 12, title: "12개월" },
+])
+
+export const shipOutStats = <Options[]>([
+    { id: 0, title: "공단말기" }, { id: 1, title: "입고" },
+    { id: 2, title: "출고" }, { id: 3, title: "해지" },
 ])
 export const payModFilter = (all_pay_modules:PayModule[], filter:PayModule[], pmod_id:number|null) => {
     if (all_pay_modules.length > 0) {
@@ -114,7 +123,7 @@ export const useUpdateStore = defineStore('payModUpdateStore', () => {
         under_sales_amt: 0,
         begin_dt: undefined,
         ship_out_dt: undefined,
-        ship_out_stat: false,
+        ship_out_stat: 0,
         is_old_auth: false,
         installment: 0,
         note: '비고',

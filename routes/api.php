@@ -35,12 +35,17 @@ use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 |
 */
 
-Route::prefix('v1')->middleware('log.route')->group(function() {
+Route::prefix('v1')->middleware('log.route')->group(function() {    
+    Route::post('transactions/hand-pay', [TransactionController::class, 'handPay']);
+    Route::post('computational-transfer/login', [BeforeSystemController::class, 'login']);
+    Route::get('computational-transfer/register', [BeforeSystemController::class, 'register']);
+
     Route::prefix('auth')->group(function() {
         Route::post('sign-in', [AuthController::class, 'signin']);
         Route::middleware('auth:sanctum')->post('sign-out', [AuthController::class, 'signout']);
         Route::middleware('auth:sanctum')->post('ok', [AuthController::class, 'ok']);
     });
+
     Route::prefix('manager')->middleware('auth:sanctum')->group(function() {
         Route::prefix('posts')->group(function() {
             Route::get('recent', [PostController::class, 'recent']);
@@ -57,6 +62,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('classifications', ClassificationController::class);
         });
         Route::prefix('transactions')->group(function() {
+            Route::post('pay-cancel', [TransactionController::class, 'payCancel']);    
             Route::get('fails', [FailTransController::class, 'index']);
             Route::get('dangers', [DangerTransController::class, 'index']);
             Route::post('cancel', [TransactionController::class, 'cancel']);
@@ -91,7 +97,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::get('terminals', [TerminalController::class, 'index']);   
             Route::post('password-change', [MerchandiseController::class, 'passwordChange']);
             Route::post('bulk-register', [MerchandiseController::class, 'bulkRegister']);
-            Route::get('pay-modules/all', [PaymentModuleController::class, 'all']);     
+            Route::get('pay-modules/all', [PaymentModuleController::class, 'all']);
+            Route::get('pay-modules/{id}/sales-slip', [PaymentModuleController::class, 'salesSlip']);     
             Route::post('pay-modules/bulk-register', [PaymentModuleController::class, 'bulkRegister']);
             Route::apiResource('pay-modules', PaymentModuleController::class); 
 
@@ -107,8 +114,4 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::apiResource('posts', PostController::class);
         
     });
-});
-Route::prefix('v1')->group(function() {
-    Route::post('computational-transfer/login', [BeforeSystemController::class, 'login']);
-    Route::get('computational-transfer/register', [BeforeSystemController::class, 'register']);
 });

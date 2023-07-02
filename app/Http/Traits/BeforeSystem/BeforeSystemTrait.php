@@ -4,11 +4,11 @@ namespace App\Http\Traits\BeforeSystem;
 
 trait BeforeSystemTrait
 {
-    public function getPaywellPrivacy($paywell, $users)
+    public function getPaywellPrivacy($paywell, $users, $col='PK')
     {
-        $pks = $users->pluck('PK')->toArray();
+        $pks = $users->pluck($col)->toArray();
         return $paywell->table('privacy')
-            ->whereIn('PK', $pks)
+            ->whereIn('USER_PK', $pks)
             ->get();
     }
 
@@ -22,13 +22,13 @@ trait BeforeSystemTrait
         return json_decode(json_encode($items), true);
     }
 
-    public function getPayvery($payvery_table, $brand_id, $created_at)
+    public function getPayvery($payvery_table, $brand_id, $updated_at)
     {
         return json_decode(
             json_encode(
                 $payvery_table
                 ->where('brand_id', $brand_id)
-                ->where('created_at', $created_at)
+                ->where('updated_at', $updated_at)
                 ->get()
             ), 
             true);

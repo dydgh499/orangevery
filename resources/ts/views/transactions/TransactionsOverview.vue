@@ -106,8 +106,8 @@ const changeMchtEvent = () => {
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales5_id"
-                                        :items="[{ id: null, user_name: '선택안함' }].concat(sales[5].value)"
-                                        prepend-inner-icon="tabler-man" label="지사 선택" item-title="user_name" item-value="id"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[5].value)"
+                                        prepend-inner-icon="tabler-man" label="지사 선택" item-title="sales_name" item-value="id"
                                         create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
@@ -124,8 +124,8 @@ const changeMchtEvent = () => {
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales4_id"
-                                        :items="[{ id: null, user_name: '선택안함' }].concat(sales[4].value)"
-                                        prepend-inner-icon="tabler-man" label="하위지사 선택" item-title="user_name"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[4].value)"
+                                        prepend-inner-icon="tabler-man" label="하위지사 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
@@ -142,8 +142,8 @@ const changeMchtEvent = () => {
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales3_id"
-                                        :items="[{ id: null, user_name: '선택안함' }].concat(sales[3].value)"
-                                        prepend-inner-icon="tabler-man" label="총판 선택" item-title="user_name" item-value="id"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[3].value)"
+                                        prepend-inner-icon="tabler-man" label="총판 선택" item-title="sales_name" item-value="id"
                                         create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
@@ -160,8 +160,8 @@ const changeMchtEvent = () => {
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales2_id"
-                                        :items="[{ id: null, user_name: '선택안함' }].concat(sales[2].value)"
-                                        prepend-inner-icon="tabler-man" label="하위총판 선택" item-title="user_name"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[2].value)"
+                                        prepend-inner-icon="tabler-man" label="하위총판 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
@@ -178,8 +178,8 @@ const changeMchtEvent = () => {
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales1_id"
-                                        :items="[{ id: null, user_name: '선택안함' }].concat(sales[1].value)"
-                                        prepend-inner-icon="tabler-man" label="대리점 선택" item-title="user_name"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[1].value)"
+                                        prepend-inner-icon="tabler-man" label="대리점 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
@@ -196,8 +196,8 @@ const changeMchtEvent = () => {
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales0_id"
-                                        :items="[{ id: null, user_name: '선택안함' }].concat(sales[0].value)"
-                                        prepend-inner-icon="tabler-man" label="하위대리점 선택" item-title="user_name"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[0].value)"
+                                        prepend-inner-icon="tabler-man" label="하위대리점 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
@@ -513,7 +513,7 @@ const changeMchtEvent = () => {
                                         <template #input>
                                             <VTextField v-model="props.item.card_num" type="text" placeholder="카드번호를 입력해주세요"
                                                 persistent-placeholder counter prepend-inner-icon="emojione:credit-card"
-                                                :rules="[requiredValidator, lengthValidatorV2(props.item.card_num, 16)]"
+                                                :rules="[requiredValidator]"
                                                 maxlength="16" />
                                         </template>
                                     </CreateHalfVCol>
@@ -527,7 +527,7 @@ const changeMchtEvent = () => {
                                         <template #name>발급사</template>
                                         <template #input>
                                             <VTextField v-model="props.item.issuer" type="text" placeholder="발급사를 입력해주세요"
-                                                prepend-inner-icon="ph-buildings" :rules="[requiredValidator]" />
+                                                prepend-inner-icon="ph-buildings" :rules="[requiredValidator]" maxlength="20"/>
                                         </template>
                                     </CreateHalfVCol>
                                 </VRow>
@@ -540,7 +540,7 @@ const changeMchtEvent = () => {
                                         <template #name>매입사</template>
                                         <template #input>
                                             <VTextField v-model="props.item.acquirer" type="text" placeholder="매입사를 입력해주세요"
-                                                prepend-inner-icon="ph-buildings" :rules="[requiredValidator]" />
+                                                prepend-inner-icon="ph-buildings" :rules="[requiredValidator]" maxlength="20"/>
                                         </template>
                                     </CreateHalfVCol>
                                 </VRow>
@@ -569,7 +569,7 @@ const changeMchtEvent = () => {
                                         <template #name>구매자명</template>
                                         <template #input>
                                             <VTextField v-model="props.item.buyer_name" type="text"
-                                                placeholder="구매자명을 입력해주세요" prepend-inner-icon="tabler-user" />
+                                                placeholder="구매자명을 입력해주세요" prepend-inner-icon="tabler-user" maxlength="50"/>
                                         </template>
                                     </CreateHalfVCol>
                                 </VRow>
@@ -582,7 +582,7 @@ const changeMchtEvent = () => {
                                         <template #name>구매자 연락처</template>
                                         <template #input>
                                             <VTextField v-model="props.item.buyer_phone" type="text"
-                                                placeholder="구매자 연락처를 입력해주세요" prepend-inner-icon="tabler-device-mobile" />
+                                                placeholder="구매자 연락처를 입력해주세요" prepend-inner-icon="tabler-device-mobile" maxlength="20"/>
                                         </template>
                                     </CreateHalfVCol>
                                 </VRow>
@@ -595,7 +595,7 @@ const changeMchtEvent = () => {
                                         <template #name>상품명</template>
                                         <template #input>
                                             <VTextField v-model="props.item.item_name" type="text" placeholder="상품명을 입력해주세요"
-                                                prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products" />
+                                                prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products" maxlength="100"/>
                                         </template>
                                     </CreateHalfVCol>
                                 </VRow>

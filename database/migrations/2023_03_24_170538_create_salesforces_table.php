@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('addr', 150)->nullable()->comment('영업점 주소');
             $table->string('profile_img')->nullable()->comment('프로필 이미지');
             //
-            $table->string('phone_num')->nullable()->comment('휴대폰 번호');
+            $table->string('phone_num',20)->nullable()->comment('휴대폰 번호');
             $table->string('resident_num', 20)->nullable()->comment('주민등록번호');
             $table->string('business_num', 20)->nullable()->comment('사업자번호');
             $table->string('sector', 20)->nullable()->comment('업종');

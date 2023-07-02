@@ -52,7 +52,7 @@ class SalesforceController extends Controller
         $query = $this->salesforces
             ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
-            ->where('user_name', 'like', "%$search%");
+            ->where('sales_name', 'like', "%$search%");
 
         if(isSalesforce($request))
             $query = $query->where('id', $request->user()->id);
@@ -168,7 +168,7 @@ class SalesforceController extends Controller
         }
         $grouped = $this->salesforces
                 ->where('brand_id', $request->user()->brand_id)
-                ->get(['id', 'user_name', 'level'])
+                ->get(['id', 'sales_name', 'level'])
                 ->groupBy('level');
 
         if(isSalesforce($request))

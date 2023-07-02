@@ -28,17 +28,7 @@ const items = ref<extendMerchandise[]>([])
 const is_clear = ref<boolean>(false)
 const banksExplain = ref()
 
-const getFiltersExplain = () => {
-    let content = ""
-    if (cus_filters.length == 0)
-        return '<b>"운영 관리 - PG사 관리"에서 커스텀 필터 추가 후 입력 가능합니다.</b>'
-    else {
-        for (let i = 0; i < cus_filters.length; i++) {
-            content += '<b>' + cus_filters[i].name + '</b>' + "= " + cus_filters[i].id + ", "
-        }
-        return content
-    }
-}
+
 const isNotExistSalesforce = (is_use: boolean, sales_idx: number, item_idx: number) => {
     const sales_id = 'sales' + sales_idx + '_id';
     const sales_name = 'sales' + sales_idx + '_name';
@@ -185,24 +175,31 @@ watchEffect(async () => {
             <CreateHalfVCol :mdl="6" :mdr="6">
                 <template #name>
                     <VCol>
-                        <b>커스텀 필터 -> </b><span v-html="getFiltersExplain()"></span>
+                        <b>커스텀 필터
+                            <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in cus_filters" :key="key">
+                                {{ cus.name }} = {{ cus.id }}
+                            </VChip>
+                            <span v-if="cus_filters.length == 0">
+                                "운영 관리 - PG사 관리"에서 커스텀 필터 추가 후 입력 가능합니다.
+                            </span>
+                        </b>
                     </VCol>
                     <VCol>
-                        <b>입금은행명/은행코드 테이블 -> </b>
-                        <VBtn variant="tonal" @click="banksExplain.show()">
+                        <b>입금은행명/은행코드 테이블 </b>
+                        <VBtn size="small" color="success" variant="tonal" @click="banksExplain.show()" style="margin: 0.5em;">
                             상세정보 확인
                         </VBtn>
                     </VCol>
                 </template>
                 <template #input>
                     <VCol>
-                        <b>수수료 입력시 주의사항 -></b><span>%제외 및 실수만 입력(예: 5.00)</span>
+                        <b>수수료 입력 주의사항: </b><span>%제외 및 실수만 입력(예: 5.00)</span>
                     </VCol>
                     <VCol>
-                        <b>사업자등록번호 입력시 주의사항 -></b><span>정확한 사업자 번호 입력(예:123-13-12345)</span>
+                        <b>사업자등록번호 입력 주의사항: </b><span>정확한 사업자 번호 입력(예:123-13-12345)</span>
                     </VCol>
                     <VCol>
-                        <b>주민등록번호 입력시 주의사항 -></b><span>13자리 정수 입력(예:8001017654321)</span>
+                        <b>주민등록번호 입력 주의사항: </b><span>13자리 정수 입력(예:8001017654321)</span>
                     </VCol>
                 </template>
             </CreateHalfVCol>

@@ -7,20 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Options\PvOptions;
 use App\Models\Options\ThemeCSS;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use DateTimeInterface;
+use App\Http\Traits\Models\AttributeTrait;
 
 class Brand extends Model
 {
-    use HasFactory;
+    use HasFactory, AttributeTrait;
     protected   $table        = 'brands';
     protected   $primaryKey   = 'id';
     protected   $guarded      = [];
     protected   $hidden = [];
-    
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format("Y-m-d H:i:s");
-    }
 
     protected function PvOptions() : Attribute
     {

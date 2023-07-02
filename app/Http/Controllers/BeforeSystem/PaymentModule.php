@@ -41,7 +41,31 @@ class PaymentModule
         $this->paywell_to_payvery_mchts = $paywell_to_payvery_mchts;
     }
 
-    public function getTerminalModule($paywell, $brand_id, $before_brand_id)
+    public function getOnlinePGId($payvery, $pg_type, $brand_id)
+    {
+        $pg = array_values(array_filter($this->payvery_pgs, function($item) use($pg_type) {
+            return $item['pg_type'] == $pg_type;
+        }));
+        if(count($pg) > 0)
+            return $pg[0]['id'];
+        else
+        {
+            $pg = array_values(array_filter($this->pg_types, function($item) use($pg_type) {
+                return $item['id'] == $pg_type;
+           }))[0];
+           $pg['brand_id'] = $brand_id;
+           $pg['pg_type'] = $pg['id'];
+           $pg['created_at'] = $this->current_time;
+           $pg['updated_at'] = $this->current_time;
+           unset($pg['id']);
+           $id = $payvery->table('payment_gateways')->insertGetId($pg);
+
+           array_push($this->payvery_pgs, array_merge($pg, ['id'=>$id]));
+           return $id;
+        }
+    }
+
+    public function getTerminalModule($paywell, $payvery, $brand_id, $before_brand_id)
     {
         $items = [];
         $mchts = $paywell->table('user')
@@ -60,17 +84,19 @@ class PaymentModule
                 'pg_id' => $mcht->PGID_PK ? $this->paywell_to_payvery_pgs[$mcht->PGID_PK] : null,
                 'ps_id' => $mcht->PG_SEC_PK ? $this->paywell_to_payvery_pss[$mcht->PG_SEC_PK] : null,
                 'module_type' => 0,
+                'settle_type' => 0,
+                'settle_fee' => 0,
                 'mid' => $mcht->MID,
                 'tid' => $mcht->TID,
                 'serial_num' => $mcht->SERIAL_NUM,
-                'terminal_id' => $mcht->T_TYPE_PK ? $this->paywell_to_payvery_cls[$mcht->T_TYPE_PK] : 0,
+                'terminal_id' => $mcht->T_TYPE_PK ? $this->paywell_to_payvery_cls[$mcht->T_TYPE_PK] : null,
                 'comm_settle_fee' => $mcht->COMM_PR,
                 'comm_settle_type' => $mcht->COMM_PR_CALC_LEVEL,
                 'comm_calc_level' => $mcht->COMM_PR_CALC_DAY,
                 'under_sales_amt' => $mcht->COMM_SALES_CON,
                 'begin_dt' => $mcht->COMM_OPEN_DT,
                 'ship_out_dt' => $mcht->RELEASE_DT,
-                'ship_out_stat' => $mcht->STATUS,
+                'ship_out_stat' => $mcht->STATUS == 5 ? 2 : 1,
                 'note' => '단말기',
                 'USER_PK' => $mcht->USER_PK,
                 'created_at' => $this->current_time,
@@ -81,7 +107,7 @@ class PaymentModule
         return $items;
     }
 
-    public function getHandModule($paywell, $brand_id, $before_brand_id)
+    public function getHandModule($paywell, $payvery, $brand_id, $before_brand_id)
     {
         $items = [];
         $mchts = $paywell->table('user')
@@ -92,12 +118,11 @@ class PaymentModule
                 ->orderby('user.PK', 'DESC')
                 ->get();
 
-        foreach($mchts as $mcht) {
-            $pg = collect($this->payvery_pgs)->first(function($item) use($mcht) { return $item['pg_type'] == $mcht->M_PG; });
+        foreach($mchts as $mcht) {            
             $item = [
                 'brand_id'  => $brand_id,
                 'mcht_id' => $this->paywell_to_payvery_mchts[$mcht->USER_PK],
-                'pg_id' => $pg->id,
+                'pg_id' => $this->getOnlinePGId($payvery, $mcht->M_PG, $brand_id),
                 'ps_id' => $mcht->PG_SEC_PK ? $this->paywell_to_payvery_pss[$mcht->PG_SEC_PK] : null,
                 'module_type' => 1,
                 'api_key' => $mcht->M_KEY,
@@ -123,7 +148,7 @@ class PaymentModule
         return $items;
     }
 
-    public function getAuthModule($paywell, $brand_id, $before_brand_id)
+    public function getAuthModule($paywell, $payvery, $brand_id, $before_brand_id)
     {
         $items = [];
         $mchts = $paywell->table('user')
@@ -133,14 +158,11 @@ class PaymentModule
                 ->where('merchandise.A_KEY', '!=', '')
                 ->orderby('user.PK', 'DESC')
                 ->get();
-        foreach($mchts as $mcht) {
-            if(isset($this->paywell_to_payvery_mchts[$mcht->USER_PK]) == false)
-                continue;
-            $pg = collect($this->payvery_pgs)->first(function($item) use($mcht) { return $item['pg_type'] == $mcht->A_PG; });
+        foreach($mchts as $mcht) {            
             $item = [
                 'brand_id'  => $brand_id,
                 'mcht_id' => $this->paywell_to_payvery_mchts[$mcht->USER_PK],
-                'pg_id' => $pg->id,
+                'pg_id' => $this->getOnlinePGId($payvery, $mcht->A_PG, $brand_id),
                 'ps_id' => $mcht->PG_SEC_PK ? $this->paywell_to_payvery_pss[$mcht->PG_SEC_PK] : null,
                 'module_type' => 2,
                 'api_key' => $mcht->A_KEY,
@@ -163,7 +185,7 @@ class PaymentModule
         return $items;
     }
 
-    public function getEasyModule($paywell, $brand_id, $before_brand_id)
+    public function getEasyModule($paywell, $payvery, $brand_id, $before_brand_id)
     {
         $items = [];
         $mchts = $paywell->table('user')
@@ -180,11 +202,11 @@ class PaymentModule
             $item = [
                 'brand_id'  => $brand_id,
                 'mcht_id' => $this->paywell_to_payvery_mchts[$mcht->USER_PK],
-                'pg_id' => $pg->id,
+                'pg_id' => $this->getOnlinePGId($payvery, $mcht->S_PG, $brand_id),
                 'ps_id' => $mcht->PG_SEC_PK ? $this->paywell_to_payvery_pss[$mcht->PG_SEC_PK] : null,
                 'module_type' => 3,
                 'api_key' => $mcht->S_KEY,
-                'sub_key' => $mcht->S_SUB_KEY,
+                'sub_key' => '',
                 'mid' => $mcht->S_MID,
                 'tid' => $mcht->S_TID,
                 'pay_dupe_limit' => $mcht->USE_DUPE_TRX,
@@ -203,24 +225,26 @@ class PaymentModule
         return $items;
     }
 
-    public function getPaywell($paywell, $brand_id, $before_brand_id)
+    public function getPaywell($paywell, $payvery, $brand_id, $before_brand_id)
     {
-        $a = $this->getTerminalModule($paywell, $brand_id, $before_brand_id);
-        $b = $this->getHandModule($paywell, $brand_id, $before_brand_id);
-        $c = $this->getAuthModule($paywell, $brand_id, $before_brand_id);
-        $d = $this->getEasyModule($paywell, $brand_id, $before_brand_id);        
-        $this->paywell = array_merge(array_merge($a, $b), array_merge($c, $d));
-    }
+        $a = $this->getTerminalModule($paywell, $payvery, $brand_id, $before_brand_id);
+        $b = $this->getHandModule($paywell, $payvery, $brand_id, $before_brand_id);
+        $c = $this->getAuthModule($paywell, $payvery, $brand_id, $before_brand_id);
+        $d = $this->getEasyModule($paywell, $payvery, $brand_id, $before_brand_id);    
 
-    public function setPayvery($payvery_table, $brand_id)
-    {
-        $items = $this->getPayveryFormat($this->paywell, 'USER_PK');
-        $res   = $this->manyInsert($payvery_table, $items);
-        if($res)
-        {
-            $this->payvery = $this->getPayvery($payvery_table, $brand_id, $this->current_time);
-            $this->paywell_to_payvery = $this->connect($this->payvery, $this->paywell, 'USER_PK');
-        }
-        return $res;
+        
+        $a = $this->getPayveryFormat($a, 'USER_PK');
+        $res = $this->manyInsert($payvery->table('payment_modules'), $a);
+
+        $b = $this->getPayveryFormat($b, 'USER_PK');
+        $res = $this->manyInsert($payvery->table('payment_modules'), $b);
+
+        $c = $this->getPayveryFormat($c, 'USER_PK');
+        $res = $this->manyInsert($payvery->table('payment_modules'), $c);
+
+        $d = $this->getPayveryFormat($d, 'USER_PK');
+        $res = $this->manyInsert($payvery->table('payment_modules'), $d);    
+        
+        $this->payvery = $this->getPayvery($payvery->table('payment_modules'), $brand_id, $this->current_time);
     }
 }

@@ -55,11 +55,10 @@ const metas = [
         subtitle: 'Last week analytics',
     },
 ]
-
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="ID, 대표자명 검색" :metas="metas" :add="user_info.level >= 35" add_name="영업점" :is_range_date="true">
+        <BaseIndexView placeholder="영업점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="영업점" :is_range_date="true">
             <template #filter>
                 <BaseIndexFilterCard :pg="false" :ps="false" :pay_cond="false" :terminal="false" :cus_filter="false"
                     :sales="false">

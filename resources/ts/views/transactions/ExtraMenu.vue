@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import type { SalesSlip } from '@/views/types'
+import type { SalesSlip, CancelPay } from '@/views/types'
+import { axios } from '@axios'
 
 interface Props {
     item: SalesSlip,
 }
 
 const props = defineProps<Props>()
+
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+const errorHandler = <any>(inject('$errorHandler'))
+
 const salesslip = <any>(inject('salesslip'))
 const cancelTran = <any>(inject('cancelTran'))
 const router = useRouter()
@@ -26,6 +32,24 @@ const complaint = () => {
         query: params,
     })
 }
+const payCanceled = async() => {
+    if(await alert.value.show('정말 상위 PG사를 통해 결제를 취소하시겠습니까?')) {
+        const params:CancelPay = {
+            pmod_id: props.item.pmod_id as number,
+            amount: props.item.amount,
+            trx_id: props.item.trx_id,
+            only: false,
+        }
+        try {
+            const r = await axios.post('/api/v1/manager/transactions/pay-cancel', params)
+            snackbar.value.show('성공하였습니다.', 'success')
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            const r = errorHandler(e)
+        }
+    }
+}
 </script>
 <template>
     <VBtn icon size="x-small" color="default" variant="text">
@@ -44,11 +68,17 @@ const complaint = () => {
                     </template>
                     <VListItemTitle>민원처리</VListItemTitle>
                 </VListItem>
-                <VListItem value="complaint" @click="cancelTran.show(props.item)" v-show="props.item.is_cancel == false">
+                <VListItem value="cancelTrans" @click="cancelTran.show(props.item)" v-show="props.item.is_cancel == false">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:device-tablet-cancel" />
                     </template>
                     <VListItemTitle>취소매출생성</VListItemTitle>
+                </VListItem>
+                <VListItem value="cancel" @click="payCanceled()" v-show="props.item.is_cancel == false">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="tabler:world-cancel" />
+                    </template>
+                    <VListItemTitle>결제취소하기</VListItemTitle>
                 </VListItem>
             </VList>
         </VMenu>
