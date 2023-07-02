@@ -1,5 +1,5 @@
 export default [
-  { heading: 'Forms' },
+  { heading: '' },
   {
     title: 'Home',
     icon: { icon: 'tabler-smart-home' },

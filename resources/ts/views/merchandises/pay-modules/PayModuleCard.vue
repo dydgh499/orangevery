@@ -244,7 +244,7 @@ const filterPgs = computed(() => {
                                 <template #name>정산주체</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.comm_calc_level"
-                                        :items="all_levels" prepend-inner-icon="tabler-man" label="정산자 선택"
+                                        :items="all_levels" prepend-inner-icon="ph:share-network" label="정산자 선택"
                                         item-title="title" item-value="id" persistent-hint single-line />
                                 </template>
                             </CreateHalfVCol>

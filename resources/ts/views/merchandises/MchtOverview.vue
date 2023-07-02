@@ -76,7 +76,7 @@ watchEffect(() => {
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales5_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[5].value)"
-                                        prepend-inner-icon="tabler-man" label="지사 선택" item-title="sales_name" item-value="id"
+                                        prepend-inner-icon="ph:share-network" label="지사 선택" item-title="sales_name" item-value="id"
                                         create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
@@ -96,7 +96,7 @@ watchEffect(() => {
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales4_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[4].value)"
-                                        prepend-inner-icon="tabler-man" label="하위지사 선택" item-title="sales_name"
+                                        prepend-inner-icon="ph:share-network" label="하위지사 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
@@ -116,7 +116,7 @@ watchEffect(() => {
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales3_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[3].value)"
-                                        prepend-inner-icon="tabler-man" label="총판 선택" item-title="sales_name" item-value="id"
+                                        prepend-inner-icon="ph:share-network" label="총판 선택" item-title="sales_name" item-value="id"
                                         create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
@@ -136,7 +136,7 @@ watchEffect(() => {
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales2_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[2].value)"
-                                        prepend-inner-icon="tabler-man" label="하위총판 선택" item-title="sales_name"
+                                        prepend-inner-icon="ph:share-network" label="하위총판 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
@@ -156,7 +156,7 @@ watchEffect(() => {
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales1_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[1].value)"
-                                        prepend-inner-icon="tabler-man" label="대리점 선택" item-title="sales_name"
+                                        prepend-inner-icon="ph:share-network" label="대리점 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
@@ -176,7 +176,7 @@ watchEffect(() => {
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales0_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[0].value)"
-                                        prepend-inner-icon="tabler-man" label="하위대리점 선택" item-title="sales_name"
+                                        prepend-inner-icon="ph:share-network" label="하위대리점 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">

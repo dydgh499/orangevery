@@ -17,7 +17,6 @@ export const module_types = <Options[]>([
     { id: 0, title: "단말기" }, { id: 1, title: "수기결제" },
     { id: 2, title: "인증결제" }, { id: 3, title: "간편결제" },
     /*{ id: 4, title: "실시간 이체" },*/
-    { id: 5, title: "비인증 단말기" },
 ])
 export const installments = <Options[]>([
     { id: 0, title: "일시불" }, { id: 2, title: "2개월" },

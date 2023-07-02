@@ -73,7 +73,7 @@ const tax_types = settleTaxTypes()
                             </template>
                             <template #input>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level" :items="all_sales"
-                                    prepend-inner-icon="tabler-man" label="영업자 등급 선택" item-title="title" item-value="id"
+                                    prepend-inner-icon="ph:share-network" label="영업자 등급 선택" item-title="title" item-value="id"
                                     persistent-hint single-line :rules="[nullValidator]" :readonly="props.item.id != 0" />
                             </template>
                         </CreateHalfVCol>

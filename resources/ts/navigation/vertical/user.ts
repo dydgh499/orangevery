@@ -26,7 +26,7 @@ const getAbilitiesMenu = computed(() => {
     if(user_info.value.level >= 13) {
         sales.push({
             title: 'salesforce-management',
-            icon: { icon: 'tabler-user' },
+            icon: { icon: 'ph:share-network' },
             children: [
                 { title: 'salesforces', to: 'salesforces' },
                 ...sales_child,

@@ -43,7 +43,7 @@ const pay = async () => {
                 sale_slip.value.item_name = r.data.item_name
                 sale_slip.value.appr_num = r.data.appr_num
                 sale_slip.value.installment = r.data.installment
-                sale_slip.value.trx_dttm = r.data.trx_dttm                
+                sale_slip.value.trx_dttm = r.data.trx_dttm
                 sale_slip.value.is_cancel = Boolean(r.data.is_cancel)
                 sale_slip.value.mcht = {
                     id: 0,

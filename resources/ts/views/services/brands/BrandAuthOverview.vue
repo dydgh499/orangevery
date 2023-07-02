@@ -27,7 +27,7 @@ const props = defineProps<Props>()
                             <template #name><span>개발사</span></template>
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.dev_name"
-                                    prepend-inner-icon="tabler-man" placeholder="개발사 등급 명칭을 입력해주세요"
+                                    prepend-inner-icon="ph:share-network" placeholder="개발사 등급 명칭을 입력해주세요"
                                     persistent-placeholder :rules="[nullValidator]" />
                             </template>
                         </CreateHalfVCol>
@@ -37,7 +37,7 @@ const props = defineProps<Props>()
                             <template #name><span>영업자 등급 6</span></template>
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.sales5_name"
-                                    prepend-inner-icon="tabler-man" placeholder="사용할 등급 명칭을 입력해주세요"
+                                    prepend-inner-icon="ph:share-network" placeholder="사용할 등급 명칭을 입력해주세요"
                                     persistent-placeholder :rules="[nullValidator]" />
                             </template>
                         </CreateHalfVCol>
@@ -47,7 +47,7 @@ const props = defineProps<Props>()
                             <template #name><span>영업자 등급 5</span></template>
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.sales4_name"
-                                    prepend-inner-icon="tabler-man" placeholder="사용할 등급 명칭을 입력해주세요"
+                                    prepend-inner-icon="ph:share-network" placeholder="사용할 등급 명칭을 입력해주세요"
                                     persistent-placeholder :rules="[nullValidator]" />
                             </template>
                         </CreateHalfVCol>
@@ -57,7 +57,7 @@ const props = defineProps<Props>()
                             <template #name><span>영업자 등급 4</span></template>
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.sales3_name"
-                                    prepend-inner-icon="tabler-man" placeholder="사용할 등급 명칭을 입력해주세요"
+                                    prepend-inner-icon="ph:share-network" placeholder="사용할 등급 명칭을 입력해주세요"
                                     persistent-placeholder :rules="[nullValidator]" />                            </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -67,7 +67,7 @@ const props = defineProps<Props>()
                             <template #name><span>영업자 등급 3</span></template>
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.sales2_name"
-                                    prepend-inner-icon="tabler-man" placeholder="사용할 등급 명칭을 입력해주세요"
+                                    prepend-inner-icon="ph:share-network" placeholder="사용할 등급 명칭을 입력해주세요"
                                     persistent-placeholder :rules="[nullValidator]" />
                             </template>
                         </CreateHalfVCol>
@@ -78,7 +78,7 @@ const props = defineProps<Props>()
                             <template #name><span>영업자 등급 2</span></template>
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.sales1_name"
-                                    prepend-inner-icon="tabler-man" placeholder="사용할 등급 명칭을 입력해주세요"
+                                    prepend-inner-icon="ph:share-network" placeholder="사용할 등급 명칭을 입력해주세요"
                                     persistent-placeholder :rules="[nullValidator]" />
                             </template>
                         </CreateHalfVCol>
@@ -89,7 +89,7 @@ const props = defineProps<Props>()
                             <template #name><span>영업자 등급 1</span></template>
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.sales0_name"
-                                    prepend-inner-icon="tabler-man" placeholder="사용할 등급 명칭을 입력해주세요"
+                                    prepend-inner-icon="ph:share-network" placeholder="사용할 등급 명칭을 입력해주세요"
                                     persistent-placeholder :rules="[nullValidator]" />
                             </template>
                         </CreateHalfVCol>

@@ -107,7 +107,7 @@ const changeMchtEvent = () => {
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales5_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[5].value)"
-                                        prepend-inner-icon="tabler-man" label="지사 선택" item-title="sales_name" item-value="id"
+                                        prepend-inner-icon="ph:share-network" label="지사 선택" item-title="sales_name" item-value="id"
                                         create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
@@ -125,7 +125,7 @@ const changeMchtEvent = () => {
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales4_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[4].value)"
-                                        prepend-inner-icon="tabler-man" label="하위지사 선택" item-title="sales_name"
+                                        prepend-inner-icon="ph:share-network" label="하위지사 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
@@ -143,7 +143,7 @@ const changeMchtEvent = () => {
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales3_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[3].value)"
-                                        prepend-inner-icon="tabler-man" label="총판 선택" item-title="sales_name" item-value="id"
+                                        prepend-inner-icon="ph:share-network" label="총판 선택" item-title="sales_name" item-value="id"
                                         create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
@@ -161,7 +161,7 @@ const changeMchtEvent = () => {
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales2_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[2].value)"
-                                        prepend-inner-icon="tabler-man" label="하위총판 선택" item-title="sales_name"
+                                        prepend-inner-icon="ph:share-network" label="하위총판 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
@@ -179,7 +179,7 @@ const changeMchtEvent = () => {
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales1_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[1].value)"
-                                        prepend-inner-icon="tabler-man" label="대리점 선택" item-title="sales_name"
+                                        prepend-inner-icon="ph:share-network" label="대리점 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
@@ -197,7 +197,7 @@ const changeMchtEvent = () => {
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales0_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[0].value)"
-                                        prepend-inner-icon="tabler-man" label="하위대리점 선택" item-title="sales_name"
+                                        prepend-inner-icon="ph:share-network" label="하위대리점 선택" item-title="sales_name"
                                         item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
@@ -217,7 +217,7 @@ const changeMchtEvent = () => {
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id"
                                         :items="[{ id: null, mcht_name: '선택안함' }].concat(merchandises)"
-                                        prepend-inner-icon="tabler-man" label="가맹점 선택" item-title="mcht_name"
+                                        prepend-inner-icon="ph:share-network" label="가맹점 선택" item-title="mcht_name"
                                         item-value="id" @update:modelValue="changeMchtEvent()" create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
