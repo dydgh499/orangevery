@@ -62,7 +62,7 @@ const metas = [
                     </th>
                 </tr>
                 <tr>
-                    <th v-for="(header, key) in head.flat_headers" :key="key" v-show="!header.hidden" class='list-square'>
+                    <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                         <span>
                             {{ header.ko }}
                         </span>
@@ -75,7 +75,7 @@ const metas = [
                         <template v-if="head.getDepth(_header, 0) != 1">
                         </template>
                         <template v-else>
-                            <td v-show="!_header.hidden" class='list-square'>
+                            <td v-show="_header.visible" class='list-square'>
                                 <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
                                     #{{ item[_key] }}
                                 </span>

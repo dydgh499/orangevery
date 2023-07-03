@@ -97,7 +97,7 @@ class TransactionFactory extends Factory
         {
             $trx = Transaction::all()->random();
             $data['is_cancel'] = true;
-            $data['cxl_dt'] = date('Y-m-23');
+            $data['cxl_dt'] = date('2023-06-d');
             $data['cxl_tm'] = date('H:i:s');
             $data['ori_trx_id'] = $trx->trx_id;
 
@@ -123,7 +123,7 @@ class TransactionFactory extends Factory
             $data['cxl_tm'] = null;
             $data['ori_trx_id'] = null;
             $data['amount'] = rand(100, 999999);
-            $data['trx_dt'] = date('Y-m-22');
+            $data['trx_dt'] = date('2023-06-d');
             $data['trx_tm'] = date('H:i:s');
             $data['ord_num']    = $this->faker->isbn10();
             $data['trx_id']     = $this->faker->unique->isbn13();

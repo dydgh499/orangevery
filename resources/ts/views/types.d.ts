@@ -53,7 +53,7 @@ export interface Pagenation {
 }
 export interface FilterItem {
     ko: string;
-    hidden: boolean | null;
+    visible: boolean | null;
     idx: number | null;
 }
 export interface Filter {
@@ -595,4 +595,12 @@ export interface CancelPay {
     trx_id: string,
     only: boolean,
     temp?: string,
+}
+//----------------------------
+export interface MchtRecentTransaction {
+    date: Date,
+    appr_amount: number,
+    cxl_amount: number,
+    total_amount: number,
+    settle_amount: number,
 }

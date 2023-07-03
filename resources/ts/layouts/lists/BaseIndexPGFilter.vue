@@ -40,7 +40,7 @@ const filterPgs = computed(() => {
         </VCol>
         <VCol cols="12" sm="3" v-if="props.terminal">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.terminal_id"
-                :items="[{ id: null, name: '전체' }].concat(terminals)" label="단말기 선택" item-title="name" item-value="id"
+                :items="[{ id: null, name: '전체' }].concat(terminals)" label="장비 선택" item-title="name" item-value="id"
                 create />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.cus_filter && user_info.level > 30">

@@ -69,7 +69,7 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
         '취소',
         '매출',
         '추가차감',
-        '단말기',
+        '장비',
         '정산금',
         '은행정보',
     ];

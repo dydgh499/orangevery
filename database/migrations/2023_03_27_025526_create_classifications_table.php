@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->string('name')->default('')->comment('구간명');
             $table->boolean('is_delete')->default(false)->comment('현재 사용중?');
-            $table->tinyInteger('type')->default(0)->comment('구분타입(0=단말기, 1=커스텀 필터)');
+            $table->tinyInteger('type')->default(0)->comment('구분타입(0=장비, 1=커스텀 필터)');
             $table->timestamps();
         });
     }

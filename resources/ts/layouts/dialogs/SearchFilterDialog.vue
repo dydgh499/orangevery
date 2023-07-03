@@ -30,8 +30,8 @@ defineExpose({
                                     <template v-for="(_header, key, _index) in head.flat_headers" :key="_index">
                                         <template v-if="_index >= getStartIdx(index) && _index < getStartIdx(index) + leng">
                                             <VCol :cols="($vuetify.display.smAndDown ? 6 : 4)">
-                                                <VCheckbox v-model="_header.hidden" :label="_header.ko"
-                                                    true-icon="tabler-circle-x" false-icon="tabler-eye-check"
+                                                <VCheckbox v-model="_header.visible" :label="_header.ko"
+                                                    true-icon="tabler-eye-check" false-icon="tabler-circle-x"
                                                     color="primary" />
                                             </VCol>
                                         </template>
@@ -48,8 +48,8 @@ defineExpose({
                                 <template v-for="(_header, key, _index) in head.flat_headers" :key="_index">
                                     <template v-if="_index >= fullColspanSize">
                                         <VCol :cols="($vuetify.display.smAndDown ? 6 : 4)">
-                                            <VCheckbox v-model="_header.hidden" :label="_header.ko"
-                                                true-icon="tabler-circle-x" false-icon="tabler-eye-check"
+                                            <VCheckbox v-model="_header.visible" :label="_header.ko"
+                                                true-icon="tabler-eye-check" false-icon="tabler-circle-x"
                                                 color="primary" />
                                         </VCol>
                                     </template>

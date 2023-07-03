@@ -134,9 +134,7 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
 
 export const useSalesFilterStore = defineStore('salesFilterStore', () => {
     const sales = Array.from({ length: 6 }, () => ref<any[]>([]))
-    onMounted(async () => {
-        await classification()
-    })
+    onMounted(() => { classification() })
     const classification = async () => {
         const r = await axios.get('/api/v1/manager/salesforces/classification')
         const keys = Object.keys(r.data);
@@ -176,7 +174,7 @@ export const useUpdateStore = defineStore('salesUpdateStore', () => {
         passbook_file: undefined,
         contract_file: undefined,
         bsin_lic_file: undefined,
-        level: 13,
+        level: 15,
         settle_cycle: 0,
         settle_day: 0,
         sales_name: '',

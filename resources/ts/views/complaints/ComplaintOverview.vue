@@ -15,7 +15,9 @@ interface Props {
 const props = defineProps<Props>()
 const { pgs } = useStore()
 
-const { merchandises } = useMchtFilterStore()
+const { merchandises, getAllMerchandises } = useMchtFilterStore()
+getAllMerchandises()
+
 onMounted(() => {
     props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
     props.item.is_deposit = Boolean(props.item.is_deposit)

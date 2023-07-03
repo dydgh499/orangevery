@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useRequestStore } from '@/views/request'
-import { useMchtFilterStore } from '@/views/merchandises/useStore'
 import { requiredValidator, nullValidator } from '@validators'
-import type { PayModule } from '@/views/types'
+import type { PayModule, Merchandise } from '@/views/types'
 import { module_types, installments, abnormal_trans_limits, shipOutStats } from '@/views/merchandises/pay-modules/useStore'
 import { allLevels } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
@@ -15,12 +14,12 @@ import corp from '@corp'
 interface Props {
     item: PayModule,
     able_mcht_chanage: boolean,
+    merchandises: Merchandise[]
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
 
 const all_levels = allLevels()
-const { merchandises } = useMchtFilterStore()
 const { update, remove } = useRequestStore()
 const { pgs, pss, settle_types, terminals, psFilter, setFee } = useStore()
 const md = ref<number>(3)
@@ -34,6 +33,7 @@ onMounted(() => {
 
 // 결제모듈 타입 변동 체크
 watchEffect(() => {
+    console.log(props.merchandises)
     md.value = props.item.module_type == 0 ? 3 : 4
 })
 
@@ -59,7 +59,7 @@ const filterPgs = computed(() => {
                                 <template #name>소유 가맹점</template>
                                 <template #input>
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id"
-                                        :items="merchandises" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
+                                        :items="props.merchandises" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
                                         item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] create />
                                 </template>
                             </CreateHalfVCol>
@@ -195,14 +195,14 @@ const filterPgs = computed(() => {
                 <VDivider :vertical="$vuetify.display.mdAndUp" v-show="props.item.module_type == 0" />
                 <VCol cols="12" :md="md" v-show="props.item.module_type == 0">
                     <VCardItem>
-                        <VCardTitle style="margin-bottom: 1em;">단말기정보</VCardTitle>
-                        <!-- 단말기 종류 -->
+                        <VCardTitle style="margin-bottom: 1em;">장비정보</VCardTitle>
+                        <!-- 장비 종류 -->
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>단말기 타입</template>
+                                <template #name>장비 타입</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.terminal_id"
-                                        :items="terminals" prepend-inner-icon="ic-outline-send-to-mobile" label="단말기 선택"
+                                        :items="terminals" prepend-inner-icon="ic-outline-send-to-mobile" label="장비 선택"
                                         item-title="name" item-value="id" single-line />
                                 </template>
                             </CreateHalfVCol>

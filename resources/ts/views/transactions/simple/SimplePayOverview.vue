@@ -53,9 +53,9 @@ watchEffect(() => {
             <VDivider />
             <VForm ref="vForm" :action="link" method="post">
                 <div>
-                    <VTextField type="hidden" name="only" value="0" style="display: none;" />
-                    <VTextField v-model="simple_pay_info.pmod_id" type="hidden" name="pmod_id" style="display: none;" />
-                    <VTextField v-model="simple_pay_info.return_url" type="hidden" name="return_url" style="display: none;" />
+                    <VTextField type="visible" name="only" value="0" style="display: none;" />
+                    <VTextField v-model="simple_pay_info.pmod_id" type="visible" name="pmod_id" style="display: none;" />
+                    <VTextField v-model="simple_pay_info.return_url" type="visible" name="return_url" style="display: none;" />
                     <VCol cols="12">
                         <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                             <template #name>상품명</template>

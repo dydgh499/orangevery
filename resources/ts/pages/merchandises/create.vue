@@ -15,6 +15,7 @@ const tabs = <Tab[]>([
     { icon: 'ic-outline-send-to-mobile', title: '결제모듈정보(가맹점 추가 후 가능)' },
 ])
 const id = ref<number>(0)
+
 </script>
 <template>
     <section>

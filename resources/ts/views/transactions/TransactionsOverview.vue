@@ -16,10 +16,14 @@ interface Props {
 
 const props = defineProps<Props>()
 const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
-const { merchandises } = useMchtFilterStore()
-const { pay_modules } = usePayModFilterStore()
-const { sales } = useSalesFilterStore()
+const { merchandises, getAllMerchandises } = useMchtFilterStore()
+const { pay_modules, getAllPayModules } = usePayModFilterStore()
+const { sales, classification } = useSalesFilterStore()
 const levels = corp.pv_options.auth.levels
+
+getAllMerchandises()
+getAllPayModules()
+classification()
 
 const filterPgs = computed(() => {
     const filter = pss.filter(item => { return item.pg_id == props.item.pg_id })
@@ -100,15 +104,15 @@ const changeMchtEvent = () => {
                     <VRow class="pt-5">
                         <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales5_use">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="4">
                                     <label>{{ levels.sales5_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales5_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[5].value)"
-                                        prepend-inner-icon="ph:share-network" label="지사 선택" item-title="sales_name" item-value="id"
-                                        create />
+                                        prepend-inner-icon="ph:share-network" label="지사 선택" item-title="sales_name"
+                                        item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales5_fee" type="number" suffix="%"
@@ -118,7 +122,7 @@ const changeMchtEvent = () => {
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales4_use">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="4">
                                     <label>{{ levels.sales4_name }}/수수료율</label>
                                 </VCol>
@@ -136,15 +140,15 @@ const changeMchtEvent = () => {
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales3_use">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="4">
                                     <label>{{ levels.sales3_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales3_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[3].value)"
-                                        prepend-inner-icon="ph:share-network" label="총판 선택" item-title="sales_name" item-value="id"
-                                        create />
+                                        prepend-inner-icon="ph:share-network" label="총판 선택" item-title="sales_name"
+                                        item-value="id" create />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales3_fee" type="number" suffix="%"
@@ -154,7 +158,7 @@ const changeMchtEvent = () => {
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales2_use">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="4">
                                     <label>{{ levels.sales2_name }}/수수료율</label>
                                 </VCol>
@@ -172,7 +176,7 @@ const changeMchtEvent = () => {
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales1_use">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="4">
                                     <label>{{ levels.sales1_name }}/수수료율</label>
                                 </VCol>
@@ -190,7 +194,7 @@ const changeMchtEvent = () => {
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales0_use">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="4">
                                     <label>{{ levels.sales0_name }}/수수료율</label>
                                 </VCol>
@@ -208,7 +212,7 @@ const changeMchtEvent = () => {
                         </VCol>
                         <!-- 👉 가맹점 수수료율 -->
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="4">
                                     <BaseQuestionTooltip :location="'top'" :text="'가맹점/수수료율'"
                                         :content="'가맹점 선택시 가맹점 정보 및 결제모듈 선택란이 현재 설정값 기준으로 세팅됩니다.<br>수수료율을 주의해서 입력해주시길 부탁드립니다.'">
@@ -227,7 +231,7 @@ const changeMchtEvent = () => {
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="4">
                                     <label>유보금 수수료율</label>
                                 </VCol>
@@ -238,7 +242,7 @@ const changeMchtEvent = () => {
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="4">
                                     <label>커스텀 필터</label>
                                 </VCol>
@@ -262,7 +266,7 @@ const changeMchtEvent = () => {
                     <VCardTitle>결제모듈 정보</VCardTitle>
                     <VRow class="pt-5">
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>
                                         <BaseQuestionTooltip :location="'top'" :text="'결제모듈 선택'"
@@ -279,7 +283,7 @@ const changeMchtEvent = () => {
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>결제모듈 타입</template>
                                     <template #input>
@@ -292,19 +296,19 @@ const changeMchtEvent = () => {
                             </VRow>
                         </VCol>
                         <VCol cols="12" v-show="props.item.module_type == 0">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
-                                    <template #name>단말기 타입</template>
+                                    <template #name>장비 타입</template>
                                     <template #input>
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.terminal_id"
-                                            :items="terminals" prepend-inner-icon="ic-outline-send-to-mobile" label="단말기 선택"
+                                            :items="terminals" prepend-inner-icon="ic-outline-send-to-mobile" label="장비 선택"
                                             item-title="name" item-value="id" single-line :rules=[requiredValidator] />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>PG사</template>
                                     <template #input>
@@ -317,7 +321,7 @@ const changeMchtEvent = () => {
                         </VCol>
                         <!-- 👉 PG 구간 -->
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>구간</template>
                                     <template #input>
@@ -330,7 +334,7 @@ const changeMchtEvent = () => {
                         </VCol>
                         <!-- 👉 PG 수수료 -->
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>구간 수수료</template>
                                     <template #input>
@@ -342,7 +346,7 @@ const changeMchtEvent = () => {
                         </VCol>
                         <!-- 👉 정산일 -->
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>정산일</template>
                                     <template #input>
@@ -354,7 +358,7 @@ const changeMchtEvent = () => {
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>입금 수수료</template>
                                     <template #input>
@@ -365,7 +369,7 @@ const changeMchtEvent = () => {
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>MID</template>
                                     <template #input>
@@ -376,7 +380,7 @@ const changeMchtEvent = () => {
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>TID</template>
                                     <template #input>
@@ -398,8 +402,8 @@ const changeMchtEvent = () => {
                     <VCardTitle>매출 정보</VCardTitle>
                     <VRow class="pt-5">
                         <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="4">
+                            <VRow>
+                                <VCol cols="12" md="3">
                                     <label>거래시간</label>
                                 </VCol>
                                 <VCol cols="12" md="3">
@@ -409,8 +413,8 @@ const changeMchtEvent = () => {
                                     <VTextField v-model="props.item.trx_tm" type="time" :rules="[requiredValidator]"
                                         step="1" />
                                 </VCol>
-                                <VCol cols="12" md="2" style="text-align: center;">
-                                    <VBtn size="small" variant="tonal" @click="initTrxAt(true)">
+                                <VCol cols="12" md="3" style="text-align: center;">
+                                    <VBtn variant="tonal" @click="initTrxAt(true)">
                                         초기화
                                         <VIcon end
                                             icon="streamline:interface-time-rewind-back-return-clock-timer-countdown" />
@@ -419,8 +423,8 @@ const changeMchtEvent = () => {
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="4">
+                            <VRow>
+                                <VCol cols="12" md="3">
                                     <label>취소시간</label>
                                 </VCol>
                                 <VCol cols="12" md="3">
@@ -429,8 +433,8 @@ const changeMchtEvent = () => {
                                 <VCol cols="12" md="3">
                                     <VTextField v-model="props.item.cxl_tm" type="time" step="1" />
                                 </VCol>
-                                <VCol cols="12" md="2" style="text-align: center;">
-                                    <VBtn size="small" variant="tonal" @click="initTrxAt(false)">
+                                <VCol cols="12" md="3" style="text-align: center;">
+                                    <VBtn variant="tonal" @click="initTrxAt(false)">
                                         초기화
                                         <VIcon end
                                             icon="streamline:interface-time-rewind-back-return-clock-timer-countdown" />
@@ -440,7 +444,7 @@ const changeMchtEvent = () => {
                         </VCol>
 
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>
                                         <BaseQuestionTooltip :location="'top'" :text="'할부'"
@@ -456,7 +460,7 @@ const changeMchtEvent = () => {
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>
                                         <BaseQuestionTooltip :location="'top'" :text="'거래금액'"
@@ -472,7 +476,7 @@ const changeMchtEvent = () => {
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>주문번호</template>
                                     <template #input>
@@ -483,7 +487,7 @@ const changeMchtEvent = () => {
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>거래번호</template>
                                     <template #input>
@@ -495,7 +499,7 @@ const changeMchtEvent = () => {
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>원거래번호</template>
                                     <template #input>
@@ -506,99 +510,85 @@ const changeMchtEvent = () => {
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
-                                <VRow no-gutters>
-                                    <CreateHalfVCol :mdl="4" :mdr="8">
-                                        <template #name>카드번호</template>
-                                        <template #input>
-                                            <VTextField v-model="props.item.card_num" type="text" placeholder="카드번호를 입력해주세요"
-                                                persistent-placeholder counter prepend-inner-icon="emojione:credit-card"
-                                                :rules="[requiredValidator]"
-                                                maxlength="16" />
-                                        </template>
-                                    </CreateHalfVCol>
-                                </VRow>
+                            <VRow>
+                                <CreateHalfVCol :mdl="4" :mdr="8">
+                                    <template #name>카드번호</template>
+                                    <template #input>
+                                        <VTextField v-model="props.item.card_num" type="text" placeholder="카드번호를 입력해주세요"
+                                            persistent-placeholder counter prepend-inner-icon="emojione:credit-card"
+                                            :rules="[requiredValidator]" maxlength="16" />
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
-                                <VRow no-gutters>
-                                    <CreateHalfVCol :mdl="4" :mdr="8">
-                                        <template #name>발급사</template>
-                                        <template #input>
-                                            <VTextField v-model="props.item.issuer" type="text" placeholder="발급사를 입력해주세요"
-                                                prepend-inner-icon="ph-buildings" :rules="[requiredValidator]" maxlength="20"/>
-                                        </template>
-                                    </CreateHalfVCol>
-                                </VRow>
+                            <VRow>
+                                <CreateHalfVCol :mdl="4" :mdr="8">
+                                    <template #name>발급사</template>
+                                    <template #input>
+                                        <VTextField v-model="props.item.issuer" type="text" placeholder="발급사를 입력해주세요"
+                                            prepend-inner-icon="ph-buildings" :rules="[requiredValidator]" maxlength="20" />
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
-                                <VRow no-gutters>
-                                    <CreateHalfVCol :mdl="4" :mdr="8">
-                                        <template #name>매입사</template>
-                                        <template #input>
-                                            <VTextField v-model="props.item.acquirer" type="text" placeholder="매입사를 입력해주세요"
-                                                prepend-inner-icon="ph-buildings" :rules="[requiredValidator]" maxlength="20"/>
-                                        </template>
-                                    </CreateHalfVCol>
-                                </VRow>
+                            <VRow>
+                                <CreateHalfVCol :mdl="4" :mdr="8">
+                                    <template #name>매입사</template>
+                                    <template #input>
+                                        <VTextField v-model="props.item.acquirer" type="text" placeholder="매입사를 입력해주세요"
+                                            prepend-inner-icon="ph-buildings" :rules="[requiredValidator]" maxlength="20" />
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
-                                <VRow no-gutters>
-                                    <CreateHalfVCol :mdl="4" :mdr="8">
-                                        <template #name>승인번호</template>
-                                        <template #input>
-                                            <VTextField v-model="props.item.appr_num" type="text" placeholder="승인번호를 입력해주세요"
-                                                prepend-inner-icon="icon-park-solid:transaction-order"
-                                                persistent-placeholder counter
-                                                :rules="[requiredValidator, lengthValidatorV2(props.item.appr_num, 8)]"
-                                                maxlength="8" />
-                                        </template>
-                                    </CreateHalfVCol>
-                                </VRow>
+                            <VRow>
+                                <CreateHalfVCol :mdl="4" :mdr="8">
+                                    <template #name>승인번호</template>
+                                    <template #input>
+                                        <VTextField v-model="props.item.appr_num" type="text" placeholder="승인번호를 입력해주세요"
+                                            prepend-inner-icon="icon-park-solid:transaction-order" persistent-placeholder
+                                            counter :rules="[requiredValidator, lengthValidatorV2(props.item.appr_num, 8)]"
+                                            maxlength="8" />
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
-                                <VRow no-gutters>
-                                    <CreateHalfVCol :mdl="4" :mdr="8">
-                                        <template #name>구매자명</template>
-                                        <template #input>
-                                            <VTextField v-model="props.item.buyer_name" type="text"
-                                                placeholder="구매자명을 입력해주세요" prepend-inner-icon="tabler-user" maxlength="50"/>
-                                        </template>
-                                    </CreateHalfVCol>
-                                </VRow>
+                            <VRow>
+                                <CreateHalfVCol :mdl="4" :mdr="8">
+                                    <template #name>구매자명</template>
+                                    <template #input>
+                                        <VTextField v-model="props.item.buyer_name" type="text" placeholder="구매자명을 입력해주세요"
+                                            prepend-inner-icon="tabler-user" maxlength="50" />
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
-                                <VRow no-gutters>
-                                    <CreateHalfVCol :mdl="4" :mdr="8">
-                                        <template #name>구매자 연락처</template>
-                                        <template #input>
-                                            <VTextField v-model="props.item.buyer_phone" type="text"
-                                                placeholder="구매자 연락처를 입력해주세요" prepend-inner-icon="tabler-device-mobile" maxlength="20"/>
-                                        </template>
-                                    </CreateHalfVCol>
-                                </VRow>
+                            <VRow>
+                                <CreateHalfVCol :mdl="4" :mdr="8">
+                                    <template #name>구매자 연락처</template>
+                                    <template #input>
+                                        <VTextField v-model="props.item.buyer_phone" type="text"
+                                            placeholder="구매자 연락처를 입력해주세요" prepend-inner-icon="tabler-device-mobile"
+                                            maxlength="20" />
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12">
-                            <VRow no-gutters>
-                                <VRow no-gutters>
-                                    <CreateHalfVCol :mdl="4" :mdr="8">
-                                        <template #name>상품명</template>
-                                        <template #input>
-                                            <VTextField v-model="props.item.item_name" type="text" placeholder="상품명을 입력해주세요"
-                                                prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products" maxlength="100"/>
-                                        </template>
-                                    </CreateHalfVCol>
-                                </VRow>
+                            <VRow>
+                                <CreateHalfVCol :mdl="4" :mdr="8">
+                                    <template #name>상품명</template>
+                                    <template #input>
+                                        <VTextField v-model="props.item.item_name" type="text" placeholder="상품명을 입력해주세요"
+                                            prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
+                                            maxlength="100" />
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
                         </VCol>
                         <VDivider />

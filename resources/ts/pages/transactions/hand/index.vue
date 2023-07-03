@@ -3,14 +3,15 @@
 import HandPayOverview from '@/views/transactions/hand/HandPayOverview.vue'
 import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { useMchtFilterStore } from '@/views/merchandises/useStore'
 import { usePayModFilterStore } from '@/views/merchandises/pay-modules/useStore'
 import { payModFilter } from '@/views/merchandises/pay-modules/useStore'
 import type { PayModule, Merchandise } from '@/views/types'
 import { axios } from '@axios'
 
 
-const { pay_modules } = usePayModFilterStore()
-const merchandises = ref(<Merchandise[]>([]))
+const { pay_modules, getAllPayModules } = usePayModFilterStore()
+const { merchandises, getAllMerchandises } = useMchtFilterStore()
 
 const salesslip = ref()
 const mcht_id = ref()
@@ -22,9 +23,8 @@ const installment = ref(<number>(0))
 const is_old_auth = ref(<boolean>(false))
 const merchandise = ref(<Merchandise>({}))
 
-axios.get('/api/v1/manager/merchandises/all?module_type=1')
-    .then(r => { Object.assign(merchandises.value, r.data.content as Merchandise[]) })
-    .catch(e => { console.log(e) })
+getAllMerchandises(1)
+getAllPayModules()
 
 const filterPayMod = computed(() => {
     const filter = pay_modules.filter((obj: PayModule) => { return obj.mcht_id == mcht_id.value && obj.module_type == 1 })
@@ -35,8 +35,8 @@ watchEffect(() => {
     const pmod = pay_modules.find(obj => obj.id == pmod_id.value)
     if (pmod) {
         installment.value = pmod.installment
-        is_old_auth.value = pmod.is_old_auth
-        merchandise.value = merchandises.value.find(obj => obj.id == mcht_id.value)
+        is_old_auth.value = Boolean(pmod.is_old_auth)
+        merchandise.value = merchandises.find(obj => obj.id == mcht_id.value) as Merchandise
     }
 })
 </script>

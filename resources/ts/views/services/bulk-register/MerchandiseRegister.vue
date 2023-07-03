@@ -8,7 +8,6 @@ import type { Merchandise } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BanksExplainDialog from '@/views/services/bulk-register/BanksExplainDialog.vue'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
-import { useMchtFilterStore } from '@/views/merchandises/useStore'
 import { Registration } from '@/views/registration'
 
 interface extendMerchandise extends Merchandise {
@@ -16,18 +15,17 @@ interface extendMerchandise extends Merchandise {
 }
 
 const { cus_filters } = useStore()
-const { sales } = useSalesFilterStore()
+const { sales, classification } = useSalesFilterStore()
 const { head, headers, levels } = useRegisterStore()
-const { getAllMerchandises } = useMchtFilterStore()
 const { ExcelReader, isEmpty, openFilePicker, bulkRegister } = Registration()
 
 const snackbar = <any>(inject('snackbar'))
-
 const excel = ref()
 const items = ref<extendMerchandise[]>([])
 const is_clear = ref<boolean>(false)
 const banksExplain = ref()
 
+classification()
 
 const isNotExistSalesforce = (is_use: boolean, sales_idx: number, item_idx: number) => {
     const sales_id = 'sales' + sales_idx + '_id';
@@ -144,8 +142,6 @@ const validate = () => {
 
 const mchtRegister = async () => {
     const result = await bulkRegister('가맹점', 'merchandises', items.value)
-    if(result)
-        getAllMerchandises()
 }
 
 watchEffect(async () => {

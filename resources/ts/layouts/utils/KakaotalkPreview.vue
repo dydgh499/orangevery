@@ -81,7 +81,7 @@ watchEffect(() => {
 }
 
 .description {
-  overflow: hidden;
+  overflow: visible;
   font-size: 13px;
   margin-block-start: -4px;
   text-overflow: ellipsis;

@@ -52,7 +52,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     }
 
     headers['custom_id'] = '커스텀필터'
-    headers['terminal_id'] = '단말기타입'
+    headers['terminal_id'] = '장비타입'
     headers['amount'] = '거래 금액'
     headers['trx_amount'] = '거래 수수료'
     headers['hold_amount'] = '유보금'

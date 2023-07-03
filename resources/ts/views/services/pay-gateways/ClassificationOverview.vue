@@ -22,12 +22,12 @@ const addNewClassification = (items: Classification[], type: number) => {
         <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
-                    <VCardTitle style="margin-bottom: 1em;">단말기 종류</VCardTitle>
+                    <VCardTitle style="margin-bottom: 1em;">장비 종류</VCardTitle>
                     <VTable style="text-align: center;">
                         <thead>
                             <tr>
                                 <th scope="col" style="text-align: center;">No.</th>
-                                <th scope="col" style="text-align: center;">단말기명</th>
+                                <th scope="col" style="text-align: center;">장비명</th>
                                 <th scope="col" style="text-align: center;">추가/수정</th>
                             </tr>
                         </thead>
@@ -43,7 +43,7 @@ const addNewClassification = (items: Classification[], type: number) => {
                     <VRow>
                         <VCol class="d-flex gap-4 pt-10">
                             <VBtn type="button" style="margin-left: auto;" @click="addNewClassification(new_terminals, 0)">
-                                단말기 종류
+                                장비 종류
                                 <VIcon end icon="tabler-plus" />
                             </VBtn>
                         </VCol>

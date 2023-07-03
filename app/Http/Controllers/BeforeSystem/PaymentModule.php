@@ -97,7 +97,7 @@ class PaymentModule
                 'begin_dt' => $mcht->COMM_OPEN_DT,
                 'ship_out_dt' => $mcht->RELEASE_DT,
                 'ship_out_stat' => $mcht->STATUS == 5 ? 2 : 1,
-                'note' => '단말기',
+                'note' => '장비',
                 'USER_PK' => $mcht->USER_PK,
                 'created_at' => $this->current_time,
                 'updated_at' => $this->current_time,

@@ -82,7 +82,7 @@ const isSalesCol = (key: string) => {
                 </th>
             </tr>
             <tr>
-                <th v-for="(header, key) in head.flat_headers" :key="key" v-show="!header.hidden" class='list-square'>
+                <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                     <template v-if="key == 'deduction.input'">
                         <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
                             :content="'차감이 아닌 추가금 설정을 하시러면 금액 앞에 -(마이너스 기호)를 입력 후 차감버튼을 클릭해주세요.'">
@@ -100,7 +100,7 @@ const isSalesCol = (key: string) => {
             <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
-                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="!__header.hidden"
+                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
                             class='list-square'>
                             <span v-if="_key == 'deduction' && (__key as string) == 'input'">
                                 <AddDeductBtn :id="item['id']" :name="item['mcht_name']" :is_mcht="true">
@@ -112,7 +112,7 @@ const isSalesCol = (key: string) => {
                         </td>
                     </template>
                     <template v-else>
-                        <td v-show="!_header.hidden" class='list-square'>
+                        <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key === 'id'" class="edit-link">
                                 #{{ item[_key] }}
                             </span>

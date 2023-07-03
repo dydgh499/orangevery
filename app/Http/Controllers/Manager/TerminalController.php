@@ -45,6 +45,8 @@ class TerminalController extends Controller
         $query  = $query
                 ->where('payment_modules.brand_id', $request->user()->brand_id)
                 ->where('payment_modules.module_type', 0);
+        if($request->ship_out_stat != null)
+            $query = $query->where('payment_modules.ship_out_stat', $request->ship_out_stat);
 
         $query = $query->where(function ($query) use ($search) {
             return $query->where('payment_modules.mid', 'like', "%$search%")

@@ -74,7 +74,7 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         '취소',
         '매출',
         '추가차감',
-        '단말기',
+        '장비',
         '정산금',
     ];
     const headers = {

@@ -19,7 +19,7 @@ export const Header = (_path: string, file_name: string) => {
             if (typeof value === 'object')
                 result[key] = initHeader(value, {})
             else
-                result[key] = { ko: value, hidden: false, idx: header_count++ };
+                result[key] = { ko: value, visible: true, idx: header_count++ };
         }
         return result;
     }
@@ -47,13 +47,13 @@ export const Header = (_path: string, file_name: string) => {
                     colspans.push(colspan)
                 colspan = 0
                 const subColspan: number = _.reduce(val, (sum: number, subVal: any) => {
-                    return sum + (subVal.hidden ? 0 : 1)
+                    return sum + (subVal.visible ? 1 : 0)
                 }, 0)
                 colspans.push(subColspan)
                 colspan = 0
             } 
             else
-                colspan += val.hidden ? 0 : 1
+                colspan += val.visible ? 1 : 0
         })
         return colspans
     }
@@ -90,7 +90,7 @@ export const Header = (_path: string, file_name: string) => {
     const setHeader = (_headers: Filter): Filter => {
         return _.transform(_headers, (result: Filter, val:any, key:string) => {
             if (getDepth(val, 0) === 1 && key in headers.value) {
-                val.hidden = headers.value[key].hidden;
+                val.visible = headers.value[key].visible;
             } else {
                 result[key] = setHeader(val as Filter);
             }

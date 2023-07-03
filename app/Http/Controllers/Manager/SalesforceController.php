@@ -155,9 +155,7 @@ class SalesforceController extends Controller
     {
         $data = [];
         $levels = [];
-        if(isMerchandise($request))
-            return $this->response(951);
-        else
+        if(isMerchandise($request) == false)
         {
             $_levels = [13,15,17,20,25,30];
             for ($i=0; $i<count($_levels); $i++)

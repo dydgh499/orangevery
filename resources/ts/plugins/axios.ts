@@ -1,10 +1,5 @@
 import axiosIns from 'axios';
 
-interface userInfo {
-    id: number,
-    
-}
-
 export const pay_token  = ref<string>(localStorage.getItem('access-token') || '')
 export const user_info  = ref<any>(JSON.parse(localStorage.getItem('user_info') || '{}'))
 

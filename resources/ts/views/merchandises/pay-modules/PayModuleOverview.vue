@@ -1,25 +1,24 @@
 <script lang="ts" setup>
-import { axios } from '@axios'
 import type { PayModule, Merchandise } from '@/views/types'
 import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue'
+
+import { useMchtFilterStore } from '@/views/merchandises/useStore'
+import { usePayModFilterStore } from '@/views/merchandises/pay-modules/useStore'
 
 interface Props {
     item: Merchandise,
 }
 const props = defineProps<Props>();
-
-const pay_modules       = reactive<PayModule[]>([]);
 const new_pay_modules   = reactive<PayModule[]>([]);
-const snackbar      = <any>(inject('snackbar'))
 
-onMounted(async () => {
-    const params = {'mcht_id': props.item.id};
-    axios.get('/api/v1/manager/merchandises/pay-modules/all', { params: params })
-    .then(r => { Object.assign(pay_modules, r.data.content as PayModule[]) })
-    .catch(e => { snackbar.value.show(e.response.data.message, 'error') })
-})
+const { merchandises, getAllMerchandises } = useMchtFilterStore()
+const { pay_modules, getAllPayModules } = usePayModFilterStore()
 
-function addNewPaymodule() {
+getAllMerchandises()
+console.log(props.item.id)
+getAllPayModules(props.item.id)
+
+const addNewPaymodule = () => {
     new_pay_modules.push(<PayModule>{
         id: 0,
         mcht_id: props.item.id,
@@ -56,8 +55,8 @@ function addNewPaymodule() {
 }
 </script>
 <template>
-    <PayModuleCard v-for="(item, index) in pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false"/>
-    <PayModuleCard v-for="(item, index) in new_pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false"/>
+    <PayModuleCard v-for="(item, index) in pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="merchandises"/>
+    <PayModuleCard v-for="(item, index) in new_pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="merchandises"/>
     <!-- 👉 submit -->
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">

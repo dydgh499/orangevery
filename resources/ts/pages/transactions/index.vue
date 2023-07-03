@@ -95,7 +95,7 @@ const isSalesCol = (key: string) => {
                     </th>
                 </tr>
                 <tr>
-                    <th v-for="(header, key) in head.flat_headers" :key="key" v-show="!header.hidden" class='list-square'>
+                    <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                         <template v-if="key == 'total_trx_amount'">
                             <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
                                 :content="'총 거래 수수료 = 금액 - (거래 수수료 + 유보금 + 입금 수수료)'">
@@ -123,7 +123,7 @@ const isSalesCol = (key: string) => {
                 <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <template v-if="head.getDepth(_header, 0) != 1">
-                            <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="!__header.hidden"
+                            <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
                                 class='list-square'>
                                 <span>
                                     {{ item[_key][__key] }}
@@ -131,7 +131,7 @@ const isSalesCol = (key: string) => {
                             </td>
                         </template>
                         <template v-else>
-                            <td v-show="!_header.hidden" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
+                            <td v-show="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
                                 <span v-if="_key == 'id'" class="edit-link" @click="store.edit(item['id'])">
                                     #{{ item[_key] }}
                                 </span>

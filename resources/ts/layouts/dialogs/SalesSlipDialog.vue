@@ -30,7 +30,7 @@ const copySalesSlip = () => {
     if (card.value) {
         html2canvas(card.value).then(canvas => {
             canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]))
-            snackbar.value.show('영수증이 클립보드에 복사되었습니다.')
+            snackbar.value.show('영수증이 클립보드에 복사되었습니다.', 'success')
         })
     }
 }

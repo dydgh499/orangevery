@@ -13,7 +13,15 @@ const getUserLevel = () => {
     }
     return 0
 }
-
+const getViewType = () => {
+    const level = getUserLevel()
+    if(level == 10)
+        return 'quick-view'
+    else if(level <= 30 && user_info.value.view_type == 0)
+        return 'quick-view'
+    else
+        return 'dashboards-home'
+}
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -23,12 +31,10 @@ const router = createRouter({
             path: '/',
             redirect: to => {
                 const isLoggedIn = pay_token.value != ''
-                const userLevel = getUserLevel()
-                if (userLevel > 0 && isLoggedIn)
-                    return { name: 'dashboards-home' }
-                else {
+                if (isLoggedIn)
+                    return { name: getViewType(), query: to.query }
+                else
                     return { name: 'login', query: to.query }
-                }
             },
         },
         {
@@ -41,8 +47,8 @@ const router = createRouter({
         },
         {
             path: '/dashboards/home',
-            redirect: to => {
-                return { name: 'dashboards-home', query: to.query }
+            redirect: to => {                
+                return { name: getViewType(), query: to.query }
             }
         },
         ...setupLayouts(routes),
@@ -53,7 +59,6 @@ const router = createRouter({
 router.beforeEach(to => {
     const isLoggedIn = pay_token.value != ''
     axios.defaults.headers.common['Authorization'] = `Bearer ${pay_token.value}`;
-    
     if (canNavigate(to)) {
         if (to.meta.redirectIfLoggedIn && isLoggedIn)
             return '/'

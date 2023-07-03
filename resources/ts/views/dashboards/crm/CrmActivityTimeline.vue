@@ -117,7 +117,7 @@ import avatar2 from '@images/avatars/avatar_2.jpg'
           <!-- 👉 Header -->
           <div class="d-flex justify-space-between">
             <h6 class="text-base font-weight-semibold me-3">
-              단말기 등록
+              장비 등록
             </h6>
             <span class="text-sm text-disabled">10 Day Ago</span>
           </div>

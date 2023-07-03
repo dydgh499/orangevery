@@ -51,9 +51,17 @@ const metas = [
 const all_levels = allLevels()
 </script>
 <template>
-    <BaseIndexView placeholder="MID, TID, 시리얼 번호, 가맹점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="단말기" :is_range_date="true">
+    <BaseIndexView placeholder="MID, TID, 시리얼 번호, 가맹점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="장비" :is_range_date="true">
         <template #filter>
-            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" :sales="true" />
+            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" :sales="true">                
+                <template #extra_right>
+                    <VCol cols="12" sm="3">
+                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.ship_out_stat"
+                            :items="[{ id: null, title: '전체' }].concat(shipOutStats)" label="출고타입 선택" item-title="title"
+                            item-value="id" />
+                    </VCol>
+                </template>
+            </BaseIndexFilterCard>
         </template>
         <template #headers>
             <tr>
@@ -65,7 +73,7 @@ const all_levels = allLevels()
                 </th>
             </tr>
             <tr>
-                <th v-for="(header, key) in head.flat_headers" :key="key" v-show="!header.hidden" class='list-square'>
+                <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                     <span>
                         {{ header.ko }}
                     </span>
@@ -77,14 +85,14 @@ const all_levels = allLevels()
             <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
-                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="!__header.hidden" class='list-square'>
+                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible" class='list-square'>
                             <span>
                                 {{ item[_key][__key] }}
                             </span>
                         </td>
                     </template>
                     <template v-else>
-                        <td v-show="!_header.hidden" class='list-square'>
+                        <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key == 'id'" class="edit-link" @click="store.edit(item['id'])">
                                 #{{ item[_key] }}
                             </span>

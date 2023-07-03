@@ -34,12 +34,7 @@ const getAbilitiesMenu = computed(() => {
             title: 'Complaint',
             icon: { icon: 'ic-round-sentiment-dissatisfied' },
             to: 'complaints',
-        },
-            {
-                title: 'Calendar',
-                icon: { icon: 'tabler-calendar' },
-                to: 'calendars',
-            })
+        })
     }
     return [
         { heading: 'Service' },

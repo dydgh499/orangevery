@@ -6,7 +6,7 @@ import { user_info } from '@axios'
 
 export const useSearchStore = defineStore('terminalSearchStore', () => {
     const store = Searcher('merchandises/terminals')
-    const head = Header('merchandises/terminals', '단말기 관리')
+    const head = Header('merchandises/terminals', '장비 관리')
     const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
     const headers1: Record<string, string> = {
@@ -25,7 +25,7 @@ export const useSearchStore = defineStore('terminalSearchStore', () => {
         'mid': 'MID',
         'tid': 'TID',
         'installment': '할부한도',
-        'terminal_id': '단말기 타입',
+        'terminal_id': '장비 타입',
         'serial_num': '시리얼 번호',
         'comm_settle_fee': '통신비',
         'comm_settle_type': '통신비 정산일',

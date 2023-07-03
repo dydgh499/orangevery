@@ -9,14 +9,13 @@ const ability = useAppAbility()
 
 let mylink = ''
 if (user_info.value.level == 10)
-    mylink = '/merchandises/edit/' + user_info.value.id;
+    mylink = '/merchandises/edit/' + user_info.value.id
 else if (user_info.value.level <= 30)
-    mylink = '/salesforces/edit/' + user_info.value.id;
+    mylink = '/salesforces/edit/' + user_info.value.id
 else if (user_info.value.level <= 45)
-    mylink = '/operators/edit/' + user_info.value.id;
-
+    mylink = '/operators/edit/' + user_info.value.id
+// 개발사는 이동할 수 없음
 const avartar_num = Math.floor(Math.random() * 25) + 1;
-
 const logout = async () => {
     await axios.get('/api/v1/auth/sign-out', {})
     localStorage.removeItem('abilities')
@@ -63,12 +62,11 @@ const logout = async () => {
                             <template #prepend>
                                 <VIcon class="me-2" icon="tabler-user" size="22" />
                             </template>
-
                             <VListItemTitle>Profile</VListItemTitle>
                         </VListItem>
                     </router-link>
-                        <!-- Divider -->
-                        <VDivider class="my-2" />
+                    <!-- Divider -->
+                    <VDivider class="my-2" />
 
                     <!-- 👉 Logout -->
                     <VListItem link @click="logout">

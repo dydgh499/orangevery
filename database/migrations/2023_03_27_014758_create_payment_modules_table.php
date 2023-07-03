@@ -21,21 +21,21 @@ return new class extends Migration
             $table->integer('ps_id')->nullable()->comment('PG사 구간 id');
             $table->integer('settle_type')->default(0)->comment('정산일(D+1, D+2 ..)');
             $table->smallInteger('settle_fee')->default(0)->comment('입금 수수료');
-            $table->tinyInteger('module_type')->default(0)->comment('모듈 타입(0=단말기, 1=수기, 2=인증, 3=간편, 4=실시간 이체, 5=비인증 단말기)');
+            $table->tinyInteger('module_type')->default(0)->comment('모듈 타입(0=장비, 1=수기, 2=인증, 3=간편, 4=실시간 이체, 5=비인증 장비)');
             $table->string('api_key', 100)->default('')->comment('API KEY');
             $table->string('sub_key', 100)->default('')->comment('SUB KEY');
             $table->string('mid', 50)->default('')->comment('mid');
             $table->string('tid', 50)->default('')->comment('tid');
             $table->string('serial_num', 50)->default('')->comment('serial num');
             //-------------------------- comm
-            $table->integer('terminal_id')->nullable()->comment('단말기 종류');
+            $table->integer('terminal_id')->nullable()->comment('장비 종류');
             $table->smallInteger('comm_settle_fee')->default(0)->comment('통신비 입금 수수료');
             $table->tinyInteger('comm_settle_type')->default(0)->comment('통신비 정산일');
             $table->tinyInteger('comm_calc_level')->default(0)->comment('정산주체(sales id), -1=본인, 125=개발사, 128=본사');
             $table->integer('under_sales_amt')->default(0)->comment('매출미달 차감금');
             $table->date('begin_dt')->nullable()->comment('개통일');
             $table->date('ship_out_dt')->nullable()->comment('출고일');
-            $table->tinyInteger('ship_out_stat')->nullable()->comment('출고 상태(0=공단말기, 1=입고, 2=출고, 3=해지)');
+            $table->tinyInteger('ship_out_stat')->nullable()->comment('출고 상태(0=공장비, 1=입고, 2=출고, 3=해지)');
             //-------------------------- 4
             $table->integer('fin_id')->nullable()->comment('실시간 이체 ID');
             $table->tinyInteger('fin_trx_delay')->nullable()->comment('실시간 이체 딜레이(15,30,45,60)');

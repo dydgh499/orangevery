@@ -3,7 +3,6 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useRegisterStore } from '@/views/services/bulk-register/PayModRegisterStore'
 import { useMchtFilterStore } from '@/views/merchandises/useStore'
-import { usePayModFilterStore } from '@/views/merchandises/pay-modules/useStore'
 import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
 import { allLevels } from '@/views/salesforces/useStore'
 import SettleTypeExplainDialog from '@/views/services/bulk-register/SettleTypeExplainDialog.vue'
@@ -17,8 +16,8 @@ import corp from '@corp';
 const { store } = useSearchStore()
 const { pgs, pss, settle_types, terminals } = useStore()
 const { head, headers } = useRegisterStore()
-const { merchandises } = useMchtFilterStore()
-const { getAllPayModules } = usePayModFilterStore()
+const { merchandises, getAllMerchandises } = useMchtFilterStore()
+
 const all_levels = allLevels()
 const auth_types: Options[] = [
         { id: 0, title: '비인증',},
@@ -39,6 +38,7 @@ const is_clear = ref<boolean>(false)
 const settleTypeExplain = ref()
 const pgExplain = ref()
 
+getAllMerchandises()
 const validate = () => {
     for (let i = 0; i < items.value.length; i++) {
         const pg_id = pgs.find(item => item.id === items.value[i].pg_id)
@@ -78,7 +78,7 @@ const validate = () => {
             is_clear.value = false
         }
         else if (terminal_id == null) {
-            snackbar.value.show((i + 1) + '번째 결제모듈의 단말기 종류 이상합니다.', 'error')
+            snackbar.value.show((i + 1) + '번째 결제모듈의 장비 종류 이상합니다.', 'error')
             is_clear.value = false
         }
         else if (module_type == null) {
@@ -104,8 +104,6 @@ const validate = () => {
 
 const payModRegister = async () => {
     const result = await bulkRegister('결제모듈', 'merchandises/pay-modules', items.value)
-    if(result)
-        getAllPayModules()
 }
 
 watchEffect(async () => {
@@ -160,7 +158,7 @@ watchEffect(async () => {
                         </b>
                     </VCol>                    
                     <VCol>
-                        <b>단말기 종류
+                        <b>장비 종류
                             <VChip color="primary" style="margin: 0.5em;" v-for="(terminal, key) in terminals" :key="key">
                                 {{ terminal.name }} = {{ terminal.id }}
                             </VChip>

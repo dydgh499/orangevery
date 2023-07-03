@@ -6,16 +6,18 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import corp from '@corp'
 
 interface Props {
     item: Merchandise,
 }
 const props = defineProps<Props>()
-const { sales } = useSalesFilterStore()
+const { sales, classification } = useSalesFilterStore()
 const { cus_filters } = useStore()
-
 const levels = corp.pv_options.auth.levels
+
+classification()
 watchEffect(() => {
     props.item.sales0_fee = props.item.sales0_fee.toFixed(3)
     props.item.sales1_fee = props.item.sales1_fee.toFixed(3)
@@ -51,9 +53,11 @@ watchEffect(() => {
                         </CreateHalfVCol>
                         <!-- 👉 수수료율 -->
                         <VCol cols="12">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="3">
-                                    <label>거래/유보금 수수료율</label>
+                                    <BaseQuestionTooltip :location="'top'" :text="'거래/유보금 수수료율'"
+                                        :content="'화면 해상도가 맞지않아 버튼이 보이지 않는다면 Ctrl+Mouse wheel을 통해 해상도를 조절해주세요.'">
+                                    </BaseQuestionTooltip>
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.trx_fee" type="number" suffix="%"
@@ -69,7 +73,7 @@ watchEffect(() => {
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales5_use">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="3">
                                     <label>{{ levels.sales5_name }}/수수료율</label>
                                 </VCol>
@@ -89,7 +93,7 @@ watchEffect(() => {
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales4_use">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="3">
                                     <label>{{ levels.sales4_name }}/수수료율</label>
                                 </VCol>
@@ -97,7 +101,7 @@ watchEffect(() => {
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales4_id"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[4].value)"
                                         prepend-inner-icon="ph:share-network" label="하위지사 선택" item-title="sales_name"
-                                        item-value="id" create />
+                                        item-value="id" create/>
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales4_fee" type="number" suffix="%"
@@ -109,7 +113,7 @@ watchEffect(() => {
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales3_use">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="3">
                                     <label>{{ levels.sales3_name }}/수수료율</label>
                                 </VCol>
@@ -129,7 +133,7 @@ watchEffect(() => {
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales2_use">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="3">
                                     <label>{{ levels.sales2_name }}/수수료율</label>
                                 </VCol>
@@ -149,7 +153,7 @@ watchEffect(() => {
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales1_use">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="3">
                                     <label>{{ levels.sales1_name }}/수수료율</label>
                                 </VCol>
@@ -169,7 +173,7 @@ watchEffect(() => {
                         </VCol>
                         <!-- 👉 영업점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales0_use">
-                            <VRow no-gutters>
+                            <VRow>
                                 <VCol cols="12" md="3">
                                     <label>{{ levels.sales0_name }}/수수료율</label>
                                 </VCol>

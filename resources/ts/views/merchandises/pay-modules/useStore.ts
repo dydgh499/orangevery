@@ -14,7 +14,7 @@ export const abnormal_trans_limits = <Options[]>([
 ])
 
 export const module_types = <Options[]>([
-    { id: 0, title: "단말기" }, { id: 1, title: "수기결제" },
+    { id: 0, title: "장비" }, { id: 1, title: "수기결제" },
     { id: 2, title: "인증결제" }, { id: 3, title: "간편결제" },
     /*{ id: 4, title: "실시간 이체" },*/
 ])
@@ -28,7 +28,7 @@ export const installments = <Options[]>([
 ])
 
 export const shipOutStats = <Options[]>([
-    { id: 0, title: "공단말기" }, { id: 1, title: "입고" },
+    { id: 0, title: "공장비" }, { id: 1, title: "입고" },
     { id: 2, title: "출고" }, { id: 3, title: "해지" },
 ])
 export const payModFilter = (all_pay_modules:PayModule[], filter:PayModule[], pmod_id:number|null) => {
@@ -144,11 +144,9 @@ export const useUpdateStore = defineStore('payModUpdateStore', () => {
 
 export const usePayModFilterStore = defineStore('payModFilterStore', () => {
     const pay_modules = ref<PayModule[]>([])
-    onMounted(() => {
-        getAllPayModules()
-    })
-    const getAllPayModules = () => {
-        axios.get('/api/v1/manager/merchandises/pay-modules/all')
+    const getAllPayModules = (mcht_id:number|null=null) => {
+        const url = '/api/v1/manager/merchandises/pay-modules/all' + (mcht_id != null ? '?mcht_id='+mcht_id : '')
+        axios.get(url)
         .then(r => { Object.assign(pay_modules.value, r.data.content as PayModule[]) })
         .catch(e => { console.log(e) })
     }

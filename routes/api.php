@@ -23,6 +23,7 @@ use App\Http\Controllers\Log\SettleHistoryController;
 use App\Http\Controllers\Log\DangerTransController;
 use App\Http\Controllers\Log\FailTransController;
 
+use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 /*
 |--------------------------------------------------------------------------
@@ -113,5 +114,9 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::apiResource('merchandises', MerchandiseController::class);
         Route::apiResource('posts', PostController::class);
         
+    });
+
+    Route::prefix('quick-view')->middleware('auth:sanctum')->group(function() {
+        Route::get('', [QuickViewController::class, 'index']);        
     });
 });

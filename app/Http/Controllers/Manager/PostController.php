@@ -49,7 +49,6 @@ class PostController extends Controller
 
         $data = $this->getIndexData($request, $query, 'id', $this->posts->cols, 'updated_at');
         return $this->response(0, $data);
-
     }
 
     /**

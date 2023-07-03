@@ -27,7 +27,7 @@ const router = useRouter()
         </template>
         <template #headers>
             <tr>
-                <th v-for="(header, key) in head.flat_headers" :key="key" v-show="!header.hidden" class='list-square'>
+                <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                     <span :class="key === 'title' ? 'title' : ''">
                         {{ header.ko }}
                     </span>
@@ -38,7 +38,7 @@ const router = useRouter()
             <template v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
                 <tr>
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                        <td v-show="!_header.hidden" :class="_key == 'title' ? 'list-square title' : 'list-square'">
+                        <td v-show="_header.visible" :class="_key == 'title' ? 'list-square title' : 'list-square'">
                             <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
                                 #{{ item[_key] }}
                             </span>

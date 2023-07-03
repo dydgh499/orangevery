@@ -20,7 +20,7 @@ const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 
 const vForm = ref<VForm>()
-const is_hidden = ref(false)
+const is_visible = ref(false)
 const is_loading = ref(false)
 const is_disabled = ref(true)
 const is_transfer = ref(corp.is_transfer)
@@ -124,9 +124,9 @@ const register = async() => {
                                         <!-- password -->
                                         <VCol cols="12">
                                             <VTextField v-model="login_info.user_pw" label="패스워드 입력"
-                                                :rules="[requiredValidator]" :type="is_hidden ? 'text' : 'password'"
-                                                :append-inner-icon="is_hidden ? 'tabler-eye-off' : 'tabler-eye'"
-                                                @click:append-inner="is_hidden = !is_hidden" class="mb-6" :disabled="is_transfer"/>
+                                                :rules="[requiredValidator]" :type="is_visible ? 'text' : 'password'"
+                                                :append-inner-icon="is_visible ? 'tabler-eye-off' : 'tabler-eye'"
+                                                @click:append-inner="is_visible = !is_visible" class="mb-6" :disabled="is_transfer"/>
 
                                             <VBtn block type="submit" :disabled="is_transfer">
                                                 로그인
@@ -166,10 +166,10 @@ const register = async() => {
                                 <b style="margin-left: 1em;">- 입금 수수료 </b>                                
                                 <VChip>0원</VChip>                                
                                 <br>
-                                <b style="margin-left: 1em;">- 비인증 단말기 모듈타입 </b>
+                                <b style="margin-left: 1em;">- 비인증 장비 모듈타입 </b>
                                 <VChip>{{ module_types.find(item => item.id === 1)?.title }}</VChip>
                                 <br>
-                                <b style="margin-left: 1em;">- 구간타입(단말기 이외만 적용) </b>
+                                <b style="margin-left: 1em;">- 구간타입(장비 이외만 적용) </b>
                                 <VChip>{{ '기본 값 없음' }}</VChip>
                             </VCol>
                         </VCard>

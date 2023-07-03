@@ -24,7 +24,7 @@ export const useSearchStore = defineStore('dangerSearchStore', () => {
         'tid': 'TID',
         'pg_id': 'PG사',
         'ps_id': '구간',
-        'terminal_id': '단말기 타입',
+        'terminal_id': '장비 타입',
         'issuer': '발급사',
         'acquirer': '매입사',
         'card_num': '카드번호',

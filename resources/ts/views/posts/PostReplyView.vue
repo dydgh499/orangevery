@@ -21,7 +21,7 @@ provide('head', head)
 <template>
     <tr>
         <template v-for="(header, key, idx) in head.headers" :key="idx">
-            <td v-show="!header.hidden" :class="key == 'title' ? 'list-square title' : 'list-square'">
+            <td v-show="header.visible" :class="key == 'title' ? 'list-square title' : 'list-square'">
                 <span v-if="key == 'id'" class="edit-link" @click="store.edit(props.post['id'])">
                     #{{ props.post.id }}
                 </span>
@@ -41,7 +41,6 @@ provide('head', head)
                     <ExtraMenu :item="props.post">
                     </ExtraMenu>
                 </span>
-
                 <span v-else>
                     {{ props.post[key] }}
                 </span>

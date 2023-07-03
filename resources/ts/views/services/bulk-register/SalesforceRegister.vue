@@ -2,7 +2,6 @@
 import { businessNumValidator, lengthValidatorV2 } from '@validators'
 import { useSearchStore } from '@/views/salesforces/useStore'
 import { useRegisterStore } from '@/views/services/bulk-register/SalesRegisterStore'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { salesLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import type { Salesforce } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
@@ -14,7 +13,6 @@ import corp from '@corp'
 
 const { store } = useSearchStore()
 const { head, headers } = useRegisterStore()
-const { classification } = useSalesFilterStore()
 const { ExcelReader, isEmpty, openFilePicker, bulkRegister } = Registration()
 const snackbar = <any>(inject('snackbar'))
 const all_sales = salesLevels()
@@ -73,10 +71,6 @@ const validate = () => {
             snackbar.value.show((i + 1) + '번째 영업점의 주민등록번호 포멧이 정확하지 않습니다.', 'error')
             is_clear.value = false
         }
-        else if (isEmpty(saleses.value[i].sector)) {
-            snackbar.value.show((i + 1) + '번째 영업점의 업종은 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
         else if (level == null) {
             snackbar.value.show((i + 1) + '번째 영업점의 등급이 이상합니다.', 'error')
             is_clear.value = false
@@ -121,8 +115,6 @@ const validate = () => {
 
 const salesRegister = async () => {
     const result = await bulkRegister('영업점', 'salesforces', saleses.value)
-    if (result)
-        await classification()
 }
 watchEffect(async () => {
     if (excel.value) {

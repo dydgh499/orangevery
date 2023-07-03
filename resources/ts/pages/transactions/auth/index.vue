@@ -2,14 +2,15 @@
 <script setup lang="ts">
 import AuthPayOverview from '@/views/transactions/auth/AuthPayOverview.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+
+import { useMchtFilterStore } from '@/views/merchandises/useStore'
 import { usePayModFilterStore } from '@/views/merchandises/pay-modules/useStore'
+
 import { payModFilter } from '@/views/merchandises/pay-modules/useStore'
 import type { PayModule, Merchandise } from '@/views/types'
-import { axios } from '@axios'
-import corp from '@corp'
 
-const { pay_modules } = usePayModFilterStore()
-const merchandises = ref(<Merchandise[]>([]))
+const { pay_modules, getAllPayModules } = usePayModFilterStore()
+const { merchandises, getAllMerchandises } = useMchtFilterStore()
 
 const mcht_id = ref()
 const pmod_id = ref()
@@ -18,9 +19,8 @@ const return_url = 'http://'+'localhost'+'/transactions/result'
 const installment = ref(<number>(0))
 const pg_id = ref(<number>(0))
 
-axios.get('/api/v1/manager/merchandises/all?module_type=2')
-    .then(r => { Object.assign(merchandises.value, r.data.content as Merchandise[]) })
-    .catch(e => { console.log(e) })
+getAllMerchandises(2)
+getAllPayModules()
 
 const filterPayMod = computed(() => {
     const filter = pay_modules.filter((obj: PayModule) => { return obj.mcht_id == mcht_id.value && obj.module_type == 2 })
