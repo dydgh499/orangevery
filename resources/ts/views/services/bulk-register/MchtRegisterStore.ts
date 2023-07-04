@@ -8,27 +8,27 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
 
     const headers: Record<string, string> = {}
     if (levels.sales5_use && user_info.value.level >= 30) {
-        headers['sales5_name'] = levels.sales5_name + ' ID(X)'
+        headers['sales5_name'] = levels.sales5_name + '(X)'
         headers['sales5_fee'] = levels.sales5_name + ' 수수료(X)'
     }
     if (levels.sales4_use && user_info.value.level >= 25) {
-        headers['sales4_name'] = levels.sales4_name + ' ID(X)'
+        headers['sales4_name'] = levels.sales4_name + '(X)'
         headers['sales4_fee'] = levels.sales4_name + ' 수수료(X)'
     }
     if (levels.sales3_use && user_info.value.level >= 20) {
-        headers['sales3_name'] = levels.sales3_name + ' ID(X)'
+        headers['sales3_name'] = levels.sales3_name + '(X)'
         headers['sales3_fee'] = levels.sales3_name + ' 수수료(X)'
     }
     if (levels.sales2_use && user_info.value.level >= 17) {
-        headers['sales2_name'] = levels.sales2_name + ' ID(X)'
+        headers['sales2_name'] = levels.sales2_name + '(X)'
         headers['sales2_fee'] = levels.sales2_name + ' 수수료(X)'
     }
     if (levels.sales1_use && user_info.value.level >= 15) {
-        headers['sales1_name'] = levels.sales1_name + ' ID(X)'
+        headers['sales1_name'] = levels.sales1_name + '(X)'
         headers['sales1_fee'] = levels.sales1_name + ' 수수료(X)'
     }
     if (levels.sales0_use && user_info.value.level >= 13) {
-        headers['sales0_name'] = levels.sales0_name + ' ID(X)'
+        headers['sales0_name'] = levels.sales0_name + '(X)'
         headers['sales0_fee'] = levels.sales0_name + ' 수수료(X)'
     }
     headers['user_name'] = '가맹점 ID(O)'

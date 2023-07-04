@@ -1,12 +1,22 @@
 import type { VerticalNavItems } from '@/@layouts/types'
+import { getViewType, user_info } from '@axios'
 
 import home from './home'
 import service from './service'
 import transaction from './transaction'
 import user from './user'
 
+import quick from './quick/quick'
+
 const combinedNavItems = computed(() => {
-    return [...home, ...user.value, ...transaction.value, ...service.value] as VerticalNavItems;
+    if(getViewType() == 'quick-view')
+    {
+        
+        console.log(user_info.level)
+        return [...quick.value, ] as VerticalNavItems;
+    }
+    else
+        return [...home, ...user.value, ...transaction.value, ...service.value] as VerticalNavItems;
 });
 
 export default combinedNavItems;

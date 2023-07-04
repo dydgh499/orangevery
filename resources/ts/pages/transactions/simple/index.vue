@@ -35,15 +35,7 @@ watchEffect(() => {
         pg_id.value = pmod.pg_id ?? 0
     }
 })
-/*
-    <img :src="corp.logo_img || ''" width="100" height="100">
-    <br>
-    <b>
-        환영합니다 !
-    </b>
-    <br>
-    결제하실 정보를 입력해주세요.
-*/
+
 </script>
 <template>
     <section>
@@ -79,9 +71,9 @@ watchEffect(() => {
                                             <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                                                 <template #name>결제모듈 선택</template>
                                                 <template #input>
-                                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pmod_id"
+                                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="pmod_id"
                                                         :items="filterPayMod" prepend-inner-icon="ic-outline-send-to-mobile"
-                                                        label="결제모듈 선택" item-title="note" item-value="id" single-line />
+                                                        label="결제모듈 선택" item-title="note" item-value="id" single-line create />
                                                 </template>
                                             </CreateHalfVCol>
                                         </VRow>

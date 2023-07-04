@@ -46,7 +46,7 @@ const metas = [
 const all_levels = allLevels()
 </script>
 <template>
-    <BaseIndexView placeholder="영업점명 검색" :metas="metas" :add="false" add_name="가맹점" :is_range_date="true">
+    <BaseIndexView placeholder="영업점 상호 검색" :metas="metas" :add="false" add_name="가맹점" :is_range_date="true">
         <template #filter>
         </template>
         <template #headers>

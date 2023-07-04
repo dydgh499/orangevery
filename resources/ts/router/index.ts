@@ -1,27 +1,10 @@
-import { axios, pay_token, user_info } from '@axios'
+import { axios, getViewType, pay_token } from '@axios'
 import { canNavigate } from '@layouts/plugins/casl'
 import { setupLayouts } from 'virtual:generated-layouts'
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from '~pages'
 
-const getUserLevel = () => {
-    if(user_info.value) {
-        if(user_info.value.mcht_name) {
-            user_info.value.level = 10
-        }
-        return user_info.value.level
-    }
-    return 0
-}
-const getViewType = () => {
-    const level = getUserLevel()
-    if(level == 10)
-        return 'quick-view'
-    else if(level <= 30 && user_info.value.view_type == 0)
-        return 'quick-view'
-    else
-        return 'dashboards-home'
-}
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [

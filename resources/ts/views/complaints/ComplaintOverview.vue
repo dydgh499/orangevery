@@ -18,9 +18,13 @@ const { pgs } = useStore()
 const { merchandises, getAllMerchandises } = useMchtFilterStore()
 getAllMerchandises()
 
+const mcht = ref({ id: null, mcht_name: '가맹점 선택' })
 onMounted(() => {
     props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
     props.item.is_deposit = Boolean(props.item.is_deposit)
+})
+watchEffect(() => {
+    props.item.mcht_id = mcht.value.id
 })
 </script>
 <template>
@@ -78,9 +82,9 @@ onMounted(() => {
                     <CreateHalfVCol :mdl="3" :mdr="9">
                         <template #name>가맹점 선택</template>
                         <template #input>
-                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id" :items="merchandises"
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht" :items="merchandises"
                                 prepend-inner-icon="tabler-building-store" label="가맹점 선택" item-title="mcht_name"
-                                item-value="id" single-line :rules=[nullValidator] create />
+                                item-value="id" single-line :rules=[nullValidator] return-object />
                         </template>
                     </CreateHalfVCol>
                     <CreateHalfVCol :mdl="3" :mdr="9">

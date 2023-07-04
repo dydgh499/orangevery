@@ -53,7 +53,7 @@ const metas = [
 <template>
     <div>
         <BaseIndexView placeholder="가맹점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="가맹점"
-            :is_range_date="true">
+            :is_range_date="null">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true"
                     :sales="true">

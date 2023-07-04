@@ -50,13 +50,13 @@ const metas = [
 ]
 </script>
 <template>
-    <BaseIndexView placeholder="영업점 ID 검색" :metas="metas" :add="false" add_name="정산" :is_range_date="true">
+    <BaseIndexView placeholder="영업점 상호 검색" :metas="metas" :add="false" add_name="정산" :is_range_date="true">
         <template #filter>
             <BaseIndexFilterCard :pg="false" :ps="false" :pay_cond="false" :terminal="false" :cus_filter="false"
                 :sales="false">
                 <template #extra_left>
                     <VCol cols="12" sm="3">
-                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.level"
+                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level"
                             :items="[{ id: null, title: '전체' }].concat(salesLevels())" :label="`등급 선택`" item-title="title"
                             item-value="id" create />
                     </VCol>

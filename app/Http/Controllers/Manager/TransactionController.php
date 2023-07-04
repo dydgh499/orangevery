@@ -32,7 +32,7 @@ class TransactionController extends Controller
     public function index(IndexRequest $request)
     {
         $search = $request->input('search', '');
-        $query =  $this->transactions
+        $query  = $this->transactions
             ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
             ->where(function ($query) use ($search) {
@@ -41,6 +41,23 @@ class TransactionController extends Controller
                     ->orWhere('trx_id', 'like', "%$search%")
                     ->orWhere('appr_num', 'like', "%$search%");
             });
+            
+        if($request->has('s_dt') && $request->has('e_dt'))
+        {
+            $query = $query->where(function($query) use($request) {
+                $query->where(function($query) use($request) {
+                    $query->where('is_cancel', false)
+                        ->where('trx_dt', '>=', $request->s_dt)
+                        ->where('trx_dt', '<=', $request->e_dt);
+                })->orWhere(function($query) use($request) {
+                    $query->where('is_cancel', true)
+                        ->where('cxl_dt', '>=', $request->s_dt)
+                        ->where('cxl_dt', '<=', $request->e_dt);
+                });
+            });
+            $request->query->remove('s_dt');
+            $request->query->remove('e_dt');
+        }
         $query = globalPGFilter($query, $request);
         $query = globalSalesFilter($query, $request);
         $query = globalAuthFilter($query, $request);

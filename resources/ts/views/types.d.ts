@@ -430,36 +430,31 @@ export interface FailTransaction {
     resuld_cd: string,
     result_msg: string,
 }
-
-export interface Settle extends Bank {
+export interface TotalSetteObject {
+    count: number,
+    amount: number,
+    trx_amount: number,
+    hold_amount: number,
+    settle_fee: number,
+    total_trx_amount: number,
+    profit: number,
+}
+export interface TotalSettle {
+    appr: TotalSette,
+    cxl: TotalSette,
+    count: number,
+    amount: number,
+    trx_amount: number,
+    hold_amount: number,
+    settle_fee: number,
+    total_trx_amount: number,
+    profit: number,
+}
+export interface Settle extends TotalSettle, Bank {
     id: number,
     level: number,
     user_name: string,
     mcht_name: string,
-    count: number,
-    amount: number,
-    trx_amount: number,
-    settle_fee: number,
-    total_trx_amount: number,
-    profit: number,
-    appr: {
-        count: number,
-        amount: number,
-        trx_amount: number,
-        hold_amount: number,
-        settle_fee: number,
-        total_trx_amount: number,
-        profit: number,
-    },
-    cxl: {
-        count: number,
-        amount: number,
-        trx_amount: number,
-        hold_amount: number,
-        settle_fee: number,
-        total_trx_amount: number,
-        profit: number,  
-    },
     deduction: {
         amount: number,
     },
@@ -598,9 +593,13 @@ export interface CancelPay {
 }
 //----------------------------
 export interface MchtRecentTransaction {
-    date: Date,
-    appr_amount: number,
-    cxl_amount: number,
-    total_amount: number,
-    settle_amount: number,
+    month : {
+        [key: string]: TotalSette        
+    },
+    day : {
+        [key: string]: TotalSette
+    },
+    mcht_name: {
+        [key: string]: TotalSette
+    }
 }

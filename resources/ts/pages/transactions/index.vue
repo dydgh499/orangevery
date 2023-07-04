@@ -79,7 +79,7 @@ const isSalesCol = (key: string) => {
                     :sales="true">
                     <template #extra_left>
                         <VCol cols="12" sm="3">
-                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="all_levels"
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="all_levels"
                                 :label="`등급 선택`" item-title="title" item-value="id" create />
                         </VCol>
                     </template>

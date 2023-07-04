@@ -40,16 +40,16 @@ const isSalesCol = (key: string) => {
 }
 </script>
 <template>
-    <BaseIndexView placeholder="영업점 ID 검색" :metas="metas" :add="false" add_name="정산" :is_range_date="false">
+    <BaseIndexView placeholder="영업점 상호 검색" :metas="metas" :add="false" add_name="정산" :is_range_date="false">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" :sales="true">
                 <template #extra_left>
                     <VCol cols="12" sm="3">
-                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="salesLevels()"
+                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="salesLevels()"
                             :label="`전체`" item-title="title" item-value="id" create />
                     </VCol>
                     <VCol cols="12" sm="3">
-                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
+                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
                             :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`정산주기 선택`"
                             item-title="title" item-value="id" create />
                     </VCol>

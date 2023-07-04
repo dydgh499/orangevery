@@ -16,27 +16,27 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     }
     const { pgs, pss, terminals } = useStore()
     if (levels.sales5_use && user_info.value.level >= 30) {
-        headers['sales5_name'] = levels.sales5_name + ' ID'
+        headers['sales5_name'] = levels.sales5_name
         headers['sales5_fee'] = '수수료'
     }
     if (levels.sales4_use && user_info.value.level >= 25) {
-        headers['sales4_name'] = levels.sales4_name + ' ID'
+        headers['sales4_name'] = levels.sales4_name
         headers['sales4_fee'] = '수수료'
     }
     if (levels.sales3_use && user_info.value.level >= 20) {
-        headers['sales3_name'] = levels.sales3_name + ' ID'
+        headers['sales3_name'] = levels.sales3_name
         headers['sales3_fee'] = '수수료'
     }
     if (levels.sales2_use && user_info.value.level >= 17) {
-        headers['sales2_name'] = levels.sales2_name + ' ID'
+        headers['sales2_name'] = levels.sales2_name
         headers['sales2_fee'] = '수수료'
     }
     if (levels.sales1_use && user_info.value.level >= 15) {
-        headers['sales1_name'] = levels.sales1_name + ' ID'
+        headers['sales1_name'] = levels.sales1_name
         headers['sales1_fee'] = '수수료'
     }
     if (levels.sales0_use && user_info.value.level >= 13) {
-        headers['sales0_name'] = levels.sales0_name + ' ID'
+        headers['sales0_name'] = levels.sales0_name
         headers['sales0_fee'] = '수수료'
     }
 

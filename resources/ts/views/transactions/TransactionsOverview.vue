@@ -19,31 +19,21 @@ const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
 const { merchandises, getAllMerchandises } = useMchtFilterStore()
 const { pay_modules, getAllPayModules } = usePayModFilterStore()
 const { sales, classification } = useSalesFilterStore()
+
 const levels = corp.pv_options.auth.levels
+const sales5 = ref({ id: null, sales_name: '선택안함' })
+const sales4 = ref({ id: null, sales_name: '선택안함' })
+const sales3 = ref({ id: null, sales_name: '선택안함' })
+const sales2 = ref({ id: null, sales_name: '선택안함' })
+const sales1 = ref({ id: null, sales_name: '선택안함' })
+const sales0 = ref({ id: null, sales_name: '선택안함' })
+const mcht  = ref({ id: null, mcht_name: '선택안함' })
+const custom = ref({ id: null, type: 1, name: '사용안함' })
 
 getAllMerchandises()
 getAllPayModules()
 classification()
 
-const filterPgs = computed(() => {
-    const filter = pss.filter(item => { return item.pg_id == props.item.pg_id })
-    props.item.ps_id = psFilter(filter, props.item.ps_id as number)
-    props.item.ps_fee = pss.find((obj: PaySection) => obj.id == props.item.ps_id)?.trx_fee
-    return filter
-})
-const filterPayMod = computed(() => {
-    const filter = pay_modules.filter((obj: PayModule) => { return obj.mcht_id == props.item.mcht_id })
-    props.item.pmod_id = payModFilter(pay_modules, filter, props.item.pmod_id as number)
-    return filter
-})
-const filterInsts = computed(() => {
-    if (props.item.pmod_id != null) {
-        const pmod = pay_modules.find((obj: PayModule) => obj.id == props.item.pmod_id)
-        return installments.filter((obj: Options) => { return pmod && obj.id <= pmod.installment });
-    }
-    else
-        return []
-})
 const initTrxAt = (is_trx: boolean) => {
     if (is_trx) {
         props.item.trx_dt = null
@@ -92,7 +82,35 @@ const changeMchtEvent = () => {
         }
     }
 }
-
+const filterPgs = computed(() => {
+    const filter = pss.filter(item => { return item.pg_id == props.item.pg_id })
+    props.item.ps_id = psFilter(filter, props.item.ps_id as number)
+    props.item.ps_fee = pss.find((obj: PaySection) => obj.id == props.item.ps_id)?.trx_fee
+    return filter
+})
+const filterPayMod = computed(() => {
+    const filter = pay_modules.filter((obj: PayModule) => { return obj.mcht_id == props.item.mcht_id })
+    props.item.pmod_id = payModFilter(pay_modules, filter, props.item.pmod_id as number)
+    return filter
+})
+const filterInsts = computed(() => {
+    if (props.item.pmod_id != null) {
+        const pmod = pay_modules.find((obj: PayModule) => obj.id == props.item.pmod_id)
+        return installments.filter((obj: Options) => { return pmod && obj.id <= pmod.installment });
+    }
+    else
+        return []
+})
+watchEffect(() => {
+    props.item.sales5_id = sales5.value.id
+    props.item.sales4_id = sales4.value.id
+    props.item.sales3_id = sales3.value.id
+    props.item.sales2_id = sales2.value.id
+    props.item.sales1_id = sales1.value.id
+    props.item.sales0_id = sales0.value.id
+    props.item.custom_id = custom.value.id
+    props.item.mcht_id = mcht.value.id
+})
 </script>
 <template>
     <VRow class="match-height">
@@ -109,10 +127,10 @@ const changeMchtEvent = () => {
                                     <label>{{ levels.sales5_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales5_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales5"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[5].value)"
                                         prepend-inner-icon="ph:share-network" label="지사 선택" item-title="sales_name"
-                                        item-value="id" create />
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales5_fee" type="number" suffix="%"
@@ -127,10 +145,10 @@ const changeMchtEvent = () => {
                                     <label>{{ levels.sales4_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales4_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales4"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[4].value)"
                                         prepend-inner-icon="ph:share-network" label="하위지사 선택" item-title="sales_name"
-                                        item-value="id" create />
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales4_fee" type="number" suffix="%"
@@ -145,10 +163,10 @@ const changeMchtEvent = () => {
                                     <label>{{ levels.sales3_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales3_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales3"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[3].value)"
                                         prepend-inner-icon="ph:share-network" label="총판 선택" item-title="sales_name"
-                                        item-value="id" create />
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales3_fee" type="number" suffix="%"
@@ -163,10 +181,10 @@ const changeMchtEvent = () => {
                                     <label>{{ levels.sales2_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales2_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales2"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[2].value)"
                                         prepend-inner-icon="ph:share-network" label="하위총판 선택" item-title="sales_name"
-                                        item-value="id" create />
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales2_fee" type="number" suffix="%"
@@ -181,10 +199,10 @@ const changeMchtEvent = () => {
                                     <label>{{ levels.sales1_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales1_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales1"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[1].value)"
                                         prepend-inner-icon="ph:share-network" label="대리점 선택" item-title="sales_name"
-                                        item-value="id" create />
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales1_fee" type="number" suffix="%"
@@ -199,10 +217,10 @@ const changeMchtEvent = () => {
                                     <label>{{ levels.sales0_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales0_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales0"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[0].value)"
                                         prepend-inner-icon="ph:share-network" label="하위대리점 선택" item-title="sales_name"
-                                        item-value="id" create />
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales0_fee" type="number" suffix="%"
@@ -219,10 +237,10 @@ const changeMchtEvent = () => {
                                     </BaseQuestionTooltip>
                                 </VCol>
                                 <VCol cols="12" :md="4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht
                                         :items="[{ id: null, mcht_name: '선택안함' }].concat(merchandises)"
                                         prepend-inner-icon="ph:share-network" label="가맹점 선택" item-title="mcht_name"
-                                        item-value="id" @update:modelValue="changeMchtEvent()" create />
+                                        item-value="id" @update:modelValue="changeMchtEvent()" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.mcht_fee" type="number" suffix="%"
@@ -247,7 +265,7 @@ const changeMchtEvent = () => {
                                     <label>커스텀 필터</label>
                                 </VCol>
                                 <VCol cols="12" md="8">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.custom_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="custom"
                                         :items="[{ id: null, name: '선택안함' }].concat(cus_filters)"
                                         prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name"
                                         item-value="id" persistent-hint create />

@@ -14,39 +14,53 @@ const props = defineProps<Props>()
 const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
 const store = <any>(inject('store'))
 
+const pg = ref({ id: null, pg_name: '전체' })
+const ps = ref({ id: null, name: '전체' })
+const custom = ref({ id: null, name: '전체' })
+const terminal = ref({ id: null, name: '전체' })
+const settle_type = ref({ id: null, name: '전체' })
+
 const filterPgs = computed(() => {
     const filter = pss.filter(item => {
-        return item.pg_id == store.params.pg_id;
+        return item.pg_id == pg.value.id
     })
-    store.params.ps_id = psFilter(filter, store.params.ps_id)
+    ps.value.id = psFilter(filter, store.params.ps_id)
     return filter
+})
+
+watchEffect(() => {
+    store.params.pg_id = pg.value.id
+    store.params.ps_id = ps.value.id
+    store.params.terminal = terminal.value.id
+    store.params.custom_id = custom.value.id
+    store.params.settle_type = settle_type.value.id
 })
 </script>
 <template>
     <VRow>
         <VCol cols="12" sm="3" v-if="props.pg && user_info.level > 30">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.pg_id"
-                :items="[{ id: null, pg_name: '전체' }].concat(pgs)" label="PG사 선택" item-title="pg_name" item-value="id" create />
+            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="pg" :items="[{ id: null, pg_name: '전체' }].concat(pgs)"
+                label="PG사 선택" item-title="pg_name" item-value="id" return-object />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.ps && user_info.level > 30">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.ps_id"
+            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="ps"
                 :items="[{ id: null, name: '전체' }].concat(filterPgs)" label="구간 선택" item-title="name" item-value="id"
-                create />
+                return-object />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.pay_cond">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_type"
+            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="settle_type"
                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산일 선택" item-title="name" item-value="id"
-                create />
+                return-object />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.terminal">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.terminal_id"
+            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="terminal"
                 :items="[{ id: null, name: '전체' }].concat(terminals)" label="장비 선택" item-title="name" item-value="id"
-                create />
+                return-object />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.cus_filter && user_info.level > 30">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.custom_id"
+            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="custom"
                 :items="[{ id: null, name: '전체' }].concat(cus_filters)" label="커스텀 필터" item-title="name" item-value="id"
-                create />
+                return-object />
         </VCol>
         <slot name="extra_right"></slot>
         <VCol cols="12" sm="3">

@@ -17,6 +17,14 @@ const { sales, classification } = useSalesFilterStore()
 const { cus_filters } = useStore()
 const levels = corp.pv_options.auth.levels
 
+const sales5 = ref({ id: null, sales_name: '선택안함' })
+const sales4 = ref({ id: null, sales_name: '선택안함' })
+const sales3 = ref({ id: null, sales_name: '선택안함' })
+const sales2 = ref({ id: null, sales_name: '선택안함' })
+const sales1 = ref({ id: null, sales_name: '선택안함' })
+const sales0 = ref({ id: null, sales_name: '선택안함' })
+const custom = ref({ id: null, type: 1, name: '사용안함' })
+
 classification()
 watchEffect(() => {
     props.item.sales0_fee = props.item.sales0_fee.toFixed(3)
@@ -27,6 +35,16 @@ watchEffect(() => {
     props.item.sales5_fee = props.item.sales5_fee.toFixed(3)
     props.item.trx_fee = props.item.trx_fee.toFixed(3)
     props.item.hold_fee = props.item.hold_fee.toFixed(3)
+})
+
+watchEffect(() => {
+    props.item.sales5_id = sales5.value.id
+    props.item.sales4_id = sales4.value.id
+    props.item.sales3_id = sales3.value.id
+    props.item.sales2_id = sales2.value.id
+    props.item.sales1_id = sales1.value.id
+    props.item.sales0_id = sales0.value.id
+    props.item.custom_id = custom.value.id
 })
 </script>
 <template>
@@ -78,10 +96,10 @@ watchEffect(() => {
                                     <label>{{ levels.sales5_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales5_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales5"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[5].value)"
                                         prepend-inner-icon="ph:share-network" label="지사 선택" item-title="sales_name" item-value="id"
-                                        create />
+                                        return-object />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales5_fee" type="number" suffix="%"
@@ -98,10 +116,10 @@ watchEffect(() => {
                                     <label>{{ levels.sales4_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales4_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales4"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[4].value)"
                                         prepend-inner-icon="ph:share-network" label="하위지사 선택" item-title="sales_name"
-                                        item-value="id" create/>
+                                        item-value="id" return-object/>
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales4_fee" type="number" suffix="%"
@@ -118,10 +136,10 @@ watchEffect(() => {
                                     <label>{{ levels.sales3_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales3_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales3"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[3].value)"
                                         prepend-inner-icon="ph:share-network" label="총판 선택" item-title="sales_name" item-value="id"
-                                        create />
+                                        return-object />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales3_fee" type="number" suffix="%"
@@ -138,10 +156,10 @@ watchEffect(() => {
                                     <label>{{ levels.sales2_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales2_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales2"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[2].value)"
                                         prepend-inner-icon="ph:share-network" label="하위총판 선택" item-title="sales_name"
-                                        item-value="id" create />
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales2_fee" type="number" suffix="%"
@@ -158,10 +176,10 @@ watchEffect(() => {
                                     <label>{{ levels.sales1_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales1_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales1"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[1].value)"
                                         prepend-inner-icon="ph:share-network" label="대리점 선택" item-title="sales_name"
-                                        item-value="id" create />
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales1_fee" type="number" suffix="%"
@@ -178,10 +196,10 @@ watchEffect(() => {
                                     <label>{{ levels.sales0_name }}/수수료율</label>
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.sales0_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales0"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[0].value)"
                                         prepend-inner-icon="ph:share-network" label="하위대리점 선택" item-title="sales_name"
-                                        item-value="id" create />
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales0_fee" type="number" suffix="%"
@@ -210,10 +228,10 @@ watchEffect(() => {
                                 <CreateHalfVCol :mdl="3" :mdr="9">
                                     <template #name>커스텀 필터</template>
                                     <template #input>
-                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.custom_id"
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="custom"
                                             :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)"
                                             prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name"
-                                            item-value="id" persistent-hint create />
+                                            item-value="id" persistent-hint return-object />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>

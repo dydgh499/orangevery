@@ -22,6 +22,8 @@ const props = defineProps<Props>()
 const all_levels = allLevels()
 const { update, remove } = useRequestStore()
 const { pgs, pss, settle_types, terminals, psFilter, setFee } = useStore()
+
+const mcht = ref({ id: null, mcht_name: '선택안함' })
 const md = ref<number>(3)
 
 onMounted(() => {
@@ -42,7 +44,9 @@ const filterPgs = computed(() => {
     props.item.ps_id = psFilter(filter, props.item.ps_id)
     return filter
 })
-
+watchEffect(() => {
+    props.item.mcht_id = mcht.value.id
+})
 
 </script>
 <template>
@@ -58,9 +62,9 @@ const filterPgs = computed(() => {
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>소유 가맹점</template>
                                 <template #input>
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht"
                                         :items="props.merchandises" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
-                                        item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] create />
+                                        item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] return-object />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

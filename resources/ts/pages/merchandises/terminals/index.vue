@@ -51,7 +51,7 @@ const metas = [
 const all_levels = allLevels()
 </script>
 <template>
-    <BaseIndexView placeholder="MID, TID, 시리얼 번호, 가맹점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="장비" :is_range_date="true">
+    <BaseIndexView placeholder="MID, TID, 시리얼 번호, 가맹점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="장비" :is_range_date="null">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" :sales="true">                
                 <template #extra_right>
