@@ -8,6 +8,18 @@ const vuetifyTheme = useTheme()
 const currentTab = ref<number>(0)
 const refVueApexChart = ref()
 
+const getPreviousMonths = () => {
+    const currentDate = new Date(); // 현재 날짜 가져오기
+    const months: string[] = []; // 결과를 저장할 배열
+
+    for (let i = 0; i < 10; i++) {
+        const targetDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+        const targetMonth = targetDate.toLocaleString('default', { month: 'long' }); // 월 이름 가져오기
+        months.unshift(targetMonth); // 배열의 맨 앞에 추가
+    }
+    return months;
+}
+const categories = getPreviousMonths()
 const chartConfigs = computed(() => {
   const currentTheme = vuetifyTheme.current.value.colors
   const variableTheme = vuetifyTheme.current.value.variables
@@ -19,7 +31,7 @@ const chartConfigs = computed(() => {
 
   return [
     {
-      title: 'Orders',
+      title: '승인',
       icon: 'tabler-shopping-cart',
       chartOptions: {
         chart: {
@@ -52,13 +64,13 @@ const chartConfigs = computed(() => {
         colors: [
           labelPrimaryColor,
           labelPrimaryColor,
+          labelPrimaryColor,
+          labelPrimaryColor,
+          labelPrimaryColor,
+          labelPrimaryColor,
+          labelPrimaryColor,
+          labelPrimaryColor,
           currentTheme.primary,
-          labelPrimaryColor,
-          labelPrimaryColor,
-          labelPrimaryColor,
-          labelPrimaryColor,
-          labelPrimaryColor,
-          labelPrimaryColor,
         ],
         dataLabels: {
           enabled: true,
@@ -80,7 +92,7 @@ const chartConfigs = computed(() => {
           enabled: false,
         },
         xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+          categories: categories,
           axisBorder: {
             show: true,
             color: borderColor,
@@ -159,7 +171,7 @@ const chartConfigs = computed(() => {
       ],
     },
     {
-      title: 'Sales',
+      title: '취소',
       icon: 'tabler-chart-bar',
       chartOptions: {
         chart: {
@@ -196,9 +208,9 @@ const chartConfigs = computed(() => {
           labelPrimaryColor,
           labelPrimaryColor,
           labelPrimaryColor,
+          labelPrimaryColor,
+          labelPrimaryColor,
           currentTheme.primary,
-          labelPrimaryColor,
-          labelPrimaryColor,
         ],
         dataLabels: {
           enabled: true,
@@ -220,7 +232,7 @@ const chartConfigs = computed(() => {
           enabled: false,
         },
         xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+          categories: categories,
           axisBorder: {
             show: true,
             color: borderColor,
@@ -298,7 +310,7 @@ const chartConfigs = computed(() => {
       ],
     },
     {
-      title: 'Profit',
+      title: '매출',
       icon: 'tabler-currency-dollar',
       chartOptions: {
         chart: {
@@ -333,11 +345,11 @@ const chartConfigs = computed(() => {
           labelPrimaryColor,
           labelPrimaryColor,
           labelPrimaryColor,
+          labelPrimaryColor,
+          labelPrimaryColor,
+          labelPrimaryColor,
+          labelPrimaryColor,
           currentTheme.primary,
-          labelPrimaryColor,
-          labelPrimaryColor,
-          labelPrimaryColor,
-          labelPrimaryColor,
         ],
         dataLabels: {
           enabled: true,
@@ -359,7 +371,7 @@ const chartConfigs = computed(() => {
           enabled: false,
         },
         xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+          categories: categories,
           axisBorder: {
             show: true,
             color: borderColor,
@@ -437,7 +449,7 @@ const chartConfigs = computed(() => {
       ],
     },
     {
-      title: 'Income',
+      title: '정산',
       icon: 'tabler-chart-pie-2',
       chartOptions: {
         chart: {
@@ -498,7 +510,7 @@ const chartConfigs = computed(() => {
           enabled: false,
         },
         xaxis: {
-          categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+          categories: categories,
           axisBorder: {
             show: true,
             color: borderColor,
@@ -581,8 +593,8 @@ const chartConfigs = computed(() => {
 
 <template>
   <VCard
-    title="Earning Reports"
-    subtitle="Yearly Earnings Overview"
+    title="월별 거래량"
+    subtitle="10개월간 거래금 개요"
   >
     <template #append>
       <div class="mt-n4 me-n2">
@@ -645,24 +657,7 @@ const chartConfigs = computed(() => {
             </p>
           </div>
         </VSlideGroupItem>
-
         <!-- 👉 slider more -->
-        <VSlideGroupItem>
-          <div
-            style=" width: 110px;height: 94px;"
-            class="d-flex flex-column justify-center align-center rounded me-6 border border-dashed"
-          >
-            <VAvatar
-              rounded
-              size="38"
-              color="default"
-              variant="tonal"
-              class="text-disabled"
-            >
-              <VIcon icon="tabler-plus" />
-            </VAvatar>
-          </div>
-        </VSlideGroupItem>
       </VSlideGroup>
 
       <VueApexCharts

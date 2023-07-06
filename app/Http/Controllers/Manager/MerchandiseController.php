@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
 /**
  * @group Merchandise API
  *
@@ -43,7 +44,27 @@ class MerchandiseController extends Controller
         ];
     }
 
-    private function get($request, $cols)
+    public function chart(Request $request)
+    {
+        $request->merge([
+            'page' => 1,
+            'page_size' => 99999999,
+        ]);
+        $cols = ['merchandises.*'];
+        $chart = [
+            'this_week_add' => 0,
+            'this_week_del' => 0,
+            'this_month_add' => 0,
+            'this_month_del' => 0,
+            'total' => 0,
+        ];
+        $query = $this->commonSelect($request, true);
+        $data = $this->getIndexData($request, $query, 'merchandises.id', $cols, 'merchandises.created_at', true);
+        $chart = getDefaultChartFormat($data);
+        return $this->response(0, $chart);
+    }
+
+    private function commonSelect($request, $is_all=false)
     {
         $search = $request->input('search', '');
         $query = $this->merchandises->leftJoin('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id');
@@ -51,21 +72,13 @@ class MerchandiseController extends Controller
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
         $query = $query
-            ->where('merchandises.is_delete', false)
             ->where('merchandises.brand_id', $request->user()->brand_id)
             ->where('merchandises.mcht_name', 'like', "%$search%");
+        if($is_all == false)
+            $query = $query->where('merchandises.is_delete', false);
 
         $query = $query->groupBy('merchandises.id');
-        $data = $this->getIndexData($request, $query, 'merchandises.id', $cols, 'merchandises.created_at', true);
-
-        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-        $salesforces    = globalGetSalesByIds($sales_ids);
-        $data['content'] = globalMappingSales($salesforces, $data['content']);
-        foreach($data['content'] as $content) 
-        {
-            $content->setFeeFormatting(true);
-        }
-        return $this->response(0, $data);
+        return $query;
     }
 
     /**
@@ -78,7 +91,18 @@ class MerchandiseController extends Controller
     public function index(IndexRequest $request)
     {
         $cols = ['merchandises.*'];
-        return $this->get($request, $cols);
+        $query = $this->commonSelect($request);
+        $data = $this->getIndexData($request, $query, 'merchandises.id', $cols, 'merchandises.created_at', true);
+
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
+        foreach($data['content'] as $content) 
+        {
+            $content->setFeeFormatting(true);
+        }
+        return $this->response(0, $data);
+
     }
 
     /**
@@ -214,7 +238,17 @@ class MerchandiseController extends Controller
             'merchandises.business_num', 'merchandises.resident_num',
             'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell',
         ];
-        return $this->get($request, $cols);
+        $query = $this->commonSelect($request);
+        $data = $this->getIndexData($request, $query, 'merchandises.id', $cols, 'merchandises.created_at', true);
+
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
+        foreach($data['content'] as $content) 
+        {
+            $content->setFeeFormatting(true);
+        }
+        return $this->response(0, $data);
     }
 
     public function passwordChange(Request $request)
@@ -259,5 +293,21 @@ class MerchandiseController extends Controller
             $res = $this->manyInsert($this->merchandises, $merchandises);
             return $this->response($res ? 1 : 990);
         }
+    }
+
+    /**
+     * 영수증 정보조회
+     *
+     * @urlParam id integer required 유저 PK
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function saleSlip(Request $request, $id)
+    {
+        $cols = [
+            'addr', 'business_num', 'resident_num', 'mcht_name', 'user_name',
+            'nick_name', 'is_show_fee', 'use_saleslip_prov', 'use_saleslip_sell'
+        ];
+        $data = $this->merchandises->where('id', $id)->first($cols);
+        return $this->response(0, $data);
     }
 }

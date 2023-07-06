@@ -580,7 +580,7 @@ export interface AuthPay extends BasePay{
     return_url: string,
 }
 
-export interface SimplehPay extends BasePay {
+export interface SimplePay extends BasePay {
     route: string,
     return_url: string,
 }

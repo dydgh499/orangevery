@@ -16,7 +16,7 @@ export const { themeConfig, layoutConfig } = defineThemeConfig({
     contentWidth: ContentWidth.Boxed,
     contentLayoutNav: AppContentLayoutNav.Vertical,
     overlayNavFromBreakpoint: breakpointsVuetify.md + 16, // 16 for scro
-    enableI18n: true,
+    enableI18n: false,
     theme: 'light',
     isRtl: false,
     skin: Skins.Default,

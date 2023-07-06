@@ -1,22 +1,13 @@
 <script lang="ts" setup>
 import Preview from '@/layouts/utils/Preview.vue'
 
-const props = defineProps({
-    file: {
-        type: File,
-        required: false,
-    },
-    preview: {
-        type: String || null,
-        default: '/icons/img-preview.svg',
-        required: false,
-    },
-    label: {
-        type: String,
-        required: true,
-    },
-});
-const files = ref(props.file)
+interface Props {
+    preview: string,
+    label: string,
+}
+const props = defineProps<Props>()
+
+const files = ref(<File[]>([]))
 const preview = ref<string>(props.preview)
 const previewStyle = `
     border: 2px solid rgb(238, 238, 238);
@@ -51,7 +42,7 @@ watchEffect(() => {
             </VFileInput>
         </VCol>
         <VCol cols="12" md="3">
-            <Preview :preview="preview" :style="``" :preview-style="previewStyle"></Preview>
+            <Preview :preview="preview" :style="``" :preview-style="previewStyle" class="preview"/>
         </VCol>
     </VRow>
 </template>

@@ -1,6 +1,6 @@
 import axiosIns from 'axios';
 
-const getUserLevel = () => {
+export const getUserLevel = () => {
     if(user_info.value) {
         if(user_info.value.mcht_name) {
             user_info.value.level = 10
@@ -16,8 +16,10 @@ export const getViewType = () => {
         return 'quick-view'
     else if(level <= 30 && user_info.value.view_type == 0)
         return 'quick-view'
-    else
+    else if(level > 10)
         return 'dashboards-home'
+    else
+        return ''
 }
 
 export const pay_token  = ref<string>(localStorage.getItem('access-token') || '')

@@ -1,20 +1,12 @@
 <script setup lang="ts">
 
-const props = defineProps({
-    preview: {
-        type: String,
-        default: '/icons/img-preview.svg',
-        required: true,
-    },
-    style: {
-        type: String,
-        required: true,
-    },
-    previewStyle: {
-        type: String,
-        required: true,
-    }
-});
+interface Props {
+    previewStyle: string,
+    preview: string,
+    style: string,
+}
+const props = defineProps<Props>()
+
 const visable = ref(false);
 const zoomIn = () => {
     if (props.preview != '/icons/img-preview.svg')
@@ -41,8 +33,8 @@ const zoomIn = () => {
 
 @media only screen and (max-device-width: 960px) {
   .preview {
-    margin-block: 0.5em;
-    margin-inline: 0;
+    margin-block: 0.5em !important;
+    margin-inline: 0 !important;
   }
 }
 </style>

@@ -111,8 +111,8 @@ const chartOptions = computed(() => {
 <template>
   <VCard>
     <VCardItem class="pb-0">
-      <VCardTitle>Sales</VCardTitle>
-      <VCardSubtitle>Last 6 Months</VCardSubtitle>
+      <VCardTitle>결제모듈 사용량</VCardTitle>
+      <VCardSubtitle>6개월간 결제모듈 사용량 개요</VCardSubtitle>
 
       <template #append>
         <div class="mt-n4 me-n2">

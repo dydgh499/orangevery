@@ -8,47 +8,47 @@ const getAbilitiesMenu = computed(() => {
 
     if (corp.pv_options.free.use_hand_pay) {
         payments.push({
-            title: 'Hand payment',
-            to: 'transactions-hand',
+            title: '수기 결제 테스트',
+            to: 'transactions-pay-test-hand',
         })
     }
     if (corp.pv_options.free.use_auth_pay) {
         payments.push({
-            title: 'Auth payment',
-            to: 'transactions-auth',
+            title: '인증 결제 테스트',
+            to: 'transactions-pay-test-auth',
         })
     }
     if (corp.pv_options.free.use_simple_pay) {
         payments.push({
-            title: 'Simple payment',
-            to: 'transactions-simple',
+            title: '간편 결제 테스트',
+            to: 'transactions-pay-test-simple',
         })
     }
     if (user_info.value.level > 10) {
         settles.push({
-            title: 'settle',
+            title: '정산 관리',
             icon: { icon: 'tabler-calculator' },
             children: [
                 {
-                    title: 'merchandise-settle',
+                    title: '가맹점 정산 관리',
                     to: 'transactions-settle-merchandises',
                 },
                 {
-                    title: 'salesforce-settle',
+                    title: '영업점 정산 관리',
                     to: 'transactions-settle-salesforces',
                 },
             ]
         },
         {
-            title: 'settle-histories',
+            title: '정산 이력',
             icon: { icon: 'tabler:calendar-time' },
             children: [
                 {
-                    title: 'merchandise-settle-histories',
+                    title: '가맹점 정산 이력',
                     to: 'transactions-settle-histories-merchandises',
                 },
                 {
-                    title: 'salesforce-settle-histories',
+                    title: '영업점 정산 이력',
                     to: 'transactions-settle-histories-salesforces',
                 },
             ]
@@ -56,12 +56,12 @@ const getAbilitiesMenu = computed(() => {
     }
     if (user_info.value.level > 10) {
         risks.push({
-            title: 'Abnormal transaction',
+            title: '이상거래 관리',
             icon: { icon: 'jam-triangle-danger' },
             to: 'transactions-dangers',
         },
         {
-            title: 'Fail transaction',
+            title: '결제실패 관리',
             icon: { icon: 'carbon:ai-status-failed' },
             to: 'transactions-fails',
         })
@@ -70,12 +70,12 @@ const getAbilitiesMenu = computed(() => {
     return [
         { heading: 'Transaction' },
         {
-            title: 'Payment',
+            title: '결제',
             icon: { icon: 'fluent-payment-32-regular' },
             children: payments
         },
         {
-            title: 'transactions-management',
+            title: '매출 관리',
             icon: { icon: 'ic-outline-payments' },
             to: 'transactions',
         },

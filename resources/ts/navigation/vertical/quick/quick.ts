@@ -1,45 +1,109 @@
 import { usePayModFilterStore } from '@/views/merchandises/pay-modules/useStore'
-import { user_info } from '@axios'
+import type { PayModule } from '@/views/types'
+import { getUserLevel } from '@axios'
 import corp from '@corp'
+import * as CryptoJS from 'crypto-js'
+import { filter, map } from 'lodash'
+
+const hands = ref(<PayModule[]>([]))
+const auths = ref(<PayModule[]>([]))
+const simples = ref(<PayModule[]>([]))
+const { pay_modules, getAllPayModules } = usePayModFilterStore()
+const url = new URL(window.location.href);
+if (getUserLevel() == 10) {
+    getAllPayModules()
+}
 
 
+
+const getPayLinkFormats = (pays: PayModule[], type: string) => {
+    return map(pays, (pay) => {
+        const params = encodeURIComponent(
+            CryptoJS.AES.encrypt(
+                JSON.stringify(
+                    {
+                        m: pay.mcht_id,
+                        p: pay.id,
+                        o: Boolean(pay.is_old_auth),
+                        i: pay.installment,
+                        t: Date.now() % 10000,
+                        g: pay.pg_id,
+                    }
+                )
+                , '^^_masking_^^').toString())
+        return {
+            title: pay.note,
+            children: [
+                {
+                    title: '이동하기',
+                    href: '/pay/' + type + "?e=" + params,
+                },
+                {
+                    title: '링크복사',
+                    class: 'copy()',
+                    params: url.origin + '/pay/' + type + "?e=" + params,
+                }
+            ]
+            
+        };
+    });
+};
+
+watchEffect(() => {
+    hands.value = filter(pay_modules, { module_type: 1 });
+    auths.value = filter(pay_modules, { module_type: 2 });
+    simples.value = filter(pay_modules, { module_type: 3 });
+});
 const getAbilitiesMenu = computed(() => {
-    const payments = []
-    if(user_info.value.level == 10) {
-        const { pay_modules, getAllPayModules } = usePayModFilterStore()
-        getAllPayModules()
+    const payments: any = []
+    if (getUserLevel() == 10) {
         if (corp.pv_options.free.use_hand_pay) {
             payments.push({
-                title: 'Hand payment',
-                to: 'quick-view-hand',
-            })
+                title: '수기결제',
+                icon: { icon: 'fluent-payment-32-regular' },
+                children: getPayLinkFormats(hands.value, 'hand'),
+            });
         }
         if (corp.pv_options.free.use_auth_pay) {
             payments.push({
-                title: 'Auth payment',
-                to: 'quick-view-auth',
-            })
+                title: '인증결제',
+                icon: { icon: 'fluent-payment-32-regular' },
+                children: getPayLinkFormats(auths.value, 'auth'),
+            });
         }
         if (corp.pv_options.free.use_simple_pay) {
             payments.push({
-                title: 'Simple payment',
-                to: 'quick-view-simple',
-            })
+                title: '간편결제',
+                icon: { icon: 'fluent-payment-32-regular' },
+                children: getPayLinkFormats(simples.value, 'simple'),
+            });
         }
     }
     return [
         { heading: 'Forms' },
         {
-          title: 'Home',
-          icon: { icon: 'tabler-smart-home' },
-          to:  'quick-view',
+            title: '홈',
+            icon: { icon: 'tabler-smart-home' },
+            to: 'quick-view',
         },
-        { heading: 'Transaction' },
+
+        { heading: 'User information' },
         {
-            title: 'Payment',
-            icon: { icon: 'fluent-payment-32-regular' },
-            children: payments
+            title: '장비 관리',
+            icon: { icon: 'ic-outline-send-to-mobile' },
+            to: 'merchandises-terminals',
+        },
+
+        { heading: 'Transaction' },
+        ...payments,
+
+        { heading: 'Service' },
+        {
+            title: '공지사항',
+            icon: { icon: 'fe-notice-active' },
+            to: 'posts',
         },
     ]
 })
 export default getAbilitiesMenu
+

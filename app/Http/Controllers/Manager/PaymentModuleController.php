@@ -25,13 +25,27 @@ class PaymentModuleController extends Controller
         $this->imgs = [];
     }
 
-    private function get($request, $cols)
+    public function chart(Request $request)
+    {
+        $request->merge([
+            'page' => 1,
+            'page_size' => 99999999,
+        ]);
+        $cols = ['payment_modules.*'];
+        $query = $this->commonSelect($request, true);
+        $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
+        $chart = getDefaultChartFormat($data);
+        return $this->response(0, $chart);
+    }
+
+    private function commonSelect($request, $is_all=false)
     {
         $search = $request->input('search', '');
         $query = $this->payModules
             ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-            ->where('payment_modules.brand_id', $request->user()->brand_id)
-            ->where('payment_modules.is_delete', false);
+            ->where('payment_modules.brand_id', $request->user()->brand_id);
+        if($is_all == false)
+            $query = $query->where('payment_modules.is_delete', false);
             
         $query = globalPGFilter($query, $request, 'payment_modules');
         $query = globalSalesFilter($query, $request, 'merchandises');       
@@ -42,14 +56,12 @@ class PaymentModuleController extends Controller
         if($request->has('module_type'))
             $query = $query->where('payment_modules.module_type', $request->module_type);
 
-        $query = $query->where(function ($query) use ($search) {
+        return $query->where(function ($query) use ($search) {
             return $query->where('payment_modules.mid', 'like', "%$search%")
                 ->orWhere('payment_modules.tid', 'like', "%$search%")
                 ->orWhere('merchandises.mcht_name', 'like', "%$search%");
         });
 
-        $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
-        return $this->response(0, $data);
     }
 
     /**
@@ -63,7 +75,10 @@ class PaymentModuleController extends Controller
     public function index(IndexRequest $request)
     {
         $cols = ['payment_modules.*', 'merchandises.mcht_name'];
-        return $this->get($request, $cols);
+        $query = $this->commonSelect($request);
+        $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
+        return $this->response(0, $data);
+
     }
 
     /**
@@ -186,7 +201,9 @@ class PaymentModuleController extends Controller
                 'payment_modules.terminal_id', 'payment_modules.note', 'payment_modules.is_old_auth', 'payment_modules.installment', 
             ];    
         }
-        return $this->get($request, $cols);
+        $query = $this->commonSelect($request);
+        $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
+        return $this->response(0, $data);
     }
     
     public function bulkRegister(BulkPayModuleRequest $request)

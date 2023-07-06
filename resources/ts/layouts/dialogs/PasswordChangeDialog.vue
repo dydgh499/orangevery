@@ -17,9 +17,14 @@ const password = ref()
 const is_show = ref(false)
 
 const show = (_user_id: number, _user_type: number) => {
-    user_id.value = _user_id
-    user_type.value = _user_type
-    visible.value = true
+    if( _user_type !== 3) {
+        user_id.value = _user_id
+        user_type.value = _user_type
+        visible.value = true
+    }
+    else {
+        snackbar.value.show('개발사는 패스워드를 변경할 수 없습니다.', 'warning')
+    }
 }
 
 const submit = async () => {

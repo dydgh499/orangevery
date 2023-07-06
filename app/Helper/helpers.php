@@ -5,6 +5,7 @@
     use Illuminate\Support\Facades\Redis;
     use App\Models\Brand;
     use App\Models\Salesforce;
+    use Carbon\Carbon;
 
     function isMainBrand($brand_id)
     {
@@ -242,4 +243,44 @@
             $content = mappingSalesInfo($content, $sales_index_by_ids, $content->sales5_id, 5);
         }
         return $contents;
+    }
+
+    function getDefaultChartFormat($data)
+    {        
+        $division_by_delete = function($item) {
+            return $item->is_delete == true;
+        };
+        $chart = [
+            'this_week_add' => 0,
+            'this_week_del' => 0,
+            'this_month_add' => 0,
+            'this_month_del' => 0,
+            'total' => $data['total'],
+        ];   
+        $first_dy_week = Carbon::now()->startOfWeek();
+        $first_dy_month = Carbon::now()->startOfMonth();
+
+        $this_week = $data['content']->filter(function ($item) use ($first_dy_week) {
+            return Carbon::parse($item->created_at)->greaterThanOrEqualTo($first_dy_week);
+        })->values();
+
+        $this_month = $data['content']->filter(function ($item) use ($first_dy_month) {
+            return Carbon::parse($item->created_at)->greaterThanOrEqualTo($first_dy_month);
+        })->values();
+
+        $chart['this_week_add'] = $this_week->filter(function ($item) use ($division_by_delete) {
+            return $division_by_delete($item) == false;
+        })->values()->count();
+        $chart['this_week_del'] = $this_week->filter(function ($item) use ($division_by_delete) {
+            return $division_by_delete($item) == true;
+        })->values()->count();
+        
+        $chart['this_month_add'] = $this_month->filter(function ($item) use ($division_by_delete) {
+            return $division_by_delete($item) == false;
+        })->values()->count();
+    
+        $chart['this_month_del'] = $this_month->filter(function ($item) use ($division_by_delete) {
+            return $division_by_delete($item) == true;
+        })->values()->count();
+        return $chart;
     }

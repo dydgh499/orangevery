@@ -2,25 +2,15 @@
 import Preview from '@/layouts/utils/Preview.vue'
 import { extensionValidator } from '@validators'
 
-const props = defineProps({
-    file: {
-        type: File,
-        required: false,
-    },
-    preview: {
-        type: String || null,
-        required: false,
-    },
-    label: {
-        type: String,
-        required: true,
-    },
-    validates : {
-        type: Array,
-        required: true,
-    }
-});
-const files = ref(props.file)
+interface Props {
+    file: File,
+    preview: string,
+    label: string,
+    validates: [],
+}
+const props = defineProps<Props>()
+
+const files = ref(<File[]>([]))
 const preview = ref<string>('/icons/img-preview.svg')
 const previewStyle = `
     border: 2px solid rgb(238, 238, 238);
@@ -60,6 +50,6 @@ const extentionRule = computed(() => {
                 </template>
             </template>
         </VFileInput>
-        <Preview :preview="preview" :style="``" :preview-style="previewStyle"></Preview>
+        <Preview :preview="preview" :style="``" :preview-style="previewStyle" class="preview"/>
     </VCol>
 </template>

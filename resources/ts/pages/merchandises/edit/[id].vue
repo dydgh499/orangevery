@@ -5,11 +5,12 @@ import MchtOverview from '@/views/merchandises/MchtOverview.vue'
 import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOverview.vue'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import { useUpdateStore } from '@/views/merchandises/useStore'
+
 const {path, item } = useUpdateStore()
 const tabs = [
     { icon: 'tabler-user-check', title: '개인정보' },
     { icon: 'tabler-building-store', title: '가맹점정보' },
-    { icon: 'ic-outline-send-to-mobile', title: '결제모듈정보' },
+    { icon: 'ic-outline-send-to-mobile', title: '결제모듈정보' }
 ]
 const id    = ref<number>(0)
 const route = useRoute()

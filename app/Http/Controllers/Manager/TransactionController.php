@@ -23,13 +23,53 @@ class TransactionController extends Controller
         $this->transactions = $transactions;
     }
 
-    /**
-     * 목록출력
-     *
-     * 가맹점 이상 가능
-     *
-     */
-    public function index(IndexRequest $request)
+    public function getSettleInformation($data)
+    {
+        $charts = [
+            'appr' => [
+                'amount' => 0,
+                'count' => 0,
+                'profit' => 0,
+            ],
+            'cxl' => [
+                'amount' => 0,
+                'count' => 0,
+                'profit' => 0,
+            ],
+            'amount' => 0,
+            'count' => 0,
+            'profit' => 0,
+        ];
+        if(count($data['content']))
+        {
+            $division = function($item) {
+                return $item->is_cancel == true;
+            };
+            $totals = function($items) {
+                return [
+                    'amount'        => $items->sum('amount'),
+                    'count'         => $items->count(),
+                    'profit'    => $items->sum('profit'),
+                ];
+            };
+            $appr = $data['content']->filter(function ($transaction) use ($division) {
+                return $division($transaction) == false;
+            })->values();
+        
+            $cxl = $data['content']->filter(function ($transaction) use ($division) {
+                return $division($transaction) == true;
+            })->values();
+
+            $charts['appr'] = $totals($appr);
+            $charts['cxl'] = $totals($cxl);
+            $charts['amount'] = $charts['appr']['amount'] + $charts['cxl']['amount'];
+            $charts['count'] = $charts['appr']['count'] + $charts['cxl']['count'];
+            $charts['profit'] = $charts['appr']['profit'] + $charts['cxl']['profit'];
+        }
+        return $charts;
+    }
+
+    public function commonSelect($request)
     {
         $search = $request->input('search', '');
         $query  = $this->transactions
@@ -70,7 +110,34 @@ class TransactionController extends Controller
             if($request->has($col))
                 $query = $query->where($col, $request->input($col));
         }
+        return $query;
+    }
 
+    /**
+     * 차트 데이터 출력
+     *
+     * 가맹점 이상 가능
+     */
+    public function chart(IndexRequest $request)
+    {
+        $request->merge([
+            'page' => 1,
+            'page_size' => 99999999,
+        ]);
+        $query  = $this->commonSelect($request);
+        $data   = $this->getIndexData($request, $query);
+        $chart  = $this->getSettleInformation($data);
+        return $this->response(0, $chart);
+    }
+
+    /**
+     * 목록출력
+     *
+     * 가맹점 이상 가능
+     */
+    public function index(IndexRequest $request)
+    {
+        $query = $this->commonSelect($request);
         $query = $query->with(['mcht']);
         $data = $this->getIndexData($request, $query);
 

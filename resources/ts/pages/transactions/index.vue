@@ -13,8 +13,8 @@ import { user_info } from '@axios'
 import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
-
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
+
 const all_levels = allLevels()
 const salesslip = ref()
 const cancelTran = ref()
@@ -28,40 +28,40 @@ provide('cancelTran', cancelTran)
 store.params.level = 10
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
 
-const metas = [
+const metas = ref([
     {
-        icon: 'tabler-user',
+        icon: 'ic-outline-payments',
         color: 'primary',
-        title: '금월 추가된 가맹점',
-        stats: '21,459',
-        percentage: +29,
-        subtitle: 'Total Users',
+        title: '승인액 합계',
+        stats: '0',
+        percentage: 0,
+        subtitle: '0건',
     },
     {
-        icon: 'tabler-user-plus',
+        icon: 'ic-outline-payments',
         color: 'error',
-        title: '금주 추가된 가맹점',
-        stats: '4,567',
-        percentage: +18,
-        subtitle: 'Last week analytics',
+        title: '취소액 합계',
+        stats: '0',
+        percentage: 0,
+        subtitle: '0건',
     },
     {
-        icon: 'tabler-user-check',
+        icon: 'ic-outline-payments',
         color: 'success',
-        title: '금월 감소한 가맹점',
-        stats: '19,860',
-        percentage: -14,
-        subtitle: 'Last week analytics',
+        title: '매출액 합계',
+        stats: '0',
+        percentage: 0,
+        subtitle: '0건',
     },
     {
-        icon: 'tabler-user-exclamation',
+        icon: 'ic-outline-payments',
         color: 'warning',
-        title: '금주 감소한 가맹점',
-        stats: '237',
-        percentage: +42,
-        subtitle: 'Last week analytics',
+        title: '정산액 합계',
+        stats: '0',
+        percentage: 0,
+        subtitle: '0건',
     },
-]
+])
 const isSalesCol = (key: string) => {
     const sales_cols = ['amount', 'trx_amount', 'mcht_settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
     for (let i = 0; i < sales_cols.length; i++) {
@@ -70,6 +70,26 @@ const isSalesCol = (key: string) => {
     }
     return false
 }
+onMounted(() => {
+    watchEffect(async() => {
+        if(store.params.page == 1) {
+            const r = await store.getChartData()
+            metas.value[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
+            metas.value[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
+            metas.value[2]['stats'] = r.data.amount.toLocaleString() + ' ￦'
+            metas.value[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
+            metas.value[0]['subtitle'] = r.data.appr.count.toLocaleString() + '건'
+            metas.value[1]['subtitle'] = r.data.cxl.count.toLocaleString() + '건'
+            metas.value[2]['subtitle'] = r.data.count.toLocaleString() + '건'
+            metas.value[3]['subtitle'] = r.data.count.toLocaleString() + '건'
+            metas.value[0]['percentage'] = r.data.appr.amount ? 100 : 0
+            metas.value[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
+            metas.value[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
+            metas.value[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
+            
+        }
+    })
+})
 </script>
 <template>
     <div>
@@ -182,7 +202,7 @@ const isSalesCol = (key: string) => {
                 </tr>
             </template>
         </BaseIndexView>
-        <SalesSlipDialog ref="salesslip" />
+        <SalesSlipDialog ref="salesslip" :pgs="pgs"/>
         <CancelTransDialog ref="cancelTran" />
     </div>
 </template>

@@ -1,48 +1,18 @@
 
 <script setup lang="ts">
-import AuthPayOverview from '@/views/transactions/auth/AuthPayOverview.vue'
+import HandPayOverview from '@/views/pay/HandPayOverview.vue'
+import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { payTest } from '@/views/transactions/pay-test/payTest'
 
-import { useMchtFilterStore } from '@/views/merchandises/useStore'
-import { usePayModFilterStore } from '@/views/merchandises/pay-modules/useStore'
+const {
+    mcht_id, pmod_id, pgs, is_old_auth, installment, 
+    merchandise, merchandises, filterPayMod 
+} = payTest(3)
 
-import { payModFilter } from '@/views/merchandises/pay-modules/useStore'
-import type { PayModule, Merchandise } from '@/views/types'
+const salesslip = ref()
+provide('salesslip', salesslip)
 
-const { pay_modules, getAllPayModules } = usePayModFilterStore()
-const { merchandises, getAllMerchandises } = useMchtFilterStore()
-
-const mcht_id = ref()
-const pmod_id = ref()
-const return_url = 'http://'+'localhost'+'/transactions/result'
-
-const installment = ref(<number>(0))
-const pg_id = ref(<number>(0))
-
-getAllMerchandises(2)
-getAllPayModules()
-
-const filterPayMod = computed(() => {
-    const filter = pay_modules.filter((obj: PayModule) => { return obj.mcht_id == mcht_id.value && obj.module_type == 2 })
-    pmod_id.value = payModFilter(pay_modules, filter, pmod_id.value as number)
-    return filter
-})
-watchEffect(() => {
-    const pmod = pay_modules.find(obj => obj.id == pmod_id.value)
-    if (pmod) {
-        installment.value = pmod.installment
-        pg_id.value = pmod.pg_id ?? 0
-    }
-})
-/*
-    <img :src="corp.logo_img || ''" width="100" height="100">
-    <br>
-    <b>
-        환영합니다 !
-    </b>
-    <br>
-    결제하실 정보를 입력해주세요.
-*/
 </script>
 <template>
     <section>
@@ -58,7 +28,8 @@ watchEffect(() => {
                             </b>
                                 
                             </div>
-                            <AuthPayOverview :pmod_id="pmod_id || 0" :installment="installment || 0" :pg_id="pg_id" :return_url="return_url">
+                            <HandPayOverview :pmod_id="pmod_id || 0" :installment="installment || 0"
+                                :is_old_auth="is_old_auth || false" :merchandise="merchandise">
                                 <template #explain>
                                     <VCol cols="12">
                                         <VRow no-gutters>
@@ -86,11 +57,12 @@ watchEffect(() => {
                                         </VRow>
                                     </VCol>
                                 </template>
-                            </AuthPayOverview>
+                            </HandPayOverview>
                         </div>
                     </VCol>
                 </VRow>
             </VCardText>
         </VCard>
+        <SalesSlipDialog ref="salesslip" :pgs="pgs"/>
     </section>
 </template>

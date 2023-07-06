@@ -1,19 +1,32 @@
 <script setup lang="ts">
+import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
 import { initialAbility } from '@/plugins/casl/ability'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
 import { axios, pay_token, user_info } from '@axios'
-import { getRating } from '@layouts/utils'
+import { allLevels } from '@/views/salesforces/useStore'
 
 const router = useRouter()
 const ability = useAppAbility()
+const password = ref()
 
+const all_levels = allLevels()
 let mylink = ''
-if (user_info.value.level == 10)
+let mytype = 0
+if (user_info.value.level == 10) {
     mylink = '/merchandises/edit/' + user_info.value.id
-else if (user_info.value.level <= 30)
+    mytype = 0
+}
+else if (user_info.value.level <= 30) {
     mylink = '/salesforces/edit/' + user_info.value.id
-else if (user_info.value.level <= 45)
+    mytype = 1
+}
+else if (user_info.value.level <= 45) {
     mylink = '/operators/edit/' + user_info.value.id
+    mytype = 2
+}
+else
+    mytype = 3
+
 // 개발사는 이동할 수 없음
 const avartar_num = Math.floor(Math.random() * 25) + 1;
 const logout = async () => {
@@ -52,7 +65,7 @@ const logout = async () => {
                         <VListItemTitle class="font-weight-semibold">
                             {{ user_info.user_name }}
                         </VListItemTitle>
-                        <VListItemSubtitle>{{ getRating(user_info.level) }}</VListItemSubtitle>
+                        <VListItemSubtitle>{{ all_levels.find(level => level['id'] === user_info.level)?.title }}</VListItemSubtitle>
                     </VListItem>
 
                     <VDivider class="my-2" />
@@ -62,9 +75,16 @@ const logout = async () => {
                             <template #prepend>
                                 <VIcon class="me-2" icon="tabler-user" size="22" />
                             </template>
-                            <VListItemTitle>Profile</VListItemTitle>
+                            <VListItemTitle>프로필</VListItemTitle>
                         </VListItem>
                     </router-link>
+                    <VDivider class="my-2" />
+                    <VListItem @click="password.show(user_info.id, mytype)">
+                        <template #prepend>
+                            <VIcon class="me-2" icon="tabler-lock" size="22" />
+                        </template>
+                        <VListItemTitle>패스워드 변경</VListItemTitle>
+                    </VListItem>
                     <!-- Divider -->
                     <VDivider class="my-2" />
 
@@ -74,12 +94,13 @@ const logout = async () => {
                             <VIcon class="me-2" icon="tabler-logout" size="22" />
                         </template>
 
-                        <VListItemTitle>Logout</VListItemTitle>
+                        <VListItemTitle>로그아웃</VListItemTitle>
                     </VListItem>
                 </VList>
             </VMenu>
             <!-- !SECTION -->
         </VAvatar>
+        <PasswordChangeDialog ref="password" />
     </VBadge>
 </template>
 <style lang="scss" scoped>

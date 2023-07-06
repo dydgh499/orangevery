@@ -18,9 +18,11 @@ import { user_info } from '@axios'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { config } from '@layouts/config'
 
+const router = useRouter()
 const alert = ref(null)
 const snackbar = ref(null)
 const loading = ref(null)
+const is_pay_link = ref(router.currentRoute.value.path.includes('/pay/'))
 
 provide('alert', alert)
 provide('snackbar', snackbar)
@@ -31,7 +33,7 @@ const { width: windowWidth } = useWindowSize()
 </script>
 
 <template>
-    <VerticalNavLayout :nav-items="navItems">
+    <VerticalNavLayout :nav-items="navItems" v-if="is_pay_link === false">
         <!-- 👉 navbar -->
         <template #navbar="{ toggleVerticalOverlayNavActive }">
             <div class="d-flex h-100 align-center">
@@ -71,4 +73,14 @@ const { width: windowWidth } = useWindowSize()
         <!-- 👉 Customizer -->
         <TheCustomizer />
     </VerticalNavLayout>
+    <div v-else style="height: 100%;" class="d-flex justify-center align-center">
+        <RouterView v-slot="{ Component }">
+            <Transition :name="appRouteTransition" mode="out-in">
+                <Component :is="Component" />
+            </Transition>
+            <Snackbar ref="snackbar" />
+            <AlertDialog ref="alert" />
+            <LoadingDialog ref="loading" />
+        </RouterView>
+    </div>
 </template>

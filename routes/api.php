@@ -37,6 +37,9 @@ use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 */
 
 Route::prefix('v1')->middleware('log.route')->group(function() {    
+    Route::get('merchandises/{id}/sale-slip', [MerchandiseController::class, 'saleSlip']);
+    Route::get('pay-gateways/{id}/sale-slip', [PaymentGatewayController::class, 'saleSlip']);
+    
     Route::post('transactions/hand-pay', [TransactionController::class, 'handPay']);
     Route::post('computational-transfer/login', [BeforeSystemController::class, 'login']);
     Route::get('computational-transfer/register', [BeforeSystemController::class, 'register']);
@@ -64,6 +67,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         });
         Route::prefix('transactions')->group(function() {
             Route::post('pay-cancel', [TransactionController::class, 'payCancel']);    
+            Route::get('chart', [TransactionController::class, 'chart']);
             Route::get('fails', [FailTransController::class, 'index']);
             Route::get('dangers', [DangerTransController::class, 'index']);
             Route::post('cancel', [TransactionController::class, 'cancel']);
@@ -88,16 +92,20 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             });
         });
         Route::prefix('salesforces')->group(function() {
+            Route::get('chart', [SalesforceController::class, 'chart']);
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
             Route::get('classification', [SalesforceController::class, 'classification']);
             Route::post('password-change', [SalesforceController::class, 'passwordChange']);
             Route::post('bulk-register', [SalesforceController::class, 'bulkRegister']);
         });
         Route::prefix('merchandises')->group(function() {
+            Route::get('chart', [MerchandiseController::class, 'chart']);
             Route::get('all', [MerchandiseController::class, 'all']);   
             Route::get('terminals', [TerminalController::class, 'index']);   
             Route::post('password-change', [MerchandiseController::class, 'passwordChange']);
             Route::post('bulk-register', [MerchandiseController::class, 'bulkRegister']);
+
+            Route::get('pay-modules/chart', [PaymentModuleController::class, 'chart']);
             Route::get('pay-modules/all', [PaymentModuleController::class, 'all']);
             Route::get('pay-modules/{id}/sales-slip', [PaymentModuleController::class, 'salesSlip']);     
             Route::post('pay-modules/bulk-register', [PaymentModuleController::class, 'bulkRegister']);

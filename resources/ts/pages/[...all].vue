@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import misc404 from '@images/pages/404.png'
 import miscMaskDark from '@images/pages/misc-mask-dark.png'
 import miscMaskLight from '@images/pages/misc-mask-light.png'
+import page401 from '@images/pages/401.png'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 
 const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
@@ -23,7 +23,7 @@ const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
     <!-- 👉 Image -->
     <div class="misc-avatar w-100 text-center">
       <VImg
-        :src="misc404"
+        :src="page401"
         alt="Coming Soon"
         :max-width="200"
         class="mx-auto"

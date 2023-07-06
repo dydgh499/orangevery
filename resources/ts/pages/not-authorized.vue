@@ -15,7 +15,7 @@ const authThemeMask = useGenerateImageVariant(miscMaskLight, miscMaskDark)
       <h4 class="text-h4 font-weight-medium mb-3">
         권한이 없습니다! 🔐
       </h4>
-      <p>이 페이지에 액세스할 수 있는 권한이 없습니다. 로그인 후 이용해주세요.</p>
+      <p>이 페이지에 액세스할 수 있는 권한이 없습니다.</p>
       <VBtn to="/login">
         로그인 하기
       </VBtn>

@@ -8,8 +8,6 @@ import routes from '~pages'
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
-        // ℹ️ We are redirecting to different pages based on role.
-        // NOTE: Role is just for UI purposes. ACL is based on abilities.
         {
             path: '/',
             redirect: to => {
@@ -41,17 +39,22 @@ const router = createRouter({
 // Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach(to => {
     const isLoggedIn = pay_token.value != ''
-    axios.defaults.headers.common['Authorization'] = `Bearer ${pay_token.value}`;
-    if (canNavigate(to)) {
-        if (to.meta.redirectIfLoggedIn && isLoggedIn)
-            return '/'
-    }
-    else {
-        if (isLoggedIn)
-            return { name: 'not-authorized' }
-        else
-            return { name: 'login', query: { to: to.name !== 'index' ? to.fullPath : undefined } }
+    axios.defaults.headers.common['Authorization'] = `Bearer ${pay_token.value}`
+
+    if(to.path.startsWith('/pay/') === false) {
+        if (canNavigate(to)) {
+            if (to.meta.redirectIfLoggedIn && isLoggedIn)
+                return '/'
+        }
+        else {
+            if (isLoggedIn)
+                return { name: 'not-authorized' }
+            else
+                return { name: 'login', query: { to: to.name !== 'index' ? to.fullPath : undefined } }
+        }    
     }
 })
 
 export default router
+
+//http://localhost/pay/hand?e=U2FsdGVkX1%2FUu4TQ%2Fyq52fuG%2FVsV153%2B0nPk3GZrEb2xhEQCkMKnWr6PhvwGxCmz2gW0qEq%2FmjcL9NKt79t%2Fog%3D%3D

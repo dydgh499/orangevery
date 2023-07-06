@@ -1,13 +1,14 @@
 <script lang="ts" setup>
 import DialogHalfVCol from '@/layouts/utils/DialogHalfVCol.vue'
-import { useStore } from '@/views/services/pay-gateways/useStore'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
 import type { SalesSlip, PayGateway } from '@/views/types'
 import html2canvas from "html2canvas"
 import cancel from '@images/salesslip/cancel.png'
 
-//이미지로 복사기능
-const { pgs } = useStore()
+interface Props {
+    pgs: PayGateway[],
+}
+const props = defineProps<Props>()
 
 const snackbar  = <any>(inject('snackbar'))
 const visible   = ref(false)
@@ -36,7 +37,7 @@ const copySalesSlip = () => {
 }
 const show = (item: SalesSlip) => {
     trans.value = item
-    pg.value = pgs.find(pg => pg['id'] === item.pg_id)
+    pg.value = props.pgs.find(pg => pg['id'] === item.pg_id)
     visible.value = true
 }
 const cancelColor = computed(() => {

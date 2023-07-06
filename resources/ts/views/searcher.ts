@@ -29,8 +29,26 @@ export function Searcher(path: string) {
         if(user_info.value.level > 30)
             router.push('/' + path + '/edit/' + id)
     }
+    
+    const getChartData = async() => {
+        const p = cloneDeep(params)
+        p.search = search.value
+        try {
+            const r = await axios.get('/api/v1/manager/'+path+'/chart', { params: p })
+            return r
+        } catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            return errorHandler(e)
+        }
+    }
 
-    const setTable = async () => {
+    const getPercentage = (n:number, d:number) => {
+        if (d === 0)
+            return 0;
+          return Number(((n / d) * 100).toFixed(2))
+    }
+
+    const setTable = async() => {
         const p = cloneDeep(params)
         p.search = search.value
         
@@ -80,7 +98,7 @@ export function Searcher(path: string) {
     return {
         setTable,
         items, params, search, pagenation,
-        create, edit,
+        create, edit, getChartData, getPercentage,
         get, booleanTypeColor, getSelectIdColor, getAllDataFormat,
         pagenationCouputed
     }

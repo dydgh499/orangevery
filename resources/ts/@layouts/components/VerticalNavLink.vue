@@ -9,17 +9,37 @@ defineProps<{
   item: NavLink
 }>()
 
+const snackbar  = <any>(inject('snackbar'))
+
 const { width: windowWidth } = useWindowSize()
 const { isVerticalNavMini, dynamicI18nProps } = useLayouts()
-
 const hideTitleAndBadge = isVerticalNavMini(windowWidth)
+
+const copy = (text: string) => {
+    console.log(123)
+    try {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', '');
+        textarea.style.position = 'fixed';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        snackbar.value.show('복사에 성공하였습니다.', 'success')
+    } catch (err) {
+        snackbar.value.show('복사에 실패하였습니다.', 'error')
+    }
+}
 </script>
 
 <template>
   <li
     v-if="can(item.action, item.subject)"
     class="nav-link"
-    :class="{ disabled: item.disable }"
+    :class="{ disabled: item.disable }"    
+    @click="item.class == 'copy()' ? copy(item.params ?? '') : ''"
   >
     <Component
       :is="item.to ? 'RouterLink' : 'a'"

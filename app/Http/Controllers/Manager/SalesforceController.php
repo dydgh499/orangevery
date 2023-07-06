@@ -12,8 +12,8 @@ use App\Http\Requests\Manager\SalesforceRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\Hash;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class SalesforceController extends Controller
 {
@@ -39,6 +39,34 @@ class SalesforceController extends Controller
         ];
     }
 
+    public function chart(Request $request)
+    {
+        $request->merge([
+            'page' => 1,
+            'page_size' => 99999999,
+        ]);
+        $query = $this->commonSelect($request, true);
+        $data = $this->getIndexData($request, $query);
+        $chart = getDefaultChartFormat($data);
+        return $this->response(0, $chart);
+    }
+
+    private function commonSelect($request, $is_all=false)
+    {
+        $search = $request->input('search', '');
+        $query = $this->salesforces
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('sales_name', 'like', "%$search%");
+
+        if($is_all == false)
+            $query = $query->where('is_delete', false);            
+        if(isSalesforce($request))
+            $query = $query->where('id', $request->user()->id);
+
+        if($request->has('level') && $request->level >= 0)
+            $query = $query->where('level', $request->level);
+        return $query;
+    }
     /**
      * 목록출력
      *
@@ -48,17 +76,7 @@ class SalesforceController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $search = $request->input('search', '');
-        $query = $this->salesforces
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
-            ->where('sales_name', 'like', "%$search%");
-
-        if(isSalesforce($request))
-            $query = $query->where('id', $request->user()->id);
-
-        if($request->has('level') && $request->level >= 0)
-            $query = $query->where('level', $request->level);
+        $query = $this->commonSelect($request);
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }

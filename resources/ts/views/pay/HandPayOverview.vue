@@ -7,7 +7,6 @@ import { VForm } from 'vuetify/components'
 import type { Merchandise, SalesSlip, Options, HandPay } from '@/views/types'
 import { cloneDeep } from 'lodash'
 import { axios } from '@axios'
-import corp from '@corp'
 
 interface Props {
     pmod_id: number,
@@ -22,6 +21,7 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 const salesslip = <any>(inject('salesslip'))
+
 const sale_slip = ref(<SalesSlip>({}))
 const hand_pay_info = reactive(<HandPay>({}))
 const is_show = ref(false)
@@ -136,7 +136,7 @@ watchEffect(() => {
                                     label="할부기간 선택" item-title="title" item-value="id" single-line />
                             </template>
                         </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 12px;">
+                        <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
                             <template #name>유효기간</template>
                             <template #input>
                                 <VTextField v-model="hand_pay_info.yymm" type="text"

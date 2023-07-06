@@ -70,7 +70,7 @@ watchEffect(() => {
                             <template #input>
                                 <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="text"
                                     prepend-inner-icon="tabler-device-mobile" placeholder="숫자만 입력해주세요."
-                                    persistent-placeholder :rules="[integerValidator]"/>
+                                    persistent-placeholder :rules="[integerValidator]" />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 사업자 번호 -->
@@ -135,26 +135,26 @@ watchEffect(() => {
                     <VRow class="pt-5">
                         <VCol cols="12">
                             <VRow no-gutters>
-                                <FileInput :file="props.item.passbook_file" :label="`통장사본 업로드`"
-                                    :preview="props.item.passbook_img || undefined" @update:file="props.item.passbook_file = $event" />
+                                <FileInput :label="`통장사본 업로드`" :preview="props.item.passbook_img || ''"
+                                    @update:file="props.item.passbook_file = $event" />
                             </VRow>
                         </VCol>
                         <VCol cols="12">
                             <VRow no-gutters>
-                                <FileInput :file="props.item.id_file" :label="`신분증 업로드`" :preview="props.item.id_img || undefined"
+                                <FileInput :label="`신분증 업로드`" :preview="props.item.id_img || ''"
                                     @update:file="props.item.id_file = $event" />
                             </VRow>
                         </VCol>
                         <VCol cols="12">
                             <VRow no-gutters>
-                                <FileInput :file="props.item.contract_file" :label="`계약서 업로드`"
-                                    :preview="props.item.contract_img || undefined" @update:file="props.item.contract_file = $event" />
+                                <FileInput :label="`계약서 업로드`" :preview="props.item.contract_img || ''"
+                                    @update:file="props.item.contract_file = $event" />
                             </VRow>
                         </VCol>
                         <VCol cols="12">
                             <VRow no-gutters>
-                                <FileInput :file="props.item.bsin_lic_file" :label="`사업자 등록증 업로드`"
-                                    :preview="props.item.bsin_lic_img || undefined" @update:file="props.item.bsin_lic_file = $event" />
+                                <FileInput :label="`사업자 등록증 업로드`" :preview="props.item.bsin_lic_img || ''"
+                                    @update:file="props.item.bsin_lic_file = $event" />
                             </VRow>
                         </VCol>
                     </VRow>

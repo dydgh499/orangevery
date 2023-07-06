@@ -118,4 +118,11 @@ class PaymentGatewayController extends Controller
         ];
         return $this->response(0, $data);
     }
+
+    public function saleSlip(Request $request, $id)
+    {
+        $cols = ['id', 'pg_type' ,'company_name', 'business_num', 'rep_name', 'addr'];      
+        $datas = $this->pay_gateways->where('id', $id)->get($cols);
+        return $this->response(0, $datas);
+    }
 }
