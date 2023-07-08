@@ -3,7 +3,7 @@ import type { MchtRecentTransaction } from '@/views/types'
 
 interface Props {
     transaction: MchtRecentTransaction,
-    date:string,
+    date: string,
 }
 const props = defineProps<Props>()
 
@@ -23,14 +23,14 @@ const displayDate = () => {
 
     if (props.date === `${currentYear}-${currentMonth}-${today}`) {
         date = '오늘'
-        style = 'color:#06C4AE !important;'
+        style = 'success'
     }
     else if (inputYear === currentYear && inputDateParts.length === 2) {
-        date    = monthNames[parseInt(inputMonth, 10)]
-        style   = currentMonth == inputMonth ? '' : 'color:#DF3E2A !important;';
+        date = monthNames[parseInt(inputMonth, 10)]
+        style = currentMonth == inputMonth ? 'warning' : 'primary';
     } else {
-        date    = props.date
-        style   = 'color:#000000;'
+        date = props.date
+        style = 'color:#000000;'
     }
 
     return {
@@ -40,42 +40,51 @@ const displayDate = () => {
 const { date, style } = displayDate()
 </script>
 <template>
-    <VCol>
-        <div style="text-align: end;">
-            <span class="text-primary" :style="style">{{ date }} </span> 정산금액
-        </div>
-        <div style="font-weight: bold;text-align: end;">
-            <span>
-                {{ props.transaction.profit.toLocaleString() }}
-            </span>
-            <span> 원</span>
-        </div>
-    </VCol>
-    <VCol>
+    <VCol class="d-flex justify-space-between small-font">
         <div>
-            <div style="text-align: end;">
-                <span class="text-primary" :style="style">{{ date }} </span> 총 매출
+            <div class="small-font">
+                <span :class="'text-' + style">{{ date }} </span> 정산금액
             </div>
-            <div style="font-weight: bold;text-align: end;">                 
+            <div style="font-weight: bold;">
+                <span>
+                    {{ props.transaction.profit.toLocaleString() }}
+                </span>
+                <span class="small-font" style="font-weight: 500;"> 원</span>
+            </div>
+        </div>
+        <VAvatar rounded variant="tonal" :color="style" icon="ic-outline-payments" />
+    </VCol>
+    <VCol style="padding-top: 0;" class="d-flex justify-space-between small-font">
+        <div>
+            <div class="small-font">
+                <span :class="'text-' + style">{{ date }} </span> 총 매출
+            </div>
+            <div style="font-weight: bold;">
                 <span>
                     {{ props.transaction.amount.toLocaleString() }}
                 </span>
-                <span> 원</span>
+                <span class="small-font" style="font-weight: 500;"> 원</span>
             </div>
         </div>
     </VCol>
-    <VCol>
+    <VCol style="padding-top: 0;" class="d-flex justify-space-between small-font">
         <div>
-            <div style="text-align: end;">
-                <span class="text-primary" :style="style">{{ date }} </span> 승인/취소
+            <div class="small-font">
+                <span :class="'text-' + style">{{ date }} </span> 승인/취소
             </div>
-            <div style="font-weight: bold;text-align: end;">
+            <div style="font-weight: bold;">
                 <span>
-                    {{ props.transaction.appr.count.toLocaleString() }}/{{ props.transaction.cxl.count.toLocaleString() }}
+                    {{ props.transaction.appr.count.toLocaleString() }}/{{ props.transaction.cxl.count.toLocaleString()
+                    }}
                 </span>
-                <span> 건</span>
+                <span class="small-font" style="font-weight: 500;"> 건</span>
             </div>
         </div>
+        <span style=" margin-top: auto; font-weight: 600;" class="small-font">{{ props.date }}</span>
     </VCol>
-    {{ props.date }}
 </template>
+<style>
+.small-font {
+  font-size: 0.9em;
+}
+</style>

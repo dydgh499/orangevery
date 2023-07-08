@@ -67,6 +67,12 @@ class BrandController extends Controller
             ->where('is_delete', false)
             ->where('name', 'like', "%$search%");
         $data   = $this->getIndexData($request, $query);
+        foreach ($data['content'] as $content) {
+            $content->free = $content->pv_options->free;
+            $content->paid = $content->pv_options->paid;
+            $content->auth = $content->pv_options->auth;
+            $content->makeHidden(['pv_options']);
+        }
         return $this->response(0, $data);
     }
 

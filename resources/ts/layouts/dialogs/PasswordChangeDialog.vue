@@ -3,7 +3,6 @@ import { requiredValidator } from '@validators'
 import { axios } from '@axios'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 
-const store = <any>(inject('store'))
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
@@ -40,7 +39,6 @@ const submit = async () => {
         try {
             const r = await axios.post('/api/v1/manager/' + page + '/password-change', { id: user_id.value, user_pw: password.value })
             snackbar.value.show('성공하였습니다.', 'success')
-            store.setTable()
         }
         catch (e: any) {
             snackbar.value.show(e.response.data.message, 'error')

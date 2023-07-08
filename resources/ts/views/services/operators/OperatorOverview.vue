@@ -27,7 +27,7 @@ const is_show = ref(false)
                             <template #input>
                                 <VTextField v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
                                     placeholder="ID로 사용됩니다." persistent-placeholder
-                                    :rules="[requiredValidator, emailValidator]" maxlength="30" />
+                                    :rules="[requiredValidator]" maxlength="30" />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Password -->

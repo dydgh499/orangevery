@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/services/brands/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { user_info } from '@/plugins/axios'
 
-const { store, head, exporter } = useSearchStore()
+const { store, head, exporter, boolToText } = useSearchStore()
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
-
 </script>
 <template>
     <BaseIndexView placeholder="서비스명" :metas="[]" :add="true" add_name="서비스" :is_range_date="null">
@@ -36,7 +36,9 @@ provide('exporter', exporter)
                         <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
                             class='list-square'>
                             <span>
-                                {{ item[_key][__key] }}
+                                <VChip :color="store.booleanTypeColor(!item[_key][__key])">
+                                    {{ boolToText(item[_key][__key]) }}
+                                </VChip>
                             </span>
                         </td>
                     </template>

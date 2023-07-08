@@ -4,6 +4,7 @@ import { requiredValidator } from '@validators'
 import type { FreeOption, PaidOption, AuthOption, Brand } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import { user_info } from '@/plugins/axios';
 
 interface Props {
     item: {
@@ -14,12 +15,12 @@ interface Props {
     brand: Brand,
 }
 const props = defineProps<Props>()
-
+const md = user_info.value.level == 50 ? 6 : 12
 // 화면 타입은 영업점 개별 선택
 </script>
 <template>
     <VRow class="match-height">
-        <VCol cols="12" md="6">
+        <VCol cols="12" :md="md">
             <VCard>
                 <VCardItem>
                     <VCardTitle>무료 옵션</VCardTitle>
@@ -90,7 +91,7 @@ const props = defineProps<Props>()
                 </VCardItem>
             </VCard>
         </VCol>
-        <VCol cols="12" md="6">
+        <VCol cols="12" :md="md" v-show="user_info.level == 50">
             <VCard>
                 <VCardItem>
                     <VCardTitle>유료 옵션</VCardTitle>

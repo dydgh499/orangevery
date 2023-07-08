@@ -34,7 +34,7 @@ class PaymentModuleController extends Controller
         $cols = ['payment_modules.*'];
         $query = $this->commonSelect($request, true);
         $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
-        $chart = getDefaultChartFormat($data);
+        $chart = getDefaultUsageChartFormat($data);
         return $this->response(0, $chart);
     }
 

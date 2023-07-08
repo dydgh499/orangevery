@@ -34,40 +34,17 @@ class SettleController extends Controller
 
     public function getSettleInformation($data)
     {
-        $division = function($item) {
-            return $item->is_cancel == true;
-        };        
-        $totals = function($items) {
-            return [
-                'amount'        => $items->sum('amount'),
-                'count'         => $items->count(),
-                'trx_amount'    => $items->sum('trx_amount'),
-                'hold_amount'   => $items->sum('hold_amount'),
-                'settle_fee'  => $items->sum('mcht_settle_fee'),
-                'total_trx_amount'=> $items->sum('total_trx_amount'),
-                'profit'    => $items->sum('profit'),
-            ];
-        };
         foreach($data['content'] as $content) {
-            $appr = $content->transactions->filter(function ($transaction) use ($division) {
-                return $division($transaction) == false;
-            })->values();
-        
-            $cxl = $content->transactions->filter(function ($transaction) use ($division) {
-                return $division($transaction) == true;
-            })->values();
-
-            $content->appr  = $totals($appr);
-            $content->cxl   = $totals($cxl);
-
-            $content->amount    = $content->appr['amount'] + $content->cxl['amount'];
-            $content->count     = $content->appr['count'] + $content->cxl['count'];
-            $content->trx_amount = $content->appr['trx_amount'] + $content->cxl['trx_amount'];
-            $content->total_trx_amount = $content->appr['total_trx_amount'] + $content->cxl['total_trx_amount'];
-            $content->settle_fee = $content->appr['settle_fee'] + $content->cxl['settle_fee'];
-            $content->hold_amount = $content->appr['hold_amount'] + $content->cxl['hold_amount'];
-            $content->profit = $content->appr['profit'] + $content->cxl['profit'];
-
+            $chart = getDefaultTransChartFormat($content->transactions);
+            $content->amount = $chart['amount'];
+            $content->count = $chart['count'];
+            $content->profit = $chart['profit'];
+            $content->trx_amount = $chart['trx_amount'];
+            $content->hold_amount = $chart['hold_amount'];
+            $content->settle_fee = $chart['settle_fee'];
+            $content->total_trx_amount = $chart['total_trx_amount'];
+            $content->appr = $chart['appr'];
+            $content->cxl = $chart['cxl'];
             $content->deduction = [
                 'input' => null,
                 'amount' => $content->deducts->sum('amount'),
@@ -76,9 +53,9 @@ class SettleController extends Controller
                 'amount' => 0,   
             ];
             $content->settle = [
-                'amount'    => $content->profit + $content->deduction['amount'],
-                'deposit'   => $content->profit + $content->deduction['amount'],
-                'transfer'  => $content->profit + $content->deduction['amount'],
+                'amount'    => $chart['profit'] + $content->deduction['amount'],
+                'deposit'   => $chart['profit'] + $content->deduction['amount'],
+                'transfer'  => $chart['profit'] + $content->deduction['amount'],
             ];
             $content->makeHidden(['transactions']);
         }

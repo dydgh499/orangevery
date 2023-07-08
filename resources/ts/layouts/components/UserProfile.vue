@@ -70,7 +70,7 @@ const logout = async () => {
 
                     <VDivider class="my-2" />
 
-                    <router-link :to="mylink" class="custom-link">
+                    <router-link :to="mylink" class="custom-link" v-if="user_info.level > 10">
                         <VListItem>
                             <template #prepend>
                                 <VIcon class="me-2" icon="tabler-user" size="22" />

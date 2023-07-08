@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Manager\DashboardController;
 use App\Http\Controllers\Manager\BrandController;
 use App\Http\Controllers\Manager\OperatorController;
 use App\Http\Controllers\Manager\MerchandiseController;
@@ -51,6 +52,13 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
     });
 
     Route::prefix('manager')->middleware('auth:sanctum')->group(function() {
+        Route::prefix('dashsboards')->group(function() {
+            Route::get('monthly-transactions-analysis', [DashboardController::class, 'monthlyTranAnalysis']);
+            Route::get('upside-merchandises-analysis', [DashboardController::class, 'upSideMchtAnalysis']);
+            Route::get('upside-salesforces-analysis', [DashboardController::class, 'upSideSaleAnalysis']);
+            Route::get('usage-pay-modules-analysis', [DashboardController::class, 'usagePayModuleAnalysis']);
+        });
+
         Route::prefix('posts')->group(function() {
             Route::get('recent', [PostController::class, 'recent']);
             Route::post('upload', [PostController::class, 'upload']);    

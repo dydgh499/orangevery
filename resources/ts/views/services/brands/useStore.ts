@@ -1,41 +1,86 @@
-import { Header } from '@/views/headers'
-import { Searcher } from '@/views/searcher'
-import type { AuthOption, Brand, FreeOption, PaidOption, ThemeCSS } from '@/views/types'
+import { user_info } from '@/plugins/axios';
+import { Header } from '@/views/headers';
+import { Searcher } from '@/views/searcher';
+import type { AuthOption, Brand, FreeOption, PaidOption, ThemeCSS } from '@/views/types';
 
 export const useSearchStore = defineStore('brandSearchStore', () => {
     const store = Searcher('services/brands')
-    const head  = Header('services/brands', '서비스 관리')
-    const headers: Record<string, string|object> = {
-        'id' : 'NO.',
-        'dns' : 'DNS',
-        'logo_img' : 'LOGO',
-        'main_color' : '테마색상',
-        'company_name' : '회사명',
-        'ceo_name' : '대표자명',
-        'phone_num' : '연락처',
-        'note' : '비고',
-        'deposit_day': '입금일',
-        'deposit_amount': '입금액',
-        'last_dpst_at': '마지막 입금일',
-        'created_at' : '생성시간',
-        'updated_at' : '업데이트시간',
+    const head = Header('services/brands', '서비스 관리')
+    const headers: Record<string, string | object> = {
+        'id': 'NO.',
+        'dns': 'DNS',
+        'logo_img': 'LOGO',
+        'main_color': '테마색상',
+        'company_name': '회사명',
+        'ceo_name': '대표자명',
+        'phone_num': '연락처',
+        'free': {
+            'use_hand_pay': '수기결제',
+            'use_auth_pay': '인증결제',
+            'use_simple_pay': '간편결제',
+        },
     }
-  
+    if (user_info.value.level == 50) {
+        headers['paid'] = {
+            'subsidiary_use_control': '가맹점 전산 사용 ON/OFF',
+            'use_acct_verification': '예금주 검증',
+            'use_dup_pay_validation': '중복결제 검증',
+            'use_forb_pay_time': '결제금지시간 검증',
+            'use_pay_limit': '결제한도 검증',
+            'use_hand_pay_drct': '수기결제 직접입력',
+            'use_hand_pay_sms': '수기결제 SMS',
+            'use_issuer_filter': '카드사 필터링',
+            'use_realtime_deposit': '실시간 결제모듈',
+        }
+        headers['deposit_day'] = '입금일'
+        headers['deposit_amount'] = '입금액'
+        headers['last_dpst_at'] = '마지막 입금일'
+        headers['note'] = '비고'
+    }
+    headers['created_at'] = '생성시간'
+    headers['updated_at'] = '업데이트시간'
+
     head.main_headers.value = [
         '서비스 정보',
-        '결제 사용여부',
-        '입금',
-    ];
+        '무료옵션',
+    ]
+    if (user_info.value.level == 50)
+        head.main_headers.value.push('유료옵션')
+
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
 
+    const boolToText = (col: any) => {
+        if(typeof col == 'boolean') {
+            return col ? '사용' : '미사용'
+        }
+        else
+            return col
+    }
     const exporter = async (type: number) => {
         const keys = Object.keys(headers);
         const r = await store.get(store.getAllDataFormat())
         let datas = r.data.content;
         for (let i = 0; i < datas.length; i++) {
-
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
+            if (user_info.value.level == 50)
+            {
+                datas[i].free.use_hand_pay = boolToText(datas[i].free.use_hand_pay)
+                datas[i].free.use_auth_pay = boolToText(datas[i].free.use_auth_pay)
+                datas[i].free.use_simple_pay = boolToText(datas[i].free.use_simple_pay)
+
+                datas[i].paid.subsidiary_use_control = boolToText(datas[i].paid.subsidiary_use_control)
+                datas[i].paid.use_acct_verification = boolToText(datas[i].paid.use_acct_verification)
+                datas[i].paid.use_dup_pay_validation = boolToText(datas[i].paid.use_dup_pay_validation)
+
+                datas[i].paid.use_forb_pay_time = boolToText(datas[i].paid.use_forb_pay_time)
+                datas[i].paid.use_pay_limit = boolToText(datas[i].paid.use_pay_limit)
+                datas[i].paid.use_hand_pay_drct = boolToText(datas[i].paid.use_hand_pay_drct)
+
+                datas[i].paid.use_hand_pay_sms = boolToText(datas[i].paid.use_hand_pay_sms)
+                datas[i].paid.use_issuer_filter = boolToText(datas[i].paid.use_issuer_filter)
+                datas[i].paid.use_realtime_deposit = boolToText(datas[i].paid.use_realtime_deposit)
+            }
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }
@@ -43,6 +88,7 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
         store,
         head,
         exporter,
+        boolToText,
     }
 })
 

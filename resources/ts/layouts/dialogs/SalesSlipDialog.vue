@@ -4,6 +4,7 @@ import { installments } from '@/views/merchandises/pay-modules/useStore'
 import type { SalesSlip, PayGateway } from '@/views/types'
 import html2canvas from "html2canvas"
 import cancel from '@images/salesslip/cancel.png'
+import background from '@images/salesslip/background.jpg'
 
 interface Props {
     pgs: PayGateway[],
@@ -57,7 +58,7 @@ defineExpose({
 });
 </script>
 <template>
-    <VDialog v-model="visible" class="v-dialog-sm">
+    <VDialog v-model="visible" class="v-dialog-sm" style="box-shadow: 0 !important;">
         <div class="button-container">
             <VBtn size="small" @click="copySalesSlip()" class="copy-btn">
                 영수증 복사
@@ -67,9 +68,9 @@ defineExpose({
             <DialogCloseBtn @click="visible = !visible" />
         </div>
         <!-- Dialog Content -->
-        <VCard>
+        <VCard style="background: rgba(0, 0, 0, 0%);">
             <div ref="card">
-                <VCardText class="sales-slip-rect">
+                <VCardText class="sales-slip-rect" :style="`background-image: url(${background})`">
                     <VCol class="font-weight-bold v-col-custom big-font text-center">
                         신용카드 영수증
                     </VCol>
@@ -186,6 +187,16 @@ defineExpose({
     </VDialog>
 </template>
 <style scoped>
+div {
+  color: rgba(51, 48, 60, 68%) !important;
+}
+
+.sales-slip-rect {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .cancel-img {
   position: absolute;
   inline-size: 55%;
@@ -234,5 +245,12 @@ defineExpose({
   .cancel-img {
     inset-block-start: 67%;
   }
+}
+
+/deep/ .v-card,
+/deep/ .v-dialog,
+/deep/ .v-dialog .v-overlay__content > .v-card,
+/deep/ .v-dialog .v-overlay__content > .v-sheet {
+  box-shadow: 0 !important;
 }
 </style>

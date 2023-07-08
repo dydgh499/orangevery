@@ -16,15 +16,12 @@ const vuetifyTheme = useTheme()
 const color = ref(props.item.theme_css.main_color)
 
 const setPrimaryColor = (color: string) => {
-    //const currentThemeName = vuetifyTheme.name.value
-    // ℹ️ We need to store this color value in localStorage so vuetify plugin can pick on next reload
     localStorage.setItem(`${themeConfig.app.title}-lightThemePrimaryColor`, color)
     localStorage.setItem(`${themeConfig.app.title}-darkThemePrimaryColor`, color)
     vuetifyTheme.themes.value['light'].colors.primary = color
     vuetifyTheme.themes.value['dark'].colors.primary = color
 
     props.item.theme_css.main_color = color  
-    // ℹ️ Update initial loader color
     localStorage.setItem(`${themeConfig.app.title}-initial-loader-color`, color)
 }
 const moveNewTap = (url: string) => {
@@ -40,16 +37,16 @@ watchEffect(() => {
         <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>페이지 디자인</VCardTitle>
+                    <VCardTitle>로고 등록</VCardTitle>
                     <VRow class="pt-5">
                         <VCol md="6">
                             <VCol>
                                 <VRow no-gutters>
-                                    <FileLogoInput :file="props.item.logo_file" :preview="props.item.logo_img"
+                                    <FileLogoInput :preview="props.item.logo_img ?? ''"
                                         :label="'로고 이미지(85 * 85px *.svg)'" @update:file="props.item.logo_file = $event" :validates="['svg']"/>
                                 </VRow>
                                 <VRow no-gutters>
-                                    <FileLogoInput :file="props.item.favicon_file" :preview="props.item.favicon_img"
+                                    <FileLogoInput :preview="props.item.favicon_img ?? ''"
                                         :label="'파비콘 이미지(32 * 32px*.ico)'" @update:file="props.item.favicon_file = $event" :validates="['ico']"/>
                                 </VRow>
                             </VCol>
@@ -76,8 +73,7 @@ watchEffect(() => {
                                 </div>
                                 <br>
                                 <br>
-                                <br>
-                                <VCol>
+                                <VCol style="text-align: center;">
                                     <b>좌우상하 공백을 제거한 후 이미지들 등록해주세요.</b>
                                 </VCol>
                             </VCol>
@@ -104,9 +100,14 @@ watchEffect(() => {
                 <VCardItem>
                     <VCardTitle>카카오톡 미리보기</VCardTitle>
                     <VRow class="pt-5">
-                        <KakaotalkPreview :file="props.item.og_file" :preview="props.item.og_img" :name="toRef(props.item, 'name')"
+                        <KakaotalkPreview :file="props.item.og_file" :preview="props.item.og_img ?? ''" :name="toRef(props.item, 'name')"
                             :og_description="toRef(props.item, 'og_description')" @update:file="props.item.og_file = $event">
                         </KakaotalkPreview>
+                    </VRow>
+                    <br>                
+                    <VCardTitle>로그인 페이지 배경 등록</VCardTitle>                            
+                    <VRow class="pt-5">
+
                     </VRow>
                 </VCardItem>
             </VCard>

@@ -60,7 +60,7 @@ class MerchandiseController extends Controller
         ];
         $query = $this->commonSelect($request, true);
         $data = $this->getIndexData($request, $query, 'merchandises.id', $cols, 'merchandises.created_at', true);
-        $chart = getDefaultChartFormat($data);
+        $chart = getDefaultUsageChartFormat($data);
         return $this->response(0, $chart);
     }
 

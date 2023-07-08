@@ -15,7 +15,7 @@ export const pay = (module_type: number) => {
     const pgs = ref(<PayGateway[]>([]))
     const pg_type = ref(<string>(''))
     const pay_url = ref(<string>(''))
-    const return_url = process.env.NOTI_URL + '/pay/result'
+    const return_url = new URL(window.location.href).origin + '/pay/result'
 
     const pgTypeToPath = (pg_type: number) => {
         const pg_paths = [

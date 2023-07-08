@@ -2,153 +2,177 @@
 import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
 import { hexToRgb } from '@layouts/utils'
+import { useCRMStore } from '@/views/dashboards/crm/crm'
 
 const vuetifyTheme = useTheme()
+const { monthly_transactions } = useCRMStore()
 
-const series = [
-  {
-    name: 'Sales',
-    data: [32, 27, 27, 30, 25, 25],
-  },
-  {
-    name: 'Visits',
-    data: [25, 35, 20, 20, 20, 20],
-  },
-]
+const months = ref<string[]>([])
+const series = ref([
+    {
+        name: '장비',
+        data: [] as number [],
+    },
+    {
+        name: '수기결제',
+        data: [] as number [],
+    },
+    {
+        name: '인증결제',
+        data: [] as number [],
+    },
+    {
+        name: '간편결제',
+        data: [] as number [],
+    },
+])
+
+const getPreviousMonths = (dates: string[]) => {
+    const _months: string[] = []
+    for (let i = 0; i < dates.length; i++) {
+        const month = new Date(dates[i]).toLocaleString('default', { month: 'long' });
+        _months.unshift(month)
+    }
+    months.value = _months
+}
+const getPreviousAmount = (dates: string[]) => {
+    const terminal_counts = []
+    const hand_counts = []
+    const auth_counts = []
+    const simple_counts = []
+    for (let i = 0; i < dates.length; i++) {
+        terminal_counts.unshift(monthly_transactions[dates[i]].modules.terminal_count)
+        hand_counts.unshift(monthly_transactions[dates[i]].modules.hand_count)
+        auth_counts.unshift(monthly_transactions[dates[i]].modules.auth_count)
+        simple_counts.unshift(monthly_transactions[dates[i]].modules.simple_count)
+    }
+    series.value[0].data = terminal_counts
+    series.value[1].data = hand_counts
+    series.value[2].data = auth_counts
+    series.value[3].data = simple_counts
+}
 
 const chartOptions = computed(() => {
-  const currentTheme = vuetifyTheme.current.value.colors
-  const variableTheme = vuetifyTheme.current.value.variables
+    const currentTheme = vuetifyTheme.current.value.colors
+    const variableTheme = vuetifyTheme.current.value.variables
 
-  const borderColor = `rgba(${hexToRgb(String(variableTheme['border-color']))},${variableTheme['border-opacity']})`
-  const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`
-  const legendColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
+    const borderColor = `rgba(${hexToRgb(String(variableTheme['border-color']))},${variableTheme['border-opacity']})`
+    const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`
+    const legendColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
 
-  return {
-    chart: {
-      type: 'radar',
-      toolbar: {
-        show: false,
-      },
-    },
-    plotOptions: {
-      radar: {
-        polygons: {
-          strokeColors: borderColor,
-          connectorColors: borderColor,
+    if (Object.keys(monthly_transactions).length > 0) {
+        getPreviousMonths(Object.keys(monthly_transactions))
+        getPreviousAmount(Object.keys(monthly_transactions))
+    }
+    return {
+        chart: {
+            type: 'radar',
+            toolbar: {
+                show: false,
+            },
         },
-      },
-    },
-    stroke: {
-      show: false,
-      width: 0,
-    },
-    legend: {
-      show: true,
-      fontSize: '14px',
-      position: 'bottom',
-      labels: {
-        colors: legendColor,
-        useSeriesColors: false,
-      },
-      markers: {
-        height: 10,
-        width: 10,
-        offsetX: -3,
-      },
-      itemMargin: {
-        horizontal: 10,
-      },
-      onItemHover: {
-        highlightDataSeries: false,
-      },
-    },
-    colors: [currentTheme.primary, currentTheme.info],
-    fill: {
-      opacity: [1, 0.85],
-    },
-    markers: {
-      size: 0,
-    },
-    grid: {
-      show: false,
-      padding: {
-        top: 0,
-        bottom: -5,
-      },
-    },
-    xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-      labels: {
-        show: true,
-        style: {
-          colors: [labelColor, labelColor, labelColor, labelColor, labelColor, labelColor],
-          fontSize: '14px',
-          fontFamily: 'Public Sans',
+        plotOptions: {
+            radar: {
+                polygons: {
+                    strokeColors: borderColor,
+                    connectorColors: borderColor,
+                },
+            },
         },
-      },
-    },
-    yaxis: {
-      show: false,
-      min: 0,
-      max: 40,
-      tickAmount: 4,
-    },
-    responsive: [
-      {
-        breakpoint: 769,
-        options: {
-          chart: {
-            height: 372,
-          },
+        stroke: {
+            show: false,
+            width: 0,
         },
-      },
-    ],
-  }
+        legend: {
+            show: true,
+            fontSize: '14px',
+            position: 'bottom',
+            labels: {
+                colors: legendColor,
+                useSeriesColors: false,
+            },
+            markers: {
+                height: 10,
+                width: 10,
+                offsetX: -3,
+            },
+            itemMargin: {
+                horizontal: 10,
+            },
+            onItemHover: {
+                highlightDataSeries: false,
+            },
+        },
+        colors: [currentTheme.secondary, currentTheme.primary, currentTheme.success, currentTheme.info],
+        fill: {
+            opacity: [1, 0.85],
+        },
+        markers: {
+            size: 0,
+        },
+        grid: {
+            show: false,
+            padding: {
+                top: 0,
+                bottom: -5,
+            },
+        },
+        xaxis: {
+            categories: months.value,
+            labels: {
+                show: true,
+                style: {
+                    colors: [labelColor, labelColor, labelColor, labelColor, labelColor, labelColor],
+                    fontSize: '14px',
+                    fontFamily: 'Public Sans',
+                },
+            },
+        },
+        yaxis: {
+            show: false,
+            min: 0,
+            max: 40,
+            tickAmount: 4,
+        },
+        responsive: [
+            {
+                breakpoint: 769,
+                options: {
+                    chart: {
+                        height: 372,
+                    },
+                },
+            },
+        ],
+    }
 })
 </script>
 
 <template>
-  <VCard>
-    <VCardItem class="pb-0">
-      <VCardTitle>결제모듈 사용량</VCardTitle>
-      <VCardSubtitle>6개월간 결제모듈 사용량 개요</VCardSubtitle>
+    <VCard>
+        <VCardItem class="pb-0">
+            <VCardTitle>결제모듈 사용량</VCardTitle>
+            <VCardSubtitle>10개월간 결제모듈 사용량 개요</VCardSubtitle>
 
-      <template #append>
-        <div class="mt-n4 me-n2">
-          <VBtn
-            icon
-            size="x-small"
-            variant="plain"
-            color="default"
-          >
-            <VIcon
-              size="22"
-              icon="tabler-dots-vertical"
-            />
+            <template #append>
+                <div class="mt-n4 me-n2">
+                    <VBtn icon size="x-small" variant="plain" color="default">
+                        <VIcon size="22" icon="tabler-dots-vertical" />
 
-            <VMenu activator="parent">
-              <VList>
-                <VListItem
-                  v-for="(item, index) in ['View More', 'Delete']"
-                  :key="index"
-                  :value="index"
-                >
-                  <VListItemTitle>{{ item }}</VListItemTitle>
-                </VListItem>
-              </VList>
-            </VMenu>
-          </VBtn>
-        </div>
-      </template>
-    </VCardItem>
+                        <VMenu activator="parent">
+                            <VList>
+                                <VListItem v-for="(item, index) in ['View More', 'Delete']" :key="index" :value="index">
+                                    <VListItemTitle>{{ item }}</VListItemTitle>
+                                </VListItem>
+                            </VList>
+                        </VMenu>
+                    </VBtn>
+                </div>
+            </template>
+        </VCardItem>
 
-    <VCardText>
-      <VueApexCharts
-        :options="chartOptions"
-        :series="series"
-        height="355"
-      />
-    </VCardText>
-  </VCard>
+        <VCardText>
+            <VueApexCharts :options="chartOptions" :series="series" height="355" />
+        </VCardText>
+    </VCard>
 </template>

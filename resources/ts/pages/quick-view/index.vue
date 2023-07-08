@@ -21,18 +21,19 @@ axios.get('api/v1/quick-view')
                 <template #content>
                     <VCol>
                         <div style="text-align: center;">
-                            <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>님 안녕하세요 !
+                            <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>
+                            <span style="font-size: 0.9em;">님 안녕하세요 !</span>
                         </div>
                     </VCol>
                     <VCol>
                         <div class="d-flex justify-space-evenly">
-                            <VBtn @click="router.push('/posts?type=0')">
+                            <VBtn variant="tonal" @click="router.push('/posts?type=0')">
                                 공지사항
-                                <VIcon end icon="fxemoji-notepage" />
+                                <VIcon end icon="svg-spinners:bars-scale-middle" color="primary"/>
                             </VBtn>
                             <VBtn variant="tonal" @click="router.push('/posts?type=2')">
                                 1:1 문의
-                                <VIcon end icon="clarity:talk-bubbles-line" />
+                                <VIcon end icon="twemoji:adhesive-bandage" />
                             </VBtn>
                         </div>
                     </VCol>
@@ -40,7 +41,7 @@ axios.get('api/v1/quick-view')
             </CardLayout>
             <CardLayout v-for="(transaction, key) in transactions['month']" :key="key" :padding="true">
                 <template #content>
-                    <SettleContentOverview :transaction="transaction" :date="key"/>
+                    <SettleContentOverview :transaction="transaction" :date="key as string"/>
                 </template>
             </CardLayout>
             <CardLayout :padding="false">

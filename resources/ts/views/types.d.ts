@@ -603,3 +603,50 @@ export interface MchtRecentTransaction {
         [key: string]: TotalSette
     }
 }
+
+export interface TransWeekChart {
+    [key: string]: TransChart
+}
+// --------------------------
+interface Series {
+    name: string,
+    data: number[]
+}
+
+export interface TransChartData {
+    amount: number
+    count: number
+    hold_amount: number
+    profit: number
+    settle_fee: number
+    total_trx_amount: number
+    trx_amount: number
+    profit_rate?: number
+    amount_rate?: number
+    week_amount_rate?: number
+    week?: TransWeekChart
+}
+
+export interface TransChart extends TransChartData {
+    appr: TransChartData
+    cxl: TransChartData
+    modules: {
+        terminal_count: number
+        hand_count: number
+        auth_count: number
+        simple_count: number
+    }
+    [key: string]: TransChart; // Index signature
+}
+
+export interface MonthlyTransChart {
+    [key: string]: TransChart
+}
+export interface UpSideChartData {
+    add: number,
+    del: number,
+}
+export interface UpSideChart {
+    total: number,
+    [key: string]: UpSideChartData
+}

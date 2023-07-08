@@ -126,8 +126,15 @@ export const Header = (_path: string, file_name: string) => {
         };
         const getExcelOptions = (): { merge_cols: any[], widths: any[] } => {
             const header_2 = _.map(flat_headers.value, (value: Filter) => value.ko);
-            const colspans = getColspans();
-            const merge_cols = _.map(colspans, (value:number, index:number) => ({ s: { r: 0, c: index }, e: { r: 0, c: index + value - 1 } }));
+            const colspans = getColspans()
+
+            let index = 0
+            const merge_cols = []
+            for (let i = 0; i < colspans.length; i++) {
+                merge_cols.push({ s: { r: 0, c: index }, e: { r: 0, c: index + colspans[i] - 1 } })                
+                index += colspans[i]
+            }
+
             const widths = _.map(header_2, () => ({ width: 20 }));
             return { merge_cols, widths };
         };
@@ -135,7 +142,6 @@ export const Header = (_path: string, file_name: string) => {
         const contents = getDatasToArray()
         const total_headers = getHeadersToArray()
         const { merge_cols, widths } = getExcelOptions()
-
         const all_data = total_headers.concat(contents)
         const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(all_data)
         ws['!merges'] = merge_cols

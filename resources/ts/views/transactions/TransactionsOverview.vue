@@ -237,7 +237,7 @@ watchEffect(() => {
                                     </BaseQuestionTooltip>
                                 </VCol>
                                 <VCol cols="12" :md="4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht"
                                         :items="[{ id: null, mcht_name: '선택안함' }].concat(merchandises)"
                                         prepend-inner-icon="ph:share-network" label="가맹점 선택" item-title="mcht_name"
                                         item-value="id" @update:modelValue="changeMchtEvent()" return-object />

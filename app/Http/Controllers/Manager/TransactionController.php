@@ -23,52 +23,6 @@ class TransactionController extends Controller
         $this->transactions = $transactions;
     }
 
-    public function getSettleInformation($data)
-    {
-        $charts = [
-            'appr' => [
-                'amount' => 0,
-                'count' => 0,
-                'profit' => 0,
-            ],
-            'cxl' => [
-                'amount' => 0,
-                'count' => 0,
-                'profit' => 0,
-            ],
-            'amount' => 0,
-            'count' => 0,
-            'profit' => 0,
-        ];
-        if(count($data['content']))
-        {
-            $division = function($item) {
-                return $item->is_cancel == true;
-            };
-            $totals = function($items) {
-                return [
-                    'amount'        => $items->sum('amount'),
-                    'count'         => $items->count(),
-                    'profit'    => $items->sum('profit'),
-                ];
-            };
-            $appr = $data['content']->filter(function ($transaction) use ($division) {
-                return $division($transaction) == false;
-            })->values();
-        
-            $cxl = $data['content']->filter(function ($transaction) use ($division) {
-                return $division($transaction) == true;
-            })->values();
-
-            $charts['appr'] = $totals($appr);
-            $charts['cxl'] = $totals($cxl);
-            $charts['amount'] = $charts['appr']['amount'] + $charts['cxl']['amount'];
-            $charts['count'] = $charts['appr']['count'] + $charts['cxl']['count'];
-            $charts['profit'] = $charts['appr']['profit'] + $charts['cxl']['profit'];
-        }
-        return $charts;
-    }
-
     public function commonSelect($request)
     {
         $search = $request->input('search', '');
@@ -126,7 +80,7 @@ class TransactionController extends Controller
         ]);
         $query  = $this->commonSelect($request);
         $data   = $this->getIndexData($request, $query);
-        $chart  = $this->getSettleInformation($data);
+        $chart  = getDefaultTransChartFormat($data['content']);
         return $this->response(0, $chart);
     }
 
@@ -275,8 +229,8 @@ class TransactionController extends Controller
 
         $data = $request->all();
         $data['yymm'] = $getYYMM($data['yymm']);
-
-        $res = post(env('NOTI_URL', 'http://localhost:81/api/v2/pay/hand'), $data);
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/hand';
+        $res = post($url, $data);
         if($res['body']['result_cd'] === "0000")
             return $this->response(1, $res['body']);
         else
@@ -287,7 +241,8 @@ class TransactionController extends Controller
     public function payCancel(Request $request)
     {
         $data = $request->all();
-        $res = post(env('NOTI_URL', 'http://localhost:81/api/v2/pay/cancel'), $data);
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/cancel';
+        $res = post($url, $data);
         if($res['body']['result_cd'] === "0000")
             return $this->response(1, $res['body']);
         else

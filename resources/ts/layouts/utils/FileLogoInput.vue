@@ -3,10 +3,9 @@ import Preview from '@/layouts/utils/Preview.vue'
 import { extensionValidator } from '@validators'
 
 interface Props {
-    file: File,
     preview: string,
     label: string,
-    validates: [],
+    validates: string[],
 }
 const props = defineProps<Props>()
 

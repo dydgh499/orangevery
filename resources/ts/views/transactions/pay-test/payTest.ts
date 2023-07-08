@@ -11,14 +11,14 @@ export const payTest = (module_type:number) => {
     const { pgTypeToPath, pmod_id, pg_id, is_old_auth, installment, merchandise, pg_type, pay_url } = pay(module_type)
 
     const mcht_id = ref()
-    const return_url = process.env.NOTI_URL + '/transactions/pay-test/result'
+    const return_url = new URL(window.location.href).origin + '/transactions/pay-test/result'
 
     getAllMerchandises(module_type)
     getAllPayModules()
 
     const filterPayMod = computed(() => {
         const filter = pay_modules.filter((obj: PayModule) => { return obj.mcht_id == mcht_id.value && obj.module_type == 2 })
-        pmod_id.value = payModFilter(pay_modules, filter, pmod_id.value as number)
+        pmod_id.value = payModFilter(pay_modules, filter, pmod_id.value as number) ?? 0
         return filter
     })
 

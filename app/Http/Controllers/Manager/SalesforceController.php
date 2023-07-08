@@ -47,7 +47,7 @@ class SalesforceController extends Controller
         ]);
         $query = $this->commonSelect($request, true);
         $data = $this->getIndexData($request, $query);
-        $chart = getDefaultChartFormat($data);
+        $chart = getDefaultUsageChartFormat($data);
         return $this->response(0, $chart);
     }
 

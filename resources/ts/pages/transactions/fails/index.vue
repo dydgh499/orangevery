@@ -14,7 +14,7 @@ const metas = [
     {
         icon: 'tabler-user',
         color: 'primary',
-        title: '금월 추가된 가맹점',
+        title: '금월 발생한 이상거래',
         stats: '21,459',
         percentage: +29,
         subtitle: 'Total Users',
@@ -22,7 +22,7 @@ const metas = [
     {
         icon: 'tabler-user-plus',
         color: 'error',
-        title: '금주 추가된 가맹점',
+        title: '금주 발생한 이상거래',
         stats: '4,567',
         percentage: +18,
         subtitle: 'Last week analytics',

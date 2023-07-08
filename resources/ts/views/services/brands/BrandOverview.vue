@@ -100,25 +100,25 @@ watchEffect(() => {
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <FileInput :file="props.item.passbook_file" :label="`통장사본 업로드`"
-                                    :preview="props.item.passbook_img" @update:file="props.item.passbook_file = $event" />
+                                    :preview="props.item.passbook_img ?? '/icons/img-preview.svg'" @update:file="props.item.passbook_file = $event" />
                             </VRow>
                         </VCol>
                         <VCol cols="12">
                             <VRow no-gutters>
-                                <FileInput :file="props.item.id_file" :label="`신분증 업로드`" :preview="props.item.id_img"
+                                <FileInput :file="props.item.id_file" :label="`신분증 업로드`" :preview="props.item.id_img ?? '/icons/img-preview.svg'"
                                     @update:file="props.item.id_file = $event" />
                             </VRow>
                         </VCol>
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <FileInput :file="props.item.contract_file" :label="`계약서 업로드`"
-                                    :preview="props.item.contract_img" @update:file="props.item.contract_file = $event" />
+                                    :preview="props.item.contract_img ?? '/icons/img-preview.svg'" @update:file="props.item.contract_file = $event" />
                             </VRow>
                         </VCol>
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <FileInput :file="props.item.bsin_lic_file" :label="`사업자 등록증 업로드`"
-                                    :preview="props.item.bsin_lic_img" @update:file="props.item.bsin_lic_file = $event" />
+                                    :preview="props.item.bsin_lic_img ?? '/icons/img-preview.svg'" @update:file="props.item.bsin_lic_file = $event" />
                             </VRow>
                         </VCol>
                     </VRow>

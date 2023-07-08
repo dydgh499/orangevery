@@ -4,7 +4,7 @@ a
 import { VForm } from 'vuetify/components'
 import type { Tab } from '@/views/types'
 import { useRequestStore } from '@/views/request'
-
+import { user_info } from '@axios'
 
 interface Props {
     id: number | string,
@@ -20,7 +20,9 @@ const vForm = ref<VForm>()
 const { formRequest, remove, setOneObject } = useRequestStore()
 
 const disabledConditions = (index: number) => {
-    return index == 2 && props.id == 0 && props.path == 'merchandises'
+    const cond_1 = index == 2 && props.id == 0 && props.path == 'merchandises'
+    const cond_2 = index == 3 && user_info.value.level < 50 && props.path == 'brands'
+    return cond_1 && cond_2
 }
 
 const hideConditions = () => {

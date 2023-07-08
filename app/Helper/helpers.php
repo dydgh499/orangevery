@@ -245,7 +245,8 @@
         return $contents;
     }
 
-    function getDefaultChartFormat($data)
+    
+    function getDefaultUsageChartFormat($data)
     {        
         $division_by_delete = function($item) {
             return $item->is_delete == true;
@@ -283,4 +284,55 @@
             return $division_by_delete($item) == true;
         })->values()->count();
         return $chart;
+    }
+
+    function getDefaultTransChartFormat($data)
+    {
+        $division = function($item) {
+            return $item->is_cancel == true;
+        };
+        $totals = function($items) {
+            return [
+                'amount'        => $items->sum('amount'),
+                'count'         => $items->count(),
+                'profit'        => $items->sum('profit'),
+                'trx_amount'    => $items->sum('trx_amount'),
+                'hold_amount'   => $items->sum('hold_amount'),
+                'settle_fee'    => $items->sum('mcht_settle_fee'),
+                'total_trx_amount'=> $items->sum('total_trx_amount'),
+            ];
+        };
+        $defualt_format = [
+            'amount' => 0,
+            'count' => 0,
+            'profit' => 0,
+            'trx_amount' => 0,
+            'hold_amount' => 0,
+            'settle_fee' => 0,
+            'total_trx_amount' => 0,
+        ];
+        $chart = $defualt_format;
+        $chart['appr'] = $defualt_format;
+        $chart['cxl'] = $defualt_format;
+
+        if(count($data))
+        {
+            $appr = $data->filter(function ($transaction) use ($division) {
+                return $division($transaction) == false;
+            })->values();        
+            $cxl = $data->filter(function ($transaction) use ($division) {
+                return $division($transaction) == true;
+            })->values();
+
+            $chart['appr'] = $totals($appr);
+            $chart['cxl'] = $totals($cxl);
+            $chart['amount'] = $chart['appr']['amount'] + $chart['cxl']['amount'];
+            $chart['count'] = $chart['appr']['count'] + $chart['cxl']['count'];
+            $chart['profit'] = $chart['appr']['profit'] + $chart['cxl']['profit'];
+            $chart['trx_amount'] = $chart['appr']['trx_amount'] + $chart['cxl']['trx_amount'];
+            $chart['total_trx_amount'] = $chart['appr']['total_trx_amount'] + $chart['cxl']['total_trx_amount'];
+            $chart['settle_fee'] = $chart['appr']['settle_fee'] + $chart['cxl']['settle_fee'];
+            $chart['hold_amount'] = $chart['appr']['hold_amount'] + $chart['cxl']['hold_amount'];
+        }
+        return $chart;        
     }
