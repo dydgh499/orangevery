@@ -68,3 +68,12 @@ watchEffect(() => {
         </VCol>
     </VCard>
 </template>
+<style scoped>
+/deep/ .v-tabs {
+  pointer-events: none;
+}
+
+/deep/ .v-tabs__content {
+  pointer-events: auto;
+}
+</style>

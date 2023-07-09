@@ -9,7 +9,7 @@ import type { MchtRecentTransaction } from '@/views/types'
 const router = useRouter()
 const transactions = ref(<MchtRecentTransaction>({}))
 
-axios.get('api/v1/quick-view')
+axios.get('/api/v1/quick-view')
     .then(r => { transactions.value = r.data as MchtRecentTransaction; })
     .catch(e => { console.log(e) })
 

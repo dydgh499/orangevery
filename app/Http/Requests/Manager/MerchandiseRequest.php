@@ -58,6 +58,7 @@ class MerchandiseRequest extends FormRequest
             'contract_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
             'bsin_lic_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
             'id_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp',
+            'profile_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
 
         ];
         return $this->getRules($this->keys, $sub);
@@ -94,6 +95,8 @@ class MerchandiseRequest extends FormRequest
             $data[$key] = $this->input($key, '');
         }
         $data['custom_id'] = $this->input('custom_id', null);
+        if($this->has('profile_img'))
+            $data['profile_img'] = $this->profile_img;
         return $data;
     }
 }

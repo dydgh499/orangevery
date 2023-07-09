@@ -1,45 +1,27 @@
 <script lang="ts" setup>
 import type { Brand } from '@/views/types'
 import FileLogoInput from '@/layouts/utils/FileLogoInput.vue'
-import Preview from '@/layouts/utils/Preview.vue'
 import KakaotalkPreview from '@/layouts/utils/KakaotalkPreview.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
 import { useTheme } from 'vuetify'
 import { themeConfig } from '@themeConfig'
-import authV2LoginDefault from '@images/pages/auth-v2-login-default.png'
+import authV2LoginDefault1 from '@images/pages/auth-v2-login-default1.png'
 import authV2LoginDefault2 from '@images/pages/auth-v2-login-default2.png'
 import authV2LoginDefault3 from '@images/pages/auth-v2-login-default3.png'
-
-import { Pagination, EffectCoverflow } from 'swiper'
-import { Swiper, SwiperSlide } from 'swiper/vue'
-
-// import swiper module styles
-import 'swiper/css'
-import 'swiper/css/pagination'
-import 'swiper/css/effect-coverflow'
-import { PropertyDescriptorParsingType } from 'html2canvas/dist/types/css/IPropertyDescriptor'
 
 interface Props {
     item: Brand,
 }
-
-const swiper = ref()
-const modules = [Pagination, EffectCoverflow];
 const props = defineProps<Props>()
 
 const vuetifyTheme = useTheme()
-const login_file = ref(<File[]>([]))
-const preview = ref(<string>(props.item.login_img ?? authV2LoginDefault))
-
+const login_imgs = [
+    authV2LoginDefault1,
+    authV2LoginDefault2,
+    authV2LoginDefault3,
+]
 const color = ref(props.item.theme_css.main_color)
-const previewStyle = `
-    border: 2px solid rgb(238, 238, 238);
-    border-radius: 0.5em;
-    margin-block: 0;
-    margin-inline: 0.5em;
-`;
-
 
 const setPrimaryColor = (color: string) => {
     localStorage.setItem(`${themeConfig.app.title}-lightThemePrimaryColor`, color)
@@ -53,29 +35,8 @@ const setPrimaryColor = (color: string) => {
 const moveNewTap = (url: string) => {
     window.open(url)
 }
-const getRef = (swiperInstance:any) => {
-    swiper.value = swiperInstance
-}
-const setDefaultimage = () => {
-    if(swiper.value.activeIndex == 0)
-        preview.value = authV2LoginDefault
-    else if(swiper.value.activeIndex == 1)
-        preview.value = authV2LoginDefault2
-    else if(swiper.value.activeIndex == 2)
-        preview.value = authV2LoginDefault3
-    else
-        return
-    props.item.default_login_img = preview.value
-}
 watchEffect(() => {
     setPrimaryColor(color.value)
-})
-
-watchEffect(() => {
-    if (login_file.value != undefined && login_file.value.length) {
-        props.item.login_file = login_file.value[0]
-        preview.value = URL.createObjectURL(login_file.value[0])
-    }
 })
 </script>
 <template>
@@ -160,54 +121,11 @@ watchEffect(() => {
                     <VRow class="pt-5">
                         <VCol cols="12">
                             <VRow no-gutters>
-                                <VCol cols="12" md="6" style="padding: 0 0.5em;">
-                                    <VFileInput accept="image/*" show-size v-model="login_file"
-                                        :label="'배경 이미지(가로 최대 1500px)'" prepend-icon="tabler-camera-up">
-                                        <template #selection="{ fileNames }">
-                                            <template v-for="fileName in fileNames" :key="fileName">
-                                                <VChip label size="small" variant="outlined" color="primary" class="me-2">
-                                                    {{ fileName }}
-                                                </VChip>
-                                            </template>
-                                        </template>
-                                    </VFileInput>
-                                    <br>
-                                    <BaseQuestionTooltip :location="'top'" :text="'기본 제공 배경 이미지'"
-                                        :content="'기본으로 제공되는 배경 이미지 입니다.<br>하단 스와이프뷰에서 이미지를 선택하신 후, 선택 버튼을 눌러주세요.'">
-                                    </BaseQuestionTooltip>
-                                    <br>
-                                    <br>
-                                    <div class="coverflow-example">
-                                        <Swiper class="swiper" :modules="modules" :pagination="true" :effect="'coverflow'"
-                                            :grab-cursor="true" :centered-slides="true" :slides-per-view="'auto'"
-                                            @swiper="getRef"
-                                            :coverflow-effect="{
-                                                rotate: 50,
-                                                stretch: 0,
-                                                depth: 100,
-                                                modifier: 1,
-                                                slideShadows: true
-                                            }">
-                                            <SwiperSlide class="slide" :style="previewStyle">
-                                                <VImg rounded :src="authV2LoginDefault"></VImg>
-                                            </SwiperSlide>
-                                            <SwiperSlide class="slide" :style="previewStyle">
-                                                <VImg rounded :src="authV2LoginDefault2"></VImg>
-                                            </SwiperSlide>
-                                            <SwiperSlide class="slide" :style="previewStyle">
-                                                <VImg rounded :src="authV2LoginDefault3"></VImg>
-                                            </SwiperSlide>
-                                        </Swiper>
-                                    </div>
-                                    <div style="text-align: end;">
-                                        <VBtn @click="setDefaultimage()">
-                                            선택
-                                        </VBtn>
-                                    </div>
-                                </VCol>
-                                <VCol cols="12" md="6">
-                                    <Preview :preview="preview" :style="``" :preview-style="previewStyle" class="preview" />
-                                </VCol>
+                                <SwiperPreview :items="login_imgs" :default_img="props.item.login_img ?? login_imgs[Math.floor(Math.random() * login_imgs.length)]"
+                                    :item_name="'배경'" :lmd="6" :rmd="6"
+                                    @update:file="props.item.login_file = $event"
+                                    @update:default="props.item.login_img = $event">
+                                </SwiperPreview>
                             </VRow>
                         </VCol>
                     </VRow>

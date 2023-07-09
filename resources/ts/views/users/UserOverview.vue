@@ -1,15 +1,16 @@
 <script lang="ts" setup>
-
 import { businessNumValidator, lengthValidatorV2, requiredValidator, nullValidator, integerValidator } from '@validators'
 import type { UserPropertie } from '@/views/types'
 import FileInput from '@/layouts/utils/FileInput.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { banks } from '@/views/users/useStore'
+import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
+import { banks, avatars } from '@/views/users/useStore'
+
 interface Props {
     item: UserPropertie,
     id: number | string,
 }
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
 const is_show = ref(false)
 const bank = ref({ code: props.item.acct_bank_code, title: props.item.acct_bank_name })
@@ -78,7 +79,7 @@ watchEffect(() => {
                             <template #name>사업자번호</template>
                             <template #input>
                                 <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
-                                    prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
+                                    prepend-inner-icon="ic-outline-business-center" placeholder="1231212345"
                                     persistent-placeholder
                                     :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
                             </template>
@@ -125,6 +126,21 @@ watchEffect(() => {
                         </CreateHalfVCol>
                     </VRow>
                 </VCardItem>
+                <VCardItem>
+                    <VCardTitle>프로필 이미지</VCardTitle>
+                    <VRow class="pt-5">
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <SwiperPreview :items="avatars" :default_img="props.item.profile_img ?? avatars[Math.floor(Math.random() * avatars.length)]"
+                                    :item_name="'프로필'" :lmd="10" :rmd="2"
+                                    @update:file="props.item.profile_file = $event"
+                                    @update:default="props.item.profile_img = $event"
+                                >
+                                </SwiperPreview>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                </VCardItem>
             </VCard>
         </VCol>
         <!-- 👉 계약정보 -->
@@ -135,7 +151,8 @@ watchEffect(() => {
                     <VRow class="pt-5">
                         <VCol cols="12">
                             <VRow no-gutters>
-                                <FileInput :label="`통장사본 업로드`" :preview="props.item.passbook_img ?? '/icons/img-preview.svg'"
+                                <FileInput :label="`통장사본 업로드`"
+                                    :preview="props.item.passbook_img ?? '/icons/img-preview.svg'"
                                     @update:file="props.item.passbook_file = $event" />
                             </VRow>
                         </VCol>
@@ -153,7 +170,8 @@ watchEffect(() => {
                         </VCol>
                         <VCol cols="12">
                             <VRow no-gutters>
-                                <FileInput :label="`사업자 등록증 업로드`" :preview="props.item.bsin_lic_img ?? '/icons/img-preview.svg'"
+                                <FileInput :label="`사업자 등록증 업로드`"
+                                    :preview="props.item.bsin_lic_img ?? '/icons/img-preview.svg'"
                                     @update:file="props.item.bsin_lic_file = $event" />
                             </VRow>
                         </VCol>
@@ -163,4 +181,3 @@ watchEffect(() => {
         </VCol>
     </VRow>
 </template>
-  

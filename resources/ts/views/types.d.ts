@@ -87,7 +87,9 @@ export interface BasePropertie {
     user_name: string,
     user_pw: string,
     nick_name: string,
-    phone_num: string,
+    phone_num: string,    
+    profile_file?: File | null,
+    profile_img?: string,
     created_at: datetime | null,
     updated_at: datetime | null,
 }
@@ -271,7 +273,6 @@ export interface Brand extends Contract {
     favicon_file: File | undefined,
     og_file: File | undefined,
     login_file: File | undefined,
-    default_login_img?: string,
     // 운영 정보
     og_description: string,
     note: string,

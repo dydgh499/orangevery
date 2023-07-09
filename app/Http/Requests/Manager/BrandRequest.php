@@ -122,9 +122,9 @@ class BrandRequest extends FormRequest
         ];
         $data['pv_options'] = json_encode($this->pv_options); 
         $data['theme_css']  = json_encode($this->theme_css);
-        if($this->has('default_login_img'))
-            $data['login_img'] = $this->default_login_img;
-            
+        if($this->has('login_img'))
+            $data['login_img'] = $this->login_img;
+
         return $data;
     }
 }

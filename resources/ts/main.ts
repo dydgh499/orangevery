@@ -12,8 +12,8 @@ import '@core-scss/template/index.scss'
 import '@styles/styles.scss'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-loadFonts()
 
+loadFonts()
 
 declare module '@vue/runtime-core' {
     export interface ComponentCustomProperties {

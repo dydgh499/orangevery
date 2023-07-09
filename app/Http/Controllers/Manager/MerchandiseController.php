@@ -30,16 +30,16 @@ class MerchandiseController extends Controller
         $this->merchandises = $merchandises;
         $this->imgs = [
             'params'    => [
-                'contract_file', 'id_file', 'passbook_file', 'bsin_lic_file',
+                'contract_file', 'id_file', 'passbook_file', 'bsin_lic_file', 'profile_file',
             ],
             'cols'  => [
-                'contract_img', 'id_img', 'passbook_img', 'bsin_lic_img',
+                'contract_img', 'id_img', 'passbook_img', 'bsin_lic_img', 'profile_img',
             ],
             'folders'   => [
-                'contracts', 'ids', 'passbooks', 'bsin_lic'
+                'contracts', 'ids', 'passbooks', 'bsin_lic', 'profile',
             ],
             'sizes'     => [
-                500, 500, 500, 500
+                500, 500, 500, 500, 120
             ],
         ];
     }

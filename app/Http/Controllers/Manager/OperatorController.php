@@ -24,7 +24,20 @@ class OperatorController extends Controller
     public function __construct(Operator $operators)
     {
         $this->operators = $operators;
-        $this->imgs = [];
+        $this->imgs = [
+            'params'    => [
+                 'profile_file',
+            ],
+            'cols'  => [
+                'profile_img',
+            ],
+            'folders'   => [
+                'profile',
+            ],
+            'sizes'     => [
+               120
+            ],
+        ];
     }
 
     /**
@@ -50,6 +63,7 @@ class OperatorController extends Controller
     {
         $validated = $request->validate(['user_pw'=>'required']);
         $user = $request->data();
+        $user = $this->saveImages($request, $user, $this->imgs);
         $user['user_pw'] = Hash::make($request->input('user_pw'));
         $res = $this->operators->create($user);
         return $this->response($res ? 1 : 990);
@@ -79,8 +93,9 @@ class OperatorController extends Controller
      */
     public function update(OperatorReqeust $request, $id)
     {
-        $data = $request->data();
-        $res = $this->operators->where('id', $id)->update($data);
+        $user = $request->data();
+        $user = $this->saveImages($request, $user, $this->imgs);
+        $res = $this->operators->where('id', $id)->update($user);
         return $this->response($res ? 1 : 990);
     }
 

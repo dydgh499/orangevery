@@ -4,6 +4,7 @@ import { initialAbility } from '@/plugins/casl/ability'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
 import { axios, pay_token, user_info } from '@axios'
 import { allLevels } from '@/views/salesforces/useStore'
+import { avatars } from '@/views/users/useStore'
 
 const ability = useAppAbility()
 const password = ref()
@@ -27,7 +28,6 @@ else
     mytype = 3
 
 // 개발사는 이동할 수 없음
-const avartar_num = Math.floor(Math.random() * 25) + 1;
 const logout = async () => {
     await axios.get('/api/v1/auth/sign-out', {})
     localStorage.removeItem('abilities')
@@ -36,12 +36,14 @@ const logout = async () => {
     ability.update(initialAbility)
     location.href = '/'
 }
+user_info.value.profile_img = user_info.value.profile_img ? user_info.value.profile_img : avatars[Math.floor(Math.random() * avatars.length)]
+console.log(user_info.value.profile_img )
 </script>
 
 <template>
     <VBadge dot location="bottom right" offset-x="3" offset-y="3" bordered color="success">
         <VAvatar class="cursor-pointer" color="primary" variant="tonal">
-            <VImg :src="'/images/avatars/avatar_' + avartar_num + '.jpg'" />
+            <VImg :src="user_info.profile_img" />
 
             <!-- SECTION Menu -->
             <VMenu activator="parent" width="230" location="bottom end" offset="14px">
@@ -52,7 +54,7 @@ const logout = async () => {
                             <VListItemAction start>
                                 <VBadge dot location="bottom right" offset-x="3" offset-y="3" color="success">
                                     <VAvatar color="primary" variant="tonal">
-                                        <VImg :src="'/images/avatars/avatar_' + avartar_num + '.jpg'" />
+                                        <VImg :src="user_info.profile_img" />
                                     </VAvatar>
                                 </VBadge>
                             </VListItemAction>

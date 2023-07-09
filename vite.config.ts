@@ -9,6 +9,7 @@ import DefineOptions from 'unplugin-vue-define-options/vite'
 import { fileURLToPath } from 'url'
 import { defineConfig } from 'vite'
 import Pages from 'vite-plugin-pages'
+import { VitePWA } from 'vite-plugin-pwa'
 import Layouts from 'vite-plugin-vue-layouts'
 import vuetify from 'vite-plugin-vuetify'
 
@@ -60,6 +61,13 @@ export default defineConfig({
             include: [
                 fileURLToPath(new URL('./resources/ts/plugins/i18n/locales/**', import.meta.url)),
             ],
+        }),
+        VitePWA({
+            registerType: 'autoUpdate',
+            injectRegister: 'auto',
+            devOptions: {
+                enabled: true
+            }
         }),
         DefineOptions(),
     ],

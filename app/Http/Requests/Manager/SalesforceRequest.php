@@ -54,6 +54,11 @@ class SalesforceRequest extends FormRequest
             'acct_bank_code' => 'required',
             'settle_tax_type' => 'required',
             'settle_cycle' => 'required',
+            'passbook_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
+            'contract_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
+            'bsin_lic_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
+            'id_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp',
+            'profile_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -85,6 +90,8 @@ class SalesforceRequest extends FormRequest
         }
         $data['brand_id'] = $this->user()->brand_id;
         $data['phone_num'] = $data['phone_num'] == '' ? 0 : $data['phone_num'];
+        if($this->has('profile_img'))
+            $data['profile_img'] = $this->profile_img;
         return $data;
     }
 }

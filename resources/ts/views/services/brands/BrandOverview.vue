@@ -77,7 +77,7 @@ watchEffect(() => {
                             <template #name>사업자번호</template>
                             <template #input>
                                 <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
-                                    prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
+                                    prepend-inner-icon="ic-outline-business-center" placeholder="1231212345"
                                     persistent-placeholder
                                     :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
                             </template>

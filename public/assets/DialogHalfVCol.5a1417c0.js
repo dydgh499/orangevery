@@ -1,0 +1,1 @@
+import{ac as o,E as a,G as n,J as t,L as s}from"./main.78b17f62.js";const _={},d={class:"d-flex content"},c={style:{width:"33%"}},l={style:{width:"66%"}};function i(e,r){return a(),n("div",d,[t("div",c,[s(e.$slots,"name",{},void 0,!0)]),t("div",l,[s(e.$slots,"input",{},void 0,!0)])])}const u=o(_,[["render",i],["__scopeId","data-v-24fe6aa3"]]);export{u as default};

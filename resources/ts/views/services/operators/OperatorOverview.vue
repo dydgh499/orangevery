@@ -1,22 +1,24 @@
 <script lang="ts" setup>
 
-import { emailValidator, passwordValidator, requiredValidator } from '@validators'
+import { passwordValidator, requiredValidator } from '@validators'
 import type { Operator } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { operator_levels } from '@/views/services/operators/useStore'
+import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
+import { avatars } from '@/views/users/useStore'
 
 interface Props {
     item: Operator,
     id: number | string,
 }
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 //--
 const is_show = ref(false)
 </script>
 <template>
     <VRow class="match-height">
         <!-- 👉 개인정보 -->
-        <VCol cols="12" md="12">
+        <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
                     <VCardTitle>기본정보</VCardTitle>
@@ -26,8 +28,8 @@ const is_show = ref(false)
                             <template #name>아이디</template>
                             <template #input>
                                 <VTextField v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
-                                    placeholder="ID로 사용됩니다." persistent-placeholder
-                                    :rules="[requiredValidator]" maxlength="30" />
+                                    placeholder="ID로 사용됩니다." persistent-placeholder :rules="[requiredValidator]"
+                                    maxlength="30" />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Password -->
@@ -67,6 +69,23 @@ const is_show = ref(false)
                                     :readonly="props.id != 0" />
                             </template>
                         </CreateHalfVCol>
+                    </VRow>
+                </VCardItem>
+            </VCard>
+        </VCol>
+        <VCol cols="12" md="6">
+            <VCard>
+                <VCardItem>
+                    <VCardTitle>프로필 이미지</VCardTitle>
+                    <VRow class="pt-5">
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <SwiperPreview :items="avatars" :default_img="props.item.profile_img ?? avatars[Math.floor(Math.random() * avatars.length)]" :item_name="'프로필'"
+                                :lmd="10" :rmd="2" @update:file="props.item.profile_file = $event"
+                                @update:default="props.item.profile_img = $event">
+                            </SwiperPreview>
+                            </VRow>
+                        </VCol>
                     </VRow>
                 </VCardItem>
             </VCard>

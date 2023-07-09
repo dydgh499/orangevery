@@ -13,9 +13,9 @@ import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import authV2MaskDark from '@images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@images/pages/misc-mask-light.png'
 
-import authV2LoginDefault from '@images/pages/auth-v2-login-default.png'
+import authV2LoginDefault1 from '@images/pages/auth-v2-login-default1.png'
 
-const default_img = corp.login_img ? corp.login_img : authV2LoginDefault
+const default_img = corp.login_img ? corp.login_img : authV2LoginDefault1
 const authThemeImg = useGenerateImageVariant(default_img, default_img, default_img, default_img, true)
 const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 
@@ -46,7 +46,7 @@ const getAbilities = (): UserAbility[] => {
     return auth;
 }
 const login = () => {
-    axios.post('api/v1/auth/sign-in', { brand_id: corp.id, user_name: user_name.value, user_pw: user_pw.value })
+    axios.post('/api/v1/auth/sign-in', { brand_id: corp.id, user_name: user_name.value, user_pw: user_pw.value })
         .then(r => {
             const { access_token, user } = r.data
             user['level'] = user['level'] == null ? 10 : user['level']
@@ -80,7 +80,7 @@ const onSubmit = () => {
         <VCol lg="8" class="d-none d-lg-flex">
             <div class="position-relative auth-bg rounded-lg w-100 ma-8 me-0">
                 <div class="d-flex align-center justify-center w-100 h-100">
-                    <VImg max-width="505" :src="authThemeImg" class="auth-illustration mt-16 mb-2" />
+                    <VImg max-width="605" :src="authThemeImg" class="auth-illustration mt-16 mb-2" />
                 </div>
 
                 <VImg :src="authThemeMask" class="auth-footer-mask" />
@@ -143,6 +143,24 @@ const onSubmit = () => {
 
 <style lang="scss">
 @use "@core-scss/template/pages/page-auth.scss";
+
+@keyframes scale {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.auth-illustration {
+  animation: scale 14s infinite;
+}
 </style>
 
 <route lang="yaml">

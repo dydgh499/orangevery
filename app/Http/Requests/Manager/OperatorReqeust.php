@@ -36,6 +36,7 @@ class OperatorReqeust extends FormRequest
             'nick_name' => 'required',
             'phone_num' => 'required',
             'level' => 'required',
+            'profile_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -60,6 +61,8 @@ class OperatorReqeust extends FormRequest
             $data[$key] = $this->input($key, '');
         }
         $data['brand_id'] = $this->user()->brand_id;
+        if($this->has('profile_img'))
+            $data['profile_img'] = $this->profile_img;
         return $data;
     }
 }

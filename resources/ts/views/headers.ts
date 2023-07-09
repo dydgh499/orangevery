@@ -1,10 +1,6 @@
-import { Filter } from '@/views/types'
-import _ from 'lodash'
-import pdfMake from 'pdfmake/build/pdfmake'
-import pdfFonts from "pdfmake/build/vfs_fonts"
-import * as XLSX from 'xlsx'
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import { Filter } from '@/views/types';
+import _ from 'lodash';
+import * as XLSX from 'xlsx';
 
 export const Header = (_path: string, file_name: string) => {
     const filter = ref<any>(null)
@@ -188,8 +184,7 @@ export const Header = (_path: string, file_name: string) => {
                 },
             ],
         };
-        const pdfDoc = pdfMake.createPdf(docDefinition);
-        pdfDoc.download(file_name + "_" + date + ".pdf");
+        //pdfDoc.download(file_name + "_" + date + ".pdf");
     }
 
     watchEffect(() => {
