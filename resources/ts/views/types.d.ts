@@ -264,10 +264,14 @@ export interface Brand extends Contract {
     // 운영 이미지
     logo_img: string | null,
     favicon_img: string | null,
-    og_img:string | null,
+    og_img: string | null,
+    login_img: string | null,
+
     logo_file: File | undefined,
     favicon_file: File | undefined,
     og_file: File | undefined,
+    login_file: File | undefined,
+    default_login_img?: string,
     // 운영 정보
     og_description: string,
     note: string,

@@ -32,7 +32,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VCol md="6">
+    <VCol md="6" style="padding: 0.5em;">
         <VFileInput accept="image/*" v-model="files" :label="`미리보기 이미지(1260px * 630px)`"
             prepend-icon="tabler-camera-up">
             <template #selection="{ fileNames }">
@@ -47,7 +47,7 @@ watchEffect(() => {
             <VTextarea v-model="props.og_description.value" counter label="내용"/>
         </VRow>
     </VCol>
-    <VCol md="6">
+    <VCol md="6" style="padding: 0.5em;">
         <div class="preview-box">
             <div class="preview-image-box" :style="`background-image: url(${preview});`">
             </div>

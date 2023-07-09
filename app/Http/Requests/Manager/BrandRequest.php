@@ -61,6 +61,7 @@ class BrandRequest extends FormRequest
             'bsin_lic_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
             'id_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp',
             'og_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp',
+            'login_file'     => 'file|mimes:jpg,bmp,png,jpeg,webp',
             'pv_options'    => 'required',
             'ceo_name'        => 'string|required',
             'company_name'    => 'string|required',
@@ -121,6 +122,9 @@ class BrandRequest extends FormRequest
         ];
         $data['pv_options'] = json_encode($this->pv_options); 
         $data['theme_css']  = json_encode($this->theme_css);
+        if($this->has('default_login_img'))
+            $data['login_img'] = $this->default_login_img;
+            
         return $data;
     }
 }

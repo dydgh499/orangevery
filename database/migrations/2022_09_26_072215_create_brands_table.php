@@ -26,7 +26,7 @@ class CreateBrandsTable extends Migration
             $table->string('contract_img', 100)->nullable()->comment('계약서 사본');
             $table->string('og_img', 100)->nullable()->comment('오픈 그래프 이미지(1200x630 권장)');
             $table->string('bsin_lic_img', 100)->nullable()->comment('사업자 등록증 사본');
-            $table->string('background_img', 100)->nullable()->comment('로그인 배경 이미지');
+            $table->string('login_img', 100)->nullable()->comment('로그인 배경 이미지');
             $table->string('og_description')->nullable()->comment('오픈 그래프 내용');
             $table->string('note')->nullable()->comment('내용');
             $table->string('company_name')->nullable()->comment('회사명');

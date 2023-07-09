@@ -261,28 +261,32 @@
         $first_dy_week = Carbon::now()->startOfWeek();
         $first_dy_month = Carbon::now()->startOfMonth();
 
-        $this_week = $data['content']->filter(function ($item) use ($first_dy_week) {
-            return Carbon::parse($item->created_at)->greaterThanOrEqualTo($first_dy_week);
-        })->values();
-
-        $this_month = $data['content']->filter(function ($item) use ($first_dy_month) {
-            return Carbon::parse($item->created_at)->greaterThanOrEqualTo($first_dy_month);
-        })->values();
-
-        $chart['this_week_add'] = $this_week->filter(function ($item) use ($division_by_delete) {
-            return $division_by_delete($item) == false;
-        })->values()->count();
-        $chart['this_week_del'] = $this_week->filter(function ($item) use ($division_by_delete) {
-            return $division_by_delete($item) == true;
-        })->values()->count();
-        
-        $chart['this_month_add'] = $this_month->filter(function ($item) use ($division_by_delete) {
-            return $division_by_delete($item) == false;
-        })->values()->count();
+        if(count($data['content']))
+        {
+            $this_week = $data['content']->filter(function ($item) use ($first_dy_week) {
+                return Carbon::parse($item->created_at)->greaterThanOrEqualTo($first_dy_week);
+            })->values();
     
-        $chart['this_month_del'] = $this_month->filter(function ($item) use ($division_by_delete) {
-            return $division_by_delete($item) == true;
-        })->values()->count();
+            $this_month = $data['content']->filter(function ($item) use ($first_dy_month) {
+                return Carbon::parse($item->created_at)->greaterThanOrEqualTo($first_dy_month);
+            })->values();
+    
+            $chart['this_week_add'] = $this_week->filter(function ($item) use ($division_by_delete) {
+                return $division_by_delete($item) == false;
+            })->values()->count();
+            $chart['this_week_del'] = $this_week->filter(function ($item) use ($division_by_delete) {
+                return $division_by_delete($item) == true;
+            })->values()->count();
+            
+            $chart['this_month_add'] = $this_month->filter(function ($item) use ($division_by_delete) {
+                return $division_by_delete($item) == false;
+            })->values()->count();
+        
+            $chart['this_month_del'] = $this_month->filter(function ($item) use ($division_by_delete) {
+                return $division_by_delete($item) == true;
+            })->values()->count();
+    
+        }
         return $chart;
     }
 

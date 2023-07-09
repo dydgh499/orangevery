@@ -69,8 +69,11 @@ export const allLevels = () => {
     const sales = salesLevels()
     if(user_info.value.level >= 10)
         sales.unshift(<Options>({id: 10, title: '가맹점'}))
-    if(user_info.value.level >= 35)
+    if(user_info.value.level >= 35) {
+        sales.push(<Options>({id: 35, title: '직원'}))
         sales.push(<Options>({id: 40, title: '본사'}))
+        sales.push(<Options>({id: 45, title: '협력사'}))
+    }
     if(levels.dev_use && user_info.value.level >= 35)
         sales.push(<Options>({id: 50, title: levels.dev_name}))
     return sales

@@ -166,16 +166,18 @@ export const useUpdateStore = defineStore('brandUpdateStore', () => {
             })
         },
         theme_css: reactive<ThemeCSS>({
-            main_color: '#5E35B1FF',
+            main_color: '#5E35B1',
         }),
         logo_file: undefined,
         favicon_file: undefined,
-        og_file: undefined,
-        id_file: undefined,
         passbook_file: undefined,
         contract_file: undefined,
         bsin_lic_file: undefined,
-        is_transfer: false
+        og_file: undefined,
+        id_file: undefined,
+        login_file: undefined,
+        is_transfer: false,
+        login_img: null,
     })
 
 

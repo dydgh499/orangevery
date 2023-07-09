@@ -76,7 +76,8 @@ class DashboardController extends Controller
             $charts[$cur_month]['modules']['auth_count'] = 0;
             $charts[$cur_month]['modules']['simple_count'] = 0;
             $charts[$cur_month]['week_amount_rate'] = 0;
-            $cahrts[$cur_month]['week'] = [];
+            $charts[$cur_month]['week'] = [];
+            $cur_chart = $charts[$cur_month];
         }
         if(count($last_chart) > 0)
         {

@@ -68,7 +68,7 @@ defineExpose({
             <DialogCloseBtn @click="visible = !visible" />
         </div>
         <!-- Dialog Content -->
-        <VCard style="background: rgba(0, 0, 0, 0%);">
+        <VCard style="background: rgba(0, 0, 0, 0%); box-shadow: 0 0 0 0;">
             <div ref="card">
                 <VCardText class="sales-slip-rect" :style="`background-image: url(${background})`">
                     <VCol class="font-weight-bold v-col-custom big-font text-center">
@@ -245,12 +245,5 @@ div {
   .cancel-img {
     inset-block-start: 67%;
   }
-}
-
-/deep/ .v-card,
-/deep/ .v-dialog,
-/deep/ .v-dialog .v-overlay__content > .v-card,
-/deep/ .v-dialog .v-overlay__content > .v-sheet {
-  box-shadow: 0 !important;
 }
 </style>

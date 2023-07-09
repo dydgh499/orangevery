@@ -30,18 +30,22 @@ class BrandController extends Controller
             'params'    => [
                 'logo_file', 'favicon_file', 'passbook_file',
                 'contract_file', 'id_file', 'og_file', 'bsin_lic_file',
+                'login_file',
             ],
             'cols'  => [
                 'logo_img', 'favicon_img', 'passbook_img',
                 'contract_img', 'id_img', 'og_img', 'bsin_lic_img',
+                'login_img',
             ],
             'folders'   => [
                 'logos', 'favicons', 'passbooks',
-                'contracts', 'ids', 'ogs', 'bsin_lic'
+                'contracts', 'ids', 'ogs', 'bsin_lic',
+                'logins',
             ],
             'sizes'     => [
                 85, 32, 500,
-                500, 500, 1200, 500
+                500, 500, 1200, 500,
+                2000,
             ],
         ];
     }
@@ -132,8 +136,7 @@ class BrandController extends Controller
             
             $query  = $this->brands->where('id', $id);
             $result = $query->update($data);
-            $brand = Redis::set($request->dns, json_encode($query->first()->toArray()));
-
+            setBrandByDNS($request->dns);
             return $this->response($result ? 1 : 990);
         }
         else

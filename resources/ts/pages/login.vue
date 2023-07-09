@@ -15,7 +15,8 @@ import authV2MaskLight from '@images/pages/misc-mask-light.png'
 
 import authV2LoginDefault from '@images/pages/auth-v2-login-default.png'
 
-const authThemeImg = useGenerateImageVariant(authV2LoginDefault, authV2LoginDefault, authV2LoginDefault, authV2LoginDefault, true)
+const default_img = corp.login_img ? corp.login_img : authV2LoginDefault
+const authThemeImg = useGenerateImageVariant(default_img, default_img, default_img, default_img, true)
 const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 
 const isPasswordVisible = ref(false)
@@ -39,20 +40,9 @@ const user_pw = ref('1234')
   Admin user_name: <strong>admin@demo.com</strong> / Pass: <strong>admin</strong>
   Client user_name: <strong>client@demo.com</strong> / Pass: <strong>client</strong>
 */
-const getAbilities = (level: number): UserAbility[] => {
+const getAbilities = (): UserAbility[] => {
     let auth: UserAbility[] = [];
-    switch (level) {
-        case 10: auth.push({ action: 'manage', subject: 'all' }); break;
-        case 13: auth.push({ action: 'manage', subject: 'all' }); break;
-        case 15: auth.push({ action: 'manage', subject: 'all' }); break;
-        case 17: auth.push({ action: 'manage', subject: 'all' }); break;
-        case 20: auth.push({ action: 'manage', subject: 'all' }); break;
-        case 25: auth.push({ action: 'manage', subject: 'all' }); break;
-        case 30: auth.push({ action: 'manage', subject: 'all' }); break;
-        case 35: auth.push({ action: 'read', subject: 'all' }); break;
-        case 40: auth.push({ action: 'manage', subject: 'all' }); break;
-        case 50: auth.push({ action: 'manage', subject: 'all' }); break;
-    }
+    auth.push({ action: 'manage', subject: 'all' })
     return auth;
 }
 const login = () => {
@@ -60,7 +50,7 @@ const login = () => {
         .then(r => {
             const { access_token, user } = r.data
             user['level'] = user['level'] == null ? 10 : user['level']
-            const abilities = getAbilities(user['level'])
+            const abilities = getAbilities()
             ability.update(abilities);
             pay_token.value = access_token
             user_info.value = user
@@ -90,7 +80,7 @@ const onSubmit = () => {
         <VCol lg="8" class="d-none d-lg-flex">
             <div class="position-relative auth-bg rounded-lg w-100 ma-8 me-0">
                 <div class="d-flex align-center justify-center w-100 h-100">
-                    <VImg max-width="605" :src="authThemeImg" class="auth-illustration mt-16 mb-2" />
+                    <VImg max-width="505" :src="authThemeImg" class="auth-illustration mt-16 mb-2" />
                 </div>
 
                 <VImg :src="authThemeMask" class="auth-footer-mask" />

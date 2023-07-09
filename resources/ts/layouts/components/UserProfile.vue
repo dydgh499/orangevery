@@ -5,11 +5,10 @@ import { useAppAbility } from '@/plugins/casl/useAppAbility'
 import { axios, pay_token, user_info } from '@axios'
 import { allLevels } from '@/views/salesforces/useStore'
 
-const router = useRouter()
 const ability = useAppAbility()
 const password = ref()
-
 const all_levels = allLevels()
+
 let mylink = ''
 let mytype = 0
 if (user_info.value.level == 10) {
@@ -34,11 +33,8 @@ const logout = async () => {
     localStorage.removeItem('abilities')
     pay_token.value = ''
     user_info.value = {}
-    // Redirect to login page
-    router.replace('/login')
-        .then(() => {
-            ability.update(initialAbility)
-        })
+    ability.update(initialAbility)
+    location.href = '/'
 }
 </script>
 
