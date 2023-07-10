@@ -210,11 +210,21 @@ class DashboardController extends Controller
                 return $division($item) === true;
             })->count();
 
-            $chart['month'.$i] = [
-                'add' => ($add/$chart['total']),
-                'del' => ($del/$chart['total']),
-            ];
-        }       
+            if($chart['total'])
+            {
+                $chart['month'.$i] = [
+                    'add' => ($add/$chart['total']),
+                    'del' => ($del/$chart['total']),
+                ];    
+            }
+            else
+            {
+                $chart['month'.$i] = [
+                    'add' => 0,
+                    'del' => 0,
+                ];
+            }
+        }
         return $chart;
     }
 
