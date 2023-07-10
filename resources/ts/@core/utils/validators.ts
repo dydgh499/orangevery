@@ -121,7 +121,7 @@ export const alphaDashValidator = (value: unknown) => {
 
 // custom
 export const businessNumValidator = (value: string) => {
-    return /^[0-9]{3}[0-9]{2}[0-9]{5}$/.test(value) || '유효한 사업자 번호를 입력하세요.'
+    return /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/.test(value) || '유효한 사업자 번호를 입력하세요.'
 }
 
 export const extensionValidator = (files: File[], values: string[]) => {
