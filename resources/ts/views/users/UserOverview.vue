@@ -70,8 +70,8 @@ watchEffect(() => {
                             <template #name>휴대폰번호</template>
                             <template #input>
                                 <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="text"
-                                    prepend-inner-icon="tabler-device-mobile" placeholder="숫자만 입력해주세요."
-                                    persistent-placeholder :rules="[integerValidator]" />
+                                    prepend-inner-icon="tabler-device-mobile" placeholder="010-0000-0000"
+                                    persistent-placeholder :rules="[integerValidator]" maxlength="13" />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 사업자 번호 -->
@@ -89,9 +89,9 @@ watchEffect(() => {
                             <template #name>주민등록번호</template>
                             <template #input>
                                 <VTextField id="residentFirstHorizontalIcons" v-model="props.item.resident_num" type="text"
-                                    counter prepend-inner-icon="carbon-identification" placeholder="8001017654321"
+                                    counter prepend-inner-icon="carbon-identification" placeholder="800101-7654321"
                                     persistent-placeholder
-                                    :rules="[requiredValidator, lengthValidatorV2(props.item.resident_num, 13)]"
+                                    :rules="[requiredValidator, lengthValidatorV2(props.item.resident_num, 14)]"
                                     maxlength="13" />
                             </template>
                         </CreateHalfVCol>
