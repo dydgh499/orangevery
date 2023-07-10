@@ -1,0 +1,44 @@
+name: Deploy to server
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18.12.1'
+
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Build
+      run: yarn build
+
+    - name: Decode SSH key
+      id: decode_key
+      run: echo "${{ secrets.SCP_KEY }}" | base64 --decode > id_rsa
+      shell: bash
+
+    - name: Set permissions for SSH key
+      run: chmod 600 id_rsa
+      shell: bash
+
+    - name: Deploy to server
+      uses: appleboy/scp-action@master
+      with:
+        host: 211.45.163.74
+        username: forge
+        key_path: ./id_rsa
+        passphrase: ${{ secrets.PASSPHRASE }}
+        source: "public/build"
+        target: "/home/forge/team.payvery.kr"
+        debug: true
