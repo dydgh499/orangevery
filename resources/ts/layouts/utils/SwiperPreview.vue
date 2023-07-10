@@ -31,6 +31,7 @@ const emits = defineEmits(['update:file', 'update:default']);
 const getRef = (swiperInstance:any) => {
     swiper.value = swiperInstance
 }
+console.log(preview.value)
 emits('update:default', preview.value)
 const setDefaultImage = () => {
     preview.value = props.items[swiper.value.activeIndex]
