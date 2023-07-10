@@ -23,21 +23,13 @@ jobs:
     - name: Build
       run: yarn build
 
-    - name: Decode SSH key
-      run: echo "${{ secrets.SCP_KEY }}" | base64 -d > id_rsa
-      shell: bash
-
-    - name: Set permissions for SSH key
-      run: chmod 600 id_rsa
-      shell: bash
-
     - name: Deploy to server
       uses: appleboy/scp-action@master
       with:
         host: 211.45.163.74
         username: forge
-        key: ${{ steps.decode_key.outputs.key }}
+        key: ${{ secrets.SCP_KEY }}
         passphrase: ${{ secrets.PASSPHRASE }}
         source: "public/build"
-        target: "forge@211.45.163.74:/home/forge/team.payvery.kr"
+        target: "/home/forge/team.payvery.kr"
         debug: true
