@@ -1,0 +1,69 @@
+name: Deploy to server
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18.12.1'
+
+    - name: Install dependencies
+      run: yarn install
+
+    - name: Build
+      run: yarn build
+
+    - name: Deploy to server
+      uses: appleboy/scp-action@master
+      with:
+        host: 211.45.163.74
+        username: forge
+        key: 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
+n5tr1Z8bljL30rAzyVi9wiOVmr0=
+        source: "public/build"
+        target: "forge@211.45.163.74:/home/forge/team.payvery.kr"
