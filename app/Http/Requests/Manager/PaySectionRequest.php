@@ -58,7 +58,6 @@ class PaySectionRequest extends FormRequest
         }
         $data['brand_id'] = $this->user()->brand_id;
         $data['trx_fee'] = (float)$data['trx_fee']/100;
-        $data['is_delete'] = true;
         return $data;
     }
 }
