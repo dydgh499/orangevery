@@ -94,6 +94,7 @@ class MerchandiseRequest extends FormRequest
             $key = $this->keys[$i];
             $data[$key] = $this->input($key, '');
         }
+        $data['brand_id'] = $request->user()->brand_id;
         $data['custom_id'] = $this->input('custom_id', null);
         if($this->has('profile_img'))
             $data['profile_img'] = $this->profile_img;
