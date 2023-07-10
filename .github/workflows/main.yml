@@ -40,3 +40,4 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         source: "public/build"
         target: "forge@211.45.163.74:/home/forge/team.payvery.kr"
+        debug: true
