@@ -17,7 +17,7 @@ export const payTest = (module_type:number) => {
     getAllPayModules()
 
     const filterPayMod = computed(() => {
-        const filter = pay_modules.filter((obj: PayModule) => { return obj.mcht_id == mcht_id.value && obj.module_type == 2 })
+        const filter = pay_modules.filter((obj: PayModule) => { return obj.mcht_id == mcht_id.value && obj.module_type == module_type })
         pmod_id.value = payModFilter(pay_modules, filter, pmod_id.value as number) ?? 0
         return filter
     })
