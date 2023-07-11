@@ -60,7 +60,7 @@
     "@fullcalendar/vue3": "^5.11.2",
     "@iconify-json/fa": "^1.1.2",
     "@iconify-json/tabler": "^1.1.35",
-    "@iconify/tools": "^2.1.0",
+    "@iconify/tools": "^2.2.6",
     "@iconify/vue": "^4.0.0",
     "@intlify/vite-plugin-vue-i18n": "^5.0.1",
     "@types/jquery": "^3.5.16",

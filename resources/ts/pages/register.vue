@@ -6,7 +6,7 @@ import { useGenerateImageVariant } from '@core/composable/useGenerateImageVarian
 import corp from '@corp'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
-import { requiredValidator } from '@validators'
+import { requiredValidator, businessNumValidator } from '@validators'
 import { VForm } from 'vuetify/components'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 
@@ -35,7 +35,6 @@ const errors = ref<Record<string, string | undefined>>({
 const snackbar = ref(null)
 const refVForm = ref<VForm>()
 
-const name = ref(corp.name)
 const ceo_name = ref('')
 const phone_num = ref('')
 const business_num = ref('')
@@ -54,12 +53,11 @@ const getAbilities = (): UserAbility[] => {
 }
 const signUp = () => {
     const params = {
-        brand_id: corp.id, 
-        name: name.value,
+        brand_id: corp.id,
         ceo_name: ceo_name.value,
         phone_num: phone_num.value,
         business_num: business_num.value,
-        user_name: user_name.value, 
+        user_name: user_name.value,
         user_pw: user_pw.value,
     }
     axios.post('/api/v1/auth/sign-up', params)
@@ -118,17 +116,18 @@ const sameValidaor = () => {
                 <VCardText>
                     <VForm ref="refVForm" @submit.prevent="onSubmit">
                         <VRow>
+
                             <VCol cols="12">
-                                <VTextField v-model="name" label="운영사명 입력" type="name" :rules="[requiredValidator]" />
+                                <VTextField v-model="ceo_name" label="대표자명 입력" type="ceo_name"
+                                    :rules="[requiredValidator]" />
                             </VCol>
                             <VCol cols="12">
-                                <VTextField v-model="ceo_name" label="대표자명 입력" type="ceo_name" :rules="[requiredValidator]" />
+                                <VTextField v-model="phone_num" label="전화번호 입력" type="phone_num"
+                                    :rules="[requiredValidator]" />
                             </VCol>
                             <VCol cols="12">
-                                <VTextField v-model="phone_num" label="전화번호 입력" type="phone_num" :rules="[requiredValidator]" />
-                            </VCol>
-                            <VCol cols="12">
-                                <VTextField v-model="business_num" label="사업자등록번호 입력" type="business_num" :rules="[requiredValidator]"/>
+                                <VTextField v-model="business_num" label="사업자등록번호 입력" type="business_num" placeholder="123-12-12345"
+                                    :rules="[requiredValidator, businessNumValidator(business_num)]" />
                             </VCol>
                             <!-- user_name -->
                             <VCol cols="12">
@@ -136,17 +135,22 @@ const sameValidaor = () => {
                                     :error-messages="errors.message" />
                             </VCol>
                             <VCol cols="12">
-                                <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidator, sameValidaor]"
+                                <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidator]"
                                     :type="isPasswordVisible ? 'text' : 'password'"
                                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                                     @click:append-inner="isPasswordVisible = !isPasswordVisible" />
                             </VCol>
                             <!-- password -->
                             <VCol cols="12">
-                                <VTextField v-model="user_pw_check" label="패스워드 확인" :rules="[requiredValidator]"
+                                <VTextField v-model="user_pw_check" label="패스워드 확인" :rules="[requiredValidator, sameValidaor]"
                                     :type="isPasswordVisible ? 'text' : 'password'"
                                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                                     @click:append-inner="isPasswordVisible = !isPasswordVisible" />
+
+                                <div class="d-flex align-center flex-wrap justify-space-between mt-2 mb-4">
+                                    <div class="text-primary ms-2 mb-1" style="cursor: pointer;">
+                                    </div>
+                                </div>
                                 <VBtn block type="submit">
                                     Register
                                 </VBtn>

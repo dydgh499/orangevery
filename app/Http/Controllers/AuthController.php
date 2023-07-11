@@ -157,42 +157,34 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'brand_id'=>'required',
-            'name'=>'required',
             'ceo_name'=>'required',
             'phone_num'=>'required',
             'business_num'=>'required',
             'user_name'=>'required',
             'user_pw'=>'required'
         ]);
-        $query = Brand::where('name', $request->name);
-        $brand = $query->first();
-        if($brand)
-            return $this->extendResponse(1000, __("validation.already_exsit", ['attribute'=>'운영사명']));
-        else
-        {
-            return DB::transaction(function () use($request) {
-                $res = Brand::where('id', $request->brand_id)
-                    ->update([
-                        'name'=>$request->name, 
-                        'ceo_name'=>$request->ceo_name,
-                        'phone_num'=>$request->phone_num,
-                        'business_num'=>$request->business_num,
-                    ]);
-                $res = Operator::create([
-                    'brand_id'  => $request->brand_id,
-                    'user_name' => $request->user_name,
-                    'user_pw'   => Hash::make($request->user_pw),
-                    'level'     => 40,
+
+        return DB::transaction(function () use($request) {
+            $res = Brand::where('id', $request->brand_id)
+                ->update([
+                    'ceo_name'=>$request->ceo_name,
+                    'phone_num'=>$request->phone_num,
+                    'business_num'=>$request->business_num,
                 ]);
-                if($res)
-                {
-                    $user = Operator::where('id', $res->id)->first();
-                    return $this->response(0, $user->loginInfo(40));
-                }
-                else
-                    return $this->response(990);
-            }, 3);
-        }
+            $res = Operator::create([
+                'brand_id'  => $request->brand_id,
+                'user_name' => $request->user_name,
+                'user_pw'   => Hash::make($request->user_pw),
+                'level'     => 40,
+            ]);
+            if($res)
+            {
+                $user = Operator::where('id', $res->id)->first();
+                return $this->response(0, $user->loginInfo(40));
+            }
+            else
+                return $this->response(990);
+        }, 3);
     }
 }
 

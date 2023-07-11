@@ -47,6 +47,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
 
     Route::prefix('auth')->group(function() {
         Route::post('sign-in', [AuthController::class, 'signin']);
+        Route::post('sign-up', [AuthController::class, 'signUp']);
         Route::middleware('auth:sanctum')->post('sign-out', [AuthController::class, 'signout']);
         Route::middleware('auth:sanctum')->post('ok', [AuthController::class, 'ok']);
     });
