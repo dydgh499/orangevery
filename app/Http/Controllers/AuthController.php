@@ -111,22 +111,6 @@ class AuthController extends Controller
     }
 
     /**
-     * 로그인 정보 조회
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function ok(Request $request)
-    {
-        $user = $request->user()->toArray();
-        if(isset($user['mcht_name']))
-            $user['level'] = 10;
-        if($request->user()->tokenCan(50))
-            $user['level'] = 50;
-        return $this->response(0, $user);
-    }
-
-
-    /**
      * 네임서버 검증
      * @unauthenticated
      *
@@ -165,34 +149,44 @@ class AuthController extends Controller
      * 회원가입(본사)
      * @unauthenticated
      *
-     * @bodyParam name string required 서비스명 입력 Example: 테스트
-     * @bodyParam dns string required 검증할 DNS 입력 Example: www.example.com
-     * @bodyParam user_name string required 아이디 입력 Example: test
-     * @bodyParam user_pw string required 패스워드 입력 Example: 1234
      * 본사 등급으로 회원가입 합니다.
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function brandSignup(Request $request)
+    public function signUp(Request $request)
     {
-        $validated = $request->validate(['name'=>'required','dns'=>'required','user_name'=>'required','user_pw'=>'required']);
-        $query = Brand::where('dns', $request->dns);
+        $validated = $request->validate([
+            'brand_id'=>'required',
+            'name'=>'required',
+            'ceo_name'=>'required',
+            'phone_num'=>'required',
+            'business_num'=>'required',
+            'user_name'=>'required',
+            'user_pw'=>'required'
+        ]);
+        $query = Brand::where('name', $request->name);
         $brand = $query->first();
         if($brand)
-            return $this->extendResponse(1000, __("validation.already_exsit", ['attribute'=>'도메인']));
+            return $this->extendResponse(1000, __("validation.already_exsit", ['attribute'=>'운영사명']));
         else
         {
             return DB::transaction(function () use($request) {
-                $res = Brand::create(['name'=>$request->name, 'dns'=>$request->dns]);
+                $res = Brand::where('id', $request->brand_id)
+                    ->update([
+                        'name'=>$request->name, 
+                        'ceo_name'=>$request->ceo_name,
+                        'phone_num'=>$request->phone_num,
+                        'business_num'=>$request->business_num,
+                    ]);
                 $res = Operator::create([
-                    'brand_id'  => $res->id,
+                    'brand_id'  => $request->brand_id,
                     'user_name' => $request->user_name,
                     'user_pw'   => Hash::make($request->user_pw),
                     'level'     => 40,
                 ]);
                 if($res)
                 {
-                    $user = User::where('id', $res->id)->first();
+                    $user = Operator::where('id', $res->id)->first();
                     return $this->response(0, $user->loginInfo(40));
                 }
                 else

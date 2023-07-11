@@ -34,16 +34,35 @@ const errors = ref<Record<string, string | undefined>>({
 
 const snackbar = ref(null)
 const refVForm = ref<VForm>()
+
+const name = ref(corp.name)
+const ceo_name = ref('')
+const phone_num = ref('')
+const business_num = ref('')
+
 const user_name = ref('')
 const user_pw = ref('')
-
+const user_pw_check = ref('')
+/*
+  Admin user_name: <strong>admin@demo.com</strong> / Pass: <strong>admin</strong>
+  Client user_name: <strong>client@demo.com</strong> / Pass: <strong>client</strong>
+*/
 const getAbilities = (): UserAbility[] => {
     let auth: UserAbility[] = [];
     auth.push({ action: 'manage', subject: 'all' })
     return auth;
 }
-const login = () => {
-    axios.post('/api/v1/auth/sign-in', { brand_id: corp.id, user_name: user_name.value, user_pw: user_pw.value })
+const signUp = () => {
+    const params = {
+        brand_id: corp.id, 
+        name: name.value,
+        ceo_name: ceo_name.value,
+        phone_num: phone_num.value,
+        business_num: business_num.value,
+        user_name: user_name.value, 
+        user_pw: user_pw.value,
+    }
+    axios.post('/api/v1/auth/sign-up', params)
         .then(r => {
             const { access_token, user } = r.data
             user['level'] = user['level'] == null ? 10 : user['level']
@@ -60,15 +79,15 @@ const login = () => {
             errors.value = e.response.data
         })
 }
-const forgotPassword = () => {
-    snackbar.value.show('각 영업점들에게 전화해 주세요.', 'warning')
-}
 const onSubmit = () => {
     refVForm.value?.validate()
         .then(({ valid: isValid }) => {
             if (isValid)
-                login()
+                signUp()
         })
+}
+const sameValidaor = () => {
+    return user_pw.value === user_pw_check.value || '패스워드와 패스워드 확인이 같지 않습니다.'
 }
 </script>
 
@@ -93,34 +112,43 @@ const onSubmit = () => {
                         {{ themeConfig.app.title }}에 오신것을 환영합니다! 👋🏻
                     </h5>
                     <p class="mb-0">
-                        새롭게 리뉴얼된 {{ themeConfig.app.title }}를 이용해보세요.
+                        서비스 운영에 사용할 본사 계정을 등록해주세요.
                     </p>
                 </VCardText>
                 <VCardText>
                     <VForm ref="refVForm" @submit.prevent="onSubmit">
                         <VRow>
+                            <VCol cols="12">
+                                <VTextField v-model="name" label="운영사명 입력" type="name" :rules="[requiredValidator]" />
+                            </VCol>
+                            <VCol cols="12">
+                                <VTextField v-model="ceo_name" label="대표자명 입력" type="ceo_name" :rules="[requiredValidator]" />
+                            </VCol>
+                            <VCol cols="12">
+                                <VTextField v-model="phone_num" label="전화번호 입력" type="phone_num" :rules="[requiredValidator]" />
+                            </VCol>
+                            <VCol cols="12">
+                                <VTextField v-model="business_num" label="사업자등록번호 입력" type="business_num" :rules="[requiredValidator]"/>
+                            </VCol>
                             <!-- user_name -->
                             <VCol cols="12">
                                 <VTextField v-model="user_name" label="아이디 입력" type="user_name" :rules="[requiredValidator]"
                                     :error-messages="errors.message" />
                             </VCol>
-
-                            <!-- password -->
                             <VCol cols="12">
-                                <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidator]"
+                                <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidator, sameValidaor]"
                                     :type="isPasswordVisible ? 'text' : 'password'"
                                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                                     @click:append-inner="isPasswordVisible = !isPasswordVisible" />
-
-                                <div class="d-flex align-center flex-wrap justify-space-between mt-2 mb-4">
-                                    <div class="text-primary ms-2 mb-1" style="cursor: pointer;"
-                                        @click="forgotPassword()">
-                                        패스워드를 잊으셨나요?
-                                    </div>
-                                </div>
-
+                            </VCol>
+                            <!-- password -->
+                            <VCol cols="12">
+                                <VTextField v-model="user_pw_check" label="패스워드 확인" :rules="[requiredValidator]"
+                                    :type="isPasswordVisible ? 'text' : 'password'"
+                                    :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
+                                    @click:append-inner="isPasswordVisible = !isPasswordVisible" />
                                 <VBtn block type="submit">
-                                    Login
+                                    Register
                                 </VBtn>
                             </VCol>
 
