@@ -66,7 +66,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['mid'] = 'MID'
     headers['tid'] = 'TID'
     headers['issuer'] = '발급사'
-    headers['acquirer'] = '발행사'
+    headers['acquirer'] = '매입사'
 
     headers['card_num'] = '카드번호'
     headers['buyer_name'] = '구매자명'
