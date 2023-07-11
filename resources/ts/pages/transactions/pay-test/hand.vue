@@ -8,7 +8,7 @@ import { payTest } from '@/views/transactions/pay-test/payTest'
 const {
     mcht_id, pmod_id, pgs, is_old_auth, installment, 
     merchandise, merchandises, filterPayMod 
-} = payTest(3)
+} = payTest(1)
 
 const salesslip = ref()
 provide('salesslip', salesslip)
