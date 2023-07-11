@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Log;
 
-use App\Models\Logs\MChtFeeChangeHistory;
+use App\Models\Logs\MchtFeeChangeHistory;
 use App\Models\Logs\SfFeeChangeHistory;
 use App\Models\Merchandise;
 
@@ -21,7 +21,7 @@ class FeeChangeHistoryController extends Controller
     protected $mcht_fee_histories;
     protected $sf_fee_histories;
 
-    public function __construct(MChtFeeChangeHistory $mcht_fee_histories, SfFeeChangeHistory $sf_fee_histories)
+    public function __construct(MchtFeeChangeHistory $mcht_fee_histories, SfFeeChangeHistory $sf_fee_histories)
     {
         $this->mcht_fee_histories   = $mcht_fee_histories;
         $this->sf_fee_histories     = $sf_fee_histories;
