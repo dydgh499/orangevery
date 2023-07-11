@@ -29,7 +29,12 @@ return [
     */
 
     'disks' => [
-
+        'main' => [
+            'driver' => 'local',
+            'root' => public_path('storage/images'),
+            'visibility' => 'public',
+            'throw' => false,
+        ],
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
