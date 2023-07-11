@@ -72,7 +72,6 @@ trait ManagerTrait
     public function saveImage($img, $parent_folder, $img_folder, $max_width)
     {
         $img_name = $img->store("$img_folder", 'main');
-        echo $img_name;
         return env('APP_URL')."/storage/images/".$img_name;
     }
 
