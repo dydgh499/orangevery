@@ -37,7 +37,7 @@ provide('head', head)
                         {{ props.post.title }}
                     </span>
                 </span>
-                <span v-else-if="_key == 'extra_col'">
+                <span v-else-if="key == 'extra_col'">
                     <ExtraMenu :item="props.post">
                     </ExtraMenu>
                 </span>
