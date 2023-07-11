@@ -72,7 +72,7 @@ trait ManagerTrait
     public function saveImage($img, $parent_folder, $img_folder, $max_width)
     {
         $name    = time().md5(pathinfo($img, PATHINFO_FILENAME)).$img->getClientOriginalExtension();
-        $src_img = $img->store("$images/$img_folder/$name", 'public');
+        $src_img = $img->store("images/$img_folder/$name", 'public');
         return env('APP_URL').'/storage/images/'.$img_folder.'/'.$name;
     }
 
