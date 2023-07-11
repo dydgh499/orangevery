@@ -71,7 +71,8 @@ trait ManagerTrait
     }
     public function saveImage($img, $parent_folder, $img_folder, $max_width)
     {
-        $img_name = $img->store("images/$img_folder", 'public');
+        $name = time().md5($img->getClientOriginalName()).".".$img->getClientOriginalExtension();
+        $img_name = $img->storeAs("images/$img_folder", $name, 'public');
         return env('APP_URL')."/storage/".$img_name;
     }
 
@@ -105,7 +106,7 @@ trait ManagerTrait
                     Storage::disk('public')->delete($img);
 
                 if(!file_exists($folder))
-                    mkdir($folder, 755, true);
+                    mkdir($folder, '0755', true);
 
                 $data[$cols[$i]] = $is_webp ? $this->saveWebp($img, $folder, $folders[$i], $sizes[$i]) : $this->saveImage($img, $folder, $folders[$i], $sizes[$i]);
             }
