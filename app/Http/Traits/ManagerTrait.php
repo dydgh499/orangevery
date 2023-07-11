@@ -71,9 +71,11 @@ trait ManagerTrait
     }
     public function saveImage($img, $parent_folder, $img_folder, $max_width)
     {
-        $name = time().md5($img->getClientOriginalName()).".".$img->getClientOriginalExtension();
-        $img_name = $img->storeAs("images/$img_folder", $name, 'public');
-        return env('APP_URL')."/storage/".$img_name;
+        $name    = time().md5(pathinfo($img, PATHINFO_FILENAME)).$img->getClientOriginalExtension();
+        $src_img = Image::make($img);
+        $src_img = $this->imgMaxResize($src_img, $max_width);
+        $src_img = $src_img->save("$parent_folder/$name");
+        return env('APP_URL').'/storage/images/'.$img_folder.'/'.$name;
     }
 
     public function saveWebp($img, $parent_folder, $img_folder, $max_width)
