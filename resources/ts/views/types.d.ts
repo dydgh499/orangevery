@@ -289,7 +289,7 @@ export interface Brand extends Contract {
         paid: PaidOption,
         auth: AuthOption,
     },
-    is_transfer: boolean,
+    is_transfer: number,
     deposit_day: number,
     deposit_amount: number,    
     last_dpst_at: datetime,

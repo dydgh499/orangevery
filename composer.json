@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.0.2",
         "arcanedev/log-viewer": "^9.0",
+        "doctrine/dbal": "^3.6",
         "guzzlehttp/guzzle": "^7.2",
         "illuminatech/multipart-middleware": "^1.1",
         "intervention/image": "^2.7",

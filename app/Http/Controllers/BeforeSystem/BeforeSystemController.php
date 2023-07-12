@@ -2,26 +2,14 @@
 
 namespace App\Http\Controllers\BeforeSystem;
 
+use App\Jobs\BeforeSystemRegisterJob;
+
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Hash;
 
-
-use App\Http\Controllers\BeforeSystem\Brand;
-use App\Http\Controllers\BeforeSystem\PaymentGateway;
-use App\Http\Controllers\BeforeSystem\PaymentSection;
-use App\Http\Controllers\BeforeSystem\Classification;
-
-use App\Http\Controllers\BeforeSystem\Salesforce;
-use App\Http\Controllers\BeforeSystem\Merchandise;
-use App\Http\Controllers\BeforeSystem\PayModule;
-
-use Symfony\Component\HttpFoundation\StreamedResponse;
-use Illuminate\Database\QueryException;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -75,77 +63,17 @@ class BeforeSystemController extends Controller
             else
                 return [];
         };
-        
         $user = $dehashing($request->token);
         $before_brand_id = $user['data']['DNS_PK'];
         $brand_id = $request->brand_id;
 
-        $response = new StreamedResponse(function () use($brand_id, $before_brand_id) {
-            // 클라이언트로 메시지를 보내는 함수
-            $result = DB::transaction(function () use($brand_id, $before_brand_id ) {
-                $sendClient = function($message, $per) {
-                    echo 'data: '.json_encode(['message'=>$message, 'per'=>$per])."\n\n";
-                    @ob_flush();
-                    @flush();
-                };
-                $brand = new Brand();
-                $brand->getPaywell($this->paywell->table('service'), $brand_id, $before_brand_id);
-                $brand->setPayvery($this->payvery->table('brands'), $brand_id);
-                $sendClient("본사정보 연동을 완료하였습니다.<br>PG사 연동을 시작합니다..", 5);
+        $current_brand = $this->payvery->table('brands')->where('id', $brand_id)->first();
+        $this->payvery->table('brands')->where('id', $brand_id)->update(['is_transfer'=>1]);
+        setBrandByDNS($current_brand->dns);
 
-                $pg = new PaymentGateway();
-                $pg->getPaywell($this->paywell->table('agency_info'), $brand_id, $before_brand_id);
-                $pg->setPayvery($this->payvery->table('payment_gateways'), $brand_id);
-                $sendClient("PG사 연동을 완료하였습니다.<br>PG사 구간 연동을 시작합니다..", 8);
-
-                $ps = new PaymentSection($pg->payvery, $pg->paywell_to_payvery);
-                $ps->getPaywell($this->paywell->table('item_classification'), $brand_id, $before_brand_id);
-                $ps->setPayvery($this->payvery->table('payment_sections'), $brand_id);
-                $sendClient("PG사 구간 연동을 완료하였습니다.<br>구분 정보 연동을 시작합니다..", 12);
-
-                $cfic = new Classification();
-                $cfic->getPaywell($this->paywell->table('item_classification'), $brand_id, $before_brand_id);
-                $cfic->setPayvery($this->payvery->table('classifications'), $brand_id);
-                $sendClient("구분 정보 연동을 완료하였습니다.<br>영업점 연동을 시작합니다..", 17);
-
-                $sale = new Salesforce();
-                $sale->getPaywell($this->paywell, $brand_id, $before_brand_id);
-                $sale->setPayvery($this->payvery->table('salesforces'), $brand_id);
-                $sendClient(count($sale->paywell_to_payvery)."개의 영업점 연동을 완료하였습니다.<br>가맹점 연동을 시작합니다..", 35);
-
-                $mcht = new Merchandise();
-                $mcht->connectSalesInfo($sale->payvery, $sale->paywell_to_payvery);
-                $mcht->connectClsInfo($cfic->payvery, $cfic->paywell_to_payvery);
-                $mcht->getPaywell($this->paywell, $brand_id, $before_brand_id);
-                $mcht->setPayvery($this->payvery->table('merchandises'), $brand_id);
-                $sendClient(count($mcht->paywell_to_payvery)."개의 가맹점 연동을 완료하였습니다.<br>결제모듈 연동을 시작합니다..", 68);
-                
-                logging(['paymode'=>'start']);
-                $pmod = new PaymentModule($pg->pg_types);
-                logging(['paymode'=>'1']);
-                $pmod->connectPGInfo($pg->payvery, $pg->paywell_to_payvery, $ps->payvery, $ps->paywell_to_payvery);
-                logging(['paymode'=>'2']);
-                $pmod->connectClsInfo($cfic->payvery, $cfic->paywell_to_payvery);
-                logging(['paymode'=>'3']);
-                $pmod->connectMchtInfo($mcht->payvery, $mcht->paywell_to_payvery);
-                logging(['paymode'=>'4']);
-                $pmod->getPaywell($this->paywell, $this->payvery, $brand_id, $before_brand_id);
-                logging(['paymode'=>'5']);
-                $pg->payvery_pgs = $pmod->payvery;  // 수기, 인증, 간편 관련 PG사 추가됨
-                $sendClient(count($pmod->payvery)."개의 결제모듈 연동을 완료하였습니다.", 99);
-
-                $current_brand = $this->payvery->table('brands')->where('id', $brand_id)->first();
-                $this->payvery->table('brands')->where('id', $brand_id)->update(['is_transfer'=>true]);
-                setBrandByDNS($current_brand->dns);
-                $sendClient("성공하였습니다.", 100);
-
-                return true;
-            });
-        });
-        $response->headers->set('Content-Type', 'text/event-stream');
-        $response->headers->set('Cache-Control', 'no-cache');
-        $response->headers->set('Connection', 'keep-alive');
-        $response->headers->set('X-Accel-Buffering', 'no');
-        return $response;
+        BeforeSystemRegisterJob::dispatch($brand_id, $before_brand_id, $current_brand->dns)
+            ->onConnection('redis')
+            ->onQueue('computational-transfer');
+        return $this->extendResponse(1, '전산 이전 작업을 예약하였습니다.<br>5분 내외로 이전 전산에대한 정보가 반영됩니다.');
     }
 }

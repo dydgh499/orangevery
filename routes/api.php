@@ -43,7 +43,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
     
     Route::post('transactions/hand-pay', [TransactionController::class, 'handPay']);
     Route::post('computational-transfer/login', [BeforeSystemController::class, 'login']);
-    Route::get('computational-transfer/register', [BeforeSystemController::class, 'register']);
+    Route::post('computational-transfer/register', [BeforeSystemController::class, 'register']);
 
     Route::prefix('auth')->group(function() {
         Route::post('sign-in', [AuthController::class, 'signin']);

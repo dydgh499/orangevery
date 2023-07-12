@@ -5,7 +5,6 @@ import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import ProgressDialog from '@/layouts/dialogs/ProgressDialog.vue'
 import { requiredValidator } from '@validators'
 import { reactive } from 'vue';
 import { axios } from '@axios';
@@ -23,13 +22,12 @@ const vForm = ref<VForm>()
 const is_visible = ref(false)
 const is_loading = ref(false)
 const is_disabled = ref(true)
-const is_transfer = ref(corp.is_transfer)
-const process = ref()
+const is_transfer = ref(0)//ref(corp.is_transfer)
 
 const login_info = reactive({
-    domain: '',
-    user_name: '',
-    user_pw: '',
+    domain: 'onechek.co.kr',
+    user_name: 'dooripay',
+    user_pw: 'a!0218332099',
     token: '',
 })
 
@@ -50,30 +48,17 @@ const login = async() => {
 }
 const register = async() => {
     if (await alert.value.show('정말 연동 하시겠습니까? 대량의 정보가 연동되므로 시간이 소요됩니다.<br><b>해당 기능은 전산당 1번만 할 수 있습니다.</b>')) {
-        process.value.show(true, 0, '연동을 시작합니다.')
         is_loading.value = true
         try {
-            const token = login_info.token
-            const brand_id = corp.id
-            var eventSource = new EventSource(`/api/v1/computational-transfer/register?token=${token}&brand_id=${brand_id}`);
-            eventSource.onmessage = function(event) {
-                const json = JSON.parse(event.data)
-                snackbar.value.show(json.message, 'success');
-                process.value.show(true, json.per, json.message)
-            };
-            
-            eventSource.onerror = function(error) {
-                //eventSource.close()
-                login_info.token = ''
-                login_info.domain = ''
-                login_info.user_name = ''
-                login_info.user_pw = ''
-                is_loading.value = false
-                is_disabled.value = true
-                process.value.show(false, 0, '')
-                snackbar.value.show('환영합니다! 🎉 연동정보를 확인해주세요.', 'success');
-                //setTimeout(function () { location.reload() }, 1000)
-            };
+            const params = {
+                token: login_info.token,
+                brand_id: corp.id,
+            }
+            const r = await axios.post('/api/v1/computational-transfer/register', params);
+            snackbar.value.show(r.data.message, 'success')
+            login_info.token = r.data.token
+            is_disabled.value = false
+            setTimeout(function () { location.reload() }, 1000)
         }
         catch (e) {
             snackbar.value.show(e.response.data.message, 'error')
@@ -126,9 +111,9 @@ const register = async() => {
                                             <VTextField v-model="login_info.user_pw" label="패스워드 입력"
                                                 :rules="[requiredValidator]" :type="is_visible ? 'text' : 'password'"
                                                 :append-inner-icon="is_visible ? 'tabler-eye-off' : 'tabler-eye'"
-                                                @click:append-inner="is_visible = !is_visible" class="mb-6" :disabled="is_transfer"/>
+                                                @click:append-inner="is_visible = !is_visible" class="mb-6" :disabled="Boolean(is_transfer)"/>
 
-                                            <VBtn block type="submit" :disabled="is_transfer">
+                                            <VBtn block type="submit" :disabled="Boolean(is_transfer)">
                                                 로그인
                                             </VBtn>
                                             <br>
@@ -136,8 +121,11 @@ const register = async() => {
                                                 이전 전산내용 추가하기
                                             </VBtn>                                            
                                         </VCol>
-                                        <VCol class="text-center text-primary" style="font-weight: bold;" v-if="is_transfer">
+                                        <VCol class="text-center text-primary" style="font-weight: bold;" v-if="is_transfer == 2">
                                             이미 이전 전산을 추가하셨습니다.
+                                        </VCol>
+                                        <VCol class="text-center text-primary" style="font-weight: bold;" v-if="is_transfer == 1">
+                                            전산을 연동중 입니다 ... <VIcon size="20" icon="svg-spinners:blocks-shuffle-3" color="primary" />
                                         </VCol>
                                     </VRow>
                                 </VForm>
@@ -177,7 +165,6 @@ const register = async() => {
                 </template>
             </CreateHalfVCol>
         </VCard>
-        <ProgressDialog ref="process"/>
     </section>
 </template>
 <style lang="scss">

@@ -22,6 +22,9 @@ trait ExtendResponseTrait
             $http_code = 409;
             Log::notice($msg, $logs);
         }
+        else if($code < 5)
+            $http_code = '20'.$code;
+
         return Response::json(['code'=>$code, 'message'=>$msg], $http_code);        
     }
     

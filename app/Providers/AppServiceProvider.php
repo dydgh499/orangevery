@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
+use Doctrine\DBAL\Types\Type;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
                 );
             });
         }
+        Type::addType('tinyinteger', \Doctrine\DBAL\Types\SmallIntType::class);
         Paginator::useBootstrap();
     }
 }
