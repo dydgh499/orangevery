@@ -68,10 +68,7 @@ class DashboardController extends Controller
             if($key == $one_months_ago)
                 $last_chart = $value;
         }
-        logging(['trans'=>isset($charts[$cur_month])]);
-        logging(['trans'=>isset($charts[$cur_month]->transactions)]);
-
-        if(isset($charts[$cur_month]->transactions) == false)
+        if(isset($charts[$cur_month]) == false)
         {
             $charts[$cur_month] = getDefaultTransChartFormat(collect([]));
             $charts[$cur_month]['modules']['terminal_count'] = 0;
