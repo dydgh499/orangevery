@@ -63,7 +63,7 @@ const register = async() => {
             };
             
             eventSource.onerror = function(error) {
-                eventSource.close()
+                //eventSource.close()
                 login_info.token = ''
                 login_info.domain = ''
                 login_info.user_name = ''
@@ -72,7 +72,7 @@ const register = async() => {
                 is_disabled.value = true
                 process.value.show(false, 0, '')
                 snackbar.value.show('환영합니다! 🎉 연동정보를 확인해주세요.', 'success');
-                setTimeout(function () { location.reload() }, 1000)
+                //setTimeout(function () { location.reload() }, 1000)
             };
         }
         catch (e) {
