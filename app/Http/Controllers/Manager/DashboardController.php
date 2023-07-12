@@ -253,12 +253,4 @@ class DashboardController extends Controller
         $chart = $this->getUpSideChartFormat($sales);
         return $this->response(0, $chart);
     }
-
-    /*
-     * 결제모듈 사용량 분석(6개월) (장비, 수기, 인증, 간편)
-     */
-    public function usagePayModuleAnalysis(Request $request)
-    {        
-        return $this->response(0, []);
-    }
 }

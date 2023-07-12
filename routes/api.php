@@ -57,7 +57,6 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::get('monthly-transactions-analysis', [DashboardController::class, 'monthlyTranAnalysis']);
             Route::get('upside-merchandises-analysis', [DashboardController::class, 'upSideMchtAnalysis']);
             Route::get('upside-salesforces-analysis', [DashboardController::class, 'upSideSaleAnalysis']);
-            Route::get('usage-pay-modules-analysis', [DashboardController::class, 'usagePayModuleAnalysis']);
         });
 
         Route::prefix('posts')->group(function() {
