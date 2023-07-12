@@ -58,7 +58,7 @@ const register = async() => {
             snackbar.value.show(r.data.message, 'success')
             login_info.token = r.data.token
             is_disabled.value = false
-            setTimeout(function () { location.reload() }, 1000)
+            setTimeout(function () { location.reload() }, 2000)
         }
         catch (e:any) {
             snackbar.value.show(e.response.data.message, 'error')
