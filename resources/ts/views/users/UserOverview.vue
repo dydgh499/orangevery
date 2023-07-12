@@ -79,7 +79,7 @@ watchEffect(() => {
                             <template #name>사업자번호</template>
                             <template #input>
                                 <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
-                                    prepend-inner-icon="ic-outline-business-center" placeholder="1231212345"
+                                    prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
                                     persistent-placeholder
                                     :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
                             </template>
@@ -92,7 +92,7 @@ watchEffect(() => {
                                     counter prepend-inner-icon="carbon-identification" placeholder="800101-7654321"
                                     persistent-placeholder
                                     :rules="[requiredValidator, lengthValidatorV2(props.item.resident_num, 14)]"
-                                    maxlength="13" />
+                                    maxlength="14" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>

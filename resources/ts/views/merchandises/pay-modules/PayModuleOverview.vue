@@ -53,7 +53,6 @@ const addNewPaymodule = () => {
         show_pay_view: true,
         note: '비고',
     })
-    console.log(props.item.id)
 }
 </script>
 <template>

@@ -106,7 +106,7 @@ const validate = () => {
             snackbar.value.show((i + 1) + '번째 가맹점의 사업자번호 포멧이 정확하지 않습니다.', 'error')
             is_clear.value = false
         }
-        else if (typeof lengthValidatorV2(items.value[i].resident_num, 13) != 'boolean') {
+        else if (typeof lengthValidatorV2(items.value[i].resident_num, 14) != 'boolean') {
             snackbar.value.show((i + 1) + '번째 가맹점의 주민등록번호 포멧이 정확하지 않습니다.', 'error')
             is_clear.value = false
         }
@@ -195,7 +195,7 @@ watchEffect(async () => {
                         <b>사업자등록번호 입력 주의사항: </b><span>정확한 사업자 번호 입력(예:123-13-12345)</span>
                     </VCol>
                     <VCol>
-                        <b>주민등록번호 입력 주의사항: </b><span>13자리 정수 입력(예:8001017654321)</span>
+                        <b>주민등록번호 입력 주의사항: </b><span>14자리 입력(예:800101-7654321)</span>
                     </VCol>
                 </template>
             </CreateHalfVCol>
