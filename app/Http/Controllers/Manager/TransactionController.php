@@ -93,7 +93,7 @@ class TransactionController extends Controller
     {
         $query = $this->commonSelect($request);
         $query = $query->with(['mcht']);
-        $data = $this->getIndexData($request, $query, [], 'trx_dt');
+        $data = $this->getIndexData($request, $query);
 
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
