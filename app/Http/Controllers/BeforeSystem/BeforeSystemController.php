@@ -68,9 +68,6 @@ class BeforeSystemController extends Controller
         $brand_id = $request->brand_id;
 
         $current_brand = $this->payvery->table('brands')->where('id', $brand_id)->first();
-        $this->payvery->table('brands')->where('id', $brand_id)->update(['is_transfer'=>1]);
-        setBrandByDNS($current_brand->dns);
-
         BeforeSystemRegisterJob::dispatch($brand_id, $before_brand_id, $current_brand->dns)
             ->onConnection('redis')
             ->onQueue('computational-transfer');
