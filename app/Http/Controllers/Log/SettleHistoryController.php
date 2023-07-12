@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Log;
 
 use Illuminate\Support\Facades\DB;
-use App\Models\Logs\SettleHistoryMerchandise;
-use App\Models\Logs\SettleHistorySalesforce;
+use App\Models\Log\SettleHistoryMerchandise;
+use App\Models\Log\SettleHistorySalesforce;
 use App\Models\Transaction;
 use App\Models\Salesforce;
 

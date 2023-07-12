@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Models\Logs;
+namespace App\Models\Log;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DateTimeInterface;
 
-class SettleHistoryMerchandise extends Model
+class NotiSendHistory extends Model
 {
     use HasFactory;
-    protected   $table      = 'settle_histories_merchandises';
+    protected   $table      = 'noti_send_histories';
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
-    protected   $hidden     = [
-        'brand_id',
-    ];
+    protected   $hidden     = [];
 
     protected function serializeDate(DateTimeInterface $date)
     {

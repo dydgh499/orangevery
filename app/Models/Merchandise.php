@@ -10,8 +10,8 @@ use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Salesforce;
 use App\Models\Transaction;
-use App\Models\Logs\SettleDeductMerchandise;
-use App\Models\Logs\SettleHistoryMerchandise;
+use App\Models\Log\SettleDeductMerchandise;
+use App\Models\Log\SettleHistoryMerchandise;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Http\Traits\Models\AttributeTrait;
 

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Log;
 
-use App\Models\Logs\MchtFeeChangeHistory;
-use App\Models\Logs\SfFeeChangeHistory;
+use App\Models\Log\MchtFeeChangeHistory;
+use App\Models\Log\SfFeeChangeHistory;
 use App\Models\Merchandise;
 
 use App\Http\Controllers\Controller;

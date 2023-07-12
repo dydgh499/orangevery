@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Log;
 
-use App\Models\Logs\NotiSendHistory;
+use App\Models\Log\NotiSendHistory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

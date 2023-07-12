@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Log;
 
-use App\Models\Logs\DangerTransaction;
+use App\Models\Log\DangerTransaction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

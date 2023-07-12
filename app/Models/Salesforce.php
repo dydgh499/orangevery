@@ -11,8 +11,8 @@ use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 
 use App\Models\Transaction;
-use App\Models\Logs\SettleDeductSalesforce;
-use App\Models\Logs\SettleHistorySalesforce;
+use App\Models\Log\SettleDeductSalesforce;
+use App\Models\Log\SettleHistorySalesforce;
 use App\Http\Traits\Models\AttributeTrait;
 
 class Salesforce extends Authenticatable

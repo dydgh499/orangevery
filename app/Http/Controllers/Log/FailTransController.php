@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Log;
 
-use App\Models\Logs\FailTransaction;
+use App\Models\Log\FailTransaction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 

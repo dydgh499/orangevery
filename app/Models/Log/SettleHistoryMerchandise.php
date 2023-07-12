@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Models\Logs;
+namespace App\Models\Log;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DateTimeInterface;
 
-class SettleDeductMerchandise extends Model
+class SettleHistoryMerchandise extends Model
 {
     use HasFactory;
-    protected   $table      = 'settle_deduct_merchandises';
+    protected   $table      = 'settle_histories_merchandises';
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
     protected   $hidden     = [

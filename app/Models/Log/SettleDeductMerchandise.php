@@ -1,31 +1,23 @@
 <?php
 
-namespace App\Models\Logs;
+namespace App\Models\Log;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DateTimeInterface;
 
-class FailTransaction extends Model
+class SettleDeductMerchandise extends Model
 {
     use HasFactory;
-    protected   $table      = 'fail_transactions';
+    protected   $table      = 'settle_deduct_merchandises';
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
-    protected   $appends    = [        
-        'trx_dttm',
-    ];
     protected   $hidden     = [
-        'mcht', 
+        'brand_id',
     ];
 
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format("Y-m-d H:i:s");
-    }
-
-    public function getTrxDttmAttribute()
-    {
-        return $this->trx_dt." ".$this->trx_tm;
     }
 }

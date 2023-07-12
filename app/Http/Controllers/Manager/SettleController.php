@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Manager;
 
 use App\Models\Merchandise;
 use App\Models\Salesforce;
-use App\Models\Logs\SettleDeductMerchandise;
-use App\Models\Logs\SettleDeductSalesforce;
+use App\Models\Log\SettleDeductMerchandise;
+use App\Models\Log\SettleDeductSalesforce;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
