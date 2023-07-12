@@ -22,12 +22,12 @@ const vForm = ref<VForm>()
 const is_visible = ref(false)
 const is_loading = ref(false)
 const is_disabled = ref(true)
-const is_transfer = ref(0)//ref(corp.is_transfer)
+const is_transfer = ref(corp.is_transfer)
 
 const login_info = reactive({
-    domain: 'onechek.co.kr',
-    user_name: 'dooripay',
-    user_pw: 'a!0218332099',
+    domain: '',
+    user_name: '',
+    user_pw: '',
     token: '',
 })
 
