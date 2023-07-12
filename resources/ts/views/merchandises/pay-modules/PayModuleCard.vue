@@ -45,7 +45,8 @@ const filterPgs = computed(() => {
     return filter
 })
 watchEffect(() => {
-    props.item.mcht_id = mcht.value.id
+    if(props.able_mcht_chanage)
+        props.item.mcht_id = mcht.value.id
 })
 
 </script>

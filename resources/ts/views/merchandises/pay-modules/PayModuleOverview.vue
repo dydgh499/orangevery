@@ -14,10 +14,11 @@ const new_pay_modules   = reactive<PayModule[]>([]);
 const { merchandises, getAllMerchandises } = useMchtFilterStore()
 const { pay_modules, getAllPayModules } = usePayModFilterStore()
 
-getAllMerchandises()
-console.log(props.item.id)
-getAllPayModules(props.item.id)
-
+if(props.item.id)
+    getAllPayModules(props.item.id)
+else {
+    getAllMerchandises()
+}
 const addNewPaymodule = () => {
     new_pay_modules.push(<PayModule>{
         id: 0,
