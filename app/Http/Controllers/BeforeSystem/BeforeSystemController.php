@@ -112,14 +112,13 @@ class BeforeSystemController extends Controller
                 $sale->getPaywell($this->paywell, $brand_id, $before_brand_id);
                 $sale->setPayvery($this->payvery->table('salesforces'), $brand_id);
                 $sendClient(count($sale->paywell_to_payvery)."개의 영업점 연동을 완료하였습니다.<br>가맹점 연동을 시작합니다..", 35);
-                logging(['mcht'=>'start']);
+
                 $mcht = new Merchandise();
                 $mcht->connectSalesInfo($sale->payvery, $sale->paywell_to_payvery);
                 $mcht->connectClsInfo($cfic->payvery, $cfic->paywell_to_payvery);
                 $mcht->getPaywell($this->paywell, $brand_id, $before_brand_id);
                 $mcht->setPayvery($this->payvery->table('merchandises'), $brand_id);
                 $sendClient(count($mcht->paywell_to_payvery)."개의 가맹점 연동을 완료하였습니다.<br>결제모듈 연동을 시작합니다..", 68);
-                logging(['paymodule'=>'start']);
                 
                 $pmod = new PaymentModule($pg->pg_types);
                 $pmod->connectPGInfo($pg->payvery, $pg->paywell_to_payvery, $ps->payvery, $ps->paywell_to_payvery);
