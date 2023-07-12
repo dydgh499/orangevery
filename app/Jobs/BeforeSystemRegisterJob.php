@@ -58,9 +58,7 @@ class BeforeSystemRegisterJob implements ShouldQueue
      * @return void
      */
     public function handle()
-    {
-        logging(['b'=>$this->brand_id, 'before_brand_id'=>$this->before_brand_id]);
-        
+    {        
         $this->paywell = DB::connection('paywell');
         $this->payvery = DB::connection('mysql');
         $result = DB::transaction(function () {
@@ -99,8 +97,9 @@ class BeforeSystemRegisterJob implements ShouldQueue
 
             $this->payvery->table('brands')->where('id', $this->brand_id)->update(['is_transfer'=>2]);
             setBrandByDNS($this->dns);
-
             return true;
         });
+        logging(['finish'=>$result], 'before-system-register-job');
+        return $result;
     }
 }
