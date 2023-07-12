@@ -32,8 +32,8 @@ const login_info = reactive({
 })
 
 const login = async() => {
-    const is_valid = await vForm.value.validate();
-    if (is_valid.valid && await alert.value.show('정말 로그인 하시겠습니까?')) {
+    const is_valid = await vForm.value?.validate();
+    if (is_valid?.valid && await alert.value.show('정말 로그인 하시겠습니까?')) {
         try {
             const r = await axios.post('/api/v1/computational-transfer/login', cloneDeep(login_info))
             snackbar.value.show('성공하였습니다.', 'success')
@@ -60,7 +60,7 @@ const register = async() => {
             is_disabled.value = false
             setTimeout(function () { location.reload() }, 1000)
         }
-        catch (e) {
+        catch (e:any) {
             snackbar.value.show(e.response.data.message, 'error')
             const r = errorHandler(e)
         }
@@ -99,12 +99,12 @@ const register = async() => {
                                         <!-- domain -->
                                         <VCol cols="12">
                                             <VTextField v-model="login_info.domain" label="도메인 입력" type="domain"
-                                                :rules="[requiredValidator]" :disabled="is_transfer"/>
+                                                :rules="[requiredValidator]" :disabled="Boolean(is_transfer)"/>
                                         </VCol>
                                         <!-- user_name -->
                                         <VCol cols="12">
                                             <VTextField v-model="login_info.user_name" label="아이디 입력" type="user_name"
-                                                :rules="[requiredValidator]" :disabled="is_transfer" />
+                                                :rules="[requiredValidator]" :disabled="Boolean(is_transfer)" />
                                         </VCol>
                                         <!-- password -->
                                         <VCol cols="12">
