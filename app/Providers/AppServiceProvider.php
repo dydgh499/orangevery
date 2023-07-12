@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ($this->app->environment('local')) {
+       # if ($this->app->environment('local')) {
             DB::listen(function ($query) {
                 Log::info(
                     $query->sql,
@@ -41,7 +41,7 @@ class AppServiceProvider extends ServiceProvider
                     $query->time
                 );
             });
-        }
+       # }
         Paginator::useBootstrap();
     }
 }
