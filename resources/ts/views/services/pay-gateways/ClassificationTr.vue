@@ -30,7 +30,7 @@ const { update, remove } = useRequestStore()
         </td>
         <td class="text-center" style="width: 25%;">
             <VCol class="d-flex gap-4">
-                <VBtn type="button" color="default" variant="text" @click="update('/services/classifications', props.item.id, props.item, vForm, false)">
+                <VBtn type="button" color="default" variant="text" @click="update('/services/classifications', props.item.id as number, props.item, vForm, false)">
                     {{ props.item.id == 0 ? "추가" : "수정" }}
                     <VIcon end icon="tabler-pencil" />
                 </VBtn>

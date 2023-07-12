@@ -33,7 +33,6 @@ const hideConditions = () => {
     const cond_5 = props.path == 'posts/view' ? false : true
     return cond_1 && cond_2 && cond_3 && cond_4 && cond_5
 }
-
 watchEffect(() => {
     if (props.id) 
         setOneObject('/' + props.path, Number(props.id), props.item)
@@ -68,12 +67,3 @@ watchEffect(() => {
         </VCol>
     </VCard>
 </template>
-<style scoped>
-/deep/ .v-tabs {
-  pointer-events: none;
-}
-
-/deep/ .v-tabs__content {
-  pointer-events: auto;
-}
-</style>

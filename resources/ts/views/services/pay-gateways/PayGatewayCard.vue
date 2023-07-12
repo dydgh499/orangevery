@@ -131,7 +131,7 @@ const filterPss = computed(() => {
                         </VRow>
                         <VRow>
                             <VCol class="d-flex gap-4 pt-10">
-                                <VBtn type="button" style="margin-left: auto;" @click="update('/services/pay-gateways', props.item.id, props.item, vForm)">
+                                <VBtn type="button" style="margin-left: auto;" @click="update('/services/pay-gateways', props.item.id as number, props.item, vForm, false)">
                                     {{ props.item.id == 0 ? "추가" : "수정" }}
                                     <VIcon end icon="tabler-pencil" />
                                 </VBtn>
