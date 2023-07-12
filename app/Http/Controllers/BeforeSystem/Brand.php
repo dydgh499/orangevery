@@ -52,7 +52,7 @@ class Brand
             
             $pv_options->auth->levels['dev_use'] = (boolean)$brand->USE_DEV;
             $pv_options->auth->levels['sales5_use'] = false;
-            $pv_options->auth->levels['sales4_use'] = $brand->USE_SF;
+            $pv_options->auth->levels['sales4_use'] = (boolean)$brand->USE_SF;
             $pv_options->auth->levels['sales3_use'] = true;
             $pv_options->auth->levels['sales2_use'] = true;
             $pv_options->auth->levels['sales1_use'] = true;
