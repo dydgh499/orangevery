@@ -68,6 +68,9 @@ class DashboardController extends Controller
             if($key == $one_months_ago)
                 $last_chart = $value;
         }
+        logging(['trans'=>isset($charts[$cur_month])]);
+        logging(['trans'=>isset($charts[$cur_month]->transactions)]);
+
         if(isset($charts[$cur_month]->transactions) == false)
         {
             $charts[$cur_month] = getDefaultTransChartFormat(collect([]));
@@ -174,12 +177,8 @@ class DashboardController extends Controller
         foreach ($month_trans as $key => $transactions) {           
             $charts[$key]['modules'] = $this->setMonthlyPayModule(collect($transactions));
         }
-        logging(json_decode(json_encode($charts), true));
         $charts = $this->setWeeklyRate($charts, $week_trans, $last_week_trans);
-        logging(json_decode(json_encode($charts), true));
-        $charts = $this->setCurrentMonthRate($charts, $cur_trans, $last_trans);
-        logging(json_decode(json_encode($charts), true));
-        
+        $charts = $this->setCurrentMonthRate($charts, $cur_trans, $last_trans);        
         return $this->response(0, $charts);
     }
 
