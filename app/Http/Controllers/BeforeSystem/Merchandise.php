@@ -83,7 +83,6 @@ class Merchandise
             ];
             array_push($items, $item);
         }
-        logging(['mcht'=>'getPaywell end']);
         $this->paywell = $items;
     }
 
@@ -98,5 +97,6 @@ class Merchandise
             $this->payvery = $this->getPayvery($payvery_table, $brand_id, $this->current_time);
             $this->paywell_to_payvery = $this->connect($this->payvery, $this->paywell, 'USER_PK');
         }
+        logging(['mcht'=>'set payvery end']);
     }
 }

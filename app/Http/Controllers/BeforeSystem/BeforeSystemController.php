@@ -120,11 +120,17 @@ class BeforeSystemController extends Controller
                 $mcht->setPayvery($this->payvery->table('merchandises'), $brand_id);
                 $sendClient(count($mcht->paywell_to_payvery)."개의 가맹점 연동을 완료하였습니다.<br>결제모듈 연동을 시작합니다..", 68);
                 
+                logging(['paymode'=>'start']);
                 $pmod = new PaymentModule($pg->pg_types);
+                logging(['paymode'=>'1']);
                 $pmod->connectPGInfo($pg->payvery, $pg->paywell_to_payvery, $ps->payvery, $ps->paywell_to_payvery);
+                logging(['paymode'=>'2']);
                 $pmod->connectClsInfo($cfic->payvery, $cfic->paywell_to_payvery);
+                logging(['paymode'=>'3']);
                 $pmod->connectMchtInfo($mcht->payvery, $mcht->paywell_to_payvery);
+                logging(['paymode'=>'4']);
                 $pmod->getPaywell($this->paywell, $this->payvery, $brand_id, $before_brand_id);
+                logging(['paymode'=>'5']);
                 $pg->payvery_pgs = $pmod->payvery;  // 수기, 인증, 간편 관련 PG사 추가됨
                 $sendClient(count($pmod->payvery)."개의 결제모듈 연동을 완료하였습니다.", 99);
 
