@@ -141,7 +141,6 @@ class DashboardController extends Controller
             $one_months_ago = $cur_month->copy()->subMonths(1)->startOfMonth();
             $six_days_ago   = Carbon::now()->subDays(6);
             $thit_days_ago  = Carbon::now()->subDays(13);
-            logging(json_decode(json_encode($transactions), true));
             foreach ($transactions as $transaction) {
                 $month = Carbon::parse($transaction->trx_dt)->format('Y-m');
                 $month_trans[$month][] = $transaction;
@@ -175,8 +174,11 @@ class DashboardController extends Controller
         foreach ($month_trans as $key => $transactions) {           
             $charts[$key]['modules'] = $this->setMonthlyPayModule(collect($transactions));
         }
+        logging(json_decode(json_encode($charts), true));
         $charts = $this->setWeeklyRate($charts, $week_trans, $last_week_trans);
+        logging(json_decode(json_encode($charts), true));
         $charts = $this->setCurrentMonthRate($charts, $cur_trans, $last_trans);
+        logging(json_decode(json_encode($charts), true));
         
         return $this->response(0, $charts);
     }
