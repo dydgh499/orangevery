@@ -36,7 +36,7 @@ class Merchandise
         $items = [];
         $mchts = $paywell->table('user')
                 ->join('merchandise', 'user.PK', '=', 'merchandise.USER_PK')
-                ->where('DNS_PK', $before_brand_id)
+                ->where('user.DNS_PK', $before_brand_id)
                 ->orderby('user.PK', 'DESC')
                 ->get();
         $privacys = $this->getPaywellPrivacy($paywell, $mchts, 'USER_PK');
