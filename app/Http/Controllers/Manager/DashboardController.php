@@ -141,7 +141,7 @@ class DashboardController extends Controller
             $one_months_ago = $cur_month->copy()->subMonths(1)->startOfMonth();
             $six_days_ago   = Carbon::now()->subDays(6);
             $thit_days_ago  = Carbon::now()->subDays(13);
-    
+            logging(json_decode(json_encode($transactions), true));
             foreach ($transactions as $transaction) {
                 $month = Carbon::parse($transaction->trx_dt)->format('Y-m');
                 $month_trans[$month][] = $transaction;

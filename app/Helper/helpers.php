@@ -340,3 +340,8 @@
         }
         return $chart;        
     }
+
+    function logging($data, $msg='test')
+    {
+        Log::info($msg, $data);
+    }
