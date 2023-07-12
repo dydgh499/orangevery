@@ -21,6 +21,12 @@ class FeeChangeHistoryController extends Controller
     protected $mcht_fee_histories;
     protected $sf_fee_histories;
 
+    public function __invoke()
+    {   // fee reservation list
+        $mcht_histories = MchtFeeChangeHistory::where('change_status', 0)->get();
+        $sf_histories = SfFeeChangeHistory::where('change_status', 0)->get();
+    }
+
     public function __construct(MchtFeeChangeHistory $mcht_fee_histories, SfFeeChangeHistory $sf_fee_histories)
     {
         $this->mcht_fee_histories   = $mcht_fee_histories;
