@@ -17,16 +17,16 @@ const { sales, classification } = useSalesFilterStore()
 const { cus_filters } = useStore()
 const levels = corp.pv_options.auth.levels
 
-const sales5 = ref({ id: null, sales_name: '선택안함' })
-const sales4 = ref({ id: null, sales_name: '선택안함' })
-const sales3 = ref({ id: null, sales_name: '선택안함' })
-const sales2 = ref({ id: null, sales_name: '선택안함' })
-const sales1 = ref({ id: null, sales_name: '선택안함' })
-const sales0 = ref({ id: null, sales_name: '선택안함' })
-const custom = ref({ id: null, type: 1, name: '사용안함' })
+const sales5 = ref(<any>({ id: null, sales_name: '선택안함' }))
+const sales4 = ref(<any>({ id: null, sales_name: '선택안함' }))
+const sales3 = ref(<any>({ id: null, sales_name: '선택안함' }))
+const sales2 = ref(<any>({ id: null, sales_name: '선택안함' }))
+const sales1 = ref(<any>({ id: null, sales_name: '선택안함' }))
+const sales0 = ref(<any>({ id: null, sales_name: '선택안함' }))
+const custom = ref(<any>({ id: null, type: 1, name: '사용안함' }))
 
-classification()
-watchEffect(() => {
+onMounted(async() => {
+    await classification()
     props.item.sales0_fee = props.item.sales0_fee.toFixed(3)
     props.item.sales1_fee = props.item.sales1_fee.toFixed(3)
     props.item.sales2_fee = props.item.sales2_fee.toFixed(3)
@@ -35,16 +35,23 @@ watchEffect(() => {
     props.item.sales5_fee = props.item.sales5_fee.toFixed(3)
     props.item.trx_fee = props.item.trx_fee.toFixed(3)
     props.item.hold_fee = props.item.hold_fee.toFixed(3)
-})
 
-watchEffect(() => {
-    props.item.sales5_id = sales5.value.id
-    props.item.sales4_id = sales4.value.id
-    props.item.sales3_id = sales3.value.id
-    props.item.sales2_id = sales2.value.id
-    props.item.sales1_id = sales1.value.id
-    props.item.sales0_id = sales0.value.id
-    props.item.custom_id = custom.value.id
+    sales5.value = sales[5].value.find(obj => obj.id === props.item.sales5_id)
+    sales4.value = sales[4].value.find(obj => obj.id === props.item.sales4_id)
+    sales3.value = sales[3].value.find(obj => obj.id === props.item.sales3_id)
+    sales2.value = sales[2].value.find(obj => obj.id === props.item.sales2_id)
+    sales1.value = sales[1].value.find(obj => obj.id === props.item.sales1_id)
+    sales0.value = sales[0].value.find(obj => obj.id === props.item.sales0_id)
+    custom.value = cus_filters.find(obj => obj.id === props.item.custom_id)
+    watchEffect(() => {
+        props.item.sales5_id = sales5.value?.id
+        props.item.sales4_id = sales4.value?.id
+        props.item.sales3_id = sales3.value?.id 
+        props.item.sales2_id = sales2.value?.id
+        props.item.sales1_id = sales1.value?.id
+        props.item.sales0_id = sales0.value?.id
+        props.item.custom_id = custom.value?.id
+    })
 })
 </script>
 <template>
@@ -89,7 +96,7 @@ watchEffect(() => {
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
-                        <!-- 👉 영업점 수수료율 -->
+                        <!-- 👉 상위 영업점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales5_use">
                             <VRow>
                                 <VCol cols="12" md="3">
@@ -98,14 +105,14 @@ watchEffect(() => {
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales5"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[5].value)"
-                                        prepend-inner-icon="ph:share-network" label="지사 선택" item-title="sales_name" item-value="id"
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales5_name+ '선택'" item-title="sales_name" item-value="id"
                                         return-object />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales5_fee" type="number" suffix="%"
                                         :rules="[requiredValidator]" />
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :level=5 :item="props.item">
+                                <FeeChangeBtn v-if="props.item.id" :level=30 :item="props.item">
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
@@ -118,18 +125,18 @@ watchEffect(() => {
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales4"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[4].value)"
-                                        prepend-inner-icon="ph:share-network" label="하위지사 선택" item-title="sales_name"
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales4_name+' 선택'" item-title="sales_name"
                                         item-value="id" return-object/>
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales4_fee" type="number" suffix="%"
                                         :rules="[requiredValidator]" />
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :level=4 :item="props.item">
+                                <FeeChangeBtn v-if="props.item.id" :level=25 :item="props.item">
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
-                        <!-- 👉 영업점 수수료율 -->
+                        <!-- 👉 지사 수수료율 -->
                         <VCol cols="12" v-if="levels.sales3_use">
                             <VRow>
                                 <VCol cols="12" md="3">
@@ -138,18 +145,18 @@ watchEffect(() => {
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales3"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[3].value)"
-                                        prepend-inner-icon="ph:share-network" label="총판 선택" item-title="sales_name" item-value="id"
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales3_name+' 선택'" item-title="sales_name" item-value="id"
                                         return-object />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales3_fee" type="number" suffix="%"
                                         :rules="[requiredValidator]" />
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :level=3 :item="props.item">
+                                <FeeChangeBtn v-if="props.item.id" :level=20 :item="props.item">
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
-                        <!-- 👉 영업점 수수료율 -->
+                        <!-- 👉 총판 수수료율 -->
                         <VCol cols="12" v-if="levels.sales2_use">
                             <VRow>
                                 <VCol cols="12" md="3">
@@ -158,18 +165,18 @@ watchEffect(() => {
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales2"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[2].value)"
-                                        prepend-inner-icon="ph:share-network" label="하위총판 선택" item-title="sales_name"
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales2_name+' 선택'" item-title="sales_name"
                                         item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales2_fee" type="number" suffix="%"
                                         :rules="[requiredValidator]" />
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :level=2 :item="props.item">
+                                <FeeChangeBtn v-if="props.item.id" :level=17 :item="props.item">
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
-                        <!-- 👉 영업점 수수료율 -->
+                        <!-- 👉 대리점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales1_use">
                             <VRow>
                                 <VCol cols="12" md="3">
@@ -178,18 +185,18 @@ watchEffect(() => {
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales1"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[1].value)"
-                                        prepend-inner-icon="ph:share-network" label="대리점 선택" item-title="sales_name"
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales1_name+' 선택'" item-title="sales_name"
                                         item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales1_fee" type="number" suffix="%"
                                         :rules="[requiredValidator]" />
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :level=1 :item="props.item">
+                                <FeeChangeBtn v-if="props.item.id" :level=15 :item="props.item">
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
-                        <!-- 👉 영업점 수수료율 -->
+                        <!-- 👉 하위 대리점 수수료율 -->
                         <VCol cols="12" v-if="levels.sales0_use">
                             <VRow>
                                 <VCol cols="12" md="3">
@@ -198,14 +205,14 @@ watchEffect(() => {
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales0"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[0].value)"
-                                        prepend-inner-icon="ph:share-network" label="하위대리점 선택" item-title="sales_name"
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales0_name+' 선택'" item-title="sales_name"
                                         item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.sales0_fee" type="number" suffix="%"
                                         :rules="[requiredValidator]" />
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :level=0 :item="props.item">
+                                <FeeChangeBtn v-if="props.item.id" :level=13 :item="props.item">
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>

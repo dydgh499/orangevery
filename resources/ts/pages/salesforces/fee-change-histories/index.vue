@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/salesforces/fee-change-histories/useStore'
+import ExtraMenu from '@/views/merchandises/fee-change-histories/ExtraMenu.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { allLevels } from '@/views/salesforces/useStore'
 
@@ -9,44 +10,10 @@ provide('head', head)
 provide('exporter', exporter)
 provide('store', store)
 
-const metas = [
-    {
-        icon: 'tabler-user',
-        color: 'primary',
-        title: '금월 추가된 가맹점',
-        stats: '21,459',
-        percentage: +29,
-        subtitle: 'Total Users',
-    },
-    {
-        icon: 'tabler-user-plus',
-        color: 'error',
-        title: '금주 추가된 가맹점',
-        stats: '4,567',
-        percentage: +18,
-        subtitle: 'Last week analytics',
-    },
-    {
-        icon: 'tabler-user-check',
-        color: 'success',
-        title: '금월 감소한 가맹점',
-        stats: '19,860',
-        percentage: -14,
-        subtitle: 'Last week analytics',
-    },
-    {
-        icon: 'tabler-user-exclamation',
-        color: 'warning',
-        title: '금주 감소한 가맹점',
-        stats: '237',
-        percentage: +42,
-        subtitle: 'Last week analytics',
-    },
-]
 const all_levels = allLevels()
 </script>
 <template>
-    <BaseIndexView placeholder="영업점 상호 검색" :metas="metas" :add="false" add_name="가맹점" :is_range_date="true">
+    <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="가맹점" :is_range_date="true">
         <template #filter>
         </template>
         <template #headers>
@@ -97,6 +64,9 @@ const all_levels = allLevels()
                             </span>
                             <span v-else-if="_key == `level`">
                                 {{ all_levels.find(level => level.id === item[_key])?.title }}
+                            </span>
+                            <span v-else-if="_key == 'extra_col'">
+                                <ExtraMenu :item="item" :type="'salesforces'"></ExtraMenu>
                             </span>
                             <span v-else>
                                 {{ item[_key] }}

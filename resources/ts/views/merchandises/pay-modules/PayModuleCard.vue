@@ -310,7 +310,7 @@ watchEffect(() => {
                 <VCol cols="12" :md="md">
                     <VCardItem>
                         <VCardTitle style="margin-bottom: 1em;">옵션</VCardTitle>
-                        <VRow class="pt-3" v-if="corp.pv_options.paid.use_dup_pay_validation">
+                        <VRow class="pt-3">
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'이상거래 한도설정'"

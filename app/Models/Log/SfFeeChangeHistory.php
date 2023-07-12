@@ -27,22 +27,22 @@ class SfFeeChangeHistory extends Model
 
     public function bfSales()
     {
-        return $this->belongsTo(Salesforce::class, 'bf_sales_id')->select(['id', 'nick_name']);
+        return $this->belongsTo(Salesforce::class, 'bf_sales_id')->select(['id', 'sales_name']);
     }
 
     public function aftSales()
     {
-        return $this->belongsTo(Salesforce::class, 'aft_sales_id')->select(['id', 'nick_name']);
+        return $this->belongsTo(Salesforce::class, 'aft_sales_id')->select(['id', 'sales_name']);
     }
     
     public function getBfSalesNameAttribute()
     {
-        return $this->bfSales ? $this->bfSales->nick_name : null;
+        return $this->bfSales ? $this->bfSales->sales_name : null;
     }
 
     public function getAftSalesNameAttribute()
     {
-        return $this->aftSales ? $this->aftSales->nick_name : null;
+        return $this->aftSales ? $this->aftSales->sales_name : null;
     }
 
     protected function BfTrxFee() : Attribute

@@ -7,18 +7,15 @@ export const useSearchStore = defineStore('salesFeeHistorySearchStore', () => {
 
     const headers: Record<string, string> = {
         'id' : 'NO.',
-        'user_name' : '영업점 상호',
-        'level': '등급',
-        'note' : '별칭',
-        'module_type' : '모듈타입',
-        'pg_id' : 'PG사명',
-        'ps_id' : '구간',
-        'settle_type' : '정산일',
-        'mid' : 'MID',
-        'tid' : 'TID',
-        'installment' : '할부한도',
+        'mcht_name' : '가맹점 상호',
+        'level': '영업점 등급',
+        'bf_sales_name' : '이전 영업점 상호',
+        'aft_sales_name' : '변경 영업점 상호',
+        'bf_trx_fee' : '이전 수수료',
+        'aft_trx_fee' : '변경 수수료',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
+        'extra_col': '더보기',
     }
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})

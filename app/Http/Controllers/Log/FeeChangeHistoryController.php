@@ -22,9 +22,44 @@ class FeeChangeHistoryController extends Controller
     protected $sf_fee_histories;
 
     public function __invoke()
-    {   // fee reservation list
-        $mcht_histories = MchtFeeChangeHistory::where('change_status', 0)->get();
-        $sf_histories = SfFeeChangeHistory::where('change_status', 0)->get();
+    {
+        $mcht_histories = MchtFeeChangeHistory::where('is_delete', false)
+                    ->where('change_status', 0)
+                    ->orderby('created_at', 'asc')
+                    ->get();
+        $sf_histories = SfFeeChangeHistory::where('is_delete', false)
+                    ->where('change_status', 0)
+                    ->orderby('created_at', 'asc')
+                    ->get();
+
+        logging([
+            'mcht_histories'=> json_decode(json_encode($mcht_histories), true),
+            'sf_histories'  => json_decode(json_encode($sf_histories), true),
+        ], 'fee-book-apply-scheduler');
+
+        $res = DB::transaction(function () use($sf_histories, $mcht_histories) {
+            foreach($sf_histories as $sf_history)
+            {
+                $idx = globalLevelByIndex($sf_history->level);
+                Merchandise::where('id', $sf_history->mcht_id)
+                    ->update([
+                        'sales'.$idx.'_id'  => $sf_history->aft_sales_id,
+                        'sales'.$idx.'_fee' => $sf_history->aft_trx_fee,
+                    ]);
+                $sf_history->save(['change_status' => true]);
+            }
+            foreach($mcht_histories as $mcht_history)
+            {
+                Merchandise::where('id', $mcht_history->mcht_id)
+                ->update([
+                    'hold_fee'  => $mcht_history->aft_hold_fee,
+                    'trx_fee' => $mcht_history->aft_trx_fee,
+                ]);
+                $mcht_history->save(['change_status' => true]);
+            }
+            return true;
+        });
+        logging(['result' => true], 'fee-book-apply-scheduler');
     }
 
     public function __construct(MchtFeeChangeHistory $mcht_fee_histories, SfFeeChangeHistory $sf_fee_histories)
@@ -38,6 +73,8 @@ class FeeChangeHistoryController extends Controller
         $search = $request->input('search', '');
         $query  = $this->mcht_fee_histories
             ->join('merchandises', 'mcht_fee_change_histories.mcht_id', '=', 'merchandises.id')
+            ->where('merchandises.is_delete', false)
+            ->where('mcht_fee_change_histories.is_delete', false)
             ->where('mcht_fee_change_histories.brand_id', $request->user()->brand_id)
             ->where('merchandises.mcht_name', 'like', "%$search%");
 
@@ -50,6 +87,8 @@ class FeeChangeHistoryController extends Controller
         $search = $request->input('search', '');
         $query  = $this->sf_fee_histories
             ->join('merchandises', 'sf_fee_change_histories.mcht_id', '=', 'merchandises.id')
+            ->where('merchandises.is_delete', false)
+            ->where('sf_fee_change_histories.is_delete', false)
             ->where('sf_fee_change_histories.brand_id', $request->user()->brand_id)
             ->where('merchandises.mcht_name', 'like', "%$search%");
 
@@ -58,12 +97,24 @@ class FeeChangeHistoryController extends Controller
         return $this->response(0, $data);
     }
 
+    public function deleteMerchandise(Request $request, $id)
+    {
+        $d_res = $this->mcht_fee_histories->where('id', $id)->update(['is_delete' => true]);
+        return $this->response($d_res ? 4 : 990);
+    }
+
+    public function deleteSalesforce(Request $request, $id)
+    {
+        $d_res = $this->sf_fee_histories->where('id', $id)->update(['is_delete' => true]);
+        return $this->response($d_res ? 4 : 990);
+    }
+
     private function getMchtResource($request, $mcht, $data)
     {
         $udpt_data = [];
-        $bf_trx_fee = $mcht->trx_fee/100;
+        $bf_trx_fee = $mcht->trx_fee;
         $aft_trx_fee = $request->trx_fee/100;
-        $bf_hold_fee = $mcht->hold_fee/100;
+        $bf_hold_fee = $mcht->hold_fee;
         $aft_hold_fee = $request->hold_fee/100;
 
         $data['bf_trx_fee']  = $bf_trx_fee;
@@ -83,7 +134,6 @@ class FeeChangeHistoryController extends Controller
     private function getSalesResource($request, $mcht, $data)
     {
         $udpt_data  = [];
-        $data       = [];
         $data['level'] = $request->level;
         $idx  = globalLevelByIndex($data['level']);
         $mcht = json_decode(json_encode($mcht), true);
@@ -92,7 +142,7 @@ class FeeChangeHistoryController extends Controller
             'sales_id'  => 'sales'.$idx.'_id',
         ];
         
-        $bf_trx_fee = $mcht[$sales_key['sales_fee']]/100;
+        $bf_trx_fee = $mcht[$sales_key['sales_fee']];
         $aft_trx_fee = $request->sales_fee/100;
         $bf_sales_id = $mcht[$sales_key['sales_id']];
         $aft_sales_id = $request->sales_id;
@@ -112,7 +162,7 @@ class FeeChangeHistoryController extends Controller
     }
 
     public function apply(Request $request, $user, $type)
-    {  
+    {
         $change_status = $type == 'direct-apply' ? 1 : 0;
         $data = [
             'mcht_id'   => $request->mcht_id,

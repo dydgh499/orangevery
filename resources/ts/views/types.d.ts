@@ -21,32 +21,6 @@ export interface StringOptions {
     title: string,
 }
 
-export interface CustomFilter {
-    pg_id: number | null,
-    ps_id: number | null,
-    settle_type: number | null,
-    terminal_id: number | null,
-    custom_id: number | null,
-}
-
-export interface SalesForceFilter {
-    sales5_id: number | null,
-    sales4_id: number | null,
-    sales3_id: number | null,
-    sales2_id: number | null,
-    sales1_id: number | null,
-    sales0_id: number | null,
-}
-
-export interface SearchParams {
-    page: number,
-    page_size: number,
-    s_dt: Date,
-    e_dt: Date,
-    custom: CustomFilter,
-    sales: SalesForceFilter,
-}
-
 export interface Pagenation {
     total_count: number,
     total_page: number,
@@ -141,7 +115,9 @@ export interface SalesforcePropertie {
     note: string,
 }
 
-export interface Merchandise extends MerchandisePropertie, UserPropertie {}
+export interface Merchandise extends MerchandisePropertie, UserPropertie {    
+    [key: string]: number | string
+}
 
 export interface Salesforce extends SalesforcePropertie, UserPropertie {}
 
@@ -256,7 +232,6 @@ interface AuthOption {
 interface ThemeCSS {
     main_color: string,
 }
-
 
 export interface Brand extends Contract {
     id: number,

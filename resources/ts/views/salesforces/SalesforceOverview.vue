@@ -5,6 +5,7 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import type { Salesforce } from '@/views/types'
 import { requiredValidator, nullValidator } from '@validators'
+import SalesforceBatchOverview from '@/views/salesforces/SalesforceBatchOverview.vue'
 
 interface Props {
     item: Salesforce,
@@ -101,6 +102,7 @@ const tax_types = settleTaxTypes()
                                     </BooleanRadio>
                                 </template>
                             </CreateHalfVCol>
+                            <SalesforceBatchOverview :item="props.item"/>
                         </VRow>
                     </VCol>
                 </VCardItem>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { axios } from '@axios'
 import type { Merchandise } from '@/views/types'
+import { getLevelByIndex } from '@/views/salesforces/useStore'
 
 interface Props {
     level: number,
@@ -13,44 +14,11 @@ const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 
 const getSalesByClass = () => {
-    if (props.level == 0) {
-        return {
-            sales_id: props.item.sales0_id,
-            sales_fee: parseFloat(props.item.sales0_fee),
-        }
+    const idx = getLevelByIndex(props.level)
+    return {
+        sales_id: props.item['sales' + idx + '_id'],
+        sales_fee: parseFloat(props.item['sales' + idx + '_fee'] as string),
     }
-    else if (props.level == 1) {
-        return {
-            sales_id: props.item.sales1_id,
-            sales_fee: parseFloat(props.item.sales1_fee),
-        }
-    }
-    else if (props.level == 2) {
-        return {
-            sales_id: props.item.sales2_id,
-            sales_fee: parseFloat(props.item.sales2_fee),
-        }
-    }
-    else if (props.level == 3) {
-        return {
-            sales_id: props.item.sales3_id,
-            sales_fee: parseFloat(props.item.sales3_fee),
-        }
-    }
-    else if (props.level == 4) {
-        return {
-            sales_id: props.item.sales4_id,
-            sales_fee: parseFloat(props.item.sales4_fee),
-        }
-    }
-    else if (props.level == 5) {
-        return {
-            sales_id: props.item.sales5_id,
-            sales_fee: parseFloat(props.item.sales5_fee),
-        }
-    }
-    else
-        return {}
 }
 
 const feeChangeRequest = async (type: string) => {
@@ -66,7 +34,7 @@ const feeChangeRequest = async (type: string) => {
     }
     else {
         params = Object.assign({
-            class: props.level,
+            level: props.level,
             mcht_id: props.item.id,
         }, getSalesByClass())
         url += '/salesforces/' + type
@@ -86,7 +54,7 @@ const directFeeChange = async () => {
         await feeChangeRequest('direct-apply')
 }
 const bookFeeChange = async () => {
-    if (await alert.value.show('정말 예약적용하시겠습니까? 명일 00시에 반영됩니다.'))
+    if (await alert.value.show('정말 예약적용하시겠습니까? <b>명일 00시</b>에 반영됩니다.<br><br><h5>실수로 적용된 예약적용 수수료는 "수수료율 변경이력" 탭에서 삭제시 반영되지 않습니다.</h5>'))
         await feeChangeRequest('book-apply')
 }
 </script>

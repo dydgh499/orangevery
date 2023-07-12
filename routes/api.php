@@ -101,10 +101,14 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         });
         Route::prefix('salesforces')->group(function() {
             Route::get('chart', [SalesforceController::class, 'chart']);
+            Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteSalesforce']);
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
             Route::get('classification', [SalesforceController::class, 'classification']);
             Route::post('password-change', [SalesforceController::class, 'passwordChange']);
             Route::post('bulk-register', [SalesforceController::class, 'bulkRegister']);
+            Route::prefix('batch')->group(function() {
+                
+            });
         });
         Route::prefix('merchandises')->group(function() {
             Route::get('chart', [MerchandiseController::class, 'chart']);
@@ -119,6 +123,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::post('pay-modules/bulk-register', [PaymentModuleController::class, 'bulkRegister']);
             Route::apiResource('pay-modules', PaymentModuleController::class); 
 
+            Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
             Route::post('fee-change-histories/{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
             Route::get('noti-send-histories', [NotiSendHistoryController::class, 'index']);

@@ -22,7 +22,7 @@ const vForm = ref<VForm>()
 const is_visible = ref(false)
 const is_loading = ref(false)
 const is_disabled = ref(true)
-const is_transfer = ref(corp.is_transfer)
+const is_transfer = ref(false) // corp.is_transfer
 
 const login_info = reactive({
     domain: '',
