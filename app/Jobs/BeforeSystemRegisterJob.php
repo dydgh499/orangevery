@@ -19,7 +19,7 @@ use App\Http\Controllers\BeforeSystem\Classification;
 
 use App\Http\Controllers\BeforeSystem\Salesforce;
 use App\Http\Controllers\BeforeSystem\Merchandise;
-use App\Http\Controllers\BeforeSystem\PayModule;
+use App\Http\Controllers\BeforeSystem\PaymentModule;
 
 use Illuminate\Support\Facades\Log;
 
@@ -49,7 +49,7 @@ class BeforeSystemRegisterJob implements ShouldQueue
         $this->payvery = DB::connection('mysql');
         $this->payvery->table('brands')->where('id', $this->brand_id)->update(['is_transfer'=>0]);
         setBrandByDNS($this->dns);
-        Log::warning("BeforeSystemRegisterJob fail", ['retry'=>$this->attempts()]);
+        Log::warning("before-system-register-job-fail", ['retry'=>$this->attempts()]);
     }
 
     /**
@@ -59,6 +59,7 @@ class BeforeSystemRegisterJob implements ShouldQueue
      */
     public function handle()
     {        
+        logging([], 'before-system-register-job-start');
         $this->paywell = DB::connection('paywell');
         $this->payvery = DB::connection('mysql');
         $result = DB::transaction(function () {
@@ -81,19 +82,22 @@ class BeforeSystemRegisterJob implements ShouldQueue
             $sale = new Salesforce();
             $sale->getPaywell($this->paywell, $this->brand_id, $this->before_brand_id);
             $sale->setPayvery($this->payvery->table('salesforces'), $this->brand_id);
+            logging(['sales'=>'ok'], 'before-system-register-job');
 
             $mcht = new Merchandise();
             $mcht->connectSalesInfo($sale->payvery, $sale->paywell_to_payvery);
             $mcht->connectClsInfo($cfic->payvery, $cfic->paywell_to_payvery);
             $mcht->getPaywell($this->paywell, $this->brand_id, $this->before_brand_id);
             $mcht->setPayvery($this->payvery->table('merchandises'), $this->brand_id);
-            
+            logging(['mcht'=>'ok'], 'before-system-register-job');
+
             $pmod = new PaymentModule($pg->pg_types);
             $pmod->connectPGInfo($pg->payvery, $pg->paywell_to_payvery, $ps->payvery, $ps->paywell_to_payvery);
             $pmod->connectClsInfo($cfic->payvery, $cfic->paywell_to_payvery);
             $pmod->connectMchtInfo($mcht->payvery, $mcht->paywell_to_payvery);
             $pmod->getPaywell($this->paywell, $this->payvery, $this->brand_id, $this->before_brand_id);
             $pg->payvery_pgs = $pmod->payvery;  // 수기, 인증, 간편 관련 PG사 추가됨
+            logging(['paymod'=>'ok'], 'before-system-register-job');
 
             $this->payvery->table('brands')->where('id', $this->brand_id)->update(['is_transfer'=>2]);
             setBrandByDNS($this->dns);
