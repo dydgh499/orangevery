@@ -6,7 +6,7 @@ trait BeforeSystemTrait
 {
     public function getPaywellPrivacy($paywell, $users, $col='PK')
     {
-        $pks = $users->pluck($col)->toArray();
+        $pks = $users->pluck($col)->values()->toArray();
         return $paywell->table('privacy')
             ->whereIn('USER_PK', $pks)
             ->get();
