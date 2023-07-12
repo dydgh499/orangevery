@@ -34,12 +34,17 @@ class Merchandise
     public function getPaywell($paywell, $brand_id, $before_brand_id)
     {
         $items = [];
+        logging(['mcht'=>'get user']);
+
         $mchts = $paywell->table('user')
                 ->join('merchandise', 'user.PK', '=', 'merchandise.USER_PK')
                 ->where('user.DNS_PK', $before_brand_id)
                 ->orderby('user.PK', 'DESC')
                 ->get();
+        logging(['mcht'=>'get privacy']);
+
         $privacys = $this->getPaywellPrivacy($paywell, $mchts, 'USER_PK');
+        logging(['mcht'=>'get privacy end']);
         foreach($mchts as $mcht) {
             $privacy = $privacys->first(function($item) use ($mcht) {return $item->USER_PK == $mcht->USER_PK;});
             $item = [
@@ -87,6 +92,8 @@ class Merchandise
 
     public function setPayvery($payvery_table, $brand_id)
     {
+        logging(['mcht'=>'set payvery']);
+
         $items = $this->getPayveryFormat($this->paywell, 'USER_PK');
         $res   = $this->manyInsert($payvery_table, $items);
         if($res)
