@@ -135,7 +135,7 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
     }
 })
 
-export const useSalesFilterStore = defineStore('salesFilterStore', () => {
+export const useSalesFilterStore = () => {
     const sales = Array.from({ length: 6 }, () => ref<any[]>([]))
     onMounted(() => { classification() })
     const classification = async () => {
@@ -149,9 +149,9 @@ export const useSalesFilterStore = defineStore('salesFilterStore', () => {
         sales,
         classification,
     }
-})
+}
 
-export const useUpdateStore = defineStore('salesUpdateStore', () => {
+export const defaultItemInfo = () => {
     const path = 'salesforces'
     const item = reactive<Salesforce>({
         id: 0,
@@ -187,4 +187,4 @@ export const useUpdateStore = defineStore('salesUpdateStore', () => {
     return {
         path, item
     }
-})
+}

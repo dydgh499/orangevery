@@ -83,7 +83,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     }
 })
 
-export const useUpdateStore = defineStore('mchtUpdateStore', () => {
+export const defaultItemInfo = () => {
     const path = 'merchandises'
     const item = reactive<Merchandise>({
         acct_bank_code: null,
@@ -135,7 +135,7 @@ export const useUpdateStore = defineStore('mchtUpdateStore', () => {
     return {
         path, item
     }
-})
+}
 
 export const useMchtFilterStore = defineStore('mchtFilterStore', () => {
     const merchandises = ref<Merchandise[]>([])

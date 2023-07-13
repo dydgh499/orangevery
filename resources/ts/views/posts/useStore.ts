@@ -45,7 +45,7 @@ export const useSearchStore = defineStore('postSearchStore', () => {
     }
 })
 
-export const useUpdateStore = defineStore('postUpdateStore', () => {
+export const defaultItemInfo = () => {
     const path  = 'posts'
     const item  = reactive<Post>({
         id: 0,
@@ -59,4 +59,4 @@ export const useUpdateStore = defineStore('postUpdateStore', () => {
     return {
         path, item
     }
-})
+}

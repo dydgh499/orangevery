@@ -9,8 +9,8 @@ export const simplePays = <StringOptions[]>([
 ])
 
 export const abnormal_trans_limits = <Options[]>([
-    { id: 0, title: "한도없음" }, { id: 1, title: "200만원" },
-    { id: 2, title: "300만원" }, { id: 3, title: "500만원" },
+    { id: 0, title: "한도없음" }, { id: 200, title: "200만원" },
+    { id: 300, title: "300만원" }, { id: 500, title: "500만원" },
 ])
 
 export const module_types = <Options[]>([
@@ -101,7 +101,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     }
 });
 
-export const useUpdateStore = defineStore('payModUpdateStore', () => {   
+export const defaultItemInfo =  () => {   
     const path  = 'merchandises/pay-modules'
     const item  = reactive<PayModule>({
         id: 0,
@@ -140,7 +140,7 @@ export const useUpdateStore = defineStore('payModUpdateStore', () => {
     return {
         path, item
     }
-});
+}
 
 export const usePayModFilterStore = defineStore('payModFilterStore', () => {
     const pay_modules = ref<PayModule[]>([])

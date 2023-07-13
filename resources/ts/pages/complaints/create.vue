@@ -2,9 +2,9 @@
 <script setup lang="ts">
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import ComplaintOverview from '@/views/complaints/ComplaintOverview.vue'
-import { useUpdateStore } from '@/views/complaints/useStore'
+import { defaultItemInfo } from '@/views/complaints/useStore'
 import type { Tab } from '@/views/types'
-const {path, item } = useUpdateStore()
+const {path, item } = defaultItemInfo()
 const tabs = <Tab[]>([
     { icon: 'tabler-user-check', title: '민원 정보' },
 ])

@@ -16,6 +16,7 @@ use App\Http\Controllers\Manager\ClassificationController;
 use App\Http\Controllers\Manager\PostController;
 use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Manager\TransactionController;
+use App\Http\Controllers\Manager\SalesforceBatchController;
 
 use App\Http\Controllers\Manager\SettleController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
@@ -107,7 +108,13 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::post('password-change', [SalesforceController::class, 'passwordChange']);
             Route::post('bulk-register', [SalesforceController::class, 'bulkRegister']);
             Route::prefix('batch')->group(function() {
-                
+                Route::post('set-fee', [SalesforceBatchController::class, 'setFee']);
+                Route::post('set-custom-filter', [SalesforceBatchController::class, 'setCustomFilter']);
+                Route::post('set-abnormal-trans-limit', [SalesforceBatchController::class, 'setAbnormalTransLimit']);
+                Route::post('set-dupe-pay-validation', [SalesforceBatchController::class, 'setDupPayValidation']);
+                Route::post('set-pay-limit', [SalesforceBatchController::class, 'setPayLimit']);
+                Route::post('set-pay-disable-time', [SalesforceBatchController::class, 'setForbiddenPayTime']);
+                Route::post('set-show-pay-view', [SalesforceBatchController::class, 'setShowPayView']);
             });
         });
         Route::prefix('merchandises')->group(function() {

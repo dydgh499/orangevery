@@ -93,7 +93,7 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
 })
 
 
-export const useUpdateStore = defineStore('brandUpdateStore', () => {
+export const defaultItemInfo = () => {
     const path = 'services/brands'
     const item = reactive<Brand>({
         id: 0,
@@ -176,7 +176,7 @@ export const useUpdateStore = defineStore('brandUpdateStore', () => {
         og_file: undefined,
         id_file: undefined,
         login_file: undefined,
-        is_transfer: false,
+        is_transfer: 0,
         login_img: null,
     })
 
@@ -184,4 +184,4 @@ export const useUpdateStore = defineStore('brandUpdateStore', () => {
     return {
         path, item
     }
-})
+}

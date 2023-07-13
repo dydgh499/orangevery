@@ -19,10 +19,10 @@ class Salesforce extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, AuthTrait, AttributeTrait;
 
-    protected   $table          = 'salesforces';
-    protected   $primaryKey     = 'id';
-    protected   $guarded        = [];
-    protected   $hidden = [
+    protected   $table      = 'salesforces';
+    protected   $primaryKey = 'id';
+    protected   $guarded    = [];
+    protected   $hidden     = [
         'user_pw',
     ];
 

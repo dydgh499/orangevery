@@ -12,5 +12,5 @@ class Classification extends Model
     protected   $table      = 'classifications';
     protected   $primaryKey = 'id';
     protected   $hidden     = ['is_delete'];
-    protected $guarded      = [];    
+    protected   $guarded    = [];    
 }

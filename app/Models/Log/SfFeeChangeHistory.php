@@ -3,14 +3,14 @@
 namespace App\Models\Log;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Salesforce;
-use DateTimeInterface;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Http\Traits\Models\AttributeTrait;
 
 class SfFeeChangeHistory extends Model
 {
-    use HasFactory;
+    use HasFactory, AttributeTrait;
     protected   $table      = 'sf_fee_change_histories';
     protected   $primaryKey = 'id';
     protected   $appends    = ['bf_sales_name', 'aft_sales_name'];
@@ -19,12 +19,7 @@ class SfFeeChangeHistory extends Model
         'bfSales',
         'aftSales',
     ];
-
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format("Y-m-d H:i:s");
-    }
-
+    
     public function bfSales()
     {
         return $this->belongsTo(Salesforce::class, 'bf_sales_id')->select(['id', 'sales_name']);

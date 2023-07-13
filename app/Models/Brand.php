@@ -12,10 +12,10 @@ use App\Http\Traits\Models\AttributeTrait;
 class Brand extends Model
 {
     use HasFactory, AttributeTrait;
-    protected   $table        = 'brands';
-    protected   $primaryKey   = 'id';
-    protected   $guarded      = [];
-    protected   $hidden = [];
+    protected   $table      = 'brands';
+    protected   $primaryKey = 'id';
+    protected   $guarded    = [];
+    protected   $hidden     = [];
 
     protected function PvOptions() : Attribute
     {

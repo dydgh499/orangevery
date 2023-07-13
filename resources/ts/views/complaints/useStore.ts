@@ -51,7 +51,7 @@ export const useSearchStore = defineStore('complaintSearchStore', () => {
     }
 })
 
-export const useUpdateStore = defineStore('complaintUpdateStore', () => {
+export const defaultItemInfo = () => {
     const path = 'complaints'
     const item = reactive<Complaint>({
         id: 0,
@@ -75,4 +75,4 @@ export const useUpdateStore = defineStore('complaintUpdateStore', () => {
     return {
         path, item
     }
-})
+}

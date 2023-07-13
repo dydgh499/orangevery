@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Manager;
 
 use App\Models\Merchandise;
 use App\Models\PaymentModule;
+use App\Models\Log\SfFeeChangeHistory;
+use App\Models\Log\SfFeeApplyHistory;
+
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\StoresTrait;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,7 +22,7 @@ use Illuminate\Support\Facades\DB;
  */
 class SalesforceBatchController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $merchandises, $payModules;
 
     public function __construct(Merchandise $merchandises, PaymentModule $payModules)
@@ -43,31 +47,47 @@ class SalesforceBatchController extends Controller
     public function setFee(Request $request)
     {
         $sales_key = $this->getSalesKeys($request);
+        $aft_trx_fee = $request->sales_fee/100;
+        $aft_sales_id = $request->id;
 
-        $mchts = $this->merchandises->where('brand_id', $request->user()->id)
+        $mchts = $this->merchandises->where('brand_id', $request->user()->brand_id)
                 ->where($sales_key['sales_id'], $request->id)
                 ->get();
 
-
-
-        $this->merchandises->where('brand_id', $request->user()->id)
+        $datas = [];
+        foreach($mchts as $mcht)
+        {
+            $js_mcht = json_decode(json_encode($mcht), true);
+            $bf_trx_fee = $js_mcht[$sales_key['sales_fee']];
+            $bf_sales_id = $mcht[$sales_key['sales_id']];            
+            array_push($datas, [
+                'brand_id' => $request->user()->brand_id,
+                'mcht_id'   => $js_mcht['id'],
+                'level'     => $request->level,
+                'bf_trx_fee' => $bf_trx_fee,
+                'aft_trx_fee' => $aft_trx_fee,
+                'bf_sales_id' => $bf_sales_id,
+                'aft_sales_id' => $aft_sales_id,
+                'change_status' => true,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+        }
+        $res = DB::transaction(function () use($sales_key, $datas, $request, $aft_sales_id, $aft_trx_fee) {
+            $this->merchandises->where('brand_id', $request->user()->brand_id)
                 ->where($sales_key['sales_id'], $request->id)
                 ->update([$sales_key['sales_fee'] => $request->sales_fee/100]);
-        /*
-        $bf_trx_fee = $mcht[$sales_key['sales_fee']];
-        $aft_trx_fee = $request->sales_fee/100;
-        $bf_sales_id = $mcht[$sales_key['sales_id']];
-        $aft_sales_id = $request->sales_id;
-
-        $data['bf_trx_fee']     = $bf_trx_fee;
-        $data['aft_trx_fee']    = $aft_trx_fee;
-        $udpt_data[$sales_key['sales_fee']] = $aft_trx_fee;
-
-        $data['bf_sales_id'] = $bf_sales_id;
-        $data['aft_sales_id'] = $aft_sales_id;
-        $udpt_data[$sales_key['sales_id']] = $aft_sales_id;
-        */
-        return $this->response(1);
+            $i_res = $this->manyInsert(new SfFeeChangeHistory(), $datas);
+            SfFeeApplyHistory::where('sales_id', $aft_sales_id)
+                ->update(['is_delete' => true]);
+            $c_apply_res = SfFeeApplyHistory::create([
+                'brand_id' => $request->user()->brand_id,
+                'sales_id' => $aft_sales_id,
+                'trx_fee'  => $aft_trx_fee,
+            ]);
+            return $i_res && $c_apply_res;
+        });
+        return $this->response($res ? 1 : 990);
     }
 
     /**
@@ -75,8 +95,11 @@ class SalesforceBatchController extends Controller
      */
     public function setCustomFilter(Request $request)
     {
-        return $this->response(1);
-
+        $sales_key = $this->getSalesKeys($request);
+        $res = $this->merchandises->where('brand_id', $request->user()->brand_id)
+            ->where($sales_key['sales_id'], $request->id)
+            ->update(['custom_id' => $request->custom_id]);
+        return $this->response($res ? 1 : 990);
     }
 
     /**
@@ -84,8 +107,16 @@ class SalesforceBatchController extends Controller
      */
     public function setAbnormalTransLimit(Request $request)
     {
+        $sales_key = $this->getSalesKeys($request);
+        $sales_id = 'merchandises.'.$sales_key['sales_id'];
+        $row = $this->payModules
+            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+            ->where('payment_modules.brand_id', $request->user()->brand_id)
+            ->where($sales_id, $request->id)
+            ->update([
+                'payment_modules.abnormal_trans_limit' => $request->abnormal_trans_limit
+            ]);
         return $this->response(1);
-
     }
 
     /**
@@ -93,8 +124,14 @@ class SalesforceBatchController extends Controller
      */
     public function setDupPayValidation(Request $request)
     {
+        $sales_key = $this->getSalesKeys($request);
+        $sales_id = 'merchandises.'.$sales_key['sales_id'];
+        $res = $this->payModules
+            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+            ->where('payment_modules.brand_id', $request->user()->brand_id)
+            ->where($sales_id, $request->id)
+            ->update(['payment_modules.pay_dupe_limit' => $request->pay_dupe_limit]);
         return $this->response(1);
-
     }
     
     /**
@@ -102,8 +139,22 @@ class SalesforceBatchController extends Controller
      */
     public function setPayLimit(Request $request)
     {
-        return $this->response(1);
+        $type = 'pay_'.$request->type.'_limit';
+        if($request->type == 'day')
+            $limit = $request->pay_day_limit;
+        else if($request->type == 'month')
+            $limit = $request->pay_month_limit;
+        else if($request->type == 'year')
+            $limit = $request->pay_year_limit;
 
+        $sales_key = $this->getSalesKeys($request);
+        $sales_id = 'merchandises.'.$sales_key['sales_id'];
+        $row = $this->payModules
+            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+            ->where('payment_modules.brand_id', $request->user()->brand_id)
+            ->where($sales_id, $request->id)
+            ->update(['payment_modules.'.$type => $limit]);
+        return $this->response(1);
     }
 
     /**
@@ -111,8 +162,17 @@ class SalesforceBatchController extends Controller
      */
     public function setForbiddenPayTime(Request $request)
     {
+        $sales_key = $this->getSalesKeys($request);
+        $sales_id = 'merchandises.'.$sales_key['sales_id'];
+        $row = $this->payModules
+            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+            ->where('payment_modules.brand_id', $request->user()->brand_id)
+            ->where($sales_id, $request->id)
+            ->update([
+                'payment_modules.pay_disable_s_tm' => $request->pay_disable_s_tm,
+                'payment_modules.pay_disable_e_tm' => $request->pay_disable_e_tm,
+            ]);
         return $this->response(1);
-
     }
 
     /**
@@ -120,7 +180,13 @@ class SalesforceBatchController extends Controller
      */
     public function setShowPayView(Request $request)
     {
+        $sales_key = $this->getSalesKeys($request);
+        $sales_id = 'merchandises.'.$sales_key['sales_id'];
+        $row = $this->payModules
+            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+            ->where('payment_modules.brand_id', $request->user()->brand_id)
+            ->where($sales_id, $request->id)
+            ->update(['payment_modules.show_pay_view' => $request->show_pay_view]);
         return $this->response(1);
-
     }
 }

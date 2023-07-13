@@ -47,7 +47,7 @@ export const useSearchStore = defineStore('operatorSearchStore', () => {
     }
 })
 
-export const useUpdateStore = defineStore('operatorUpdateStore', () => {
+export const defaultItemInfo = () => {
     const path  = 'services/operators'
     const item  = reactive<Operator>({
         level: 35,
@@ -62,4 +62,4 @@ export const useUpdateStore = defineStore('operatorUpdateStore', () => {
     return {
         path, item
     }
-})
+}

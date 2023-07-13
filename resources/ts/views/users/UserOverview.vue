@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { businessNumValidator, lengthValidatorV2, requiredValidator, nullValidator, integerValidator } from '@validators'
-import type { UserPropertie } from '@/views/types'
+import type { UserPropertie, Options } from '@/views/types'
 import FileInput from '@/layouts/utils/FileInput.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
@@ -13,11 +13,17 @@ interface Props {
 const props = defineProps<Props>()
 
 const is_show = ref(false)
-const bank = ref({ code: props.item.acct_bank_code, title: props.item.acct_bank_name })
+const bank = ref(<any>({ code: null, title: '선택안함' }))
 
-watchEffect(() => {
-    props.item.acct_bank_code = bank.value.code
-    props.item.acct_bank_name = bank.value.title
+onMounted(async() => {
+    watchEffect(() => {
+        if(props.item.acct_bank_code !== null)
+            bank.value = banks.find(obj => obj.code == props.item.acct_bank_code)
+    })
+    watchEffect(() => {
+        props.item.acct_bank_code = bank.value.code
+        props.item.acct_bank_name = bank.value.title
+    })
 })
 </script>
 <template>
@@ -71,7 +77,7 @@ watchEffect(() => {
                             <template #input>
                                 <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="text"
                                     prepend-inner-icon="tabler-device-mobile" placeholder="010-0000-0000"
-                                    persistent-placeholder :rules="[integerValidator]" maxlength="13" />
+                                    persistent-placeholder maxlength="13" />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 사업자 번호 -->

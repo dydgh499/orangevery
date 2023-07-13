@@ -2,9 +2,9 @@
 <script setup lang="ts">
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import PostOverview from '@/views/posts/PostOverview.vue'
-import { useUpdateStore } from '@/views/posts/useStore'
+import { defaultItemInfo } from '@/views/posts/useStore'
 import type { Tab } from '@/views/types'
-const {path, item } = useUpdateStore()
+const {path, item } = defaultItemInfo()
 const tabs = <Tab[]>([
     { icon: 'fxemoji-notepage', title: '게시글 정보' },
 ])

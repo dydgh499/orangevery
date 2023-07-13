@@ -16,14 +16,10 @@ class Operator extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, AuthTrait, AttributeTrait;
 
-    protected   $table        = 'operators';
-    protected   $primaryKey   = 'id';
-    protected   $guarded      = [];
-    protected   $hidden = [
+    protected   $table      = 'operators';
+    protected   $primaryKey = 'id';
+    protected   $guarded    = [];
+    protected   $hidden     = [
         'user_pw',
-    ];
-    protected   $casts = [
-        'created_at' => "datetime:Y-m-d H:m:s",
-        'updated_at' => "datetime:Y-m-d H:m:s",
     ];
 }

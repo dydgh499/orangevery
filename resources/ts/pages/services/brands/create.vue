@@ -5,10 +5,10 @@ import BrandDesignOverview from '@/views/services/brands/BrandDesignOverview.vue
 import BrandOptionOverview from '@/views/services/brands/BrandOptionOverview.vue'
 import BrandAuthOverview from '@/views/services/brands/BrandAuthOverview.vue'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
-import { useUpdateStore } from '@/views/services/brands/useStore'
+import { defaultItemInfo } from '@/views/services/brands/useStore'
 import type { Tab } from '@/views/types'
 
-const { path, item } = useUpdateStore()
+const { path, item } = defaultItemInfo()
 const tabs = <Tab[]>([
     { icon: 'ph-buildings', title: '운영사정보' },
     { icon: 'tabler-color-filter', title: '테마디자인' },

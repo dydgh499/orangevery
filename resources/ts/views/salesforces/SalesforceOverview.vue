@@ -102,7 +102,7 @@ const tax_types = settleTaxTypes()
                                     </BooleanRadio>
                                 </template>
                             </CreateHalfVCol>
-                            <SalesforceBatchOverview :item="props.item"/>
+                                <SalesforceBatchOverview :item="props.item"/>
                         </VRow>
                     </VCol>
                 </VCardItem>

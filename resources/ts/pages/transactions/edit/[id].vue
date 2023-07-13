@@ -2,9 +2,9 @@
 <script setup lang="ts">
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import TransactionsOverview from '@/views/transactions/TransactionsOverview.vue'
-import { useUpdateStore } from '@/views/transactions/useStore'
+import { defaultItemInfo } from '@/views/transactions/useStore'
 import type { Tab } from '@/views/types'
-const {path, item } = useUpdateStore()
+const {path, item } = defaultItemInfo()
 const tabs = <Tab[]>([
     { icon: 'ic-outline-payments', title: '매출 정보' },
 ])

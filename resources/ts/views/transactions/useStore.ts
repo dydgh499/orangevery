@@ -128,7 +128,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     }
 })
 
-export const useUpdateStore = defineStore('transUpdateStore', () => {
+export const defaultItemInfo = () => {
     const path = 'transactions'
     const item = reactive<Transaction>({
         id: 0,
@@ -186,4 +186,4 @@ export const useUpdateStore = defineStore('transUpdateStore', () => {
     return {
         path, item
     }
-})
+}

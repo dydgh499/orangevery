@@ -3,9 +3,9 @@
 import UserOverview from '@/views/users/UserOverview.vue'
 import SalesforceOverview from '@/views/salesforces/SalesforceOverview.vue'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
-import { useUpdateStore } from '@/views/salesforces/useStore'
+import { defaultItemInfo } from '@/views/salesforces/useStore'
 
-const {path, item } = useUpdateStore()
+const {path, item } = defaultItemInfo()
 const tabs = [
     { icon: 'tabler-user-check', title: '개인정보' },
     { icon: 'ph-buildings', title: '영업점정보' },

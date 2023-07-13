@@ -1,10 +1,10 @@
 
 <script setup lang="ts">
 import OperatorOverview from '@/views/services/operators/OperatorOverview.vue'
-import { useUpdateStore } from '@/views/services/operators/useStore'
+import { defaultItemInfo } from '@/views/services/operators/useStore'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import type { Tab } from '@/views/types'
-const {path, item } = useUpdateStore()
+const {path, item } = defaultItemInfo()
 const tabs = <Tab[]>([
     { icon: 'tabler-user-check', title: '개인정보' },
 ])

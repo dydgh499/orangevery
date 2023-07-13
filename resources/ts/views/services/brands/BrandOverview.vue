@@ -68,7 +68,7 @@ watchEffect(() => {
                             <template #name>휴대폰번호</template>
                             <template #input>
                                 <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="number"
-                                    prepend-inner-icon="tabler-device-mobile" placeholder="숫자만 입력해주세요."
+                                    prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호 입력"
                                     persistent-placeholder :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>

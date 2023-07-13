@@ -4,18 +4,13 @@ namespace App\Models\Log;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use DateTimeInterface;
+use App\Http\Traits\Models\AttributeTrait;
 
 class NotiSendHistory extends Model
 {
-    use HasFactory;
+    use HasFactory, AttributeTrait;
     protected   $table      = 'noti_send_histories';
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
     protected   $hidden     = [];
-
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format("Y-m-d H:i:s");
-    }
 }

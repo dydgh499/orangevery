@@ -4,11 +4,11 @@ namespace App\Models\Log;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use DateTimeInterface;
+use App\Http\Traits\Models\AttributeTrait;
 
 class FailTransaction extends Model
 {
-    use HasFactory;
+    use HasFactory, AttributeTrait;
     protected   $table      = 'fail_transactions';
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
@@ -18,11 +18,6 @@ class FailTransaction extends Model
     protected   $hidden     = [
         'mcht', 
     ];
-
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format("Y-m-d H:i:s");
-    }
 
     public function getTrxDttmAttribute()
     {

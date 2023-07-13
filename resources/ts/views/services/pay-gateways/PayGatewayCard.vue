@@ -115,7 +115,7 @@ const filterPss = computed(() => {
                             </VCol>
                             <VCol>
                                 <VTextField v-model="props.item.phone_num" type="text"
-                                    prepend-inner-icon="tabler-device-mobile" placeholder="숫자만 입력해주세요."
+                                    prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호 입력"
                                     persistent-placeholder :rules="[requiredValidator]" />
 
                             </VCol>
