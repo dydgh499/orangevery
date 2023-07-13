@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Models\Salesforce;
+use App\Models\Log\SfFeeApplyHistory;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
@@ -202,6 +203,14 @@ class SalesforceController extends Controller
             $data["level_$level"] = isset($grouped[$level]) ? $grouped[$level] : [];
         }
         return $this->response(0, $data);
+    }
+
+    public function feeApplyHistories(Request $request)
+    {
+        $histories = SfFeeApplyHistory::where('brand_id', $request->user()->brand_id)
+                ->where('is_delete', false)
+                ->get();
+        return $this->response(0, $histories);
     }
 
     public function passwordChange(Request $request)
