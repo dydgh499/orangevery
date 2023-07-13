@@ -4,11 +4,11 @@ import type { ThemeSwitcherTheme } from '@layouts/types'
 const themes: ThemeSwitcherTheme[] = [
   {
     name: 'light',
-    icon: 'tabler-sun-high',
+    icon: 'line-md:moon-alt-to-sunny-outline-loop-transition',
   },
   {
     name: 'dark',
-    icon: 'tabler-moon',
+    icon: 'line-md:moon-loop',
   },
 ]
 </script>

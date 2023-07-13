@@ -13,40 +13,7 @@ const { store, head, exporter } = useSearchStore()
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
-const metas = [
-    {
-        icon: 'tabler-user',
-        color: 'primary',
-        title: '금월 추가된 가맹점',
-        stats: '21,459',
-        percentage: +29,
-        subtitle: 'Total Users',
-    },
-    {
-        icon: 'tabler-user-plus',
-        color: 'error',
-        title: '금주 추가된 가맹점',
-        stats: '4,567',
-        percentage: +18,
-        subtitle: 'Last week analytics',
-    },
-    {
-        icon: 'tabler-user-check',
-        color: 'success',
-        title: '금월 감소한 가맹점',
-        stats: '19,860',
-        percentage: -14,
-        subtitle: 'Last week analytics',
-    },
-    {
-        icon: 'tabler-user-exclamation',
-        color: 'warning',
-        title: '금주 감소한 가맹점',
-        stats: '237',
-        percentage: +42,
-        subtitle: 'Last week analytics',
-    },
-]
+
 const all_levels = allLevels()
 const isMchtUnableCol = (key: string) => {
     if(getUserLevel() > 10)
