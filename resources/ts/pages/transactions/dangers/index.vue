@@ -14,7 +14,6 @@ const metas = [
         title: '금월 발생한 이상거래',
         stats: '0',
         percentage: +0,
-        subtitle: 'Total Users',
     },
     {
         icon: 'jam-triangle-danger',
@@ -22,7 +21,6 @@ const metas = [
         title: '금주 발생한 이상거래',
         stats: '0',
         percentage: +0,
-        subtitle: 'Last week analytics',
     },
     {
         icon: 'jam-triangle-danger',
@@ -30,7 +28,6 @@ const metas = [
         title: '금월 감소한 이상거래',
         stats: '0',
         percentage: -0,
-        subtitle: 'Last week analytics',
     },
     {
         icon: 'jam-triangle-danger',
@@ -38,7 +35,6 @@ const metas = [
         title: '금주 감소한 이상거래',
         stats: '0',
         percentage: +0,
-        subtitle: 'Last week analytics',
     },
 ]
 </script>

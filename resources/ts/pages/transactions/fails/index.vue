@@ -17,7 +17,6 @@ const metas = [
         title: '금월 발생한 결제실패',
         stats: '0',
         percentage: +0,
-        subtitle: 'Total Users',
     },
     {
         icon: 'carbon:ai-status-failed',
@@ -25,7 +24,6 @@ const metas = [
         title: '금주 발생한 결제실패',
         stats: '0',
         percentage: +0,
-        subtitle: 'Last week analytics',
     },
     {
         icon: 'carbon:ai-status-failed',
@@ -33,7 +31,6 @@ const metas = [
         title: '금월 감소한 결제실패',
         stats: '0',
         percentage: -0,
-        subtitle: 'Last week analytics',
     },
     {
         icon: 'carbon:ai-status-failed',
@@ -41,7 +38,6 @@ const metas = [
         title: '금주 감소한 결제실패',
         stats: '0',
         percentage: +0,
-        subtitle: 'Last week analytics',
     },
 ]
 </script>
