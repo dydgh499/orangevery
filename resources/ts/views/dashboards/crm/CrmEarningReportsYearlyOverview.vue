@@ -49,7 +49,7 @@ const getSeries = (dates: string[], col: string, sec_col?: string) => {
     const amount: number[] = []; // 결과를 저장할 배열
     for (let i = 0; i < dates.length; i++) {
         const data = monthly_transactions[dates[i]][col]
-        amount.unshift((sec_col ? data[sec_col] : data) / 10000000)
+        amount.unshift((sec_col ? data[sec_col] : data) / 100000000)
     }
     return amount
 }
