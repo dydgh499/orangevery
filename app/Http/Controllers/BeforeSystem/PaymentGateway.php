@@ -91,6 +91,7 @@ class PaymentGateway
     public function setPayvery($payvery_table, $brand_id)
     {
         $items = $this->getPayveryFormat($this->paywell);
+        logging($items);
         $res = $this->manyInsert($payvery_table, $items);
         if($res)
         {
