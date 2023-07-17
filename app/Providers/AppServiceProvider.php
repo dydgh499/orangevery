@@ -24,6 +24,12 @@ class AppServiceProvider extends ServiceProvider
                 $app->make(PaymentGateway::class),
                 $app->make(PaymentSection::class),
             );
+        });        
+        $this->app->bind(FeeChangeHistoryController::class, function ($app) {
+            return new FeeChangeHistoryController(
+            $app->make(MchtFeeChangeHistory::class),
+            $app->make(SfFeeChangeHistory::class),
+            );
         });
     }
 
