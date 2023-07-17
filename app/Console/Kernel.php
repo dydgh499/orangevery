@@ -5,6 +5,8 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
+use App\Models\Log\MchtFeeChangeHistory;
+use App\Models\Log\SfFeeChangeHistory;
 
 class Kernel extends ConsoleKernel
 {
@@ -17,7 +19,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('sanctum:prune-expired --hours=35')->daily();
-        $schedule->call(new FeeChangeHistoryController)->daily();        
+        $controller = new FeeChangeHistoryController(new MchtFeeChangeHistory, new SfFeeChangeHistory);
+        $controller->__invoke();
     }
 
     /**
