@@ -64,7 +64,7 @@ class BeforeSystemRegisterJob implements ShouldQueue
         $this->payvery = DB::connection('mysql');
         $result = DB::transaction(function () {
             $this->payvery->table('brands')->where('id', $this->brand_id)->update(['is_transfer'=>1]);
-            setBrandByDNS($current_brand->dns);
+            setBrandByDNS($dns);
     
             $brand = new Brand();
             $brand->getPaywell($this->paywell->table('service'), $this->brand_id, $this->before_brand_id);
