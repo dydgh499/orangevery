@@ -5,6 +5,8 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
+use App\Models\Log\MchtFeeChangeHistory;
+use App\Models\Log\SfFeeChangeHistory;
 
 class Kernel extends ConsoleKernel
 {
