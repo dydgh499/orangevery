@@ -13,6 +13,7 @@ export const useSearchStore = defineStore('salesFeeHistorySearchStore', () => {
         'aft_sales_name' : '변경 영업점 상호',
         'bf_trx_fee' : '이전 수수료',
         'aft_trx_fee' : '변경 수수료',
+        'change_status' : '변경상태',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
         'extra_col': '더보기',

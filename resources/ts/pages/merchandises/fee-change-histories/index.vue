@@ -46,8 +46,8 @@ provide('exporter', exporter)
                                 #{{ item[_key] }}
                             </span>
                             <span v-else-if="_key == `change_status`">
-                                <VChip :color="store.booleanTypeColor(item[_key])" >
-                                    {{ item[_key] ? '변경예약' : '변경완료' }}
+                                <VChip :color="store.booleanTypeColor(!item[_key])" >
+                                    {{ item[_key] ? '변경완료' : '변경예약' }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key.includes('_fee')"> 
