@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import Preview from '@/layouts/utils/Preview.vue'
-import { Pagination, EffectCoverflow } from 'swiper'
+import { Pagination, EffectCoverflow, Navigation } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -19,7 +19,7 @@ const props = defineProps<Props>()
 const files = ref(<File[]>([]))
 const preview = ref(<string>(props.default_img))
 const swiper = ref()
-const modules = [Pagination, EffectCoverflow]
+const modules = [Pagination, EffectCoverflow, Navigation]
 const previewStyle = `
     border: 2px solid rgb(238, 238, 238);
     border-radius: 0.5em;
@@ -64,7 +64,7 @@ watchEffect(() => {
         <br>
         <br>
         <div class="coverflow-example">
-            <Swiper class="swiper" :modules="modules" :pagination="true" :effect="'coverflow'" :grab-cursor="true"
+            <Swiper class="swiper" :modules="modules" :pagination="true" :effect="'coverflow'" :grab-cursor="true" :navigation="true" 
                 :centered-slides="true" :slides-per-view="'auto'" @swiper="getRef" :coverflow-effect="{
                     rotate: 50,
                     stretch: 0,

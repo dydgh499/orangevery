@@ -69,7 +69,7 @@ defineExpose({
         </div>
         <!-- Dialog Content -->
             <div ref="card">
-                <VCard style="background: rgba(0, 0, 0, 0%); box-shadow: 0 0 0 0;">
+                <VCard style=" padding: 0.3em; background: rgba(0, 0, 0, 0%); box-shadow: 0 0 0 0;">
                 <VCardText class="sales-slip-rect" :style="`background-image: url(${background})`">
                     <VCol class="font-weight-bold v-col-custom big-font text-center">
                         신용카드 영수증

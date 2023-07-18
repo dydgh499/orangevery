@@ -33,7 +33,7 @@ const vuetifyTheme = useTheme()
 const initialThemeColors = JSON.parse(JSON.stringify(vuetifyTheme.current.value.colors))
 const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'error']
 
-
+console.log(FooterType)
 /*
   ℹ️ This will return static color for first indexed color based on theme
   If we don't make first (primary) color as static then when another color is selected then we will have two theme colors with same hex codes and it will show two check marks
@@ -179,7 +179,6 @@ const headerValues = computed(() => {
             />
           </VRadioGroup>
           <!-- 👉 Footer Type -->
-          <!--
           <h6 class="mt-3 text-base font-weight-regular">
             푸터 타입
           </h6>
@@ -194,7 +193,6 @@ const headerValues = computed(() => {
               :value="val"
             />
           </VRadioGroup>
-          -->
           <!-- 👉 Navbar blur -->
           <br>
           <div class="d-flex align-center justify-space-between">

@@ -31,7 +31,6 @@ const getSeries = (idays: string[], week: TransWeekChart) => {
     }
     series.value[0].data = datas
     week_amount.value = amount
-    console.log(week_amount.value)
 }
 
 const chartOptions = computed(() => {

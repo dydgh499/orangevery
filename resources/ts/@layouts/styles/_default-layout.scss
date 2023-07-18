@@ -19,10 +19,6 @@ body {
 }
 
 .layout-footer {
-  .footer-content-container {
-    block-size: variables.$layout-vertical-nav-footer-height;
-  }
-
   .layout-footer-sticky & {
     position: sticky;
     inset-block-end: 0;
