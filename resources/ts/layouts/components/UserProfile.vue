@@ -37,7 +37,6 @@ const logout = async () => {
     location.href = '/'
 }
 user_info.value.profile_img = user_info.value.profile_img ? user_info.value.profile_img : avatars[Math.floor(Math.random() * avatars.length)]
-console.log(user_info.value.profile_img )
 </script>
 
 <template>
@@ -101,9 +100,15 @@ console.log(user_info.value.profile_img )
         <PasswordChangeDialog ref="password" />
     </VBadge>
 </template>
-<style lang="scss" scoped>
+<style scoped>
 .custom-link {
   color: inherit;
   text-decoration: none;
+}
+
+/deep/ .v-overlay__content {
+  inset-inline-end: 1.5em !important;
+  inset-inline-start: 0 !important;
+  margin-inline-start: auto !important;
 }
 </style>

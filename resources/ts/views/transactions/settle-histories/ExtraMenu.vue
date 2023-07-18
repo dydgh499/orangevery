@@ -77,7 +77,7 @@ const download = async () => {
 <template>
     <VBtn icon size="x-small" color="default" variant="text">
         <VIcon size="22" icon="tabler-dots-vertical" />
-        <VMenu activator="parent">
+        <VMenu activator="parent" width="230" offset="14px">
             <VList>
                 <VListItem value="deposit" @click="deposit()">
                     <template #prepend>
@@ -104,3 +104,10 @@ const download = async () => {
         </VMenu>
     </VBtn>
 </template>
+<style scoped>
+/deep/ .v-overlay__content {
+  inset-inline-end: 1.5em !important;
+  inset-inline-start: 0 !important;
+  margin-inline-start: auto !important;
+}
+</style>

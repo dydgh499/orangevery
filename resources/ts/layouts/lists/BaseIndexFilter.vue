@@ -30,7 +30,7 @@ else if (props.is_range_date == false)
                     <template v-if="props.is_range_date == true">
                         <VCol cols="12" sm="3" md="1">
                             <AppDateTimePicker v-model="store.params.s_dt" prepend-inner-icon="ic-baseline-calendar-today"
-                                label="검색 시작일" />
+                                label="검색 시작일"/>
                         </VCol>
                         <VCol cols="12" sm="3" md="1">
                             <AppDateTimePicker v-model="store.params.e_dt" prepend-inner-icon="ic-baseline-calendar-today"

@@ -71,7 +71,7 @@ const getTitleStatus = computed(() => {
     </VBadge>
 </template>
 
-<style lang="scss" scoped>
+<style  scoped>
 .notification-section {
   padding: 14px !important;
 }
@@ -79,5 +79,11 @@ const getTitleStatus = computed(() => {
 .custom-link {
   color: inherit;
   text-decoration: none;
+}
+
+/deep/ .v-overlay__content {
+  inset-inline-end: 1.5em !important;
+  inset-inline-start: 0 !important;
+  margin-inline-start: auto !important;
 }
 </style>

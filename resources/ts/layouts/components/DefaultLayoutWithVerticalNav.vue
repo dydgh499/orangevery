@@ -4,8 +4,9 @@ import { useThemeConfig } from '@core/composable/useThemeConfig'
 
 // Components
 import Footer from '@/layouts/components/Footer.vue'
-import NavBarNotifications from '@/layouts/components/NavBarNotifications.vue'
+import NavbarNotifications from '@/layouts/components/NavbarNotifications.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
+import NavbarZoomSwitcher from '@/layouts/components/NavbarZoomSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
 
 // @layouts plugin
@@ -49,8 +50,9 @@ const { width: windowWidth } = useWindowSize()
                     <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>님 안녕하세요!
                 </div>
                 <VSpacer />
+                <NavbarZoomSwitcher />
                 <NavbarThemeSwitcher />
-                <NavBarNotifications class="me-2" v-if="user_info.level >= 35"/>
+                <NavbarNotifications class="me-2" v-if="user_info.level >= 35"/>
                 <UserProfile />
             </div>
         </template>

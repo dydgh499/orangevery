@@ -10,7 +10,7 @@ const password = <any>(inject('password'))
 <template>
     <VBtn icon size="x-small" color="default" variant="text">
         <VIcon size="22" icon="tabler-dots-vertical" />
-        <VMenu activator="parent">
+        <VMenu activator="parent" width="230" offset="14px">
             <VList>
                 <VListItem value="password" @click="password.show(props.id, type)">
                     <template #prepend>
@@ -22,3 +22,10 @@ const password = <any>(inject('password'))
         </VMenu>
     </VBtn>
 </template>
+<style scoped>
+/deep/ .v-overlay__content {
+  inset-inline-end: 1.5em !important;
+  inset-inline-start: 0 !important;
+  margin-inline-start: auto !important;
+}
+</style>
