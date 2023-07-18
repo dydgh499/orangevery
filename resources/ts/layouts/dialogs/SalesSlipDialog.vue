@@ -68,9 +68,9 @@ defineExpose({
             <DialogCloseBtn @click="visible = !visible" />
         </div>
         <!-- Dialog Content -->
-            <div ref="card">
+            <div ref="card"  style="background: rgba(0, 0, 0, 0%); box-shadow: 0 0 0 0;">
                 <VCard style=" padding: 0.3em; background: rgba(0, 0, 0, 0%); box-shadow: 0 0 0 0;">
-                <VCardText class="sales-slip-rect" :style="`background-image: url(${background})`">
+                <VCardText class="sales-slip-rect" :style="`background-image: url(${background}); box-shadow: 0 0 0 0;`">
                     <VCol class="font-weight-bold v-col-custom big-font text-center">
                         신용카드 영수증
                     </VCol>
