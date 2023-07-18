@@ -67,7 +67,7 @@ class CreateTransactionsTable extends Migration
             $table->string('ord_num', 100)->default('')->comment('주문번호');
             $table->string('mid', 100)->index()->default('')->comment('MID');
             $table->string('tid', 100)->index()->default('')->comment('장비 ID');
-            $table->string('trx_id', 100)->index()->default('')->comment('거래번호');
+            $table->string('trx_id', 100)->default('')->comment('거래번호');
             $table->string('ori_trx_id', 100)->nullable()->comment('원거래번호');
             $table->string('card_num', 100)->comment('거래 카드번호');
             $table->string('issuer', 20)->nullable()->comment('발급사');

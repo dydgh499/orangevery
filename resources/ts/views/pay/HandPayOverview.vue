@@ -45,18 +45,16 @@ const pay = async () => {
                 sale_slip.value.installment = r.data.installment
                 sale_slip.value.trx_dttm = r.data.trx_dttm
                 sale_slip.value.is_cancel = Boolean(r.data.is_cancel)
-                sale_slip.value.mcht = {
-                    id: 0,
-                    addr: props.merchandise.addr,
-                    business_num: props.merchandise.business_num,
-                    resident_num: props.merchandise.resident_num,
-                    mcht_name: props.merchandise.mcht_name,
-                    nick_name: props.merchandise.nick_name,
-                    is_show_fee: props.merchandise.is_show_fee,
-                    use_saleslip_prov: props.merchandise.use_saleslip_prov,
-                    use_saleslip_sell: props.merchandise.use_saleslip_sell,
-                    user_name: props.merchandise.user_name,
-                }
+                
+                sale_slip.value.addr = props.merchandise.addr
+                sale_slip.value.business_num = props.merchandise.business_num
+                sale_slip.value.resident_num = props.merchandise.resident_num
+                sale_slip.value.mcht_name = props.merchandise.mcht_name
+                sale_slip.value.nick_name = props.merchandise.nick_name
+                sale_slip.value.is_show_fee = props.merchandise.is_show_fee
+                sale_slip.value.use_saleslip_prov = props.merchandise.use_saleslip_prov
+                sale_slip.value.use_saleslip_sell = props.merchandise.use_saleslip_sell
+
                 salesslip.value.show(sale_slip.value)
                 snackbar.value.show('성공하였습니다.', 'success')
             }

@@ -141,19 +141,19 @@ defineExpose({
                     <VDivider :thickness="thickness" class="mb-2" />
                     <DialogHalfVCol class="cell">
                         <template #name>상호</template>
-                        <template #input>{{ trans?.mcht.use_saleslip_sell ?  pg?.company_name : trans?.mcht_name }}</template>
+                        <template #input>{{ trans?.use_saleslip_sell ?  pg?.company_name : trans?.mcht_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>사업자번호</template>
-                        <template #input>{{ trans?.mcht.use_saleslip_sell ? pg?.business_num : trans?.business_num }}</template>
+                        <template #input>{{ trans?.use_saleslip_sell ? pg?.business_num : trans?.business_num }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>대표자명</template>
-                        <template #input>{{ trans?.mcht.use_saleslip_sell ? pg?.rep_name : trans?.nick_name }}</template>
+                        <template #input>{{ trans?.use_saleslip_sell ? pg?.rep_name : trans?.nick_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>주소</template>
-                        <template #input>{{ trans?.mcht.use_saleslip_sell ? pg?.addr : trans?.addr}}</template>
+                        <template #input>{{ trans?.use_saleslip_sell ? pg?.addr : trans?.addr}}</template>
                     </DialogHalfVCol>
                     <VCol class="text-primary font-weight-bold v-col-custom">
                         공급자(결제대행사) 정보
@@ -161,19 +161,19 @@ defineExpose({
                     <VDivider :thickness="thickness" class="mb-2" />
                     <DialogHalfVCol class="cell">
                         <template #name>상호</template>
-                        <template #input>{{ trans?.mcht.use_saleslip_prov ? pg?.company_name : trans?.mcht_name }}</template>
+                        <template #input>{{ trans?.use_saleslip_prov ? pg?.company_name : trans?.mcht_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>사업자번호</template>
-                        <template #input>{{ trans?.mcht.use_saleslip_prov ? pg?.business_num : trans?.business_num }}</template>
+                        <template #input>{{ trans?.use_saleslip_prov ? pg?.business_num : trans?.business_num }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>대표자명</template>
-                        <template #input>{{ trans?.mcht.use_saleslip_prov ? pg?.rep_name : trans?.nick_name }}</template>
+                        <template #input>{{ trans?.use_saleslip_prov ? pg?.rep_name : trans?.nick_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell mb-2">
                         <template #name>주소</template>
-                        <template #input>{{trans?.mcht.use_saleslip_prov ?  pg?.addr : trans?.addr }}</template>
+                        <template #input>{{trans?.use_saleslip_prov ?  pg?.addr : trans?.addr }}</template>
                     </DialogHalfVCol>
                     <VDivider :thickness="1" />
                     <VCol style="font-size: 0.9em;">

@@ -361,18 +361,9 @@ export interface Transaction {
 }
 
 export interface SalesSlip extends Transaction{
-    mcht: {
-       addr: string, 
-       business_num: string, 
-       resident_num: string, 
-       id: number, 
-       mcht_name: string, 
-       nick_name: string, 
-       is_show_fee: boolean, 
-       use_saleslip_prov: boolean, 
-       use_saleslip_sell: boolean, 
-       user_name: string, 
-    }
+    is_show_fee: boolean, 
+    use_saleslip_prov: boolean, 
+    use_saleslip_sell: boolean, 
 }
 
 export interface Danger {

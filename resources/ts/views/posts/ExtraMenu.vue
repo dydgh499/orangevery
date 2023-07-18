@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import type { SalesSlip } from '@/views/types'
-import { user_info } from '@axios'
+import type { Post } from '@/views/types'
 
 interface Props {
     item: Post,
