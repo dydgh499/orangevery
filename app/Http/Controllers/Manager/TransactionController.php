@@ -80,6 +80,14 @@ class TransactionController extends Controller
         ]);
         $query  = $this->commonSelect($request);
         $data   = $this->getIndexData($request, $query);
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
+
+        foreach($data['content'] as $content) 
+        {
+            $content->append(['total_trx_amount']);
+        }
         $chart  = getDefaultTransChartFormat($data['content']);
         return $this->response(0, $chart);
     }

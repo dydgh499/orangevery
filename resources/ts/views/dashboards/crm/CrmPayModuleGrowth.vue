@@ -153,22 +153,6 @@ const chartOptions = computed(() => {
         <VCardItem class="pb-0">
             <VCardTitle>결제모듈 사용량</VCardTitle>
             <VCardSubtitle>10개월간 결제모듈 사용량 개요</VCardSubtitle>
-
-            <template #append>
-                <div class="mt-n4 me-n2">
-                    <VBtn icon size="x-small" variant="plain" color="default">
-                        <VIcon size="22" icon="tabler-dots-vertical" />
-
-                        <VMenu activator="parent">
-                            <VList>
-                                <VListItem v-for="(item, index) in ['View More', 'Delete']" :key="index" :value="index">
-                                    <VListItemTitle>{{ item }}</VListItemTitle>
-                                </VListItem>
-                            </VList>
-                        </VMenu>
-                    </VBtn>
-                </div>
-            </template>
         </VCardItem>
 
         <VCardText>

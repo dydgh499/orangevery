@@ -2,23 +2,24 @@
 import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
 import { useSearchStore } from '@/views/transactions/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import { salesLevels } from '@/views/salesforces/useStore'
 import ExtraMenu from '@/views/transactions/ExtraMenu.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
 import CancelTransDialog from '@/layouts/dialogs/CancelTransDialog.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import { allLevels } from '@/views/salesforces/useStore'
 import { user_info } from '@axios'
+import type { Options } from '@/views/types'
 import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
-const all_levels = allLevels()
 const salesslip = ref()
 const cancelTran = ref()
 const mcht_settle_type = ref({ id: null, name: '전체' })
+const levels = corp.pv_options.auth.levels
 
 provide('store', store)
 provide('head', head)
@@ -63,6 +64,17 @@ const metas = ref([
         subtitle: '0건',
     },
 ])
+const getAllLevels = () => {
+    const sales = salesLevels()
+    if(user_info.value.level >= 10)
+        sales.unshift(<Options>({id: 10, title: '가맹점'}))
+    if(user_info.value.level >= 35) {
+        sales.push(<Options>({id: 40, title: '본사'}))
+    }
+    if(levels.dev_use && user_info.value.level >= 35)
+        sales.push(<Options>({id: 50, title: levels.dev_name}))
+    return sales
+}
 const isSalesCol = (key: string) => {
     const sales_cols = ['amount', 'trx_amount', 'mcht_settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
     for (let i = 0; i < sales_cols.length; i++) {
@@ -94,6 +106,8 @@ onMounted(() => {
 watchEffect(() => {
     store.params.mcht_settle_type = mcht_settle_type.value.id
 })
+
+const all_levels = getAllLevels()
 </script>
 <template>
     <div>
@@ -108,12 +122,12 @@ watchEffect(() => {
                         </VCol>
                     </template>
                     <template #extra_right>
-                    <VCol cols="12" sm="3">
-                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
-                            :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 선택" item-title="name" item-value="id"
-                        return-object />
-                    </VCol>
-                </template>
+                        <VCol cols="12" sm="3">
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
+                                :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 선택" item-title="name" item-value="id"
+                            return-object />
+                        </VCol>
+                    </template>
                 </BaseIndexFilterCard>
             </template>
             <template #headers>

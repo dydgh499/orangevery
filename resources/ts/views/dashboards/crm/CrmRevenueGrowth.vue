@@ -27,9 +27,11 @@ const getSeries = (idays: string[], week: TransWeekChart) => {
     for (let i = 0; i < idays.length; i++) {
         datas.push(week[idays[i]].amount)
         amount += week[idays[i]].amount
+        console.log(week[idays[i]].amount)
     }
     series.value[0].data = datas
     week_amount.value = amount
+    console.log(week_amount.value)
 }
 
 const chartOptions = computed(() => {

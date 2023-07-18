@@ -131,12 +131,12 @@
             $query = $query->where($table.'ps_id', $request->ps_id);
         if($request->settle_type)
             $query = $query->where($table.'settle_type', $request->settle_type);
+        if($request->mcht_settle_type)
+            $query = $query->where($table.'mcht_settle_type', $request->mcht_settle_type);
         if($request->terminal_id)
             $query = $query->where($table.'terminal_id', $request->terminal_id);
         if($request->module_type)
             $query = $query->where($table.'module_type', $request->module_type);            
-        if($request->mcht_settle_type)
-            $query = $query->where($table.'mcht_settle_type', $request->mcht_settle_type);
         return $query;
     }
 

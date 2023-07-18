@@ -12,16 +12,16 @@ const props = defineProps<Props>()
 const vuetifyTheme = useTheme()
 const series = ref([
     {
-        name: 'PRODUCT A',
-        data: [] as string[],
+        name: '감소',
+        data: [] as number [],
     },
     {
-        name: 'PRODUCT B',
-        data: [] as string[],
+        name: '추가',
+        data: [] as number [],
     },
 ])
 const rate = ref(0)
-const getChartData = (col: string):string[] => {
+const getChartData = (col: string):number[] => {
     const datas = []
         for (let i = 4; i >= 0; i--) {
             let data = props.datas['month' + i][col]

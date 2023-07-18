@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import CrmAnalyticsSales from '@/views/dashboards/crm/CrmAnalyticsSales.vue'
-import CrmEarningReportsYearlyOverview from '@/views/dashboards/crm/CrmEarningReportsYearlyOverview.vue'
+import CrmPayModuleGrowth from '@/views/dashboards/crm/CrmPayModuleGrowth.vue'
+import CrmRevenueYearlyGrowth from '@/views/dashboards/crm/CrmRevenueYearlyGrowth.vue'
 import CrmRevenueGrowth from '@/views/dashboards/crm/CrmRevenueGrowth.vue'
-import CrmSessionsBarWithGapCharts from '@/views/dashboards/crm/CrmSessionsBarWithGapCharts.vue'
+import CrmUserGrowth from '@/views/dashboards/crm/CrmUserGrowth.vue'
 import { useCRMStore } from '@/views/dashboards/crm/crm'
 
 const { upside_merchandises, upside_salesforces, monthly_transactions } = useCRMStore()
@@ -44,11 +44,11 @@ onMounted(() => {
 <template>
     <VRow>
         <VCol cols="12" md="4" sm="6" lg="2">
-            <CrmSessionsBarWithGapCharts :dest_user="'가맹점'" :datas="upside_merchandises"/>
+            <CrmUserGrowth :dest_user="'가맹점'" :datas="upside_merchandises"/>
         </VCol>
 
         <VCol cols="12" md="4" sm="6" lg="2">
-            <CrmSessionsBarWithGapCharts :dest_user="'영업점'" :datas="upside_salesforces"/>
+            <CrmUserGrowth :dest_user="'영업점'" :datas="upside_salesforces"/>
         </VCol>
 
         <VCol v-for="demo in simpleStatisticsDemoCards" :key="demo.title" cols="12" sm="6" md="4" lg="2">
@@ -82,12 +82,12 @@ onMounted(() => {
 
         <!-- 👉 Earning Reports -->
         <VCol cols="12" md="8">
-            <CrmEarningReportsYearlyOverview />
+            <CrmRevenueYearlyGrowth />
         </VCol>
 
-        <!-- 👉 Sales -->
+        <!-- 👉 PayModule -->
         <VCol cols="12" md="4">
-            <CrmAnalyticsSales />
+            <CrmPayModuleGrowth />
         </VCol>
 
         <!-- 👉 Recent Transaction -->

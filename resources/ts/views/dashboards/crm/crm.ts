@@ -10,11 +10,10 @@ export const useCRMStore = defineStore('CRMStore', () => {
     const usage_pay_modules = ref([])
     onMounted(async() => {        
         try {
-            const [r1, r2, r3, r4] = await Promise.all([
+            const [r1, r2, r3] = await Promise.all([
                 axios.get('/api/v1/manager/dashsboards/monthly-transactions-analysis'),
                 axios.get('/api/v1/manager/dashsboards/upside-merchandises-analysis'),
                 axios.get('/api/v1/manager/dashsboards/upside-salesforces-analysis'),
-                axios.get('/api/v1/manager/dashsboards/usage-pay-modules-analysis'),
             ])
             const sortedKeys = orderBy(Object.keys(r1.data), [], ['desc']);
             const sortedData = sortedKeys.reduce((acc, key) => {
@@ -24,7 +23,6 @@ export const useCRMStore = defineStore('CRMStore', () => {
             Object.assign(monthly_transactions.value, sortedData)
             Object.assign(upside_merchandises.value, r2.data)
             Object.assign(upside_salesforces.value, r3.data)
-            Object.assign(usage_pay_modules.value, r4.data)
         }
         catch (e) {
             const r = errorHandler(e)
@@ -43,11 +41,12 @@ export const useCRMStore = defineStore('CRMStore', () => {
     }
     
     const getDayOfWeeks = (idays: string[]) => {
-        const weeks = []
-        const days = ['일', '월', '화', '수', '목', '금', '토'];
-        for (let i = 0; i < idays.length; i++) {
-            weeks.push(days[Number(idays[i])])
-        }
+        const weeks:string[] = []
+        idays.forEach(date => {
+            const options:any = { weekday: 'short', locale: 'ko-KR' };
+            const dayOfWeek = new Date(date).toLocaleDateString('ko-KR', options);
+            weeks.push(dayOfWeek)
+        });
         return weeks
     }
 

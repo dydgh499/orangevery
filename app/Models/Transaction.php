@@ -33,11 +33,12 @@ class Transaction extends Model
             $pks  = ['mcht_id', 'sales0_id','sales1_id','sales2_id','sales3_id','sales4_id','sales5_id','ps_id'];            
             $fees = ['mcht_fee', 'sales0_fee', 'sales1_fee', 'sales2_fee','sales3_fee', 'sales4_fee', 'sales5_fee', 'ps_fee'];
             $dest_fee = $fees[$idx+1];
+
             for($i=$idx; count($fees)-1 > -1; $i--)
             {
-                if($this[$pks[$i]] != 0)    // 하위 영업자 - 상위(나의) 영업자, 하위 영업자가 존재할 시, 존재안하면 더 하위로
+                if($this[$pks[$i]])    // 하위 영업자 - 상위(나의) 영업자, 하위 영업자가 존재할 시, 존재안하면 더 하위로
                     return $this->amount * ($this[$fees[$i]] - $this[$dest_fee]);
-            }    
+            }
             return 0;
         };
         if($level == 10)
@@ -80,7 +81,8 @@ class Transaction extends Model
 
     public function getProfitAttribute()
     {   //정산액
-        return $this->getProfit(request()->level);
+        $level = request()->level ? request()->level : request()->user()->level;
+        return $this->getProfit($level);
     }
 
     public function getTrxAmountAttribute()

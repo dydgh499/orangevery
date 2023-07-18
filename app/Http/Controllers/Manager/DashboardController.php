@@ -32,11 +32,10 @@ class DashboardController extends Controller
         {
             $week_chart = [];
             foreach($week_trans as $transaction) {
-                $yoil = Carbon::parse($transaction->trx_dt)->dayOfWeek;
-                if (!isset($week_chart[$yoil])) {
-                    $week_chart[$yoil] = [];
+                if (!isset($week_chart[$transaction->trx_dt])) {
+                    $week_chart[$transaction->trx_dt] = [];
                 }
-                $week_chart[$yoil][] = $transaction;
+                $week_chart[$transaction->trx_dt][] = $transaction;
             }
             $charts[$cur_month]['week'] = [];
             $this_week_amount = 0;
@@ -120,6 +119,10 @@ class DashboardController extends Controller
      */
     public function monthlyTranAnalysis(Request $request)
     {
+        $request->merge([
+            'page' => 1,
+            'page_size' => 99999999,
+        ]);
         $charts = [];
         $week_trans = [];
         $last_week_trans = [];
@@ -135,42 +138,48 @@ class DashboardController extends Controller
                 ->where('trx_dt', '>=', $ten_months_ago)
                 ->where('is_delete', false);
         $query = globalAuthFilter($query, $request);
-
-        $query->chunk(1000, function ($transactions) use (&$month_trans, $cur_day, $cur_month, &$last_week_trans, &$week_trans, &$cur_trans, &$last_trans) {
-            $next_month     = $cur_month->copy()->addMonth(1)->startOfMonth();
-            $one_months_ago = $cur_month->copy()->subMonths(1)->startOfMonth();
-            $six_days_ago   = Carbon::now()->subDays(6);
-            $thit_days_ago  = Carbon::now()->subDays(13);
-            foreach ($transactions as $transaction) {
-                $month = Carbon::parse($transaction->trx_dt)->format('Y-m');
-                $month_trans[$month][] = $transaction;
-                $trx_dt = Carbon::parse($transaction->trx_dt);
-                $cxl_dt = Carbon::parse($transaction->cxl_dt);
-
-                $isCurTran = (!$transaction->is_cancel && $trx_dt->between($cur_month, $next_month, true)) ||
-                            ($transaction->is_cancel && $cxl_dt->between($cur_month, $next_month, true));
-                $isLastTran = (!$transaction->is_cancel && $trx_dt->between($one_months_ago, $cur_month, false)) ||
-                            ($transaction->is_cancel && $cxl_dt->between($one_months_ago, $cur_month, false));
-                $isSixDaysTrans = (!$transaction->is_cancel && $trx_dt->between($six_days_ago, $cur_day, true)) ||
-                                ($transaction->is_cancel && $cxl_dt->between($six_days_ago, $cur_day, true));
-                $isThirDaysTrans = (!$transaction->is_cancel && $trx_dt->between($thit_days_ago, $six_days_ago, true)) ||
-                                ($transaction->is_cancel && $cxl_dt->between($six_days_ago, $six_days_ago, true));
-    
-                if ($isCurTran)
-                    $cur_trans[] = $transaction;
-                if ($isLastTran)
-                    $last_trans[] = $transaction;
-                if ($isSixDaysTrans)
-                    $week_trans[] = $transaction;
-                if ($isThirDaysTrans)
-                    $last_week_trans[] = $transaction;             
-            }
-        });
         
+        $data           = $this->getIndexData($request, $query);
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
+
+        $next_month     = $cur_month->copy()->addMonth(1)->startOfMonth();
+        $one_months_ago = $cur_month->copy()->subMonths(1)->startOfMonth();
+        $six_days_ago   = Carbon::now()->subDays(6);
+        $thit_days_ago  = Carbon::now()->subDays(13);
+
+        foreach($data['content'] as $transaction) 
+        {
+            $transaction->append(['total_trx_amount']);
+
+
+            $month = Carbon::parse($transaction->trx_dt)->format('Y-m');
+            $month_trans[$month][] = $transaction;
+            $trx_dt = Carbon::parse($transaction->trx_dt);
+            $cxl_dt = Carbon::parse($transaction->cxl_dt);
+
+            $isCurTran = (!$transaction->is_cancel && $trx_dt->between($cur_month, $next_month, true)) ||
+                        ($transaction->is_cancel && $cxl_dt->between($cur_month, $next_month, true));
+            $isLastTran = (!$transaction->is_cancel && $trx_dt->between($one_months_ago, $cur_month, false)) ||
+                        ($transaction->is_cancel && $cxl_dt->between($one_months_ago, $cur_month, false));
+            $isSixDaysTrans = (!$transaction->is_cancel && $trx_dt->between($six_days_ago, $cur_day, true)) ||
+                            ($transaction->is_cancel && $cxl_dt->between($six_days_ago, $cur_day, true));
+            $isThirDaysTrans = (!$transaction->is_cancel && $trx_dt->between($thit_days_ago, $six_days_ago, true)) ||
+                            ($transaction->is_cancel && $cxl_dt->between($six_days_ago, $six_days_ago, true));
+
+            if ($isCurTran)
+                $cur_trans[] = $transaction;
+            if ($isLastTran)
+                $last_trans[] = $transaction;
+            if ($isSixDaysTrans)
+                $week_trans[] = $transaction;
+            if ($isThirDaysTrans)
+                $last_week_trans[] = $transaction;               
+        }
         foreach ($month_trans as $key => $transactions) {            
             $charts[$key] = getDefaultTransChartFormat(collect($transactions));           
-        }
-        
+        }        
         foreach ($month_trans as $key => $transactions) {           
             $charts[$key]['modules'] = $this->setMonthlyPayModule(collect($transactions));
         }
