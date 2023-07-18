@@ -12,9 +12,9 @@ import corp from '@corp'
     </VRow>
     <VRow>
         <VCol :cols="12" :md="6">
-            <span style="padding: 0.2em;"><b> 사업자 등록번호 </b>436-86-01992</span>
-            <span style="padding: 0.2em;"><b> 전화 </b>1522-7049</span>
-            <span style="padding: 0.2em;"><b> 팩스 </b>1522-2318</span><br>
+            <span style="padding: 0.2em;"><b> 사업자 등록번호 </b>{{ corp.business_num }}</span>
+            <span style="padding: 0.2em;"><b> 전화 </b>{{ corp.phone_num }}</span>
+            <span style="padding: 0.2em;"><b> 팩스 </b>{{ corp.fax_num }}</span><br>
         </VCol>
     </VRow>
 </template>
