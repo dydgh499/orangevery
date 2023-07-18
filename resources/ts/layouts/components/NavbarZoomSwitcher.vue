@@ -28,7 +28,7 @@ const getZoom = () => {
 }
 
 const setZoom = () => {
-    document.body.style.zoom = zoom.value + "%";
+    document.documentElement.style.zoom = zoom.value + "%";
     localStorage.setItem(`${themeConfig.app.title}-zoom`, zoom.value.toString())
 }
 

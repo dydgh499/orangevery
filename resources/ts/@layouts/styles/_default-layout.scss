@@ -5,8 +5,9 @@
 @use "@configured-variables" as variables;
 
 html,
-body {
-  min-block-size: 100%;
+body,
+#app {
+  block-size: 100%;
 }
 
 .layout-page-content {
