@@ -35,7 +35,7 @@ const getTitleStatus = computed(() => {
                 <VIcon icon="tabler-bell" size="24" />
             </VBadge>
 
-            <VMenu activator="parent" width="380px" :location="props.location" offset="14px">
+            <VMenu activator="parent" width="380" :location="props.location" offset="14px">
                 <VList class="py-0">
                     <!-- 👉 Header -->
                     <VListItem :title="getTitleStatus" class="notification-section" height="48px">
