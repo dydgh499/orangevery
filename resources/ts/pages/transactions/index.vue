@@ -18,6 +18,7 @@ const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 const all_levels = allLevels()
 const salesslip = ref()
 const cancelTran = ref()
+const mcht_settle_type = ref({ id: null, name: '전체' })
 
 provide('store', store)
 provide('head', head)
@@ -90,12 +91,15 @@ onMounted(() => {
         }
     })
 })
+watchEffect(() => {
+    store.params.mcht_settle_type = mcht_settle_type.value.id
+})
 </script>
 <template>
     <div>
         <BaseIndexView placeholder="MID, TID, 승인번호, 거래번호 검색" :metas="metas" :add="user_info.level >= 35" add_name="매출" :is_range_date="true">
             <template #filter>
-                <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true"
+                <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="false" :terminal="true" :cus_filter="true"
                     :sales="true">
                     <template #extra_left>
                         <VCol cols="12" sm="3">
@@ -103,6 +107,13 @@ onMounted(() => {
                                 :label="`등급 선택`" item-title="title" item-value="id" create />
                         </VCol>
                     </template>
+                    <template #extra_right>
+                    <VCol cols="12" sm="3">
+                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
+                            :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 선택" item-title="name" item-value="id"
+                        return-object />
+                    </VCol>
+                </template>
                 </BaseIndexFilterCard>
             </template>
             <template #headers>

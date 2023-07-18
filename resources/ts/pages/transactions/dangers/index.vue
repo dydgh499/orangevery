@@ -2,8 +2,11 @@
 import { useSearchStore } from '@/views/transactions/dangers/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { useStore } from '@/views/services/pay-gateways/useStore'
 
 const { store, head, exporter } = useSearchStore()
+const { settle_types } = useStore()
+
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
@@ -37,11 +40,23 @@ const metas = [
         percentage: +0,
     },
 ]
+const mcht_settle_type = ref({ id: null, name: '전체' })
+watchEffect(() => {
+    store.params.mcht_settle_type = mcht_settle_type.value.id
+})
 </script>
 <template>
     <BaseIndexView placeholder="가맹점 상호, MID, TID, 승인번호 검색" :metas="metas" :add="false" add_name="가맹점" :is_range_date="false">
         <template #filter>
-            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" :sales="true" />
+            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="false" :terminal="true" :cus_filter="true" :sales="true">
+                <template #extra_right>
+                        <VCol cols="12" sm="3">
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
+                                :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 선택" item-title="name" item-value="id"
+                            return-object />
+                        </VCol>
+                    </template>
+            </BaseIndexFilterCard>
         </template>
         <template #headers>
             <tr>

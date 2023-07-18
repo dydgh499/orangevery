@@ -75,7 +75,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('classifications', ClassificationController::class);
         });
         Route::prefix('transactions')->group(function() {
-            Route::post('pay-cancel', [TransactionController::class, 'payCancel']);    
+            Route::post('pay-cancel', [TransactionController::class, 'payCancel']);
             Route::get('chart', [TransactionController::class, 'chart']);
             Route::get('fails', [FailTransController::class, 'index']);
             Route::get('dangers', [DangerTransController::class, 'index']);

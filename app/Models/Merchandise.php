@@ -31,6 +31,7 @@ class Merchandise extends Authenticatable
         $query = $this->hasMany(Transaction::class, 'mcht_id')
             ->where('brand_id', request()->user()->brand_id)
             ->whereNull('mcht_settle_id');
+
         $query = globalPGFilter($query, request());
         return $query->select();
     }

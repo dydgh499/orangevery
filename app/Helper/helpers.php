@@ -24,7 +24,7 @@
         return $cond_1 && $cond_2;
     }
 
-    function isOrderator($request)
+    function isOperator($request)
     {
         return $request->user()->tokenCan(35);
     }
@@ -113,7 +113,7 @@
             $idx = globalLevelByIndex($request->user()->level);            
             $query = $query->where($table."sales".$idx."_id",  $request->user()->id);
         }
-        else if(isOrderator($request))
+        else if(isOperator($request))
         {   // all
 
         }
@@ -135,6 +135,8 @@
             $query = $query->where($table.'terminal_id', $request->terminal_id);
         if($request->module_type)
             $query = $query->where($table.'module_type', $request->module_type);            
+        if($request->mcht_settle_type)
+            $query = $query->where($table.'mcht_settle_type', $request->mcht_settle_type);
         return $query;
     }
 
