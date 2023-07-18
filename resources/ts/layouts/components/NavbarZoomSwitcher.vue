@@ -24,7 +24,7 @@ const zoomOut = () => {
 }
 
 const getZoom = () => {
-    return Number(localStorage.getItem(`${themeConfig.app.title}-zoom`) ?? 100)
+    return Number(localStorage.getItem(`${themeConfig.app.title}-zoom`) ?? 80)
 }
 
 const setZoom = () => {

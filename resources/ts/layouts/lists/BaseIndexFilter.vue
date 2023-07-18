@@ -5,12 +5,13 @@ interface Props {
     add_name: string,
     is_range_date: boolean | null,
 }
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 const store = <any>(inject('store'))
 const head = <any>(inject('head'))
 const exporter = <any>(inject('exporter'))
 const formatDate = <any>(inject('$formatDate'))
 
+const use_date_button = ref(head.path === 'transactions')
 if (props.is_range_date == null) {
 
 }
@@ -21,41 +22,80 @@ else if (props.is_range_date == true) {
 }
 else if (props.is_range_date == false)
     store.params.dt = formatDate(new Date())
+
+const setDateRange = (type: string) => {
+    var s_date = undefined
+    var e_date = undefined
+    var date = new Date();
+    if(type == 'today')
+    {
+        s_date  = date;
+        e_date  = date;
+    }
+    else if(type == '1 day')
+    {
+        s_date  = new Date(date.setDate(date.getDate() - 1));
+        e_date  = s_date;
+    }
+    else if(type == '3 day')
+    {
+        e_date  = new Date(date.setDate(date.getDate() - 1));
+        s_date  = new Date(date.setDate(date.getDate() - 2));
+    }
+    else if(type == '1 mon')
+    {
+        s_date  = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+        e_date  = new Date(date.getFullYear(), date.getMonth(), 0);
+    }
+    else if(type == '3 mon')
+    {
+        s_date  = new Date(date.getFullYear(), date.getMonth() - 3, 1);
+        e_date  = new Date(date.getFullYear(), date.getMonth(), 0);
+    }
+    store.params.s_dt = formatDate(s_date)
+    store.params.e_dt = formatDate(e_date)
+}
 </script>
 <template>
-    <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
+    <div class="d-inline-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
         <VCol cols="12">
-            <VCardText style="padding: 0.5em;">
+            <VCardText>
                 <VRow>
-                    <template v-if="props.is_range_date == true">
-                        <VCol cols="12" sm="3" md="1">
-                            <AppDateTimePicker v-model="store.params.s_dt" prepend-inner-icon="ic-baseline-calendar-today"
-                                label="검색 시작일"/>
-                        </VCol>
-                        <VCol cols="12" sm="3" md="1">
-                            <AppDateTimePicker v-model="store.params.e_dt" prepend-inner-icon="ic-baseline-calendar-today"
-                                label="검색 종료일" />
-                        </VCol>
-                    </template>
-                    <template v-else-if="props.is_range_date == false">
-                        <VCol cols="12" sm="3" md="2">
-                            <AppDateTimePicker v-model="store.params.dt" prepend-inner-icon="ic-baseline-calendar-today"
-                                label="검색일" />
-                        </VCol>
-                    </template>
-                    <VCol cols="12" sm="3" md="2" class="export-container">
-                        <div class="d-inline-flex align-center gap-4 justify-content-evenly">
-                            <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel"
-                                @click="exporter(1)" style="flex-grow: 1;">
-                                엑셀 추출
-                            </VBtn>
-                            <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-pdf2"
-                                @click="exporter(2)" style="flex-grow: 1;">
-                                PDF 추출
-                            </VBtn>
-                        </div>
-                    </VCol>
-                    <VCol>
+                    <div class="d-flex align-center flex-wrap gap-4 justify-center" style="width: 100%;">
+                        <VTextField type="date" v-model="store.params.s_dt" prepend-inner-icon="ic-baseline-calendar-today"
+                            label="검색 시작일" v-if="props.is_range_date == true" class="search-date"/>
+                        <VTextField type="date" v-model="store.params.e_dt" prepend-inner-icon="ic-baseline-calendar-today"
+                            label="검색 종료일" v-if="props.is_range_date == true" class="search-date" />
+                        <VTextField type="date" v-model="store.params.dt" prepend-inner-icon="ic-baseline-calendar-today"
+                            label="검색일" v-if="props.is_range_date == false" class="search-date" />
+                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today" @click="setDateRange('today')"
+                            style="flex-grow: 1;" v-if="use_date_button">
+                            당일
+                        </VBtn>
+                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today" @click="setDateRange('1 day')"
+                            style="flex-grow: 1;" v-if="use_date_button">
+                            어제
+                        </VBtn>
+                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today" @click="setDateRange('3 day')"
+                            style="flex-grow: 1;" v-if="use_date_button">
+                            3일전
+                        </VBtn>
+                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today" @click="setDateRange('1 mon')"
+                            style="flex-grow: 1;" v-if="use_date_button">
+                            1개월
+                        </VBtn>
+                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today" @click="setDateRange('3 mon')"
+                            style="flex-grow: 1;" v-if="use_date_button">
+                            3개월
+                        </VBtn>
+                        <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel"
+                            @click="exporter(1)" style="flex-grow: 1;">
+                            엑셀 추출
+                        </VBtn>
+                        <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-pdf2"
+                            @click="exporter(2)" style="flex-grow: 1;">
+                            PDF 추출
+                        </VBtn>
                         <div class="d-inline-flex align-center flex-wrap gap-4 float-right justify-center">
                             <VTextField v-model="store.search" :placeholder="`${props.placeholder}`" density="compact"
                                 prepend-inner-icon="tabler:search" class="search-input" style="flex-grow: 3;" />
@@ -70,7 +110,7 @@ else if (props.is_range_date == false)
                                 {{ props.add_name }} 추가
                             </VBtn>
                         </div>
-                    </VCol>
+                    </div>
                 </VRow>
             </VCardText>
         </VCol>
@@ -78,28 +118,13 @@ else if (props.is_range_date == false)
 </template>
 <style lang="scss" scoped>
 .search-input {
-  min-inline-size: 17.35rem;
+  min-inline-size: 20.35rem;
 }
 
-@media (min-width: 2399px) {
-  /* xs breakpoint in Vuetify */
+@media (max-width: 600px) {
+  .search-date,
   .search-input {
-    min-inline-size: 20.35rem;
-  }
-}
-
-@media (max-width: 1500px) {
-  /* xs breakpoint in Vuetify */
-  .search-input {
-    min-inline-size: 10.35rem;
-  }
-}
-
-@media (max-width: 960px) {
-  /* xs breakpoint in Vuetify */
-
-  .export-container {
-    text-align: center;
+    min-inline-size: 100%;
   }
 }
 </style>

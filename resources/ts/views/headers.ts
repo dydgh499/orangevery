@@ -194,7 +194,7 @@ export const Header = (_path: string, file_name: string) => {
     return {
         filter, headers, main_headers, flat_headers, initHeader, sortAndFilterByHeader,
         setFlattenHeaders, getColspans, getFullColspans, getColspansComputed, getDepth,
-        exportToExcel, exportToPdf,
+        exportToExcel, exportToPdf, path,
     }
 }
 
