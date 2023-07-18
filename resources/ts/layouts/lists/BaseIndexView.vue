@@ -54,8 +54,8 @@ onMounted(() => {
                         </tfoot>
                     </VTable>
                     <VDivider/>
-                    <VCardText class="d-flex align-center flex-wrap justify-space-between gap-4 py-3 px-5">
-                        <span class="text-sm text-disabled">
+                    <VCardText class="d-flex align-center flex-wrap justify-space-between gap-4 py-3" style=" padding-right: 0 !important;padding-left: 0 !important;">
+                        <span class="text-sm text-disabled" style="padding-left: 10px;">
                             {{ store.pagenationCouputed }}
                         </span>
                         <VPagination v-model="store.params.page" size="small" :total-visible="10"
