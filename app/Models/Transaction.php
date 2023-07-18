@@ -20,7 +20,6 @@ class Transaction extends Model
     protected   $primaryKey = 'id';
     protected   $appends    = [
         'profit', 'trx_amount', 'hold_amount',
-        'user_name', 'mcht_name', 'nick_name', 'addr', 'resident_num', 'business_num',
         'trx_dttm', 'cxl_dttm',
     ];
     protected   $hidden     = ['sales0', 'sales1', 'sales2', 'sales3', 'sales4', 'sales5'];
@@ -114,36 +113,6 @@ class Transaction extends Model
             'use_saleslip_prov', 'use_saleslip_sell',
             'is_show_fee',
         ]);
-    }
-    // mcht
-    public function getMchtNameAttribute()
-    {
-        return $this->mcht ? $this->mcht->mcht_name : null;
-    }
-
-    public function getNickNameAttribute()
-    {
-        return $this->mcht ? $this->mcht->mcht_name : null;
-    }
-
-    public function getAddrAttribute()
-    {
-        return $this->mcht ? $this->mcht->addr : null;
-    }
-
-    public function getResidentNumAttribute()
-    {
-        return $this->mcht ? $this->mcht->resident_num : null;
-    }
-
-    public function getbusinessNumAttribute()
-    {
-        return $this->mcht ? $this->mcht->business_num : null;
-    }
-
-    public function getUserNameAttribute()
-    {
-        return $this->mcht ? $this->mcht->user_name : null;
     }
     // trans
     public function getTrxDttmAttribute()

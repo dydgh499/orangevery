@@ -21,46 +21,55 @@ class TransactionController extends Controller
     public function __construct(Transaction $transactions)
     {
         $this->transactions = $transactions;
+        $this->cols = [
+            'merchandises.id', 'merchandises.mcht_name', 
+            'merchandises.user_name', 'merchandises.nick_name',
+            'merchandises.addr', 'merchandises.resident_num', 'merchandises.business_num', 
+            'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell', 'merchandises.is_show_fee',
+            'transactions.*'
+        ];
     }
 
     public function commonSelect($request)
     {
         $search = $request->input('search', '');
         $query  = $this->transactions
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
+            ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
+            ->where('transactions.brand_id', $request->user()->brand_id)
+            ->where('transactions.is_delete', false)
             ->where(function ($query) use ($search) {
-                return $query->where('mid', 'like', "%$search%")
-                    ->orWhere('tid', 'like', "%$search%")
-                    ->orWhere('trx_id', 'like', "%$search%")
-                    ->orWhere('appr_num', 'like', "%$search%");
+                return $query->where('transactions.mid', 'like', "%$search%")
+                    ->orWhere('transactions.tid', 'like', "%$search%")
+                    ->orWhere('transactions.trx_id', 'like', "%$search%")
+                    ->orWhere('transactions.appr_num', 'like', "%$search%")
+                    ->orWhere('merchandises.mcht_name', 'like', "%$search%");
             });
             
         if($request->has('s_dt') && $request->has('e_dt'))
         {
             $query = $query->where(function($query) use($request) {
                 $query->where(function($query) use($request) {
-                    $query->where('is_cancel', false)
-                        ->where('trx_dt', '>=', $request->s_dt)
-                        ->where('trx_dt', '<=', $request->e_dt);
+                    $query->where('transactions.is_cancel', false)
+                        ->where('transactions.trx_dt', '>=', $request->s_dt)
+                        ->where('transactions.trx_dt', '<=', $request->e_dt);
                 })->orWhere(function($query) use($request) {
-                    $query->where('is_cancel', true)
-                        ->where('cxl_dt', '>=', $request->s_dt)
-                        ->where('cxl_dt', '<=', $request->e_dt);
+                    $query->where('transactions.is_cancel', true)
+                        ->where('transactions.cxl_dt', '>=', $request->s_dt)
+                        ->where('transactions.cxl_dt', '<=', $request->e_dt);
                 });
             });
             $request->query->remove('s_dt');
             $request->query->remove('e_dt');
         }
-        $query = globalPGFilter($query, $request);
-        $query = globalSalesFilter($query, $request);
-        $query = globalAuthFilter($query, $request);
+        $query = globalPGFilter($query, $request, 'transactions');
+        $query = globalSalesFilter($query, $request, 'transactions');
+        $query = globalAuthFilter($query, $request, 'transactions');
 
         if($request->has('mcht_settle_id'))
-            $query = $query->where('mcht_settle_id', $request->mcht_settle_id);
+            $query = $query->where('transactions.mcht_settle_id', $request->mcht_settle_id);
 
         for ($i=0; $i < 6; $i++) { 
-            $col = 'sales'.$i.'_settle_id';
+            $col = 'transactions.sales'.$i.'_settle_id';
             if($request->has($col))
                 $query = $query->where($col, $request->input($col));
         }
@@ -79,7 +88,7 @@ class TransactionController extends Controller
             'page_size' => 99999999,
         ]);
         $query  = $this->commonSelect($request);
-        $data   = $this->getIndexData($request, $query);
+        $data   = $this->getIndexData($request, $query, 'transactions.id', $this->cols, 'transactions.id');
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
@@ -100,8 +109,7 @@ class TransactionController extends Controller
     public function index(IndexRequest $request)
     {
         $query = $this->commonSelect($request);
-        $query = $query->with(['mcht']);
-        $data = $this->getIndexData($request, $query);
+        $data   = $this->getIndexData($request, $query, 'transactions.id', $this->cols, 'transactions.id');
 
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);

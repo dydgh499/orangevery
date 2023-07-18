@@ -39,9 +39,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         headers['sales0_name'] = levels.sales0_name
         headers['sales0_fee'] = '수수료'
     }
-
-    headers['user_name'] = '가맹점 ID'
-    headers['mcht_name'] = '상호'
+    headers['mcht_name'] = '가맹점'
     headers['mcht_fee'] = '수수료'
     headers['hold_fee'] = '유보금 수수료'
 
@@ -65,6 +63,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['installment'] = '할부'
     headers['mid'] = 'MID'
     headers['tid'] = 'TID'
+    headers['appr_num'] = '승인번호'    
     headers['issuer'] = '발급사'
     headers['acquirer'] = '매입사'
 

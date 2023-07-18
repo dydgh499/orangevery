@@ -88,7 +88,7 @@ else if (props.is_range_date == false)
   }
 }
 
-@media (min-width: 1500px) {
+@media (max-width: 1500px) {
   /* xs breakpoint in Vuetify */
   .search-input {
     min-inline-size: 10.35rem;
