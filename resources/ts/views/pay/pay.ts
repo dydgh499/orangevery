@@ -12,6 +12,11 @@ export const pay = (module_type: number) => {
     const installment = ref(<number>(0))
     const merchandise = ref(<Merchandise>({}))
 
+    const item_name = ref()
+    const buyer_name = ref()
+    const amount = ref()
+    const phone_num = ref()
+
     const pgs = ref(<PayGateway[]>([]))
     const pg_type = ref(<string>(''))
     const pay_url = ref(<string>(''))
@@ -68,7 +73,8 @@ export const pay = (module_type: number) => {
     return {
         pg_id, pmod_id, is_old_auth, pg_type,
         installment, merchandise, return_url,
-        pgs, pgTypeToPath, getSalesSlipInfo, pay_url
+        pgs, pgTypeToPath, getSalesSlipInfo, pay_url,
+        item_name, buyer_name, amount, phone_num
     }
 }
 

@@ -15,6 +15,8 @@ import { VerticalNavLayout } from '@layouts'
 import AlertDialog from '@/layouts/dialogs/AlertDialog.vue'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import LoadingDialog from '@/layouts/dialogs/LoadingDialog.vue'
+import PayLinkDialog from '@/layouts/dialogs/PayLinkDialog.vue'
+
 import { user_info } from '@axios'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { config } from '@layouts/config'
@@ -23,11 +25,14 @@ const router = useRouter()
 const alert = ref(null)
 const snackbar = ref(null)
 const loading = ref(null)
+const payLink = ref(null)
+
 const is_pay_link = ref(router.currentRoute.value.path.includes('/pay/'))
 
 provide('alert', alert)
 provide('snackbar', snackbar)
 provide('loading', loading)
+provide('payLink', payLink)
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
@@ -62,6 +67,7 @@ const { width: windowWidth } = useWindowSize()
             <Transition :name="appRouteTransition" mode="out-in">
                 <Component :is="Component" />
             </Transition>
+            <PayLinkDialog ref="payLink" />
             <Snackbar ref="snackbar" />
             <AlertDialog ref="alert" />
             <LoadingDialog ref="loading" />

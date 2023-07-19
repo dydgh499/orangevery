@@ -9,7 +9,7 @@ import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
 import CancelTransDialog from '@/layouts/dialogs/CancelTransDialog.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import { user_info } from '@axios'
+import { user_info, getUserLevel } from '@axios'
 import type { Options } from '@/views/types'
 import corp from '@corp'
 
@@ -122,7 +122,7 @@ const all_levels = getAllLevels()
                         </VCol>
                     </template>
                     <template #extra_right>
-                        <VCol cols="12" sm="3">
+                        <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 선택" item-title="name" item-value="id"
                             return-object />

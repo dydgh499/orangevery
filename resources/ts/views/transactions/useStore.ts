@@ -3,7 +3,7 @@ import { installments, module_types } from '@/views/merchandises/pay-modules/use
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Transaction } from '@/views/types'
-import { user_info } from '@axios'
+import { getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 
 export const useSearchStore = defineStore('transSearchStore', () => {    
@@ -15,35 +15,39 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         'module_type': '거래 타입',
     }
     const { pgs, pss, terminals } = useStore()
-    if (levels.sales5_use && user_info.value.level >= 30) {
+    if (levels.sales5_use && getUserLevel() >= 30) {
         headers['sales5_name'] = levels.sales5_name
         headers['sales5_fee'] = '수수료'
     }
-    if (levels.sales4_use && user_info.value.level >= 25) {
+    if (levels.sales4_use && getUserLevel() >= 25) {
         headers['sales4_name'] = levels.sales4_name
         headers['sales4_fee'] = '수수료'
     }
-    if (levels.sales3_use && user_info.value.level >= 20) {
+    if (levels.sales3_use && getUserLevel() >= 20) {
         headers['sales3_name'] = levels.sales3_name
         headers['sales3_fee'] = '수수료'
     }
-    if (levels.sales2_use && user_info.value.level >= 17) {
+    if (levels.sales2_use && getUserLevel() >= 17) {
         headers['sales2_name'] = levels.sales2_name
         headers['sales2_fee'] = '수수료'
     }
-    if (levels.sales1_use && user_info.value.level >= 15) {
+    if (levels.sales1_use && getUserLevel() >= 15) {
         headers['sales1_name'] = levels.sales1_name
         headers['sales1_fee'] = '수수료'
     }
-    if (levels.sales0_use && user_info.value.level >= 13) {
+    if (levels.sales0_use && getUserLevel() >= 13) {
         headers['sales0_name'] = levels.sales0_name
         headers['sales0_fee'] = '수수료'
     }
     headers['mcht_name'] = '가맹점'
-    headers['mcht_fee'] = '수수료'
-    headers['hold_fee'] = '유보금 수수료'
 
-    if(user_info.value >= 35)
+    if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13)
+    {
+        headers['mcht_fee'] = '수수료'
+        headers['hold_fee'] = '유보금 수수료'
+    }
+
+    if(getUserLevel() >= 35)
     {
         headers['pg_id'] = 'PG사 수수료'
         headers['ps_fee'] = '구간 수수료'
@@ -61,8 +65,11 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['trx_dttm'] = '거래 시간'
     headers['cxl_dttm'] = '취소 시간'
     headers['installment'] = '할부'
-    headers['mid'] = 'MID'
-    headers['tid'] = 'TID'
+    if(getUserLevel() >= 13)
+    {
+        headers['mid'] = 'MID'
+        headers['tid'] = 'TID'    
+    }
     headers['appr_num'] = '승인번호'    
     headers['issuer'] = '발급사'
     headers['acquirer'] = '매입사'
@@ -72,15 +79,16 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['buyer_phone'] = '구매자 연락처'
     
     headers['item_name'] = '상품명'
-    headers['ord_num'] = '주문번호'
-    headers['trx_id'] = '거래번호'
-    headers['ori_trx_id'] = '원거래번호'
-
+    if(getUserLevel() >= 13)
+    {
+        headers['ord_num'] = '주문번호'
+        headers['trx_id'] = '거래번호'
+        headers['ori_trx_id'] = '원거래번호'
+    }
     headers['created_at'] = '생성시간'
     headers['updated_at'] = '업데이트시간'
     
-    if (user_info.value.level >= 35)
-        headers['extra_col'] = '더보기'
+    headers['extra_col'] = '더보기'
     
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})

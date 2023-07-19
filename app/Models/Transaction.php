@@ -80,7 +80,15 @@ class Transaction extends Model
 
     public function getProfitAttribute()
     {   //정산액
-        $level = request()->level ? request()->level : request()->user()->level;
+        if(request()->has('level'))
+            $level = request()->level;
+        else
+        {
+            if(request()->user()->level != null)
+                $level = request()->user()->level;
+            else if(request()->user()->mcht_name != null)
+                $level = 10;
+        }
         return $this->getProfit($level);
     }
 

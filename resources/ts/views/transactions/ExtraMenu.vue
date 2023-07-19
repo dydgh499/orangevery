@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { SalesSlip, CancelPay } from '@/views/types'
-import { axios } from '@axios'
+import { axios, getUserLevel, user_info } from '@axios'
 
 interface Props {
     item: SalesSlip,
@@ -62,19 +62,19 @@ const payCanceled = async() => {
                     </template>
                     <VListItemTitle>매출전표</VListItemTitle>
                 </VListItem>
-                <VListItem value="complaint" @click="complaint()">
+                <VListItem value="complaint" @click="complaint()" v-if="getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="ic-round-sentiment-dissatisfied" />
                     </template>
                     <VListItemTitle>민원처리</VListItemTitle>
                 </VListItem>
-                <VListItem value="cancelTrans" @click="cancelTran.show(props.item)" v-show="props.item.is_cancel == false">
+                <VListItem value="cancelTrans" @click="cancelTran.show(props.item)" v-show="props.item.is_cancel == false" v-if="getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:device-tablet-cancel" />
                     </template>
                     <VListItemTitle>취소매출생성</VListItemTitle>
                 </VListItem>
-                <VListItem value="cancel" @click="payCanceled()" v-show="props.item.is_cancel == false">
+                <VListItem value="cancel" @click="payCanceled()" v-show="props.item.is_cancel == false" v-if="getUserLevel() == 10 || getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:world-cancel" />
                     </template>

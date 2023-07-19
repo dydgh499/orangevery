@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { axios, user_info } from '@axios'
+import { axios, user_info, getUserLevel } from '@axios'
 import CardLayout from '@/views/quick-view/CardLayout.vue'
 import SettleContentOverview from '@/views/quick-view/SettleContentOverview.vue'
 import Recent30DaysRankOverview from '@/views/quick-view/Recent30DaysRankOverview.vue'
@@ -29,7 +29,7 @@ axios.get('/api/v1/quick-view')
                         <div class="d-flex justify-space-evenly">
                             <VBtn variant="tonal" @click="router.push('/posts?type=0')">
                                 공지사항
-                                <VIcon end icon="svg-spinners:bars-scale-middle" color="primary"/>
+                                <VIcon end icon="svg-spinners:bars-scale-middle" color="primary" />
                             </VBtn>
                             <VBtn variant="tonal" @click="router.push('/posts?type=2')">
                                 1:1 문의
@@ -41,17 +41,18 @@ axios.get('/api/v1/quick-view')
             </CardLayout>
             <CardLayout v-for="(transaction, key) in transactions['month']" :key="key" :padding="true">
                 <template #content>
-                    <SettleContentOverview :transaction="transaction" :date="key as string"/>
+                    <SettleContentOverview :transaction="transaction" :date="key">
+                    </SettleContentOverview>
                 </template>
             </CardLayout>
             <CardLayout :padding="false">
                 <template #content>
-                    <Recent30DaysContentOverview :transactions="transactions['day']"/>
+                    <Recent30DaysContentOverview :transactions="transactions['day']" />
                 </template>
             </CardLayout>
-            <CardLayout :padding="false">
+            <CardLayout :padding="false" v-if="getUserLevel() > 10">
                 <template #content>
-                    <Recent30DaysRankOverview :transactions="transactions['mcht_name']"/>
+                    <Recent30DaysRankOverview :transactions="transactions['mcht_name']" />
                 </template>
             </CardLayout>
         </VRow>

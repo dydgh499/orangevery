@@ -4,6 +4,7 @@ namespace App\Http\Controllers\QuickView;
 
 use App\Models\Transaction;
 
+use App\Http\Controllers\Manager\TransactionController;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
@@ -17,6 +18,7 @@ class QuickViewController extends Controller
 
     private function groupedByMonth($contents)
     {
+        $transactions = [];
         $now = Carbon::now();
         $last_month = $now->copy()->subMonth();
         
@@ -29,7 +31,8 @@ class QuickViewController extends Controller
             $str_cur_month => [],
             $str_last_month => [],
         ];
-        foreach ($contents as $content) {
+        foreach($contents as $content) 
+        {
             $trxDate = Carbon::parse($content->trx_dt);            
             if ($trxDate->isToday()) 
                 $grouped[$str_now][] = $content;
@@ -38,15 +41,21 @@ class QuickViewController extends Controller
             if ($trxDate->year === $last_month->year && $trxDate->month === $last_month->month) 
                 $grouped[$str_last_month][] = $content;
         }
-        return $this->setTotalAmount($grouped);
+        foreach($grouped as $key => $group)
+        {
+            $transactions[$key] = getDefaultTransChartFormat(collect($group));
+        }
+        return $transactions;
     }
 
     private function groupedBy30Days($contents)
     {
         $grouped = [];
+        $transactions = [];
         $now = Carbon::now();
         $ago_30_days = $now->copy()->subDays(30);
-        foreach ($contents as $content) {
+        foreach($contents as $content) 
+        {
             $trxDate = Carbon::parse($content->trx_dt);
     
             if ($trxDate->format('Y-m-d') >= $ago_30_days->format('Y-m-d') && $trxDate->format('Y-m-d') <= $now->format('Y-m-d')) {
@@ -57,12 +66,18 @@ class QuickViewController extends Controller
                 $grouped[$groupKey][] = $content;
             }
         }
-        return $this->setTotalAmount($grouped);    
+        foreach($grouped as $key => $group)
+        {
+            $transactions[$key] = getDefaultTransChartFormat(collect($group));
+
+        }
+        return $transactions;
     }
 
     private function groupedByMchtName($contents)
     {
         $grouped = [];
+        $transactions = [];
         $now = Carbon::now();
         $ago_30_days = $now->copy()->subDays(30);
         
@@ -71,80 +86,60 @@ class QuickViewController extends Controller
             return $trxDate->format('Y-m-d') >= $ago_30_days->format('Y-m-d') && $trxDate->format('Y-m-d') <= $now->format('Y-m-d');
         })->all();
         
-        foreach ($content_in_30_days as $content) {
+        foreach ($content_in_30_days as $content) 
+        {
             if (!isset($grouped[$content->mcht_name]))
                 $grouped[$content->mcht_name] = [];
             $grouped[$content->mcht_name][] = $content;
         }
-        return $this->setTotalAmount($grouped);
-    }
-
-    private function setTotalAmount($grouped)
-    {
-        $transactions = [];
-        $division = function($item) {
-            return $item->is_cancel == true;
-        };        
-        $infos = function($items) {
-            return [
-                'amount'        => $items->sum('amount'),
-                'count'         => $items->count(),
-                'trx_amount'    => $items->sum('trx_amount'),
-                'hold_amount'   => $items->sum('hold_amount'),
-                'settle_fee'  => $items->sum('mcht_settle_fee'),
-                'total_trx_amount'=> $items->sum('total_trx_amount'),
-                'profit'    => $items->sum('profit'),
-            ];
-        };
-        $totals = function($trans, $key) {
-            return $trans['appr'][$key] + $trans['cxl'][$key];
-        };
         foreach($grouped as $key => $group)
         {
-            $group = collect($group);
-            $appr = $group->filter(function ($group) use ($division) {
-                return $division($group) == false;
-            })->values();
-        
-            $cxl = $group->filter(function ($group) use ($division) {
-                return $division($group) == true;
-            })->values();
-
-            $transactions[$key]['appr']  = $infos($appr);
-            $transactions[$key]['cxl']   = $infos($cxl);
-
-            $transactions[$key]['amount'] = $totals($transactions[$key], 'amount');
-            $transactions[$key]['count'] = $totals($transactions[$key], 'count');
-            $transactions[$key]['trx_amount'] = $totals($transactions[$key], 'trx_amount');
-            $transactions[$key]['total_trx_amount'] = $totals($transactions[$key], 'total_trx_amount');
-            $transactions[$key]['settle_fee'] = $totals($transactions[$key], 'settle_fee');
-            $transactions[$key]['hold_amount'] = $totals($transactions[$key], 'hold_amount');
-            $transactions[$key]['profit'] = $totals($transactions[$key], 'profit');
+            $transactions[$key] = getDefaultTransChartFormat(collect($group));
         }
         return $transactions;
     }
 
-    function index(Request $request)
+    public function index(Request $request)
     {
-        $one_month_ago = Carbon::now()->subMonths(1)->startOfMonth();
+        $one_month_ago = Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m-d');
         $request->merge([
             'page' => '1',
             'page_size'=> '9999999',
+            's_dt' => $one_month_ago,
+            'e_dt' => '2999-01-01',
         ]);
-        $query = Transaction::where('is_delete', false)
-            ->where('brand_id', $request->user()->brand_id)
-            ->where(function($query) use($one_month_ago) {
-                $query->where('trx_dt', '>=', $one_month_ago)
-                    ->orWhere('cxl_dt', '>=', $one_month_ago);
-            });
-        $query = globalAuthFilter($query, $request);        
-        $data = $this->getIndexData($request, $query);
+        $controller = new TransactionController(new Transaction);
 
+        $query = $controller->commonSelect($request);
+        $data   = $controller->getIndexData($request, $query, 'transactions.id', $controller->cols, 'transactions.id');
+
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
+
+        foreach($data['content'] as $content) 
+        {
+            $content->append(['total_trx_amount']);
+        }
         $grouped = [
             'day' =>  $this->groupedBy30Days($data['content']),
             'month' => $this->groupedByMonth($data['content']),
             'mcht_name' => $this->groupedByMchtName($data['content']),
         ];
         return $this->response(0, $grouped);
+    }
+
+    public function smslinkSend(Request $request)
+    {
+        $sms = [];
+        $sms['user_id'] = "onmir1234";               // SMS 아이디
+        $sms['key'] = "u73u7mt294xt2r9av2fevgg7yb154xtt"; //인증키
+        $sms['msg'] = $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n".$request->url;
+        $sms['receiver'] = $request->phone_num;     // 수신번호
+        $sms['sender']  ="07043232060";             // 발신번호
+        $sms['subject'] = "[안녕하세요. ".$request->user()->mcht_name." 입니다.]";
+
+        $res = asPost("https://apis.aligo.in/send/", $sms);
+        return $this->response(1);
     }
 }

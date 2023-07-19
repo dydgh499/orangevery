@@ -17,13 +17,13 @@ class TransactionController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
     protected $transactions;
-
+    public $cols;
+    
     public function __construct(Transaction $transactions)
     {
         $this->transactions = $transactions;
         $this->cols = [
-            'merchandises.id', 'merchandises.mcht_name', 
-            'merchandises.user_name', 'merchandises.nick_name',
+            'merchandises.mcht_name', 'merchandises.user_name', 'merchandises.nick_name',
             'merchandises.addr', 'merchandises.resident_num', 'merchandises.business_num', 
             'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell', 'merchandises.is_show_fee',
             'transactions.*'

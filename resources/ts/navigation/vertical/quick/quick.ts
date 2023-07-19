@@ -9,15 +9,15 @@ const hands = ref(<PayModule[]>([]))
 const auths = ref(<PayModule[]>([]))
 const simples = ref(<PayModule[]>([]))
 const { pay_modules, getAllPayModules } = usePayModFilterStore()
-const url = new URL(window.location.href);
+const url = new URL(window.location.href)
 if (getUserLevel() == 10) {
     getAllPayModules()
 }
 
 
-
 const getPayLinkFormats = (pays: PayModule[], type: string) => {
     return map(pays, (pay) => {
+        const pays: any = []
         const params = encodeURIComponent(
             CryptoJS.AES.encrypt(
                 JSON.stringify(
@@ -31,20 +31,32 @@ const getPayLinkFormats = (pays: PayModule[], type: string) => {
                     }
                 )
                 , '^^_masking_^^').toString())
+        pays.push({
+            title: '이동하기',
+            href: '/pay/' + type + "?e=" + params,
+        })
+        pays.push({
+            title: '링크복사',
+            class: 'copy()',
+            params: url.origin + '/pay/' + type + "?e=" + params,
+        })
+        if(corp.pv_options.paid.use_hand_pay_drct) {
+            pays.push({
+                title: '링크생성',
+                class: 'direct()',
+                params: url.origin + '/pay/' + type + "?e=" + params,
+            })
+        }
+        if(corp.pv_options.paid.use_hand_pay_sms) {
+            pays.push({
+                title: 'SMS 결제 전송',
+                class: 'sms()',
+                params: url.origin + '/pay/' + type + "?e=" + params,
+            })
+        }
         return {
             title: pay.note,
-            children: [
-                {
-                    title: '이동하기',
-                    href: '/pay/' + type + "?e=" + params,
-                },
-                {
-                    title: '링크복사',
-                    class: 'copy()',
-                    params: url.origin + '/pay/' + type + "?e=" + params,
-                }
-            ]
-            
+            children: pays            
         };
     });
 };
@@ -79,6 +91,11 @@ const getAbilitiesMenu = computed(() => {
             });
         }
     }
+    payments.push({
+        title: '매출 관리',
+        icon: { icon: 'ic-outline-payments' },
+        to: 'transactions',
+    });
     return [
         { heading: 'Forms' },
         {

@@ -10,13 +10,14 @@ defineProps<{
 }>()
 
 const snackbar  = <any>(inject('snackbar'))
+const payLink  = <any>(inject('payLink'))
+
 
 const { width: windowWidth } = useWindowSize()
 const { isVerticalNavMini, dynamicI18nProps } = useLayouts()
 const hideTitleAndBadge = isVerticalNavMini(windowWidth)
 
 const copy = (text: string) => {
-    console.log(123)
     try {
         const textarea = document.createElement('textarea');
         textarea.value = text;
@@ -32,6 +33,23 @@ const copy = (text: string) => {
         snackbar.value.show('복사에 실패하였습니다.', 'error')
     }
 }
+
+const direct = (url: string) => {
+    payLink.value.show('PAY-LINK', url)
+}
+
+const sms = (url: string) => {
+    payLink.value.show('SMS-SEND', url)    
+}
+
+const TapFunctionNavi = (item: NavLink) => {
+    if(item.class == 'copy()')
+        copy(item.params ?? '')
+    else if(item.class == 'direct()')
+        direct(item.params ?? '')
+    else if(item.class == 'sms()')
+        sms(item.params ?? '')
+}
 </script>
 
 <template>
@@ -39,7 +57,7 @@ const copy = (text: string) => {
     v-if="can(item.action, item.subject)"
     class="nav-link"
     :class="{ disabled: item.disable }"    
-    @click="item.class == 'copy()' ? copy(item.params ?? '') : ''"
+    @click="TapFunctionNavi(item)"
   >
     <Component
       :is="item.to ? 'RouterLink' : 'a'"

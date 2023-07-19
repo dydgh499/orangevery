@@ -146,6 +146,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
     });
 
     Route::prefix('quick-view')->middleware('auth:sanctum')->group(function() {
-        Route::get('', [QuickViewController::class, 'index']);        
+        Route::get('', [QuickViewController::class, 'index']);
+        Route::post('sms-link-send', [QuickViewController::class, 'smslinkSend']);
     });
 });
