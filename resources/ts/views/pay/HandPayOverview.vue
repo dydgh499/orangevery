@@ -27,6 +27,12 @@ const hand_pay_info = reactive(<HandPay>({}))
 const is_show = ref(false)
 const vForm = ref<VForm>()
 
+const urlParams = new URLSearchParams(window.location.search)
+const item_name = urlParams.get('item_name') || ''
+const buyer_name = urlParams.get('buyer_name') || ''
+const amount = urlParams.get('amount') || ''
+const phone_num = urlParams.get('phone_num') || ''
+
 const pay = async () => {
     if (hand_pay_info.pmod_id) {
         const is_valid = await vForm.value?.validate();
@@ -90,7 +96,7 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                             <template #name>상품명</template>
                             <template #input>
-                                <VTextField v-model="hand_pay_info.item_name" type="text"
+                                <VTextField v-model="hand_pay_info.item_name" type="text" :value="item_name"
                                     prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
                                     maxlength="100" :rules="[requiredValidator]" placeholder="상품명을 입력해주세요" counter />
                             </template>
@@ -98,7 +104,7 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                             <template #name>상품금액</template>
                             <template #input>
-                                <VTextField v-model="hand_pay_info.amount" type="number" suffix="₩"
+                                <VTextField v-model="hand_pay_info.amount" type="number" suffix="₩" :value="amount"
                                     placeholder="거래금액을 입력해주세요" prepend-inner-icon="ic:outline-price-change"
                                     :rules="[requiredValidator]" />
                             </template>
@@ -106,14 +112,14 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 24px 0;">
                             <template #name>구매자명</template>
                             <template #input>
-                                <VTextField v-model="hand_pay_info.buyer_name" type="text" placeholder="구매자명을 입력해주세요"
+                                <VTextField v-model="hand_pay_info.buyer_name" type="text" placeholder="구매자명을 입력해주세요" :value="buyer_name"
                                     :rules="[requiredValidator]" prepend-inner-icon="tabler-user" />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                             <template #name>휴대폰번호</template>
                             <template #input>
-                                <VTextField v-model="hand_pay_info.phone" type="number"
+                                <VTextField v-model="hand_pay_info.phone" type="number" :value="phone_num"
                                     prepend-inner-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
                                     :rules="[requiredValidator]" />
                             </template>

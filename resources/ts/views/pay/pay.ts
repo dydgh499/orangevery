@@ -12,11 +12,6 @@ export const pay = (module_type: number) => {
     const installment = ref(<number>(0))
     const merchandise = ref(<Merchandise>({}))
 
-    const item_name = ref()
-    const buyer_name = ref()
-    const amount = ref()
-    const phone_num = ref()
-
     const pgs = ref(<PayGateway[]>([]))
     const pg_type = ref(<string>(''))
     const pay_url = ref(<string>(''))
@@ -34,7 +29,6 @@ export const pay = (module_type: number) => {
     const getSalesSlipInfo = async () => {
         const urlParams = new URLSearchParams(window.location.search)
         const encrypt = decodeURIComponent(urlParams.get('e') || '')
-
         const enc = CryptoJS.AES.decrypt(encrypt, '^^_masking_^^').toString(CryptoJS.enc.Utf8)
         const params = JSON.parse(enc)
 
@@ -74,7 +68,6 @@ export const pay = (module_type: number) => {
         pg_id, pmod_id, is_old_auth, pg_type,
         installment, merchandise, return_url,
         pgs, pgTypeToPath, getSalesSlipInfo, pay_url,
-        item_name, buyer_name, amount, phone_num
     }
 }
 
@@ -93,19 +86,14 @@ export const payResult = () => {
                 axios.get('/api/v1/manager/pay-modules/' + pmod_id + '/sales-slip'),
                 axios.get('/api/v1/pay-gateways/' + pg_id + '/sale-slip')
             ]);
-
-            sale_slip.value.mcht = {
-                id: 0,
-                addr: response1.data.addr,
-                business_num: response1.data.business_num,
-                resident_num: response1.data.resident_num,
-                mcht_name: response1.data.mcht_name,
-                nick_name: response1.data.nick_name,
-                is_show_fee: response1.data.is_show_fee,
-                use_saleslip_prov: response1.data.use_saleslip_prov,
-                use_saleslip_sell: response1.data.use_saleslip_sell,
-                user_name: '',
-            };
+            sale_slip.value.addr = response1.data.addr
+            sale_slip.value.business_num = response1.data.business_num
+            sale_slip.value.resident_num = response1.data.resident_num
+            sale_slip.value.mcht_name = response1.data.mcht_name
+            sale_slip.value.nick_name = response1.data.nick_name
+            sale_slip.value.is_show_fee = response1.data.is_show_fee
+            sale_slip.value.use_saleslip_prov = response1.data.use_saleslip_prov
+            sale_slip.value.use_saleslip_sell = response1.data.use_saleslip_sell            
             pgs.value = response2.data
         } catch (error) {
             console.log(error);
