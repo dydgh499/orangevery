@@ -87,8 +87,8 @@ class ComplaintRequest extends FormRequest
             $data[$key] = $this->input($key, '');
         }
         if(strpos($data['appr_dt'], 'T') !== false)
-            $data['appr_dt'] = explode($data['appr_dt'], 'T')[0];
-            
+            $data['appr_dt'] = explode('T', $data['appr_dt'])[0];
+
         $data['brand_id'] = $this->user()->brand_id;
         return $data;
     }
