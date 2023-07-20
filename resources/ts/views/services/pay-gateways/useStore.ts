@@ -24,6 +24,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:14, name: '키움페이', rep_name: '성백진', company_name: '(주)다우데이타', business_num: '220-81-01733', phone_num: '1588-5984', addr: '서울시 마포구 독막로 311 재화스퀘어 5층'},
         {id:15, name: '위즈페이', rep_name: '이용재', company_name: '(주)유니윌 위즈페이', business_num: '220-85-36623', phone_num: '1544-3267', addr: '서울 강남구 테헤란로 124, 5층 (역삼동, 삼원타워) (주)유니윌 위즈페이'},
         {id:16, name: '네스트페이', rep_name: '김찬수', company_name: '(주)페이네스트', business_num: '139-81-46088', phone_num: '02-431-8333', addr: '서울특별시 송파구 송파대로 201, 테라타워2 A동 905호 (문정동)'},
+        {id:17, name: 'E2U', rep_name: '이용원', company_name: '(주)이투유', business_num: '383-87-01545', phone_num: '1600-4191', addr: '경기도 성남시 수정구 위례광장로 19 아이페리온, 10층 1001호'},
     ]
 
     const settle_types = [
