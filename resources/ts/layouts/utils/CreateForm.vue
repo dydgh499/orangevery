@@ -21,17 +21,19 @@ const { formRequest, remove, setOneObject } = useRequestStore()
 
 const disabledConditions = (index: number) => {
     const cond_1 = index == 2 && props.id == 0 && props.path == 'merchandises'
-    const cond_2 = index == 3 && user_info.value.level < 50 && props.path == 'services/brands'
-    return cond_1 || cond_2
+    const cond_2 = index == 3 && props.id == 0 && props.path == 'merchandises'
+    const cond_3 = index == 3 && user_info.value.level < 50 && props.path == 'services/brands'
+    return cond_1 || cond_2 || cond_3
 }
 
 const hideConditions = () => {
     const cond_1 = tab.value == 2 && props.path == 'merchandises' ? false : true
-    const cond_2 = props.path == 'merchandises/pay-modules' ? false : true
-    const cond_3 = props.path == 'services/pay-gateways' ? false : true
-    const cond_4 = props.path == 'services/bulk-register' ? false : true
-    const cond_5 = props.path == 'posts/view' ? false : true
-    return cond_1 && cond_2 && cond_3 && cond_4 && cond_5
+    const cond_2 = tab.value == 3 && props.path == 'merchandises' ? false : true
+    const cond_3 = props.path == 'merchandises/pay-modules' ? false : true
+    const cond_4 = props.path == 'services/pay-gateways' ? false : true
+    const cond_5 = props.path == 'services/bulk-register' ? false : true
+    const cond_6 = props.path == 'posts/view' ? false : true
+    return cond_1 && cond_2 && cond_3 && cond_4 && cond_5 && cond_6
 }
 watchEffect(() => {
     if (props.id) 

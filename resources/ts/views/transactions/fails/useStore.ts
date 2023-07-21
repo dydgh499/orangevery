@@ -20,6 +20,7 @@ export const useSearchStore = defineStore('failSearchStore', () => {
         'amount': '결제시도 금액',
         'trx_dttm': '결제시도시간',
         'created_at': '생성시간',
+        'updated_at': '업데이트시간',
     }
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})

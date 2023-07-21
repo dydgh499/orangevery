@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import UserOverview from '@/views/users/UserOverview.vue'
 import MchtOverview from '@/views/merchandises/MchtOverview.vue'
+import NotiOverview from '@/views/merchandises/NotiOverview.vue'
 import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOverview.vue'
 
 import { defaultItemInfo } from '@/views/merchandises/useStore'
@@ -13,7 +14,7 @@ const tabs = <Tab[]>([
     { icon: 'tabler-user-check', title: '개인정보' },
     { icon: 'ph-buildings', title: '가맹점정보' },
     { icon: 'ic-outline-send-to-mobile', title: '결제모듈정보(가맹점 추가 후 가능)' },
-    { icon: 'streamline:interface-time-alarm-notification-alert-bell-wake-clock-alarm', title: '결제모듈정보(가맹점 추가 후 가능)' },
+    { icon: 'streamline:interface-time-alarm-notification-alert-bell-wake-clock-alarm', title: '노티정보(가맹점 추가 후 가능)' },
 ])
 const id = ref<number>(0)
 
@@ -30,6 +31,9 @@ const id = ref<number>(0)
                 </VWindowItem>
                 <VWindowItem>
                     <PayModuleOverview :item="item" />
+                </VWindowItem>
+                <VWindowItem>
+                    <NotiOverview :item="item" />
                 </VWindowItem>
             </template>
         </CreateForm>

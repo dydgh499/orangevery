@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/transactions/fails/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 
@@ -83,7 +84,12 @@ const metas = [
                             </span>        
                             <span v-else-if="_key == 'ps_id'">
                                 {{ pss.find(ps => ps['id'] === item[_key])?.name }}
-                            </span>                    
+                            </span>
+                            <span v-else-if="_key == 'module_type'">
+                                <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
+                                    {{ module_types.find(module_type => module_type['id'] === item[_key])?.title }}
+                                </VChip>
+                            </span>
                             <span v-else-if="_key == 'amount'">
                                 {{ (item[_key] as number).toLocaleString() }}
                             </span>
