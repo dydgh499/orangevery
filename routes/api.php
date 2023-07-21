@@ -12,6 +12,8 @@ use App\Http\Controllers\Manager\TerminalController;
 use App\Http\Controllers\Manager\PaymentModuleController;
 use App\Http\Controllers\Manager\PaymentGatewayController;
 use App\Http\Controllers\Manager\PaymentSectionController;
+use App\Http\Controllers\Manager\NotiUrlController;
+
 use App\Http\Controllers\Manager\ClassificationController;
 use App\Http\Controllers\Manager\PostController;
 use App\Http\Controllers\Manager\ComplaintController;
@@ -119,23 +121,27 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             });
         });
         Route::prefix('merchandises')->group(function() {
+
             Route::get('chart', [MerchandiseController::class, 'chart']);
             Route::get('all', [MerchandiseController::class, 'all']);   
             Route::get('terminals', [TerminalController::class, 'index']);   
             Route::post('password-change', [MerchandiseController::class, 'passwordChange']);
             Route::post('bulk-register', [MerchandiseController::class, 'bulkRegister']);
 
+
             Route::get('pay-modules/chart', [PaymentModuleController::class, 'chart']);
             Route::get('pay-modules/all', [PaymentModuleController::class, 'all']);
             Route::get('pay-modules/{id}/sales-slip', [PaymentModuleController::class, 'salesSlip']);     
             Route::post('pay-modules/bulk-register', [PaymentModuleController::class, 'bulkRegister']);
-            Route::apiResource('pay-modules', PaymentModuleController::class); 
 
             Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
             Route::post('fee-change-histories/{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
             Route::get('noti-send-histories', [NotiSendHistoryController::class, 'index']);
             Route::get('noti-send-histories/detail/{trans_id}', [NotiSendHistoryController::class, 'detail']);
+
+            Route::apiResource('pay-modules', PaymentModuleController::class); 
+            Route::apiResource('noti-urls', NotiUrlController::class); 
         });
         Route::apiResource('complaints', ComplaintController::class);
         Route::apiResource('salesforces', SalesforceController::class);

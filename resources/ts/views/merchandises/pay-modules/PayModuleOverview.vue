@@ -61,7 +61,7 @@ const addNewPaymodule = () => {
     <!-- 👉 submit -->
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">
-            <VBtn type="submit" style="margin-left: auto;" @click="addNewPaymodule">
+            <VBtn type="button" style="margin-left: auto;" @click="addNewPaymodule">
                 결제모듈 신규추가
                 <VIcon end icon="tabler-plus" />
             </VBtn>

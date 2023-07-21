@@ -203,13 +203,8 @@ class MerchandiseController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        if($this->authCheck($request->user(), $id, 15))
-        {
-            $res = $this->delete($this->merchandises->where('id', $id));
-            return $this->response($res);
-        }
-        else
-            return $this->response(951);
+        $res = $this->delete($this->merchandises->where('id', $id));
+        return $this->response($res);
     }
 
     /**

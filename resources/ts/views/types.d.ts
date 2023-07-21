@@ -616,3 +616,12 @@ export interface UpSideChart {
     total: number,
     [key: string]: UpSideChartData
 }
+
+
+export interface NotiUrl {
+    id: number,
+    mcht_id: number | null,
+    send_url: string,
+    noti_status: boolean,
+    note: string,
+}

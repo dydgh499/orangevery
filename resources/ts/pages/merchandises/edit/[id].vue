@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import UserOverview from '@/views/users/UserOverview.vue'
 import MchtOverview from '@/views/merchandises/MchtOverview.vue'
-import NotiOverview from '@/views/merchandises/NotiOverview.vue'
+import NotiOverview from '@/views/merchandises/noti-urls/NotiOverview.vue'
 import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOverview.vue'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import { defaultItemInfo } from '@/views/merchandises/useStore'

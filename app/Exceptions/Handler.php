@@ -2,11 +2,19 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Support\Facades\Response;
+use Illuminate\Database\QueryException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Http\Traits\ExtendResponseTrait;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
+    use ExtendResponseTrait;
     /**
      * A list of exception types with their corresponding custom log levels.
      *
@@ -46,8 +54,26 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        $this->renderable(function (TokenMismatchException $e, $request) {
+            return $this->response(953);
+        });
+        $this->renderable(function (AuthenticationException $e, $request) {
+            return $this->response(950);
+        });
+        $this->renderable(function (AccessDeniedHttpException $e, $request) {
+            return $this->response(951);
+        });
+        $this->renderable(function (QueryException $e, $request) {
+            return $this->extendResponse(990, $e->getMessage());
+        });
         $this->renderable(function (ErrorException $e, $request) {
             return $this->extendResponse(990, $e->getMessage());
+        });
+        $this->renderable(function (ValidationException $e, $request) {
+            $exceptions = $e->errors();
+            $first_key  = array_key_first($exceptions);
+            return $this->extendResponse(1004, __($exceptions[$first_key][0]));
         });
     }
 }
