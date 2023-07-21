@@ -40,7 +40,7 @@ export interface Tab {
 //----------------- 검색 -------------
 export interface Bank {
     acct_bank_name: string,
-    acct_bank_code: string | null,
+    acct_bank_code: string | number | null;
     acct_num: string,
     acct_name: string,
 }
@@ -457,15 +457,10 @@ export interface SettlesHistories extends Bank{
     appr_amount: number,
     cxl_amount: number,
     total_amount: number,
-    acct_name: string,
-    acct_num: string,
-    acct_bank_name: string,
-    acct_bank_code: string,
     settle_dt: Date,
     deposit_dt: Date,
     status: Boolean,
 }
-
 export interface Post {
     id: number,
     title: string,

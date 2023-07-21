@@ -86,6 +86,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
 export const defaultItemInfo = () => {
     const path = 'merchandises'
     const item = reactive<Merchandise>({
+        id:0,
         acct_bank_code: null,
         acct_bank_name: '은행명',
         hold_fee: 0,
@@ -105,7 +106,6 @@ export const defaultItemInfo = () => {
         bsin_lic_img: null,
         acct_num: '',
         acct_name: '',
-        id: 0,
         created_at: null,
         updated_at: null,
         id_file: undefined,

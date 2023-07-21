@@ -22,7 +22,7 @@ const { formRequest, remove, setOneObject } = useRequestStore()
 const disabledConditions = (index: number) => {
     const cond_1 = index == 2 && props.id == 0 && props.path == 'merchandises'
     const cond_2 = index == 3 && user_info.value.level < 50 && props.path == 'brands'
-    return cond_1 && cond_2
+    return cond_1 || cond_2
 }
 
 const hideConditions = () => {
