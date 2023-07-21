@@ -36,7 +36,9 @@ class NotiUrlController extends Controller
                 ->where('merchandises.brand_id', $request->user()->brand_id)
                 ->where('merchandises.is_delete', false)
                 ->where('noti_urls.is_delete', false);
-
+        $query = globalSalesFilter($query, $request, 'merchandises');
+        $query = globalAuthFilter($query, $request, 'merchandises');
+        
         if($request->mcht_id)
             $query = $query->where('noti_urls.mcht_id', $request->mcht_id);
 

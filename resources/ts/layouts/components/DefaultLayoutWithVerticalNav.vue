@@ -57,7 +57,7 @@ const { width: windowWidth } = useWindowSize()
                 <VSpacer />
                 <NavbarZoomSwitcher />
                 <NavbarThemeSwitcher />
-                <NavbarNotifications class="me-2" v-if="user_info.level >= 35"/>
+                <NavbarNotifications class="me-2" v-if="user_info.level >= 35" />
                 <UserProfile />
             </div>
         </template>
@@ -90,5 +90,6 @@ const { width: windowWidth } = useWindowSize()
             <AlertDialog ref="alert" />
             <LoadingDialog ref="loading" />
         </RouterView>
+        <TheCustomizer />
     </div>
 </template>
