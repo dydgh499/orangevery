@@ -41,7 +41,7 @@ class BrandRequest extends FormRequest
 
     public function authorize()
     {
-        return $this->user()->tokenCan(35) ? true : false;
+        return $this->user()->tokenCan(40) ? true : false;
     }
 
     /**
