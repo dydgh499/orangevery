@@ -89,7 +89,7 @@ class BrandController extends Controller
      */
     public function store(BrandRequest $request)
     {
-        if($request->user()->tokenCan(50))
+        if($request->user()->tokenCan(35))
         {
             $data = $request->data();
             $data = $this->saveImages($request, $data, $this->imgs);
@@ -110,13 +110,8 @@ class BrandController extends Controller
      */
     public function show(Request $request, $id)
     {
-        if($this->authCheck($request->user(), $id, 45))
-        {
-            $data = $this->brands->where('id', $id)->first();
-            return $this->response($data ? 0 : 1000, $data);
-        }
-        else
-            return $this->response(951);
+        $data = $this->brands->where('id', $id)->first();
+        return $this->response($data ? 0 : 1000, $data);
     }
 
     /**
@@ -129,18 +124,13 @@ class BrandController extends Controller
      */
     public function update(BrandRequest $request, $id)
     {
-        if($this->authCheck($request->user(), $id, 45))
-        {
-            $data = $request->data();
-            $data = $this->saveImages($request, $data, $this->imgs);
-            
-            $query  = $this->brands->where('id', $id);
-            $result = $query->update($data);
-            setBrandByDNS($request->dns);
-            return $this->response($result ? 1 : 990);
-        }
-        else
-            return $this->response(951);
+        $data = $request->data();
+        $data = $this->saveImages($request, $data, $this->imgs);
+        
+        $query  = $this->brands->where('id', $id);
+        $result = $query->update($data);
+        setBrandByDNS($request->dns);
+        return $this->response($result ? 1 : 990);
     }
 
     /**
@@ -153,14 +143,9 @@ class BrandController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        if($this->authCheck($request->user(), $id, 45))
-        {
-            $brand = $this->brands->where('id', $id)->first();
-            Redis::del($brand->dns);
-            $result = $this->delete($this->brands->where('id', $id), ['logo_img', 'favicon_img']);
-            return $this->response($result);
-        }
-        else
-            return $this->response(951);
+        $brand = $this->brands->where('id', $id)->first();
+        Redis::del($brand->dns);
+        $result = $this->delete($this->brands->where('id', $id), ['logo_img', 'favicon_img']);
+        return $this->response($result);
     }
 }
