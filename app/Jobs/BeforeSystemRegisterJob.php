@@ -48,7 +48,6 @@ class BeforeSystemRegisterJob implements ShouldQueue
     {
         $this->payvery = DB::connection('mysql');
         $this->payvery->table('brands')->where('id', $this->brand_id)->update(['is_transfer'=>0]);
-        setBrandByDNS($this->dns);
         Log::warning("before-system-register-job-fail", ['retry'=>$this->attempts()]);
     }
 
@@ -64,7 +63,6 @@ class BeforeSystemRegisterJob implements ShouldQueue
         $this->payvery = DB::connection('mysql');
         $result = DB::transaction(function () {
             $this->payvery->table('brands')->where('id', $this->brand_id)->update(['is_transfer'=>1]);
-            setBrandByDNS($this->dns);
     
             $brand = new Brand();
             $brand->getPaywell($this->paywell->table('service'), $this->brand_id, $this->before_brand_id);
@@ -103,7 +101,6 @@ class BeforeSystemRegisterJob implements ShouldQueue
             logging(['paymod'=>'ok'], 'before-system-register-job');
 
             $this->payvery->table('brands')->where('id', $this->brand_id)->update(['is_transfer'=>2]);
-            setBrandByDNS($this->dns);
             return true;
         });
         logging(['finish'=>$result], 'before-system-register-job');

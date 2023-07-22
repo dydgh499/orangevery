@@ -28,12 +28,10 @@ class Merchandise extends Authenticatable
 
     public function transactions()
     {
-        $query = $this->hasMany(Transaction::class, 'mcht_id')
-            ->where('brand_id', request()->user()->brand_id)
-            ->whereNull('mcht_settle_id');
-
-        $query = globalPGFilter($query, request());
-        return $query->select();
+        return $this->hasMany(Transaction::class, 'mcht_id')
+            ->settleFilter()
+            ->settleTransaction(request()->dt)
+            ->select();
     }
     
     public function deducts()

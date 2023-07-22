@@ -81,25 +81,10 @@
 
     function getBrandByDNS($request)
     {
-        $brand = Redis::get($request->dns);
-        if($brand == null)
-            return setBrandByDNS($request->dns);
-        else
-            return json_decode($brand, true);
+        $brand = Brand::where('dns', $request->dns)->first();
+        return json_decode(json_encode($brand), true);
     }
-
-    function setBrandByDNS($dns)
-    {
-        $brand = Brand::where('dns', $dns)->first();
-        if($brand)
-        {
-            $res = Redis::set($dns, json_encode($brand));
-            return json_decode(json_encode($brand), true);
-        }
-        else
-            return null;
-    }
-
+    
     function globalAuthFilter($query, $request, $parent_table='')
     {
         $table = $parent_table != "" ? $parent_table."." : "";

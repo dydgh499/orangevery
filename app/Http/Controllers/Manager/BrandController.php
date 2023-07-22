@@ -129,7 +129,6 @@ class BrandController extends Controller
         
         $query  = $this->brands->where('id', $id);
         $result = $query->update($data);
-        setBrandByDNS($request->dns);
         return $this->response($result ? 1 : 990);
     }
 

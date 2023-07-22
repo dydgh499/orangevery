@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Models\Merchandise;
 use App\Models\Salesforce;
+use App\Models\Transaction;
 use App\Models\Log\SettleDeductMerchandise;
 use App\Models\Log\SettleDeductSalesforce;
 
@@ -62,30 +63,47 @@ class SettleController extends Controller
         return $data;
     }
 
+    private function getDefaultQuery($query, $request, $ids)
+    {
+        return $query
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
+            ->whereIn('id', $ids);
+    }
+
+    private function getExistTransUserIds($date, $col)
+    {
+        return Transaction::settleFilter()
+            ->settleTransaction($date)
+            ->distinct()
+            ->get([$col])
+            ->pluck([$col]);
+    }
+
+    public function merchandiseChart(Request $request)
+    {
+
+    }
+
+    public function salesforceChart(Request $request)
+    {
+
+    }
+
     public function merchandises(IndexRequest $request)
     {
         $validated = $request->validate(['dt'=>'required|date']);
-
         $cols = array_merge($this->cols, ['mcht_name']);
         $search = $request->input('search', '');
         $date   = $request->dt;
 
-        $query = $this->merchandises
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
-            ->where('mcht_name', 'like', "%$search%");
+        $mcht_ids = $this->getExistTransUserIds($date, 'mcht_id');
+        $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
+                ->where('mcht_name', 'like', "%$search%");
             
         $query = globalSalesFilter($query, $request);
         $query = globalAuthFilter($query, $request);
-        $query = $query->with(['transactions' => function ($query) use ($date) {
-            $query->where(function ($query) use ($date) {   // 승인이면서 D+1 적용
-                $query->whereRaw("trx_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)")
-                    ->where('is_cancel', false);
-            })->orWhere(function ($query) use ($date) {     // 취소이면서 D+1 적용
-                $query->whereRaw("cxl_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)")
-                    ->where('is_cancel', true);
-            });
-        }, 'deducts']);
+        $query = $query->with(['transactions', 'deducts']);
 
         $data = $this->getIndexData($request, $query, 'id', $cols);
         $data = $this->getSettleInformation($data); 
@@ -100,22 +118,24 @@ class SettleController extends Controller
         $level  = $request->level;
         $date   = $request->dt;
 
-        $query = $this->salesforces
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
+        $idx = globalLevelByIndex($level);
+        $sales_ids = $this->getExistTransUserIds($date, 'sales'.$idx.'_id');
+        $query = $this->getDefaultQuery($this->salesforces, $request, $sales_ids)
             ->where('sales_name', 'like', "%$search%")
             ->where('level', $level);
 
         if(isSalesforce($request))
             $query = $query->where('id', $request->user()->id);
+
         if($request->settle_cycle)
             $query = $query->where('settle_cycle', $request->settle_cycle);
+
         if(Carbon::parse($date)->isLastOfMonth()) 
         { // 조회 일이 말일이면 settle_cycle 28인 영업자도 조회
             $query = $query->where(function ($query) use ($date) {
                 $query->where('settle_day', Carbon::parse($date)->dayOfWeek)
                     ->orWhereNull('settle_day');
-            });            
+            });
         }
         else
         { // 말일이 아니라면 settle_cycle 28인 영업자는 제외
@@ -124,16 +144,7 @@ class SettleController extends Controller
                 ->where('settle_cycle', '!=', 28);
         }
         $query = $query->whereRaw("'$date' > DATE_ADD(COALESCE(last_settle_dt, '2000-01-01'), INTERVAL(settle_cycle) DAY)");
-        $query = $query->with(['transactions' => function ($query) use ($date) {
-            $query->where(function ($query) use ($date) {   // 승인이면서 D+1 적용
-                $query->whereRaw("trx_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)")
-                    ->where('is_cancel', false);
-            })->orWhere(function ($query) use ($date) {     // 취소이면서 D+1 적용
-                $query->whereRaw("cxl_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)")
-                    ->where('is_cancel', true);
-            });
-        }, 'deducts']);
-
+        $query = $query->with(['transactions', 'deducts']);
         $data = $this->getIndexData($request, $query, 'id', $cols);
 
         $salesforces = globalGetIndexingByCollection($data['content']);
@@ -142,32 +153,29 @@ class SettleController extends Controller
             $content->transactions = globalMappingSales($salesforces, $content->transactions);
         }
 
-
         $data = $this->getSettleInformation($data); 
         return $this->response(0, $data);
     }
 
-    function MchtDeduct(Request $request) 
+    private function deduct($orm, $col, $request)
     {
         $validated = $request->validate(['amount'=>'required|integer', 'dt'=>'required|date', 'id'=>'required']);
-        $res = SettleDeductMerchandise::create([
+        $res = $orm->create([
             'brand_id'  => $request->user()->brand_id,
-            'mcht_id'   => $request->id,
             'amount'    => $request->amount * -1,
             'deduct_dt' => $request->dt,
+            $col   => $request->id,
         ]);
         return $this->response(1);
     }
 
+    function MchtDeduct(Request $request) 
+    {
+        return $this->deduct(new SettleDeductMerchandise(), 'mcht_id', $request);
+    }
+
     function SalesDeduct(Request $request) 
     {
-        $validated = $request->validate(['amount'=>'required|integer', 'dt'=>'required|date', 'id'=>'required']);
-        $res = SettleDeductSalesforce::create([
-            'brand_id'  => $request->user()->brand_id,
-            'sales_id'   => $request->id,
-            'amount'    => $request->amount * -1,
-            'deduct_dt' => $request->dt,
-        ]);
-        return $this->response(1);
+        return $this->deduct(new SettleDeductSalesforce(), 'sales_id', $request);
     }
 }
