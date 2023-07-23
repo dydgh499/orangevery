@@ -6,7 +6,7 @@ import { useGenerateImageVariant } from '@core/composable/useGenerateImageVarian
 import corp from '@corp'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import { VForm } from 'vuetify/components'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 
@@ -97,12 +97,12 @@ const onSubmit = () => {
                         <VRow>
                             <!-- user_name -->
                             <VCol cols="12">
-                                <VTextField v-model="user_name" label="아이디 입력" type="user_name" :rules="[requiredValidator]"
+                                <VTextField v-model="user_name" label="아이디 입력" type="user_name" :rules="[requiredValidatorV2(user_name, '아이디')]"
                                     :error-messages="errors.message" />
                             </VCol>
                             <!-- password -->
                             <VCol cols="12">
-                                <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidator]"
+                                <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidatorV2(user_pw, '패스워드')]"
                                     :type="isPasswordVisible ? 'text' : 'password'"
                                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                                     @click:append-inner="isPasswordVisible = !isPasswordVisible" />

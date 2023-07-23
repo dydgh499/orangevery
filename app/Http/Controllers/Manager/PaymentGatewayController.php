@@ -111,7 +111,7 @@ class PaymentGatewayController extends Controller
         $grouped = Classification::where('brand_id', $brand_id)->where('is_delete', false)->get()->groupBy('type');
 
         $data = [
-            'pay_gateways' => $this->pay_gateways->where('brand_id', $brand_id)->get(),
+            'pay_gateways' => $this->pay_gateways->where('brand_id', $brand_id)->where('is_delete', false)->get(),
             'pay_sections' => $this->pay_sections->where('brand_id', $brand_id)->where('is_delete', false)->get(),
             'terminals'    => isset($grouped[0]) ? $grouped[0] : [],
             'custom_filters' => isset($grouped[1]) ? $grouped[1] : [],

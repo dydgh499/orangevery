@@ -135,7 +135,7 @@ const filterPss = computed(() => {
                                     {{ props.item.id == 0 ? "추가" : "수정" }}
                                     <VIcon end icon="tabler-pencil" />
                                 </VBtn>
-                                <VBtn type="button" color="error" v-if="props.item.id" @click="remove('/services/pay-gateways', props.item.id)">
+                                <VBtn type="button" color="error" v-if="props.item.id" @click="remove('/services/pay-gateways', props.item.id, false)">
                                     삭제
                                     <VIcon end icon="tabler-trash" />
                                 </VBtn>

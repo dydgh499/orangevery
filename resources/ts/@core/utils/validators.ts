@@ -1,5 +1,12 @@
 import { isEmpty, isEmptyArray, isNullOrUndefined } from './index'
 
+export const requiredValidatorV2 = (value: unknown, name:string) => {
+    if (isNullOrUndefined(value) || isEmptyArray(value) || value === false)
+        return name+'를 입력해주세요.'
+
+return !!String(value).trim().length || name+'를 입력해주세요.'
+}
+
 // 👉 Required Validator
 export const requiredValidator = (value: unknown) => {
     if (isNullOrUndefined(value) || isEmptyArray(value) || value === false)
