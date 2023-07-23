@@ -90,6 +90,11 @@ class SettleController extends Controller
 
     }
 
+    public function merchandiseCommonQuery($request)
+    {
+
+    }
+
     public function merchandises(IndexRequest $request)
     {
         $validated = $request->validate(['dt'=>'required|date']);
@@ -110,6 +115,10 @@ class SettleController extends Controller
         return $this->response(0, $data);
     }
 
+    public function salesforceCommonQuery($request)
+    {
+
+    }
     public function salesforces(IndexRequest $request)
     {
         $validated = $request->validate(['dt'=>'required|date']);

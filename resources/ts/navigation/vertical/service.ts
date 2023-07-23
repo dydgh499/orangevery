@@ -1,8 +1,9 @@
 import { user_info } from '@axios'
 
 const getAbilitiesMenu = computed(() => {
-    const operations = []
+    const operations:any[] = []
     const complaints = []
+
     if (user_info.value.level >= 35) {
         operations.push({
             title: '운영 관리',
@@ -34,6 +35,13 @@ const getAbilitiesMenu = computed(() => {
             title: '민원 관리',
             icon: { icon: 'ic-round-sentiment-dissatisfied' },
             to: 'complaints',
+        })
+    }
+    if (user_info.value.level >= 50) {
+        operations[0].children.push({
+            title: '로그 관리',
+            class: 'log()',
+            params: '',
         })
     }
     return [
