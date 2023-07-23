@@ -91,7 +91,8 @@ watchEffect(() => {
                                     <CreateHalfVCol :mdl="3" :mdr="9">
                                         <template #name></template>
                                         <template #input>
-                                            <VColorPicker v-model="color" show-swatches swatches-max-height="360px" />
+                                            <VColorPicker v-model="color" show-swatches swatches-max-height="360px" 
+                                            mode="rgb"/>
                                         </template>
                                     </CreateHalfVCol>
                                 </VRow>

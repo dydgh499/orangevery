@@ -88,13 +88,9 @@ const onSubmit = () => {
             <VCard flat :max-width="500" class="mt-12 mt-sm-0 pa-4">
                 <VCardText>
                     <VNodeRenderer :nodes="themeConfig.app.logo" class="mb-6" />
-
                     <h5 class="text-h5 font-weight-semibold mb-1">
                         {{ themeConfig.app.title }}에 오신것을 환영합니다! 👋🏻
                     </h5>
-                    <p class="mb-0">
-                        새롭게 리뉴얼된 {{ themeConfig.app.title }}를 이용해보세요.
-                    </p>
                 </VCardText>
                 <VCardText>
                     <VForm ref="refVForm" @submit.prevent="onSubmit">
@@ -104,7 +100,6 @@ const onSubmit = () => {
                                 <VTextField v-model="user_name" label="아이디 입력" type="user_name" :rules="[requiredValidator]"
                                     :error-messages="errors.message" />
                             </VCol>
-
                             <!-- password -->
                             <VCol cols="12">
                                 <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidator]"

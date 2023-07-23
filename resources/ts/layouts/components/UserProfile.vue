@@ -9,6 +9,7 @@ import { avatars } from '@/views/users/useStore'
 const ability = useAppAbility()
 const password = ref()
 const all_levels = allLevels()
+const snackbar = <any>(inject('snackbar'))
 
 let mylink = ''
 let mytype = 0
@@ -27,7 +28,15 @@ else if (user_info.value.level <= 45) {
 else
     mytype = 3
 
+const router = useRouter()
 // 개발사는 이동할 수 없음
+const profile = () => {
+    if(mytype < 3)
+        router.push(mylink)
+    else
+        snackbar.value.show('개발사는 프로필로 이동할 수 없습니다.', 'warning')
+}
+
 const logout = async () => {
     await axios.get('/api/v1/auth/sign-out', {})
     localStorage.removeItem('abilities')
@@ -67,14 +76,12 @@ user_info.value.profile_img = user_info.value.profile_img ? user_info.value.prof
 
                     <VDivider class="my-2" />
 
-                    <router-link :to="mylink" class="custom-link" v-if="user_info.level > 10">
-                        <VListItem>
-                            <template #prepend>
-                                <VIcon class="me-2" icon="tabler-user" size="22" />
-                            </template>
-                            <VListItemTitle>프로필</VListItemTitle>
-                        </VListItem>
-                    </router-link>
+                    <VListItem @click="profile()" class="custom-link" v-if="user_info.level > 10">
+                        <template #prepend>
+                            <VIcon class="me-2" icon="tabler-user" size="22" />
+                        </template>
+                        <VListItemTitle>프로필</VListItemTitle>
+                    </VListItem>
                     <VDivider class="my-2" />
                     <VListItem @click="password.show(user_info.id, mytype)">
                         <template #prepend>
