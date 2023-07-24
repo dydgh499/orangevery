@@ -88,16 +88,23 @@ class BeforeSystemController extends Controller
         $privacys = $mc->getPaywellPrivacy($this->paywell, $mchts, 'USER_PK');
         foreach($mchts as $mcht) {
             $privacy = $privacys->first(function($item) use ($mcht) {return $item->USER_PK == $mcht->USER_PK;});
-            $update = [
-                'acct_num'  => $privacy ? $privacy->ACCT_NUM : null,
-                'acct_name'  => $privacy ? $privacy->ACCT_NM : null,
-                'acct_bank_name'  => $privacy ? $privacy->ACCT_BANK : null,
-                'acct_bank_code'  => $privacy ? sprintf("%03d", (int)$privacy->ACCT_BANK_CD) : null,
-            ];
-            $res = $this->payvery->table('merchandises')
-                ->where('user_name', $mcht->ID)
-                ->update($update);
-            echo $res;
+            if($privacy)
+            {
+                $update = [
+                    'acct_num'  => $privacy ? $privacy->ACCT_NUM : null,
+                    'acct_name'  => $privacy ? $privacy->ACCT_NM : null,
+                    'acct_bank_name'  => $privacy ? $privacy->ACCT_BANK : null,
+                    'acct_bank_code'  => $privacy ? sprintf("%03d", (int)$privacy->ACCT_BANK_CD) : null,
+                ];
+                $res = $this->payvery->table('merchandises')
+                    ->where('brand_id',2)
+                    ->where('user_name', $mcht->ID)
+                    ->update($update);
+                echo $res;    
+            }
+            else 
+                echo $item->USER_PK;
+            echo "\n";
         };
     }
 }
