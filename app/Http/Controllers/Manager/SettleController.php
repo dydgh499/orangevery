@@ -80,22 +80,7 @@ class SettleController extends Controller
             ->pluck([$col]);
     }
 
-    public function merchandiseChart(Request $request)
-    {
-
-    }
-
-    public function salesforceChart(Request $request)
-    {
-
-    }
-
-    public function merchandiseCommonQuery($request)
-    {
-
-    }
-
-    public function merchandises(IndexRequest $request)
+    private function merchandiseCommonQuery($request)
     {
         $validated = $request->validate(['dt'=>'required|date']);
         $cols = array_merge($this->cols, ['mcht_name']);
@@ -112,14 +97,26 @@ class SettleController extends Controller
 
         $data = $this->getIndexData($request, $query, 'id', $cols);
         $data = $this->getSettleInformation($data); 
+        return $data;
+    }
+
+    public function merchandiseChart(Request $request)
+    {
+        $request = $request->merge([
+            'paze_size' => 999999,
+        ]);
+        $data = $this->merchandiseCommonQuery($request);
+        
         return $this->response(0, $data);
     }
 
-    public function salesforceCommonQuery($request)
+    public function merchandises(IndexRequest $request)
     {
-
+        $data = $this->merchandiseCommonQuery($request);
+        return $this->response(0, $data);
     }
-    public function salesforces(IndexRequest $request)
+
+    private function salesforceCommonQuery($request)
     {
         $validated = $request->validate(['dt'=>'required|date']);
         $cols   = array_merge($this->cols, ['sales_name', 'level', 'settle_cycle', 'settle_day', 'settle_tax_type', 'last_settle_dt']);
@@ -161,8 +158,22 @@ class SettleController extends Controller
         {
             $content->transactions = globalMappingSales($salesforces, $content->transactions);
         }
-
         $data = $this->getSettleInformation($data); 
+        return $data;
+    }
+
+    public function salesforceChart(Request $request)
+    {
+        $request = $request->merge([
+            'paze_size' => 999999,
+        ]);
+        $data = $this->salesforceCommonQuery($request);
+        return $this->response(0, $data);
+    }
+
+    public function salesforces(IndexRequest $request)
+    {
+        $data = $this->salesforceCommonQuery($request);
         return $this->response(0, $data);
     }
 

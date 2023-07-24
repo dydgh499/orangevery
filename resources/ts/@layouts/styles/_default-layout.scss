@@ -4,6 +4,13 @@
 @use "@layouts/styles/mixins";
 @use "@configured-variables" as variables;
 
+html,
+body,
+#app,
+.v-application {
+  min-block-size: 75em;
+}
+
 .layout-page-content {
   @include mixins.boxed-content(true);
 
