@@ -97,13 +97,13 @@ class BeforeSystemController extends Controller
                     'acct_bank_code'  => $privacy ? sprintf("%03d", (int)$privacy->ACCT_BANK_CD) : null,
                 ];
                 $res = $this->payvery->table('merchandises')
-                    ->where('brand_id',2)
+                    ->where('brand_id', 2)
                     ->where('user_name', $mcht->ID)
                     ->update($update);
                 echo $res;    
             }
             else 
-                echo $item->USER_PK;
+                echo $mcht->USER_PK;
             echo "\n";
         };
     }
