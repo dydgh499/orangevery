@@ -7,10 +7,8 @@ trait BeforeSystemTrait
     public function getPaywellPrivacy($paywell, $users, $col='PK')
     {
         $pks = $users->pluck($col)->values()->toArray();
-        logging(json_decode(json_encode($pks), true));
-        return $paywell->table('privacy')
-            ->whereIn('USER_PK', $pks)
-            ->get();
+        logging($pks);
+        return $paywell->table('privacy')->whereIn('USER_PK', $pks)->get();
     }
 
     public function getPayveryFormat($paywell, $col='PK')
