@@ -25,20 +25,6 @@ const {
   isLessThanOverlayNavBreakpoint,
 } = useThemeConfig()
 
-// 👉 Primary Color
-const vuetifyTheme = useTheme()
-
-// const vuetifyThemesName = Object.keys(vuetifyTheme.themes.value)
-
-const initialThemeColors = JSON.parse(JSON.stringify(vuetifyTheme.current.value.colors))
-const colors = ['primary', 'secondary', 'success', 'info', 'warning', 'error']
-
-console.log(FooterType)
-/*
-  ℹ️ This will return static color for first indexed color based on theme
-  If we don't make first (primary) color as static then when another color is selected then we will have two theme colors with same hex codes and it will show two check marks
-*/
-
 const { width: windowWidth } = useWindowSize()
 
 const headerValues = computed(() => {

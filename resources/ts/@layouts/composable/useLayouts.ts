@@ -30,10 +30,12 @@ export const useLayouts = () => {
 
   const footerType = computed({
     get() {
+        console.log(config.footer.type.value)
       return config.footer.type.value ?? 'hidden'
     },
     set(value: typeof config.footer.type.value) {
       config.footer.type.value = value
+      localStorage.setItem(`${config.app.title}-footerType`, value.toString())
     },
   })
 

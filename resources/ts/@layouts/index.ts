@@ -33,7 +33,7 @@ export const createLayouts = (userConfig: UserConfig): Plugin => {
   config.navbar.type.value = userConfig.navbar.type
   config.navbar.navbarBlur.value = localStorageNavbarBlur ? JSON.parse(localStorageNavbarBlur) : userConfig.navbar.navbarBlur
 
-  config.footer.type.value = userConfig.footer.type
+  config.footer.type.value = localStorage.getItem(`${userConfig.app.title}-footerType`)
 
   config.verticalNav.isVerticalNavCollapsed.value
     = localStorageIsVerticalNavCollapsed
