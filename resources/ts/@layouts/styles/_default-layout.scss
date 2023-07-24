@@ -4,13 +4,6 @@
 @use "@layouts/styles/mixins";
 @use "@configured-variables" as variables;
 
-html,
-body,
-#app,
-.v-application {
-  block-size: 100%;
-}
-
 .layout-page-content {
   @include mixins.boxed-content(true);
 
