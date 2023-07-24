@@ -81,7 +81,8 @@ const { width: windowWidth } = useWindowSize()
         <!-- 👉 Customizer -->
         <TheCustomizer />
     </VerticalNavLayout>
-    <div v-else style="height: 100%;" class="d-flex justify-center align-center">
+
+    <div v-else class="d-flex justify-center align-center" style="height: 100%;flex-direction: column;">
         <RouterView v-slot="{ Component }">
             <Transition :name="appRouteTransition" mode="out-in">
                 <Component :is="Component" />
@@ -90,6 +91,5 @@ const { width: windowWidth } = useWindowSize()
             <AlertDialog ref="alert" />
             <LoadingDialog ref="loading" />
         </RouterView>
-        <TheCustomizer />
     </div>
 </template>

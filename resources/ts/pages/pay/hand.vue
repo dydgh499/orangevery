@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import HandPayOverview from '@/views/pay/HandPayOverview.vue'
 import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
+import Footer from '@/layouts/components/Footer.vue'
 import { pay } from '@/views/pay/pay'
 import corp from '@corp'
 
@@ -38,6 +39,16 @@ provide('salesslip', salesslip)
                         </div>
                     </VCol>
                 </VRow>
+            </VCardText>
+        </VCard>
+        <br>
+        <VCard rounded>
+            <VCardText>
+                <footer class="layout-footer">
+                    <div class="footer-content-container">
+                        <Footer />
+                    </div>
+                </footer>
             </VCardText>
         </VCard>
         <SalesSlipDialog ref="salesslip" :pgs="pgs" />
