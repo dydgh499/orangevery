@@ -85,8 +85,8 @@ class BeforeSystemController extends Controller
             ->orderby('user.PK', 'DESC')
             ->get();
             
-        logging(json_decode(json_encode($mchts), true));
         $privacys = $mc->getPaywellPrivacy($this->paywell, $mchts, 'USER_PK');
+        logging(json_decode(json_encode($privacys), true));
         foreach($mchts as $mcht) {
             $privacy = $privacys->first(function($item) use ($mcht) {
                 return $item->USER_PK == $mcht->USER_PK;
