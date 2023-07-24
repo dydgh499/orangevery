@@ -34,11 +34,16 @@ class Merchandise
     public function getPaywell($paywell, $brand_id, $before_brand_id)
     {
         $items = [];
+        $cols = [
+            'merchandise.*', 'user.ID', 'user.PW', 
+            'user.REP_NM', 'user.SECTORS', 'user.RESIDENT_NUM', 'user.BUSINESS_NUM',
+            'user.PHONE', 'user.ADDR'
+        ];
         $mchts = $paywell->table('user')
                 ->join('merchandise', 'user.PK', '=', 'merchandise.USER_PK')
                 ->where('user.DNS_PK', $before_brand_id)
                 ->orderby('user.PK', 'DESC')
-                ->get();
+                ->get($cols);
 
         $privacys = $this->getPaywellPrivacy($paywell, $mchts, 'USER_PK');
         foreach($mchts as $mcht) {

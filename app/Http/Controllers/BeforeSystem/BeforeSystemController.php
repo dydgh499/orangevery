@@ -79,15 +79,22 @@ class BeforeSystemController extends Controller
     function mchtUpdate()
     {
         $mc = new Merchandise();
+        $cols = [
+            'merchandise.*', 'user.ID', 'user.PW', 
+            'user.REP_NM', 'user.SECTORS', 'user.RESIDENT_NUM', 'user.BUSINESS_NUM',
+            'user.PHONE', 'user.ADDR'
+        ];
         $mchts = $this->paywell->table('user')
             ->join('merchandise', 'user.PK', '=', 'merchandise.USER_PK')
             ->where('user.DNS_PK', 15)
             ->orderby('user.PK', 'DESC')
-            ->get();
+            ->get($cols);
 
         $privacys = $mc->getPaywellPrivacy($this->paywell, $mchts, 'USER_PK');
         foreach($mchts as $mcht) {
-            $privacy = $privacys->first(function($item) use ($mcht) {return $item->USER_PK == $mcht->USER_PK;});
+            $privacy = $privacys->first(function($item) use ($mcht) {
+                return $item->USER_PK == $mcht->USER_PK;
+            });
             if($privacy)
             {
                 $update = [
@@ -102,7 +109,7 @@ class BeforeSystemController extends Controller
                     ->update($update);
                 echo $res;    
             }
-            else 
+            else
                 echo $mcht->USER_PK;
             echo "\n";
         };
