@@ -70,24 +70,28 @@ class BeforeSystemController extends Controller
         $brand_id = $request->brand_id;
 
         $current_brand = $this->payvery->table('brands')->where('id', $brand_id)->first();
-        BeforeSystemRegisterJob::dispatch($brand_id, $before_brand_id, $current_brand->dns);
-        #    ->onConnection('redis')
-        #    ->onQueue('computational-transfer');
+        BeforeSystemRegisterJob::dispatch($brand_id, $before_brand_id, $current_brand->dns)
+            ->onConnection('redis')
+            ->onQueue('computational-transfer');
         return $this->extendResponse(1, '전산 이전 작업을 예약하였습니다.<br>5분 내외로 이전 전산에대한 정보가 반영됩니다.');
     }
 
     function mchtUpdate()
     {
+        $cols = [
+            'merchandise.*', 'user.ID', 'user.PW', 
+            'user.REP_NM', 'user.SECTORS', 'user.RESIDENT_NUM', 'user.BUSINESS_NUM',
+            'user.PHONE', 'user.ADDR', 'user.NICK_NM', 'user.NOTE',
+        ];
         $mc = new Merchandise();
-        $mchts = $this->paywell->table('user')
+        $users = $this->paywell->table('user')
             ->join('merchandise', 'user.PK', '=', 'merchandise.USER_PK')
             ->where('user.DNS_PK', 15)
             ->orderby('user.PK', 'DESC')
             ->get();
-            
-        $privacys = $mc->getPaywellPrivacy($this->paywell, $mchts, 'USER_PK');
-        logging(json_decode(json_encode($privacys), true));
-        foreach($mchts as $mcht) {
+        $privacys = $mc->getPaywellPrivacy($this->paywell, $users, 'USER_PK');
+        foreach($users as $mcht) 
+        {
             $privacy = $privacys->first(function($item) use ($mcht) {
                 return $item->USER_PK == $mcht->USER_PK;
             });

@@ -7,7 +7,6 @@ trait BeforeSystemTrait
     public function getPaywellPrivacy($paywell, $users, $col='PK')
     {
         $pks = $users->pluck($col)->all();
-        logging($pks);
         return $paywell->table('privacy')->whereIn('USER_PK', $pks)->get();
     }
 
@@ -38,7 +37,9 @@ trait BeforeSystemTrait
         $connections = [];
         for ($i=0; $i < count($payvery) ; $i++) 
         { 
-            $connections[$paywell[$i][$col]] = $payvery[$i]['id'];
+            $key   = $paywell[$i][$col];
+            $value = $payvery[$i]['id'];
+            $connections[$key] = $value;
         }
         return $connections;
     }
