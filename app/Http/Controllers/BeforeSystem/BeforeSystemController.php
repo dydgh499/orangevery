@@ -105,9 +105,6 @@ class BeforeSystemController extends Controller
                     ->update($update);
                 echo $res;    
             }
-            else
-                echo $mcht->USER_PK;
-            echo "\n";
         };
     }
 }
