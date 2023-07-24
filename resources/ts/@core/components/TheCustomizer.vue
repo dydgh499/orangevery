@@ -38,7 +38,6 @@ console.log(FooterType)
   ℹ️ This will return static color for first indexed color based on theme
   If we don't make first (primary) color as static then when another color is selected then we will have two theme colors with same hex codes and it will show two check marks
 */
-const getBoxColor = (color: string, index: number) => index ? color : '#7367F0'
 
 const { width: windowWidth } = useWindowSize()
 
