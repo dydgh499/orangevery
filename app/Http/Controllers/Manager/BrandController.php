@@ -10,7 +10,6 @@ use App\Http\Requests\Manager\IndexRequest;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Redis;
 
 /**
  * @group Brand API
@@ -143,7 +142,6 @@ class BrandController extends Controller
     public function destroy(Request $request, $id)
     {
         $brand = $this->brands->where('id', $id)->first();
-        Redis::del($brand->dns);
         $result = $this->delete($this->brands->where('id', $id), ['logo_img', 'favicon_img']);
         return $this->response($result);
     }

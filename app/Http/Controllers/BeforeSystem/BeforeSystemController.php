@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\BeforeSystem\Merchandise;
+
 class BeforeSystemController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
@@ -68,9 +70,34 @@ class BeforeSystemController extends Controller
         $brand_id = $request->brand_id;
 
         $current_brand = $this->payvery->table('brands')->where('id', $brand_id)->first();
-        BeforeSystemRegisterJob::dispatch($brand_id, $before_brand_id, $current_brand->dns)
-            ->onConnection('redis')
-            ->onQueue('computational-transfer');
+        BeforeSystemRegisterJob::dispatch($brand_id, $before_brand_id, $current_brand->dns);
+        #    ->onConnection('redis')
+        #    ->onQueue('computational-transfer');
         return $this->extendResponse(1, '전산 이전 작업을 예약하였습니다.<br>5분 내외로 이전 전산에대한 정보가 반영됩니다.');
+    }
+
+    function mchtUpdate()
+    {
+        $mc = new Merchandise();
+        $mchts = $this->paywell->table('user')
+            ->join('merchandise', 'user.PK', '=', 'merchandise.USER_PK')
+            ->where('user.DNS_PK', 15)
+            ->orderby('user.PK', 'DESC')
+            ->get();
+
+        $privacys = $mc->getPaywellPrivacy($this->paywell, $mchts, 'USER_PK');
+        foreach($mchts as $mcht) {
+            $privacy = $privacys->first(function($item) use ($mcht) {return $item->USER_PK == $mcht->USER_PK;});
+            $update = [
+                'acct_num'  => $privacy ? $privacy->ACCT_NUM : null,
+                'acct_name'  => $privacy ? $privacy->ACCT_NM : null,
+                'acct_bank_name'  => $privacy ? $privacy->ACCT_BANK : null,
+                'acct_bank_code'  => $privacy ? sprintf("%03d", (int)$privacy->ACCT_BANK_CD) : null,
+            ];
+            $res = $this->payvery->table('merchandises')
+                ->where('user_name', $mcht->ID)
+                ->update($update);
+            echo $res;
+        };
     }
 }
