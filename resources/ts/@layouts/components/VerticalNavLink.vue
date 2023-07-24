@@ -42,7 +42,7 @@ const sms = (url: string) => {
     payLink.value.show('SMS-SEND', url)    
 }
 const log = () => {
-    window.open(process.env.APP_URL+'/log-viewer')
+    window.open('/log-viewer')
 }
 const TapFunctionNavi = (item: NavLink) => {
     if(item.class == 'copy()')
