@@ -51,7 +51,7 @@ const TapFunctionNavi = (item: NavLink) => {
         direct(item.params ?? '')
     else if(item.class == 'sms()')
         sms(item.params ?? '')
-    else if(item.class= 'log()')
+    else if(item.class == 'log()')
         log()
 }
 </script>
