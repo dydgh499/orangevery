@@ -15,47 +15,13 @@ provide('exporter', exporter)
 
 store.params.level = 10 // taransaction model에서 필수
 
+const totals = ref(<any[]>([]))
 const { settle_types } = useStore()
 const mcht_settle_type = ref({ id: null, name: '전체' })
 
-const metas = ref([
-    {
-        icon: 'ic-outline-payments',
-        color: 'primary',
-        title: '승인액 합계',
-        stats: '0',
-        percentage: 0,
-        subtitle: '0건',
-    },
-    {
-        icon: 'ic-outline-payments',
-        color: 'error',
-        title: '취소액 합계',
-        stats: '0',
-        percentage: 0,
-        subtitle: '0건',
-    },
-    {
-        icon: 'ic-outline-payments',
-        color: 'success',
-        title: '매출액 합계',
-        stats: '0',
-        percentage: 0,
-        subtitle: '0건',
-    },
-    {
-        icon: 'ic-outline-payments',
-        color: 'warning',
-        title: '정산액 합계',
-        stats: '0',
-        percentage: 0,
-        subtitle: '0건',
-    },
-])
-
 const getSettleStyle = (parent_key: string) => {
     if (parent_key === 'appr')
-        return 'color: blue;'
+        return 'color: rgb(var(--v-theme-primary));'
     else if (parent_key === 'cxl')
         return 'color: red;'
     else if (parent_key === 'settle')
@@ -72,12 +38,23 @@ const isSalesCol = (key: string) => {
     return false
 }
 
-watchEffect(() => {
-    store.params.mcht_settle_type = mcht_settle_type.value.id
+onMounted(() => {
+    watchEffect(() => {
+        store.params.mcht_settle_type = mcht_settle_type.value.id
+    })
+
+    watchEffect(async() => {
+        if(store.params.page == 1) {
+            const r = await store.getChartData()            
+            totals.value = []
+            if(r.data.amount != 0)
+                totals.value.push(r.data)
+        }
+    })
 })
 </script>
 <template>
-    <BaseIndexView placeholder="가맹점 상호 검색" :metas="metas" :add="false" add_name="정산" :is_range_date="false">
+    <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="정산" :is_range_date="false">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="false" :terminal="true" :cus_filter="true" :sales="true">
                 <template #extra_right>
@@ -114,6 +91,32 @@ watchEffect(() => {
             </tr>
         </template>
         <template #body>
+            <!-- chart -->
+            <tr v-for="(item, index) in totals" :key="index" style="height: 3.75rem;">
+                <template v-for="(_header, _key, _index) in head.headers" :key="_index">
+                    <template v-if="head.getDepth(_header, 0) != 1">
+                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
+                            class='list-square'>
+                            <span v-if="_key == 'deduction' && (__key as string) == 'input'">
+                            </span>
+                            <span v-else :style="getSettleStyle(_key as string)">
+                                {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0 }}
+                            </span>
+                        </td>
+                    </template>
+                    <template v-else>
+                        <td v-show="_header.visible" class='list-square'>
+                            <span v-if="isSalesCol(_key as string)" style="font-weight: bold;">
+                                {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
+                            </span>
+                            <span v-else>
+                                {{ item[_key] }}
+                            </span>
+                        </td>
+                    </template>
+                </template>
+            </tr>
+            <!-- normal -->
             <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
@@ -124,7 +127,7 @@ watchEffect(() => {
                                 </AddDeductBtn>
                             </span>
                             <span v-else :style="getSettleStyle(_key as string)">
-                                {{ (item[_key][__key] as number).toLocaleString() }}
+                                {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0 }}
                             </span>
                         </td>
                     </template>
@@ -134,7 +137,7 @@ watchEffect(() => {
                                 #{{ item[_key] }}
                             </span>
                             <span v-else-if="isSalesCol(_key as string)" style="font-weight: bold;">
-                                {{ (item[_key] as number).toLocaleString() }}
+                                {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
                             </span>
                             <span v-else-if="_key === 'extra_col'">
                                 <ExtraMenu :name="item['mcht_name']" :is_mcht="true" :item="item">

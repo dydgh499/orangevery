@@ -85,9 +85,11 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             
             Route::prefix('settle')->group(function() {
                 Route::get('merchandises', [SettleController::class, 'merchandises']);
+                Route::get('merchandises/chart', [SettleController::class, 'merchandiseChart']);
                 Route::post('merchandises/deduct', [SettleController::class, 'MchtDeduct']);
 
                 Route::get('salesforces', [SettleController::class, 'salesforces']);
+                Route::get('salesforces/chart', [SettleController::class, 'salesforceChart']);
                 Route::post('salesforces/deduct', [SettleController::class, 'SalesDeduct']);
             });
             Route::prefix('settle-histories')->group(function() {

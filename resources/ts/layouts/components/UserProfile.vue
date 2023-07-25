@@ -74,8 +74,7 @@ user_info.value.profile_img = user_info.value.profile_img ? user_info.value.prof
                         <VListItemSubtitle>{{ all_levels.find(level => level['id'] === user_info.level)?.title }}</VListItemSubtitle>
                     </VListItem>
 
-                    <VDivider class="my-2" />
-
+                    <VDivider class="my-2" v-if="user_info.level > 10" />
                     <VListItem @click="profile()" class="custom-link" v-if="user_info.level > 10">
                         <template #prepend>
                             <VIcon class="me-2" icon="tabler-user" size="22" />

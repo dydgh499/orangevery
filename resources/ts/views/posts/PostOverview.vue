@@ -1,15 +1,22 @@
 <script lang="ts" setup>
 import type { Post } from '@/views/types'
-import { requiredValidator, nullValidator } from '@validators'
+import { requiredValidator } from '@validators'
 import Editor from '@/layouts/utils/Editor.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { types } from '@/views/posts/useStore'
+import { getUserLevel } from '@/plugins/axios'
 
 interface Props {
     item: Post,
 }
 const props = defineProps<Props>()
-
+const getPostTypes = computed(() => {
+    if(getUserLevel() >= 35)
+        return types
+    else {
+        return [{ id: 2, title: "1:1 문의" }]
+    }
+})
 </script>
 <template>
     <VRow class="match-height">
@@ -44,7 +51,7 @@ const props = defineProps<Props>()
                                 <template #name></template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.type"
-                                    :items="types" prepend-inner-icon="fxemoji-notepage" label="게시글 타입 선택" 
+                                    :items="getPostTypes" prepend-inner-icon="fxemoji-notepage" label="게시글 타입 선택" 
                                     item-title="title" item-value="id" />
                                 </template>
                             </CreateHalfVCol>

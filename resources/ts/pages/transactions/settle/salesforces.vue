@@ -12,12 +12,12 @@ const all_sales = salesLevels()
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
+const totals = ref(<any[]>([]))
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-const metas = []
 store.params.level = all_sales[0].id
 
 const getSettleStyle = (parent_key: string) => {
@@ -38,9 +38,20 @@ const isSalesCol = (key: string) => {
     }
     return false
 }
+
+onMounted(() => {
+    watchEffect(async() => {
+        if(store.params.page == 1) {
+            const r = await store.getChartData()            
+            totals.value = []
+            if(r.data.amount != 0)
+                totals.value.push(r.data)
+        }
+    })
+})
 </script>
 <template>
-    <BaseIndexView placeholder="영업점 상호 검색" :metas="metas" :add="false" add_name="정산" :is_range_date="false">
+    <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :is_range_date="false">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" :sales="true">
                 <template #extra_left>
@@ -81,6 +92,32 @@ const isSalesCol = (key: string) => {
             </tr>
         </template>
         <template #body>
+            <!-- chart -->
+            <tr v-for="(item, index) in totals" :key="index" style="height: 3.75rem;">
+                <template v-for="(_header, _key, _index) in head.headers" :key="_index">
+                    <template v-if="head.getDepth(_header, 0) != 1">
+                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
+                            class='list-square'>
+                            <span v-if="_key == 'deduction' && (__key as string) == 'input'">
+                            </span>
+                            <span v-else :style="getSettleStyle(_key as string)">
+                                {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0 }}
+                            </span>
+                        </td>
+                    </template>
+                    <template v-else>
+                        <td v-show="_header.visible" class='list-square'>
+                            <span v-if="isSalesCol(_key as string)" style="font-weight: bold;">
+                                {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
+                            </span>
+                            <span v-else>
+                                {{ item[_key] }}
+                            </span>
+                        </td>
+                    </template>
+                </template>
+            </tr>
+            <!-- normal -->
             <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
@@ -91,7 +128,7 @@ const isSalesCol = (key: string) => {
                                 </AddDeductBtn>
                             </span>
                             <span v-else :style="getSettleStyle(_key as string)">
-                                {{ (item[_key][__key] as number).toLocaleString() }}
+                                {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0 }}
                             </span>
                         </td>
                     </template>
@@ -119,7 +156,7 @@ const isSalesCol = (key: string) => {
                                 </VChip>
                             </span>
                             <span v-else-if="isSalesCol(_key as string)" style="font-weight: bold;">
-                                {{ (item[_key] as number).toLocaleString() }}
+                                {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
                             </span>
                             <span v-else-if="_key === 'extra_col'">
                                 <ExtraMenu :name="item['user_name']" :is_mcht="false" :item="item">

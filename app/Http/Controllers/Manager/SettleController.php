@@ -105,9 +105,35 @@ class SettleController extends Controller
         $request = $request->merge([
             'paze_size' => 999999,
         ]);
+        $total = [
+            'id' => '합계',
+            'deduction' => [
+                'input' => null,
+                'amount' => 0,
+            ],
+            'terminal' => [
+                'amount' => 0,
+            ],
+            'settle' => [
+                'amount' => 0,
+                'deposit' => 0,
+                'transfer' => 0,
+            ]
+        ];
+        $transactions = collect();
         $data = $this->merchandiseCommonQuery($request);
-        
-        return $this->response(0, $data);
+        foreach($data['content'] as $data)
+        {
+            $transactions = $transactions->merge($data->transactions);
+            $total['deduction']['amount'] += $data->deduction['amount'];
+            $total['terminal']['amount'] += $data->terminal['amount'];
+            $total['settle']['amount'] += $data->settle['amount'];
+            $total['settle']['deposit'] += $data->settle['deposit'];
+            $total['settle']['transfer'] += $data->settle['transfer'];
+        }
+        $chart = getDefaultTransChartFormat($transactions);
+        $total = array_merge($total, $chart);
+        return $this->response(0, $total);
     }
 
     public function merchandises(IndexRequest $request)
@@ -167,8 +193,35 @@ class SettleController extends Controller
         $request = $request->merge([
             'paze_size' => 999999,
         ]);
+        $total = [
+            'id' => '합계',
+            'deduction' => [
+                'input' => null,
+                'amount' => 0,
+            ],
+            'terminal' => [
+                'amount' => 0,
+            ],
+            'settle' => [
+                'amount' => 0,
+                'deposit' => 0,
+                'transfer' => 0,
+            ]
+        ];
+        $transactions = collect();
         $data = $this->salesforceCommonQuery($request);
-        return $this->response(0, $data);
+        foreach($data['content'] as $data)
+        {
+            $transactions = $transactions->merge($data->transactions);
+            $total['deduction']['amount'] += $data->deduction['amount'];
+            $total['terminal']['amount'] += $data->terminal['amount'];
+            $total['settle']['amount'] += $data->settle['amount'];
+            $total['settle']['deposit'] += $data->settle['deposit'];
+            $total['settle']['transfer'] += $data->settle['transfer'];
+        }
+        $chart = getDefaultTransChartFormat($transactions);
+        $total = array_merge($total, $chart);
+        return $this->response(0, $total);
     }
 
     public function salesforces(IndexRequest $request)
