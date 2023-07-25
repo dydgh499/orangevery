@@ -158,9 +158,9 @@ class AuthController extends Controller
         $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/onwer-check';
         $res = post($url, $data);
         if($res['body']['result'] === 100)
-            return $this->response(1, $res['body']['message']);
+            return $this->response(1, ['message'=> $res['body']['message']]);
         else
-            return $this->extendResponse(1999, $res['body']['message']);
+            return $this->extendResponse(1999, ['message'=> $res['body']['message']]);
     }
 }
 
