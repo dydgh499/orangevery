@@ -81,11 +81,16 @@ class QuickViewController extends Controller
         $now = Carbon::now();
         $ago_30_days = $now->copy()->subDays(30);
         
-        $content_in_30_days = $contents->filter(function ($content) use ($ago_30_days, $now) {
-            $trxDate = Carbon::parse($content->trx_dt);
-            return $trxDate->format('Y-m-d') >= $ago_30_days->format('Y-m-d') && $trxDate->format('Y-m-d') <= $now->format('Y-m-d');
-        })->all();
-        
+        if($contents)
+        {
+            $content_in_30_days = $contents->filter(function ($content) use ($ago_30_days, $now) {
+                $trxDate = Carbon::parse($content->trx_dt);
+                return $trxDate->format('Y-m-d') >= $ago_30_days->format('Y-m-d') && $trxDate->format('Y-m-d') <= $now->format('Y-m-d');
+            })->all();    
+        }
+        else
+            $content_in_30_days = [];
+            
         foreach ($content_in_30_days as $content) 
         {
             if (!isset($grouped[$content->mcht_name]))
