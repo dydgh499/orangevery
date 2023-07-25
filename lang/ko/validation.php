@@ -157,7 +157,7 @@ return [
         'theme_css' => 'JSON 포멧의 CSS',
         'company_name'    => '법인 상호',
         'pvcy_rep_name'   => '개인정보 책임자명',
-        'business_num'  => '사업자 번호',
+        'business_num'  => '사업자등록번호',
         'stamp_max_size'    => '스탬프 쿠폰변환 최소개수',
         'stamp_save_count'  => '상품당 스탬프 저장개수',
         'coupon_model_id'   => '쿠폰 발행시 발행될 쿠폰 ID',

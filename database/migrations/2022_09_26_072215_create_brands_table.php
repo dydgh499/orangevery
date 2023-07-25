@@ -33,7 +33,7 @@ class CreateBrandsTable extends Migration
             $table->string('pvcy_rep_name')->nullable()->comment('개인정보 보호 담당자명');
             $table->string('ceo_name')->nullable()->comment('대표자명');
             $table->string('addr')->nullable()->comment('주소');
-            $table->string('business_num')->nullable()->comment('사업자 번호');
+            $table->string('business_num')->nullable()->comment('사업자등록번호');
             $table->string('phone_num')->nullable()->comment('휴대폰 번호');
             $table->string('fax_num')->nullable()->comment('팩스 번호');
             $table->string('pv_options', 1000)->default('[]')->comment('페이베리 옵션()');

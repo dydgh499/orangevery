@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('pg_name')->comment('PG사명');
             $table->string('rep_name')->comment('대표자명');
             $table->string('company_name')->comment('회사명');
-            $table->string('business_num', 20)->nullable()->comment('사업자번호');
+            $table->string('business_num', 20)->nullable()->comment('사업자등록번호');
             $table->string('phone_num', 20)->default('')->comment('휴대폰 번호');
             $table->string('addr', 200)->nullable()->comment('사업지 주소');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');

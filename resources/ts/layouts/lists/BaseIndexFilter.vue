@@ -23,6 +23,11 @@ else if (props.is_range_date == true) {
 else if (props.is_range_date == false)
     store.params.dt = formatDate(new Date())
 
+const handleEnterKey = (event: KeyboardEvent) => {
+      if (event.keyCode === 13) 
+        store.setTable()
+}
+
 const setDateRange = (type: string) => {
     var s_date = undefined
     var e_date = undefined
@@ -97,7 +102,7 @@ const setDateRange = (type: string) => {
                             PDF 추출
                         </VBtn>
                         <div class="d-inline-flex align-center flex-wrap gap-4 float-right justify-center">
-                            <VTextField v-model="store.search" :placeholder="`${props.placeholder}`" density="compact"
+                            <VTextField id="search" :placeholder="`${props.placeholder}`" density="compact" @keyup.enter="handleEnterKey"
                                 prepend-inner-icon="tabler:search" class="search-input" style="flex-grow: 3;" />
                             <VBtn prepend-icon="tabler:search" @click="store.setTable()" style="flex-grow: 1;">
                                 검색

@@ -10,7 +10,7 @@ export const useRegisterStore = defineStore('salesRegisterStore', () => {
         addr: '주소(X)', 
         phone_num: '휴대폰번호(X)', 
         resident_num: '주민등록번호(O)', 
-        business_num: '사업자번호(O)', 
+        business_num: '사업자등록번호(O)', 
         sector: '업종(O)',
         acct_num: '계좌번호(O)',
         acct_name: '예금주(O)', 

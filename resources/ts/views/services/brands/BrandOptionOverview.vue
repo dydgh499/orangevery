@@ -80,7 +80,7 @@ const md = user_info.value.level == 50 ? 6 : 12
                                         placeholder="연락처를 입력해주세요." type="text" class='pt-3' />
                                     <VTextField prepend-inner-icon="ic-outline-business-center"
                                         v-model="props.item.free.sales_slip.merchandise.business_num"
-                                        placeholder="사업자번호를 입력해주세요." type="text" class='pt-3' />
+                                        placeholder="사업자등록번호를 입력해주세요." type="text" class='pt-3' />
                                     <VTextField prepend-inner-icon="tabler-map-pin"
                                         v-model="props.item.free.sales_slip.merchandise.addr"
                                         placeholder="주소를 입력해주세요." type="text" class='pt-3' />

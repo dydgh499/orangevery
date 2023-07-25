@@ -72,9 +72,9 @@ watchEffect(() => {
                                     persistent-placeholder :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
-                        <!-- 👉 사업자 번호 -->
+                        <!-- 👉 사업자등록번호 -->
                         <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>사업자번호</template>
+                            <template #name>사업자등록번호</template>
                             <template #input>
                                 <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
                                     prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"

@@ -144,7 +144,7 @@ defineExpose({
                         <template #input>{{ trans?.use_saleslip_sell ?  pg?.company_name : trans?.mcht_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
-                        <template #name>사업자번호</template>
+                        <template #name>사업자등록번호</template>
                         <template #input>{{ trans?.use_saleslip_sell ? pg?.business_num : trans?.business_num }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
@@ -164,7 +164,7 @@ defineExpose({
                         <template #input>{{ trans?.use_saleslip_prov ? pg?.company_name : trans?.mcht_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
-                        <template #name>사업자번호</template>
+                        <template #name>사업자등록번호</template>
                         <template #input>{{ trans?.use_saleslip_prov ? pg?.business_num : trans?.business_num }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">

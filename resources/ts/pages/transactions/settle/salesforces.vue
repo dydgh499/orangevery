@@ -22,7 +22,7 @@ store.params.level = all_sales[0].id
 
 const getSettleStyle = (parent_key: string) => {
     if (parent_key === 'appr')
-        return 'color: blue;'
+        return 'color: rgb(var(--v-theme-primary));'
     else if (parent_key === 'cxl')
         return 'color: red;'
     else if (parent_key === 'settle')

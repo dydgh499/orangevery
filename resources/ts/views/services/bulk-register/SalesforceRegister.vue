@@ -52,7 +52,7 @@ const validate = () => {
             is_clear.value = false
         }
         else if (isEmpty(saleses.value[i].business_num)) {
-            snackbar.value.show((i + 1) + '번째 영업점의 사업자번호는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 1) + '번째 영업점의 사업자등록번호는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(saleses.value[i].resident_num)) {
@@ -60,11 +60,11 @@ const validate = () => {
             is_clear.value = false
         }
         else if (isEmpty(saleses.value[i].business_num)) {
-            snackbar.value.show((i + 1) + '번째 영업점의 사업자번호는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 1) + '번째 영업점의 사업자등록번호는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (typeof businessNumValidator(saleses.value[i].business_num) != 'boolean') {
-            snackbar.value.show((i + 1) + '번째 영업점의 사업자번호 포멧이 정확하지 않습니다.', 'error')
+            snackbar.value.show((i + 1) + '번째 영업점의 사업자등록번호 포멧이 정확하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (typeof lengthValidatorV2(saleses.value[i].resident_num, 14) != 'boolean') {
@@ -193,7 +193,7 @@ watchEffect(async () => {
                 </template>
                 <template #input>
                     <VCol>
-                        <b>사업자등록번호 입력 주의사항: </b><span>정확한 사업자 번호 입력(예:123-13-12345)</span>
+                        <b>사업자등록번호 입력 주의사항: </b><span>정확한 사업자등록번호 입력(예:123-13-12345)</span>
                     </VCol>
                     <VCol>
                         <b>주민등록번호 입력 주의사항: </b><span>14자리 입력(예:800101-7654321)</span>

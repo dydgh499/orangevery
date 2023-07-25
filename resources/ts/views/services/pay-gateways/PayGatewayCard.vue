@@ -99,11 +99,11 @@ const filterPss = computed(() => {
                         </VRow>
                         <VRow class="pt-3">
                             <VCol>
-                                <label>사업자번호</label>
+                                <label>사업자등록번호</label>
                             </VCol>
                             <VCol>
                                 <VTextField v-model="props.item.business_num" type="text"
-                                    prepend-inner-icon="ic-outline-business-center" placeholder="사업자번호 입력"
+                                    prepend-inner-icon="ic-outline-business-center" placeholder="사업자등록번호 입력"
                                     persistent-placeholder
                                     :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
 

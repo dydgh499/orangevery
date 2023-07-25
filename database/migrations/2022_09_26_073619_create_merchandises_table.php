@@ -49,7 +49,7 @@ class CreateMerchandisesTable extends Migration
             //
             $table->string('phone_num',20)->nullable()->comment('휴대폰 번호');
             $table->string('resident_num', 20)->nullable()->comment('주민등록번호');
-            $table->string('business_num', 20)->nullable()->comment('사업자번호');
+            $table->string('business_num', 20)->nullable()->comment('사업자등록번호');
             $table->string('sector', 20)->nullable()->comment('업종');
             //
             $table->string('passbook_img', 100)->nullable()->comment('통장 사본');
