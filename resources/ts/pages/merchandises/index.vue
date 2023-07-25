@@ -7,7 +7,7 @@ import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { user_info } from '@axios'
 
-const { store, head, exporter } = useSearchStore()
+const { store, head, exporter, getModuleTypes } = useSearchStore()
 const password = ref()
 
 provide('password', password)
@@ -45,18 +45,21 @@ const metas = ref([
         stats: '0',
     },
 ])
+const defaultValue = (values: any[]) => {
+    return values.length ? values[0] : ''
+}
 onMounted(() => {
-    watchEffect(async() => {
-        if(store.params.page == 1) {
+    watchEffect(async () => {
+        if (store.params.page == 1) {
             const r = await store.getChartData()
             metas.value[0]['stats'] = r.data.this_month_add.toLocaleString()
             metas.value[1]['stats'] = (r.data.this_month_del * -1).toLocaleString()
             metas.value[2]['stats'] = r.data.this_week_add.toLocaleString()
-            metas.value[3]['stats'] = (r.data.this_week_del * -1).toLocaleString()  
+            metas.value[3]['stats'] = (r.data.this_week_del * -1).toLocaleString()
             metas.value[0]['percentage'] = store.getPercentage(r.data.this_month_add, r.data.total)
             metas.value[1]['percentage'] = store.getPercentage((r.data.this_month_del * -1), r.data.total)
             metas.value[2]['percentage'] = store.getPercentage(r.data.this_week_add, r.data.total)
-            metas.value[3]['percentage'] = store.getPercentage((r.data.this_week_del * -1), r.data.total)            
+            metas.value[3]['percentage'] = store.getPercentage((r.data.this_week_del * -1), r.data.total)
         }
     })
 })
@@ -118,6 +121,18 @@ onMounted(() => {
                                         {{ (item[_key] as number).toFixed(3) }} %
                                     </VChip>
                                 </span>
+                                <span v-else-if="_key == 'mids'">
+                                    <VSelect style="min-width: 10em;" :value="defaultValue(item['mids'])"
+                                        :items="item['mids']" :menu-props="{ maxHeight: 400 }"/>
+                                </span>
+                                <span v-else-if="_key == 'tids'">
+                                    <VSelect style="min-width: 10em;" :value="defaultValue(item['tids'])"
+                                        :items="item['tids']" :menu-props="{ maxHeight: 400 }"/>
+                                </span>
+                                <span v-else-if="_key == 'module_types'">
+                                    <VSelect style="min-width: 10em;" :value="defaultValue(getModuleTypes(item['module_types']))"
+                                        :items="getModuleTypes(item['module_types'])" :menu-props="{ maxHeight: 400 }"/>
+                                </span>
                                 <span v-else-if="_key == 'enabled'">
                                     <VChip :color="store.booleanTypeColor(!item[_key])">
                                         {{ item[_key] ? 'ON' : 'OFF' }}
@@ -134,7 +149,6 @@ onMounted(() => {
                     </template>
                 </tr>
             </template>
-        </BaseIndexView>
-        <PasswordChangeDialog ref="password" />
-    </div>
-</template>
+    </BaseIndexView>
+    <PasswordChangeDialog ref="password" />
+</div></template>

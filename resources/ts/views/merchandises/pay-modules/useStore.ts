@@ -66,6 +66,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         'settle_type' : '정산일',
         'mid' : 'MID',
         'tid' : 'TID',
+        'pay_key' : '결제 KEY',
         'installment' : '할부한도',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',

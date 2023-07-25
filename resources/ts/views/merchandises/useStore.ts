@@ -1,4 +1,5 @@
 import { Header } from '@/views/headers'
+import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { Searcher } from '@/views/searcher'
 import { Merchandise } from '@/views/types'
 import { axios, user_info } from '@axios'
@@ -41,6 +42,11 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     headers['trx_fee'] = '수수료'
     headers['hold_fee'] = '유보금 수수료'
     headers['mcht_name'] = '상호'
+    if(user_info.value.level >= 35) {
+        headers['mids'] = 'MID'
+        headers['tids'] = 'TID'
+        headers['module_types'] = '모듈타입'
+    }
     headers['nick_name'] = '대표자명'
     headers['phone_num'] = '연락처'
     headers['resident_num'] = '주민등록번호'
@@ -66,12 +72,20 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
 
+    const getModuleTypes = (my_modules: any[]) => {
+        return my_modules.map(id => module_types.find(module => module.id === id)?.title )
+    };
+
     const exporter = async (type: number) => {
         const keys = Object.keys(headers);
         const r = await store.get(store.getAllDataFormat())
         let datas = r.data.content;
         for (let i = 0; i < datas.length; i++) {
-
+            if(user_info.value.level >= 35) {
+                datas[i]['module_types'] = getModuleTypes(datas[i]['module_types']).join(',')
+                datas[i]['mids'] = datas[i]['mids'].join(',')
+                datas[i]['tids'] = datas[i]['tids'].join(',')
+            }
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
@@ -80,6 +94,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
         store,
         head,
         exporter,
+        getModuleTypes,
     }
 })
 
