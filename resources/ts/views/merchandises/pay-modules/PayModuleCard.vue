@@ -10,6 +10,7 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { VForm } from 'vuetify/components'
 import corp from '@corp'
+import { axios, getUserLevel } from '@axios'
 
 interface Props {
     item: PayModule,
@@ -18,6 +19,9 @@ interface Props {
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+const errorHandler = <any>(inject('$errorHandler'))
 
 const all_levels = allLevels()
 const { update, remove } = useRequestStore()
@@ -26,29 +30,50 @@ const { pgs, pss, settle_types, terminals, psFilter, setFee } = useStore()
 const mcht = ref({ id: null, mcht_name: '선택안함' })
 const md = ref<number>(3)
 
-onMounted(() => {
-    props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
-    props.item.ps_id = props.item.ps_id == 0 ? null : props.item.ps_id
-    props.item.settle_type = props.item.settle_type == 0 ? null : props.item.settle_type
-    props.item.terminal_id = props.item.terminal_id == 0 ? null : props.item.terminal_id
-})
-
-// 결제모듈 타입 변동 체크
-watchEffect(() => {
-    console.log(props.merchandises)
-    md.value = props.item.module_type == 0 ? 3 : 4
-})
-
+const tidCreate = async() => {
+    if(await alert.value.show('정말 TID를 새로 가져오시겠습니까?')) {
+        try {
+            const pg_type = pgs.find(obj => obj.id === props.item.pg_id)?.pg_type
+            const r = await axios.post('/api/v1/manager/merchandises/pay-modules/tid-create', { pg_type : pg_type })
+            props.item.tid = r.data.tid
+            snackbar.value.show('성공하였습니다.<br>저장하시려면 수정버튼을 눌러주세요.', 'success')
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            const r = errorHandler(e)
+        }
+    }
+}
+const payKeyCreate = async() => {
+    if(await alert.value.show('정말 결제 KEY를 신규 발급하시겠습니까?<br><br><b>이전 결제키는 더이상 사용할 수 없으니 주의하시기바랍니다.</b>')) {
+        try {
+            const r = await axios.post('/api/v1/manager/merchandises/pay-modules/pay-key-create', {id: props.item.id})
+            props.item.pay_key = r.data.pay_key
+            snackbar.value.show('결제 KEY가 업데이트 되었습니다.', 'success')
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            const r = errorHandler(e)
+        }
+    }
+}
 const filterPgs = computed(() => {
     const filter = pss.filter(item => { return item.pg_id == props.item.pg_id })
     props.item.ps_id = psFilter(filter, props.item.ps_id)
     return filter
 })
-watchEffect(() => {
-    if(props.able_mcht_chanage)
-        props.item.mcht_id = mcht.value.id
+onMounted(() => {
+    props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
+    props.item.ps_id = props.item.ps_id == 0 ? null : props.item.ps_id
+    // 결제모듈 타입 변동 체크
+    watchEffect(() => {
+        md.value = props.item.module_type == 0 ? 3 : 4
+    })
+    watchEffect(() => {
+        if(props.able_mcht_chanage)
+            props.item.mcht_id = mcht.value.id
+    })
 })
-
 </script>
 <template>
     <AppCardActions action-collapsed :title="props.item.note" :collapsed="props.able_mcht_chanage ? false : true">
@@ -168,7 +193,7 @@ watchEffect(() => {
                         <!-- 👉 SUB KEY-->
                         <VRow class="pt-3" v-show="props.item.module_type != 0">
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>SUB KEY(license)</template>
+                                <template #name>SUB KEY(iv)</template>
                                 <template #input>
                                     <VTextField type="text" v-model="props.item.sub_key" prepend-inner-icon="ic-sharp-key"
                                         placeholder="SUB KEY 입력" persistent-placeholder />
@@ -190,8 +215,36 @@ watchEffect(() => {
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>TID</template>
                                 <template #input>
-                                    <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
-                                        placeholder="TID 입력" persistent-placeholder />
+                                    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                        <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
+                                            placeholder="TID 입력" persistent-placeholder />
+                                        <VBtn type="button" variant="tonal" v-if="getUserLevel() >= 50 && props.item.id == 0"
+                                            @click="tidCreate()">
+                                            {{ "생성" }}
+                                            <VIcon end icon="material-symbols:add-to-home-screen" />
+                                        </VBtn>                                        
+                                    </div>
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow class="pt-3" v-show="props.item.module_type != 0" v-if="props.item.id != 0">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>
+                                    <BaseQuestionTooltip :location="'top'" :text="'결제 KEY'"
+                                        :content="'해당 키를 통해 온라인 결제를 발생시킬 수 있습니다.<br>키를 복사하려면 입력필드에서 더블클릭하세요.'">
+                                    </BaseQuestionTooltip>
+                                </template>
+                                <template #input>
+                                    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                        <VTextField type="text" v-model="props.item.pay_key" prepend-inner-icon="ic-baseline-vpn-key"
+                                             persistent-placeholder :disabled="true"/>
+
+                                        <VBtn type="button" variant="tonal" v-if="getUserLevel() >= 35"
+                                            @click="payKeyCreate()">
+                                            {{ "발급" }}
+                                            <VIcon end icon="material-symbols:add-to-home-screen" />
+                                        </VBtn>                                            
+                                    </div>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

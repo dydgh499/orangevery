@@ -13,6 +13,10 @@ use App\Http\Requests\Manager\IndexRequest;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class PaymentModuleController extends Controller
 {
@@ -102,7 +106,14 @@ class PaymentModuleController extends Controller
                 if($res)
                     return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
             }
-            $res = $this->payModules->create($item);
+
+            $res = DB::transaction(function () use($item) {
+                $res = $this->payModules->create($item);
+                $res = $this->payModules
+                    ->where('id', $res->id)
+                    ->update(['pay_key' => $this->getNewPayKey($res->id)]);
+                return true;
+            });
             return $this->response($res ? 1 : 990);
         }
         else
@@ -141,6 +152,8 @@ class PaymentModuleController extends Controller
         if($this->authCheck($request->user(), $id, 15))
         {
             $item = $request->data();
+            $item['pay_key'] = $request->pay_key;
+
             if($item['module_type'] == 0 && $item['serial_num'] != '')
             {
                 $res = $this->payModules
@@ -239,5 +252,43 @@ class PaymentModuleController extends Controller
             ->where('payment_modules.id', $id)
             ->first($cols);
         return $this->response(0, $mcht);        
+    }
+
+    
+    public function tidCreate(Request $request)
+    {
+        //0523070000 pg(2) + ym(2) + idx(4)
+        $pg_type = sprintf("%02d", $request->pg_type);
+        $date = date('ym');
+
+        $cur_month = Carbon::now()->startOfMonth();
+        $next_month = $cur_month->copy()->addMonth(1)->startOfMonth()->format('Y-m-d');
+        $cur_month = $cur_month->format('Y-m-d');
+        $pay_modules = $this->payModules
+            ->where('created_at', '>=', $cur_month)
+            ->where('created_at', '<', $next_month)
+            ->get(['tid']);
+
+        $pattern = '/^'.$pg_type.$date.'[0-9]{4}$/';
+        $idx     = $pay_modules->filter(function($pay_module) use($pattern) {       
+            return preg_match($pattern, $pay_module->tid) === 1;
+        })->count();
+
+        $tid = sprintf($pg_type.$date.'%04d', $idx);
+        return $this->response(0, ['tid'=>$tid]);    
+    }
+
+    public function getNewPayKey($id)
+    {
+        return $id.Str::random(64 - strlen((string)$id));
+    }
+
+    public function payKeyCreate(Request $request)
+    {
+        $pay_key = $this->getNewPayKey($request->id);
+        $res = $this->payModules
+            ->where('id', $request->id)
+            ->update(['pay_key' => $pay_key]);
+        return $this->response(0, ['pay_key'=>$pay_key]);    
     }
 }

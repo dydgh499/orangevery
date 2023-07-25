@@ -132,8 +132,10 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
 
 
             Route::get('pay-modules/chart', [PaymentModuleController::class, 'chart']);
-            Route::get('pay-modules/all', [PaymentModuleController::class, 'all']);
-            Route::get('pay-modules/{id}/sales-slip', [PaymentModuleController::class, 'salesSlip']);     
+            Route::get('pay-modules/all', [PaymentModuleController::class, 'all']);            
+            Route::get('pay-modules/{id}/sales-slip', [PaymentModuleController::class, 'salesSlip']);
+            Route::post('pay-modules/tid-create', [PaymentModuleController::class, 'tidCreate']);
+            Route::post('pay-modules/pay-key-create', [PaymentModuleController::class, 'payKeyCreate']);
             Route::post('pay-modules/bulk-register', [PaymentModuleController::class, 'bulkRegister']);
 
             Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);

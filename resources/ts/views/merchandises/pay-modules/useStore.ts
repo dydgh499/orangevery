@@ -135,6 +135,7 @@ export const defaultItemInfo =  () => {
         pay_disable_s_tm: null,
         pay_disable_e_tm: null,
         show_pay_view: false,
+        pay_key: ''
     })
     //카드사 필터 및 다른 필터옵션들
     return {
