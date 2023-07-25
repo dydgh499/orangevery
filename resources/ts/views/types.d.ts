@@ -159,6 +159,7 @@ export interface PayModule {
     pay_disable_e_tm: date | null,
     show_pay_view: boolean,
     note: string,
+    filter_issuers: string[],
 }
 
 export interface PayGateway {

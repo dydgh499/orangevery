@@ -8,6 +8,7 @@ import { allLevels } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { issuers } from '@/views/complaints/useStore'
 import { VForm } from 'vuetify/components'
 import corp from '@corp'
 import { axios, getUserLevel } from '@axios'
@@ -253,6 +254,8 @@ onMounted(() => {
                 <VDivider :vertical="$vuetify.display.mdAndUp" v-show="props.item.module_type == 0" />
                 <VCol cols="12" :md="md" v-show="props.item.module_type == 0">
                     <VCardItem>
+
+                        <!-- {"except_cards":[],"use":"0"} -->
                         <VCardTitle style="margin-bottom: 1em;">장비정보</VCardTitle>
                         <!-- 장비 종류 -->
                         <VRow class="pt-3">
@@ -372,7 +375,7 @@ onMounted(() => {
                                 </template>
                                 <template #input>
                                     <VSelect v-model="props.item.abnormal_trans_limit" :items="abnormal_trans_limits"
-                                        prepend-inner-icon="jam-triangle-danger" label="이상거래 한도설정" item-title="title"
+                                        prepend-inner-icon="jam-triangle-danger" label="이상거래 한도설정" item-title="title" single-line
                                         item-value="id" />
                                 </template>
                             </CreateHalfVCol>
@@ -435,6 +438,21 @@ onMounted(() => {
                                         <span class="text-center mx-auto">~</span>
                                         <VTextField v-model="props.item.pay_disable_e_tm" type="time" />
                                     </div>
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow class="pt-3" v-if="corp.pv_options.paid.use_issuer_filter && props.item.module_type != 0">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
+                                <template #name>
+                                    <BaseQuestionTooltip :location="'top'" :text="'발급사 필터링'"
+                                        :content="'해당 발급사로 결제된 카드는 강제취소됩니다.'">
+                                    </BaseQuestionTooltip>
+                                </template>
+                                <template #input>
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.filter_issuers" label="필터링할 발급사 선택"
+                                        :items="issuers" prepend-inner-icon="ph-buildings"
+                                        item-title="title" item-value="code" multiple chips closable-chips single-line
+                                        create />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

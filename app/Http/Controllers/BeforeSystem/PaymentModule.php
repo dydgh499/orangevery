@@ -117,7 +117,7 @@ class PaymentModule
                 ->where('merchandise.M_KEY', '!=', '')
                 ->orderby('user.PK', 'DESC')
                 ->get();
-
+        
         foreach($mchts as $mcht) {            
             $item = [
                 'brand_id'  => $brand_id,

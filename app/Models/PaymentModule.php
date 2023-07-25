@@ -26,4 +26,11 @@ class PaymentModule extends Model
     {
         return $this->dateAttribute();
     }
+
+    protected function filterIssuers(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => json_decode($value, true),
+        );
+    }    
 }
