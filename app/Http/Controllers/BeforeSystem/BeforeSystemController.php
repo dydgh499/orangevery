@@ -89,9 +89,8 @@ class BeforeSystemController extends Controller
             ->where('user.DNS_PK', 15)
             ->orderby('user.PK', 'DESC')
             ->get($cols);
-        logging(['users'=>json_encode($users)]);
+
         $privacys = $mc->getPaywellPrivacy($this->paywell, $users, 'USER_PK');
-        logging(['privacys'=>json_encode($privacys)]);
         foreach($users as $mcht) 
         {
             $privacy = $privacys->first(function($item) use ($mcht) {
