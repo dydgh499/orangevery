@@ -109,9 +109,12 @@ class PaymentModuleController extends Controller
 
             $res = DB::transaction(function () use($item) {
                 $res = $this->payModules->create($item);
-                $res = $this->payModules
-                    ->where('id', $res->id)
-                    ->update(['pay_key' => $this->getNewPayKey($res->id)]);
+                if($item['module_type'] != 0)
+                {
+                    $res = $this->payModules
+                        ->where('id', $res->id)
+                        ->update(['pay_key' => $this->getNewPayKey($res->id)]);
+                }
                 return true;
             });
             return $this->response($res ? 1 : 990);
