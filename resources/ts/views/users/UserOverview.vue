@@ -1,20 +1,43 @@
 <script lang="ts" setup>
-import { businessNumValidator, lengthValidatorV2, requiredValidator, nullValidator, integerValidator } from '@validators'
-import type { UserPropertie, Options } from '@/views/types'
+import { lengthValidatorV2, requiredValidator, nullValidator } from '@validators'
+import type { UserPropertie } from '@/views/types'
 import FileInput from '@/layouts/utils/FileInput.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
 import { banks, avatars } from '@/views/users/useStore'
+import corp from '@corp'
+import { axios } from '@axios'
 
 interface Props {
     item: UserPropertie,
     id: number | string,
 }
 const props = defineProps<Props>()
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+const errorHandler = <any>(inject('$errorHandler'))
+
 
 const is_show = ref(false)
 const bank = ref(<any>({ code: null, title: '선택안함' }))
 
+const onwerCheck = async() => {
+    if(await alert.value.show('정말 예금주 검증을 하시겠습니까?')) {
+        try {
+            const params = {
+                acct_cd: bank.code,
+                acct_num: props.item.acct_num,
+                acct_nm: props.item.acct_name
+            }
+            const r = await axios.post('/api/v1/auth/onwer-check', params)
+            snackbar.value.show(r.data.message, 'success')
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            const r = errorHandler(e)
+        }
+    }
+}
 onMounted(async() => {
     watchEffect(() => {
         if(props.item.acct_bank_code !== null)
@@ -86,8 +109,7 @@ onMounted(async() => {
                             <template #input>
                                 <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
                                     prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
-                                    persistent-placeholder
-                                    :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
+                                    persistent-placeholder />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 주민등록 번호 -->
@@ -130,6 +152,12 @@ onMounted(async() => {
                                     :rules="[nullValidator]" create />
                             </template>
                         </CreateHalfVCol>
+                        <VCol cols="12" v-if="corp.pv_options.paid.use_acct_verification" >
+                            <VBtn @click="onwerCheck"
+                            prepend-icon="ri:pass-valid-line" class="float-right">
+                                예금주 검증
+                            </VBtn>                            
+                        </VCol>
                     </VRow>
                 </VCardItem>
                 <VCardItem>

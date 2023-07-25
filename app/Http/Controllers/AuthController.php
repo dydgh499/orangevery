@@ -111,41 +111,6 @@ class AuthController extends Controller
     }
 
     /**
-     * 네임서버 검증
-     * @unauthenticated
-     *
-     * @bodyParam dns string required 검증할 DNS 입력 Example: www.example.com
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function nameServerValidate(Request $request)
-    {
-        $validated = $request->validate(['dns'=>'required']);
-        $records = dns_get_record($request->dns, DNS_ALL);
-        if(count($records))
-        {
-            $ns_1 = "ns1.vercel-dns.com";
-            $ns_2 = "ns2.vercel-dns.com";
-            $cname = "cname.vercel-dns.com";
-
-            for($i=0; $i<count($records); $i++)
-            {
-                if($records[$i]['type'] == "NS")
-                {
-                    if(($records[$i]['target'] == $ns_1) || ($records[$i]['target'] == $ns_2))
-                        return $this->response(0, $records);
-                }
-                else if($records[$i]['type'] == "CNAME")
-                {
-                    if($records[$i]['target'] == $cname)
-                        return $this->response(0, $records);
-                }
-            }
-        }
-        return Response::json(['code'=>1000, 'message'=>'올바른 네임서버또는 CNAME이 아니에요 😥', 'data'=>$records], 409);
-    }
-
-    /**
      * 회원가입(본사)
      * @unauthenticated
      *
@@ -185,6 +150,17 @@ class AuthController extends Controller
             else
                 return $this->response(990);
         }, 3);
+    }
+
+    public function onwerCheck(Request $request)
+    {
+        $data = $request->all();
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/onwer-check';
+        $res = post($url, $data);
+        if($res['body']['result'] === 100)
+            return $this->response(1, $res['body']['message']);
+        else
+            return $this->extendResponse(1999, $res['body']['message']);
     }
 }
 

@@ -51,7 +51,7 @@ const addNewPaymodule = () => {
         pay_disable_s_tm: null,
         pay_disable_e_tm: null,
         show_pay_view: true,
-        note: '비고',
+        note: '결제모듈 명칭을 적어주세요.😀',
     })
 }
 </script>

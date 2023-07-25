@@ -88,8 +88,7 @@ watchEffect(() => {
 <template>
     <VCard flat rounded>
         <VCardText>
-            <slot name="explain">
-                
+            <slot name="explain">                
             </slot>
             <VDivider />
             <VForm ref="vForm" @submit.prevent="pay">

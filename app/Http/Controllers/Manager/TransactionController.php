@@ -263,6 +263,5 @@ class TransactionController extends Controller
             return $this->response(1, $res['body']);
         else
             return $this->extendResponse(1999, $res['body']['result_msg']);
-
     }
 }

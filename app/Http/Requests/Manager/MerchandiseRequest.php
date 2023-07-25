@@ -48,7 +48,6 @@ class MerchandiseRequest extends FormRequest
             'mcht_name' => 'required',
             'addr'      => 'required',
             'resident_num' => 'required',
-            'business_num' => 'required',
             'acct_bank_name' => 'required',
             'acct_bank_code' => 'required',
             'enabled' => 'required|boolean',

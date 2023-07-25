@@ -85,7 +85,7 @@ onMounted(() => {
                         <VCardTitle style="margin-bottom: 1em;">결제타입</VCardTitle>
                         <!-- 👉 결제 모듈 타입 -->
                         <VRow class="pt-3" v-if="props.able_mcht_chanage">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>소유 가맹점</template>
                                 <template #input>
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht"
@@ -96,7 +96,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 결제 모듈 타입 -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>결제모듈 타입</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.module_type"
@@ -107,7 +107,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 수기결제 타입(구인증, 비인증) -->
                         <VRow class="pt-3" v-show="props.item.module_type == 1 || props.item.module_type == 5">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>수기결제 타입</template>
                                 <template #input>
                                     <BooleanRadio :radio="Boolean(props.item.is_old_auth)"
@@ -120,7 +120,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 할부한도 (수기,인증,간편,실시간,비인증) -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>할부한도</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.installment"
@@ -131,7 +131,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 PG사 -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>PG사</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_id" :items="pgs"
@@ -142,7 +142,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 PG 구간 -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>구간</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.ps_id" :items="filterPgs"
@@ -154,7 +154,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 정산일 -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>정산일</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type"
@@ -164,7 +164,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>입금 수수료</template>
                                 <template #input>
                                     <VTextField v-model="props.item.settle_fee" type="number" suffix="₩"
@@ -180,7 +180,7 @@ onMounted(() => {
                         <VCardTitle style="margin-bottom: 1em;">결제정보</VCardTitle>
                         <!-- 👉 API KEY-->
                         <VRow class="pt-3" v-show="props.item.module_type != 0">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>API KEY(license)</template>
                                 <template #input>
                                     <VTextField type="text" v-model="props.item.api_key"
@@ -192,7 +192,7 @@ onMounted(() => {
 
                         <!-- 👉 SUB KEY-->
                         <VRow class="pt-3" v-show="props.item.module_type != 0">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>SUB KEY(iv)</template>
                                 <template #input>
                                     <VTextField type="text" v-model="props.item.sub_key" prepend-inner-icon="ic-sharp-key"
@@ -202,7 +202,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 MID -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>MID</template>
                                 <template #input>
                                     <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
@@ -212,7 +212,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 TID -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>TID</template>
                                 <template #input>
                                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
@@ -228,7 +228,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3" v-show="props.item.module_type != 0" v-if="props.item.id != 0">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'결제 KEY'"
                                         :content="'해당 키를 통해 온라인 결제를 발생시킬 수 있습니다.<br>키를 복사하려면 입력필드에서 더블클릭하세요.'">
@@ -256,7 +256,7 @@ onMounted(() => {
                         <VCardTitle style="margin-bottom: 1em;">장비정보</VCardTitle>
                         <!-- 장비 종류 -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>장비 타입</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.terminal_id"
@@ -267,7 +267,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 시리얼 번호 -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>시리얼번호</template>
                                 <template #input>
                                     <VTextField type="text" v-model="props.item.serial_num"
@@ -278,7 +278,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 통신비 -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>통신비</template>
                                 <template #input>
                                     <VTextField type="number" v-model="props.item.comm_settle_fee"
@@ -289,7 +289,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 정산일 -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>정산일</template>
                                 <template #input>
                                     <VTextField v-model="props.item.comm_settle_type" label="정산일 입력" suffix="일" />
@@ -298,7 +298,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 정산주체 -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>정산주체</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.comm_calc_level"
@@ -309,7 +309,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 매출미달 차감금 -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>매출미달 차감금</template>
                                 <template #input>
                                     <VTextField type="number" v-model="props.item.under_sales_amt"
@@ -320,7 +320,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 개통일 -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>개통일</template>
                                 <template #input>
                                     <AppDateTimePicker v-model="props.item.begin_dt"
@@ -330,7 +330,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 출고일 -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>출고일</template>
                                 <template #input>
                                     <AppDateTimePicker v-model="props.item.ship_out_dt"
@@ -340,7 +340,7 @@ onMounted(() => {
                         </VRow>
                         <!-- 👉 출고상태 -->
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>출고상태</template>
                                 <template #input>
                                     <VRadioGroup
@@ -364,7 +364,7 @@ onMounted(() => {
                     <VCardItem>
                         <VCardTitle style="margin-bottom: 1em;">옵션</VCardTitle>
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'이상거래 한도설정'"
                                         :content="'설정 금액 이상으로 결제가 발생할 시, 이상거래 관리 목록에 추가됩니다.'">
@@ -378,7 +378,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3" v-if="corp.pv_options.paid.use_dup_pay_validation">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'중복결제 허용회수'"
                                         :content="'입력된 카드번호를 통해 중복해서 결제가되었는지 검증합니다.<br>0 입력 시 허용회수를 검증하지 않으며, <b>온라인 결제</b>만 적용 가능합니다.'">
@@ -391,7 +391,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3" v-if="corp.pv_options.paid.use_pay_limit && props.item.module_type != 0">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'일 결제 한도'"
                                         :content="'결제 한도 금액: 1,000,000원 = 100 입력(이하동일)<br><b>온라인 결제</b>만 적용 가능합니다.'">
@@ -404,7 +404,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3" v-if="corp.pv_options.paid.use_pay_limit && props.item.module_type != 0">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>월 결제 한도</template>
                                 <template #input>
                                     <VTextField prepend-inner-icon="tabler-currency-won"
@@ -414,7 +414,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3" v-if="corp.pv_options.paid.use_pay_limit && props.item.module_type != 0">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>연 결제 한도</template>
                                 <template #input>
                                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_year_limit"
@@ -423,7 +423,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3" v-if="corp.pv_options.paid.use_forb_pay_time && props.item.module_type != 0">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'결제금지 시간'"
                                         :content="'해당 시간대에는 <b>온라인 결제</b>를 발생시킬 수 없습니다.'">
@@ -439,7 +439,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3" v-if="props.item.module_type != 0">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>결제창 노출여부</template>
                                 <template #input>
                                     <BooleanRadio :radio="Boolean(props.item.show_pay_view)"

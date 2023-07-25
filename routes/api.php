@@ -53,6 +53,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::post('sign-up', [AuthController::class, 'signUp']);
         Route::middleware('auth:sanctum')->post('sign-out', [AuthController::class, 'signout']);
         Route::middleware('auth:sanctum')->post('ok', [AuthController::class, 'ok']);
+        Route::middleware('auth:sanctum')->post('onwer-check', [AuthController::class, 'onwerCheck']);
     });
 
     Route::prefix('manager')->middleware('auth:sanctum')->group(function() {
