@@ -25,7 +25,7 @@ const onwerCheck = async() => {
     if(await alert.value.show('정말 예금주 검증을 하시겠습니까?')) {
         try {
             const params = {
-                acct_cd: bank.code,
+                acct_cd: props.item.acct_bank_code,
                 acct_num: props.item.acct_num,
                 acct_nm: props.item.acct_name
             }
