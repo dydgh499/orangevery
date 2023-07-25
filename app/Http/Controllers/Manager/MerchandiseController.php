@@ -99,18 +99,20 @@ class MerchandiseController extends Controller
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
-
-        $mcht_ids = $data['content']->pluck('id')->values()->toArray();
-        $pay_modules = $this->payModules->whereIn('mcht_id', $mcht_ids)->get(['mcht_id', 'mid', 'tid', 'module_type']);
-        foreach($data['content'] as $content) 
+        if(count($data['content']))
         {
-            $my_modules = $pay_modules->filter(function($pay_module) use($content) {
-                return $pay_module->mcht_id == $content->id;
-            });
-            $content->mids = $my_modules->pluck('mid')->values()->toArray();
-            $content->tids = $my_modules->pluck('tid')->values()->toArray();
-            $content->module_types = $my_modules->pluck('module_type')->values()->toArray();
-            $content->setFeeFormatting(true);
+            $mcht_ids = $data['content']->pluck('id')->values()->toArray();
+            $pay_modules = $this->payModules->whereIn('mcht_id', $mcht_ids)->get(['mcht_id', 'mid', 'tid', 'module_type']);
+            foreach($data['content'] as $content) 
+            {
+                $my_modules = $pay_modules->filter(function($pay_module) use($content) {
+                    return $pay_module->mcht_id == $content->id;
+                });
+                $content->mids = $my_modules->pluck('mid')->values()->toArray();
+                $content->tids = $my_modules->pluck('tid')->values()->toArray();
+                $content->module_types = $my_modules->pluck('module_type')->values()->toArray();
+                $content->setFeeFormatting(true);
+            }
         }
         return $this->response(0, $data);
 
