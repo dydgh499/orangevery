@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { useSalesFilterStore, feeApplyHistoires } from '@/views/salesforces/useStore'
 import { getAllMerchandises } from '@/views/merchandises/useStore'
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
@@ -16,7 +16,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
-const { sales, fee_histories, classification, feeApplyHistoires } = useSalesFilterStore()
+const { sales, fee_histories, classification } = useSalesFilterStore()
 
 const levels = corp.pv_options.auth.levels
 const sales5 = ref(<any>({ id: null, sales_name: '선택안함' }))

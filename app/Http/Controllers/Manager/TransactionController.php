@@ -12,6 +12,7 @@ use Illuminate\Database\QueryException;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
@@ -26,8 +27,37 @@ class TransactionController extends Controller
             'merchandises.mcht_name', 'merchandises.user_name', 'merchandises.nick_name',
             'merchandises.addr', 'merchandises.resident_num', 'merchandises.business_num', 
             'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell', 'merchandises.is_show_fee',
-            'transactions.*'
+            'transactions.*',
+            DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
+            DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
         ];
+    }
+
+    public function getTransactionData($request, $query)
+    {
+        $page      = $request->input('page');
+        $page_size = $request->input('page_size');
+        $sp = ($page - 1) * $page_size;
+
+        $min    = $query->min('transactions.id');
+        $res    = ['page'=>$page, 'page_size'=>$page_size];
+        if($min != NULL)
+        {
+            $con_query = $query->where('transactions.id', '>=', $min);
+            $res['total']   = $query->count();
+            $con_query = $con_query
+                        ->orderBy('trx_dttm', 'desc')
+                        ->orderBy('cxl_dttm', 'desc')
+                        ->offset($sp)
+                        ->limit($page_size);
+            $res['content'] = $con_query->get($this->cols);
+        }
+        else
+        {
+            $res['total'] = 0;
+            $res['content'] = [];
+        }
+        return $res;
     }
 
     public function commonSelect($request)
@@ -88,7 +118,7 @@ class TransactionController extends Controller
             'page_size' => 99999999,
         ]);
         $query  = $this->commonSelect($request);
-        $data   = $this->getIndexData($request, $query, 'transactions.id', $this->cols, 'transactions.id');
+        $data   = $this->getTransactionData($request, $query);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
@@ -109,8 +139,7 @@ class TransactionController extends Controller
     public function index(IndexRequest $request)
     {
         $query = $this->commonSelect($request);
-        $data   = $this->getIndexData($request, $query, 'transactions.id', $this->cols, 'transactions.id');
-
+        $data   = $this->getTransactionData($request, $query);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);

@@ -3,7 +3,7 @@ import { requiredValidator, nullValidator } from '@validators'
 import type { Merchandise } from '@/views/types'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { useSalesFilterStore, feeApplyHistoires } from '@/views/salesforces/useStore'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
@@ -13,7 +13,7 @@ interface Props {
     item: Merchandise,
 }
 const props = defineProps<Props>()
-const { sales, fee_histories, classification, feeApplyHistoires } = useSalesFilterStore()
+const { sales, fee_histories, classification } = useSalesFilterStore()
 const { cus_filters } = useStore()
 const levels = corp.pv_options.auth.levels
 

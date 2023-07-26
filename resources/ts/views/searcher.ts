@@ -59,6 +59,7 @@ export function Searcher(path: string) {
             pagenation.total_count = data.total
             pagenation.total_page = parseInt(String(l_page > Math.floor(l_page) ? l_page + 1 : l_page))
         }
+        return r.data.content
     }
     const getAllDataFormat = () => {
         const p = cloneDeep(params)

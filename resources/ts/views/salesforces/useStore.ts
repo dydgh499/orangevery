@@ -135,6 +135,11 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
     }
 })
 
+export const feeApplyHistoires = async () => {
+    const r = await axios.get('/api/v1/manager/salesforces/fee-apply-histories')
+    return r.data
+}
+
 export const useSalesFilterStore = () => {
     const fee_histories = ref(<any[]>([]))
     const sales = Array.from({ length: 6 }, () => ref<any[]>([]))
@@ -146,15 +151,10 @@ export const useSalesFilterStore = () => {
             sales[index].value = r.data[keys[index]]
         }
     }
-    const feeApplyHistoires = async () => {
-        const r = await axios.get('/api/v1/manager/salesforces/fee-apply-histories')
-        Object.assign(fee_histories.value, r.data)
-    }
     return {
         sales,
         fee_histories,
         classification,
-        feeApplyHistoires,
     }
 }
 
