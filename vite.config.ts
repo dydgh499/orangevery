@@ -102,6 +102,7 @@ export default defineConfig({
     build: {
         outDir: 'public/build',
         chunkSizeWarningLimit: 5000,
+        target: 'esnext',
     },
     optimizeDeps: {
         exclude: ['vuetify'],
