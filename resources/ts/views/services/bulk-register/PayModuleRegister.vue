@@ -2,31 +2,31 @@
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useRegisterStore } from '@/views/services/bulk-register/PayModRegisterStore'
-import { useMchtFilterStore } from '@/views/merchandises/useStore'
+import { getAllMerchandises } from '@/views/merchandises/useStore'
 import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
 import { allLevels } from '@/views/salesforces/useStore'
 import SettleTypeExplainDialog from '@/views/services/bulk-register/SettleTypeExplainDialog.vue'
 import PGExplainDialog from '@/views/services/bulk-register/PGExplainDialog.vue'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { Registration } from '@/views/registration'
-import type { PayModule, Options } from '@/views/types'
+import type { PayModule, Options, Merchandise } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import corp from '@corp';
 
 const { store } = useSearchStore()
 const { pgs, pss, settle_types, terminals } = useStore()
 const { head, headers } = useRegisterStore()
-const { merchandises, getAllMerchandises } = useMchtFilterStore()
 
+const merchandises = reactive<Merchandise[]>([])
 const all_levels = allLevels()
 const auth_types: Options[] = [
-        { id: 0, title: '비인증',},
-        { id: 1, title: '구인증',},
-    ]
+    { id: 0, title: '비인증',},
+    { id: 1, title: '구인증',},
+]
 const view_types: Options[] = [
-        { id: 0, title: '숨김',},
-        { id: 1, title: '노출',},
-    ]
+    { id: 0, title: '숨김',},
+    { id: 1, title: '노출',},
+]
 const { ExcelReader, isEmpty, openFilePicker, bulkRegister } = Registration()
 
 const snackbar = <any>(inject('snackbar'))
@@ -38,7 +38,6 @@ const is_clear = ref<boolean>(false)
 const settleTypeExplain = ref()
 const pgExplain = ref()
 
-getAllMerchandises()
 const validate = () => {
     for (let i = 0; i < items.value.length; i++) {
         const pg_id = pgs.find(item => item.id === items.value[i].pg_id)
@@ -105,7 +104,9 @@ const validate = () => {
 const payModRegister = async () => {
     const result = await bulkRegister('결제모듈', 'merchandises/pay-modules', items.value)
 }
-
+watchEffect(async() => {
+    Object.assign(merchandises, await getAllMerchandises())
+})
 watchEffect(async () => {
     if (excel.value) {
         items.value = await ExcelReader(headers, excel.value[0]) as PayModule[]

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { useMchtFilterStore } from '@/views/merchandises/useStore'
-import { usePayModFilterStore } from '@/views/merchandises/pay-modules/useStore'
+import { getAllMerchandises } from '@/views/merchandises/useStore'
+import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { requiredValidator, lengthValidatorV2 } from '@validators'
@@ -16,8 +16,6 @@ interface Props {
 
 const props = defineProps<Props>()
 const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
-const { merchandises, getAllMerchandises } = useMchtFilterStore()
-const { pay_modules, getAllPayModules } = usePayModFilterStore()
 const { sales, fee_histories, classification, feeApplyHistoires } = useSalesFilterStore()
 
 const levels = corp.pv_options.auth.levels
@@ -29,6 +27,8 @@ const sales1 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const sales0 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const mcht  = ref(<any>({ id: null, mcht_name: '선택안함' }))
 const custom = ref(<any>({ id: null, type: 1, name: '사용안함' }))
+const pay_modules = reactive<PayModule[]>([])
+const merchandises = reactive<Merchandise[]>([])
 
 
 const initTrxAt = (is_trx: boolean) => {
@@ -107,10 +107,10 @@ const hintSalesApplyFee = (sales: any):string => {
         return ''
 }
 onMounted(async() => {
-    await getAllMerchandises()
-    await getAllPayModules()
     await classification()
     await feeApplyHistoires()
+    Object.assign(pay_modules, await getAllPayModules(props.item.id))
+    Object.assign(merchandises, await getAllMerchandises())
 
     sales5.value = sales[5].value.find(obj => obj.id === props.item.sales5_id)
     sales4.value = sales[4].value.find(obj => obj.id === props.item.sales4_id)

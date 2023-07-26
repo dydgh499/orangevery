@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import { useMchtFilterStore } from '@/views/merchandises/useStore'
+import { getAllMerchandises } from '@/views/merchandises/useStore'
 import { requiredValidator, nullValidator } from '@validators'
 import type { Complaint, Merchandise } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { complaint_types } from '@/views/complaints/useStore'
-import { axios } from '@axios'
 
 interface Props {
     item: Complaint,
@@ -15,13 +14,15 @@ interface Props {
 const props = defineProps<Props>()
 const { pgs } = useStore()
 
-const { merchandises, getAllMerchandises } = useMchtFilterStore()
-getAllMerchandises()
-
+const merchandises = reactive<Merchandise[]>([])
 const mcht = ref({ id: null, mcht_name: '가맹점 선택' })
+
 onMounted(() => {
     props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
     props.item.is_deposit = Boolean(props.item.is_deposit)
+})
+watchEffect(async() => {
+    Object.assign(merchandises, await getAllMerchandises())
 })
 watchEffect(() => {
     props.item.mcht_id = mcht.value.id

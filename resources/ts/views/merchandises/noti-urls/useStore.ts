@@ -54,23 +54,16 @@ export const defaultItemInfo =  () => {
     }
 }
 
-export const useNotiUrlFilterStore = defineStore('notiUrlFilterStore', () => {
-    const noti_urls = ref<NotiUrl[]>([])
-    const getAllNotiUrls = (mcht_id:number|null=null) => {
-        const params:any = {
-            page: 1,
-            page_size: 999,
-        }
-        if(mcht_id)
-            params['mcht_id'] = mcht_id
-        const sub_query = Object.keys(params).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`).join('&')
-        const url = '/api/v1/manager/merchandises/noti-urls?'+sub_query
-        axios.get(url, params)
-        .then(r => { Object.assign(noti_urls.value, r.data.content as NotiUrl[]) })
-        .catch(e => { console.log(e) })
+
+export const getAllNotiUrls = async(mcht_id:number|null=null) => {
+    const params:any = {
+        page: 1,
+        page_size: 999,
     }
-    return {
-        noti_urls,
-        getAllNotiUrls,
-    }
-})
+    if(mcht_id)
+        params['mcht_id'] = mcht_id    
+    const sub_query = Object.keys(params).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`).join('&')
+    const url = '/api/v1/manager/merchandises/noti-urls?'+sub_query
+    const r = await axios.get(url)
+    return r.data.content
+}

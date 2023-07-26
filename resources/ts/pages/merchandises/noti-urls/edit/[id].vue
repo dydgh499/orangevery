@@ -4,17 +4,19 @@ import NotiCard from '@/views/merchandises/noti-urls/NotiCard.vue'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 
 import { defaultItemInfo } from '@/views/merchandises/noti-urls/useStore'
-import { useMchtFilterStore } from '@/views/merchandises/useStore'
-import type { Tab } from '@/views/types'
+import { getAllMerchandises } from '@/views/merchandises/useStore'
+import type { Tab, Merchandise } from '@/views/types'
 
 const {path, item } = defaultItemInfo()
-const { merchandises, getAllMerchandises } = useMchtFilterStore()
+const merchandises = reactive<Merchandise[]>([])
 const tabs = <Tab[]>([
     { icon: 'streamline:interface-time-alarm-notification-alert-bell-wake-clock-alarm', title: '노티정보' },
 ])
 const route = useRoute()
 const id = Number(route.params.id) || 0
-getAllMerchandises()
+watchEffect(async() => {
+    Object.assign(merchandises, await getAllMerchandises())
+})
 </script>
 <template>
     <section>

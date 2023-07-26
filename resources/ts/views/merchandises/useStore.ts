@@ -152,16 +152,8 @@ export const defaultItemInfo = () => {
     }
 }
 
-export const useMchtFilterStore = defineStore('mchtFilterStore', () => {
-    const merchandises = ref<Merchandise[]>([])
-    const getAllMerchandises = (module_type:number|null = null) => {
-        const url = '/api/v1/manager/merchandises/all' + (module_type != null ? '?module_type='+module_type : '')
-        axios.get(url)
-        .then(r => { Object.assign(merchandises.value, r.data.content as Merchandise[]) })
-        .catch(e => { console.log(e) })
-    }
-    return {
-        merchandises,
-        getAllMerchandises,
-    }
-})
+export const getAllMerchandises = async(module_type:number|null = null) => {
+    const url = '/api/v1/manager/merchandises/all' + (module_type != null ? '?module_type='+module_type : '')
+    const r = await axios.get(url)
+    return r.data.content
+}

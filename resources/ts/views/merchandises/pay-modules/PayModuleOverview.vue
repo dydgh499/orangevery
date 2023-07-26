@@ -1,24 +1,17 @@
 <script lang="ts" setup>
 import type { PayModule, Merchandise } from '@/views/types'
 import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue'
-
-import { useMchtFilterStore } from '@/views/merchandises/useStore'
-import { usePayModFilterStore } from '@/views/merchandises/pay-modules/useStore'
+import { getAllMerchandises } from '@/views/merchandises/useStore'
+import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 
 interface Props {
     item: Merchandise,
 }
 const props = defineProps<Props>();
-const new_pay_modules   = reactive<PayModule[]>([]);
+const new_pay_modules = reactive<PayModule[]>([])
+const pay_modules = reactive<PayModule[]>([])
+const merchandises = reactive<Merchandise[]>([])
 
-const { merchandises, getAllMerchandises } = useMchtFilterStore()
-const { pay_modules, getAllPayModules } = usePayModFilterStore()
-
-if(props.item.id)
-    getAllPayModules(props.item.id)
-else {
-    getAllMerchandises()
-}
 const addNewPaymodule = () => {
     new_pay_modules.push(<PayModule>{
         id: 0,
@@ -54,6 +47,13 @@ const addNewPaymodule = () => {
         note: '결제모듈 명칭을 적어주세요.😀',
     })
 }
+
+watchEffect(async() => {
+    if(props.item.id)
+        Object.assign(pay_modules, await getAllPayModules(props.item.id))
+    else
+        Object.assign(merchandises, await getAllMerchandises())
+})
 </script>
 <template>
     <PayModuleCard v-for="(item, index) in pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="merchandises"/>

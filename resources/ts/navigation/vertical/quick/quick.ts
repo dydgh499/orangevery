@@ -1,4 +1,4 @@
-import { usePayModFilterStore } from '@/views/merchandises/pay-modules/useStore'
+import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import type { PayModule } from '@/views/types'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
@@ -8,10 +8,10 @@ import { filter, map } from 'lodash'
 const hands = ref(<PayModule[]>([]))
 const auths = ref(<PayModule[]>([]))
 const simples = ref(<PayModule[]>([]))
-const { pay_modules, getAllPayModules } = usePayModFilterStore()
+const pay_modules = reactive<PayModule[]>([])
 const url = new URL(window.location.href)
 if (getUserLevel() == 10) {
-    getAllPayModules()
+    Object.assign(pay_modules, await getAllPayModules())
 }
 
 

@@ -145,16 +145,8 @@ export const defaultItemInfo =  () => {
     }
 }
 
-export const usePayModFilterStore = defineStore('payModFilterStore', () => {
-    const pay_modules = ref<PayModule[]>([])
-    const getAllPayModules = (mcht_id:number|null=null) => {
-        const url = '/api/v1/manager/merchandises/pay-modules/all' + (mcht_id != null ? '?mcht_id='+mcht_id : '')
-        axios.get(url)
-        .then(r => { Object.assign(pay_modules.value, r.data.content as PayModule[]) })
-        .catch(e => { console.log(e) })
-    }
-    return {
-        pay_modules,
-        getAllPayModules,
-    }
-})
+export const getAllPayModules = async(mcht_id:number|null=null) => {
+    const url = '/api/v1/manager/merchandises/pay-modules/all' + (mcht_id != null ? '?mcht_id='+mcht_id : '')
+    const r = await axios.get(url)
+    return r.data.content
+}
