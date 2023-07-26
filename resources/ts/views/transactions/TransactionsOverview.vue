@@ -106,29 +106,30 @@ const hintSalesApplyFee = (sales: any):string => {
     else
         return ''
 }
+
+await classification()
+await feeApplyHistoires()
+Object.assign(pay_modules, await getAllPayModules(props.item.id))
+Object.assign(merchandises, await getAllMerchandises())
+
+sales5.value = sales[5].value.find(obj => obj.id === props.item.sales5_id)
+sales4.value = sales[4].value.find(obj => obj.id === props.item.sales4_id)
+sales3.value = sales[3].value.find(obj => obj.id === props.item.sales3_id)
+sales2.value = sales[2].value.find(obj => obj.id === props.item.sales2_id)
+sales1.value = sales[1].value.find(obj => obj.id === props.item.sales1_id)
+sales0.value = sales[0].value.find(obj => obj.id === props.item.sales0_id)
+custom.value = cus_filters.find(obj => obj.id === props.item.custom_id)
+
+props.item.sales0_fee = props.item.sales0_fee.toFixed(3)
+props.item.sales1_fee = props.item.sales1_fee.toFixed(3)
+props.item.sales2_fee = props.item.sales2_fee.toFixed(3)
+props.item.sales3_fee = props.item.sales3_fee.toFixed(3)
+props.item.sales4_fee = props.item.sales4_fee.toFixed(3)
+props.item.sales5_fee = props.item.sales5_fee.toFixed(3)
+props.item.mcht_fee = props.item.mcht_fee.toFixed(3)
+props.item.hold_fee = props.item.hold_fee.toFixed(3)
+
 onMounted(async() => {
-    await classification()
-    await feeApplyHistoires()
-    Object.assign(pay_modules, await getAllPayModules(props.item.id))
-    Object.assign(merchandises, await getAllMerchandises())
-
-    sales5.value = sales[5].value.find(obj => obj.id === props.item.sales5_id)
-    sales4.value = sales[4].value.find(obj => obj.id === props.item.sales4_id)
-    sales3.value = sales[3].value.find(obj => obj.id === props.item.sales3_id)
-    sales2.value = sales[2].value.find(obj => obj.id === props.item.sales2_id)
-    sales1.value = sales[1].value.find(obj => obj.id === props.item.sales1_id)
-    sales0.value = sales[0].value.find(obj => obj.id === props.item.sales0_id)
-    custom.value = cus_filters.find(obj => obj.id === props.item.custom_id)
-
-    props.item.sales0_fee = props.item.sales0_fee.toFixed(3)
-    props.item.sales1_fee = props.item.sales1_fee.toFixed(3)
-    props.item.sales2_fee = props.item.sales2_fee.toFixed(3)
-    props.item.sales3_fee = props.item.sales3_fee.toFixed(3)
-    props.item.sales4_fee = props.item.sales4_fee.toFixed(3)
-    props.item.sales5_fee = props.item.sales5_fee.toFixed(3)
-    props.item.mcht_fee = props.item.mcht_fee.toFixed(3)
-    props.item.hold_fee = props.item.hold_fee.toFixed(3)
-
     watchEffect(() => {
         props.item.sales5_id = sales5.value.id
         props.item.sales4_id = sales4.value.id

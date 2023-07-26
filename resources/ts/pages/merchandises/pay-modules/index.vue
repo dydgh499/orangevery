@@ -7,7 +7,6 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { user_info } from '@axios'
 
 const { pgs, pss, settle_types } = useStore()
-
 const { store, head, exporter } = useSearchStore()
 provide('store', store)
 provide('head', head)

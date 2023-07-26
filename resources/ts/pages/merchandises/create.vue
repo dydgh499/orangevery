@@ -30,7 +30,9 @@ const id = ref<number>(0)
                     <MchtOverview :item="item"/>
                 </VWindowItem>
                 <VWindowItem>
-                    <PayModuleOverview :item="item" />
+                    <Suspense>
+                        <PayModuleOverview :item="item" />
+                    </Suspense>
                 </VWindowItem>
                 <VWindowItem>
                     <NotiOverview :item="item" />

@@ -47,13 +47,10 @@ const addNewPaymodule = () => {
         note: '결제모듈 명칭을 적어주세요.😀',
     })
 }
-
-watchEffect(async() => {
-    if(props.item.id)
-        Object.assign(pay_modules, await getAllPayModules(props.item.id))
-    else
-        Object.assign(merchandises, await getAllMerchandises())
-})
+if(props.item.id)
+    Object.assign(pay_modules, await getAllPayModules(props.item.id))
+else
+    Object.assign(merchandises, await getAllMerchandises())
 </script>
 <template>
     <PayModuleCard v-for="(item, index) in pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="merchandises"/>

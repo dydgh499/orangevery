@@ -33,7 +33,7 @@ class TransactionController extends Controller
         ];
     }
 
-    public function getTransactionData($request, $query)
+    protected function getTransactionData($request, $query)
     {
         $page      = $request->input('page');
         $page_size = $request->input('page_size');
@@ -46,10 +46,10 @@ class TransactionController extends Controller
             $con_query = $query->where('transactions.id', '>=', $min);
             $res['total']   = $query->count();
             $con_query = $con_query
-                        ->orderBy('trx_dttm', 'desc')
-                        ->orderBy('cxl_dttm', 'desc')
-                        ->offset($sp)
-                        ->limit($page_size);
+                    ->orderBy('trx_dttm', 'desc')
+                    ->orderBy('cxl_dttm', 'desc')
+                    ->offset($sp)
+                    ->limit($page_size);
             $res['content'] = $con_query->get($this->cols);
         }
         else
@@ -60,7 +60,7 @@ class TransactionController extends Controller
         return $res;
     }
 
-    public function commonSelect($request)
+    protected function commonSelect($request)
     {
         $search = $request->input('search', '');
         $query  = $this->transactions
