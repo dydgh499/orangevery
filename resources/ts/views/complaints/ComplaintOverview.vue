@@ -17,12 +17,10 @@ const { pgs } = useStore()
 const merchandises = reactive<Merchandise[]>([])
 const mcht = ref({ id: null, mcht_name: '가맹점 선택' })
 
+Object.assign(merchandises, await getAllMerchandises())
 onMounted(() => {
     props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
     props.item.is_deposit = Boolean(props.item.is_deposit)
-})
-watchEffect(async() => {
-    Object.assign(merchandises, await getAllMerchandises())
 })
 watchEffect(() => {
     props.item.mcht_id = mcht.value.id

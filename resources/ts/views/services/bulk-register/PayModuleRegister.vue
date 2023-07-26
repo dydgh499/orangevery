@@ -101,12 +101,10 @@ const validate = () => {
     is_clear.value = true
 }
 
+Object.assign(merchandises, await getAllMerchandises())
 const payModRegister = async () => {
     const result = await bulkRegister('결제모듈', 'merchandises/pay-modules', items.value)
 }
-watchEffect(async() => {
-    Object.assign(merchandises, await getAllMerchandises())
-})
 watchEffect(async () => {
     if (excel.value) {
         items.value = await ExcelReader(headers, excel.value[0]) as PayModule[]

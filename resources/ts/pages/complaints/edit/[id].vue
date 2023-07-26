@@ -19,7 +19,9 @@ watchEffect(() => {
         <CreateForm :id="id" :path="path" :tabs="tabs" :item="item">
             <template #view>
                 <VWindowItem>
-                    <ComplaintOverview :item="item" :id="id" />
+                    <Suspense>
+                        <ComplaintOverview :item="item" :id="id" />
+                    </Suspense>
                 </VWindowItem>
             </template>
         </CreateForm>

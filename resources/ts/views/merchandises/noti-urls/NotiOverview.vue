@@ -22,12 +22,10 @@ const addNewNotiUrl = () => {
         note: '비고',
     })
 }
-watchEffect(async() => {
-    if(props.item.id)
-        Object.assign(noti_urls, await getAllNotiUrls(props.item.id))
-    else
-        Object.assign(merchandises, await getAllMerchandises())
-})
+if(props.item.id)
+    Object.assign(noti_urls, await getAllNotiUrls(props.item.id))
+else
+    Object.assign(merchandises, await getAllMerchandises())
 </script>
 <template>
     <NotiCard v-for="(item, index) in noti_urls" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="merchandises"/>

@@ -29,8 +29,10 @@ const tabs = <Tab[]>([
                     </MerchandiseRegister>
                 </VWindowItem>
                 <VWindowItem>
-                    <PayModuleRegister>
-                    </PayModuleRegister>
+                    <Suspense>
+                        <PayModuleRegister>
+                        </PayModuleRegister>
+                    </Suspense>
                 </VWindowItem>
             </template>
         </CreateForm>        

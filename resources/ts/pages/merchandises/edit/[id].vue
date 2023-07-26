@@ -36,7 +36,9 @@ watchEffect(() => {
                     </Suspense>
                 </VWindowItem>
                 <VWindowItem>
-                    <NotiOverview :item="item" />
+                    <Suspense>
+                        <NotiOverview :item="item" />
+                    </Suspense>
                 </VWindowItem>
             </template>
         </CreateForm>
