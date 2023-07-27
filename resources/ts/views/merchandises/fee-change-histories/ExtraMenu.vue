@@ -28,8 +28,8 @@ const { remove } = useRequestStore()
 </template>
 <style scoped>
 /deep/ .v-overlay__content {
-  inset-inline-end: 1.5em !important;
-  inset-inline-start: 0 !important;
-  margin-inline-start: auto !important;
+  z-index: 99999999999 !important;
+  inset-block-start: 4em !important;
+  inset-inline-start: -19em !important;
 }
 </style>

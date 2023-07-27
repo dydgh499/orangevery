@@ -74,8 +74,15 @@ class MerchandiseController extends Controller
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
         $query = $query
-            ->where('merchandises.brand_id', $request->user()->brand_id)
-            ->where('merchandises.mcht_name', 'like', "%$search%");
+            ->where('merchandises.brand_id', $request->user()->brand_id);
+        if($search != '')
+        {
+            $query = $query->where(function ($query) use ($search) {
+                return $query->where('merchandises.mcht_name', 'like', "%$search%")
+                    ->orWhere('merchandises.phone_num', 'like', "%$search%")
+                    ->orWhere('merchandises.nick_name', 'like', "%$search%");
+            });
+        }
         if($is_all == false)
             $query = $query->where('merchandises.is_delete', false);
 
@@ -88,7 +95,7 @@ class MerchandiseController extends Controller
      *
      * 가맹점 이상 가능
      *
-     * @queryParam search string 검색어(유저 ID)
+     * @queryParam search string 검색어(가맹점상호, 휴대폰번호, 대표자명)
      */
     public function index(IndexRequest $request)
     {

@@ -64,7 +64,7 @@ class TransactionRequest extends FormRequest
             'sales2_fee' => 'required',
             'sales1_fee' => 'required',
             'sales0_fee' => 'required',
-            'custom_id' => 'required', 'mcht_fee' => 'required', 'hold_fee' => 'required',
+            'mcht_fee' => 'required', 'hold_fee' => 'required',
             'module_type' => 'required',
             'pg_id' => 'required', 'pmod_id' => 'required', 'ps_id' => 'required', 'ps_fee' => 'required',
             'mcht_settle_fee' => 'required', 'mcht_settle_type'=> 'required',

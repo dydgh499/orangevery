@@ -40,7 +40,7 @@ watchEffect(() => {
     <VRow>
         <VCol cols="12" sm="3" v-if="props.pg && user_info.level > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="pg" :items="[{ id: null, pg_name: '전체' }].concat(pgs)"
-                label="PG사 선택" item-title="pg_name" item-value="id" return-object />
+                label="PG사 선택" item-title="pg_name" item-value="id" return-object/>
         </VCol>
         <VCol cols="12" sm="3" v-if="props.ps && user_info.level > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="ps"
@@ -63,9 +63,15 @@ watchEffect(() => {
                 return-object />
         </VCol>
         <slot name="extra_right"></slot>
-        <VCol cols="12" sm="3">
-            <VSelect v-model="store.params.page_size" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" />
+        <VCol cols="12" sm="3" id="paze-size-filter">
+            <VSelect :menu-props="{ maxHeight: 400, attach: '#paze-size-filter' }" v-model="store.params.page_size" density="compact" variant="outlined"
+                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수"/>
         </VCol>
     </VRow>
 </template>
+<style scoped>
+.v-menu__content {
+  z-index: 99999999999 !important;
+  inset-inline-start: -19em !important;
+}
+</style>

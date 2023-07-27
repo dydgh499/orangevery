@@ -47,9 +47,9 @@ const settle = async () => {
 }
 </script>
 <template>
-    <VBtn icon size="x-small" color="default" variant="text">
+    <VBtn icon size="x-small" color="default" variant="text" :id="`item-${props.item.id}`">
         <VIcon size="22" icon="tabler-dots-vertical" />
-        <VMenu activator="parent" width="230" offset="14px">
+        <VMenu activator="parent" width="230" :attach="`#item-${props.item.id}`">
             <VList>
                 <VListItem value="settle" @click="settle()">
                     <template #prepend>
@@ -63,8 +63,8 @@ const settle = async () => {
 </template>
 <style scoped>
 /deep/ .v-overlay__content {
-  inset-inline-end: 1.5em !important;
-  inset-inline-start: 0 !important;
-  margin-inline-start: auto !important;
+  z-index: 99999999999 !important;
+  inset-block-start: 4em !important;
+  inset-inline-start: -19em !important;
 }
 </style>
