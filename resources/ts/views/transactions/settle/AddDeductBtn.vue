@@ -49,11 +49,11 @@ const addDeduction = async () => {
     </VRow>
 </template>
 <style scoped>
-/deep/ .v-text-field {
+:deep(.v-text-field) {
   inline-size: 7em;
 }
 
-/deep/ .v-field__field {
+:deep(.v-field__field) {
   block-size: 2.2em;
 }
 </style>

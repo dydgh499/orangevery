@@ -40,7 +40,7 @@ const props = defineProps<Props>();
     </AppCardActions>
 </template>
 <style scoped>
-/deep/ .v-card-item {
+:deep(.v-card-item) {
   padding: 20px;
 }
 </style>

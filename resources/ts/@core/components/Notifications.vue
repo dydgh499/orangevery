@@ -81,7 +81,7 @@ const getTitleStatus = computed(() => {
   text-decoration: none;
 }
 
-/deep/ .v-overlay__content {
+:deep(.v-overlay__content) {
   inset-inline-end: 1.5em !important;
   inset-inline-start: 0 !important;
   margin-inline-start: auto !important;
