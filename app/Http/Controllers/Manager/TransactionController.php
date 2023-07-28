@@ -60,7 +60,7 @@ class TransactionController extends Controller
         return $res;
     }
 
-    protected function commonSelect($request)
+    public function commonSelect($request)
     {
         $search = $request->input('search', '');
         $query  = $this->transactions
