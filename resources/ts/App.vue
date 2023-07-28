@@ -38,6 +38,6 @@ div::-webkit-scrollbar {
   block-size: 15px;
   inline-size: 15px;
 }
-div::-webkit-scrollbar-thumb { background: rgb(var(--v-global-theme-primary)); }
-div::-webkit-scrollbar-thumb:hover { background: rgb(var(--v-global-theme-primary), 0.9); }
+.v-table__wrapper::-webkit-scrollbar-thumb { background: rgb(var(--v-global-theme-primary)); }
+.v-table__wrapper::-webkit-scrollbar-thumb:hover { background: rgb(var(--v-global-theme-primary), 0.9); }
 </style>
