@@ -45,56 +45,56 @@ class Merchandise extends Authenticatable
     protected function Sales5Fee() : Attribute
     {
         return new Attribute(
-            get: fn ($value) => $this->getFeeFormatting() ? $value * 100 : $value,
+            get: fn ($value) => $this->getFeeFormatting() ? round($value * 100, 3) : $value,
         );
     }
 
     protected function Sales4Fee() : Attribute
     {
         return new Attribute(
-            get: fn ($value) => $this->getFeeFormatting() ? $value * 100 : $value,
+            get: fn ($value) => $this->getFeeFormatting() ? round($value * 100, 3) : $value,
         );
     }
 
     protected function Sales3Fee() : Attribute
     {
         return new Attribute(
-            get: fn ($value) => $this->getFeeFormatting() ? $value * 100 : $value,
+            get: fn ($value) => $this->getFeeFormatting() ? round($value * 100, 3) : $value,
         );
     }
 
     protected function Sales2Fee() : Attribute
     {
         return new Attribute(
-            get: fn ($value) => $this->getFeeFormatting() ? $value * 100 : $value,
+            get: fn ($value) => $this->getFeeFormatting() ? round($value * 100, 3) : $value,
         );
     }
 
     protected function Sales1Fee() : Attribute
     {
         return new Attribute(
-            get: fn ($value) => $this->getFeeFormatting() ? $value * 100 : $value,
+            get: fn ($value) => $this->getFeeFormatting() ? round($value * 100, 3) : $value,
         );
     }
 
     protected function Sales0Fee() : Attribute
     {
         return new Attribute(
-            get: fn ($value) => $this->getFeeFormatting() ? $value * 100 : $value,
+            get: fn ($value) => $this->getFeeFormatting() ? round($value * 100, 3) : $value,
         );
     }
 
     protected function TrxFee() : Attribute
     {
         return new Attribute(
-            get: fn ($value) => $this->getFeeFormatting() ? $value * 100 : $value,
+            get: fn ($value) => $this->getFeeFormatting() ? round($value * 100, 3) : $value,
         );
     }
 
     protected function HoldFee() : Attribute
     {
         return new Attribute(
-            get: fn ($value) => $this->getFeeFormatting() ? $value * 100 : $value,
+            get: fn ($value) => $this->getFeeFormatting() ? round($value * 100, 3) : $value,
         );
     }
 
