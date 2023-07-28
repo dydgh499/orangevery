@@ -27,7 +27,7 @@ syncConfigThemeWithVuetifyTheme()
 <style>
 .v-btn__content > .v-overlay > .v-overlay__content {
   inset-block-start: 4em !important;
-  inset-inline-start: -19em !important;
+  inset-inline-start: -20em !important;
 }
 
 /*

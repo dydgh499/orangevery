@@ -72,7 +72,7 @@ defineExpose({
         <div ref="card">
             <VCard class="sales-slip-rect-container">
                 <VCardText class="sales-slip-rect" :style="`background-image: url(${background});`">
-                    <VCol class="font-weight-bold v-col-custom big-font text-center">
+                    <VCol class="font-weight-bold v-col-custom big-font text-center" style="padding-top: 24px;">
                         신용카드 영수증
                     </VCol>
                     <VCol class="text-primary font-weight-bold v-col-custom">
