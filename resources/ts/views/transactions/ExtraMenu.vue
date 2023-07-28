@@ -52,9 +52,9 @@ const payCanceled = async() => {
 }
 </script>
 <template>
-    <VBtn icon size="x-small" color="default" variant="text" :id="`item-${props.item.tid}`">
+    <VBtn icon size="x-small" color="default" variant="text" :id="`item-${props.item.id}`">
         <VIcon size="22" icon="tabler-dots-vertical" />
-        <VMenu activator="parent" width="230" :attach="`#item-${props.item.tid}`">
+        <VMenu activator="parent" width="230" :attach="`#item-${props.item.id}`">
             <VList>
                 <VListItem value="saleslip" @click="salesslip.show(props.item)">
                     <template #prepend>
