@@ -30,6 +30,13 @@ syncConfigThemeWithVuetifyTheme()
   inset-inline-start: -19em !important;
 }
 
+/*
+.v-overlay > .v-autocomplete__content,
+.v-overlay > .v-select__content {
+  background-color: rgb(var(--v-theme-surface)) !important;
+  inset-inline-start: 0 !important;
+}
+*/
 .v-table__wrapper {
   overflow-y: auto !important;
 }
@@ -40,4 +47,5 @@ div::-webkit-scrollbar {
 }
 .v-table__wrapper::-webkit-scrollbar-thumb { background: rgb(var(--v-global-theme-primary)); }
 .v-table__wrapper::-webkit-scrollbar-thumb:hover { background: rgb(var(--v-global-theme-primary), 0.9); }
+
 </style>

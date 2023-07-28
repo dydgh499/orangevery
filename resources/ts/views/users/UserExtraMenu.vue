@@ -22,3 +22,4 @@ const password = <any>(inject('password'))
         </VMenu>
     </VBtn>
 </template>
+
