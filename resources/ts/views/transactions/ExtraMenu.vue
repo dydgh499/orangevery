@@ -84,10 +84,3 @@ const payCanceled = async() => {
         </VMenu>
     </VBtn>
 </template>
-<style scoped>
-:deep(.v-overlay__content) {
-  z-index: 99999999999 !important;
-  inset-block-start: 4em !important;
-  inset-inline-start: -19em !important;
-}
-</style>

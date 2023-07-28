@@ -24,3 +24,20 @@ syncConfigThemeWithVuetifyTheme()
         </VApp>
     </VLocaleProvider>
 </template>
+<style>
+.v-btn__content > .v-overlay > .v-overlay__content {
+  inset-block-start: 4em !important;
+  inset-inline-start: -19em !important;
+}
+
+.v-table__wrapper {
+  overflow-y: auto !important;
+}
+
+div::-webkit-scrollbar {
+  block-size: 15px;
+  inline-size: 15px;
+}
+div::-webkit-scrollbar-thumb { background: rgb(var(--v-global-theme-primary)); }
+div::-webkit-scrollbar-thumb:hover { background: rgb(var(--v-global-theme-primary), 0.9); }
+</style>

@@ -58,20 +58,19 @@ watchEffect(() => {
                 return-object />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.cus_filter && user_info.level > 30">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="custom"
+            <VAutocomplete :menu-props="{ maxHeight: 400  }" v-model="custom"
                 :items="[{ id: null, name: '전체' }].concat(cus_filters)" label="커스텀 필터" item-title="name" item-value="id"
                 return-object />
         </VCol>
         <slot name="extra_right"></slot>
-        <VCol cols="12" sm="3" id="paze-size-filter">
-            <VSelect :menu-props="{ maxHeight: 400, attach: '#paze-size-filter' }" v-model="store.params.page_size" density="compact" variant="outlined"
+        <VCol cols="12" sm="3">
+            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
                 :items="[10, 20, 30, 50, 100, 200]" label="표시 개수"/>
         </VCol>
     </VRow>
 </template>
-<style scoped>
-.v-menu__content {
-  z-index: 99999999999 !important;
-  inset-inline-start: -19em !important;
+<style>
+#paze-size-filter .v-menu__content {
+  inset-inline-start: 100em !important;
 }
 </style>
