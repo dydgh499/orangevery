@@ -11,15 +11,15 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const snackbar  = <any>(inject('snackbar'))
-const visible   = ref(false)
-const trans     = ref<SalesSlip>()
-const pg    = ref<PayGateway>()
-const card  = ref(null)
+const snackbar = <any>(inject('snackbar'))
+const visible = ref(false)
+const trans = ref<SalesSlip>()
+const pg = ref<PayGateway>()
+const card = ref(null)
 const thickness = ref(3);
 
 const updateThickness = () => {
-    if (window.innerWidth <= 500) 
+    if (window.innerWidth <= 500)
         thickness.value = 2;
     else
         thickness.value = 3;
@@ -31,7 +31,7 @@ const getVat = () => {
 const copySalesSlip = () => {
     snackbar.value.show('영수증을 복사하고있습니다..', 'success')
     if (card.value) {
-        html2canvas(card.value, {useCORS: true}).then(canvas => {
+        html2canvas(document.getElementsByClassName('sales-slip-rect')[0], { useCORS: true, removeContainer: true }).then(canvas => {
             canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({ "image/png": blob as Blob })]))
             snackbar.value.show('영수증이 클립보드에 복사되었습니다.', 'success')
         })
@@ -69,9 +69,9 @@ defineExpose({
             <DialogCloseBtn @click="visible = !visible" />
         </div>
         <!-- Dialog Content -->
-            <div ref="card"  style="background: rgba(0, 0, 0, 0%); box-shadow: 0 0 0 0;">
-                <VCard style=" padding: 0.3em; background: rgba(0, 0, 0, 0%); box-shadow: 0 0 0 0;">
-                <VCardText class="sales-slip-rect" :style="`background-image: url(${background}); box-shadow: 0 0 0 0;`">
+        <div ref="card">
+            <VCard class="sales-slip-rect-container">
+                <VCardText class="sales-slip-rect" :style="`background-image: url(${background});`">
                     <VCol class="font-weight-bold v-col-custom big-font text-center">
                         신용카드 영수증
                     </VCol>
@@ -142,7 +142,7 @@ defineExpose({
                     <VDivider :thickness="thickness" class="mb-2" />
                     <DialogHalfVCol class="cell">
                         <template #name>상호</template>
-                        <template #input>{{ trans?.use_saleslip_sell ?  pg?.company_name : trans?.mcht_name }}</template>
+                        <template #input>{{ trans?.use_saleslip_sell ? pg?.company_name : trans?.mcht_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>사업자등록번호</template>
@@ -154,7 +154,7 @@ defineExpose({
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>주소</template>
-                        <template #input>{{ trans?.use_saleslip_sell ? pg?.addr : trans?.addr}}</template>
+                        <template #input>{{ trans?.use_saleslip_sell ? pg?.addr : trans?.addr }}</template>
                     </DialogHalfVCol>
                     <VCol class="text-primary font-weight-bold v-col-custom">
                         공급자(결제대행사) 정보
@@ -174,7 +174,7 @@ defineExpose({
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell mb-2">
                         <template #name>주소</template>
-                        <template #input>{{trans?.use_saleslip_prov ?  pg?.addr : trans?.addr }}</template>
+                        <template #input>{{ trans?.use_saleslip_prov ? pg?.addr : trans?.addr }}</template>
                     </DialogHalfVCol>
                     <VDivider :thickness="1" />
                     <VCol style="font-size: 0.9em;">
@@ -183,13 +183,19 @@ defineExpose({
                     <VDivider :thickness="1" class="mb-2" />
                     <img :src="cancel" class="cancel-img" v-show="trans?.is_cancel">
                 </VCardText>
-                </VCard>
-            </div>
+            </VCard>
+        </div>
     </VDialog>
 </template>
 <style scoped>
 div {
   color: rgba(51, 48, 60, 68%) !important;
+}
+
+.sales-slip-rect-container {
+  padding: 0.3em;
+  background: rgb(255, 255, 255, 0%) !important;
+  box-shadow: 0 0 0 0;
 }
 
 .sales-slip-rect {
