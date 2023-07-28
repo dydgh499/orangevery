@@ -110,6 +110,11 @@ user_info.value.profile_img = user_info.value.profile_img ? user_info.value.prof
 .custom-link {
   color: inherit;
   text-decoration: none;
-}nline-start: auto !important;
+}
+
+:deep(.v-overlay__content) {
+  inset-inline-end: 1.5em !important;
+  inset-inline-start: 0 !important;
+  margin-inline-start: auto !important;
 }
 </style>
