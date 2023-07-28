@@ -29,8 +29,9 @@ const getVat = () => {
     return Math.round(trans.value?.amount as number / 1.1)
 }
 const copySalesSlip = () => {
+    snackbar.value.show('영수증을 복사하고있습니다..', 'success')
     if (card.value) {
-        html2canvas(card.value).then(canvas => {
+        html2canvas(card.value, {useCORS: true}).then(canvas => {
             canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({ "image/png": blob as Blob })]))
             snackbar.value.show('영수증이 클립보드에 복사되었습니다.', 'success')
         })

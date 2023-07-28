@@ -16,3 +16,17 @@ const props = withDefaults(defineProps<Props>(), {
     <VIcon :icon="props.icon" />
   </VBtn>
 </template>
+<style scoped>
+.v-dialog-close-btn {
+  position: absolute;
+  z-index: 1;
+  border-radius: 0.375rem;
+  background-color: rgb(var(--v-theme-surface)) !important;
+  block-size: 2rem;
+  color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity)) !important;
+  inline-size: 2rem;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  transform: translate(0.5rem, -0.5rem);
+}
+</style>
