@@ -124,13 +124,11 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             });
         });
         Route::prefix('merchandises')->group(function() {
-
             Route::get('chart', [MerchandiseController::class, 'chart']);
             Route::get('all', [MerchandiseController::class, 'all']);   
             Route::get('terminals', [TerminalController::class, 'index']);   
             Route::post('password-change', [MerchandiseController::class, 'passwordChange']);
             Route::post('bulk-register', [MerchandiseController::class, 'bulkRegister']);
-
 
             Route::get('pay-modules/chart', [PaymentModuleController::class, 'chart']);
             Route::get('pay-modules/all', [PaymentModuleController::class, 'all']);            

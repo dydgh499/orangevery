@@ -91,7 +91,7 @@ onMounted(() => {
                                 <template #input>
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht"
                                         :items="props.merchandises" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
-                                        item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] return-object />
+                                        item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] return-object :eager="true"/>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
