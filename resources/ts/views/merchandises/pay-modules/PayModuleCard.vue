@@ -380,7 +380,7 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VRow class="pt-3" v-if="corp.pv_options.paid.use_dup_pay_validation">
+                        <VRow class="pt-3" v-if="corp.pv_options.paid.use_dup_pay_validation && props.item.module_type != 0">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'중복결제 허용회수'"

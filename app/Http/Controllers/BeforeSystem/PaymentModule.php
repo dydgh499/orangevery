@@ -96,6 +96,7 @@ class PaymentModule
                 'under_sales_amt' => $mcht->COMM_SALES_CON,
                 'begin_dt' => $mcht->COMM_OPEN_DT,
                 'ship_out_dt' => $mcht->RELEASE_DT,
+                'abnormal_trans_limit' => $mcht->DANGER_DPST_PR,
                 'ship_out_stat' => $mcht->STATUS == 5 ? 2 : 1,
                 'note' => '장비',
                 'USER_PK' => $mcht->USER_PK,

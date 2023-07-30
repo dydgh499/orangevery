@@ -76,7 +76,7 @@ class BeforeSystemController extends Controller
         return $this->extendResponse(1, '전산 이전 작업을 예약하였습니다.<br>5분 내외로 이전 전산에대한 정보가 반영됩니다.');
     }
 
-    function mchtUpdate()
+    public function mchtUpdate()
     {
         $cols = [
             'merchandise.*', 'user.ID', 'user.PW', 
