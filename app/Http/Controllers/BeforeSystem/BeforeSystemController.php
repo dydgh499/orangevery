@@ -130,12 +130,13 @@ class BeforeSystemController extends Controller
                 ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
                 ->where('merchandises.user_name', $mcht->ID)
                 ->where('merchandises.brand_id', 2)
+                ->select('payment_modules.id as pm_id', 'merchandises.id as m_id')
                 ->get();
         
             // iterate through each payment module and update it
             foreach($paymentModules as $paymentModule) {
                 $this->payvery->table('payment_modules')
-                    ->where('id', $paymentModule->id)
+                    ->where('id', $paymentModule->pm_id)
                     ->update(['abnormal_trans_limit' => $mcht->DANGER_DPST_PR]);
                 echo $mcht->DANGER_DPST_PR;
             }
