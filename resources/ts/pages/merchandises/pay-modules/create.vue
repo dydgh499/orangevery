@@ -5,7 +5,7 @@ import Modify from '@/views/merchandises/pay-modules/Modify.vue'
 <template>
     <section>
         <Suspense>
-            <Modify/>
+            <Modify :able_mcht_chanage="true"/>
         </Suspense>
     </section>
 </template>

@@ -6,6 +6,11 @@ import { getAllMerchandises } from '@/views/merchandises/useStore'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import type { Merchandise } from '@/views/types'
 
+interface Props {
+    able_mcht_chanage: boolean,
+}
+const props = defineProps<Props>()
+
 const { path, item } = defaultItemInfo()
 const merchandises = reactive<Merchandise[]>([])
 const tabs = [
@@ -20,7 +25,7 @@ Object.assign(merchandises, await getAllMerchandises())
         <CreateForm :id="id" :path="path" :tabs="tabs" :item="item">
             <template #view>
                 <VWindowItem>
-                    <PayModuleCard :item="item" :able_mcht_chanage="false" :merchandises="merchandises"/>
+                    <PayModuleCard :item="item" :able_mcht_chanage="props.able_mcht_chanage" :merchandises="merchandises"/>
                 </VWindowItem>
             </template>
         </CreateForm>
