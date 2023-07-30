@@ -14,6 +14,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\BeforeSystem\Merchandise;
+use App\Http\Controllers\BeforeSystem\PaymentModule;
 
 class BeforeSystemController extends Controller
 {
@@ -111,5 +112,33 @@ class BeforeSystemController extends Controller
                 echo $res;    
             }
         };
+    }
+
+    public function payModUpdate()
+    {
+        $mchts = $this->paywell->table('user')
+            ->join('merchandise', 'user.PK', '=', 'merchandise.USER_PK')
+            ->join('terminal', 'user.PK', '=', 'terminal.USER_PK')
+            ->where('user.DNS_PK', 15)
+            ->where('merchandise.DANGER_DPST_PR', '>', 0)
+            ->orderby('user.PK', 'DESC')
+            ->get();
+            
+        foreach($mchts as $mcht) {
+            // get the related payment modules
+            $paymentModules = $this->payvery->table('payment_modules')
+                ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+                ->where('merchandises.user_name', $mcht->ID)
+                ->where('merchandises.brand_id', 2)
+                ->get();
+        
+            // iterate through each payment module and update it
+            foreach($paymentModules as $paymentModule) {
+                $this->payvery->table('payment_modules')
+                    ->where('id', $paymentModule->id)
+                    ->update(['abnormal_trans_limit' => $mcht->DANGER_DPST_PR]);
+                echo $mcht->DANGER_DPST_PR;
+            }
+        }
     }
 }
