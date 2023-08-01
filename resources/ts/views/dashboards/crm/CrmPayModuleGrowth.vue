@@ -45,7 +45,7 @@ const getPreviousAmount = (dates: string[]) => {
         const hand_cnt = monthly_transactions[dates[i]].modules.hand_count
         const auth_cnt = monthly_transactions[dates[i]].modules.auth_count
         const simple_cnt = monthly_transactions[dates[i]].modules.simple_count
-        
+
         terminal_counts.unshift(tmn_cnt > 100 ? 100 : tmn_cnt)
         hand_counts.unshift(hand_cnt > 100 ? 100 : hand_cnt)
         auth_counts.unshift(auth_cnt > 100 ? 100 : auth_cnt)
@@ -110,7 +110,7 @@ const chartOptions = computed(() => {
         },
         colors: [currentTheme.secondary, currentTheme.primary, currentTheme.success, currentTheme.info],
         fill: {
-            opacity: [1, 0.85],
+            opacity: [0.1, 0.1, 0.1, 0.1],
         },
         markers: {
             size: 0,
