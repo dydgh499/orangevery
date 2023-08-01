@@ -49,7 +49,6 @@ class SalesforceRequest extends FormRequest
             'view_type' => 'required',
             'level'     => 'required',
             'acct_bank_name' => 'required',
-            'acct_bank_code' => 'required',
             'settle_tax_type' => 'required',
             'settle_cycle' => 'required',
             'passbook_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
@@ -88,6 +87,8 @@ class SalesforceRequest extends FormRequest
         }
         $data['brand_id'] = $this->user()->brand_id;
         $data['phone_num'] = $data['phone_num'] == '' ? 0 : $data['phone_num'];
+        if($data['acct_bank_code'] == '')
+            $data['acct_bank_code'] = "000";
         if($this->has('profile_img'))
             $data['profile_img'] = $this->profile_img;
         return $data;
