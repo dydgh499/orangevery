@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { lengthValidatorV2, requiredValidator, nullValidator } from '@validators'
+import { requiredValidator, nullValidator } from '@validators'
 import type { UserPropertie } from '@/views/types'
 import FileInput from '@/layouts/utils/FileInput.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
@@ -119,7 +119,6 @@ onMounted(async() => {
                                 <VTextField id="residentFirstHorizontalIcons" v-model="props.item.resident_num" type="text"
                                     counter prepend-inner-icon="carbon-identification" placeholder="800101-7654321"
                                     persistent-placeholder
-                                    :rules="[requiredValidator, lengthValidatorV2(props.item.resident_num, 14)]"
                                     maxlength="14" />
                             </template>
                         </CreateHalfVCol>

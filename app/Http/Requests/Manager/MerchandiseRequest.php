@@ -28,6 +28,7 @@ class MerchandiseRequest extends FormRequest
             'use_saleslip_prov',
             'use_saleslip_sell',
             'is_show_fee',
+            'note',
         ];
     }
 
@@ -47,7 +48,6 @@ class MerchandiseRequest extends FormRequest
             'user_name' => 'required',
             'mcht_name' => 'required',
             'addr'      => 'required',
-            'resident_num' => 'required',
             'acct_bank_name' => 'required',
             'acct_bank_code' => 'required',
             'enabled' => 'required|boolean',
