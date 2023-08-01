@@ -164,7 +164,7 @@ class MerchandiseController extends Controller
                 $user = $this->saveImages($request, $user, $this->imgs);
                 $user['user_pw'] = Hash::make($request->input('user_pw'));
                 $res = $this->merchandises->create($user);
-                return $this->response($res ? 1 : 990);
+                return $this->response($res ? 1 : 990, ['id'=>$res->id]);
             }
             else
                 return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));

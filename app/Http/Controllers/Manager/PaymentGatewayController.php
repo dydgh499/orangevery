@@ -52,7 +52,7 @@ class PaymentGatewayController extends Controller
     {
         $user = $request->data();
         $res = $this->pay_gateways->create($user);
-        return $this->response($res ? 1 : 990);
+        return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
 
     /**

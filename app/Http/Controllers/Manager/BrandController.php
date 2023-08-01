@@ -92,8 +92,8 @@ class BrandController extends Controller
         {
             $data = $request->data();
             $data = $this->saveImages($request, $data, $this->imgs);
-            $result = $this->brands->create($data);
-            return $this->response($result ? 1 : 990);
+            $res = $this->brands->create($data);
+            return $this->response($result ? 1 : 990, ['id'=>$res->id]);
         }
         else
             return $this->response(951);

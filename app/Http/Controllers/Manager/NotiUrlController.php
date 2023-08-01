@@ -57,7 +57,7 @@ class NotiUrlController extends Controller
     {
         $user = $request->data();
         $res = $this->noti_urls->create($user);
-        return $this->response($res ? 1 : 990);
+        return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
 
     /**

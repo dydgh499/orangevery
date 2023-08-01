@@ -73,7 +73,7 @@ class PostController extends Controller
                 ->where('id', $data['parent_id'])
                 ->update(['is_reply' => true]);
         }
-        return $this->response($i_res && $u_res ? 1 : 990);
+        return $this->response($i_res && $u_res ? 1 : 990, ['id'=>$i_res->id]);
     }
 
     /**

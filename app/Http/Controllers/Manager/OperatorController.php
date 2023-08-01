@@ -66,7 +66,7 @@ class OperatorController extends Controller
         $user = $this->saveImages($request, $user, $this->imgs);
         $user['user_pw'] = Hash::make($request->input('user_pw'));
         $res = $this->operators->create($user);
-        return $this->response($res ? 1 : 990);
+        return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
 
     /**

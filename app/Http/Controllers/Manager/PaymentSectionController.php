@@ -47,7 +47,7 @@ class PaymentSectionController extends Controller
     {
         $user = $request->data();
         $res = $this->pay_sections->create($user);
-        return $this->response($res ? 1 : 990);
+        return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
 
     /**

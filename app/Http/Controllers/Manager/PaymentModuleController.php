@@ -111,13 +111,13 @@ class PaymentModuleController extends Controller
                 $res = $this->payModules->create($item);
                 if($item['module_type'] != 0)
                 {
-                    $res = $this->payModules
+                    $this->payModules
                         ->where('id', $res->id)
                         ->update(['pay_key' => $this->getNewPayKey($res->id)]);
                 }
-                return true;
+                return $res;
             });
-            return $this->response($res ? 1 : 990);
+            return $this->response($res ? 1 : 990, ['id'=>$res->id]);
         }
         else
             return $this->response(951);

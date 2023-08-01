@@ -58,7 +58,7 @@ class ComplaintController extends Controller
     {
         $data = $request->data();
         $res  = $this->complaints->create($data);
-        return $this->response($res ? 1 : 990);
+        return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
 
     /**
