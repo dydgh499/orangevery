@@ -27,6 +27,7 @@ class SalesforceRequest extends FormRequest
             'settle_tax_type',
             'settle_cycle',
             'settle_day',
+            'note',
         ];
     }
 
