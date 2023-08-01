@@ -49,7 +49,6 @@ class MerchandiseRequest extends FormRequest
             'mcht_name' => 'required',
             'addr'      => 'required',
             'acct_bank_name' => 'required',
-            'acct_bank_code' => 'required',
             'enabled' => 'required|boolean',
             'use_saleslip_prov' => 'required|boolean',
             'use_saleslip_sell' => 'required|boolean',
@@ -96,6 +95,8 @@ class MerchandiseRequest extends FormRequest
         }
         $data['brand_id'] = $this->user()->brand_id;
         $data['custom_id'] = $this->input('custom_id', null);
+        if($data['acct_bank_code'] == '')
+            $data['acct_bank_code'] = "000";
         if($this->has('profile_img'))
             $data['profile_img'] = $this->profile_img;
         return $data;
