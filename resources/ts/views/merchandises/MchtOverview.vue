@@ -25,15 +25,15 @@ const sales1 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const sales0 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const custom = ref(<any>({ id: null, type: 1, name: '사용안함' }))
 
-const hintSalesApplyFee = (sales: any):string => {
-    if(sales && sales.id) {
+const hintSalesApplyFee = (sales: any): string => {
+    if (sales && sales.id) {
         const history = fee_histories.value.find(obj => obj.sales_id === sales.id)
-        return history ? '마지막 일괄적용: '+(history.trx_fee * 100).toFixed(3)+'%' : '';
+        return history ? '마지막 일괄적용: ' + (history.trx_fee * 100).toFixed(3) + '%' : '';
     }
     else
         return ''
 }
-onMounted(async() => {
+onMounted(async () => {
     await classification()
     await feeApplyHistoires()
     props.item.sales0_fee = props.item.sales0_fee.toFixed(3)
@@ -55,7 +55,7 @@ onMounted(async() => {
     watchEffect(() => {
         props.item.sales5_id = sales5.value?.id
         props.item.sales4_id = sales4.value?.id
-        props.item.sales3_id = sales3.value?.id 
+        props.item.sales3_id = sales3.value?.id
         props.item.sales2_id = sales2.value?.id
         props.item.sales1_id = sales1.value?.id
         props.item.sales0_id = sales0.value?.id
@@ -85,7 +85,133 @@ onMounted(async() => {
                                     placeholder="업종을 입력해주세요" persistent-placeholder />
                             </template>
                         </CreateHalfVCol>
-                        <!-- 👉 수수료율 -->
+                        <!-- 👉 상위 영업점 수수료율 -->
+                        <VCol cols="12" v-if="levels.sales5_use">
+                            <VRow>
+                                <VCol cols="12" md="3">
+                                    <label>{{ levels.sales5_name }}/수수료율</label>
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales5"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[5].value)"
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales5_name + '선택'"
+                                        item-title="sales_name" item-value="id" persistent-hint
+                                        :hint="hintSalesApplyFee(sales5)" return-object />
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.sales5_fee" type="number" suffix="%"
+                                        :rules="[requiredValidator]" />
+                                </VCol>
+                                <FeeChangeBtn v-if="props.item.id" :level=30 :item="props.item">
+                                </FeeChangeBtn>
+                            </VRow>
+                        </VCol>
+                        <!-- 👉 영업점 수수료율 -->
+                        <VCol cols="12" v-if="levels.sales4_use">
+                            <VRow>
+                                <VCol cols="12" md="3">
+                                    <label>{{ levels.sales4_name }}/수수료율</label>
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales4"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[4].value)"
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales4_name + ' 선택'"
+                                        item-title="sales_name" item-value="id" persistent-hint
+                                        :hint="hintSalesApplyFee(sales4)" return-object />
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.sales4_fee" type="number" suffix="%"
+                                        :rules="[requiredValidator]" />
+                                </VCol>
+                                <FeeChangeBtn v-if="props.item.id" :level=25 :item="props.item">
+                                </FeeChangeBtn>
+                            </VRow>
+                        </VCol>
+                        <!-- 👉 지사 수수료율 -->
+                        <VCol cols="12" v-if="levels.sales3_use">
+                            <VRow>
+                                <VCol cols="12" md="3">
+                                    <label>{{ levels.sales3_name }}/수수료율</label>
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales3"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[3].value)"
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales3_name + ' 선택'"
+                                        item-title="sales_name" item-value="id" persistent-hint
+                                        :hint="hintSalesApplyFee(sales3)" return-object />
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.sales3_fee" type="number" suffix="%"
+                                        :rules="[requiredValidator]" />
+                                </VCol>
+                                <FeeChangeBtn v-if="props.item.id" :level=20 :item="props.item">
+                                </FeeChangeBtn>
+                            </VRow>
+                        </VCol>
+                        <!-- 👉 총판 수수료율 -->
+                        <VCol cols="12" v-if="levels.sales2_use">
+                            <VRow>
+                                <VCol cols="12" md="3">
+                                    <label>{{ levels.sales2_name }}/수수료율</label>
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales2"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[2].value)"
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales2_name + ' 선택'"
+                                        item-title="sales_name" item-value="id" persistent-hint
+                                        :hint="hintSalesApplyFee(sales2)" return-object />
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.sales2_fee" type="number" suffix="%"
+                                        :rules="[requiredValidator]" />
+                                </VCol>
+                                <FeeChangeBtn v-if="props.item.id" :level=17 :item="props.item">
+                                </FeeChangeBtn>
+                            </VRow>
+                        </VCol>
+                        <!-- 👉 대리점 수수료율 -->
+                        <VCol cols="12" v-if="levels.sales1_use">
+                            <VRow>
+                                <VCol cols="12" md="3">
+                                    <label>{{ levels.sales1_name }}/수수료율</label>
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales1"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[1].value)"
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales1_name + ' 선택'"
+                                        item-title="sales_name" item-value="id" persistent-hint
+                                        :hint="hintSalesApplyFee(sales1)" return-object />
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.sales1_fee" type="number" suffix="%"
+                                        :rules="[requiredValidator]" />
+                                </VCol>
+                                <FeeChangeBtn v-if="props.item.id" :level=15 :item="props.item">
+                                </FeeChangeBtn>
+                            </VRow>
+                        </VCol>
+                        <!-- 👉 하위 대리점 수수료율 -->
+                        <VCol cols="12" v-if="levels.sales0_use">
+                            <VRow>
+                                <VCol cols="12" md="3">
+                                    <label>{{ levels.sales0_name }}/수수료율</label>
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales0"
+                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[0].value)"
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales0_name + ' 선택'"
+                                        item-title="sales_name" item-value="id" persistent-hint
+                                        :hint="hintSalesApplyFee(sales0)" return-object />
+                                </VCol>
+                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VTextField v-model="props.item.sales0_fee" type="number" suffix="%"
+                                        :rules="[requiredValidator]" />
+                                </VCol>
+                                <FeeChangeBtn v-if="props.item.id" :level=13 :item="props.item">
+                                </FeeChangeBtn>
+                            </VRow>
+                        </VCol>
+                        <!-- 👉 가맹점 수수료율 -->
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="3">
@@ -105,129 +231,9 @@ onMounted(async() => {
                                 </FeeChangeBtn>
                             </VRow>
                         </VCol>
-                        <!-- 👉 상위 영업점 수수료율 -->
-                        <VCol cols="12" v-if="levels.sales5_use">
-                            <VRow>
-                                <VCol cols="12" md="3">
-                                    <label>{{ levels.sales5_name }}/수수료율</label>
-                                </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales5"
-                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[5].value)"
-                                        prepend-inner-icon="ph:share-network" :label="levels.sales5_name+ '선택'" item-title="sales_name" item-value="id"
-                                        persistent-hint :hint="hintSalesApplyFee(sales5)" return-object />
-                                </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.sales5_fee" type="number" suffix="%"
-                                        :rules="[requiredValidator]" />
-                                </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :level=30 :item="props.item">
-                                </FeeChangeBtn>
-                            </VRow>
-                        </VCol>
-                        <!-- 👉 영업점 수수료율 -->
-                        <VCol cols="12" v-if="levels.sales4_use">
-                            <VRow>
-                                <VCol cols="12" md="3">
-                                    <label>{{ levels.sales4_name }}/수수료율</label>
-                                </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales4"
-                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[4].value)"
-                                        prepend-inner-icon="ph:share-network" :label="levels.sales4_name+' 선택'" item-title="sales_name"
-                                        item-value="id" persistent-hint :hint="hintSalesApplyFee(sales4)" return-object/>
-                                </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.sales4_fee" type="number" suffix="%"
-                                        :rules="[requiredValidator]" />
-                                </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :level=25 :item="props.item">
-                                </FeeChangeBtn>
-                            </VRow>
-                        </VCol>
-                        <!-- 👉 지사 수수료율 -->
-                        <VCol cols="12" v-if="levels.sales3_use">
-                            <VRow>
-                                <VCol cols="12" md="3">
-                                    <label>{{ levels.sales3_name }}/수수료율</label>
-                                </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales3"
-                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[3].value)"
-                                        prepend-inner-icon="ph:share-network" :label="levels.sales3_name+' 선택'" item-title="sales_name" item-value="id"
-                                        persistent-hint :hint="hintSalesApplyFee(sales3)" return-object />
-                                </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.sales3_fee" type="number" suffix="%"
-                                        :rules="[requiredValidator]" />
-                                </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :level=20 :item="props.item">
-                                </FeeChangeBtn>
-                            </VRow>
-                        </VCol>
-                        <!-- 👉 총판 수수료율 -->
-                        <VCol cols="12" v-if="levels.sales2_use">
-                            <VRow>
-                                <VCol cols="12" md="3">
-                                    <label>{{ levels.sales2_name }}/수수료율</label>
-                                </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales2"
-                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[2].value)"
-                                        prepend-inner-icon="ph:share-network" :label="levels.sales2_name+' 선택'" item-title="sales_name"
-                                        item-value="id" persistent-hint :hint="hintSalesApplyFee(sales2)" return-object />
-                                </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.sales2_fee" type="number" suffix="%"
-                                        :rules="[requiredValidator]" />
-                                </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :level=17 :item="props.item">
-                                </FeeChangeBtn>
-                            </VRow>
-                        </VCol>
-                        <!-- 👉 대리점 수수료율 -->
-                        <VCol cols="12" v-if="levels.sales1_use">
-                            <VRow>
-                                <VCol cols="12" md="3">
-                                    <label>{{ levels.sales1_name }}/수수료율</label>
-                                </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales1"
-                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[1].value)"
-                                        prepend-inner-icon="ph:share-network" :label="levels.sales1_name+' 선택'" item-title="sales_name"
-                                        item-value="id" persistent-hint :hint="hintSalesApplyFee(sales1)" return-object />
-                                </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.sales1_fee" type="number" suffix="%"
-                                        :rules="[requiredValidator]" />
-                                </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :level=15 :item="props.item">
-                                </FeeChangeBtn>
-                            </VRow>
-                        </VCol>
-                        <!-- 👉 하위 대리점 수수료율 -->
-                        <VCol cols="12" v-if="levels.sales0_use">
-                            <VRow>
-                                <VCol cols="12" md="3">
-                                    <label>{{ levels.sales0_name }}/수수료율</label>
-                                </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales0"
-                                        :items="[{ id: null, sales_name: '선택안함' }].concat(sales[0].value)"
-                                        prepend-inner-icon="ph:share-network" :label="levels.sales0_name+' 선택'" item-title="sales_name"
-                                        item-value="id" persistent-hint :hint="hintSalesApplyFee(sales0)" return-object />
-                                </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.sales0_fee" type="number" suffix="%"
-                                        :rules="[requiredValidator]" />
-                                </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :level=13 :item="props.item">
-                                </FeeChangeBtn>
-                            </VRow>
-                        </VCol>
                         <VCol>
                             <VTextarea v-model="props.item.note" counter label="메모사항"
-                                prepend-inner-icon="twemoji-spiral-notepad"  maxlength="100"/>
+                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="100" />
                         </VCol>
                     </VRow>
                 </VCardItem>
@@ -312,7 +318,6 @@ onMounted(async() => {
                         </VCol>
                     </VRow>
                 </VCardItem>
-            </VCard>
-        </VCol>
-    </VRow>
-</template>
+        </VCard>
+    </VCol>
+</VRow></template>
