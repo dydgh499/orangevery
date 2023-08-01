@@ -127,7 +127,6 @@ const chartOptions = computed(() => {
             labels: {
                 show: true,
                 style: {
-                    colors: [labelColor, labelColor, labelColor, labelColor, labelColor, labelColor],
                     fontSize: '14px',
                     fontFamily: 'Public Sans',
                 },
