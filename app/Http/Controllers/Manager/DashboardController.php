@@ -99,19 +99,21 @@ class DashboardController extends Controller
 
     private function setMonthlyPayModule($transactions)
     {
+        $total = $transactions->count();
+        $total = $total == 0 ? 1 : $total;
         return [
-            'terminal_count' => $transactions->filter(function ($transaction) {
+            'terminal_count' => ($transactions->filter(function ($transaction) {
                 return $transaction->module_type == 0;
-            })->count(),
-            'hand_count' => $transactions->filter(function ($transaction) {
+            })->count()/$total) * 100,
+            'hand_count' => ($transactions->filter(function ($transaction) {
                 return $transaction->module_type == 1;
-            })->count(),
-            'auth_count' => $transactions->filter(function ($transaction) {
+            })->count()/$total) * 100,
+            'auth_count' => ($transactions->filter(function ($transaction) {
                 return $transaction->module_type == 2;
-            })->count(),
-            'simple_count' => $transactions->filter(function ($transaction) {
+            })->count()/$total) * 100,
+            'simple_count' => ($transactions->filter(function ($transaction) {
                 return $transaction->module_type == 3;
-            })->count(),
+            })->count()/$total) * 100,
         ];
     }
     /*
