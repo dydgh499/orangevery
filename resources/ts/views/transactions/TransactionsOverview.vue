@@ -28,8 +28,8 @@ const sales0 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const mcht  = ref(<any>({ id: null, mcht_name: '선택안함' }))
 const custom = ref(<any>({ id: null, type: 1, name: '사용안함' }))
 const pay_modules = ref<PayModule[]>([])
-const merchandises = ref<Merchandise[]>([])
-const fee_histories = ref(<any[]>([]))
+let merchandises = <Merchandise[]>([])
+let fee_histories = ref(<any[]>([]))
 
 
 const initTrxAt = (is_trx: boolean) => {
@@ -59,7 +59,7 @@ const changePaymodEvent = () => {
 }
 const changeMchtEvent = () => {
     if (props.item.mcht_id != null) {
-        const mcht = merchandises.value.find((obj: Merchandise) => obj.id == props.item.mcht_id)
+        const mcht = merchandises.find((obj: Merchandise) => obj.id == props.item.mcht_id)
         if (mcht) {
             props.item.sales5_fee = mcht.sales5_fee
             props.item.sales4_fee = mcht.sales4_fee
@@ -70,13 +70,13 @@ const changeMchtEvent = () => {
             props.item.hold_fee = mcht.hold_fee
             props.item.mcht_fee = mcht.trx_fee
 
-            props.item.sales5_id = mcht.sales5_id
-            props.item.sales4_id = mcht.sales4_id
-            props.item.sales3_id = mcht.sales3_id
-            props.item.sales2_id = mcht.sales2_id
-            props.item.sales1_id = mcht.sales1_id
-            props.item.sales0_id = mcht.sales0_id
-            props.item.custom_id = mcht.custom_id
+            sales5.value = sales[5].value.find(obj => obj.id === mcht.sales5_id)
+            sales4.value = sales[4].value.find(obj => obj.id === mcht.sales4_id)
+            sales3.value = sales[3].value.find(obj => obj.id === mcht.sales3_id)
+            sales2.value = sales[2].value.find(obj => obj.id === mcht.sales2_id)
+            sales1.value = sales[1].value.find(obj => obj.id === mcht.sales1_id)
+            sales0.value = sales[0].value.find(obj => obj.id === mcht.sales0_id)
+            custom.value = cus_filters.find(obj => obj.id === props.item.custom_id)
         }
     }
 }
@@ -101,7 +101,7 @@ const filterInsts = computed(() => {
 })
 const hintSalesApplyFee = (sales: any):string => {
     if(sales && sales.id) {
-        const history = fee_histories.value.find(obj => obj.sales_id === sales.id)
+        const history = fee_histories.find(obj => obj.sales_id === sales.id)
         return history ? '마지막 일괄적용: '+(history.trx_fee * 100).toFixed(3)+'%' : '';
     }
     else
@@ -109,29 +109,35 @@ const hintSalesApplyFee = (sales: any):string => {
 }
 
 onMounted(async() => {
-    await classification()
-    fee_histories.value = await feeApplyHistoires()
-    pay_modules.value = await getAllPayModules()
-    merchandises.value = await getAllMerchandises()
+    await Promise.all([
+        classification(),
+        feeApplyHistoires(),
+        getAllPayModules(),
+        getAllMerchandises()
+    ]).then(([classificationResult, feeHistoriesResult, payModulesResult, merchandisesResult]) => {
+        fee_histories = feeHistoriesResult
+        pay_modules.value = payModulesResult
+        merchandises = merchandisesResult
 
-    sales5.value = sales[5].value.find(obj => obj.id === props.item.sales5_id)
-    sales4.value = sales[4].value.find(obj => obj.id === props.item.sales4_id)
-    sales3.value = sales[3].value.find(obj => obj.id === props.item.sales3_id)
-    sales2.value = sales[2].value.find(obj => obj.id === props.item.sales2_id)
-    sales1.value = sales[1].value.find(obj => obj.id === props.item.sales1_id)
-    sales0.value = sales[0].value.find(obj => obj.id === props.item.sales0_id)
-    mcht.value = merchandises.value.find(obj => obj.id === props.item.mcht_id)
-    custom.value = cus_filters.find(obj => obj.id === props.item.custom_id)
+        sales5.value = sales[5].value.find(obj => obj.id === props.item.sales5_id)
+        sales4.value = sales[4].value.find(obj => obj.id === props.item.sales4_id)
+        sales3.value = sales[3].value.find(obj => obj.id === props.item.sales3_id)
+        sales2.value = sales[2].value.find(obj => obj.id === props.item.sales2_id)
+        sales1.value = sales[1].value.find(obj => obj.id === props.item.sales1_id)
+        sales0.value = sales[0].value.find(obj => obj.id === props.item.sales0_id)
+        mcht.value = merchandises.find(obj => obj.id === props.item.mcht_id)
+        custom.value = cus_filters.find(obj => obj.id === props.item.custom_id)
 
-    watchEffect(() => {
-        props.item.sales5_id = sales5.value.id
-        props.item.sales4_id = sales4.value.id
-        props.item.sales3_id = sales3.value.id
-        props.item.sales2_id = sales2.value.id
-        props.item.sales1_id = sales1.value.id
-        props.item.sales0_id = sales0.value.id
-        props.item.custom_id = custom.value.id
-        props.item.mcht_id = mcht.value.id
+        watchEffect(() => {
+            props.item.sales5_id = sales5.value.id
+            props.item.sales4_id = sales4.value.id
+            props.item.sales3_id = sales3.value.id
+            props.item.sales2_id = sales2.value.id
+            props.item.sales1_id = sales1.value.id
+            props.item.sales0_id = sales0.value.id
+            props.item.custom_id = custom.value.id
+            props.item.mcht_id = mcht.value.id
+        })
     })
 })
 
