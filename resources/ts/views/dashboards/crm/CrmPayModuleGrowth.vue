@@ -46,10 +46,10 @@ const getPreviousAmount = (dates: string[]) => {
         const auth_cnt = monthly_transactions[dates[i]].modules.auth_count
         const simple_cnt = monthly_transactions[dates[i]].modules.simple_count
 
-        terminal_counts.unshift(tmn_cnt > 100 ? 100 : tmn_cnt)
-        hand_counts.unshift(hand_cnt > 100 ? 100 : hand_cnt)
-        auth_counts.unshift(auth_cnt > 100 ? 100 : auth_cnt)
-        simple_counts.unshift(simple_cnt > 100 ? 100 : simple_cnt)
+        terminal_counts.unshift(tmn_cnt)
+        hand_counts.unshift(hand_cnt)
+        auth_counts.unshift(auth_cnt)
+        simple_counts.unshift(simple_cnt)
     }
     series.value[0].data = terminal_counts
     series.value[1].data = hand_counts
