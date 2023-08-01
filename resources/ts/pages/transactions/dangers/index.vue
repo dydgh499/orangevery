@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useSearchStore } from '@/views/transactions/dangers/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
@@ -90,6 +91,12 @@ watchEffect(() => {
                             <span v-if="_key == `id`" class="edit-link">
                                 #{{ item[_key] }}
                             </span>
+                            <span v-else-if="_key == 'module_type'">
+                                <VChip
+                                    :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
+                                    {{ module_types.find(obj => obj.id === item[_key])?.title }}
+                                </VChip>
+                            </span>                            
                             <span v-else-if="_key == 'amount'">
                                 {{ (item[_key] as number).toLocaleString() }}
                             </span>
