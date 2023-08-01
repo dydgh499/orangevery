@@ -57,6 +57,10 @@ onMounted(() => {
         }
     })
 })
+watchEffect(() => {    
+    store.params.page = 1
+    store.params.module_type = store.params.module_type
+})
 </script>
 <template>
     <BaseIndexView placeholder="MID, TID, 가맹점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="결제모듈" :is_range_date="null">

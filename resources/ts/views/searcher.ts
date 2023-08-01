@@ -10,7 +10,7 @@ export function Searcher(path: string) {
     const router = useRouter()
     const params = reactive<any>({page:1, page_size:10})
     const pagenation = reactive<Pagenation>({ total_count: 0, total_page: 1 })
-
+    let before_search = ''
     const get = async (p: object) => {
         try {
             const r = await axios.get('/api/v1/manager/' + path, { params: p })
@@ -47,9 +47,11 @@ export function Searcher(path: string) {
     }
 
     const setTable = async() => {
+        const current_search = (document.getElementById('search') as HTMLInputElement).value
+        if(before_search != current_search)
+            params.page = 1
         const p = cloneDeep(params)
-        p.search = (document.getElementById('search') as HTMLInputElement).value
-
+        p.search = current_search
         
         const r = await get(p)
         if (r.status == 200) {

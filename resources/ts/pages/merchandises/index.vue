@@ -63,6 +63,10 @@ onMounted(() => {
         }
     })
 })
+watchEffect(() => {    
+    store.params.page = 1
+    store.params.module_type = store.params.module_type
+})
 </script>
 <template>
     <div>

@@ -48,6 +48,11 @@ onMounted(() => {
                 totals.value.push(r.data)
         }
     })
+    watchEffect(() => {    
+        store.params.page = 1
+        store.params.level = store.params.level
+        store.params.settle_cycle = store.params.settle_cycle
+    })
 })
 </script>
 <template>

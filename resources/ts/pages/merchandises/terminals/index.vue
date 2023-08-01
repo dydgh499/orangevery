@@ -28,6 +28,10 @@ const isMchtUnableCol = (key: string) => {
         return cols.includes(key);
     }
 }
+watchEffect(() => {    
+    store.params.page = 1
+    store.params.ship_out_stat = store.params.ship_out_stat
+})
 </script>
 <template>
     <BaseIndexView placeholder="MID, TID, 시리얼 번호, 가맹점 상호 검색" :metas="[]" :add="user_info.level >= 35" add_name="장비"

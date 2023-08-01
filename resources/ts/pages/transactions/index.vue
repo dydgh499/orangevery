@@ -18,7 +18,6 @@ const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
 const salesslip = ref()
 const cancelTran = ref()
-const mcht_settle_type = ref({ id: null, name: '전체' })
 const levels = corp.pv_options.auth.levels
 
 provide('store', store)
@@ -98,13 +97,14 @@ onMounted(() => {
             metas.value[0]['percentage'] = r.data.appr.amount ? 100 : 0
             metas.value[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
             metas.value[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
-            metas.value[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
-            
+            metas.value[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)            
         }
     })
-})
-watchEffect(() => {
-    store.params.mcht_settle_type = mcht_settle_type.value.id
+    watchEffect(() => {    
+        store.params.page = 1
+        store.params.level = store.params.level
+        store.params.mcht_settle_type = store.params.mcht_settle_type
+    })
 })
 
 const all_levels = getAllLevels()
@@ -123,7 +123,7 @@ const all_levels = getAllLevels()
                     </template>
                     <template #extra_right>
                         <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
-                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 선택" item-title="name" item-value="id"
                             return-object />
                         </VCol>

@@ -60,6 +60,13 @@ const setDateRange = (type: string) => {
     store.params.s_dt = formatDate(s_date)
     store.params.e_dt = formatDate(e_date)
 }
+
+watchEffect(() => {    
+    store.params.page = 1
+    store.params.s_dt = store.params.s_dt
+    store.params.e_dt = store.params.e_dt
+    store.params.dt = store.params.dt
+})
 </script>
 <template>
     <div class="d-inline-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
@@ -68,7 +75,7 @@ const setDateRange = (type: string) => {
                 <VRow>
                     <div class="d-flex align-center flex-wrap gap-4 justify-center" style="width: 100%;">
                         <VTextField type="date" v-model="store.params.s_dt" prepend-inner-icon="ic-baseline-calendar-today"
-                            label="검색 시작일" v-if="props.is_range_date == true" class="search-date"/>
+                            label="검색 시작일" v-if="props.is_range_date == true" class="search-date" @onchange="store.params.page=1"/>
                         <VTextField type="date" v-model="store.params.e_dt" prepend-inner-icon="ic-baseline-calendar-today"
                             label="검색 종료일" v-if="props.is_range_date == true" class="search-date" />
                         <VTextField type="date" v-model="store.params.dt" prepend-inner-icon="ic-baseline-calendar-today"

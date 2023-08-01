@@ -55,6 +55,7 @@ export const useLayouts = () => {
     },
     set(val: typeof config.app.contentWidth.value) {
       config.app.contentWidth.value = val
+      console.log(config.app.contentWidth.value)
       localStorage.setItem(`${config.app.title}-contentWidth`, val.toString())
     },
   })

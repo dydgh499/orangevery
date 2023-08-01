@@ -29,6 +29,7 @@ const filterPgs = computed(() => {
 })
 
 watchEffect(() => {
+    store.params.page = 1
     store.params.pg_id = pg.value.id
     store.params.ps_id = ps.value.id
     store.params.terminal = terminal.value.id
@@ -44,32 +45,32 @@ watchEffect(() => {
     <VRow>
         <VCol cols="12" sm="3" v-if="props.pg && user_info.level > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="pg" :items="[{ id: null, pg_name: '전체' }].concat(pgs)"
-                label="PG사 선택" item-title="pg_name" item-value="id" return-object/>
+                label="PG사 선택" item-title="pg_name" item-value="id" return-object />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.ps && user_info.level > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="ps"
                 :items="[{ id: null, name: '전체' }].concat(filterPgs)" label="구간 선택" item-title="name" item-value="id"
-                return-object id="ps-filter" :eager="true" />
+                return-object id="ps-filter" :eager="true"  />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.pay_cond">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="settle_type"
                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산일 선택" item-title="name" item-value="id"
-                return-object id="settle_types-filter" :eager="true"/>
+                return-object id="settle_types-filter" :eager="true" />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.terminal">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="terminal"
                 :items="[{ id: null, name: '전체' }].concat(terminals)" label="장비 선택" item-title="name" item-value="id"
-                return-object id="terminal-filter" :eager="true" />
+                return-object id="terminal-filter" :eager="true"  />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.cus_filter && user_info.level > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="custom"
                 :items="[{ id: null, name: '전체' }].concat(cus_filters)" label="커스텀 필터" item-title="name" item-value="id"
-                return-object id="custom-filter" :eager="true" :isActive="test"/>
+                return-object id="custom-filter" :eager="true" />
         </VCol>
         <slot name="extra_right"></slot>
         <VCol cols="12" sm="3">
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" :eager="true"/>
+                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" :eager="true" />
         </VCol>
     </VRow>
 </template>

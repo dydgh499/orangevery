@@ -52,21 +52,11 @@ const payCanceled = async() => {
         }
     }
 }
-const menu = ref()
-const setVMenuLocation = async (event:any) => {
-    await nextTick();
-    const rect = event.target.getBoundingClientRect()
-    const left = (rect.x + rect.width) * (zoom.value/100)
-    const top = rect.bottom
-    console.log(menu.value.$el)
-    menu.value.$el.style.left = `${left}px`;
-    menu.value.$el.style.top = `${top}px`;
-}
 </script>
 <template>
-    <VBtn icon size="x-small" color="default" variant="text" @click="setVMenuLocation($event)">
+    <VBtn icon size="x-small" color="default" variant="text">
         <VIcon size="22" icon="tabler-dots-vertical" />
-        <VMenu activator="parent" width="230" ref="menu">
+        <VMenu activator="parent" width="230">
             <VList>
                 <VListItem value="saleslip" @click="salesslip.show(props.item)">
                     <template #prepend>
@@ -96,3 +86,6 @@ const setVMenuLocation = async (event:any) => {
         </VMenu>
     </VBtn>
 </template>
+<style scoped>
+
+</style>

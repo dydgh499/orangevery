@@ -14,7 +14,10 @@ provide('head', head)
 provide('exporter', exporter)
 
 store.params.level = all_sales[0].id
-
+watchEffect(() => {    
+    store.params.page = 1
+    store.params.level = store.params.level
+})
 </script>
 <template>
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :is_range_date="true">

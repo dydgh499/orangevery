@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import { useZoomProperty } from '@layouts/composable/useZoomProperty'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
+import { useLayouts } from '@layouts/composable/useLayouts'
 
 const { zoom, zoomIn,zoomOut } = useZoomProperty()
 const { isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
-console.log(windowWidth.value)
+const { isAppRtl, appContentWidth } = useLayouts()
+
+watchEffect(() => {
+
+
+})
 </script>
 <template>
     <VChip color="primary" variant="elevated" size="default" style="padding: 0 0.1em; margin-right: 0.5em;" v-if="isLessThanOverlayNavBreakpoint(windowWidth) == false">

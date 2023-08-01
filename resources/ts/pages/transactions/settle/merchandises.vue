@@ -52,6 +52,10 @@ onMounted(() => {
         }
     })
 })
+watchEffect(() => {    
+    store.params.page = 1
+    store.params.mcht_settle_type = store.params.mcht_settle_type
+})
 </script>
 <template>
     <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="정산" :is_range_date="false">
