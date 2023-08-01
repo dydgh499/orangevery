@@ -102,18 +102,18 @@ class DashboardController extends Controller
         $total = $transactions->count();
         $total = $total == 0 ? 1 : $total;
         return [
-            'terminal_count' => ($transactions->filter(function ($transaction) {
+            'terminal_count' => round(($transactions->filter(function ($transaction) {
                 return $transaction->module_type == 0;
-            })->count()/$total) * 100,
-            'hand_count' => ($transactions->filter(function ($transaction) {
+            })->count()/$total) * 100),
+            'hand_count' => round(($transactions->filter(function ($transaction) {
                 return $transaction->module_type == 1;
-            })->count()/$total) * 100,
-            'auth_count' => ($transactions->filter(function ($transaction) {
+            })->count()/$total) * 100),
+            'auth_count' => round(($transactions->filter(function ($transaction) {
                 return $transaction->module_type == 2;
-            })->count()/$total) * 100,
-            'simple_count' => ($transactions->filter(function ($transaction) {
+            })->count()/$total) * 100),
+            'simple_count' => round(($transactions->filter(function ($transaction) {
                 return $transaction->module_type == 3;
-            })->count()/$total) * 100,
+            })->count()/$total) * 100),
         ];
     }
     /*
