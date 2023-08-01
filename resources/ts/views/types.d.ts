@@ -530,8 +530,8 @@ export interface BasePay {
     amount: number,
     item_name: string,
     buyer_name: string,
+    buyer_phone: string,
     installment: number,
-    phone: string,
     only: boolean,
     temp?: string,
 }

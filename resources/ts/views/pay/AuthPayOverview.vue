@@ -21,8 +21,8 @@ const vForm = ref<VForm>()
 const urlParams = new URLSearchParams(window.location.search)
 auth_pay_info.item_name = urlParams.get('item_name') || ''
 auth_pay_info.buyer_name = urlParams.get('buyer_name') || ''
+auth_pay_info.buyer_phone = urlParams.get('phone_num') || ''
 auth_pay_info.amount = Number(urlParams.get('amount') || '')
-auth_pay_info.phone = urlParams.get('phone_num') || ''
 
 const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.installment || 0) })
@@ -73,7 +73,7 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
                             <template #name>휴대폰번호</template>
                             <template #input>
-                                <VTextField v-model="auth_pay_info.phone" type="number" name="phone"
+                                <VTextField v-model="auth_pay_info.buyer_phone" type="number" name="phone"
                                     prepend-inner-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
                                     :rules="[requiredValidator]" />
                             </template>

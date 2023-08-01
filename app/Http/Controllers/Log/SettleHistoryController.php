@@ -53,6 +53,7 @@ class SettleHistoryController extends Controller
         $search = $request->input('search', '');
         $query  = $this->settle_mcht_hist
                 ->join('merchandises', 'settle_histories_merchandises.mcht_id', 'merchandises.id')
+                ->where('settle_histories_merchandises.brand_id', $request->user()->brand_id)
                 ->where('settle_histories_merchandises.is_delete', false)
                 ->where('merchandises.mcht_name', 'like', "%$search%");
 
@@ -69,6 +70,7 @@ class SettleHistoryController extends Controller
         $search = $request->input('search', '');
         $query  = $this->settle_sales_hist
                 ->join('salesforces', 'settle_histories_salesforces.sales_id', 'salesforces.id')
+                ->where('settle_histories_salesforces.brand_id', $request->user()->brand_id)
                 ->where('settle_histories_salesforces.is_delete', false)
                 ->where('salesforces.user_name', 'like', "%$search%");
 

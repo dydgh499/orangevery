@@ -75,9 +75,9 @@ const download = async () => {
 }
 </script>
 <template>
-    <VBtn icon size="x-small" color="default" variant="text" :id="`item-${props.item.id}`">
+    <VBtn icon size="x-small" color="default" variant="text">
         <VIcon size="22" icon="tabler-dots-vertical" />
-        <VMenu activator="parent" width="230" :attach="`#item-${props.item.id}`">
+        <VMenu activator="parent" width="230">
             <VList>
                 <VListItem value="deposit" @click="deposit()">
                     <template #prepend>

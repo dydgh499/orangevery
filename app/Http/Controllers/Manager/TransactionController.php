@@ -274,7 +274,7 @@ class TransactionController extends Controller
 
         $data = $request->all();
         $data['yymm'] = $getYYMM($data['yymm']);
-        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/hand';
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/online/v2/pay/hand';
         $res = post($url, $data);
         if($res['body']['result_cd'] === "0000")
             return $this->response(1, $res['body']);
@@ -286,7 +286,7 @@ class TransactionController extends Controller
     public function payCancel(Request $request)
     {
         $data = $request->all();
-        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/pay/cancel';
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/cancel';
         $res = post($url, $data);
         if($res['body']['result_cd'] === "0000")
             return $this->response(1, $res['body']);

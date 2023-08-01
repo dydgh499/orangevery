@@ -196,6 +196,7 @@ div {
   padding: 0.3em;
   background: rgb(255, 255, 255, 0%) !important;
   box-shadow: 0 0 0 0;
+  min-block-size: 67em;
 }
 
 .sales-slip-rect {

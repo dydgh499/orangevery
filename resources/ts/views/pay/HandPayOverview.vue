@@ -7,7 +7,6 @@ import { VForm } from 'vuetify/components'
 import type { Merchandise, SalesSlip, Options, HandPay } from '@/views/types'
 import { cloneDeep } from 'lodash'
 import { axios } from '@axios'
-import { pay } from '@/views/pay/pay'
 
 interface Props {
     pmod_id: number,
@@ -16,7 +15,6 @@ interface Props {
     merchandise: Merchandise
 }
 const props = defineProps<Props>()
-
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
@@ -31,9 +29,8 @@ const vForm = ref<VForm>()
 const urlParams = new URLSearchParams(window.location.search)
 hand_pay_info.item_name = urlParams.get('item_name') || ''
 hand_pay_info.buyer_name = urlParams.get('buyer_name') || ''
+hand_pay_info.buyer_phone = urlParams.get('phone_num') || ''
 hand_pay_info.amount = Number(urlParams.get('amount') || '')
-hand_pay_info.phone = urlParams.get('phone_num') || ''
-
 
 const pay = async () => {
     if (hand_pay_info.pmod_id) {
@@ -120,7 +117,7 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                             <template #name>휴대폰번호</template>
                             <template #input>
-                                <VTextField v-model="hand_pay_info.phone" type="number"
+                                <VTextField v-model="hand_pay_info.buyer_phone" type="number"
                                     prepend-inner-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
                                     :rules="[requiredValidator]" />
                             </template>

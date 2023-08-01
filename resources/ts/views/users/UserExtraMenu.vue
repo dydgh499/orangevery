@@ -8,9 +8,9 @@ const props = defineProps<Props>()
 const password = <any>(inject('password'))
 </script>
 <template>
-    <VBtn icon size="x-small" color="default" variant="text" :id="`item-${props.id}`">
+    <VBtn icon size="x-small" color="default" variant="text">
         <VIcon size="22" icon="tabler-dots-vertical" />
-        <VMenu activator="parent" width="230" :attach="`#item-${props.id}`">
+        <VMenu activator="parent" width="230">
             <VList>
                 <VListItem value="password" @click="password.show(props.id, type)">
                     <template #prepend>

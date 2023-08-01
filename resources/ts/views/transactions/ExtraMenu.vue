@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { SalesSlip, CancelPay } from '@/views/types'
 import { axios, getUserLevel, user_info } from '@axios'
+import { useZoomProperty } from '@layouts/composable/useZoomProperty'
 
 interface Props {
     item: SalesSlip,
@@ -8,6 +9,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
+const { zoom } = useZoomProperty()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
@@ -50,11 +52,21 @@ const payCanceled = async() => {
         }
     }
 }
+const menu = ref()
+const setVMenuLocation = async (event:any) => {
+    await nextTick();
+    const rect = event.target.getBoundingClientRect()
+    const left = (rect.x + rect.width) * (zoom.value/100)
+    const top = rect.bottom
+    console.log(menu.value.$el)
+    menu.value.$el.style.left = `${left}px`;
+    menu.value.$el.style.top = `${top}px`;
+}
 </script>
 <template>
-    <VBtn icon size="x-small" color="default" variant="text" :id="`item-${props.item.id}`">
+    <VBtn icon size="x-small" color="default" variant="text" @click="setVMenuLocation($event)">
         <VIcon size="22" icon="tabler-dots-vertical" />
-        <VMenu activator="parent" width="230" :attach="`#item-${props.item.id}`">
+        <VMenu activator="parent" width="230" ref="menu">
             <VList>
                 <VListItem value="saleslip" @click="salesslip.show(props.item)">
                     <template #prepend>

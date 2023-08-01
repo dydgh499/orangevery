@@ -14,7 +14,6 @@ if (getUserLevel() == 10) {
     Object.assign(pay_modules, await getAllPayModules())
 }
 
-
 const getPayLinkFormats = (pays: PayModule[], type: string) => {
     return map(pays, (pay) => {
         const pays: any = []
