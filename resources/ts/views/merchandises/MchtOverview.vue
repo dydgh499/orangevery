@@ -82,7 +82,7 @@ onMounted(async() => {
                             <template #name>업종</template>
                             <template #input>
                                 <VTextField v-model="props.item.sector" prepend-inner-icon="tabler-building-store"
-                                    placeholder="업종을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
+                                    placeholder="업종을 입력해주세요" persistent-placeholder />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 수수료율 -->
@@ -273,8 +273,8 @@ onMounted(async() => {
                                     <template #input>
                                         <BooleanRadio :radio="Boolean(props.item.is_show_fee)"
                                             @update:radio="props.item.is_show_fee = $event">
-                                            <template #true>사용</template>
-                                            <template #false>미사용</template>
+                                            <template #true>노출</template>
+                                            <template #false>숨김</template>
                                         </BooleanRadio>
                                     </template>
                                 </CreateHalfVCol>

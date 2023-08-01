@@ -44,7 +44,6 @@ class SalesforceRequest extends FormRequest
     {
         $sub = [
             'user_name' => 'required',
-            'nick_name' => 'required',
             'sales_name' => 'required',
             'view_type' => 'required',
             'level'     => 'required',
