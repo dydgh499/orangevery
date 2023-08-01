@@ -47,7 +47,6 @@ class SalesforceRequest extends FormRequest
             'sales_name' => 'required',
             'view_type' => 'required',
             'level'     => 'required',
-            'resident_num' => 'required',
             'acct_bank_name' => 'required',
             'acct_bank_code' => 'required',
             'settle_tax_type' => 'required',
