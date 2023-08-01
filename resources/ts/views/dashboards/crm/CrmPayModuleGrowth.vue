@@ -41,10 +41,15 @@ const getPreviousAmount = (dates: string[]) => {
     const auth_counts = []
     const simple_counts = []
     for (let i = 0; i < dates.length; i++) {
-        terminal_counts.unshift(monthly_transactions[dates[i]].modules.terminal_count)
-        hand_counts.unshift(monthly_transactions[dates[i]].modules.hand_count)
-        auth_counts.unshift(monthly_transactions[dates[i]].modules.auth_count)
-        simple_counts.unshift(monthly_transactions[dates[i]].modules.simple_count)
+        const tmn_cnt = monthly_transactions[dates[i]].modules.terminal_count
+        const hand_cnt = monthly_transactions[dates[i]].modules.hand_count
+        const auth_cnt = monthly_transactions[dates[i]].modules.auth_count
+        const simple_cnt = monthly_transactions[dates[i]].modules.simple_count
+        
+        terminal_counts.unshift(tmn_cnt > 100 ? 100 : tmn_cnt)
+        hand_counts.unshift(hand_cnt > 100 ? 100 : hand_cnt)
+        auth_counts.unshift(auth_cnt > 100 ? 100 : auth_cnt)
+        simple_counts.unshift(simple_cnt > 100 ? 100 : simple_cnt)
     }
     series.value[0].data = terminal_counts
     series.value[1].data = hand_counts
@@ -131,7 +136,7 @@ const chartOptions = computed(() => {
         yaxis: {
             show: false,
             min: 0,
-            max: 40,
+            max: 100,
             tickAmount: 4,
         },
         responsive: [
