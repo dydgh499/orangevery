@@ -100,6 +100,16 @@ watchEffect(() => {
                             <span v-else-if="_key == 'amount'">
                                 {{ (item[_key] as number).toLocaleString() }}
                             </span>
+                            <span v-else-if="_key == `danger_type`">
+                                <VChip :color="store.booleanTypeColor(!item[_key])" >
+                                    {{ item[_key] ? '한도초과' : '중복결제' }}
+                                </VChip>
+                            </span>
+                            <span v-else-if="_key == `is_checked`">
+                                <VChip :color="store.booleanTypeColor(!item[_key])" >
+                                    {{ item[_key] ? '확인' : '미확인' }}
+                                </VChip>
+                            </span>
                             <span v-else>
                                 {{ item[_key] }}
                             </span>
