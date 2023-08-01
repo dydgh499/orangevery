@@ -11,7 +11,7 @@ interface Props {
 const props = defineProps<Props>();
 const new_noti_urls = reactive<NotiUrl[]>([])
 const noti_urls = reactive<NotiUrl[]>([])
-const merchandises = reactive<Merchandise[]>([])
+const merchandises = ref<Merchandise[]>([])
 
 const addNewNotiUrl = () => {
     new_noti_urls.push(<NotiUrl>{
@@ -25,7 +25,7 @@ const addNewNotiUrl = () => {
 if(props.item.id)
     Object.assign(noti_urls, await getAllNotiUrls(props.item.id))
 else
-    Object.assign(merchandises, await getAllMerchandises())
+    merchandises.value = await getAllMerchandises()
 </script>
 <template>
     <NotiCard v-for="(item, index) in noti_urls" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="merchandises"/>

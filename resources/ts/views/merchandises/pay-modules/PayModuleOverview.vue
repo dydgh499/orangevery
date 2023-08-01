@@ -9,8 +9,8 @@ interface Props {
 }
 const props = defineProps<Props>();
 const new_pay_modules = reactive<PayModule[]>([])
-const pay_modules = reactive<PayModule[]>([])
-const merchandises = reactive<Merchandise[]>([])
+const pay_modules = ref<PayModule[]>([])
+const merchandises = ref<Merchandise[]>([])
 
 const addNewPaymodule = () => {
     new_pay_modules.push(<PayModule>{
@@ -48,9 +48,9 @@ const addNewPaymodule = () => {
     })
 }
 if(props.item.id)
-    Object.assign(pay_modules, await getAllPayModules(props.item.id))
+    pay_modules.value = await getAllPayModules(props.item.id)
 else
-    Object.assign(merchandises, await getAllMerchandises())
+    merchandises.value = await getAllMerchandises()
 </script>
 <template>
     <PayModuleCard v-for="(item, index) in pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="merchandises"/>

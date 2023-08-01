@@ -12,13 +12,13 @@ interface Props {
 const props = defineProps<Props>()
 
 const { path, item } = defaultItemInfo()
-const merchandises = reactive<Merchandise[]>([])
+const merchandises = ref<Merchandise[]>([])
 const tabs = [
     { icon: 'ic-outline-send-to-mobile', title: '결제모듈정보' },
 ]
 const route = useRoute()
 const id = Number(route.params.id) || 0
-Object.assign(merchandises, await getAllMerchandises())
+merchandises.value = await getAllMerchandises()
 </script>
 <template>
     <section>

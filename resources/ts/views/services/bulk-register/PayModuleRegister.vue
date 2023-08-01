@@ -17,7 +17,7 @@ const { store } = useSearchStore()
 const { pgs, pss, settle_types, terminals } = useStore()
 const { head, headers } = useRegisterStore()
 
-const merchandises = reactive<Merchandise[]>([])
+const merchandises = ref<Merchandise[]>([])
 const all_levels = allLevels()
 const auth_types: Options[] = [
     { id: 0, title: '비인증',},
@@ -46,7 +46,7 @@ const validate = () => {
         const terminal_id = terminals.find(item => item.id === items.value[i].terminal_id)
         const module_type = module_types.find(item => item.id === items.value[i].module_type)
         const installment = installments.find(item => item.id === items.value[i].installment)
-        const mcht = merchandises.find(item => item.mcht_name === items.value[i].mcht_name)
+        const mcht = merchandises.value.find(item => item.mcht_name === items.value[i].mcht_name)
 
         if (mcht == null) {
             snackbar.value.show((i + 1) + '번째 결제모듈의 가맹점 상호가 이상합니다.', 'error')
@@ -100,8 +100,7 @@ const validate = () => {
     snackbar.value.show('입력값 1차 검증에 성공하였습니다.', 'success')
     is_clear.value = true
 }
-
-Object.assign(merchandises, await getAllMerchandises())
+merchandises.value = await getAllMerchandises()
 const payModRegister = async () => {
     const result = await bulkRegister('결제모듈', 'merchandises/pay-modules', items.value)
 }

@@ -13,9 +13,10 @@ interface Props {
     item: Merchandise,
 }
 const props = defineProps<Props>()
-const { sales, fee_histories, classification } = useSalesFilterStore()
+const { sales, classification } = useSalesFilterStore()
 const { cus_filters } = useStore()
 const levels = corp.pv_options.auth.levels
+const fee_histories = ref(<any[]>([]))
 
 const sales5 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const sales4 = ref(<any>({ id: null, sales_name: '선택안함' }))
@@ -35,7 +36,7 @@ const hintSalesApplyFee = (sales: any): string => {
 }
 onMounted(async () => {
     await classification()
-    await feeApplyHistoires()
+    fee_histories.value = await feeApplyHistoires()
     props.item.sales0_fee = props.item.sales0_fee.toFixed(3)
     props.item.sales1_fee = props.item.sales1_fee.toFixed(3)
     props.item.sales2_fee = props.item.sales2_fee.toFixed(3)

@@ -16,7 +16,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
-const { sales, fee_histories, classification } = useSalesFilterStore()
+const { sales, classification } = useSalesFilterStore()
 
 const levels = corp.pv_options.auth.levels
 const sales5 = ref(<any>({ id: null, sales_name: '선택안함' }))
@@ -27,8 +27,9 @@ const sales1 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const sales0 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const mcht  = ref(<any>({ id: null, mcht_name: '선택안함' }))
 const custom = ref(<any>({ id: null, type: 1, name: '사용안함' }))
-const pay_modules = reactive<PayModule[]>([])
-const merchandises = reactive<Merchandise[]>([])
+const pay_modules = ref<PayModule[]>([])
+const merchandises = ref<Merchandise[]>([])
+const fee_histories = ref(<any[]>([]))
 
 
 const initTrxAt = (is_trx: boolean) => {
@@ -43,7 +44,7 @@ const initTrxAt = (is_trx: boolean) => {
 }
 const changePaymodEvent = () => {
     if (props.item.pmod_id != null) {
-        const pmod = pay_modules.find((obj: PayModule) => obj.id == props.item.pmod_id)
+        const pmod = pay_modules.value.find((obj: PayModule) => obj.id == props.item.pmod_id)
         if (pmod) {
             props.item.module_type = pmod.module_type
             props.item.terminal_id = pmod.terminal_id
@@ -58,7 +59,7 @@ const changePaymodEvent = () => {
 }
 const changeMchtEvent = () => {
     if (props.item.mcht_id != null) {
-        const mcht = merchandises.find((obj: Merchandise) => obj.id == props.item.mcht_id)
+        const mcht = merchandises.value.find((obj: Merchandise) => obj.id == props.item.mcht_id)
         if (mcht) {
             props.item.sales5_fee = mcht.sales5_fee
             props.item.sales4_fee = mcht.sales4_fee
@@ -86,13 +87,13 @@ const filterPgs = computed(() => {
     return filter
 })
 const filterPayMod = computed(() => {
-    const filter = pay_modules.filter((obj: PayModule) => { return obj.mcht_id == props.item.mcht_id })
-    props.item.pmod_id = payModFilter(pay_modules, filter, props.item.pmod_id as number)
+    const filter = pay_modules.value.filter((obj: PayModule) => { return obj.mcht_id == props.item.mcht_id })
+    props.item.pmod_id = payModFilter(pay_modules.value, filter, props.item.pmod_id as number)
     return filter
 })
 const filterInsts = computed(() => {
     if (props.item.pmod_id != null) {
-        const pmod = pay_modules.find((obj: PayModule) => obj.id == props.item.pmod_id)
+        const pmod = pay_modules.value.find((obj: PayModule) => obj.id == props.item.pmod_id)
         return installments.filter((obj: Options) => { return pmod && obj.id <= pmod.installment });
     }
     else
@@ -109,9 +110,9 @@ const hintSalesApplyFee = (sales: any):string => {
 
 onMounted(async() => {
     await classification()
-    await feeApplyHistoires()
-    Object.assign(pay_modules, await getAllPayModules(props.item.id))
-    Object.assign(merchandises, await getAllMerchandises())
+    fee_histories.value = await feeApplyHistoires()
+    pay_modules.value = await getAllPayModules()
+    merchandises.value = await getAllMerchandises()
 
     sales5.value = sales[5].value.find(obj => obj.id === props.item.sales5_id)
     sales4.value = sales[4].value.find(obj => obj.id === props.item.sales4_id)
@@ -119,16 +120,8 @@ onMounted(async() => {
     sales2.value = sales[2].value.find(obj => obj.id === props.item.sales2_id)
     sales1.value = sales[1].value.find(obj => obj.id === props.item.sales1_id)
     sales0.value = sales[0].value.find(obj => obj.id === props.item.sales0_id)
+    mcht.value = merchandises.value.find(obj => obj.id === props.item.mcht_id)
     custom.value = cus_filters.find(obj => obj.id === props.item.custom_id)
-
-    props.item.sales0_fee = props.item.sales0_fee.toFixed(3)
-    props.item.sales1_fee = props.item.sales1_fee.toFixed(3)
-    props.item.sales2_fee = props.item.sales2_fee.toFixed(3)
-    props.item.sales3_fee = props.item.sales3_fee.toFixed(3)
-    props.item.sales4_fee = props.item.sales4_fee.toFixed(3)
-    props.item.sales5_fee = props.item.sales5_fee.toFixed(3)
-    props.item.mcht_fee = props.item.mcht_fee.toFixed(3)
-    props.item.hold_fee = props.item.hold_fee.toFixed(3)
 
     watchEffect(() => {
         props.item.sales5_id = sales5.value.id

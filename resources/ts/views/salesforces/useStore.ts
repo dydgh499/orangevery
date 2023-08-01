@@ -141,7 +141,6 @@ export const feeApplyHistoires = async () => {
 }
 
 export const useSalesFilterStore = () => {
-    const fee_histories = ref(<any[]>([]))
     const sales = Array.from({ length: 6 }, () => ref<any[]>([]))
     onMounted(() => { classification() })
     const classification = async () => {
@@ -153,7 +152,6 @@ export const useSalesFilterStore = () => {
     }
     return {
         sales,
-        fee_histories,
         classification,
     }
 }
