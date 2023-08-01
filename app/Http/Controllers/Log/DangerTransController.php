@@ -40,7 +40,6 @@ class DangerTransController extends Controller
             'transactions.trx_tm',
             'transactions.amount',
             'transactions.buyer_name',
-            'transactions.danger_type',
         ];
         $search = $request->input('search', '');
         $query  = $this->danger_transactions
