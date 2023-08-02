@@ -31,6 +31,7 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
             'use_hand_pay_sms': '수기결제 SMS',
             'use_issuer_filter': '카드사 필터링',
             'use_realtime_deposit': '실시간 결제모듈',
+            'use_online_pay': '온라인 결제',
         }
         headers['deposit_day'] = '입금일'
         headers['deposit_amount'] = '입금액'
