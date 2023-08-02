@@ -20,7 +20,7 @@ const sales1 = ref({ id: null, sales_name: '전체' })
 const sales0 = ref({ id: null, sales_name: '전체' })
 
 watchEffect(() => {    
-    store.params.page = 1
+    store.setChartProcess()
     store.params.sales5_id = sales5.value.id
     store.params.sales4_id = sales4.value.id
     store.params.sales3_id = sales3.value.id

@@ -29,7 +29,7 @@ const isMchtUnableCol = (key: string) => {
     }
 }
 watchEffect(() => {    
-    store.params.page = 1
+    store.setChartProcess()
     store.params.ship_out_stat = store.params.ship_out_stat
 })
 </script>

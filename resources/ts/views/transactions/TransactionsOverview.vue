@@ -29,7 +29,7 @@ const mcht  = ref(<any>({ id: null, mcht_name: '선택안함' }))
 const custom = ref(<any>({ id: null, type: 1, name: '사용안함' }))
 const pay_modules = ref<PayModule[]>([])
 let merchandises = <Merchandise[]>([])
-let fee_histories = ref(<any[]>([]))
+let fee_histories = <any[]>([])
 
 
 const initTrxAt = (is_trx: boolean) => {

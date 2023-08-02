@@ -44,7 +44,7 @@ onMounted(() => {
     })
 
     watchEffect(async() => {
-        if(store.params.page == 1) {
+        if(store.getChartProcess() === false) {
             const r = await store.getChartData()            
             totals.value = []
             if(r.data.amount != 0)
@@ -53,7 +53,7 @@ onMounted(() => {
     })
 })
 watchEffect(() => {    
-    store.params.page = 1
+    store.setChartProcess()
     store.params.mcht_settle_type = store.params.mcht_settle_type
 })
 </script>

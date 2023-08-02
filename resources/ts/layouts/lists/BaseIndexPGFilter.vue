@@ -29,7 +29,7 @@ const filterPgs = computed(() => {
 })
 
 watchEffect(() => {
-    store.params.page = 1
+    store.setChartProcess()
     store.params.pg_id = pg.value.id
     store.params.ps_id = ps.value.id
     store.params.terminal = terminal.value.id

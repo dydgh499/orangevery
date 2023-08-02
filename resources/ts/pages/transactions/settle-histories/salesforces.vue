@@ -15,7 +15,7 @@ provide('exporter', exporter)
 
 store.params.level = all_sales[0].id
 watchEffect(() => {    
-    store.params.page = 1
+    store.setChartProcess()
     store.params.level = store.params.level
 })
 </script>

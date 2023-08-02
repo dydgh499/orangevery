@@ -76,10 +76,6 @@ const validate = () => {
             snackbar.value.show((i + 1) + '번째 결제모듈의 가맹점 정산타입이 이상합니다.', 'error')
             is_clear.value = false
         }
-        else if (terminal_id == null) {
-            snackbar.value.show((i + 1) + '번째 결제모듈의 장비 종류 이상합니다.', 'error')
-            is_clear.value = false
-        }
         else if (module_type == null) {
             snackbar.value.show((i + 1) + '번째 결제모듈의 모듈타입이 이상합니다.', 'error')
             is_clear.value = false

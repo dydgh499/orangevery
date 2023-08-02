@@ -10,7 +10,18 @@ export function Searcher(path: string) {
     const router = useRouter()
     const params = reactive<any>({page:1, page_size:10})
     const pagenation = reactive<Pagenation>({ total_count: 0, total_page: 1 })
+    const chart_process = ref(false)
     let before_search = ''
+
+    const getChartProcess = () => {
+        return chart_process.value
+    }
+
+    const setChartProcess = () => {
+        params.page = 1
+        chart_process.value = false
+    }
+
     const get = async (p: object) => {
         try {
             const r = await axios.get('/api/v1/manager/' + path, { params: p })
@@ -33,6 +44,7 @@ export function Searcher(path: string) {
         p.search = (document.getElementById('search') as HTMLInputElement).value
         try {
             const r = await axios.get('/api/v1/manager/'+path+'/chart', { params: p })
+            chart_process.value = true
             return r
         } catch (e: any) {
             snackbar.value.show(e.response.data.message, 'error')
@@ -49,7 +61,8 @@ export function Searcher(path: string) {
     const setTable = async() => {
         const current_search = (document.getElementById('search') as HTMLInputElement).value
         if(before_search != current_search)
-            params.page = 1
+            setChartProcess()
+            
         const p = cloneDeep(params)
         p.search = current_search
         
@@ -99,7 +112,7 @@ export function Searcher(path: string) {
 
     return {
         setTable,
-        items, params, pagenation,
+        items, params, pagenation, getChartProcess, setChartProcess,
         create, edit, getChartData, getPercentage,
         get, booleanTypeColor, getSelectIdColor, getAllDataFormat,
         pagenationCouputed

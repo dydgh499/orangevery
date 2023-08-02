@@ -50,7 +50,7 @@ const defaultValue = (values: any[]) => {
 }
 onMounted(() => {
     watchEffect(async () => {
-        if (store.params.page == 1) {
+        if(store.getChartProcess() === false) {
             const r = await store.getChartData()
             metas.value[0]['stats'] = r.data.this_month_add.toLocaleString()
             metas.value[1]['stats'] = (r.data.this_month_del * -1).toLocaleString()
@@ -64,7 +64,7 @@ onMounted(() => {
     })
 })
 watchEffect(() => {    
-    store.params.page = 1
+    store.setChartProcess()
     store.params.module_type = store.params.module_type
 })
 </script>

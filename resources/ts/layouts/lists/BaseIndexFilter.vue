@@ -62,7 +62,7 @@ const setDateRange = (type: string) => {
 }
 
 watchEffect(() => {    
-    store.params.page = 1
+    store.setChartProcess()
     store.params.s_dt = store.params.s_dt
     store.params.e_dt = store.params.e_dt
     store.params.dt = store.params.dt

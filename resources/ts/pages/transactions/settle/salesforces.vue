@@ -41,7 +41,7 @@ const isSalesCol = (key: string) => {
 
 onMounted(() => {
     watchEffect(async() => {
-        if(store.params.page == 1) {
+        if(store.getChartProcess() === false) {
             const r = await store.getChartData()            
             totals.value = []
             if(r.data.amount != 0)
@@ -49,7 +49,7 @@ onMounted(() => {
         }
     })
     watchEffect(() => {    
-        store.params.page = 1
+        store.setChartProcess()
         store.params.level = store.params.level
         store.params.settle_cycle = store.params.settle_cycle
     })
