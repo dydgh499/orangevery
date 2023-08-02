@@ -15,7 +15,7 @@ provide('exporter', exporter)
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="ID 및 성명 검색" :metas="[]" :add="true" add_name="운영자" :is_range_date="true">
+        <BaseIndexView placeholder="ID 및 성명 검색" :metas="[]" :add="true" add_name="운영자" :is_range_date="null">
             <template #filter>
             </template>
             <template #headers>

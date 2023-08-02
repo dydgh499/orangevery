@@ -43,7 +43,6 @@ const validate = () => {
         const pg_id = pgs.find(item => item.id === items.value[i].pg_id)
         const ps_id = pss.find(item => item.id === items.value[i].ps_id)
         const settle_type = settle_types.find(item => item.id === items.value[i].settle_type)
-        const terminal_id = terminals.find(item => item.id === items.value[i].terminal_id)
         const module_type = module_types.find(item => item.id === items.value[i].module_type)
         const installment = installments.find(item => item.id === items.value[i].installment)
         const mcht = merchandises.value.find(item => item.mcht_name === items.value[i].mcht_name)
