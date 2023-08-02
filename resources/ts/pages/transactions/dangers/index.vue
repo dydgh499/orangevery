@@ -49,7 +49,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <BaseIndexView placeholder="가맹점 상호, MID, TID, 승인번호 검색" :metas="metas" :add="false" add_name="가맹점" :is_range_date="false">
+    <BaseIndexView placeholder="가맹점 상호, MID, TID, 승인번호 검색" :metas="metas" :add="false" add_name="가맹점" :is_range_date="true">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="false" :terminal="true" :cus_filter="true" :sales="true">
                 <template #extra_right>

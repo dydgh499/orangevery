@@ -12,15 +12,13 @@ export const useSearchStore = defineStore('failSearchStore', () => {
     const headers = {
         'id': 'NO.',
         'mcht_name': '가맹점 상호',
-        'pg_id' : 'PG사',
-        'ps_id' : '구간',
         'module_type': '거래타입',
+        'amount': '결제시도 금액',
         'result_cd': '실패 코드',
         'result_msg': '실패 메세지',
-        'amount': '결제시도 금액',
+        'pg_id' : 'PG사',
+        'ps_id' : '구간',
         'trx_dttm': '결제시도시간',
-        'created_at': '생성시간',
-        'updated_at': '업데이트시간',
     }
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})
