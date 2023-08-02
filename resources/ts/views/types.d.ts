@@ -203,6 +203,7 @@ interface FreeOption {
 }
 interface PaidOption {
     use_acct_verification: boolean, // 예금주 검증
+    subsidiary_use_control: boolean, // 하위 영업점 전산 사용 ON/OFF
     use_hand_pay_drct: boolean, // 수기결제 직접입력(가맹점)
     use_hand_pay_sms: boolean, // 수기결제 SMS
     use_realtime_deposit: boolean,  // 실시간 결제모듈
@@ -210,8 +211,7 @@ interface PaidOption {
     use_dup_pay_validation: boolean,    // 중복결제 검증 사용 여부
     use_forb_pay_time: boolean,   // 결제금지시간 지정 사용 여부
     use_pay_limit: boolean,   // 결제한도 지정 사용 여부
-    subsidiary_use_control: boolean, // 하위 영업점 전산 사용 ON/OFF
-
+    use_online_pay: boolean,
 }
 interface AuthOption {
     levels: {

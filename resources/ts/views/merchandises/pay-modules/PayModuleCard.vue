@@ -228,7 +228,7 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VRow class="pt-3" v-show="props.item.module_type != 0" v-if="props.item.id != 0">
+                        <VRow class="pt-3" v-show="props.item.module_type != 0" v-if="props.item.id != 0 && corp.pv_options.paid.use_online_pay">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'결제 KEY'"

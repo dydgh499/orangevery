@@ -29,6 +29,9 @@ use App\Http\Controllers\Log\FailTransController;
 
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\BeforeSystem\BeforeSystemController;
+
+
+use App\Http\Controllers\Manager\Settle\MerchandiseController as MchtSettleController;
 /*
 |--------------------------------------------------------------------------
 | API Routes

@@ -37,7 +37,7 @@
         public $use_forb_pay_time = false;      // 결제금지시간 지정 사용 여부
         public $use_hand_pay_sms = false;       // 수기결제 SMS
         public $use_pay_limit = false;          // 결제한도 지정 사용 여부
-        
+        public $use_online_pay = false;         // 온라인 결제 사용 여부
         public function __construct(array $source)
         {
             foreach ($source as $property => $value) 

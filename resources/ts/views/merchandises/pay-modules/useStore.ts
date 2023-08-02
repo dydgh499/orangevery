@@ -3,6 +3,7 @@ import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Options, PayModule, StringOptions } from '@/views/types'
 import { axios, user_info } from '@axios'
+import corp from '@corp'
 
 export const simplePays = <StringOptions[]>([
     { id: "KAKAO", title: "카카오" }, { id: "NAVER", title: "네이버" },
@@ -57,23 +58,28 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         'note' : '별칭',
         'module_type' : '모듈타입',
     }
+    const headers2: Record<string, string> = {
+        'settle_type' : '정산일',
+        'mid' : 'MID',
+        'tid' : 'TID',
+    }        
+    const headers3: Record<string, string> = {
+        'installment' : '할부한도',
+        'created_at' : '생성시간',
+        'updated_at' : '업데이트시간',
+    }
     if(user_info.value >= 35)
     {
         headers1['pg_id'] = 'PG사명'
         headers1['ps_id'] = '구간'
     }
-    const headers2: Record<string, string> = {
-        'settle_type' : '정산일',
-        'mid' : 'MID',
-        'tid' : 'TID',
-        'pay_key' : '결제 KEY',
-        'installment' : '할부한도',
-        'created_at' : '생성시간',
-        'updated_at' : '업데이트시간',
-    }
+    if(corp.pv_options.paid.use_online_pay)
+        headers2['pay_key'] = '결제 KEY'
+
     const headers = {
         ...headers1,
         ...headers2,
+        ...headers3,
     }
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})

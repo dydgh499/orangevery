@@ -212,6 +212,17 @@ const md = user_info.value.level == 50 ? 6 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
+                    <VRow class="pt-5">
+                        <CreateHalfVCol :mdl="3" :mdr="9">
+                            <template #name><span></span>온라인 결제 사용여부</template>
+                            <template #input>
+                                <BooleanRadio :radio="props.item.paid.use_online_pay" @update:radio="props.item.paid.use_online_pay = $event">
+                                    <template #true>사용</template>
+                                    <template #false>미사용</template>
+                                </BooleanRadio>
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>                    
                 </VCardItem>
             </VCard>
         </VCol>

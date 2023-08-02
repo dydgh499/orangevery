@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Manager;
+namespace App\Http\Controllers\Manager\Settle;
 
 use App\Models\Merchandise;
-use App\Models\Salesforce;
 use App\Models\Transaction;
 use App\Models\Log\SettleDeductMerchandise;
 use App\Models\Log\SettleDeductSalesforce;
@@ -17,7 +16,7 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
 
 
-class SettleController extends Controller
+class MerchandiseController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
     protected $merchandises, $salesforces, $cols;
@@ -254,12 +253,15 @@ class SettleController extends Controller
 
     public function MchtPartSettle(Request $request)
     {
-
+        $trans = Transaction::where('mcht_id', $request->mcht_id)
+            ->settleFilter()
+            ->settleTransaction(request()->dt)
+            ->select();
+        return $this->response(1);
     }
 
     public function SalesPartSettle(Request $request)
     {
-        
     }
 
 }
