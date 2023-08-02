@@ -82,6 +82,9 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::get('chart', [TransactionController::class, 'chart']);
             Route::get('fails', [FailTransController::class, 'index']);
             Route::get('dangers', [DangerTransController::class, 'index']);
+            Route::delete('dangers/{id}', [DangerTransController::class, 'destroy']);
+            Route::post('dangers/{id}/checked', [DangerTransController::class, 'checked']);
+            
             Route::post('cancel', [TransactionController::class, 'cancel']);
             
             Route::prefix('settle')->group(function() {

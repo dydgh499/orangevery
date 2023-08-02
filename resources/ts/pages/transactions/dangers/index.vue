@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { module_types } from '@/views/merchandises/pay-modules/useStore'
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useSearchStore } from '@/views/transactions/dangers/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import ExtraMenu from '@/views/transactions/dangers/ExtraMenu.vue'
 
 const { store, head, exporter } = useSearchStore()
+const { pgs, pss, terminals, } = useStore()
 const { settle_types } = useStore()
 
 provide('store', store)
@@ -96,7 +98,19 @@ watchEffect(() => {
                                     :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
                                     {{ module_types.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
-                            </span>                            
+                            </span>        
+                            <span v-else-if="_key == 'installment'">
+                                {{ installments.find(inst => inst['id'] === item[_key])?.title as string }}
+                            </span>
+                            <span v-else-if="_key == 'pg_id'">
+                                {{ pgs.find(pg => pg['id'] === item[_key])?.pg_name as string }}
+                            </span>
+                            <span v-else-if="_key == 'ps_id'">
+                                {{ pss.find(pg => pg['id'] === item[_key])?.name as string }}
+                            </span>
+                            <span v-else-if="_key == 'terminal_id'">
+                                {{ terminals.find(inst => inst['id'] === item[_key])?.name as string }}
+                            </span>
                             <span v-else-if="_key == 'amount'">
                                 {{ (item[_key] as number).toLocaleString() }}
                             </span>
@@ -109,6 +123,9 @@ watchEffect(() => {
                                 <VChip :color="store.booleanTypeColor(!item[_key])" >
                                     {{ item[_key] ? '확인' : '미확인' }}
                                 </VChip>
+                            </span>
+                            <span v-else-if="_key == 'extra_col'">
+                                <ExtraMenu :item="item"></ExtraMenu>
                             </span>
                             <span v-else>
                                 {{ item[_key] }}

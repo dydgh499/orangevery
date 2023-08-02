@@ -17,7 +17,6 @@ export const useSearchStore = defineStore('dangerSearchStore', () => {
         'amount': '거래금액',
         'ord_num': '주문번호',
         'trx_id': '거래번호',
-        'ori_trx_id': '원거래번호',
         'appr_num': '승인번호',
         'installment': '할부',
         'mid': 'MID',

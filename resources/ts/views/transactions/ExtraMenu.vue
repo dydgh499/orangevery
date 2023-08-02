@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { SalesSlip, CancelPay } from '@/views/types'
 import { axios, getUserLevel, user_info } from '@axios'
-import { useZoomProperty } from '@layouts/composable/useZoomProperty'
 
 interface Props {
     item: SalesSlip,
@@ -9,7 +8,6 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { zoom } = useZoomProperty()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
@@ -86,6 +84,3 @@ const payCanceled = async() => {
         </VMenu>
     </VBtn>
 </template>
-<style scoped>
-
-</style>
