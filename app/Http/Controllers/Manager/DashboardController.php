@@ -6,8 +6,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Transaction;
 use App\Models\Merchandise;
 use App\Models\Salesforce;
-use App\Models\PayModule;
 use App\Models\Log\DangerTransaction;
+use App\Models\Log\OperatorHistory;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -290,6 +290,20 @@ class DashboardController extends Controller
 
     public function getRecentOperatorHistories(Request $request)
     {   
-        return $this->response(0);
+        if(isOperator($request))
+        {
+            $request->merge([
+                'page' => 1,
+                'page_size' => 5,
+            ]);
+            $operator_histories = new OperatorHistory();
+            $query = $operator_histories
+                ->join('operators', 'operator_histories.oper_id', '=', 'operators.id')
+                ->where('operator_histories.brand_id', $request->user()->brand_id);
+            $data = $this->getIndexData($request, $query, 'operator_histories.id', $operator_histories->cols, 'operator_histories.created_at');
+            return $this->response(0, $data);
+        }
+        else
+            return $this->response(0, ['content'=>[]]);
     }
 }

@@ -619,11 +619,21 @@ export interface UpSideChart {
     [key: string]: UpSideChartData
 }
 
-
 export interface NotiUrl {
     id: number,
     mcht_id: number | null,
     send_url: string,
     noti_status: boolean,
     note: string,
+}
+
+export interface OperatorHistory {
+    id: number,
+    nick_name: string,
+    profile_img: string,
+    history_type: number,
+    history_title: string,
+    history_target: string,
+    history_detail?: string,
+    created_at: datetime,
 }

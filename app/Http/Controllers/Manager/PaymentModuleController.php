@@ -17,15 +17,18 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use App\Enums\HistoryType;
 
 class PaymentModuleController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $payModules;
+    protected $target;
 
     public function __construct(PaymentModule $payModules)
     {
         $this->payModules = $payModules;
+        $this->target = '결제모듈';
         $this->imgs = [];
     }
 
@@ -96,20 +99,20 @@ class PaymentModuleController extends Controller
     {
         if($request->user()->tokenCan(10))
         {
-            $item = $request->data();
-            if($item['module_type'] == 0 && $item['serial_num'] != '')
+            $data = $request->data();
+            if($data['module_type'] == 0 && $data['serial_num'] != '')
             {
                 $res = $this->payModules
                     ->where('brand_id', $request->user()->brand_id)
-                    ->where('serial_num', $item['serial_num'])
+                    ->where('serial_num', $data['serial_num'])
                     ->exists();
                 if($res)
                     return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
             }
 
-            $res = DB::transaction(function () use($item) {
-                $res = $this->payModules->create($item);
-                if($item['module_type'] != 0)
+            $res = DB::transaction(function () use($data) {
+                $res = $this->payModules->create($data);
+                if($data['module_type'] != 0)
                 {
                     $this->payModules
                         ->where('id', $res->id)
@@ -117,6 +120,8 @@ class PaymentModuleController extends Controller
                 }
                 return $res;
             });
+
+            operLogging(HistoryType::CREATE, $this->target, $data, $data['note']);
             return $this->response($res ? 1 : 990, ['id'=>$res->id]);
         }
         else
@@ -154,20 +159,22 @@ class PaymentModuleController extends Controller
     {
         if($this->authCheck($request->user(), $id, 15))
         {
-            $item = $request->data();
-            $item['pay_key'] = $request->pay_key;
+            $data = $request->data();
+            $data['pay_key'] = $request->pay_key;
 
-            if($item['module_type'] == 0 && $item['serial_num'] != '')
+            if($data['module_type'] == 0 && $data['serial_num'] != '')
             {
                 $res = $this->payModules
                     ->where('brand_id', $request->user()->brand_id)
-                    ->where('serial_num', $item['serial_num'])
+                    ->where('serial_num', $data['serial_num'])
                     ->where('id', '!=', $id)
                     ->exists();
                 if($res)
                     return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
             }
-            $res = $this->payModules->where('id', $id)->update($item);
+            $res = $this->payModules->where('id', $id)->update($data);
+
+            operLogging(HistoryType::UPDATE, $this->target, $data, $data['note']);
             return $this->response($res ? 1 : 990);
         }
         else
@@ -185,6 +192,9 @@ class PaymentModuleController extends Controller
         if($this->authCheck($request->user(), $id, 15))
         {
             $res = $this->delete($this->payModules->where('id', $id));
+
+            $data = $this->payModules->where('id', $id)->first(['note']);
+            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->note);
             return $this->response($res);
         }
         else

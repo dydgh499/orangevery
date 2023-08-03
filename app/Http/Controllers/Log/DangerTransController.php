@@ -85,7 +85,7 @@ class DangerTransController extends Controller
     /**
      * 단일삭제
      *
-     * @urlParam id integer required 유저 PK
+     * @urlParam id integer required 이상거래 PK
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)

@@ -13,6 +13,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
+use App\Enums\HistoryType;
 
 
 class FeeChangeHistoryController extends Controller
@@ -96,17 +97,25 @@ class FeeChangeHistoryController extends Controller
         $data = $this->getIndexData($request, $query, 'sf_fee_change_histories.id', ['sf_fee_change_histories.*', 'merchandises.mcht_name'], 'sf_fee_change_histories.created_at');
         return $this->response(0, $data);
     }
+    private function deleteHistory($orm, $target, $id)
+    {
+        $query      = $orm->where('id', $id);
+        $history    = $query->first()->toArray();
+        $history_type = $history['change_status'] ? HistoryType::HISTORY_DELETE : HistoryType::BOOK_DELETE;
+
+        $res  = $query->update(['is_delete' => true]);
+        operLogging($history_type, $target, $history, "#".$id);
+        return $this->response($res ? 4 : 990);
+    }
 
     public function deleteMerchandise(Request $request, $id)
     {
-        $d_res = $this->mcht_fee_histories->where('id', $id)->update(['is_delete' => true]);
-        return $this->response($d_res ? 4 : 990);
+        return $this->deleteHistory($this->mcht_fee_histories, '가맹점 수수료율', $id);
     }
 
     public function deleteSalesforce(Request $request, $id)
     {
-        $d_res = $this->sf_fee_histories->where('id', $id)->update(['is_delete' => true]);
-        return $this->response($d_res ? 4 : 990);
+        return $this->deleteHistory($this->sf_fee_histories, '영업점 수수료율', $id);
     }
 
     private function getMchtResource($request, $mcht, $data)
@@ -177,18 +186,26 @@ class FeeChangeHistoryController extends Controller
             {
                 $resource = $this->getMchtResource($request, $mcht, $data);
                 $orm = $this->mcht_fee_histories;
+                $target = '가맹점 수수료율';
             }
             else
             {
                 $resource = $this->getSalesResource($request, $mcht, $data);
                 $orm = $this->sf_fee_histories;
-
+                $target = '영업점 수수료율';
             }
             
-            $res = DB::transaction(function () use($orm, $resource, $mchts) {
+            $res = DB::transaction(function () use($orm, $resource, $mcht, $mchts, $target) {
                 $res = $orm->create($resource['history']);
                 if($resource['history']['change_status'] == true)
-                    $mchts->where('id', $resource['history']['mcht_id'])->update($resource['update']);
+                {
+                    $res = $mchts->where('id', $resource['history']['mcht_id'])
+                        ->update($resource['update']);
+                    operLogging(HistoryType::UPDATE, $target, $resource['update'], $mcht->mcht_name);
+                }
+                else
+                    operLogging(HistoryType::BOOK, $target, $resource['update'], $mcht->mcht_name);
+
                 return true;
             }, 3);
             return $this->response(0);

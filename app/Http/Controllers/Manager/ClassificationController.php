@@ -10,15 +10,18 @@ use App\Http\Requests\Manager\IndexRequest;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Enums\HistoryType;
 
 class ClassificationController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
     protected $classifications;
+    protected $target;
 
     public function __construct(Classification $classifications)
     {
         $this->classifications = $classifications;
+        $this->target = '구분 정보';
         $this->imgs = [];
     }
 
@@ -45,8 +48,10 @@ class ClassificationController extends Controller
      */
     public function store(ClassificationReqeust $request)
     {
-        $user = $request->data();
-        $res = $this->classifications->create($user);
+        $data = $request->data();
+        $res = $this->classifications->create($data);
+
+        operLogging(HistoryType::CREATE, $this->target, $data, $data['name']);
         return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
 
@@ -76,6 +81,8 @@ class ClassificationController extends Controller
     {
         $data = $request->data();
         $res = $this->classifications->where('id', $id)->update($data);
+
+        operLogging(HistoryType::UPDATE, $this->target, $data, $data['name']);
         return $this->response($res ? 1 : 990);
     }
 
@@ -88,6 +95,9 @@ class ClassificationController extends Controller
     public function destroy(Request $request, $id)
     {
         $res = $this->classifications->where('id', $id)->update(['is_delete'=>true]);
+
+        $data = $this->classifications->where('id', $id)->first(['name']);
+        operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->name);
         return $this->response($res ? 1 : 990);
     }
 }

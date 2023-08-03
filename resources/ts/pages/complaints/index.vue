@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/complaints/useStore'
+import { useSearchStore, complaint_types } from '@/views/complaints/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { complaint_types } from '@/views/complaints/useStore'
 
 const { store, head, exporter } = useSearchStore()
 provide('store', store)

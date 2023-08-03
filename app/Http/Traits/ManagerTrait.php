@@ -3,19 +3,9 @@ namespace App\Http\Traits;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-use Illuminate\Support\Facades\DB;
 
 trait ManagerTrait
 {
-    function sql($query) {
-        $sql = $query->toSql();
-        $bindings = $query->getBindings();
-        foreach ($bindings as $binding) {
-            $value = is_numeric($binding) ? $binding : "'".str_replace("'", "\'", $binding)."'";
-            $sql = preg_replace('/\?/', $value, $sql, 1);
-        }
-        echo $sql;
-    }
     public function getIndexData($request, $query, $index_col='id', $cols=[], $date="created_at", $is_group=false)
     {
         $page      = $request->input('page');

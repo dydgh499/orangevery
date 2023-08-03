@@ -58,6 +58,9 @@ const payKeyCreate = async() => {
         }
     }
 }
+const onModuleTypeChange = () => {
+    props.item.note = module_types.find(obj => obj.id === props.item.module_type)?.title || ''
+}
 const filterPgs = computed(() => {
     const filter = pss.filter(item => { return item.pg_id == props.item.pg_id })
     props.item.ps_id = psFilter(filter, props.item.ps_id)
@@ -100,7 +103,7 @@ onMounted(() => {
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>결제모듈 타입</template>
                                 <template #input>
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.module_type"
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.module_type" @update:modelValue="onModuleTypeChange"
                                         :items="module_types" prepend-inner-icon="ic-outline-send-to-mobile" label="결제모듈 선택"
                                         item-title="title" item-value="id" single-line :rules=[requiredValidator] />
                                 </template>

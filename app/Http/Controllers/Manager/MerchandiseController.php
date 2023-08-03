@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Enums\HistoryType;
 
 /**
  * @group Merchandise API
@@ -25,11 +26,14 @@ class MerchandiseController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $merchandises, $payModules;
+    protected $target;
     protected $imgs;
+
     public function __construct(Merchandise $merchandises, PaymentModule $payModules)
     {
         $this->merchandises = $merchandises;
         $this->payModules = $payModules;
+        $this->target = '가맹점';
         $this->imgs = [
             'params'    => [
                 'contract_file', 'id_file', 'passbook_file', 'bsin_lic_file', 'profile_file',
@@ -164,6 +168,8 @@ class MerchandiseController extends Controller
                 $user = $this->saveImages($request, $user, $this->imgs);
                 $user['user_pw'] = Hash::make($request->input('user_pw'));
                 $res = $this->merchandises->create($user);
+
+                operLogging(HistoryType::CREATE, $this->target, $user, $user['mcht_name']);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);
             }
             else
@@ -209,6 +215,8 @@ class MerchandiseController extends Controller
             $data = $request->data();
             $data = $this->saveImages($request, $data, $this->imgs);
             $res = $query->update($data);
+            
+            operLogging(HistoryType::UPDATE, $this->target, $data, $data['mcht_name']);
             return $this->response($res ? 1 : 990);
         }
         else
@@ -224,6 +232,9 @@ class MerchandiseController extends Controller
     public function destroy(Request $request, $id)
     {
         $res = $this->delete($this->merchandises->where('id', $id));
+
+        $data = $this->merchandises->where('id', $id)->first(['mcht_name']);
+        operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->mcht_name);
         return $this->response($res);
     }
 

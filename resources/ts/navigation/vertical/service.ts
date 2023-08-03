@@ -24,6 +24,10 @@ const getAbilitiesMenu = computed(() => {
             to: 'services-operators',
         })
         operations[0].children.push({
+            title: '운영자 활동이력',
+            to: 'services-operator-histories',
+        })
+        operations[0].children.push({
             title: '대량 등록',
             to: 'services-bulk-register',
         })

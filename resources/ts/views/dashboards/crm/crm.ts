@@ -1,4 +1,4 @@
-import type { Danger, MonthlyTransChart, UpSideChart } from '@/views/types'
+import type { Danger, MonthlyTransChart, OperatorHistory, UpSideChart } from '@/views/types'
 import { axios } from '@axios'
 import { orderBy } from 'lodash'
 
@@ -8,7 +8,7 @@ export const useCRMStore = defineStore('CRMStore', () => {
     const upside_merchandises = ref(<UpSideChart>({}))
     const upside_salesforces = ref(<UpSideChart>({}))
     const danger_histories = ref(<Danger[]>[])
-    const operator_histories = ref([])
+    const operator_histories = ref(<OperatorHistory[]>([]))
     onMounted(async() => {        
         try {
             const [r1, r2, r3, r4, r5] = await Promise.all([
@@ -27,7 +27,7 @@ export const useCRMStore = defineStore('CRMStore', () => {
             Object.assign(upside_merchandises.value, r2.data)
             Object.assign(upside_salesforces.value, r3.data)
             Object.assign(danger_histories.value, r4.data.content)
-            Object.assign(operator_histories.value, r5.data)
+            Object.assign(operator_histories.value, r5.data.content)
         }
         catch (e) {
             const r = errorHandler(e)

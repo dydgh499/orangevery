@@ -132,7 +132,7 @@ export const defaultItemInfo =  () => {
         ship_out_stat: 0,
         is_old_auth: false,
         installment: 0,
-        note: '결제모듈 명칭을 적어주세요.😀',
+        note: '장비',
         settle_fee: 0,
         pay_dupe_limit: 0,
         abnormal_trans_limit: 0,

@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Manager\DashboardController;
 use App\Http\Controllers\Manager\BrandController;
 use App\Http\Controllers\Manager\OperatorController;
+
 use App\Http\Controllers\Manager\MerchandiseController;
 use App\Http\Controllers\Manager\SalesforceController;
 use App\Http\Controllers\Manager\TerminalController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\Manager\SalesforceBatchController;
 
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\NotiSendHistoryController;
+use App\Http\Controllers\Log\OperatorHistoryContoller;
 use App\Http\Controllers\Log\SettleHistoryController;
 use App\Http\Controllers\Log\DangerTransController;
 use App\Http\Controllers\Log\FailTransController;
@@ -77,6 +79,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
 
             Route::apiResource('brands', BrandController::class);
             Route::apiResource('operators', OperatorController::class);
+            Route::apiResource('operator-histories', OperatorHistoryContoller::class);
             Route::apiResource('pay-gateways', PaymentGatewayController::class);
             Route::apiResource('pay-sections', PaymentSectionController::class);
             Route::apiResource('classifications', ClassificationController::class);

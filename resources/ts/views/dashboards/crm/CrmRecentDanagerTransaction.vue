@@ -90,6 +90,13 @@ const getSelectIdColor = (id: number | undefined) => {
                     </td>
                 </tr>
             </tbody>
+            <tfoot v-show="!Boolean(danger_histories.length)">
+                <tr>
+                    <td colspan="8" class='list-square' style="border: 0;">
+                        최근 이상거래가 존재하지 않습니다.
+                    </td>
+                </tr>
+            </tfoot>
         </VTable>
     </VCard>
 </template>

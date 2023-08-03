@@ -97,10 +97,9 @@ onMounted(() => {
             <CrmRecentDanagerTransaction />
         </VCol>
         <!-- 👉 Active timeline -->
-        <!--
+
         <VCol cols="12" md="6">
             <CrmOperatorHistory />
         </VCol>
-        -->
     </VRow>
 </template>

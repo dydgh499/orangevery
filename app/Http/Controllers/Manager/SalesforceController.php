@@ -15,15 +15,17 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Enums\HistoryType;
 
 class SalesforceController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $salesforces;
+    protected $salesforces, $target;
 
     public function __construct(Salesforce $salesforces)
     {
-        $this->salesforces  = $salesforces;
+        $this->salesforces = $salesforces;
+        $this->target = '영업점';
         $this->imgs = [
             'params'    => [
                 'contract_file', 'id_file', 'passbook_file', 'bsin_lic_file', 'profile_file',
@@ -104,6 +106,8 @@ class SalesforceController extends Controller
                 $user = $this->saveImages($request, $user, $this->imgs);
                 $user['user_pw'] = Hash::make($request->input('user_pw'));
                 $res = $this->salesforces->create($user);
+
+                operLogging(HistoryType::CREATE, $this->target, $user, $user['sales_name']);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);
             }
             else
@@ -147,6 +151,8 @@ class SalesforceController extends Controller
             $data = $request->data();
             $data = $this->saveImages($request, $data, $this->imgs);
             $res = $this->salesforces->where('id', $id)->update($data);
+
+            operLogging(HistoryType::UPDATE, $this->target, $data, $data['sales_name']);
             return $this->response($res ? 1 : 990);
         }
         else
@@ -164,6 +170,9 @@ class SalesforceController extends Controller
         if($this->authCheck($request->user(), $id, 15))
         {
             $res = $this->delete($this->salesforces->where('id', $id));
+
+            $data = $this->salesforces->where('id', $id)->first(['sales_name']);
+            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->sales_name);
             return $this->response($res);
         }
         else

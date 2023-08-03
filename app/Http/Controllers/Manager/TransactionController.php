@@ -13,16 +13,19 @@ use Illuminate\Database\QueryException;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Enums\HistoryType;
 
 class TransactionController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
     protected $transactions;
+    protected $target;
     public $cols;
     
     public function __construct(Transaction $transactions)
     {
         $this->transactions = $transactions;
+        $this->target = '매출';
         $this->cols = [
             'merchandises.mcht_name', 'merchandises.user_name', 'merchandises.nick_name',
             'merchandises.addr', 'merchandises.resident_num', 'merchandises.business_num', 
@@ -163,6 +166,7 @@ class TransactionController extends Controller
     {
         $data = $request->data();
         $res = $this->transactions->create($data);
+        operLogging(HistoryType::CREATE, $this->target, $data, "#".$res->id);
         return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
 
@@ -206,6 +210,8 @@ class TransactionController extends Controller
     {
         $data = $request->data();
         $res = $this->transactions->where('id', $id)->update($data);
+
+        operLogging(HistoryType::UPDATE, $this->target, $data, "#".$id);
         return $this->response($res ? 1 : 990);
     }
 
@@ -220,6 +226,7 @@ class TransactionController extends Controller
         if($this->authCheck($request->user(), $id, 35))
         {
             $res = $this->delete($this->transactions->where('id', $id));
+            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], "#".$id);
             return $this->response($res);
         }
         else
@@ -247,6 +254,7 @@ class TransactionController extends Controller
         try 
         {
             $res = $this->transactions->create($data);
+            operLogging(HistoryType::CREATE, $this->target, $data, "#".$res->id);
             return $this->response(1);
         }
         catch(QueryException $ex)

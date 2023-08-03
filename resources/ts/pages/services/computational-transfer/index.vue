@@ -154,9 +154,6 @@ const register = async() => {
                                 <b style="margin-left: 1em;">- 입금 수수료 </b>                                
                                 <VChip>0원</VChip>                                
                                 <br>
-                                <b style="margin-left: 1em;">- 비인증 장비 모듈타입 </b>
-                                <VChip>{{ module_types.find(item => item.id === 1)?.title }}</VChip>
-                                <br>
                                 <b style="margin-left: 1em;">- 구간타입(장비 이외만 적용) </b>
                                 <VChip>{{ '기본 값 없음' }}</VChip>
                             </VCol>
