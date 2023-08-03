@@ -110,7 +110,7 @@ const chartOptions = computed(() => {
         },
         colors: [currentTheme.secondary, currentTheme.primary, currentTheme.success, currentTheme.info],
         fill: {
-            opacity: [0.5, 0.5, 0.5, 0.5],
+            opacity: [0.7, 0.7, 0.7, 0.7],
         },
         markers: {
             size: 0,
