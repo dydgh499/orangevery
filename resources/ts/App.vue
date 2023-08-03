@@ -33,6 +33,12 @@ syncConfigThemeWithVuetifyTheme()
   inset-inline-start: 0 !important;
 }
 */
+.list-square {
+  padding-block: 0;
+  padding-inline: 6px !important;
+  text-align: center !important;
+}
+
 .v-table__wrapper {
   overflow-y: auto !important;
 }

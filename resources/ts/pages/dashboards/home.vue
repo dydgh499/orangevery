@@ -3,6 +3,8 @@ import CrmPayModuleGrowth from '@/views/dashboards/crm/CrmPayModuleGrowth.vue'
 import CrmRevenueYearlyGrowth from '@/views/dashboards/crm/CrmRevenueYearlyGrowth.vue'
 import CrmRevenueGrowth from '@/views/dashboards/crm/CrmRevenueGrowth.vue'
 import CrmUserGrowth from '@/views/dashboards/crm/CrmUserGrowth.vue'
+import CrmRecentDanagerTransaction from '@/views/dashboards/crm/CrmRecentDanagerTransaction.vue'
+import CrmOperatorHistory from '@/views/dashboards/crm/CrmOperatorHistory.vue'
 import { useCRMStore } from '@/views/dashboards/crm/crm'
 
 const { upside_merchandises, upside_salesforces, monthly_transactions } = useCRMStore()
@@ -91,15 +93,13 @@ onMounted(() => {
         </VCol>
 
         <!-- 👉 Recent Transaction -->
-        <!--
         <VCol cols="12" md="6">
-            <CrmRecentTransaction />
+            <CrmRecentDanagerTransaction />
         </VCol>
-        -->
         <!-- 👉 Active timeline -->
         <!--
         <VCol cols="12" md="6">
-            <CrmActivityTimeline />
+            <CrmOperatorHistory />
         </VCol>
         -->
     </VRow>

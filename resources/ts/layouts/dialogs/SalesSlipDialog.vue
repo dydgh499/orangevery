@@ -196,19 +196,19 @@ div {
   padding: 0.3em;
   background: rgb(255, 255, 255, 0%) !important;
   box-shadow: 0 0 0 0;
-  min-block-size: 67em;
 }
 
 .sales-slip-rect {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  min-block-size: 67em;
 }
 
 .cancel-img {
   position: absolute;
   inline-size: 55%;
-  inset-block-start: 55%;
+  inset-block-start: 56%;
   inset-inline-start: 23%;
 }
 

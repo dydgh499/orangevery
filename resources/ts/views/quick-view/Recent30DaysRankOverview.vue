@@ -103,10 +103,3 @@ watchEffect(() => {
         </tbody>
     </VTable>
 </template>
-<style scoped>
-.list-square {
-  padding-block: 0;
-  padding-inline: 6px !important;
-  text-align: center !important;
-}
-</style>

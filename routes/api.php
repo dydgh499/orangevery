@@ -20,7 +20,6 @@ use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Manager\TransactionController;
 use App\Http\Controllers\Manager\SalesforceBatchController;
 
-use App\Http\Controllers\Manager\SettleController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\NotiSendHistoryController;
 use App\Http\Controllers\Log\SettleHistoryController;
@@ -30,8 +29,8 @@ use App\Http\Controllers\Log\FailTransController;
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 
-
 use App\Http\Controllers\Manager\Settle\MerchandiseController as MchtSettleController;
+use App\Http\Controllers\Manager\Settle\SalesforceController as SalesSettleController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -64,6 +63,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::get('monthly-transactions-analysis', [DashboardController::class, 'monthlyTranAnalysis']);
             Route::get('upside-merchandises-analysis', [DashboardController::class, 'upSideMchtAnalysis']);
             Route::get('upside-salesforces-analysis', [DashboardController::class, 'upSideSaleAnalysis']);
+            Route::get('recent-danger-histories', [DashboardController::class, 'getRecentDangerHistories']);
+            Route::get('recent-operator-histories', [DashboardController::class, 'getRecentOperatorHistories']);
         });
 
         Route::prefix('posts')->group(function() {
@@ -91,13 +92,15 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::post('cancel', [TransactionController::class, 'cancel']);
             
             Route::prefix('settle')->group(function() {
-                Route::get('merchandises', [SettleController::class, 'merchandises']);
-                Route::get('merchandises/chart', [SettleController::class, 'merchandiseChart']);
-                Route::post('merchandises/deduct', [SettleController::class, 'MchtDeduct']);
-
-                Route::get('salesforces', [SettleController::class, 'salesforces']);
-                Route::get('salesforces/chart', [SettleController::class, 'salesforceChart']);
-                Route::post('salesforces/deduct', [SettleController::class, 'SalesDeduct']);
+                Route::get('merchandises', [MchtSettleController::class, 'index']);
+                Route::get('merchandises/chart', [MchtSettleController::class, 'chart']);
+                Route::post('merchandises/deduct', [MchtSettleController::class, 'deduct']);
+                Route::post('merchandises/{id}', [MchtSettleController::class, 'part']);
+                
+                Route::get('salesforces', [SalesSettleController::class, 'index']);
+                Route::get('salesforces/chart', [SalesSettleController::class, 'chart']);
+                Route::post('salesforces/deduct', [SalesSettleController::class, 'deduct']);
+                Route::post('salesforces/{id}', [SalesSettleController::class, 'part']);
             });
             Route::prefix('settle-histories')->group(function() {
                 Route::get('merchandises', [SettleHistoryController::class, 'indexMerchandise']);

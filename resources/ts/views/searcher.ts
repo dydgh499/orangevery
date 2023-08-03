@@ -109,9 +109,11 @@ export function Searcher(path: string) {
         const lastIndex = items.value.length + ((params.page - 1) * params.page_size)
         return `총 ${pagenation.total_count}개 항목 중 ${firstIndex} ~ ${lastIndex}개 표시`
     })
-
+    const getItems = computed(() => {
+        return items.value
+    })
     return {
-        setTable,
+        setTable, getItems,
         items, params, pagenation, getChartProcess, setChartProcess,
         create, edit, getChartData, getPercentage,
         get, booleanTypeColor, getSelectIdColor, getAllDataFormat,

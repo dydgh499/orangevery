@@ -167,10 +167,3 @@ const register = async() => {
         </VCard>
     </section>
 </template>
-<style lang="scss">
-.list-square {
-  padding-block: 0;
-  padding-inline: 6px !important;
-  text-align: center !important;
-}
-</style>

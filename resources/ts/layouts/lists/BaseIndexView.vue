@@ -22,6 +22,8 @@ onMounted(() => {
         store.setTable()
     })
 });
+
+
 </script>
 <template>
     <section>
@@ -32,7 +34,8 @@ onMounted(() => {
                 <slot name="filter"></slot>
                 <br>
                 <VCard>
-                    <BaseIndexFilter :placeholder="props.placeholder" :add="props.add" :add_name="props.add_name" :is_range_date="props.is_range_date">
+                    <BaseIndexFilter :placeholder="props.placeholder" :add="props.add" :add_name="props.add_name"
+                        :is_range_date="props.is_range_date">
                     </BaseIndexFilter>
                     <VDivider />
                     <VTable class="text-no-wrap">
@@ -53,8 +56,9 @@ onMounted(() => {
                             </tr>
                         </tfoot>
                     </VTable>
-                    <VDivider/>
-                    <VCardText class="d-flex align-center flex-wrap justify-space-between gap-4 py-3" style=" padding-right: 0 !important;padding-left: 0 !important;">
+                    <VDivider />
+                    <VCardText class="d-flex align-center flex-wrap justify-space-between gap-4 py-3"
+                        style=" padding-right: 0 !important;padding-left: 0 !important;">
                         <span class="text-sm text-disabled" style="padding-left: 10px;">
                             {{ store.pagenationCouputed }}
                         </span>
@@ -87,5 +91,4 @@ onMounted(() => {
 .edit-link:hover {
   font-weight: 900;
 }
-
 </style>

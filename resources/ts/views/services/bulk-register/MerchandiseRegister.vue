@@ -32,10 +32,9 @@ const isNotExistSalesforce = (is_use: boolean, sales_idx: number, item_idx: numb
     const sales_name = 'sales' + sales_idx + '_name';
     
     if (is_use && items.value[item_idx][sales_name]) {
-        const salesforce = sales[sales_idx].value.find(sales => sales.user_name === items.value[item_idx][sales_name])
+        const salesforce = sales[sales_idx].value.find(sales => sales.sales_name === items.value[item_idx][sales_name])
         if (salesforce)
             items.value[item_idx][sales_id] = salesforce.id
-
         return salesforce == null ? true : false
     }
     else
@@ -55,27 +54,27 @@ const validate = () => {
         const acct_bank_name = banks.find(sales => sales.title === items.value[i].acct_bank_name)
 
         if (isNotExistSalesforce(levels.sales5_use, 5, i)) {
-            snackbar.value.show((i + 1) + '번째 ' + levels.sales5_name + '가 존재하지 않습니다.', 'error')
+            snackbar.value.show((i + 1) + '번째 ' + levels.sales5_name + '이(가) 존재하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (isNotExistSalesforce(levels.sales4_use, 4, i)) {
-            snackbar.value.show((i + 1) + '번째 ' + levels.sales4_name + '가 존재하지 않습니다.', 'error')
+            snackbar.value.show((i + 1) + '번째 ' + levels.sales4_name + '이(가) 존재하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (isNotExistSalesforce(levels.sales3_use, 3, i)) {
-            snackbar.value.show((i + 1) + '번째 ' + levels.sales3_name + '가 존재하지 않습니다.', 'error')
+            snackbar.value.show((i + 1) + '번째 ' + levels.sales3_name + '이(가) 존재하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (isNotExistSalesforce(levels.sales2_use, 2, i)) {
-            snackbar.value.show((i + 1) + '번째 ' + levels.sales2_name + '가 존재하지 않습니다.', 'error')
+            snackbar.value.show((i + 1) + '번째 ' + levels.sales2_name + '이(가) 존재하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (isNotExistSalesforce(levels.sales1_use, 1, i)) {
-            snackbar.value.show((i + 1) + '번째 ' + levels.sales1_name + '가 존재하지 않습니다.', 'error')
+            snackbar.value.show((i + 1) + '번째 ' + levels.sales1_name + '이(가) 존재하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (isNotExistSalesforce(levels.sales0_use, 0, i)) {
-            snackbar.value.show((i + 1) + '번째 ' + levels.sales0_name + '가 존재하지 않습니다.', 'error')
+            snackbar.value.show((i + 1) + '번째 ' + levels.sales0_name + '이(가) 존재하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (isNotExistCustomFilter(items.value[i].custom_id)) {
@@ -147,8 +146,8 @@ const mchtRegister = async () => {
 watchEffect(async () => {
     if (excel.value) {
         items.value = await ExcelReader(headers, excel.value[0]) as extendMerchandise[]
-        validate()
         console.log(items.value)
+        validate()
     }
 })
 </script>
@@ -226,7 +225,7 @@ watchEffect(async () => {
                                         <td class='list-square'>
                                             <span v-if="(_key as string).includes('_fee')">
                                                 <VChip>
-                                                    {{ (item[_key] as number).toFixed(3) }} %
+                                                    {{ item[_key] ? (item[_key] as number).toFixed(3)+'%' : ''}}
                                                 </VChip>
                                             </span>
                                             <span v-else-if="_key === 'custom_id'">

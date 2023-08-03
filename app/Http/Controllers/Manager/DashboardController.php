@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Models\Merchandise;
 use App\Models\Salesforce;
 use App\Models\PayModule;
+use App\Models\Log\DangerTransaction;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -245,9 +246,7 @@ class DashboardController extends Controller
         $query = Merchandise::where('brand_id', $request->user()->brand_id);
         $query = globalAuthFilter($query, $request);
         $mcht = $query->get(['id', 'is_delete','created_at']);
-
         $chart = $this->getUpSideChartFormat($mcht);
-
         return $this->response(0, $chart);
     }
 
@@ -263,5 +262,34 @@ class DashboardController extends Controller
 
         $chart = $this->getUpSideChartFormat($sales);
         return $this->response(0, $chart);
+    }
+
+    public function getRecentDangerHistories(Request $request)
+    {
+        $request->merge([
+            'page' => 1,
+            'page_size' => 5,
+        ]);
+        $cols = [
+            'danger_transactions.*',
+            'merchandises.mcht_name',
+            'transactions.module_type',
+            'transactions.issuer',
+            'transactions.card_num',
+            'transactions.installment',
+            'transactions.amount',
+            DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
+        ];
+        $query = DangerTransaction::join('merchandises', 'danger_transactions.mcht_id', '=', 'merchandises.id')
+            ->join('transactions', 'danger_transactions.trans_id', '=', 'transactions.id')
+            ->where('danger_transactions.brand_id', $request->user()->brand_id);
+        $query = globalAuthFilter($query, $request, 'transactions');
+        $data = $this->getIndexData($request, $query, 'danger_transactions.id', $cols, 'transactions.created_at');
+        return $this->response(0, $data);
+    }
+
+    public function getRecentOperatorHistories(Request $request)
+    {   
+        return $this->response(0);
     }
 }

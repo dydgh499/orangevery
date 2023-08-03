@@ -81,10 +81,3 @@ const e_dt = formatDate(new Date(date.getFullYear(), date.getMonth() + 1))
         </tbody>
     </VTable>
 </template>
-<style scoped>
-.list-square {
-  padding-block: 0;
-  padding-inline: 6px !important;
-  text-align: center !important;
-}
-</style>

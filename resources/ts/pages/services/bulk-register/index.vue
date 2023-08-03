@@ -38,10 +38,3 @@ const tabs = <Tab[]>([
         </CreateForm>        
     </section>
 </template>
-<style lang="scss">
-.list-square {
-  padding-block: 0;
-  padding-inline: 6px !important;
-  text-align: center !important;
-}
-</style>

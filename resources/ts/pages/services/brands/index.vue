@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/services/brands/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { user_info } from '@/plugins/axios'
 
 const { store, head, exporter, boolToText } = useSearchStore()
 provide('store', store)

@@ -18,6 +18,7 @@ store.params.level = 10 // taransaction model에서 필수
 const totals = ref(<any[]>([]))
 const { settle_types } = useStore()
 const mcht_settle_type = ref({ id: null, name: '전체' })
+const router = useRouter()
 
 const getSettleStyle = (parent_key: string) => {
     if (parent_key === 'appr')
@@ -42,17 +43,16 @@ onMounted(() => {
     watchEffect(() => {
         store.params.mcht_settle_type = mcht_settle_type.value.id
     })
-
-    watchEffect(async() => {
-        if(store.getChartProcess() === false) {
-            const r = await store.getChartData()            
+    watchEffect(async () => {
+        if (store.getChartProcess() === false) {
+            const r = await store.getChartData()
             totals.value = []
-            if(r.data.amount != 0)
+            if (r.data.amount != 0)
                 totals.value.push(r.data)
         }
     })
 })
-watchEffect(() => {    
+watchEffect(() => {
     store.setChartProcess()
     store.params.mcht_settle_type = store.params.mcht_settle_type
 })
@@ -64,11 +64,11 @@ watchEffect(() => {
                 <template #extra_right>
                     <VCol cols="12" sm="3">
                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
-                            :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 선택" item-title="name" item-value="id"
-                        return-object />
+                            :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 선택" item-title="name"
+                            item-value="id" return-object />
                     </VCol>
                 </template>
-            </BaseIndexFilterCard>            
+            </BaseIndexFilterCard>
         </template>
         <template #headers>
             <tr>
@@ -96,7 +96,7 @@ watchEffect(() => {
         </template>
         <template #body>
             <!-- chart -->
-            <tr v-for="(item, index) in totals" :key="index" style="height: 3.75rem;">
+            <tr v-for="(item, key, index) in totals" :key="key" style="height: 3.75rem;">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
                         <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
@@ -121,7 +121,7 @@ watchEffect(() => {
                 </template>
             </tr>
             <!-- normal -->
-            <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
+            <tr v-for="(item, _key, _index) in store.getItems" :key="_key" style="height: 3.75rem;">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
                         <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
@@ -137,7 +137,7 @@ watchEffect(() => {
                     </template>
                     <template v-else>
                         <td v-show="_header.visible" class='list-square'>
-                            <span v-if="_key === 'id'" class="edit-link">
+                            <span v-if="_key === 'id'" class="edit-link" @click="router.push('/transactions/settle/merchandises/part/'+item[_key])">
                                 #{{ item[_key] }}
                             </span>
                             <span v-else-if="isSalesCol(_key as string)" style="font-weight: bold;">
@@ -154,6 +154,7 @@ watchEffect(() => {
                     </template>
                 </template>
             </tr>
+            <!-- part -->
         </template>
     </BaseIndexView>
 </template>

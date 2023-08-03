@@ -1,4 +1,4 @@
-import type { MonthlyTransChart, UpSideChart } from '@/views/types'
+import type { Danger, MonthlyTransChart, UpSideChart } from '@/views/types'
 import { axios } from '@axios'
 import { orderBy } from 'lodash'
 
@@ -7,13 +7,16 @@ export const useCRMStore = defineStore('CRMStore', () => {
     const monthly_transactions = ref(<MonthlyTransChart>({}))
     const upside_merchandises = ref(<UpSideChart>({}))
     const upside_salesforces = ref(<UpSideChart>({}))
-    const usage_pay_modules = ref([])
+    const danger_histories = ref(<Danger[]>[])
+    const operator_histories = ref([])
     onMounted(async() => {        
         try {
-            const [r1, r2, r3] = await Promise.all([
+            const [r1, r2, r3, r4, r5] = await Promise.all([
                 axios.get('/api/v1/manager/dashsboards/monthly-transactions-analysis'),
                 axios.get('/api/v1/manager/dashsboards/upside-merchandises-analysis'),
                 axios.get('/api/v1/manager/dashsboards/upside-salesforces-analysis'),
+                axios.get('/api/v1/manager/dashsboards/recent-danger-histories'),                
+                axios.get('/api/v1/manager/dashsboards/recent-operator-histories'),                
             ])
             const sortedKeys = orderBy(Object.keys(r1.data), [], ['desc']);
             const sortedData = sortedKeys.reduce((acc, key) => {
@@ -23,6 +26,8 @@ export const useCRMStore = defineStore('CRMStore', () => {
             Object.assign(monthly_transactions.value, sortedData)
             Object.assign(upside_merchandises.value, r2.data)
             Object.assign(upside_salesforces.value, r3.data)
+            Object.assign(danger_histories.value, r4.data.content)
+            Object.assign(operator_histories.value, r5.data)
         }
         catch (e) {
             const r = errorHandler(e)
@@ -63,7 +68,8 @@ export const useCRMStore = defineStore('CRMStore', () => {
         monthly_transactions,
         upside_merchandises,
         upside_salesforces,
-        usage_pay_modules,
+        danger_histories,
+        operator_histories,
         getColors,
         getDayOfWeeks,
         getMonths,

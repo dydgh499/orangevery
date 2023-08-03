@@ -3,8 +3,6 @@ import { Searcher } from '@/views/searcher'
 import type { DeductionHeader } from '@/views/types'
 import { user_info } from '@axios'
 
-
-
 export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {    
     const store = Searcher('transactions/settle/merchandises')
     const head  = Header('transactions/settle/merchandises', '가맹점 정산관리')
@@ -100,4 +98,11 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         head,
         exporter,
     }
+})
+
+
+export const userPartStore = defineStore('transPartSettleMchtStore', () => {
+    const store = Searcher('transactions/settle/merchandises/part')
+    const head  = Header('transactions/settle/merchandises', '가맹점 부분정산관리')
+    
 })
