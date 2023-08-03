@@ -6,6 +6,7 @@ import CrmUserGrowth from '@/views/dashboards/crm/CrmUserGrowth.vue'
 import CrmRecentDanagerTransaction from '@/views/dashboards/crm/CrmRecentDanagerTransaction.vue'
 import CrmOperatorHistory from '@/views/dashboards/crm/CrmOperatorHistory.vue'
 import { useCRMStore } from '@/views/dashboards/crm/crm'
+import { getUserLevel } from '@axios'
 
 const { upside_merchandises, upside_salesforces, monthly_transactions } = useCRMStore()
 const simpleStatisticsDemoCards = ref([
@@ -98,7 +99,7 @@ onMounted(() => {
         </VCol>
         <!-- 👉 Active timeline -->
 
-        <VCol cols="12" md="6">
+        <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
             <CrmOperatorHistory />
         </VCol>
     </VRow>

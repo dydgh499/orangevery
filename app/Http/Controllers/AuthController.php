@@ -144,6 +144,7 @@ class AuthController extends Controller
                 'brand_id'  => $request->brand_id,
                 'user_name' => $request->user_name,
                 'user_pw'   => Hash::make($request->user_pw),
+                'profile_img' => '/build/assets/avatar_5.644eef84.svg',
                 'level'     => 40,
             ]);
             if($res)
