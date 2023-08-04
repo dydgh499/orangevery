@@ -117,6 +117,9 @@ class SettleHistoryController extends Controller
             $hist  = $query->first();
             if($hist)
             {
+                $request = $request->merge([
+                    'id' => $id,
+                ]);
                 $u_res = $this->SetNullTransSettle($request, 'mcht_id', 'mcht_settle_id', $hist->mcht_id);
                 $d_res = $query->update(['is_delete' => true]);
                 return $this->response($u_res && $d_res ? 1 : 990);        
@@ -136,6 +139,9 @@ class SettleHistoryController extends Controller
                 $idx = globalLevelByIndex($hist->level);
                 $target_id =  'sales'.$idx.'_id';
                 $target_settle_id =  'sales'.$idx.'_settle_id';
+                $request = $request->merge([
+                    'id' => $id,
+                ]);
 
                 $u_res = $this->SetNullTransSettle($request, $target_id, $target_settle_id, $hist->sales_id);
                 $d_res = $query->update(['is_delete' => true]);
