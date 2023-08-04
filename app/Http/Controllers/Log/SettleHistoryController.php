@@ -112,7 +112,7 @@ class SettleHistoryController extends Controller
 
     public function deleteMerchandise(Request $request, $id)
     {
-        return DB::transaction(function () use($request) {
+        return DB::transaction(function () use($request, $id) {
             $query = $this->settle_mcht_hist->find($request->id);
             $hist  = $query->first();
             if($hist)
@@ -131,7 +131,7 @@ class SettleHistoryController extends Controller
 
     public function deleteSalesforce(Request $request, $id)
     {
-        return DB::transaction(function () use($request) {
+        return DB::transaction(function () use($request, $id) {
             $query = $this->settle_sales_hist->find($id);
             $hist  = $query->first();
             if($hist)
@@ -139,6 +139,7 @@ class SettleHistoryController extends Controller
                 $idx = globalLevelByIndex($hist->level);
                 $target_id =  'sales'.$idx.'_id';
                 $target_settle_id =  'sales'.$idx.'_settle_id';
+
                 $request = $request->merge([
                     'id' => $id,
                 ]);
