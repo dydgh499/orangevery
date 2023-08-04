@@ -83,7 +83,7 @@ class SettleHistoryController extends Controller
 
     public function createMerchandise(CreateSettleHistoryRequest $request)
     {
-        return DB::transaction(function () use($request) {            
+        return DB::transaction(function () use($request) {
             $data = $request->data('mcht_id');
             $data['settle_fee'] = $request->settle_fee;
 
