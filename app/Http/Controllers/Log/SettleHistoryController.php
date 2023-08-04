@@ -105,7 +105,7 @@ class SettleHistoryController extends Controller
 
             $c_res = $this->settle_sales_hist->create($data);
             $u_res = $this->SetTransSettle($request, $target_id, $target_settle_id, $c_res->id);
-            $s_res = Salesforce::find($request->id)->update(['last_settle_dt' => $request->dt]);
+            $s_res = Salesforce::where('id', $request->id)->update(['last_settle_dt' => $request->dt]);
             return $this->response($c_res && $u_res && $s_res ? 1 : 990);
         });
     }
@@ -113,7 +113,7 @@ class SettleHistoryController extends Controller
     public function deleteMerchandise(Request $request, $id)
     {
         return DB::transaction(function () use($request, $id) {
-            $query = $this->settle_mcht_hist->find($request->id);
+            $query = $this->settle_mcht_hist->where('id', $id);
             $hist  = $query->first();
             if($hist)
             {
@@ -122,7 +122,7 @@ class SettleHistoryController extends Controller
                 ]);
                 $u_res = $this->SetNullTransSettle($request, 'mcht_id', 'mcht_settle_id', $hist->mcht_id);
                 $d_res = $query->update(['is_delete' => true]);
-                return $this->response($u_res && $d_res ? 1 : 990);        
+                return $this->response($d_res ? 1 : 990);        
             }
             else
                 return $this->response(1000);
@@ -132,7 +132,7 @@ class SettleHistoryController extends Controller
     public function deleteSalesforce(Request $request, $id)
     {
         return DB::transaction(function () use($request, $id) {
-            $query = $this->settle_sales_hist->find($id);
+            $query = $this->settle_sales_hist->where('id', $id);
             $hist  = $query->first();
             if($hist)
             {
@@ -146,7 +146,7 @@ class SettleHistoryController extends Controller
 
                 $u_res = $this->SetNullTransSettle($request, $target_id, $target_settle_id, $hist->sales_id);
                 $d_res = $query->update(['is_delete' => true]);
-                return $this->response($u_res && $d_res ? 1 : 990);    
+                return $this->response($d_res ? 1 : 990);    
             }
             else
                 return $this->response(1000);
@@ -155,7 +155,7 @@ class SettleHistoryController extends Controller
 
     public function depositMerchandise(Request $request, $id)
     {
-        $query = $this->settle_mcht_hist->find($id);
+        $query = $this->settle_mcht_hist->where('id', $id);
         $hist = $query->first();
         if($hist)
         {
@@ -170,7 +170,7 @@ class SettleHistoryController extends Controller
 
     public function depositSalesforce(Request $request, $id)
     {
-        $query = $this->settle_sales_hist->find($id);
+        $query = $this->settle_sales_hist->where('id', $id);
         $hist = $query->first();
         if($hist)
         {
