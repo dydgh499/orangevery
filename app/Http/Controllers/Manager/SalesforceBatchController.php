@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Models\Merchandise;
 use App\Models\PaymentModule;
+use App\Models\NotiUrl;
 use App\Models\Log\SfFeeChangeHistory;
 use App\Models\Log\SfFeeApplyHistory;
 
@@ -188,5 +189,53 @@ class SalesforceBatchController extends Controller
             ->where($sales_id, $request->id)
             ->update(['payment_modules.show_pay_view' => $request->show_pay_view]);
         return $this->response(1);
+    }
+
+    /**
+     * 노티 URL 일괄등록
+     *
+     * 가맹점 이상 가능
+     *
+     */
+    public function setNotiUrl(Request $request)
+    {
+        $notis = new NotiUrl();
+        $sales_key = $this->getSalesKeys($request);
+        $sales_id = 'merchandises.'.$sales_key['sales_id'];
+
+        $mcht_ids = $this->merchandises->where('brand_id', $request->user()->brand_id)
+            ->where($sales_key['sales_id'], $request->id)
+            ->get(['id'])
+            ->pluck('id');
+
+        $registered_notis = $notis
+            ->whereIn('mcht_id', $mcht_ids)
+            ->where('send_url', $request->send_url)
+            ->get(['id']);
+
+        $datas = [];
+        foreach($mcht_ids as $mcht_id)
+        {
+            $registered = $registered_notis->first(function($noti) use ($mcht_id) {
+                return $noti->id == $mcht_id;
+            });
+            if($registered)
+            {
+            }
+            else
+            {
+                array_push($datas, [
+                    'brand_id' => $request->user()->brand_id,
+                    'mcht_id' => $mcht_id,
+                    'send_url' => $request->send_url,
+                    'noti_status' => $request->noti_status,
+                    'note' => $request->note,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'updated_at' => date('Y-m-d H:i:s'),
+                ]);
+            }
+        }
+        $res = $this->manyInsert($notis, $datas);
+        return $this->response(1, ['registered_notis'=>$registered_notis->pluck('id'), 'count'=>count($datas)]);
     }
 }

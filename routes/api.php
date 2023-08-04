@@ -133,6 +133,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('set-pay-limit', [SalesforceBatchController::class, 'setPayLimit']);
                 Route::post('set-pay-disable-time', [SalesforceBatchController::class, 'setForbiddenPayTime']);
                 Route::post('set-show-pay-view', [SalesforceBatchController::class, 'setShowPayView']);
+                Route::post('set-noti-url', [SalesforceBatchController::class, 'setNotiUrl']);                
             });
         });
         Route::prefix('merchandises')->group(function() {

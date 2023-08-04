@@ -33,7 +33,10 @@ const pay_month_limit = ref()
 const pay_year_limit = ref()
 const show_pay_view = ref()
 
-console.log(props.item.id)
+const noti_url = ref()
+const noti_note = ref()
+const noti_status = ref(true)
+
 const post = async (page: string, params: any) => {
     try {
         if (await alert.value.show('정말 일괄적용하시겠습니까?')) {
@@ -100,6 +103,15 @@ const setShowPayView = () => {
         'show_pay_view': show_pay_view.value,
     })
 }
+const setNotiUrl = () => {
+    post('set-noti-url', {
+        'id': props.item.id,
+        'level': props.item.level,
+        'noti_status': noti_status.value,
+        'send_url': noti_url.value,
+        'note': noti_note.value,
+    })
+}
 </script>
 <template>
     <VCardTitle style="margin: 1em 0;">
@@ -139,7 +151,7 @@ const setShowPayView = () => {
         <CreateHalfVCol :mdl="0" :mdr="12">
             <template #name></template>
             <template #input>
-                    영업점을 추가한 후 사용 가능합니다.
+                영업점을 추가한 후 사용 가능합니다.
             </template>
         </CreateHalfVCol>
     </div>
@@ -249,7 +261,52 @@ const setShowPayView = () => {
         <CreateHalfVCol :mdl="0" :mdr="12">
             <template #name></template>
             <template #input>
-                    영업점을 추가한 후 사용 가능합니다.
+                영업점을 추가한 후 사용 가능합니다.
+            </template>
+        </CreateHalfVCol>
+    </div>
+    <VCardTitle style="margin: 1em 0;">
+        <BaseQuestionTooltip :location="'top'" :text="'노티 URL 일괄적용'"
+            :content="'해당 영업점이 포함되어있는 가맹점의 모든 노티 URL이 추가됩니다.<br>(같은 노티 URL의 중복등록은 불가능합니다.)'">
+        </BaseQuestionTooltip>
+    </VCardTitle>
+    <div v-if="props.item.id != 0" style="width: 100%;">
+        <CreateHalfVCol :mdl="3" :mdr="9">
+            <template #name>노티 URL</template>
+            <template #input>
+                <div class="batch-container">
+                    <VTextField v-model="noti_url" type="text" placeholder="https://www.naver.com" />
+                </div>
+            </template>
+        </CreateHalfVCol>
+        <CreateHalfVCol :mdl="3" :mdr="9">
+            <template #name>노티 사용 유무</template>
+            <template #input>
+                <div class="batch-container">
+                    <BooleanRadio :radio="noti_status" @update:radio="noti_status = $event">
+                        <template #true>사용</template>
+                        <template #false>미사용</template>
+                    </BooleanRadio>
+                </div>
+            </template>
+        </CreateHalfVCol>
+        <VRow>
+            <VCol>
+                <VTextarea v-model="noti_note" counter label="메모사항" prepend-inner-icon="twemoji-spiral-notepad" />
+            </VCol>
+        </VRow>
+        <div style="float: inline-end;">
+            <VBtn variant="tonal" @click="setNotiUrl()">
+            즉시적용
+            <VIcon end icon="tabler-direction-sign" />
+        </VBtn>
+        </div>
+    </div>
+    <div v-else style="width: 100%; text-align: center;">
+        <CreateHalfVCol :mdl="0" :mdr="12">
+            <template #name></template>
+            <template #input>
+                영업점을 추가한 후 사용 가능합니다.
             </template>
         </CreateHalfVCol>
     </div>
