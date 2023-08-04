@@ -55,7 +55,7 @@ class PaymentModuleController extends Controller
             $query = $query->where('payment_modules.is_delete', false);
             
         $query = globalPGFilter($query, $request, 'payment_modules');
-        $query = globalSalesFilter($query, $request, 'merchandises');       
+        $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
 
         if($request->has('mcht_id'))

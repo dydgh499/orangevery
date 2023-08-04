@@ -113,7 +113,10 @@ class MerchandiseController extends Controller
         if(count($data['content']))
         {
             $mcht_ids = $data['content']->pluck('id')->values()->toArray();
-            $pay_modules = $this->payModules->whereIn('mcht_id', $mcht_ids)->get(['mcht_id', 'mid', 'tid', 'module_type']);
+            $pay_modules = $this->payModules
+                ->where('is_delete', false)
+                ->whereIn('mcht_id', $mcht_ids)
+                ->get(['mcht_id', 'mid', 'tid', 'module_type']);
             foreach($data['content'] as $content) 
             {
                 $my_modules = $pay_modules->filter(function($pay_module) use($content) {
