@@ -40,7 +40,7 @@ const getSelectIdColor = (id: number | undefined) => {
                         </span>
                     </div>
                     <!-- 👉 Content -->
-                    <div class="d-flex align-center">
+                    <div class="d-flex align-center mt-2">
                         <VAvatar :image="operator_history.profile_img" class="me-3" />
                         <div>
                             <p class="font-weight-semibold mb-0">

@@ -268,7 +268,7 @@ class DashboardController extends Controller
     {
         $request->merge([
             'page' => 1,
-            'page_size' => 5,
+            'page_size' => 8,
         ]);
         $cols = [
             'danger_transactions.*',
