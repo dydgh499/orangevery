@@ -30,6 +30,8 @@ class PaymentSection
                 ->orderby('PK', 'DESC')
                 ->get();
         foreach($pss as $ps) {
+            if(isset($this->paywell_to_payvery_pgs[$ps->PG_PK]) == false)
+                continue;
             $item = [
                 'brand_id' => $brand_id,
                 'trx_fee'=> $ps->ITEM_COST,
