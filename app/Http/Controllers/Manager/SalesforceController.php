@@ -204,7 +204,7 @@ class SalesforceController extends Controller
                 $ids = $mchts->pluck($sales_keys[$i])->values()->toArray();
                 $grouped[$levels[$i]] = $grouped[$levels[$i]]->filter(function($sales) use($ids){
                     return array_search($sales->id, $ids) !== false;
-                });
+                })->values();
             }
         }
         $grouped[$my_level] = $grouped[$my_level]->filter(function($sales) use($my_id){
