@@ -18,6 +18,7 @@ const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
 const salesslip = ref()
 const cancelTran = ref()
+const mcht_settle_type = ref({ id: null, name: '전체' })
 
 provide('store', store)
 provide('head', head)
@@ -27,7 +28,6 @@ provide('cancelTran', cancelTran)
 
 store.params.level = 10
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
-const mcht_settle_type = ref({ id: null, name: '전체' })
 
 const metas = ref([
     {
@@ -65,13 +65,13 @@ const metas = ref([
 ])
 const getAllLevels = () => {
     const sales = salesLevels()
-    if(user_info.value.level >= 10)
-        sales.unshift(<Options>({id: 10, title: '가맹점'}))
-    if(user_info.value.level >= 35) {
-        sales.push(<Options>({id: 40, title: '본사'}))
+    if (user_info.value.level >= 10)
+        sales.unshift(<Options>({ id: 10, title: '가맹점' }))
+    if (user_info.value.level >= 35) {
+        sales.push(<Options>({ id: 40, title: '본사' }))
     }
-    if(levels.dev_use && user_info.value.level >= 35)
-        sales.push(<Options>({id: 50, title: levels.dev_name}))
+    if (levels.dev_use && user_info.value.level >= 35)
+        sales.push(<Options>({ id: 50, title: levels.dev_name }))
     return sales
 }
 const isSalesCol = (key: string) => {
@@ -83,8 +83,8 @@ const isSalesCol = (key: string) => {
     return false
 }
 onMounted(() => {
-    watchEffect(async() => {
-        if(store.getChartProcess() === false) {
+    watchEffect(async () => {
+        if (store.getChartProcess() === false) {
             const r = await store.getChartData()
             metas.value[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
             metas.value[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
@@ -97,10 +97,10 @@ onMounted(() => {
             metas.value[0]['percentage'] = r.data.appr.amount ? 100 : 0
             metas.value[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
             metas.value[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
-            metas.value[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)            
+            metas.value[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
         }
     })
-    watchEffect(() => {    
+    watchEffect(() => {
         store.setChartProcess()
         store.params.level = store.params.level
         store.params.mcht_settle_type = mcht_settle_type.value.id
@@ -110,7 +110,8 @@ const all_levels = getAllLevels()
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="MID, TID, 승인번호, 거래번호 검색" :metas="metas" :add="user_info.level >= 35" add_name="매출" :is_range_date="true">
+        <BaseIndexView placeholder="MID, TID, 승인번호, 거래번호 검색" :metas="metas" :add="user_info.level >= 35" add_name="매출"
+            :is_range_date="true">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="false" :terminal="true" :cus_filter="true"
                     :sales="true">
@@ -123,8 +124,8 @@ const all_levels = getAllLevels()
                     <template #extra_right>
                         <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
-                                :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 선택" item-title="name" item-value="id"
-                            return-object />
+                                :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 선택" item-title="name"
+                                item-value="id" return-object />
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>
@@ -226,7 +227,7 @@ const all_levels = getAllLevels()
                 </tr>
             </template>
         </BaseIndexView>
-        <SalesSlipDialog ref="salesslip" :pgs="pgs"/>
+        <SalesSlipDialog ref="salesslip" :pgs="pgs" />
         <CancelTransDialog ref="cancelTran" />
     </div>
 </template>
