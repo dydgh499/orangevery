@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Models\Salesforce;
+use App\Models\Merchandise;
 use App\Models\Log\SfFeeApplyHistory;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -179,6 +180,39 @@ class SalesforceController extends Controller
             return $this->response(951);
     }
 
+    private function salesClassFilter($request, $grouped, $levels)
+    {
+        $sales_keys = [];
+        $my_level = $request->user()->level;
+        $my_id = $request->user()->id;
+        for($i=0; $i <count($levels); $i++) 
+        { 
+            $idx = globalLevelByIndex($levels[$i]);
+            array_push($sales_keys, 'sales'.$idx.'_id');
+        }
+        $idx = globalLevelByIndex($my_level);
+        $mchts = Merchandise::where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
+            ->where('sales'.$idx.'_id', $request->user()->id)
+            ->get($sales_keys);
+        
+        for($i=0; $i <count($sales_keys)-1; $i++) 
+        {
+            $key = $levels[$i];
+            if(isset($grouped[$key]))
+            {
+                $ids = $mchts->pluck($sales_keys[$i])->values()->toArray();
+                $grouped[$levels[$i]] = $grouped[$levels[$i]]->filter(function($sales) use($ids){
+                    return array_search($sales->id, $ids) !== false;
+                });
+            }
+        }
+        $grouped[$my_level] = $grouped[$my_level]->filter(function($sales) use($my_id){
+                return $sales->id == $my_id;
+            })->values();
+        return $grouped;
+    }
+
     public function classification(Request $request)
     {
         $data = [];
@@ -191,19 +225,14 @@ class SalesforceController extends Controller
                 if($request->user()->level >= $_levels[$i])
                     array_push($levels, $_levels[$i]);
             }
-        }
-        $grouped = $this->salesforces
+            $grouped = $this->salesforces
                 ->where('brand_id', $request->user()->brand_id)
+                ->where('is_delete', false)
                 ->get(['id', 'sales_name', 'level'])
                 ->groupBy('level');
-
-        if(isSalesforce($request))
-        {
-            $my_level = $request->user()->level;
-            $my_id =  $request->user()->id;
-            $grouped[$my_level] = $grouped[$my_level]->filter(function($sales) use($my_id){
-                return $sales->id == $my_id;
-            })->values();
+                
+            if(isSalesforce($request))
+                $grouped = $this->salesClassFilter($request, $grouped, $levels);   
         }
 
         for($i=0; $i<count($levels); $i++)
