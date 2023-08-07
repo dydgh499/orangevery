@@ -73,7 +73,7 @@ class PaymentGateway
         else if(strpos($pg_name, '겔럭시아') !== false || strpos($pg_name, '삼인칭') !== false)
             return array_filter($this->pg_types, function($item) {return $item['id'] == 19; });
         else
-            return [["PK" => 1, "pg_name" => $pg_name, "rep_name" => '', "company_name" => '', "business_num" => '', "phone_num" => '', "addr" => '', 'id'=>1]];
+            return ["pg_name" => $pg_name, "rep_name" => '', "company_name" => '', "business_num" => '', "phone_num" => '', "addr" => '', 'id'=>1]];
     }
 
     public function getPaywell($paywell_table, $brand_id, $before_brand_id)
