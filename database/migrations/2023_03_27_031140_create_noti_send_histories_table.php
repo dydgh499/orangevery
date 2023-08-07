@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('brand_id')->nullable()->comment('브랜드 ID')->constrained('brands')->onDelete('SET NULL');
             $table->foreignId('trans_id')->nullable()->comment('거래 ID')->constrained('transactions')->onDelete('SET NULL');
-            $table->tinyInteger('http_code')->comment('응답 HTTP CODE');
+            $table->integer('http_code')->comment('응답 HTTP CODE');
             $table->string('send_url')->comment('발송 url');
             $table->tinyInteger('retry_count')->comment('재시도 회수');
             $table->string('message')->comment('내용');
