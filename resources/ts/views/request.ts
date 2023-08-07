@@ -11,7 +11,17 @@ export const useRequestStore = defineStore('requestStore', () => {
             const res = await axios(params);
             snackbar.value.show('성공하였습니다.', 'success')
             if (is_redirect)
-                setTimeout(function () { router.replace(back_url) }, 1000)
+            {
+                console.log(back_url)
+                if(back_url == '/merchandises/pay-modules')
+                    setTimeout(function () { location.href = '/merchandises/edit/'+res.data.mcht_id }, 500)
+                else if(back_url == '/merchandises/pay-modules')
+                    setTimeout(function () { location.href = '/merchandises/edit/'+res.data.mcht_id }, 500)
+                else if(back_url == '/merchandises')
+                    setTimeout(function () { location.href = '/merchandises/edit/'+res.data.id }, 500)
+                else
+                    setTimeout(function () { router.replace(back_url) }, 1000)
+            }
             else
                 location.reload()
         }

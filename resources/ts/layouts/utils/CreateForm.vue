@@ -14,6 +14,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 
+const route = useRoute()
 const tab = ref(0)
 const vForm = ref<VForm>()
 

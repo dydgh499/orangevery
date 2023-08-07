@@ -220,7 +220,7 @@ class MerchandiseController extends Controller
             $res = $query->update($data);
             
             operLogging(HistoryType::UPDATE, $this->target, $data, $data['mcht_name']);
-            return $this->response($res ? 1 : 990);
+            return $this->response($res ? 1 : 990, ['id'=>$id]);
         }
         else
             return $this->response(951);
