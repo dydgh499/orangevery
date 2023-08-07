@@ -49,6 +49,7 @@ class DangerTransController extends Controller
             DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
         ];
         $search = $request->input('search', '');
+
         $query  = $this->danger_transactions
             ->join('merchandises', 'danger_transactions.mcht_id', '=', 'merchandises.id')
             ->join('transactions', 'danger_transactions.trans_id', '=', 'transactions.id')
@@ -58,14 +59,17 @@ class DangerTransController extends Controller
         $query = globalSalesFilter($query, $request, 'transactions');
         $query = globalAuthFilter($query, $request, 'transactions');
 
-        $query = $query->where(function ($query) use ($search) {
-            return $query->where('merchandises.mcht_name', 'like', "%$search%")
-                ->orWhere('transactions.appr_num', 'like', "%$search%")
-                ->orWhere('transactions.mid', 'like', "%$search%")
-                ->orWhere('transactions.tid', 'like', "%$search%");
-        });
+        if($search != '')
+        {
+            $query = $query->where(function ($query) use ($search) {
+                return $query->where('merchandises.mcht_name', 'like', "%$search%")
+                    ->orWhere('transactions.appr_num', 'like', "%$search%")
+                    ->orWhere('transactions.mid', 'like', "%$search%")
+                    ->orWhere('transactions.tid', 'like', "%$search%");
+            });    
+        }
 
-        $data = $this->getIndexData($request, $query, 'danger_transactions.id', $cols, 'danger_transactions.trx_dttm');
+        $data = $this->getIndexData($request, $query, 'danger_transactions.id', $cols, 'transactions.created_at');
         return $this->response(0, $data);
     }
 
