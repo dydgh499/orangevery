@@ -62,7 +62,7 @@ class PaymentGateway
             return array_filter($this->pg_types, function($item) {return $item['id'] == 10; });
         else if(strpos($pg_name, '더페이원') !== false)
             return array_filter($this->pg_types, function($item) {return $item['id'] == 11; });
-        else if(strpos($pg_name, '이지피쥐') !== false)
+        else if(strpos($pg_name, '이지피쥐') !== false || strpos($pg_name, '이지피지') !== false)
             return array_filter($this->pg_types, function($item) {return $item['id'] == 12; });
         else if(strpos($pg_name, 'cm페이') !== false || strpos($pg_name, 'CM페이') !== false)
             return array_filter($this->pg_types, function($item) {return $item['id'] == 13; });

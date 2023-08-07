@@ -65,7 +65,7 @@ class DangerTransController extends Controller
                 ->orWhere('transactions.tid', 'like', "%$search%");
         });
 
-        $data = $this->getIndexData($request, $query, 'danger_transactions.id', $cols, 'transactions.created_at');
+        $data = $this->getIndexData($request, $query, 'danger_transactions.id', $cols, 'danger_transactions.created_at');
         return $this->response(0, $data);
     }
 

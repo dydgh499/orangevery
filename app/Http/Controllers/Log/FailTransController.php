@@ -38,7 +38,7 @@ class FailTransController extends Controller
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
 
-        $data = $this->getIndexData($request, $query, 'fail_transactions.id', $cols, 'fail_transactions.trx_dt');
+        $data = $this->getIndexData($request, $query, 'fail_transactions.id', $cols, 'fail_transactions.created_at');
         return $this->response(0, $data);
     }
 }
