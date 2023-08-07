@@ -284,7 +284,7 @@ class DashboardController extends Controller
             ->join('transactions', 'danger_transactions.trans_id', '=', 'transactions.id')
             ->where('danger_transactions.brand_id', $request->user()->brand_id);
         $query = globalAuthFilter($query, $request, 'transactions');
-        $data = $this->getIndexData($request, $query, 'danger_transactions.id', $cols, 'transactions.created_at');
+        $data = $this->getIndexData($request, $query, 'danger_transactions.id', $cols, 'transactions.trx_dttm');
         return $this->response(0, $data);
     }
 
