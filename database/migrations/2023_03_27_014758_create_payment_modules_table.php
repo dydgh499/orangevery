@@ -53,7 +53,7 @@ return new class extends Migration
             $table->time('pay_disable_s_tm')->nullable()->comment('결제 금지 시작 시간');
             $table->time('pay_disable_e_tm')->nullable()->comment('결제 금지 종료 시간');
 
-            $table->string('note', 200)->default('')->comment('별칭');
+            $table->string('note', 200)->nullable()->default('')->comment('별칭');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });

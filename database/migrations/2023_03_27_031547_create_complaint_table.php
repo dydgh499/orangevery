@@ -29,7 +29,7 @@ return new class extends Migration
             $table->tinyInteger('type')->default(0)->comment('민원타입');
             $table->string('entry_path', 50)->default('')->comment('인입경로');
             $table->boolean('is_deposit')->default(false)->comment('입금상태');
-            $table->string('note', 255)->default('')->comment('내용');
+            $table->string('note', 255)->nullable()->default('')->comment('내용');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });
