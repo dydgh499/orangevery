@@ -30,8 +30,8 @@ class PaymentGateway
             ["id" => 15, "pg_name" => '위즈페이', "rep_name" => '이용재', "company_name" => '(주)유니윌 위즈페이', "business_num" => '220-85-36623', "phone_num" => '1544-3267', "addr" => '서울 강남구 테헤란로 124, 5층 (역삼동, 삼원타워) (주)유니윌 위즈페이'],
             ["id" => 16, "pg_name" => '네스트페이', "rep_name" => '김찬수', "company_name" => '(주)페이네스트', "business_num" => '139-81-46088', "phone_num" => '02-431-8333', "addr" => '서울특별시 송파구 송파대로 201, 테라타워2 A동 905호 (문정동)'],
             ["id" => 17, "pg_name" => 'E2U', "rep_name" => '이용원', "company_name" => '(주)이투유', "business_num" => '383-87-01545', "phone_num" => '1600-4191', "addr" => '경기도 성남시 수정구 위례광장로 19 아이페리온, 10층 1001호'],
-            ["id" => 18, "pg_name" => '애드원', "rep_name" => '', "company_name" => '', "business_num" => '', "phone_num" => '', "addr" => ''],
-            ["id" => 19, "pg_name" => '삼인칭', "rep_name" => '', "company_name" => '', "business_num" => '', "phone_num" => '', "addr" => ''],
+            ["id" => 18, "pg_name" => '애드원', "rep_name" => '김춘걸', "company_name" => '주식회사 에드원', "business_num" => '114-81-90678', "phone_num" => '554-4002', "addr" => '서울시 영등포구 당산로 41길 11, E동 1109호 (당산동 4가, 당산 SK V1센터)'],
+            ["id" => 19, "pg_name" => '삼인칭', "rep_name" => '윤건', "company_name" => '주식회사 삼인칭', "business_num" => '489-87-00733', "phone_num" => '1833-4854', "addr" => '서울특별시 마포구 큰우물로 76, 403호(도화동, 고려빌딩)'],
         ];
         $this->paywell = [];
         $this->payvery = [];
@@ -68,6 +68,12 @@ class PaymentGateway
             return array_filter($this->pg_types, function($item) {return $item['id'] == 13; });
         else if(strpos($pg_name, '키움') !== false)
             return array_filter($this->pg_types, function($item) {return $item['id'] == 14; });
+        else if(strpos($pg_name, '위즈') !== false)
+            return array_filter($this->pg_types, function($item) {return $item['id'] == 15; });
+        else if(strpos($pg_name, '네스트') !== false)
+            return array_filter($this->pg_types, function($item) {return $item['id'] == 16; });
+        else if(strpos($pg_name, 'e2u') !== false || strpos($pg_name, 'E2U') !== false || strpos($pg_name, '이투유') !== false)
+            return array_filter($this->pg_types, function($item) {return $item['id'] == 17; });
         else if(strpos($pg_name, '애드원') !== false || strpos($pg_name, '에드원') !== false)
             return array_filter($this->pg_types, function($item) {return $item['id'] == 18; });
         else if(strpos($pg_name, '겔럭시아') !== false || strpos($pg_name, '삼인칭') !== false)
