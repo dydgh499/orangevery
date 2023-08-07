@@ -68,21 +68,26 @@ class Transaction extends Model
             $idx    = globalLevelByIndex($level);
             $profit = $getSalesProfit($idx);
             $property = 'sales'.$idx;
-            switch($this[$property]->settle_tax_type)
+            if(isset($this[$property]))
             {
-                case 1:
-                    $profit *= 0.967;
-                    break;
-                case 2:
-                    $profit *= 0.9;
-                    break;
-                case 3:                               
-                    $profit *= 0.9;
-                    $profit *= 0.967;
-                    break;
-                default:
-                    break;
+                switch($this[$property]->settle_tax_type)
+                {
+                    case 1:
+                        $profit *= 0.967;
+                        break;
+                    case 2:
+                        $profit *= 0.9;
+                        break;
+                    case 3:                               
+                        $profit *= 0.9;
+                        $profit *= 0.967;
+                        break;
+                    default:
+                        break;
+                }
             }
+            else
+                $profit = 0;
         }
         else
         {   // 본사 
