@@ -211,7 +211,8 @@ interface PaidOption {
     use_dup_pay_validation: boolean,    // 중복결제 검증 사용 여부
     use_forb_pay_time: boolean,   // 결제금지시간 지정 사용 여부
     use_pay_limit: boolean,   // 결제한도 지정 사용 여부
-    use_online_pay: boolean,
+    use_online_pay: boolean,    // 통합 API KEY
+    use_tid_create: boolean,    // TID 생성버튼
 }
 interface AuthOption {
     levels: {

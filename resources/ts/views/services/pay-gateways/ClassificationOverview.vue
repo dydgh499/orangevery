@@ -76,7 +76,7 @@ const addNewClassification = (items: Classification[], type: number) => {
                     <VRow>
                         <VCol class="d-flex gap-4 pt-10">
                             <VBtn type="button" style="margin-left: auto;"
-                                @click="addNewClassification(new_cus_filters, 2)">
+                                @click="addNewClassification(new_cus_filters, 1)">
                                 커스텀 필터 추가
                                 <VIcon end icon="tabler-plus" />
                             </VBtn>

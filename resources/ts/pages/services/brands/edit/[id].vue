@@ -7,14 +7,18 @@ import BrandAuthOverview from '@/views/services/brands/BrandAuthOverview.vue'
 import { defaultItemInfo } from '@/views/services/brands/useStore'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import type { Tab } from '@/views/types'
+import corp from '@corp'
+import { getUserLevel } from '@axios'
 
 const {path, item } = defaultItemInfo()
 const tabs = <Tab[]>([
     { icon: 'ph-buildings', title: '운영사정보' },
     { icon: 'tabler-color-filter', title: '테마디자인' },
     { icon: 'tabler-table-options', title: '추가옵션' },
-    { icon: 'carbon:two-factor-authentication', title: '권한옵션' },
 ])
+if(corp.id === parseInt(process.env.MAIN_BRAND_ID) && getUserLevel() == 50) {
+    tabs.push({ icon: 'carbon:two-factor-authentication', title: '권한옵션' })
+}
 const id = ref<number>(0)
 const route = useRoute()
 watchEffect(() => {

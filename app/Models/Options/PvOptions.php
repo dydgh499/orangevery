@@ -38,6 +38,8 @@
         public $use_hand_pay_sms = false;       // 수기결제 SMS
         public $use_pay_limit = false;          // 결제한도 지정 사용 여부
         public $use_online_pay = false;         // 온라인 결제 사용 여부
+        public $use_tid_create = false;         // tid 생성버튼 사용여부
+
         public function __construct(array $source)
         {
             foreach ($source as $property => $value) 

@@ -146,7 +146,8 @@ export const defaultItemInfo = () => {
                 use_forb_pay_time: false,
                 use_pay_limit: false,
                 subsidiary_use_control: false,
-                use_online_pay: false
+                use_online_pay: false,
+                use_tid_create: false,
             }),
             auth: reactive<AuthOption>({
                 levels: {

@@ -222,7 +222,7 @@ onMounted(() => {
                                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                                         <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
                                             placeholder="TID 입력" persistent-placeholder />
-                                        <VBtn type="button" variant="tonal" v-if="getUserLevel() >= 50 && props.item.id == 0"
+                                        <VBtn type="button" variant="tonal" v-if="getUserLevel() >= 35 && props.item.id == 0 && corp.pv_options.paid.use_tid_create"
                                             @click="tidCreate()">
                                             {{ "생성" }}
                                             <VIcon end icon="material-symbols:add-to-home-screen" />
@@ -231,7 +231,7 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VRow class="pt-3" v-show="props.item.module_type != 0" v-if="props.item.id != 0 && corp.pv_options.paid.use_online_pay">
+                        <VRow class="pt-3" v-show="props.item.module_type != 0" v-if="getUserLevel() >= 35 && props.item.id != 0 && corp.pv_options.paid.use_online_pay">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'결제 KEY'"
