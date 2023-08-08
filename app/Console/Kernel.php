@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('sanctum:prune-expired --hours=35')->daily();
         $schedule->call(new FeeChangeHistoryController(new MchtFeeChangeHistory, new SfFeeChangeHistory))->daily();
-        $schedule->call(new DangerTransController(new DangerTransaction))->everyMinutes(360);
+        $schedule->call(new DangerTransController(new DangerTransaction))->everySixHours();
     }
 
     /**
