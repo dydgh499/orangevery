@@ -69,7 +69,7 @@ class CreateTransactionsTable extends Migration
             $table->string('tid', 100)->index()->default('')->comment('장비 ID');
             $table->string('trx_id', 100)->default('')->comment('거래번호');
             $table->string('ori_trx_id', 100)->nullable()->comment('원거래번호');
-            $table->string('card_num', 100)->comment('거래 카드번호');
+            $table->string('card_num', 20)->comment('거래 카드번호');
             $table->string('issuer', 20)->nullable()->comment('발급사');
             $table->string('acquirer', 20)->nullable()->comment('매입사');
             $table->string('appr_num', 9)->comment('승인번호');

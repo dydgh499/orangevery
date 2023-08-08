@@ -32,9 +32,9 @@ const complaint = () => {
         query: params,
     })
 }
-const payCanceled = async() => {
-    if(await alert.value.show('정말 상위 PG사를 통해 결제를 취소하시겠습니까?')) {
-        const params:CancelPay = {
+const payCanceled = async () => {
+    if (await alert.value.show('정말 상위 PG사를 통해 결제를 취소하시겠습니까?')) {
+        const params: CancelPay = {
             pmod_id: props.item.pmod_id as number,
             amount: props.item.amount,
             trx_id: props.item.trx_id,
@@ -68,13 +68,15 @@ const payCanceled = async() => {
                     </template>
                     <VListItemTitle>민원처리</VListItemTitle>
                 </VListItem>
-                <VListItem value="cancelTrans" @click="cancelTran.show(props.item)" v-show="props.item.is_cancel == false" v-if="getUserLevel() >= 35">
+                <VListItem value="cancelTrans" @click="cancelTran.show(props.item)" v-show="props.item.is_cancel == false"
+                    v-if="getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:device-tablet-cancel" />
                     </template>
                     <VListItemTitle>취소매출생성</VListItemTitle>
                 </VListItem>
-                <VListItem value="cancel" @click="payCanceled()" v-show="props.item.is_cancel == false" v-if="getUserLevel() == 10 || getUserLevel() >= 35">
+                <VListItem value="cancel" class="pg-cancel" @click="payCanceled()" v-show="props.item.is_cancel == false"
+                    v-if="getUserLevel() == 10 || getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:world-cancel" />
                     </template>
@@ -84,3 +86,9 @@ const payCanceled = async() => {
         </VMenu>
     </VBtn>
 </template>
+<style lang="scss" scoped>
+.pg-cancel {
+  background: linear-gradient(72.47deg, rgb(var(--v-global-theme-primary)) 22.16%, rgba(var(--v-global-theme-primary), 0.7) 76.47%) !important;
+  box-shadow: 0 3px 1px -2px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 20%)), 0 2px 2px 0 var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 14%)), 0 1px 5px 0 var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 12%));
+}
+</style>

@@ -44,8 +44,8 @@ onMounted(async() => {
             bank.value = banks.find(obj => obj.code == props.item.acct_bank_code)
     })
     watchEffect(() => {
-        props.item.acct_bank_code = bank.value.code
-        props.item.acct_bank_name = bank.value.title
+        props.item.acct_bank_code = bank.value.code || null
+        props.item.acct_bank_name = bank.value.title || '선택안함'
     })
 })
 </script>
