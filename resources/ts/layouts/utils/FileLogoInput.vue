@@ -12,7 +12,7 @@ const props = defineProps<Props>()
 const files = ref(<File[]>([]))
 const preview = ref<string>('/icons/img-preview.svg')
 const previewStyle = `
-    border: 2px solid rgb(238, 238, 238);
+    border: 2px solid rgb(130, 130, 130);
     border-radius: 0.5em;
     float: inline-end;
     margin-block-end: 0.5em;

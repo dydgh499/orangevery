@@ -22,7 +22,7 @@ const preview = ref(<string>(props.default_img))
 const swiper = ref()
 const modules = [Pagination, EffectCoverflow, Navigation]
 const previewStyle = `
-    border: 2px solid rgb(238, 238, 238);
+    border: 2px solid rgb(130, 130, 130);
     border-radius: 0.5em;
     margin-block: 0;
     margin-inline: 0.5em;

@@ -66,7 +66,7 @@ onMounted(async() => {
                             <template #input>
                                 <VTextField v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
                                     placeholder="아이디 입력" persistent-placeholder :rules="[requiredValidator]"
-                                    maxlength="30" />
+                                    maxlength="30" autocomplete="off"/>
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Password -->
@@ -77,7 +77,7 @@ onMounted(async() => {
                                     :rules="[requiredValidator]"
                                     :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
                                     :type="is_show ? 'text' : 'password'" persistent-placeholder
-                                    @click:append-inner="is_show = !is_show" autocomplete />
+                                    @click:append-inner="is_show = !is_show" autocomplete="off" />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 대표자명 -->

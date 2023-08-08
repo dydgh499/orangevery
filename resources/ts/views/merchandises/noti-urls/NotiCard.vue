@@ -25,7 +25,7 @@ watchEffect(() => {
 
 </script>
 <template>
-    <AppCardActions action-collapsed :title="props.item.note" :collapsed="props.able_mcht_chanage ? false : true">
+    <AppCardActions action-collapsed :title="props.item.note">
         <VDivider />
         <VForm ref="vForm">
             <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">

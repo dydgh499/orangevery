@@ -52,7 +52,7 @@ const filterPss = computed(() => {
 
 </script>
 <template>
-    <AppCardActions action-collapsed :title="props.item.pg_name" :collapsed="true">
+    <AppCardActions action-collapsed :title="props.item.pg_name">
         <VDivider />
         <div class="d-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
             <VCol cols="12" md="5">

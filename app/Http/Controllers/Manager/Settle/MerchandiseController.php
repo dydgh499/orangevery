@@ -49,6 +49,7 @@ class MerchandiseController extends Controller
     public function chart(Request $request)
     {
         $request = $request->merge([
+            'page' => 1,
             'paze_size' => 999999,
         ]);
         $total = [
