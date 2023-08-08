@@ -225,7 +225,7 @@ const md = user_info.value.level == 50 ? 6 : 12
                     </VRow> 
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name><span></span>온라인 결제 사용여부</template>
+                            <template #name><span></span>TID 발급버튼 사용여부</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.use_tid_create" @update:radio="props.item.paid.use_tid_create = $event">
                                     <template #true>사용</template>
