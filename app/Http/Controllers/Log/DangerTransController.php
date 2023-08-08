@@ -45,8 +45,6 @@ class DangerTransController extends Controller
                 'trans_id' => $transaction->trans_id,
                 'module_type' => $transaction->module_type,
                 'danger_type' => 0,  // static value
-                'created_at'  => date('Y-m-d H:i:s'),
-                'updated_at'  => date('Y-m-d H:i:s'),
             ]);
         }
     }
