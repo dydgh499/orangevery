@@ -12,7 +12,8 @@ export const useSearchStore = defineStore('notiSendHistorySearchStore', () => {
             'http_code': '응답코드',
             'message': '내용',
             'retry_count': '재시도 회수',
-            'created_at': '발송시간',
+            'created_at': '발송시간',            
+            'extra_col': '더보기',
         }
         head.main_headers.value = [];
         head.headers.value = head.initHeader(headers, {})

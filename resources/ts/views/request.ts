@@ -12,7 +12,6 @@ export const useRequestStore = defineStore('requestStore', () => {
             snackbar.value.show('성공하였습니다.', 'success')
             if (is_redirect)
             {
-                console.log(back_url)
                 if(back_url == '/merchandises/pay-modules')
                     setTimeout(function () { location.href = '/merchandises/edit/'+res.data.mcht_id }, 500)
                 else if(back_url == '/merchandises/pay-modules')
@@ -108,6 +107,25 @@ export const useRequestStore = defineStore('requestStore', () => {
             })
     }
 
-    return { formRequest, update, remove, setOneObject, request }
+    const post = async(url: string, params: any) => {
+        try {
+            return await axios.post(url, params)
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            return errorHandler(e)
+        }
+    }
+
+    const get = async(url: string) => {
+        try {
+            return await axios.get(url)
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            return errorHandler(e)
+        }
+    }
+    return { formRequest, update, remove, setOneObject, request, post, get }
 })
 

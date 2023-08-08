@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/merchandises/noti-send-histories/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import ExtraMenu from '@/views/merchandises/noti-send-histories/ExtraMenu.vue'
 
 const { store, head, exporter } = useSearchStore()
 provide('store', store)
@@ -52,6 +53,9 @@ provide('exporter', exporter)
                                     {{ item[_key] }}
                                 </VChip>
                             </span>
+                            <span v-else-if="_key == 'extra_col'">
+                                <ExtraMenu :item="item['id']"></ExtraMenu>
+                            </span>                            
                             <span v-else>
                                 {{ item[_key] }}
                             </span>
