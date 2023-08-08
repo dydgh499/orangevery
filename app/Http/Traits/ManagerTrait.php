@@ -3,6 +3,7 @@ namespace App\Http\Traits;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
+use Carbon\Carbon;
 
 trait ManagerTrait
 {
@@ -133,5 +134,14 @@ trait ManagerTrait
             $auth = true;
 
         return $auth;
+    }
+
+    public function oldDataDelete($orm)
+    {
+        $one_month_ago = Carbon::now()->subMonth();
+        $orm->query()
+            ->where('is_delete', true)
+            ->where('updated_at', '<', $one_month_ago)
+            ->delete();
     }
 }

@@ -44,7 +44,7 @@ class DangerTransController extends Controller
                 'mcht_id' => $transaction->mcht_id,
                 'trans_id' => $transaction->trans_id,
                 'module_type' => $transaction->module_type,
-                'danger_type' => 0,  // static value
+                'danger_type' => 0,
             ]);
         }
     }
