@@ -14,7 +14,6 @@ class ClassificationReqeust extends FormRequest
         $this->keys = [
             'type',
             'name',
-            'trx_fee',
         ];
     }
 
@@ -33,7 +32,6 @@ class ClassificationReqeust extends FormRequest
         $sub = [
             'type' => 'required',
             'name' => 'required',
-            'trx_fee' => 'required',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -57,7 +55,6 @@ class ClassificationReqeust extends FormRequest
             $data[$key] = $this->input($key, '');
         }
         $data['brand_id'] = $this->user()->brand_id;
-        $data['is_delete'] = true;
         return $data;
     }
 }

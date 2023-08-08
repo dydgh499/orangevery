@@ -1,1 +1,17 @@
 // Write your overrides
+
+.v-field__outline {
+  --v-field-border-opacity: 0.78;
+}
+
+.v-field__input {
+  opacity: inherit;
+}
+
+.v-label {
+  opacity: inherit;
+}
+
+.v-field__input::placeholder {
+  opacity: inherit;
+}

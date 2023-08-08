@@ -45,8 +45,10 @@ onMounted(async() => {
         }
     })
     watchEffect(() => {
-        props.item.acct_bank_code = bank.value?.code || null
-        props.item.acct_bank_name = bank.value?.title || '선택안함'
+        if(bank.value) {
+            props.item.acct_bank_code = bank.value?.code || null
+            props.item.acct_bank_name = bank.value?.title || '선택안함'
+        }
     })
 })
 </script>

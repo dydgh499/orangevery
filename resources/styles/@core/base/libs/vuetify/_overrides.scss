@@ -48,6 +48,9 @@ h6,
 
 // 👉 Theme
 .v-theme--light {
+  --v-theme-secondary: 30, 30, 30 !important;   // add
+  --v-field-border-opacity: 0.78 !important;
+  --v-medium-emphasis-opacity: 0.85 !important;
   --v-theme-background:
     var(
       --skin-theme-background,
@@ -61,6 +64,8 @@ h6,
 }
 
 .v-theme--dark {
+  --v-field-border-opacity: 0.78 !important;
+  --v-medium-emphasis-opacity: 0.85 !important;
   --v-theme-background:
     var(
       --skin-theme-background,

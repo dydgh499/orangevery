@@ -88,7 +88,8 @@ const payCanceled = async () => {
 </template>
 <style lang="scss" scoped>
 .pg-cancel {
-  background: linear-gradient(72.47deg, rgb(var(--v-global-theme-primary)) 22.16%, rgba(var(--v-global-theme-primary), 0.7) 76.47%) !important;
+  background: linear-gradient(72.47deg, rgb(255, 70, 70) 22.16%, rgba(rgb(255, 70, 70), 0.7) 76.47%);
   box-shadow: 0 3px 1px -2px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 20%)), 0 2px 2px 0 var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 14%)), 0 1px 5px 0 var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 12%));
+  color: white;
 }
 </style>
