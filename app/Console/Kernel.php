@@ -4,9 +4,13 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+
 use App\Http\Controllers\Log\FeeChangeHistoryController;
+use App\Http\Controllers\Log\DangerTransController;
+
 use App\Models\Log\MchtFeeChangeHistory;
 use App\Models\Log\SfFeeChangeHistory;
+use App\Models\Log\DangerTransaction;
 
 class Kernel extends ConsoleKernel
 {
@@ -20,6 +24,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('sanctum:prune-expired --hours=35')->daily();
         $schedule->call(new FeeChangeHistoryController(new MchtFeeChangeHistory, new SfFeeChangeHistory))->daily();
+        $schedule->call(new DangerTransController(new DangerTransaction))->everyNMinutes(360);
     }
 
     /**

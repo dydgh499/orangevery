@@ -32,29 +32,20 @@ const getSettleStyle = (parent_key: string) => {
 }
 const isSalesCol = (key: string) => {
     const sales_cols = ['count', 'amount', 'trx_amount', 'settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
-    for (let i = 0; i < sales_cols.length; i++) {
-        if (sales_cols[i] === key)
-            return true
-    }
-    return false
+    return sales_cols.find(obj => obj === key) ? true : false
 }
 
-onMounted(() => {
-    watchEffect(() => {
-        store.params.mcht_settle_type = mcht_settle_type.value.id
-    })
-    watchEffect(async () => {
-        if (store.getChartProcess() === false) {
-            const r = await store.getChartData()
-            totals.value = []
-            if (r.data.amount != 0)
-                totals.value.push(r.data)
-        }
-    })
+watchEffect(async () => {
+    if (store.getChartProcess() === false) {
+        const r = await store.getChartData()
+        totals.value = []
+        if (r.data.amount != 0)
+            totals.value.push(r.data)
+    }
 })
 watchEffect(() => {
-    store.setChartProcess()
-    store.params.mcht_settle_type = store.params.mcht_settle_type
+    store.setChartProcess()    
+    store.params.mcht_settle_type = mcht_settle_type.value.id
 })
 </script>
 <template>
