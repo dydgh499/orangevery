@@ -40,12 +40,13 @@ const onwerCheck = async() => {
 }
 onMounted(async() => {
     watchEffect(() => {
-        if(props.item.acct_bank_code !== null)
+        if(props.item.acct_bank_code !== null &&  props.item.acct_bank_code != "000") {
             bank.value = banks.find(obj => obj.code == props.item.acct_bank_code)
+        }
     })
     watchEffect(() => {
-        props.item.acct_bank_code = bank.value.code || null
-        props.item.acct_bank_name = bank.value.title || '선택안함'
+        props.item.acct_bank_code = bank.value?.code || null
+        props.item.acct_bank_name = bank.value?.title || '선택안함'
     })
 })
 </script>
