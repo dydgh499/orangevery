@@ -60,6 +60,8 @@ export function Searcher(path: string) {
 
     const setTable = async() => {
         const current_search = (document.getElementById('search') as HTMLInputElement).value
+        console.log(current_search)
+        console.log(before_search)
         if(before_search != current_search)
             setChartProcess()
             
