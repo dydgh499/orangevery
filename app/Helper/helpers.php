@@ -49,7 +49,7 @@
                 $res = Http::withHeaders($headers)->timeout(60)->get($url, $params);
 
             $code = $res->status();
-            $body = $res->json();            
+            $body = $code < 500 ? $res->json() : "";
         }
         catch(ConnectionException $ex)
         {
@@ -61,7 +61,12 @@
                 return httpSender($type,$url, $params, $headers, $retry);
         }
         $res = ['body' => $body, 'code'=> $code];
-        $code == 200 ? Log::info('http-response', $res) : Log::error('http-response', $res);
+        if($code < 400)
+            Log::info('http-response', $res);
+        else if($code < 500)
+            Log::notice('http-response', $res);
+        else
+            Log::warning('http-response', $res);
         return $res;
     }
 

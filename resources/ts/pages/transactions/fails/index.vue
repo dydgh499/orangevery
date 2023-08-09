@@ -11,39 +11,9 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-const metas = [
-    {
-        icon: 'carbon:ai-status-failed',
-        color: 'primary',
-        title: '금월 발생한 결제실패',
-        stats: '0',
-        percentage: +0,
-    },
-    {
-        icon: 'carbon:ai-status-failed',
-        color: 'error',
-        title: '금주 발생한 결제실패',
-        stats: '0',
-        percentage: +0,
-    },
-    {
-        icon: 'carbon:ai-status-failed',
-        color: 'success',
-        title: '금월 감소한 결제실패',
-        stats: '0',
-        percentage: -0,
-    },
-    {
-        icon: 'carbon:ai-status-failed',
-        color: 'warning',
-        title: '금주 감소한 결제실패',
-        stats: '0',
-        percentage: +0,
-    },
-]
 </script>
 <template>
-    <BaseIndexView placeholder="가맹점 상호 검색" :metas="metas" :add="false" add_name="가맹점" :is_range_date="true">
+    <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="가맹점" :is_range_date="true">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" :sales="true" />
         </template>

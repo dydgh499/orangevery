@@ -2,12 +2,25 @@
 import { useSearchStore } from '@/views/merchandises/noti-send-histories/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import ExtraMenu from '@/views/merchandises/noti-send-histories/ExtraMenu.vue'
+import NotiDetailDialog from '@/layouts/dialogs/NotiDetailDialog.vue'
 
 const { store, head, exporter } = useSearchStore()
+const notiDetail = ref()
+
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+provide('notiDetail', notiDetail)
 
+
+const httpCodeColor = (http_code: number) => {
+    if(http_code < 300)
+        return "success"
+    else if(http_code < 500)
+        return "warning"
+    else
+        return "error"
+}
 </script>
 <template>
     <BaseIndexView placeholder="발송 URL 검색" :metas="[]" :add="false" add_name="가맹점" :is_range_date="true">
@@ -49,13 +62,13 @@ provide('exporter', exporter)
                                 #{{ item[_key] }}
                             </span>
                             <span v-else-if="_key == `http_code`">
-                                <VChip :color="store.booleanTypeColor(item[_key] >= 200 && item[_key] <= 299)">
+                                <VChip :color="httpCodeColor(item[_key])">
                                     {{ item[_key] }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'extra_col'">
-                                <ExtraMenu :item="item['id']"></ExtraMenu>
-                            </span>                            
+                                <ExtraMenu :item="item"></ExtraMenu>
+                            </span>
                             <span v-else>
                                 {{ item[_key] }}
                             </span>
@@ -65,4 +78,5 @@ provide('exporter', exporter)
             </tr>
         </template>
     </BaseIndexView>
+    <NotiDetailDialog ref="notiDetail"/>
 </template>

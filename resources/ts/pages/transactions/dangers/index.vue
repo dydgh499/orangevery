@@ -13,43 +13,14 @@ const { settle_types } = useStore()
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
-const metas = [
-    {
-        icon: 'jam-triangle-danger',
-        color: 'primary',
-        title: '금월 발생한 이상거래',
-        stats: '0',
-        percentage: +0,
-    },
-    {
-        icon: 'jam-triangle-danger',
-        color: 'error',
-        title: '금주 발생한 이상거래',
-        stats: '0',
-        percentage: +0,
-    },
-    {
-        icon: 'jam-triangle-danger',
-        color: 'success',
-        title: '금월 감소한 이상거래',
-        stats: '0',
-        percentage: -0,
-    },
-    {
-        icon: 'jam-triangle-danger',
-        color: 'warning',
-        title: '금주 감소한 이상거래',
-        stats: '0',
-        percentage: +0,
-    },
-]
+
 const mcht_settle_type = ref({ id: null, name: '전체' })
-watchEffect(() => {
+watchEffect(() => {    
     store.params.mcht_settle_type = mcht_settle_type.value.id
 })
 </script>
 <template>
-    <BaseIndexView placeholder="가맹점 상호, MID, TID, 승인번호 검색" :metas="metas" :add="false" add_name="가맹점" :is_range_date="true">
+    <BaseIndexView placeholder="가맹점 상호, MID, TID, 승인번호 검색" :metas="[]" :add="false" add_name="가맹점" :is_range_date="true">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="false" :terminal="true" :cus_filter="true" :sales="true">
                 <template #extra_right>

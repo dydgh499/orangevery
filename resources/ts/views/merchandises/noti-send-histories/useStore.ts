@@ -10,7 +10,7 @@ export const useSearchStore = defineStore('notiSendHistorySearchStore', () => {
             'trans_id': '거래 고유번호',
             'send_url': '발송 URL',
             'http_code': '응답코드',
-            'message': '내용',
+            'message': '응답내용',
             'retry_count': '재시도 회수',
             'created_at': '발송시간',            
             'extra_col': '더보기',

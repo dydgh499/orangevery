@@ -16,11 +16,32 @@ use Illuminate\Support\Facades\DB;
 class DangerTransController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
-    protected $danger_transactions;
+    protected $danger_transactions, $cols;
 
     public function __construct(DangerTransaction $danger_transactions)
     {
-        $this->danger_transactions = $danger_transactions;
+        $this->danger_transactions = $danger_transactions;        
+        $this->cols = [
+            'danger_transactions.*',
+            'merchandises.mcht_name',
+            'transactions.module_type',
+            'transactions.item_name',
+            'transactions.ord_num',
+            'transactions.trx_id',
+            'transactions.mid',
+            'transactions.tid',
+            'transactions.issuer',
+            'transactions.acquirer',
+            'transactions.card_num',
+            'transactions.appr_num',
+            'transactions.installment',
+            'transactions.pg_id',
+            'transactions.ps_id',
+            'transactions.terminal_id',
+            'transactions.amount',
+            'transactions.buyer_name',
+            DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
+        ];
     }
 
     public function __invoke()
@@ -48,35 +69,10 @@ class DangerTransController extends Controller
             ]);
         }
     }
-    /**
-     * 목록출력
-     *
-     */
-    public function index(IndexRequest $request)
-    {
-        $cols = [
-            'danger_transactions.*',
-            'merchandises.mcht_name',
-            'transactions.module_type',
-            'transactions.item_name',
-            'transactions.ord_num',
-            'transactions.trx_id',
-            'transactions.mid',
-            'transactions.tid',
-            'transactions.issuer',
-            'transactions.acquirer',
-            'transactions.card_num',
-            'transactions.appr_num',
-            'transactions.installment',
-            'transactions.pg_id',
-            'transactions.ps_id',
-            'transactions.terminal_id',
-            'transactions.amount',
-            'transactions.buyer_name',
-            DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
-        ];
-        $search = $request->input('search', '');
 
+    private function commonSelect($request)
+    {
+        $search = $request->input('search', '');
         $query  = $this->danger_transactions
             ->join('merchandises', 'danger_transactions.mcht_id', '=', 'merchandises.id')
             ->join('transactions', 'danger_transactions.trans_id', '=', 'transactions.id')
@@ -95,8 +91,17 @@ class DangerTransController extends Controller
                     ->orWhere('transactions.tid', 'like', "%$search%");
             });    
         }
+        return $query;
+    }
 
-        $data = $this->getIndexData($request, $query, 'danger_transactions.id', $cols, 'transactions.created_at');
+    /**
+     * 목록출력
+     *
+     */
+    public function index(IndexRequest $request)
+    {
+        $query = $this->commonSelect($request);
+        $data = $this->getIndexData($request, $query, 'danger_transactions.id', $this->cols, 'transactions.created_at');
         return $this->response(0, $data);
     }
 

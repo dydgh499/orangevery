@@ -49,7 +49,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
 
     if(getUserLevel() >= 35)
     {
-        headers['pg_id'] = 'PG사 수수료'
+        headers['pg_id'] = 'PG사'
         headers['ps_fee'] = '구간 수수료'
         headers['custom_id'] = '커스텀필터'
         headers['terminal_id'] = '장비타입'

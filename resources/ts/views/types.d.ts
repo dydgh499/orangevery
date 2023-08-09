@@ -638,3 +638,24 @@ export interface OperatorHistory {
     history_detail?: string,
     created_at: datetime,
 }
+
+export interface NotiFormat {
+    send_url: string,
+    mid: string,
+    tid: string,
+    trx_id: string,
+    amount: number,
+    ord_num: string,
+    appr_num: string,
+    item_name: string,
+    buyer_name: string,
+    buyer_phone: string,
+    acquirer: string,
+    issuer: string,
+    card_num: string,
+    installment: string,
+    pay_dttm: string,
+    cxl_dttm: string,
+    is_cancel: boolean,
+    temp: string,
+}

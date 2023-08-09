@@ -32,7 +32,7 @@ const check = async () => {
                     <template #prepend>
                         <VIcon size="24" class="me-3" :icon="'tabler:check'" />
                     </template>
-                    <VListItemTitle>상세이력확인</VListItemTitle>
+                    <VListItemTitle>상세이력</VListItemTitle>
                 </VListItem>
             </VList>
         </VMenu>

@@ -9,22 +9,28 @@ interface Props {
 const props = defineProps<Props>()
 const { remove, post, get } = useRequestStore()
 
+const store = <any>(inject('store'))
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
+const notiDetail = <any>(inject('notiDetail'))
 
 const retry = async () => {
     if(await alert.value.show('정말 재발송하시겠습니까?'))
     {
-        const url = '/merchandises/noti-send-histories/'+props.item.id+'/retry'
+        const url = '/api/v1/manager/merchandises/noti-send-histories/'+props.item.trans_id+'/retry'
         const r = await post(url, {})
-        snackbar.value.show('성공하였습니다.', 'success')
+        if(r.status == 201)
+            snackbar.value.show('성공하였습니다.', 'success')
+        else
+            snackbar.value.show(r.data.message, 'error')
+        store.setTable()
     }
 }
 
-const history = async () => {
-    const url = '/merchandises/noti-send-histories/'+props.item.id
+const detail = async () => {
+    const url = '/api/v1/manager/merchandises/noti-send-histories/'+props.item.trans_id
     const r = await get(url)
-    const detail = r.data
+    notiDetail.value.show(r.data)
 }
 
 </script>
@@ -35,13 +41,13 @@ const history = async () => {
             <VList>
                 <VListItem value="retry" @click="retry()">
                     <template #prepend>
-                        <VIcon size="24" class="me-3" icon="tabler:receipt" />
+                        <VIcon size="24" class="me-3" icon="gridicons:reply" />
                     </template>
                     <VListItemTitle>재발송</VListItemTitle>
                 </VListItem>
-                <VListItem value="retry" @click="history()">
+                <VListItem value="retry" @click="detail()">
                     <template #prepend>
-                        <VIcon size="24" class="me-3" icon="tabler:receipt" />
+                        <VIcon size="24" class="me-3" icon="tabler:check" />
                     </template>
                     <VListItemTitle>상세이력</VListItemTitle>
                 </VListItem>
