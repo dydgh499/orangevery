@@ -1,7 +1,7 @@
 import { user_info } from '@axios'
 
 export default [
-  { heading: 'Forms' },
+  { heading: '' },
   {
     title: '홈',
     icon: { icon: 'tabler-smart-home' },

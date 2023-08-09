@@ -208,7 +208,7 @@ const chartOptions = computed(() => {
                     </h5>
                 </div>
                 <div>
-                    <p class="text-sm text-disabled mt-0 mb-1">
+                    <p class="text-sm mt-0 mb-1">
                         이전 대비
                         <VChip label color="success">
                             {{ current.week_amount_rate?.toFixed(3) }}%

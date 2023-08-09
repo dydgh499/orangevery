@@ -35,7 +35,7 @@ const getSelectIdColor = (id: number | undefined) => {
                                 {{ history_types.find(history_type => history_type['id'] === operator_history.history_type)?.title  }}
                             </VChip>   
                         </h6>
-                        <span class="text-sm text-disabled">
+                        <span class="text-sm">
                             {{ operator_history.created_at }}
                         </span>
                     </div>
@@ -51,7 +51,7 @@ const getSelectIdColor = (id: number | undefined) => {
                 </VTimelineItem>
                 <VTimelineItem v-show="!Boolean(operator_histories.length)" size="x-small">
                     <div class="d-flex justify-space-between">
-                        <span class="text-sm text-disabled">
+                        <span class="text-sm">
                             최근 운영자 활동이력이 존재하지 않습니다.
                         </span>
                     </div>

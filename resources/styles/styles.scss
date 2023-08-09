@@ -15,3 +15,27 @@
 .v-field__input::placeholder {
   opacity: inherit !important;
 }
+
+.v-card-subtitle {
+  color: rgb(var(--v-theme-on-background));
+}
+
+.v-table.v-theme--light {
+  color: #000 !important;
+}
+
+.list-square {
+  padding-block: 0;
+  padding-inline: 6px !important;
+  text-align: center !important;
+}
+
+.edit-link {
+  color: rgb(var(--v-global-theme-primary)) !important;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.edit-link:hover {
+  font-weight: 900;
+}

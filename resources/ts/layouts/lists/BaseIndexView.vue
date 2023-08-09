@@ -71,24 +71,3 @@ onMounted(() => {
         <SearchFilterDialog ref="filter" />
     </section>
 </template>
-<style lang="scss">
-.list-square {
-  padding-block: 0;
-  padding-inline: 6px !important;
-  text-align: center !important;
-}
-
-.v-table.v-theme--light {
-  color: #000;
-}
-
-.edit-link {
-  color: rgb(var(--v-global-theme-primary)) !important;
-  cursor: pointer;
-  text-decoration: underline;
-}
-
-.edit-link:hover {
-  font-weight: 900;
-}
-</style>

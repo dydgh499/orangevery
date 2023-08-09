@@ -96,7 +96,7 @@ const getAbilitiesMenu = computed(() => {
         to: 'transactions',
     });
     return [
-        { heading: 'Forms' },
+        { heading: '' },
         {
             title: '홈',
             icon: { icon: 'tabler-smart-home' },

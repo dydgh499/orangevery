@@ -68,7 +68,7 @@ onMounted(() => {
                         {{ demo.stat }}
                     </p>
                     <br>
-                    <p class="text-sm text-disabled mt-0 mb-1">
+                    <p class="text-sm mt-0 mb-1">
                         {{ demo.subTitle }}
                         <VChip :color="demo.color" label>
                             {{ demo.change }}

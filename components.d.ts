@@ -7,7 +7,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AppBarSearch: typeof import('./resources/ts/@core/components/AppBarSearch.vue')['default']
     AppCardActions: typeof import('./resources/ts/@core/components/AppCardActions.vue')['default']
     AppCardCode: typeof import('./resources/ts/@core/components/AppCardCode.vue')['default']
     AppDateTimePicker: typeof import('./resources/ts/@core/components/AppDateTimePicker.vue')['default']
