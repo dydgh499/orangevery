@@ -50,7 +50,7 @@ class MerchandiseController extends Controller
     {
         $request = $request->merge([
             'page' => 1,
-            'paze_size' => 999999,
+            'page_size' => 999999,
         ]);
         $total = [
             'id' => '합계',
