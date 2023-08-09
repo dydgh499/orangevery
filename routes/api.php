@@ -130,6 +130,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('set-custom-filter', [SalesforceBatchController::class, 'setCustomFilter']);
                 Route::post('set-abnormal-trans-limit', [SalesforceBatchController::class, 'setAbnormalTransLimit']);
                 Route::post('set-dupe-pay-validation', [SalesforceBatchController::class, 'setDupPayValidation']);
+                Route::post('set-mid', [SalesforceBatchController::class, 'setMid']);
+                Route::post('set-tid', [SalesforceBatchController::class, 'setTid']);
                 Route::post('set-pay-limit', [SalesforceBatchController::class, 'setPayLimit']);
                 Route::post('set-pay-disable-time', [SalesforceBatchController::class, 'setForbiddenPayTime']);
                 Route::post('set-show-pay-view', [SalesforceBatchController::class, 'setShowPayView']);

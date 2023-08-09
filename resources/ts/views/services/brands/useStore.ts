@@ -148,6 +148,8 @@ export const defaultItemInfo = () => {
                 subsidiary_use_control: false,
                 use_online_pay: false,
                 use_tid_create: false,
+                use_mid_batch: false,
+                use_tid_batch: false
             }),
             auth: reactive<AuthOption>({
                 levels: {

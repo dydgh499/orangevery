@@ -27,6 +27,8 @@ const pay_dupe_limit = ref()
 
 const pay_disable_s_tm = ref()
 const pay_disable_e_tm = ref()
+const pay_mid = ref()
+const pay_tid = ref()
 
 const pay_day_limit = ref()
 const pay_month_limit = ref()
@@ -101,6 +103,21 @@ const setShowPayView = () => {
         'id': props.item.id,
         'level': props.item.level,
         'show_pay_view': show_pay_view.value,
+    })
+}
+//
+const setMid = () => {
+    post('set-mid', {
+        'id': props.item.id,
+        'level': props.item.level,
+        'mid': pay_mid.value,
+    })
+}
+const setTid = () => {
+    post('set-tid', {
+        'id': props.item.id,
+        'level': props.item.level,
+        'tid': pay_tid.value,
     })
 }
 const setNotiUrl = () => {
@@ -250,6 +267,30 @@ const setNotiUrl = () => {
                         <template #false>숨김</template>
                     </BooleanRadio>
                     <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setShowPayView()">
+                        즉시적용
+                        <VIcon end icon="tabler-direction-sign" />
+                    </VBtn>
+                </div>
+            </template>
+        </CreateHalfVCol>
+        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_mid_batch">
+            <template #name>MID</template>
+            <template #input>
+                <div class="batch-container">
+                    <VTextField v-model="pay_mid" label="MID" type="text" />
+                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setMid()">
+                        즉시적용
+                        <VIcon end icon="tabler-direction-sign" />
+                    </VBtn>
+                </div>
+            </template>
+        </CreateHalfVCol>
+        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_tid_batch">
+            <template #name>TID</template>
+            <template #input>
+                <div class="batch-container">
+                    <VTextField v-model="pay_tid" label="TID" type="text" />
+                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setTid()">
                         즉시적용
                         <VIcon end icon="tabler-direction-sign" />
                     </VBtn>

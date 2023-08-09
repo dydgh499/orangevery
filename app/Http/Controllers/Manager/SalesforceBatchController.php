@@ -238,4 +238,44 @@ class SalesforceBatchController extends Controller
         $res = $this->manyInsert($notis, $datas);
         return $this->response(1, ['registered_notis'=>$registered_notis->pluck('id'), 'count'=>count($datas)]);
     }
+
+    /**
+     * MID 일괄등록
+     *
+     * 가맹점 이상 가능
+     *
+     */
+    public function setMid(Request $request)
+    {
+        $sales_key = $this->getSalesKeys($request);
+        $sales_id = 'merchandises.'.$sales_key['sales_id'];
+        $row = $this->payModules
+            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+            ->where('payment_modules.brand_id', $request->user()->brand_id)
+            ->where($sales_id, $request->id)
+            ->update([
+                'payment_modules.mid' => $request->mid,
+            ]);
+        return $this->response(1);
+    }
+
+    /**
+     * TID 일괄등록
+     *
+     * 가맹점 이상 가능
+     *
+     */
+    public function setTid(Request $request)
+    {
+        $sales_key = $this->getSalesKeys($request);
+        $sales_id = 'merchandises.'.$sales_key['sales_id'];
+        $row = $this->payModules
+            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+            ->where('payment_modules.brand_id', $request->user()->brand_id)
+            ->where($sales_id, $request->id)
+            ->update([
+                'payment_modules.tid' => $request->tid,
+            ]);
+        return $this->response(1);
+    }    
 }
