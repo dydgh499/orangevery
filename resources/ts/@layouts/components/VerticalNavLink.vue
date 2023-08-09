@@ -41,8 +41,8 @@ const direct = (url: string) => {
 const sms = (url: string) => {
     payLink.value.show('SMS-SEND', url)    
 }
-const log = () => {
-    window.open('/log-viewer')
+const log = (type: number) => {
+    type == 1 ? window.open('/log-viewer') : window.open(process.env.NOTI_URL+'/log-viewer')
 }
 const TapFunctionNavi = (item: NavLink) => {
     if(item.class == 'copy()')
@@ -51,8 +51,10 @@ const TapFunctionNavi = (item: NavLink) => {
         direct(item.params ?? '')
     else if(item.class == 'sms()')
         sms(item.params ?? '')
-    else if(item.class == 'log()')
-        log()
+    else if(item.class == 'log(1)')
+        log(1)
+    else if(item.class == 'log(2)')
+        log(2)
 }
 </script>
 

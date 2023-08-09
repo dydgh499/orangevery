@@ -37,8 +37,13 @@ const getAbilitiesMenu = computed(() => {
         })
         if (user_info.value.level >= 50) {
             operations[0].children.push({
-                title: '로그 관리',
-                class: 'log()',
+                title: '전산 서버 로그',
+                class: 'log(1)',
+                params: '',
+            })
+            operations[0].children.push({
+                title: '노티/결제 서버 로그',
+                class: 'log(2)',
                 params: '',
             })
         }        
