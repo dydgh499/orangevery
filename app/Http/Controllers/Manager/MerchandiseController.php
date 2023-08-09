@@ -249,16 +249,10 @@ class MerchandiseController extends Controller
             'merchandises.business_num', 'merchandises.resident_num',
             'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell',
         ];
-        $query = $this->commonSelect($request);
-        $data = $this->getIndexData($request, $query, 'merchandises.id', $cols, 'merchandises.created_at', true);
-
+        $data = $this->commonSelect($request);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
-        foreach($data['content'] as $content) 
-        {
-            $content->setFeeFormatting(true);
-        }
         return $this->response(0, $data);
     }
 

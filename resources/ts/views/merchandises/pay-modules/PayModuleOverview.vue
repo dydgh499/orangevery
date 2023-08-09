@@ -33,7 +33,7 @@ const addNewPaymodule = () => {
         under_sales_amt: 0,
         begin_dt: null,
         ship_out_dt: null,
-        ship_out_stat: null,
+        ship_out_stat: 0,
         is_old_auth: false,
         installment: 0,
         pay_dupe_limit:0,

@@ -71,7 +71,7 @@ onMounted(() => {
     props.item.ps_id = props.item.ps_id == 0 ? null : props.item.ps_id
     // 결제모듈 타입 변동 체크
     watchEffect(() => {
-        md.value = (props.item.module_type == 0 || props.item.module_type == 0)  ? 3 : 4
+        md.value = (props.item.module_type == 0 || props.item.module_type == 1)  ? 3 : 4
     })
     watchEffect(() => {
         if(props.able_mcht_chanage)
