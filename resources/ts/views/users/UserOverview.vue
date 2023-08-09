@@ -64,7 +64,7 @@ onMounted(async() => {
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>아이디</template>
                             <template #input>
-                                <VTextField v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
+                                <VTextField type='text' v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
                                     placeholder="아이디 입력" persistent-placeholder :rules="[requiredValidator]"
                                     maxlength="30" autocomplete="off"/>
                             </template>
