@@ -8,8 +8,8 @@ trait SettleTrait
     public function getDefaultCols()
     {
         return [
-            'id', 'user_name', 'addr',
-            'phone_num', 'sector', 'business_num', 'resident_num',
+            'id', 'user_name', 'addr', 'nick_name',
+            'phone_num', 'sector', 'business_num', 'resident_num', 
             "acct_num", "acct_name", "acct_bank_name", "acct_bank_code",
         ];
     }

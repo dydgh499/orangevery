@@ -56,13 +56,6 @@ class MerchandiseController extends Controller
             'page' => 1,
             'page_size' => 99999999,
         ]);
-        $chart = [
-            'this_week_add' => 0,
-            'this_week_del' => 0,
-            'this_month_add' => 0,
-            'this_month_del' => 0,
-            'total' => 0,
-        ];
         $data = $this->commonSelect($request, true);
         $chart = getDefaultUsageChartFormat($data);
         return $this->response(0, $chart);
@@ -86,7 +79,7 @@ class MerchandiseController extends Controller
             return $query->where('mcht_name', 'like', "%$search%")
                 ->orWhere('phone_num', 'like', "%$search%")
                 ->orWhere('nick_name', 'like', "%$search%");
-        });        
+        });
         if($is_all == false)
             $query = $query->where('is_delete', false);
         $data = $this->getIndexData($request, $query, 'id');        
