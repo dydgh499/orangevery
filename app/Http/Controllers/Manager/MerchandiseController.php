@@ -56,7 +56,6 @@ class MerchandiseController extends Controller
             'page' => 1,
             'page_size' => 99999999,
         ]);
-        $cols = ['merchandises.*'];
         $chart = [
             'this_week_add' => 0,
             'this_week_del' => 0,
@@ -64,34 +63,45 @@ class MerchandiseController extends Controller
             'this_month_del' => 0,
             'total' => 0,
         ];
-        $query = $this->commonSelect($request, true);
-        $data = $this->getIndexData($request, $query, 'merchandises.id', $cols, 'merchandises.created_at', true);
+        $data = $this->commonSelect($request, true);
         $chart = getDefaultUsageChartFormat($data);
         return $this->response(0, $chart);
     }
 
     private function commonSelect($request, $is_all=false)
     {
-        $search = $request->input('search', '');
-        $query = $this->merchandises->leftJoin('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id');
+        // payment modules sections
+        $query = $this->payModules
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false);
         $query = globalPGFilter($query, $request, 'payment_modules');
+        $pay_modules = $query->get(['mcht_id', 'mid', 'tid', 'module_type']);
+        $mcht_ids = $pay_modules->pluck('mcht_id')->values()->unique()->toArray();
+        // merchandises sections
+        $search = $request->input('search', '');
+        $query = $this->merchandises->whereIn('id', $mcht_ids);
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
-        $query = $query
-            ->where('merchandises.brand_id', $request->user()->brand_id);
-        if($search != '')
-        {
-            $query = $query->where(function ($query) use ($search) {
-                return $query->where('merchandises.mcht_name', 'like', "%$search%")
-                    ->orWhere('merchandises.phone_num', 'like', "%$search%")
-                    ->orWhere('merchandises.nick_name', 'like', "%$search%");
-            });
-        }
+        $query = $query->where(function ($query) use ($search) {
+            return $query->where('mcht_name', 'like', "%$search%")
+                ->orWhere('phone_num', 'like', "%$search%")
+                ->orWhere('nick_name', 'like', "%$search%");
+        });        
         if($is_all == false)
-            $query = $query->where('merchandises.is_delete', false);
-
-        $query = $query->groupBy('merchandises.id');
-        return $query;
+            $query = $query->where('is_delete', false);
+        $data = $this->getIndexData($request, $query, 'id');        
+        // mapping payment modules and merchandises sections
+        foreach($data['content'] as $content) 
+        {
+            $my_modules = $pay_modules->filter(function($pay_module) use($content) {
+                return $pay_module->mcht_id == $content->id;
+            });
+            $content->mids = $my_modules->pluck('mid')->values()->toArray();
+            $content->tids = $my_modules->pluck('tid')->values()->toArray();
+            $content->module_types = $my_modules->pluck('module_type')->values()->toArray();
+            $content->setFeeFormatting(true);
+        }
+        return $data;
     }
 
     /**
@@ -103,31 +113,10 @@ class MerchandiseController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $cols = ['merchandises.*'];
-        $query = $this->commonSelect($request);
-        $data = $this->getIndexData($request, $query, 'merchandises.id', $cols, 'merchandises.created_at', true);
-
+        $data = $this->commonSelect($request);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
-        if(count($data['content']))
-        {
-            $mcht_ids = $data['content']->pluck('id')->values()->toArray();
-            $pay_modules = $this->payModules
-                ->where('is_delete', false)
-                ->whereIn('mcht_id', $mcht_ids)
-                ->get(['mcht_id', 'mid', 'tid', 'module_type']);
-            foreach($data['content'] as $content) 
-            {
-                $my_modules = $pay_modules->filter(function($pay_module) use($content) {
-                    return $pay_module->mcht_id == $content->id;
-                });
-                $content->mids = $my_modules->pluck('mid')->values()->toArray();
-                $content->tids = $my_modules->pluck('tid')->values()->toArray();
-                $content->module_types = $my_modules->pluck('module_type')->values()->toArray();
-                $content->setFeeFormatting(true);
-            }
-        }
         return $this->response(0, $data);
 
     }
