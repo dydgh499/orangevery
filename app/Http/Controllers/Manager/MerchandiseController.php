@@ -63,9 +63,9 @@ class MerchandiseController extends Controller
         return $this->response(0, $chart);
     }
 
-    private function getMchtIds($pay_modules)
+    private function getMchtIds($pay_modules, $id='mcht_id')
     {
-        return $pay_modules->pluck('mcht_id')->values()->unique()->toArray();
+        return $pay_modules->pluck($id)->values()->unique()->toArray();
     }
 
     private function merchandisePGFilter($p_query, $request)
@@ -122,7 +122,7 @@ class MerchandiseController extends Controller
         // mapping payment modules and merchandises sections
         if(($cond_1 && $cond_2) == false)
         {
-            $mcht_ids = $this->getMchtIds(collect($data['content']));
+            $mcht_ids = $this->getMchtIds(collect($data['content']), 'id');
             $pay_modules = $p_query
                     ->whereIn('mcht_id', $mcht_ids)
                     ->get($this->pay_mod_cols);
