@@ -32,5 +32,5 @@ class PaymentModule extends Model
         return Attribute::make(
             get: fn ($value) => json_decode($value, true),
         );
-    }    
+    }
 }

@@ -28,6 +28,7 @@ class MerchandiseController extends Controller
     protected $merchandises, $payModules;
     protected $target;
     protected $imgs;
+    protected $pay_mod_cols;
 
     public function __construct(Merchandise $merchandises, PaymentModule $payModules)
     {
@@ -48,6 +49,7 @@ class MerchandiseController extends Controller
                 500, 500, 500, 500, 120
             ],
         ];
+        $this->pay_mod_cols = ['mcht_id', 'mid', 'tid', 'module_type'];
     }
 
     public function chart(Request $request)
@@ -61,29 +63,22 @@ class MerchandiseController extends Controller
         return $this->response(0, $chart);
     }
 
-    private function commonSelect($request, $is_all=false)
+    private function getMchtIds($pay_modules)
     {
-        // payment modules sections
-        $query = $this->payModules
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false);
-        $query = globalPGFilter($query, $request, 'payment_modules');
-        $pay_modules = $query->get(['mcht_id', 'mid', 'tid', 'module_type']);
-        $mcht_ids = $pay_modules->pluck('mcht_id')->values()->unique()->toArray();
-        // merchandises sections
-        $search = $request->input('search', '');
-        $query = $this->merchandises->whereIn('id', $mcht_ids);
-        $query = globalSalesFilter($query, $request, 'merchandises');
-        $query = globalAuthFilter($query, $request, 'merchandises');
-        $query = $query->where(function ($query) use ($search) {
-            return $query->where('mcht_name', 'like', "%$search%")
-                ->orWhere('phone_num', 'like', "%$search%")
-                ->orWhere('nick_name', 'like', "%$search%");
-        });
-        if($is_all == false)
-            $query = $query->where('is_delete', false);
-        $data = $this->getIndexData($request, $query, 'id');        
-        // mapping payment modules and merchandises sections
+        return $pay_modules->pluck('mcht_id')->values()->unique()->toArray();
+    }
+
+    private function merchandisePGFilter($p_query, $request)
+    {
+        $p_query = globalPGFilter($p_query, $request, 'payment_modules');
+        $pay_modules = $p_query->get($this->pay_mod_cols);
+        $mcht_ids = $this->getMchtIds($pay_modules);
+
+        return [$pay_modules, $mcht_ids];
+    }
+
+    private function mappingPayModules($data, $pay_modules)
+    {
         foreach($data['content'] as $content) 
         {
             $my_modules = $pay_modules->filter(function($pay_module) use($content) {
@@ -95,6 +90,44 @@ class MerchandiseController extends Controller
             $content->setFeeFormatting(true);
         }
         return $data;
+    }
+
+    private function commonSelect($request, $is_all=false)
+    {
+        $search = $request->input('search', '');
+        $cond_1 = $request->pg_id || $request->ps_id || $request->terminal_id;
+        $cond_2 = $request->settle_type || $request->mcht_settle_type || $request->module_type;
+        // payment modules sections
+        $p_query = $this->payModules
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false);
+
+        $m_query = $this->merchandises;
+        if($cond_1 && $cond_2)
+        {
+            [$pay_modules, $mcht_ids] = merchandisePGFilter($p_query, $request);
+            $m_query = $m_query->whereIn('id', $mcht_ids);
+        }
+        // merchandises sections
+        $query = globalSalesFilter($m_query, $request, 'merchandises');
+        $query = globalAuthFilter($query, $request, 'merchandises');
+        $query = $query->where(function ($query) use ($search) {
+            return $query->where('mcht_name', 'like', "%$search%")
+                ->orWhere('phone_num', 'like', "%$search%")
+                ->orWhere('nick_name', 'like', "%$search%");
+        });
+        if($is_all == false)
+            $query = $query->where('is_delete', false);
+        $data = $this->getIndexData($request, $query, 'id');
+        // mapping payment modules and merchandises sections
+        if(($cond_1 && $cond_2) == false)
+        {
+            $mcht_ids = $this->getMchtIds(collect($data['content']));
+            $pay_modules = $p_query
+                    ->whereIn('mcht_id', $mcht_ids)
+                    ->get($this->pay_mod_cols);
+        }
+        return $this->mappingPayModules($data, $pay_modules);
     }
 
     /**
