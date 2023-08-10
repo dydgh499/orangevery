@@ -81,6 +81,7 @@ class MerchandiseController extends Controller
     {
         $query = $this->merchandises
             ->join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
+            ->where('payment_modules.is_delete', false)
             ->distinct('payment_modules.mcht_id');
 
         $query = globalPGFilter($query, $request, 'payment_modules');
