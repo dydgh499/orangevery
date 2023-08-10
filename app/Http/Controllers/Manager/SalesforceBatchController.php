@@ -36,10 +36,13 @@ class SalesforceBatchController extends Controller
     {
         $sales_key = $this->getSalesKeys($request);
         $sales_id = 'merchandises.'.$sales_key['sales_id'];
-        return $this->payModules
+        $query = $this->payModules
             ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
             ->where('payment_modules.brand_id', $request->user()->brand_id)
             ->where($sales_id, $request->id);
+        if($request->pg_id)
+            $query = $query->where('payment_modules.pg_id', $request->pg_id);
+        return $query;
     }
 
     private function merchandiseBatch($request)

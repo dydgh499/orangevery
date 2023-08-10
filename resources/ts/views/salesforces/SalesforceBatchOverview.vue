@@ -17,10 +17,11 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 
-const { cus_filters } = useStore()
+const { pgs, cus_filters } = useStore()
 
 const custom = ref(<any>({ id: null, type: 1, name: '사용안함' }))
 const sales_fee = ref()
+const pg_id = ref()
 
 const abnormal_trans_limit = ref()
 const pay_dupe_limit = ref()
@@ -53,37 +54,40 @@ const post = async (page: string, params: any) => {
         const r = errorHandler(e)
     }
 }
-const common = {
+const common = computed(() => {
+        return {
         'id': props.item.id,
         'level': props.item.level,
+        'pg_id': pg_id.value
     }
+})
 const setFee = () => {
     post('set-fee', {
-        ...common,
+        ...common.value,
         'sales_fee': parseFloat(sales_fee.value),
     })
 }
 const setCustomFilter = () => {
     post('set-custom-filter', {
-        ...common,
+        ...common.value,
         'custom_id': custom.value.id,
     })
 }
 const setAbnormalTransLimit = () => {
     post('set-abnormal-trans-limit', {
-        ...common,
+        ...common.value,
         'abnormal_trans_limit': abnormal_trans_limit.value,
     })
 }
 const setDupPayValidation = () => {
     post('set-dupe-pay-validation', {
-        ...common,
+        ...common.value,
         'pay_dupe_limit': pay_dupe_limit.value,
     })
 }
 const setPayLimit = (type: string) => {
     post('set-pay-limit', {
-        ...common,
+        ...common.value,
         'pay_day_limit': pay_day_limit.value,
         'pay_month_limit': pay_month_limit.value,
         'pay_year_limit': pay_year_limit.value,
@@ -92,45 +96,45 @@ const setPayLimit = (type: string) => {
 }
 const setForbiddenPayTime = () => {
     post('set-pay-disable-time', {
-        ...common,
+        ...common.value,
         'pay_disable_s_tm': pay_disable_s_tm.value,
         'pay_disable_e_tm': pay_disable_e_tm.value,
     })
 }
 const setShowPayView = () => {
     post('set-show-pay-view', {
-        ...common,
+        ...common.value,
         'show_pay_view': show_pay_view.value,
     })
 }
 //
 const setMid = () => {
     post('set-mid', {
-        ...common,
+        ...common.value,
         'mid': pay_mid.value,
     })
 }
 const setTid = () => {
     post('set-tid', {
-        ...common,
+        ...common.value,
         'tid': pay_tid.value,
     })
 }
 const setApiKey = () => {
     post('set-api-key', {
-        ...common,
+        ...common.value,
         'api_key': api_key.value,
     })
 }
 const setSubKey = () => {
     post('set-sub-key', {
-        ...common,
+        ...common.value,
         'sub_key': sub_key.value,
     })
 }
 const setNotiUrl = () => {
     post('set-noti-url', {
-        ...common,
+        ...common.value,
         'noti_status': noti_status.value,
         'send_url': noti_url.value,
         'note': noti_note.value,
@@ -184,6 +188,16 @@ const setNotiUrl = () => {
         </BaseQuestionTooltip>
     </VCardTitle>
     <div v-if="props.item.id != 0" style="width: 100%;">
+        <CreateHalfVCol :mdl="3" :mdr="9">
+            <template #name>
+                <BaseQuestionTooltip :location="'top'" :text="'PG사 필터'" :content="'해당 PG사가 적용되어있는 결제모듈에 한해 적용됩니다.'">
+                </BaseQuestionTooltip>
+            </template>
+            <template #input>
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="pg_id" :items="[{ id: null, pg_name: '전체' }].concat(pgs)"
+                    prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_name" item-value="id" single-line />
+            </template>
+        </CreateHalfVCol>
         <CreateHalfVCol :mdl="3" :mdr="9">
             <template #name>이상거래 한도</template>
             <template #input>
@@ -369,9 +383,9 @@ const setNotiUrl = () => {
         </VRow>
         <div style="float: inline-end;">
             <VBtn variant="tonal" @click="setNotiUrl()">
-            즉시적용
-            <VIcon end icon="tabler-direction-sign" />
-        </VBtn>
+                즉시적용
+                <VIcon end icon="tabler-direction-sign" />
+            </VBtn>
         </div>
     </div>
     <div v-else style="width: 100%; text-align: center;">
