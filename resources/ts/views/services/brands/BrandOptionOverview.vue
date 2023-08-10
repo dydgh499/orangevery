@@ -256,6 +256,28 @@ const md = user_info.value.level == 50 ? 6 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
+                    <VRow class="pt-5">
+                        <CreateHalfVCol :mdl="3" :mdr="9">
+                            <template #name><span></span>API KEY 일괄적용 사용여부</template>
+                            <template #input>
+                                <BooleanRadio :radio="props.item.paid.use_api_key_batch" @update:radio="props.item.paid.use_api_key_batch = $event">
+                                    <template #true>사용</template>
+                                    <template #false>미사용</template>
+                                </BooleanRadio>
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    <VRow class="pt-5">
+                        <CreateHalfVCol :mdl="3" :mdr="9">
+                            <template #name><span></span>SUB KEY 일괄적용 사용여부</template>
+                            <template #input>
+                                <BooleanRadio :radio="props.item.paid.use_sub_key_batch" @update:radio="props.item.paid.use_sub_key_batch = $event">
+                                    <template #true>사용</template>
+                                    <template #false>미사용</template>
+                                </BooleanRadio>
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
                 </VCardItem>
             </VCard>
         </VCol>

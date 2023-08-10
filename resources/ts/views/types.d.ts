@@ -215,6 +215,8 @@ interface PaidOption {
     use_tid_create: boolean,    // TID 생성버튼
     use_mid_batch: boolean,    // MID 일괄 적용
     use_tid_batch: boolean,    // TID 일괄 적용
+    use_api_key_batch: boolean,
+    use_sub_key_batch: boolean,
 }
 interface AuthOption {
     levels: {

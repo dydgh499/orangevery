@@ -149,7 +149,9 @@ export const defaultItemInfo = () => {
                 use_online_pay: false,
                 use_tid_create: false,
                 use_mid_batch: false,
-                use_tid_batch: false
+                use_tid_batch: false,
+                use_api_key_batch: false,
+                use_sub_key_batch: false
             }),
             auth: reactive<AuthOption>({
                 levels: {

@@ -32,6 +32,23 @@ class SalesforceBatchController extends Controller
         $this->payModules   = $payModules;
     }
 
+    private function payModuleBatch($request)
+    {
+        $sales_key = $this->getSalesKeys($request);
+        $sales_id = 'merchandises.'.$sales_key['sales_id'];
+        return $this->payModules
+            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+            ->where('payment_modules.brand_id', $request->user()->brand_id)
+            ->where($sales_id, $request->id);
+    }
+
+    private function merchandiseBatch($request)
+    {
+        $sales_key = $this->getSalesKeys($request);
+        return $this->merchandises->where('brand_id', $request->user()->brand_id)
+            ->where($sales_key['sales_id'], $request->id);
+    }
+
     private function getSalesKeys($request)
     {
         $idx  = globalLevelByIndex($request->level);
@@ -96,11 +113,9 @@ class SalesforceBatchController extends Controller
      */
     public function setCustomFilter(Request $request)
     {
-        $sales_key = $this->getSalesKeys($request);
-        $res = $this->merchandises->where('brand_id', $request->user()->brand_id)
-            ->where($sales_key['sales_id'], $request->id)
-            ->update(['custom_id' => $request->custom_id]);
-        return $this->response($res ? 1 : 990);
+        $cols = ['custom_id' => $request->custom_id];
+        $row = $this->merchandiseBatch($request)->update($cols);
+        return $this->response(1);
     }
 
     /**
@@ -108,15 +123,10 @@ class SalesforceBatchController extends Controller
      */
     public function setAbnormalTransLimit(Request $request)
     {
-        $sales_key = $this->getSalesKeys($request);
-        $sales_id = 'merchandises.'.$sales_key['sales_id'];
-        $row = $this->payModules
-            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-            ->where('payment_modules.brand_id', $request->user()->brand_id)
-            ->where($sales_id, $request->id)
-            ->update([
-                'payment_modules.abnormal_trans_limit' => $request->abnormal_trans_limit
-            ]);
+        $cols = [
+            'payment_modules.abnormal_trans_limit' => $request->abnormal_trans_limit
+        ];
+        $row = $this->payModuleBatch($request)->update($cols);
         return $this->response(1);
     }
 
@@ -125,13 +135,10 @@ class SalesforceBatchController extends Controller
      */
     public function setDupPayValidation(Request $request)
     {
-        $sales_key = $this->getSalesKeys($request);
-        $sales_id = 'merchandises.'.$sales_key['sales_id'];
-        $res = $this->payModules
-            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-            ->where('payment_modules.brand_id', $request->user()->brand_id)
-            ->where($sales_id, $request->id)
-            ->update(['payment_modules.pay_dupe_limit' => $request->pay_dupe_limit]);
+        $cols = [
+            'payment_modules.pay_dupe_limit' => $request->pay_dupe_limit
+        ];
+        $row = $this->payModuleBatch($request)->update($cols);
         return $this->response(1);
     }
     
@@ -148,13 +155,10 @@ class SalesforceBatchController extends Controller
         else if($request->type == 'year')
             $limit = $request->pay_year_limit;
 
-        $sales_key = $this->getSalesKeys($request);
-        $sales_id = 'merchandises.'.$sales_key['sales_id'];
-        $row = $this->payModules
-            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-            ->where('payment_modules.brand_id', $request->user()->brand_id)
-            ->where($sales_id, $request->id)
-            ->update(['payment_modules.'.$type => $limit]);
+        $cols = [
+            'payment_modules.'.$type => $limit
+        ];
+        $row = $this->payModuleBatch($request)->update($cols);
         return $this->response(1);
     }
 
@@ -163,16 +167,11 @@ class SalesforceBatchController extends Controller
      */
     public function setForbiddenPayTime(Request $request)
     {
-        $sales_key = $this->getSalesKeys($request);
-        $sales_id = 'merchandises.'.$sales_key['sales_id'];
-        $row = $this->payModules
-            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-            ->where('payment_modules.brand_id', $request->user()->brand_id)
-            ->where($sales_id, $request->id)
-            ->update([
-                'payment_modules.pay_disable_s_tm' => $request->pay_disable_s_tm,
-                'payment_modules.pay_disable_e_tm' => $request->pay_disable_e_tm,
-            ]);
+        $cols = [
+            'payment_modules.pay_disable_s_tm' => $request->pay_disable_s_tm,
+            'payment_modules.pay_disable_e_tm' => $request->pay_disable_e_tm,
+        ];
+        $row = $this->payModuleBatch($request)->update($cols);
         return $this->response(1);
     }
 
@@ -181,13 +180,10 @@ class SalesforceBatchController extends Controller
      */
     public function setShowPayView(Request $request)
     {
-        $sales_key = $this->getSalesKeys($request);
-        $sales_id = 'merchandises.'.$sales_key['sales_id'];
-        $row = $this->payModules
-            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-            ->where('payment_modules.brand_id', $request->user()->brand_id)
-            ->where($sales_id, $request->id)
-            ->update(['payment_modules.show_pay_view' => $request->show_pay_view]);
+        $cols = [
+            'payment_modules.show_pay_view' => $request->show_pay_view,
+        ];
+        $row = $this->payModuleBatch($request)->update($cols);
         return $this->response(1);
     }
 
@@ -200,14 +196,8 @@ class SalesforceBatchController extends Controller
     public function setNotiUrl(Request $request)
     {
         $notis = new NotiUrl();
-        $sales_key = $this->getSalesKeys($request);
-        $sales_id = 'merchandises.'.$sales_key['sales_id'];
-
-        $mcht_ids = $this->merchandises->where('brand_id', $request->user()->brand_id)
-            ->where($sales_key['sales_id'], $request->id)
-            ->get(['id'])
-            ->pluck('id');
-
+        
+        $mcht_ids = $this->merchandiseBatch($request)->get(['id'])->pluck('id');
         $registered_notis = $notis
             ->whereIn('mcht_id', $mcht_ids)
             ->where('send_url', $request->send_url)
@@ -240,42 +230,57 @@ class SalesforceBatchController extends Controller
     }
 
     /**
-     * MID 일괄등록
+     * MID 일괄적용
      *
      * 가맹점 이상 가능
      *
      */
     public function setMid(Request $request)
     {
-        $sales_key = $this->getSalesKeys($request);
-        $sales_id = 'merchandises.'.$sales_key['sales_id'];
-        $row = $this->payModules
-            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-            ->where('payment_modules.brand_id', $request->user()->brand_id)
-            ->where($sales_id, $request->id)
-            ->update([
-                'payment_modules.mid' => $request->mid,
-            ]);
+        $cols = [
+            'payment_modules.mid' => $request->mid,
+        ];
+        $row = $this->payModuleBatch($request)->update($cols);
         return $this->response(1);
     }
 
     /**
-     * TID 일괄등록
+     * TID 일괄적용
      *
      * 가맹점 이상 가능
      *
      */
     public function setTid(Request $request)
     {
-        $sales_key = $this->getSalesKeys($request);
-        $sales_id = 'merchandises.'.$sales_key['sales_id'];
-        $row = $this->payModules
-            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-            ->where('payment_modules.brand_id', $request->user()->brand_id)
-            ->where($sales_id, $request->id)
-            ->update([
-                'payment_modules.tid' => $request->tid,
-            ]);
+        $cols = [
+            'payment_modules.tid' => $request->tid,
+        ];
+        $row = $this->payModuleBatch($request)->update($cols);
         return $this->response(1);
-    }    
+    }
+
+    /**
+     * API KEY 일괄적용
+     *
+     * 가맹점 이상 가능
+     *
+     */
+    public function setApiKey(Request $request)
+    {
+        $cols = ['payment_modules.api_key' => $request->api_key,];
+        $row = $this->payModuleBatch($request)->update($cols);
+        return $this->response(1);
+    }
+
+    /**
+     * SUB KEY 일괄적용
+     *
+     * 가맹점 이상 가능
+     */
+    public function setSubKey(Request $request)
+    {
+        $cols = ['payment_modules.sub_key' => $request->sub_key];
+        $row = $this->payModuleBatch($request)->update($cols);
+        return $this->response(1);
+    }
 }

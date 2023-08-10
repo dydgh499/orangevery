@@ -29,6 +29,8 @@ const pay_disable_s_tm = ref()
 const pay_disable_e_tm = ref()
 const pay_mid = ref()
 const pay_tid = ref()
+const api_key = ref()
+const sub_key = ref()
 
 const pay_day_limit = ref()
 const pay_month_limit = ref()
@@ -51,39 +53,37 @@ const post = async (page: string, params: any) => {
         const r = errorHandler(e)
     }
 }
-
-const setFee = () => {
-    post('set-fee', {
+const common = {
         'id': props.item.id,
         'level': props.item.level,
+    }
+const setFee = () => {
+    post('set-fee', {
+        ...common,
         'sales_fee': parseFloat(sales_fee.value),
     })
 }
 const setCustomFilter = () => {
     post('set-custom-filter', {
-        'id': props.item.id,
-        'level': props.item.level,
+        ...common,
         'custom_id': custom.value.id,
     })
 }
 const setAbnormalTransLimit = () => {
     post('set-abnormal-trans-limit', {
-        'id': props.item.id,
-        'level': props.item.level,
+        ...common,
         'abnormal_trans_limit': abnormal_trans_limit.value,
     })
 }
 const setDupPayValidation = () => {
     post('set-dupe-pay-validation', {
-        'id': props.item.id,
-        'level': props.item.level,
+        ...common,
         'pay_dupe_limit': pay_dupe_limit.value,
     })
 }
 const setPayLimit = (type: string) => {
     post('set-pay-limit', {
-        'id': props.item.id,
-        'level': props.item.level,
+        ...common,
         'pay_day_limit': pay_day_limit.value,
         'pay_month_limit': pay_month_limit.value,
         'pay_year_limit': pay_year_limit.value,
@@ -92,38 +92,45 @@ const setPayLimit = (type: string) => {
 }
 const setForbiddenPayTime = () => {
     post('set-pay-disable-time', {
-        'id': props.item.id,
-        'level': props.item.level,
+        ...common,
         'pay_disable_s_tm': pay_disable_s_tm.value,
         'pay_disable_e_tm': pay_disable_e_tm.value,
     })
 }
 const setShowPayView = () => {
     post('set-show-pay-view', {
-        'id': props.item.id,
-        'level': props.item.level,
+        ...common,
         'show_pay_view': show_pay_view.value,
     })
 }
 //
 const setMid = () => {
     post('set-mid', {
-        'id': props.item.id,
-        'level': props.item.level,
+        ...common,
         'mid': pay_mid.value,
     })
 }
 const setTid = () => {
     post('set-tid', {
-        'id': props.item.id,
-        'level': props.item.level,
+        ...common,
         'tid': pay_tid.value,
+    })
+}
+const setApiKey = () => {
+    post('set-api-key', {
+        ...common,
+        'api_key': api_key.value,
+    })
+}
+const setSubKey = () => {
+    post('set-sub-key', {
+        ...common,
+        'sub_key': sub_key.value,
     })
 }
 const setNotiUrl = () => {
     post('set-noti-url', {
-        'id': props.item.id,
-        'level': props.item.level,
+        ...common,
         'noti_status': noti_status.value,
         'send_url': noti_url.value,
         'note': noti_note.value,
@@ -291,6 +298,30 @@ const setNotiUrl = () => {
                 <div class="batch-container">
                     <VTextField v-model="pay_tid" label="TID" type="text" />
                     <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setTid()">
+                        즉시적용
+                        <VIcon end icon="tabler-direction-sign" />
+                    </VBtn>
+                </div>
+            </template>
+        </CreateHalfVCol>
+        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_api_key_batch">
+            <template #name>API KEY(license)</template>
+            <template #input>
+                <div class="batch-container">
+                    <VTextField v-model="api_key" label="API KEY" type="text" />
+                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setApiKey()">
+                        즉시적용
+                        <VIcon end icon="tabler-direction-sign" />
+                    </VBtn>
+                </div>
+            </template>
+        </CreateHalfVCol>
+        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_sub_key_batch">
+            <template #name>SUB KEY(iv)</template>
+            <template #input>
+                <div class="batch-container">
+                    <VTextField v-model="sub_key" label="SUB KEY" type="text" />
+                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setSubKey()">
                         즉시적용
                         <VIcon end icon="tabler-direction-sign" />
                     </VBtn>

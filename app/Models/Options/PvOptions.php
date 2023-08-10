@@ -41,6 +41,8 @@
         public $use_tid_create = false;         // tid 생성버튼 사용여부
         public $use_mid_batch = false;         // mid 일괄적용
         public $use_tid_batch = false;         // tid 일괄적용
+        public $use_api_key_batch = false;      // api_key 일괄적용
+        public $use_sub_key_batch = false;      // sub_key 일괄적용
         
         public function __construct(array $source)
         {
