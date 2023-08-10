@@ -37,7 +37,7 @@ const tidCreate = async() => {
             const pg_type = pgs.find(obj => obj.id === props.item.pg_id)?.pg_type
             const r = await axios.post('/api/v1/manager/merchandises/pay-modules/tid-create', { pg_type : pg_type })
             props.item.tid = r.data.tid
-            snackbar.value.show('성공하였습니다.<br>저장하시려면 수정버튼을 눌러주세요.', 'success')
+            snackbar.value.show('성공하였습니다.<br>저장하시려면 추가버튼을 눌러주세요.', 'success')
         }
         catch (e: any) {
             snackbar.value.show(e.response.data.message, 'error')

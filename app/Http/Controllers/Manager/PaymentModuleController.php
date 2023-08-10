@@ -283,11 +283,17 @@ class PaymentModuleController extends Controller
             ->get(['tid']);
 
         $pattern = '/^'.$pg_type.$date.'[0-9]{4}$/';
-        $idx     = $pay_modules->filter(function($pay_module) use($pattern) {       
+        $cur_modules = $pay_modules->filter(function($pay_module) use($pattern) {  
             return preg_match($pattern, $pay_module->tid) === 1;
-        })->map(function($pay_module) {
-            return (int)substr($pay_module->tid, -4);
-        })->max();
+        });
+        if($cur_modules->count())
+        {
+            $idx = $cur_modules->map(function($pay_module) {
+                return (int)substr($pay_module->tid, -4);
+            })->max()+1;
+        }
+        else
+            $idx = 0;
 
         $tid = sprintf($pg_type.$date.'%04d', $idx);
         return $this->response(0, ['tid'=>$tid]);    
