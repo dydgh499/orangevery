@@ -120,14 +120,14 @@
             $query = $query->where($table.'pg_id', $request->pg_id);
         if($request->ps_id)
             $query = $query->where($table.'ps_id', $request->ps_id);
-        if($request->settle_type)
+        if(zeroCheck($request, 'settle_type'))
             $query = $query->where($table.'settle_type', $request->settle_type);
-        if($request->mcht_settle_type)
+        if(zeroCheck($request, 'mcht_settle_type'))
             $query = $query->where($table.'mcht_settle_type', $request->mcht_settle_type);
         if($request->terminal_id)
             $query = $query->where($table.'terminal_id', $request->terminal_id);
-        if($request->module_type)
-            $query = $query->where($table.'module_type', $request->module_type);            
+        if(zeroCheck($request, 'module_type'))
+            $query = $query->where($table.'module_type', $request->module_type);
         return $query;
     }
 
@@ -350,4 +350,9 @@
             'oper_id' => $oper_id,
         ]);
         return OperatorHistoryContoller::logging($request);
+    }
+
+    function zeroCheck($request, $key)
+    {
+        return ($request->input($key, 0) || $request->input($key, '') == 0);
     }

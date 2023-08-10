@@ -79,52 +79,42 @@ class MerchandiseController extends Controller
 
     private function byPayModules($request, $is_all)
     {
-        // payment modules sections
-        $p_query = $this->payModules
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false);
-        $p_query = globalPGFilter($p_query, $request, 'payment_modules');
-        $pay_modules = $p_query->get($this->pay_mod_cols);
-        // merchandises sections
-        $m_query = $this->merchandises->whereIn('id', $this->getMchtIds($pay_modules));
-        $data = $this->mchtCommonFilter($m_query, $request, $is_all);
-        return $this->mappingPayModules($data, $pay_modules);
-    
+        $query = $this->merchandises
+            ->join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
+            ->distinct('payment_modules.mcht_id');
+
+        $query = globalPGFilter($query, $request, 'payment_modules');
+        $query = $this->mchtCommonFilter($query, $request, 'merchandises', $is_all);
+        $data = $this->getIndexData($request, $query, 'merchandises.id', ['merchandises.*'], 'merchandises.created_at');
+        return $data;
     }
 
     private function byNormalIndex($request, $is_all)
     {
         // payment modules sections
-        $m_query = $this->merchandises;
-        $data = $this->mchtCommonFilter($m_query, $request, $is_all);
-        // merchandises sections
-        $pay_modules = $this->payModules
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
-            ->whereIn('mcht_id', $this->getMchtIds(collect($data['content']), 'id'))
-            ->get($this->pay_mod_cols);
-
-        return $this->mappingPayModules($data, $pay_modules);
+        $query = $this->merchandises;
+        $query = $this->mchtCommonFilter($query, $request, '', $is_all);
+        return $this->getIndexData($request, $query, 'id');
     }
 
-    private function mchtCommonFilter($query, $request, $is_all)
+    private function mchtCommonFilter($query, $request, $parent, $is_all)
     {
+        $full_parent = $parent != '' ? $parent."." : '';
         $search = $request->input('search', '');
         $query = $query
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false);
+            ->where($full_parent.'brand_id', $request->user()->brand_id)
+            ->where($full_parent.'is_delete', false);
         // merchandises sections
-        $query = globalSalesFilter($query, $request, 'merchandises');
-        $query = globalAuthFilter($query, $request, 'merchandises');
-        $query = $query->where(function ($query) use ($search) {
+        $query = globalSalesFilter($query, $request, $parent);
+        $query = globalAuthFilter($query, $request, $parent);
+        $query = $query->where(function ($query) use ($search, $full_parent) {
             return $query->where('mcht_name', 'like', "%$search%")
-                ->orWhere('phone_num', 'like', "%$search%")
-                ->orWhere('nick_name', 'like', "%$search%");
+                ->orWhere($full_parent.'phone_num', 'like', "%$search%")
+                ->orWhere($full_parent.'nick_name', 'like', "%$search%");
         });
         if($is_all == false)
-            $query = $query->where('is_delete', false);
-        $data = $this->getIndexData($request, $query, 'id');
-        return $data;
+            $query = $query->where($full_parent.'is_delete', false);
+        return $query;
     }
     
     private function mappingPayModules($data, $pay_modules)
@@ -145,11 +135,19 @@ class MerchandiseController extends Controller
     private function commonSelect($request, $is_all=false)
     {
         $cond_1 = $request->pg_id || $request->ps_id || $request->terminal_id;
-        $cond_2 = $request->settle_type || $request->mcht_settle_type || $request->module_type;
+        $cond_2 = zeroCheck($request, 'settle_type') || zeroCheck($request, 'mcht_settle_type') || zeroCheck($request, 'module_type');
         if($cond_1 || $cond_2)
-            return $this->byPayModules($request, $is_all);
+            $data = $this->byPayModules($request, $is_all);
         else 
-            return $this->byNormalIndex($request, $is_all);
+            $data = $this->byNormalIndex($request, $is_all);
+        // merchandises sections
+        $pay_modules = $this->payModules
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
+            ->whereIn('mcht_id', $this->getMchtIds(collect($data['content']), 'id'))
+            ->get($this->pay_mod_cols);
+        return $this->mappingPayModules($data, $pay_modules);    
+
     }
 
     /**
