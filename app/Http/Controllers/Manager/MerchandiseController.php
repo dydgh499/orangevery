@@ -63,20 +63,6 @@ class MerchandiseController extends Controller
         return $this->response(0, $chart);
     }
 
-    private function getMchtIds($pay_modules, $id='mcht_id')
-    {
-        return $pay_modules->pluck($id)->values()->unique()->toArray();
-    }
-
-    private function merchandisePGFilter($p_query, $request)
-    {
-        $p_query = globalPGFilter($p_query, $request, 'payment_modules');
-        $pay_modules = $p_query->get($this->pay_mod_cols);
-        $mcht_ids = $this->getMchtIds($pay_modules);
-
-        return [$pay_modules, $mcht_ids];
-    }
-
     private function byPayModules($request, $is_all)
     {
         $query = $this->merchandises
@@ -86,13 +72,11 @@ class MerchandiseController extends Controller
 
         $query = globalPGFilter($query, $request, 'payment_modules');
         $query = $this->mchtCommonFilter($query, $request, 'merchandises', $is_all);
-        $data = $this->getIndexData($request, $query, 'merchandises.id', ['merchandises.*'], 'merchandises.created_at');
-        return $data;
+        return $this->getIndexData($request, $query, 'merchandises.id', ['merchandises.*'], 'merchandises.created_at');
     }
 
     private function byNormalIndex($request, $is_all)
     {
-        // payment modules sections
         $query = $this->merchandises;
         $query = $this->mchtCommonFilter($query, $request, '', $is_all);
         return $this->getIndexData($request, $query, 'id');
@@ -102,13 +86,12 @@ class MerchandiseController extends Controller
     {
         $full_parent = $parent != '' ? $parent."." : '';
         $search = $request->input('search', '');
-        $query = $query
-            ->where($full_parent.'brand_id', $request->user()->brand_id)
-            ->where($full_parent.'is_delete', false);
-        // merchandises sections
+
         $query = globalSalesFilter($query, $request, $parent);
         $query = globalAuthFilter($query, $request, $parent);
-        $query = $query->where(function ($query) use ($search, $full_parent) {
+        $query = $query
+                ->where($full_parent.'brand_id', $request->user()->brand_id)
+                ->where(function ($query) use ($search, $full_parent) {
             return $query->where('mcht_name', 'like', "%$search%")
                 ->orWhere($full_parent.'phone_num', 'like', "%$search%")
                 ->orWhere($full_parent.'nick_name', 'like', "%$search%");
@@ -141,11 +124,12 @@ class MerchandiseController extends Controller
             $data = $this->byPayModules($request, $is_all);
         else 
             $data = $this->byNormalIndex($request, $is_all);
-        // merchandises sections
+        // payment modules sections        
+        $mcht_ids = collect($data['content'])->pluck('id')->values()->unique()->toArray();
         $pay_modules = $this->payModules
             ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
-            ->whereIn('mcht_id', $this->getMchtIds(collect($data['content']), 'id'))
+            ->whereIn('mcht_id', $mcht_ids)
             ->get($this->pay_mod_cols);
         return $this->mappingPayModules($data, $pay_modules);    
 
