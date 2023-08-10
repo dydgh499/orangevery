@@ -102,7 +102,9 @@ class MerchandiseController extends Controller
             ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false);
 
-        $m_query = $this->merchandises;
+        $m_query = $this->merchandises
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false);
         if($cond_1 && $cond_2)
         {
             [$pay_modules, $mcht_ids] = merchandisePGFilter($p_query, $request);
