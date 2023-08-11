@@ -65,12 +65,13 @@ onMounted(() => {
             metas.value[3]['percentage'] = store.getPercentage((r.data.this_week_del * -1), r.data.total)
         }
     })
-    watchEffect(() => {    
+})
+
+watchEffect(() => {    
         store.setChartProcess()
         store.params.level = store.params.level
         store.params.settle_cycle = store.params.settle_cycle
     })
-})
 </script>
 <template>
     <div>

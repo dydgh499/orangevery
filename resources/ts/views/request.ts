@@ -117,9 +117,9 @@ export const useRequestStore = defineStore('requestStore', () => {
         }
     }
 
-    const get = async(url: string) => {
+    const get = async(url: string, params: any = {}) => {
         try {
-            return await axios.get(url)
+            return await axios.get(url, params)
         }
         catch (e: any) {
             snackbar.value.show(e.response.data.message, 'error')

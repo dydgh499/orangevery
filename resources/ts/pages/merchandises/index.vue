@@ -86,14 +86,6 @@ watchEffect(() => {
             </template>
             <template #headers>
                 <tr>
-                    <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
-                        class='list-square'>
-                        <span>
-                            {{ head.main_headers[index] }}
-                        </span>
-                    </th>
-                </tr>
-                <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                         <span>
                             {{ header.ko }}
@@ -103,53 +95,43 @@ watchEffect(() => {
             </template>
             <template #body>
                 <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
-                    <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                        <template v-if="head.getDepth(_header, 0) != 1">
-                            <td v-for="(__header, __key, __index) in _header" :key="__index"
-                                v-show="(__header?.visible as boolean)" class='list-square'>
-                                <span>
-                                    {{ item[_key][__key] }}
-                                </span>
-                            </td>
-                        </template>
-                        <template v-else>
-                            <td v-show="_header.visible" class='list-square'>
-                                <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
-                                    #{{ item[_key] }}
-                                </span>
-                                <span v-else-if="_key == `user_name`" class="edit-link" @click="store.edit(item['id'])">
-                                    {{ item[_key] }}
-                                </span>
-                                <span v-else-if="(_key as string).includes('_fee')">
-                                    <VChip>
-                                        {{ (item[_key] as number).toFixed(3) }} %
-                                    </VChip>
-                                </span>
-                                <span v-else-if="_key == 'mids'">
-                                    <VSelect style="min-width: 10em;" :value="defaultValue(item['mids'])"
-                                        :items="item['mids']" :menu-props="{ maxHeight: 400 }"/>
-                                </span>
-                                <span v-else-if="_key == 'tids'">
-                                    <VSelect style="min-width: 10em;" :value="defaultValue(item['tids'])"
-                                        :items="item['tids']" :menu-props="{ maxHeight: 400 }"/>
-                                </span>
-                                <span v-else-if="_key == 'module_types'">
-                                    <VSelect style="min-width: 10em;" :value="defaultValue(getModuleTypes(item['module_types']))"
-                                        :items="getModuleTypes(item['module_types'])" :menu-props="{ maxHeight: 400 }"/>
-                                </span>
-                                <span v-else-if="_key == 'enabled'">
-                                    <VChip :color="store.booleanTypeColor(!item[_key])">
-                                        {{ item[_key] ? 'ON' : 'OFF' }}
-                                    </VChip>
-                                </span>
-                                <span v-else-if="_key == 'extra_col'">
-                                    <UserExtraMenu :id="item['id']" :type="0"></UserExtraMenu>
-                                </span>
-                                <span v-else>
-                                    {{ item[_key] }}
-                                </span>
-                            </td>
-                        </template>
+                    <template v-for="(_header, _key, _index) in head.headers" :key="_index">                        
+                        <td v-show="_header.visible" class='list-square'>
+                            <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
+                                #{{ item[_key] }}
+                            </span>
+                            <span v-else-if="_key == `user_name`" class="edit-link" @click="store.edit(item['id'])">
+                                {{ item[_key] }}
+                            </span>
+                            <span v-else-if="(_key as string).includes('_fee')">
+                                <VChip>
+                                    {{ (item[_key] as number).toFixed(3) }} %
+                                </VChip>
+                            </span>
+                            <span v-else-if="_key == 'mids'">
+                                <VSelect style="min-width: 10em;" :value="defaultValue(item['mids'])"
+                                    :items="item['mids']" :menu-props="{ maxHeight: 400 }"/>
+                            </span>
+                            <span v-else-if="_key == 'tids'">
+                                <VSelect style="min-width: 10em;" :value="defaultValue(item['tids'])"
+                                    :items="item['tids']" :menu-props="{ maxHeight: 400 }"/>
+                            </span>
+                            <span v-else-if="_key == 'module_types'">
+                                <VSelect style="min-width: 10em;" :value="defaultValue(getModuleTypes(item['module_types']))"
+                                    :items="getModuleTypes(item['module_types'])" :menu-props="{ maxHeight: 400 }"/>
+                            </span>
+                            <span v-else-if="_key == 'enabled'">
+                                <VChip :color="store.booleanTypeColor(!item[_key])">
+                                    {{ item[_key] ? 'ON' : 'OFF' }}
+                                </VChip>
+                            </span>
+                            <span v-else-if="_key == 'extra_col'">
+                                <UserExtraMenu :id="item['id']" :type="0"></UserExtraMenu>
+                            </span>
+                            <span v-else>
+                                {{ item[_key] }}
+                            </span>
+                        </td>
                     </template>
                 </tr>
             </template>

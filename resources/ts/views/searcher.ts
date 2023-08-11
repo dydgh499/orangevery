@@ -1,12 +1,13 @@
+import { useRequestStore } from '@/views/request'
 import { Pagenation } from '@/views/types'
-import { axios, user_info } from '@axios'
+import { user_info } from '@axios'
 import { cloneDeep } from 'lodash'
 
+
 export function Searcher(path: string) {
-    const snackbar = <any>(inject('snackbar'))
-    const errorHandler = <any>(inject('$errorHandler'))
+    const { get } = useRequestStore()
     // -----------------------------
-    const items = ref<[]>([])
+    let items = ref(<[]>([]))
     const router = useRouter()
     const params = reactive<any>({page:1, page_size:10})
     const pagenation = reactive<Pagenation>({ total_count: 0, total_page: 1 })
@@ -22,15 +23,6 @@ export function Searcher(path: string) {
         chart_process.value = false
     }
 
-    const get = async (p: object) => {
-        try {
-            const r = await axios.get('/api/v1/manager/' + path, { params: p })
-            return r
-        } catch (e: any) {
-            snackbar.value.show(e.response.data.message, 'error')
-            return errorHandler(e)
-        }
-    }
     const create = () => {
         router.push('/' + path + '/create')
     }
@@ -38,57 +30,43 @@ export function Searcher(path: string) {
         if(user_info.value.level > 30)
             router.push('/' + path + '/edit/' + id)
     }
+    const getSearch = () => {
+        const search = (document.getElementById('search') as HTMLInputElement)
+        return search ? search.value : ''
+    }
     
     const getChartData = async() => {
         const p = cloneDeep(params)
-        const search = (document.getElementById('search') as HTMLInputElement)
-        const current_search = search ? search.value : ''
-        p.search = current_search
-        
-        try {
-            const r = await axios.get('/api/v1/manager/'+path+'/chart', { params: p })
-            chart_process.value = true
-            return r
-        } catch (e: any) {
-            snackbar.value.show(e.response.data.message, 'error')
-            return errorHandler(e)
-        }
+        p.search = getSearch()        
+        const r = await get('/api/v1/manager/'+path+'/chart', { params: p })
+        chart_process.value = true
+        return r
     }
 
     const getPercentage = (n:number, d:number) => {
-        if (d === 0)
-            return 0;
-          return Number(((n / d) * 100).toFixed(2))
+          return d === 0 ? 0 : Number(((n / d) * 100).toFixed(2))
     }
 
     const setTable = async() => {
-        const search = (document.getElementById('search') as HTMLInputElement)
-        const current_search = search ? search.value : ''
-        
-        if(before_search != current_search) {
-            setChartProcess()
-            before_search = current_search
-        }
-            
         const p = cloneDeep(params)
-        p.search = current_search
+        p.search = getSearch()        
+        if(before_search != p.search) {
+            setChartProcess()
+            before_search = p.search
+        }
         
-        const r = await get(p)
+        const r = await get('/api/v1/manager/'+path, { params: p })        
         if (r.status == 200) {
-            const data = r.data
-            let l_page = data.total / params.page_size
-            items.value = data.content
-            pagenation.total_count = data.total
+            let l_page = r.data.total / params.page_size
+            items.value = r.data.content
+            pagenation.total_count = r.data.total
             pagenation.total_page = parseInt(String(l_page > Math.floor(l_page) ? l_page + 1 : l_page))
         }
         return r.data.content
     }
     const getAllDataFormat = () => {
-        const p = cloneDeep(params)
-        const search = (document.getElementById('search') as HTMLInputElement)
-        const current_search = search ? search.value : ''
-
-        p.search = current_search
+        const p  = cloneDeep(params)  
+        p.search = getSearch()
         p.page_size = 99999999
         p.page = 1
         return p
@@ -120,8 +98,8 @@ export function Searcher(path: string) {
         return `총 ${pagenation.total_count}개 항목 중 ${firstIndex} ~ ${lastIndex}개 표시`
     })
     const getItems = computed(() => {
+        console.log(items.value)
         return items.value
-        //return await setTable()
     })
     return {
         setTable, getItems,

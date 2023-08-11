@@ -48,12 +48,13 @@ onMounted(() => {
                 totals.value.push(r.data)
         }
     })
-    watchEffect(() => {    
+})
+
+watchEffect(() => {    
         store.setChartProcess()
         store.params.level = store.params.level
         store.params.settle_cycle = store.params.settle_cycle
     })
-})
 </script>
 <template>
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :is_range_date="false">

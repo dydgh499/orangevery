@@ -35,23 +35,27 @@ const isSalesCol = (key: string) => {
     return sales_cols.find(obj => obj === key) ? true : false
 }
 
-watchEffect(async () => {
-    if (store.getChartProcess() === false) {
-        const r = await store.getChartData()
-        totals.value = []
-        if (r.data.amount != 0)
-            totals.value.push(r.data)
-    }
+onMounted(() => {
+    watchEffect(async () => {
+        if (store.getChartProcess() === false) {
+            const r = await store.getChartData()
+            totals.value = []
+            if (r.data.amount != 0)
+                totals.value.push(r.data)
+        }
+    })
 })
+
 watchEffect(() => {
-    store.setChartProcess()    
+    store.setChartProcess()
     store.params.mcht_settle_type = mcht_settle_type.value.id
 })
 </script>
 <template>
     <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="정산" :is_range_date="false">
         <template #filter>
-            <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true" :sales="true">
+            <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
+                :sales="true">
                 <template #extra_right>
                     <VCol cols="12" sm="3">
                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
@@ -128,7 +132,8 @@ watchEffect(() => {
                     </template>
                     <template v-else>
                         <td v-show="_header.visible" class='list-square'>
-                            <span v-if="_key === 'id'" class="edit-link" @click="router.push('/transactions/settle/merchandises/part/'+item[_key])">
+                            <span v-if="_key === 'id'" class="edit-link"
+                                @click="router.push('/transactions/settle/merchandises/part/' + item[_key])">
                                 #{{ item[_key] }}
                             </span>
                             <span v-else-if="isSalesCol(_key as string)" style="font-weight: bold;">
