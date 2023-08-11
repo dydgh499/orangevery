@@ -113,7 +113,7 @@ const all_levels = getAllLevels()
     <div>
         <BaseIndexView placeholder="MID, TID, 승인번호, 거래번호 검색" :metas="metas" :add="user_info.level >= 35" add_name="매출" :is_range_date="true">
             <template #filter>
-                <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="false" :terminal="true" :cus_filter="true"
+                <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">
                     <template #extra_left>
                         <VCol cols="12" sm="3">
@@ -209,7 +209,7 @@ const all_levels = getAllLevels()
                                         {{ (item[_key] * 100).toFixed(3) }} %
                                     </VChip>
                                 </span>
-                                <span v-else-if="_key == 'pay_cond_price'">
+                                <span v-else-if="_key == 'settle_type_price'">
                                     {{ item['settle_fee'] }}
                                 </span>
                                 <span v-else-if="_key == 'custom_id'">

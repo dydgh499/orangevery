@@ -5,7 +5,7 @@ import BaseIndexPGFilter from '@/layouts/lists/BaseIndexPGFilter.vue'
 interface Props {
     pg: boolean,
     ps: boolean,
-    pay_cond: boolean,
+    settle_type: boolean,
     terminal: boolean,
     cus_filter: boolean,
     sales: boolean,
@@ -28,7 +28,7 @@ const props = defineProps<Props>();
             <VDivider :vertical="$vuetify.display.mdAndUp" />
             <VCol cols="12" md="6">
                 <VCardText style="padding: 1em;">
-                    <BaseIndexPGFilter :pg="props.pg" :ps="props.ps" :pay_cond="props.pay_cond" :terminal="props.terminal"
+                    <BaseIndexPGFilter :pg="props.pg" :ps="props.ps" :settle_type="props.settle_type" :terminal="props.terminal"
                         :cus_filter="props.cus_filter">
                         <template #extra_right>
                             <slot name="extra_right"></slot>

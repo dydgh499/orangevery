@@ -5,7 +5,7 @@ import { user_info } from '@axios'
 interface Props {
     pg: boolean,
     ps: boolean,
-    pay_cond: boolean,
+    settle_type: boolean,
     terminal: boolean,
     cus_filter: boolean,
 }
@@ -52,7 +52,7 @@ watchEffect(() => {
                 :items="[{ id: null, name: '전체' }].concat(filterPgs)" label="구간 선택" item-title="name" item-value="id"
                 return-object id="ps-filter" :eager="true"  />
         </VCol>
-        <VCol cols="12" sm="3" v-if="props.pay_cond">
+        <VCol cols="12" sm="3" v-if="props.settle_type">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="settle_type"
                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산일 선택" item-title="name" item-value="id"
                 return-object id="settle_types-filter" :eager="true" />

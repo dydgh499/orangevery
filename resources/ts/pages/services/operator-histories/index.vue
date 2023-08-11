@@ -15,7 +15,7 @@ provide('exporter', exporter)
     <div>
         <BaseIndexView placeholder="운영자명, 적용대상 검색" :metas="[]" :add="false" add_name="" :is_range_date="true">
             <template #filter>
-                <BaseIndexFilterCard :pg="false" :ps="false" :pay_cond="false" :terminal="false" :cus_filter="false"
+                <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                     :sales="false">
                 </BaseIndexFilterCard>
             </template>

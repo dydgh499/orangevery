@@ -73,7 +73,7 @@ watchEffect(() => {
         <BaseIndexView placeholder="가맹점 상호, 휴대폰번호, 대표자명 검색" :metas="metas" :add="user_info.level >= 35" add_name="가맹점"
             :is_range_date="null">
             <template #filter>
-                <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true"
+                <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true"
                     :sales="true">
                     <template #extra_right>
                         <VCol cols="12" sm="3">

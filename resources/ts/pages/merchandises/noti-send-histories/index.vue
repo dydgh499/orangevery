@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/merchandises/noti-send-histories/useStore'
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import ExtraMenu from '@/views/merchandises/noti-send-histories/ExtraMenu.vue'
 import NotiDetailDialog from '@/layouts/dialogs/NotiDetailDialog.vue'
+import { module_types } from '@/views/merchandises/pay-modules/useStore'
 
 const { store, head, exporter } = useSearchStore()
 const notiDetail = ref()
@@ -24,8 +26,18 @@ const httpCodeColor = (http_code: number) => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="발송 URL 검색" :metas="[]" :add="false" add_name="가맹점" :is_range_date="true">
+        <BaseIndexView placeholder="MID, TID, 승인번호 검색" :metas="[]" :add="false" add_name="가맹점" :is_range_date="true">
             <template #filter>
+                <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
+                    :sales="true">
+                    <template #extra_right>
+                        <VCol cols="12" sm="3">
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"
+                                :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 선택" item-title="title"
+                                item-value="id" />
+                        </VCol>
+                    </template>
+                </BaseIndexFilterCard>
             </template>
             <template #headers>
                 <tr>

@@ -22,7 +22,7 @@ watchEffect(() => {
 <template>
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :is_range_date="true">
         <template #filter>
-            <BaseIndexFilterCard :pg="false" :ps="false" :pay_cond="false" :terminal="false" :cus_filter="false"
+            <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                 :sales="false">
                 <template #extra_left>
                     <VCol cols="12" sm="3">

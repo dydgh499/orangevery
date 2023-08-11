@@ -24,12 +24,26 @@ class NotiSendHistoryController extends Controller
     public function index(IndexRequest $request)
     {
         $search = $request->input('search', '');
+        $cols = [
+            'noti_send_histories.*', 
+            'transactions.appr_num', 
+            'transactions.mid', 
+            'transactions.tid'
+        ];
         $query  = $this->noti_send_histories
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
-            ->where('send_url', 'like', "%$search%");
+            ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')            
+            ->where('noti_send_histories.brand_id', $request->user()->brand_id)
+            ->where('noti_send_histories.is_delete', false);
+        $query = globalPGFilter($query, $request, 'transactions');
+        $query = globalSalesFilter($query, $request, 'transactions');
+        $query = globalAuthFilter($query, $request, 'transactions');
+        $query = $query->where(function($query) use ($search) {
+            return $query->where('transactions.appr_num', 'like', "%$search%")
+                ->orWhere('transactions.mid', 'like', "%$search%")
+                ->orWhere('transactions.tid', 'like', "%$search%");
+        });
 
-        $data = $this->getIndexData($request, $query);
+        $data = $this->getIndexData($request, $query, 'noti_send_histories.id', $cols, 'noti_send_histories.created_at');
         return $this->response(0, $data);
     }
 

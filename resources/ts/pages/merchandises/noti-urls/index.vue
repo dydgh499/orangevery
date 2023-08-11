@@ -16,7 +16,7 @@ provide('exporter', exporter)
         <BaseIndexView placeholder="발송 URL 검색" :metas="[]" :add="user_info.level >= 35" add_name="노티"
             :is_range_date="null">
             <template #filter>
-                <BaseIndexFilterCard :pg="false" :ps="false" :pay_cond="false" :terminal="false" :cus_filter="true"
+                <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="true"
                     :sales="true">
                 </BaseIndexFilterCard>
             </template>

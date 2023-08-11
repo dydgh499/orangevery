@@ -9,7 +9,7 @@ export const history_types = <Options[]>([
     { id: 6, title: "예약삭제" }, { id: 7, title: "이력삭제" },
 ])
 
-export const useSearchStore = defineStore('brandSearchStore', () => {
+export const useSearchStore = defineStore('operatorHistorySearchStore', () => {
     const store = Searcher('services/operator-histories')
     const head = Header('services/operator-histories', '운영자 활동이력')
     const headers: Record<string, string | object> = {

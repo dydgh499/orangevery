@@ -8,6 +8,9 @@ export const useSearchStore = defineStore('notiSendHistorySearchStore', () => {
         const headers: Record<string, string> = {
             'id': 'NO.',
             'trans_id': '거래 고유번호',
+            'mid': 'MID',
+            'tid': 'TID',
+            'appr_num': '승인번호',
             'send_url': '발송 URL',
             'http_code': '응답코드',
             'message': '응답내용',

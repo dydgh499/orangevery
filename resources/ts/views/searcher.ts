@@ -41,7 +41,10 @@ export function Searcher(path: string) {
     
     const getChartData = async() => {
         const p = cloneDeep(params)
-        p.search = (document.getElementById('search') as HTMLInputElement).value
+        const search = (document.getElementById('search') as HTMLInputElement)
+        const current_search = search ? search.value : ''
+        p.search = current_search
+        
         try {
             const r = await axios.get('/api/v1/manager/'+path+'/chart', { params: p })
             chart_process.value = true
@@ -59,7 +62,9 @@ export function Searcher(path: string) {
     }
 
     const setTable = async() => {
-        const current_search = (document.getElementById('search') as HTMLInputElement).value
+        const search = (document.getElementById('search') as HTMLInputElement)
+        const current_search = search ? search.value : ''
+        
         if(before_search != current_search) {
             setChartProcess()
             before_search = current_search
@@ -80,7 +85,10 @@ export function Searcher(path: string) {
     }
     const getAllDataFormat = () => {
         const p = cloneDeep(params)
-        p.search = (document.getElementById('search') as HTMLInputElement).value
+        const search = (document.getElementById('search') as HTMLInputElement)
+        const current_search = search ? search.value : ''
+
+        p.search = current_search
         p.page_size = 99999999
         p.page = 1
         return p
@@ -113,6 +121,7 @@ export function Searcher(path: string) {
     })
     const getItems = computed(() => {
         return items.value
+        //return await setTable()
     })
     return {
         setTable, getItems,

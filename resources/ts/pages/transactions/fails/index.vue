@@ -15,7 +15,7 @@ provide('exporter', exporter)
 <template>
     <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="가맹점" :is_range_date="true">
         <template #filter>
-            <BaseIndexFilterCard :pg="true" :ps="true" :pay_cond="true" :terminal="true" :cus_filter="true" :sales="true" />
+            <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true" :sales="true" />
         </template>
         <template #headers>
             <tr>

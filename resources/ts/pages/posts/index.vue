@@ -15,7 +15,7 @@ const router = useRouter()
 <template>
     <BaseIndexView placeholder="게시글 검색" :metas="[]" :add="true" add_name="게시글" :is_range_date="null">
         <template #filter>
-            <BaseIndexFilterCard :pg="false" :ps="false" :pay_cond="false" :terminal="false" :cus_filter="false"
+            <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                 :sales="false">
                 <template #extra_left>
                     <VCol cols="12" sm="3">

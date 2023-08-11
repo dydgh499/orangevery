@@ -76,7 +76,7 @@ onMounted(() => {
     <div>
         <BaseIndexView placeholder="영업점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="영업점" :is_range_date="null">
             <template #filter>
-                <BaseIndexFilterCard :pg="false" :ps="false" :pay_cond="false" :terminal="false" :cus_filter="false"
+                <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                     :sales="false">
                     <template #extra_left>
                         <VCol cols="12" sm="3">
