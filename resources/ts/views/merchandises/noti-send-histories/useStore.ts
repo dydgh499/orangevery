@@ -11,6 +11,7 @@ export const useSearchStore = defineStore('notiSendHistorySearchStore', () => {
             'mid': 'MID',
             'tid': 'TID',
             'appr_num': '승인번호',
+            'is_cancel': '취소여부',
             'send_url': '발송 URL',
             'http_code': '응답코드',
             'message': '응답내용',

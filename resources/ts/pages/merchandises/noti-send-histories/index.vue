@@ -75,6 +75,11 @@ const httpCodeColor = (http_code: number) => {
                                 <span v-else-if="_key == `trans_id`" class="edit-link">
                                     #{{ item[_key] }}
                                 </span>
+                                <span v-else-if="_key == `is_cancel`" class="edit-link">
+                                    <VChip :color="store.booleanTypeColor(item[_key])">
+                                        {{ item[_key] ? '취소' : '승인' }}
+                                    </VChip>
+                                </span>                                
                                 <span v-else-if="_key == `http_code`">
                                     <VChip :color="httpCodeColor(item[_key])">
                                         {{ item[_key] }}
