@@ -75,7 +75,12 @@ const httpCodeColor = (http_code: number) => {
                                 <span v-else-if="_key == `trans_id`" class="edit-link">
                                     #{{ item[_key] }}
                                 </span>
-                                <span v-else-if="_key == `is_cancel`" class="edit-link">
+                                <span v-else-if="_key == 'module_type'">
+                                    <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
+                                        {{ module_types.find(module_type => module_type['id'] === item[_key])?.title }}
+                                    </VChip>
+                                </span>
+                                <span v-else-if="_key == `is_cancel`">
                                     <VChip :color="store.booleanTypeColor(item[_key])">
                                         {{ item[_key] ? '취소' : '승인' }}
                                     </VChip>

@@ -30,6 +30,7 @@ class NotiSendHistoryController extends Controller
             'transactions.mid', 
             'transactions.tid',
             'transactions.is_cancel',
+            'transactions.module_type',
         ];
         $query  = $this->noti_send_histories
             ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')            
