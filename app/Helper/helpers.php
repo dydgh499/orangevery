@@ -354,5 +354,6 @@
 
     function zeroCheck($request, $key)
     {
-        return ($request->input($key, 0) || $request->input($key, '') == 0);
+        // 0 허용, 빈값, null 안됨
+        return ($request->input($key, 0) || $request->input($key, '') == 0) && !is_null($request->input($key, null));
     }
