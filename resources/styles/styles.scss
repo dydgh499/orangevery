@@ -41,10 +41,10 @@
 }
 
 .check-label {
-  display: flex;
+  display: flex !important;
 }
 
 .check-label > .v-input__control > .v-selection-control > .v-label {
-  font-size: 0.85rem;
-  font-weight: bold;
+  font-size: 0.85rem !important;
+  font-weight: bold !important;
 }
