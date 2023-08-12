@@ -66,7 +66,7 @@ watchEffect(() => {
     <BaseIndexView placeholder="MID, TID, 가맹점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="결제모듈" :is_range_date="null">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true" :sales="true">                
-                <template #extra_right>
+                <template #pg_extra_field>
                     <VCol cols="12" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type" :items="[{ id: null, title: '전체' }].concat(module_types)"
                              label="모듈타입 선택" item-title="title" item-value="id" />

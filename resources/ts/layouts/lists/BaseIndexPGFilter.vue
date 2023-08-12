@@ -36,10 +36,6 @@ watchEffect(() => {
     store.params.custom_id = custom.value.id
     store.params.settle_type = settle_type.value.id
 })
-const test = ref()
-watchEffect(() => {
-    console.log(test.value)
-})
 </script>
 <template>
     <VRow>
@@ -67,7 +63,7 @@ watchEffect(() => {
                 :items="[{ id: null, name: '전체' }].concat(cus_filters)" label="커스텀 필터" item-title="name" item-value="id"
                 return-object id="custom-filter" :eager="true" />
         </VCol>
-        <slot name="extra_right"></slot>
+        <slot name="pg_extra_field"></slot>
         <VCol cols="12" sm="3">
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
                 :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" :eager="true" />

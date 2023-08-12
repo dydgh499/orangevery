@@ -39,7 +39,7 @@ watchEffect(() => {
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true" :sales="true"
                 v-if="getUserLevel() > 10">
-                <template #extra_right>
+                <template #pg_extra_field>
                     <VCol cols="12" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.ship_out_stat"
                             :items="[{ id: null, title: '전체' }].concat(shipOutStats)" label="출고타입 선택" item-title="title"

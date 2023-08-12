@@ -98,7 +98,6 @@ export function Searcher(path: string) {
         return `총 ${pagenation.total_count}개 항목 중 ${firstIndex} ~ ${lastIndex}개 표시`
     })
     const getItems = computed(() => {
-        console.log(items.value)
         return items.value
     })
     return {

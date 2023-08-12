@@ -61,6 +61,6 @@ watchEffect(() => {
                 :items="[{ id: null, sales_name: '전체' }].concat(sales[0].value)" :label="levels.sales0_name + ' 선택'"
                 item-title="sales_name" item-value="id" return-object />
         </VCol>
-        <slot name="extra_left"></slot>
+        <slot name="sales_extra_field"></slot>
     </VRow>
 </template>

@@ -115,13 +115,13 @@ watchEffect(() => {
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">
-                    <template #extra_left>
+                    <template #sales_extra_field>
                         <VCol cols="12" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="getAllLevels()"
                                 :label="`등급 선택`" item-title="title" item-value="id" create />
                         </VCol>
                     </template>
-                    <template #extra_right>
+                    <template #pg_extra_field>
                         <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 선택" item-title="name"

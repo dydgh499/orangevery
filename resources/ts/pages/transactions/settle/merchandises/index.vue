@@ -34,6 +34,9 @@ const isSalesCol = (key: string) => {
     const sales_cols = ['count', 'amount', 'trx_amount', 'settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
     return sales_cols.find(obj => obj === key) ? true : false
 }
+const movePartSettle = (id: number) => {    
+    router.push('/transactions/settle/merchandises/part/' + id + '?dt=' + store.params.dt)
+}
 
 onMounted(() => {
     watchEffect(async () => {
@@ -56,7 +59,7 @@ watchEffect(() => {
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                 :sales="true">
-                <template #extra_right>
+                <template #pg_extra_field>
                     <VCol cols="12" sm="3">
                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
                             :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 선택" item-title="name"
@@ -79,6 +82,11 @@ watchEffect(() => {
                     <template v-if="key == 'deduction.input'">
                         <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
                             :content="'차감이 아닌 추가금 설정을 하시러면 금액 앞에 -(마이너스 기호)를 입력 후 차감버튼을 클릭해주세요.'">
+                        </BaseQuestionTooltip>
+                    </template>                    
+                    <template v-else-if="key == 'id'">
+                        <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
+                            :content="'하단 가맹점 고유번호를 클릭하여 부분정산 페이지로 이동할 수 있습니다.'">
                         </BaseQuestionTooltip>
                     </template>
                     <template v-else>
@@ -132,8 +140,7 @@ watchEffect(() => {
                     </template>
                     <template v-else>
                         <td v-show="_header.visible" class='list-square'>
-                            <span v-if="_key === 'id'" class="edit-link"
-                                @click="router.push('/transactions/settle/merchandises/part/' + item[_key])">
+                            <span v-if="_key === 'id'" class="edit-link" @click="movePartSettle(item[_key])">
                                 #{{ item[_key] }}
                             </span>
                             <span v-else-if="isSalesCol(_key as string)" style="font-weight: bold;">

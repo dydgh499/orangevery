@@ -13,6 +13,7 @@ const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
 const totals = ref(<any[]>([]))
+const router = useRouter()
 
 provide('store', store)
 provide('head', head)
@@ -39,28 +40,33 @@ const isSalesCol = (key: string) => {
     return false
 }
 
+const movePartSettle = (id: number) => {    
+    router.push('/transactions/settle/salesforces/part/'+id+'?dt='+store.params.dt+'&level='+store.params.level)
+}
+
 onMounted(() => {
-    watchEffect(async() => {
-        if(store.getChartProcess() === false) {
-            const r = await store.getChartData()            
+    watchEffect(async () => {
+        if (store.getChartProcess() === false) {
+            const r = await store.getChartData()
             totals.value = []
-            if(r.data.amount != 0)
+            if (r.data.amount != 0)
                 totals.value.push(r.data)
         }
     })
 })
 
-watchEffect(() => {    
-        store.setChartProcess()
-        store.params.level = store.params.level
-        store.params.settle_cycle = store.params.settle_cycle
-    })
+watchEffect(() => {
+    store.setChartProcess()
+    store.params.level = store.params.level
+    store.params.settle_cycle = store.params.settle_cycle
+})
 </script>
 <template>
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :is_range_date="false">
         <template #filter>
-            <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true" :sales="true">
-                <template #extra_left>
+            <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true"
+                :sales="true">
+                <template #sales_extra_field>
                     <VCol cols="12" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="salesLevels()"
                             :label="`전체`" item-title="title" item-value="id" create />
@@ -87,6 +93,11 @@ watchEffect(() => {
                     <template v-if="key == 'deduction.input'">
                         <BaseQuestionTooltip :location="'top'" :text="header.ko"
                             :content="'차감이 아닌 추가금 설정을 하시러면 금액 앞에 -(마이너스 기호)를 입력 후 차감버튼을 클릭해주세요.'">
+                        </BaseQuestionTooltip>
+                    </template>
+                    <template v-else-if="key == 'id'">
+                        <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
+                            :content="'하단 영업점 고유번호를 클릭하여 부분정산 페이지로 이동할 수 있습니다.'">
                         </BaseQuestionTooltip>
                     </template>
                     <template v-else>
@@ -140,7 +151,7 @@ watchEffect(() => {
                     </template>
                     <template v-else>
                         <td v-show="_header.visible" class='list-square'>
-                            <span v-if="_key === 'id'" class="edit-link">
+                            <span v-if="_key === 'id'" class="edit-link" @click="movePartSettle(item[_key])">
                                 #{{ item[_key] }}
                             </span>
                             <span v-else-if="_key == 'level'">

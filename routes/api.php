@@ -98,21 +98,25 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::get('merchandises', [MchtSettleController::class, 'index']);
                 Route::get('merchandises/chart', [MchtSettleController::class, 'chart']);
                 Route::post('merchandises/deduct', [MchtSettleController::class, 'deduct']);
-                Route::post('merchandises/{id}', [MchtSettleController::class, 'part']);
-                
+                Route::get('merchandises/part', [MchtSettleController::class, 'part']);
+                Route::get('merchandises/part/chart', [MchtSettleController::class, 'partChart']);
+
                 Route::get('salesforces', [SalesSettleController::class, 'index']);
                 Route::get('salesforces/chart', [SalesSettleController::class, 'chart']);
                 Route::post('salesforces/deduct', [SalesSettleController::class, 'deduct']);
-                Route::post('salesforces/{id}', [SalesSettleController::class, 'part']);
+                Route::get('salesforces/part', [SalesSettleController::class, 'part']);
+                Route::get('salesforces/part/chart', [SalesSettleController::class, 'partChart']);
             });
             Route::prefix('settle-histories')->group(function() {
                 Route::get('merchandises', [SettleHistoryController::class, 'indexMerchandise']);
                 Route::post('merchandises', [SettleHistoryController::class, 'createMerchandise']);
+                Route::post('merchandises/part', [SettleHistoryController::class, 'createMerchandisePart']);
                 Route::delete('merchandises/{id}', [SettleHistoryController::class, 'deleteMerchandise']);
                 Route::post('merchandises/{id}/deposit', [SettleHistoryController::class, 'depositMerchandise']);
 
                 Route::get('salesforces', [SettleHistoryController::class, 'indexSalesforce']);
                 Route::post('salesforces', [SettleHistoryController::class, 'createSalesforce']);
+                Route::post('salesforces/part', [SettleHistoryController::class, 'createSalesforcePart']);
                 Route::delete('salesforces/{id}', [SettleHistoryController::class, 'deleteSalesforce']);
                 Route::post('salesforces/{id}/deposit', [SettleHistoryController::class, 'depositSalesforce']);    
             });

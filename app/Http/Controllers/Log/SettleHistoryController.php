@@ -13,38 +13,20 @@ use Illuminate\Http\Request;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\Settle\SettleHistoryTrait;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Log\CreateSettleHistoryRequest;
 
 
 class SettleHistoryController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, SettleHistoryTrait;
     protected $settle_mcht_hist, $settle_sales_hist, $add_cols;
     
     public function __construct(SettleHistoryMerchandise $settle_mcht_hist, SettleHistorySalesforce $settle_sales_hist)
     {
         $this->settle_mcht_hist = $settle_mcht_hist;
         $this->settle_sales_hist = $settle_sales_hist;
-    }
-    
-    private function SetTransSettle($request, $target_id, $target_settle_id, $resource_id)
-    {
-        $query = Transaction::where('brand_id', $request->user()->brand_id)
-            ->where($target_id, $request->id)
-            ->whereNull($target_settle_id)
-            ->whereRaw("trx_dt < DATE_SUB('".$request->dt."', INTERVAL(mcht_settle_type) DAY)");
-        $query = globalPGFilter($query, $request);
-        return $query->update([$target_settle_id => $resource_id]);
-    }
-
-    
-    private function SetNullTransSettle($request, $target_id, $target_settle_id, $user_id)
-    {
-        return Transaction::where('brand_id', $request->user()->brand_id)
-            ->where($target_id, $user_id)
-            ->where($target_settle_id, $request->id)
-            ->update([$target_settle_id => null]);
     }
 
     public function indexMerchandise(IndexRequest $request)
@@ -60,7 +42,7 @@ class SettleHistoryController extends Controller
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
 
-        $data = $this->getIndexData($request, $query, 'settle_histories_merchandises.id', $cols, 'settle_histories_merchandises.settle_dt');
+        $data = $this->getIndexData($request, $query, 'settle_histories_merchandises.id', $cols, 'settle_histories_merchandises.created_at');
         return $this->response(0, $data);
     }
 
@@ -71,115 +53,78 @@ class SettleHistoryController extends Controller
         $query  = $this->settle_sales_hist
                 ->join('salesforces', 'settle_histories_salesforces.sales_id', 'salesforces.id')
                 ->where('settle_histories_salesforces.brand_id', $request->user()->brand_id)
+                ->where('settle_histories_salesforces.level', $request->level)
                 ->where('settle_histories_salesforces.is_delete', false)
                 ->where('salesforces.user_name', 'like', "%$search%");
 
         if(isSalesforce($request) && $request->level == $request->user()->level)
             $query = $query->where('salesforces.id', $request->user()->id);
 
-        $data = $this->getIndexData($request, $query, 'settle_histories_salesforces.id', $cols, 'settle_histories_salesforces.settle_dt');
+        $data = $this->getIndexData($request, $query, 'settle_histories_salesforces.id', $cols, 'settle_histories_salesforces.created_at');
         return $this->response(0, $data);
     }
 
     public function createMerchandise(CreateSettleHistoryRequest $request)
     {
         return DB::transaction(function () use($request) {
-            $data = $request->data('mcht_id');
-            $data['settle_fee'] = $request->settle_fee;
+            $query = Transaction::where('mcht_id', $request->id);
+            $res = $this->createMerchandiseCommon($request, $query);
+            return $this->response($res ? 1 : 990);    
+        });
+    }
 
-            $c_res = $this->settle_mcht_hist->create($data);
-            $u_res = $this->SetTransSettle($request, 'mcht_id', 'mcht_settle_id', $c_res->id);            
-            return $this->response($c_res && $u_res ? 1 : 990);    
+    public function createMerchandisePart(CreateSettleHistoryRequest $request)
+    {
+        return DB::transaction(function () use($request) {
+            $query = Transaction::whereIn('id', $request->selected);
+            $res = $this->createMerchandiseCommon($request, $query);
+            return $this->response($res ? 1 : 990);    
         });
     }
 
     public function createSalesforce(CreateSettleHistoryRequest $request)
     {
         return DB::transaction(function () use($request) {
-            $idx = globalLevelByIndex($request->level);
-            $target_id =  'sales'.$idx.'_id';
-            $target_settle_id = 'sales'.$idx.'_settle_id';
-
-            $data = $request->data('sales_id');
-            $data['level'] = $request->level;
-
-            $c_res = $this->settle_sales_hist->create($data);
-            $u_res = $this->SetTransSettle($request, $target_id, $target_settle_id, $c_res->id);
-            $s_res = Salesforce::where('id', $request->id)->update(['last_settle_dt' => $request->dt]);
-            return $this->response($c_res && $u_res && $s_res ? 1 : 990);
+            [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
+            $query = Transaction::where($target_id, $request->id);
+            return $this->createSalesforceCommon($request, $query, $target_id, $target_settle_id);
         });
     }
+
+    public function createSalesforcePart(CreateSettleHistoryRequest $request)
+    {
+        return DB::transaction(function () use($request) {
+            [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
+            $query = Transaction::whereIn('id', $request->selected);
+            return $this->createSalesforceCommon($request, $query, $target_id, $target_settle_id);
+        });
+    }
+
 
     public function deleteMerchandise(Request $request, $id)
     {
         return DB::transaction(function () use($request, $id) {
-            $query = $this->settle_mcht_hist->where('id', $id);
-            $hist  = $query->first();
-            if($hist)
-            {
-                $request = $request->merge([
-                    'id' => $id,
-                ]);
-                $u_res = $this->SetNullTransSettle($request, 'mcht_id', 'mcht_settle_id', $hist->mcht_id);
-                $d_res = $query->update(['is_delete' => true]);
-                return $this->response($d_res ? 1 : 990);        
-            }
-            else
-                return $this->response(1000);
+            $res = $this->deleteMchtforceCommon( $request, $id, 'mcht_id', 'mcht_settle_id', 'mcht_id');
+            return $this->response($res ? 1 : 1000);
         });
     }
 
     public function deleteSalesforce(Request $request, $id)
     {
         return DB::transaction(function () use($request, $id) {
-            $query = $this->settle_sales_hist->where('id', $id);
-            $hist  = $query->first();
-            if($hist)
-            {
-                $idx = globalLevelByIndex($hist->level);
-                $target_id =  'sales'.$idx.'_id';
-                $target_settle_id =  'sales'.$idx.'_settle_id';
-
-                $request = $request->merge([
-                    'id' => $id,
-                ]);
-
-                $u_res = $this->SetNullTransSettle($request, $target_id, $target_settle_id, $hist->sales_id);
-                $d_res = $query->update(['is_delete' => true]);
-                return $this->response($d_res ? 1 : 990);    
-            }
-            else
-                return $this->response(1000);
+            [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
+            $res = $this->deleteSalesforceCommon($request, $id, $target_id, $target_settle_id, 'sales_id');
+            return $this->response($res ? 1 : 1000);
         });
     }
-
+    
     public function depositMerchandise(Request $request, $id)
     {
-        $query = $this->settle_mcht_hist->where('id', $id);
-        $hist = $query->first();
-        if($hist)
-        {
-            $deposit_dt     = $hist->deposit_status ? null : date('Y-m-d');
-            $deposit_status = !$hist->deposit_status;
-            $res = $query->update(['deposit_dt'=>$deposit_dt, 'deposit_status'=>$deposit_status]);
-            return $this->response($res ? 1 : 990);    
-        }
-        else
-            return $this->response(1000);
+        return $this->deposit($this->settle_mcht_hist, $id);
     }
 
     public function depositSalesforce(Request $request, $id)
     {
-        $query = $this->settle_sales_hist->where('id', $id);
-        $hist = $query->first();
-        if($hist)
-        {
-            $deposit_dt     = $hist->deposit_status ? null : date('Y-m-d');
-            $deposit_status = !$hist->deposit_status;
-            $res = $query->update(['deposit_dt'=>$deposit_dt, 'deposit_status'=>$deposit_status]);
-            return $this->response($res ? 1 : 990);    
-        }
-        else
-            return $this->response(1000);
+        return $this->deposit($this->settle_sales_hist, $id);
     }
 }

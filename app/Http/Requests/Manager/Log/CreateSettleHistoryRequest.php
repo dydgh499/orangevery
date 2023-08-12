@@ -40,12 +40,10 @@ class CreateSettleHistoryRequest extends FormRequest
     {
         $sub = [
             'id'        => 'required|integer',
-            /*
             'acct_name'   => 'required', 
             'acct_num'  => 'required', 
             'acct_bank_name' => 'required', 
             'acct_bank_code' => 'required', 
-            */
             'total_amount' => 'required|integer',
             'cxl_amount' => 'required|integer', 
             'appr_amount' => 'required|integer', 

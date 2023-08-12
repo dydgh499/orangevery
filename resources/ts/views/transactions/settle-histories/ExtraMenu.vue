@@ -12,20 +12,21 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
 const { printer } = useSearchStore()
+
 const store = <any>(inject('store'))
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 
-const commonRequest = async (page: string, method: string) => {
+const commonRequest = async (page: string, method: string, params={}) => {
     try {
         const type = props.is_mcht ? 'merchandises' : 'salesforces'
         const url = '/api/v1/manager/transactions/settle-histories/' + type + '/' + page
         const res = await axios({
             url: url,
-            method: method
+            method: method,
+            params: params,
         })
         snackbar.value.show('성공하였습니다.', 'success')
         store.setTable()
@@ -45,7 +46,7 @@ const deposit = async () => {
 
 const cancel = async () => {
     if (await alert.value.show('정말 정산취소 하시겠습니까?')) {
-        commonRequest(props.item.id.toString(), 'delete')
+        commonRequest(props.item.id.toString(), 'delete', {level: props.item.level})
     }
 }
 const download = async () => {

@@ -52,9 +52,9 @@ trait SettleTrait
             ->whereIn('id', $ids);
     }
 
-    private function getExistTransUserIds($date, $col)
+    private function getExistTransUserIds($date, $col, $target)
     {
-        return Transaction::settleFilter()
+        return Transaction::settleFilter($target)
             ->settleTransaction($date)
             ->distinct()
             ->get([$col])

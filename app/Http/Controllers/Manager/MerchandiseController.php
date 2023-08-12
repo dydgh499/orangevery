@@ -17,6 +17,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Enums\HistoryType;
 
+
+use App\Http\Controllers\Log\FeeChangeHistoryController;
+use App\Models\Log\MchtFeeChangeHistory;
+use App\Models\Log\SfFeeChangeHistory;
+
 /**
  * @group Merchandise API
  *

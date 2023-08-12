@@ -17,7 +17,7 @@ const router = useRouter()
         <template #filter>
             <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                 :sales="false">
-                <template #extra_left>
+                <template #sales_extra_field>
                     <VCol cols="12" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.type" :items="[{ id: null, title: '전체' }].concat(types)"
                             prepend-inner-icon="fxemoji-notepage" label="게시글 타입" item-title="title" item-value="id" />

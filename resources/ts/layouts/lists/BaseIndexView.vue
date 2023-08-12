@@ -36,6 +36,9 @@ onMounted(() => {
                 <VCard>
                     <BaseIndexFilter :placeholder="props.placeholder" :add="props.add" :add_name="props.add_name"
                         :is_range_date="props.is_range_date">
+                        <template #index_extra_field>
+                            <slot name="index_extra_field"></slot>
+                        </template>
                     </BaseIndexFilter>
                     <VDivider />
                     <VTable class="text-no-wrap">

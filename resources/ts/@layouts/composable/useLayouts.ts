@@ -30,7 +30,6 @@ export const useLayouts = () => {
 
   const footerType = computed({
     get() {
-        console.log(config.footer.type.value)
       return config.footer.type.value ?? 'hidden'
     },
     set(value: typeof config.footer.type.value) {

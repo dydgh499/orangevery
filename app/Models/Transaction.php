@@ -28,7 +28,12 @@ class Transaction extends Model
 
     public function scopeSettleTransaction($query, $date)
     {
-        return $query->where(function ($query) use ($date) {   // 승인이면서 D+1 적용
+        $query = globalPGFilter($query, request());
+        $query = globalSalesFilter($query, request());
+        $query = globalAuthFilter($query, request());
+        return $query
+            ->where('is_delete', false)
+            ->where(function ($query) use ($date) {   // 승인이면서 D+1 적용
                 $query->whereRaw("trx_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)")
                     ->where('is_cancel', false);
             })->orWhere(function ($query) use ($date) {     // 취소이면서 D+1 적용
@@ -37,10 +42,15 @@ class Transaction extends Model
             });
     }
 
-    public function scopeSettleFilter($query)
+    public function scopeSettleFilter($query, $target)
     {
-        $query = globalPGFilter($query, request());
-        return $query->whereNull('mcht_settle_id')
+        return $query->whereNull($target)
+            ->where('brand_id', request()->user()->brand_id);
+    }
+
+    public function scopeNullSettleFilter($query, $target, $id)
+    {
+        return $query->where($target, $id)
             ->where('brand_id', request()->user()->brand_id);
     }
 

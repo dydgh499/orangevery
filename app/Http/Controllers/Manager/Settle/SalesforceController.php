@@ -34,9 +34,11 @@ class SalesforceController extends Controller
         $search = $request->input('search', '');
         $level  = $request->level;
         $date   = $request->dt;
-
+        
         $idx = globalLevelByIndex($level);
-        $sales_ids = $this->getExistTransUserIds($date, 'sales'.$idx.'_id');
+        $key = 'sales'.$idx;
+        
+        $sales_ids = $this->getExistTransUserIds($date, $key.'_id', $key.'_settle_id');
         $query = $this->getDefaultQuery($this->salesforces, $request, $sales_ids)
             ->where('sales_name', 'like', "%$search%")
             ->where('level', $level);
@@ -121,6 +123,63 @@ class SalesforceController extends Controller
 
     public function part(Request $request)
     {
+        $idx = globalLevelByIndex($request->level);
+        $key = 'sales'.$idx;
 
+        $query = Transaction::where($key.'_id', $request->id)
+            ->settleFilter($key."_settle_id")
+            ->settleTransaction(request()->dt)
+            ->with(['mcht']);
+
+        $query = globalPGFilter($query, $request);
+        $query = globalSalesFilter($query, $request);
+        $query = globalAuthFilter($query, $request);
+
+        $data = $this->getIndexData($request, $query);
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
+
+        foreach($data['content'] as $content) 
+        {
+            $content->mcht_name = $content->mcht['mcht_name'];
+            $content->append(['total_trx_amount']);
+            $content->makeHidden(['mcht']);
+        }
+        return $this->response(0, $data);
+    }
+
+    public function partChart(Request $request)
+    {
+        $request = $request->merge([
+            'page' => 1,
+            'page_size' => 999999,
+        ]);
+        $idx = globalLevelByIndex($request->level);
+        $key = 'sales'.$idx;
+
+        $query = Transaction::where($key.'_id', $request->id)
+            ->settleFilter($key."_settle_id")
+            ->settleTransaction($request->dt);
+
+        $query = globalPGFilter($query, $request);
+        $query = globalSalesFilter($query, $request);
+        $query = globalAuthFilter($query, $request);
+
+        $data = $this->getIndexData($request, $query);
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
+        foreach($data['content'] as $content) 
+        {
+            $content->append(['total_trx_amount']);
+        }
+        $chart = getDefaultTransChartFormat($data['content']);
+        return $this->response(0, $chart);     
+    }
+
+    public function partSettle(Request $request)
+    {
+        echo $request->selected;
     }
 }

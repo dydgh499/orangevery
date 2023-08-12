@@ -45,18 +45,20 @@ class FeeChangeHistoryController extends Controller
                 Merchandise::where('id', $sf_history->mcht_id)
                     ->update([
                         'sales'.$idx.'_id'  => $sf_history->aft_sales_id,
-                        'sales'.$idx.'_fee' => $sf_history->aft_trx_fee,
+                        'sales'.$idx.'_fee' => $sf_history->aft_trx_fee/100,
                     ]);
-                $sf_history->save(['change_status' => true]);
+                $sf_history->change_status = true;
+                $sf_history->save();
             }
             foreach($mcht_histories as $mcht_history)
             {
                 Merchandise::where('id', $mcht_history->mcht_id)
-                ->update([
-                    'hold_fee'  => $mcht_history->aft_hold_fee,
-                    'trx_fee' => $mcht_history->aft_trx_fee,
-                ]);
-                $mcht_history->save(['change_status' => true]);
+                    ->update([
+                        'hold_fee'  => $mcht_history->aft_hold_fee/100,
+                        'trx_fee' => $mcht_history->aft_trx_fee/100,
+                    ]);
+                $mcht_history->change_status = true;
+                $mcht_history->save();
             }
             return true;
         });

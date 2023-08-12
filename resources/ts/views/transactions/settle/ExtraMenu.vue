@@ -37,6 +37,7 @@ const settle = async () => {
             const page = props.is_mcht ? 'merchandises' : 'salesforces'
             const r = await axios.post('/api/v1/manager/transactions/settle-histories/' + page, Object.assign(params, p))
             snackbar.value.show('성공하였습니다.', 'success')
+            store.setChartProcess()
             store.setTable()
         }
         catch (e: any) {

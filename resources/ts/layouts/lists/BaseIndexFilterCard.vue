@@ -19,8 +19,8 @@ const props = defineProps<Props>();
             <VCol cols="12" md="6">
                 <VCardText style="padding: 1em;">
                     <BaseIndexSalesFilter :show="sales">
-                        <template #extra_left>
-                            <slot name="extra_left"></slot>
+                        <template #sales_extra_field>
+                            <slot name="sales_extra_field"></slot>
                         </template>
                     </BaseIndexSalesFilter>
                 </VCardText>
@@ -30,8 +30,8 @@ const props = defineProps<Props>();
                 <VCardText style="padding: 1em;">
                     <BaseIndexPGFilter :pg="props.pg" :ps="props.ps" :settle_type="props.settle_type" :terminal="props.terminal"
                         :cus_filter="props.cus_filter">
-                        <template #extra_right>
-                            <slot name="extra_right"></slot>
+                        <template #pg_extra_field>
+                            <slot name="pg_extra_field"></slot>
                         </template>
                     </BaseIndexPGFilter>
                 </VCardText>

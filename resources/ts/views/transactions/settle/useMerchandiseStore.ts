@@ -99,10 +99,3 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         exporter,
     }
 })
-
-
-export const userPartStore = defineStore('transPartSettleMchtStore', () => {
-    const store = Searcher('transactions/settle/merchandises/part')
-    const head  = Header('transactions/settle/merchandises', '가맹점 부분정산관리')
-    
-})

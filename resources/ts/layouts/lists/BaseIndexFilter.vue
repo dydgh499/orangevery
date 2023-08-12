@@ -121,6 +121,7 @@ watchEffect(() => {
                             <VBtn prepend-icon="tabler-plus" @click="store.create()" v-if="props.add" style="flex-grow: 1;">
                                 {{ props.add_name }} 추가
                             </VBtn>
+                            <slot name="index_extra_field"></slot>
                         </div>
                     </div>
                 </VRow>

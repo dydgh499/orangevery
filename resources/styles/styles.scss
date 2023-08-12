@@ -39,3 +39,12 @@
 .edit-link:hover {
   font-weight: 900;
 }
+
+.check-label {
+  display: flex;
+}
+
+.check-label > .v-input__control > .v-selection-control > .v-label {
+  font-size: 0.85rem;
+  font-weight: bold;
+}

@@ -14,6 +14,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleTrait;
 use App\Http\Requests\Manager\IndexRequest;
+use Illuminate\Support\Facades\DB;
 
 class MerchandiseController extends Controller
 {
@@ -33,12 +34,9 @@ class MerchandiseController extends Controller
         $search = $request->input('search', '');
         $date   = $request->dt;
 
-        $mcht_ids = $this->getExistTransUserIds($date, 'mcht_id');
+        $mcht_ids = $this->getExistTransUserIds($date, 'mcht_id', 'mcht_settle_id');
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
-                ->where('mcht_name', 'like', "%$search%");
-            
-        $query = globalSalesFilter($query, $request);
-        $query = globalAuthFilter($query, $request);
+                ->where('mcht_name', 'like', "%$search%");            
         $query = $query->with(['transactions', 'deducts']);
 
         $data = $this->getIndexData($request, $query, 'id', $cols);
@@ -93,18 +91,54 @@ class MerchandiseController extends Controller
         return $this->commonDeduct($this->settleDeducts, 'mcht_id', $request);
     }
 
-    public function partSettle(Request $request)
-    {
-        $trans = Transaction::where('mcht_id', $request->mcht_id)
-            ->settleFilter()
-            ->settleTransaction(request()->dt)
-            ->select();
-        return $this->response(1);
-    }
-
     public function part(Request $request)
-    {
+    {        
+        $query = Transaction::where('mcht_id', $request->id)
+            ->settleFilter('mcht_settle_id')
+            ->settleTransaction(request()->dt)
+            ->with(['mcht']);
 
+        $query = globalPGFilter($query, $request);
+        $query = globalSalesFilter($query, $request);
+        $query = globalAuthFilter($query, $request);
+
+        $data = $this->getIndexData($request, $query);
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
+
+        foreach($data['content'] as $content) 
+        {
+            $content->mcht_name = $content->mcht['mcht_name'];
+            $content->append(['total_trx_amount']);
+            $content->makeHidden(['mcht']);
+        }
+        return $this->response(0, $data);
     }
 
+    public function partChart(Request $request)
+    {
+        $request = $request->merge([
+            'page' => 1,
+            'page_size' => 999999,
+        ]);
+        $query = Transaction::where('mcht_id', $request->id)
+            ->settleFilter('mcht_settle_id')
+            ->settleTransaction($request->dt);
+
+        $query = globalPGFilter($query, $request);
+        $query = globalSalesFilter($query, $request);
+        $query = globalAuthFilter($query, $request);
+
+        $data = $this->getIndexData($request, $query);
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
+        foreach($data['content'] as $content) 
+        {
+            $content->append(['total_trx_amount']);
+        }
+        $chart = getDefaultTransChartFormat($data['content']);
+        return $this->response(0, $chart);
+    }
 }
