@@ -496,6 +496,7 @@ export interface Complaint {
     type: number | null,
     entry_path: string,
     is_deposit: boolean,
+    complaint_status: number,
     note: string,
 }
 

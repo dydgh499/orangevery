@@ -25,6 +25,7 @@ class ComplaintRequest extends FormRequest
             'type',
             'entry_path',
             'is_deposit',
+            'complaint_status',
             'note',
         ];
     }
@@ -53,6 +54,7 @@ class ComplaintRequest extends FormRequest
             'type' => 'required',
             'entry_path' => 'required',
             'is_deposit' => 'required',
+            'complaint_status' => 'required',
         ];
         return $this->getRules($this->keys, $sub);
     }

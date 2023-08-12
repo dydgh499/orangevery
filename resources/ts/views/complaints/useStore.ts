@@ -6,6 +6,10 @@ export const complaint_types = <Options[]>[
     { id: 1, title: '유사수신' }, { id: 2, title: '유사투자' },
     { id: 3, title: '단순소명' }, { id: 4, title: '기타' },
 ]
+export const complaint_statuses = <Options[]>[
+    { id: 0, title: '처리전' }, { id: 1, title: '처리중' },
+    { id: 2, title: '처리완료' },
+]
 export const issuers = [
     '비씨', '국민', '하나', '삼성',
     '신한', '현대', '롯데', '시티',
@@ -81,7 +85,8 @@ export const defaultItemInfo = () => {
         is_deposit: false,
         note: '',
         mcht_name: null,
-        pg_name: null
+        pg_name: null,
+        complaint_status: 0
     })
     return {
         path, item

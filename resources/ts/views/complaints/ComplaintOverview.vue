@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { getAllMerchandises } from '@/views/merchandises/useStore'
 import { requiredValidator, nullValidator } from '@validators'
-import type { Complaint, Merchandise } from '@/views/types'
+import type { Complaint, Merchandise, Options } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { complaint_types } from '@/views/complaints/useStore'
+import { complaint_types, complaint_statuses } from '@/views/complaints/useStore'
 
 interface Props {
     item: Complaint,
@@ -16,11 +16,9 @@ const { pgs } = useStore()
 
 const merchandises = ref<Merchandise[]>([])
 const mcht = ref({ id: null, mcht_name: '가맹점 선택' })
-
 merchandises.value = await getAllMerchandises()
 onMounted(() => {
     props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
-    props.item.is_deposit = Boolean(props.item.is_deposit)
 })
 watchEffect(() => {
     props.item.mcht_id = mcht.value.id
@@ -135,6 +133,14 @@ watchEffect(() => {
                         <template #input>
                             <VTextField v-model="props.item.entry_path" prepend-inner-icon="tabler-door-enter"
                                 placeholder="유입경로를 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
+                        </template>
+                    </CreateHalfVCol>                    
+                    <CreateHalfVCol :mdl="3" :mdr="9">
+                        <template #name>민원상태</template>
+                        <template #input>
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.complaint_status" :items="complaint_statuses"
+                             label="민원 상태 선택" item-title="title"
+                                item-value="id" single-line :rules="[nullValidator]" />
                         </template>
                     </CreateHalfVCol>
                     <CreateHalfVCol :mdl="3" :mdr="9">

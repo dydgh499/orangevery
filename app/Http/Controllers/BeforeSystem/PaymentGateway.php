@@ -42,7 +42,7 @@ class PaymentGateway
     {
         if(strpos($pg_name, '페이투스') !== false)
             return array_filter($this->pg_types, function($item) {return $item['id'] == 1; });
-        else if(strpos($pg_name, '케이원피에스') !== false)
+        else if(strpos($pg_name, '케이원피에스') !== false || strpos($pg_name, '광원') !== false)
             return array_filter($this->pg_types, function($item) {return $item['id'] == 2; });
         else if(strpos($pg_name, '에이닐') !== false || strpos($pg_name, '애드원') !== false)
             return array_filter($this->pg_types, function($item) {return $item['id'] == 3; });
