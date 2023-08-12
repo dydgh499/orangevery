@@ -52,5 +52,5 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <QuillEditor v-model:content="content" contentType="html" :modules="modules" theme="snow" toolbar="full" placeholder="게시글 내용을 작성하세요."/>
+    <QuillEditor v-model="content" contentType="html" :modules="modules" theme="snow" toolbar="full" placeholder="게시글 내용을 작성하세요."/>
 </template>
