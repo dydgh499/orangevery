@@ -93,7 +93,7 @@ class BrandController extends Controller
             $data = $request->data();
             $data = $this->saveImages($request, $data, $this->imgs);
             $res = $this->brands->create($data);
-            return $this->response($result ? 1 : 990, ['id'=>$res->id]);
+            return $this->response($res ? 1 : 990, ['id'=>$res->id]);
         }
         else
             return $this->response(951);
@@ -127,8 +127,8 @@ class BrandController extends Controller
         $data = $this->saveImages($request, $data, $this->imgs);
         
         $query  = $this->brands->where('id', $id);
-        $result = $query->update($data);
-        return $this->response($result ? 1 : 990);
+        $res = $query->update($data);
+        return $this->response($res ? 1 : 990);
     }
 
     /**

@@ -82,7 +82,7 @@ class BeforeSystemController extends Controller
         BeforeSystemRegisterJob::dispatch($brand_id, $before_brand_id, $current_brand->dns)
             ->onConnection('redis')
             ->onQueue('computational-transfer');
-        sleep(2);
+        sleep(10);
         return $this->extendResponse(1, '전산 이전 작업을 예약하였습니다.<br>5분 내외로 이전 전산에대한 정보가 반영됩니다.');
     }
 
