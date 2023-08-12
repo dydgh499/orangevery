@@ -69,10 +69,10 @@ const httpCodeColor = (http_code: number) => {
                         </template>
                         <template v-else>
                             <td v-show="_header.visible" class='list-square'>
-                                <span v-if="_key == 'id'" class="edit-link" @click="store.edit(item['id'])">
+                                <span v-if="_key == 'id'" @click="store.edit(item['id'])">
                                     #{{ item[_key] }}
                                 </span>
-                                <span v-else-if="_key == `trans_id`" class="edit-link">
+                                <span v-else-if="_key == `trans_id`">
                                     #{{ item[_key] }}
                                 </span>
                                 <span v-else-if="_key == 'module_type'">

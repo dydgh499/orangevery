@@ -61,7 +61,7 @@ watchEffect(() => {
                     </template>
                     <template v-else>
                         <td v-show="_header.visible" class='list-square'>
-                            <span v-if="_key == `id`" class="edit-link">
+                            <span v-if="_key == `id`">
                                 #{{ item[_key] }}
                             </span>
                             <span v-else-if="_key == 'module_type'">
