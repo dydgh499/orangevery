@@ -100,12 +100,14 @@ class TransactionRequest extends FormRequest
         $data['amount'] = abs($data['amount']);
         $data['mcht_settle_fee']  = abs($data['mcht_settle_fee']);
         
-        $user['sales0_id'] = $this->input('sales0_id', null);
+        $data['sales0_id'] = $this->input('sales0_id', null);
         $data['sales1_id'] = $this->input('sales1_id', null);
         $data['sales2_id'] = $this->input('sales2_id', null);
         $data['sales3_id'] = $this->input('sales3_id', null);
         $data['sales4_id'] = $this->input('sales4_id', null);
         $data['sales5_id'] = $this->input('sales5_id', null);
+        $data['custom_id'] = $this->input('custom_id', null);
+        
         $data['ps_fee']  = $this->input('ps_fee', 0)/100;
         $data['hold_fee']  = $this->input('hold_fee', 0)/100;
         $data['mcht_fee']    = $this->input('mcht_fee', 0)/100;

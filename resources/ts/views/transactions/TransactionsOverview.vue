@@ -129,13 +129,14 @@ onMounted(async() => {
         custom.value = cus_filters.find(obj => obj.id === props.item.custom_id)
 
         watchEffect(() => {
-            props.item.sales5_id = sales5.value.id
-            props.item.sales4_id = sales4.value.id
-            props.item.sales3_id = sales3.value.id
-            props.item.sales2_id = sales2.value.id
-            props.item.sales1_id = sales1.value.id
-            props.item.sales0_id = sales0.value.id
-            props.item.custom_id = custom.value.id
+            console.log(1)
+            props.item.sales5_id = sales5.value?.id || null
+            props.item.sales4_id = sales4.value?.id || null
+            props.item.sales3_id = sales3.value?.id || null
+            props.item.sales2_id = sales2.value?.id || null
+            props.item.sales1_id = sales1.value?.id || null
+            props.item.sales0_id = sales0.value?.id || null
+            props.item.custom_id = custom.value?.id || null
             props.item.mcht_id = mcht.value.id
         })
     })
