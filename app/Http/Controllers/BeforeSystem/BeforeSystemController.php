@@ -29,9 +29,17 @@ class BeforeSystemController extends Controller
 
     public function login(Request $request)
     {
+        if(preg_match("/^(http[s]?:\/\/)?([^\/\s]+\/)/i", $request->domain, $matches)) 
+        {
+            $domain = $matches[2];
+            $domain = trim($domain, '/');
+        } 
+        else
+            return $this->extendResponse(1000, '도메인을 찾을 수 없습니다.');
+
         $validated = $request->validate(['domain'=>'required','user_name'=>'required','user_pw'=>'required']);
         $service = $this->paywell->table('service')
-            ->where('DNS', $request->domain)
+            ->where('DNS', $domain)
             ->first();
         if($service)
         {
@@ -40,7 +48,7 @@ class BeforeSystemController extends Controller
                 'id' => $request->user_name,
                 'pw' => $request->user_pw,
             ];
-            $res = asPost('https://'.$request->domain.'/paywell/login/logining.php', $params);
+            $res = asPost('https://'.$domain.'/paywell/login/logining.php', $params);
             if($res['body']['result'] != 100)
                 return $this->extendResponse(2000, $res['body']['message']);
             else
