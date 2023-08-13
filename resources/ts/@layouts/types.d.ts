@@ -133,7 +133,6 @@ export interface NavGroup extends Partial<AclProperties> {
 }
 
 export declare type VerticalNavItems = (NavLink | NavGroup | NavSectionTitle)[]
-export declare type HorizontalNavItems = (NavLink | NavGroup)[]
 
 // 👉 Components ========================
 
