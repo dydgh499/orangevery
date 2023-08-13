@@ -2,7 +2,7 @@
 import { businessNumValidator, requiredValidator } from '@validators'
 import type { PayGateway, PaySection } from '@/views/types'
 import { VForm } from 'vuetify/components'
-import { useStore } from '@/views/services/pay-gateways/useStore'
+import { useStore, settle_types } from '@/views/services/pay-gateways/useStore'
 import PaySectionTr from '@/views/services/pay-gateways/PaySectionTr.vue'
 import { useRequestStore } from '@/views/request'
 
@@ -129,6 +129,18 @@ const filterPss = computed(() => {
                                     placeholder="주소 입력" persistent-placeholder maxlength="200" :rules="[requiredValidator]" />
                             </VCol>
                         </VRow>
+                        <VRow class="pt-3">
+                            <VCol>
+                                <label>정산타입</label>
+                            </VCol>
+                            <VCol>
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type" :items="settle_types"
+                                    prepend-inner-icon="tabler-calculator" label="정산타입 선택" item-title="title" item-value="id"
+                                    single-line :rules="[requiredValidator]" />
+                            </VCol>
+                        </VRow>
+
+                        
                         <VRow>
                             <VCol class="d-flex gap-4 pt-10">
                                 <VBtn type="button" style="margin-left: auto;" @click="update('/services/pay-gateways', props.item.id as number, props.item, vForm, false)">

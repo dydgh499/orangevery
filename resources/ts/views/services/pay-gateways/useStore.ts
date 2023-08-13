@@ -1,5 +1,10 @@
-import type { Classification, PayGateway, PaySection } from '@/views/types'
+import type { Classification, Options, PayGateway, PaySection } from '@/views/types'
 import { axios } from '@axios'
+
+export const settle_types = <Options[]>([
+    {id:0, title:'주말제외'},
+    {id:1, title:'주말포함'},
+])
 
 export const useStore = defineStore('payGatewayStore', () => {
     const pgs = ref<PayGateway[]>([])

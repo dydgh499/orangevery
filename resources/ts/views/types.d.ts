@@ -171,6 +171,7 @@ export interface PayGateway {
     business_num: string,
     phone_num: string,
     addr:string,
+    settle_type:number,
 }
 
 export interface PaySection {
