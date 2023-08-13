@@ -94,18 +94,18 @@ const onSubmit = () => {
                 </VCardText>
                 <VCardText>
                     <VForm ref="refVForm" @submit.prevent="onSubmit">
-                        <VRow>
+                        <VRow no-gutters>
                             <!-- user_name -->
                             <VCol cols="12">
                                 <VTextField v-model="user_name" label="아이디 입력" type="user_name" :rules="[requiredValidatorV2(user_name, '아이디')]"
                                     :error-messages="errors.message" />
                             </VCol>
                             <!-- password -->
-                            <VCol cols="12">
+                            <VCol cols="12" style="margin-top: 24px;">
                                 <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidatorV2(user_pw, '패스워드')]"
                                     :type="isPasswordVisible ? 'text' : 'password'"
                                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                                    @click:append-inner="isPasswordVisible = !isPasswordVisible" />
+                                    @click:append-inner="isPasswordVisible = !isPasswordVisible"/>
 
                                 <div class="d-flex align-center flex-wrap justify-space-between mt-2 mb-4">
                                     <div class="text-primary ms-2 mb-1" style="cursor: pointer;"

@@ -64,7 +64,7 @@ export const isNavLinkActive = (link: NavLink, router: Router) => {
     curr_route_name = curr_route_name.startsWith('-') ? curr_route_name.substring(1) : curr_route_name
     
     const full_route_name = resolveRoutedName.toString()
-    const regex_pattern = `^(${full_route_name}-create|${full_route_name}-edit-[0-9]+|${full_route_name}-part-[0-9]+|${full_route_name}-reply-[0-9]+)$`
+    const regex_pattern = `^${full_route_name}-(create|edit-[0-9]+|part-[0-9]+|reply-[0-9]+)$`
     const regex = new RegExp(regex_pattern)
 
     return matchedRoutes.some(route => {
