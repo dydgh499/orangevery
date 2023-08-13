@@ -17,11 +17,6 @@ const store = <any>(inject('store'))
 const head = <any>(inject('head'))
 const filter = ref(null)
 
-const first_loading = ref(true)
-watchEffect(() => {
-    if(store.getChartProcess())
-        first_loading.value = false
-})
 onMounted(() => {
     head.filter = filter.value
     watchEffect(() => {
@@ -51,7 +46,7 @@ onMounted(() => {
                         <!-- 👉 table head -->
                         <thead>
                             <slot name="headers"></slot>
-                            <template v-if="first_loading">
+                            <template v-if="store.is_skeleton">
                                 <tr v-for="(item, index) in 10" :key="index">
                                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                                         <td v-show="_header.visible" class='list-square'>
@@ -69,7 +64,7 @@ onMounted(() => {
                             <slot name="body"></slot>
                         </tbody>
                         <!-- 👉 table footer  -->
-                        <tfoot v-if="!Boolean(store.items.length) && first_loading == false">
+                        <tfoot v-if="!Boolean(store.items.length) && store.is_skeleton == false">
                             <tr>
                                 <td :colspan="Object.keys(head.flat_headers).length" class='list-square' style="border: 0;">
                                     검색 결과가 없습니다.

@@ -6,17 +6,17 @@ interface Props {
 const props = defineProps<Props>()
 const store = <any>(inject('store'))
 
-const first_loading = ref(true)
+const is_skeleton = ref(true)
 watchEffect(() => {
     if(store.getChartProcess())
-        first_loading.value = false
+        is_skeleton.value = false
 })
 </script>
 <template>
     <VCol v-for="meta in props.metas" :key="meta.title" cols="12" sm="6" lg="3">
     <VCard>
         <VCardText class="d-flex justify-space-between">
-            <div v-if="first_loading">
+            <div v-if="is_skeleton">
                 <span>{{ meta.title }}</span>
                 <div class="d-flex align-center gap-2 my-1">
                     <SkeletonBox :width="'3em'"/>

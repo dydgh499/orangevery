@@ -14,7 +14,9 @@ const all_levels = allLevels()
 </script>
 <template>
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="가맹점" :is_range_date="true">
-        <template #filter>
+        <template #index_extra_field>
+            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
+                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" :eager="true" />
         </template>
         <template #headers>
             <tr>
@@ -34,7 +36,7 @@ const all_levels = allLevels()
             </tr>
         </template>
         <template #body>
-            <tr v-for="(item, index) in store.items" :key="index">
+            <tr v-for="(item, index) in store.getItems" :key="index">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
                         <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"

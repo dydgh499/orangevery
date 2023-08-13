@@ -14,7 +14,8 @@ export const useSearchStore = defineStore('operatorSearchStore', () => {
     const head  = Header('services/operators', '운영자 관리')
     const headers: Record<string, string|object> = {
         'id' : 'NO.',
-        'level' : '등급',
+        'profile_img' : '프로필',
+        'level'     : '등급',
         'user_name' : 'ID',
         'nick_name' : '성명',
         'phone_num' : '연락처',

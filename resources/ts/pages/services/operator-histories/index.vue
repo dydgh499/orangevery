@@ -15,9 +15,10 @@ provide('exporter', exporter)
     <div>
         <BaseIndexView placeholder="운영자명, 적용대상 검색" :metas="[]" :add="false" add_name="" :is_range_date="true">
             <template #filter>
-                <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
-                    :sales="false">
-                </BaseIndexFilterCard>
+            </template>
+            <template #index_extra_field>
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
+                    :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" :eager="true" />
             </template>
             <template #headers>
                 <tr>
@@ -37,7 +38,7 @@ provide('exporter', exporter)
                 </tr>
             </template>
             <template #body>
-                <tr v-for="(item, index) in store.items" :key="index">
+                <tr v-for="(item, index) in store.getItems" :key="index">
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <template v-if="head.getDepth(_header, 0) != 1">
                         </template>
@@ -45,6 +46,9 @@ provide('exporter', exporter)
                             <td v-show="_header.visible" class='list-square'>
                                 <span v-if="_key == `id`">
                                     #{{ item[_key] }}
+                                </span>                                
+                                <span v-else-if="_key == 'profile_img'">
+                                    <VAvatar :image="item[_key]" class="me-3" />
                                 </span>
                                 <span v-else-if="_key == `history_type`">
                                     <VChip

@@ -7,10 +7,12 @@ import CrmRecentDanagerTransaction from '@/views/dashboards/crm/CrmRecentDanager
 import CrmOperatorHistory from '@/views/dashboards/crm/CrmOperatorHistory.vue'
 import { useCRMStore } from '@/views/dashboards/crm/crm'
 import { getUserLevel } from '@axios'
+import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 
 const { upside_merchandises, upside_salesforces, monthly_transactions, getGraphData } = useCRMStore()
-const first_loading = ref(true)
-provide('first_loading', first_loading)
+const is_skeleton = ref(true)
+provide('is_skeleton', is_skeleton)
+
 const simpleStatisticsDemoCards = ref([
     {
         icon: 'tabler-calculator',
@@ -31,7 +33,7 @@ const simpleStatisticsDemoCards = ref([
 ])
 onMounted(async() => {
     await getGraphData()
-    first_loading.value = false
+    is_skeleton.value = false
     watchEffect(() => {
         if(Object.keys(monthly_transactions).length > 0) {
             const curernt_month = new Date().toISOString().slice(0, 7);
@@ -68,14 +70,24 @@ onMounted(async() => {
                         {{ demo.title }}
                     </h6>
                     <p class="my-2 font-weight-semibold text-h6">
-                        {{ demo.stat }}
+                        <template v-if="is_skeleton">
+                            <SkeletonBox/>
+                        </template>
+                        <template v-else>
+                            {{ demo.stat }}                            
+                        </template>
                     </p>
                     <br>
                     <p class="text-sm mt-0 mb-1">
                         {{ demo.subTitle }}
-                        <VChip :color="demo.color" label>
-                            {{ demo.change }}
-                        </VChip>
+                        <template v-if="is_skeleton">
+                            <SkeletonBox/>
+                        </template>
+                        <template v-else>
+                            <VChip :color="demo.color" label>
+                                {{ demo.change }}
+                            </VChip>                        
+                        </template>
                     </p>
                 </VCardText>
             </VCard>

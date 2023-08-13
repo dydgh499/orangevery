@@ -9,7 +9,7 @@ interface Props {
     datas: UpSideChart,
 }
 const props = defineProps<Props>()
-const first_loading = <any>(inject('first_loading'))
+const is_skeleton = <any>(inject('is_skeleton'))
 
 const vuetifyTheme = useTheme()
 const series = ref([
@@ -244,7 +244,7 @@ const chartOptions = computed(() => {
 
             <div class="d-flex align-center justify-space-between mt-4">
                 <h6 class="text-h6 text-center font-weight-semibold">
-                    <template v-if="first_loading">
+                    <template v-if="is_skeleton">
                         <SkeletonBox :width="'2em'" />
                     </template>
                     <template v-else>
@@ -255,7 +255,7 @@ const chartOptions = computed(() => {
                 </h6>
                 <span class="text-sm text-success">
                     <span class="text-body-2">작월 대비</span>
-                    <template v-if="first_loading">
+                    <template v-if="is_skeleton">
                         <SkeletonBox />
                     </template>
                     <template v-else>

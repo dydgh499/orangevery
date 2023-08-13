@@ -18,6 +18,10 @@ provide('exporter', exporter)
         <BaseIndexView placeholder="ID 및 성명 검색" :metas="[]" :add="true" add_name="운영자" :is_range_date="null">
             <template #filter>
             </template>
+            <template #index_extra_field>
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
+                    :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" :eager="true" />
+            </template>
             <template #headers>
                 <tr>
                     <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
@@ -36,7 +40,7 @@ provide('exporter', exporter)
                 </tr>
             </template>
             <template #body>
-                <tr v-for="(item, index) in store.items" :key="index">
+                <tr v-for="(item, index) in store.getItems" :key="index">
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <template v-if="head.getDepth(_header, 0) != 1">
                         </template>
@@ -45,14 +49,14 @@ provide('exporter', exporter)
                                 <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
                                     #{{ item[_key] }}
                                 </span>
-                                <span v-else-if="_key == `user_name`" class="edit-link" @click="store.edit(item['id'])">
-                                    {{ item[_key] }}
-                                </span>
                                 <span v-else-if="_key == `level`">
                                     <VChip
                                         :color="store.getSelectIdColor(operator_levels.find(obj => obj.id === item[_key])?.id)">
                                         {{ operator_levels.find(obj => obj.id === item[_key])?.title }}
                                     </VChip>
+                                </span>
+                                <span v-else-if="_key == 'profile_img'">
+                                    <VAvatar :image="item[_key]" class="me-3" />
                                 </span>
                                 <span v-else-if="_key == 'extra_col'">
                                     <UserExtraMenu :id="item['id']" :type="2"></UserExtraMenu>

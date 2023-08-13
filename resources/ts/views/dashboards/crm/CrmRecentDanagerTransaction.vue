@@ -3,7 +3,7 @@ import { installments, module_types } from '@/views/merchandises/pay-modules/use
 import { useCRMStore } from '@/views/dashboards/crm/crm'
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 
-const first_loading = <any>(inject('first_loading'))
+const is_skeleton = <any>(inject('is_skeleton'))
 
 const { danger_histories } = useCRMStore()
 const booleanTypeColor = (type: boolean | null) => {
@@ -91,7 +91,7 @@ const getSelectIdColor = (id: number | undefined) => {
                         </VChip>
                     </td>
                 </tr>            
-                <tr v-for="(transition, _key) in 9" :key="_key" v-if="first_loading">
+                <tr v-for="(transition, _key) in 9" :key="_key" v-if="is_skeleton">
                     <td class="list-square">
                         <SkeletonBox />
                     </td>
@@ -118,7 +118,7 @@ const getSelectIdColor = (id: number | undefined) => {
                     </td>
                 </tr>
             </tbody>
-            <tfoot v-show="!Boolean(danger_histories.length) && !first_loading">
+            <tfoot v-show="!Boolean(danger_histories.length) && !is_skeleton">
                 <tr>
                     <td colspan="8" class='list-square' style="border: 0;">
                         최근 이상거래가 존재하지 않습니다.

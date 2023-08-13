@@ -15,15 +15,13 @@ const router = useRouter()
 <template>
     <BaseIndexView placeholder="게시글 검색" :metas="[]" :add="true" add_name="게시글" :is_range_date="null">
         <template #filter>
-            <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
-                :sales="false">
-                <template #sales_extra_field>
-                    <VCol cols="12" sm="3">
-                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.type" :items="[{ id: null, title: '전체' }].concat(types)"
-                            prepend-inner-icon="fxemoji-notepage" label="게시글 타입" item-title="title" item-value="id" />
-                    </VCol>
-                </template>
-            </BaseIndexFilterCard>
+        </template>
+        <template #index_extra_field>
+            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
+                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" :eager="true" />
+            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.type"
+                :items="[{ id: null, title: '전체' }].concat(types)" prepend-inner-icon="fxemoji-notepage" label="게시글 타입"
+                item-title="title" item-value="id" style="min-width: 11em;"/>
         </template>
         <template #headers>
             <tr>
@@ -35,7 +33,7 @@ const router = useRouter()
             </tr>
         </template>
         <template #body>
-            <template v-for="(item, index) in store.items" :key="index">
+            <template v-for="(item, index) in store.getItems" :key="index">
                 <tr>
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" :class="_key == 'title' ? 'list-square title' : 'list-square'">
@@ -47,11 +45,12 @@ const router = useRouter()
                                     {{ types.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
                             </span>
-                            <span v-else-if="_key == 'title'" class="edit-link" @click="router.push('/posts/view/' + item['id'])">
+                            <span v-else-if="_key == 'title'" class="edit-link"
+                                @click="router.push('/posts/view/' + item['id'])">
                                 {{ item[_key] }}
                             </span>
                             <span v-else-if="_key == 'extra_col'">
-                                <ExtraMenu :item="item">                                    
+                                <ExtraMenu :item="item">
                                 </ExtraMenu>
                             </span>
                             <span v-else>

@@ -74,13 +74,24 @@ const tax_types = settleTaxTypes()
                             </template>
                             <template #input>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level" :items="all_sales"
-                                    prepend-inner-icon="ph:share-network" label="영업자 등급 선택" item-title="title" item-value="id"
-                                    persistent-hint single-line :rules="[nullValidator]" :readonly="props.item.id != 0" />
+                                    prepend-inner-icon="ph:share-network" label="영업자 등급 선택" item-title="title"
+                                    item-value="id" persistent-hint single-line :rules="[nullValidator]"
+                                    :readonly="props.item.id != 0" />
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="3" :mdr="9">
+                            <template #name>화면 타입</template>
+                            <template #input>
+                                <BooleanRadio :radio="Boolean(props.item.view_type)"
+                                    @update:radio="props.item.view_type = $event">
+                                    <template #true>상세보기</template>
+                                    <template #false>간편보기</template>
+                                </BooleanRadio>
                             </template>
                         </CreateHalfVCol>
                         <VCol>
                             <VTextarea v-model="props.item.note" counter label="메모사항"
-                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="100"/>
+                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="100" />
                         </VCol>
                     </VRow>
                 </VCardItem>
@@ -89,20 +100,9 @@ const tax_types = settleTaxTypes()
         <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>옵션</VCardTitle>
                     <VCol cols="12">
                         <VRow>
-                            <CreateHalfVCol :mdl="3" :mdr="9">
-                                <template #name>화면 타입</template>
-                                <template #input>
-                                    <BooleanRadio :radio="Boolean(props.item.view_type)"
-                                        @update:radio="props.item.view_type = $event">
-                                        <template #true>상세보기</template>
-                                        <template #false>간편보기</template>
-                                    </BooleanRadio>
-                                </template>
-                            </CreateHalfVCol>
-                                <SalesforceBatchOverview :item="props.item"/>
+                            <SalesforceBatchOverview :item="props.item" />
                         </VRow>
                     </VCol>
                 </VCardItem>

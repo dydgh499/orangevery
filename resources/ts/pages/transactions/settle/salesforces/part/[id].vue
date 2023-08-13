@@ -250,7 +250,7 @@ watchEffect(() => {
                 </tr>
             </template>
             <template #body>
-                <tr v-for="(item, index) in store.items" :key="index">
+                <tr v-for="(item, index) in store.getItems" :key="index">
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
                             <span v-if="_key == 'id'">
@@ -280,7 +280,7 @@ watchEffect(() => {
                                 {{ Number(item[_key]).toLocaleString() }}
                             </span>
                             <span v-else-if="_key.toString().includes('_fee') && _key != 'mcht_settle_fee'">
-                                <VChip>
+                                <VChip v-if="item[_key]">
                                     {{ (item[_key] * 100).toFixed(3) }} %
                                 </VChip>
                             </span>

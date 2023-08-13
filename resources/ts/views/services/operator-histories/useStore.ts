@@ -14,7 +14,8 @@ export const useSearchStore = defineStore('operatorHistorySearchStore', () => {
     const head = Header('services/operator-histories', '운영자 활동이력')
     const headers: Record<string, string | object> = {
         'id': 'NO.',
-        'nick_name': '운영자명',
+        'profile_img'   : '프로필',
+        'nick_name'     : '운영자명',
         'history_target': '활동종류',
         'history_title' : '적용대상',
         'history_type'  : '활동타입',

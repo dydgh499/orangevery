@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import type { MchtRecentTransaction } from '@/views/types'
+import type { TotalSettle } from '@/views/types'
+import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 
 interface Props {
-    transaction: MchtRecentTransaction,
+    transaction: TotalSettle,
     date: string,
 }
 const props = defineProps<Props>()
-
+const is_skeleton = ref(true)
 const displayDate = () => {
     const currentDate = new Date()
     const currentYear = currentDate.getFullYear().toString()
@@ -38,6 +39,9 @@ const displayDate = () => {
     }
 };
 const { date, style } = displayDate()
+watchEffect(() => {
+    is_skeleton.value = true
+})
 </script>
 <template>
     <VCol class="d-flex justify-space-between small-font">
@@ -45,10 +49,8 @@ const { date, style } = displayDate()
             <div class="small-font">
                 <span :class="'text-' + style">{{ date }} </span> 정산금액
             </div>
-            <div style="font-weight: bold;">
-                <span>
-                    {{ props.transaction.profit.toLocaleString() }}
-                </span>
+            <div style="font-weight: bold;">                
+                <span> {{ props.transaction.profit.toLocaleString() }} </span>
                 <span class="small-font" style="font-weight: 500;"> 원</span>
             </div>
         </div>

@@ -59,7 +59,7 @@ watchEffect(() => {
         </template>
 
         <template #body>
-            <tr v-for="(item, index) in store.items" :key="index">
+            <tr v-for="(item, index) in store.getItems" :key="index">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <td v-show="_header.visible" class='list-square'>
                         <span v-if="_key == 'id'" class="edit-link" @click="store.edit(item['id'])">

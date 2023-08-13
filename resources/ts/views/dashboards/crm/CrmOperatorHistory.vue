@@ -4,7 +4,7 @@ import { history_types } from '@/views/services/operator-histories/useStore'
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 
 const { operator_histories } = useCRMStore()
-const first_loading = <any>(inject('first_loading'))
+const is_skeleton = <any>(inject('is_skeleton'))
 const getSelectIdColor = (id: number | undefined) => {
     if (id == 0)
         return "default"
@@ -51,7 +51,7 @@ const getSelectIdColor = (id: number | undefined) => {
                         </div>
                     </div>
                 </VTimelineItem>
-                <template v-if="first_loading">
+                <template v-if="is_skeleton">
                     <VTimelineItem v-for="(operator_history, _index) in 5" :key="_index" size="x-small" >
                     <div class="d-flex justify-space-between">
                         <h6 class="text-base font-weight-semibold me-3" style="display: flex; align-items: center;">
@@ -74,7 +74,7 @@ const getSelectIdColor = (id: number | undefined) => {
                     </div>
                 </VTimelineItem>
                 </template>
-                <VTimelineItem v-show="!Boolean(operator_histories.length) && first_loading" size="x-small">
+                <VTimelineItem v-show="!Boolean(operator_histories.length) && is_skeleton" size="x-small">
                     <div class="d-flex justify-space-between">
                         <span class="text-sm">
                             최근 운영자 활동이력이 존재하지 않습니다.

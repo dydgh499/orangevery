@@ -12,6 +12,7 @@ export function Searcher(path: string) {
     const params = reactive<any>({page:1, page_size:20})
     const pagenation = reactive<Pagenation>({ total_count: 0, total_page: 1 })
     const chart_process = ref(false)
+    const is_skeleton   = ref(true)
     let before_search = ''
 
     const getChartProcess = () => {
@@ -62,6 +63,7 @@ export function Searcher(path: string) {
             pagenation.total_count = r.data.total
             pagenation.total_page = parseInt(String(l_page > Math.floor(l_page) ? l_page + 1 : l_page))
         }
+        is_skeleton.value = false
         return r.data.content
     }
     const getAllDataFormat = () => {
@@ -105,6 +107,6 @@ export function Searcher(path: string) {
         items, params, pagenation, getChartProcess, setChartProcess,
         create, edit, getChartData, getPercentage,
         get, booleanTypeColor, getSelectIdColor, getAllDataFormat,
-        pagenationCouputed
+        pagenationCouputed, is_skeleton
     }
 }

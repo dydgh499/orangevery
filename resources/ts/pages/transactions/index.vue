@@ -187,7 +187,7 @@ watchEffect(() => {
                                 {{ Number(item[_key]).toLocaleString() }}
                             </span>
                             <span v-else-if="_key.toString().includes('_fee') && _key != 'mcht_settle_fee'">
-                                <VChip>
+                                <VChip v-if="item[_key]">
                                     {{ (item[_key] * 100).toFixed(3) }} %
                                 </VChip>
                             </span>

@@ -6,7 +6,7 @@ import { useCRMStore } from '@/views/dashboards/crm/crm'
 import type { TransWeekChart, TransChart, Series } from '@/views/types'
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 
-const first_loading = <any>(inject('first_loading'))
+const is_skeleton = <any>(inject('is_skeleton'))
 
 const vuetifyTheme = useTheme()
 const { monthly_transactions, getColors, getDayOfWeeks } = useCRMStore()
@@ -205,7 +205,7 @@ const chartOptions = computed(() => {
                     </h6>
                     <span class="text-sm">7일간 거래금 개요</span>
                     <h5 class="text-h5 my-2 text-h6 font-weight-semibold">
-                        <template v-if="first_loading">
+                        <template v-if="is_skeleton">
                             <SkeletonBox />
                         </template>
                         <template v-else>
@@ -214,7 +214,7 @@ const chartOptions = computed(() => {
                     </h5>
                 </div>
                 <div>
-                    <template v-if="first_loading">
+                    <template v-if="is_skeleton">
                         <SkeletonBox />
                     </template>
                     <template v-else>
