@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { QuillEditor } from '@vueup/vue-quill'
-import BlotFormatter from 'quill-blot-formatter'
+import BlotFormatter from 'quill-blot-formatter/dist/BlotFormatter'
 import ImageUploader from 'quill-image-uploader'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { axios } from '@axios'
@@ -52,5 +52,5 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <QuillEditor v-model="content" contentType="html" :modules="modules" theme="snow" toolbar="full" placeholder="게시글 내용을 작성하세요."/>
+    <QuillEditor v-model:content="content" contentType="html" :modules="modules" theme="snow" toolbar="full" placeholder="게시글 내용을 작성하세요."/>
 </template>
