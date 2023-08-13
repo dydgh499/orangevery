@@ -9,7 +9,7 @@ export function Searcher(path: string) {
     // -----------------------------
     let items = ref(<[]>([]))
     const router = useRouter()
-    const params = reactive<any>({page:1, page_size:10})
+    const params = reactive<any>({page:1, page_size:20})
     const pagenation = reactive<Pagenation>({ total_count: 0, total_page: 1 })
     const chart_process = ref(false)
     let before_search = ''

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { useCRMStore } from '@/views/dashboards/crm/crm'
 import { history_types } from '@/views/services/operator-histories/useStore'
+import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 
 const { operator_histories } = useCRMStore()
+const first_loading = <any>(inject('first_loading'))
 const getSelectIdColor = (id: number | undefined) => {
     if (id == 0)
         return "default"
@@ -49,7 +51,30 @@ const getSelectIdColor = (id: number | undefined) => {
                         </div>
                     </div>
                 </VTimelineItem>
-                <VTimelineItem v-show="!Boolean(operator_histories.length)" size="x-small">
+                <template v-if="first_loading">
+                    <VTimelineItem v-for="(operator_history, _index) in 5" :key="_index" size="x-small" >
+                    <div class="d-flex justify-space-between">
+                        <h6 class="text-base font-weight-semibold me-3" style="display: flex; align-items: center;">
+                            <SkeletonBox :width="'10em'"/>
+                            <span>-</span>
+                            <SkeletonBox/>
+                        </h6>
+                        <span class="text-sm">
+                            <SkeletonBox :width="'10em'"/>
+                        </span>
+                    </div>
+                    <!-- 👉 Content -->
+                    <div class="d-flex align-center mt-2">
+                            <SkeletonBox :width="'3em'" :height="'3em'"/>
+                        <div>
+                            <p class="font-weight-semibold mb-0" style="margin-left: 1em;">
+                                <SkeletonBox :width="'5em'"/>
+                            </p>
+                        </div>
+                    </div>
+                </VTimelineItem>
+                </template>
+                <VTimelineItem v-show="!Boolean(operator_histories.length) && first_loading" size="x-small">
                     <div class="d-flex justify-space-between">
                         <span class="text-sm">
                             최근 운영자 활동이력이 존재하지 않습니다.

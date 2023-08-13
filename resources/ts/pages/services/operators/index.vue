@@ -36,7 +36,7 @@ provide('exporter', exporter)
                 </tr>
             </template>
             <template #body>
-                <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
+                <tr v-for="(item, index) in store.items" :key="index">
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <template v-if="head.getDepth(_header, 0) != 1">
                         </template>

@@ -2,7 +2,7 @@ import { themeConfig } from '@themeConfig'
 
 export const useZoomProperty = () => {
     const snackbar = <any>(inject('snackbar'))
-    const zoom = ref(<number>(Number(localStorage.getItem(`${themeConfig.app.title}-zoom`) ?? 80)))
+    const zoom = ref(<number>(Number(localStorage.getItem(`${themeConfig.app.title}-zoom`) ?? 90)))
     
     const setZoom = () => {
         //document.documentElement.style.setProperty('font-size', `${zoom.value/100}em`)

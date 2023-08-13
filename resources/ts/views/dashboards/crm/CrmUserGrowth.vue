@@ -2,33 +2,35 @@
 import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
 import type { UpSideChart } from '@/views/types'
+import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 
 interface Props {
     dest_user: string,
     datas: UpSideChart,
 }
 const props = defineProps<Props>()
+const first_loading = <any>(inject('first_loading'))
 
 const vuetifyTheme = useTheme()
 const series = ref([
     {
         name: '감소',
-        data: [] as number [],
+        data: [] as number[],
     },
     {
         name: '추가',
-        data: [] as number [],
+        data: [] as number[],
     },
 ])
 const rate = ref(0)
-const getChartData = (col: string):number[] => {
+const getChartData = (col: string): number[] => {
     const datas = []
-        for (let i = 4; i >= 0; i--) {
-            let data = props.datas['month' + i][col]
-            if (col == 'del')
-                data *= 1
-            datas.push(data)
-        }
+    for (let i = 4; i >= 0; i--) {
+        let data = props.datas['month' + i][col]
+        if (col == 'del')
+            data *= 1
+        datas.push(data)
+    }
     return datas
 }
 
@@ -39,7 +41,7 @@ const chartOptions = computed(() => {
         series.value[1].data = getChartData('add')
         const cur = props.datas.month0.add * 10
         const last = props.datas.month1.add * 10
-        rate.value = (cur - last/(last || 1)) * 10
+        rate.value = (cur - last / (last || 1)) * 10
     }
 
     return {
@@ -228,7 +230,6 @@ const chartOptions = computed(() => {
     }
 })
 </script>
-
 <template>
     <VCard>
         <VCardText>
@@ -243,13 +244,23 @@ const chartOptions = computed(() => {
 
             <div class="d-flex align-center justify-space-between mt-4">
                 <h6 class="text-h6 text-center font-weight-semibold">
-                    <span class="font-weight-light" style="font-size: 0.8em;">총 </span>
-                    <span>{{ props.datas.total?.toLocaleString() || 0}}</span>                    
-                    <span class="font-weight-light" style="font-size: 0.8em;">개</span>
+                    <template v-if="first_loading">
+                        <SkeletonBox :width="'2em'" />
+                    </template>
+                    <template v-else>
+                        <span class="font-weight-light" style="font-size: 0.8em;">총 </span>
+                        <span>{{ props.datas.total?.toLocaleString() || 0 }}</span>
+                        <span class="font-weight-light" style="font-size: 0.8em;">개</span>
+                    </template>
                 </h6>
                 <span class="text-sm text-success">
                     <span class="text-body-2">작월 대비</span>
-                    {{ rate.toFixed(1) }}%
+                    <template v-if="first_loading">
+                        <SkeletonBox />
+                    </template>
+                    <template v-else>
+                        {{ rate.toFixed(1) }}%
+                    </template>
                 </span>
             </div>
         </VCardText>

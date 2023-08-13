@@ -8,7 +8,9 @@ import CrmOperatorHistory from '@/views/dashboards/crm/CrmOperatorHistory.vue'
 import { useCRMStore } from '@/views/dashboards/crm/crm'
 import { getUserLevel } from '@axios'
 
-const { upside_merchandises, upside_salesforces, monthly_transactions } = useCRMStore()
+const { upside_merchandises, upside_salesforces, monthly_transactions, getGraphData } = useCRMStore()
+const first_loading = ref(true)
+provide('first_loading', first_loading)
 const simpleStatisticsDemoCards = ref([
     {
         icon: 'tabler-calculator',
@@ -27,8 +29,9 @@ const simpleStatisticsDemoCards = ref([
         change: '0%',
     },
 ])
-
-onMounted(() => {
+onMounted(async() => {
+    await getGraphData()
+    first_loading.value = false
     watchEffect(() => {
         if(Object.keys(monthly_transactions).length > 0) {
             const curernt_month = new Date().toISOString().slice(0, 7);
@@ -77,22 +80,17 @@ onMounted(() => {
                 </VCardText>
             </VCard>
         </VCol>
-
-        <!-- 👉 Revenue Growth -->
         <VCol cols="12" md="8" lg="4">
             <CrmRevenueGrowth />
         </VCol>
 
-        <!-- 👉 Earning Reports -->
         <VCol cols="12" md="8">
             <CrmRevenueYearlyGrowth />
         </VCol>
-
         <!-- 👉 PayModule -->
         <VCol cols="12" md="4">
             <CrmPayModuleGrowth />
         </VCol>
-
         <!-- 👉 Recent Transaction -->
         <VCol cols="12" md="6">
             <CrmRecentDanagerTransaction />

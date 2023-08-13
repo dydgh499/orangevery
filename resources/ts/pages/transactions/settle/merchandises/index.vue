@@ -99,7 +99,7 @@ watchEffect(() => {
         </template>
         <template #body>
             <!-- chart -->
-            <tr v-for="(item, key, index) in totals" :key="key" style="height: 3.75rem;">
+            <tr v-for="(item, key, index) in totals" :key="key">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
                         <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
@@ -124,7 +124,7 @@ watchEffect(() => {
                 </template>
             </tr>
             <!-- normal -->
-            <tr v-for="(item, _key, _index) in store.getItems" :key="_key" style="height: 3.75rem;">
+            <tr v-for="(item, _key, _index) in store.getItems" :key="_key">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
                         <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"

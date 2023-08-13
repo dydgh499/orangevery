@@ -9,14 +9,15 @@ export const useCRMStore = defineStore('CRMStore', () => {
     const upside_salesforces = ref(<UpSideChart>({}))
     const danger_histories = ref(<Danger[]>[])
     const operator_histories = ref(<OperatorHistory[]>([]))
-    onMounted(async() => {        
+    
+    const getGraphData = async() => {        
         try {
             const [r1, r2, r3, r4, r5] = await Promise.all([
                 axios.get('/api/v1/manager/dashsboards/monthly-transactions-analysis'),
                 axios.get('/api/v1/manager/dashsboards/upside-merchandises-analysis'),
                 axios.get('/api/v1/manager/dashsboards/upside-salesforces-analysis'),
-                axios.get('/api/v1/manager/dashsboards/recent-danger-histories'),                
-                axios.get('/api/v1/manager/dashsboards/recent-operator-histories'),                
+                axios.get('/api/v1/manager/dashsboards/recent-danger-histories'),
+                axios.get('/api/v1/manager/dashsboards/recent-operator-histories'),
             ])
             const sortedKeys = orderBy(Object.keys(r1.data), [], ['desc']);
             const sortedData = sortedKeys.reduce((acc, key) => {
@@ -32,7 +33,7 @@ export const useCRMStore = defineStore('CRMStore', () => {
         catch (e) {
             const r = errorHandler(e)
         }
-    })
+    }
 
     const getColors = (dates: string[], previous: string, current: string) => {
         const _color = []
@@ -63,8 +64,8 @@ export const useCRMStore = defineStore('CRMStore', () => {
         }
         return _months
     }
-
     return {
+        getGraphData,
         monthly_transactions,
         upside_merchandises,
         upside_salesforces,

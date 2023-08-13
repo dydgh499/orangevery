@@ -71,10 +71,10 @@ const chartConfigs = computed(() => {
         serieses.value[3][0].data = getSeries(keys, 'profit')
 
         months.value = getMonths(keys)
-        appr_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.primary)},0.16)`, currentTheme.primary)
-        cxl_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.error)},0.16)`, currentTheme.error)
-        amount_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.success)},0.16)`, currentTheme.success)
-        profit_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.warning)},0.16)`, currentTheme.warning)
+        appr_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.primary)},0.16)`, `rgba(${hexToRgb(currentTheme.primary)},1)`)
+        cxl_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.error)},0.16)`, `rgba(${hexToRgb(currentTheme.error)},1)`)
+        amount_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.success)},0.16)`, `rgba(${hexToRgb(currentTheme.success)},1)`)
+        profit_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.warning)},0.16)`, `rgba(${hexToRgb(currentTheme.warning)},1)`)
     }
 
     return [

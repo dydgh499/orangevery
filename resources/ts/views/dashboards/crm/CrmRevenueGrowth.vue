@@ -4,7 +4,9 @@ import { useTheme } from 'vuetify'
 import { hexToRgb } from '@layouts/utils'
 import { useCRMStore } from '@/views/dashboards/crm/crm'
 import type { TransWeekChart, TransChart, Series } from '@/views/types'
+import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 
+const first_loading = <any>(inject('first_loading'))
 
 const vuetifyTheme = useTheme()
 const { monthly_transactions, getColors, getDayOfWeeks } = useCRMStore()
@@ -46,11 +48,10 @@ const chartOptions = computed(() => {
                 const idays = Object.keys(week)
                 getSeries(idays, week)
                 dayofweeks.value = getDayOfWeeks(idays)
-                colors.value = getColors(idays, `rgba(${hexToRgb(currentTheme.success)},0.16)`, currentTheme.success)
+                colors.value = getColors(idays, `rgba(${hexToRgb(currentTheme.success)},0.16)`, `rgba(${hexToRgb(currentTheme.success)},1)`)
             }
         }
     }
-
     return {
         chart: {
             type: 'bar',
@@ -204,16 +205,27 @@ const chartOptions = computed(() => {
                     </h6>
                     <span class="text-sm">7일간 거래금 개요</span>
                     <h5 class="text-h5 my-2 text-h6 font-weight-semibold">
-                        {{ week_amount.toLocaleString() }} ￦
+                        <template v-if="first_loading">
+                            <SkeletonBox />
+                        </template>
+                        <template v-else>
+                            {{ week_amount.toLocaleString() }} ￦
+                        </template>
                     </h5>
                 </div>
                 <div>
-                    <p class="text-sm mt-0 mb-1">
-                        이전 대비
-                        <VChip label color="success">
-                            {{ current.week_amount_rate?.toFixed(3) }}%
-                        </VChip>
-                    </p>
+                    <template v-if="first_loading">
+                        <SkeletonBox />
+                    </template>
+                    <template v-else>
+                        <p class="text-sm mt-0 mb-1">
+                            이전 대비
+                            <VChip label color="success">
+                                {{ current.week_amount_rate?.toFixed(3) }}%
+                            </VChip>
+                        </p>
+                    </template>
+
                 </div>
             </div>
             <div>

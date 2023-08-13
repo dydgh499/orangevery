@@ -35,7 +35,7 @@ const router = useRouter()
             </tr>
         </template>
         <template #body>
-            <template v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
+            <template v-for="(item, index) in store.items" :key="index">
                 <tr>
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" :class="_key == 'title' ? 'list-square title' : 'list-square'">

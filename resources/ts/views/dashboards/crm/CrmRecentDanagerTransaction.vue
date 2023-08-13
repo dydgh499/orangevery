@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useCRMStore } from '@/views/dashboards/crm/crm'
+import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
+
+const first_loading = <any>(inject('first_loading'))
 
 const { danger_histories } = useCRMStore()
 const booleanTypeColor = (type: boolean | null) => {
     return Boolean(type) ? "default" : "success";
-};
-
+}
 const getSelectIdColor = (id: number | undefined) => {
     if (id == 0)
         return "default"
@@ -88,9 +90,35 @@ const getSelectIdColor = (id: number | undefined) => {
                             {{ transition.danger_type ? '한도초과' : '중복결제' }}
                         </VChip>
                     </td>
+                </tr>            
+                <tr v-for="(transition, _key) in 9" :key="_key" v-if="first_loading">
+                    <td class="list-square">
+                        <SkeletonBox />
+                    </td>
+                    <td class="list-square">
+                        <SkeletonBox />
+                    </td>
+                    <td class="list-square">
+                        <SkeletonBox />
+                    </td>
+                    <td class="list-square">
+                        <SkeletonBox />
+                    </td>
+                    <td class="list-square">
+                        <SkeletonBox />
+                    </td>
+                    <td class="list-square">
+                        <SkeletonBox />
+                    </td>
+                    <td class="list-square">
+                        <SkeletonBox />
+                    </td>
+                    <td class="list-square">
+                        <SkeletonBox />
+                    </td>
                 </tr>
             </tbody>
-            <tfoot v-show="!Boolean(danger_histories.length)">
+            <tfoot v-show="!Boolean(danger_histories.length) && !first_loading">
                 <tr>
                     <td colspan="8" class='list-square' style="border: 0;">
                         최근 이상거래가 존재하지 않습니다.

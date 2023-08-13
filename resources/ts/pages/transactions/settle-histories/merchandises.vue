@@ -32,7 +32,7 @@ provide('exporter', exporter)
             </tr>
         </template>
         <template #body>
-            <tr v-for="(item, index) in store.items" :key="index" style="height: 3.75rem;">
+            <tr v-for="(item, index) in store.items" :key="index">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
                         <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible" class='list-square'>
