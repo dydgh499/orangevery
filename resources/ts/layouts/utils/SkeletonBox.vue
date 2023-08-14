@@ -43,10 +43,10 @@ const computedWidth = computed(() => {
     background-image:
       linear-gradient(
         90deg,
-        rgba(#fff, 0) 0,
-        rgba(#fff, 0.2) 20%,
-        rgba(#fff, 0.5) 60%,
-        rgba(#fff, 0)
+        rgba(var(--v-theme-background), 0) 0,
+        rgba(var(--v-theme-background), 0.2) 20%,
+        rgba(var(--v-theme-background), 0.5) 60%,
+        rgba(var(--v-theme-background), 0)
       );
     content: "";
     inset: 0;
