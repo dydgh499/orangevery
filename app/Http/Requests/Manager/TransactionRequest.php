@@ -123,6 +123,7 @@ class TransactionRequest extends FormRequest
         $data['cxl_tm'] = $data['cxl_tm'] == '' ? null : $data['cxl_tm'];
         $data['is_cancel'] = $data['cxl_dt'] == null ? false : true;
         $data['ori_trx_id'] = $data['cxl_dt'] == null ? null : $data['trx_id'];
+        $data['terminal_id'] = $data['terminal_id'] == '' ? null : $data['terminal_id'];
 
         if($data['is_cancel'])
         {
