@@ -97,7 +97,7 @@ class NotiUrlController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $res = $this->delete($this->merchandises->where('id', $id));
+        $res = $this->delete($this->noti_urls->where('id', $id));
         return $this->response($res);
     }
 }
