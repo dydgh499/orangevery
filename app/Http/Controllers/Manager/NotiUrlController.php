@@ -55,8 +55,8 @@ class NotiUrlController extends Controller
      */
     public function store(NotiRequest $request)
     {
-        $user = $request->data();
-        $res = $this->noti_urls->create($user);
+        $data = $request->data();
+        $res = $this->noti_urls->create($data);
         return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);
     }
 
