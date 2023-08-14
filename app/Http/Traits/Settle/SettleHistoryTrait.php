@@ -9,6 +9,7 @@ trait SettleHistoryTrait
     protected function SetTransSettle($query, $request, $target_id, $target_settle_id, $resource_id)
     {
         return $query
+            ->globalFilter()
             ->settleFilter($target_settle_id)
             ->settleTransaction($request->dt)
             ->update([$target_settle_id => $resource_id]);

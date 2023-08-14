@@ -155,9 +155,9 @@ watchEffect(() => {
         const trans:any = store.getItems.find(item => item['id'] == selected.value[i])
         if(trans) {
             if(trans['is_cancel'])
-                _settle.appr_amount += trans['amount']
-            else
                 _settle.cxl_amount += trans['amount']
+            else
+                _settle.appr_amount += trans['amount']
 
             _settle.total_amount += trans['amount']
             _settle.settle_amount += trans['profit']

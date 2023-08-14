@@ -54,7 +54,8 @@ trait SettleTrait
 
     private function getExistTransUserIds($date, $col, $target)
     {
-        return Transaction::settleFilter($target)
+        return Transaction::settleFilter($target)    
+            ->globalFilter()
             ->settleTransaction($date)
             ->distinct()
             ->get([$col])

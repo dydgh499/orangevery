@@ -26,13 +26,18 @@ class Transaction extends Model
     protected   $guarded    = [];
     protected   $feeFormatting = false;
 
-    public function scopeSettleTransaction($query, $date)
+    public function scopeGlobalFilter($query)
     {
+        $query = $query->where('is_delete', false);
         $query = globalPGFilter($query, request());
         $query = globalSalesFilter($query, request());
         $query = globalAuthFilter($query, request());
+        return $query;
+    }
+
+    public function scopeSettleTransaction($query, $date)
+    {
         return $query
-            ->where('is_delete', false)
             ->where(function ($query) use ($date) {   // 승인이면서 D+1 적용
                 $query->whereRaw("trx_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)")
                     ->where('is_cancel', false);

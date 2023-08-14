@@ -94,6 +94,7 @@ class MerchandiseController extends Controller
     public function part(Request $request)
     {        
         $query = Transaction::where('mcht_id', $request->id)
+            ->globalFilter()
             ->settleFilter('mcht_settle_id')
             ->settleTransaction(request()->dt)
             ->with(['mcht']);
@@ -123,6 +124,7 @@ class MerchandiseController extends Controller
             'page_size' => 999999,
         ]);
         $query = Transaction::where('mcht_id', $request->id)
+            ->globalFilter()
             ->settleFilter('mcht_settle_id')
             ->settleTransaction($request->dt);
 

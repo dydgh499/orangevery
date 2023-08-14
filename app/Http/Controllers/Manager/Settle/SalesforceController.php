@@ -127,6 +127,7 @@ class SalesforceController extends Controller
         $key = 'sales'.$idx;
 
         $query = Transaction::where($key.'_id', $request->id)
+            ->globalFilter()
             ->settleFilter($key."_settle_id")
             ->settleTransaction(request()->dt)
             ->with(['mcht']);
@@ -159,6 +160,7 @@ class SalesforceController extends Controller
         $key = 'sales'.$idx;
 
         $query = Transaction::where($key.'_id', $request->id)
+            ->globalFilter()
             ->settleFilter($key."_settle_id")
             ->settleTransaction($request->dt);
 

@@ -98,7 +98,7 @@ const partSettle = async () => {
     {
         if (await alert.value.show('정말 '+count+'개의 매출을 부분정산하시겠습니까?<br><br>NO. ['+str_selected+']')) {
             const res = await post('/api/v1/manager/transactions/settle-histories/'+path+'/part', params)
-            snackbar.value.show('성공하였습니다', 'success')
+            snackbar.value.show('성공하였습니다.', 'success')
             store.setChartProcess()
             store.setTable()
         }
@@ -155,9 +155,9 @@ watchEffect(() => {
         const trans:any = store.getItems.find(item => item['id'] == selected.value[i])
         if(trans) {
             if(trans['is_cancel'])
-                _settle.appr_amount += trans['amount']
-            else
                 _settle.cxl_amount += trans['amount']
+            else
+                _settle.appr_amount += trans['amount']
 
             _settle.total_amount += trans['amount']
             _settle.settle_amount += trans['profit']
