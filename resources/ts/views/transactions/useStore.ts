@@ -95,7 +95,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     head.flat_headers.value = head.setFlattenHeaders()
     
     const exporter = async (type: number) => {      
-        const r = await store.get(store.getAllDataFormat())
+        const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         printer(type, r.data.content)
     }
     const printer = (type:number, datas: Transaction[]) => {

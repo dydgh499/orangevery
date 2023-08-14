@@ -50,7 +50,7 @@ export const useSearchStore = defineStore('complaintSearchStore', () => {
 
     const exporter = async (type: number) => {      
         const keys = Object.keys(headers);
-        const r = await store.get(store.getAllDataFormat())
+        const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         const datas = r.data.content;
         for (let i = 0; i <datas.length; i++) {
             datas[i]['type'] = complaint_types.find(types => types.id === datas[i]['type'])?.title

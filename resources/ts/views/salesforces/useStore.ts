@@ -116,7 +116,7 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
     
     const exporter = async (type: number) => {
         const keys = Object.keys(headers);
-        const r = await store.get(store.getAllDataFormat())
+        const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         let datas = r.data.content;
         for (let i = 0; i < datas.length; i++) {
             datas[i]['level'] = all_sales.find(obj => obj['id'] === datas[i]['level'])?.title as string

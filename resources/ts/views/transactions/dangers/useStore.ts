@@ -40,7 +40,7 @@ export const useSearchStore = defineStore('dangerSearchStore', () => {
     head.flat_headers.value = head.setFlattenHeaders()
     
     const exporter = async (type: number) => {      
-        const r = await store.get(store.getAllDataFormat())
+        const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         printer(type, r.data.content)
     }
     

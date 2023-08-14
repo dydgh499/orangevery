@@ -6,6 +6,7 @@ import { cloneDeep } from 'lodash'
 
 export function Searcher(path: string) {
     const { get } = useRequestStore()
+    const base_url = '/api/v1/manager/'+path
     // -----------------------------
     let items = ref(<[]>([]))
     const router = useRouter()
@@ -39,7 +40,7 @@ export function Searcher(path: string) {
     const getChartData = async() => {
         const p = cloneDeep(params)
         p.search = getSearch()        
-        const r = await get('/api/v1/manager/'+path+'/chart', { params: p })
+        const r = await get(base_url+'/chart', { params: p })
         chart_process.value = true
         return r
     }
@@ -56,7 +57,7 @@ export function Searcher(path: string) {
             before_search = p.search
         }
         
-        const r = await get('/api/v1/manager/'+path, { params: p })        
+        const r = await get(base_url, { params: p })        
         if (r.status == 200) {
             let l_page = r.data.total / params.page_size
             items.value = r.data.content
@@ -103,7 +104,7 @@ export function Searcher(path: string) {
         return items.value
     })
     return {
-        setTable, getItems,
+        setTable, getItems, base_url,
         items, params, pagenation, getChartProcess, setChartProcess,
         create, edit, getChartData, getPercentage,
         get, booleanTypeColor, getSelectIdColor, getAllDataFormat,

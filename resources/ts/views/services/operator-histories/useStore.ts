@@ -28,7 +28,7 @@ export const useSearchStore = defineStore('operatorHistorySearchStore', () => {
 
     const exporter = async (type: number) => {
         const keys = Object.keys(headers);
-        const r = await store.get(store.getAllDataFormat())
+        const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         let datas = r.data.content;
         for (let i = 0; i < datas.length; i++) {
             datas[i]['module_type'] = history_types.find(history_type => history_type['id'] === datas[i]['history_type'])?.title as string

@@ -25,7 +25,7 @@ export const useSearchStore = defineStore('NotiSearchStore', () => {
     head.flat_headers.value = head.setFlattenHeaders()
 
     const exporter = async (type: number) => {
-        const r = await store.get(store.getAllDataFormat())
+        const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         let datas = r.data.content;
         for (let i = 0; i < datas.length; i++) {
             datas[i]['noti_status'] = noti_statuses.find(status => status['id'] === datas[i]['noti_status'])?.title as string

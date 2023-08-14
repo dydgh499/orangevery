@@ -33,7 +33,7 @@ export const useSearchStore = defineStore('transSettlesHistorySalesSearchStore',
 
     const exporter = async (type: number) => {     
         const keys = Object.keys(headers); 
-        const r = await store.get(store.getAllDataFormat())
+        const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         let datas = r.data.content;
         for (let i = 0; i <datas.length; i++) {
             datas[i]['deposit_status'] = datas[i]['deposit_status'] ? '입금완료' : '미입금'
