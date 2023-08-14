@@ -433,7 +433,7 @@ onMounted(async() => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>TID</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.tid" type="text" :rules="[requiredValidator]"
+                                        <VTextField v-model="props.item.tid" type="text"
                                             prepend-inner-icon="jam-key-f" />
                                     </template>
                                 </CreateHalfVCol>
