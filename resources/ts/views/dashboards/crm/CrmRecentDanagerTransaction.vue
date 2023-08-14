@@ -59,64 +59,68 @@ const getSelectIdColor = (id: number | undefined) => {
                     </th>
                 </tr>
             </thead>
-
             <tbody>
-                <tr v-for="(transition, key, index) in danger_histories" :key="key">
-                    <td class="list-square">
-                        {{ transition.mcht_name }}
-                    </td>
-                    <td class="list-square">
-                        <VChip :color="getSelectIdColor(module_types.find(obj => obj.id === transition.module_type)?.id)">
-                            {{ module_types.find(obj => obj.id === transition.module_type)?.title }}
-                        </VChip>
-                    </td>
-                    <td class="list-square">
-                        {{ transition.amount.toLocaleString() }}
-                    </td>
-                    <td class="list-square">
-                        {{ installments.find(inst => inst['id'] === transition.installment)?.title }}
-                    </td>
-                    <td class="list-square">
-                        {{ transition.issuer }}
-                    </td>
-                    <td class="list-square">
-                        {{ transition.card_num }}
-                    </td>
-                    <td class="list-square">
-                        {{ transition.trx_dttm }}
-                    </td>
-                    <td class="list-square">
-                        <VChip :color="booleanTypeColor(!transition.danger_type)" >
-                            {{ transition.danger_type ? '한도초과' : '중복결제' }}
-                        </VChip>
-                    </td>
-                </tr>            
-                <tr v-for="(transition, _key) in 9" :key="_key" v-if="is_skeleton">
-                    <td class="list-square">
-                        <SkeletonBox />
-                    </td>
-                    <td class="list-square">
-                        <SkeletonBox />
-                    </td>
-                    <td class="list-square">
-                        <SkeletonBox />
-                    </td>
-                    <td class="list-square">
-                        <SkeletonBox />
-                    </td>
-                    <td class="list-square">
-                        <SkeletonBox />
-                    </td>
-                    <td class="list-square">
-                        <SkeletonBox />
-                    </td>
-                    <td class="list-square">
-                        <SkeletonBox />
-                    </td>
-                    <td class="list-square">
-                        <SkeletonBox />
-                    </td>
-                </tr>
+                <template v-if="is_skeleton">
+                    <tr v-for="(transition, _key) in 9" :key="_key">
+                        <td class="list-square">
+                            <SkeletonBox />
+                        </td>
+                        <td class="list-square">
+                            <SkeletonBox />
+                        </td>
+                        <td class="list-square">
+                            <SkeletonBox />
+                        </td>
+                        <td class="list-square">
+                            <SkeletonBox />
+                        </td>
+                        <td class="list-square">
+                            <SkeletonBox />
+                        </td>
+                        <td class="list-square">
+                            <SkeletonBox />
+                        </td>
+                        <td class="list-square">
+                            <SkeletonBox />
+                        </td>
+                        <td class="list-square">
+                            <SkeletonBox />
+                        </td>
+                    </tr>
+                </template>
+                <template v-else>
+                    <tr v-for="(transition, key, index) in danger_histories" :key="key">
+                        <td class="list-square">
+                            {{ transition.mcht_name }}
+                        </td>
+                        <td class="list-square">
+                            <VChip
+                                :color="getSelectIdColor(module_types.find(obj => obj.id === transition.module_type)?.id)">
+                                {{ module_types.find(obj => obj.id === transition.module_type)?.title }}
+                            </VChip>
+                        </td>
+                        <td class="list-square">
+                            {{ transition.amount.toLocaleString() }}
+                        </td>
+                        <td class="list-square">
+                            {{ installments.find(inst => inst['id'] === transition.installment)?.title }}
+                        </td>
+                        <td class="list-square">
+                            {{ transition.issuer }}
+                        </td>
+                        <td class="list-square">
+                            {{ transition.card_num }}
+                        </td>
+                        <td class="list-square">
+                            {{ transition.trx_dttm }}
+                        </td>
+                        <td class="list-square">
+                            <VChip :color="booleanTypeColor(!transition.danger_type)">
+                                {{ transition.danger_type ? '한도초과' : '중복결제' }}
+                            </VChip>
+                        </td>
+                    </tr>
+                </template>
             </tbody>
             <tfoot v-show="!Boolean(danger_histories.length) && !is_skeleton">
                 <tr>

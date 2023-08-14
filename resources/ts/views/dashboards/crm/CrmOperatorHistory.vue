@@ -26,31 +26,6 @@ const getSelectIdColor = (id: number | undefined) => {
     <VCard title="운영자 활동이력">
         <VCardText>
             <VTimeline side="end" align="start" truncate-line="both" density="compact" class="v-timeline-density-compact">
-                <VTimelineItem v-for="(operator_history, key, index) in operator_histories" :key="key"
-                    :dot-color="getSelectIdColor(operator_history.history_type)" size="x-small">
-                    <!-- 👉 Header -->
-                    <div class="d-flex justify-space-between">
-                        <h6 class="text-base font-weight-semibold me-3">
-                            {{ operator_history.history_target }}
-                            {{ operator_history.history_title ? " - "+operator_history.history_title : ''}}
-                            <VChip :color="getSelectIdColor(operator_history.history_type)">
-                                {{ history_types.find(history_type => history_type['id'] === operator_history.history_type)?.title  }}
-                            </VChip>   
-                        </h6>
-                        <span class="text-sm">
-                            {{ operator_history.created_at }}
-                        </span>
-                    </div>
-                    <!-- 👉 Content -->
-                    <div class="d-flex align-center mt-2">
-                        <VAvatar :image="operator_history.profile_img" class="me-3" />
-                        <div>
-                            <p class="font-weight-semibold mb-0">
-                                <span>{{ operator_history.nick_name }}</span>                             
-                            </p>
-                        </div>
-                    </div>
-                </VTimelineItem>
                 <template v-if="is_skeleton">
                     <VTimelineItem v-for="(operator_history, _index) in 5" :key="_index" size="x-small" >
                     <div class="d-flex justify-space-between">
@@ -74,6 +49,34 @@ const getSelectIdColor = (id: number | undefined) => {
                     </div>
                 </VTimelineItem>
                 </template>
+                <template v-else>
+                    <VTimelineItem v-for="(operator_history, key, index) in operator_histories" :key="key"
+                        :dot-color="getSelectIdColor(operator_history.history_type)" size="x-small">
+                        <!-- 👉 Header -->
+                        <div class="d-flex justify-space-between">
+                            <h6 class="text-base font-weight-semibold me-3">
+                                {{ operator_history.history_target }}
+                                {{ operator_history.history_title ? " - "+operator_history.history_title : ''}}
+                                <VChip :color="getSelectIdColor(operator_history.history_type)">
+                                    {{ history_types.find(history_type => history_type['id'] === operator_history.history_type)?.title  }}
+                                </VChip>   
+                            </h6>
+                            <span class="text-sm">
+                                {{ operator_history.created_at }}
+                            </span>
+                        </div>
+                        <!-- 👉 Content -->
+                        <div class="d-flex align-center mt-2">
+                            <VAvatar :image="operator_history.profile_img" class="me-3" />
+                            <div>
+                                <p class="font-weight-semibold mb-0">
+                                    <span>{{ operator_history.nick_name }}</span>                             
+                                </p>
+                            </div>
+                        </div>
+                    </VTimelineItem>
+                </template>
+
                 <VTimelineItem v-show="!Boolean(operator_histories.length) && is_skeleton" size="x-small">
                     <div class="d-flex justify-space-between">
                         <span class="text-sm">
