@@ -137,7 +137,7 @@ class DashboardController extends Controller
         $cur_month  = $cur_day->copy()->startOfMonth();
         $ten_months_ago = $cur_month->copy()->subMonths(9)->startOfMonth()->format('Y-m-d');
 
-        $query  = Transaction::where('brand_id', $request->user()->brand_id)
+        $query = Transaction::where('brand_id', $request->user()->brand_id)
                 ->where('trx_dt', '>=', $ten_months_ago)
                 ->where('is_delete', false);
         $query = globalAuthFilter($query, $request);
@@ -155,7 +155,6 @@ class DashboardController extends Controller
         foreach($data['content'] as $transaction) 
         {
             $transaction->append(['total_trx_amount']);
-
 
             $month = Carbon::parse($transaction->trx_dt)->format('Y-m');
             $month_trans[$month][] = $transaction;
