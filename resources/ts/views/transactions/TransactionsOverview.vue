@@ -351,7 +351,7 @@ onMounted(async() => {
                                     <template #input>
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.terminal_id"
                                             :items="terminals" prepend-inner-icon="ic-outline-send-to-mobile" label="장비 선택"
-                                            item-title="name" item-value="id" single-line :rules=[requiredValidator] />
+                                            item-title="name" item-value="id" single-line />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
