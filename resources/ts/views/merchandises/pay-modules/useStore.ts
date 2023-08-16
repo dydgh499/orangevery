@@ -34,7 +34,9 @@ export const ship_out_stats = <Options[]>([
 ])
 
 export const under_sales_types = <Options[]>([
-    {id: 0, title:'작월 1일 ~ 작월 말일'}, {id: 1, title:'등록일 ~ +1달-1일'}, 
+    {id: 1, title:'적용안함'},
+    {id: 1, title:'작월 1일 ~ 작월 말일'}, 
+    {id: 2, title:'등록일 ~ +1달-1일'}, 
 ])
 
 export const payModFilter = (all_pay_modules:PayModule[], filter:PayModule[], pmod_id:number|null) => {

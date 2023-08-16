@@ -2,7 +2,7 @@
 import { useSearchStore } from '@/views/merchandises/terminals/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { allLevels } from '@/views/salesforces/useStore'
-import { module_types, installments, ship_out_stats } from '@/views/merchandises/pay-modules/useStore'
+import { module_types, installments, ship_out_stats, under_sales_types } from '@/views/merchandises/pay-modules/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { user_info, getUserLevel } from '@axios'
@@ -23,7 +23,7 @@ const isMchtUnableCol = (key: string) => {
             'module_type', 'installment', 'pg_id', 'ps_id', 
             'settle_type', 'terminal_id', 'comm_settle_fee', 'ship_out_stat',
             'comm_calc_level', 'mid', 'tid', 'begin_dt', 'ship_out_dt',
-            'under_sales_amt', 'comm_settle_type',
+            'under_sales_amt', 'under_sales_type', 'comm_settle_type',
         ]
         return cols.includes(key);
     }
@@ -90,6 +90,9 @@ watchEffect(() => {
                         </span>
                         <span v-else-if="_key == 'comm_settle_fee' && isMchtUnableCol(_key) == false">
                             {{ item[_key].toLocaleString() }}
+                        </span>
+                        <span v-else-if="_key == 'under_sales_type' && isMchtUnableCol(_key) == false">
+                            {{ under_sales_types.find(under_sales_type => under_sales_type['id'] === item[_key])?.title }}
                         </span>
                         <span v-else-if="_key == 'ship_out_stat' && isMchtUnableCol(_key) == false">
                             <VChip :color="store.getSelectIdColor(ship_out_stats.find(obj => obj.id === item[_key])?.id)">
