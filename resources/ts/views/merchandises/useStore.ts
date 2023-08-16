@@ -98,6 +98,8 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     }
 })
 
+
+
 export const defaultItemInfo = () => {
     const path = 'merchandises'
     const item = reactive<Merchandise>({

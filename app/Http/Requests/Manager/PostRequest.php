@@ -63,12 +63,7 @@ class PostRequest extends FormRequest
 
     public function data()
     {
-        $data = [];
-        for ($i=0; $i < count($this->keys) ; $i++)
-        {
-            $key = $this->keys[$i];
-            $data[$key] = $this->input($key, '');
-        }
+        $data = $this->getParmasBaseKey();
         $data['parent_id'] = $data['parent_id'] == '' ? null : $data['parent_id'];
         $data['parent_id'] = $data['parent_id'] == 'NaN' ? null : $data['parent_id'];
         $data['brand_id'] = $this->user()->brand_id;

@@ -2,7 +2,7 @@
 import { useSearchStore } from '@/views/merchandises/terminals/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { allLevels } from '@/views/salesforces/useStore'
-import { module_types, installments, shipOutStats } from '@/views/merchandises/pay-modules/useStore'
+import { module_types, installments, ship_out_stats } from '@/views/merchandises/pay-modules/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { user_info, getUserLevel } from '@axios'
@@ -42,7 +42,7 @@ watchEffect(() => {
                 <template #pg_extra_field>
                     <VCol cols="12" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.ship_out_stat"
-                            :items="[{ id: null, title: '전체' }].concat(shipOutStats)" label="출고타입 선택" item-title="title"
+                            :items="[{ id: null, title: '전체' }].concat(ship_out_stats)" label="출고타입 선택" item-title="title"
                             item-value="id" />
                     </VCol>
                 </template>
@@ -92,8 +92,8 @@ watchEffect(() => {
                             {{ item[_key].toLocaleString() }}
                         </span>
                         <span v-else-if="_key == 'ship_out_stat' && isMchtUnableCol(_key) == false">
-                            <VChip :color="store.getSelectIdColor(shipOutStats.find(obj => obj.id === item[_key])?.id)">
-                                {{ shipOutStats.find(obj => obj.id === item[_key])?.title }}
+                            <VChip :color="store.getSelectIdColor(ship_out_stats.find(obj => obj.id === item[_key])?.id)">
+                                {{ ship_out_stats.find(obj => obj.id === item[_key])?.title }}
                             </VChip>
                         </span>
                         <span v-else-if="_key == 'comm_calc_level' && isMchtUnableCol(_key) == false">

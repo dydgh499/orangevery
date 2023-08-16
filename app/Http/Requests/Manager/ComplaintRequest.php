@@ -82,12 +82,7 @@ class ComplaintRequest extends FormRequest
 
     public function data()
     {
-        $data = [];
-        for ($i=0; $i < count($this->keys) ; $i++)
-        {
-            $key = $this->keys[$i];
-            $data[$key] = $this->input($key, '');
-        }
+        $data = $this->getParmasBaseKey();
         if(strpos($data['appr_dt'], 'T') !== false)
             $data['appr_dt'] = explode('T', $data['appr_dt'])[0];
 

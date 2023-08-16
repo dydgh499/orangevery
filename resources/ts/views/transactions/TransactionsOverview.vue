@@ -15,6 +15,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
 const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
 const { sales, classification } = useSalesFilterStore()
 
@@ -25,7 +26,7 @@ const sales3 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const sales2 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const sales1 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const sales0 = ref(<any>({ id: null, sales_name: '선택안함' }))
-const mcht  = ref(<any>({ id: null, mcht_name: '선택안함' }))
+const mcht = ref(<any>({ id: null, mcht_name: '선택안함' }))
 const custom = ref(<any>({ id: null, type: 1, name: '사용안함' }))
 const pay_modules = ref<PayModule[]>([])
 let merchandises = <Merchandise[]>([])
@@ -99,16 +100,16 @@ const filterInsts = computed(() => {
     else
         return []
 })
-const hintSalesApplyFee = (sales: any):string => {
-    if(sales && sales.id) {
+const hintSalesApplyFee = (sales: any): string => {
+    if (sales && sales.id) {
         const history = fee_histories.find(obj => obj.sales_id === sales.id)
-        return history ? '마지막 일괄적용: '+(history.trx_fee * 100).toFixed(3)+'%' : '';
+        return history ? '마지막 일괄적용: ' + (history.trx_fee * 100).toFixed(3) + '%' : '';
     }
     else
         return ''
 }
 
-onMounted(async() => {
+onMounted(async () => {
     await Promise.all([
         classification(),
         feeApplyHistoires(),
@@ -160,8 +161,9 @@ onMounted(async() => {
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales5"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[5].value)"
-                                        prepend-inner-icon="ph:share-network" :label="levels.sales5_name+ ' 선택'" item-title="sales_name"
-                                        persistent-hint :hint="hintSalesApplyFee(sales5)" item-value="id" return-object />
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales5_name + ' 선택'"
+                                        item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales5)"
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales5_fee" type="number" suffix="%"
@@ -178,8 +180,9 @@ onMounted(async() => {
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales4"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[4].value)"
-                                        prepend-inner-icon="ph:share-network" :label="levels.sales4_name+ ' 선택'" item-title="sales_name"
-                                        persistent-hint :hint="hintSalesApplyFee(sales4)" item-value="id" return-object />
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales4_name + ' 선택'"
+                                        item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales4)"
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales4_fee" type="number" suffix="%"
@@ -196,8 +199,9 @@ onMounted(async() => {
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales3"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[3].value)"
-                                        prepend-inner-icon="ph:share-network" :label="levels.sales3_name+ ' 선택'" item-title="sales_name"
-                                        persistent-hint :hint="hintSalesApplyFee(sales3)" item-value="id" return-object />
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales3_name + ' 선택'"
+                                        item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales3)"
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales3_fee" type="number" suffix="%"
@@ -214,8 +218,9 @@ onMounted(async() => {
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales2"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[2].value)"
-                                        prepend-inner-icon="ph:share-network" :label="levels.sales2_name+ ' 선택'" item-title="sales_name"
-                                        persistent-hint :hint="hintSalesApplyFee(sales2)" item-value="id" return-object />
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales2_name + ' 선택'"
+                                        item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales2)"
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales2_fee" type="number" suffix="%"
@@ -232,8 +237,9 @@ onMounted(async() => {
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales1"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[1].value)"
-                                        prepend-inner-icon="ph:share-network" :label="levels.sales1_name+ ' 선택'" item-title="sales_name"
-                                        persistent-hint :hint="hintSalesApplyFee(sales1)" item-value="id" return-object />
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales1_name + ' 선택'"
+                                        item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales1)"
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales1_fee" type="number" suffix="%"
@@ -250,8 +256,9 @@ onMounted(async() => {
                                 <VCol cols="12" :md="4">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales0"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[0].value)"
-                                        prepend-inner-icon="ph:share-network" :label="levels.sales0_name+ ' 선택'" item-title="sales_name"
-                                        persistent-hint :hint="hintSalesApplyFee(sales0)" item-value="id" return-object />
+                                        prepend-inner-icon="ph:share-network" :label="levels.sales0_name + ' 선택'"
+                                        item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales0)"
+                                        item-value="id" return-object />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales0_fee" type="number" suffix="%"
@@ -433,8 +440,7 @@ onMounted(async() => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>TID</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.tid" type="text"
-                                            prepend-inner-icon="jam-key-f" />
+                                        <VTextField v-model="props.item.tid" type="text" prepend-inner-icon="jam-key-f" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>

@@ -3,7 +3,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useRequestStore } from '@/views/request'
 import { requiredValidator, nullValidator } from '@validators'
 import type { PayModule, Merchandise } from '@/views/types'
-import { module_types, installments, abnormal_trans_limits, shipOutStats } from '@/views/merchandises/pay-modules/useStore'
+import { module_types, installments, abnormal_trans_limits, ship_out_stats, under_sales_types } from '@/views/merchandises/pay-modules/useStore'
 import { allLevels } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
@@ -324,6 +324,18 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
+                        <!-- 👉 매출미달 적용기간 -->
+                        <VRow class="pt-3">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
+                                <template #name>매출미달 적용기간</template>
+                                <template #input>
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.under_sales_type"
+                                            :items="under_sales_types" prepend-inner-icon="bi:calendar-range" label="적용기간 선택"
+                                            item-title="title" item-value="id" persistent-hint single-line />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        
                         <!-- 👉 개통일 -->
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
@@ -354,7 +366,7 @@ onMounted(() => {
                                         inline
                                     >
                                         <VRadio
-                                            v-for="(shipOutStat, key) in shipOutStats"
+                                            v-for="(shipOutStat, key) in ship_out_stats"
                                             :key="key"
                                             :label="shipOutStat.title"
                                             :value="shipOutStat.id"

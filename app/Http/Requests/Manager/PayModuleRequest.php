@@ -32,6 +32,7 @@ class PayModuleRequest extends FormRequest
             'is_old_auth',
             'pay_dupe_limit',
             'abnormal_trans_limit',
+            'under_sales_type',
             'pay_year_limit',
             'pay_month_limit',
             'pay_day_limit',
@@ -86,12 +87,7 @@ class PayModuleRequest extends FormRequest
     }
     public function data()
     {
-        $data = [];
-        for ($i=0; $i < count($this->keys) ; $i++)
-        {
-            $key = $this->keys[$i];
-            $data[$key] = $this->input($key, '');
-        }
+        $data = $this->getParmasBaseKey();
         $data['brand_id'] = $this->user()->brand_id;
         $data['terminal_id'] = $data['terminal_id'] == null ? 0 : $data['terminal_id'];
         $data['begin_dt']    = $data['begin_dt'] == '' ? '1970-01-01' : $data['begin_dt'];

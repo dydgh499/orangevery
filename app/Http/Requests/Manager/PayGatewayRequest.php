@@ -59,12 +59,7 @@ class PayGatewayRequest extends FormRequest
     }
     public function data()
     {
-        $data = [];
-        for ($i=0; $i < count($this->keys) ; $i++)
-        {
-            $key = $this->keys[$i];
-            $data[$key] = $this->input($key, '');
-        }
+        $data = $this->getParmasBaseKey();
         $data['brand_id'] = $this->user()->brand_id;
         return $data;
     }

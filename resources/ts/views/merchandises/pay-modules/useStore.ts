@@ -28,10 +28,15 @@ export const installments = <Options[]>([
     { id: 11, title: "11개월" }, { id: 12, title: "12개월" },
 ])
 
-export const shipOutStats = <Options[]>([
+export const ship_out_stats = <Options[]>([
     { id: 0, title: "공장비" }, { id: 1, title: "입고" },
     { id: 2, title: "출고" }, { id: 3, title: "해지" },
 ])
+
+export const under_sales_types = <Options[]>([
+    {id: 0, title:'작월 1일 ~ 작월 말일'}, {id: 1, title:'등록일 ~ +1달-1일'}, 
+])
+
 export const payModFilter = (all_pay_modules:PayModule[], filter:PayModule[], pmod_id:number|null) => {
     if (all_pay_modules.length > 0) {
         if (filter.length > 0) {
@@ -127,6 +132,7 @@ export const defaultItemInfo =  () => {
         comm_settle_type: 1,
         comm_calc_level: 10,
         under_sales_amt: 0,
+        under_sales_type: 0,
         begin_dt: undefined,
         ship_out_dt: undefined,
         ship_out_stat: 0,
@@ -143,7 +149,7 @@ export const defaultItemInfo =  () => {
         pay_disable_e_tm: null,
         show_pay_view: false,
         pay_key: '',
-        filter_issuers: []
+        filter_issuers: [],
     })
     //카드사 필터 및 다른 필터옵션들
     return {
