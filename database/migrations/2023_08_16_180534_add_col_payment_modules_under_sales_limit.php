@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('payment_modules', function (Blueprint $table) {
-            $table->tinyInteger('under_sales_type')->default(0)->comment('매출미달 적용타입');
+            $table->integer('under_sales_limit')->default(0)->comment('매출미달 상한금액');
         });
     }
 

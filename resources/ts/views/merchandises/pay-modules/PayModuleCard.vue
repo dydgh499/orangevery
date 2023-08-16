@@ -320,7 +320,18 @@ onMounted(() => {
                                 <template #input>
                                     <VTextField type="number" v-model="props.item.under_sales_amt"
                                         prepend-inner-icon="tabler-currency-won" placeholder="매출미달 차감금 입력"
-                                        persistent-placeholder />
+                                        persistent-placeholder suffix="만원" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <!-- 👉 매출미달 상한금액 -->
+                        <VRow class="pt-3">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
+                                <template #name>매출미달 상한금</template>
+                                <template #input>
+                                    <VTextField type="number" v-model="props.item.under_sales_limit"
+                                        prepend-inner-icon="tabler-currency-won" placeholder="매출미달 상한금 입력"
+                                        persistent-placeholder suffix="만원" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

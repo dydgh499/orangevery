@@ -19,6 +19,9 @@ return new class extends Migration
         Schema::table('payment_gateways', function (Blueprint $table) {
             $table->boolean('settle_type')->default(0)->comment('정산타입(0=주말제외, 1=주말포함)');
         });
+        Schema::table('payment_modules', function (Blueprint $table) {
+            $table->tinyInteger('under_sales_type')->default(0)->comment('매출미달 적용타입');
+        });
     }
 
     /**

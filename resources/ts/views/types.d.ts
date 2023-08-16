@@ -146,6 +146,7 @@ export interface PayModule {
     comm_calc_level: number,
     under_sales_amt: number,
     under_sales_type: number,
+    under_sales_limit: number,
     begin_dt: date | null,
     ship_out_dt: date | null,
     ship_out_stat: number | null,

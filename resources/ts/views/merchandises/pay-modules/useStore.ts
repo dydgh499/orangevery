@@ -135,6 +135,7 @@ export const defaultItemInfo =  () => {
         comm_calc_level: 10,
         under_sales_amt: 0,
         under_sales_type: 0,
+        under_sales_limit: 0,
         begin_dt: undefined,
         ship_out_dt: undefined,
         ship_out_stat: 0,
