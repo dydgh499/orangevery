@@ -90,6 +90,7 @@ class PayModuleRequest extends FormRequest
     {
         $data = $this->getParmasBaseKey();
         $data['brand_id'] = $this->user()->brand_id;
+        $data['under_sales_type'] = $data['under_sales_type'] == null ? 0 : $data['under_sales_type'];
         $data['terminal_id'] = $data['terminal_id'] == null ? 0 : $data['terminal_id'];
         $data['begin_dt']    = $data['begin_dt'] == '' ? '1970-01-01' : $data['begin_dt'];
         $data['ship_out_dt'] = $data['ship_out_dt'] == '' ? '1970-01-01' : $data['ship_out_dt'];
