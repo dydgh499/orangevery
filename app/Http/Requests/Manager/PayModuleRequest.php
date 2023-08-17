@@ -65,7 +65,6 @@ class PayModuleRequest extends FormRequest
             'module_type' => 'required',
             'is_old_auth' => 'required',
             'pay_dupe_limit' => 'required',
-            'under_sales_limit' => 'required',
             'abnormal_trans_limit' => 'required',
             'pay_year_limit' => 'required',
             'pay_month_limit' => 'required',

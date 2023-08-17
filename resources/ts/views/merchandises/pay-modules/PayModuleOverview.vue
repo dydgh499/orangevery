@@ -31,6 +31,7 @@ const addNewPaymodule = () => {
         comm_settle_type: 0,
         comm_calc_level: 0,
         under_sales_amt: 0,
+        under_sales_limit:0,
         begin_dt: null,
         ship_out_dt: null,
         ship_out_stat: 0,
