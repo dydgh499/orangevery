@@ -10,7 +10,7 @@
             <span>
                 <div style="line-height: 40px;">
                     주의사항을 확인한 후 오른쪽 하단
-                    <VBtn color="secondary" variant="tonal" aria-readonly="" size="small">
+                    <VBtn color="secondary" aria-readonly="" size="small">
                         양식 다운로드
                         <VIcon end icon="uiw-file-excel" />
                     </VBtn>
