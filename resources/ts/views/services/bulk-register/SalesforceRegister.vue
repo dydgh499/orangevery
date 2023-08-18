@@ -47,6 +47,10 @@ const validate = () => {
             snackbar.value.show((i + 1) + '번째 영업점의 패스워드는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
+        else if (isEmpty(saleses.value[i].sales_name)) {
+            snackbar.value.show((i + 1) + '번째 영업점의 상호는 필수로 입력해야합니다.', 'error')
+            is_clear.value = false
+        }
         else if (isEmpty(saleses.value[i].resident_num)) {
             snackbar.value.show((i + 1) + '번째 영업점의 주민등록번호는 필수로 입력해야합니다.', 'error')
             is_clear.value = false

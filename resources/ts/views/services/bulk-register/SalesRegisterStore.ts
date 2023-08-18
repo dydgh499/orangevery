@@ -5,6 +5,7 @@ export const useRegisterStore = defineStore('salesRegisterStore', () => {
     const headers: Record<string, string> = {
         user_name: '아이디(O)',
         user_pw: '패스워드(O)', 
+        sales_name: '영업점 상호(0)',
         level: '등급(O)', 
         nick_name: '대표자명(O)',
         addr: '주소(X)', 

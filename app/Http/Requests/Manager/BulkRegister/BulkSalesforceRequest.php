@@ -13,6 +13,7 @@ class BulkSalesforceRequest extends FormRequest
         $this->keys = [
             'user_name',
             'user_pw',
+            'sales_name',
             'nick_name',
             'level'    ,
             'resident_num',
