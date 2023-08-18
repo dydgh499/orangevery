@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { axios, user_info, getUserLevel } from '@axios'
+import { useRequestStore } from '@/views/request'
 import CardLayout from '@/views/quick-view/CardLayout.vue'
 import SettleContentOverview from '@/views/quick-view/SettleContentOverview.vue'
 import SettleContentSkeleton from '@/views/quick-view/SettleContentSkeleton.vue'
@@ -9,9 +10,9 @@ import type { MchtRecentTransaction } from '@/views/types'
 
 const router = useRouter()
 const transactions = ref(<MchtRecentTransaction>({}))
-
 const is_skeleton = ref(true)
-axios.get('/api/v1/quick-view')
+const { get } = useRequestStore()
+get('/api/v1/quick-view')
     .then(r => { transactions.value = r.data as MchtRecentTransaction; })
     .catch(e => { console.log(e) })
 watchEffect(() => {

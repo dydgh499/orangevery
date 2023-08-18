@@ -57,7 +57,6 @@ class BulkSalesforceRequest extends FormRequest
             '*.acct_bank_code' => 'required',
             '*.settle_tax_type' => 'required',
             '*.settle_cycle' => 'required',
-            '*.settle_day' => 'required',
         ];
         return $sub;
     }

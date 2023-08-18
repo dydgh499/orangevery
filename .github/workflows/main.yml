@@ -7,7 +7,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    env: # <-- 여기에 환경 변수를 추가
+      MAIN_BRAND_ID: ${{ secrets.MAIN_BRAND_ID }}
+      APP_URL: ${{ secrets.APP_URL }}
+      NOTI_URL: ${{ secrets.NOTI_URL }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
