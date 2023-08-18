@@ -42,7 +42,7 @@ watchEffect(() => {
                 <template #pg_extra_field>
                     <VCol cols="12" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.ship_out_stat"
-                            :items="[{ id: null, title: '전체' }].concat(ship_out_stats)" label="출고타입 선택" item-title="title"
+                            :items="[{ id: null, title: '전체' }].concat(ship_out_stats)" label="출고타입 필터" item-title="title"
                             item-value="id" />
                     </VCol>
                 </template>

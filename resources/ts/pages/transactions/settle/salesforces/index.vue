@@ -5,15 +5,18 @@ import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { salesLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
+import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 
 const { store, head, exporter } = useSearchStore()
+const { settle_types } = useStore()
 const all_sales = salesLevels()
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
 const totals = ref(<any[]>([]))
 const router = useRouter()
+const mcht_settle_type = ref({ id: null, name: '전체' })
 
 provide('store', store)
 provide('head', head)
@@ -59,12 +62,13 @@ watchEffect(() => {
     store.setChartProcess()
     store.params.level = store.params.level
     store.params.settle_cycle = store.params.settle_cycle
+    store.params.mcht_settle_type = mcht_settle_type.value.id
 })
 </script>
 <template>
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :is_range_date="false">
         <template #filter>
-            <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true"
+            <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                 :sales="true">
                 <template #sales_extra_field>
                     <VCol cols="12" sm="3">
@@ -73,8 +77,13 @@ watchEffect(() => {
                     </VCol>
                     <VCol cols="12" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
-                            :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`정산주기 선택`"
+                            :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`영업점 정산주기 필터`"
                             item-title="title" item-value="id" create />
+                    </VCol>
+                    <VCol cols="12" sm="3">
+                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
+                            :items="[{ id: null, name: '전체' }].concat(settle_types)" label="가맹점 정산타입 필터" item-title="name"
+                            item-value="id" return-object />
                     </VCol>
                 </template>
             </BaseIndexFilterCard>

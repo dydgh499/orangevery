@@ -179,7 +179,7 @@ watchEffect(() => {
                     <template #pg_extra_field>
                         <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
-                                :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 선택" item-title="name"
+                                :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
                                 item-value="id" return-object />
                         </VCol>
                     </template>

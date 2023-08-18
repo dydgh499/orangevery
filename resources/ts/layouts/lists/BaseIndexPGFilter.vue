@@ -45,17 +45,17 @@ watchEffect(() => {
         </VCol>
         <VCol cols="12" sm="3" v-if="props.ps && user_info.level > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="ps"
-                :items="[{ id: null, name: '전체' }].concat(filterPgs)" label="구간 선택" item-title="name" item-value="id"
+                :items="[{ id: null, name: '전체' }].concat(filterPgs)" label="구간 필터" item-title="name" item-value="id"
                 return-object id="ps-filter" :eager="true"  />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.settle_type">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="settle_type"
-                :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산일 선택" item-title="name" item-value="id"
+                :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산일 필터" item-title="name" item-value="id"
                 return-object id="settle_types-filter" :eager="true" />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.terminal">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="terminal"
-                :items="[{ id: null, name: '전체' }].concat(terminals)" label="장비 선택" item-title="name" item-value="id"
+                :items="[{ id: null, name: '전체' }].concat(terminals)" label="장비 필터" item-title="name" item-value="id"
                 return-object id="terminal-filter" :eager="true"  />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.cus_filter && user_info.level > 30">
