@@ -104,8 +104,8 @@ watchEffect(() => {
                                 {{ item[_key] }}
                             </span>
                             <span v-else-if="(_key as string).includes('_fee')">
-                                <VChip>
-                                    {{ item[_key] ? (item[_key] as number).toFixed(3)+'%' : ''}}
+                                <VChip v-if="item[_key]">
+                                    {{ (item[_key] as number).toFixed(3) }} %
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'mids'">

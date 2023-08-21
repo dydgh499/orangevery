@@ -53,8 +53,8 @@ provide('exporter', exporter)
                                 </VChip>
                             </span>
                             <span v-else-if="_key.includes('_fee')"> 
-                                <VChip>
-                                    {{ item[_key] ? (item[_key] as number)+'%' : ''}}
+                                <VChip v-if="item[_key]">
+                                    {{ item[_key] + "%" }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'extra_col'">

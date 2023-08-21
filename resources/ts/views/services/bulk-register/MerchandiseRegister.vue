@@ -224,7 +224,7 @@ watchEffect(async () => {
                                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                                         <td class='list-square'>
                                             <span v-if="(_key as string).includes('_fee')">
-                                                <VChip>
+                                                <VChip v-if="item[_key]">
                                                     {{ item[_key] ? (item[_key] as number).toFixed(3)+'%' : ''}}
                                                 </VChip>
                                             </span>
