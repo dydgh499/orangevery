@@ -32,7 +32,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:17, name:'E2U', rep_name: '이용원', company_name: '(주)이투유', business_num: '383-87-01545', phone_num: '1600-4191', addr: '경기도 성남시 수정구 위례광장로 19 아이페리온, 10층 1001호'},
         {id:18, name:'에드원', rep_name: '김춘걸', company_name: '주식회사 에드원', business_num: '114-81-90678', phone_num: '554-4002', addr: '서울시 영등포구 당산로 41길 11, E동 1109호 (당산동 4가, 당산 SK V1센터)'},
         {id:19, name:'삼인칭', rep_name: '윤건', company_name: '주식회사 삼인칭', business_num: '489-87-00733', phone_num: '1833-4854', addr: '서울특별시 마포구 큰우물로 76, 403호(도화동, 고려빌딩'},
-        {id:20, pg_name:'WGP', rep_name: '우강섭', company_name: '(주)윈글로벌페이', business_num: '648-86-00577', phone_num: '1877-7590', addr: '[12918] 경기도 하남시 조정대로 45, 미사센텀비즈 F348호'},
+        {id:20, name:'WGP', rep_name: '우강섭', company_name: '(주)윈글로벌페이', business_num: '648-86-00577', phone_num: '1877-7590', addr: '[12918] 경기도 하남시 조정대로 45, 미사센텀비즈 F348호'},
     ]
 
     const settle_types = [
