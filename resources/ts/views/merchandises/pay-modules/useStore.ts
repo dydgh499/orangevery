@@ -2,7 +2,7 @@ import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Options, PayModule, StringOptions } from '@/views/types'
-import { axios, user_info } from '@axios'
+import { axios, pay_token, user_info } from '@axios'
 import corp from '@corp'
 
 export const simplePays = <StringOptions[]>([
@@ -162,6 +162,14 @@ export const defaultItemInfo =  () => {
 
 export const getAllPayModules = async(mcht_id:number|null=null) => {
     const url = '/api/v1/manager/merchandises/pay-modules/all' + (mcht_id != null ? '?mcht_id='+mcht_id : '')
-    const r = await axios.get(url)
-    return r.data.content
+    try {
+        const r = await axios.get(url)
+        return r.data.content
+    }
+    catch (e: any) {
+        pay_token.value = ''
+        user_info.value = {}
+        location.href = '/'
+        return []
+    }
 }

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { TotalSettle } from '@/views/types'
-import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 
 interface Props {
     transaction: TotalSettle,

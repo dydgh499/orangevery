@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { axios, user_info, getUserLevel } from '@axios'
+import { user_info, getUserLevel } from '@axios'
 import { useRequestStore } from '@/views/request'
 import CardLayout from '@/views/quick-view/CardLayout.vue'
 import SettleContentOverview from '@/views/quick-view/SettleContentOverview.vue'
@@ -55,7 +55,7 @@ watchEffect(() => {
             <template v-else>
                 <CardLayout v-for="(transaction, key) in transactions['month']" :key="key" :padding="true">
                     <template #content>
-                        <SettleContentOverview :transaction="transaction" :date="key">
+                        <SettleContentOverview :transaction="transaction" :date="(key as string)">
                         </SettleContentOverview>
                     </template>
                 </CardLayout> 

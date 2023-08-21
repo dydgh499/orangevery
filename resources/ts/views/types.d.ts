@@ -411,7 +411,7 @@ export interface FailTransaction {
     resuld_cd: string,
     result_msg: string,
 }
-export interface TotalSetteObject {
+export interface TotalSettleObject {
     count: number,
     amount: number,
     trx_amount: number,
@@ -421,8 +421,8 @@ export interface TotalSetteObject {
     profit: number,
 }
 export interface TotalSettle {
-    appr: TotalSette,
-    cxl: TotalSette,
+    appr: TotalSettle,
+    cxl: TotalSettle,
     count: number,
     amount: number,
     trx_amount: number,
@@ -571,13 +571,13 @@ export interface CancelPay {
 //----------------------------
 export interface MchtRecentTransaction {
     month : {
-        [key: string]: TotalSette        
+        [key: string]: TotalSettle        
     },
     day : {
-        [key: string]: TotalSette
+        [key: string]: TotalSettle
     },
     mcht_name: {
-        [key: string]: TotalSette
+        [key: string]: TotalSettle
     }
 }
 

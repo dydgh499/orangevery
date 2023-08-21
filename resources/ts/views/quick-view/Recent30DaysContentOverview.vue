@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { MchtRecentTransaction } from '@/views/types'
+import type { TotalSettle } from '@/views/types'
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 
 interface Props {
-    transactions: MchtRecentTransaction,
+    transactions: TotalSettle,
 }
 const props = defineProps<Props>()
 
