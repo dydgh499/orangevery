@@ -2,7 +2,6 @@
 import { useSearchStore, types } from '@/views/posts/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import PostReplyView from '@/views/posts/PostReplyView.vue'
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import ExtraMenu from '@/views/posts/ExtraMenu.vue'
 
 const { store, head, exporter } = useSearchStore()
@@ -20,7 +19,7 @@ const router = useRouter()
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
                 :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" :eager="true" />
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.type"
-                :items="[{ id: null, title: '전체' }].concat(types)" prepend-inner-icon="fxemoji-notepage" label="게시글 타입"
+                :items="types" prepend-inner-icon="fxemoji-notepage" label="게시글 타입"
                 item-title="title" item-value="id" style="min-width: 11em;"/>
         </template>
         <template #headers>
@@ -71,6 +70,5 @@ const router = useRouter()
   max-inline-size: 100em;
   padding-block: 2em;
   padding-inline: 0;
-  text-align: start !important;
 }
 </style>

@@ -15,6 +15,7 @@ const { get } = useRequestStore()
 get('/api/v1/quick-view')
     .then(r => { transactions.value = r.data as MchtRecentTransaction; })
     .catch(e => { console.log(e) })
+    
 watchEffect(() => {
     if(Object.keys(transactions.value).length)
         is_skeleton.value = false

@@ -33,6 +33,7 @@ class PostController extends Controller
      * 가맹점 이상 가능
      *
      * @queryParam search string 검색어(제목)
+     * @queryParam type string 검색타입(0=공지사항, 1=FAQ, 2=1:1문의)
      */
     public function index(IndexRequest $request)
     {
@@ -46,7 +47,16 @@ class PostController extends Controller
 
         if($request->type)
             $query = $query->where('type', $request->type);
-
+        if(isOperator($request) == false)
+        {
+            $query = $query->where(function($q) use($request) {
+                $q->where('type', '!=', 2)
+                  ->orWhere(function($subQuery) use($request) {
+                      $subQuery->where('type', 2)
+                               ->where('writer', $request->user()->user_name);
+                  });
+            });
+        }
         $data = $this->getIndexData($request, $query, 'id', $this->posts->cols, 'updated_at');
         return $this->response(0, $data);
     }
