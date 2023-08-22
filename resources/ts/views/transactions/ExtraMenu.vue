@@ -11,6 +11,7 @@ const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
+const formatDate = <any>(inject('$formatDate'))
 
 const salesslip = <any>(inject('salesslip'))
 const cancelTran = <any>(inject('cancelTran'))
@@ -50,6 +51,10 @@ const payCanceled = async () => {
         }
     }
 }
+const isCancelSafeDate = () => {    
+    const current_dt = formatDate(new Date())
+    return getUserLevel() == 10 && props.item.trx_dt == current_dt
+}
 </script>
 <template>
     <VBtn icon size="x-small" color="default" variant="text">
@@ -76,7 +81,7 @@ const payCanceled = async () => {
                     <VListItemTitle>취소매출생성</VListItemTitle>
                 </VListItem>
                 <VListItem value="cancel" class="pg-cancel" @click="payCanceled()" v-show="props.item.is_cancel == false"
-                    v-if="getUserLevel() == 10 || getUserLevel() >= 35">
+                    v-if="isCancelSafeDate() || getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:world-cancel" />
                     </template>
