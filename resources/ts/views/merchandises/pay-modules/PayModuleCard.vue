@@ -255,7 +255,7 @@ onMounted(() => {
                     </VCardItem>
                 </VCol>
                 <VDivider :vertical="$vuetify.display.mdAndUp" />
-                <VCol cols="12" :md="md">
+                <VCol cols="12" :md="md" v-if="props.item.module_type < 2">
                     <VCardItem>
 
                         <!-- {"except_cards":[],"use":"0"} -->

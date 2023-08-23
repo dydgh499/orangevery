@@ -37,6 +37,7 @@ const is_clear = ref<boolean>(false)
 
 const settleTypeExplain = ref()
 const pgExplain = ref()
+merchandises.value = await getAllMerchandises()
 
 const validate = () => {
     for (let i = 0; i < items.value.length; i++) {
@@ -95,7 +96,6 @@ const validate = () => {
     snackbar.value.show('입력값 1차 검증에 성공하였습니다.', 'success')
     is_clear.value = true
 }
-merchandises.value = await getAllMerchandises()
 const payModRegister = async () => {
     const result = await bulkRegister('결제모듈', 'merchandises/pay-modules', items.value)
 }
