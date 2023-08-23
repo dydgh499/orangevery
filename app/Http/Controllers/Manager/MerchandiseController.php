@@ -172,8 +172,12 @@ class MerchandiseController extends Controller
         {
             $user = $this->merchandises
                 ->where('brand_id', $request->user()->brand_id)
-                ->where('user_name', $request->user_name)
-                ->where('mcht_name', $request->mcht_name)->first();
+                ->where('is_delete', false)
+                ->where(function ($query) use ($request) {
+                    return $query->where('user_name', $request->user_name)
+                        ->orWhere('mcht_name', $request->mcht_name);
+                })
+                ->first();
             if(!$user)
             {
                 $user = $request->data();
@@ -201,7 +205,7 @@ class MerchandiseController extends Controller
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);
             }
             else
-                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디 또는 상호']));
         }
         else
             return $this->response(951);

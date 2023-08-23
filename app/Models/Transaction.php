@@ -10,6 +10,7 @@ use App\Models\Merchandise;
 use App\Models\Classification;
 use App\Models\PaymentSection;
 use App\Http\Traits\Models\AttributeTrait;
+use Carbon\Carbon;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
@@ -35,15 +36,24 @@ class Transaction extends Model
         return $query;
     }
 
-    public function scopeSettleTransaction($query, $date)
+    public function scopeSettleTransaction($query)
     {
-        return $query
-            ->where(function ($query) use ($date) {   // 승인이면서 D+1 적용
-                $query->whereRaw("trx_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)")
-                    ->where('is_cancel', false);
-            })->orWhere(function ($query) use ($date) {     // 취소이면서 D+1 적용
-                $query->whereRaw("cxl_dt < DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)")
-                    ->where('is_cancel', true);
+        $date = request()->dt;
+        if(request()->input('is_base_trx', 'false') == 'true')
+        {   //2023-08-23 -> 2023-08-24
+            $date = Carbon::parse($date);
+            $date = $date->addDay()->toDateString();
+            $date = "'$date'";            
+        }
+        else
+        {   //2023-08-23 -> 2023-08-23(D+1), 2023-08-22(D+2)
+            $date = "DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)";
+            
+        }
+        return $query->where(function ($query) use ($date) {      
+                $query->whereRaw("trx_dt < $date")->where('is_cancel', false);
+            })->orWhere(function ($query) use ($date) {
+                $query->whereRaw("cxl_dt < $date")->where('is_cancel', true);
             });
     }
 

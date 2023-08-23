@@ -15,6 +15,10 @@ export const useSearchStore = defineStore('transSettlesMchtPartSearchStore', () 
         'module_type': '거래 타입',
     }
     const { pgs, pss, terminals } = useStore()
+    if(getUserLevel() >= 35) {
+        headers['pg_id'] = 'PG사'
+        headers['ps_fee'] = '구간 수수료'
+    }
     if (levels.sales5_use && getUserLevel() >= 30) {
         headers['sales5_name'] = levels.sales5_name
         headers['sales5_fee'] = '수수료'
@@ -41,16 +45,12 @@ export const useSearchStore = defineStore('transSettlesMchtPartSearchStore', () 
     }
     headers['mcht_name'] = '가맹점'
 
-    if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13)
-    {
+    if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
         headers['mcht_fee'] = '수수료'
         headers['hold_fee'] = '유보금 수수료'
     }
 
-    if(getUserLevel() >= 35)
-    {
-        headers['pg_id'] = 'PG사'
-        headers['ps_fee'] = '구간 수수료'
+    if(getUserLevel() >= 35) {
         headers['custom_id'] = '커스텀필터'
         headers['terminal_id'] = '장비타입'
     }

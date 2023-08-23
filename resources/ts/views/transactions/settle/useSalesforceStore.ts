@@ -10,6 +10,7 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
     const headers1:Record<string, string | object> = {
         'id': 'NO.',
         'user_name' : '영업점 ID',
+        'sales_name': '상호',
         'level' : '등급',
         'settle_cycle' : '정산 주기',
         'settle_day' : '정산 요일',

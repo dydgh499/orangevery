@@ -6,12 +6,12 @@ use App\Models\Salesforce;
 
 trait SettleHistoryTrait
 {
-    protected function SetTransSettle($query, $request, $target_id, $target_settle_id, $resource_id)
+    protected function SetTransSettle($query, $target_settle_id, $resource_id)
     {
         return $query
             ->globalFilter()
             ->settleFilter($target_settle_id)
-            ->settleTransaction($request->dt)
+            ->settleTransaction()
             ->update([$target_settle_id => $resource_id]);
     }
 
@@ -39,7 +39,7 @@ trait SettleHistoryTrait
     }
 
     protected function getTargetInfo($level)
-    {
+    {   //SettleTrait와 같은 함수 존재
         $idx = globalLevelByIndex($level);
         $target_id =  'sales'.$idx.'_id';
         $target_settle_id =  'sales'.$idx.'_settle_id';
@@ -52,17 +52,17 @@ trait SettleHistoryTrait
         $data['settle_fee'] = $request->settle_fee;
 
         $c_res = $this->settle_mcht_hist->create($data);
-        $u_res = $this->SetTransSettle($query, $request, 'mcht_id', 'mcht_settle_id', $c_res->id);
+        $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);
         return $this->response($c_res && $u_res ? 1 : 990);
     }
 
-    protected function createSalesforceCommon($request, $query, $target_id, $target_settle_id)
+    protected function createSalesforceCommon($request, $query, $target_settle_id)
     {
         $data = $request->data('sales_id');
         $data['level'] = $request->level;
 
         $c_res = $this->settle_sales_hist->create($data);
-        $u_res = $this->SetTransSettle($query, $request, $target_id, $target_settle_id, $c_res->id);
+        $u_res = $this->SetTransSettle($query, $target_settle_id, $c_res->id);
         $s_res = Salesforce::where('id', $request->id)->update(['last_settle_dt' => $request->dt]);
         return $this->response($c_res && $u_res && $s_res ? 1 : 990);
     }

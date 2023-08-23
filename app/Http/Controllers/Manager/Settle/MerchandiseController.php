@@ -32,9 +32,8 @@ class MerchandiseController extends Controller
         $validated = $request->validate(['dt'=>'required|date']);
         $cols = array_merge($this->getDefaultCols(), ['mcht_name']);
         $search = $request->input('search', '');
-        $date   = $request->dt;
 
-        $mcht_ids = $this->getExistTransUserIds($date, 'mcht_id', 'mcht_settle_id');
+        $mcht_ids = $this->getExistTransUserIds('mcht_id', 'mcht_settle_id');
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
                 ->where('mcht_name', 'like', "%$search%");            
         $query = $query->with(['transactions', 'deducts']);
@@ -92,28 +91,8 @@ class MerchandiseController extends Controller
     }
 
     public function part(Request $request)
-    {        
-        $query = Transaction::where('mcht_id', $request->id)
-            ->globalFilter()
-            ->settleFilter('mcht_settle_id')
-            ->settleTransaction(request()->dt)
-            ->with(['mcht']);
-
-        $query = globalPGFilter($query, $request);
-        $query = globalSalesFilter($query, $request);
-        $query = globalAuthFilter($query, $request);
-
-        $data = $this->getIndexData($request, $query);
-        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-        $salesforces    = globalGetSalesByIds($sales_ids);
-        $data['content'] = globalMappingSales($salesforces, $data['content']);
-
-        foreach($data['content'] as $content) 
-        {
-            $content->mcht_name = $content->mcht['mcht_name'];
-            $content->append(['total_trx_amount']);
-            $content->makeHidden(['mcht']);
-        }
+    {
+        $data = $this->partSettleCommonQuery($request, 'mcht_id', 'mcht_settle_id');
         return $this->response(0, $data);
     }
 
@@ -126,7 +105,7 @@ class MerchandiseController extends Controller
         $query = Transaction::where('mcht_id', $request->id)
             ->globalFilter()
             ->settleFilter('mcht_settle_id')
-            ->settleTransaction($request->dt);
+            ->settleTransaction();
 
         $query = globalPGFilter($query, $request);
         $query = globalSalesFilter($query, $request);

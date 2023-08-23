@@ -48,7 +48,7 @@ class SettleHistoryController extends Controller
 
     public function indexSalesforce(IndexRequest $request)
     {
-        $cols = ['salesforces.user_name', 'salesforces.level', 'settle_histories_salesforces.*'];
+        $cols = ['salesforces.user_name', 'salesforces.sales_name', 'salesforces.level', 'settle_histories_salesforces.*'];
         $search = $request->input('search', '');
         $query  = $this->settle_sales_hist
                 ->join('salesforces', 'settle_histories_salesforces.sales_id', 'salesforces.id')
@@ -87,7 +87,7 @@ class SettleHistoryController extends Controller
         return DB::transaction(function () use($request) {
             [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
             $query = Transaction::where($target_id, $request->id);
-            return $this->createSalesforceCommon($request, $query, $target_id, $target_settle_id);
+            return $this->createSalesforceCommon($request, $query, $target_settle_id);
         });
     }
 
@@ -96,7 +96,7 @@ class SettleHistoryController extends Controller
         return DB::transaction(function () use($request) {
             [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
             $query = Transaction::whereIn('id', $request->selected);
-            return $this->createSalesforceCommon($request, $query, $target_id, $target_settle_id);
+            return $this->createSalesforceCommon($request, $query, $target_settle_id);
         });
     }
 

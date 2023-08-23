@@ -23,6 +23,7 @@ provide('head', head)
 provide('exporter', exporter)
 
 store.params.level = all_sales[0].id
+store.params.is_base_trx = true
 
 const getSettleStyle = (parent_key: string) => {
     if (parent_key === 'appr')
@@ -43,8 +44,8 @@ const isSalesCol = (key: string) => {
     return false
 }
 
-const movePartSettle = (id: number) => {    
-    router.push('/transactions/settle/salesforces/part/'+id+'?dt='+store.params.dt+'&level='+store.params.level)
+const movePartSettle = (id: number) => {
+    router.push('/transactions/settle/salesforces/part/' + id + '?dt=' + store.params.dt + '&level=' + store.params.level)
 }
 
 onMounted(() => {
@@ -63,17 +64,23 @@ watchEffect(() => {
     store.params.level = store.params.level
     store.params.settle_cycle = store.params.settle_cycle
     store.params.mcht_settle_type = mcht_settle_type.value.id
+    store.params.is_base_trx = store.params.is_base_trx
 })
 </script>
 <template>
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :is_range_date="false">
+        <template #index_extra_field>
+            <div class="demo-space-x" style="color: black;">
+                <VSwitch v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" />
+            </div>
+        </template>
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                 :sales="true">
                 <template #sales_extra_field>
                     <VCol cols="12" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="salesLevels()"
-                            :label="`전체`" item-title="title" item-value="id" create />
+                            :label="`조회등급`" item-title="title" item-value="id" create />
                     </VCol>
                     <VCol cols="12" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"

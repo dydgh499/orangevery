@@ -33,6 +33,7 @@ class PayModuleRequest extends FormRequest
             'pay_dupe_limit',
             'abnormal_trans_limit',
             'under_sales_type',
+            'under_sales_amt',
             'under_sales_limit',
             'pay_year_limit',
             'pay_month_limit',
@@ -91,9 +92,11 @@ class PayModuleRequest extends FormRequest
         $data = $this->getParmasBaseKey();
         $data['brand_id'] = $this->user()->brand_id;
         $data['under_sales_type'] = $data['under_sales_type'] == null ? 0 : $data['under_sales_type'];
+        $data['under_sales_limit'] = $data['under_sales_limit'] == '' ? 0 : $data['under_sales_type'];
+        $data['under_sales_amt'] = $data['under_sales_amt'] == '' ? 0 : $data['under_sales_amt'];
         $data['terminal_id'] = $data['terminal_id'] == null ? 0 : $data['terminal_id'];
         $data['begin_dt']    = $data['begin_dt'] == '' ? '1970-01-01' : $data['begin_dt'];
-        $data['ship_out_dt'] = $data['ship_out_dt'] == '' ? '1970-01-01' : $data['ship_out_dt'];
+        $data['ship_out_dt'] = $data['ship_out_dt'] == '' ? '1970-01-01' : $data['ship_out_dt'];   
         $data['filter_issuers'] = json_encode($this->filter_issuers);
         return $data;
     }

@@ -18,7 +18,7 @@ const addNewPaymodule = () => {
         mcht_id: props.item.id,
         pg_id: 0,
         ps_id: 0,
-        terminal_id: 0,
+        terminal_id: null,
         settle_type: 0,
         settle_fee: 0,
         module_type: 0,

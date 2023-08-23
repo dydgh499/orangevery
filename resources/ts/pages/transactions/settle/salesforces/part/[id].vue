@@ -74,6 +74,7 @@ store.params.dev_use = corp.pv_options.auth.levels.dev_use
 store.params.id = route.params.id
 store.params.dt = route.query.dt
 store.params.level = route.query.level
+store.params.is_base_trx = true
 
 const isSalesCol = (key: string) => {
     const sales_cols = ['amount', 'trx_amount', 'mcht_settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
@@ -137,6 +138,7 @@ watchEffect(() => {
     store.setChartProcess()
     store.params.level = store.params.level
     store.params.mcht_settle_type = mcht_settle_type.value.id
+    store.params.is_base_trx = store.params.is_base_trx
 })
 watchEffect(() => {
     selected.value = all_selected.value ? store.getItems.map(item => item['id']) : []
@@ -190,6 +192,9 @@ watchEffect(() => {
                     부분정산
                 </VBtn>
                 <div style="display: flex;">
+                    <div class="demo-space-x" style="color: black;">
+                        <VSwitch v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" />
+                    </div>
                     <table>
                         <tr>
                             <th>승인액 합계</th>

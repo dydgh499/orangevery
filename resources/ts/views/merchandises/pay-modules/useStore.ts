@@ -122,7 +122,7 @@ export const defaultItemInfo =  () => {
         mcht_id: null,
         pg_id: 0,
         ps_id: 0,
-        terminal_id: 0,
+        terminal_id: null,
         settle_type: 0,
         module_type: 0,
         api_key: '',

@@ -31,7 +31,7 @@ class Merchandise extends Authenticatable
         return $this->hasMany(Transaction::class, 'mcht_id')
             ->globalFilter()
             ->settleFilter('mcht_settle_id')
-            ->settleTransaction(request()->dt)            
+            ->settleTransaction()            
             ->select();
     }
     

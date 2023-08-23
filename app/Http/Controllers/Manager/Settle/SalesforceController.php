@@ -27,28 +27,8 @@ class SalesforceController extends Controller
         $this->settleDeducts = $settleDeducts;
     }
 
-    private function commonQuery($request)
+    private function commonSalesQuery($query, $date)
     {
-        $validated = $request->validate(['dt'=>'required|date']);
-        $cols   = array_merge($this->getDefaultCols(), ['sales_name', 'level', 'settle_cycle', 'settle_day', 'settle_tax_type', 'last_settle_dt']);
-        $search = $request->input('search', '');
-        $level  = $request->level;
-        $date   = $request->dt;
-        
-        $idx = globalLevelByIndex($level);
-        $key = 'sales'.$idx;
-        
-        $sales_ids = $this->getExistTransUserIds($date, $key.'_id', $key.'_settle_id');
-        $query = $this->getDefaultQuery($this->salesforces, $request, $sales_ids)
-            ->where('sales_name', 'like', "%$search%")
-            ->where('level', $level);
-
-        if(isSalesforce($request))
-            $query = $query->where('id', $request->user()->id);
-
-        if($request->settle_cycle)
-            $query = $query->where('settle_cycle', $request->settle_cycle);
-
         if(Carbon::parse($date)->isLastOfMonth()) 
         { // 조회 일이 말일이면 settle_cycle 28인 영업자도 조회
             $query = $query->where(function ($query) use ($date) {
@@ -62,7 +42,29 @@ class SalesforceController extends Controller
                 ->where('settle_day', Carbon::parse($date)->dayOfWeek)
                 ->where('settle_cycle', '!=', 28);
         }
-        $query = $query->whereRaw("'$date' > DATE_ADD(COALESCE(last_settle_dt, '2000-01-01'), INTERVAL(settle_cycle) DAY)");
+        return $query->whereRaw("'$date' > DATE_ADD(COALESCE(last_settle_dt, '2000-01-01'), INTERVAL(settle_cycle) DAY)");
+    }
+
+    private function commonQuery($request)
+    {
+        $validated = $request->validate(['dt'=>'required|date']);
+        $cols   = array_merge($this->getDefaultCols(), ['sales_name', 'level', 'settle_cycle', 'settle_day', 'settle_tax_type', 'last_settle_dt']);
+        $search = $request->input('search', '');
+        $level  = $request->level;
+        $date   = $request->dt;
+
+        [$target_id, $target_settle_id] =  $this->getTargetInfo($level);
+        $sales_ids = $this->getExistTransUserIds($target_id, $target_settle_id);
+        $query = $this->getDefaultQuery($this->salesforces, $request, $sales_ids)
+            ->where('sales_name', 'like', "%$search%")
+            ->where('level', $level);
+
+        if(isSalesforce($request))
+            $query = $query->where('id', $request->user()->id);
+        if($request->settle_cycle)
+            $query = $query->where('settle_cycle', $request->settle_cycle);
+
+        $query = $this->commonSalesQuery($query, $date);
         $query = $query->with(['transactions', 'deducts']);
         $data = $this->getIndexData($request, $query, 'id', $cols);
 
@@ -123,29 +125,24 @@ class SalesforceController extends Controller
 
     public function part(Request $request)
     {
-        $idx = globalLevelByIndex($request->level);
-        $key = 'sales'.$idx;
+        $level  = $request->level;
+        $date   = $request->dt;
 
-        $query = Transaction::where($key.'_id', $request->id)
-            ->globalFilter()
-            ->settleFilter($key."_settle_id")
-            ->settleTransaction(request()->dt)
-            ->with(['mcht']);
-
-        $query = globalPGFilter($query, $request);
-        $query = globalSalesFilter($query, $request);
-        $query = globalAuthFilter($query, $request);
-
-        $data = $this->getIndexData($request, $query);
-        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-        $salesforces    = globalGetSalesByIds($sales_ids);
-        $data['content'] = globalMappingSales($salesforces, $data['content']);
-
-        foreach($data['content'] as $content) 
+        $query = $this->salesforces->where('id', $request->id);
+        $sales = $this->commonSalesQuery($query, $date)->first();
+        if($sales)
         {
-            $content->mcht_name = $content->mcht['mcht_name'];
-            $content->append(['total_trx_amount']);
-            $content->makeHidden(['mcht']);
+            [$target_id, $target_settle_id] = $this->getTargetInfo($level);
+            $data = $this->partSettleCommonQuery($request, $target_id, $target_settle_id);
+        }
+        else
+        {
+            $data = [
+                'content' => [],
+                'page' => $request->page,
+                'page_size' => $request->page_size,
+                'total' => 0,
+            ];
         }
         return $this->response(0, $data);
     }
@@ -162,7 +159,7 @@ class SalesforceController extends Controller
         $query = Transaction::where($key.'_id', $request->id)
             ->globalFilter()
             ->settleFilter($key."_settle_id")
-            ->settleTransaction($request->dt);
+            ->settleTransaction();
 
         $query = globalPGFilter($query, $request);
         $query = globalSalesFilter($query, $request);

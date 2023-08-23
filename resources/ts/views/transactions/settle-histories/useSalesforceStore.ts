@@ -8,6 +8,7 @@ export const useSearchStore = defineStore('transSettlesHistorySalesSearchStore',
     const headers:Record<string, string | object> = {
         'id': 'NO.',
         'user_name' : '영업점 ID',
+        'sales_name': '상호',
         'level' : '등급',
         'total_amount': '매출액',
         'appr_amount': '승인액',

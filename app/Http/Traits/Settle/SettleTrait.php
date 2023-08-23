@@ -52,11 +52,11 @@ trait SettleTrait
             ->whereIn('id', $ids);
     }
 
-    private function getExistTransUserIds($date, $col, $target)
-    {
+    private function getExistTransUserIds($col, $target)
+    {   //#date
         return Transaction::settleFilter($target)    
             ->globalFilter()
-            ->settleTransaction($date)
+            ->settleTransaction()
             ->distinct()
             ->get([$col])
             ->pluck([$col]);
@@ -72,5 +72,46 @@ trait SettleTrait
             $col   => $request->id,
         ]);
         return $this->response(1);
+    }
+
+    protected function getTargetInfo($level)
+    {   //SettleHistoryTrait와 같은 함수 존재
+        $idx = globalLevelByIndex($level);
+        $target_id =  'sales'.$idx.'_id';
+        $target_settle_id =  'sales'.$idx.'_settle_id';
+        return [$target_id, $target_settle_id];
+    }
+
+    protected function partSettleCommonQuery($request, $target_id, $target_settle_id)
+    {
+        $search = $request->input('search', '');
+        $query = Transaction::where($target_id, $request->id)
+            ->globalFilter()
+            ->settleFilter($target_settle_id)
+            ->settleTransaction()
+            ->where(function ($query) use ($search) {
+                return $query->where('mid', 'like', "%$search%")
+                    ->orWhere('tid', 'like', "%$search%")
+                    ->orWhere('trx_id', 'like', "%$search%")
+                    ->orWhere('appr_num', 'like', "%$search%");
+            })
+            ->with(['mcht']);
+
+        $query = globalPGFilter($query, $request);
+        $query = globalSalesFilter($query, $request);
+        $query = globalAuthFilter($query, $request);
+
+        $data = $this->getIndexData($request, $query);
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
+
+        foreach($data['content'] as $content) 
+        {
+            $content->mcht_name = $content->mcht['mcht_name'];
+            $content->append(['total_trx_amount']);
+            $content->makeHidden(['mcht']);
+        }
+        return $data;
     }
 }
