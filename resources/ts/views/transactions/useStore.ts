@@ -17,6 +17,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     const { pgs, pss, terminals } = useStore()
     if(getUserLevel() >= 35) {
         headers['pg_id'] = 'PG사'
+        headers['ps_id'] = '구간'
         headers['ps_fee'] = '구간 수수료'
     }
     if (levels.sales5_use && getUserLevel() >= 30) {

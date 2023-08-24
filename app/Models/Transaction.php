@@ -40,20 +40,19 @@ class Transaction extends Model
     {
         $date = request()->dt;
         if(request()->input('is_base_trx', 'false') == 'true')
-        {   //2023-08-23 -> 2023-08-24
-            $date = Carbon::parse($date);
-            $date = $date->addDay()->toDateString();
-            $date = "'$date'";            
+        {
+            $trx_dt = 'trx_dt';
+            $cxl_dt = 'cxl_dt';
         }
         else
-        {   //2023-08-23 -> 2023-08-23(D+1), 2023-08-22(D+2)
-            $date = "DATE_SUB('$date', INTERVAL(mcht_settle_type) DAY)";
-            
+        {
+            $trx_dt = "AddBaseWorkingDays(trx_dt, mcht_settle_type+1)";
+            $cxl_dt = "AddBaseWorkingDays(cxl_dt, mcht_settle_type+1)";
         }
-        return $query->where(function ($query) use ($date) {      
-                $query->whereRaw("trx_dt < $date")->where('is_cancel', false);
-            })->orWhere(function ($query) use ($date) {
-                $query->whereRaw("cxl_dt < $date")->where('is_cancel', true);
+        return $query->where(function ($query) use ($date, $trx_dt) {      
+                $query->whereRaw("$trx_dt <= '$date'")->where('is_cancel', false);
+            })->orWhere(function ($query) use ($date ,$cxl_dt) {
+                $query->whereRaw("$cxl_dt <= '$date'")->where('is_cancel', true);
             });
     }
 

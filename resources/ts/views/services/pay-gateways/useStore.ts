@@ -2,8 +2,8 @@ import type { Classification, Options, PayGateway, PaySection } from '@/views/ty
 import { axios } from '@axios'
 
 export const settle_types = <Options[]>([
-    {id:0, title:'주말제외'},
-    {id:1, title:'주말포함'},
+    {id:0, title:'주말 포함하여 정산'},
+    {id:1, title:'주말 건너뛰고 정산'},
 ])
 
 export const useStore = defineStore('payGatewayStore', () => {

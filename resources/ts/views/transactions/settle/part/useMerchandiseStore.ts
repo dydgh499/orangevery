@@ -17,7 +17,9 @@ export const useSearchStore = defineStore('transSettlesMchtPartSearchStore', () 
     const { pgs, pss, terminals } = useStore()
     if(getUserLevel() >= 35) {
         headers['pg_id'] = 'PG사'
+        headers['ps_id'] = '구간'
         headers['ps_fee'] = '구간 수수료'
+        headers['mcht_settle_type'] = '가맹점 정산타입'
     }
     if (levels.sales5_use && getUserLevel() >= 30) {
         headers['sales5_name'] = levels.sales5_name

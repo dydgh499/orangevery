@@ -96,7 +96,8 @@ class PayModuleRequest extends FormRequest
         $data['under_sales_amt'] = $data['under_sales_amt'] == '' ? 0 : $data['under_sales_amt'];
         $data['terminal_id'] = $data['terminal_id'] == null ? 0 : $data['terminal_id'];
         $data['begin_dt']    = $data['begin_dt'] == '' ? '1970-01-01' : $data['begin_dt'];
-        $data['ship_out_dt'] = $data['ship_out_dt'] == '' ? '1970-01-01' : $data['ship_out_dt'];   
+        $data['ship_out_dt'] = $data['ship_out_dt'] == '' ? '1970-01-01' : $data['ship_out_dt'];
+        $data['ship_out_stat'] = $data['ship_out_stat'] == null ? 0 : $data['ship_out_stat'];        
         $data['filter_issuers'] = json_encode($this->filter_issuers);
         return $data;
     }

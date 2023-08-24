@@ -275,7 +275,7 @@ watchEffect(() => {
                             <span v-else-if="_key == 'ps_id'">
                                 {{ pss.find(ps => ps['id'] === item[_key])?.name }}
                             </span>
-                            <span v-else-if="_key == 'settle_type'">
+                            <span v-else-if="_key == 'mcht_settle_type'">
                                 {{ settle_types.find(settle_type => settle_type['id'] === item[_key])?.name }}
                             </span>
                             <span v-else-if="_key == 'terminal_id'">
