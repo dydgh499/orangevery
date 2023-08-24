@@ -46,8 +46,8 @@ class Transaction extends Model
         }
         else
         {
-            $trx_dt = "AddBaseWorkingDays(trx_dt, mcht_settle_type+1)";
-            $cxl_dt = "AddBaseWorkingDays(cxl_dt, mcht_settle_type+1)";
+            $trx_dt = "AddBaseWorkingDays(trx_dt, mcht_settle_type+1, pg_settle_type)";
+            $cxl_dt = "AddBaseWorkingDays(cxl_dt, mcht_settle_type+1, pg_settle_type)";
         }
         return $query->where(function ($query) use ($date, $trx_dt) {      
                 $query->whereRaw("$trx_dt <= '$date'")->where('is_cancel', false);
