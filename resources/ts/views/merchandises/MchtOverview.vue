@@ -295,8 +295,8 @@ onMounted(async () => {
                                     <template #input>
                                         <BooleanRadio :radio="Boolean(props.item.use_saleslip_prov)"
                                             @update:radio="props.item.use_saleslip_prov = $event">
-                                            <template #true>본사</template>
-                                            <template #false>가맹점</template>
+                                            <template #true>PG사</template>
+                                            <template #false>본사</template>
                                         </BooleanRadio>
                                     </template>
                                 </CreateHalfVCol>

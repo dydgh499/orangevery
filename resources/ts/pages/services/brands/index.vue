@@ -6,6 +6,11 @@ const { store, head, exporter, boolToText } = useSearchStore()
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+/*
+    금월 입금 받을 합계액
+    금월 입금 함계액
+    금월 중간 입금 합계액
+*/
 </script>
 <template>
     <BaseIndexView placeholder="서비스명" :metas="[]" :add="true" add_name="서비스" :is_range_date="null">

@@ -16,27 +16,18 @@ provide('exporter', exporter)
         </template>
         <template #headers>
             <tr>
-                <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
-                    class='list-square'>
-                    <span>
-                        {{ head.main_headers[index] }}
-                    </span>
-                </th>
-            </tr>
-            <tr>
-                <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                    <span>
-                        {{ header.ko }}
-                    </span>
-                </th>
+                <template v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible">
+                    <th :style="key == 'note' ? 'min-width: 50em;' : ''"  class='list-square'>
+                        <span>
+                            {{ header.ko }}
+                        </span>
+                    </th>
+                </template>
             </tr>
         </template>
         <template #body>
             <tr v-for="(item, index) in store.getItems" :key="index">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                    <template v-if="head.getDepth(_header, 0) != 1">
-                    </template>
-                    <template v-else>
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
                                 #{{ item[_key] }}
@@ -55,7 +46,6 @@ provide('exporter', exporter)
                                 {{ item[_key] }}
                             </span>
                         </td>
-                    </template>
                 </template>
             </tr>
 

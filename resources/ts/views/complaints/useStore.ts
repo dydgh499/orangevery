@@ -35,6 +35,7 @@ export const useSearchStore = defineStore('complaintSearchStore', () => {
         'phone_num' : '연락처',
         'hand_cust_name' : '수기작성성함',
         'hand_phone_num' : '수기작성연락처',
+        'note'  : '민원내용',
         'issuer' : '발급사',
         'pg_name': 'PG사',
         'type': '민원타입',

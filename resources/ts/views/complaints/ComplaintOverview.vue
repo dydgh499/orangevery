@@ -15,8 +15,13 @@ const props = defineProps<Props>()
 const { pgs } = useStore()
 
 const merchandises = ref<Merchandise[]>([])
-const mcht = ref({ id: null, mcht_name: '가맹점 선택' })
+const mcht = ref(<{id:number|null, mcht_name: string}>{ id: null, mcht_name: '가맹점 선택' })
 merchandises.value = await getAllMerchandises()
+if(props.item.mcht_id) {
+    const _mcht = merchandises.value.find(item => item.id === props.item.mcht_id)
+    mcht.value = {id: _mcht?.id as number, mcht_name: _mcht?.mcht_name as string}
+}
+
 onMounted(() => {
     props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
 })

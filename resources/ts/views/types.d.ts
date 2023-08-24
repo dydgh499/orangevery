@@ -493,7 +493,7 @@ export interface Complaint {
     phone_num: string,
     hand_cust_name: string,
     hand_phone_num: string,
-    issuer: number | null,
+    issuer: string | null,
     pg_id: number | null,
     pg_name: string | null,
     type: number | null,
