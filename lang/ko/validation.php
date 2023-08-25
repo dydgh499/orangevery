@@ -162,16 +162,9 @@ return [
         'stamp_save_count'  => '상품당 스탬프 저장개수',
         'coupon_model_id'   => '쿠폰 발행시 발행될 쿠폰 ID',
         'point_min_amount'  => '포인트 최소 사용 금액',
-        'mbr_type'  => '멤버쉽 적용 타입',
-        'guide_type'=> '안내 타입',
-        //coupon_imgpon model
-        'coupon_img'  => '쿠폰 이미지',
-        'sale_amt'  => '할인가',
+        'sales_name' => '영업점 상호',
         //coupon publish
         'user_id'   => '유저',
-        'coupon_id' => '쿠폰',
-        'valid_s_dt'  => '유효기간 시작일',
-        'valid_e_dt'  => '유효기간 종료일',
         //device
         'mcht_id'   => '가맹점',
         'partner_id'=> '협럭사',
