@@ -75,7 +75,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
     }
-    if(user_info.value >= 35)
+    if(user_info.value.level >= 35)
     {
         headers1['pg_id'] = 'PG사명'
         headers1['ps_id'] = '구간'
