@@ -79,6 +79,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     {
         headers1['pg_id'] = 'PG사명'
         headers1['ps_id'] = '구간'
+        headers1['settle_fee'] = '입금수수료'
     }
     if(corp.pv_options.paid.use_online_pay)
         headers2['pay_key'] = '결제 KEY'

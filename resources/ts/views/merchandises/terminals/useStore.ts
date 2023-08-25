@@ -19,6 +19,7 @@ export const useSearchStore = defineStore('terminalSearchStore', () => {
     {
         headers1['pg_id'] = 'PG사명'
         headers1['ps_id'] = '구간'
+        headers1['settle_fee'] = '입금수수료'        
     }
     const headers2: Record<string, string> = {
         'settle_type': '정산일',
