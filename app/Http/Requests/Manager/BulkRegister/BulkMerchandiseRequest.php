@@ -65,7 +65,7 @@ class BulkMerchandiseRequest extends FormRequest
             for ($j=0; $j < count($this->keys) ; $j++) 
             {
                 $key = $this->keys[$j];
-                $data[$key] = $_datas[$i][$key];
+                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : '';
             }            
             $data['custom_id'] = isset($_datas[$i]['custom_id']) ? $_datas[$i]['custom_id'] : null;
             $data['sales0_id'] = isset($_datas[$i]['sales0_id']) ? $_datas[$i]['sales0_id'] : 0;
