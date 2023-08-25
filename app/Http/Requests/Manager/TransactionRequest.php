@@ -58,12 +58,6 @@ class TransactionRequest extends FormRequest
     {
         $sub = [
             'mcht_id' => 'required',
-            'sales5_fee' => 'required',
-            'sales4_fee' => 'required',
-            'sales3_fee' => 'required',
-            'sales2_fee' => 'required',
-            'sales1_fee' => 'required',
-            'sales0_fee' => 'required',
             'mcht_fee' => 'required', 'hold_fee' => 'required',
             'module_type' => 'required',
             'pg_id' => 'required', 'pmod_id' => 'required', 'ps_id' => 'required', 'ps_fee' => 'required',
