@@ -1,6 +1,7 @@
 import { Header } from '@/views/headers'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { Searcher } from '@/views/searcher'
+import { useStore } from '@/views/services/pay-gateways/useStore'
 import { Merchandise } from '@/views/types'
 import { axios, user_info } from '@axios'
 import corp from '@corp'
@@ -10,6 +11,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     const head      = Header('merchandises', '가맹점 관리')
     const levels    = corp.pv_options.auth.levels
     const paid      = corp.pv_options.paid;
+    const { pgs }   = useStore()
 
     const headers: Record<string, string> = {
         'id': 'NO.',
@@ -46,6 +48,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
         headers['mids'] = 'MID'
         headers['tids'] = 'TID'
         headers['module_types'] = '모듈타입'
+        headers['pgs'] = 'PG사'
     }
     headers['nick_name'] = '대표자명'
     headers['phone_num'] = '연락처'
@@ -75,7 +78,9 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     const getModuleTypes = (my_modules: any[]) => {
         return my_modules.map(id => module_types.find(module => module.id === id)?.title )
     };
-
+    const getPGs = (my_modules: any[]) => {
+        return my_modules.map(id => pgs.find(module => module.id === id)?.pg_name )
+    };
     const exporter = async (type: number) => {
         const keys = Object.keys(headers);
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
@@ -83,6 +88,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
         for (let i = 0; i < datas.length; i++) {
             if(user_info.value.level >= 35) {
                 datas[i]['module_types'] = getModuleTypes(datas[i]['module_types']).join(',')
+                datas[i]['pgs'] = getPGs(datas[i]['pgs']).join(',')
                 datas[i]['mids'] = datas[i]['mids'].join(',')
                 datas[i]['tids'] = datas[i]['tids'].join(',')
             }
@@ -95,6 +101,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
         head,
         exporter,
         getModuleTypes,
+        getPGs,
     }
 })
 

@@ -7,7 +7,7 @@ import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { user_info } from '@axios'
 
-const { store, head, exporter, getModuleTypes } = useSearchStore()
+const { store, head, exporter, getModuleTypes, getPGs } = useSearchStore()
 const password = ref()
 
 provide('password', password)
@@ -119,6 +119,10 @@ watchEffect(() => {
                             <span v-else-if="_key == 'module_types'">
                                 <VSelect style="min-width: 10em;" :value="defaultValue(getModuleTypes(item['module_types']))"
                                     :items="getModuleTypes(item['module_types'])" :menu-props="{ maxHeight: 400 }"/>
+                            </span>
+                            <span v-else-if="_key == 'pgs'">
+                                <VSelect style="min-width: 10em;" :value="defaultValue(getPGs(item['pgs']))"
+                                    :items="getPGs(item['pgs'])" :menu-props="{ maxHeight: 400 }"/>
                             </span>
                             <span v-else-if="_key == 'enabled'">
                                 <VChip :color="store.booleanTypeColor(!item[_key])">

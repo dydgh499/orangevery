@@ -54,7 +54,7 @@ class MerchandiseController extends Controller
                 500, 500, 500, 500, 120
             ],
         ];
-        $this->pay_mod_cols = ['mcht_id', 'mid', 'tid', 'module_type'];
+        $this->pay_mod_cols = ['mcht_id', 'mid', 'tid', 'module_type', 'pg_id'];
     }
 
     public function chart(Request $request)
@@ -118,6 +118,7 @@ class MerchandiseController extends Controller
             $content->mids = $my_modules->pluck('mid')->values()->toArray();
             $content->tids = $my_modules->pluck('tid')->values()->toArray();
             $content->module_types = $my_modules->pluck('module_type')->values()->toArray();    
+            $content->pgs = $my_modules->pluck('pg_id')->values()->toArray();
             $content->setFeeFormatting(true);
         }
         return $data;
