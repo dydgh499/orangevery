@@ -127,15 +127,7 @@ watchEffect(() => {
                             <template #input>
                                 <VTextField v-model="hand_pay_info.card_num" type="text" persistent-placeholder counter
                                     prepend-inner-icon="emojione:credit-card" placeholder="카드번호를 입력해주세요"
-                                    :rules="[requiredValidator]" maxlength="16" autocomplete />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
-                            <template #name>할부기간</template>
-                            <template #input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="hand_pay_info.installment"
-                                    :items="filterInstallment" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
-                                    label="할부기간 선택" item-title="title" item-value="id" single-line />
+                                    :rules="[requiredValidator]" maxlength="16" autocomplete="cc-number" />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
@@ -144,6 +136,14 @@ watchEffect(() => {
                                 <VTextField v-model="hand_pay_info.yymm" type="text"
                                     prepend-inner-icon="ic-baseline-calendar-today" placeholder="(MM/YY:0324)"
                                     :rules="[requiredValidator, lengthValidatorV2(hand_pay_info.yymm, 4)]" maxlength="4" />
+                            </template>
+                        </CreateHalfVCol>                        
+                        <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
+                            <template #name>할부기간</template>
+                            <template #input>
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="hand_pay_info.installment"
+                                    :items="filterInstallment" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                    label="할부기간 선택" item-title="title" item-value="id" single-line />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 0; padding-top: 12px;"
