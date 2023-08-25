@@ -108,14 +108,16 @@ class MerchandiseController extends Controller
     
     private function mappingPayModules($data, $pay_modules)
     {
+        $module_mcht_ids = [];
+        foreach ($pay_modules as $module) {
+            $module_mcht_ids[$module->mcht_id][] = $module;
+        }
         foreach($data['content'] as $content) 
         {
-            $my_modules = $pay_modules->filter(function($pay_module) use($content) {
-                return $pay_module->mcht_id == $content->id;
-            });
+            $my_modules = isset($module_mcht_ids[$content->id]) ? collect($module_mcht_ids[$content->id]) : collect();
             $content->mids = $my_modules->pluck('mid')->values()->toArray();
             $content->tids = $my_modules->pluck('tid')->values()->toArray();
-            $content->module_types = $my_modules->pluck('module_type')->values()->toArray();
+            $content->module_types = $my_modules->pluck('module_type')->values()->toArray();    
             $content->setFeeFormatting(true);
         }
         return $data;
@@ -129,15 +131,15 @@ class MerchandiseController extends Controller
             $data = $this->byPayModules($request, $is_all);
         else 
             $data = $this->byNormalIndex($request, $is_all);
-        // payment modules sections        
-        $mcht_ids = collect($data['content'])->pluck('id')->values()->unique()->toArray();
+        // payment modules sections
+        $mcht_ids = collect($data['content'])->pluck('id')->all();
         $pay_modules = $this->payModules
             ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
             ->whereIn('mcht_id', $mcht_ids)
             ->get($this->pay_mod_cols);
+        
         return $this->mappingPayModules($data, $pay_modules);    
-
     }
 
     /**
