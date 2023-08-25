@@ -107,8 +107,8 @@ class OperatorController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $res = $this->operators->where('id', $id)->update(['is_delete'=>false]);
-        return $this->response($res ? 1 : 990);
+        $res = $this->delete($this->operators->where('id', $id));
+        return $this->response($res);
     }
 
     public function passwordChange(Request $request)

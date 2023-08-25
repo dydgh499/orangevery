@@ -225,7 +225,7 @@ class PaymentModuleController extends Controller
                 'payment_modules.mid', 'payment_modules.tid', 'payment_modules.pg_id', 'payment_modules.ps_id',
                 'payment_modules.module_type', 'payment_modules.settle_fee', 'payment_modules.settle_type',
                 'payment_modules.terminal_id', 'payment_modules.note', 'payment_modules.is_old_auth', 'payment_modules.installment', 
-            ];    
+            ];
         }
         $query = $this->commonSelect($request);
         $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');

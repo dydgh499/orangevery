@@ -264,7 +264,6 @@ class MerchandiseController extends Controller
     public function destroy(Request $request, $id)
     {
         $res = $this->delete($this->merchandises->where('id', $id));
-
         $data = $this->merchandises->where('id', $id)->first(['mcht_name']);
         operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->mcht_name);
         return $this->response($res);
@@ -296,7 +295,10 @@ class MerchandiseController extends Controller
             'merchandises.business_num', 'merchandises.resident_num',
             'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell',
         ];
-        $data = $this->byNormalIndex($request, false);
+        $data = $this->commonSelect($request);
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
         return $this->response(0, $data);
     }
 

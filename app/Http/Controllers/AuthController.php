@@ -67,7 +67,11 @@ class AuthController extends Controller
     public function __signIn($orm, $request)
     {
         $result = ['result' => 0];
-        $result['user'] = $orm->where('brand_id', $request->brand_id)->where('user_name', $request->user_name)->first();
+        $result['user'] = $orm
+            ->where('brand_id', $request->brand_id)
+            ->where('is_delete', false)
+            ->where('user_name', $request->user_name)
+            ->first();
         if($result['user'])
             $result['result'] = Hash::check($request->user_pw, $result['user']->user_pw) ? 1 : 0;
         else
