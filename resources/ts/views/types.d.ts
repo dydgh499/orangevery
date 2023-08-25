@@ -662,7 +662,7 @@ export interface NotiFormat {
     issuer: string,
     card_num: string,
     installment: string,
-    pay_dttm: string,
+    trx_dttm: string,
     cxl_dttm: string,
     is_cancel: boolean,
     temp: string,

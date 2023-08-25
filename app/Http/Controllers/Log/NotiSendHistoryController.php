@@ -65,7 +65,7 @@ class NotiSendHistoryController extends Controller
             'issuer'        => $noti->issuer,
             'card_num'      => $noti->card_num,
             'installment'   => $noti->installment,
-            'pay_dttm'      => $noti->trx_dt." ".$noti->trx_tm,
+            'trx_dttm'      => $noti->trx_dt." ".$noti->trx_tm,
             'is_cancel'     => $noti->is_cancel,
             'temp'          => $noti->temp,
         ];
@@ -79,7 +79,7 @@ class NotiSendHistoryController extends Controller
         $noti  = $this->noti_send_histories
             ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')
             ->where('noti_send_histories.trans_id', $trans_id)
-            ->orderby('created_at', 'desc')
+            ->orderby('created_at', 'asc')
             ->first($this->cols);
 
         $params = $this->getNotiSendFormat($noti);

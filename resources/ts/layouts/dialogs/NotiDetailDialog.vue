@@ -101,8 +101,8 @@ defineExpose({
                         </tr>
                         <tr>
                             <td class='list-square'>거래시간</td>
-                            <td class='list-square'>pay_dttm</td>
-                            <td class='list-square'>{{ noti.pay_dttm }}</td>
+                            <td class='list-square'>trx_dttm</td>
+                            <td class='list-square'>{{ noti.trx_dttm }}</td>
                         </tr>
                         <tr v-if="noti.is_cancel">
                             <td class='list-square'>취소시간</td>
