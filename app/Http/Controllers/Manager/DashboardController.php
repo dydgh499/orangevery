@@ -22,36 +22,27 @@ class DashboardController extends Controller
 
     private function setWeeklyRate($charts, $week_trans, $last_week_trans)
     {
-        $cur_month  = Carbon::now()->format('Y-m');
-        $cur_chart = [];
-        foreach($charts as $key => $value)
-        {
-            if($key == $cur_month)
-                $cur_chart = $value;
+        $cur_month = Carbon::now()->format('Y-m');
+        // 불필요한 반복을 제거하고, isset()을 사용하여 현재 월의 데이터를 확인
+        if (!isset($charts[$cur_month])) {
+            return $charts;
+        }    
+        $week_chart = [];
+        foreach ($week_trans as $transaction) {
+            $week_chart[$transaction->trx_dt][] = $transaction;
         }
-        if(count($cur_chart) > 0)
-        {
-            $week_chart = [];
-            foreach($week_trans as $transaction) {
-                if (!isset($week_chart[$transaction->trx_dt])) {
-                    $week_chart[$transaction->trx_dt] = [];
-                }
-                $week_chart[$transaction->trx_dt][] = $transaction;
-            }
-            $charts[$cur_month]['week'] = [];
-            $this_week_amount = 0;
-            foreach ($week_chart as $key => $transactions) {            
-                $charts[$cur_month]['week'][$key] = getDefaultTransChartFormat(collect($transactions));
-                $this_week_amount += $charts[$cur_month]['week'][$key]['amount'];
-            }
+        $charts[$cur_month]['week'] = [];
+        $this_week_amount = 0;
+        foreach ($week_chart as $key => $transactions) {
+            $charts[$cur_month]['week'][$key] = getDefaultTransChartFormat(collect($transactions));
+            $this_week_amount += $charts[$cur_month]['week'][$key]['amount'];
+        }
+        ksort($charts[$cur_month]['week']);
+        $last_week_chart = getDefaultTransChartFormat(collect($last_week_trans));
 
-            ksort($charts[$cur_month]['week']);
-            $last_week_chart = getDefaultTransChartFormat(collect($last_week_trans));
-            if($last_week_chart['amount'])
-                $charts[$cur_month]['week_amount_rate'] = (($this_week_amount - $last_week_chart['amount'])/($last_week_chart['amount'])/100);
-            else
-                $charts[$cur_month]['week_amount_rate'] = 0;
-        }
+        $charts[$cur_month]['week_amount_rate'] = ($last_week_chart['amount'] != 0) 
+            ? (($this_week_amount - $last_week_chart['amount']) / $last_week_chart['amount']) / 100
+            : 0;
         return $charts;
     }
     # 작월대비 거래비율 세팅
@@ -180,13 +171,13 @@ class DashboardController extends Controller
                 $last_week_trans[] = $transaction;               
         }
         foreach ($month_trans as $key => $transactions) {            
-            $charts[$key] = getDefaultTransChartFormat(collect($transactions));           
-        }        
+            $charts[$key] = getDefaultTransChartFormat(collect($transactions)); // 성능 개선 필요
+        }
         foreach ($month_trans as $key => $transactions) {           
             $charts[$key]['modules'] = $this->setMonthlyPayModule(collect($transactions));
         }
         $charts = $this->setWeeklyRate($charts, $week_trans, $last_week_trans);
-        $charts = $this->setCurrentMonthRate($charts, $cur_trans, $last_trans);        
+        $charts = $this->setCurrentMonthRate($charts, $cur_trans, $last_trans);
         return $this->response(0, $charts);
     }
 

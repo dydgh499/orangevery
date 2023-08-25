@@ -285,53 +285,56 @@
 
     function getDefaultTransChartFormat($data)
     {
-        $division = function($item) {
-            return $item->is_cancel == true;
-        };
-        $totals = function($items) {
-            return [
-                'amount'        => $items->sum('amount'),
-                'count'         => $items->count(),
-                'profit'        => $items->sum('profit'),
-                'trx_amount'    => $items->sum('trx_amount'),
-                'hold_amount'   => $items->sum('hold_amount'),
-                'settle_fee'    => $items->sum('mcht_settle_fee'),
-                'total_trx_amount'=> $items->sum('total_trx_amount'),
-            ];
-        };
-        $defualt_format = [
+        $chart = [
+            'appr' => [
+                'amount' => 0,
+                'count' => 0,
+                'profit' => 0,
+                'trx_amount' => 0,
+                'hold_amount' => 0,
+                'settle_fee' => 0,
+                'total_trx_amount' => 0
+            ],
+            'cxl' => [
+                'amount' => 0,
+                'count' => 0,
+                'profit' => 0,
+                'trx_amount' => 0,
+                'hold_amount' => 0,
+                'settle_fee' => 0,
+                'total_trx_amount' => 0
+            ],
             'amount' => 0,
             'count' => 0,
             'profit' => 0,
             'trx_amount' => 0,
             'hold_amount' => 0,
             'settle_fee' => 0,
-            'total_trx_amount' => 0,
+            'total_trx_amount' => 0
         ];
-        $chart = $defualt_format;
-        $chart['appr'] = $defualt_format;
-        $chart['cxl'] = $defualt_format;
-
-        if(count($data))
-        {
-            $appr = $data->filter(function ($transaction) use ($division) {
-                return $division($transaction) == false;
-            })->values();        
-            $cxl = $data->filter(function ($transaction) use ($division) {
-                return $division($transaction) == true;
-            })->values();
-
-            $chart['appr'] = $totals($appr);
-            $chart['cxl'] = $totals($cxl);
-            $chart['amount'] = $chart['appr']['amount'] + $chart['cxl']['amount'];
-            $chart['count'] = $chart['appr']['count'] + $chart['cxl']['count'];
-            $chart['profit'] = $chart['appr']['profit'] + $chart['cxl']['profit'];
-            $chart['trx_amount'] = $chart['appr']['trx_amount'] + $chart['cxl']['trx_amount'];
-            $chart['total_trx_amount'] = $chart['appr']['total_trx_amount'] + $chart['cxl']['total_trx_amount'];
-            $chart['settle_fee'] = $chart['appr']['settle_fee'] + $chart['cxl']['settle_fee'];
-            $chart['hold_amount'] = $chart['appr']['hold_amount'] + $chart['cxl']['hold_amount'];
+    
+        // 트랜잭션 유형별로 데이터를 분류하며, 동시에 필요한 합계를 계산합니다.
+        foreach ($data as $transaction) {
+            $type = $transaction->is_cancel ? 'cxl' : 'appr';
+    
+            $chart[$type]['amount'] += $transaction->amount;
+            $chart[$type]['count']++;
+            $chart[$type]['profit'] += $transaction->profit;
+            $chart[$type]['trx_amount'] += $transaction->trx_amount;
+            $chart[$type]['hold_amount'] += $transaction->hold_amount;
+            $chart[$type]['settle_fee'] += $transaction->mcht_settle_fee;
+            $chart[$type]['total_trx_amount'] += $transaction->total_trx_amount;
         }
-        return $chart;        
+    
+        // 전체 차트 값을 계산합니다.
+        foreach ($chart['appr'] as $key => $value) {
+            if ($key != 'count') { // 'count'는 더하지 않습니다.
+                $chart[$key] = $chart['appr'][$key] + $chart['cxl'][$key];
+            }
+        }
+        $chart['count'] = $chart['appr']['count'] + $chart['cxl']['count'];
+    
+        return $chart;  
     }
 
     function logging($data, $msg='test')
