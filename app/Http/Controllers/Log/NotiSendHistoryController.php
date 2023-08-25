@@ -82,11 +82,11 @@ class NotiSendHistoryController extends Controller
             ->orderby('created_at', 'asc')
             ->first($this->cols);
 
-        $params = $this->getNotiSendFormat($noti);
         $headers = [
             'Content-Type'  => 'application/json',
             'Accept' => 'application/json',
         ];
+        $params = $this->getNotiSendFormat($noti);
         $res  = post($noti->send_url, $params, $headers);
         $log = [
             'http_code' => $res['code'],
@@ -98,6 +98,33 @@ class NotiSendHistoryController extends Controller
         ];
         $res = $this->noti_send_histories->create($log);
         return $this->response($res ? 1 : 990);
+    }
+
+    public function batchRetry(Request $request) 
+    {
+        $notis = $this->noti_send_histories
+            ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')
+            ->whereIn('noti_send_histories.id', $request->selected)
+            ->get($this->cols);
+        $headers = [
+            'Content-Type'  => 'application/json',
+            'Accept' => 'application/json',
+        ];
+        foreach($notis as $noti)
+        {            
+            $params = $this->getNotiSendFormat($noti);
+            $res  = post($noti->send_url, $params, $headers);
+            $log = [
+                'http_code' => $res['code'],
+                'message'   => json_encode($res['body']),
+                'send_url'  => $noti->send_url,
+                'trans_id'  => $noti->id,
+                'brand_id'  => $noti->brand_id,
+                'retry_count' => $noti->retry_count+1,
+            ];
+            $res = $this->noti_send_histories->create($log);
+        }
+        return $this->response(1);
     }
     
     public function detail(Request $request, $trans_id)

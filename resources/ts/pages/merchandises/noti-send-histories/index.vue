@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/merchandises/noti-send-histories/useStore'
+import { useRequestStore } from '@/views/request'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import ExtraMenu from '@/views/merchandises/noti-send-histories/ExtraMenu.vue'
@@ -7,13 +8,18 @@ import NotiDetailDialog from '@/layouts/dialogs/NotiDetailDialog.vue'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 
 const { store, head, exporter } = useSearchStore()
+const { post } = useRequestStore()
 const notiDetail = ref()
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 provide('notiDetail', notiDetail)
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
 
+const selected = ref<number[]>([])
+const all_selected = ref()
 
 const httpCodeColor = (http_code: number) => {
     if (http_code < 300)
@@ -23,6 +29,22 @@ const httpCodeColor = (http_code: number) => {
     else
         return "error"
 }
+const batchRetry = async() => {
+    if(await alert.value.show('정말 일괄 재발송하시겠습니까?'))
+    {
+        const params = { selected : selected.value }
+        const url = '/api/v1/manager/merchandises/noti-send-histories/batch-retry'
+        const r = await post(url, params)
+        if(r.status == 201)
+            snackbar.value.show('성공하였습니다.', 'success')
+        else
+            snackbar.value.show(r.data.message, 'error')
+        store.setTable()
+    }
+}
+watchEffect(() => {
+    selected.value = all_selected.value ? store.getItems.map(item => item['id']) : []
+})
 </script>
 <template>
     <div>
@@ -39,6 +61,11 @@ const httpCodeColor = (http_code: number) => {
                     </template>
                 </BaseIndexFilterCard>
             </template>
+            <template #index_extra_field>
+                <VBtn prepend-icon="tabler-calculator" @click="batchRetry()">
+                    일괄 재발송
+                </VBtn>
+            </template>
             <template #headers>
                 <tr>
                     <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
@@ -50,7 +77,8 @@ const httpCodeColor = (http_code: number) => {
                 </tr>
                 <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                        <span>
+                        <VCheckbox v-model="all_selected" label="선택/취소" class="check-label" v-if="key == 'id'"/>
+                        <span v-else>
                             {{ header.ko }}
                         </span>
                     </th>
@@ -70,7 +98,9 @@ const httpCodeColor = (http_code: number) => {
                         <template v-else>
                             <td v-show="_header.visible" class='list-square'>
                                 <span v-if="_key == 'id'" @click="store.edit(item['id'])">
-                                    #{{ item[_key] }}
+                                    <span v-if="_key == 'id'">
+                                        <VCheckbox v-model="selected" :value="item[_key]" :label="`#${item[_key]}`" class="check-label"/>
+                                    </span>
                                 </span>
                                 <span v-else-if="_key == `trans_id`">
                                     #{{ item[_key] }}

@@ -165,7 +165,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::get('noti-send-histories', [NotiSendHistoryController::class, 'index']);
             Route::get('noti-send-histories/{trans_id}', [NotiSendHistoryController::class, 'detail']);
             Route::post('noti-send-histories/{trans_id}/retry', [NotiSendHistoryController::class, 'retry']);
-
+            Route::post('noti-send-histories/batch-retry', [NotiSendHistoryController::class, 'batchRetry']);
+            
             Route::apiResource('pay-modules', PaymentModuleController::class); 
             Route::apiResource('noti-urls', NotiUrlController::class); 
         });

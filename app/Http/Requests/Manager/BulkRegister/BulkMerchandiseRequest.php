@@ -60,7 +60,7 @@ class BulkMerchandiseRequest extends FormRequest
         $datas = [];
         $_datas = $this->all();
         for ($i=0; $i < count($_datas) ; $i++)
-        { 
+        {
             $data = [];
             for ($j=0; $j < count($this->keys) ; $j++) 
             {

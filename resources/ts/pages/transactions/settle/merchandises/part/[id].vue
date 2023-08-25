@@ -15,6 +15,12 @@ const { store, head, exporter } = useSearchStore()
 const { get, post } = useRequestStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
+provide('store', store)
+provide('head', head)
+provide('exporter', exporter)
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+
 const mcht_settle_type = ref({ id: null, name: '전체' })
 const selected = ref<number[]>([])
 const all_selected = ref()
@@ -62,13 +68,6 @@ const metas = ref([
         subtitle: '0건',
     },
 ])
-
-const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
-
-provide('store', store)
-provide('head', head)
-provide('exporter', exporter)
 
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
 store.params.id = route.params.id
