@@ -100,6 +100,7 @@ class SalesforceController extends Controller
             $validated  = $request->validate(['user_pw'=>'required']);
             $user = $this->salesforces
                 ->where('brand_id', $request->user()->brand_id)
+                ->where('is_delete', false)
                 ->where('user_name', $request->user_name)->first();
             if(!$user)
             {
