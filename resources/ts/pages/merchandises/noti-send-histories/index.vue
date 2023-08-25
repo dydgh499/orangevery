@@ -97,10 +97,8 @@ watchEffect(() => {
                         </template>
                         <template v-else>
                             <td v-show="_header.visible" class='list-square'>
-                                <span v-if="_key == 'id'" @click="store.edit(item['id'])">
-                                    <span v-if="_key == 'id'">
-                                        <VCheckbox v-model="selected" :value="item[_key]" :label="`#${item[_key]}`" class="check-label"/>
-                                    </span>
+                                <span v-if="_key == 'id'">
+                                    <VCheckbox v-model="selected" :value="item[_key]" :label="`#${item[_key]}`" class="check-label"/>
                                 </span>
                                 <span v-else-if="_key == `trans_id`">
                                     #{{ item[_key] }}
