@@ -101,7 +101,11 @@ class SalesforceController extends Controller
             $user = $this->salesforces
                 ->where('brand_id', $request->user()->brand_id)
                 ->where('is_delete', false)
-                ->where('user_name', $request->user_name)->first();
+                ->where(function ($query) use ($request) {
+                    return $query->where('user_name', $request->user_name)
+                        ->orWhere('sales_name', $request->sales_name);
+                })
+                ->first();
             if(!$user)
             {
                 $user = $request->data();
@@ -113,7 +117,7 @@ class SalesforceController extends Controller
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);
             }
             else
-                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디 또는 상호']));
         }
         else
             return $this->response(951);
