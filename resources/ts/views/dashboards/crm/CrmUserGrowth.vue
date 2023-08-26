@@ -47,7 +47,7 @@ const chartOptions = computed(() => {
         series.value[0].data = getChartData('del_rate')
         series.value[1].data = getChartData('add_rate')
         const curernt_month = new Date().toISOString().slice(0, 7)
-        rate.value = props.datas[curernt_month]['increase_rate']
+        rate.value = props.datas[curernt_month] && props.datas[curernt_month]['increase_rate'] ? props.datas[curernt_month]['increase_rate'] : 0;
     }
 
     return {

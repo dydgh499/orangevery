@@ -68,6 +68,9 @@ class DashboardController extends Controller
                 $before_date = Carbon::now()->subMonths(1)->format('Y-m');
                 if(isset($datas[$before_date]))
                 {
+                    $getIncreaseRate = function($col, $current, $before) {
+                        return (($current[$col] - $before[$col])/$before[$col]) * 100;
+                    };
                     $datas[$month->month]['amount_rate'] = $getIncreaseRate('amount', $datas[$month->month], $datas[$before_date]);
                     $datas[$month->month]['profit_rate'] = $getIncreaseRate('profit', $datas[$month->month], $datas[$before_date]);    
                 }
@@ -88,9 +91,6 @@ class DashboardController extends Controller
                         'amount' => $day->appr_amount + $day->cxl_amount
                     ];
                 }
-                $getIncreaseRate = function($col, $current, $before) {
-                    return (($current[$col] - $before[$col])/$before[$col]) * 100;
-                };
             }
         }
         return $this->response(0, $datas);
