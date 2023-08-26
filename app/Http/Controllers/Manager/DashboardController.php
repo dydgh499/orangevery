@@ -20,165 +20,72 @@ class DashboardController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
 
-    private function setWeeklyRate($charts, $week_trans, $last_week_trans)
-    {
-        $cur_month = Carbon::now()->format('Y-m');
-        // 불필요한 반복을 제거하고, isset()을 사용하여 현재 월의 데이터를 확인
-        if (!isset($charts[$cur_month])) {
-            return $charts;
-        }    
-        $week_chart = [];
-        foreach ($week_trans as $transaction) {
-            $week_chart[$transaction->trx_dt][] = $transaction;
-        }
-        $charts[$cur_month]['week'] = [];
-        $this_week_amount = 0;
-        foreach ($week_chart as $key => $transactions) {
-            $charts[$cur_month]['week'][$key] = getDefaultTransChartFormat(collect($transactions));
-            $this_week_amount += $charts[$cur_month]['week'][$key]['amount'];
-        }
-        ksort($charts[$cur_month]['week']);
-        $last_week_chart = getDefaultTransChartFormat(collect($last_week_trans));
-
-        $charts[$cur_month]['week_amount_rate'] = ($last_week_chart['amount'] != 0) 
-            ? (($this_week_amount - $last_week_chart['amount']) / $last_week_chart['amount']) / 100
-            : 0;
-        return $charts;
-    }
-    # 작월대비 거래비율 세팅
-    private function setCurrentMonthRate($charts, $cur_trans, $last_trans)
-    {
-        $cur_month  = Carbon::now()->format('Y-m');
-        $one_months_ago = Carbon::now()->subMonths(1)->format('Y-m');
-        $cur_chart = [];
-        $last_chart = [];
-        foreach($charts as $key => $value)
-        {
-            if($key == $cur_month)
-                $cur_chart = $value;
-            if($key == $one_months_ago)
-                $last_chart = $value;
-        }
-        if(isset($charts[$cur_month]) == false)
-        {
-            $charts[$cur_month] = getDefaultTransChartFormat(collect([]));
-            $charts[$cur_month]['modules']['terminal_count'] = 0;
-            $charts[$cur_month]['modules']['hand_count'] = 0;
-            $charts[$cur_month]['modules']['auth_count'] = 0;
-            $charts[$cur_month]['modules']['simple_count'] = 0;
-            $charts[$cur_month]['week_amount_rate'] = 0;
-            $charts[$cur_month]['week'] = [];
-            $cur_chart = $charts[$cur_month];
-        }
-        if(count($last_chart) > 0)
-        {
-            if($last_chart['amount'])
-                $charts[$cur_month]['amount_rate'] = (($cur_chart['amount'] - $last_chart['amount'])/($last_chart['amount'])) * 100;
-            else
-                $charts[$cur_month]['amount_rate'] = 0;
-            if($last_chart['profit'])
-                $charts[$cur_month]['profit_rate'] = (($cur_chart['profit'] - $last_chart['profit'])/($last_chart['profit'])) * 100;    
-            else
-                $charts[$cur_month]['profit_rate'] = 0;
-        }
-        else
-        {
-            $charts[$cur_month]['amount_rate'] = 0;
-            $charts[$cur_month]['profit_rate'] = 0;
-        }
-        return $charts;
-    }
-
-    private function setMonthlyPayModule($transactions)
-    {
-        $total = $transactions->count();
-        $total = $total == 0 ? 1 : $total;
-        return [
-            'terminal_count' => round(($transactions->filter(function ($transaction) {
-                return $transaction->module_type == 0;
-            })->count()/$total) * 100),
-            'hand_count' => round(($transactions->filter(function ($transaction) {
-                return $transaction->module_type == 1;
-            })->count()/$total) * 100),
-            'auth_count' => round(($transactions->filter(function ($transaction) {
-                return $transaction->module_type == 2;
-            })->count()/$total) * 100),
-            'simple_count' => round(($transactions->filter(function ($transaction) {
-                return $transaction->module_type == 3;
-            })->count()/$total) * 100),
-        ];
-    }
     /*
      * 월별 거래 분석(10개월)
      */
     public function monthlyTranAnalysis(Request $request)
     {
-        $request->merge([
-            'page' => 1,
-            'page_size' => 99999999,
-        ]);
-        $charts = [];
-        $week_trans = [];
-        $last_week_trans = [];
-        $cur_trans = [];
-        $last_trans = [];
-        $month_trans = [];
-
-        $cur_day    = Carbon::now();
-        $cur_month  = $cur_day->copy()->startOfMonth();
-        $ten_months_ago = $cur_month->copy()->subMonths(9)->startOfMonth()->format('Y-m-d');
-
-        $query = Transaction::where('brand_id', $request->user()->brand_id)
-                ->where('trx_dt', '>=', $ten_months_ago)
-                ->where('is_delete', false);
-        $query = globalAuthFilter($query, $request);
-        
-        $data           = $this->getIndexData($request, $query);
-        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-        $salesforces    = globalGetSalesByIds($sales_ids);
-        $data['content'] = globalMappingSales($salesforces, $data['content']);
-
-        $next_month     = $cur_month->copy()->addMonth(1)->startOfMonth();
-        $one_months_ago = $cur_month->copy()->subMonths(1)->startOfMonth();
-        $six_days_ago   = Carbon::now()->subDays(6);
-        $thit_days_ago  = Carbon::now()->subDays(13);
-
-        foreach($data['content'] as $transaction) 
+        $datas = [];
+        if(isOperator($request))
         {
-            $transaction->append(['total_trx_amount']);
-
-            $month = Carbon::parse($transaction->trx_dt)->format('Y-m');
-            $month_trans[$month][] = $transaction;
-            $trx_dt = Carbon::parse($transaction->trx_dt);
-            $cxl_dt = Carbon::parse($transaction->cxl_dt);
-
-            $isCurTran = (!$transaction->is_cancel && $trx_dt->between($cur_month, $next_month, true)) ||
-                        ($transaction->is_cancel && $cxl_dt->between($cur_month, $next_month, true));
-            $isLastTran = (!$transaction->is_cancel && $trx_dt->between($one_months_ago, $cur_month, false)) ||
-                        ($transaction->is_cancel && $cxl_dt->between($one_months_ago, $cur_month, false));
-            $isSixDaysTrans = (!$transaction->is_cancel && $trx_dt->between($six_days_ago, $cur_day, true)) ||
-                            ($transaction->is_cancel && $cxl_dt->between($six_days_ago, $cur_day, true));
-            $isThirDaysTrans = (!$transaction->is_cancel && $trx_dt->between($thit_days_ago, $six_days_ago, true)) ||
-                            ($transaction->is_cancel && $cxl_dt->between($six_days_ago, $six_days_ago, true));
-
-            if ($isCurTran)
-                $cur_trans[] = $transaction;
-            if ($isLastTran)
-                $last_trans[] = $transaction;
-            if ($isSixDaysTrans)
-                $week_trans[] = $transaction;
-            if ($isThirDaysTrans)
-                $last_week_trans[] = $transaction;               
+            $key = 'brand_id';
+            $id =  $request->user()->brand_id;
+            $settle_key = 'brand_settle_amount';
         }
-        foreach ($month_trans as $key => $transactions) {            
-            $charts[$key] = getDefaultTransChartFormat(collect($transactions)); // 성능 개선 필요
+        else if(isSalesforce($request))
+        {
+            $idx = globalLevelByIndex($request->user()->level);
+            $key = 'sales'.$idx.'_id';
+            $id =  $request->user()->id;
+            $settle_key = 'sales'.$idx.'_settle_amount';
         }
-        foreach ($month_trans as $key => $transactions) {           
-            $charts[$key]['modules'] = $this->setMonthlyPayModule(collect($transactions));
+        $monthly = DB::select('CALL getMonthlyAmount(?, ?, ?)', [$key, $id, $settle_key]);
+        $daily = DB::select('CALL getDailyAmount(?, ?)', [$key, $id]);
+        foreach($monthly as $month)
+        {
+            $datas[$month->month] = [
+                'modules' => [
+                    "terminal_count" => (int)$month->terminal_count,
+                    "hand_count"    => (int)$month->hand_count,
+                    "auth_count"    => (int)$month->auth_count,
+                    "simple_count"  => (int)$month->simple_count
+                ],
+                'appr'  => [
+                    'amount'=> (int)$month->appr_amount,
+                    'count' => (int)$month->appr_count,
+                ],
+                'cxl'   => [
+                    'amount'=> (int)$month->cxl_amount,
+                    'count' => (int)$month->cxl_count,
+                ],
+                'amount'    => $month->appr_amount + $month->cxl_amount,
+                'count'     => $month->appr_count + $month->cxl_count,
+                'profit'    => (int)$month->profit,
+            ];
+            if($month->month == Carbon::now()->format('Y-m'))
+            {
+                $datas[$month->month]['week'] = [];
+                foreach($daily as $day)
+                {
+                    $datas[$month->month]['week'][$day->day] = [
+                        'appr' => [
+                            'amount' => (int)$day->appr_amount,
+                        ],
+                        'cxl' => [
+                            'amount' => (int)$day->cxl_amount,
+                        ],
+                        'amount' => $day->appr_amount + $day->cxl_amount
+                    ];
+                }
+                $getIncreaseRate = function($col, $current, $before) {
+                    return (($current[$col] - $before[$col])/$before[$col]) * 100;
+                };
+                $before_date = Carbon::now()->subMonths(1)->format('Y-m');
+                $datas[$month->month]['amount_rate'] = $getIncreaseRate('amount', $datas[$month->month], $datas[$before_date]);
+                $datas[$month->month]['profit_rate'] = $getIncreaseRate('profit', $datas[$month->month], $datas[$before_date]);
+            }
         }
-        $charts = $this->setWeeklyRate($charts, $week_trans, $last_week_trans);
-        $charts = $this->setCurrentMonthRate($charts, $cur_trans, $last_trans);
-        return $this->response(0, $charts);
+        return $this->response(0, $datas);
     }
 
     public function getUpSideChartFormat($data)

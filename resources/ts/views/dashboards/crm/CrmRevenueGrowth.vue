@@ -213,20 +213,6 @@ const chartOptions = computed(() => {
                         </template>
                     </h5>
                 </div>
-                <div>
-                    <template v-if="is_skeleton">
-                        <SkeletonBox />
-                    </template>
-                    <template v-else>
-                        <p class="text-sm mt-0 mb-1">
-                            이전 대비
-                            <VChip label color="success">
-                                {{ current.week_amount_rate?.toFixed(3) }}%
-                            </VChip>
-                        </p>
-                    </template>
-
-                </div>
             </div>
             <div>
                 <VueApexCharts :options="chartOptions" :series="series" :height="165" />

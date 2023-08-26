@@ -600,7 +600,6 @@ export interface TransChartData {
     trx_amount: number
     profit_rate?: number
     amount_rate?: number
-    week_amount_rate?: number
     week?: TransWeekChart
 }
 
