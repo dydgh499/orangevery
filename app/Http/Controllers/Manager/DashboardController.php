@@ -65,6 +65,17 @@ class DashboardController extends Controller
             if($month->month == Carbon::now()->format('Y-m'))
             {
                 $datas[$month->month]['week'] = [];
+                $before_date = Carbon::now()->subMonths(1)->format('Y-m');
+                if(isset($datas[$before_date]))
+                {
+                    $datas[$month->month]['amount_rate'] = $getIncreaseRate('amount', $datas[$month->month], $datas[$before_date]);
+                    $datas[$month->month]['profit_rate'] = $getIncreaseRate('profit', $datas[$month->month], $datas[$before_date]);    
+                }
+                else
+                {
+                    $datas[$month->month]['amount_rate'] = 0;
+                    $datas[$month->month]['amount_rate'] = 0;
+                }
                 foreach($daily as $day)
                 {
                     $datas[$month->month]['week'][$day->day] = [
@@ -80,17 +91,6 @@ class DashboardController extends Controller
                 $getIncreaseRate = function($col, $current, $before) {
                     return (($current[$col] - $before[$col])/$before[$col]) * 100;
                 };
-                $before_date = Carbon::now()->subMonths(1)->format('Y-m');
-                if(isset($datas[$before_date]))
-                {
-                    $datas[$month->month]['amount_rate'] = $getIncreaseRate('amount', $datas[$month->month], $datas[$before_date]);
-                    $datas[$month->month]['profit_rate'] = $getIncreaseRate('profit', $datas[$month->month], $datas[$before_date]);    
-                }
-                else
-                {
-                    $datas[$month->month]['amount_rate'] = 0;
-                    $datas[$month->month]['amount_rate'] = 0;
-                }
             }
         }
         return $this->response(0, $datas);
