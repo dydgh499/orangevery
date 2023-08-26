@@ -25,11 +25,18 @@ const series = ref([
 const rate = ref(0)
 const getChartData = (col: string): number[] => {
     const datas = []
-    for (let i = 4; i >= 0; i--) {
-        let data = props.datas['month' + i][col]
-        if (col == 'del')
-            data *= 1
-        datas.push(data)
+    const keys = Object.keys(props.datas)
+    for (let i = keys.length - 1 ; i >= 0; i--) {
+        if(keys[i] === 'total')
+            continue
+        else
+        {
+            console.log(keys[i])
+            let data = props.datas[keys[i]][col]
+            if (col == 'del_rate')
+                data *= 1
+            datas.push(data)
+        }
     }
     return datas
 }
@@ -37,11 +44,10 @@ const getChartData = (col: string): number[] => {
 const chartOptions = computed(() => {
     const currentTheme = vuetifyTheme.current.value.colors
     if (Object.keys(props.datas).length > 0) {
-        series.value[0].data = getChartData('del')
-        series.value[1].data = getChartData('add')
-        const cur = props.datas.month0.add * 10
-        const last = props.datas.month1.add * 10
-        rate.value = (cur - last / (last || 1)) * 10
+        series.value[0].data = getChartData('del_rate')
+        series.value[1].data = getChartData('add_rate')
+        const curernt_month = new Date().toISOString().slice(0, 7)
+        rate.value = props.datas[curernt_month]['increase_rate']
     }
 
     return {

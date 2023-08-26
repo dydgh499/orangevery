@@ -40,7 +40,7 @@ const chartOptions = computed(() => {
     const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`
 
     if (Object.keys(monthly_transactions).length > 0) {
-        const curernt_month = new Date().toISOString().slice(0, 7);
+        const curernt_month = new Date().toISOString().slice(0, 7)
         current.value = monthly_transactions[curernt_month]
         if (current) {
             const week = current.value['week']

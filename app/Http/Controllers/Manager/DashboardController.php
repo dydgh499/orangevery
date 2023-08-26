@@ -81,58 +81,59 @@ class DashboardController extends Controller
                     return (($current[$col] - $before[$col])/$before[$col]) * 100;
                 };
                 $before_date = Carbon::now()->subMonths(1)->format('Y-m');
-                $datas[$month->month]['amount_rate'] = $getIncreaseRate('amount', $datas[$month->month], $datas[$before_date]);
-                $datas[$month->month]['profit_rate'] = $getIncreaseRate('profit', $datas[$month->month], $datas[$before_date]);
+                if(isset($datas[$before_date]))
+                {
+                    $datas[$month->month]['amount_rate'] = $getIncreaseRate('amount', $datas[$month->month], $datas[$before_date]);
+                    $datas[$month->month]['profit_rate'] = $getIncreaseRate('profit', $datas[$month->month], $datas[$before_date]);    
+                }
+                else
+                {
+                    $datas[$month->month]['amount_rate'] = 0;
+                    $datas[$month->month]['amount_rate'] = 0;
+                }
             }
         }
         return $this->response(0, $datas);
     }
 
-    public function getUpSideChartFormat($data)
-    {        
-        $division = function($item) {
-            return $item->is_delete == true;
-        };
-        $cur_month  = Carbon::now()->startOfMonth();
-        $next_month = $cur_month->copy()->addMonth(1)->startOfMonth();
-
-        $chart = [];  
-         $chart['total'] = $data->filter(function ($item) use($division) {
-            return $division($item) === false;
-        })->count();
-
-        for ($i = 0; $i < 5; $i++) {
-            $start_month = $cur_month->copy()->subMonths($i)->startOfMonth();
-            $end_month = $next_month->copy()->subMonths($i)->startOfMonth();
-
-            $items = $data->filter(function ($item) use ($start_month, $end_month) {
-                $created_at = Carbon::parse($item->created_at);
-                return $created_at->greaterThanOrEqualTo($start_month) && $created_at->lessThan($end_month);
-            })->values();
-
-            $add = $items->filter(function ($item) use($division) {
-                return $division($item) === false;
-            })->count();
-            $del = $items->filter(function ($item) use($division) {
-                return $division($item) === true;
-            })->count();
-
-            if($chart['total'])
+    public function getUpSideChartFormat($query)
+    {
+        $datas = [];  
+        $monthly = $query
+            ->select(
+                DB::raw("DATE_FORMAT(updated_at, '%Y-%m') as month"),
+                DB::raw("SUM(is_delete = 0) as add_count"),
+                DB::raw("SUM(is_delete = 1) as del_count"),
+            )
+            ->where('updated_at', '>=', now()->subMonths(4))
+            ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%Y-%m')"))
+            ->orderBy('month')
+            ->get();
+        $total = 0;
+        foreach($monthly as $month)
+        {
+            $total += $month->add_count;
+            $month_total = $month->add_count + $month->del_count;
+            $datas[$month->month] = [
+                'add_rate' => $month->add_count/$month_total,
+                'del_rate' => $month->del_count/$month_total,
+                'add_count' => (int)$month->add_count,
+                'del_count' => (int)$month->del_count,
+            ];
+            if($month->month == Carbon::now()->format('Y-m'))
             {
-                $chart['month'.$i] = [
-                    'add' => ($add/$chart['total']),
-                    'del' => ($del/$chart['total']),
-                ];    
-            }
-            else
-            {
-                $chart['month'.$i] = [
-                    'add' => 0,
-                    'del' => 0,
-                ];
+                $getIncreaseRate = function($col, $current, $before) {
+                    return (($current[$col] - $before[$col])/$before[$col]) * 100;
+                };                
+                $before_date = Carbon::now()->subMonths(1)->format('Y-m');
+                if(isset($datas[$before_date]))
+                {
+                    $datas[$month->month]['increase_rate'] = $getIncreaseRate('add_count', $datas[$month->month], $datas[$before_date]);
+                }
             }
         }
-        return $chart;
+        $datas['total'] = $total;
+        return $datas;
     }
 
     /*
@@ -142,8 +143,7 @@ class DashboardController extends Controller
     {
         $query = Merchandise::where('brand_id', $request->user()->brand_id);
         $query = globalAuthFilter($query, $request);
-        $mcht = $query->get(['id', 'is_delete','created_at']);
-        $chart = $this->getUpSideChartFormat($mcht);
+        $chart = $this->getUpSideChartFormat($query);
         return $this->response(0, $chart);
     }
 
@@ -155,9 +155,7 @@ class DashboardController extends Controller
         $query = Salesforce::where('brand_id', $request->user()->brand_id);
         if(isSalesforce($request))
             $query = $query->where('id', $request->user()->id);
-        $sales = $query->get(['id', 'is_delete','created_at']);
-
-        $chart = $this->getUpSideChartFormat($sales);
+        $chart = $this->getUpSideChartFormat($query);
         return $this->response(0, $chart);
     }
 

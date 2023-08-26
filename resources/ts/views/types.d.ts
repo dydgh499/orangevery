@@ -619,8 +619,9 @@ export interface MonthlyTransChart {
     [key: string]: TransChart
 }
 export interface UpSideChartData {
-    add: number,
-    del: number,
+    add_rate: number,
+    del_rate: number,
+    increase_rate:? number,
 }
 export interface UpSideChart {
     total: number,
