@@ -26,7 +26,8 @@ const rate = ref(0)
 const getChartData = (col: string): number[] => {
     const datas = []
     const keys = Object.keys(props.datas)
-    for (let i = keys.length - 1 ; i >= 0; i--) {
+    for (let i = 0; i < keys.length; i++) 
+    {
         if(keys[i] === 'total')
             continue
         else
@@ -44,8 +45,8 @@ const getChartData = (col: string): number[] => {
 const chartOptions = computed(() => {
     const currentTheme = vuetifyTheme.current.value.colors
     if (Object.keys(props.datas).length > 0) {
-        series.value[0].data = getChartData('del_rate')
-        series.value[1].data = getChartData('add_rate')
+        series.value[0].data = getChartData('del_count')
+        series.value[1].data = getChartData('add_count')
         const curernt_month = new Date().toISOString().slice(0, 7)
         rate.value = props.datas[curernt_month] && props.datas[curernt_month]['increase_rate'] ? props.datas[curernt_month]['increase_rate'] : 0;
     }
