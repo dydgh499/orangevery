@@ -1,11 +1,11 @@
-import { user_info } from '@axios'
+import { getUserLevel } from '@axios'
 
 const getAbilitiesMenu = computed(() => {
     const logs = []
     const sales = []
     const sales_child = []
 
-    if(user_info.value.level >= 35) {
+    if(getUserLevel() >= 35) {
         logs.push({
             title: '수수료율 변경이력',
             to: 'merchandises-fee-change-histories',
@@ -20,14 +20,14 @@ const getAbilitiesMenu = computed(() => {
         },)
     }
     
-    if(user_info.value.level >= 35) {
+    if(getUserLevel() >= 35) {
         sales_child.push({
             title: '수수료율 변경이력',
             to: 'salesforces-fee-change-histories',
         })
     }
     
-    if(user_info.value.level >= 13) {
+    if(getUserLevel() >= 13) {
         sales.push({
             title: '영업점 관리',
             icon: { icon: 'ph:share-network' },

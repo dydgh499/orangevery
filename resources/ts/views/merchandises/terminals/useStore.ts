@@ -2,7 +2,7 @@ import { Header } from '@/views/headers'
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { user_info } from '@axios'
+import { getUserLevel } from '@axios'
 
 export const useSearchStore = defineStore('terminalSearchStore', () => {
     const store = Searcher('merchandises/terminals')
@@ -15,7 +15,7 @@ export const useSearchStore = defineStore('terminalSearchStore', () => {
         'note': '별칭',
         'module_type': '모듈타입',
     }
-    if(user_info.value.level >= 35)
+    if(getUserLevel() >= 35)
     {
         headers1['pg_id'] = 'PG사명'
         headers1['ps_id'] = '구간'

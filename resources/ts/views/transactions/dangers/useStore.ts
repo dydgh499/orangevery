@@ -3,7 +3,7 @@ import { installments, module_types } from '@/views/merchandises/pay-modules/use
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Danger } from '@/views/types'
-import { user_info } from '@axios'
+import { getUserLevel } from '@axios'
 
 export const useSearchStore = defineStore('dangerSearchStore', () => {    
     const store = Searcher('transactions/dangers')
@@ -32,7 +32,7 @@ export const useSearchStore = defineStore('dangerSearchStore', () => {
         'danger_type': '이상거래타입',
         'is_checked': '확인 여부',
     }
-    if(user_info.value.level >= 35)
+    if(getUserLevel() >= 35)
         headers['extra_col'] = '더보기'
 
     head.main_headers.value = [];

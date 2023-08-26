@@ -1,15 +1,15 @@
-import { user_info } from '@axios'
+import { getUserLevel } from '@axios'
 
 const getAbilitiesMenu = computed(() => {
     const operations:any[] = []
     const complaints = []
-    if (user_info.value.level >= 35) {
+    if (getUserLevel() >= 35) {
         operations.push({
             title: '운영 관리',
             icon: { icon: 'ph-buildings' },
             children: []
         })
-        if (user_info.value.level >= 40) {
+        if (getUserLevel() >= 40) {
             operations[0].children.push({
                 title: '서비스 관리',
                 to: 'services-brands',
@@ -35,7 +35,7 @@ const getAbilitiesMenu = computed(() => {
             title: '이전 전산 연동',
             to: 'services-computational-transfer',
         })
-        if (user_info.value.level >= 50) {
+        if (getUserLevel() >= 50) {
             operations[0].children.push({
                 title: '전산 서버 로그',
                 class: 'log(1)',

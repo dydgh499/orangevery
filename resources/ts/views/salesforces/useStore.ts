@@ -1,7 +1,7 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { Options, Salesforce } from '@/views/types'
-import { axios, user_info } from '@axios'
+import { axios, getUserLevel } from '@axios'
 import corp from '@corp'
 
 const levels = corp.pv_options.auth.levels
@@ -50,31 +50,31 @@ export const settleTaxTypes = () => {
 
 export const salesLevels = () => {
     const sales = <Options[]>([]);
-    if(levels.sales0_use && user_info.value.level >= 13)
+    if(levels.sales0_use && getUserLevel() >= 13)
         sales.push({id: 13, title: levels.sales0_name})
-    if(levels.sales1_use && user_info.value.level >= 15)
+    if(levels.sales1_use && getUserLevel() >= 15)
         sales.push({id: 15, title: levels.sales1_name})
-    if(levels.sales2_use && user_info.value.level >= 17)
+    if(levels.sales2_use && getUserLevel() >= 17)
         sales.push({id: 17, title: levels.sales2_name})
-    if(levels.sales3_use && user_info.value.level >= 20)
+    if(levels.sales3_use && getUserLevel() >= 20)
         sales.push({id: 20, title: levels.sales3_name})
-    if(levels.sales4_use && user_info.value.level >= 25)
+    if(levels.sales4_use && getUserLevel() >= 25)
         sales.push({id: 25, title: levels.sales4_name})
-    if(levels.sales5_use && user_info.value.level >= 30)
+    if(levels.sales5_use && getUserLevel() >= 30)
         sales.push({id: 30, title: levels.sales5_name})
     return sales
 }
 
 export const allLevels = () => {
     const sales = salesLevels()
-    if(user_info.value.level >= 10)
+    if(getUserLevel() >= 10)
         sales.unshift(<Options>({id: 10, title: '가맹점'}))
-    if(user_info.value.level >= 35) {
+    if(getUserLevel() >= 35) {
         sales.push(<Options>({id: 35, title: '직원'}))
         sales.push(<Options>({id: 40, title: '본사'}))
         sales.push(<Options>({id: 45, title: '협력사'}))
     }
-    if(levels.dev_use && user_info.value.level >= 35)
+    if(levels.dev_use && getUserLevel() >= 35)
         sales.push(<Options>({id: 50, title: levels.dev_name}))
     return sales
 }

@@ -1,7 +1,7 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { DeductionHeader } from '@/views/types'
-import { user_info } from '@axios'
+import { getUserLevel } from '@axios'
 
 export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
     const store = Searcher('transactions/settle/salesforces')
@@ -34,7 +34,7 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
         'profit': '정산액',
     }
     const headers2:DeductionHeader = {'deduction': {}}
-    if(user_info.value.level >= 35) {
+    if(getUserLevel() >= 35) {
         headers2['deduction']['input'] = '추가차감입력'
     }
     headers2['deduction']['amount'] = '차감완료금'
@@ -60,7 +60,7 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
         'addr': '주소',
     };
     
-    if(user_info.value.level >= 35) {
+    if(getUserLevel() >= 35) {
         headers3['extra_col'] = '더보기'
     }
     

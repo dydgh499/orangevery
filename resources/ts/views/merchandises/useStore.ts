@@ -3,7 +3,7 @@ import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { Merchandise } from '@/views/types'
-import { axios, user_info } from '@axios'
+import { axios, getUserLevel } from '@axios'
 import corp from '@corp'
 
 export const useSearchStore = defineStore('mchtSearchStore', () => {
@@ -16,27 +16,27 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     const headers: Record<string, string> = {
         'id': 'NO.',
     }
-    if (levels.sales5_use && user_info.value.level >= 30) {
+    if (levels.sales5_use && getUserLevel() >= 30) {
         headers['sales5_name'] = levels.sales5_name
         headers['sales5_fee'] = '수수료'
     }
-    if (levels.sales4_use && user_info.value.level >= 25) {
+    if (levels.sales4_use && getUserLevel() >= 25) {
         headers['sales4_name'] = levels.sales4_name
         headers['sales4_fee'] = '수수료'
     }
-    if (levels.sales3_use && user_info.value.level >= 20) {
+    if (levels.sales3_use && getUserLevel() >= 20) {
         headers['sales3_name'] = levels.sales3_name
         headers['sales3_fee'] = '수수료'
     }
-    if (levels.sales2_use && user_info.value.level >= 17) {
+    if (levels.sales2_use && getUserLevel() >= 17) {
         headers['sales2_name'] = levels.sales2_name
         headers['sales2_fee'] = '수수료'
     }
-    if (levels.sales1_use && user_info.value.level >= 15) {
+    if (levels.sales1_use && getUserLevel() >= 15) {
         headers['sales1_name'] = levels.sales1_name
         headers['sales1_fee'] = '수수료'
     }
-    if (levels.sales0_use && user_info.value.level >= 13) {
+    if (levels.sales0_use && getUserLevel() >= 13) {
         headers['sales0_name'] = levels.sales0_name
         headers['sales0_fee'] = '수수료'
     }
@@ -44,7 +44,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     headers['trx_fee'] = '수수료'
     headers['hold_fee'] = '유보금 수수료'
     headers['mcht_name'] = '상호'
-    if(user_info.value.level >= 35) {
+    if(getUserLevel() >= 35) {
         headers['mids'] = 'MID'
         headers['tids'] = 'TID'
         headers['module_types'] = '모듈타입'
@@ -68,7 +68,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     headers['created_at'] = '생성시간'
     headers['updated_at'] = '업데이트시간'
 
-    if (user_info.value.level >= 35)
+    if (getUserLevel() >= 35)
         headers['extra_col'] = '더보기'
     
     head.main_headers.value = [];
@@ -86,7 +86,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         let datas = r.data.content;
         for (let i = 0; i < datas.length; i++) {
-            if(user_info.value.level >= 35) {
+            if(getUserLevel() >= 35) {
                 datas[i]['module_types'] = getModuleTypes(datas[i]['module_types']).join(',')
                 datas[i]['pgs'] = getPGs(datas[i]['pgs']).join(',')
                 datas[i]['mids'] = datas[i]['mids'].join(',')

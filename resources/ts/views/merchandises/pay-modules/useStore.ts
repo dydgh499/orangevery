@@ -2,7 +2,7 @@ import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Options, PayModule, StringOptions } from '@/views/types'
-import { axios, pay_token, user_info } from '@axios'
+import { axios, getUserLevel, pay_token, user_info } from '@axios'
 import corp from '@corp'
 
 export const simplePays = <StringOptions[]>([
@@ -75,7 +75,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
     }
-    if(user_info.value.level >= 35)
+    if(getUserLevel() >= 35)
     {
         headers1['pg_id'] = 'PG사명'
         headers1['ps_id'] = '구간'

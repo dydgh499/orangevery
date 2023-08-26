@@ -66,12 +66,12 @@ const metas = ref([
 ])
 const getAllLevels = () => {
     const sales = salesLevels()
-    if (user_info.value.level >= 10)
+    if (getUserLevel() >= 10)
         sales.unshift(<Options>({ id: 10, title: '가맹점' }))
-    if (user_info.value.level >= 35) {
+    if (getUserLevel() >= 35) {
         sales.push(<Options>({ id: 40, title: '본사' }))
     }
-    if (levels.dev_use && user_info.value.level >= 35)
+    if (levels.dev_use && getUserLevel() >= 35)
         sales.push(<Options>({ id: 50, title: levels.dev_name }))
     return sales
 }

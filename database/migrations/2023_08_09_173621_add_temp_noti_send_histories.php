@@ -31,6 +31,9 @@ return new class extends Migration
         Schema::table('transactions', function (Blueprint $table) {
             $table->boolean('pg_settle_type')->default(0)->comment('PG사 정산타입(0=주말포함, 1=주말제외)');
         });
+        Schema::table('operators', function (Blueprint $table) {
+            $table->boolean('is_delete')->default(false)->comment('삭제 여부');
+        });
     }
 
     /**

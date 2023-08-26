@@ -6,6 +6,7 @@ use App\Models\Transaction;
 use App\Models\Salesforce;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\Settle\TransactionSettleUpdateTrait;
 use App\Http\Requests\Manager\TransactionRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Database\QueryException;
@@ -17,7 +18,7 @@ use App\Enums\HistoryType;
 
 class TransactionController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, TransactionSettleUpdateTrait;
     protected $transactions;
     protected $target;
     public $cols;
@@ -301,5 +302,11 @@ class TransactionController extends Controller
             return $this->response(1, $res['body']);
         else
             return $this->extendResponse(1999, $res['body']['result_msg']);
+    }
+
+    public function test($request)
+    {
+        $trans = $this->commonSelect($request)->orderBy('transactions.id', 'desc')->offset(0)->limit(10)->get()->toArray();
+        print_r($this->setSettleAmount($trans));
     }
 }

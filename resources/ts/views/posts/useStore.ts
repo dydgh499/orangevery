@@ -1,7 +1,7 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { Options, Post } from '@/views/types'
-import { user_info } from '@axios'
+import { getUserLevel } from '@axios'
 
 
 export const types = <Options[]>([
@@ -21,7 +21,7 @@ export const useSearchStore = defineStore('postSearchStore', () => {
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
     }    
-    if(user_info.value.level >= 35)
+    if(getUserLevel() >= 35)
         headers['extra_col'] = '더보기'
         
     head.main_headers.value = [];

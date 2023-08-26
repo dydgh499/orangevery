@@ -1,6 +1,6 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
-import { user_info } from '@axios'
+import { getUserLevel } from '@axios'
 
 export const useSearchStore = defineStore('transSettlesHistorySalesSearchStore', () => {    
     const store = Searcher('transactions/settle-histories/salesforces')
@@ -24,7 +24,7 @@ export const useSearchStore = defineStore('transSettlesHistorySalesSearchStore',
         'acct_num': '계좌번호',
         'created_at': '생성시간',
     };
-    if(user_info.value.level >= 35) {
+    if(getUserLevel() >= 35) {
         headers['extra_col'] = '더보기'
     }
 
