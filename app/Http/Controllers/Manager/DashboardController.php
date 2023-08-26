@@ -77,7 +77,7 @@ class DashboardController extends Controller
                 else
                 {
                     $datas[$month->month]['amount_rate'] = 0;
-                    $datas[$month->month]['amount_rate'] = 0;
+                    $datas[$month->month]['profit_rate'] = 0;
                 }
                 foreach($daily as $day)
                 {
