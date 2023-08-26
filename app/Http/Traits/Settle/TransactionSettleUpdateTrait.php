@@ -36,9 +36,15 @@ trait TransactionSettleUpdateTrait
             ];
         })->unique();
 
-        $saleses = json_decode(json_encode(DB::table('salesforces')
-            ->whereIn('id', $sales_ids)
-            ->get(['id', 'settle_tax_type'])), true);
+        if(count($sales_ids) > 0)
+        {
+            $saleses = json_decode(json_encode(DB::table('salesforces')
+                ->whereIn('id', $sales_ids)
+                ->get(['id', 'settle_tax_type'])), true);
+        }
+        else
+            $saleses = [];
+        
         foreach($trans as &$tran)
         {
             //가맹점 수수료 세팅
