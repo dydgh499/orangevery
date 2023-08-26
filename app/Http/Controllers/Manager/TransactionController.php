@@ -304,9 +304,33 @@ class TransactionController extends Controller
             return $this->extendResponse(1999, $res['body']['result_msg']);
     }
 
-    public function test($request)
+    public function _test()
     {
-        $trans = $this->commonSelect($request)->orderBy('transactions.id', 'desc')->offset(0)->limit(10)->get()->toArray();
-        print_r($this->setSettleAmount($trans));
+        $db_trans = $this->transactions
+            ->orderBy('transactions.id', 'desc')
+            ->get();
+        
+        $trans = json_decode(json_encode($db_trans), true);
+        $trans = $this->setSettleAmount($trans);
+        $i=0;
+        foreach($db_trans as $tran)
+        {
+            $tran->brand_settle_amount = $trans[$i]['brand_settle_amount'];
+            $tran->dev_settle_amount = $trans[$i]['dev_settle_amount'];
+            $tran->mcht_settle_amount = $trans[$i]['mcht_settle_amount'];
+            $tran->sales0_settle_amount = $trans[$i]['sales0_settle_amount'];
+            $tran->sales1_settle_amount = $trans[$i]['sales1_settle_amount'];
+            $tran->sales2_settle_amount = $trans[$i]['sales2_settle_amount'];
+            $tran->sales3_settle_amount = $trans[$i]['sales3_settle_amount'];
+            $tran->sales4_settle_amount = $trans[$i]['sales4_settle_amount'];
+            $tran->sales5_settle_amount = $trans[$i]['sales5_settle_amount'];
+            $tran->save();
+            $i++;
+        }
+    }
+    static public function test()
+    {
+        $ist = new TransactionController(new Transaction);
+        $ist->_test();
     }
 }

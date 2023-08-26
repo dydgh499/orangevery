@@ -27,15 +27,8 @@ trait TransactionSettleUpdateTrait
         }
     }
 
-    protected function setSettleAmount($trans)
+    protected function getSalesforces($sales_ids)
     {
-        $sales_ids = collect($trans)->flatMap(function ($tran) {
-            return [
-                $tran['sales0_id'], $tran['sales1_id'], $tran['sales2_id'],
-                $tran['sales3_id'], $tran['sales4_id'], $tran['sales5_id'],
-            ];
-        })->unique();
-
         if(count($sales_ids) > 0)
         {
             $saleses = json_decode(json_encode(DB::table('salesforces')
@@ -44,7 +37,18 @@ trait TransactionSettleUpdateTrait
         }
         else
             $saleses = [];
-        
+        return $saleses;
+    }
+
+    protected function setSettleAmount($trans)
+    {
+        $sales_ids = collect($trans)->flatMap(function ($tran) {
+            return [
+                $tran['sales0_id'], $tran['sales1_id'], $tran['sales2_id'],
+                $tran['sales3_id'], $tran['sales4_id'], $tran['sales5_id'],
+            ];
+        })->unique();
+        $saleses = $this->getSalesforces($sales_ids);
         foreach($trans as &$tran)
         {
             //가맹점 수수료 세팅
