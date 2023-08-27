@@ -57,18 +57,20 @@ const getPreviousAmount = (dates: string[]) => {
     series.value[3].data = simple_counts
 }
 
+
+watchEffect(() => {
+    if (Object.keys(monthly_transactions).length > 0) {
+        getPreviousMonths(Object.keys(monthly_transactions))
+        getPreviousAmount(Object.keys(monthly_transactions))
+    }
+})
 const chartOptions = computed(() => {
     const currentTheme = vuetifyTheme.current.value.colors
     const variableTheme = vuetifyTheme.current.value.variables
 
     const borderColor = `rgba(${hexToRgb(String(variableTheme['border-color']))},${variableTheme['border-opacity']})`
-    const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`
     const legendColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
 
-    if (Object.keys(monthly_transactions).length > 0) {
-        getPreviousMonths(Object.keys(monthly_transactions))
-        getPreviousAmount(Object.keys(monthly_transactions))
-    }
     return {
         chart: {
             type: 'radar',

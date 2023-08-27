@@ -54,16 +54,10 @@ const getSeries = (dates: string[], col: string, sec_col?: string) => {
     return amount
 }
 
-const chartConfigs = computed(() => {
+
+watchEffect(() => {
     const currentTheme = vuetifyTheme.current.value.colors
-    const variableTheme = vuetifyTheme.current.value.variables
-
-    const legendColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
-    const borderColor = `rgba(${hexToRgb(String(variableTheme['border-color']))},${variableTheme['border-opacity']})`
-    const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`
-
     const keys = Object.keys(monthly_transactions)
-
     if (keys.length > 0) {
         serieses.value[0][0].data = getSeries(keys, 'appr', 'amount')
         serieses.value[1][0].data = getSeries(keys, 'cxl', 'amount')
@@ -76,6 +70,14 @@ const chartConfigs = computed(() => {
         amount_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.success)},0.16)`, `rgba(${hexToRgb(currentTheme.success)},1)`)
         profit_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.warning)},0.16)`, `rgba(${hexToRgb(currentTheme.warning)},1)`)
     }
+})
+const chartConfigs = computed(() => {
+    const currentTheme = vuetifyTheme.current.value.colors
+    const variableTheme = vuetifyTheme.current.value.variables
+
+    const legendColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
+    const borderColor = `rgba(${hexToRgb(String(variableTheme['border-color']))},${variableTheme['border-opacity']})`
+    const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`
 
     return [
         {

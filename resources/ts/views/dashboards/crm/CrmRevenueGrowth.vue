@@ -18,7 +18,7 @@ const dayofweeks = ref(<string[]>([]))
 const series = ref(<Series[]>([
     {
         name: '매출',
-        data: [],
+        data: [] as number[],
     }
 ]))
 
@@ -34,11 +34,9 @@ const getSeries = (idays: string[], week: TransWeekChart) => {
     week_amount.value = amount
 }
 
-const chartOptions = computed(() => {
-    const currentTheme = vuetifyTheme.current.value.colors
-    const variableTheme = vuetifyTheme.current.value.variables
-    const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`
 
+watchEffect(() => {
+    const currentTheme = vuetifyTheme.current.value.colors
     if (Object.keys(monthly_transactions).length > 0) {
         const curernt_month = new Date().toISOString().slice(0, 7)
         current.value = monthly_transactions[curernt_month]
@@ -52,6 +50,12 @@ const chartOptions = computed(() => {
             }
         }
     }
+})
+const chartOptions = computed(() => {
+    const currentTheme = vuetifyTheme.current.value.colors
+    const variableTheme = vuetifyTheme.current.value.variables
+    const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`
+
     return {
         chart: {
             type: 'bar',

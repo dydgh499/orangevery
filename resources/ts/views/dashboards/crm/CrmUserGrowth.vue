@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
-import type { UpSideChart } from '@/views/types'
+import type { UpSideChart, Series } from '@/views/types'
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 
 interface Props {
@@ -12,7 +12,7 @@ const props = defineProps<Props>()
 const is_skeleton = <any>(inject('is_skeleton'))
 
 const vuetifyTheme = useTheme()
-const series = ref([
+const series = ref(<Series[]>([
     {
         name: '감소',
         data: [] as number[],
@@ -21,7 +21,7 @@ const series = ref([
         name: '추가',
         data: [] as number[],
     },
-])
+]))
 const rate = ref(0)
 const getChartData = (col: string): number[] => {
     const datas = []
