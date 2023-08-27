@@ -32,7 +32,7 @@ class Merchandise extends Authenticatable
             ->globalFilter()
             ->settleFilter('mcht_settle_id')
             ->settleTransaction()            
-            ->select();
+            ->select(['transactions.*', 'mcht_settle_amount as profit']);
     }
     
     public function deducts()

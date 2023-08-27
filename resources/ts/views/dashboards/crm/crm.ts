@@ -10,7 +10,7 @@ export const useCRMStore = defineStore('CRMStore', () => {
     const danger_histories = ref(<Danger[]>[])
     const operator_histories = ref(<OperatorHistory[]>([]))
     
-    const getGraphData = async() => {        
+    const getGraphData = async() => {
         try {
             const [r1, r2, r3, r4, r5] = await Promise.all([
                 axios.get('/api/v1/manager/dashsboards/monthly-transactions-analysis'),

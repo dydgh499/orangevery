@@ -43,8 +43,7 @@ onMounted(() => {
         if (store.getChartProcess() === false) {
             const r = await store.getChartData()
             totals.value = []
-            if (r.data.amount != 0)
-                totals.value.push(r.data)
+            totals.value.push(r.data)
         }
     })
 })

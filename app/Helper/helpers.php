@@ -7,6 +7,7 @@
     use Carbon\Carbon;
     use App\Http\Controllers\Log\OperatorHistoryContoller;
     use App\Enums\HistoryType;
+    use Illuminate\Support\Facades\DB;
 
     function isMainBrand($brand_id)
     {
@@ -283,7 +284,7 @@
         return $chart;
     }
 
-    function getDefaultTransChartFormat($data)
+    function getDefaultTransChartFormat($data, $settle_key)
     {
         $chart = [
             'appr' => [
@@ -319,7 +320,7 @@
     
             $chart[$type]['amount'] += $transaction->amount;
             $chart[$type]['count']++;
-            $chart[$type]['profit'] += $transaction->profit;
+            $chart[$type]['profit'] += $transaction[$settle_key];
             $chart[$type]['trx_amount'] += $transaction->trx_amount;
             $chart[$type]['hold_amount'] += $transaction->hold_amount;
             $chart[$type]['settle_fee'] += $transaction->mcht_settle_fee;
@@ -333,7 +334,6 @@
             }
         }
         $chart['count'] = $chart['appr']['count'] + $chart['cxl']['count'];
-    
         return $chart;  
     }
 

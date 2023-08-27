@@ -3,7 +3,7 @@
 namespace App\Http\Traits\Settle;
 use Illuminate\Support\Facades\DB;
 
-trait TransactionSettleUpdateTrait
+trait TransactionTrait
 {
     protected function getSettleAmount($idx, $tran)
     {
@@ -89,5 +89,59 @@ trait TransactionSettleUpdateTrait
             $tran['brand_settle_amount'] = round($brand_profit - $dev_profit);
         }
         return $trans;
+    }
+
+    
+    public function getTotalCols($settle_key, $group_key=null)
+    {
+        $cols = [
+            DB::raw("SUM(IF(is_cancel = 0, amount, 0)) AS appr_amount"),
+            DB::raw("SUM(is_cancel = 0) AS appr_count"),
+            DB::raw("SUM(IF(is_cancel = 1, amount, 0)) AS cxl_amount"),
+            DB::raw("SUM(is_cancel = 1) AS cxl_count"),
+            DB::raw("SUM($settle_key) AS profit"),
+        ];
+        if($group_key)
+            array_push($cols, $group_key);
+        return $cols;
+    }
+    
+    public function setTransChartFormat($chart)
+    {
+        return [
+            'appr'  => [
+                'amount'=> (int)$chart->appr_amount,
+                'count' => (int)$chart->appr_count,
+            ],
+            'cxl'   => [
+                'amount'=> (int)$chart->cxl_amount,
+                'count' => (int)$chart->cxl_count,
+            ],
+            'amount'    => $chart->appr_amount + $chart->cxl_amount,
+            'count'     => $chart->appr_count + $chart->cxl_count,
+            'profit'    => (int)$chart->profit,
+        ];
+    }
+
+    public function getSettleCol($request)
+    {
+        if($request->level == 10)
+        {
+            $group_key = 'mcht_id';
+            $settle_key = 'mcht_settle_amount';
+        }
+        else if($request->level <= 35)
+        {
+            $idx = globalLevelByIndex($request->level);
+            $group_key  = 'sales'.$idx.'_id';
+            $settle_key = 'sales'.$idx.'_settle_amount';
+        }
+        else
+        {
+            $settle = $request->level == 50 ? 'dev' :'brand';
+            $group_key = 'brand_id';
+            $settle_key = $settle."_settle_amount";
+        }
+        return [$settle_key, $group_key];
     }
 }

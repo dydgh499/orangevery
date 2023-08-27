@@ -6,7 +6,7 @@ use App\Models\Transaction;
 use App\Models\Salesforce;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Traits\Settle\TransactionSettleUpdateTrait;
+use App\Http\Traits\Settle\TransactionTrait;
 use App\Http\Requests\Manager\TransactionRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Database\QueryException;
@@ -18,7 +18,7 @@ use App\Enums\HistoryType;
 
 class TransactionController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, TransactionSettleUpdateTrait;
+    use ManagerTrait, ExtendResponseTrait, TransactionTrait;
     protected $transactions;
     protected $target;
     public $cols;
@@ -39,6 +39,9 @@ class TransactionController extends Controller
 
     protected function getTransactionData($request, $query)
     {
+        [$settle_key, $group_key] = $this->getSettleCol($request);
+        array_push($this->cols, $settle_key." AS profit");
+
         $page      = $request->input('page');
         $page_size = $request->input('page_size');
         $sp = ($page - 1) * $page_size;
@@ -118,21 +121,11 @@ class TransactionController extends Controller
      */
     public function chart(IndexRequest $request)
     {
-        $request->merge([
-            'page' => 1,
-            'page_size' => 99999999,
-        ]);
         $query  = $this->commonSelect($request);
-        $data   = $this->getTransactionData($request, $query);
-        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-        $salesforces    = globalGetSalesByIds($sales_ids);
-        $data['content'] = globalMappingSales($salesforces, $data['content']);
-
-        foreach($data['content'] as $content) 
-        {
-            $content->append(['total_trx_amount']);
-        }
-        $chart  = getDefaultTransChartFormat($data['content']);
+        [$settle_key, $group_key] = $this->getSettleCol($request);
+        $cols = $this->getTotalCols($settle_key);
+        $chart = $query->first($cols);
+        $chart = $this->setTransChartFormat($chart);
         return $this->response(0, $chart);
     }
 
@@ -148,11 +141,6 @@ class TransactionController extends Controller
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
-
-        foreach($data['content'] as $content) 
-        {
-            $content->append(['total_trx_amount']);
-        }
         return $this->response(0, $data);
     }
 
@@ -167,6 +155,7 @@ class TransactionController extends Controller
     public function store(TransactionRequest $request)
     {
         $data = $request->data();
+        [$data] = $this->setSettleAmount([$data]);
         $res = $this->transactions->create($data);
         operLogging(HistoryType::CREATE, $this->target, $data, "#".$res->id);
         return $this->response($res ? 1 : 990, ['id'=>$res->id]);
@@ -255,6 +244,7 @@ class TransactionController extends Controller
         $data['sales5_fee'] = $request->input('sales5_fee', 0);
         try 
         {
+            [$data] = $this->setSettleAmount([$data]);
             $res = $this->transactions->create($data);
             operLogging(HistoryType::CREATE, $this->target, $data, "#".$res->id);
             return $this->response(1);

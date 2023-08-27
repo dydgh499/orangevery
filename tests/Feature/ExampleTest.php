@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    use TransactionSettleUpdateTrait;
+    use TransactionTrait;
     /**
      * A basic test example.
      *

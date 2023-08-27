@@ -14,10 +14,10 @@ trait SettleTrait
         ];
     }
 
-    public function getSettleInformation($data)
+    public function getSettleInformation($data, $settle_key)
     {
         foreach($data['content'] as $content) {
-            $chart = getDefaultTransChartFormat($content->transactions);
+            $chart = getDefaultTransChartFormat($content->transactions, $settle_key);
             $content->amount = $chart['amount'];
             $content->count = $chart['count'];
             $content->profit = $chart['profit'];
@@ -84,6 +84,10 @@ trait SettleTrait
 
     protected function partSettleCommonQuery($request, $target_id, $target_settle_id)
     {
+        $cols = ['transactions.*'];
+        [$settle_key, $group_key] = $this->getSettleCol($request);
+        array_push($cols, $settle_key." AS profit");
+
         $search = $request->input('search', '');
         $query = Transaction::where($target_id, $request->id)
             ->globalFilter()
@@ -101,7 +105,7 @@ trait SettleTrait
         $query = globalSalesFilter($query, $request);
         $query = globalAuthFilter($query, $request);
 
-        $data = $this->getIndexData($request, $query);
+        $data = $this->getIndexData($request, $query, 'id', $cols);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
@@ -109,7 +113,6 @@ trait SettleTrait
         foreach($data['content'] as $content) 
         {
             $content->mcht_name = $content->mcht['mcht_name'];
-            $content->append(['total_trx_amount']);
             $content->makeHidden(['mcht']);
         }
         return $data;

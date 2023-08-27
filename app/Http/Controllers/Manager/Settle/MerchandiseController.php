@@ -13,12 +13,13 @@ use Carbon\Carbon;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleTrait;
+use App\Http\Traits\Settle\TransactionTrait;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
 
 class MerchandiseController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, SettleTrait;
+    use ManagerTrait, ExtendResponseTrait, SettleTrait, TransactionTrait;
     protected $merchandises, $settleDeducts;
 
     public function __construct(Merchandise $merchandises, SettleDeductMerchandise $settleDeducts)
@@ -30,6 +31,8 @@ class MerchandiseController extends Controller
     private function commonQuery($request)
     {
         $validated = $request->validate(['dt'=>'required|date']);
+        [$settle_key, $group_key] = $this->getSettleCol($request);
+
         $cols = array_merge($this->getDefaultCols(), ['mcht_name']);
         $search = $request->input('search', '');
 
@@ -39,7 +42,7 @@ class MerchandiseController extends Controller
         $query = $query->with(['transactions', 'deducts']);
 
         $data = $this->getIndexData($request, $query, 'id', $cols);
-        $data = $this->getSettleInformation($data); 
+        $data = $this->getSettleInformation($data, $settle_key); 
         return $data;
     }
 
@@ -64,6 +67,8 @@ class MerchandiseController extends Controller
                 'transfer' => 0,
             ]
         ];
+        [$settle_key, $group_key] = $this->getSettleCol($request);
+
         $transactions = collect();
         $data = $this->commonQuery($request);
         foreach($data['content'] as $data)
@@ -75,7 +80,7 @@ class MerchandiseController extends Controller
             $total['settle']['deposit'] += $data->settle['deposit'];
             $total['settle']['transfer'] += $data->settle['transfer'];
         }
-        $chart = getDefaultTransChartFormat($transactions);
+        $chart = getDefaultTransChartFormat($transactions, $settle_key);
         $total = array_merge($total, $chart);
         return $this->response(0, $total);
     }
@@ -102,24 +107,17 @@ class MerchandiseController extends Controller
             'page' => 1,
             'page_size' => 999999,
         ]);
+        [$settle_key, $group_key] = $this->getSettleCol($request);
         $query = Transaction::where('mcht_id', $request->id)
             ->globalFilter()
             ->settleFilter('mcht_settle_id')
             ->settleTransaction();
-
         $query = globalPGFilter($query, $request);
         $query = globalSalesFilter($query, $request);
         $query = globalAuthFilter($query, $request);
-
-        $data = $this->getIndexData($request, $query);
-        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-        $salesforces    = globalGetSalesByIds($sales_ids);
-        $data['content'] = globalMappingSales($salesforces, $data['content']);
-        foreach($data['content'] as $content) 
-        {
-            $content->append(['total_trx_amount']);
-        }
-        $chart = getDefaultTransChartFormat($data['content']);
+        $cols = $this->getTotalCols($settle_key);
+        $chart = $query->first($cols);
+        $chart = $this->setTransChartFormat($chart);
         return $this->response(0, $chart);
     }
 }

@@ -43,7 +43,7 @@ class QuickViewController extends Controller
         }
         foreach($grouped as $key => $group)
         {
-            $transactions[$key] = getDefaultTransChartFormat(collect($group));
+            $transactions[$key] = getDefaultTransChartFormat(collect($group), 'mcht_settle_amount');
         }
         return $transactions;
     }
@@ -68,7 +68,7 @@ class QuickViewController extends Controller
         }
         foreach($grouped as $key => $group)
         {
-            $transactions[$key] = getDefaultTransChartFormat(collect($group));
+            $transactions[$key] = getDefaultTransChartFormat(collect($group), 'mcht_settle_amount');
 
         }
         return $transactions;
@@ -99,7 +99,7 @@ class QuickViewController extends Controller
         }
         foreach($grouped as $key => $group)
         {
-            $transactions[$key] = getDefaultTransChartFormat(collect($group));
+            $transactions[$key] = getDefaultTransChartFormat(collect($group), 'mcht_settle_amount');
         }
         return $transactions;
     }

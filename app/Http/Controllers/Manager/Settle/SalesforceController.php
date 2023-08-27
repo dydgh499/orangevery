@@ -14,11 +14,13 @@ use Carbon\Carbon;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleTrait;
+use App\Http\Traits\Settle\TransactionTrait;
+
 use App\Http\Requests\Manager\IndexRequest;
 
 class SalesforceController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, SettleTrait;
+    use ManagerTrait, ExtendResponseTrait, SettleTrait, TransactionTrait;
     protected $salesforces, $settleDeducts;
 
     public function __construct(Salesforce $salesforces, SettleDeductSalesforce $settleDeducts)
@@ -48,6 +50,8 @@ class SalesforceController extends Controller
     private function commonQuery($request)
     {
         $validated = $request->validate(['dt'=>'required|date']);
+        [$settle_key, $group_key] = $this->getSettleCol($request);
+
         $cols   = array_merge($this->getDefaultCols(), ['sales_name', 'level', 'settle_cycle', 'settle_day', 'settle_tax_type', 'last_settle_dt']);
         $search = $request->input('search', '');
         $level  = $request->level;
@@ -73,7 +77,7 @@ class SalesforceController extends Controller
         {
             $content->transactions = globalMappingSales($salesforces, $content->transactions);
         }
-        $data = $this->getSettleInformation($data); 
+        $data = $this->getSettleInformation($data, $settle_key); 
         return $data;
     }
 
@@ -97,6 +101,8 @@ class SalesforceController extends Controller
                 'transfer' => 0,
             ]
         ];
+        [$settle_key, $group_key] = $this->getSettleCol($request);
+
         $transactions = collect();
         $data = $this->commonQuery($request);
         foreach($data['content'] as $data)
@@ -108,7 +114,7 @@ class SalesforceController extends Controller
             $total['settle']['deposit'] += $data->settle['deposit'];
             $total['settle']['transfer'] += $data->settle['transfer'];
         }
-        $chart = getDefaultTransChartFormat($transactions);
+        $chart = getDefaultTransChartFormat($transactions, $settle_key);
         $total = array_merge($total, $chart);
         return $this->response(0, $total);
     }
@@ -153,27 +159,37 @@ class SalesforceController extends Controller
             'page' => 1,
             'page_size' => 999999,
         ]);
-        $idx = globalLevelByIndex($request->level);
-        $key = 'sales'.$idx;
+        
+        $level  = $request->level;
+        $date   = $request->dt;
+        [$settle_key, $group_key] = $this->getSettleCol($request);
 
-        $query = Transaction::where($key.'_id', $request->id)
-            ->globalFilter()
-            ->settleFilter($key."_settle_id")
-            ->settleTransaction();
-
-        $query = globalPGFilter($query, $request);
-        $query = globalSalesFilter($query, $request);
-        $query = globalAuthFilter($query, $request);
-
-        $data = $this->getIndexData($request, $query);
-        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-        $salesforces    = globalGetSalesByIds($sales_ids);
-        $data['content'] = globalMappingSales($salesforces, $data['content']);
-        foreach($data['content'] as $content) 
+        $query = $this->salesforces->where('id', $request->id);
+        $sales = $this->commonSalesQuery($query, $date)->first();
+        if($sales)
         {
-            $content->append(['total_trx_amount']);
+            $idx = globalLevelByIndex($request->level);
+            $key = 'sales'.$idx;
+    
+            $query = Transaction::where($key.'_id', $request->id)
+                ->globalFilter()
+                ->settleFilter($key."_settle_id")
+                ->settleTransaction();
+    
+            $query = globalPGFilter($query, $request);
+            $query = globalSalesFilter($query, $request);
+            $query = globalAuthFilter($query, $request);
+    
+            $data = $this->getIndexData($request, $query);
+            $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+            $salesforces    = globalGetSalesByIds($sales_ids);
+            $data['content'] = globalMappingSales($salesforces, $data['content']);
+            $chart = getDefaultTransChartFormat($data['content'], $settle_key);
         }
-        $chart = getDefaultTransChartFormat($data['content']);
+        else
+        {
+            $chart = getDefaultTransChartFormat([], $settle_key);
+        }
         return $this->response(0, $chart);     
     }
 
