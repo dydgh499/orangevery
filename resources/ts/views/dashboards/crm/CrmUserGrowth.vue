@@ -32,7 +32,6 @@ const getChartData = (col: string): number[] => {
             continue
         else
         {
-            console.log(keys[i])
             let data = props.datas[keys[i]][col]
             if (col == 'del_rate')
                 data *= 1
@@ -41,16 +40,16 @@ const getChartData = (col: string): number[] => {
     }
     return datas
 }
-
-const chartOptions = computed(() => {
-    const currentTheme = vuetifyTheme.current.value.colors
+watchEffect(() => {
     if (Object.keys(props.datas).length > 0) {
         series.value[0].data = getChartData('del_count')
         series.value[1].data = getChartData('add_count')
         const curernt_month = new Date().toISOString().slice(0, 7)
         rate.value = props.datas[curernt_month] && props.datas[curernt_month]['increase_rate'] ? props.datas[curernt_month]['increase_rate'] : 0;
-    }
-
+    }    
+})
+const chartOptions = computed(() => {
+    const currentTheme = vuetifyTheme.current.value.colors
     return {
         chart: {
             type: 'bar',
@@ -61,16 +60,7 @@ const chartOptions = computed(() => {
                 show: false,
             },
         },
-        series: [
-            {
-                name: 'PRODUCT A',
-                data: [0, 0, 0, 0, 0],
-            },
-            {
-                name: 'PRODUCT B',
-                data: [0, 0, 0, 0, 0],
-            },
-        ],
+        series: series.value,
         plotOptions: {
             bar: {
                 horizontal: false,
