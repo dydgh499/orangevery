@@ -4,6 +4,7 @@ import { useTheme } from 'vuetify'
 import { hexToRgb } from '@layouts/utils'
 import { useCRMStore } from '@/views/dashboards/crm/crm'
 import type { Series } from '@/views/types'
+import { TitleOptions } from 'chart.js'
 
 const vuetifyTheme = useTheme()
 const { monthly_transactions, getColors, getMonths } = useCRMStore()
@@ -54,7 +55,6 @@ const getSeries = (dates: string[], col: string, sec_col?: string) => {
     return amount
 }
 
-
 watchEffect(() => {
     const currentTheme = vuetifyTheme.current.value.colors
     const keys = Object.keys(monthly_transactions)
@@ -71,24 +71,22 @@ watchEffect(() => {
         profit_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.warning)},0.16)`, `rgba(${hexToRgb(currentTheme.warning)},1)`)
     }
 })
-const chartConfigs = computed(() => {
+const getChartData = (title: string, icon:string, color:string[], datas:Series[]) => {
     const currentTheme = vuetifyTheme.current.value.colors
     const variableTheme = vuetifyTheme.current.value.variables
-
     const legendColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
     const borderColor = `rgba(${hexToRgb(String(variableTheme['border-color']))},${variableTheme['border-opacity']})`
     const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`
 
-    return [
-        {
-            title: '승인',
-            icon: 'fluent-payment-32-regular',
+    return {
+            title: title,
+            icon: icon,
             chartOptions: {
                 chart: {
                     parentHeightOffset: 0,
                     type: 'bar',
                     toolbar: {
-                        show: false,
+                        show: true,
                     },
                 },
                 plotOptions: {
@@ -111,7 +109,7 @@ const chartConfigs = computed(() => {
                         right: -10,
                     },
                 },
-                colors: appr_colors.value,
+                colors: color,
                 dataLabels: {
                     enabled: true,
                     formatter(val: number) {
@@ -204,383 +202,15 @@ const chartConfigs = computed(() => {
                     },
                 ],
             },
-            series: serieses.value[0],
-        },
-        {
-            title: '취소',
-            icon: 'tabler-chart-bar',
-            chartOptions: {
-                chart: {
-                    parentHeightOffset: 0,
-                    type: 'bar',
-                    toolbar: {
-                        show: false,
-                    },
-                },
-                plotOptions: {
-                    bar: {
-                        columnWidth: '32%',
-                        startingShape: 'rounded',
-                        borderRadius: 4,
-                        distributed: true,
-                        dataLabels: {
-                            position: 'top',
-                        },
-                    },
-                },
-                grid: {
-                    show: false,
-                    padding: {
-                        top: 0,
-                        bottom: 0,
-                        left: -10,
-                        right: -10,
-                    },
-                },
-                colors: cxl_colors.value,
-                dataLabels: {
-                    enabled: true,
-                    formatter(val: number) {
-                        return `${val.toFixed(2)}억`
-                    },
-                    offsetY: -25,
-                    style: {
-                        fontSize: '15px',
-                        colors: [legendColor],
-                        fontWeight: '600',
-                        fontFamily: 'Public Sans',
-                    },
-                },
-                legend: {
-                    show: false,
-                },
-                tooltip: {
-                    enabled: false,
-                },
-                xaxis: {
-                    categories: months.value,
-                    axisBorder: {
-                        show: true,
-                        color: borderColor,
-                    },
-                    axisTicks: {
-                        show: false,
-                    },
-                    labels: {
-                        style: {
-                            colors: labelColor,
-                            fontSize: '14px',
-                            fontFamily: 'Public Sans',
-                        },
-                    },
-                },
-                yaxis: {
-                    labels: {
-                        offsetX: -15,
-                        formatter(val: number) {
-                            return `${val.toFixed(2)}억`
-                        },
-                        style: {
-                            fontSize: '14px',
-                            colors: labelColor,
-                            fontFamily: 'Public Sans',
-                        },
-                        min: 0,
-                        max: 60000,
-                        tickAmount: 6,
-                    },
-                },
-                responsive: [
-                    {
-                        breakpoint: 1441,
-                        options: {
-                            plotOptions: {
-                                bar: {
-                                    columnWidth: '41%',
-                                },
-                            },
-                        },
-                    },
-                    {
-                        breakpoint: 590,
-                        options: {
-                            plotOptions: {
-                                bar: {
-                                    columnWidth: '61%',
-                                },
-                            },
-                            grid: {
-                                padding: {
-                                    right: 0,
-                                },
-                            },
-                            dataLabels: {
-                                style: {
-                                    fontSize: '12px',
-                                    fontWeight: '400',
-                                },
-                            },
-                            yaxis: {
-                                labels: {
-                                    show: false,
-                                },
-                            },
-                        },
-                    },
-                ],
-            },
-            series: serieses.value[1],
-        },
-        {
-            title: '매출',
-            icon: 'ic-outline-payments',
-            chartOptions: {
-                chart: {
-                    parentHeightOffset: 0,
-                    type: 'bar',
-                    toolbar: {
-                        show: false,
-                    },
-                },
-                plotOptions: {
-                    bar: {
-                        columnWidth: '32%',
-                        startingShape: 'rounded',
-                        borderRadius: 4,
-                        distributed: true,
-                        dataLabels: {
-                            position: 'top',
-                        },
-                    },
-                },
-                grid: {
-                    show: false,
-                    padding: {
-                        top: 0,
-                        bottom: 0,
-                        left: -10,
-                        right: -10,
-                    },
-                },
-                colors: amount_colors.value,
-                dataLabels: {
-                    enabled: true,
-                    formatter(val: number) {
-                        return `${val.toFixed(2)}억`
-                    },
-                    offsetY: -25,
-                    style: {
-                        fontSize: '15px',
-                        colors: [legendColor],
-                        fontWeight: '600',
-                        fontFamily: 'Public Sans',
-                    },
-                },
-                legend: {
-                    show: false,
-                },
-                tooltip: {
-                    enabled: false,
-                },
-                xaxis: {
-                    categories: months.value,
-                    axisBorder: {
-                        show: true,
-                        color: borderColor,
-                    },
-                    axisTicks: {
-                        show: false,
-                    },
-                    labels: {
-                        style: {
-                            colors: labelColor,
-                            fontSize: '14px',
-                            fontFamily: 'Public Sans',
-                        },
-                    },
-                },
-                yaxis: {
-                    labels: {
-                        offsetX: -15,
-                        formatter(val: number) {
-                            return `${val.toFixed(2)}억`
-                        },
-                        style: {
-                            fontSize: '14px',
-                            colors: labelColor,
-                            fontFamily: 'Public Sans',
-                        },
-                        min: 0,
-                        max: 60000,
-                        tickAmount: 6,
-                    },
-                },
-                responsive: [
-                    {
-                        breakpoint: 1441,
-                        options: {
-                            plotOptions: {
-                                bar: {
-                                    columnWidth: '41%',
-                                },
-                            },
-                        },
-                    },
-                    {
-                        breakpoint: 590,
-                        options: {
-                            plotOptions: {
-                                bar: {
-                                    columnWidth: '61%',
-                                },
-                            },
-                            grid: {
-                                padding: {
-                                    right: 0,
-                                },
-                            },
-                            dataLabels: {
-                                style: {
-                                    fontSize: '12px',
-                                    fontWeight: '400',
-                                },
-                            },
-                            yaxis: {
-                                labels: {
-                                    show: false,
-                                },
-                            },
-                        },
-                    },
-                ],
-            },
-            series: serieses.value[2],
-        },
-        {
-            title: '정산',
-            icon: 'tabler-calculator',
-            chartOptions: {
-                chart: {
-                    parentHeightOffset: 0,
-                    type: 'bar',
-                    toolbar: {
-                        show: false,
-                    },
-                },
-                plotOptions: {
-                    bar: {
-                        columnWidth: '32%',
-                        startingShape: 'rounded',
-                        borderRadius: 4,
-                        distributed: true,
-                        dataLabels: {
-                            position: 'top',
-                        },
-                    },
-                },
-                grid: {
-                    show: false,
-                    padding: {
-                        top: 0,
-                        bottom: 0,
-                        left: -10,
-                        right: -10,
-                    },
-                },
-                colors: profit_colors.value,
-                dataLabels: {
-                    enabled: true,
-                    formatter(val: number) {
-                        return `${val.toFixed(2)}억`
-                    },
-                    offsetY: -25,
-                    style: {
-                        fontSize: '15px',
-                        colors: [legendColor],
-                        fontWeight: '600',
-                        fontFamily: 'Public Sans',
-                    },
-                },
-                legend: {
-                    show: false,
-                },
-                tooltip: {
-                    enabled: false,
-                },
-                xaxis: {
-                    categories: months.value,
-                    axisBorder: {
-                        show: true,
-                        color: borderColor,
-                    },
-                    axisTicks: {
-                        show: false,
-                    },
-                    labels: {
-                        style: {
-                            colors: labelColor,
-                            fontSize: '14px',
-                            fontFamily: 'Public Sans',
-                        },
-                    },
-                },
-                yaxis: {
-                    labels: {
-                        offsetX: -15,
-                        formatter(val: number) {
-                            return `${val.toFixed(2)}억`
-                        },
-                        style: {
-                            fontSize: '14px',
-                            colors: labelColor,
-                            fontFamily: 'Public Sans',
-                        },
-                        min: 0,
-                        max: 60000,
-                        tickAmount: 6,
-                    },
-                },
-                responsive: [
-                    {
-                        breakpoint: 1441,
-                        options: {
-                            plotOptions: {
-                                bar: {
-                                    columnWidth: '41%',
-                                },
-                            },
-                        },
-                    },
-                    {
-                        breakpoint: 590,
-                        options: {
-                            plotOptions: {
-                                bar: {
-                                    columnWidth: '50%',
-                                },
-                            },
-                            dataLabels: {
-                                style: {
-                                    fontSize: '12px',
-                                    fontWeight: '400',
-                                },
-                            },
-                            grid: {
-                                padding: {
-                                    right: 0,
-                                },
-                            },
-                            yaxis: {
-                                labels: {
-                                    show: false,
-                                },
-                            },
-                        },
-                    },
-                ],
-            },
-            series: serieses.value[3],
-        },
+            series: datas,
+        }
+}
+const chartConfigs = computed(() => {
+    return [
+        getChartData('승인', 'fluent-payment-32-regular', appr_colors.value, serieses.value[0]),
+        getChartData('취소', 'tabler-chart-bar', cxl_colors.value, serieses.value[1]),
+        getChartData('매출', 'ic-outline-payments', amount_colors.value, serieses.value[2]),
+        getChartData('정산', 'tabler-calculator', profit_colors.value, serieses.value[3]),
     ]
 })
 </script>

@@ -75,7 +75,7 @@ const chartOptions = computed(() => {
         chart: {
             type: 'radar',
             toolbar: {
-                show: false,
+                show: true,
             },
         },
         plotOptions: {
@@ -96,7 +96,7 @@ const chartOptions = computed(() => {
             position: 'bottom',
             labels: {
                 colors: legendColor,
-                useSeriesColors: false,
+                useSeriesColors: true,
             },
             markers: {
                 height: 10,
@@ -107,12 +107,12 @@ const chartOptions = computed(() => {
                 horizontal: 10,
             },
             onItemHover: {
-                highlightDataSeries: false,
+                highlightDataSeries: true,
             },
         },
         colors: [currentTheme.secondary, currentTheme.primary, currentTheme.success, currentTheme.info],
         fill: {
-            opacity: [0.7, 0.7, 0.7, 0.7],
+            opacity: [0.6, 0.6, 0.6, 0.6],
         },
         markers: {
             size: 0,
@@ -135,10 +135,6 @@ const chartOptions = computed(() => {
             },
         },
         yaxis: {
-            show: false,
-            min: 0,
-            max: 100,
-            tickAmount: 4,
         },
         responsive: [
             {
