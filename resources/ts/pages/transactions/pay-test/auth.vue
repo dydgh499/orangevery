@@ -8,7 +8,7 @@ const {
     mcht_id, pmod_id, pg_type, installment, 
     pay_url, return_url, merchandises, filterPayMod 
 } = payTest(2)
-
+console.log(pay_url.value)
 </script>
 <template>
     <section>

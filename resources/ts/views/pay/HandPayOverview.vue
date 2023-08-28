@@ -143,7 +143,7 @@ watchEffect(() => {
                             <template #input>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="hand_pay_info.installment"
                                     :items="filterInstallment" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
-                                    label="할부기간 선택" item-title="title" item-value="id" single-line />
+                                    label="할부기간 선택" item-title="title" item-value="id" single-line :rules="[requiredValidator]"/>
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 0; padding-top: 12px;"

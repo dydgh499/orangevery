@@ -27,6 +27,7 @@ auth_pay_info.amount = Number(urlParams.get('amount') || '')
 const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.installment || 0) })
 })
+console.log(props.pay_url)
 
 watchEffect(() => {
     auth_pay_info.pmod_id = props.pmod_id
@@ -84,7 +85,7 @@ watchEffect(() => {
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="auth_pay_info.installment"
                                     name="installment" :items="filterInstallment"
                                     prepend-inneer-icon="fluent-credit-card-clock-20-regular" label="할부기간 선택"
-                                    item-title="title" item-value="id" single-line />
+                                    item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
                         <VCol cols="12" style="padding: 0;">
