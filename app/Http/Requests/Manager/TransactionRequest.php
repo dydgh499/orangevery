@@ -106,7 +106,7 @@ class TransactionRequest extends FormRequest
         $data['sales3_fee'] = $this->input('sales3_fee', 0)/100;
         $data['sales4_fee'] = $this->input('sales4_fee', 0)/100;
         $data['sales5_fee'] = $this->input('sales5_fee', 0)/100;
-
+        $data['dev_fee'] = 0;
         $data['brand_id'] = $this->user()->brand_id;
         $data['cxl_dt'] = $data['cxl_dt'] == '' ? null : $data['cxl_dt'];
         $data['cxl_tm'] = $data['cxl_tm'] == '' ? null : $data['cxl_tm'];
