@@ -27,7 +27,6 @@ auth_pay_info.amount = Number(urlParams.get('amount') || '')
 const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.installment || 0) })
 })
-console.log(props.pay_url)
 
 watchEffect(() => {
     auth_pay_info.pmod_id = props.pmod_id

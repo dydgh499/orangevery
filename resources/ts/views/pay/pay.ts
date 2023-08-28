@@ -1,3 +1,4 @@
+import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Merchandise, PayGateway, SalesSlip } from '@/views/types'
 import { axios } from '@axios'
 import * as CryptoJS from 'crypto-js'
@@ -12,7 +13,7 @@ export const pay = (module_type: number) => {
     const installment = ref(<number>(0))
     const merchandise = ref(<Merchandise>({}))
 
-    const pgs = ref(<PayGateway[]>([]))
+    const { pgs } = useStore()
     const pg_type = ref(<string>(''))
     const pay_url = ref(<string>(''))
     const return_url = new URL(window.location.href).origin + '/pay/result'
@@ -51,8 +52,9 @@ export const pay = (module_type: number) => {
             router.replace('/404')
     }
     watchEffect(() => {
-        if (pmod_id.value && pgs.value.length > 0 && pg_id.value) {
-            const pg: PayGateway = pgs.value.find(obj => obj.id === pg_id.value)
+        if (pgs.length > 0 && pg_id.value) {
+            const pg: PayGateway = pgs.find(obj => obj.id === pg_id.value)
+            console.log(pg)
             if (pg) {
                 pg_type.value = pgTypeToPath(pg.pg_type || 1)
                 let type = ''
@@ -61,6 +63,7 @@ export const pay = (module_type: number) => {
                 else if (module_type == 3)
                     type = 'simple'
                 pay_url.value = process.env.NOTI_URL + '/v2/pay/' + type + '/' + pg_type.value
+                console.log(pay_url.value)
             }
         }
     })
