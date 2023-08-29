@@ -42,11 +42,6 @@ export const pay = (module_type: number) => {
             axios.get('/api/v1/merchandises/' + params.m + '/sale-slip')
                 .then(r => { Object.assign(merchandise.value, r.data as Merchandise) })
                 .catch(e => { router.replace('/404') })
-            axios.get('/api/v1/pay-gateways/' + params.g + '/sale-slip')
-                .then(r => {
-                    Object.assign(pgs.value, r.data as PayGateway[])
-                })
-                .catch(e => { router.replace('/404') })
         }
         else
             router.replace('/404')
