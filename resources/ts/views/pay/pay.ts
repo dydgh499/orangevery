@@ -110,9 +110,9 @@ export const payResult = () => {
     sale_slip.value.amount = (route.query.amount ?? 0) as number
     sale_slip.value.buyer_name = (route.query.buyer_name ?? '') as string
     sale_slip.value.card_num = (route.query.card_num ?? '') as string
-    sale_slip.value.item_name = (route.query.item_nm ?? '') as string
+    sale_slip.value.item_name = (route.query.item_name ?? '') as string
     sale_slip.value.appr_num = (route.query.appr_num ?? '') as string
-    sale_slip.value.installment = (route.query.instment ?? 0) as number
+    sale_slip.value.installment = (route.query.installment ?? 0) as number
     sale_slip.value.trx_dttm = (route.query.trx_dttm ?? new Date()) as Date
     sale_slip.value.is_cancel = Boolean(route.query.is_cancel ?? false)
 
