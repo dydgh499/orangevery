@@ -19,28 +19,30 @@ trait SettleTerminalTrait
         );
         foreach($data['content'] as $content) 
         {
-            $module = $pay_modules->firstWhere('mcht_id', $content->id);
-            if($module)
+            $mcht_id = $content->id;
+            $modules = $pay_modules->filter(function ($pay_module) use($mcht_id) {
+                return $pay_module->mcht_id == $mcht_id;
+            })->values();
+            foreach($modules as $module)
             {
                 $terminal = $content->terminal;
-                $terminal['amount'] += $module->comm_settle_fee;
+                $terminal['amount'] -= $module->comm_settle_fee;
                 $content->terminal = $terminal;
             }
         }
         return [$data, $pay_modules];
     }
 
-    // 매출미달 차감금 세팅
-    protected function setSettleUnderAmount($data, $pay_modules, $settle_key, $settle_dt)
+    protected function getUnderSettleGroups($pay_modules, $settle_key, $settle_dt)
     {
+        $c_settle_dt = Carbon::parse($settle_dt);
         $underSettleDivision = function ($under_sales_type) {
             return function ($pay_module) use ($under_sales_type) {
                 return $pay_module->under_sales_type == $under_sales_type;
             };    
         };
         $getUnderSalesGroup = function($pmod_ids, $s_dt, $e_dt, $settle_key) {
-            return $under_sales = Transaction::query()
-                ->whereIn('pmod_id', $pmod_ids)
+            return $under_sales = Transaction::whereIn('pmod_id', $pmod_ids)
                 ->where(function($query) use ($s_dt, $e_dt) {
                     $query->where(function($query) use($s_dt, $e_dt) {
                         $query->where('is_cancel', false)
@@ -52,29 +54,58 @@ trait SettleTerminalTrait
                             ->where('cxl_dt', '<=', $e_dt);
                     });
                 })
-                ->groupby($settle_key)
-                ->get([DB::raw('SUM(amount) AS amount'), $settle_key]);
+                ->groupby('pmod_id')
+                ->get([DB::raw('SUM(amount) AS total_amount'), 'pmod_id']);
         };
-        $c_settle_dt = Carbon::parse($settle_dt);
         //작월 1일 ~ 작월 말일
+        $group1 = [];
         $under_sales1 = $pay_modules->filter($underSettleDivision(1))->values();
         $pmod_ids1 = collect($under_sales1)->pluck('id')->all();
-        //D-30 ~ 정산일
-        $under_sales2 = $pay_modules->filter($underSettleDivision(2))->values();
-        $pmod_ids2 = collect($under_sales2)->pluck('id')->all();
-
         if(count($pmod_ids1))
         {
             $mon_ago_1_s = $c_settle_dt->copy()->subMonths(1)->startOfMonth()->format('Y-m-d');
             $mon_ago_1_e = $c_settle_dt->copy()->subMonths(1)->endOfMonth()->format('Y-m-d');
             $group1 = $getUnderSalesGroup($pmod_ids1, $mon_ago_1_s, $mon_ago_1_e, $settle_key);
-        }
+        }            
+        //D-30 ~ 정산일
+        $group2 = [];
+        $under_sales2 = $pay_modules->filter($underSettleDivision(2))->values();
+        $pmod_ids2 = collect($under_sales2)->pluck('id')->all();
         if(count($pmod_ids2))
         {
             $day_ago_30 = $c_settle_dt->copy()->subDays(30)->format('Y-m-d');
             $settle_day = $c_settle_dt->format('Y-m-d');
             $group2 = $getUnderSalesGroup($pmod_ids2, $day_ago_30, $settle_day, $settle_key);
         }
+        return [$group1, $group2];
+    }
+    // 매출미달 차감금 세팅
+    protected function setSettleUnderAmount($data, $pay_modules, $settle_key, $settle_dt)
+    {
+        [$group1, $group2] = $this->getUnderSettleGroups($pay_modules, $settle_key, $settle_dt);
+        $setSettleUnderAmount = function($data, $pay_modules, $groups, $settle_key) {
+            $groups = json_decode(json_encode($groups), true);
+            foreach($pay_modules as $pay_module) 
+            {
+                $idx = array_search($pay_module->id, array_column($groups, 'pmod_id'));
+                if($idx !== false && ($pay_module->under_sales_limit * 10000 > $groups[$idx]['total_amount']))
+                {
+                    foreach($data['content'] as $content) 
+                    {
+                        //settle_key를 활용
+                        if($pay_module->mcht_id == $content->id)
+                        {
+                            $terminal = $content->terminal;
+                            $terminal['under_sales_amount'] -= ($pay_module->under_sales_amt * 10000);
+                            $content->terminal = $terminal;
+                        }
+                    }
+                }
+            }
+            return $data;
+        };
+        $data = $setSettleUnderAmount($data, $pay_modules, $group1, $settle_key);
+        $data = $setSettleUnderAmount($data, $pay_modules, $group2, $settle_key);
         return $data;
     }
 }

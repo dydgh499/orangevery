@@ -119,7 +119,8 @@ trait SettleTrait
         foreach($data['content'] as $content) 
         {
             $settle = $content['profit'] + $content->deduction['amount'];
-            $settle -= ($content->terminal['amount'] + $content->terminal['under_sales_amount']);
+            $settle += $content->terminal['amount'];
+            $settle += $content->terminal['under_sales_amount'];
             $content->settle = [
                 'amount'    => $settle,
                 'deposit'   => $settle,
