@@ -28,6 +28,7 @@ const addNewPaymodule = () => {
         tid: '',
         serial_num: '',
         comm_settle_fee: 0,
+        comm_settle_day: 0,
         comm_settle_type: 0,
         comm_calc_level: 0,
         under_sales_amt: 0,

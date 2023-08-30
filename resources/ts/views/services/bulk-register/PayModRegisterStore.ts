@@ -19,7 +19,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         'tid': 'TID(X)',
         'serial_num': '시리얼 번호(X)',
         'comm_settle_fee': '통신비 입금 수수료(X)',
-        'comm_settle_type': '통신비 정산일(X)',
+        'comm_settle_day': '통신비 정산일(X)',
         'comm_calc_level': '통신비 정산 주체(X)',
         'under_sales_amt': '매출미달 차감금(X)',
         'begin_dt': '장비 개통일(X)',

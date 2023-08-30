@@ -29,7 +29,7 @@ export const useSearchStore = defineStore('terminalSearchStore', () => {
         'terminal_id': '장비 타입',
         'serial_num': '시리얼 번호',
         'comm_settle_fee': '통신비',
-        'comm_settle_type': '통신비 정산일',
+        'comm_settle_day': '통신비 정산일',
         'comm_calc_level': '통신비 정산주체',
         'under_sales_amt': '매출미달 차감금',
         'under_sales_type': '매출미달 적용타입',

@@ -142,6 +142,7 @@ export interface PayModule {
     tid: string,
     serial_num: string,
     comm_settle_fee: number,
+    comm_settle_day: number,
     comm_settle_type: number,
     comm_calc_level: number,
     under_sales_amt: number,

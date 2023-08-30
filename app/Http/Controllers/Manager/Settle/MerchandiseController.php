@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager\Settle;
 use App\Models\Merchandise;
 use App\Models\Transaction;
 use App\Models\Log\SettleDeductMerchandise;
+use App\Models\PaymentModule;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -87,7 +88,26 @@ class MerchandiseController extends Controller
 
     public function index(IndexRequest $request)
     {
-        return $this->response(0, $this->commonQuery($request));
+        $data = $this->commonQuery($request);
+        $mcht_ids = collect($data['content'])->pluck('id')->all();
+        if(count($mcht_ids))
+        {
+            $settle_day = date('d', strtotime($request->dt));
+            $pay_modules = PaymentModule::whereIn('mcht_id', $mcht_ids)
+                ->where('comm_settle_day', $settle_day)
+                ->where('comm_calc_level', 10)
+                ->where('begin_dt', '<', $request->dt)
+                ->get();
+            $pay_modules = json_decode(json_encode($pay_modules), true);
+            foreach($data['content'] as $content) {
+                $idx = array_search($content->id, array_column($pay_modules, 'mcht_id'));
+                if($idx !== false)
+                {
+                    $content->terminal['amount'] += $pay_modules[$idx]['comm_settle_fee'];
+                }
+            }
+        }
+        return $this->response(0, $data);
     }
 
     public function deduct(Request $request) 

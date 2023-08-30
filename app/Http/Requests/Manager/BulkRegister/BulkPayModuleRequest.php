@@ -72,7 +72,7 @@ class BulkPayModuleRequest extends FormRequest
                 $data['ship_out_dt'] = isset($_datas[$i]['ship_out_dt']) ? $_datas[$i]['ship_out_dt'] : null;
                 $data['ship_out_stat'] = isset($_datas[$i]['ship_out_stat']) ? $_datas[$i]['ship_out_stat'] : null;
                 $data['comm_settle_fee'] = isset($_datas[$i]['comm_settle_fee']) ? $_datas[$i]['comm_settle_fee'] : 0;
-                $data['comm_settle_type'] = isset($_datas[$i]['comm_settle_type']) ? $_datas[$i]['comm_settle_type'] : 0;
+                $data['comm_settle_day'] = isset($_datas[$i]['comm_settle_day']) ? $_datas[$i]['comm_settle_day'] : 0;
                 $data['comm_calc_level'] = isset($_datas[$i]['comm_calc_level']) ? $_datas[$i]['comm_calc_level'] : 0;
                 $data['under_sales_amt'] = isset($_datas[$i]['under_sales_amt']) ? $_datas[$i]['under_sales_amt'] : 0;
                 $data['serial_num'] = isset($_datas[$i]['serial_num']) ? $_datas[$i]['serial_num'] : '';        

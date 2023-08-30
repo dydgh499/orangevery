@@ -38,7 +38,11 @@ export const under_sales_types = <Options[]>([
     {id: 1, title:'작월 1일 ~ 작월 말일'}, 
     {id: 2, title:'등록일 ~ +1달-1일'}, 
 ])
-
+export const comm_settle_types = <Options[]>([
+    {id: 0, title:'개통월부터 적용'},
+    {id: 1, title:'개통월 익월'}, 
+    {id: 2, title:'개통월 익익월'},
+])
 export const payModFilter = (all_pay_modules:PayModule[], filter:PayModule[], pmod_id:number|null) => {
     if (all_pay_modules.length > 0) {
         if (filter.length > 0) {
@@ -132,7 +136,8 @@ export const defaultItemInfo =  () => {
         tid: '',
         serial_num: '',
         comm_settle_fee: 0,
-        comm_settle_type: 1,
+        comm_settle_day: 1,
+        comm_settle_type: 0,
         comm_calc_level: 10,
         under_sales_amt: 0,
         under_sales_type: 0,

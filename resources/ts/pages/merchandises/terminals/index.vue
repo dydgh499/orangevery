@@ -23,7 +23,7 @@ const isMchtUnableCol = (key: string) => {
             'module_type', 'installment', 'pg_id', 'ps_id', 
             'settle_type', 'terminal_id', 'comm_settle_fee', 'ship_out_stat',
             'comm_calc_level', 'mid', 'tid', 'begin_dt', 'ship_out_dt',
-            'under_sales_amt', 'under_sales_type', 'comm_settle_type',
+            'under_sales_amt', 'under_sales_type', 'comm_settle_day',
         ]
         return cols.includes(key);
     }

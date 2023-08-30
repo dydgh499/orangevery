@@ -3,7 +3,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useRequestStore } from '@/views/request'
 import { requiredValidator, nullValidator } from '@validators'
 import type { PayModule, Merchandise } from '@/views/types'
-import { module_types, installments, abnormal_trans_limits, ship_out_stats, under_sales_types } from '@/views/merchandises/pay-modules/useStore'
+import { module_types, installments, abnormal_trans_limits, ship_out_stats, under_sales_types, comm_settle_types } from '@/views/merchandises/pay-modules/useStore'
 import { allLevels } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
@@ -296,23 +296,15 @@ onMounted(() => {
                         <!-- 👉 정산일 -->
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>정산일</template>
+                                <template #name>통신비 정산 타입</template>
                                 <template #input>
-                                    <VTextField v-model="props.item.comm_settle_type" label="정산일 입력" suffix="일" />
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
-                        <!-- 👉 정산주체 -->
-                        <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>정산주체</template>
-                                <template #input>
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.comm_calc_level"
-                                        :items="all_levels" prepend-inner-icon="ph:share-network" label="정산자 선택"
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.comm_settle_type"
+                                        :items="comm_settle_types" prepend-inner-icon="ic-baseline-calendar-today" label="정산타입"
                                         item-title="title" item-value="id" persistent-hint single-line />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
+                        <VDivider style="margin-top: 1em;"/>
                         <!-- 👉 매출미달 차감금 -->
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
@@ -346,7 +338,27 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        
+                        <VDivider style="margin-top: 1em;"/>
+                        <!-- 👉 정산일 -->
+                        <VRow class="pt-3">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
+                                <template #name>정산일</template>
+                                <template #input>
+                                    <VTextField v-model="props.item.comm_settle_day" label="정산일 입력" suffix="일" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <!-- 👉 정산주체 -->
+                        <VRow class="pt-3">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
+                                <template #name>정산주체</template>
+                                <template #input>
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.comm_calc_level"
+                                        :items="all_levels" prepend-inner-icon="ph:share-network" label="정산자 선택"
+                                        item-title="title" item-value="id" persistent-hint single-line />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
                         <!-- 👉 개통일 -->
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">

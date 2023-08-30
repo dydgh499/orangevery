@@ -25,6 +25,7 @@ class PayModuleRequest extends FormRequest
             'tid',
             'serial_num',
             'comm_settle_fee',
+            'comm_settle_day',
             'comm_settle_type',
             'comm_calc_level',
             'begin_dt',

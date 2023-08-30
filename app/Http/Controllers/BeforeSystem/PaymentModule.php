@@ -91,7 +91,7 @@ class PaymentModule
                 'serial_num' => $mcht->SERIAL_NUM,
                 'terminal_id' => $mcht->T_TYPE_PK ? $this->paywell_to_payvery_cls[$mcht->T_TYPE_PK] : null,
                 'comm_settle_fee' => $mcht->COMM_PR,
-                'comm_settle_type' => $mcht->COMM_PR_CALC_LEVEL,
+                'comm_settle_day' => $mcht->COMM_PR_CALC_LEVEL,
                 'comm_calc_level' => $mcht->COMM_PR_CALC_DAY,
                 'under_sales_amt' => $mcht->COMM_SALES_CON,
                 'begin_dt' => $mcht->COMM_OPEN_DT,
