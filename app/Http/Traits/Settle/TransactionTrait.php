@@ -49,7 +49,7 @@ trait TransactionTrait
             ];
         })->unique();
         $saleses = $this->getSalesforces($sales_ids);
-        foreach($trans as $tran)
+        foreach($trans as &$tran)
         {
             //가맹점 수수료 세팅
             $tran["mcht_settle_amount"] = round($this->getSettleAmount(-1, $tran));
