@@ -200,6 +200,7 @@ class TransactionController extends Controller
     public function update(TransactionRequest $request, $id)
     {
         $data = $request->data();
+        [$data] = $this->setSettleAmount([$data]);
         $res = $this->transactions->where('id', $id)->update($data);
 
         operLogging(HistoryType::UPDATE, $this->target, $data, "#".$id);
