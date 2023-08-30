@@ -14,13 +14,14 @@ use Carbon\Carbon;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleTrait;
+use App\Http\Traits\Settle\SettleTerminalTrait;
 use App\Http\Traits\Settle\TransactionTrait;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
 
 class MerchandiseController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, SettleTrait, TransactionTrait;
+    use ManagerTrait, ExtendResponseTrait, SettleTrait, SettleTerminalTrait, TransactionTrait;
     protected $merchandises, $settleDeducts;
 
     public function __construct(Merchandise $merchandises, SettleDeductMerchandise $settleDeducts)
@@ -41,9 +42,18 @@ class MerchandiseController extends Controller
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
                 ->where('mcht_name', 'like', "%$search%");            
         $query = $query->with(['transactions', 'deducts']);
-
         $data = $this->getIndexData($request, $query, 'id', $cols);
         $data = $this->getSettleInformation($data, $settle_key); 
+        // set terminals
+        $mcht_ids = collect($data['content'])->pluck('id')->all();
+        if(count($mcht_ids))
+        {
+            $query = PaymentModule::whereIn('mcht_id', $mcht_ids);
+            [$data, $pay_modules] = $this->setSettleTerminals($query, $data, 10, $request->dt);
+            $data = $this->setSettleUnderAmount($data, $pay_modules, 'mcht_id', $request->dt);
+        }
+        // set total settle
+        $data = $this->setSettleFinalAmount($data);
         return $data;
     }
 
@@ -89,24 +99,6 @@ class MerchandiseController extends Controller
     public function index(IndexRequest $request)
     {
         $data = $this->commonQuery($request);
-        $mcht_ids = collect($data['content'])->pluck('id')->all();
-        if(count($mcht_ids))
-        {
-            $settle_day = date('d', strtotime($request->dt));
-            $pay_modules = PaymentModule::whereIn('mcht_id', $mcht_ids)
-                ->where('comm_settle_day', $settle_day)
-                ->where('comm_calc_level', 10)
-                ->where('begin_dt', '<', $request->dt)
-                ->get();
-            $pay_modules = json_decode(json_encode($pay_modules), true);
-            foreach($data['content'] as $content) {
-                $idx = array_search($content->id, array_column($pay_modules, 'mcht_id'));
-                if($idx !== false)
-                {
-                    $content->terminal['amount'] += $pay_modules[$idx]['comm_settle_fee'];
-                }
-            }
-        }
         return $this->response(0, $data);
     }
 

@@ -36,7 +36,7 @@ export const ship_out_stats = <Options[]>([
 export const under_sales_types = <Options[]>([
     {id: 0, title:'적용안함'},
     {id: 1, title:'작월 1일 ~ 작월 말일'}, 
-    {id: 2, title:'등록일 ~ +1달-1일'}, 
+    {id: 2, title:'D-30 ~ 정산일'}, 
 ])
 export const comm_settle_types = <Options[]>([
     {id: 0, title:'개통월부터 적용'},

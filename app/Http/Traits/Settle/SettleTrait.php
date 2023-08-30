@@ -30,16 +30,11 @@ trait SettleTrait
             $content->deduction = [
                 'input' => null,
                 'amount' => $content->deducts->sum('amount'),
-            ];
+            ];            
             $content->terminal = [
-                'amount' => 0,   
+                'amount' => 0,
+                'under_sales_amount' => 0,
             ];
-            $content->settle = [
-                'amount'    => $chart['profit'] + $content->deduction['amount'],
-                'deposit'   => $chart['profit'] + $content->deduction['amount'],
-                'transfer'  => $chart['profit'] + $content->deduction['amount'],
-            ];
-            $content->makeHidden(['transactions']);
         }
         return $data;
     }
@@ -114,6 +109,23 @@ trait SettleTrait
         {
             $content->mcht_name = $content->mcht['mcht_name'];
             $content->makeHidden(['mcht']);
+        }
+        return $data;
+    }
+
+    // 최종 정산금 세팅
+    protected function setSettleFinalAmount($data)
+    {
+        foreach($data['content'] as $content) 
+        {
+            $settle = $content['profit'] + $content->deduction['amount'];
+            $settle -= ($content->terminal['amount'] + $content->terminal['under_sales_amount']);
+            $content->settle = [
+                'amount'    => $settle,
+                'deposit'   => $settle,
+                'transfer'  => $settle,
+            ];
+            $content->makeHidden(['transactions']);
         }
         return $data;
     }

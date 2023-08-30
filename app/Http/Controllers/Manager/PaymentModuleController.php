@@ -85,7 +85,6 @@ class PaymentModuleController extends Controller
         $query = $this->commonSelect($request);
         $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
         return $this->response(0, $data);
-
     }
 
     /**

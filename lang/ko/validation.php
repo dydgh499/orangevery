@@ -163,6 +163,7 @@ return [
         'coupon_model_id'   => '쿠폰 발행시 발행될 쿠폰 ID',
         'point_min_amount'  => '포인트 최소 사용 금액',
         'sales_name' => '영업점 상호',
+        'send_url'  => '전송 URL',
         //coupon publish
         'user_id'   => '유저',
         //device

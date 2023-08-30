@@ -198,8 +198,11 @@ class SalesforceBatchController extends Controller
      */
     public function setNotiUrl(Request $request)
     {
-        $notis = new NotiUrl();
+        $validated = $request->validate([
+            'send_url'=>'required',
+        ]);
         
+        $notis = new NotiUrl();        
         $mcht_ids = $this->merchandiseBatch($request)->get(['id'])->pluck('id');
         $registered_notis = $notis
             ->whereIn('mcht_id', $mcht_ids)

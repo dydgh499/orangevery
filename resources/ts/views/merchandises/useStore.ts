@@ -151,7 +151,7 @@ export const defaultItemInfo = () => {
         // options
         custom_id: null,
         enabled: true,
-        use_saleslip_prov: false,
+        use_saleslip_prov: true,
         use_saleslip_sell: false,
         is_show_fee: false,
         note: ''

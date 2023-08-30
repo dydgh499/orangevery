@@ -14,13 +14,14 @@ use Carbon\Carbon;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleTrait;
+use App\Http\Traits\Settle\SettleTerminalTrait;
 use App\Http\Traits\Settle\TransactionTrait;
 
 use App\Http\Requests\Manager\IndexRequest;
 
 class SalesforceController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, SettleTrait, TransactionTrait;
+    use ManagerTrait, ExtendResponseTrait, SettleTrait, SettleTerminalTrait, TransactionTrait;
     protected $salesforces, $settleDeducts;
 
     public function __construct(Salesforce $salesforces, SettleDeductSalesforce $settleDeducts)
@@ -71,13 +72,15 @@ class SalesforceController extends Controller
         $query = $this->commonSalesQuery($query, $date);
         $query = $query->with(['transactions', 'deducts']);
         $data = $this->getIndexData($request, $query, 'id', $cols);
-
-        $salesforces = globalGetIndexingByCollection($data['content']);
-        foreach($data['content'] as $content)
+        $data = $this->getSettleInformation($data, $settle_key);
+        // set terminals
+        $sales_id = collect($data['content'])->pluck('id')->all();
+        if(count($sales_id))
         {
-            $content->transactions = globalMappingSales($salesforces, $content->transactions);
+
         }
-        $data = $this->getSettleInformation($data, $settle_key); 
+        // set total settle
+        $data = $this->setSettleFinalAmount($data);
         return $data;
     }
 
