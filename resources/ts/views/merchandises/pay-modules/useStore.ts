@@ -40,8 +40,8 @@ export const under_sales_types = <Options[]>([
 ])
 export const comm_settle_types = <Options[]>([
     {id: 0, title:'개통월부터 적용'},
-    {id: 1, title:'개통월 M+1 부터 적용'}, 
-    {id: 2, title:'개통월 M+2 부터 적용'},
+    {id: 1, title:'개통월 M+1부터 적용'}, 
+    {id: 2, title:'개통월 M+2부터 적용'},
 ])
 export const payModFilter = (all_pay_modules:PayModule[], filter:PayModule[], pmod_id:number|null) => {
     if (all_pay_modules.length > 0) {
