@@ -102,6 +102,7 @@ class PayModuleRequest extends FormRequest
         $data['ship_out_dt'] = $data['ship_out_dt'] == '' ? '1970-01-01' : $data['ship_out_dt'];
         $data['ship_out_stat'] = $data['ship_out_stat'] == null ? 0 : $data['ship_out_stat'];        
         $data['filter_issuers'] = json_encode($this->filter_issuers);
+        $data['comm_settle_day'] = $data['comm_settle_day'] == '' ? 0 : $data['comm_settle_day'];
         return $data;
     }
 }
