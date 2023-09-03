@@ -43,7 +43,6 @@ watchEffect(() => {
             <VDivider />
             <VForm ref="vForm" :action="pay_url" method="post">
                 <div>
-                    <VTextField type="visible" name="only" value="0" style="display: none;" />
                     <VTextField v-model="auth_pay_info.pmod_id" type="visible" name="pmod_id" style="display: none;" />
                     <VTextField v-model="auth_pay_info.return_url" type="visible" name="return_url" style="display: none;" />
                     <VTextField v-model="auth_pay_info.ord_num" type="visible" name="ord_num" style="display: none;" />
