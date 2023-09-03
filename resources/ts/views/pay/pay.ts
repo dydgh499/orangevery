@@ -24,7 +24,7 @@ export const pay = (module_type: number) => {
             'payletter', 'wholebic', 'korpay', 'kppay', 'thepayone', 'ezpg',
             'cmpay', 'kiwoom','wizzpay','nestpay','e2u','addone','saminching','wgp'
         ];
-        return pg_paths[pg_type - 1];
+        return pg_paths[pg_type - 1]
     }
 
     const getSalesSlipInfo = async () => {
@@ -94,7 +94,7 @@ export const payResult = () => {
             sale_slip.value.use_saleslip_sell = response1.data.use_saleslip_sell            
             pgs.value = response2.data
         } catch (error) {
-            console.log(error);
+            console.log(error)
             throw error;
         }
     };
