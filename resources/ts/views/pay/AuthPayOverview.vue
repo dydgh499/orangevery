@@ -31,6 +31,7 @@ const filterInstallment = computed(() => {
 watchEffect(() => {
     auth_pay_info.pmod_id = props.pmod_id
     auth_pay_info.return_url = props.return_url
+    auth_pay_info.ord_num = props.pmod_id + "A" + Date.now().toString().substr(0, 10)
 })
 </script>
 <template>

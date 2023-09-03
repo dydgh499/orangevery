@@ -34,7 +34,7 @@ hand_pay_info.amount = Number(urlParams.get('amount') || '')
 
 const pay = async () => {
     if (hand_pay_info.pmod_id) {
-        const is_valid = await vForm.value?.validate();
+        const is_valid = await vForm.value?.validate()
         if (is_valid?.valid && await alert.value.show('정말 결제하시겠습니까?')) {
             //5389038218744126
             try {
@@ -80,6 +80,7 @@ const filterInstallment = computed(() => {
 watchEffect(() => {
     hand_pay_info.pmod_id = props.pmod_id
     hand_pay_info.is_old_auth = props.is_old_auth
+    hand_pay_info.ord_num = props.pmod_id + "H" + Date.now().toString().substr(0, 10)
 })
 </script>
 <template>

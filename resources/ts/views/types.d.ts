@@ -542,7 +542,7 @@ export interface BasePay {
     buyer_name: string,
     buyer_phone: string,
     installment: number,
-    only: boolean,
+    ord_num: string,
     temp?: string,
 }
 
