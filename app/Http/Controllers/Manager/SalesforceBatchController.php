@@ -207,7 +207,7 @@ class SalesforceBatchController extends Controller
         $registered_notis = $notis
             ->whereIn('mcht_id', $mcht_ids)
             ->where('send_url', $request->send_url)
-            ->get(['id']);
+            ->get(['mcht_id']);
 
         $datas = [];
         foreach($mcht_ids as $mcht_id)
