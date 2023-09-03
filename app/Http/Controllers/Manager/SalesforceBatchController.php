@@ -213,7 +213,7 @@ class SalesforceBatchController extends Controller
         foreach($mcht_ids as $mcht_id)
         {
             $registered = $registered_notis->first(function($noti) use ($mcht_id) {
-                return $noti->id == $mcht_id;
+                return $noti->mcht_id == $mcht_id;
             });
             if($registered)
             {
