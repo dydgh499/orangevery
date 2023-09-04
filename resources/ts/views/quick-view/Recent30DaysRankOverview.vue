@@ -7,32 +7,38 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const formatDate = <any>(inject('$formatDate'))
-const date = new Date()
-const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
-const s_dt = formatDate(new Date(date.getFullYear(), date.getMonth()))
-const e_dt = formatDate(new Date(date.getFullYear(), date.getMonth() + 1))
-
+let first = '2023-01-01'
+let end = '2023-01-01'
 const is_skeleton = ref(true)
 
 watchEffect(() => {
     if(props.transactions)
+    {
+        first = props.transactions[0].mcht_name as string
+        end = props.transactions[props.transactions.length - 1].mcht_name as string
         is_skeleton.value = false
+    }
 })
 </script>
 <template>
     <VCard style="text-align: center;" color="primary">
         <VCol>
             <span>
-                <b>30</b>일간 매출액 순위
+                <template v-if="is_skeleton">
+                </template>
+                <template v-else>
+                    <b>{{ props.transactions.length }}</b>개 가맹점 매출액 랭킹
+                </template>
             </span>
             <br>
             <span style="font-size: 0.8em;">
-                {{ s_dt }}
-                ({{ weekdays[new Date(s_dt).getDay()] }})
-                ~
-                {{ e_dt }}
-                ({{ weekdays[new Date(e_dt).getDay()] }})
+                <template v-if="is_skeleton">
+                </template>
+                <template v-else>
+                    {{ first }} (1위)
+                    ~
+                    {{ end }} ({{ props.transactions.length }}위)
+                </template>
             </span>
         </VCol>
     </VCard>

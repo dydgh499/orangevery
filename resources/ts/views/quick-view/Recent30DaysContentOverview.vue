@@ -7,30 +7,40 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const formatDate = <any>(inject('$formatDate'))
-const date = new Date()
+let s_dt = '2023-01-01'
+let e_dt = '2023-01-01'
 const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
-const s_dt = formatDate(new Date(date.getFullYear(), date.getMonth()))
-const e_dt = formatDate(new Date(date.getFullYear(), date.getMonth() + 1))
 const is_skeleton = ref(true)
 watchEffect(() => {
     if(props.transactions)
+    {
+        s_dt = props.transactions[props.transactions.length - 1].day as string
+        e_dt = props.transactions[0].day as string
         is_skeleton.value = false
+    }
 })
 </script>
 <template>
     <VCard style="text-align: center;" color="primary">
         <VCol>
             <span>
-                <b>30</b>일간 정산 금액
+                <template v-if="is_skeleton">
+                </template>
+                <template v-else>
+                    <b>{{ props.transactions.length }}</b>일간 정산 금액
+                </template>                
             </span>
             <br>
             <span style="font-size: 0.8em;">
-                {{ s_dt }}
-                ({{ weekdays[new Date(s_dt).getDay()] }})
-                ~
-                {{ e_dt }}
-                ({{ weekdays[new Date(e_dt).getDay()] }})
+                <template v-if="is_skeleton">
+                </template>
+                <template v-else>
+                    {{ s_dt }}
+                    ({{ weekdays[new Date(s_dt).getDay()] }})
+                    ~
+                    {{ e_dt }}
+                    ({{ weekdays[new Date(e_dt).getDay()] }})
+                </template>
             </span>
         </VCol>
     </VCard>
