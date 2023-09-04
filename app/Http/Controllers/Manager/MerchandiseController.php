@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Models\Merchandise;
 use App\Models\PaymentModule;
+use App\Models\NotiUrl;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
@@ -267,6 +268,9 @@ class MerchandiseController extends Controller
     public function destroy(Request $request, $id)
     {
         $res = $this->delete($this->merchandises->where('id', $id));
+        $res = $this->delete($this->payModules->where('mcht_id', $id));
+        $res = $this->delete(NotiUrl::where('mcht_id', $id));
+
         $data = $this->merchandises->where('id', $id)->first(['mcht_name']);
         operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->mcht_name);
         return $this->response($res);

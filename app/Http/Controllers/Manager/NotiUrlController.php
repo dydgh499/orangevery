@@ -31,14 +31,19 @@ class NotiUrlController extends Controller
     public function index(IndexRequest $request)
     {
         $cols = ['noti_urls.*', 'merchandises.mcht_name'];
+        $search = $request->input('search', '');
         $query = $this->noti_urls
                 ->join('merchandises', 'noti_urls.mcht_id', '=', 'merchandises.id')
                 ->where('merchandises.brand_id', $request->user()->brand_id)
                 ->where('merchandises.is_delete', false)
-                ->where('noti_urls.is_delete', false);
+                ->where('noti_urls.is_delete', false)
+                ->where(function ($query) use ($search) {
+                    return $query->where('merchandises.mcht_name', 'like', "%$search%")
+                        ->orWhere('noti_urls.send_url', 'like', "%$search%");
+                });
+
         $query = globalSalesFilter($query, $request, 'merchandises');
-        $query = globalAuthFilter($query, $request, 'merchandises');
-        
+        $query = globalAuthFilter($query, $request, 'merchandises');        
         if($request->mcht_id)
             $query = $query->where('noti_urls.mcht_id', $request->mcht_id);
 
