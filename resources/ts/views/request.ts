@@ -14,7 +14,7 @@ export const useRequestStore = defineStore('requestStore', () => {
             {
                 if(back_url == '/merchandises/pay-modules')
                     setTimeout(function () { location.href = '/merchandises/edit/'+res.data.mcht_id }, 500)
-                else if(back_url == '/merchandises/pay-modules')
+                else if(back_url == '/merchandises/noti-urls')
                     setTimeout(function () { location.href = '/merchandises/edit/'+res.data.mcht_id }, 500)
                 else if(back_url == '/merchandises')
                     setTimeout(function () { location.href = '/merchandises/edit/'+res.data.id }, 500)

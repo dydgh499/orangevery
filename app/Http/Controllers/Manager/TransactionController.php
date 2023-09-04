@@ -74,7 +74,6 @@ class TransactionController extends Controller
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
             ->where('transactions.brand_id', $request->user()->brand_id)
             ->where('transactions.is_delete', false)
-            ->where('merchandises.is_delete', false)
             ->where(function ($query) use ($search) {
                 return $query->where('transactions.mid', 'like', "%$search%")
                     ->orWhere('transactions.tid', 'like', "%$search%")
