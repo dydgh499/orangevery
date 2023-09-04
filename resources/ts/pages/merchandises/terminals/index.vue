@@ -91,6 +91,9 @@ watchEffect(() => {
                         <span v-else-if="_key == 'comm_settle_fee' && isMchtUnableCol(_key) == false">
                             {{ item[_key].toLocaleString() }}
                         </span>
+                        <span v-else-if="_key == 'under_sales_amt' && isMchtUnableCol(_key) == false">
+                            {{ item[_key].toLocaleString() }}
+                        </span>                        
                         <span v-else-if="_key == 'under_sales_type' && isMchtUnableCol(_key) == false">
                             {{ under_sales_types.find(under_sales_type => under_sales_type['id'] === item[_key])?.title }}
                         </span>
