@@ -4,17 +4,56 @@ namespace App\Http\Controllers\QuickView;
 
 use App\Models\Transaction;
 
-use App\Http\Controllers\Manager\TransactionController;
+use App\Http\Controllers\Manager\TransactionController; //지워
+
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\Settle\TransactionTrait;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 class QuickViewController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, TransactionTrait;
+
+    public function __construct(Transaction $transactions)
+    {
+        $this->transactions = $transactions;
+    }
+
+    private function get3MonthlyTransactions($request)
+    {
+        $one_month_ago = Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m-d');
+        [$settle_key, $group_key] = $this->getSettleCol($request);
+        $cols = $this->getTotalCols($settle_key);
+        array_push($cols, DB::raw("DATE_FORMAT(trx_dt, '%Y-%m-%d') as day"));
+
+        return $this->transactions
+            ->where($group_key, $request->user()->id)
+            ->whereBetween('trx_dt', [$one_month_ago, DB::raw('CURDATE()')])
+            ->groupby(DB::raw("DATE_FORMAT(trx_dt, '%Y-%m-%d')"))
+            ->orderBy('day', 'desc')
+            ->get($cols);
+    }
+
+    private function getMchtRankTransactions($request)
+    {
+        $one_month_ago = Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m-d');
+        [$settle_key, $group_key] = $this->getSettleCol($request);
+        $cols = $this->getTotalCols($settle_key, 'merchandises.id');
+        array_push($cols, 'merchandises.mcht_name');
+
+        return $this->transactions
+            ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
+            ->where('transactions.'.$group_key, $request->user()->id)
+            ->whereBetween('transactions.trx_dt', [$one_month_ago, DB::raw('CURDATE()')])
+            ->groupby('merchandises.id')
+            ->orderBy('appr_amount', 'desc')
+            ->get($cols);
+    }
 
     private function groupedByMonth($contents)
     {
@@ -26,112 +65,77 @@ class QuickViewController extends Controller
         $str_cur_month = $now->format('Y-m');
         $str_last_month = $last_month->format('Y-m');
         
-        $grouped = [
-            $str_now => [],
-            $str_cur_month => [],
-            $str_last_month => [],
+        $group = [
+            $str_now => [
+                "appr_amount" => 0,
+                "appr_count" => 0,
+                "cxl_amount" => 0,
+                "cxl_count" => 0,
+                "profit" => 0,
+            ],
+            $str_cur_month => [
+                "appr_amount" => 0,
+                "appr_count" => 0,
+                "cxl_amount" => 0,
+                "cxl_count" => 0,
+                "profit" => 0,
+            ],
+            $str_last_month => [
+                "appr_amount" => 0,
+                "appr_count" => 0,
+                "cxl_amount" => 0,
+                "cxl_count" => 0,
+                "profit" => 0,
+            ],
         ];
+        $addAmount = function($group, $content) {
+            $group['appr_amount'] += $content->appr_amount;
+            $group['appr_count'] += $content->appr_count;
+            $group['cxl_amount'] += $content->cxl_amount;
+            $group['cxl_count'] += $content->cxl_count;
+            $group['profit'] += $content->profit;
+            return $group;
+        };
         foreach($contents as $content) 
         {
-            $trxDate = Carbon::parse($content->trx_dt);            
-            if ($trxDate->isToday()) 
-                $grouped[$str_now][] = $content;
-            if ($trxDate->year === $now->year && $trxDate->month === $now->month) 
-                $grouped[$str_cur_month][] = $content;
-            if ($trxDate->year === $last_month->year && $trxDate->month === $last_month->month) 
-                $grouped[$str_last_month][] = $content;
+            $day = Carbon::parse($content->day);
+            if ($day->isToday()) 
+                $group[$str_now] = $addAmount($group[$str_now], $content);
+            if ($day->year === $now->year && $day->month === $now->month) 
+                $group[$str_cur_month] = $addAmount($group[$str_cur_month], $content);
+            if ($day->year === $last_month->year && $day->month === $last_month->month) 
+                $group[$str_last_month] = $addAmount($group[$str_last_month], $content);
         }
-        foreach($grouped as $key => $group)
-        {
-            $transactions[$key] = getDefaultTransChartFormat(collect($group), 'mcht_settle_amount');
-        }
-        return $transactions;
-    }
-
-    private function groupedBy30Days($contents)
-    {
-        $grouped = [];
-        $transactions = [];
-        $now = Carbon::now();
-        $ago_30_days = $now->copy()->subDays(30);
-        foreach($contents as $content) 
-        {
-            $trxDate = Carbon::parse($content->trx_dt);
-    
-            if ($trxDate->format('Y-m-d') >= $ago_30_days->format('Y-m-d') && $trxDate->format('Y-m-d') <= $now->format('Y-m-d')) {
-                $groupKey = $trxDate->format('Y-m-d');
-                if (!isset($grouped[$groupKey])) {
-                    $grouped[$groupKey] = [];
-                }
-                $grouped[$groupKey][] = $content;
-            }
-        }
-        foreach($grouped as $key => $group)
-        {
-            $transactions[$key] = getDefaultTransChartFormat(collect($group), 'mcht_settle_amount');
-
-        }
-        return $transactions;
-    }
-
-    private function groupedByMchtName($contents)
-    {
-        $grouped = [];
-        $transactions = [];
-        $now = Carbon::now();
-        $ago_30_days = $now->copy()->subDays(30);
-        
-        if($contents)
-        {
-            $content_in_30_days = $contents->filter(function ($content) use ($ago_30_days, $now) {
-                $trxDate = Carbon::parse($content->trx_dt);
-                return $trxDate->format('Y-m-d') >= $ago_30_days->format('Y-m-d') && $trxDate->format('Y-m-d') <= $now->format('Y-m-d');
-            })->all();    
-        }
-        else
-            $content_in_30_days = [];
-            
-        foreach ($content_in_30_days as $content) 
-        {
-            if (!isset($grouped[$content->mcht_name]))
-                $grouped[$content->mcht_name] = [];
-            $grouped[$content->mcht_name][] = $content;
-        }
-        foreach($grouped as $key => $group)
-        {
-            $transactions[$key] = getDefaultTransChartFormat(collect($group), 'mcht_settle_amount');
-        }
-        return $transactions;
+        return $group;
     }
 
     public function index(Request $request)
     {
-        $one_month_ago = Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m-d');
-        $request->merge([
-            'page' => '1',
-            'page_size'=> '9999999',
-            's_dt' => $one_month_ago,
-            'e_dt' => '2999-01-01',
-        ]);
-        $controller = new TransactionController(new Transaction);
-
-        $query = $controller->commonSelect($request);
-        $data   = $controller->getIndexData($request, $query, 'transactions.id', $controller->cols, 'transactions.id');
-
-        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-        $salesforces    = globalGetSalesByIds($sales_ids);
-        $data['content'] = globalMappingSales($salesforces, $data['content']);
-
-        foreach($data['content'] as $content) 
+        $daily = $this->get3MonthlyTransactions($request);
+        $mchts = $this->getMchtRankTransactions($request);        
+        $toIntFormat = function($day) {
+            $day->appr_amount = (int)$day->appr_amount;
+            $day->appr_count = (int)$day->appr_count;
+            $day->cxl_amount = (int)$day->cxl_amount;
+            $day->cxl_count = (int)$day->cxl_count;
+            $day->profit = (int)$day->profit;
+            return $day;
+        };
+        foreach($daily as &$day)
         {
-            $content->append(['total_trx_amount']);
+            $day = $toIntFormat($day);
         }
-        $grouped = [
-            'day' =>  $this->groupedBy30Days($data['content']),
-            'month' => $this->groupedByMonth($data['content']),
-            'mcht_name' => $this->groupedByMchtName($data['content']),
+        foreach($mchts as &$mcht)
+        {
+            $mcht = $toIntFormat($mcht);            
+        }
+        $monthly = $this->groupedByMonth($daily);
+        $group = [
+            'daily' => $daily,
+            'monthly' => $monthly,
+            'mchts' => $mchts,
         ];
-        return $this->response(0, $grouped);
+        return $this->response(0, $group);
     }
 
     public function smslinkSend(Request $request)

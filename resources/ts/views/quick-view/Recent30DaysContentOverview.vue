@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { TotalSettle } from '@/views/types'
+import type { MchtRecentTransaction } from '@/views/types'
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 
 interface Props {
-    transactions: TotalSettle,
+    transactions: MchtRecentTransaction[],
 }
 const props = defineProps<Props>()
 
@@ -69,7 +69,7 @@ watchEffect(() => {
                     <td class="list-square">
                         <span>
                             <VChip size="small" color="primary" label>
-                                {{ key + "(" + weekdays[new Date(key).getDay()] + ")" }}
+                                {{ transaction.day + "(" + weekdays[new Date(transaction.day).getDay()] + ")" }}
                             </VChip>
                         </span>
                     </td>
@@ -80,17 +80,17 @@ watchEffect(() => {
                     </td>
                     <td class="list-square">
                         <span>
-                            {{ transaction.amount.toLocaleString() }}원
+                            {{ transaction.appr_amount.toLocaleString() }}원
                         </span>
                     </td>
                     <td class="list-square">
                         <span>
-                            {{ transaction.appr.count.toLocaleString() }}건
+                            {{ transaction.appr_count.toLocaleString() }}건
                         </span>
                     </td>
                     <td class="list-square">
                         <span>
-                            {{ transaction.cxl.count.toLocaleString() }}건
+                            {{ transaction.cxl_count.toLocaleString() }}건
                         </span>
                     </td>
                 </tr>

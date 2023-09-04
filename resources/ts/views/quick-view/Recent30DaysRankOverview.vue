@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { TotalSettle } from '@/views/types'
+import type { MchtRecentTransaction } from '@/views/types'
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 
 interface Props {
-    transactions: TotalSettle,
+    transactions: MchtRecentTransaction[],
 }
 const props = defineProps<Props>()
 
@@ -13,23 +13,11 @@ const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
 const s_dt = formatDate(new Date(date.getFullYear(), date.getMonth()))
 const e_dt = formatDate(new Date(date.getFullYear(), date.getMonth() + 1))
 
-const transactions = ref(<TotalSettle>(props.transactions))
 const is_skeleton = ref(true)
 
-const sortByAmount = () => {
-    if (props.transactions != undefined) {
-        const sortedTransactions = Object.entries(props.transactions)
-        .sort(([, a], [, b]) => b.amount - a.amount)
-        .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})
-        transactions.value = <TotalSettle>(sortedTransactions)
-    }
-}
 watchEffect(() => {
     if(props.transactions)
         is_skeleton.value = false
-})
-watchEffect(() => {
-    sortByAmount()
 })
 </script>
 <template>
@@ -83,16 +71,16 @@ watchEffect(() => {
                 </tr>
             </template>
             <template v-else>
-            <tr v-for="(transaction, key, index) in transactions" :key="key">
+            <tr v-for="(transaction, key, index) in props.transactions" :key="key">
                 <td class="list-square">
                     <span>
-                        {{ index + 1 }}위
+                        {{ key + 1 }}위
                     </span>
                 </td>
                 <td class="list-square">
                     <span>
                         <VChip size="small" color="primary" label>
-                            {{ key }}
+                            {{ transaction.mcht_name }}
                         </VChip>
                     </span>
                 </td>
@@ -103,17 +91,17 @@ watchEffect(() => {
                 </td>
                 <td class="list-square">
                     <span>
-                        {{ transaction.amount.toLocaleString() }}원
+                        {{ transaction.appr_amount.toLocaleString() }}원
                     </span>
                 </td>
                 <td class="list-square">
                     <span>
-                        {{ transaction.appr.count.toLocaleString() }}건
+                        {{ transaction.appr_count.toLocaleString() }}건
                     </span>
                 </td>
                 <td class="list-square">
                     <span>
-                        {{ transaction.cxl.count.toLocaleString() }}건
+                        {{ transaction.cxl_count.toLocaleString() }}건
                     </span>
                 </td>
             </tr>

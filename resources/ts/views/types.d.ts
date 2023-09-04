@@ -571,15 +571,20 @@ export interface CancelPay {
 }
 //----------------------------
 export interface MchtRecentTransaction {
-    month : {
-        [key: string]: TotalSettle        
+    appr_amount: number,
+    appr_count: number,
+    cxl_amount: number,
+    cxl_count: number,
+    profit: number,
+    day?: string,
+    mcht_name?: string,
+}
+export interface MchtRecentTransactions {
+    monthly : {
+        [key: string]: MchtRecentTransaction        
     },
-    day : {
-        [key: string]: TotalSettle
-    },
-    mcht_name: {
-        [key: string]: TotalSettle
-    }
+    daily : MchtRecentTransaction[],
+    mchts : MchtRecentTransaction[],
 }
 
 export interface TransWeekChart {

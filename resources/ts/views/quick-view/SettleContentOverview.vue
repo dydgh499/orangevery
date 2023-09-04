@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { TotalSettle } from '@/views/types'
+import type { MchtRecentTransaction } from '@/views/types'
 
 interface Props {
-    transaction: TotalSettle,
+    transaction: MchtRecentTransaction,
     date: string,
 }
 const props = defineProps<Props>()
@@ -32,7 +32,6 @@ const displayDate = () => {
         date = props.date
         style = 'color:#000000;'
     }
-
     return {
         date, style
     }
@@ -62,7 +61,7 @@ watchEffect(() => {
             </div>
             <div style="font-weight: bold;">
                 <span>
-                    {{ props.transaction.amount.toLocaleString() }}
+                    {{ (props.transaction.appr_amount + props.transaction.cxl_amount).toLocaleString() }}
                 </span>
                 <span class="small-font" style="font-weight: 500;"> 원</span>
             </div>
@@ -75,7 +74,7 @@ watchEffect(() => {
             </div>
             <div style="font-weight: bold;">
                 <span>
-                    {{ props.transaction.appr.count.toLocaleString() }}/{{ props.transaction.cxl.count.toLocaleString()
+                    {{ props.transaction.appr_count.toLocaleString() }}/{{ props.transaction.cxl_count.toLocaleString()
                     }}
                 </span>
                 <span class="small-font" style="font-weight: 500;"> 건</span>
