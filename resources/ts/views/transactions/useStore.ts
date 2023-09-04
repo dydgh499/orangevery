@@ -13,6 +13,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     const headers: Record<string, string> = {
         'id': 'NO.',
         'module_type': '거래 타입',
+        'note': '결제모듈 별칭',
     }
     const { pgs, pss, terminals } = useStore()
     if(getUserLevel() >= 35) {

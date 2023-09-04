@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\QuickView;
 
 use App\Models\Transaction;
-
-use App\Http\Controllers\Manager\TransactionController; //지워
-
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\TransactionTrait;

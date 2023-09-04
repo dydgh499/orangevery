@@ -32,6 +32,7 @@ class TransactionController extends Controller
             'merchandises.addr', 'merchandises.resident_num', 'merchandises.business_num', 
             'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell', 'merchandises.is_show_fee',
             'transactions.*',
+            'payment_modules.note',
             DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
             DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
         ];
@@ -71,6 +72,7 @@ class TransactionController extends Controller
     {
         $search = $request->input('search', '');
         $query  = $this->transactions
+            ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
             ->where('transactions.brand_id', $request->user()->brand_id)
             ->where('transactions.is_delete', false)
@@ -79,6 +81,7 @@ class TransactionController extends Controller
                     ->orWhere('transactions.tid', 'like', "%$search%")
                     ->orWhere('transactions.trx_id', 'like', "%$search%")
                     ->orWhere('transactions.appr_num', 'like', "%$search%")
+                    ->orWhere('payment_modules.note', 'like', "%$search%")
                     ->orWhere('merchandises.mcht_name', 'like', "%$search%");
             });
             
