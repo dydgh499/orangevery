@@ -84,7 +84,7 @@ class MerchandiseController extends Controller
     private function byNormalIndex($request, $is_all)
     {
         $query = $this->merchandises;
-        $query = $this->mchtCommonFilter($query, $request, '', $is_all);
+        $query = $this->mchtCommonFilter($query, $request, 'merchandises', $is_all);
         return $this->getIndexData($request, $query, 'id');
     }
 
