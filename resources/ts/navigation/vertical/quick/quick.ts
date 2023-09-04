@@ -102,14 +102,16 @@ const getAbilitiesMenu = computed(() => {
             icon: { icon: 'tabler-smart-home' },
             to: 'quick-view',
         },
-
         { heading: 'User information' },
         {
-            title: '장비 관리',
-            icon: { icon: 'ic-outline-send-to-mobile' },
-            to: 'merchandises-terminals',
+            title: '가맹점 관리',
+            icon: { icon: 'tabler-user' },
+            children: [
+                { title: '가맹점 목록', to: 'merchandises' },
+                { title: '장비 관리', to: 'merchandises-terminals' },
+                //{ title: '결제모듈 관리', to: 'merchandises-pay-modules' },
+            ]
         },
-
         { heading: 'Transaction' },
         ...payments,
 
