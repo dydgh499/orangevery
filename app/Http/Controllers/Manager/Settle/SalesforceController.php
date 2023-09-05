@@ -40,7 +40,7 @@ class SalesforceController extends Controller
             });
         }
         else
-        { // 말일이 아니라면 settle_cycle 28인 영업자는 제외
+        {   // 말일이 아니라면 settle_cycle 28인 영업자는 제외
             $query = $query
                 ->where('settle_day', Carbon::parse($date)->dayOfWeek)
                 ->where('settle_cycle', '!=', 28);

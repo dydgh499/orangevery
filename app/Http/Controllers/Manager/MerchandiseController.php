@@ -100,6 +100,7 @@ class MerchandiseController extends Controller
                 ->where(function ($query) use ($search, $full_parent) {
             return $query->where('mcht_name', 'like', "%$search%")
                 ->orWhere($full_parent.'phone_num', 'like', "%$search%")
+                ->orWhere($full_parent.'business_num', 'like', "%$search%")
                 ->orWhere($full_parent.'nick_name', 'like', "%$search%");
         });
         if($is_all == false)
