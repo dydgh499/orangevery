@@ -299,6 +299,11 @@ class TransactionController extends Controller
     public function _test()
     {
         $db_trans = $this->transactions
+            ->where(function ($query) {
+                return $query
+                ->where('pg_id', 62)
+                ->where('pg_id', 51);
+            })
             ->orderBy('transactions.id', 'desc')
             ->get();
         
