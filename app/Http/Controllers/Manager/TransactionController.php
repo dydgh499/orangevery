@@ -302,7 +302,7 @@ class TransactionController extends Controller
             ->where(function ($query) {
                 return $query
                 ->where('pg_id', 62)
-                ->where('pg_id', 51);
+                ->orWhere('pg_id', 51);
             })
             ->orderBy('transactions.id', 'desc')
             ->get();
