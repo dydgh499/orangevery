@@ -64,8 +64,6 @@ class SalesforceController extends Controller
             ->where('sales_name', 'like', "%$search%")
             ->where('level', $level);
 
-        if(isSalesforce($request))
-            $query = $query->where('id', $request->user()->id);
         if($request->settle_cycle)
             $query = $query->where('settle_cycle', $request->settle_cycle);
 

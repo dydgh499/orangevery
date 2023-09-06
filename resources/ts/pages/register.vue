@@ -126,7 +126,7 @@ const sameValidaor = () => {
                                     :rules="[requiredValidator]" />
                             </VCol>
                             <VCol cols="12">
-                                <VTextField v-model="business_num" label="사업자등록번호 입력" type="business_num" placeholder="123-12-12345"
+                                <VTextField v-model="business_num" label="사업자등록번호 입력" type="business_num"
                                     :rules="[requiredValidator, businessNumValidator(business_num)]" />
                             </VCol>
                             <!-- user_name -->

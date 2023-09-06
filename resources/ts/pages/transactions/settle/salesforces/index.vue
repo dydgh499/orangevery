@@ -106,7 +106,7 @@ watchEffect(() => {
             <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                     <template v-if="key == 'deduction.input'">
-                        <BaseQuestionTooltip :location="'top'" :text="header.ko"
+                        <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
                             :content="'차감이 아닌 추가금 설정을 하시러면 금액 앞에 -(마이너스 기호)를 입력 후 차감버튼을 클릭해주세요.'">
                         </BaseQuestionTooltip>
                     </template>
