@@ -71,7 +71,7 @@ class SalesforceController extends Controller
                 $query = $query->where('id', $request->user()->id);
             else
             {
-                if($request->input('level', 0))
+                if($request->input('level', false))
                 {
                     $rq_idx = globalLevelByIndex($request->level);
                     $s_keys = ['sales'.$rq_idx.'_id'];
@@ -80,7 +80,6 @@ class SalesforceController extends Controller
                 {
                     $levels  = $this->getUnderSalesLevels($request);
                     $s_keys = $this->getUnderSalesKeys($levels);
-                    logging(['levels'=>$levels, 'keys'=>$s_keys]);
                 }
                 $sales = $this->getUnderSalesIds($request, $s_keys);
                 $sales_ids = $sales->flatMap(function ($sale) use($s_keys) {
@@ -96,9 +95,11 @@ class SalesforceController extends Controller
                     $query = $query->whereIn('id', $sales_ids);
             }
         }
-
-        if($request->has('level') && $request->level >= 0)
-            $query = $query->where('level', $request->level);
+        else
+        {
+            if($request->input('level', false))
+                $query = $query->where('level', $request->level);
+        }
         return $query;
     }
     /**
