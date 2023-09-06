@@ -79,7 +79,8 @@ class SalesforceController extends Controller
                 else
                 {
                     $levels  = $this->getUnderSalesLevels($request);
-                    $s_keys = $this->getUnderSalesKeys($levels);                    
+                    $s_keys = $this->getUnderSalesKeys($levels);
+                    logging(['levels'=>$levels, 'keys'=>$s_keys]);
                 }
                 $sales = $this->getUnderSalesIds($request, $s_keys);
                 $sales_ids = $sales->flatMap(function ($sale) use($s_keys) {
