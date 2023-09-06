@@ -127,6 +127,9 @@ watchEffect(() => {
     store.params.level = store.params.level
     store.params.mcht_settle_type = mcht_settle_type.value.id
 })
+watchEffect(() => {
+    selected.value = all_selected.value ? store.getItems.map(item => item['id']) : []
+})
 </script>
 <template>
     <div>
@@ -186,9 +189,11 @@ watchEffect(() => {
                 <tr v-for="(item, index) in store.getItems" :key="index">
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
-                            <span v-if="_key == 'id'" class="edit-link" @click="store.edit(item['id'])">
-                                <VCheckbox v-if="getUserLevel() >= 50" v-model="selected" :value="item[_key]" :label="`#${item[_key]}`" class="check-label"/>
-                                <span v-else>#{{ item[_key] }}</span>
+                            <span v-if="_key == 'id'">
+                                <div style="display: inline-flex; align-items: center; vertical-align: middle;">
+                                    <VCheckbox v-if="getUserLevel() >= 50" v-model="selected" :value="item[_key]" class="check-label"/>
+                                    <span  class="edit-link" @click="store.edit(item['id'])">#{{ item[_key] }}</span>
+                                </div>
                             </span>
                             <span v-else-if="_key == 'module_type'">
                                 <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
