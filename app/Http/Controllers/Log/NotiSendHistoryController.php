@@ -8,11 +8,12 @@ use Illuminate\Http\Request;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\Settle\TransactionTrait;
 use App\Http\Requests\Manager\IndexRequest;
 
 class NotiSendHistoryController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, TransactionTrait;
     protected $noti_send_histories;
 
     public function __construct(NotiSendHistory $noti_send_histories)
@@ -48,46 +49,9 @@ class NotiSendHistoryController extends Controller
         $data = $this->getIndexData($request, $query, 'noti_send_histories.id', $cols, 'noti_send_histories.created_at');
         return $this->response(0, $data);
     }
-
-    private function getNotiSendFormat($noti)
+    
+    private function save($res, $noti)
     {
-        $params = [
-            'mid'   => $noti->mid,
-            'tid'    => $noti->tid,
-            'trx_id'    => $noti->trx_id,
-            'amount'    => $noti->amount,
-            'ord_num'   => $noti->ord_num,
-            'appr_num'  => $noti->appr_num,
-            'item_name' => $noti->item_name,
-            'buyer_name'    => $noti->buyer_name,
-            'buyer_phone'   => $noti->buyer_phone,
-            'acquirer'      => $noti->acquirer,
-            'issuer'        => $noti->issuer,
-            'card_num'      => $noti->card_num,
-            'installment'   => $noti->installment,
-            'trx_dttm'      => $noti->trx_dt." ".$noti->trx_tm,
-            'is_cancel'     => $noti->is_cancel,
-            'temp'          => $noti->temp,
-        ];
-        if($noti->is_cancel)
-            $params['cxl_dttm'] = $noti->cxl_dttm;
-        return $params;
-    }
-
-    public function retry(Request $request, $trans_id)
-    {
-        $noti  = $this->noti_send_histories
-            ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')
-            ->where('noti_send_histories.trans_id', $trans_id)
-            ->orderby('created_at', 'asc')
-            ->first($this->cols);
-
-        $headers = [
-            'Content-Type'  => 'application/json',
-            'Accept' => 'application/json',
-        ];
-        $params = $this->getNotiSendFormat($noti);
-        $res  = post($noti->send_url, $params, $headers);
         $log = [
             'http_code' => $res['code'],
             'message'   => json_encode($res['body']),
@@ -96,33 +60,39 @@ class NotiSendHistoryController extends Controller
             'brand_id'  => $noti->brand_id,
             'retry_count' => $noti->retry_count+1,
         ];
-        $res = $this->noti_send_histories->create($log);
+        return $this->noti_send_histories->create($log);        
+    }
+
+    /*
+     * 노티 재전송
+     */
+    public function retry(Request $request, $trans_id)
+    {
+        $noti  = $this->noti_send_histories
+            ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')
+            ->where('noti_send_histories.trans_id', $trans_id)
+            ->orderby('created_at', 'asc')
+            ->first($this->cols);
+
+        $res = $this->notiSender($noti->send_url, $tran, $noti->temp);
+        $res = $this->save($res, $noti);
         return $this->response($res ? 1 : 990);
     }
 
+    /*
+     * 노티 대량 재전송
+     */
     public function batchRetry(Request $request) 
     {
         $notis = $this->noti_send_histories
             ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')
             ->whereIn('noti_send_histories.id', $request->selected)
             ->get($this->cols);
-        $headers = [
-            'Content-Type'  => 'application/json',
-            'Accept' => 'application/json',
-        ];
+
         foreach($notis as $noti)
-        {            
-            $params = $this->getNotiSendFormat($noti);
-            $res  = post($noti->send_url, $params, $headers);
-            $log = [
-                'http_code' => $res['code'],
-                'message'   => json_encode($res['body']),
-                'send_url'  => $noti->send_url,
-                'trans_id'  => $noti->id,
-                'brand_id'  => $noti->brand_id,
-                'retry_count' => $noti->retry_count+1,
-            ];
-            $res = $this->noti_send_histories->create($log);
+        {
+            $res = $this->notiSender($noti->send_url, $tran, $noti->temp);
+            $res = $this->save($res, $noti);
         }
         return $this->response(1);
     }

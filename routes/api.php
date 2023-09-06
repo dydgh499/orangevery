@@ -84,7 +84,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('pay-sections', PaymentSectionController::class);
             Route::apiResource('classifications', ClassificationController::class);
         });
-        Route::prefix('transactions')->group(function() {
+        Route::prefix('transactions')->group(function() {            
+            Route::post('batch-retry', [TransactionController::class, 'batchRetry']);
             Route::post('cancel', [TransactionController::class, 'cancel']);
             Route::post('pay-cancel', [TransactionController::class, 'payCancel']);
             Route::get('chart', [TransactionController::class, 'chart']);

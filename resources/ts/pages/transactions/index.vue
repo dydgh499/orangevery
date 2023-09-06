@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
 import { useSearchStore } from '@/views/transactions/useStore'
+import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { salesLevels } from '@/views/salesforces/useStore'
 import ExtraMenu from '@/views/transactions/ExtraMenu.vue'
@@ -14,6 +15,7 @@ import type { Options } from '@/views/types'
 import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
+const { post } = useRequestStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
 const salesslip = ref()
@@ -26,6 +28,11 @@ provide('head', head)
 provide('exporter', exporter)
 provide('salesslip', salesslip)
 provide('cancelTran', cancelTran)
+
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+const selected = ref<number[]>([])
+const all_selected = ref()
 
 store.params.level = 10
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
@@ -83,6 +90,19 @@ const isSalesCol = (key: string) => {
     }
     return false
 }
+const batchRetry = async() => {
+    if(await alert.value.show('정말 일괄 재발송하시겠습니까?'))
+    {
+        const params = { selected : selected.value }
+        const url = '/api/v1/manager/transactions/batch-retry'
+        const r = await post(url, params)
+        if(r.status == 201)
+            snackbar.value.show('성공하였습니다.', 'success')
+        else
+            snackbar.value.show(r.data.message, 'error')
+        store.setTable()
+    }
+}
 onMounted(() => {
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
@@ -130,6 +150,11 @@ watchEffect(() => {
                     </template>
                 </BaseIndexFilterCard>
             </template>
+            <template #index_extra_field>
+                <VBtn prepend-icon="tabler-calculator" @click="batchRetry()" v-if="getUserLevel() >= 50">
+                    일괄 재발송
+                </VBtn>
+            </template>
             <template #headers>
                 <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
@@ -149,6 +174,7 @@ watchEffect(() => {
                             </BaseQuestionTooltip>
                         </template>
                         <template v-else>
+                            <VCheckbox v-model="all_selected" label="선택/취소" class="check-label" v-if="key == 'id' && getUserLevel() >= 50"/>
                             <span>
                                 {{ header.ko }}
                             </span>
@@ -161,7 +187,8 @@ watchEffect(() => {
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
                             <span v-if="_key == 'id'" class="edit-link" @click="store.edit(item['id'])">
-                                #{{ item[_key] }}
+                                <VCheckbox v-if="getUserLevel() >= 50" v-model="selected" :value="item[_key]" :label="`#${item[_key]}`" class="check-label"/>
+                                <span v-else>#{{ item[_key] }}</span>
                             </span>
                             <span v-else-if="_key == 'module_type'">
                                 <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">

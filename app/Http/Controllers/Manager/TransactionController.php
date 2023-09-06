@@ -261,6 +261,11 @@ class TransactionController extends Controller
         }
     }
 
+    /**
+     * 수기결제
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function handPay(Request $request)
     {
         $getYYMM = function($mmyy) {
@@ -285,6 +290,11 @@ class TransactionController extends Controller
       
     }
 
+    /**
+     * 결제취소
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function payCancel(Request $request)
     {
         $data = $request->all();
@@ -294,6 +304,20 @@ class TransactionController extends Controller
             return $this->response(1, $res['body']);
         else
             return $this->extendResponse(1999, $res['body']['result_msg']);
+    }
+
+    /*
+     * 노티 대량 재전송
+     */
+    public function batchRetry(Request $request)
+    {
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/noti/custom';
+        $trans = $this->transactions->whereIn('id', $request->selected)->get();
+        foreach($trans as $tran)
+        {
+            $res = $this->notiSender($url, $tran, '');
+        }
+        return $this->response(1);
     }
 
     public function _test()
