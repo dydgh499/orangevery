@@ -128,7 +128,7 @@ watchEffect(() => {
                             <template #input>
                                 <VTextField v-model="hand_pay_info.card_num" type="text" persistent-placeholder counter
                                     prepend-inner-icon="emojione:credit-card" placeholder="카드번호를 입력해주세요"
-                                    :rules="[requiredValidator]" maxlength="16" autocomplete="cc-number" />
+                                    :rules="[requiredValidator]" maxlength="20" autocomplete="cc-number" />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
