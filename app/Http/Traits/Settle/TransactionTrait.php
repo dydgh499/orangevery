@@ -170,7 +170,10 @@ trait TransactionTrait
             'temp'          => $temp,
         ];
         if($tran->is_cancel)
+        {
+            $params['amount'] *= -1;
             $params['cxl_dttm'] = $tran->cxl_dttm;
+        }
         return post($url, $params, $headers);
     }
 }
