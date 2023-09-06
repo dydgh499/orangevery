@@ -72,15 +72,27 @@ class SalesforceController extends Controller
             else
             {
                 $idx = globalLevelByIndex($request->user()->level);
-                $rq_idx = globalLevelByIndex($request->level);
-                $sales_ids = Merchandise::where('brand_id', $request->user()->brand_id)
+                if($request->has('level'))
+                {
+                    $rq_idx = globalLevelByIndex($request->level);
+                    $sales_keys = ['sales'.$rq_idx.'_id'];
+                }
+                else
+                {
+                    $levels  = $this->getUnderSalesIdxs($request);
+                    $sales_keys = $this->getUnderSalesKeys($levels);                    
+                }
+                $sales = Merchandise::where('brand_id', $request->user()->brand_id)
                     ->where('sales'.$idx.'_id', $request->user()->id)
                     ->where('is_delete', false)
-                    ->get(['sales'.$rq_idx.'_id'])
-                    ->pluck('sales'.$rq_idx.'_id');
+                    ->get($sales_keys);
+                    
+                $sales_ids = $sales->flatMap(function ($sales_keys) {
+                    return $sales_keys;
+                })->unique();
+                // 하위가 1000명이 넘으면 ..?
                 if(count($sales_ids))
                     $query = $query->whereIn('id', $sales_ids);
-                // 하위가 1000명이 넘으면 ..?
             }
         }
 
@@ -204,14 +216,10 @@ class SalesforceController extends Controller
 
     private function salesClassFilter($request, $grouped, $levels)
     {
-        $sales_keys = [];
         $my_level = $request->user()->level;
         $my_id = $request->user()->id;
-        for($i=0; $i <count($levels); $i++) 
-        { 
-            $idx = globalLevelByIndex($levels[$i]);
-            array_push($sales_keys, 'sales'.$idx.'_id');
-        }
+        $sales_keys = $this->getUnderSalesKeys($levels);
+        
         $idx = globalLevelByIndex($my_level);
         $mchts = Merchandise::where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
@@ -234,19 +242,33 @@ class SalesforceController extends Controller
             })->values();
         return $grouped;
     }
-
+    public function getUnderSalesIdxs($request)
+    {
+        $levels  = [];
+        $_levels = [13,15,17,20,25,30];
+        for ($i=0; $i<count($_levels); $i++)
+        {
+            if($request->user()->level >= $_levels[$i])
+                array_push($levels, $_levels[$i]);
+        }
+        return $levels;
+    }
+    public function getUnderSalesKeys($levels)
+    {
+        $sales_keys = [];
+        for($i=0; $i <count($levels); $i++) 
+        {
+            $idx = globalLevelByIndex($levels[$i]);
+            array_push($sales_keys, 'sales'.$idx.'_id');
+        }
+        return $sales_keys;
+    }
     public function classification(Request $request)
     {
         $data = [];
-        $levels = [];
         if(isMerchandise($request) == false)
         {
-            $_levels = [13,15,17,20,25,30];
-            for ($i=0; $i<count($_levels); $i++)
-            {
-                if($request->user()->level >= $_levels[$i])
-                    array_push($levels, $_levels[$i]);
-            }
+            $levels  = $this->getUnderSalesIdxs($request);
             $grouped = $this->salesforces
                 ->where('brand_id', $request->user()->brand_id)
                 ->where('is_delete', false)
