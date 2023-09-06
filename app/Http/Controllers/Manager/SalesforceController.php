@@ -82,7 +82,7 @@ class SalesforceController extends Controller
                     $levels  = $this->getUnderSalesLevels($request);
                     $s_keys = $this->getUnderSalesKeys($levels);                    
                 }
-                $sales = $this->getUnderSalesIds($s_keys);
+                $sales = $this->getUnderSalesIds($request, $s_keys);
                 $sales_ids = $sales->flatMap(function ($sale) use($s_keys) {
                     $keys = [];
                     foreach($s_keys as $s_key)
@@ -222,7 +222,7 @@ class SalesforceController extends Controller
         $my_id = $request->user()->id;
 
         $sales_keys = $this->getUnderSalesKeys($levels);
-        $mchts = $this->getUnderSalesIds($sales_keys);
+        $mchts = $this->getUnderSalesIds($request, $sales_keys);
 
         for($i=0; $i <count($sales_keys)-1; $i++) 
         {
@@ -241,7 +241,7 @@ class SalesforceController extends Controller
         return $grouped;
     }
 
-    public function getUnderSalesIds($sales_keys)
+    public function getUnderSalesIds($request, $sales_keys)
     {
         return Merchandise::where('brand_id', $request->user()->brand_id)
             ->where('sales'.$idx.'_id', $request->user()->id)
