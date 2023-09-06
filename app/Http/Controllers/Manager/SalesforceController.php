@@ -286,12 +286,12 @@ class SalesforceController extends Controller
                 
             if(isSalesforce($request))
                 $grouped = $this->salesClassFilter($request, $grouped, $levels);   
-        }
 
-        for($i=0; $i<count($levels); $i++)
-        {
-            $level = $levels[$i];
-            $data["level_$level"] = isset($grouped[$level]) ? $grouped[$level] : [];
+            for($i=0; $i<count($levels); $i++)
+            {
+                $level = $levels[$i];
+                $data["level_$level"] = isset($grouped[$level]) ? $grouped[$level] : [];
+            }
         }
         return $this->response(0, $data);
     }

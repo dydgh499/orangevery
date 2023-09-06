@@ -109,7 +109,7 @@ class QuickViewController extends Controller
     public function index(Request $request)
     {
         $daily = $this->get3MonthlyTransactions($request);
-        $mchts = $this->getMchtRankTransactions($request);        
+        $mchts = $this->getMchtRankTransactions($request);
         $toIntFormat = function($day) {
             $day->appr_amount = (int)$day->appr_amount;
             $day->appr_count = (int)$day->appr_count;
