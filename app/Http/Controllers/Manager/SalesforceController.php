@@ -71,7 +71,7 @@ class SalesforceController extends Controller
                 $query = $query->where('id', $request->user()->id);
             else
             {
-                if($request->has('level'))
+                if($request->input('level', 0))
                 {
                     $rq_idx = globalLevelByIndex($request->level);
                     $s_keys = ['sales'.$rq_idx.'_id'];
