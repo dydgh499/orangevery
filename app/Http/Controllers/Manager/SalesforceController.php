@@ -64,8 +64,25 @@ class SalesforceController extends Controller
 
         if($is_all == false)
             $query = $query->where('is_delete', false);            
+
         if(isSalesforce($request))
-            $query = $query->where('id', $request->user()->id);
+        {
+            if($request->user()->level == $request->level)
+                $query = $query->where('id', $request->user()->id);
+            else
+            {
+                $idx = globalLevelByIndex($request->user()->level);
+                $rq_idx = globalLevelByIndex($request->level);
+                $sales_ids = Merchandise::where('brand_id', $request->user()->brand_id)
+                    ->where('sales'.$idx.'_id', $request->user()->id)
+                    ->where('is_delete', false)
+                    ->get(['sales'.$rq_idx.'_id'])
+                    ->pluck('sales'.$rq_idx.'_id');
+                if(count($sales_ids))
+                    $query = $query->whereIn('id', $sales_ids);
+                // 하위가 1000명이 넘으면 ..?
+            }
+        }
 
         if($request->has('level') && $request->level >= 0)
             $query = $query->where('level', $request->level);
@@ -212,7 +229,7 @@ class SalesforceController extends Controller
                 })->values();
             }
         }
-        $grouped[$my_level] = $grouped[$my_level]->filter(function($sales) use($my_id){
+        $grouped[$my_level] = $grouped[$my_level]->filter(function($sales) use($my_id) {
                 return $sales->id == $my_id;
             })->values();
         return $grouped;
