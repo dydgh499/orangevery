@@ -86,9 +86,13 @@ class SalesforceController extends Controller
                     ->where('sales'.$idx.'_id', $request->user()->id)
                     ->where('is_delete', false)
                     ->get($sales_keys);
-                    
-                $sales_ids = $sales->flatMap(function ($sales_keys) {
-                    return $sales_keys;
+                $sales_ids = $sales->flatMap(function ($sales) use($sales_keys) {
+                    $keys = [];
+                    foreach($sales_keys as $sales_key)
+                    {
+                        $keys[] = $sales[$sales_key];
+                    }
+                    return $keys;
                 })->unique();
                 // 하위가 1000명이 넘으면 ..?
                 if(count($sales_ids))
