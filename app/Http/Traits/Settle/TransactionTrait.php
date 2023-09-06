@@ -173,7 +173,7 @@ trait TransactionTrait
         {
             $params['amount'] *= -1;
             $params['cxl_dttm'] = $tran->cxl_dttm;
-            $params['ord_trx_id'] = $tran->ord_trx_id;
+            $params['ori_trx_id'] = $tran->ori_trx_id;
         }
         return post($url, $params, $headers);
     }
