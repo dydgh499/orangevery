@@ -71,7 +71,6 @@ class SalesforceController extends Controller
                 $query = $query->where('id', $request->user()->id);
             else
             {
-                $idx = globalLevelByIndex($request->user()->level);
                 if($request->has('level'))
                 {
                     $rq_idx = globalLevelByIndex($request->level);
@@ -243,6 +242,7 @@ class SalesforceController extends Controller
 
     public function getUnderSalesIds($request, $sales_keys)
     {
+        $idx = globalLevelByIndex($request->user()->level);
         return Merchandise::where('brand_id', $request->user()->brand_id)
             ->where('sales'.$idx.'_id', $request->user()->id)
             ->where('is_delete', false)
