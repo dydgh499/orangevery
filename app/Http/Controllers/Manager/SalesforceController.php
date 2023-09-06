@@ -63,7 +63,7 @@ class SalesforceController extends Controller
             ->where('sales_name', 'like', "%$search%");
 
         if($is_all == false)
-            $query = $query->where('is_delete', false);            
+            $query = $query->where('is_delete', false);
 
         if(isSalesforce($request))
         {

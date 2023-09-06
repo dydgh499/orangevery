@@ -125,12 +125,12 @@ trait TransactionTrait
 
     public function getSettleCol($request)
     {
-        if($request->level == 10)
+        if(isMerchandise($request))
         {
             $group_key = 'mcht_id';
             $settle_key = 'mcht_settle_amount';
         }
-        else if($request->level <= 35)
+        else if(isSalesforce($request))
         {
             $idx = globalLevelByIndex($request->level);
             $group_key  = 'sales'.$idx.'_id';
