@@ -130,8 +130,8 @@ trait TransactionTrait
             $group_key = 'mcht_id';
             $settle_key = 'mcht_settle_amount';
         }
-        else if($request->level <= 35)
-        {
+        else if($request->level < 35)
+        {   // 13, 15, 17, 20 ,25, 30
             $idx = globalLevelByIndex($request->level);
             $group_key  = 'sales'.$idx.'_id';
             $settle_key = 'sales'.$idx.'_settle_amount';

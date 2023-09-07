@@ -13,14 +13,20 @@ const transactions = ref(<MchtRecentTransactions>({}))
 const is_skeleton = ref(true)
 const { get } = useRequestStore()
 const my_level = getUserLevel()
-get('/api/v1/quick-view?level='+my_level)
-    .then(r => { transactions.value = r.data as MchtRecentTransactions; })
-    .catch(e => { console.log(e) })
-    
-watchEffect(() => {
-    if(Object.keys(transactions.value).length)
-        is_skeleton.value = false
-})
+
+if(my_level >= 35)  //본사
+    router.replace('dashboards')
+else
+{
+    get('/api/v1/quick-view?level='+my_level)
+        .then(r => { transactions.value = r.data as MchtRecentTransactions; })
+        .catch(e => { console.log(e) })
+        
+    watchEffect(() => {
+        if(Object.keys(transactions.value).length)
+            is_skeleton.value = false
+    })
+}
 </script>
 <template>
     <section>
