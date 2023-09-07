@@ -11,14 +11,40 @@ class BulkPayModuleRequest extends FormRequest
 
     public function __construct()
     {
-        $this->keys = [
-            'mcht_id',
+        $this->integer_keys = [
+            'terminal_id',
+            'comm_settle_fee',
+            'comm_settle_day',
+            'comm_calc_level',
+            'under_sales_amt',
+            'is_old_auth',
+            'show_pay_view',
+            'abnormal_trans_limit',
+            'pay_dupe_limit',
+            'pay_year_limit',
+            'pay_month_limit',
+            'pay_day_limit',
             'pg_id',
             'ps_id',
             'settle_type',
             'module_type',
+            'mcht_id',
             'installment',
+        ];
+        $this->string_keys = [
+            'api_key',
+            'sub_key',
+            'mid',
+            'tid',
+            'serial_num',
             'note',
+        ];
+        $this->null_keys = [
+            'begin_dt',
+            'ship_out_dt',
+            'ship_out_stat',
+            'pay_disable_s_tm',
+            'pay_disable_e_tm',
         ];
     }
 
@@ -55,36 +81,21 @@ class BulkPayModuleRequest extends FormRequest
         for ($i=0; $i < count($_datas) ; $i++)
         { 
             $data = [];
-            for ($j=0; $j < count($this->keys) ; $j++) 
+            for ($j=0; $j < count($this->integer_keys) ; $j++) 
             {
-                $key = $this->keys[$j];
-                $data[$key] = $_datas[$i][$key];
+                $key = $this->integer_keys[$j];
+                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : 0;
             }
-            $data['api_key'] = isset($_datas[$i]['api_key']) ? $_datas[$i]['api_key'] : '';
-            $data['sub_key'] = isset($_datas[$i]['sub_key']) ? $_datas[$i]['sub_key'] : '';
-            $data['mid'] = isset($_datas[$i]['mid']) ? $_datas[$i]['mid'] : '';
-            $data['tid'] = isset($_datas[$i]['tid']) ? $_datas[$i]['tid'] : '';
-            
-            $data['terminal_id'] = isset($_datas[$i]['terminal_id']) ? $_datas[$i]['terminal_id'] : 0;
-            $data['begin_dt'] = isset($_datas[$i]['begin_dt']) ? $_datas[$i]['begin_dt'] : null;
-            $data['ship_out_dt'] = isset($_datas[$i]['ship_out_dt']) ? $_datas[$i]['ship_out_dt'] : null;
-            $data['ship_out_stat'] = isset($_datas[$i]['ship_out_stat']) ? $_datas[$i]['ship_out_stat'] : null;
-            $data['comm_settle_fee'] = isset($_datas[$i]['comm_settle_fee']) ? $_datas[$i]['comm_settle_fee'] : 0;
-            $data['comm_settle_day'] = isset($_datas[$i]['comm_settle_day']) ? $_datas[$i]['comm_settle_day'] : 0;
-            $data['comm_calc_level'] = isset($_datas[$i]['comm_calc_level']) ? $_datas[$i]['comm_calc_level'] : 0;
-            $data['under_sales_amt'] = isset($_datas[$i]['under_sales_amt']) ? $_datas[$i]['under_sales_amt'] : 0;
-            $data['serial_num'] = isset($_datas[$i]['serial_num']) ? $_datas[$i]['serial_num'] : '';
-            $data['is_old_auth'] = isset($_datas[$i]['is_old_auth']) ? $_datas[$i]['is_old_auth'] : 0;  
-
-            $data['show_pay_view'] = isset($_datas[$i]['show_pay_view']) ? $_datas[$i]['show_pay_view'] : true;
-            $data['abnormal_trans_limit'] = isset($_datas[$i]['abnormal_trans_limit']) ? $_datas[$i]['abnormal_trans_limit'] : 0;
-            $data['pay_dupe_limit'] = isset($_datas[$i]['pay_dupe_limit']) ? $_datas[$i]['pay_dupe_limit'] : 0;
-            $data['pay_year_limit'] = isset($_datas[$i]['pay_year_limit']) ? $_datas[$i]['pay_year_limit'] : 0;
-            $data['pay_month_limit'] = isset($_datas[$i]['pay_month_limit']) ? $_datas[$i]['pay_month_limit'] : 0;
-            $data['pay_day_limit'] = isset($_datas[$i]['pay_day_limit']) ? $_datas[$i]['pay_day_limit'] : 0;
-
-            $data['pay_disable_s_tm'] = isset($_datas[$i]['pay_disable_s_tm']) ? $_datas[$i]['pay_disable_s_tm'] : null;
-            $data['pay_disable_e_tm'] = isset($_datas[$i]['pay_disable_e_tm']) ? $_datas[$i]['pay_disable_e_tm'] : null;
+            for ($j=0; $j < count($this->string_keys) ; $j++) 
+            {
+                $key = $this->string_keys[$j];
+                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : '';
+            }
+            for ($j=0; $j < count($this->null_keys) ; $j++) 
+            {
+                $key = $this->null_keys[$j];
+                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : null;
+            }
             array_push($datas, $data);
         }
         return collect($datas);
