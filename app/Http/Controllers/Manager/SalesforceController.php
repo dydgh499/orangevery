@@ -72,28 +72,10 @@ class SalesforceController extends Controller
                 $query = $query->where('id', $request->user()->id);
             else
             {
-                if($request->input('level', false))
-                {
-                    $rq_idx = globalLevelByIndex($request->level);
-                    $s_keys = ['sales'.$rq_idx.'_id'];
-                }
-                else
-                {
-                    $levels  = $this->getUnderSalesLevels($request);
-                    $s_keys = $this->getUnderSalesKeys($levels);
-                }
-                $sales = $this->getUnderSalesIds($request, $s_keys);
-                $sales_ids = $sales->flatMap(function ($sale) use($s_keys) {
-                    $keys = [];
-                    foreach($s_keys as $s_key)
-                    {
-                        $keys[] = $sale[$s_key];
-                    }
-                    return $keys;
-                })->unique();
+                $sales_ids = $this->underSalesFilter($request);
                 // 하위가 1000명이 넘으면 ..?
                 if(count($sales_ids))
-                    $query = $query->whereIn('id', $sales_ids);
+                        $query = $query->whereIn('id', $sales_ids);
             }
         }
         else

@@ -23,6 +23,7 @@ trait UnderSalesTrait
             if($request->user()->level >= $_levels[$i])
                 array_push($levels, $_levels[$i]);
         }
+
         return $levels;
     }
     public function getUnderSalesKeys($levels)
@@ -59,5 +60,35 @@ trait UnderSalesTrait
                 return $sales->id == $my_id;
             })->values();
         return $grouped;
+    }
+
+    public function underSalesFilter($request)
+    {
+        if($request->user()->level == $request->level)
+            $query = $query->where('salesforces.id', $request->user()->id);
+        else
+        {
+            if($request->input('level', false))
+            {   //레벨이 선택되었다면
+                $rq_idx = globalLevelByIndex($request->level);
+                $s_keys = ['sales'.$rq_idx.'_id'];
+            }
+            else
+            {   // 모두
+                $levels  = $this->getUnderSalesLevels($request);
+                $s_keys = $this->getUnderSalesKeys($levels);
+            }
+            $sales = $this->getUnderSalesIds($request, $s_keys);
+            $sales_ids = $sales->flatMap(function ($sale) use($s_keys) {
+                $keys = [];
+                foreach($s_keys as $s_key)
+                {
+                    if($sale[$s_key] != 0)
+                        $keys[] = $sale[$s_key];
+                }
+                return $keys;
+            })->unique()->values();
+            return $sales_ids;
+        }
     }
 }

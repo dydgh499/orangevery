@@ -54,41 +54,18 @@ class SettleHistoryController extends Controller
         $query  = $this->settle_sales_hist
                 ->join('salesforces', 'settle_histories_salesforces.sales_id', 'salesforces.id')
                 ->where('settle_histories_salesforces.brand_id', $request->user()->brand_id)
-                ->where('settle_histories_salesforces.level', $request->level)
                 ->where('settle_histories_salesforces.is_delete', false)
                 ->where('salesforces.user_name', 'like', "%$search%");
 
         if(isSalesforce($request))
         {
-            if($request->user()->level == $request->level)
-                $query = $query->where('salesforces.id', $request->user()->id);
-            else
-            {
-                if($request->input('level', false))
-                {
-                    $rq_idx = globalLevelByIndex($request->level);
-                    $s_keys = ['sales'.$rq_idx.'_id'];
-                }
-                else
-                {
-                    $levels  = $this->getUnderSalesLevels($request);
-                    $s_keys = $this->getUnderSalesKeys($levels);
-                }
-                $sales = $this->getUnderSalesIds($request, $s_keys);
-                $sales_ids = $sales->flatMap(function ($sale) use($s_keys) {
-                    $keys = [];
-                    foreach($s_keys as $s_key)
-                    {
-                        $keys[] = $sale[$s_key];
-                    }
-                    return $keys;
-                })->unique();
-                // 하위가 1000명이 넘으면 ..?
-                if(count($sales_ids))
-                    $query = $query->whereIn('salesforces.id', $sales_ids);
-            }
+            $sales_ids = $this->underSalesFilter($request);
+            // 하위가 1000명이 넘으면 ..?
+            if(count($sales_ids))
+                $query = $query->whereIn('salesforces.id', $sales_ids);
         }
-
+        else
+            $query = $query->where('settle_histories_salesforces.level', $request->level);
         $data = $this->getIndexData($request, $query, 'settle_histories_salesforces.id', $cols, 'settle_histories_salesforces.created_at');
         return $this->response(0, $data);
     }
