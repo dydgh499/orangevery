@@ -64,23 +64,17 @@ class BulkPayModuleRequest extends FormRequest
             $data['sub_key'] = isset($_datas[$i]['sub_key']) ? $_datas[$i]['sub_key'] : '';
             $data['mid'] = isset($_datas[$i]['mid']) ? $_datas[$i]['mid'] : '';
             $data['tid'] = isset($_datas[$i]['tid']) ? $_datas[$i]['tid'] : '';
-
-            if($data['module_type'] == 0)
-            {
-                $data['terminal_id'] = isset($_datas[$i]['terminal_id']) ? $_datas[$i]['terminal_id'] : 0;
-                $data['begin_dt'] = isset($_datas[$i]['begin_dt']) ? $_datas[$i]['begin_dt'] : null;
-                $data['ship_out_dt'] = isset($_datas[$i]['ship_out_dt']) ? $_datas[$i]['ship_out_dt'] : null;
-                $data['ship_out_stat'] = isset($_datas[$i]['ship_out_stat']) ? $_datas[$i]['ship_out_stat'] : null;
-                $data['comm_settle_fee'] = isset($_datas[$i]['comm_settle_fee']) ? $_datas[$i]['comm_settle_fee'] : 0;
-                $data['comm_settle_day'] = isset($_datas[$i]['comm_settle_day']) ? $_datas[$i]['comm_settle_day'] : 0;
-                $data['comm_calc_level'] = isset($_datas[$i]['comm_calc_level']) ? $_datas[$i]['comm_calc_level'] : 0;
-                $data['under_sales_amt'] = isset($_datas[$i]['under_sales_amt']) ? $_datas[$i]['under_sales_amt'] : 0;
-                $data['serial_num'] = isset($_datas[$i]['serial_num']) ? $_datas[$i]['serial_num'] : '';        
-            }
-            else if($data['module_type'] == 1 || $data['module_type'] == 5)
-            {
-                $data['is_old_auth'] = isset($_datas[$i]['is_old_auth']) ? $_datas[$i]['is_old_auth'] : 0;
-            }
+            
+            $data['terminal_id'] = isset($_datas[$i]['terminal_id']) ? $_datas[$i]['terminal_id'] : 0;
+            $data['begin_dt'] = isset($_datas[$i]['begin_dt']) ? $_datas[$i]['begin_dt'] : null;
+            $data['ship_out_dt'] = isset($_datas[$i]['ship_out_dt']) ? $_datas[$i]['ship_out_dt'] : null;
+            $data['ship_out_stat'] = isset($_datas[$i]['ship_out_stat']) ? $_datas[$i]['ship_out_stat'] : null;
+            $data['comm_settle_fee'] = isset($_datas[$i]['comm_settle_fee']) ? $_datas[$i]['comm_settle_fee'] : 0;
+            $data['comm_settle_day'] = isset($_datas[$i]['comm_settle_day']) ? $_datas[$i]['comm_settle_day'] : 0;
+            $data['comm_calc_level'] = isset($_datas[$i]['comm_calc_level']) ? $_datas[$i]['comm_calc_level'] : 0;
+            $data['under_sales_amt'] = isset($_datas[$i]['under_sales_amt']) ? $_datas[$i]['under_sales_amt'] : 0;
+            $data['serial_num'] = isset($_datas[$i]['serial_num']) ? $_datas[$i]['serial_num'] : '';
+            $data['is_old_auth'] = isset($_datas[$i]['is_old_auth']) ? $_datas[$i]['is_old_auth'] : 0;  
 
             $data['show_pay_view'] = isset($_datas[$i]['show_pay_view']) ? $_datas[$i]['show_pay_view'] : true;
             $data['abnormal_trans_limit'] = isset($_datas[$i]['abnormal_trans_limit']) ? $_datas[$i]['abnormal_trans_limit'] : 0;
