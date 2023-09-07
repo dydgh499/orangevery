@@ -114,7 +114,7 @@ onMounted(() => {
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>수기결제 타입</template>
                                 <template #input>
-                                    <BooleanRadio :radio="Boolean(props.item.is_old_auth)"
+                                    <BooleanRadio :radio="props.item.is_old_auth"
                                         @update:radio="props.item.is_old_auth = $event">
                                         <template #true>구인증</template>
                                         <template #false>비인증</template>
