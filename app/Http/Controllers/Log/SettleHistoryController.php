@@ -14,13 +14,14 @@ use Illuminate\Http\Request;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleHistoryTrait;
+use App\Http\Traits\Salesforce\UnderSalesTrait;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Log\CreateSettleHistoryRequest;
 
 
 class SettleHistoryController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, SettleHistoryTrait;
+    use ManagerTrait, ExtendResponseTrait, SettleHistoryTrait, UnderSalesTrait;
     protected $settle_mcht_hist, $settle_sales_hist, $add_cols;
     
     public function __construct(SettleHistoryMerchandise $settle_mcht_hist, SettleHistorySalesforce $settle_sales_hist)
@@ -57,8 +58,36 @@ class SettleHistoryController extends Controller
                 ->where('settle_histories_salesforces.is_delete', false)
                 ->where('salesforces.user_name', 'like', "%$search%");
 
-        if(isSalesforce($request) && $request->level == $request->user()->level)
-            $query = $query->where('salesforces.id', $request->user()->id);
+        if(isSalesforce($request))
+        {
+            if($request->user()->level == $request->level)
+                $query = $query->where('salesforces.id', $request->user()->id);
+            else
+            {
+                if($request->input('level', false))
+                {
+                    $rq_idx = globalLevelByIndex($request->level);
+                    $s_keys = ['sales'.$rq_idx.'_id'];
+                }
+                else
+                {
+                    $levels  = $this->getUnderSalesLevels($request);
+                    $s_keys = $this->getUnderSalesKeys($levels);
+                }
+                $sales = $this->getUnderSalesIds($request, $s_keys);
+                $sales_ids = $sales->flatMap(function ($sale) use($s_keys) {
+                    $keys = [];
+                    foreach($s_keys as $s_key)
+                    {
+                        $keys[] = $sale[$s_key];
+                    }
+                    return $keys;
+                })->unique();
+                // 하위가 1000명이 넘으면 ..?
+                if(count($sales_ids))
+                    $query = $query->whereIn('salesforces.id', $sales_ids);
+            }
+        }
 
         $data = $this->getIndexData($request, $query, 'settle_histories_salesforces.id', $cols, 'settle_histories_salesforces.created_at');
         return $this->response(0, $data);
