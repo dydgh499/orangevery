@@ -133,7 +133,7 @@ onMounted(async() => {
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>계좌번호</template>
                             <template #input>
-                                <VTextField id="acctNumHorizontalIcons" type="number" v-model="props.item.acct_num"
+                                <VTextField id="acctNumHorizontalIcons" v-model="props.item.acct_num"
                                     prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력" persistent-placeholder />
                             </template>
                         </CreateHalfVCol>
