@@ -24,7 +24,7 @@ else if (props.is_range_date == false)
     store.params.dt = formatDate(new Date())
 
 const handleEnterKey = (event: KeyboardEvent) => {
-      if (event.keyCode === 13) 
+    if (event.keyCode === 13)
         store.setTable()
 }
 
@@ -32,36 +32,31 @@ const setDateRange = (type: string) => {
     var s_date = undefined
     var e_date = undefined
     var date = new Date();
-    if(type == 'today')
-    {
-        s_date  = date;
-        e_date  = date;
+    if (type == 'today') {
+        s_date = date;
+        e_date = date;
     }
-    else if(type == '1 day')
-    {
-        s_date  = new Date(date.setDate(date.getDate() - 1));
-        e_date  = s_date;
+    else if (type == '1 day') {
+        s_date = new Date(date.setDate(date.getDate() - 1));
+        e_date = s_date;
     }
-    else if(type == '3 day')
-    {
-        e_date  = new Date(date.setDate(date.getDate() - 1));
-        s_date  = new Date(date.setDate(date.getDate() - 2));
+    else if (type == '3 day') {
+        e_date = new Date(date.setDate(date.getDate() - 1));
+        s_date = new Date(date.setDate(date.getDate() - 2));
     }
-    else if(type == '1 mon')
-    {
-        s_date  = new Date(date.getFullYear(), date.getMonth() - 1, 1);
-        e_date  = new Date(date.getFullYear(), date.getMonth(), 0);
+    else if (type == '1 mon') {
+        s_date = new Date(date.getFullYear(), date.getMonth() - 1, 1);
+        e_date = new Date(date.getFullYear(), date.getMonth(), 0);
     }
-    else if(type == '3 mon')
-    {
-        s_date  = new Date(date.getFullYear(), date.getMonth() - 3, 1);
-        e_date  = new Date(date.getFullYear(), date.getMonth(), 0);
+    else if (type == '3 mon') {
+        s_date = new Date(date.getFullYear(), date.getMonth() - 3, 1);
+        e_date = new Date(date.getFullYear(), date.getMonth(), 0);
     }
     store.params.s_dt = formatDate(s_date)
     store.params.e_dt = formatDate(e_date)
 }
 
-watchEffect(() => {    
+watchEffect(() => {
     store.setChartProcess()
     store.params.s_dt = store.params.s_dt
     store.params.e_dt = store.params.e_dt
@@ -75,29 +70,30 @@ watchEffect(() => {
                 <VRow>
                     <div class="d-flex align-center flex-wrap gap-4 justify-center" style="width: 100%;">
                         <VTextField type="date" v-model="store.params.s_dt" prepend-inner-icon="ic-baseline-calendar-today"
-                            label="검색 시작일" v-if="props.is_range_date == true" class="search-date" @onchange="store.params.page=1"/>
+                            label="검색 시작일" v-if="props.is_range_date == true" class="search-date"
+                            @onchange="store.params.page = 1" />
                         <VTextField type="date" v-model="store.params.e_dt" prepend-inner-icon="ic-baseline-calendar-today"
                             label="검색 종료일" v-if="props.is_range_date == true" class="search-date" />
                         <VTextField type="date" v-model="store.params.dt" prepend-inner-icon="ic-baseline-calendar-today"
                             label="검색일" v-if="props.is_range_date == false" class="search-date" />
-                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today" @click="setDateRange('today')"
-                            style="flex-grow: 1;" v-if="use_date_button">
+                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today"
+                            @click="setDateRange('today')" style="flex-grow: 1;" v-if="use_date_button">
                             당일
                         </VBtn>
-                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today" @click="setDateRange('1 day')"
-                            style="flex-grow: 1;" v-if="use_date_button">
+                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today"
+                            @click="setDateRange('1 day')" style="flex-grow: 1;" v-if="use_date_button">
                             어제
                         </VBtn>
-                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today" @click="setDateRange('3 day')"
-                            style="flex-grow: 1;" v-if="use_date_button">
+                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today"
+                            @click="setDateRange('3 day')" style="flex-grow: 1;" v-if="use_date_button">
                             3일전
                         </VBtn>
-                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today" @click="setDateRange('1 mon')"
-                            style="flex-grow: 1;" v-if="use_date_button">
+                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today"
+                            @click="setDateRange('1 mon')" style="flex-grow: 1;" v-if="use_date_button">
                             1개월
                         </VBtn>
-                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today" @click="setDateRange('3 mon')"
-                            style="flex-grow: 1;" v-if="use_date_button">
+                        <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today"
+                            @click="setDateRange('3 mon')" style="flex-grow: 1;" v-if="use_date_button">
                             3개월
                         </VBtn>
                         <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel"
@@ -109,8 +105,15 @@ watchEffect(() => {
                             PDF 추출
                         </VBtn>
                         <div class="d-inline-flex align-center flex-wrap gap-4 float-right justify-center">
-                            <VTextField id="search" :placeholder="`${props.placeholder}`" density="compact" @keyup.enter="handleEnterKey"
-                                prepend-inner-icon="tabler:search" class="search-input" style="flex-grow: 3;" />
+                            <VTextField id="search" :placeholder="props.placeholder" density="compact"
+                                @keyup.enter="handleEnterKey" prepend-inner-icon="tabler:search"
+                                class="search-input" style="flex-grow: 3;" >
+                            </VTextField>
+                            <!--
+                                <VTooltip activator="parent" location="bottom">
+                                    {{ props.placeholder }}
+                                </VTooltip>
+                            -->
                             <VBtn prepend-icon="tabler:search" @click="store.setTable()" style="flex-grow: 1;">
                                 검색
                             </VBtn>

@@ -75,15 +75,21 @@ class TransactionController extends Controller
             ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
             ->where('transactions.brand_id', $request->user()->brand_id)
-            ->where('transactions.is_delete', false)
-            ->where(function ($query) use ($search) {
+            ->where('transactions.is_delete', false);
+
+        if($search != '')
+        {
+            $query = $query->where(function ($query) use ($search) {
                 return $query->where('transactions.mid', 'like', "%$search%")
                     ->orWhere('transactions.tid', 'like', "%$search%")
                     ->orWhere('transactions.trx_id', 'like', "%$search%")
                     ->orWhere('transactions.appr_num', 'like', "%$search%")
                     ->orWhere('payment_modules.note', 'like', "%$search%")
-                    ->orWhere('merchandises.mcht_name', 'like', "%$search%");
+                    ->orWhere('merchandises.mcht_name', 'like', "%$search%")
+                    ->orWhere('merchandises.resident_num', 'like', "%$search%")
+                    ->orWhere('merchandises.business_num', 'like', "%$search%");
             });
+        }
             
         if($request->has('s_dt') && $request->has('e_dt'))
         {
