@@ -62,7 +62,8 @@ export const useStore = defineStore('payGatewayStore', () => {
             Object.assign(cus_filters.value, r.data.custom_filters)
         }
         catch(e) {
-            errorHandler(e)
+            // 가맹점 수기결제시 필요
+            //errorHandler(e)
         }
     })
     const setFee = (items: PaySection[], id: number | null) => {
