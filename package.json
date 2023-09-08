@@ -34,7 +34,7 @@
     "roboto-fontface": "^0.10.0",
     "sass": "^1.56.1",
     "swiper": "^8.4.7",
-    "unplugin-vue-define-options": "^0.12.8",
+    "unplugin-vue-define-options": "^0.12.2",
     "vue": "^3.2.45",
     "vue-awesome-swiper": "^5.0.1",
     "vue-chartjs": "^4.1.1",
