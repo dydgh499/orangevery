@@ -329,11 +329,10 @@ class TransactionController extends Controller
     public function _test()
     {
         $db_trans = $this->transactions
-            ->where(function ($query) {
-                return $query
-                ->where('pg_id', 62)
-                ->orWhere('pg_id', 51);
-            })
+            ->where('brand_id', 7)
+            ->where('mcht_id', 28298)
+            ->where('trx_dt', '>=', '2023-08-01')
+            ->where('trx_dt', '<=', '2023-08-31')
             ->orderBy('transactions.id', 'desc')
             ->get();
         
