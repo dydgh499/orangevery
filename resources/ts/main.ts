@@ -12,7 +12,10 @@ import '@core-scss/template/index.scss'
 import '@styles/styles.scss'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
-
+/*
+import VueVirtualScroller from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+*/
 loadFonts()
 
 declare module '@vue/runtime-core' {
@@ -48,6 +51,7 @@ app.use(i18n)
 app.use(abilitiesPlugin, ability, {
   useGlobalProperties: true,
 })
+// app.use(VueVirtualScroller)
 
 // Mount vue app
 app.mount('#app')

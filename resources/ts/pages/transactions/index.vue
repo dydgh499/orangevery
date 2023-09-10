@@ -186,9 +186,9 @@ watchEffect(() => {
                 </tr>
             </template>
             <template #body>
-                <tr v-for="(item, index) in store.getItems" :key="index">
-                    <template v-for="(_header, _key, _index) in head.headers" :key="_index" v-memo="[valueA, valueB]">
-                        <td v-show="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
+                <tr v-for="(item, index) in store.getItems" :key="item['id']">
+                    <template v-for="(_header, _key, _index) in head.headers" :key="_key" v-memo="[item[_key]]">
+                        <td v-if="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
                             <span v-if="_key == 'id'">
                                 <div style="display: inline-flex; align-items: center; vertical-align: middle;">
                                     <VCheckbox v-if="getUserLevel() >= 50" v-model="selected" :value="item[_key]" class="check-label"/>
