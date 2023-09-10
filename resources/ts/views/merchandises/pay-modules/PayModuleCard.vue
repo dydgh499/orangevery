@@ -364,7 +364,7 @@ onMounted(() => {
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>개통일</template>
                                 <template #input>
-                                    <AppDateTimePicker v-model="props.item.begin_dt"
+                                    <VTextField type="date" v-model="props.item.begin_dt"
                                         prepend-inner-icon="ic-baseline-calendar-today" label="개통일 입력" single-line />
                                 </template>
                             </CreateHalfVCol>
@@ -374,7 +374,7 @@ onMounted(() => {
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>출고일</template>
                                 <template #input>
-                                    <AppDateTimePicker v-model="props.item.ship_out_dt"
+                                    <VTextField type="date" v-model="props.item.ship_out_dt"
                                         prepend-inner-icon="ic-baseline-calendar-today" label="출고일 입력" single-line />
                                 </template>
                             </CreateHalfVCol>

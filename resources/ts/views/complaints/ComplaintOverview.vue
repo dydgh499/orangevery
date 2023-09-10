@@ -107,7 +107,7 @@ watchEffect(() => {
                     <CreateHalfVCol :mdl="3" :mdr="9">
                         <template #name>승인일</template>
                         <template #input>
-                            <AppDateTimePicker v-model="props.item.appr_dt" prepend-inner-icon="ic-baseline-calendar-today"
+                            <VTextField type="date" v-model="props.item.appr_dt" prepend-inner-icon="ic-baseline-calendar-today"
                                 label="승인일" :rules="[requiredValidator]" />
                         </template>
                     </CreateHalfVCol>

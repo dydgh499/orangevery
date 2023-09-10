@@ -61,7 +61,8 @@
     "types": [
       "vite/client",
       "vite-plugin-pages/client",
-      "vite-plugin-vue-layouts/client"
+      "vite-plugin-vue-layouts/client",
+      "unplugin-vue-define-options/macros-global"
     ]
   },
   "include": [
@@ -70,7 +71,9 @@
     "shims.d.ts",
     "resources/ts/**/*",
     "resources/ts/**/*.vue",
-    "themeConfig.ts"
+    "themeConfig.ts",
+    "auto-imports.d.ts",
+    "components.d.ts"
   ],
   "exclude": [
     "dist",

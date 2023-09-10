@@ -68,15 +68,10 @@ class SalesforceController extends Controller
 
         if(isSalesforce($request))
         {
-            if($request->user()->level == $request->level)
-                $query = $query->where('id', $request->user()->id);
-            else
-            {
-                $sales_ids = $this->underSalesFilter($request);
-                // 하위가 1000명이 넘으면 ..?
-                if(count($sales_ids))
-                        $query = $query->whereIn('id', $sales_ids);
-            }
+            $sales_ids = $this->underSalesFilter($request);
+            // 하위가 1000명이 넘으면 ..?
+            if(count($sales_ids))
+                    $query = $query->whereIn('id', $sales_ids);
         }
         else
         {
