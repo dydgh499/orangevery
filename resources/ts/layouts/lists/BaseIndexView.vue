@@ -51,9 +51,10 @@ onMounted(() => {
                                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                                         <td v-show="_header.visible" class='list-square'>
                                             <span v-if="_key == `id`">
-                                                # <SkeletonBox :width="'2em'"/>
+                                                #
+                                                <SkeletonBox :width="'2em'" />
                                             </span>
-                                            <SkeletonBox v-else/>
+                                            <SkeletonBox v-else />
                                         </td>
                                     </template>
                                 </tr>

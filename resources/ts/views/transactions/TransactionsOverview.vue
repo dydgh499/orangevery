@@ -571,7 +571,7 @@ onMounted(async () => {
                                     <template #input>
                                         <VTextField v-model="props.item.card_num" type="text" placeholder="카드번호를 입력해주세요"
                                             persistent-placeholder counter prepend-inner-icon="emojione:credit-card"
-                                            :rules="[requiredValidator]" maxlength="16" />
+                                            :rules="[requiredValidator]" maxlength="18" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
