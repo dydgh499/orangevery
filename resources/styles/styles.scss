@@ -34,7 +34,7 @@
 }
 
 .edit-link:hover {
-  font-weight: 900;
+  font-weight: 900 !important;
 }
 
 .check-label {
@@ -51,5 +51,5 @@ th {
 }
 
 .v-table {
-  --v-table-header-height: 48px;
+  --v-table-header-height: 48px !important;
 }

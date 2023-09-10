@@ -70,7 +70,7 @@ watchEffect(() => {
         <template #headers>
             <tr>
                 <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
-                    class='list-square'>
+                    class='list-square' style="border-bottom: 0;">
                     <span>
                         {{ head.main_headers[index] }}
                     </span>
