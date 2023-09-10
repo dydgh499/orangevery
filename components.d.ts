@@ -9,7 +9,9 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AppAutocomplete: typeof import('./resources/ts/@core/components/app-form-elements/AppAutocomplete.vue')['default']
     AppCardActions: typeof import('./resources/ts/@core/components/AppCardActions.vue')['default']
+    AppDateTimePicker: typeof import('./resources/ts/@core/components/app-form-elements/AppDateTimePicker.vue')['default']
     AppOtpInput: typeof import('./resources/ts/@core/components/AppOtpInput.vue')['default']
     ConfirmDialog: typeof import('./resources/ts/@core/components/ConfirmDialog.vue')['default']
     CustomizerSection: typeof import('./resources/ts/@core/components/CustomizerSection.vue')['default']

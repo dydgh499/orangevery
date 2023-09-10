@@ -10,6 +10,7 @@ import { defineConfig } from 'vite'
 import Pages from 'vite-plugin-pages'
 import Layouts from 'vite-plugin-vue-layouts'
 import vuetify from 'vite-plugin-vuetify'
+// import { VitePWA } from 'vite-plugin-pwa'
 
 // @ts-expect-error Known error: https://github.com/sxzz/unplugin-vue-macros/issues/257#issuecomment-1410752890
 import DefineOptions from 'unplugin-vue-define-options/vite'
@@ -63,6 +64,15 @@ export default defineConfig({
                 fileURLToPath(new URL('./resources/ts/plugins/i18n/locales/**', import.meta.url)),
             ],
         }),
+        /*
+        VitePWA({
+            registerType: 'autoUpdate',
+            injectRegister: 'auto',
+            devOptions: {
+                enabled: true
+            }
+        }),
+        */
         DefineOptions(),
     ],
     define: {

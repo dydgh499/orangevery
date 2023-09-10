@@ -108,12 +108,10 @@ watchEffect(() => {
                             <VTextField id="search" :placeholder="props.placeholder" density="compact"
                                 @keyup.enter="handleEnterKey" prepend-inner-icon="tabler:search"
                                 class="search-input" style="flex-grow: 3;" >
-                            </VTextField>
-                            <!--
-                                <VTooltip activator="parent" location="bottom">
+                                <VTooltip activator="parent" location="top">
                                     {{ props.placeholder }}
                                 </VTooltip>
-                            -->
+                            </VTextField>
                             <VBtn prepend-icon="tabler:search" @click="store.setTable()" style="flex-grow: 1;">
                                 검색
                             </VBtn>

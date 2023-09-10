@@ -21,6 +21,7 @@
 }
 
 .list-square {
+  font-size: 0.875rem !important;
   padding-block: 0;
   padding-inline: 6px !important;
   text-align: center !important;
@@ -43,4 +44,12 @@
 .check-label > .v-input__control > .v-selection-control > .v-label {
   font-size: 0.85rem !important;
   font-weight: bold !important;
+}
+
+th {
+  font-weight: bold !important;
+}
+
+.v-table {
+  --v-table-header-height: 48px;
 }

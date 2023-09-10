@@ -178,7 +178,7 @@ watchEffect(() => {
                         </template>
                         <template v-else>
                             <VCheckbox v-model="all_selected" label="선택/취소" class="check-label" v-if="key == 'id' && getUserLevel() >= 50"/>
-                            <span>
+                            <span v-else>
                                 {{ header.ko }}
                             </span>
                         </template>
