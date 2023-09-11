@@ -206,7 +206,9 @@ class MerchandiseController extends Controller
                 $user['user_pw'] = Hash::make($request->input('user_pw'));
                 $res = $this->merchandises->create($user);
 
-                operLogging(HistoryType::CREATE, $this->target, $user, $user['mcht_name']);
+                
+                if(isOperator($request))
+                    operLogging(HistoryType::CREATE, $this->target, $user, $user['mcht_name']);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);
             }
             else
@@ -253,7 +255,9 @@ class MerchandiseController extends Controller
             $data = $this->saveImages($request, $data, $this->imgs);
             $res = $query->update($data);
             
-            operLogging(HistoryType::UPDATE, $this->target, $data, $data['mcht_name']);
+            
+            if(isOperator($request))
+                operLogging(HistoryType::UPDATE, $this->target, $data, $data['mcht_name']);
             return $this->response($res ? 1 : 990, ['id'=>$id]);
         }
         else
@@ -273,7 +277,9 @@ class MerchandiseController extends Controller
         $res = $this->delete(NotiUrl::where('mcht_id', $id));
 
         $data = $this->merchandises->where('id', $id)->first(['mcht_name']);
-        operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->mcht_name);
+    
+        if(isOperator($request))
+            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->mcht_name);
         return $this->response($res);
     }
 

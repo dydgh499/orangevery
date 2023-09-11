@@ -121,7 +121,7 @@ class SalesforceController extends Controller
                 $user = $this->saveImages($request, $user, $this->imgs);
                 $user['user_pw'] = Hash::make($request->input('user_pw'));
                 $res = $this->salesforces->create($user);
-                
+
                 operLogging(HistoryType::CREATE, $this->target, $user, $user['sales_name']);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);
             }
@@ -154,7 +154,7 @@ class SalesforceController extends Controller
     /**
      * 업데이트
      *
-     * 가맹점 이상 가능
+     * 영업점 이상 가능
      *
      * @urlParam id integer required 유저 PK
      * @return \Illuminate\Http\JsonResponse
@@ -167,7 +167,8 @@ class SalesforceController extends Controller
             $data = $this->saveImages($request, $data, $this->imgs);
             $res = $this->salesforces->where('id', $id)->update($data);
 
-            operLogging(HistoryType::UPDATE, $this->target, $data, $data['sales_name']);
+            if(isOperator($request))
+                operLogging(HistoryType::UPDATE, $this->target, $data, $data['sales_name']);
             return $this->response($res ? 1 : 990);
         }
         else
@@ -187,7 +188,8 @@ class SalesforceController extends Controller
             $res = $this->delete($this->salesforces->where('id', $id));
 
             $data = $this->salesforces->where('id', $id)->first(['sales_name']);
-            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->sales_name);
+            if(isOperator($request))
+                operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->sales_name);
             return $this->response($res);
         }
         else
