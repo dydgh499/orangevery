@@ -352,13 +352,15 @@
             'brand_id' => $brand_id,
             'oper_id' => $oper_id,
         ]);
+        return OperatorHistoryContoller::logging($request);    
+        /*
         // 로그인일 경우
         if(HistoryType::LOGIN == $history_type->value)
-            return OperatorHistoryContoller::logging($request);    
         // 로그인 이외일 경우
         else if(isOperator(request()))
-            return OperatorHistoryContoller::logging($request);
+            return OperatorHistoryContoller::logging($request);        
         return true;
+        */
     }
 
     function zeroCheck($request, $key)
