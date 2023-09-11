@@ -121,7 +121,7 @@ class SalesforceController extends Controller
                 $user = $this->saveImages($request, $user, $this->imgs);
                 $user['user_pw'] = Hash::make($request->input('user_pw'));
                 $res = $this->salesforces->create($user);
-
+                
                 operLogging(HistoryType::CREATE, $this->target, $user, $user['sales_name']);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);
             }

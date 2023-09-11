@@ -41,9 +41,8 @@ export const banks = [
     { code: "081", title: "하나은행" }, { code: "088", title: "신한은행" }, { code: "089", title: "케이뱅크" },
     { code: "090", title: "카카오뱅크" }, { code: "092", title: "토스뱅크" }, { code: "238", title: "(구)미래에셋증권" },
     { code: "240", title: "삼성증권" }, { code: "243", title: "한국투자증권" }, { code: '287', title: '메리츠종합금융증권' },
-    { code: "288", title: "카카오페이증권" }, { code: "328", title: "페퍼저축은행" }
+    { code: "288", title: "카카오페이증권" }, { code: "328", title: "페퍼저축은행" }, { code: '105', title: '웰컴저축은행'},
 ]
-
 export const avatars = [
     avatar_1,
     avatar_2,

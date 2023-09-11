@@ -344,15 +344,21 @@
 
     function operLogging(HistoryType $history_type, $history_target, $history_detail, $history_title='', $brand_id='', $oper_id='')
     {
-            $request = request()->merge([
-                'history_type' => $history_type->value,
-                'history_target' => $history_target,
-                'history_title'  => $history_title,
-                'history_detail' => json_encode($history_detail, JSON_UNESCAPED_UNICODE),
-                'brand_id' => $brand_id,
-                'oper_id' => $oper_id,
-            ]);
+        $request = request()->merge([
+            'history_type' => $history_type->value,
+            'history_target' => $history_target,
+            'history_title'  => $history_title,
+            'history_detail' => json_encode($history_detail, JSON_UNESCAPED_UNICODE),
+            'brand_id' => $brand_id,
+            'oper_id' => $oper_id,
+        ]);
+        // 로그인일 경우
+        if(HistoryType::LOGIN == $history_type->value)
             return OperatorHistoryContoller::logging($request);    
+        // 로그인 이외일 경우
+        else if(isOperator(request()))
+            return OperatorHistoryContoller::logging($request);
+        return true;
     }
 
     function zeroCheck($request, $key)

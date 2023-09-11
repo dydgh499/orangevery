@@ -187,7 +187,7 @@ watchEffect(() => {
             </template>
             <template #body>
                 <tr v-for="(item, index) in store.getItems" :key="item['id']">
-                    <template v-for="(_header, _key, _index) in head.headers" :key="_key" v-memo="[item[_key]]">
+                    <template v-for="(_header, _key, _index) in head.headers" :key="_key">
                         <td v-if="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
                             <span v-if="_key == 'id'">
                                 <div style="display: inline-flex; align-items: center; vertical-align: middle;">
