@@ -4,7 +4,7 @@ import PayGatewayCard from '@/views/services/pay-gateways/PayGatewayCard.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 
 const {pgs } = useStore()
-const new_pay_gateways = reactive<PayGateway[]>([]);
+const new_pay_gateways = reactive<PayGateway[]>([])
 const addNewPG = () => {
     new_pay_gateways.push({
         id: 0,

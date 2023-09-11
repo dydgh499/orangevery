@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Models\FinanceVan;
 use App\Models\PaymentGateway;
 use App\Models\PaymentSection;
 use App\Models\Classification;
@@ -109,12 +110,13 @@ class PaymentGatewayController extends Controller
     {
         $brand_id = $request->user()->brand_id;
         $grouped = Classification::where('brand_id', $brand_id)->where('is_delete', false)->get()->groupBy('type');
-
+        $finance_vans = FinanceVan::where('brand_id', $brand_id)->where('is_delete', false)->get();
         $data = [
             'pay_gateways' => $this->pay_gateways->where('brand_id', $brand_id)->where('is_delete', false)->get(),
             'pay_sections' => $this->pay_sections->where('brand_id', $brand_id)->where('is_delete', false)->get(),
             'terminals'    => isset($grouped[0]) ? $grouped[0] : [],
             'custom_filters' => isset($grouped[1]) ? $grouped[1] : [],
+            'finance_vans'  => isset($finance_vans) ? $finance_vans : [],
         ];
         return $this->response(0, $data);
     }

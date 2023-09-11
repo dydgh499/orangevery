@@ -160,9 +160,14 @@ export interface PayModule {
     pay_day_limit: number,
     pay_disable_s_tm: date | null,
     pay_disable_e_tm: date | null,
+    contract_s_dt: date | null,
+    contract_e_dt: date | null,
     show_pay_view: boolean,
     note: string,
     filter_issuers: string[],
+    fin_id: number | null,
+    fin_trx_delay: number,
+    cxl_type: number,
 }
 
 export interface PayGateway {
@@ -189,6 +194,24 @@ export interface Classification {
     id: number | null,
     name: string,
     type: number,
+}
+
+export interface FinanceVan {
+    id: number | null,
+    finance_company_num: number | null,
+    fin_type: number | null,
+    balance_status?: number,
+    dev_fee: number,
+    api_key: string,
+    sms_key: string,
+    sms_id: string,
+    sms_sender: string,
+    sms_receive_phone: string,
+    min_balance_limit: number,
+    corp_code: string,
+    corp_name: string,
+    nick_name: string,
+    widthdraw_acct_num: string,
 }
 
 interface FreeOption {

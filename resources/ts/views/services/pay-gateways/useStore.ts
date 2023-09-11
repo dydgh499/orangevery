@@ -1,4 +1,4 @@
-import type { Classification, Options, PayGateway, PaySection } from '@/views/types'
+import type { Classification, FinanceVan, Options, PayGateway, PaySection } from '@/views/types'
 import { axios } from '@axios'
 
 export const settle_types = <Options[]>([
@@ -11,8 +11,9 @@ export const useStore = defineStore('payGatewayStore', () => {
     const pss = ref<PaySection[]>([])
     const terminals   = ref<Classification[]>([])
     const cus_filters = ref<Classification[]>([])
+    const finance_vans = ref<FinanceVan[]>([])
     const errorHandler = <any>(inject('$errorHandler'))
-    const pg_types = [
+    const pg_companies = [
         {id:1, name:'페이투스', rep_name:'서동균', company_name:'(주)페이투스', business_num:'810-81-00347', phone_num:'02-465-8800', addr:'서울특별시 금천구 가산디지털1로 168, C동 7층 701B호(가산동, 우림라이온스밸리)'},
         {id:2, name:'케이원피에스', rep_name:'강승구', company_name:'(주)케이원피에스', business_num:'419-88-00046', phone_num:'1855-1838', addr:'서울특별시 구로구 디지털로33길 27, 5층 513호, 514호(구로동, 삼성IT밸리)'},
         {id:3, name:'에이닐', rep_name:'이승철', company_name:'(주)에이닐에프앤피', business_num:'788-87-00950', phone_num:'1544-6872', addr:'서울 송파구 법원로11길 7 (문정동) 문정현대지식산업센터C동 1404~1406호'}, 
@@ -34,6 +35,18 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:19, name:'삼인칭', rep_name: '윤건', company_name: '주식회사 삼인칭', business_num: '489-87-00733', phone_num: '1833-4854', addr: '서울특별시 마포구 큰우물로 76, 403호(도화동, 고려빌딩'},
         {id:20, name:'WGP', rep_name: '우강섭', company_name: '(주)윈글로벌페이', business_num: '648-86-00577', phone_num: '1877-7590', addr: '[12918] 경기도 하남시 조정대로 45, 미사센텀비즈 F348호'},
     ]
+
+    const finance_companies = <Options[]>([
+        {id:null, title:'선택안함'},
+        {id:1, title:'쿠콘'},
+        {id:2, title:'헥토파이낸셜'},
+    ])
+    
+    const fin_types = <Options[]>([
+        {id:null, title:'선택안함'},
+        {id:1, title:'중계'},
+        {id:2, title:'재판'},
+    ])
 
     const settle_types = [
         {id:-1, name:'실시간'}, //{id:0, name:'D+0'},
@@ -60,6 +73,7 @@ export const useStore = defineStore('payGatewayStore', () => {
             Object.assign(pss.value, r.data.pay_sections)
             Object.assign(terminals.value, r.data.terminals)
             Object.assign(cus_filters.value, r.data.custom_filters)
+            Object.assign(finance_vans.value, r.data.finance_vans)
         }
         catch(e) {
             // 가맹점 수기결제시 필요
@@ -92,6 +106,8 @@ export const useStore = defineStore('payGatewayStore', () => {
         return ps_id
     }
     return {
-        pgs, pss, terminals, settle_types, cus_filters, pg_types, psFilter, setFee,
+        pgs, pss, terminals, settle_types, cus_filters, finance_vans, 
+        pg_companies, finance_companies, fin_types,
+        psFilter, setFee,
     }
 })

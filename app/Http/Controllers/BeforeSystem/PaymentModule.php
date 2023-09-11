@@ -12,9 +12,9 @@ class PaymentModule
     use StoresTrait, BeforeSystemTrait;
 
     public $paywell, $payvery, $paywell_to_payvery, $current_time;
-    public function __construct($pg_types)
+    public function __construct($pg_companies)
     {
-        $this->pg_types = $pg_types;
+        $this->pg_companies = $pg_companies;
         $this->paywell = [];
         $this->payvery = [];
         $this->paywell_to_payvery = [];
@@ -50,7 +50,7 @@ class PaymentModule
             return $pg[0]['id'];
         else
         {
-            $pg = array_values(array_filter($this->pg_types, function($item) use($pg_type) {
+            $pg = array_values(array_filter($this->pg_companies, function($item) use($pg_type) {
                 return $item['id'] == $pg_type;
            }))[0];
            $pg['brand_id'] = $brand_id;

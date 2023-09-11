@@ -9,10 +9,10 @@ class PaymentGateway
 {
     use StoresTrait, BeforeSystemTrait;
 
-    public $pg_types, $paywell, $payvery, $paywell_to_payvery, $current_time;
+    public $pg_companies, $paywell, $payvery, $paywell_to_payvery, $current_time;
     public function __construct()
     {
-        $this->pg_types = [
+        $this->pg_companies = [
             ["id" => 1, "pg_name" => '페이투스', "rep_name" => '서동균', "company_name" => '(주)페이투스', "business_num" => '810-81-00347', "phone_num" => '02-465-8800', "addr" => '서울특별시 금천구 가산디지털1로 168, C동 7층 701B호(가산동, 우림라이온스밸리)'],
             ["id" => 2, "pg_name" => '케이원피에스', "rep_name" => '강승구', "company_name" => '(주)케이원피에스', "business_num" => '419-88-00046', "phone_num" => '1855-1838', "addr" => '서울특별시 구로구 디지털로33길 27, 5층 513호, 514호(구로동, 삼성IT밸리)'],
             ["id" => 3, "pg_name" => '에이닐', "rep_name" => '이승철', "company_name" => '(주)에이닐에프앤피', "business_num" => '788-87-00950', "phone_num" => '1544-6872', "addr" => '서울 송파구 법원로11길 7 (문정동) 문정현대지식산업센터C동 1404~1406호'],
@@ -42,43 +42,43 @@ class PaymentGateway
     protected function getPGType($pg_name) 
     {
         if(strpos($pg_name, '페이투스') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 1; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 1; });
         else if(strpos($pg_name, '케이원피에스') !== false || strpos($pg_name, '광원') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 2; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 2; });
         else if(strpos($pg_name, '에이닐') !== false || strpos($pg_name, '애드원') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 3; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 3; });
         else if(strpos($pg_name, '웰컴') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 4; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 4; });
         else if(strpos($pg_name, '헥토') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 5; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 5; });
         else if(strpos($pg_name, '루멘') !== false || strpos($pg_name, '루먼') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 6; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 6; });
         else if(strpos($pg_name, '페이레터') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 7; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 7; });
         else if(strpos($pg_name, '홀빅') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 8; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 8; });
         else if(strpos($pg_name, '코페이') !== false)
             return array_filter($pthis->g_types, function($item) {return $item['id'] == 9; });
         else if(strpos($pg_name, '결제시스템') !== false || strpos($pg_name, '결재시스템') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 10; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 10; });
         else if(strpos($pg_name, '더페이원') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 11; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 11; });
         else if(strpos($pg_name, '이지피쥐') !== false || strpos($pg_name, '이지피지') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 12; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 12; });
         else if(strpos($pg_name, 'cm페이') !== false || strpos($pg_name, 'CM페이') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 13; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 13; });
         else if(strpos($pg_name, '키움') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 14; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 14; });
         else if(strpos($pg_name, '위즈') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 15; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 15; });
         else if(strpos($pg_name, '네스트') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 16; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 16; });
         else if(strpos($pg_name, 'e2u') !== false || strpos($pg_name, 'E2U') !== false || strpos($pg_name, '이투유') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 17; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 17; });
         else if(strpos($pg_name, '애드원') !== false || strpos($pg_name, '에드원') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 18; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 18; });
         else if(strpos($pg_name, '겔럭시아') !== false || strpos($pg_name, '삼인칭') !== false)
-            return array_filter($this->pg_types, function($item) {return $item['id'] == 19; });
+            return array_filter($this->pg_companies, function($item) {return $item['id'] == 19; });
         else
             return [['id'=>1, "pg_name" => $pg_name, "rep_name" => '', "company_name" => '', "business_num" => '', "phone_num" => '', "addr" => '']];
     }

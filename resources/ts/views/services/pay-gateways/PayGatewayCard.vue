@@ -12,7 +12,7 @@ interface Props {
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
 
-const { pss, pg_types }  = useStore()
+const { pss, pg_companies }  = useStore()
 const { update, remove } = useRequestStore()
 
 const new_pss = reactive<PaySection[]>([])
@@ -29,13 +29,13 @@ const addNewSection = () => {
 
 watchEffect(() => {
     if (props.item.pg_type != 0 && props.item.pg_type != null) {
-        const idx = pg_types.findIndex(item => item.id == props.item.pg_type)
+        const idx = pg_companies.findIndex(item => item.id == props.item.pg_type)
         if (idx != null) {
-            props.item.addr = pg_types[idx].addr
-            props.item.rep_name = pg_types[idx].rep_name
-            props.item.company_name = pg_types[idx].company_name
-            props.item.business_num = pg_types[idx].business_num
-            props.item.phone_num = pg_types[idx].phone_num
+            props.item.addr = pg_companies[idx].addr
+            props.item.rep_name = pg_companies[idx].rep_name
+            props.item.company_name = pg_companies[idx].company_name
+            props.item.business_num = pg_companies[idx].business_num
+            props.item.phone_num = pg_companies[idx].phone_num
         }
     }
 })
@@ -64,7 +64,7 @@ const filterPss = computed(() => {
                                 <label>PG사 선택</label>
                             </VCol>
                             <VCol>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_type" :items="pg_types"
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_type" :items="pg_companies"
                                     prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="name" item-value="id"
                                     single-line :rules="[requiredValidator]" />
                             </VCol>
@@ -139,8 +139,6 @@ const filterPss = computed(() => {
                                     single-line :rules="[requiredValidator]" />
                             </VCol>
                         </VRow>
-
-                        
                         <VRow>
                             <VCol class="d-flex gap-4 pt-10">
                                 <VBtn type="button" style="margin-left: auto;" @click="update('/services/pay-gateways', props.item.id as number, props.item, vForm, false)">

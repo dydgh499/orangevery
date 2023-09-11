@@ -76,12 +76,13 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::prefix('services')->group(function() {
             Route::get('pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
             Route::post('operators/password-change', [OperatorController::class, 'passwordChange']);
-
+            
             Route::apiResource('brands', BrandController::class);
             Route::apiResource('operators', OperatorController::class);
             Route::apiResource('operator-histories', OperatorHistoryContoller::class);
             Route::apiResource('pay-gateways', PaymentGatewayController::class);
             Route::apiResource('pay-sections', PaymentSectionController::class);
+            Route::apiResource('finance-vans', FinanceVanController::class);
             Route::apiResource('classifications', ClassificationController::class);
         });
         Route::prefix('transactions')->group(function() {            

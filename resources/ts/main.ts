@@ -12,6 +12,7 @@ import '@core-scss/template/index.scss'
 import '@styles/styles.scss'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
+
 /*
 import VueVirtualScroller from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
@@ -48,6 +49,7 @@ app.use(createPinia())
 app.use(router)
 app.use(layoutsPlugin)
 app.use(i18n)
+
 app.use(abilitiesPlugin, ability, {
   useGlobalProperties: true,
 })

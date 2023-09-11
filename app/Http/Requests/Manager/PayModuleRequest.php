@@ -28,8 +28,6 @@ class PayModuleRequest extends FormRequest
             'comm_settle_day',
             'comm_settle_type',
             'comm_calc_level',
-            'begin_dt',
-            'ship_out_dt',
             'ship_out_stat',
             'is_old_auth',
             'pay_dupe_limit',
@@ -45,6 +43,12 @@ class PayModuleRequest extends FormRequest
             'show_pay_view',
             'installment',
             'note',
+        ];
+        $this->date_keys = [
+            'contract_s_dt',
+            'contract_e_dt',
+            'begin_dt',
+            'ship_out_dt',    
         ];
     }
 
@@ -93,13 +97,16 @@ class PayModuleRequest extends FormRequest
     public function data()
     {
         $data = $this->getParmasBaseKey();
+        for ($i=0; $i < count($this->date_keys); $i++) 
+        {
+            $key = $this->date_keys[$i];
+            $data[$key] = $this->input($key, null);
+        }
         $data['brand_id'] = $this->user()->brand_id;
         $data['under_sales_type'] = $data['under_sales_type'] == null ? 0 : $data['under_sales_type'];
         $data['under_sales_limit'] = $data['under_sales_limit'] == '' ? 0 : $data['under_sales_limit'];
         $data['under_sales_amt'] = $data['under_sales_amt'] == '' ? 0 : $data['under_sales_amt'];
         $data['terminal_id'] = $data['terminal_id'] == null ? 0 : $data['terminal_id'];
-        $data['begin_dt']    = $data['begin_dt'] == '' ? '1970-01-01' : $data['begin_dt'];
-        $data['ship_out_dt'] = $data['ship_out_dt'] == '' ? '1970-01-01' : $data['ship_out_dt'];
         $data['ship_out_stat'] = $data['ship_out_stat'] == null ? 0 : $data['ship_out_stat'];        
         $data['filter_issuers'] = json_encode($this->filter_issuers);
         $data['comm_settle_day'] = $data['comm_settle_day'] == '' ? 0 : $data['comm_settle_day'];

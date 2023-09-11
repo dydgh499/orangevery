@@ -3,7 +3,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useRequestStore } from '@/views/request'
 import { requiredValidator, nullValidator } from '@validators'
 import type { PayModule, Merchandise } from '@/views/types'
-import { module_types, installments, abnormal_trans_limits, ship_out_stats, under_sales_types, comm_settle_types } from '@/views/merchandises/pay-modules/useStore'
+import { module_types, installments, abnormal_trans_limits, ship_out_stats, under_sales_types, comm_settle_types, fin_trx_delays } from '@/views/merchandises/pay-modules/useStore'
 import { allLevels } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
@@ -231,6 +231,24 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
+                        <VRow class="pt-3">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
+                                <template #name>계약 시작일</template>
+                                <template #input>
+                                    <VTextField type="date" v-model="props.item.contract_s_dt"
+                                        prepend-inner-icon="ic-baseline-calendar-today" label="시작일 입력" single-line />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow class="pt-3">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
+                                <template #name>계약 종료일</template>
+                                <template #input>
+                                    <VTextField type="date" v-model="props.item.contract_e_dt"
+                                        prepend-inner-icon="ic-baseline-calendar-today" label="종료일 입력" single-line />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
                         <VRow class="pt-3" v-show="props.item.module_type != 0" v-if="getUserLevel() >= 35 && props.item.id != 0 && corp.pv_options.paid.use_online_pay">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>
@@ -252,6 +270,30 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
+                        <template v-if="corp.pv_options.paid.use_realtime_deposit">
+                            <VDivider style="margin: 1em 0;"/>
+                            <VCardTitle style="margin: 1em 0;">실시간 이체</VCardTitle>
+                            <VRow class="pt-3">
+                                <CreateHalfVCol :mdl="5" :mdr="7">
+                                    <template #name>이체 모듈 타입</template>
+                                    <template #input>
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_id"
+                                            :items="terminals" prepend-inner-icon="streamline-emojis:ant" label="모듈 타입 선택"
+                                            item-title="title" item-value="id" single-line />
+                                    </template>
+                                </CreateHalfVCol>
+                            </VRow>
+                            <VRow class="pt-3">
+                                <CreateHalfVCol :mdl="5" :mdr="7">
+                                    <template #name>이체 딜레이</template>
+                                    <template #input>
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_trx_delay"
+                                            :items="fin_trx_delays" prepend-inner-icon="streamline-emojis:bug" label="이체 딜레이 선택"
+                                            item-title="title" item-value="id" single-line />
+                                    </template>
+                                </CreateHalfVCol>
+                            </VRow>
+                        </template>
                     </VCardItem>
                 </VCol>
                 <VDivider :vertical="$vuetify.display.mdAndUp" />
@@ -304,7 +346,7 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VDivider style="margin-top: 1em;"/>
+                        <VDivider style="margin: 1em 0;"/>
                         <!-- 👉 매출미달 차감금 -->
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
@@ -338,7 +380,7 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VDivider style="margin-top: 1em;"/>
+                        <VDivider style="margin: 1em 0;"/>
                         <!-- 👉 정산일 -->
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">

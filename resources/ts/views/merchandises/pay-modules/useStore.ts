@@ -43,6 +43,13 @@ export const comm_settle_types = <Options[]>([
     {id: 1, title:'개통월 M+1부터 적용'}, 
     {id: 2, title:'개통월 M+2부터 적용'},
 ])
+export const fin_trx_delays = <Options[]>([
+    {id: 0, title:'즉시입금'},
+    {id: 15, title:'15분'},
+    {id: 30, title:'30분'}, 
+    {id: 45, title:'45분'},
+    {id: 60, title:'60분'},
+])
 
 export const payModFilter = (all_pay_modules:PayModule[], filter:PayModule[], pmod_id:number|null) => {
     if (all_pay_modules.length > 0) {
@@ -76,7 +83,9 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         'tid' : 'TID',
     }        
     const headers3: Record<string, string> = {
-        'installment' : '할부한도',
+        'installment' : '최대할부한도',
+        'contract_s_dt': '계약 시작일',
+        'contract_e_dt':  '계약 종료일',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
     }
@@ -160,6 +169,11 @@ export const defaultItemInfo =  () => {
         show_pay_view: false,
         pay_key: '',
         filter_issuers: [],
+        contract_s_dt: null,
+        contract_e_dt: null,
+        fin_id: null,
+        fin_trx_delay: 1,
+        cxl_type: 2,
     })
     //카드사 필터 및 다른 필터옵션들
     return {

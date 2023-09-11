@@ -218,10 +218,10 @@ const chartConfigs = computed(() => {
 <template>
     <VCard title="월별 거래량" subtitle="10개월간 거래금 개요">
         <VCardText>
-            <VSlideGroup v-model="currentTab" show-arrows mandatory>
+            <VSlideGroup v-model="currentTab" show-arrows mandatory style="padding: 0.1em 0;">
                 <VSlideGroupItem v-for="(report, index) in chartConfigs" :key="report.title" v-slot="{ isSelected, toggle }"
                     :value="index">
-                    <div style=" width: 110px;height: 94px;"
+                    <div style=" width: 110px;height: 89px;"
                         :style="isSelected ? 'border-color:rgb(var(--v-theme-primary)) !important' : ''"
                         :class="isSelected ? 'border' : 'border border-dashed'"
                         class="d-flex flex-column justify-center align-center cursor-pointer rounded px-5 py-2 me-6"
