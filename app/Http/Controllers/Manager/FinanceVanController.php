@@ -7,15 +7,12 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
-use App\Http\Requests\Manager\PayModuleRequest;
 use App\Http\Requests\Manager\IndexRequest;
+use App\Http\Requests\Manager\FinanceRequest;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 use App\Enums\HistoryType;
 
 
@@ -51,12 +48,10 @@ class FinanceVanController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(OperatorReqeust $request)
+    public function store(FinanceRequest $request)
     {
-        $validated = $request->validate(['user_pw'=>'required']);
         $user = $request->data();
         $user = $this->saveImages($request, $user, $this->imgs);
-        $user['user_pw'] = Hash::make($request->input('user_pw'));
         $res = $this->finance_vans->create($user);
         return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
@@ -66,7 +61,7 @@ class FinanceVanController extends Controller
      *
      * 본사 이상 가능
      *
-     * @urlParam id integer required 유저 PK
+     * @urlParam id integer required 금융 VAN PK
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $id)
@@ -80,10 +75,10 @@ class FinanceVanController extends Controller
      *
      * 본사 이상 가능
      *
-     * @urlParam id integer required 유저 PK
+     * @urlParam id integer required 금융 VAN PK
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(OperatorReqeust $request, $id)
+    public function update(FinanceRequest $request, $id)
     {
         $user = $request->data();
         $user = $this->saveImages($request, $user, $this->imgs);
@@ -94,7 +89,7 @@ class FinanceVanController extends Controller
     /**
      * 단일삭제
      *
-     * @urlParam id integer required 유저 PK
+     * @urlParam id integer required 금융VAN PK
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
