@@ -22,6 +22,7 @@ class FinanceRequest extends FormRequest
             'min_balance_limit',
             'corp_code',
             'corp_name',
+            'bank_code',
             'nick_name',
             'withdraw_acct_num',
         ];
