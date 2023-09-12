@@ -74,6 +74,7 @@ export interface UserPropertie extends BasePropertie, Bank, Contract {
 }
 
 export interface MerchandisePropertie {
+    dev_fee: float,
     sales5_id: number | null,
     sales4_id: number | null,
     sales3_id: number | null,
