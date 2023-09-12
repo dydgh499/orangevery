@@ -44,11 +44,13 @@ class PayModuleRequest extends FormRequest
             'installment',
             'note',
         ];
-        $this->date_keys = [
+        $this->nullable_keys = [
             'contract_s_dt',
             'contract_e_dt',
             'begin_dt',
-            'ship_out_dt',    
+            'ship_out_dt',
+            'fin_id',
+            'fin_trx_delay',
         ];
     }
 
@@ -97,9 +99,9 @@ class PayModuleRequest extends FormRequest
     public function data()
     {
         $data = $this->getParmasBaseKey();
-        for ($i=0; $i < count($this->date_keys); $i++) 
+        for ($i=0; $i < count($this->nullable_keys); $i++) 
         {
-            $key = $this->date_keys[$i];
+            $key = $this->nullable_keys[$i];
             $data[$key] = $this->input($key, null);
         }
         $data['brand_id'] = $this->user()->brand_id;

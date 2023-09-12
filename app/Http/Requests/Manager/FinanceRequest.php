@@ -8,23 +8,42 @@ use App\Http\Traits\FormRequestTrait;
 class FinanceRequest extends FormRequest
 {
     use FormRequestTrait;
-
     public function __construct()
     {
-        $this->keys = [];
+        $this->keys = [
+            'finance_company_num',
+            'fin_type',
+            'dev_fee',
+            'api_key',
+            'sms_key',
+            'sms_id',
+            'sms_sender_phone',
+            'sms_receive_phone',
+            'min_balance_limit',
+            'corp_code',
+            'corp_name',
+            'nick_name',
+            'withdraw_acct_num',
+        ];
     }
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize()
     {
-        return $this->user()->tokenCan(10) ? true : false;
+        return $this->user()->tokenCan(35) ? true : false;
     }
 
     public function rules()
     {
         $sub = [
-
+            'finance_company_num' => 'required',
+            'fin_type' => 'required',
+            'dev_fee' => 'required|numeric',
+            'min_balance_limit'=>'required',
+            'sms_receive_phone'=>'required',
+            'corp_name'=>'required',
+            'nick_name'=>'required',
         ];
         return $this->getRules($this->keys, $sub);
     }

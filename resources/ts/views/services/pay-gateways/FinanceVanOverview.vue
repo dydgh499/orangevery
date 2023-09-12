@@ -14,13 +14,13 @@ const addNewFinanceVan = () => {
         api_key: '',
         sms_key: '',
         sms_id: '',
-        sms_sender: '',
+        sms_sender_phone: '',
         sms_receive_phone: '',
         min_balance_limit: 0,
         corp_code: '',
         corp_name: '',
         nick_name: '금융 VAN 명칭을 적어주세요.😀',
-        widthdraw_acct_num: '',
+        withdraw_acct_num: '',
     })
 }
 

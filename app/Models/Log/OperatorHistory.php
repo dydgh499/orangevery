@@ -9,7 +9,6 @@ use App\Http\Traits\Models\AttributeTrait;
 class OperatorHistory extends Model
 {
     use HasFactory, AttributeTrait;
-
     protected   $table      = 'operator_histories';
     protected   $primaryKey = 'id';
     protected   $guarded    = [];

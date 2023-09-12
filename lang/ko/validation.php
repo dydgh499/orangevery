@@ -208,7 +208,7 @@ return [
         'use_dt'    => '사용일',
         //user
         'level' => '유저등급',
-        'nick_name' => '유저명',
+        'nick_name' => '유저명(별칭)',
         'birth_date'=> '생년월일',
         'mcht_name' => '가맹점 상호',
         'mcht_user_name' => '가맹점 ID',
@@ -249,5 +249,11 @@ return [
         'type' => '타입',
         'entry_path' => '유입경로',
         'is_deposit' => '입금상태',
+        //finance van
+        'sms_receive_phone' => '수신자 전화번호',
+        'fin_type' => '금융 VAN 타입',
+        'dev_fee' => '개발사 수수료',
+        'min_balance_limit' => '유보금미달알림 상한금',
+        'corp_name' => '법인명',
     ],
 ];

@@ -36,7 +36,9 @@ class FinanceVanController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $query = $this->finance_vans->where('brand_id', $request->user()->brand_id);
+        $query = $this->finance_vans
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false);
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }
@@ -50,9 +52,10 @@ class FinanceVanController extends Controller
      */
     public function store(FinanceRequest $request)
     {
-        $user = $request->data();
-        $user = $this->saveImages($request, $user, $this->imgs);
-        $res = $this->finance_vans->create($user);
+        $data = $request->data();
+        $res = $this->finance_vans->create($data);
+        
+        operLogging(HistoryType::CREATE, $this->target, ['id' => $res->id], $data['nick_name']);
         return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
 
@@ -80,10 +83,10 @@ class FinanceVanController extends Controller
      */
     public function update(FinanceRequest $request, $id)
     {
-        $user = $request->data();
-        $user = $this->saveImages($request, $user, $this->imgs);
-        $res = $this->finance_vans->where('id', $id)->update($user);
-        return $this->response($res ? 1 : 990);
+        $data = $request->data();
+        $res = $this->finance_vans->where('id', $id)->update($data);
+        operLogging(HistoryType::UPDATE, $this->target, ['id' => $id], $data->nick_name);
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
     /**
@@ -95,6 +98,8 @@ class FinanceVanController extends Controller
     public function destroy(Request $request, $id)
     {
         $res = $this->delete($this->finance_vans->where('id', $id));
-        return $this->response($res);
+        $data = $this->finance_vans->where('id', $id)->first(['nick_name']);
+        operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->nick_name);
+        return $this->response($res, ['id'=>$id]);
     }
 }

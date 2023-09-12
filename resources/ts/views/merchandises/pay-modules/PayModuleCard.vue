@@ -3,7 +3,10 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useRequestStore } from '@/views/request'
 import { requiredValidator, nullValidator } from '@validators'
 import type { PayModule, Merchandise } from '@/views/types'
-import { module_types, installments, abnormal_trans_limits, ship_out_stats, under_sales_types, comm_settle_types, fin_trx_delays } from '@/views/merchandises/pay-modules/useStore'
+import { 
+    module_types, installments, abnormal_trans_limits, ship_out_stats, under_sales_types, 
+    comm_settle_types, fin_trx_delays, cxl_types
+ } from '@/views/merchandises/pay-modules/useStore'
 import { allLevels } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
@@ -26,7 +29,7 @@ const errorHandler = <any>(inject('$errorHandler'))
 
 const all_levels = allLevels()
 const { update, remove } = useRequestStore()
-const { pgs, pss, settle_types, terminals, psFilter, setFee } = useStore()
+const { pgs, pss, settle_types, terminals, finance_vans, psFilter, setFee } = useStore()
 
 const mcht = ref({ id: null, mcht_name: '선택안함' })
 const md = ref<number>(3)
@@ -278,8 +281,8 @@ onMounted(() => {
                                     <template #name>이체 모듈 타입</template>
                                     <template #input>
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_id"
-                                            :items="terminals" prepend-inner-icon="streamline-emojis:ant" label="모듈 타입 선택"
-                                            item-title="title" item-value="id" single-line />
+                                            :items="finance_vans" prepend-inner-icon="streamline-emojis:ant" label="모듈 타입 선택"
+                                            item-title="nick_name" item-value="id" single-line />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -448,6 +451,16 @@ onMounted(() => {
                         <VCardTitle style="margin-bottom: 1em;">옵션</VCardTitle>
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
+                                <template #name>취소타입
+                                </template>
+                                <template #input>
+                                    <VSelect v-model="props.item.cxl_type" :items="cxl_types"
+                                        prepend-inner-icon="tabler:world-cancel" label="취소타입 설정" item-title="title"
+                                        item-value="id" single-line/>
+                                </template>
+                            </CreateHalfVCol>
+
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'이상거래 한도설정'"
                                         :content="'설정 금액 이상으로 결제가 발생할 시, 이상거래 관리 목록에 추가됩니다.'">
@@ -455,8 +468,8 @@ onMounted(() => {
                                 </template>
                                 <template #input>
                                     <VSelect v-model="props.item.abnormal_trans_limit" :items="abnormal_trans_limits"
-                                        prepend-inner-icon="jam-triangle-danger" label="이상거래 한도설정" item-title="title" single-line
-                                        item-value="id" />
+                                        prepend-inner-icon="jam-triangle-danger" label="이상거래 한도설정" item-title="title" 
+                                        item-value="id" single-line/>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

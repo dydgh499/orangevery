@@ -22,7 +22,7 @@ else if (user_info.value.level <= 30) {
     mytype = 1
 }
 else if (user_info.value.level <= 45) {
-    mylink = '/operators/edit/' + user_info.value.id
+    mylink = '/services/operators/edit/' + user_info.value.id
     mytype = 2
 }
 else

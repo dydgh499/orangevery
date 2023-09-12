@@ -1,6 +1,7 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { Operator, Options } from '@/views/types'
+import { getUserLevel } from '@axios'
 
 export const operator_levels:Options[] = [
     {id:35, title:'직원'},
@@ -21,13 +22,10 @@ export const useSearchStore = defineStore('operatorSearchStore', () => {
         'phone_num' : '연락처',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
-        'extra_col' : '더보기',
     }
-    head.main_headers.value = [
-        '서비스 정보',
-        '결제 사용여부',
-        '입금',
-    ];
+    if(getUserLevel() >= 40)
+        headers['extra_col'] = '더보기';
+
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
 

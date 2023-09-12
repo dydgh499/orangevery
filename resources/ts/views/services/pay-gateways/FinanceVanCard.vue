@@ -5,6 +5,7 @@ import { VForm } from 'vuetify/components'
 import { useRequestStore } from '@/views/request'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 
 interface Props {
     item: FinanceVan,
@@ -29,7 +30,8 @@ const { update, remove } = useRequestStore()
                                 <template #name>금융 VAN</template>
                                 <template #input>                                    
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.finance_company_num" density="compact" variant="outlined"
-                                        :items="finance_companies" label="금융 VAN 선택" :eager="true" />
+                                        :items="finance_companies" label="금융 VAN 선택" :eager="true" 
+                                        item-title="title" item-value="id"/>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -38,7 +40,8 @@ const { update, remove } = useRequestStore()
                                 <template #name>타입</template>
                                 <template #input>                                    
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_type" density="compact" variant="outlined"
-                                        :items="fin_types" label="타입 선택" :eager="true" />
+                                        :items="fin_types" label="타입 선택" :eager="true" 
+                                        item-title="title" item-value="id"/>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -81,7 +84,7 @@ const { update, remove } = useRequestStore()
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>법인명</template>
                                 <template #input>
-                                    <VTextField type="text" v-model="props.item.corp_code"
+                                    <VTextField type="text" v-model="props.item.corp_name"
                                             prepend-inner-icon="ph-buildings" placeholder="법인명 입력"
                                             persistent-placeholder />
                                 </template>
@@ -101,7 +104,7 @@ const { update, remove } = useRequestStore()
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>은행코드</template>
                                 <template #input>
-                                    <VTextField type="text" v-model="props.item.corp_code"
+                                    <VTextField type="text" v-model="props.item.bank_code"
                                             prepend-inner-icon="ph:share-network" placeholder="은행코드 입력"
                                             persistent-placeholder />
                                 </template>
@@ -111,7 +114,7 @@ const { update, remove } = useRequestStore()
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>출금 통장번호</template>
                                 <template #input>
-                                    <VTextField type="text" v-model="props.item.corp_code"
+                                    <VTextField type="text" v-model="props.item.withdraw_acct_num"
                                             prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력"
                                             persistent-placeholder />
                                 </template>
@@ -147,7 +150,7 @@ const { update, remove } = useRequestStore()
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>발신 전화번호</template>
                                 <template #input>                                    
-                                    <VTextField type="text" v-model="props.item.sms_sender"
+                                    <VTextField type="number" v-model="props.item.sms_sender_phone"
                                             prepend-inner-icon="tabler-device-mobile" placeholder="07012345678"
                                             persistent-placeholder />
                                 </template>
@@ -157,7 +160,7 @@ const { update, remove } = useRequestStore()
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>수신자 전화번호</template>
                                 <template #input>                                    
-                                    <VTextField type="text" v-model="props.item.sms_receive_phone"
+                                    <VTextField type="number" v-model="props.item.sms_receive_phone"
                                             prepend-inner-icon="tabler-device-mobile" placeholder="01012345678"
                                             persistent-placeholder />
                                 </template>
@@ -165,7 +168,10 @@ const { update, remove } = useRequestStore()
                         </VRow>
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>유보금미달알림 상한금</template>
+                                <template #name>
+                                    <BaseQuestionTooltip :location="'top'" text="유보금미달알림 상한금" 
+                                    content="보유금액이 지정 상한금 미만으로 떨어지면, 수신자 전화번호에 알림이 전송됩니다."/>
+                                    </template>
                                 <template #input>
                                     <VTextField type="number" v-model="props.item.min_balance_limit"
                                         prepend-inner-icon="tabler-currency-won" placeholder="유보금미달 알림금"

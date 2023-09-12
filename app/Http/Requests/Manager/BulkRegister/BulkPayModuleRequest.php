@@ -39,7 +39,7 @@ class BulkPayModuleRequest extends FormRequest
             'serial_num',
             'note',
         ];
-        $this->null_keys = [
+        $this->nullable_keys = [
             'begin_dt',
             'ship_out_dt',
             'ship_out_stat',
@@ -91,9 +91,9 @@ class BulkPayModuleRequest extends FormRequest
                 $key = $this->string_keys[$j];
                 $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : '';
             }
-            for ($j=0; $j < count($this->null_keys) ; $j++) 
+            for ($j=0; $j < count($this->nullable_keys) ; $j++) 
             {
-                $key = $this->null_keys[$j];
+                $key = $this->nullable_keys[$j];
                 $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : null;
             }
             array_push($datas, $data);

@@ -14,8 +14,8 @@ class IndexRequest extends FormRequest
     {
         $this->keys = ['page','page_size','s_dt', 'e_dt'];
         $this->sub = [
-            'page'      => 'required|numeric',
-            'page_size' => 'required|numeric',
+            'page'      => 'required|integer',
+            'page_size' => 'required|integer',
             's_dt'  => 'string|date_format:Y-m-d',
             'e_dt'  => 'string|date_format:Y-m-d',
         ];

@@ -51,6 +51,12 @@ export const fin_trx_delays = <Options[]>([
     {id: 60, title:'60분'},
 ])
 
+export const cxl_types = <Options[]>([
+    {id: 0, title:'취소금지'},
+    {id: 1, title:'결제이후 +5분허용'},
+    {id: 2, title:'당일허용'},
+])
+
 export const payModFilter = (all_pay_modules:PayModule[], filter:PayModule[], pmod_id:number|null) => {
     if (all_pay_modules.length > 0) {
         if (filter.length > 0) {
@@ -172,7 +178,7 @@ export const defaultItemInfo =  () => {
         contract_s_dt: null,
         contract_e_dt: null,
         fin_id: null,
-        fin_trx_delay: 1,
+        fin_trx_delay: 15,
         cxl_type: 2,
     })
     //카드사 필터 및 다른 필터옵션들

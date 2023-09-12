@@ -39,6 +39,7 @@ class FeeChangeHistoryController extends Controller
         ], 'fee-book-apply-scheduler');
 
         $res = DB::transaction(function () use($sf_histories, $mcht_histories) {
+            $date = date('Y-m-d H:i:s');
             foreach($sf_histories as $sf_history)
             {
                 $idx = globalLevelByIndex($sf_history->level);
@@ -48,6 +49,7 @@ class FeeChangeHistoryController extends Controller
                         'sales'.$idx.'_fee' => $sf_history->aft_trx_fee/100,
                     ]);
                 $sf_history->change_status = true;
+                $sf_history->updated_at = $date;
                 $sf_history->save();
             }
             foreach($mcht_histories as $mcht_history)
@@ -58,6 +60,7 @@ class FeeChangeHistoryController extends Controller
                         'trx_fee' => $mcht_history->aft_trx_fee/100,
                     ]);
                 $mcht_history->change_status = true;
+                $mcht_history->updated_at = $date;
                 $mcht_history->save();
             }
             return true;

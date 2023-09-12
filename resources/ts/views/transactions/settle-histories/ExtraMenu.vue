@@ -92,11 +92,11 @@ const download = async () => {
                     </template>
                     <VListItemTitle>정산취소</VListItemTitle>
                 </VListItem>
-                <VListItem value="download" @click="download()">
+                <VListItem value="download" @click="download()" style="width: fit-content;">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="vscode-icons:file-type-excel" />
                     </template>
-                    <VListItemTitle>
+                    <VListItemTitle style="width: fit-content;">
                         <BaseQuestionTooltip :location="'bottom'" :text="'정산매출 다운로드'" :content="'해당 정산에 사용되었던 매출건들이 다운로드 됩니다.(추가차감액은 추출되지 않습니다.)'">
                         </BaseQuestionTooltip>
                     </VListItemTitle>

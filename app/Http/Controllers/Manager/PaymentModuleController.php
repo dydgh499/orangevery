@@ -119,8 +119,8 @@ class PaymentModuleController extends Controller
                 }
                 return $res;
             });
-            if(isOperator($request))    
-                operLogging(HistoryType::CREATE, $this->target, $data, $data['note']);
+
+            operLogging(HistoryType::CREATE, $this->target, $data, $data['note']);
             return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);
         }
         else
@@ -173,8 +173,7 @@ class PaymentModuleController extends Controller
             }
             $res = $this->payModules->where('id', $id)->update($data);
 
-            if(isOperator($request))
-                operLogging(HistoryType::UPDATE, $this->target, $data, $data['note']);
+            operLogging(HistoryType::UPDATE, $this->target, $data, $data['note']);
             return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
         }
         else
@@ -195,8 +194,7 @@ class PaymentModuleController extends Controller
 
             $data = $this->payModules->where('id', $id)->first(['note']);
             
-            if(isOperator($request))
-                operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->note);
+            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->note);
             return $this->response($res);
         }
         else

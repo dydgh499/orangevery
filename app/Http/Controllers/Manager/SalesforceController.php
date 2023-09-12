@@ -166,8 +166,7 @@ class SalesforceController extends Controller
             $data = $this->saveImages($request, $data, $this->imgs);
             $res = $this->salesforces->where('id', $id)->update($data);
 
-            if(isOperator($request))
-                operLogging(HistoryType::UPDATE, $this->target, $data, $data['sales_name']);
+            operLogging(HistoryType::UPDATE, $this->target, $data, $data['sales_name']);
             return $this->response($res ? 1 : 990);
         }
         else
@@ -187,8 +186,8 @@ class SalesforceController extends Controller
             $res = $this->delete($this->salesforces->where('id', $id));
 
             $data = $this->salesforces->where('id', $id)->first(['sales_name']);
-            if(isOperator($request))
-                operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->sales_name);
+
+            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->sales_name);
             return $this->response($res);
         }
         else

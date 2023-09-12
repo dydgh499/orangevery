@@ -10,6 +10,8 @@ use App\Http\Controllers\Manager\OperatorController;
 use App\Http\Controllers\Manager\MerchandiseController;
 use App\Http\Controllers\Manager\SalesforceController;
 use App\Http\Controllers\Manager\TerminalController;
+
+use App\Http\Controllers\Manager\FinanceVanController;
 use App\Http\Controllers\Manager\PaymentModuleController;
 use App\Http\Controllers\Manager\PaymentGatewayController;
 use App\Http\Controllers\Manager\PaymentSectionController;
@@ -21,6 +23,7 @@ use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Manager\TransactionController;
 use App\Http\Controllers\Manager\SalesforceBatchController;
 
+use App\Http\Controllers\Log\RealtimeSendHistoryController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\NotiSendHistoryController;
 use App\Http\Controllers\Log\OperatorHistoryContoller;
@@ -121,7 +124,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('salesforces/part', [SettleHistoryController::class, 'createSalesforcePart']);
                 Route::delete('salesforces/{id}', [SettleHistoryController::class, 'deleteSalesforce']);
                 Route::post('salesforces/{id}/deposit', [SettleHistoryController::class, 'depositSalesforce']);    
-            });
+            });            
+            Route::apiResource('realtime-histories', RealtimeSendHistoryController::class);
         });
         Route::prefix('salesforces')->group(function() {
             Route::get('chart', [SalesforceController::class, 'chart']);

@@ -47,6 +47,9 @@ const addNewPaymodule = () => {
         pay_disable_e_tm: null,
         show_pay_view: true,
         note: '결제모듈 명칭을 적어주세요.😀',
+        fin_id: null,
+        fin_trx_delay: 15,
+        cxl_type: 2,
     })
 }
 if(props.item.id)
