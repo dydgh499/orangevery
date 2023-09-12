@@ -63,7 +63,8 @@ class FinanceRequest extends FormRequest
     public function data()
     {
         $data = $this->getParmasBaseKey();
-        $data['brand_id'] = $this->user()->brand_id;
+        $data['dev_fee'] = $data['dev_fee']/100;
+        $data['brand_id'] = $this->user()->brand_id;        
         return $data;
     }
 }
