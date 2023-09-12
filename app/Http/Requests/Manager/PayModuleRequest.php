@@ -29,7 +29,6 @@ class PayModuleRequest extends FormRequest
             'comm_settle_type',
             'comm_calc_level',
             'ship_out_stat',
-            'is_old_auth',
             'pay_dupe_limit',
             'abnormal_trans_limit',
             'under_sales_type',
@@ -40,9 +39,13 @@ class PayModuleRequest extends FormRequest
             'pay_day_limit',
             'pay_disable_s_tm',
             'pay_disable_e_tm',
-            'show_pay_view',
             'installment',
             'note',
+        ];
+        $this->boolean_keys = [
+            'is_old_auth',
+            'show_pay_view',
+            'is_use_realtime_deposit',
         ];
         $this->nullable_keys = [
             'contract_s_dt',
@@ -73,15 +76,16 @@ class PayModuleRequest extends FormRequest
             'settle_fee' => 'required',
             'settle_type' => 'required',
             'module_type' => 'required',
-            'is_old_auth' => 'required',
             'pay_dupe_limit' => 'required',
             'abnormal_trans_limit' => 'required',
             'pay_year_limit' => 'required',
             'pay_month_limit' => 'required',
             'pay_day_limit' => 'required',
-            'show_pay_view' => 'required',
             'installment' => 'required',
             'note' => 'required',
+            'is_old_auth' => 'required',
+            'is_use_realtime_deposit' => 'required',
+            'show_pay_view' => 'required',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -91,6 +95,14 @@ class PayModuleRequest extends FormRequest
         return $this->getAttributes($this->keys);
     }
 
+    protected function prepareForValidation()
+    {
+        for ($i=0; $i <count($this->boolean_keys) ; $i++) 
+        { 
+            $this->merge([$this->boolean_keys[$i] => $this->convertToBoolean($this->input($this->boolean_keys[$i]))]);
+        }
+    }
+
     public function bodyParameters()
     {
         $params = $this->getDocsParameters($this->keys);
@@ -98,12 +110,8 @@ class PayModuleRequest extends FormRequest
     }
     public function data()
     {
-        $data = $this->getParmasBaseKey();
-        for ($i=0; $i < count($this->nullable_keys); $i++) 
-        {
-            $key = $this->nullable_keys[$i];
-            $data[$key] = $this->input($key, null);
-        }
+        $data = array_merge($this->getParmasBaseKeyV2($this->nullable_keys, null), $this->getParmasBaseKeyV2($this->boolean_keys, false));
+        $data = array_merge($this->getParmasBaseKey(), $data);
         $data['brand_id'] = $this->user()->brand_id;
         $data['under_sales_type'] = $data['under_sales_type'] == null ? 0 : $data['under_sales_type'];
         $data['under_sales_limit'] = $data['under_sales_limit'] == '' ? 0 : $data['under_sales_limit'];

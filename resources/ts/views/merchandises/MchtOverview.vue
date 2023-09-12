@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { requiredValidator, nullValidator } from '@validators'
+import { requiredValidator } from '@validators'
 import type { Merchandise } from '@/views/types'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
@@ -319,6 +319,7 @@ onMounted(async () => {
                         </VCol>
                     </VRow>
                 </VCardItem>
-        </VCard>
-    </VCol>
-</VRow></template>
+            </VCard>
+        </VCol>
+    </VRow>
+</template>

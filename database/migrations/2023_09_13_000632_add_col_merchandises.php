@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('merchandises', function (Blueprint $table) {
-            $table->boolean('use_noti')->default(false)->comment('노티 사용여부');
+            $table->boolean('is_use_noti')->default(false)->comment('노티 사용여부');
         });
         Schema::table('payment_modules', function (Blueprint $table) {
-            $table->boolean('use_realtime_deposit')->default(false)->comment('실시간 이체 사용여부');
+            $table->boolean('is_use_realtime_deposit')->default(false)->comment('실시간 이체 사용여부');
         });
     }
 
@@ -25,10 +25,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('merchandises', function (Blueprint $table) {
-            $table->dropColumn('use_noti');
+            $table->dropColumn('is_use_noti');
         });
         Schema::table('payment_modules', function (Blueprint $table) {
-            $table->dropColumn('use_realtime_deposit');
+            $table->dropColumn('is_use_realtime_deposit');
         });
     }
 };

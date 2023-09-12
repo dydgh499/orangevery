@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Models\NotiUrl;
+use App\Models\Merchandise;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
 use App\Http\Requests\Manager\NotiRequest;
 use App\Http\Requests\Manager\IndexRequest;
+use App\Enums\HistoryType;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -15,11 +17,13 @@ use Illuminate\Http\Request;
 class NotiUrlController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
-    protected $noti_urls;
+    protected $noti_urls, $merchandises;
 
-    public function __construct(NotiUrl $noti_urls)
+    public function __construct(NotiUrl $noti_urls, Merchandise $merchandises)
     {
         $this->noti_urls = $noti_urls;
+        $this->merchandises = $merchandises;
+        $this->target = '노티 URL';
         $this->imgs = [];
     }
     
@@ -61,7 +65,12 @@ class NotiUrlController extends Controller
     public function store(NotiRequest $request)
     {
         $data = $request->data();
-        $res = $this->noti_urls->create($data);
+        $res = $this->noti_urls->create($data);//is_use_noti
+        if($res)
+        {
+            $this->merchandises->where('id', $data['mcht_id'])->update(['is_use_noti'=>true]);
+            operLogging(HistoryType::CREATE, $this->target, $data, $data['note']);
+        }
         return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);
     }
 
@@ -91,6 +100,10 @@ class NotiUrlController extends Controller
     {
         $data = $request->data();
         $res = $this->noti_urls->where('id', $id)->update($data);
+        if($res)
+        {
+            operLogging(HistoryType::UPDATE, $this->target, $data, $data['note']);
+        }
         return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
     }
 
@@ -102,7 +115,18 @@ class NotiUrlController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $res = $this->delete($this->noti_urls->where('id', $id));
-        return $this->response($res);
+        $res = $this->delete($this->noti_urls->where('id', $id));    
+        $data = ['id'=> $id];
+        if($res)
+        {
+            $noti   = $this->noti_urls->where('id', $id)->first(['mcht_id', 'note']);
+            $count  = $this->noti_urls->where('mcht_id', $noti->mcht_id)->where('is_delete', false)->count();
+            if($count == 0)
+                $this->merchandises->where('id', $noti->mcht_id)->update(['is_use_noti'=>false]);
+
+            $data['mcht_id'] = $noti->mcht_id;
+            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $noti->note);
+        }
+        return $this->response($res, $data);
     }
 }

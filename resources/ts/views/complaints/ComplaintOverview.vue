@@ -151,7 +151,7 @@ watchEffect(() => {
                     <CreateHalfVCol :mdl="3" :mdr="9">
                         <template #name>입금상태</template>
                         <template #input>
-                            <BooleanRadio :radio="props.item.is_deposit" @update:radio="props.item.is_deposit = $event"
+                            <BooleanRadio :radio="Boolean(props.item.is_deposit)" @update:radio="props.item.is_deposit = $event"
                                 :rules="[nullValidator]">
                                 <template #true>입금</template>
                                 <template #false>미입금</template>

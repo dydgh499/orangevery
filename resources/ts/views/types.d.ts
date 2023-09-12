@@ -168,6 +168,7 @@ export interface PayModule {
     fin_id: number | null,
     fin_trx_delay: number,
     cxl_type: number,
+    is_use_realtime_deposit: boolean,
 }
 
 export interface PayGateway {

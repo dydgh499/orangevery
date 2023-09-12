@@ -180,6 +180,7 @@ export const defaultItemInfo =  () => {
         fin_id: null,
         fin_trx_delay: 15,
         cxl_type: 2,
+        is_use_realtime_deposit: false,
     })
     //카드사 필터 및 다른 필터옵션들
     return {

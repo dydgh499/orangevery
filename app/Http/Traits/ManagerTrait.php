@@ -119,7 +119,7 @@ trait ManagerTrait
                 }
             }
             $res = $query->update(['is_delete' => true]);
-            return $res ? 4 : 990;
+            return $res ? 1 : 990;
         }
         else
             return 1000;

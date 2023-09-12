@@ -62,4 +62,15 @@ trait FormRequestTrait
         }
         return $data;
     }
+
+    protected function getParmasBaseKeyV2($keys, $base='')
+    {
+        $data = [];
+        for ($i=0; $i < count($keys) ; $i++)
+        {
+            $key = $keys[$i];
+            $data[$key] = $this->input($key, $base);
+        }
+        return $data;
+    }
 }

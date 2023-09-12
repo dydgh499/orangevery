@@ -50,6 +50,7 @@ const addNewPaymodule = () => {
         fin_id: null,
         fin_trx_delay: 15,
         cxl_type: 2,
+        is_use_realtime_deposit: false,
     })
 }
 if(props.item.id)

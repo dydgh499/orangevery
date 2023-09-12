@@ -283,7 +283,7 @@ const setNotiUrl = () => {
             <template #name>결제창 노출여부</template>
             <template #input>
                 <div class="batch-container">
-                    <BooleanRadio :radio="show_pay_view" @update:radio="show_pay_view = $event">
+                    <BooleanRadio :radio="Boolean(show_pay_view)" @update:radio="show_pay_view = $event">
                         <template #true>노출</template>
                         <template #false>숨김</template>
                     </BooleanRadio>
@@ -369,7 +369,7 @@ const setNotiUrl = () => {
             <template #name>노티 사용 유무</template>
             <template #input>
                 <div class="batch-container">
-                    <BooleanRadio :radio="noti_status" @update:radio="noti_status = $event">
+                    <BooleanRadio :radio="Boolean(noti_status)" @update:radio="noti_status = $event">
                         <template #true>사용</template>
                         <template #false>미사용</template>
                     </BooleanRadio>

@@ -119,8 +119,8 @@ export default {
   },
   VSwitch: {
     // set v-switch default color to primary
-    color: 'primary',
-    hideDetails: 'auto',
+    variant: 'outlined',
+    density: 'compact',
   },
   VTimeline: {
     lineThickness: 1,
