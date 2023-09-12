@@ -6,6 +6,7 @@ import { useRequestStore } from '@/views/request'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { banks } from '@/views/users/useStore'
 
 interface Props {
     item: FinanceVan,
@@ -16,6 +17,21 @@ const props = defineProps<Props>()
 const { finance_companies, fin_types } = useStore()
 const { update, remove } = useRequestStore()
 
+const bank = ref(<any>({ code: null, title: '선택안함' }))
+
+
+onMounted(async() => {
+    watchEffect(() => {
+        if(props.item.bank_code !== null &&  props.item.bank_code != "000") {
+            bank.value = banks.find(obj => obj.code == props.item.bank_code)
+        }
+    })
+    watchEffect(() => {
+        if(bank.value) {
+            props.item.bank_code = bank.value?.code || null
+        }
+    })
+})
 </script>
 <template>
     <AppCardActions action-collapsed :title="props.item.nick_name">
@@ -31,7 +47,7 @@ const { update, remove } = useRequestStore()
                                 <template #input>                                    
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.finance_company_num" density="compact" variant="outlined"
                                         :items="finance_companies" label="금융 VAN 선택" :eager="true" 
-                                        item-title="title" item-value="id"/>
+                                        item-title="title" item-value="id" :rules="[requiredValidator]"/>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -41,7 +57,7 @@ const { update, remove } = useRequestStore()
                                 <template #input>                                    
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_type" density="compact" variant="outlined"
                                         :items="fin_types" label="타입 선택" :eager="true" 
-                                        item-title="title" item-value="id"/>
+                                        item-title="title" item-value="id" :rules="[requiredValidator]"/>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -76,37 +92,39 @@ const { update, remove } = useRequestStore()
                                     <VTextField type="text" v-model="props.item.dev_fee"
                                             prepend-inner-icon="ph:share-network" placeholder="0.1"
                                             suffix="%"
-                                            persistent-placeholder />
+                                            persistent-placeholder :rules="[nullValidator]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>법인명</template>
+                                <template #name>기관명</template>
                                 <template #input>
                                     <VTextField type="text" v-model="props.item.corp_name"
-                                            prepend-inner-icon="ph-buildings" placeholder="법인명 입력"
+                                            prepend-inner-icon="ph-buildings" placeholder="기관명 입력"
                                             persistent-placeholder />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>법인코드</template>
+                                <template #name>기관코드</template>
                                 <template #input>
                                     <VTextField type="text" v-model="props.item.corp_code"
-                                            prepend-inner-icon="ph:share-network" placeholder="법인코드 입력"
+                                            prepend-inner-icon="ph:share-network" placeholder="기관코드 입력"
                                             persistent-placeholder />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>은행코드</template>
+                                <template #name>은행</template>
                                 <template #input>
-                                    <VTextField type="text" v-model="props.item.bank_code"
-                                            prepend-inner-icon="ph:share-network" placeholder="은행코드 입력"
-                                            persistent-placeholder />
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bank"
+                                        :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
+                                        label="은행 선택" :hint="`${bank.title}, 은행 코드: ${bank.code ? bank.code : '000'} `"
+                                        item-title="title" item-value="code" persistent-hint return-object single-line
+                                        :rules="[nullValidator]" create />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

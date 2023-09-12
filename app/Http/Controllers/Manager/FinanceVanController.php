@@ -85,7 +85,7 @@ class FinanceVanController extends Controller
     {
         $data = $request->data();
         $res = $this->finance_vans->where('id', $id)->update($data);
-        operLogging(HistoryType::UPDATE, $this->target, ['id' => $id], $data->nick_name);
+        operLogging(HistoryType::UPDATE, $this->target, ['id' => $id], $data['nick_name']);
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
