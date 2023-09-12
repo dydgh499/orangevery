@@ -70,8 +70,7 @@ class SalesforceController extends Controller
         {
             $sales_ids = $this->underSalesFilter($request);
             // 하위가 1000명이 넘으면 ..?
-            if(count($sales_ids))
-                    $query = $query->whereIn('id', $sales_ids);
+            $query = $query->whereIn('salesforces.id', $sales_ids);
         }
         else
         {

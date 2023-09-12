@@ -44,7 +44,6 @@ trait UnderSalesTrait
 
         $sales_keys = $this->getUnderSalesKeys($levels);
         $mchts = $this->getUnderSalesIds($request, $sales_keys);
-
         for($i=0; $i <count($sales_keys)-1; $i++) 
         {
             $key = $levels[$i];
