@@ -100,7 +100,7 @@ const handleNavScroll = (evt: Event) => {
             v-show="isCollapsed && !hideTitleAndIcon"
             v-bind="config.icons.verticalNavUnPinned"
             @click="isCollapsed = !isCollapsed"
-            class="header-arrow no-active"
+            class="header-arrow active"
           />
             <!-- visiable -->
             <Component
@@ -218,17 +218,8 @@ const handleNavScroll = (evt: Event) => {
   }
 }
 
-.mobile-header-arrow {
-  position: absolute;
-  border: 1px dashed rgba(145, 158, 171, 20%);
-  border-radius: 50%;
-  background-color: rgb(var(--v-theme-surface));
-  font-size: 1.5em;
-  margin-inline-start: 11.9em;
-}
-
 .header-arrow {
-  position: absolute;
+  position: absolute !important;
   border: 1px dashed rgba(145, 158, 171, 20%);
   border-radius: 50%;
   background-color: rgb(var(--v-theme-surface));
@@ -238,11 +229,6 @@ const handleNavScroll = (evt: Event) => {
 }
 
 .active {
-  inset-inline-start: 11.3em;
-}
-
-.no-active {
-  inset-inline-start: 0;
-  transition: all 0.25s ease;
+  inset-inline-start: 10.3em;
 }
 </style>
