@@ -5,6 +5,9 @@ import FileInput from '@/layouts/utils/FileInput.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { themeConfig } from '@themeConfig'
 import { config } from '@layouts/config'
+import { getUserLevel } from '@/plugins/axios';
+import { dev_settle_types } from '@/views/services/brands/useStore'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 
 interface Props {
     item: Brand,
@@ -68,8 +71,8 @@ watchEffect(() => {
                             <template #name>휴대폰번호</template>
                             <template #input>
                                 <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="number"
-                                    prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호 입력"
-                                    persistent-placeholder :rules="[requiredValidator]" />
+                                    prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호 입력" persistent-placeholder
+                                    :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 사업자등록번호 -->
@@ -82,11 +85,54 @@ watchEffect(() => {
                                     :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
                             </template>
                         </CreateHalfVCol>
+                    </VRow>
+                </VCardItem>
+                <VCardItem v-if="getUserLevel() == 50">
+                    <VCardTitle>
+                        <BaseQuestionTooltip location="top" text="지불정보" content="개발사만 확인 가능한 정보입니다."></BaseQuestionTooltip>
+                    </VCardTitle>
+                    <VRow class="pt-5">
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name><span></span>입금일</template>
+                            <template #input>
+                                <VTextField prepend-inner-icon="tabler-calendar" v-model="props.item.deposit_day"
+                                    type="number" :rules="[requiredValidator]" />
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name><span></span>입금액</template>
+                            <template #input>
+                                <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.deposit_amount"
+                                    type="number" :rules="[requiredValidator]" />
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name><span></span>부가 입금액</template>
+                            <template #input>
+                                <VTextField prepend-inner-icon="tabler-currency-won"
+                                    v-model="props.item.extra_deposit_amount" type="number" :rules="[requiredValidator]" />
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name><span></span>개발사 수수료</template>
+                            <template #input>
+                                <VTextField v-model="props.item.dev_fee" type="number" :rules="[requiredValidator]"
+                                    suffix="%" />
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name><span></span>수수료 정산 타입</template>
+                            <template #input>
+
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.dev_settle_type"
+                                    :items="dev_settle_types" prepend-inner-icon="ph-buildings" label="수수료 정산 타입 선택"
+                                    item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
+                            </template>
+                        </CreateHalfVCol>
                         <VCol>
                             <VTextarea v-model="props.item.note" counter label="메모사항"
                                 prepend-inner-icon="twemoji-spiral-notepad" />
                         </VCol>
-                        <VDivider />
                     </VRow>
                 </VCardItem>
             </VCard>
@@ -128,4 +174,5 @@ watchEffect(() => {
             </VCard>
         </VCol>
         <!-- 👉 submit -->
-    </VRow></template>
+    </VRow>
+</template>

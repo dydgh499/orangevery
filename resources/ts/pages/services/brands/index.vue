@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/services/brands/useStore'
+import { useSearchStore, dev_settle_types } from '@/views/services/brands/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 
 const { store, head, exporter, boolToText } = useSearchStore()
@@ -21,7 +21,7 @@ provide('exporter', exporter)
         <template #headers>
             <tr>
                 <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
-                    class='list-square'>
+                    class='list-square' style="border-bottom: 0;">
                     <span>
                         {{ head.main_headers[index] }}
                     </span>
@@ -65,8 +65,16 @@ provide('exporter', exporter)
                             <span v-else-if="_key == `main_color`">
                                 <div :style="`width: 90%; height: 50%;background:` + item.theme_css.main_color"></div>
                             </span>
-                            <span v-else-if="_key == `deposit_amount`">
+                            <span v-else-if="_key == `deposit_amount` || _key == `extra_deposit_amount` || _key == 'curr_deposit_amount'">
                                 {{ item[_key].toLocaleString() }}
+                            </span>
+                            <span v-else-if="_key == `dev_fee`">
+                                {{ item[_key].toLocaleString() }}%
+                            </span>
+                            <span v-else-if="_key == 'dev_settle_type'">
+                                <VChip  :color="store.booleanTypeColor(!item[_key])">
+                                    {{ dev_settle_types.find(obj => obj.id === item[_key])?.title }}
+                                </VChip>
                             </span>
                             <span v-else>
                                 {{ item[_key] }}

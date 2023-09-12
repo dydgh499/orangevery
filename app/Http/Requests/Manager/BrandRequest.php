@@ -34,6 +34,9 @@ class BrandRequest extends FormRequest
             'business_num',
             'deposit_day',
             'deposit_amount',
+            'extra_deposit_amount',
+            'dev_fee',
+            'dev_settle_type',
             'fax_num',
             'pv_options',
         ];
@@ -70,6 +73,9 @@ class BrandRequest extends FormRequest
             'business_num'  => 'string|required',
             'deposit_day'   => 'required',
             'deposit_amount' => 'required',
+            'dev_fee' => 'required|numeric',
+            'extra_deposit_amount'=> 'required|numeric',
+            'dev_settle_type'=> 'required|numeric',
 
         ];
         return $this->getRules($this->keys, $sub);
@@ -118,6 +124,9 @@ class BrandRequest extends FormRequest
             'og_description' => $this->input('og_description', ''),        
             'deposit_day'   => $this->deposit_day,
             'deposit_amount'   => $this->deposit_amount,
+            'extra_deposit_amount' => $this->extra_deposit_amount,
+            'dev_fee'   => $this->dev_fee/100,
+            'dev_settle_type'   => $this->dev_settle_type,
             'note'  => $this->input('note', ''),
         ];
         $data['pv_options'] = json_encode($this->pv_options); 

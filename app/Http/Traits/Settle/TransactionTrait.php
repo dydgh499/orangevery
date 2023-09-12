@@ -145,13 +145,9 @@ trait TransactionTrait
         return [$settle_key, $group_key];
     }
 
-    public function notiSender($url, $tran, $temp='')
+    public function getNotiSendFormat($tran, $temp='')
     {
-        $headers = [
-            'Content-Type'  => 'application/json',
-            'Accept' => 'application/json',
-        ];
-        $params = [
+        return [
             'mid'   => $tran->mid,
             'tid'    => $tran->tid,
             'trx_id'    => $tran->trx_id,
@@ -169,6 +165,15 @@ trait TransactionTrait
             'is_cancel'     => $tran->is_cancel,
             'temp'          => $temp,
         ];
+    }
+
+    public function notiSender($url, $tran, $temp='')
+    {
+        $headers = [
+            'Content-Type'  => 'application/json',
+            'Accept' => 'application/json',
+        ];
+        $params = $this->getNotiSendFormat($tran, $temp);
         if($tran->is_cancel)
         {
             $params['amount'] *= -1;

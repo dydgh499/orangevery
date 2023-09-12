@@ -1,9 +1,10 @@
 <script setup lang="ts">
 
 import { nullValidator } from '@validators'
-import type { FreeOption, PaidOption, AuthOption, Brand } from '@/views/types'
+import type { FreeOption, PaidOption, AuthOption } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 
 interface Props {
     item: {
@@ -11,7 +12,6 @@ interface Props {
         paid: PaidOption,
         auth: AuthOption,
     },
-    brand: Brand,
 }
 const props = defineProps<Props>()
 
@@ -21,7 +21,9 @@ const props = defineProps<Props>()
         <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>명칭설정</VCardTitle>
+                    <VCardTitle>
+                        <BaseQuestionTooltip location="top" text="명칭설정" content="개발사만 확인 가능한 정보입니다."></BaseQuestionTooltip>                        
+                    </VCardTitle>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>개발사</span></template>
@@ -100,7 +102,9 @@ const props = defineProps<Props>()
         <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>권한설정</VCardTitle>
+                    <VCardTitle>
+                        <BaseQuestionTooltip location="top" text="권한설정" content="개발사만 확인 가능한 정보입니다."></BaseQuestionTooltip>
+                    </VCardTitle>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>{{ item.auth.levels.dev_name }} 사용여부</span></template>

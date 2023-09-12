@@ -29,10 +29,10 @@ const id = ref<number>(0)
                     <BrandDesignOverview :item="item" />
                 </VWindowItem>
                 <VWindowItem>
-                    <BrandOptionOverview :item="item.pv_options" :brand="item" />
+                    <BrandOptionOverview :item="item.pv_options" />
                 </VWindowItem>
                 <VWindowItem>
-                    <BrandAuthOverview :item="item.pv_options" :brand="item" />
+                    <BrandAuthOverview :item="item.pv_options"/>
                 </VWindowItem>
             </template>
         </CreateForm>

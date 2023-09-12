@@ -29,4 +29,10 @@ class Brand extends Model
             get: fn ($value) => new ThemeCSS($value),
         );
     }
+    protected function devFee() : Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) =>  round($value * 100, 3),
+        );
+    }
 }

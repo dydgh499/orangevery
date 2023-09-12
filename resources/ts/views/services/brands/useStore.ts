@@ -1,8 +1,12 @@
 import { user_info } from '@/plugins/axios';
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
-import type { AuthOption, Brand, FreeOption, PaidOption, ThemeCSS } from '@/views/types';
+import type { AuthOption, Brand, FreeOption, Options, PaidOption, ThemeCSS } from '@/views/types';
 
+export const dev_settle_types = <Options[]>([
+    {id:0, title:'본사이익 대비 %'},
+    {id:1, title:'거래금액 대비 %'},
+])
 export const useSearchStore = defineStore('brandSearchStore', () => {
     const store = Searcher('services/brands')
     const head = Header('services/brands', '서비스 관리')
@@ -20,13 +24,17 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
             'use_simple_pay': '간편결제',
         },
     }
+    head.main_headers.value = [
+        '서비스 정보',
+        '무료옵션',
+    ]
     if (user_info.value.level == 50) {
         headers['paid'] = {
-            'subsidiary_use_control': '가맹점 전산 사용 ON/OFF',
+            'subsidiary_use_control': '가맹점 전산 ON/OFF',
             'use_acct_verification': '예금주 검증',
-            'use_dup_pay_validation': '중복결제 검증',
-            'use_forb_pay_time': '결제금지시간 검증',
-            'use_pay_limit': '결제한도 검증',
+            'use_dup_pay_validation': '중복결제',
+            'use_forb_pay_time': '결제금지시간',
+            'use_pay_limit': '결제한도',
             'use_hand_pay_drct': '수기결제 직접입력',
             'use_hand_pay_sms': '수기결제 SMS',
             'use_issuer_filter': '카드사 필터링',
@@ -35,18 +43,17 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
         }
         headers['deposit_day'] = '입금일'
         headers['deposit_amount'] = '입금액'
+        headers['extra_deposit_amount'] = '부가입금액'
+        headers['curr_deposit_amount'] = '현재입금액(월)'
+        headers['dev_fee'] = '개발사 수수료'
+        headers['dev_settle_type'] = '개발사 수수료 정산타입'
         headers['last_dpst_at'] = '마지막 입금일'
         headers['note'] = '비고'
-    }
-    headers['created_at'] = '생성시간'
-    headers['updated_at'] = '업데이트시간'
-
-    head.main_headers.value = [
-        '서비스 정보',
-        '무료옵션',
-    ]
-    if (user_info.value.level == 50)
+        headers['created_at'] = '생성시간'
+        headers['updated_at'] = '업데이트시간'
+        headers['extra_col'] = '더보기'
         head.main_headers.value.push('유료옵션')
+    }
 
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
@@ -185,6 +192,10 @@ export const defaultItemInfo = () => {
         login_file: undefined,
         is_transfer: 0,
         login_img: null,
+        dev_fee: 0,
+        dev_settle_type: 0,
+        extra_deposit_amount: 0,
+        curr_deposit_amount: 0,
     })
 
 
