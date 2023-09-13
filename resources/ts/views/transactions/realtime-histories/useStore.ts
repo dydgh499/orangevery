@@ -17,7 +17,7 @@ export const useSearchStore = defineStore('realtimeHistoriesSearchStore', () => 
         'acct_bank_name': '입금은행명',
         'acct_bank_code': '은행코드',
         'trans_seq_num': '요청번호',
-        'create_at': '생성시간',
+        'created_at': '생성시간',
         'updated_at': '업데이트시간',
     }
 
