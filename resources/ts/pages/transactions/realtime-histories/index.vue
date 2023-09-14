@@ -2,6 +2,7 @@
 import { useSearchStore } from '@/views/transactions/realtime-histories/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import type { RealtimeHistory } from '@/views/types'
 
 const { store, head, exporter } = useSearchStore()
 
@@ -9,6 +10,9 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
+const isSuccessDeposit = (item: RealtimeHistory) => {
+    return item.result_code == '0000' && item.key == '6170' ? true : false
+}
 </script>
 <template>
     <BaseIndexView placeholder="가맹점 상호, 계좌번호, 승인번호 검색" :metas="[]" :add="false" add_name="실시간 이체 이력" :is_range_date="true">
@@ -46,7 +50,7 @@ provide('exporter', exporter)
                         </td>
                     </template>
                     <template v-else>
-                        <td v-show="_header.visible" class='list-square'>
+                        <td v-show="_header.visible" class='list-square' :style="isSuccessDeposit(item) ? 'color:blue;' : ''">
                             <span v-if="_key == 'id' || _key == 'trans_id'">
                                 #{{ item[_key] }}
                             </span>

@@ -225,6 +225,7 @@ export interface RealtimeHistory {
     appr_num: string,
     tran_id: number,
     result_code: string,
+    request_type: number,
     message: string,
     amount: number,
     acct_num: string,

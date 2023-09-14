@@ -11,6 +11,7 @@ export const useSearchStore = defineStore('realtimeHistoriesSearchStore', () => 
         'appr_num': '승인 번호',
         'trans_id': '거래번호',
         'result_code': '응답코드',
+        'request_type': '요청타입',
         'message': '응답메세지',
         'amount': '거래금액',
         'acct_num': '계좌번호',
