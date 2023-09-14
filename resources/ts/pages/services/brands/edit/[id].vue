@@ -16,7 +16,7 @@ const tabs = <Tab[]>([
     { icon: 'tabler-table-options', title: '추가옵션' },
 ])
 if(getUserLevel() == 50) {
-    tabs.push({ icon: 'carbon:two-factor-authentication', title: '권한옵션' })
+    tabs.push({ icon: 'carbon:two-factor-authentication', title: '영업점 단계설정' })
 }
 const id = ref<number>(0)
 const route = useRoute()

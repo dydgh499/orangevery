@@ -13,7 +13,7 @@ const tabs = <Tab[]>([
     { icon: 'ph-buildings', title: '운영사정보' },
     { icon: 'tabler-color-filter', title: '테마디자인' },
     { icon: 'tabler-table-options', title: '추가옵션' },
-    { icon: 'carbon:two-factor-authentication', title: '권한옵션' },
+    { icon: 'carbon:two-factor-authentication', title: '영업점 단계설정' },
 ])
 
 const id = ref<number>(0)
