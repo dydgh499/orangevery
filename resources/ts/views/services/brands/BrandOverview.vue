@@ -3,6 +3,7 @@ import { businessNumValidator, requiredValidator } from '@validators'
 import type { Brand } from '@/views/types'
 import FileInput from '@/layouts/utils/FileInput.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { themeConfig } from '@themeConfig'
 import { config } from '@layouts/config'
 import { getUserLevel } from '@/plugins/axios';
