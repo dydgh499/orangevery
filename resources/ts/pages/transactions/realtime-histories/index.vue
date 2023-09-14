@@ -36,9 +36,9 @@ const setFianaceVansBalance = async () => {
 }
 
 const getLogStyle = (item: RealtimeHistory) => {
-    if(item.result_code == '0000' && item.key == 6170)
+    if(item.result_code === '0000' && item.request_type === 6170)
         return 'color:blue';
-    else if(item.result_code != '0000' && item.key == 6170)
+    else if(item.result_code !== '0000' && item.request_type === 6170)
         return 'color:red';
     else
         return '';
