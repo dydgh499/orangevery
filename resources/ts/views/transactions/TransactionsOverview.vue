@@ -8,6 +8,7 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { requiredValidator, lengthValidatorV2 } from '@validators'
 import type { Transaction, Merchandise, PayModule, PaySection, Options } from '@/views/types'
 import { module_types, installments, payModFilter } from '@/views/merchandises/pay-modules/useStore'
+import { dev_settle_types } from '@/views/services/brands/useStore'
 import corp from '@corp'
 
 interface Props {
@@ -16,7 +17,7 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
+const { pgs, pss, settle_types, terminals, cus_filters, psFilter, finance_vans } = useStore()
 const { sales } = useSalesFilterStore()
 
 const levels = corp.pv_options.auth.levels
@@ -26,10 +27,9 @@ const sales3 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const sales2 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const sales1 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const sales0 = ref(<any>({ id: null, sales_name: '선택안함' }))
-const mcht = ref(<any>({ id: null, mcht_name: '선택안함' }))
 const pay_modules = ref<PayModule[]>([])
-let merchandises = <Merchandise[]>([])
-let fee_histories = <any[]>([])
+const merchandises = ref<Merchandise[]>([])
+const fee_histories = ref<any[]>([])
 
 
 const initTrxAt = (is_trx: boolean) => {
@@ -54,12 +54,19 @@ const changePaymodEvent = () => {
             props.item.mcht_settle_fee = pmod.settle_fee as number
             props.item.mid = pmod.mid
             props.item.tid = pmod.tid
+
+            if (pmod.is_use_realtime_deposit) {
+                const idx = finance_vans.find(obj => obj.id === pmod.fin_id)?.dev_fee
+                props.item.dev_realtime_fee = idx ? (finance_vans[idx].dev_fee * 100).toFixed(3) : 0
+            }
+            else
+                props.item.dev_realtime_fee = 0
         }
     }
 }
 const changeMchtEvent = () => {
     if (props.item.mcht_id != null) {
-        const mcht = merchandises.find((obj: Merchandise) => obj.id == props.item.mcht_id)
+        const mcht = merchandises.value.find((obj: Merchandise) => obj.id == props.item.mcht_id)
         if (mcht) {
             props.item.sales5_fee = mcht.sales5_fee
             props.item.sales4_fee = mcht.sales4_fee
@@ -101,7 +108,7 @@ const filterInsts = computed(() => {
 })
 const hintSalesApplyFee = (sales: any): string => {
     if (sales && sales.id) {
-        const history = fee_histories.find(obj => obj.sales_id === sales.id)
+        const history = fee_histories.value.find(obj => obj.sales_id === sales.id)
         return history ? '마지막 일괄적용: ' + (history.trx_fee * 100).toFixed(3) + '%' : '';
     }
     else
@@ -109,34 +116,24 @@ const hintSalesApplyFee = (sales: any): string => {
 }
 
 onMounted(async () => {
-    await Promise.all([
+    props.item.dev_fee = (props.item.dev_fee * 100).toFixed(3)
+    props.item.dev_realtime_fee = (props.item.dev_realtime_fee * 100).toFixed(3)
+    const [feeHistoriesResult, payModulesResult, merchandisesResult] = await Promise.all([
         feeApplyHistoires(),
         getAllPayModules(),
-        getAllMerchandises()
-    ]).then(([feeHistoriesResult, payModulesResult, merchandisesResult]) => {
-        fee_histories = feeHistoriesResult
-        pay_modules.value = payModulesResult
-        merchandises = merchandisesResult
+        getAllMerchandises(),
+    ])
+    
+    fee_histories.value = feeHistoriesResult
+    pay_modules.value = payModulesResult
+    merchandises.value = merchandisesResult
 
-        sales5.value = sales[5].value.find(obj => obj.id === props.item.sales5_id)
-        sales4.value = sales[4].value.find(obj => obj.id === props.item.sales4_id)
-        sales3.value = sales[3].value.find(obj => obj.id === props.item.sales3_id)
-        sales2.value = sales[2].value.find(obj => obj.id === props.item.sales2_id)
-        sales1.value = sales[1].value.find(obj => obj.id === props.item.sales1_id)
-        sales0.value = sales[0].value.find(obj => obj.id === props.item.sales0_id)
-        mcht.value = merchandises.find(obj => obj.id === props.item.mcht_id)
-
-        watchEffect(() => {
-            props.item.sales5_id = sales5.value?.id || null
-            props.item.sales4_id = sales4.value?.id || null
-            props.item.sales3_id = sales3.value?.id || null
-            props.item.sales2_id = sales2.value?.id || null
-            props.item.sales1_id = sales1.value?.id || null
-            props.item.sales0_id = sales0.value?.id || null
-            props.item.mcht_id = mcht.value.id
-            props.item.custom_id = mcht.custom_id
-        })
-    })
+    sales5.value = sales[5].value.find(obj => obj.id === props.item.sales5_id)
+    sales4.value = sales[4].value.find(obj => obj.id === props.item.sales4_id)
+    sales3.value = sales[3].value.find(obj => obj.id === props.item.sales3_id)
+    sales2.value = sales[2].value.find(obj => obj.id === props.item.sales2_id)
+    sales1.value = sales[1].value.find(obj => obj.id === props.item.sales1_id)
+    sales0.value = sales[0].value.find(obj => obj.id === props.item.sales0_id)
 })
 
 </script>
@@ -158,8 +155,7 @@ onMounted(async () => {
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales5"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[5].value)"
                                         prepend-inner-icon="ph:share-network" :label="levels.sales5_name + ' 선택'"
-                                        item-title="sales_name" :hint="hintSalesApplyFee(sales5)"
-                                        item-value="id" />
+                                        item-title="sales_name" :hint="hintSalesApplyFee(sales5)" item-value="id" />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales5_fee" type="number" suffix="%"
@@ -178,7 +174,7 @@ onMounted(async () => {
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[4].value)"
                                         prepend-inner-icon="ph:share-network" :label="levels.sales4_name + ' 선택'"
                                         item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales4)"
-                                        item-value="id" return-object single-line/>
+                                        item-value="id" return-object single-line />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales4_fee" type="number" suffix="%"
@@ -197,7 +193,7 @@ onMounted(async () => {
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[3].value)"
                                         prepend-inner-icon="ph:share-network" :label="levels.sales3_name + ' 선택'"
                                         item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales3)"
-                                        item-value="id" return-object single-line/>
+                                        item-value="id" return-object single-line />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales3_fee" type="number" suffix="%"
@@ -216,7 +212,7 @@ onMounted(async () => {
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[2].value)"
                                         prepend-inner-icon="ph:share-network" :label="levels.sales2_name + ' 선택'"
                                         item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales2)"
-                                        item-value="id" return-object single-line/>
+                                        item-value="id" return-object single-line />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales2_fee" type="number" suffix="%"
@@ -254,7 +250,7 @@ onMounted(async () => {
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[0].value)"
                                         prepend-inner-icon="ph:share-network" :label="levels.sales0_name + ' 선택'"
                                         item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales0)"
-                                        item-value="id" return-object single-line/>
+                                        item-value="id" return-object single-line />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales0_fee" type="number" suffix="%"
@@ -267,14 +263,14 @@ onMounted(async () => {
                             <VRow>
                                 <VCol cols="12" md="4">
                                     <BaseQuestionTooltip :location="'top'" :text="'가맹점/수수료율'"
-                                        :content="'가맹점 선택시 가맹점 정보 및 결제모듈 선택란이 현재 설정값 기준으로 세팅됩니다.<br>수수료율을 주의해서 입력해주시길 부탁드립니다.'">
+                                        :content="'가맹점 선택시 가맹점 정보 및 결제모듈 선택란이 현재 설정값 기준으로 세팅됩니다.<br>수수료율을 주의해서 입력해주시길 바랍니다.'">
                                     </BaseQuestionTooltip>
                                 </VCol>
                                 <VCol cols="12" :md="4">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id"
                                         :items="[{ id: null, mcht_name: '선택안함' }].concat(merchandises)"
                                         prepend-inner-icon="ph:share-network" label="가맹점 선택" item-title="mcht_name"
-                                        item-value="id" @update:modelValue="changeMchtEvent()" return-object single-line/>
+                                        item-value="id" @update:modelValue="changeMchtEvent()" single-line />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.mcht_fee" type="number" suffix="%"
@@ -284,29 +280,54 @@ onMounted(async () => {
                         </VCol>
                         <VCol cols="12">
                             <VRow>
-                                <VCol cols="12" md="4">
-                                    <label>유보금 수수료율</label>
-                                </VCol>
-                                <VCol cols="12" :md="8">
-                                    <VTextField v-model="props.item.hold_fee" type="number" suffix="%"
-                                        :rules="[requiredValidator]" />
-                                </VCol>
+                                <CreateHalfVCol :mdl="4" :mdr="8">
+                                    <template #name>유보금 수수료율</template>
+                                    <template #input>
+                                        <VTextField v-model="props.item.hold_fee" type="number" suffix="%"
+                                            :rules="[requiredValidator]" />
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12">
                             <VRow>
-                                <VCol cols="12" md="4">
-                                    <label>커스텀 필터</label>
-                                </VCol>
-                                <VCol cols="12" md="8">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.custom_id"
-                                        :items="[{ id: null, name: '선택안함',type: 1}].concat(cus_filters)"
-                                        prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name"
-                                        item-value="id" single-line/>
-                                </VCol>
+                                <CreateHalfVCol :mdl="4" :mdr="8">
+                                    <template #name>커스텀 필터</template>
+                                    <template #input>
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.custom_id"
+                                            :items="[{ id: null, name: '선택안함', type: 1 }].concat(cus_filters)"
+                                            prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name"
+                                            item-value="id" single-line />
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
                         </VCol>
                         <VDivider />
+                    </VRow>
+                </VCardItem>
+                <VCardItem v-show="corp.pv_options.auth.levels.dev_use">
+                    <VCardTitle>
+                        <BaseQuestionTooltip :location="'top'" :text="'개발사 수수료'"
+                            :content="'해당 정보는 수정할 수 없습니다.'">
+                        </BaseQuestionTooltip>
+                    </VCardTitle>
+                    <VRow class="pt-5">
+                        <CreateHalfVCol :mdl="4" :mdr="8">
+                            <template #name>개발사 정산타입</template>
+                            <template #input>
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="corp.dev_settle_type"
+                                    :items="dev_settle_types" prepend-inner-icon="ph-buildings" item-title="title"
+                                    item-value="id" single-line readonly />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="4" :mdr="8">
+                            <template #name>개발사 수수료</template>
+                            <template #input>
+                                <VTextField v-model="props.item.dev_fee" type="number" suffix="%" readonly />
+                            </template>
+                        </CreateHalfVCol>
                     </VRow>
                 </VCardItem>
             </VCard>
@@ -334,7 +355,7 @@ onMounted(async () => {
                                 </CreateHalfVCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12">
+                        <VCol cols="12" v-show="false">
                             <VRow>
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>결제모듈 타입</template>
@@ -353,8 +374,9 @@ onMounted(async () => {
                                     <template #name>장비 타입</template>
                                     <template #input>
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.terminal_id"
-                                            :items="terminals" prepend-inner-icon="ic-outline-send-to-mobile" label="장비 선택"
-                                            item-title="name" item-value="id" single-line />
+                                            :items="[{ id: 0, name: '미선택' }].concat(terminals)"
+                                            prepend-inner-icon="ic-outline-send-to-mobile" label="장비 선택" item-title="name"
+                                            item-value="id" single-line />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -443,8 +465,24 @@ onMounted(async () => {
                         </VCol>
                     </VRow>
                 </VCardItem>
+                <VCardItem v-show="props.item.dev_realtime_fee">
+                    <VCardTitle>
+                        <BaseQuestionTooltip :location="'top'" :text="'실시간이체 수수료'"
+                            :content="'해당 정보는 수정할 수 없습니다.'">
+                        </BaseQuestionTooltip>
+                    </VCardTitle>
+                    <VRow class="pt-5">
+                        <CreateHalfVCol :mdl="4" :mdr="8">
+                            <template #name>개발사 수수료</template>
+                            <template #input>
+                                <VTextField v-model="props.item.dev_realtime_fee" type="number" suffix="%" readonly />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    <VRow>
+                    </VRow>
+                </VCardItem>
             </VCard>
-
         </VCol>
         <!-- 👉 매출 정보 -->
         <VCol cols="12" md="4">

@@ -12,7 +12,6 @@ export const useStore = defineStore('payGatewayStore', () => {
     const terminals   = ref<Classification[]>([])
     const cus_filters = ref<Classification[]>([])
     const finance_vans = ref<FinanceVan[]>([])
-    const errorHandler = <any>(inject('$errorHandler'))
     const pg_companies = [
         {id:1, name:'페이투스', rep_name:'서동균', company_name:'(주)페이투스', business_num:'810-81-00347', phone_num:'02-465-8800', addr:'서울특별시 금천구 가산디지털1로 168, C동 7층 701B호(가산동, 우림라이온스밸리)'},
         {id:2, name:'케이원피에스', rep_name:'강승구', company_name:'(주)케이원피에스', business_num:'419-88-00046', phone_num:'1855-1838', addr:'서울특별시 구로구 디지털로33길 27, 5층 513호, 514호(구로동, 삼성IT밸리)'},

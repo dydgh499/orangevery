@@ -2,10 +2,11 @@
 
 namespace App\Http\Traits\Settle;
 use Illuminate\Support\Facades\DB;
+use App\Enums\DevSettleType;
 
 trait TransactionTrait
 {
-    protected function getSettleAmount($idx, $tran)
+    protected function getSettleAmount($idx, $tran, $is_deduct_fee_type=false)
     {
         if($idx == -1)
         {   // 가맹점
@@ -14,8 +15,17 @@ trait TransactionTrait
         }
         else
         {
-            $pks  = ['mcht_id', 'sales0_id','sales1_id','sales2_id','sales3_id','sales4_id','sales5_id','ps_id'];
-            $fees = ['mcht_fee', 'sales0_fee', 'sales1_fee', 'sales2_fee','sales3_fee', 'sales4_fee', 'sales5_fee', 'ps_fee'];
+            if($is_deduct_fee_type)
+            {
+                $pks  = ['mcht_id', 'sales0_id','sales1_id','sales2_id','sales3_id','sales4_id','sales5_id', 'ps_id', 'ps_id']; // dev_id는 없음
+                $fees = ['mcht_fee', 'sales0_fee', 'sales1_fee', 'sales2_fee','sales3_fee', 'sales4_fee', 'sales5_fee', 'dev_fee', 'ps_fee'];    
+            }
+            else
+            {
+                $pks  = ['mcht_id', 'sales0_id','sales1_id','sales2_id','sales3_id','sales4_id','sales5_id','ps_id'];
+                $fees = ['mcht_fee', 'sales0_fee', 'sales1_fee', 'sales2_fee','sales3_fee', 'sales4_fee', 'sales5_fee', 'ps_fee'];
+            }
+
             $dest_fee = $fees[$idx+1];
             $fee_count = count($fees)-1;
             for($i=$idx; $fee_count > -1; $i--)
@@ -40,7 +50,69 @@ trait TransactionTrait
         return $saleses;
     }
 
-    protected function setSettleAmount($trans)
+    protected function setSalesSettleAmount($tran, $saleses)
+    {
+        for($i=0; $i<6; $i++)
+        {
+            $key = 'sales'.$i;
+            $sales_id   = $tran[$key."_id"];
+            $profit     = 0;
+            if($sales_id)
+            {
+                $profit = $this->getSettleAmount($i, $tran);
+                $idx    = array_search($sales_id, array_column($saleses, 'id'));
+                if($idx !== false)
+                {
+                    switch($saleses[$idx]['settle_tax_type'])
+                    {
+                        case 1:
+                            $profit *= 0.967;
+                            break;
+                        case 2:
+                            $profit *= 0.9;
+                            break;
+                        case 3:
+                            $profit *= 0.9;
+                            $profit *= 0.967;
+                            break;
+                    }
+                }
+            }
+            $tran[$key."_settle_amount"] = round($profit);
+        }
+        return $tran;
+    }
+
+    protected function setOperatorSettleAmount($tran, $dev_settle_type)
+    {
+        if($dev_settle_type == DevSettleType::DEDUCT_FEE->value)
+        {
+            $dev_profit = $this->getSettleAmount(6, $tran, true);
+            $brand_profit = $this->getSettleAmount(7, $tran, true);
+
+            $tran['dev_settle_amount']   = round($dev_profit);
+            $tran['brand_settle_amount'] = round($brand_profit);
+        }
+        else
+        {
+            $dev_profit = 0;
+            $brand_profit = $this->getSettleAmount(6, $tran);
+            
+            if($dev_settle_type == DevSettleType::NOT_APPLY->value)
+                $dev_profit = 0;
+            else if($dev_settle_type == DevSettleType::HEAD_OFFICE_PROFIT->value)
+                $dev_profit = $brand_profit * $tran['dev_fee'];
+            else if($dev_settle_type == DevSettleType::TOTAL_SALES->value)
+                $dev_profit = $tran['amount'] * $tran['dev_fee'];
+
+            $tran['dev_settle_amount']   = round($dev_profit);
+            $tran['brand_settle_amount'] = round($brand_profit - $dev_profit);
+        }
+        $tran['dev_realtime_settle_amount'] = $tran['amount'] * $tran['dev_realtime_fee'];
+        return $tran;
+    }
+
+    protected function setSettleAmount($trans, $dev_settle_type)
     {
         $sales_ids = collect($trans)->flatMap(function ($tran) {
             return [
@@ -54,39 +126,9 @@ trait TransactionTrait
             //가맹점 수수료 세팅
             $tran["mcht_settle_amount"] = round($this->getSettleAmount(-1, $tran));
             //영업점 수수료 세팅
-            for($i=0; $i<6; $i++)
-            {
-                $key = 'sales'.$i;
-                $sales_id   = $tran[$key."_id"];
-                $profit     = 0;
-                if($sales_id)
-                {
-                    $profit = $this->getSettleAmount($i, $tran);
-                    $idx    = array_search($sales_id, array_column($saleses, 'id'));
-                    if($idx !== false)
-                    {
-                        switch($saleses[$idx]['settle_tax_type'])
-                        {
-                            case 1:
-                                $profit *= 0.967;
-                                break;
-                            case 2:
-                                $profit *= 0.9;
-                                break;
-                            case 3:
-                                $profit *= 0.9;
-                                $profit *= 0.967;
-                                break;
-                        }
-                    }
-                }
-                $tran[$key."_settle_amount"] = round($profit);
-            }
+            $tran = $this->setSalesSettleAmount($tran, $saleses);
             //개발사, 본사 수수료 세팅
-            $brand_profit = $this->getSettleAmount(6, $tran);
-            $dev_profit   = $brand_profit * $tran['dev_fee'];
-            $tran['dev_settle_amount']   = round($dev_profit);
-            $tran['brand_settle_amount'] = round($brand_profit - $dev_profit);
+            $tran = $this->setOperatorSettleAmount($tran, $dev_settle_type);
         }
         return $trans;
     }

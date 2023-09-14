@@ -165,11 +165,21 @@ class TransactionController extends Controller
      */
     public function store(TransactionRequest $request)
     {
-        $data = $request->data();
-        [$data] = $this->setSettleAmount([$data]);
-        $res = $this->transactions->create($data);
-        operLogging(HistoryType::CREATE, $this->target, $data, "#".$res->id);
-        return $this->response($res ? 1 : 990, ['id'=>$res->id]);
+        try
+        {
+            $data = $request->data();
+            [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
+            $res = $this->transactions->create($data);
+            operLogging(HistoryType::CREATE, $this->target, $data, "#".$res->id);
+            return $this->response($res ? 1 : 990, ['id'=>$res->id]);
+        }
+        catch(QueryException $ex)
+        {
+            $msg = $ex->getMessage();
+            if(str_contains($msg, 'Duplicate entry'))
+                $msg = '이미 같은 거래번호의 취소매출이 존재합니다.<br>해당 매출을 삭제하거나 거래번호를 수정한 후 다시 시도해주세요.';                
+            return $this->extendResponse(990, $msg);
+        }
     }
 
     /**
@@ -210,11 +220,21 @@ class TransactionController extends Controller
      */
     public function update(TransactionRequest $request, $id)
     {
-        $data = $request->data();
-        [$data] = $this->setSettleAmount([$data]);
-        $res = $this->transactions->where('id', $id)->update($data);
-        operLogging(HistoryType::UPDATE, $this->target, $data, "#".$id);
-        return $this->response($res ? 1 : 990);
+        try
+        {
+            $data = $request->data();
+            [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
+            $res = $this->transactions->where('id', $id)->update($data);
+            operLogging(HistoryType::UPDATE, $this->target, $data, "#".$id);
+            return $this->response($res ? 1 : 990);    
+        }
+        catch(QueryException $ex)
+        {
+            $msg = $ex->getMessage();
+            if(str_contains($msg, 'Duplicate entry'))
+                $msg = '이미 같은 거래번호의 취소매출이 존재합니다.<br>해당 매출을 삭제하거나 거래번호를 수정한 후 다시 시도해주세요.';                
+            return $this->extendResponse(990, $msg);
+        }
     }
 
     /**
@@ -255,7 +275,7 @@ class TransactionController extends Controller
         $data['sales5_fee'] = $request->input('sales5_fee', 0);
         try 
         {
-            [$data] = $this->setSettleAmount([$data]);
+            [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
             $res = $this->transactions->create($data);
             operLogging(HistoryType::CREATE, $this->target, $data, "#".$res->id);
             return $this->response(1);
@@ -264,7 +284,7 @@ class TransactionController extends Controller
         {
             $msg = $ex->getMessage();
             if(str_contains($msg, 'Duplicate entry'))
-                $msg = '이미 같은 거래번호의 취소매출이 존재합니다.';
+                $msg = '이미 같은 거래번호의 취소매출이 존재합니다.<br>해당 매출을 삭제하거나 거래번호를 수정한 후 다시 시도해주세요.';     
                 
             return $this->extendResponse(990, $msg);
         }
@@ -331,6 +351,7 @@ class TransactionController extends Controller
 
     public function _test()
     {
+        $dev_settle_type = 0;
         $db_trans = $this->transactions
             ->where('brand_id', 7)
             ->where('mcht_id', 28298)
@@ -340,7 +361,7 @@ class TransactionController extends Controller
             ->get();
         
         $trans = json_decode(json_encode($db_trans), true);
-        $trans = $this->setSettleAmount($trans);
+        $trans = $this->setSettleAmount($trans, $dev_settle_type);
         $i=0;
         foreach($db_trans as $tran)
         {
