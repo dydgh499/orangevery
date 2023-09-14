@@ -107,10 +107,7 @@ class RealtimeSendHistoryController extends Controller
         $data = $request->all();
         $url = $this->base_noti_url.'/get-balance';
         $res = post($url, $data);
-        if($res['body']['result_cd'] === "0000")
-            return $this->response(1, $res['body']);
-        else
-            return $this->extendResponse(1999, $res['body']['result_msg']);
+        return $this->response(1, $res['body']);
     }
 
     public function deposit(Request $request)
@@ -119,10 +116,7 @@ class RealtimeSendHistoryController extends Controller
         $data = $request->all();
         $url = $this->base_noti_url.'/deposit';
         $res = post($url, $data);
-        if($res['body']['result_cd'] === "0000")
-            return $this->response(1, $res['body']);
-        else
-            return $this->extendResponse(1999, $res['body']['result_msg']);
+        return $this->response(1, $res['body']);
     }
 
     public function depositCollect(Request $request)
