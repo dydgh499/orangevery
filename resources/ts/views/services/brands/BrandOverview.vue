@@ -91,10 +91,10 @@ watchEffect(() => {
                 </VCardItem>
                 <VCardItem v-if="getUserLevel() == 50">
                     <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="지불정보" :content="item.pv_options.auth.levels.dev_name+'만 확인 가능한 정보입니다.'"></BaseQuestionTooltip>
+                        <BaseQuestionTooltip location="top" text="개발사 정보" :content="item.pv_options.auth.levels.dev_name+'만 확인 가능한 정보입니다.'"></BaseQuestionTooltip>
                     </VCardTitle>
                     <VRow class="pt-5">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
+                        <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name><span>{{ item.pv_options.auth.levels.dev_name }} 사용여부</span></template>
                                 <template #input>
                                     <BooleanRadio :radio="item.pv_options.auth.levels.dev_use" @update:radio="item.pv_options.auth.levels.dev_use = $event">
@@ -104,13 +104,36 @@ watchEffect(() => {
                                 </template>
                             </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span>개발사</span></template>
+                            <template #name><span>개발사 명칭설정</span></template>
                             <template #input>
                                 <VTextField v-model="props.item.pv_options.auth.levels.dev_name"
                                     prepend-inner-icon="ph:share-network" placeholder="개발사 등급 명칭을 입력해주세요"
                                     persistent-placeholder :rules="[nullValidator]" />
                             </template>
                         </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name><span></span>{{ props.item.pv_options.auth.levels.dev_name }} 수수료</template>
+                            <template #input>
+                                <VTextField v-model="props.item.dev_fee" type="number" :rules="[requiredValidator]"
+                                    suffix="%" />
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name><span></span>수수료 정산 타입</template>
+                            <template #input>
+
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.dev_settle_type"
+                                    :items="dev_settle_types" prepend-inner-icon="ph-buildings" label="수수료 정산 타입 선택"
+                                    item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                </VCardItem>
+                <VCardItem v-if="getUserLevel() == 50">
+                    <VCardTitle>
+                        <BaseQuestionTooltip location="top" text="지불정보" :content="item.pv_options.auth.levels.dev_name+'만 확인 가능한 정보입니다.'"></BaseQuestionTooltip>
+                    </VCardTitle>
+                    <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name><span></span>입금일</template>
                             <template #input>
@@ -130,22 +153,6 @@ watchEffect(() => {
                             <template #input>
                                 <VTextField prepend-inner-icon="tabler-currency-won"
                                     v-model="props.item.extra_deposit_amount" type="number" :rules="[requiredValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>{{ props.item.pv_options.auth.levels.dev_name }} 수수료</template>
-                            <template #input>
-                                <VTextField v-model="props.item.dev_fee" type="number" :rules="[requiredValidator]"
-                                    suffix="%" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>수수료 정산 타입</template>
-                            <template #input>
-
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.dev_settle_type"
-                                    :items="dev_settle_types" prepend-inner-icon="ph-buildings" label="수수료 정산 타입 선택"
-                                    item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
                         <VCol>
