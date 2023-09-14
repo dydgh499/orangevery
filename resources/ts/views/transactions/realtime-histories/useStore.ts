@@ -9,7 +9,7 @@ export const useSearchStore = defineStore('realtimeHistoriesSearchStore', () => 
         'id': 'NO.',
         'mcht_name': '가맹점 상호',
         'appr_num': '승인 번호',
-        'tran_id': '거래번호',
+        'trans_id': '거래번호',
         'result_code': '응답코드',
         'message': '응답메세지',
         'amount': '거래금액',
