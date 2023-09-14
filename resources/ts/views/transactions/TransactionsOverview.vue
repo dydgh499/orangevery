@@ -134,6 +134,7 @@ onMounted(async () => {
             props.item.sales1_id = sales1.value?.id || null
             props.item.sales0_id = sales0.value?.id || null
             props.item.mcht_id = mcht.value.id
+            props.item.custom_id = mcht.custom_id
         })
     })
 })
