@@ -5,6 +5,7 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { user_info } from '@/plugins/axios';
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import corp from '@corp';
 
 interface Props {
     item: {
@@ -96,8 +97,9 @@ const md = user_info.value.level == 50 ? 4 : 12
         <VCol cols="12" :md="md" v-show="user_info.level == 50">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="영업점 일괄적용(유료)" content="개발사만 확인 가능한 정보입니다."></BaseQuestionTooltip>
+                    <VCardTitle>                        
+                        <BaseQuestionTooltip location="top" text="영업점 일괄적용(유료)" :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
+                        </BaseQuestionTooltip>
                     </VCardTitle>
                     <VRow class="pt-5">
                     </VRow>
@@ -152,7 +154,8 @@ const md = user_info.value.level == 50 ? 4 : 12
                     <VRow class="pt-10">
                     </VRow>
                     <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="가맹점 옵션(유료)" content="개발사만 확인 가능한 정보입니다."></BaseQuestionTooltip>
+                        <BaseQuestionTooltip location="top" text="가맹점 옵션(유료)" :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
+                        </BaseQuestionTooltip>
                     </VCardTitle>
                     <VRow class="pt-5">
                     </VRow>
@@ -211,7 +214,8 @@ const md = user_info.value.level == 50 ? 4 : 12
             <VCard>
                 <VCardItem>
                     <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="결제모듈 옵션(유료)" content="개발사만 확인 가능한 정보입니다."></BaseQuestionTooltip>
+                        <BaseQuestionTooltip location="top" text="결제모듈 옵션(유료)" :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
+                        </BaseQuestionTooltip>
                     </VCardTitle>
                     <VRow class="pt-5">
                     </VRow>

@@ -5,6 +5,7 @@ import { useAppAbility } from '@/plugins/casl/useAppAbility'
 import { axios, pay_token, user_info } from '@axios'
 import { allLevels } from '@/views/salesforces/useStore'
 import { avatars } from '@/views/users/useStore'
+import corp from '@corp'
 
 const ability = useAppAbility()
 const password = ref()
@@ -34,7 +35,8 @@ const profile = () => {
     if(mytype < 3)
         router.push(mylink)
     else
-        snackbar.value.show('개발사는 프로필로 이동할 수 없습니다.', 'warning')
+    
+        snackbar.value.show(`${corp.pv_options.auth.levels.dev_name}는 프로필로 이동할 수 없습니다.`, 'warning')
 }
 
 const logout = async () => {

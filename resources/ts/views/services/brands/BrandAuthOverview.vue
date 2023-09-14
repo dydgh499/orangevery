@@ -5,6 +5,7 @@ import type { FreeOption, PaidOption, AuthOption } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import corp from '@corp';
 
 interface Props {
     item: {
@@ -22,7 +23,8 @@ const props = defineProps<Props>()
             <VCard>
                 <VCardItem>
                     <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="명칭설정" content="개발사만 확인 가능한 정보입니다."></BaseQuestionTooltip>                        
+                        <BaseQuestionTooltip location="top" text="명칭설정" :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
+                        </BaseQuestionTooltip>                        
                     </VCardTitle>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="3" :mdr="9">
@@ -60,7 +62,8 @@ const props = defineProps<Props>()
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.sales3_name"
                                     prepend-inner-icon="ph:share-network" placeholder="사용할 등급 명칭을 입력해주세요"
-                                    persistent-placeholder :rules="[nullValidator]" />                            </template>
+                                    persistent-placeholder :rules="[nullValidator]" />
+                            </template>
                         </CreateHalfVCol>
                     </VRow>
 
@@ -103,7 +106,8 @@ const props = defineProps<Props>()
             <VCard>
                 <VCardItem>
                     <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="권한설정" content="개발사만 확인 가능한 정보입니다."></BaseQuestionTooltip>
+                        <BaseQuestionTooltip location="top" text="권한설정" :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
+                        </BaseQuestionTooltip>
                     </VCardTitle>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="3" :mdr="9">

@@ -97,7 +97,7 @@ onMounted(async () => {
                             <span v-if="_key == 'id' || _key == 'trans_id'">
                                 #{{ item[_key] }}
                             </span>
-                            <span>
+                            <span v-else>
                                 {{ item[_key] }}
                             </span>
                         </td>

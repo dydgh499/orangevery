@@ -1,13 +1,14 @@
-import { Header } from '@/views/headers'
-import { Searcher } from '@/views/searcher'
-import type { Operator, Options } from '@/views/types'
-import { getUserLevel } from '@axios'
+import { Header } from '@/views/headers';
+import { Searcher } from '@/views/searcher';
+import type { Operator, Options } from '@/views/types';
+import { getUserLevel } from '@axios';
+import corp from '@corp';
 
 export const operator_levels:Options[] = [
     {id:35, title:'직원'},
     {id:40, title:'본사'},
     {id:45, title:'협력사'},
-    {id:50, title:'개발사'},
+    {id:50, title:corp.pv_options.auth.levels.dev_name},
 ]
 
 export const useSearchStore = defineStore('operatorSearchStore', () => {    

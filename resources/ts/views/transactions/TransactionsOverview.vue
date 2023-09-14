@@ -307,13 +307,13 @@ onMounted(async () => {
                 </VCardItem>
                 <VCardItem v-show="corp.pv_options.auth.levels.dev_use">
                     <VCardTitle>
-                        <BaseQuestionTooltip :location="'top'" :text="'개발사 수수료'"
+                        <BaseQuestionTooltip :location="'top'" :text="`${corp.pv_options.auth.levels.dev_name} 수수료`"
                             :content="'해당 정보는 수정할 수 없습니다.'">
                         </BaseQuestionTooltip>
                     </VCardTitle>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="4" :mdr="8">
-                            <template #name>개발사 정산타입</template>
+                            <template #name>{{ corp.pv_options.auth.levels.dev_name }} 정산타입</template>
                             <template #input>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="corp.dev_settle_type"
                                     :items="dev_settle_types" prepend-inner-icon="ph-buildings" item-title="title"
@@ -323,7 +323,7 @@ onMounted(async () => {
                     </VRow>
                     <VRow>
                         <CreateHalfVCol :mdl="4" :mdr="8">
-                            <template #name>개발사 수수료</template>
+                            <template #name>{{ corp.pv_options.auth.levels.dev_name }} 수수료</template>
                             <template #input>
                                 <VTextField v-model="props.item.dev_fee" type="number" suffix="%" readonly />
                             </template>
@@ -473,7 +473,7 @@ onMounted(async () => {
                     </VCardTitle>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="4" :mdr="8">
-                            <template #name>개발사 수수료</template>
+                            <template #name>{{ corp.pv_options.auth.levels.dev_name }} 수수료</template>
                             <template #input>
                                 <VTextField v-model="props.item.dev_realtime_fee" type="number" suffix="%" readonly />
                             </template>

@@ -8,6 +8,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { banks } from '@/views/users/useStore'
 import { getUserLevel } from '@/plugins/axios';
+import corp from '@corp';
 
 interface Props {
     item: FinanceVan,
@@ -41,7 +42,7 @@ onMounted(async () => {
                 <VCol cols="12" md="4">
                     <VCardItem>
                         <VCardTitle style="margin-bottom: 1em;">
-                            <BaseQuestionTooltip :location="'top'" text="금융 VAN 정보" content="해당 정보는 보안상 개발사만 보여집니다." />
+                            <BaseQuestionTooltip :location="'top'" text="금융 VAN 정보" :content="'해당 정보는 보안상 '+corp.pv_options.auth.levels.dev_name+'만 보여집니다.'" />
                         </VCardTitle>
                         <VRow class="pt-3" v-if="getUserLevel() == 50">
                             <CreateHalfVCol :mdl="5" :mdr="7">
@@ -87,11 +88,11 @@ onMounted(async () => {
                 <VCol cols="12" md="4">
                     <VCardItem>
                         <VCardTitle style="margin-bottom: 1em;">
-                            <BaseQuestionTooltip :location="'top'" text="연동 정보" content="해당 정보는 보안상 개발사만 보여집니다." />
+                            <BaseQuestionTooltip :location="'top'" text="연동 정보" :content="'해당 정보는 보안상 '+corp.pv_options.auth.levels.dev_name+'만 보여집니다.'"/>
                         </VCardTitle>
                         <VRow class="pt-3" v-if="getUserLevel() == 50">
                             <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>개발사 수수료</template>
+                                <template #name>{{ corp.pv_options.auth.levels.dev_name }} 수수료</template>
                                 <template #input>
                                     <VTextField type="text" v-model="props.item.dev_fee"
                                         prepend-inner-icon="ph:share-network" placeholder="0.1" suffix="%"

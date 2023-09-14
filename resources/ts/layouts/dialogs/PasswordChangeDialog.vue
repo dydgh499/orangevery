@@ -2,6 +2,7 @@
 import { requiredValidator } from '@validators'
 import { axios } from '@axios'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import corp from '@corp'
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
@@ -22,7 +23,7 @@ const show = (_user_id: number, _user_type: number) => {
         visible.value = true
     }
     else {
-        snackbar.value.show('개발사는 패스워드를 변경할 수 없습니다.', 'warning')
+        snackbar.value.show(`${corp.pv_options.auth.levels.dev_name}는 패스워드를 변경할 수 없습니다.`, 'warning')
     }
 }
 

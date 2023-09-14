@@ -2,6 +2,7 @@ import { user_info } from '@/plugins/axios';
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import type { AuthOption, Brand, FreeOption, Options, PaidOption, ThemeCSS } from '@/views/types';
+import corp from '@corp';
 
 export const dev_settle_types = <Options[]>([
     {id:0, title:'적용안함'},
@@ -47,8 +48,8 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
         headers['deposit_amount'] = '입금액'
         headers['extra_deposit_amount'] = '부가입금액'
         headers['curr_deposit_amount'] = '현재입금액(월)'
-        headers['dev_fee'] = '개발사 수수료'
-        headers['dev_settle_type'] = '개발사 수수료 정산타입'
+        headers['dev_fee'] = corp.pv_options.auth.levels.dev_name+' 수수료'
+        headers['dev_settle_type'] = corp.pv_options.auth.levels.dev_name+' 수수료 정산타입'
         headers['last_dpst_at'] = '마지막 입금일'
         headers['note'] = '비고'
         headers['created_at'] = '생성시간'

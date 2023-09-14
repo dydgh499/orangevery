@@ -89,7 +89,7 @@ watchEffect(() => {
                 </VCardItem>
                 <VCardItem v-if="getUserLevel() == 50">
                     <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="지불정보" content="개발사만 확인 가능한 정보입니다."></BaseQuestionTooltip>
+                        <BaseQuestionTooltip location="top" text="지불정보" :content="item.pv_options.auth.levels.dev_name+'만 확인 가능한 정보입니다.'"></BaseQuestionTooltip>
                     </VCardTitle>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
@@ -114,7 +114,7 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>개발사 수수료</template>
+                            <template #name><span></span>{{ props.item.pv_options.auth.levels.dev_name }} 수수료</template>
                             <template #input>
                                 <VTextField v-model="props.item.dev_fee" type="number" :rules="[requiredValidator]"
                                     suffix="%" />
