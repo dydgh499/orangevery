@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { realtimeResult } from '@/views/transactions/useStore'
+import { useRequestStore } from '@/views/request'
 import type { SalesSlip, CancelPay } from '@/views/types'
 import { axios, getUserLevel } from '@axios'
 import corp from '@corp'
@@ -8,6 +10,7 @@ interface Props {
     item: SalesSlip,
 }
 
+const { post } = useRequestStore()
 const props = defineProps<Props>()
 
 const alert = <any>(inject('alert'))
@@ -36,7 +39,13 @@ const complaint = () => {
     })
 }
 const retryDeposit = async () => {
-
+    if (await alert.value.show('정말 해당 거래건을 실시간 재이체 하시겠습니까?')) {
+        const params = {
+            'trans_id': props.item.id,
+            'mcht_id': props.item.mcht_id,
+        }
+        const r = await post('/api/v1/manager/transactions/realtime-histories/deposit', params)
+    }
 }
 
 const payCanceled = async () => {
@@ -48,7 +57,7 @@ const payCanceled = async () => {
             only: false,
         }
         try {
-            const r = await axios.post('/api/v1/manager/transactions/pay-cancel', params)
+            const r = await post('/api/v1/manager/transactions/pay-cancel', params)
             snackbar.value.show('성공하였습니다.', 'success')
         }
         catch (e: any) {
@@ -79,7 +88,7 @@ const isCancelSafeDate = () => {
                     </template>
                     <VListItemTitle>민원처리</VListItemTitle>
                 </VListItem>
-                <VListItem value="complaint" @click="retryDeposit()" v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit">
+                <VListItem value="complaint" @click="retryDeposit()" v-if="realtimeResult(props.item) == 4 && getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:history" />
                     </template>
