@@ -69,7 +69,7 @@ const changeMchtEvent = () => {
             props.item.sales0_fee = mcht.sales0_fee
             props.item.hold_fee = mcht.hold_fee
             props.item.mcht_fee = mcht.trx_fee
-            props.item.custom_id = mcht.id
+            props.item.custom_id = mcht.custom_id
 
             sales5.value = sales[5].value.find(obj => obj.id === mcht.sales5_id)
             sales4.value = sales[4].value.find(obj => obj.id === mcht.sales4_id)
