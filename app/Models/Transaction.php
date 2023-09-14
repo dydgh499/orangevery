@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Salesforce;
 use App\Models\Merchandise;
-use Illuminate\Support\Facades\DB;
+use App\Models\Log\RealtimeSendHistory;
 
 use App\Http\Traits\Models\AttributeTrait;
 use Carbon\Carbon;
@@ -104,6 +104,13 @@ class Transaction extends Model
             return 0;        
     }
     
+    public function realtimes()
+    {
+        return $this->hasMany(RealtimeSendHistory::class, 'trans_id')
+            ->where('mcht_id', $this->mcht_id)
+            ->select();
+    }
+
     public function mcht()
     {
         return $this->belongsTo(Merchandise::class, 'mcht_id')->select([
