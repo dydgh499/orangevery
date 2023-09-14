@@ -6,6 +6,40 @@ import type { Transaction } from '@/views/types'
 import { getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 
+
+export const realtimeResult = (item: Transaction):number => {
+    if(item.is_cancel)
+        return 0
+    else if(item.dev_realtime_fee) //실시간 수수료 존재시(실시간 사용)
+    {
+        const log = item.realtimes?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
+        if(log) //성공
+            return 2
+        else if(item.realtimes?.length) // 실패
+            return 5
+        else if(item.realtimes?.length == 0) //요청 대기
+            return 1
+        else
+            return 3
+    }
+    else
+        return 0
+}
+
+export const realtimeMessage = (item: Transaction) => {
+    const code = realtimeResult(item)
+    if(code === 0)
+        return 'N/A'
+    else if(code === 1)
+        return '이체 대기중'
+    else if(code === 2)
+        return '성공'
+    else if(code === 4)
+        return '실패'
+    else
+        return '알수없는 상태'
+}
+
 export const useSearchStore = defineStore('transSearchStore', () => {    
     const store = Searcher('transactions')
     const head  = Header('transactions', '매출 관리')
@@ -89,9 +123,12 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         headers['trx_id'] = '거래번호'
         headers['ori_trx_id'] = '원거래번호'
     }
+    
+    if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit)
+        headers['realtime_result'] = '이체결과'
+    
     headers['created_at'] = '생성시간'
     headers['updated_at'] = '업데이트시간'
-    
     headers['extra_col'] = '더보기'
     
     head.main_headers.value = [];

@@ -24,12 +24,14 @@ const setFianaceVansBalance = async () => {
     }
     const results = await Promise.all(promises)
     for (let i = 0; i < results.length; i++) {
-        if(results[i]['data']['result_cd'] == "0000") {
-            finance_vans[i].balance = parseInt(results[i]['data']['data']['WDRW_CAN_AMT'])
+        console.log(results[i])
+        const data = results[i].data['data']
+        if(data['result_cd'] == "0000") {
+            finance_vans[i].balance = parseInt(data['data']['WDRW_CAN_AMT'])
         } 
         else {
             finance_vans[i].balance = 0
-            const message = finance_vans[i].nick_name+'의 잔고를 불러오는 도중 에러가 발생하였습니다.<br><br>'+results[i]['data']['result_msg']+'('+results[i]['data']['result_cd']+')'
+            const message = finance_vans[i].nick_name+'의 잔고를 불러오는 도중 에러가 발생하였습니다.<br><br>'+data['result_msg']+'('+data['result_cd']+')'
             snackbar.value.show(message, 'error')
         }
     }

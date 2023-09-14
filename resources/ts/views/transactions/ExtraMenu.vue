@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { SalesSlip, CancelPay } from '@/views/types'
-import { axios, getUserLevel, user_info } from '@axios'
+import { axios, getUserLevel } from '@axios'
+import corp from '@corp'
+
 
 interface Props {
     item: SalesSlip,
@@ -33,6 +35,10 @@ const complaint = () => {
         query: params,
     })
 }
+const retryDeposit = async () => {
+
+}
+
 const payCanceled = async () => {
     if (await alert.value.show('정말 상위 PG사를 통해 결제를 취소하시겠습니까?')) {
         const params: CancelPay = {
@@ -73,6 +79,12 @@ const isCancelSafeDate = () => {
                     </template>
                     <VListItemTitle>민원처리</VListItemTitle>
                 </VListItem>
+                <VListItem value="complaint" @click="retryDeposit()" v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="tabler:history" />
+                    </template>
+                    <VListItemTitle>재이체</VListItemTitle>
+                </VListItem>                
                 <VListItem value="cancelTrans" @click="cancelTran.show(props.item)" v-show="props.item.is_cancel == false"
                     v-if="getUserLevel() >= 35">
                     <template #prepend>

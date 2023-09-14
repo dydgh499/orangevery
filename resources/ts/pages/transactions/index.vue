@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
-import { useSearchStore } from '@/views/transactions/useStore'
+import { useSearchStore, realtimeResult, realtimeMessage } from '@/views/transactions/useStore'
 import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { salesLevels } from '@/views/salesforces/useStore'
@@ -229,6 +229,11 @@ watchEffect(() => {
                             </span>
                             <span v-else-if="_key == 'custom_id'">
                                 {{ cus_filters.find(cus => cus.id === item[_key])?.name }}
+                            </span>
+                            <span v-else-if="_key == 'realtime_result'">
+                                <VChip :color="store.getSelectIdColor(realtimeResult(item))">
+                                    {{ realtimeMessage(item) }}
+                                </VChip>
                             </span>
                             <span v-else-if="_key == 'extra_col'">
                                 <ExtraMenu :item="item"></ExtraMenu>
