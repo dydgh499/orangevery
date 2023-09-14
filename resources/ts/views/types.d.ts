@@ -224,7 +224,7 @@ export interface RealtimeHistory {
     id: number,
     mcht_name: string,
     appr_num: string,
-    tran_id: number,
+    trans_id: number,
     result_code: string,
     request_type: number,
     message: string,

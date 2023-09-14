@@ -38,7 +38,7 @@ defineExpose({
                     </thead>
                     <tbody>
                         <tr v-for="(history, key) in transaction.realtimes" :key="key" :class="realtimeDetailClass(history)">
-                            <td class='list-square'>#{{ history.tran_id }}</td>
+                            <td class='list-square'>#{{ history.trans_id }}</td>
                             <td class='list-square'>{{ history.trans_seq_num }}</td>
                             <td class='list-square'>{{ history.result_code }}</td>
                             <td class='list-square'>{{ history.request_type }}</td>
