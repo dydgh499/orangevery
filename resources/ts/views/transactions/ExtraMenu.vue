@@ -88,7 +88,7 @@ const isCancelSafeDate = () => {
                     </template>
                     <VListItemTitle>민원처리</VListItemTitle>
                 </VListItem>
-                <VListItem value="complaint" @click="retryDeposit()" v-if="realtimeResult(props.item) == 4 && getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit">
+                <VListItem value="complaint" class="retry-realtime-deposit" @click="retryDeposit()" v-if="realtimeResult(props.item) == 4 && getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:history" />
                     </template>
