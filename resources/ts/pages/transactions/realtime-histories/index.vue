@@ -43,8 +43,8 @@ const getLogStyle = (item: RealtimeHistory) => {
     else
         return '';
 }
-onMounted(() => {
-    setFianaceVansBalance()
+onMounted(async () => {
+    await setFianaceVansBalance()
 })
 </script>
 <template>
