@@ -233,7 +233,7 @@ export interface RealtimeHistory {
     acct_bank_name: string,
     acct_bank_code: string,
     trans_seq_num: string,
-    create_at: string,
+    created_at: string,
     updated_at: string,
 }
 interface FreeOption {

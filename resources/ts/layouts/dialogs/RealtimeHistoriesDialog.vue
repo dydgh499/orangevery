@@ -47,7 +47,7 @@ defineExpose({
                             <td class='list-square'>{{ history.acct_num }}</td>
                             <td class='list-square'>{{ history.acct_bank_name }}</td>
                             <td class='list-square'>{{ history.acct_bank_code }}</td>
-                            <td class='list-square'>{{ history.create_at }}</td>
+                            <td class='list-square'>{{ history.created_at }}</td>
                             <td class='list-square'>{{ history.updated_at }}</td>
                         </tr>
                     </tbody>
