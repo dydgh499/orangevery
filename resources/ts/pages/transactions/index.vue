@@ -41,7 +41,7 @@ const all_selected = ref()
 
 store.params.level = 10
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
-store.params.is_use_realtime_deposit = corp.pv_options.paid.use_realtime_deposit
+store.params.is_use_realtime_deposit = corp.pv_options.paid.use_realtime_deposit ? 1 : 0
 
 const metas = ref([
     {
