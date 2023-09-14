@@ -28,16 +28,6 @@ const props = defineProps<Props>()
                     </VCardTitle>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name><span>개발사</span></template>
-                            <template #input>
-                                <VTextField v-model="props.item.auth.levels.dev_name"
-                                    prepend-inner-icon="ph:share-network" placeholder="개발사 등급 명칭을 입력해주세요"
-                                    persistent-placeholder :rules="[nullValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>영업자 등급 6</span></template>
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.sales5_name"
@@ -109,17 +99,6 @@ const props = defineProps<Props>()
                         <BaseQuestionTooltip location="top" text="권한설정" :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
                         </BaseQuestionTooltip>
                     </VCardTitle>
-                    <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name><span>{{ item.auth.levels.dev_name }} 사용여부</span></template>
-                            <template #input>
-                                <BooleanRadio :radio="item.auth.levels.dev_use" @update:radio="item.auth.levels.dev_use = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>{{ item.auth.levels.sales5_name }} 사용여부</span></template>

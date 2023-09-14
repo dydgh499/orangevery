@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import type { FreeOption, PaidOption, AuthOption, Brand } from '@/views/types'
+import type { FreeOption, PaidOption, AuthOption } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { user_info } from '@/plugins/axios';

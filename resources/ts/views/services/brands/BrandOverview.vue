@@ -8,6 +8,7 @@ import { config } from '@layouts/config'
 import { getUserLevel } from '@/plugins/axios';
 import { dev_settle_types } from '@/views/services/brands/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { nullValidator } from '@validators'
 
 interface Props {
     item: Brand,
@@ -92,6 +93,23 @@ watchEffect(() => {
                         <BaseQuestionTooltip location="top" text="지불정보" :content="item.pv_options.auth.levels.dev_name+'만 확인 가능한 정보입니다.'"></BaseQuestionTooltip>
                     </VCardTitle>
                     <VRow class="pt-5">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name><span>{{ item.pv_options.auth.levels.dev_name }} 사용여부</span></template>
+                                <template #input>
+                                    <BooleanRadio :radio="item.pv_options.auth.levels.dev_use" @update:radio="item.pv_options.auth.levels.dev_use = $event">
+                                        <template #true>사용</template>
+                                        <template #false>미사용</template>
+                                    </BooleanRadio>
+                                </template>
+                            </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name><span>개발사</span></template>
+                            <template #input>
+                                <VTextField v-model="props.item.pv_options.auth.levels.dev_name"
+                                    prepend-inner-icon="ph:share-network" placeholder="개발사 등급 명칭을 입력해주세요"
+                                    persistent-placeholder :rules="[nullValidator]" />
+                            </template>
+                        </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name><span></span>입금일</template>
                             <template #input>
