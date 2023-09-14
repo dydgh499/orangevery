@@ -119,6 +119,9 @@ class TransactionController extends Controller
             if($request->has($col))
                 $query = $query->where($col, $request->input($col));
         }
+
+        if($request->is_use_realtime_deposit && $request->level == 10)
+            $query = $query->with(['realtimes']);
         return $query;
     }
 
