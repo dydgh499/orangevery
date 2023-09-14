@@ -69,7 +69,7 @@ const getAbilitiesMenu = computed(() => {
     if (corp.pv_options.paid.use_realtime_deposit)
     {
         risks.push({
-            title: '실시간이체 이력관리',
+            title: '실시간이체 관리',
             icon: { icon: 'tabler:history' },
             to: 'transactions-realtime-histories',
         })

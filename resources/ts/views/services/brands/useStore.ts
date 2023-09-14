@@ -4,8 +4,9 @@ import { Searcher } from '@/views/searcher';
 import type { AuthOption, Brand, FreeOption, Options, PaidOption, ThemeCSS } from '@/views/types';
 
 export const dev_settle_types = <Options[]>([
-    {id:0, title:'본사이익 대비 %'},
-    {id:1, title:'거래금액 대비 %'},
+    {id:0, title:'본사이익 대비 방식'},
+    {id:2, title:'전체매출 대비 방식'},
+    {id:1, title:'수수료 차감 방식'},
 ])
 export const useSearchStore = defineStore('brandSearchStore', () => {
     const store = Searcher('services/brands')

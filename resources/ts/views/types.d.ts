@@ -217,6 +217,7 @@ export interface FinanceVan {
     sms_receive_phone: string,
     min_balance_limit: number,
     balance_status?: number,
+    balance?: number,
 }
 
 export interface RealtimeHistory {

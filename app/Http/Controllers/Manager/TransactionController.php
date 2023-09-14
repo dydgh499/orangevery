@@ -224,9 +224,9 @@ class TransactionController extends Controller
     {
         if($this->authCheck($request->user(), $id, 35))
         {
-            $res = $this->delete($this->transactions->where('id', $id));
+            $res = $this->transactions->where('id', $id)->delete();
             operLogging(HistoryType::DELETE, $this->target, ['id' => $id], "#".$id);
-            return $this->response($res);
+            return $this->response(4);
         }
         else
             return $this->response(951);

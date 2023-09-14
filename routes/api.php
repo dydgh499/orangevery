@@ -124,7 +124,12 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('salesforces/part', [SettleHistoryController::class, 'createSalesforcePart']);
                 Route::delete('salesforces/{id}', [SettleHistoryController::class, 'deleteSalesforce']);
                 Route::post('salesforces/{id}/deposit', [SettleHistoryController::class, 'depositSalesforce']);    
-            });            
+            });
+            
+            Route::prefix('realtime-histories')->group(function() {
+                Route::post('get-balance', [RealtimeSendHistoryController::class, 'getBalance']);
+                Route::post('deposit', [RealtimeSendHistoryController::class, 'deposit']);
+            });
             Route::apiResource('realtime-histories', RealtimeSendHistoryController::class);
         });
         Route::prefix('salesforces')->group(function() {
@@ -181,7 +186,6 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::apiResource('transactions', TransactionController::class);
         Route::apiResource('merchandises', MerchandiseController::class);
         Route::apiResource('posts', PostController::class);
-        
     });
 
     Route::prefix('quick-view')->middleware('auth:sanctum')->group(function() {

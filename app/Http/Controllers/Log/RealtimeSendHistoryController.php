@@ -14,11 +14,12 @@ use Illuminate\Http\Request;
 class RealtimeSendHistoryController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
-    protected $realtime_send_histories;
+    protected $realtime_send_histories, $base_noti_url;
 
     public function __construct(RealtimeSendHistory $realtime_send_histories)
     {
         $this->realtime_send_histories = $realtime_send_histories;
+        $this->base_noti_url = $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes';
     }
        
     /**
@@ -56,7 +57,7 @@ class RealtimeSendHistoryController extends Controller
         $data = $this->getIndexData($request, $query, 'realtime_send_histories.id', $cols, 'realtime_send_histories.created_at');
         return $this->response(0, $data);
     }
-    
+
     /**
      * 추가
      *
@@ -99,5 +100,33 @@ class RealtimeSendHistoryController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getBalance(Request $request)
+    {
+        $data = $request->all();
+        $url = $this->base_noti_url.'/get-balance';
+        $res = post($url, $data);
+        if($res['body']['result_cd'] === "0000")
+            return $this->response(1, $res['body']);
+        else
+            return $this->extendResponse(1999, $res['body']['result_msg']);
+    }
+
+    public function deposit(Request $request)
+    {
+        $validated = $request->validate(['trans_id'=>'required|integer', 'mcht_id'=>'required|integer']);
+        $data = $request->all();
+        $url = $this->base_noti_url.'/deposit';
+        $res = post($url, $data);
+        if($res['body']['result_cd'] === "0000")
+            return $this->response(1, $res['body']);
+        else
+            return $this->extendResponse(1999, $res['body']['result_msg']);
+    }
+
+    public function depositCollect(Request $request)
+    {
+        
     }
 }
