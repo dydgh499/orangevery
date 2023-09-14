@@ -10,8 +10,13 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-const isSuccessDeposit = (item: RealtimeHistory) => {
-    return item.result_code == '0000' && item.key == '6170' ? true : false
+const getLogStyle = (item: RealtimeHistory) => {
+    if(item.result_code == '0000' && item.key == '6170')
+        return 'color:blue';
+    else if(item.result_code != '0000' && item.key == '6170')
+        return 'color:red';
+    else
+        return '';
 }
 </script>
 <template>
@@ -50,7 +55,7 @@ const isSuccessDeposit = (item: RealtimeHistory) => {
                         </td>
                     </template>
                     <template v-else>
-                        <td v-show="_header.visible" class='list-square' :style="isSuccessDeposit(item) ? 'color:blue;' : ''">
+                        <td v-show="_header.visible" class='list-square' :class="getLogStyle(item)">
                             <span v-if="_key == 'id' || _key == 'trans_id'">
                                 #{{ item[_key] }}
                             </span>
