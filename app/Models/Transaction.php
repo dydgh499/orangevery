@@ -106,7 +106,9 @@ class Transaction extends Model
     
     public function realtimes()
     {
-        return $this->hasMany(RealtimeSendHistory::class, 'trans_id');
+        return $this->hasMany(RealtimeSendHistory::class, 'trans_id')
+            ->orderby('id', 'desc')
+            ->select();
     }
 
     public function mcht()
