@@ -95,18 +95,20 @@ class SalesforceBatchController extends Controller
             ]);
         }
         $res = DB::transaction(function () use($sales_key, $datas, $request, $aft_sales_id, $aft_trx_fee) {
-            $this->merchandises->where('brand_id', $request->user()->brand_id)
+            $u_m_res = $this->merchandises->where('brand_id', $request->user()->brand_id)
                 ->where($sales_key['sales_id'], $request->id)
                 ->update([$sales_key['sales_fee'] => $request->sales_fee/100]);
-            $i_res = $this->manyInsert(new SfFeeChangeHistory(), $datas);
-            SfFeeApplyHistory::where('sales_id', $aft_sales_id)
+
+            $i_chg_res = $this->manyInsert(new SfFeeChangeHistory(), $datas);
+
+            $u_apply_res = SfFeeApplyHistory::where('sales_id', $aft_sales_id)
                 ->update(['is_delete' => true]);
             $c_apply_res = SfFeeApplyHistory::create([
                 'brand_id' => $request->user()->brand_id,
                 'sales_id' => $aft_sales_id,
                 'trx_fee'  => $aft_trx_fee,
             ]);
-            return $i_res && $c_apply_res;
+            return $i_chg_res && $c_apply_res;
         });
         return $this->response($res ? 1 : 990);
     }

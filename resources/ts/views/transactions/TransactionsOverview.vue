@@ -17,7 +17,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
-const { sales, classification } = useSalesFilterStore()
+const { sales } = useSalesFilterStore()
 
 const levels = corp.pv_options.auth.levels
 const sales5 = ref(<any>({ id: null, sales_name: '선택안함' }))
@@ -27,7 +27,6 @@ const sales2 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const sales1 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const sales0 = ref(<any>({ id: null, sales_name: '선택안함' }))
 const mcht = ref(<any>({ id: null, mcht_name: '선택안함' }))
-const custom = ref(<any>({ id: null, type: 1, name: '사용안함' }))
 const pay_modules = ref<PayModule[]>([])
 let merchandises = <Merchandise[]>([])
 let fee_histories = <any[]>([])
@@ -70,6 +69,7 @@ const changeMchtEvent = () => {
             props.item.sales0_fee = mcht.sales0_fee
             props.item.hold_fee = mcht.hold_fee
             props.item.mcht_fee = mcht.trx_fee
+            props.item.custom_id = mcht.id
 
             sales5.value = sales[5].value.find(obj => obj.id === mcht.sales5_id)
             sales4.value = sales[4].value.find(obj => obj.id === mcht.sales4_id)
@@ -77,7 +77,6 @@ const changeMchtEvent = () => {
             sales2.value = sales[2].value.find(obj => obj.id === mcht.sales2_id)
             sales1.value = sales[1].value.find(obj => obj.id === mcht.sales1_id)
             sales0.value = sales[0].value.find(obj => obj.id === mcht.sales0_id)
-            custom.value = cus_filters.find(obj => obj.id === props.item.custom_id)
         }
     }
 }
@@ -111,11 +110,10 @@ const hintSalesApplyFee = (sales: any): string => {
 
 onMounted(async () => {
     await Promise.all([
-        classification(),
         feeApplyHistoires(),
         getAllPayModules(),
         getAllMerchandises()
-    ]).then(([classificationResult, feeHistoriesResult, payModulesResult, merchandisesResult]) => {
+    ]).then(([feeHistoriesResult, payModulesResult, merchandisesResult]) => {
         fee_histories = feeHistoriesResult
         pay_modules.value = payModulesResult
         merchandises = merchandisesResult
@@ -127,17 +125,14 @@ onMounted(async () => {
         sales1.value = sales[1].value.find(obj => obj.id === props.item.sales1_id)
         sales0.value = sales[0].value.find(obj => obj.id === props.item.sales0_id)
         mcht.value = merchandises.find(obj => obj.id === props.item.mcht_id)
-        custom.value = cus_filters.find(obj => obj.id === props.item.custom_id)
 
         watchEffect(() => {
-            console.log(1)
             props.item.sales5_id = sales5.value?.id || null
             props.item.sales4_id = sales4.value?.id || null
             props.item.sales3_id = sales3.value?.id || null
             props.item.sales2_id = sales2.value?.id || null
             props.item.sales1_id = sales1.value?.id || null
             props.item.sales0_id = sales0.value?.id || null
-            props.item.custom_id = custom.value?.id || null
             props.item.mcht_id = mcht.value.id
         })
     })
@@ -162,8 +157,8 @@ onMounted(async () => {
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="sales5"
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[5].value)"
                                         prepend-inner-icon="ph:share-network" :label="levels.sales5_name + ' 선택'"
-                                        item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales5)"
-                                        item-value="id" return-object />
+                                        item-title="sales_name" :hint="hintSalesApplyFee(sales5)"
+                                        item-value="id" />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales5_fee" type="number" suffix="%"
@@ -182,7 +177,7 @@ onMounted(async () => {
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[4].value)"
                                         prepend-inner-icon="ph:share-network" :label="levels.sales4_name + ' 선택'"
                                         item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales4)"
-                                        item-value="id" return-object />
+                                        item-value="id" return-object single-line/>
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales4_fee" type="number" suffix="%"
@@ -201,7 +196,7 @@ onMounted(async () => {
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[3].value)"
                                         prepend-inner-icon="ph:share-network" :label="levels.sales3_name + ' 선택'"
                                         item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales3)"
-                                        item-value="id" return-object />
+                                        item-value="id" return-object single-line/>
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales3_fee" type="number" suffix="%"
@@ -220,7 +215,7 @@ onMounted(async () => {
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[2].value)"
                                         prepend-inner-icon="ph:share-network" :label="levels.sales2_name + ' 선택'"
                                         item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales2)"
-                                        item-value="id" return-object />
+                                        item-value="id" return-object single-line/>
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales2_fee" type="number" suffix="%"
@@ -239,7 +234,7 @@ onMounted(async () => {
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[1].value)"
                                         prepend-inner-icon="ph:share-network" :label="levels.sales1_name + ' 선택'"
                                         item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales1)"
-                                        item-value="id" return-object />
+                                        item-value="id" return-objectsingle-line />
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales1_fee" type="number" suffix="%"
@@ -258,7 +253,7 @@ onMounted(async () => {
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[0].value)"
                                         prepend-inner-icon="ph:share-network" :label="levels.sales0_name + ' 선택'"
                                         item-title="sales_name" persistent-hint :hint="hintSalesApplyFee(sales0)"
-                                        item-value="id" return-object />
+                                        item-value="id" return-object single-line/>
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.sales0_fee" type="number" suffix="%"
@@ -278,7 +273,7 @@ onMounted(async () => {
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht"
                                         :items="[{ id: null, mcht_name: '선택안함' }].concat(merchandises)"
                                         prepend-inner-icon="ph:share-network" label="가맹점 선택" item-title="mcht_name"
-                                        item-value="id" @update:modelValue="changeMchtEvent()" return-object />
+                                        item-value="id" @update:modelValue="changeMchtEvent()" return-object single-line/>
                                 </VCol>
                                 <VCol cols="12" :md="4">
                                     <VTextField v-model="props.item.mcht_fee" type="number" suffix="%"
@@ -303,10 +298,10 @@ onMounted(async () => {
                                     <label>커스텀 필터</label>
                                 </VCol>
                                 <VCol cols="12" md="8">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="custom"
-                                        :items="[{ id: null, name: '선택안함' }].concat(cus_filters)"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.custom_id"
+                                        :items="[{ id: null, name: '선택안함',type: 1}].concat(cus_filters)"
                                         prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name"
-                                        item-value="id" persistent-hint create />
+                                        item-value="id" single-line/>
                                 </VCol>
                             </VRow>
                         </VCol>
