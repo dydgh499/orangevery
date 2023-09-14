@@ -343,7 +343,7 @@ export interface Transaction {
     id: number,
     mcht_id: number | null,
 
-    dev_realtime_fee: number,
+    dev_realtime_fee?: number,
     sales5_name?: string,
     sales5_id: number | null,
     sales5_fee: float,

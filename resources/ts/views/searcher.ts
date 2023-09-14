@@ -1,7 +1,8 @@
-import { useRequestStore } from '@/views/request'
-import { Pagenation } from '@/views/types'
-import { user_info } from '@axios'
-import { cloneDeep } from 'lodash'
+import { useRequestStore } from '@/views/request';
+import type { Pagenation } from '@/views/types';
+import { user_info } from '@axios';
+import { StatusColors } from '@core/enums';
+import { cloneDeep } from 'lodash';
 
 
 export function Searcher(path: string) {
@@ -80,17 +81,17 @@ export function Searcher(path: string) {
     };
     
     const getSelectIdColor = (id: number | undefined) => {
-        if (id == 0)
+        if (id == StatusColors.Default)
             return "default"
-        else if (id == 1)
+        else if (id == StatusColors.Primary)
             return "primary"
-        else if (id == 2)
+        else if (id == StatusColors.Success)
             return "success"
-        else if (id == 3)
+        else if (id == StatusColors.Info)
             return "info"
-        else if (id == 4)
+        else if (id == StatusColors.Warning)
             return "warning"
-        else if (id == 5)
+        else if (id == StatusColors.Error)
             return "error"
         else
             return 'default'

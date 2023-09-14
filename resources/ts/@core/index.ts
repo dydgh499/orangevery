@@ -1,6 +1,6 @@
-import type { ThemeConfig, UserThemeConfig } from './types'
-import { RouteTransitions, Skins } from '@core/enums'
-import type { UserConfig as LayoutConfig } from '@layouts/types'
+import { RouteTransitions, Skins } from '@core/enums';
+import type { UserConfig as LayoutConfig } from '@layouts/types';
+import type { ThemeConfig, UserThemeConfig } from './types';
 
 export const defineThemeConfig = (
   userConfig: UserThemeConfig,

@@ -1,40 +1,49 @@
-import { Header } from '@/views/headers'
-import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
-import { Searcher } from '@/views/searcher'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import type { Transaction } from '@/views/types'
-import { getUserLevel, user_info } from '@axios'
-import corp from '@corp'
+import { Header } from '@/views/headers';
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore';
+import { Searcher } from '@/views/searcher';
+import { useStore } from '@/views/services/pay-gateways/useStore';
+import type { RealtimeHistory, Transaction } from '@/views/types';
+import { getUserLevel, user_info } from '@axios';
+import { StatusColors } from '@core/enums';
+import corp from '@corp';
 
+export const realtimeDetailClass = (history: RealtimeHistory) => {
+    if(history.result_code === '0000' && history.request_type === 6170)
+        return 'text-success'
+    else if(history.result_code !== '0000')
+        return 'text-error'
+    else
+        return 'text-default'
+}
 
-export const realtimeResult = (item: Transaction):number => {
+export const realtimeResult = (item: Transaction) => {
     if(item.is_cancel)
-        return 0
+        return StatusColors.Default
     else if(item.dev_realtime_fee) //실시간 수수료 존재시(실시간 사용)
     {
         const log = item.realtimes?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
         if(log) //성공
-            return 2
+            return StatusColors.Success
         else if(item.realtimes?.length) // 실패
-            return 5
+            return StatusColors.Error
         else if(item.realtimes?.length == 0) //요청 대기
-            return 1
+            return StatusColors.Primary
         else
-            return 3
+            return StatusColors.Info
     }
     else
-        return 0
+        return StatusColors.Default
 }
 
-export const realtimeMessage = (item: Transaction) => {
+export const realtimeMessage = (item: Transaction):string => {
     const code = realtimeResult(item)
-    if(code === 0)
+    if(code === StatusColors.Default)
         return 'N/A'
-    else if(code === 1)
+    else if(code === StatusColors.Primary)
         return '이체 대기중'
-    else if(code === 2)
+    else if(code === StatusColors.Success)
         return '성공'
-    else if(code === 4)
+    else if(code === StatusColors.Error)
         return '실패'
     else
         return '알수없는 상태'

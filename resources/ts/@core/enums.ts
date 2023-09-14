@@ -15,3 +15,12 @@ export const RouteTransitions = {
   'Fade': 'fade-transition',
   'None': 'none',
 } as const
+
+export const StatusColors = {
+    Default : 0,
+    Primary : 1,
+    Success : 2,
+    Info    : 3,
+    Warning : 4,
+    Error   : 5,
+} as const

@@ -8,6 +8,8 @@ import ExtraMenu from '@/views/transactions/ExtraMenu.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
 import CancelTransDialog from '@/layouts/dialogs/CancelTransDialog.vue'
+import RealtimeHistoriesDialog from '@/layouts/dialogs/RealtimeHistoriesDialog.vue'
+
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { user_info, getUserLevel } from '@axios'
@@ -20,14 +22,17 @@ const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
 const salesslip = ref()
 const cancelTran = ref()
+const realtimeHistories = ref()
 const levels = corp.pv_options.auth.levels
 const mcht_settle_type = ref({ id: null, name: '전체' })
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+
 provide('salesslip', salesslip)
 provide('cancelTran', cancelTran)
+provide('realtimeHistories', realtimeHistories)
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
@@ -248,5 +253,7 @@ watchEffect(() => {
         </BaseIndexView>
         <SalesSlipDialog ref="salesslip" :pgs="pgs" />
         <CancelTransDialog ref="cancelTran" />
+        <RealtimeHistoriesDialog ref="realtimeHistories" />
+        
     </div>
 </template>

@@ -20,6 +20,8 @@ const formatDate = <any>(inject('$formatDate'))
 
 const salesslip = <any>(inject('salesslip'))
 const cancelTran = <any>(inject('cancelTran'))
+const realtimeHistories = <any>(inject('realtimeHistories'))
+    
 const router = useRouter()
 
 const complaint = () => {
@@ -88,11 +90,17 @@ const isCancelSafeDate = () => {
                     </template>
                     <VListItemTitle>민원처리</VListItemTitle>
                 </VListItem>
-                <VListItem value="complaint" class="retry-realtime-deposit" @click="retryDeposit()" v-if="realtimeResult(props.item) == 4 && getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit">
+                <VListItem value="retry-realtime-deposit" class="retry-realtime-deposit" @click="retryDeposit()" v-if="realtimeResult(props.item) == 4 && getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="fa6-solid:money-bill-transfer" />
+                    </template>
+                    <VListItemTitle>재이체</VListItemTitle>
+                </VListItem>
+                <VListItem value="realtime-histories" @click="realtimeHistories.show(props.item)" v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:history" />
                     </template>
-                    <VListItemTitle>재이체</VListItemTitle>
+                    <VListItemTitle>실시간 상세이력 확인</VListItemTitle>
                 </VListItem>                
                 <VListItem value="cancelTrans" @click="cancelTran.show(props.item)" v-show="props.item.is_cancel == false"
                     v-if="getUserLevel() >= 35">
