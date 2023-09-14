@@ -53,7 +53,7 @@ class RealtimeSendHistoryController extends Controller
                     ->orWhere('realtime_send_histories.acct_num', 'like', "%$search%");
             });
         }
-        $data = $this->getIndexData($request, $query, 'realtime_send_histories.id', $cols, 'realtime_send_histories.id');
+        $data = $this->getIndexData($request, $query, 'realtime_send_histories.id', $cols, 'realtime_send_histories.created_at');
         return $this->response(0, $data);
     }
     
