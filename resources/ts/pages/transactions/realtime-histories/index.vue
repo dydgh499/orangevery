@@ -5,6 +5,7 @@ import { useRequestStore } from '@/views/request'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import type { RealtimeHistory } from '@/views/types'
+import { onMounted } from 'vue'
 
 const { store, head, exporter } = useSearchStore()
 const { post } = useRequestStore()
@@ -15,6 +16,7 @@ provide('head', head)
 provide('exporter', exporter)
 
 
+const snackbar = <any>(inject('snackbar'))
 const setFianaceVansBalance = async () => {
     const promises = <any>[]
     for (let i = 0; i < finance_vans.length; i++)  {
@@ -23,7 +25,14 @@ const setFianaceVansBalance = async () => {
     const results = await Promise.all(promises)
     console.log(results)
     for (let i = 0; i < results.length; i++) {
-        const element = results[i];
+        if(results[i]['RESP_CD'] == "0000") {
+            finance_vans[i].balance = results[i]['WDRW_CAN_AMT']
+        } 
+        else {
+            finance_vans[i].balance = 0
+            const message = finance_vans[i].nick_name+'의 잔고를 불러오는 도중 '
+            snackbar.value.show(message, 'error')
+        }
     }
 }
 
@@ -35,7 +44,9 @@ const getLogStyle = (item: RealtimeHistory) => {
     else
         return '';
 }
-setFianaceVansBalance()
+onMounted(() => {
+    setFianaceVansBalance()
+})
 </script>
 <template>
     <BaseIndexView placeholder="가맹점 상호, 계좌번호, 승인번호 검색" :metas="[]" :add="false" add_name="실시간 이체 이력" :is_range_date="true">
@@ -47,8 +58,8 @@ setFianaceVansBalance()
         </template>
         <template #index_extra_field>
             <table>
-                <tr v-for="(finance_van, key) in finance_vans" :key="key">
-                    <th>{{ finance_van.nick_name }} 잔액</th>
+                <tr v-for="(finance_van, key) in finance_vans" :key="key" :style="finance_van.balance_status ? '' : 'color:red'">
+                    <th>{{ finance_van.nick_name }} 잔액: </th>
                     <td><span>{{ finance_van.balance ? finance_van.balance.toLocaleString() : 0 }}</span> &#8361;</td>
                 </tr>
             </table>
