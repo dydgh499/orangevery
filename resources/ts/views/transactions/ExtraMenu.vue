@@ -73,6 +73,9 @@ const isCancelSafeDate = () => {
     const current_dt = formatDate(new Date())
     return getUserLevel() == 10 && props.item.trx_dt == current_dt
 }
+const isRealtimeTransaction = () => {
+    return getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit
+}
 </script>
 <template>
     <VBtn icon size="x-small" color="default" variant="text">
@@ -92,14 +95,14 @@ const isCancelSafeDate = () => {
                     <VListItemTitle>민원처리</VListItemTitle>
                 </VListItem>
                 <VListItem value="retry-realtime-deposit" class="retry-realtime-deposit" @click="retryDeposit()"
-                    v-show="realtimeResult(props.item) == StatusColors.Error && getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit">
+                    v-show="realtimeResult(props.item) == StatusColors.Error && isRealtimeTransaction()">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="fa6-solid:money-bill-transfer" />
                     </template>
                     <VListItemTitle>재이체</VListItemTitle>
                 </VListItem>
                 <VListItem value="realtime-histories" @click="realtimeHistories.show(props.item)"
-                    v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit">
+                    v-if="isRealtimeTransaction()">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:history" />
                     </template>
