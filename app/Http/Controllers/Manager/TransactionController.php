@@ -359,7 +359,7 @@ class TransactionController extends Controller
 
         $db_trans = $this->transactions
             ->where('brand_id', 8)
-            ->where('trx_dt', '>=', '2023-08-31')
+            ->where('trx_dt', '>=', '2023-09-15')
             ->orderBy('transactions.id', 'desc')
             ->get();
         
