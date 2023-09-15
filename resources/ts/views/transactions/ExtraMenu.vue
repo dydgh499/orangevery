@@ -2,7 +2,8 @@
 import { realtimeResult } from '@/views/transactions/useStore'
 import { useRequestStore } from '@/views/request'
 import type { SalesSlip, CancelPay } from '@/views/types'
-import { axios, getUserLevel } from '@axios'
+import { getUserLevel } from '@axios'
+import { StatusColors } from '@core/enums';
 import corp from '@corp'
 
 
@@ -21,7 +22,7 @@ const formatDate = <any>(inject('$formatDate'))
 const salesslip = <any>(inject('salesslip'))
 const cancelTran = <any>(inject('cancelTran'))
 const realtimeHistories = <any>(inject('realtimeHistories'))
-    
+
 const router = useRouter()
 
 const complaint = () => {
@@ -68,7 +69,7 @@ const payCanceled = async () => {
         }
     }
 }
-const isCancelSafeDate = () => {    
+const isCancelSafeDate = () => {
     const current_dt = formatDate(new Date())
     return getUserLevel() == 10 && props.item.trx_dt == current_dt
 }
@@ -90,27 +91,29 @@ const isCancelSafeDate = () => {
                     </template>
                     <VListItemTitle>민원처리</VListItemTitle>
                 </VListItem>
-                <VListItem value="retry-realtime-deposit" class="retry-realtime-deposit" @click="retryDeposit()" v-if="realtimeResult(props.item) == 4 && getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit">
+                <VListItem value="retry-realtime-deposit" class="retry-realtime-deposit" @click="retryDeposit()"
+                    v-show="realtimeResult(props.item) == StatusColors.Error && getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="fa6-solid:money-bill-transfer" />
                     </template>
                     <VListItemTitle>재이체</VListItemTitle>
                 </VListItem>
-                <VListItem value="realtime-histories" @click="realtimeHistories.show(props.item)" v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit">
+                <VListItem value="realtime-histories" @click="realtimeHistories.show(props.item)"
+                    v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:history" />
                     </template>
                     <VListItemTitle>실시간 상세이력 확인</VListItemTitle>
-                </VListItem>                
-                <VListItem value="cancelTrans" @click="cancelTran.show(props.item)" v-show="props.item.is_cancel == false"
-                    v-if="getUserLevel() >= 35">
+                </VListItem>
+                <VListItem value="cancelTrans" @click="cancelTran.show(props.item)"
+                    v-if="getUserLevel() >= 35 && props.item.is_cancel == false">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:device-tablet-cancel" />
                     </template>
                     <VListItemTitle>취소매출생성</VListItemTitle>
                 </VListItem>
-                <VListItem value="cancel" class="pg-cancel" @click="payCanceled()" v-show="props.item.is_cancel == false"
-                    v-if="isCancelSafeDate() || getUserLevel() >= 35">
+                <VListItem value="cancel" class="pg-cancel" @click="payCanceled()"
+                    v-if="(isCancelSafeDate() || getUserLevel() >= 35) && props.item.is_cancel == false">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:world-cancel" />
                     </template>
