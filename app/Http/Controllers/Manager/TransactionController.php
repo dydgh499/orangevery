@@ -354,7 +354,7 @@ class TransactionController extends Controller
         $dev_settle_type = 1;
         $db_trans = $this->transactions
             ->where('brand_id', 8)
-            ->where('trx_dt', '>=', '2023-08-31')
+            ->where('trx_dt', '>=', '2023-09-15')
             ->update(['dev_fee'=>0.1]);
 
         $db_trans = $this->transactions
