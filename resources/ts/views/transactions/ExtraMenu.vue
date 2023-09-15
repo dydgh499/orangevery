@@ -70,8 +70,7 @@ const payCanceled = async () => {
     }
 }
 const isCancelSafeDate = () => {
-    const current_dt = formatDate(new Date())
-    return getUserLevel() == 10 && props.item.trx_dt == current_dt
+    return getUserLevel() == 10 && props.item.trx_dt == formatDate(new Date())
 }
 const isRealtimeTransaction = () => {
     return getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit
@@ -95,7 +94,7 @@ const isRealtimeTransaction = () => {
                     <VListItemTitle>민원처리</VListItemTitle>
                 </VListItem>
                 <VListItem value="retry-realtime-deposit" class="retry-realtime-deposit" @click="retryDeposit()"
-                    v-show="realtimeResult(props.item) == StatusColors.Error && isRealtimeTransaction()">
+                    v-show="isRealtimeTransaction() && realtimeResult(props.item) == StatusColors.Error">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="fa6-solid:money-bill-transfer" />
                     </template>
