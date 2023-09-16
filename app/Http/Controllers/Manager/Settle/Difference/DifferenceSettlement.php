@@ -18,13 +18,14 @@ class DifferenceSettlement extends Controller
             ->where('is_use_different_settlement', true)
             ->get(['business_num', 'gid', 'id']);
         
-        for ($i=0; $i < count($brands); $i++) 
+        for ($i=0; $i<count($brands); $i++) 
         {
             $trans = DB::table('transactions')
                 ->where('is_delete', false)
                 ->whereIn('brand_id', $brands[$i]->id)
                 ->where('trx_dt', date('Y-m-d'))
                 ->get();
+
             $pg_name = getPGType($brands[$i]->above_pg_type);
             try
             {

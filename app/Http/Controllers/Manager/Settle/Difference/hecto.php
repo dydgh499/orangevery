@@ -98,11 +98,15 @@ class DifferentSettlementHecto
         $req_date = date('Ymd');
         $save_path = '/edi_rsp/ST_PRFT_RSP_'.$req_date;
 
+        logging(['level'=>1]);
         $start  = getStartRecord($req_date, $brand_business_num);
         $header = getHeaderRecord($gid);
+        logging(['level'=>2]);
         [$data_records, $total_count, $total_amount] = getDataRecord($trans, $brand_business_num);
+        logging(['level'=>2.5]);
         $total  = getTotalRecord($total_count, $total_amount);
         $end    = getEndRecord($total_count);
+        logging(['level'=>3]);
 
         $full_record = $start.$header.$data_records.$total.$end;
         $file = fopen($save_path, 'w+');
