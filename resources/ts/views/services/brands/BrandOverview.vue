@@ -17,7 +17,6 @@ interface Props {
 }
 const props = defineProps<Props>()
 const { pg_companies }  = useStore()
-
 watchEffect(() => {
     config.app.title = props.item.name
     themeConfig.app.title = props.item.name
