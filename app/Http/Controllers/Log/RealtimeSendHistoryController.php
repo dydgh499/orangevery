@@ -112,7 +112,7 @@ class RealtimeSendHistoryController extends Controller
 
     public function deposit(Request $request)
     {
-        $validated = $request->validate(['trans_id'=>'required|integer', 'mcht_id'=>'required|integer']);
+        $validated = $request->validate(['trx_id'=>'required', 'mid'=>'required', 'tid'=>'required']);
         $data = $request->all();
         $url = $this->base_noti_url.'/deposit';
         $res = post($url, $data);
