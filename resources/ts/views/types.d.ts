@@ -342,7 +342,7 @@ export interface DeductionHeader {
 export interface Transaction {
     id: number,
     mcht_id: number | null,
-
+    is_use_realtime_deposit?: number,
     dev_settle_type: number,
     dev_realtime_fee: float
     dev_fee: float,
