@@ -46,7 +46,7 @@ export const realtimeRetryMessage = (item: Transaction):string => {
             return formatDate(retry_able_time)+'부터 재이체 가능'
         }
         else
-            ''
+            return ''
     }
     else
         return ''
