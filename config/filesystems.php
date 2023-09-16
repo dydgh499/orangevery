@@ -60,7 +60,18 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
         ],
-
+        'different_settlement_hecto' => [
+            'driver' => 'ftp',
+            'host' => env('HECTO_DIFFER_SETTLE_HOST'),
+            'port' => env('HECTO_DIFFER_SETTLE_PORT'),
+            'username' => env('HECTO_DIFFER_SETTLE_USER'),
+            'password' => env('HECTO_DIFFER_SETTLE_PASS'),
+            // Optional FTP Settings...
+            // 'port' => env('FTP_PORT', 21),
+            // 'passive' => true,
+            // 'ssl' => true,
+            // 'timeout' => 30,
+        ],
     ],
 
     /*

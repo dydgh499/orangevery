@@ -351,15 +351,10 @@ class TransactionController extends Controller
 
     public function _test()
     {
-        $dev_settle_type = 1;
+        $dev_settle_type = 0;
         $db_trans = $this->transactions
-            ->where('brand_id', 8)
-            ->where('trx_dt', '>=', '2023-09-15')
-            ->update(['dev_fee'=>0.1]);
-
-        $db_trans = $this->transactions
-            ->where('brand_id', 8)
-            ->where('trx_dt', '>=', '2023-09-15')
+            ->where('brand_id', '!=', 8)
+            ->where('trx_dt', '>=', '2023-09-01')
             ->orderBy('transactions.id', 'desc')
             ->get();
         
