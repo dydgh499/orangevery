@@ -44,8 +44,9 @@ const complaint = () => {
 const retryDeposit = async () => {
     if (await alert.value.show('정말 해당 거래건을 실시간 재이체 하시겠습니까?')) {
         const params = {
-            'trans_id': props.item.id,
-            'mcht_id': props.item.mcht_id,
+            'trx_id': props.item.id,
+            'mid': props.item.mid,
+            'tid': props.item.tid,
         }
         const r = await post('/api/v1/manager/transactions/realtime-histories/deposit', params)
     }
@@ -94,7 +95,7 @@ const isRealtimeTransaction = () => {
                     <VListItemTitle>민원처리</VListItemTitle>
                 </VListItem>
                 <VListItem value="retry-realtime-deposit" class="retry-realtime-deposit" @click="retryDeposit()"
-                    v-show="isRealtimeTransaction() && realtimeResult(props.item) == StatusColors.Error">
+                    v-if="isRealtimeTransaction() && realtimeResult(props.item) == StatusColors.Error">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="fa6-solid:money-bill-transfer" />
                     </template>
