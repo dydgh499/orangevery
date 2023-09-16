@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('brands', function (Blueprint $table) {
-            $table->boolean('is_use_diffrent_settlement')->default(false)->comment('차액정산 사용여부');
+            $table->boolean('is_use_different_settlement')->default(false)->comment('차액정산 사용여부');
             $table->string('gid', 20)->default('')->comment('상위 PG사 GID');
             $table->tinyInteger('above_pg_type')->nullable()->comment('상위 PG사 타입(1,2,3,4,5 ...)');
         });
@@ -24,7 +24,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('brands', function (Blueprint $table) {
-            $table->dropColumn('is_use_diffrent_settlement');
+            $table->dropColumn('is_use_different_settlement');
             $table->dropColumn('gid');
             $table->dropColumn('above_pg_type');
             //

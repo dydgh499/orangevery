@@ -107,8 +107,8 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>차액정산 사용여부</template>
                             <template #input>
-                                <BooleanRadio :radio="Boolean(props.item.is_use_diffrent_settlement)"
-                                    @update:radio="props.item.is_use_diffrent_settlement = $event">
+                                <BooleanRadio :radio="Boolean(props.item.is_use_different_settlement)"
+                                    @update:radio="props.item.is_use_different_settlement = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>
                                 </BooleanRadio>
