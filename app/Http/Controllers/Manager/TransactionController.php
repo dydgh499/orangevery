@@ -32,7 +32,7 @@ class TransactionController extends Controller
             'merchandises.addr', 'merchandises.resident_num', 'merchandises.business_num', 
             'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell', 'merchandises.is_show_fee',
             'transactions.*',
-            'payment_modules.note', 'payment_modules.is_use_realtime_deposit',
+            'payment_modules.note', 'payment_modules.is_use_realtime_deposit', 'payment_modules.cxl_type', 'payment_modules.fin_trx_delay',
             DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
             DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
         ];

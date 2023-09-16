@@ -35,6 +35,23 @@ export const realtimeResult = (item: Transaction) => {
         return StatusColors.Default
 }
 
+export const realtimeRetryMessage = (item: Transaction):string => {
+    const code = realtimeResult(item)
+    if(code === StatusColors.Primary)
+    {
+        if(item.fin_trx_delay != 0)
+        {
+            const formatDate = <any>(inject('$formatDate'))
+            const retry_able_time = (item.trx_dt as Date).getTime() + (item.fin_trx_delay as number * 60000)
+            return formatDate(retry_able_time)+'부터 재이체 가능'
+        }
+        else
+            ''
+    }
+    else
+        return ''
+}
+
 export const realtimeMessage = (item: Transaction):string => {
     const code = realtimeResult(item)
     if(code === StatusColors.Default)
@@ -170,6 +187,9 @@ export const useSearchStore = defineStore('transSearchStore', () => {
             if(levels.sales0_use)
                 datas[i]['sales0_fee'] = (datas[i]['sales0_fee'] * 100).toFixed(3)
 
+            if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit)
+                datas[i]['realtime_result'] = realtimeMessage(datas[i])
+            
             datas[i]['mcht_fee'] = (datas[i]['mcht_fee'] * 100).toFixed(3)
             datas[i]['hold_fee'] = (datas[i]['hold_fee'] * 100).toFixed(3)
             datas[i]['ps_fee'] = (datas[i]['ps_fee'] * 100).toFixed(3)

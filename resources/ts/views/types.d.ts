@@ -342,7 +342,7 @@ export interface DeductionHeader {
 export interface Transaction {
     id: number,
     mcht_id: number | null,
-    is_use_realtime_deposit?: number,
+
     dev_settle_type: number,
     dev_realtime_fee: float
     dev_fee: float,
@@ -422,6 +422,9 @@ export interface Transaction {
     resident_num?: string,
     business_num?: string,
     realtimes?: RealtimeHistory[],
+    is_use_realtime_deposit?: number,
+    cxl_type?: number,
+    fin_trx_delay?: number
 }
 
 export interface SalesSlip extends Transaction{
