@@ -328,6 +328,10 @@ export interface Brand extends Contract {
     extra_deposit_amount: number,
     curr_deposit_amount: number,
     last_dpst_at: datetime,
+
+    gid: string,
+    is_use_diffrent_settlement: boolean,
+    above_pg_type: number,
     updated_at: datetime,
     created_at: datetime,
 }

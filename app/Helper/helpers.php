@@ -9,6 +9,17 @@
     use App\Enums\HistoryType;
     use Illuminate\Support\Facades\DB;
 
+    function getPGType($pg_type)
+    {
+        // lumen + payletter
+        $pgs = [
+            'paytus', 'koneps', 'aynil', 'welcome', 'hecto', 'lumen',
+            'payletter', 'wholebic', 'korpay', 'kppay', 'thepayone', 'ezpg',
+            'cmpay', 'kiwoom', 'wizzpay', 'nestpay', 'e2u','addone','saminching','wgp'
+        ];
+        return $pgs[$pg_type-1];
+    }
+    
     function isMainBrand($brand_id)
     {
         return $brand_id == env('MAIN_BRAND_ID', 1) ? true : false;

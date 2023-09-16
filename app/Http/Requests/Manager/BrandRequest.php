@@ -16,19 +16,11 @@ class BrandRequest extends FormRequest
         $this->keys = [
             'name',
             'dns',
-            'logo_file',
-            'favicon_file',
-            'passbook_file',
-            'contract_file',
-            'bsin_lic_file',
-            'id_file',
-            'og_file',
             'og_description',
             'ceo_name',
             'addr',
             'phone_num',
             'fax_num',
-            'theme_css',
             'company_name',
             'pvcy_rep_name',
             'business_num',
@@ -38,7 +30,18 @@ class BrandRequest extends FormRequest
             'dev_fee',
             'dev_settle_type',
             'fax_num',
-            'pv_options',
+            'is_use_diffrent_settlement',
+            'gid',
+            'above_pg_type',
+        ];
+        $this->file_keys = [   
+            'logo_file',         
+            'favicon_file',
+            'passbook_file',
+            'contract_file',
+            'bsin_lic_file',
+            'id_file',
+            'og_file',
         ];
     }
 
@@ -93,6 +96,7 @@ class BrandRequest extends FormRequest
             $pvOptions = $this->input('pv_options');    
             $pvOptions = $this->convertToBoolean($pvOptions);
             $this->merge(['pv_options' => $pvOptions]);
+            $this->merge(['is_use_diffrent_settlement' => $this->convertToBoolean($this->input('is_use_diffrent_settlement'), false)]);
         }
     }
 
@@ -113,24 +117,10 @@ class BrandRequest extends FormRequest
 
     public function data()
     {
-        $data = [
-            'dns' => $this->dns,
-            'name' => $this->name,
-            'ceo_name' => $this->ceo_name,
-            'company_name'    => $this->company_name,
-            'phone_num'     => $this->phone_num,
-            'addr'          => $this->addr,
-            'business_num'  => $this->business_num,
-            'og_description' => $this->input('og_description', ''),        
-            'deposit_day'   => $this->deposit_day,
-            'deposit_amount'   => $this->deposit_amount,
-            'extra_deposit_amount' => $this->extra_deposit_amount,
-            'dev_fee'   => $this->dev_fee/100,
-            'dev_settle_type'   => $this->dev_settle_type,
-            'note'  => $this->input('note', ''),
-        ];
+        $data = $this->getParmasBaseKey();
         $data['pv_options'] = json_encode($this->pv_options); 
         $data['theme_css']  = json_encode($this->theme_css);
+        $data['dev_fee']    = $this->dev_fee/100;
         if($this->has('login_img'))
             $data['login_img'] = $this->login_img;
 

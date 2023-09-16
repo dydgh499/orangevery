@@ -28,7 +28,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>수기결제 사용여부</template>
+                            <template #name>수기결제 사용여부</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.free.use_hand_pay"
                                     @update:radio="props.item.free.use_hand_pay = $event">
@@ -40,7 +40,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>인증결제 사용여부</template>
+                            <template #name>인증결제 사용여부</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.free.use_auth_pay"
                                     @update:radio="props.item.free.use_auth_pay = $event">
@@ -53,7 +53,7 @@ const md = user_info.value.level == 50 ? 4 : 12
 
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>간편결제 사용여부</template>
+                            <template #name>간편결제 사용여부</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.free.use_simple_pay"
                                     @update:radio="props.item.free.use_simple_pay = $event">
@@ -105,7 +105,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>MID 일괄적용 사용여부</template>
+                            <template #name>MID 일괄적용 사용여부</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.use_mid_batch"
                                     @update:radio="props.item.paid.use_mid_batch = $event">
@@ -117,7 +117,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>TID 일괄적용 사용여부</template>
+                            <template #name>TID 일괄적용 사용여부</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.use_tid_batch"
                                     @update:radio="props.item.paid.use_tid_batch = $event">
@@ -129,7 +129,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>API KEY 일괄적용 사용여부</template>
+                            <template #name>API KEY 일괄적용 사용여부</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.use_api_key_batch"
                                     @update:radio="props.item.paid.use_api_key_batch = $event">
@@ -141,7 +141,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>SUB KEY 일괄적용 사용여부</template>
+                            <template #name>SUB KEY 일괄적용 사용여부</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.use_sub_key_batch"
                                     @update:radio="props.item.paid.use_sub_key_batch = $event">
@@ -161,7 +161,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>예금주 검증</template>
+                            <template #name>예금주 검증</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.use_acct_verification"
                                     @update:radio="props.item.paid.use_acct_verification = $event">
@@ -173,7 +173,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>가맹점 전산 사용 ON/OFF</template>
+                            <template #name>가맹점 전산 사용 ON/OFF</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.subsidiary_use_control"
                                     @update:radio="props.item.paid.subsidiary_use_control = $event">
@@ -185,7 +185,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>수기결제 직접입력(가맹점)</template>
+                            <template #name>수기결제 직접입력(가맹점)</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.use_hand_pay_drct"
                                     @update:radio="props.item.paid.use_hand_pay_drct = $event">
@@ -197,7 +197,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>수기결제 SMS</template>
+                            <template #name>수기결제 SMS</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.use_hand_pay_sms"
                                     @update:radio="props.item.paid.use_hand_pay_sms = $event">
@@ -221,7 +221,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>실시간 결제모듈</template>
+                            <template #name>실시간 결제모듈</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.use_realtime_deposit"
                                     @update:radio="props.item.paid.use_realtime_deposit = $event">
@@ -233,7 +233,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>카드사 필터링</template>
+                            <template #name>카드사 필터링</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.use_issuer_filter"
                                     @update:radio="props.item.paid.use_issuer_filter = $event">
@@ -245,7 +245,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>중복결제 검증</template>
+                            <template #name>중복결제 검증</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.use_dup_pay_validation"
                                     @update:radio="props.item.paid.use_dup_pay_validation = $event">
@@ -257,7 +257,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>결제금지시간 지정</template>
+                            <template #name>결제금지시간 지정</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.use_forb_pay_time"
                                     @update:radio="props.item.paid.use_forb_pay_time = $event">
@@ -269,7 +269,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>결제한도 지정</template>
+                            <template #name>결제한도 지정</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.use_pay_limit"
                                     @update:radio="props.item.paid.use_pay_limit = $event">
@@ -281,7 +281,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>온라인 결제 사용여부</template>
+                            <template #name>온라인 결제 사용여부</template>
                             <template #input>
                                 <BooleanRadio :radio="props.item.paid.use_online_pay"
                                     @update:radio="props.item.paid.use_online_pay = $event">
@@ -293,7 +293,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                 </VRow>
                 <VRow class="pt-5">
                     <CreateHalfVCol :mdl="6" :mdr="6">
-                        <template #name><span></span>TID 발급버튼 사용여부</template>
+                        <template #name>TID 발급버튼 사용여부</template>
                         <template #input>
                             <BooleanRadio :radio="props.item.paid.use_tid_create"
                                 @update:radio="props.item.paid.use_tid_create = $event">

@@ -8,6 +8,7 @@ import { themeConfig } from '@themeConfig'
 import { config } from '@layouts/config'
 import { getUserLevel } from '@/plugins/axios';
 import { dev_settle_types } from '@/views/services/brands/useStore'
+import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { nullValidator } from '@validators'
 
@@ -15,6 +16,7 @@ interface Props {
     item: Brand,
 }
 const props = defineProps<Props>()
+const { pg_companies }  = useStore()
 
 watchEffect(() => {
     config.app.title = props.item.name
@@ -91,18 +93,56 @@ watchEffect(() => {
                 </VCardItem>
                 <VCardItem v-if="getUserLevel() == 50">
                     <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="개발사 정보" :content="item.pv_options.auth.levels.dev_name+'만 확인 가능한 정보입니다.'"></BaseQuestionTooltip>
+                        <BaseQuestionTooltip location="top" text="2차 PG사 정보"
+                            :content="item.pv_options.auth.levels.dev_name + '만 확인 가능한 정보입니다.'"></BaseQuestionTooltip>
                     </VCardTitle>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name><span>{{ item.pv_options.auth.levels.dev_name }} 사용여부</span></template>
-                                <template #input>
-                                    <BooleanRadio :radio="item.pv_options.auth.levels.dev_use" @update:radio="item.pv_options.auth.levels.dev_use = $event">
-                                        <template #true>사용</template>
-                                        <template #false>미사용</template>
-                                    </BooleanRadio>
-                                </template>
-                            </CreateHalfVCol>
+                            <template #name>상위 PG사 선택</template>
+                            <template #input>                                
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.above_pg_type" :items="pg_companies"
+                                    prepend-inner-icon="ph-buildings" label="상위 PG사 선택" item-title="name" item-value="id"
+                                    single-line :rules="[requiredValidator]" />
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>차액정산 사용여부</template>
+                            <template #input>
+                                <BooleanRadio :radio="Boolean(props.item.is_use_diffrent_settlement)"
+                                    @update:radio="props.item.is_use_diffrent_settlement = $event">
+                                    <template #true>사용</template>
+                                    <template #false>미사용</template>
+                                </BooleanRadio>
+                            </template>
+                        </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>
+                                <BaseQuestionTooltip location="top" text="GID"
+                                    :content="'차액정산에 사용되는 정보입니다.'"></BaseQuestionTooltip>
+                            </template>
+                            <template #input>
+                                <VTextField prepend-inner-icon="clarity:group-line" v-model="item.gid"
+                                    type="text" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                </VCardItem>
+                <VCardItem v-if="getUserLevel() == 50">
+                    <VCardTitle>
+                        <BaseQuestionTooltip location="top" text="개발사 정보"
+                            :content="props.item.pv_options.auth.levels.dev_name + '만 확인 가능한 정보입니다.'"></BaseQuestionTooltip>
+                    </VCardTitle>
+                    <VRow class="pt-5">
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name><span>{{ props.item.pv_options.auth.levels.dev_name }} 사용여부</span></template>
+                            <template #input>
+                                <BooleanRadio :radio="Boolean(props.item.pv_options.auth.levels.dev_use)"
+                                    @update:radio="props.item.pv_options.auth.levels.dev_use = $event">
+                                    <template #true>사용</template>
+                                    <template #false>미사용</template>
+                                </BooleanRadio>
+                            </template>
+                        </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name><span>개발사 명칭설정</span></template>
                             <template #input>
@@ -112,14 +152,14 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>{{ props.item.pv_options.auth.levels.dev_name }} 수수료</template>
+                            <template #name>{{ props.item.pv_options.auth.levels.dev_name }} 수수료</template>
                             <template #input>
                                 <VTextField v-model="props.item.dev_fee" type="number" :rules="[requiredValidator]"
                                     suffix="%" />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>수수료 정산 타입</template>
+                            <template #name>수수료 정산 타입</template>
                             <template #input>
 
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.dev_settle_type"
@@ -131,25 +171,26 @@ watchEffect(() => {
                 </VCardItem>
                 <VCardItem v-if="getUserLevel() == 50">
                     <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="지불정보" :content="item.pv_options.auth.levels.dev_name+'만 확인 가능한 정보입니다.'"></BaseQuestionTooltip>
+                        <BaseQuestionTooltip location="top" text="지불정보"
+                            :content="item.pv_options.auth.levels.dev_name + '만 확인 가능한 정보입니다.'"></BaseQuestionTooltip>
                     </VCardTitle>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>입금일</template>
+                            <template #name>입금일</template>
                             <template #input>
                                 <VTextField prepend-inner-icon="tabler-calendar" v-model="props.item.deposit_day"
                                     type="number" :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>입금액</template>
+                            <template #name>입금액</template>
                             <template #input>
                                 <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.deposit_amount"
                                     type="number" :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name><span></span>부가 입금액</template>
+                            <template #name>부가 입금액</template>
                             <template #input>
                                 <VTextField prepend-inner-icon="tabler-currency-won"
                                     v-model="props.item.extra_deposit_amount" type="number" :rules="[requiredValidator]" />
@@ -199,6 +240,5 @@ watchEffect(() => {
                 </VCardItem>
             </VCard>
         </VCol>
-        <!-- 👉 submit -->
-    </VRow>
-</template>
+    <!-- 👉 submit -->
+</VRow></template>

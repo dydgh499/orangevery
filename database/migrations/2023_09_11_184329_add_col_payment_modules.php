@@ -32,6 +32,11 @@ return new class extends Migration
         Schema::table('merchandises', function (Blueprint $table) {
             $table->boolean('is_use_noti')->default(false)->comment('노티 사용여부');
         });
+        Schema::table('realtime_send_histories', function (Blueprint $table) {
+            $table->foreignId('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
+            $table->integer('request_type')->nullable()->comment('요청 타입');
+            $table->integer('finance_id')->nullable()->comment('금융 VAN ID');
+        });
     }
 
     /**
@@ -59,6 +64,12 @@ return new class extends Migration
         });
         Schema::table('merchandises', function (Blueprint $table) {
             $table->dropColumn('is_use_noti');
+        });
+        Schema::table('realtime_send_histories', function (Blueprint $table) {
+            $table->dropColumn('mcht_id');
+            $table->dropColumn('request_type');
+            $table->dropColumn('finance_id');
+            //
         });
     }
 };

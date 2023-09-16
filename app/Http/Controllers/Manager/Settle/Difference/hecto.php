@@ -1,16 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Http\Request;
+namespace App\Http\Controllers\Manager\Settle\Difference;
 
-/**
- * @group Auth API
- *
- * 차액정산 API 입니다.
- */
 class DifferentSettlementHecto
 {
     public function setNtypeField($string, $length)
@@ -102,16 +93,13 @@ class DifferentSettlementHecto
         return $record_type.$total_count.$filter;
     }
 
-    public function __invoke()
+    public function request($brand_business_num, $gid, $trans)
     {
         $req_date = date('Ymd');
-        $brand_business_num = '';
-        $trans = [];
-        $mcht_id = 'G2310002';
         $save_path = '/edi_rsp/ST_PRFT_RSP_'.$req_date;
 
         $start  = getStartRecord($req_date, $brand_business_num);
-        $header = getHeaderRecord($mcht_id);
+        $header = getHeaderRecord($gid);
         [$data_records, $total_count, $total_amount] = getDataRecord($trans, $brand_business_num);
         $total  = getTotalRecord($total_count, $total_amount);
         $end    = getEndRecord($total_count);
@@ -120,15 +108,10 @@ class DifferentSettlementHecto
         $file = fopen($save_path, 'w+');
         fwrite($file, $full_record);
         Storage::disk('different_settlement_hecto')->put($save_path, $file);
-        close();
+        fclose($file);
     }
 
-    public function request(Request $request)
-    {
-
-    }
-
-    public function response(Request $request)
+    public function response($request)
     {
         
     }
