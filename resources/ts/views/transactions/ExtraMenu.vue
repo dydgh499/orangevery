@@ -51,9 +51,8 @@ const retryDeposit = async () => {
         }
         const r = await post('/api/v1/manager/transactions/realtime-histories/deposit', params)
         snackbar.value.show(r.data.message, r.data.result_cd == "0000" ? 'success' : 'warning')
-        if(r.data.result_cd == "0000") 
+        if(r.data.result_cd == "0000")
         {
-            snackbar.value.show(r.data.message, 'success')
             store.setChartProcess()
             store.setTable()
         }
