@@ -14,6 +14,7 @@ interface Props {
 const { post } = useRequestStore()
 const props = defineProps<Props>()
 
+const store = <any>(inject('store'))
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
@@ -49,6 +50,12 @@ const retryDeposit = async () => {
             'tid': props.item.tid,
         }
         const r = await post('/api/v1/manager/transactions/realtime-histories/deposit', params)
+        snackbar.value.show(r.data.message, 'error')
+        if(r.data.result_cd == "0000") 
+        {
+            store.setChartProcess()
+            store.setTable()
+        }
     }
 }
 
