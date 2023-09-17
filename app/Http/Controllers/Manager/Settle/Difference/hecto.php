@@ -98,7 +98,7 @@ class hecto
     public function request(Carbon $date, $brand_business_num, $gid, $trans)
     {
         $req_date = $date->format('Ymd');
-        $save_path = '/edi_rsp/ST_PRFT_RSP_'.$req_date;
+        $save_path = '/edi_req/ST_PRFT_REQ_'.$req_date;
 
         $start  = $this->setStartRecord($req_date, $brand_business_num);
         $header = $this->setHeaderRecord($gid);
