@@ -30,7 +30,7 @@ class hecto
     {
         $record_type    = $this->setAtypeField("10", 2);
         $gid            = $this->setAtypeField($gid, 10);
-        $filter         = $this->setAtypeField($business_num, 388);
+        $filter         = $this->setAtypeField('', 388);
         return $record_type.$gid.$filter;
     }
 
