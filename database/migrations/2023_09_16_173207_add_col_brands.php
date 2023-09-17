@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('brands', function (Blueprint $table) {
             $table->boolean('is_use_different_settlement')->default(false)->comment('차액정산 사용여부');
-            $table->string('rep_mcht_id', 20)->default('')->comment('상위 PG사 GID');
+            $table->string('rep_mcht_id', 20)->default('')->comment('상위 대표 가맹점 ID');
             $table->tinyInteger('above_pg_type')->nullable()->comment('상위 PG사 타입(1,2,3,4,5 ...)');
         });
     }

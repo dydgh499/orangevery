@@ -117,7 +117,7 @@ watchEffect(() => {
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>
-                                <BaseQuestionTooltip location="top" text="GID"
+                                <BaseQuestionTooltip location="top" text="상위 대표 가맹점 ID"
                                     :content="'차액정산에 사용되는 정보입니다.'"></BaseQuestionTooltip>
                             </template>
                             <template #input>
