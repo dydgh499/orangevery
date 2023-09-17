@@ -7,7 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\DangerTransController;
-use App\Http\Controllers\Manager\Settle\Difference\DifferenceSettlement;
+use App\Http\Controllers\Manager\Settle\Difference\DifferenceSettlementController;
 
 use App\Models\Log\MchtFeeChangeHistory;
 use App\Models\Log\SfFeeChangeHistory;
@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('sanctum:prune-expired --hours=35')->daily();
         $schedule->call(new FeeChangeHistoryController(new MchtFeeChangeHistory, new SfFeeChangeHistory))->daily();
         $schedule->call(new DangerTransController(new DangerTransaction))->everySixHours();
-        $schedule->call(new DifferenceSettlement())->daily();
+        $schedule->call(new DifferenceSettlementController())->daily();
     }
 
     /**

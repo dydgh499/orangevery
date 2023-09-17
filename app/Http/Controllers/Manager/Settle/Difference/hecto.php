@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Manager\Settle\Difference;
 
-class DifferentSettlementHecto
+class hecto
 {
     public function setNtypeField($string, $length)
     {

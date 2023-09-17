@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Manager\Settle\Difference;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
-class DifferenceSettlement extends Controller
+class DifferenceSettlementController extends Controller
 {    
     public function __construct()
     {
