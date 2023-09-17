@@ -17,7 +17,8 @@ class DifferenceSettlementController extends Controller
 
     public function __invoke()
     {
-        $date   = Carbon::now()->startOfMonth();
+        $date       = Carbon::now()->startOfMonth();
+        $str_date   = $date->format('Y-m-d');
         $brands = Brand::where('is_delete', false)
             ->where('is_use_different_settlement', true)
             ->get(['business_num', 'gid', 'id', 'above_pg_type']);
@@ -28,7 +29,7 @@ class DifferenceSettlementController extends Controller
                 ->where('transactions.is_delete', false)
                 ->where('merchandises.is_delete', false)
                 ->where('transactions.brand_id', $brands[$i]->id)
-                ->where('transactions.trx_dt', date('Y-m-d'))
+                ->where('transactions.trx_dt', $str_date)
                 ->get(['transactions.*', 'merchandises.business_num']);
             try
             {
