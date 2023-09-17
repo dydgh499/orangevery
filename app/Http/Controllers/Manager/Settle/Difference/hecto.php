@@ -107,7 +107,7 @@ class hecto
         $end    = $this->setEndRecord($total_count);
 
         $full_record = $start.$header.$data_records.$total.$end;
-        Storage::disk('different_settlement_hecto')->put($save_path, $full_record);
+        echo Storage::disk('different_settlement_hecto')->put($save_path, $full_record);
     }
 
     public function response($request)
