@@ -138,7 +138,7 @@ trait ManagerTrait
 
     public function oldDataDelete($orm)
     {
-        $one_month_ago = Carbon::now()->subMonth();
+        $one_month_ago = Carbon::now()->subMonth(3);
         $orm->query()
             ->where('is_delete', true)
             ->where('updated_at', '<', $one_month_ago)

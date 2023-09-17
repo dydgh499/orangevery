@@ -17,7 +17,7 @@ class DifferenceSettlementController extends Controller
 
     public function __invoke()
     {
-        $date       = Carbon::now();
+        $date       = Carbon::now()->subDay(1);
         $str_date   = $date->format('Y-m-d');
         $brands = Brand::where('is_delete', false)
             ->where('is_use_different_settlement', true)
