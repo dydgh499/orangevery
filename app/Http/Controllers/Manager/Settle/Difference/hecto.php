@@ -99,21 +99,14 @@ class hecto
         $req_date = date('Ymd');
         $save_path = '/edi_rsp/ST_PRFT_RSP_'.$req_date;
 
-        logging(['level'=>1]);
         $start  = $this->getStartRecord($req_date, $brand_business_num);
         $header = $this->getHeaderRecord($gid);
-        logging(['level'=>2]);
         [$data_records, $total_count, $total_amount] = $this->getDataRecord($trans, $brand_business_num);
-        logging(['level'=>2.5]);
         $total  = $this->getTotalRecord($total_count, $total_amount);
         $end    = $this->getEndRecord($total_count);
-        logging(['level'=>3]);
 
         $full_record = $start.$header.$data_records.$total.$end;
-        $file = fopen($save_path, 'w+');
-        fwrite($file, $full_record);
-        Storage::disk('different_settlement_hecto')->put($save_path, $file);
-        fclose($file);
+        Storage::disk('different_settlement_hecto')->put($save_path, $full_record);
     }
 
     public function response($request)
