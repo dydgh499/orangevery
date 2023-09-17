@@ -25,12 +25,12 @@ class hecto
         return $record_type.$req_date.$brand_business_num.$filter;
     }
 
-    private function getHeaderRecord($mcht_id)
+    private function getHeaderRecord($gid)
     {
         $record_type    = $this->setAtypeField("10", 2);
-        $mcht_id        = $this->setAtypeField($mcht_id, 10);
+        $gid            = $this->setAtypeField($gid, 10);
         $filter         = $this->setAtypeField($business_num, 388);
-        return $record_type.$mcht_id.$filter;
+        return $record_type.$gid.$filter;
     }
 
     private function getDataRecord($trans, $brand_business_num)
