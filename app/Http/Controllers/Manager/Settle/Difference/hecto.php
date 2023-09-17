@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Manager\Settle\Difference;
+use Illuminate\Support\Facades\Storage;
 
 class hecto
 {
@@ -99,13 +100,13 @@ class hecto
         $save_path = '/edi_rsp/ST_PRFT_RSP_'.$req_date;
 
         logging(['level'=>1]);
-        $start  = getStartRecord($req_date, $brand_business_num);
-        $header = getHeaderRecord($gid);
+        $start  = $this->getStartRecord($req_date, $brand_business_num);
+        $header = $this->getHeaderRecord($gid);
         logging(['level'=>2]);
-        [$data_records, $total_count, $total_amount] = getDataRecord($trans, $brand_business_num);
+        [$data_records, $total_count, $total_amount] = $this->getDataRecord($trans, $brand_business_num);
         logging(['level'=>2.5]);
-        $total  = getTotalRecord($total_count, $total_amount);
-        $end    = getEndRecord($total_count);
+        $total  = $this->getTotalRecord($total_count, $total_amount);
+        $end    = $this->getEndRecord($total_count);
         logging(['level'=>3]);
 
         $full_record = $start.$header.$data_records.$total.$end;
