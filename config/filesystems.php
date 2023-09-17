@@ -61,13 +61,13 @@ return [
             'throw' => false,
         ],
         'different_settlement_hecto' => [
-            'driver' => 'ftp',
+            'driver' => 'sftp',
             'host' => env('HECTO_DIFFER_SETTLE_HOST'),
             'port' => (int)env('HECTO_DIFFER_SETTLE_PORT'),
             'username' => env('HECTO_DIFFER_SETTLE_USER'),
             'password' => env('HECTO_DIFFER_SETTLE_PASS'),
             // Optional FTP Settings...
-            'passive' => true,
+            'passive' => false,
             // 'ssl' => true,
             // 'timeout' => 30,
         ],
