@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager\Settle\Difference;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class hecto
 {
@@ -94,9 +95,9 @@ class hecto
         return $record_type.$total_count.$filter;
     }
 
-    public function request($brand_business_num, $gid, $trans)
+    public function request(Carbon $date, $brand_business_num, $gid, $trans)
     {
-        $req_date = date('Ymd');
+        $req_date = $date->format('Ymd');
         $save_path = '/edi_rsp/ST_PRFT_RSP_'.$req_date;
 
         $start  = $this->getStartRecord($req_date, $brand_business_num);

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Manager\Settle\Difference;
 
+use Carbon\Carbon;
+use App\Models\Brand;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
@@ -14,15 +17,13 @@ class DifferenceSettlementController extends Controller
 
     public function __invoke()
     {
-        $brands = DB::table('brands')
-            ->where('is_delete', false)
+        $brands = Brand::where('is_delete', false)
             ->where('is_use_different_settlement', true)
             ->get(['business_num', 'gid', 'id', 'above_pg_type']);
         
-        for ($i=0; $i<count($brands); $i++) 
+        for ($i=0; $i<count($brands); $i++)
         {
-            $trans = DB::table('transactions')
-                ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
+            $trans = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
                 ->where('is_delete', false)
                 ->where('brand_id', $brands[$i]->id)
                 ->where('trx_dt', date('Y-m-d'))
