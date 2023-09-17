@@ -22,7 +22,7 @@ class DifferenceSettlement extends Controller
         {
             $trans = DB::table('transactions')
                 ->where('is_delete', false)
-                ->whereIn('brand_id', $brands[$i]->id)
+                ->where('brand_id', $brands[$i]->id)
                 ->where('trx_dt', date('Y-m-d'))
                 ->get();
 
