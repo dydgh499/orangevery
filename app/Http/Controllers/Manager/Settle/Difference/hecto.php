@@ -4,17 +4,17 @@ namespace App\Http\Controllers\Manager\Settle\Difference;
 
 class hecto
 {
-    public function setNtypeField($string, $length)
+    private function setNtypeField($string, $length)
     {
         return sprintf("%0".$length."s", $string);
     }
 
-    public function setAtypeField($string, $length)
+    private function setAtypeField($string, $length)
     {    
         return sprintf("%-".$length."s", $string);
     }
 
-    public function getStartRecord($req_date, $brand_business_num)
+    private function getStartRecord($req_date, $brand_business_num)
     {
         $brand_business_num = str_replace('-', '', $brand_business_num);
         $record_type    = $this->setAtypeField("01", 2);
@@ -24,7 +24,7 @@ class hecto
         return $record_type.$req_date.$brand_business_num.$filter;
     }
 
-    public function getHeaderRecord($mcht_id)
+    private function getHeaderRecord($mcht_id)
     {
         $record_type    = $this->setAtypeField("10", 2);
         $mcht_id        = $this->setAtypeField($mcht_id, 10);
@@ -32,7 +32,7 @@ class hecto
         return $record_type.$mcht_id.$filter;
     }
 
-    public function getDataRecord($trans, $brand_business_num)
+    private function getDataRecord($trans, $brand_business_num)
     {
         $brand_business_num = str_replace('-', '', $brand_business_num);
         $data_records = '';
@@ -76,7 +76,7 @@ class hecto
         return [$data_records, count($trans), $total_amount];
     }
 
-    public function getTotalRecord($total_count, $total_amount)
+    private function getTotalRecord($total_count, $total_amount)
     {
         $record_type    = $this->setAtypeField("12", 2);
         $total_count    = $this->setNtypeField($total_count, 7);
@@ -85,7 +85,7 @@ class hecto
         return $record_type.$total_count.$total_amount.$filter;        
     }
 
-    public function getEndRecord($total_count)
+    private function getEndRecord($total_count)
     {
         $record_type    = $this->setAtypeField("12", 2);
         $total_count    = $this->setNtypeField($total_count, 7);

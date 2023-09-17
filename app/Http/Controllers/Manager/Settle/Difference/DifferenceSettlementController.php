@@ -32,7 +32,7 @@ class DifferenceSettlementController extends Controller
             {
                 $path   = "App\Http\Controllers\Manager\Settle\Difference\\".$pg_name;            
                 $pg     = new $path();
-                $pg->process($brands[$i]->business_num, $brands[$i]->gid, $trans);    
+                $pg->request($brands[$i]->business_num, $brands[$i]->gid, $trans);    
             }
             catch(Exception $e)
             {   // pg사 발견못함
@@ -48,6 +48,7 @@ class DifferenceSettlementController extends Controller
 
     public function response(Request $request)
     {
+        $validated = $request->validate(['dt'=>'required']);
 
     }
 }
