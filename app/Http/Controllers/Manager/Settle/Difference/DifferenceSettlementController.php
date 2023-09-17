@@ -25,9 +25,10 @@ class DifferenceSettlementController extends Controller
         for ($i=0; $i<count($brands); $i++)
         {
             $trans = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
-                ->where('is_delete', false)
-                ->where('brand_id', $brands[$i]->id)
-                ->where('trx_dt', date('Y-m-d'))
+                ->where('transactions.is_delete', false)
+                ->where('merchandises.is_delete', false)
+                ->where('transactions.brand_id', $brands[$i]->id)
+                ->where('transactions.trx_dt', date('Y-m-d'))
                 ->get(['transactions.*', 'merchandises.business_num']);
             try
             {
