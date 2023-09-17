@@ -63,7 +63,7 @@ return [
         'different_settlement_hecto' => [
             'driver' => 'ftp',
             'host' => env('HECTO_DIFFER_SETTLE_HOST'),
-            'port' => env('HECTO_DIFFER_SETTLE_PORT'),
+            'port' => (int)env('HECTO_DIFFER_SETTLE_PORT'),
             'username' => env('HECTO_DIFFER_SETTLE_USER'),
             'password' => env('HECTO_DIFFER_SETTLE_PASS'),
             // Optional FTP Settings...
