@@ -9,6 +9,7 @@ class DifferenceSettlement extends Controller
 {    
     public function __construct()
     {
+
     }
 
     public function __invoke()
@@ -16,7 +17,7 @@ class DifferenceSettlement extends Controller
         $brands = DB::table('brands')
             ->where('is_delete', false)
             ->where('is_use_different_settlement', true)
-            ->get(['business_num', 'gid', 'id']);
+            ->get(['business_num', 'gid', 'id', 'above_pg_type']);
         
         for ($i=0; $i<count($brands); $i++) 
         {
@@ -45,7 +46,7 @@ class DifferenceSettlement extends Controller
         }
     }
 
-    public function response()
+    public function response(Request $request)
     {
 
     }
