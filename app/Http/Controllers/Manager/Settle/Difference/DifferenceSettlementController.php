@@ -17,7 +17,7 @@ class DifferenceSettlementController extends Controller
 
     public function __invoke()
     {
-        $date = Carbon::now();
+        $date   = Carbon::now();
         $brands = Brand::where('is_delete', false)
             ->where('is_use_different_settlement', true)
             ->get(['business_num', 'gid', 'id', 'above_pg_type']);
@@ -29,10 +29,9 @@ class DifferenceSettlementController extends Controller
                 ->where('brand_id', $brands[$i]->id)
                 ->where('trx_dt', date('Y-m-d'))
                 ->get(['transactions.*', 'merchandises.business_num']);
-
-            $pg_name = getPGType($brands[$i]->above_pg_type);
             try
             {
+                $pg_name = getPGType($brands[$i]->above_pg_type);
                 $path   = "App\Http\Controllers\Manager\Settle\Difference\\".$pg_name;            
                 $pg     = new $path();
                 $pg->request($date, $brands[$i]->business_num, $brands[$i]->gid, $trans);    
