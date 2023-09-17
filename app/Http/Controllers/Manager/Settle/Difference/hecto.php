@@ -26,12 +26,12 @@ class hecto
         return $record_type.$req_date.$brand_business_num.$filter;
     }
 
-    private function setHeaderRecord($gid)
+    private function setHeaderRecord($rep_mcht_id)
     {
         $record_type    = $this->setAtypeField("10", 2);
-        $gid            = $this->setAtypeField($gid, 10);
+        $rep_mcht_id            = $this->setAtypeField($rep_mcht_id, 10);
         $filter         = $this->setAtypeField('', 388);
-        return $record_type.$gid.$filter;
+        return $record_type.$rep_mcht_id.$filter;
     }
 
     private function setDataRecord($trans, $brand_business_num)
@@ -95,13 +95,13 @@ class hecto
         return $record_type.$total_count.$filter;
     }
 
-    public function request(Carbon $date, $brand_business_num, $gid, $trans)
+    public function request(Carbon $date, $brand_business_num, $rep_mcht_id, $trans)
     {
         $req_date = $date->format('Ymd');
         $save_path = "/edi_req/ST_PRFT_REQ_".$req_date;
 
         $start  = $this->setStartRecord($req_date, $brand_business_num);
-        $header = $this->setHeaderRecord($gid);
+        $header = $this->setHeaderRecord($rep_mcht_id);
         [$data_records, $total_count, $total_amount] = $this->setDataRecord($trans, $brand_business_num);
         $total  = $this->setTotalRecord($total_count, $total_amount);
         $end    = $this->setEndRecord($total_count);

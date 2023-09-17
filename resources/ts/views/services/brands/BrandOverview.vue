@@ -107,7 +107,7 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>차액정산 사용여부</template>
                             <template #input>
-                                <BooleanRadio :radio="Boolean(props.item.is_use_different_settlement)"
+                                <BooleanRadio :radio="props.item.is_use_different_settlement"
                                     @update:radio="props.item.is_use_different_settlement = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>
@@ -120,7 +120,7 @@ watchEffect(() => {
                                     :content="'차액정산에 사용되는 정보입니다.'"></BaseQuestionTooltip>
                             </template>
                             <template #input>
-                                <VTextField prepend-inner-icon="clarity:group-line" v-model="item.gid"
+                                <VTextField prepend-inner-icon="clarity:group-line" v-model="item.rep_mcht_id"
                                     type="text" />
                             </template>
                         </CreateHalfVCol>
@@ -135,7 +135,7 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name><span>{{ props.item.pv_options.auth.levels.dev_name }} 사용여부</span></template>
                             <template #input>
-                                <BooleanRadio :radio="Boolean(props.item.pv_options.auth.levels.dev_use)"
+                                <BooleanRadio :radio="props.item.pv_options.auth.levels.dev_use"
                                     @update:radio="props.item.pv_options.auth.levels.dev_use = $event">
                                     <template #true>사용</template>
                                     <template #false>미사용</template>

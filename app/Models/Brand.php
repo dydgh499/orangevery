@@ -35,4 +35,11 @@ class Brand extends Model
             get: fn ($value) =>  round($value * 100, 3),
         );
     }
+
+    protected function isUseDifferentSettlement() : Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => (boolean)$value,
+        );
+    }
 }
