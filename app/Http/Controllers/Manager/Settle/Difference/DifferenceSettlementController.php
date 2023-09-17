@@ -22,10 +22,11 @@ class DifferenceSettlementController extends Controller
         for ($i=0; $i<count($brands); $i++) 
         {
             $trans = DB::table('transactions')
+                ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
                 ->where('is_delete', false)
                 ->where('brand_id', $brands[$i]->id)
                 ->where('trx_dt', date('Y-m-d'))
-                ->get();
+                ->get(['transactions.*', 'merchandises.business_num']);
 
             $pg_name = getPGType($brands[$i]->above_pg_type);
             try
