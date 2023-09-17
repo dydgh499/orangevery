@@ -16,7 +16,7 @@ class hecto
         return sprintf("%-".$length."s", $string);
     }
 
-    private function getStartRecord($req_date, $brand_business_num)
+    private function setStartRecord($req_date, $brand_business_num)
     {
         $brand_business_num = str_replace('-', '', $brand_business_num);
         $record_type    = $this->setAtypeField("01", 2);
@@ -26,7 +26,7 @@ class hecto
         return $record_type.$req_date.$brand_business_num.$filter;
     }
 
-    private function getHeaderRecord($gid)
+    private function setHeaderRecord($gid)
     {
         $record_type    = $this->setAtypeField("10", 2);
         $gid            = $this->setAtypeField($gid, 10);
@@ -34,7 +34,7 @@ class hecto
         return $record_type.$gid.$filter;
     }
 
-    private function getDataRecord($trans, $brand_business_num)
+    private function setDataRecord($trans, $brand_business_num)
     {
         $brand_business_num = str_replace('-', '', $brand_business_num);
         $data_records = '';
@@ -78,7 +78,7 @@ class hecto
         return [$data_records, count($trans), $total_amount];
     }
 
-    private function getTotalRecord($total_count, $total_amount)
+    private function setTotalRecord($total_count, $total_amount)
     {
         $record_type    = $this->setAtypeField("12", 2);
         $total_count    = $this->setNtypeField($total_count, 7);
@@ -87,7 +87,7 @@ class hecto
         return $record_type.$total_count.$total_amount.$filter;        
     }
 
-    private function getEndRecord($total_count)
+    private function setEndRecord($total_count)
     {
         $record_type    = $this->setAtypeField("12", 2);
         $total_count    = $this->setNtypeField($total_count, 7);
@@ -100,11 +100,11 @@ class hecto
         $req_date = $date->format('Ymd');
         $save_path = '/edi_rsp/ST_PRFT_RSP_'.$req_date;
 
-        $start  = $this->getStartRecord($req_date, $brand_business_num);
-        $header = $this->getHeaderRecord($gid);
-        [$data_records, $total_count, $total_amount] = $this->getDataRecord($trans, $brand_business_num);
-        $total  = $this->getTotalRecord($total_count, $total_amount);
-        $end    = $this->getEndRecord($total_count);
+        $start  = $this->setStartRecord($req_date, $brand_business_num);
+        $header = $this->setHeaderRecord($gid);
+        [$data_records, $total_count, $total_amount] = $this->setDataRecord($trans, $brand_business_num);
+        $total  = $this->setTotalRecord($total_count, $total_amount);
+        $end    = $this->setEndRecord($total_count);
 
         $full_record = $start.$header.$data_records.$total.$end;
         Storage::disk('different_settlement_hecto')->put($save_path, $full_record);
