@@ -25,15 +25,17 @@ class DifferenceSettlementController extends Controller
         
         for ($i=0; $i<count($brands); $i++)
         {
-            $trans = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
+            $pg_name = getPGType($brands[$i]->above_pg_type);
+            $trans   = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
+                ->join('payment_gateways', 'transactions.pg_id', '=', 'payment_gateways.id')
                 ->where('transactions.is_delete', false)
                 ->where('merchandises.is_delete', false)
+                ->where('payment_gateways.pg_type', $brands[$i]->above_pg_type)
                 ->where('transactions.brand_id', $brands[$i]->id)
-                ->where('transactions.trx_dt', $str_date)
+                ->where('transactions.trx_dt', $str_date)                
                 ->get(['transactions.*', 'merchandises.business_num']);
             try
             {
-                $pg_name = getPGType($brands[$i]->above_pg_type);
                 $path   = "App\Http\Controllers\Manager\Settle\Difference\\".$pg_name;            
                 $pg     = new $path();
                 $pg->request($date, $brands[$i]->business_num, $brands[$i]->gid, $trans);    
