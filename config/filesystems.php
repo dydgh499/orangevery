@@ -67,8 +67,7 @@ return [
             'username' => env('HECTO_DIFFER_SETTLE_USER'),
             'password' => env('HECTO_DIFFER_SETTLE_PASS'),
             // Optional FTP Settings...
-            // 'port' => env('FTP_PORT', 21),
-            // 'passive' => true,
+            'passive' => true,
             // 'ssl' => true,
             // 'timeout' => 30,
         ],

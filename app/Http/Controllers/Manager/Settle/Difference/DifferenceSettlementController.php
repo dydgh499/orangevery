@@ -33,7 +33,6 @@ class DifferenceSettlementController extends Controller
                 ->get(['transactions.*', 'merchandises.business_num']);
             try
             {
-                logging(['trans'=>json_decode(json_encode($trans), true)]);
                 $pg_name = getPGType($brands[$i]->above_pg_type);
                 $path   = "App\Http\Controllers\Manager\Settle\Difference\\".$pg_name;            
                 $pg     = new $path();

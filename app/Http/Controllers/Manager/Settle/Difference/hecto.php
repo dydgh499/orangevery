@@ -98,7 +98,7 @@ class hecto
     public function request(Carbon $date, $brand_business_num, $gid, $trans)
     {
         $req_date = $date->format('Ymd');
-        $save_path = '/edi_req/ST_PRFT_REQ_'.$req_date;
+        $save_path = "/edi_req/ST_PRFT_REQ_".$req_date;
 
         $start  = $this->setStartRecord($req_date, $brand_business_num);
         $header = $this->setHeaderRecord($gid);
@@ -107,9 +107,15 @@ class hecto
         $end    = $this->setEndRecord($total_count);
 
         $full_record = $start.$header.$data_records.$total.$end;
-        logging(['level'=>4, 'full_record'=>$full_record]);
-        $result = Storage::disk('different_settlement_hecto')->put($save_path, $full_record);
-        logging(['level'=>5, 'result'=>$result]);
+        try
+        {
+            $result = Storage::disk('different_settlement_hecto')->put($save_path, $full_record);
+        }
+        catch(Exception $e)
+        {
+            logging(['message' => $e->getMessage()]);
+        }
+        logging(['result'=>$result, 'save_path'=>$save_path]);
     }
 
     public function response($request)
