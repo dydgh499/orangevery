@@ -69,7 +69,7 @@ watchEffect(() => {
 <template>
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :is_range_date="false">
         <template #index_extra_field>
-            <div class="demo-space-x" style="color: black;">
+            <div class="demo-space-x">
                 <VSwitch v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" />
             </div>
         </template>

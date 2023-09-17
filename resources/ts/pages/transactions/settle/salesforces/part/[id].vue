@@ -192,7 +192,7 @@ watchEffect(() => {
                     부분정산
                 </VBtn>
                 <div style="display: flex;">
-                    <div class="demo-space-x" style="color: black;">
+                    <div class="demo-space-x">
                         <VSwitch v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" />
                     </div>
                     <table>

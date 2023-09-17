@@ -2,7 +2,6 @@
 
 import type { FreeOption, PaidOption, AuthOption } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { user_info } from '@/plugins/axios';
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import corp from '@corp';
@@ -25,45 +24,31 @@ const md = user_info.value.level == 50 ? 4 : 12
                 <VCardItem>
                     <VCardTitle>추가 옵션</VCardTitle>
                     <VRow class="pt-5">
-                    </VRow>
-                    <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>수기결제 사용여부</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.free.use_hand_pay"
-                                    @update:radio="props.item.free.use_hand_pay = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.free.use_hand_pay" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
+                    <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>인증결제 사용여부</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.free.use_auth_pay"
-                                    @update:radio="props.item.free.use_auth_pay = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.free.use_auth_pay" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
 
-                    <VRow class="pt-5">
+                    <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>간편결제 사용여부</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.free.use_simple_pay"
-                                    @update:radio="props.item.free.use_simple_pay = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.free.use_simple_pay" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
+                    <VRow>
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <VCol cols="12" md="6">
@@ -97,113 +82,77 @@ const md = user_info.value.level == 50 ? 4 : 12
         <VCol cols="12" :md="md" v-show="user_info.level == 50">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>                        
-                        <BaseQuestionTooltip location="top" text="영업점 일괄적용(유료)" :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
+                    <VCardTitle>
+                        <BaseQuestionTooltip location="top" text="영업점 일괄적용(유료)"
+                            :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
                         </BaseQuestionTooltip>
                     </VCardTitle>
-                    <VRow class="pt-5">
-                    </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>MID 일괄적용 사용여부</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.paid.use_mid_batch"
-                                    @update:radio="props.item.paid.use_mid_batch = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.paid.use_mid_batch" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
+                    <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>TID 일괄적용 사용여부</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.paid.use_tid_batch"
-                                    @update:radio="props.item.paid.use_tid_batch = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.paid.use_tid_batch" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
+                    <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>API KEY 일괄적용 사용여부</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.paid.use_api_key_batch"
-                                    @update:radio="props.item.paid.use_api_key_batch = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.paid.use_api_key_batch" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
+                    <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>SUB KEY 일괄적용 사용여부</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.paid.use_sub_key_batch"
-                                    @update:radio="props.item.paid.use_sub_key_batch = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.paid.use_sub_key_batch" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-10">
-                    </VRow>
-                    <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="가맹점 옵션(유료)" :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
+                    <VCardTitle class="pt-10">
+                        <BaseQuestionTooltip location="top" text="가맹점 옵션(유료)"
+                            :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
                         </BaseQuestionTooltip>
                     </VCardTitle>
-                    <VRow class="pt-5">
-                    </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>예금주 검증</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.paid.use_acct_verification"
-                                    @update:radio="props.item.paid.use_acct_verification = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.paid.use_acct_verification" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
+                    <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>가맹점 전산 사용 ON/OFF</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.paid.subsidiary_use_control"
-                                    @update:radio="props.item.paid.subsidiary_use_control = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.paid.subsidiary_use_control" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
+                    <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>수기결제 직접입력(가맹점)</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.paid.use_hand_pay_drct"
-                                    @update:radio="props.item.paid.use_hand_pay_drct = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.paid.use_hand_pay_drct" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
+                    <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>수기결제 SMS</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.paid.use_hand_pay_sms"
-                                    @update:radio="props.item.paid.use_hand_pay_sms = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.paid.use_hand_pay_sms" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -214,96 +163,68 @@ const md = user_info.value.level == 50 ? 4 : 12
             <VCard>
                 <VCardItem>
                     <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="결제모듈 옵션(유료)" :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
+                        <BaseQuestionTooltip location="top" text="결제모듈 옵션(유료)"
+                            :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
                         </BaseQuestionTooltip>
                     </VCardTitle>
-                    <VRow class="pt-5">
-                    </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>실시간 결제모듈</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.paid.use_realtime_deposit"
-                                    @update:radio="props.item.paid.use_realtime_deposit = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.paid.use_realtime_deposit" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
+                    <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>카드사 필터링</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.paid.use_issuer_filter"
-                                    @update:radio="props.item.paid.use_issuer_filter = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.paid.use_issuer_filter" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
+                    <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>중복결제 검증</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.paid.use_dup_pay_validation"
-                                    @update:radio="props.item.paid.use_dup_pay_validation = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.paid.use_dup_pay_validation" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
+                    <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>결제금지시간 지정</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.paid.use_forb_pay_time"
-                                    @update:radio="props.item.paid.use_forb_pay_time = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.paid.use_forb_pay_time" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
+                    <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>결제한도 지정</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.paid.use_pay_limit"
-                                    @update:radio="props.item.paid.use_pay_limit = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.paid.use_pay_limit" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
+                    <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>온라인 결제 사용여부</template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.paid.use_online_pay"
-                                    @update:radio="props.item.paid.use_online_pay = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.paid.use_online_pay" color="primary" />
                             </template>
                         </CreateHalfVCol>
-                </VRow>
-                <VRow class="pt-5">
-                    <CreateHalfVCol :mdl="6" :mdr="6">
-                        <template #name>TID 발급버튼 사용여부</template>
-                        <template #input>
-                            <BooleanRadio :radio="props.item.paid.use_tid_create"
-                                @update:radio="props.item.paid.use_tid_create = $event">
-                                <template #true>사용</template>
-                                <template #false>미사용</template>
-                            </BooleanRadio>
-                        </template>
-                    </CreateHalfVCol>
-                </VRow>
-            </VCardItem>
-        </VCard>
-    </VCol>
-</VRow></template>
+                    </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>TID 발급버튼 사용여부</template>
+                            <template #input>
+                                <VSwitch v-model="props.item.paid.use_tid_create" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                </VCardItem>
+            </VCard>
+        </VCol>
+    </VRow>
+</template>

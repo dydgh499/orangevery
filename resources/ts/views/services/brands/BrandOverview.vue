@@ -3,7 +3,6 @@ import { businessNumValidator, requiredValidator } from '@validators'
 import type { Brand } from '@/views/types'
 import FileInput from '@/layouts/utils/FileInput.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { themeConfig } from '@themeConfig'
 import { config } from '@layouts/config'
 import { getUserLevel } from '@/plugins/axios';
@@ -17,9 +16,13 @@ interface Props {
 }
 const props = defineProps<Props>()
 const { pg_companies }  = useStore()
+
 watchEffect(() => {
     config.app.title = props.item.name
     themeConfig.app.title = props.item.name
+})
+watchEffect(() => {
+    console.log(props.item)
 })
 </script>
 <template>
@@ -95,23 +98,21 @@ watchEffect(() => {
                         <BaseQuestionTooltip location="top" text="2차 PG사 정보"
                             :content="item.pv_options.auth.levels.dev_name + '만 확인 가능한 정보입니다.'"></BaseQuestionTooltip>
                     </VCardTitle>
-                    <VRow class="pt-5">
+                    <VRow class="pt-5">                        
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>차액정산 사용여부</template>
+                            <template #input>
+                                <div class="demo-space-x">
+                                    <VSwitch v-model="props.item.is_use_different_settlement" color="primary" />
+                                </div>
+                            </template>
+                        </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>상위 PG사 선택</template>
                             <template #input>                                
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.above_pg_type" :items="pg_companies"
                                     prepend-inner-icon="ph-buildings" label="상위 PG사 선택" item-title="name" item-value="id"
                                     single-line />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>차액정산 사용여부</template>
-                            <template #input>
-                                <BooleanRadio :radio="props.item.is_use_different_settlement"
-                                    @update:radio="props.item.is_use_different_settlement = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
@@ -135,11 +136,9 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name><span>{{ props.item.pv_options.auth.levels.dev_name }} 사용여부</span></template>
                             <template #input>
-                                <BooleanRadio :radio="props.item.pv_options.auth.levels.dev_use"
-                                    @update:radio="props.item.pv_options.auth.levels.dev_use = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <div class="demo-space-x">
+                                    <VSwitch v-model="props.item.pv_options.auth.levels.dev_use" color="primary" />
+                                </div>
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
@@ -160,7 +159,6 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>수수료 정산 타입</template>
                             <template #input>
-
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.dev_settle_type"
                                     :items="dev_settle_types" prepend-inner-icon="ph-buildings" label="수수료 정산 타입 선택"
                                     item-title="title" item-value="id" single-line :rules="[requiredValidator]" />

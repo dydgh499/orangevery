@@ -10,7 +10,7 @@ interface Props {
     cus_filter: boolean,
     sales: boolean,
 }
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 </script>
 <template>
     <AppCardActions action-collapsed title="검색 옵션">
