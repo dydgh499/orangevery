@@ -17,7 +17,7 @@ trait ExtendResponseTrait
             $http_code = 500; 
             Log::error($msg, $logs);
         }
-        else if($code > 999 && $code <= 2000)
+        else if($code > 990 && $code <= 2000)
         {
             $http_code = 409;
             Log::notice($msg, $logs);
