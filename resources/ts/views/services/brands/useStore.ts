@@ -161,7 +161,8 @@ export const defaultItemInfo = () => {
                 use_mid_batch: false,
                 use_tid_batch: false,
                 use_api_key_batch: false,
-                use_sub_key_batch: false
+                use_sub_key_batch: false,
+                use_pay_verification_mobile: false
             }),
             auth: reactive<AuthOption>({
                 levels: {
@@ -199,6 +200,9 @@ export const defaultItemInfo = () => {
         dev_settle_type: 0,
         extra_deposit_amount: 0,
         curr_deposit_amount: 0,
+        rep_mcht_id: '',
+        is_use_different_settlement: false,
+        above_pg_type: 0
     })
 
 
