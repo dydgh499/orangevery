@@ -178,7 +178,7 @@ class TransactionController extends Controller
             $msg = $ex->getMessage();
             if(str_contains($msg, 'Duplicate entry'))
                 $msg = '이미 같은 거래번호의 취소매출이 존재합니다.<br>해당 매출을 삭제하거나 거래번호를 수정한 후 다시 시도해주세요.';                
-            return $this->extendResponse(990, $msg);
+            return $this->extendResponse(991, $msg);
         }
     }
 
@@ -233,7 +233,7 @@ class TransactionController extends Controller
             $msg = $ex->getMessage();
             if(str_contains($msg, 'Duplicate entry'))
                 $msg = '이미 같은 거래번호의 취소매출이 존재합니다.<br>해당 매출을 삭제하거나 거래번호를 수정한 후 다시 시도해주세요.';                
-            return $this->extendResponse(990, $msg);
+            return $this->extendResponse(991, $msg);
         }
     }
 
@@ -286,7 +286,7 @@ class TransactionController extends Controller
             if(str_contains($msg, 'Duplicate entry'))
                 $msg = '이미 같은 거래번호의 취소매출이 존재합니다.<br>해당 매출을 삭제하거나 거래번호를 수정한 후 다시 시도해주세요.';     
                 
-            return $this->extendResponse(990, $msg);
+            return $this->extendResponse(991, $msg);
         }
     }
 

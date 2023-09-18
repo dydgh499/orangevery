@@ -13,7 +13,7 @@ trait ExtendResponseTrait
         if($code == 990)
         {
             $host = request()->getHost();
-            $msg  = ($host != "localhost" && $msg == '') ? "무언가 잘못되었습니다." : $msg;
+            $msg  = ($host != "localhost") ? "무언가 잘못되었습니다." : $msg;   
             $http_code = 500; 
             Log::error($msg, $logs);
         }
