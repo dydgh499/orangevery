@@ -23,7 +23,7 @@ class hecto
         $req_date       = $this->setNtypeField($req_date, 8);
         $brand_business_num = $this->setAtypeField($brand_business_num, 10);
         $filter         = $this->setAtypeField($brand_business_num, 370);
-        return $record_type.$req_date.$brand_business_num.$filter.'\n';
+        return $record_type.$req_date.$brand_business_num.$filter."\n";
     }
 
     private function setHeaderRecord($rep_mcht_id)
@@ -31,7 +31,7 @@ class hecto
         $record_type    = $this->setAtypeField("10", 2);
         $rep_mcht_id            = $this->setAtypeField($rep_mcht_id, 10);
         $filter         = $this->setAtypeField('', 388);
-        return $record_type.$rep_mcht_id.$filter.'\n';
+        return $record_type.$rep_mcht_id.$filter."\n";
     }
 
     private function setDataRecord($trans, $brand_business_num)
@@ -73,9 +73,9 @@ class hecto
             $filter         = $this->setAtypeField('', 149);
 
             $data_record = $record_type.$appr_type.$trx_dt.$brand_business_num.$business_num.$trx_id.$installment.$ord_num.$amount.$ori_amount.$appr_num.$add_field.$filter;
-            $data_records .= $data_record;
+            $data_records .= $data_record."\n";
         }
-        return [$data_records.'\n', count($trans), $total_amount];
+        return [$data_records, count($trans), $total_amount];
     }
 
     private function setTotalRecord($total_count, $total_amount)
@@ -92,7 +92,7 @@ class hecto
         $record_type    = $this->setAtypeField("12", 2);
         $total_count    = $this->setNtypeField($total_count, 7);
         $filter         = $this->setAtypeField('', 391);
-        return $record_type.$total_count.$filter.'\n';
+        return $record_type.$total_count.$filter."\n";
     }
 
     public function request(Carbon $date, $brand_business_num, $rep_mcht_id, $trans)

@@ -3,7 +3,6 @@
 import { nullValidator } from '@validators'
 import type { FreeOption, PaidOption, AuthOption } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import corp from '@corp';
 
@@ -103,21 +102,19 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>{{ item.auth.levels.sales5_name }} 사용여부</span></template>
                             <template #input>
-                                <BooleanRadio :radio="item.auth.levels.sales5_use" @update:radio="item.auth.levels.sales5_use = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <div class="demo-space-x">
+                                    <VSwitch v-model="item.auth.levels.sales5_use" color="primary" />
+                                </div>
                             </template>
                         </CreateHalfVCol>
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>{{ item.auth.levels.sales4_name }} 사용여부</span></template>
-                            <template #input>
-                                <BooleanRadio :radio="item.auth.levels.sales4_use" @update:radio="item.auth.levels.sales4_use = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                            <template #input>                                
+                                <div class="demo-space-x">
+                                    <VSwitch v-model="item.auth.levels.sales4_use" color="primary" />
+                                </div>
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -125,10 +122,9 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>{{ item.auth.levels.sales3_name }} 사용여부</span></template>
                             <template #input>
-                                <BooleanRadio :radio="item.auth.levels.sales3_use" @update:radio="item.auth.levels.sales3_use = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <div class="demo-space-x">
+                                    <VSwitch v-model="item.auth.levels.sales3_use" color="primary" />
+                                </div>
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -137,10 +133,9 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>{{ item.auth.levels.sales2_name }} 사용여부</span></template>
                             <template #input>
-                                <BooleanRadio :radio="item.auth.levels.sales2_use" @update:radio="item.auth.levels.sales2_use = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <div class="demo-space-x">
+                                    <VSwitch v-model="item.auth.levels.sales2_use" color="primary" />
+                                </div>
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -149,10 +144,9 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>{{ item.auth.levels.sales1_name }} 사용여부</span></template>
                             <template #input>
-                                <BooleanRadio :radio="item.auth.levels.sales1_use" @update:radio="item.auth.levels.sales1_use = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <div class="demo-space-x">
+                                    <VSwitch v-model="item.auth.levels.sales1_use" color="primary" />
+                                </div>
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -161,10 +155,9 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>{{ item.auth.levels.sales0_name }} 사용여부</span></template>
                             <template #input>
-                                <BooleanRadio :radio="item.auth.levels.sales0_use" @update:radio="item.auth.levels.sales0_use = $event">
-                                    <template #true>사용</template>
-                                    <template #false>미사용</template>
-                                </BooleanRadio>
+                                <div class="demo-space-x">
+                                    <VSwitch v-model="item.auth.levels.sales0_use" color="primary" />
+                                </div>
                             </template>
                         </CreateHalfVCol>
                     </VRow>
