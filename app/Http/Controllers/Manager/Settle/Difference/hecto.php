@@ -22,8 +22,9 @@ class hecto
         $record_type    = $this->setAtypeField("01", 2);
         $req_date       = $this->setNtypeField($req_date, 8);
         $brand_business_num = $this->setAtypeField($brand_business_num, 10);
-        $filter         = $this->setAtypeField($brand_business_num, 370);
-        return $record_type.$req_date.$brand_business_num.$filter."\n";
+        $pg_type        = $this->setAtypeField("SETTLEBANK", 10);
+        $filter         = $this->setAtypeField('', 370);
+        return $record_type.$req_date.$brand_business_num.$pg_type.$filter."\n";
     }
 
     private function setHeaderRecord($rep_mcht_id)
@@ -45,7 +46,7 @@ class hecto
             $business_num = str_replace('-', '', $trans[$i]->business_num);
             $appr_type  = $trans[$i]->is_cancel ? "1" : "0";
             $trx_dt     = $trans[$i]->is_cancel ? $trans[$i]->cxl_dt : $trans[$i]->trx_dt;
-            $trx_id     = $trans[$i]->is_cancel ? $trans[$i]->trx_id : $trans[$i]->ori_trx_id;
+            $trx_id     = $trans[$i]->is_cancel ? $trans[$i]->ori_trx_id : $trans[$i]->trx_id;
             $trx_dt     = date('Ymd', strtotime($trx_dt));
             // install
             if($trans[$i]->is_cancel)
