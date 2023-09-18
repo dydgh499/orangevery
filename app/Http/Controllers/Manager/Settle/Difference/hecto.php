@@ -90,7 +90,7 @@ class hecto
 
     private function setEndRecord($total_count)
     {
-        $record_type    = $this->setAtypeField("12", 2);
+        $record_type    = $this->setAtypeField("02", 2);
         $total_count    = $this->setNtypeField($total_count, 7);
         $filter         = $this->setAtypeField('', 391);
         return $record_type.$total_count.$filter."\n";
