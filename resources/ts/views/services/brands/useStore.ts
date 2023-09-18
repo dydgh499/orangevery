@@ -180,6 +180,11 @@ export const defaultItemInfo = () => {
                     sales1_name: '대리점',
                     sales0_use: false,
                     sales0_name: '하위대리점'
+                },
+                bonaeja: {
+                    user_id: '',
+                    api_key: '',
+                    sender_phone: ''
                 }
             })
         },
