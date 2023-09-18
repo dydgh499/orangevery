@@ -88,17 +88,20 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('finance-vans', FinanceVanController::class);
             Route::apiResource('classifications', ClassificationController::class);
         });
-        Route::prefix('transactions')->group(function() {            
+        Route::prefix('transactions')->group(function() {                        
+            Route::post('mobile-code-issuance', [TransactionController::class, 'mobileCodeIssuence']);
+            Route::post('mobile-code-auth', [TransactionController::class, 'mobileCodeAuth']);
             Route::post('batch-retry', [TransactionController::class, 'batchRetry']);
             Route::post('cancel', [TransactionController::class, 'cancel']);
             Route::post('pay-cancel', [TransactionController::class, 'payCancel']);
             Route::get('chart', [TransactionController::class, 'chart']);
-
+            
             Route::get('fails', [FailTransController::class, 'index']);
             Route::get('dangers', [DangerTransController::class, 'index']);
             Route::delete('dangers/{id}', [DangerTransController::class, 'destroy']);
             Route::post('dangers/{id}/checked', [DangerTransController::class, 'checked']);
-                        
+
+
             Route::prefix('settle')->group(function() {
                 Route::get('merchandises', [MchtSettleController::class, 'index']);
                 Route::get('merchandises/chart', [MchtSettleController::class, 'chart']);

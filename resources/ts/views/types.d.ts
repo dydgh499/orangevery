@@ -266,6 +266,7 @@ interface PaidOption {
     use_tid_batch: boolean,    // TID 일괄 적용
     use_api_key_batch: boolean,
     use_sub_key_batch: boolean,
+    use_pay_verification_mobile: boolean, //휴대폰인증 
 }
 interface AuthOption {
     levels: {

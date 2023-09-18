@@ -349,6 +349,22 @@ class TransactionController extends Controller
         return $this->response(1);
     }
 
+    /*
+     * 모바일 코드 발급
+     */
+    public function mobileCodeIssuence(Request $request)
+    {
+
+    }
+
+    /*
+     * 모바일 코드 인증
+     */
+    public function mobileCodeAuth(Request $request)
+    {
+        
+    }
+
     public function _test()
     {
         $dev_settle_type = 0;

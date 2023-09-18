@@ -7,6 +7,7 @@ import { VForm } from 'vuetify/components'
 import type { Merchandise, SalesSlip, Options, HandPay } from '@/views/types'
 import { cloneDeep } from 'lodash'
 import { axios } from '@axios'
+import corp from '@corp';
 
 interface Props {
     pmod_id: number,
@@ -50,7 +51,7 @@ const pay = async () => {
                 sale_slip.value.installment = r.data.installment
                 sale_slip.value.trx_dttm = r.data.trx_dttm
                 sale_slip.value.is_cancel = Boolean(r.data.is_cancel)
-                
+
                 sale_slip.value.addr = props.merchandise.addr
                 sale_slip.value.business_num = props.merchandise.business_num
                 sale_slip.value.resident_num = props.merchandise.resident_num
@@ -82,11 +83,12 @@ watchEffect(() => {
     hand_pay_info.is_old_auth = props.is_old_auth
     hand_pay_info.ord_num = props.pmod_id + "H" + Date.now().toString().substr(0, 10)
 })
+const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
 </script>
 <template>
     <VCard flat rounded>
         <VCardText>
-            <slot name="explain">                
+            <slot name="explain">
             </slot>
             <VDivider />
             <VForm ref="vForm" @submit.prevent="pay">
@@ -119,7 +121,7 @@ watchEffect(() => {
                             <template #name>휴대폰번호</template>
                             <template #input>
                                 <VTextField v-model="hand_pay_info.buyer_phone" type="number"
-                                    prepend-inner-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
+                                    prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호를 입력해주세요"
                                     :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
@@ -138,13 +140,14 @@ watchEffect(() => {
                                     prepend-inner-icon="ic-baseline-calendar-today" placeholder="(MM/YY:0324)"
                                     :rules="[requiredValidator, lengthValidatorV2(hand_pay_info.yymm, 4)]" maxlength="4" />
                             </template>
-                        </CreateHalfVCol>                        
+                        </CreateHalfVCol>
                         <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
                             <template #name>할부기간</template>
                             <template #input>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="hand_pay_info.installment"
                                     :items="filterInstallment" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
-                                    label="할부기간 선택" item-title="title" item-value="id" single-line :rules="[requiredValidator]"/>
+                                    label="할부기간 선택" item-title="title" item-value="id" single-line
+                                    :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 0; padding-top: 12px;"
@@ -164,7 +167,9 @@ watchEffect(() => {
                                     @click:append-inner="is_show = !is_show" autocomplete maxlength="2" />
                             </template>
                         </CreateHalfVCol>
-                        <VCol cols="12" style="padding: 0;">
+
+                        <MobileVerification v-if="corp.pv_options.paid.use_pay_verification_mobile" @update:pay_button="is_show_pay_button = $event" :phone_num="hand_pay_info.buyer_phone"/>
+                        <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">
                             <VBtn block type="submit">
                                 결제하기
                             </VBtn>

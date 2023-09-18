@@ -11,11 +11,11 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AppCardActions: typeof import('./resources/ts/@core/components/AppCardActions.vue')['default']
     AppOtpInput: typeof import('./resources/ts/@core/components/AppOtpInput.vue')['default']
-    ConfirmDialog: typeof import('./resources/ts/@core/components/ConfirmDialog.vue')['default']
     CustomizerSection: typeof import('./resources/ts/@core/components/CustomizerSection.vue')['default']
     DialogCloseBtn: typeof import('./resources/ts/@core/components/DialogCloseBtn.vue')['default']
     ErrorHeader: typeof import('./resources/ts/@core/components/ErrorHeader.vue')['default']
     I18n: typeof import('./resources/ts/@core/components/I18n.vue')['default']
+    MobileVerification: typeof import('./resources/ts/@core/components/MobileVerification.vue')['default']
     Notifications: typeof import('./resources/ts/@core/components/Notifications.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
