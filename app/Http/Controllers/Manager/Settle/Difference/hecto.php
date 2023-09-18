@@ -85,7 +85,7 @@ class hecto
         $total_count    = $this->setNtypeField($total_count, 7);
         $total_amount   = $this->setAtypeField($total_amount, 18);
         $filter         = $this->setAtypeField('', 373);
-        return $record_type.$total_count.$total_amount.$filter;        
+        return $record_type.$total_count.$total_amount.$filter."\n";
     }
 
     private function setEndRecord($total_count)
