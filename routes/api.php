@@ -58,6 +58,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
     Route::prefix('auth')->group(function() {
         Route::post('sign-in', [AuthController::class, 'signin']);
         Route::post('sign-up', [AuthController::class, 'signUp']);
+        Route::post('mobile-code-issuance', [AuthController::class, 'mobileCodeIssuence']);
+        Route::post('mobile-code-auth', [AuthController::class, 'mobileCodeAuth']);
         Route::middleware('auth:sanctum')->post('sign-out', [AuthController::class, 'signout']);
         Route::middleware('auth:sanctum')->post('ok', [AuthController::class, 'ok']);
         Route::middleware('auth:sanctum')->post('onwer-check', [AuthController::class, 'onwerCheck']);
@@ -88,9 +90,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('finance-vans', FinanceVanController::class);
             Route::apiResource('classifications', ClassificationController::class);
         });
-        Route::prefix('transactions')->group(function() {                        
-            Route::post('mobile-code-issuance', [TransactionController::class, 'mobileCodeIssuence']);
-            Route::post('mobile-code-auth', [TransactionController::class, 'mobileCodeAuth']);
+        Route::prefix('transactions')->group(function() {
             Route::post('batch-retry', [TransactionController::class, 'batchRetry']);
             Route::post('cancel', [TransactionController::class, 'cancel']);
             Route::post('pay-cancel', [TransactionController::class, 'payCancel']);

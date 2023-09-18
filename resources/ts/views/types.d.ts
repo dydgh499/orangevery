@@ -284,6 +284,11 @@ interface AuthOption {
         sales1_name:string,
         sales0_use:boolean,
         sales0_name:string,
+    },
+    bonaeja: {
+        user_id: string,
+        api_key: string,
+        sender_phone: string,
     }
 }
 interface ThemeCSS {

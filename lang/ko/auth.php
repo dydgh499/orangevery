@@ -7,4 +7,5 @@ return [
     'throttle' => '너무 많은 요청으로 :seconds초 동안 통신할 수 없습니다.',
     'not_found_obj' => '계정을 찾을 수 없습니다.',
     'password' => '제공된 비밀번호가 올바르지 않습니다.',
+    'failed_token' => '인증번호가 정확하지 않습니다.',
 ];

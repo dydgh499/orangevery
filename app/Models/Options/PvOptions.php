@@ -73,7 +73,12 @@
             'sales0_use'    => false,
             'sales0_name'   => '하위대리점'
         ];
-
+        public $bonaeja = [
+            'user_id'   => '',
+            'api_key'   => '',
+            'sender_phone' => '',
+        ];
+        
         public function __construct(array $source)
         {
             foreach ($source as $property => $value) 

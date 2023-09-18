@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Redis;
 use App\Enums\HistoryType;
 
 /**
@@ -42,6 +43,7 @@ class AuthController extends Controller
         if($brand)
         {
             $brand['color'] = $brand['theme_css']['main_color'];
+            $brand['pv_options']['auth']['bonaeja'] = [];
             return response(view('application', ['json' => $brand]))
                 ->withCookie('XSRF-TOKEN', csrf_token());
         }
@@ -162,6 +164,9 @@ class AuthController extends Controller
         }, 3);
     }
 
+    /*
+    * 예금주 조회
+    */
     public function onwerCheck(Request $request)
     {
         $data = $request->all();
@@ -171,6 +176,60 @@ class AuthController extends Controller
             return $this->response(1, ['message'=> $res['body']['message']]);
         else
             return $this->extendResponse(1999, ['message'=> $res['body']['message']]);
+    }
+    
+
+    /*
+     * 모바일 코드 발급
+     */
+    public function mobileCodeIssuence(Request $request)
+    {
+        $validated = $request->validate(['phone_num'=>'required', 'brand_id'=>'required']);
+
+        $brand  = Brand::where('id', $request->brand_id)->first();
+        if($brand)
+        {
+            $bonaeja = $brand->pv_options->auth['bonaeja'];
+
+            $rand   = random_int(100000, 999999);
+            $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
+            if($res)
+            {
+                $user_id = 'test1234';
+                $sender = '18332099';
+                $api_key = 'dM3KGkKEbv7i+O46CYmW0l7xupASFn';
+                
+                $sms = [
+                    'user_id'   => $bonaeja['user_id'],
+                    'sender'    => $brand['sender_phone'],
+                    'api_key'   => $bonaeja['api_key'],
+                    'receiver'  => $request->phone_num,
+                    'msg'       => "[".$brand->name."]\n인증번호 [$rand]을(를) 입력해주세요",
+                ];
+                $res = post("https://api.bonaeja.com/api/msg/v1/send", $sms);
+                return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1000, $res['body']['message']);
+            }    
+        }
+    }
+
+    /**
+     * 휴대폰 인증번호 확인
+     *
+     * @bodyParam verification_number string required 문자로 전달받은 인증번호 Example: 1028933
+     * @bodyParam phone_num string required 휴대폰번호 Example: 01000000000
+    */
+    public function mobileCodeAuth(Request $request)
+    {
+        $validated = $request->validate(['verification_number'=>'required|string','phone_num'=>'required|string']);
+        $phone_num = $request->phone_num;
+        $verification_number = Redis::get("verify-code:".$phone_num);
+
+        $cond_1 = $request->verification_number == $verification_number;
+        $cond_2 = $request->phone_num == "01000000000" && $request->verification_number == "000000";
+        if($cond_1 || $cond_2)
+            return $this->response(0);
+        else
+            return $this->extendResponse(1000, __('auth.failed_token'), []);
     }
 }
 

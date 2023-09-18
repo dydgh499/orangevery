@@ -5,6 +5,7 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { reactive, watchEffect } from 'vue';
 import { VForm } from 'vuetify/components'
 import type { Options, AuthPay } from '@/views/types'
+import corp from '@corp'
 
 interface Props {
     pmod_id: number,
@@ -15,6 +16,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 
+const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
 const auth_pay_info = reactive(<AuthPay>({}))
 const vForm = ref<VForm>()
 
@@ -42,59 +44,56 @@ watchEffect(() => {
             </slot>
             <VDivider />
             <VForm ref="vForm" :action="pay_url" method="post">
-                <div>
-                    <VTextField v-model="auth_pay_info.pmod_id" type="visible" name="pmod_id" style="display: none;" />
-                    <VTextField v-model="auth_pay_info.return_url" type="visible" name="return_url" style="display: none;" />
-                    <VTextField v-model="auth_pay_info.ord_num" type="visible" name="ord_num" style="display: none;" />
-                    <VCol cols="12">
-                        <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
-                            <template #name>상품명</template>
-                            <template #input>
-                                <VTextField v-model="auth_pay_info.item_name" type="text" name="item_name"
-                                    prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
-                                    maxlength="100" :rules="[requiredValidator]" placeholder="상품명을 입력해주세요" counter />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
-                            <template #name>상품금액</template>
-                            <template #input>
-                                <VTextField v-model="auth_pay_info.amount" type="number" suffix="₩" name="amount"
-                                    placeholder="거래금액을 입력해주세요" prepend-inner-icon="ic:outline-price-change"
-                                    :rules="[requiredValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 24px 0;">
-                            <template #name>구매자명</template>
-                            <template #input>
-                                <VTextField v-model="auth_pay_info.buyer_name" type="text" name="buyer_name"
-                                    placeholder="구매자명을 입력해주세요" :rules="[requiredValidator]"
-                                    prepend-inner-icon="tabler-user" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
-                            <template #name>휴대폰번호</template>
-                            <template #input>
-                                <VTextField v-model="auth_pay_info.buyer_phone" type="number" name="phone"
-                                    prepend-inner-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
-                                    :rules="[requiredValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
-                            <template #name>할부기간</template>
-                            <template #input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="auth_pay_info.installment"
-                                    name="installment" :items="filterInstallment"
-                                    prepend-inneer-icon="fluent-credit-card-clock-20-regular" label="할부기간 선택"
-                                    item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                        <VCol cols="12" style="padding: 0;">
-                            <VBtn block type="submit">
-                                결제하기
-                            </VBtn>
-                        </VCol>
-                    </VCol>
-                </div>
+                <VTextField v-model="auth_pay_info.pmod_id" type="visible" name="pmod_id" style="display: none;" />
+                <VTextField v-model="auth_pay_info.return_url" type="visible" name="return_url" style="display: none;" />
+                <VTextField v-model="auth_pay_info.ord_num" type="visible" name="ord_num" style="display: none;" />
+                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; margin-top: 24px;">
+                    <template #name>상품명</template>
+                    <template #input>
+                        <VTextField v-model="auth_pay_info.item_name" type="text" name="item_name"
+                            prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
+                            maxlength="100" :rules="[requiredValidator]" placeholder="상품명을 입력해주세요" counter />
+                    </template>
+                </CreateHalfVCol>
+                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
+                    <template #name>상품금액</template>
+                    <template #input>
+                        <VTextField v-model="auth_pay_info.amount" type="number" suffix="₩" name="amount"
+                            placeholder="거래금액을 입력해주세요" prepend-inner-icon="ic:outline-price-change"
+                            :rules="[requiredValidator]" />
+                    </template>
+                </CreateHalfVCol>
+                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 24px 0;">
+                    <template #name>구매자명</template>
+                    <template #input>
+                        <VTextField v-model="auth_pay_info.buyer_name" type="text" name="buyer_name"
+                            placeholder="구매자명을 입력해주세요" :rules="[requiredValidator]" prepend-inner-icon="tabler-user" />
+                    </template>
+                </CreateHalfVCol>
+                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
+                    <template #name>휴대폰번호</template>
+                    <template #input>
+                        <VTextField v-model="auth_pay_info.buyer_phone" type="number" name="phone"
+                            prepend-inner-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
+                            :rules="[requiredValidator]" />
+                    </template>
+                </CreateHalfVCol>
+                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
+                    <template #name>할부기간</template>
+                    <template #input>
+                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="auth_pay_info.installment" name="installment"
+                            :items="filterInstallment" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                            label="할부기간 선택" item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
+                    </template>
+                </CreateHalfVCol>
+
+                <MobileVerification v-if="corp.pv_options.paid.use_pay_verification_mobile"
+                    @update:pay_button="is_show_pay_button = $event" :phone_num="auth_pay_info.buyer_phone" />
+                <VCol cols="12" style="padding: 0;">
+                    <VBtn block type="submit">
+                        결제하기
+                    </VBtn>
+                </VCol>
             </VForm>
         </VCardText>
     </VCard>

@@ -39,7 +39,6 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>간편결제 사용여부</template>
@@ -48,34 +47,93 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow>
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <VCol cols="12" md="6">
-                                    <label>
-                                        매출전표 가맹점표기 정보
-                                    </label>
-                                </VCol>
-                                <VCol cols="12" md="6">
+                    <VCardTitle class="pt-10">
+                        <BaseQuestionTooltip location="top" text="매출전표 가맹점표기 정보"
+                            :content="`가맹점 옵션중 매출전표 공급자 표기정보(PG/본사)를 본사로 설정할 시<br>매출전표에서 하단 정보들이 보여집니다.`">
+                        </BaseQuestionTooltip>
+                    </VCardTitle>
+                    <VRow class="pt-5">
+                        <CreateHalfVCol :mdl="4" :mdr="8">
+                            <template #name>회사명</template>
+                            <template #input>
                                     <VTextField prepend-inner-icon="ph-buildings"
                                         v-model="props.item.free.sales_slip.merchandise.comepany_name"
-                                        placeholder="회사명을 입력해주세요." type="text" class='pt-3' />
+                                        placeholder="회사명을 입력해주세요." type="text"/>
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="4" :mdr="8">
+                            <template #name>대표자명</template>
+                            <template #input>
                                     <VTextField prepend-inner-icon="tabler-user"
                                         v-model="props.item.free.sales_slip.merchandise.rep_name"
-                                        placeholder="대표자명을 입력해주세요." type="text" class='pt-3' />
+                                        placeholder="대표자명을 입력해주세요." type="text" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="4" :mdr="8">
+                            <template #name>연락처</template>
+                            <template #input>
                                     <VTextField prepend-inner-icon="tabler-device-mobile"
                                         v-model="props.item.free.sales_slip.merchandise.phone_num"
-                                        placeholder="연락처를 입력해주세요." type="text" class='pt-3' />
+                                        placeholder="연락처를 입력해주세요." type="text" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="4" :mdr="8">
+                            <template #name>사업자등록번호</template>
+                            <template #input>
                                     <VTextField prepend-inner-icon="ic-outline-business-center"
                                         v-model="props.item.free.sales_slip.merchandise.business_num"
-                                        placeholder="사업자등록번호를 입력해주세요." type="text" class='pt-3' />
+                                        placeholder="사업자등록번호를 입력해주세요." type="text" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="4" :mdr="8">
+                            <template #name>주소</template>
+                            <template #input>
                                     <VTextField prepend-inner-icon="tabler-map-pin"
                                         v-model="props.item.free.sales_slip.merchandise.addr" placeholder="주소를 입력해주세요."
-                                        type="text" class='pt-3' />
-                                </VCol>
-                            </VRow>
-                        </VCol>
+                                        type="text"/>
+                            </template>
+                        </CreateHalfVCol>
                     </VRow>
+                    <div v-if="props.item.paid.use_pay_verification_mobile">
+                        <VCardTitle class="pt-10">문자 발송정보</VCardTitle>
+                        <VRow class="pt-5">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>회원 ID</template>
+                                <template #input>
+                                    <VTextField prepend-inner-icon="tabler-user"
+                                        v-model="props.item.auth.bonaeja.user_id"
+                                        placeholder="대표자명을 입력해주세요." type="text" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>발신자 번호</template>
+                                <template #input>
+                                    <VTextField prepend-inner-icon="tabler-device-mobile"
+                                        v-model="props.item.auth.bonaeja.sender_phone"
+                                        placeholder="연락처를 입력해주세요." type="text" />
+                                </template>
+                            </CreateHalfVCol>
+
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>API KEY</template>
+                                <template #input>
+                                    <VTextField prepend-inner-icon="ic-baseline-vpn-key"
+                                        v-model="props.item.auth.bonaeja.api_key"
+                                        placeholder="API KEY를 입력해주세요." type="text" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                    </div>
                 </VCardItem>
             </VCard>
         </VCol>

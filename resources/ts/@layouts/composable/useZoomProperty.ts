@@ -11,17 +11,17 @@ export const useZoomProperty = () => {
     }
     const zoomIn = () => {
         zoom.value += 10
-        if (zoom.value > 140) {
+        if (zoom.value > 120) {
             snackbar.value.show('더이상 확대할 수 없습니다', 'warning')
-            zoom.value = 140
+            zoom.value = 120
         }
     }
 
     const zoomOut = () => {
         zoom.value -= 10
-        if (zoom.value < 60) {
+        if (zoom.value < 90) {
             snackbar.value.show('더이상 축소할 수 없습니다', 'warning')
-            zoom.value = 60
+            zoom.value = 90
         }
     }
     watchEffect(() => {
