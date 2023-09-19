@@ -2,10 +2,12 @@
 
 const visible = ref(false)
 const msg = ref<string>()
+const size = ref<string>()
 let resolveCallback: (isAgreed: boolean) => void;
-const show = (_msg: string): Promise<boolean> => {
-    msg.value = _msg;
-    visible.value = true;
+const show = (_msg: string, _size='v-dialog-sm'): Promise<boolean> => {
+    msg.value = _msg
+    size.value = _size
+    visible.value = true
 
     return new Promise<boolean>((resolve) => {
         resolveCallback = resolve;
@@ -27,7 +29,7 @@ defineExpose({
 });
 </script>
 <template>
-    <VDialog v-model="visible" persistent class="v-dialog-sm">
+    <VDialog v-model="visible" persistent :class="size">
         <!-- Dialog close btn -->
         <DialogCloseBtn @click="visible = !visible" />
 
@@ -42,7 +44,7 @@ defineExpose({
                     취소
                 </VBtn>
                 <VBtn @click="onAgree">
-                    동의
+                    확인
                 </VBtn>
             </VCardText>
         </VCard>

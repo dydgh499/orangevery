@@ -5,6 +5,39 @@ import { useStore } from '@/views/services/pay-gateways/useStore';
 import type { Transaction } from '@/views/types';
 import { getUserLevel } from '@axios';
 
+export const memo = `<div>
+<h3>2.1 차액 정산 송/수신 주기</h3>
+ 차액 정산 요청 파일 
+<br>
+- 거래 일자(D) 기준, D+1일 13시 전까지 업로드 (365일 전송) <br><br>
+ 차액 정산 결과 파일 <br>
+- 차액 정산 요청 일자 기준 영업일 +7일 04시 업로드 <br><br>
+Ex) 거래일자(D) : 2023년 01월 07일(토) <br>
+차액 정산 요청 파일 ( 가맹점 -> 헥토파이낸셜 ) : 2023년 01월 08일(일) <br>
+차액 정산 결과 파일 ( 헥토파이낸셜 -> 가맹점 ) : 2023년 01월 17일(화) <br>
+<br>
+<h3>2.2 차액 정산 전송 대상 </h3>
+ 전송 대상 <br>
+- 22년 하반기(9월)부터 시행된 환급정산 정책에 의해 일반(4) 매출 구간 차액 정산 데이터 전송 必 <br>
+- 장바구니 매출 발생시 PG거래번호 당 최종 하위 사업자 번호 중복 불가 <br>
+- 장바구니 매출에 대한 차액 정산 데이터 전송 시 최종 하위 사업자 매출 전부 포함 필수( PG 거래번호 기준 거래 금액과 최종 하위 사업자 매출 금액의 합계가 일치하여야 함 )<br>
+<br>
+<h3>2.3 환급 정산 </h3>
+ 개요 <br>
+- 22년 9월 첫 시행 ( 22년 상반기 매출 ) <br>
+- 신규 사업자의 경우 일반(4)사업자로 선정이 되어 반기 동안 영중소 우대수수료 적용 받지 못한 매출에 대해 수수료 환급 정산 진행( 환급 대상 사업자 리스트는 여신 협회에서 수신 ) <br>
+Ex). 2월 개업 후 7월에 영세 우대 수수료 적용 시 2월~7월까지 차액 수수료(일반-영세) 환급 <br>
+ 환급 정산 방식 <br>
+- 가맹점(2차PG사) -> 당사로 별도의 환급 정산 요청 파일 전송 없음 <br>
+- 기 전송된 차액 정산 매출 데이터로 카드사에 환급 정산 요청 ( 헥토파이낸셜 자체 처리 ) <br>
+( 차액 정산 반송 된 건에 대해서는 환급 정산 처리 불가하므로 차액 정산 반송 관리 必 ) <br>
+<br>
+- 진행 순서 <br>
+1. 차액 정산 진행 <br>
+2. 반기 단위로 직전 반기에 전송된 차액 정산 일반 매출 구간 사업자 중 환급 대상 사업자의 매출 내역을 환급 정산 요청 ( 헥토파이낸셜(자체처리) -> 카드사 ) <br>
+3. 환급 정산 지급 ( 별도의 결과 파일 제공 되지 않으며 정산 내역으로 확인 필요 )<br>
+</div>`
+
 export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchStore', () => {    
     const store = Searcher('transactions/settle-histories/difference')
     const head  = Header('transactions/settle-histories/difference', '차액정산 이력')

@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
-import { useSearchStore } from '@/views/transactions/settle-histories/useDifferenceStore'
+import { useSearchStore, memo } from '@/views/transactions/settle-histories/useDifferenceStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import { user_info, getUserLevel } from '@axios'
 import corp from '@corp'
@@ -11,6 +10,7 @@ import corp from '@corp'
 const { store, head, exporter } = useSearchStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
+const alert = <any>(inject('alert'))
 const mcht_settle_type = ref({ id: null, name: '전체' })
 
 provide('store', store)
@@ -74,7 +74,7 @@ watchEffect(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="MID, TID, 승인번호, 거래번호, 주민번호, 사업자번호 검색" :metas="metas" :add="user_info.level >= 35" add_name="매출"
+        <BaseIndexView placeholder="MID, TID, 승인번호, 거래번호, 주민번호, 사업자번호 검색" :metas="metas" :add="false" add_name=""
             :is_range_date="true">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
@@ -89,6 +89,12 @@ watchEffect(() => {
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>
+            </template>
+            <template #index_extra_field>
+                
+                <VBtn prepend-icon="ic:outline-help" @click="alert.show(memo)" >
+                    차액정산 설명서
+                </VBtn>
             </template>
             <template #headers>
                 <tr>
