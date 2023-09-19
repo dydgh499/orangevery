@@ -106,7 +106,7 @@ defineExpose({
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>할부개월</template>
-                        <template #input>{{ installments.find(inst => inst['id'] === trans?.installment)?.title
+                        <template #input>{{ installments.find(inst => inst['id'] === parseInt(trans?.installment as string))?.title
                         }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
