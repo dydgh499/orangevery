@@ -9,20 +9,25 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 class DifferenceSettlementController extends Controller
-{    
+{
     public function __construct()
     {
 
     }
 
-    public function __invoke()
+    private function getUseDifferentSettlementBrands()
     {
-        $date       = Carbon::now()->subDay(1);
-        $str_date   = $date->format('Y-m-d');
-        $brands = Brand::where('is_delete', false)
+        return Brand::where('is_delete', false)
             ->where('is_use_different_settlement', true)
             ->get(['business_num', 'rep_mcht_id', 'id', 'above_pg_type']);
-        
+    }
+
+    public function request()
+    {
+        $brands = $this->getUseDifferentSettlementBrands();
+        $date       = Carbon::now()->subDay(1);
+        $str_date   = $date->format('Y-m-d');
+
         for ($i=0; $i<count($brands); $i++)
         {
             $pg_name = getPGType($brands[$i]->above_pg_type);
@@ -52,9 +57,28 @@ class DifferenceSettlementController extends Controller
         }
     }
 
-    public function response(Request $request)
+    public function response()
     {
-        $validated = $request->validate(['dt'=>'required']);
-
+        $brands = $this->getUseDifferentSettlementBrands();
+        $date       = Carbon::now();
+        for ($i=0; $i<count($brands); $i++)
+        {
+            $pg_name = getPGType($brands[$i]->above_pg_type);
+            try
+            {
+                $path   = "App\Http\Controllers\Manager\Settle\Difference\\".$pg_name;            
+                $pg     = new $path();
+                $pg->response($date, $brands[$i]->rep_mcht_id);    
+            }
+            catch(Exception $e)
+            {   // pg사 발견못함
+                logging([
+                        'message' => $e->getMessage(),
+                        'brand' => json_decode(json_encode($brands[$i]), true),
+                    ],
+                    'PG사가 없습니다.'
+                );
+            }
+        }
     }
 }
