@@ -196,7 +196,7 @@ class AuthController extends Controller
             {
                 $sms = [
                     'user_id'   => $bonaeja['user_id'],
-                    'sender'    => $brand['sender_phone'],
+                    'sender'    => $bonaeja['sender_phone'],
                     'api_key'   => $bonaeja['api_key'],
                     'receiver'  => $request->phone_num,
                     'msg'       => "[".$brand->name."]\n인증번호 [$rand]을(를) 입력해주세요",
