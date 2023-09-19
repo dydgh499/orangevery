@@ -48,6 +48,8 @@ class hecto
             $trx_dt     = $trans[$i]->is_cancel ? $trans[$i]->cxl_dt : $trans[$i]->trx_dt;
             $trx_id     = $trans[$i]->is_cancel ? $trans[$i]->ori_trx_id : $trans[$i]->trx_id;
             $trx_dt     = date('Ymd', strtotime($trx_dt));
+            $ori_trx_dt = $trans[$i]->trx_dt;
+            $ori_trx_dt = date('Ymd', strtotime($ori_trx_dt));
             // install
             if($trans[$i]->is_cancel)
             {
@@ -69,11 +71,13 @@ class hecto
             $ord_num        = $this->setAtypeField($trans[$i]->ord_num, 100);
             $amount         = $this->setNtypeField($amount, 15);
             $ori_amount     = $this->setNtypeField($amount, 15);
-            $appr_num       = $this->setAtypeField($trans[$i]->appr_num, 8);
             $add_field      = $this->setAtypeField('', 40);
             $filter         = $this->setAtypeField('', 149);
 
-            $data_record = $record_type.$appr_type.$trx_dt.$brand_business_num.$business_num.$trx_id.$installment.$ord_num.$amount.$ori_amount.$appr_num.$add_field.$filter;
+            $data_record = 
+                $record_type.$appr_type.$trx_dt.$brand_business_num.$business_num.
+                $trx_id.$installment.$ord_num.$amount.$ori_amount.$ori_trx_dt.
+                $add_field.$filter;
             $data_records .= $data_record."\n";
         }
         return [$data_records, count($trans), $total_amount];
