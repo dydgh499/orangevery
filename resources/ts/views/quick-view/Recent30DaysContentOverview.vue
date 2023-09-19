@@ -110,5 +110,12 @@ watchEffect(() => {
                 </tr>
             </template>
         </tbody>
+        <tfoot v-if="!Boolean(props.transactions && props.transactions.length)">
+            <tr>
+                <td :colspan="5" class="list-square">
+                    거래건이 존재하지 않습니다.
+                </td>                
+            </tr>
+        </tfoot>
     </VTable>
 </template>
