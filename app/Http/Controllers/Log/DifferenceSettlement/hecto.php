@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Manager\Settle\Difference;
+namespace App\Http\Controllers\Manager\Log\DifferenceSettlement;
 
-use App\Http\Traits\Settle\Difference\Hecto\requestTrait;
-use App\Http\Traits\Settle\Difference\Hecto\responseTrait;
+use App\Http\Traits\Log\DifferenceSettlement\Hecto\requestTrait;
+use App\Http\Traits\Log\DifferenceSettlement\Hecto\responseTrait;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
@@ -47,7 +47,7 @@ class hecto
         logging(['result'=>$result, 'save_path'=>$save_path]);
     }
 
-    public function response(Carbon $date, $rep_mcht_id)
+    public function response(Carbon $date)
     {
         $req_date = $date->copy()->format('Ymd');
         $res_path = "/edi_rsp/ST_PRFT_REQ_".$req_date;
@@ -62,18 +62,6 @@ class hecto
             if(Storage::disk('different_settlement_dr_hecto')->exists($res_path))
                 $contents = Storage::disk('different_settlement_dr_hecto')->get($res_path);
         }
-        if($contents)
-        {
-            $save_date = $date->copy()->format('Y-m-d');
-            $save_path = "/hecto/$rep_mcht_id/$save_date.json";
-            $result = json_encode([
-                'content'   => $this->getDataRecord($contents),
-                'totals'    => $this->getTotalRecord($contents),
-            ]);
-            $contents = Storage::disk('local')->put($save_path, $result);
-            return true;
-        }
-        else
-            return false;
+        return $contents ? $this->getDataRecord($contents) : [];
     }
 }

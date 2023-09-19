@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Traits\Settle\Difference\Hecto;
+namespace App\Http\Traits\Log\DifferenceSettlement\Hecto;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Carbon\Carbon;
 
@@ -81,85 +81,38 @@ trait responseTrait
         { 
             $data = $datas[$i];
             $is_cancel  = $this->getNtypeField($data, 2, 1);    //원래는 A타입으로 읽어야함 내부 로직상 변경
-            $trx_dt     = $this->getNtypeField($data, 3, 8);
             $req_dt     = $this->getNtypeField($data, 3, 8);
-            $business_num = $this->getAtypeField($data, 29, 10);
-            $trx_id     = $this->getAtypeField($data, 39, 40);
-            $installment = $this->getNtypeField($data, 79, 2);
-            $ord_num    = $this->getAtypeField($data, 81, 100);
-            $amount     = $this->getNtypeField($data, 196, 15);
-            $appr_dt    = $this->getAtypeField($data, 211, 8);
             $add_field  = $this->getAtypeField($data, 219, 40);
             $mcht_section_code = $this->getAtypeField($data, 259, 1);
-            $supply_amount = $this->getNtypeField($data, 260, 15);
-            $vat        = $this->getNtypeField($data, 275, 15);
-            $settle_amount = $this->getNtypeField($data, 290, 15);
+            $supply_amount  = $this->getNtypeField($data, 260, 15);
+            $vat_amount     = $this->getNtypeField($data, 275, 15);
+            $settle_amount  = $this->getNtypeField($data, 290, 15);
             $settle_dt = $this->getNtypeField($data, 305, 8);
             $settle_result_code = $this->getAtypeField($data, 313, 4);
             $card_company_result_code = $this->getAtypeField($data, 317, 2);
 
             if($is_cancel)
             {
-                $cxl_dt = Carbon::createFromFormat('Ymd', (string)$trx_dt)->format('Y-m-d');
-                $amount *= -1;
                 $supply_amount *= -1;
-                $vat *= -1;
+                $vat_amount *= -1;
                 $settle_amount *= -1;
             }
-            else
-                $cxl_dt = null;
-            $appr_dt    = Carbon::createFromFormat('Ymd', (string)$appr_dt)->format('Y-m-d');
+
+            $req_dt     = Carbon::createFromFormat('Ymd', (string)$req_dt)->format('Y-m-d');
             $settle_dt  = Carbon::createFromFormat('Ymd', (string)$settle_dt)->format('Y-m-d');
 
             $records[] = [
+                'trans_id'   => $add_field,
                 'settle_result_code'    => $settle_result_code,
-                'settle_result_msg'     => $this->getSettleMessage($settle_result_code),
                 'card_company_result_code' => $settle_result_code,
-                'card_company_result_msg' => $this->getCardCompanyMessage($card_company_result_code),
-                'mcht_id'   => $add_field,
-                'trx_dt'    => $appr_dt,
-                'cxl_dt'    => $cxl_dt,
                 'req_dt'    => $req_dt,
-                'is_cancel' => $is_cancel,
-                'business_num' => $business_num,
-                'trx_id'    => $trx_id,
-                'installment' => $installment,
-                'ord_num'   => $ord_num,
-                'amount'    => $amount,
-                'supply_amount' => $supply_amount,
-                'vat' => $vat,
-                'settle_amount' => $settle_amount,
                 'settle_dt' => $settle_dt,
+                'supply_amount' => $supply_amount,
+                'vat_amount' => $vat_amount,
+                'settle_amount' => $settle_amount,
                 'mcht_section_code' => $mcht_section_code,
-                'mcht_section_name' => $this->getMchtSectionMessage($mcht_section_code),
             ];
         }
         return $records;
-    }
-
-    private function getTotalRecord($contents)
-    {
-        $totals = [];
-        $lines = explode("\n", $contents);
-        $datas = array_filter($lines, function($line) {
-            return substr($line, 0, 2) === DifferenceSettleHectoRecordType::TOTAL->value;
-        });
-        for ($i=0; $i <count($datas); $i++) 
-        {            
-            $data = $datas[$i];
-            $total_count    = $this->getNtypeField($data, 2, 7);
-            $total_amount   = $this->getAtypeField($data, 9, 18);
-            $total_supply_amount   = $this->getAtypeField($data, 27, 15);
-            $total_vat   = $this->getAtypeField($data, 42, 15);
-            $total_settle_amount   = $this->getAtypeField($data, 57, 15);
-            $totals[] = [
-                'mcht_id'   => $total_count,
-                'amount'    => $total_amount,
-                'supply_amount' => $total_supply_amount,
-                'vat'       => $total_vat,
-                'settle_amount' => $total_settle_amount,
-            ];
-        }
-        return $totals;
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Traits\Settle\Difference\Hecto;
+namespace App\Http\Traits\Log\DifferenceSettlement\Hecto;
 use App\Enums\DifferenceSettleHectoRecordType;
-
 trait requestTrait
 {
 
@@ -71,7 +70,7 @@ trait requestTrait
             $ord_num        = $this->setAtypeField($trans[$i]->ord_num, 100);
             $amount         = $this->setNtypeField($amount, 15);
             $ori_amount     = $this->setNtypeField($amount, 15);
-            $add_field      = $this->setAtypeField($trans[$i]->mcht_id, 40);
+            $add_field      = $this->setAtypeField($trans[$i]->id, 40);
             $filter         = $this->setAtypeField('', 149);
 
             $data_record = 

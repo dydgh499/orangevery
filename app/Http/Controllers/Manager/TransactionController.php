@@ -45,27 +45,7 @@ class TransactionController extends Controller
 
         $page      = $request->input('page');
         $page_size = $request->input('page_size');
-        $sp = ($page - 1) * $page_size;
-
-        $min    = $query->min('transactions.id');
-        $res    = ['page'=>$page, 'page_size'=>$page_size];
-        if($min != NULL)
-        {
-            $con_query = $query->where('transactions.id', '>=', $min);
-            $res['total']   = $query->count();
-            $con_query = $con_query
-                    ->orderBy('trx_dttm', 'desc')
-                    ->orderBy('cxl_dttm', 'desc')
-                    ->offset($sp)
-                    ->limit($page_size);
-            $res['content'] = $con_query->get($this->cols);
-        }
-        else
-        {
-            $res['total'] = 0;
-            $res['content'] = [];
-        }
-        return $res;
+        return $this->transPagenation($query, 'transactions', $this->cols, $page, $page_size);
     }
 
     public function commonSelect($request)
@@ -90,7 +70,6 @@ class TransactionController extends Controller
                     ->orWhere('merchandises.business_num', 'like', "%$search%");
             });
         }
-            
         if($request->has('s_dt') && $request->has('e_dt'))
         {
             $query = $query->where(function($query) use($request) {

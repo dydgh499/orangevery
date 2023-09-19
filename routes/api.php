@@ -23,6 +23,7 @@ use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Manager\TransactionController;
 use App\Http\Controllers\Manager\SalesforceBatchController;
 
+use App\Http\Controllers\Log\DifferenceSettlementHistoryController;
 use App\Http\Controllers\Log\RealtimeSendHistoryController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\NotiSendHistoryController;
@@ -100,8 +101,6 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::get('dangers', [DangerTransController::class, 'index']);
             Route::delete('dangers/{id}', [DangerTransController::class, 'destroy']);
             Route::post('dangers/{id}/checked', [DangerTransController::class, 'checked']);
-
-
             Route::prefix('settle')->group(function() {
                 Route::get('merchandises', [MchtSettleController::class, 'index']);
                 Route::get('merchandises/chart', [MchtSettleController::class, 'chart']);
@@ -116,6 +115,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::get('salesforces/part/chart', [SalesSettleController::class, 'partChart']);
             });
             Route::prefix('settle-histories')->group(function() {
+                Route::get('difference', [DifferenceSettlementHistoryController::class, 'index']);
                 Route::get('merchandises', [SettleHistoryController::class, 'indexMerchandise']);
                 Route::post('merchandises', [SettleHistoryController::class, 'createMerchandise']);
                 Route::post('merchandises/part', [SettleHistoryController::class, 'createMerchandisePart']);

@@ -224,4 +224,29 @@ trait TransactionTrait
         }
         return post($url, $params, $headers);
     }
+
+    public function transPagenation($query, $parent, $cols, $page, $page_size)
+    {
+        $res    = ['page'=>$page, 'page_size'=>$page_size];
+        $sp = ($res['page'] - 1) * $res['page_size'];
+
+        $min    = $query->min("$parent.id");
+        if($min != NULL)
+        {
+            $con_query = $query->where("$parent.id", '>=', $min);
+            $res['total']   = $query->count();
+            $con_query = $con_query
+                    ->orderBy("trx_dttm", 'desc')
+                    ->orderBy("cxl_dttm", 'desc')
+                    ->offset($sp)
+                    ->limit($page_size);
+            $res['content'] = $con_query->get($this->cols);
+        }
+        else
+        {
+            $res['total'] = 0;
+            $res['content'] = [];
+        }
+        return $res;
+    }
 }

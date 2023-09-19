@@ -7,8 +7,9 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\DangerTransController;
-use App\Http\Controllers\Manager\Settle\Difference\DifferenceSettlementController;
+use App\Http\Controllers\Manager\Log\DifferenceSettlementHistoryController;
 
+use App\Models\Log\DifferenceSettlementHistory;
 use App\Models\Log\MchtFeeChangeHistory;
 use App\Models\Log\SfFeeChangeHistory;
 use App\Models\Log\DangerTransaction;
@@ -28,10 +29,10 @@ class Kernel extends ConsoleKernel
         $schedule->call(new DangerTransController(new DangerTransaction))->everySixHours();
 
         $schedule->call(function () {
-            (new DifferenceSettlementController())->request();
+            (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->request();
         })->daily();
         $schedule->call(function () {
-            (new DifferenceSettlementController())->response();
+            (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->response();
         })->dailyAt("04:30");
 
     }

@@ -4,8 +4,8 @@ import corp from '@corp'
 const getAbilitiesMenu = computed(() => {
     const payments = []
     const settles = []
+    const settle_histories = []
     const risks = []
-
     if (corp.pv_options.free.use_hand_pay) {
         payments.push({
             title: '수기 결제 테스트',
@@ -25,6 +25,20 @@ const getAbilitiesMenu = computed(() => {
         })
     }
     if (user_info.value.level > 10) {
+        settle_histories.push({
+            title: '가맹점 정산 이력',
+            to: 'transactions-settle-histories-merchandises',
+        })
+        settle_histories.push({
+            title: '영업점 정산 이력',
+            to: 'transactions-settle-histories-salesforces',
+        })
+        if (user_info.value.level >= 35 && corp.is_use_different_settlement) {
+            settle_histories.push({
+                title: '차액 정산 이력',
+                to: 'transactions-settle-histories-difference',
+            })
+        }
         settles.push({
             title: '정산 관리',
             icon: { icon: 'tabler-calculator' },
@@ -42,16 +56,7 @@ const getAbilitiesMenu = computed(() => {
         {
             title: '정산 이력',
             icon: { icon: 'tabler:calendar-time' },
-            children: [
-                {
-                    title: '가맹점 정산 이력',
-                    to: 'transactions-settle-histories-merchandises',
-                },
-                {
-                    title: '영업점 정산 이력',
-                    to: 'transactions-settle-histories-salesforces',
-                },
-            ]
+            children: settle_histories
         })
     }
     if (user_info.value.level > 10) {
