@@ -189,8 +189,7 @@ class AuthController extends Controller
         $brand  = Brand::where('id', $request->brand_id)->first();
         if($brand)
         {
-            $bonaeja = $brand->pv_options->auth['bonaeja'];
-
+            $bonaeja = $brand->pv_options->auth->bonaeja;
             $rand   = random_int(100000, 999999);
             $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
             if($res)
