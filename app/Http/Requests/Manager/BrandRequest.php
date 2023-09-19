@@ -79,7 +79,6 @@ class BrandRequest extends FormRequest
             'dev_fee' => 'required|numeric',
             'extra_deposit_amount'=> 'required|numeric',
             'dev_settle_type'=> 'required|numeric',
-
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -121,6 +120,7 @@ class BrandRequest extends FormRequest
         $data['pv_options'] = json_encode($this->pv_options); 
         $data['theme_css']  = json_encode($this->theme_css);
         $data['dev_fee']    = $this->dev_fee/100;
+        $data['above_pg_type'] = $data['above_pg_type'] === '' ? 0 : $data['above_pg_type'];
         if($this->has('login_img'))
             $data['login_img'] = $this->login_img;
 
