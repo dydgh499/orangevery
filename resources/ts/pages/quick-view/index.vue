@@ -21,7 +21,7 @@ else
     get('/api/v1/quick-view?level='+my_level)
         .then(r => { transactions.value = r.data as MchtRecentTransactions; })
         .catch(e => { console.log(e) })
-        
+
     watchEffect(() => {
         if(Object.keys(transactions.value).length)
             is_skeleton.value = false

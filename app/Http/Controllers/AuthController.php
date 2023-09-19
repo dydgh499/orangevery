@@ -195,10 +195,6 @@ class AuthController extends Controller
             $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
             if($res)
             {
-                $user_id = 'test1234';
-                $sender = '18332099';
-                $api_key = 'dM3KGkKEbv7i+O46CYmW0l7xupASFn';
-                
                 $sms = [
                     'user_id'   => $bonaeja['user_id'],
                     'sender'    => $brand['sender_phone'],

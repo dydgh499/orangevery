@@ -6,16 +6,20 @@ interface Props {
     transactions: MchtRecentTransaction[],
 }
 const props = defineProps<Props>()
+const formatDate = <any>(inject('$formatDate'))
 
-let s_dt = '2023-01-01'
-let e_dt = '2023-01-01'
+let s_dt = formatDate(new Date())
+let e_dt = formatDate(new Date())
+
 const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
 const is_skeleton = ref(true)
 watchEffect(() => {
     if(props.transactions)
     {
-        s_dt = props.transactions[props.transactions.length - 1].day as string
-        e_dt = props.transactions[0].day as string
+        if(props.transactions.length) {
+            s_dt = props.transactions[props.transactions.length - 1].day as string
+            e_dt = props.transactions[0].day as string
+        }
         is_skeleton.value = false
     }
 })
