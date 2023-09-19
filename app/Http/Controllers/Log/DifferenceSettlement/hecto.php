@@ -44,7 +44,7 @@ class hecto
         {
             logging(['type'=>'dr', 'message' => $e->getMessage()]);
         }
-        logging(['result'=>$result, 'save_path'=>$save_path]);
+        logging(['result'=>$result, 'save_path'=>$save_path], 'hecto-difference-settlement-request');
     }
 
     public function response(Carbon $date)
@@ -62,6 +62,8 @@ class hecto
             if(Storage::disk('different_settlement_dr_hecto')->exists($res_path))
                 $contents = Storage::disk('different_settlement_dr_hecto')->get($res_path);
         }
-        return $contents ? $this->getDataRecord($contents) : [];
+        $datas = $contents ? $this->getDataRecord($contents) : [];
+        logging(['datas'=>$datas], 'hecto-difference-settlement-response');
+        return $datas;
     }
 }
