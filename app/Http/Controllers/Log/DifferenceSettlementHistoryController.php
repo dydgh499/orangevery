@@ -24,7 +24,7 @@ class DifferenceSettlementHistoryController extends Controller
     public function __construct(DifferenceSettlementHistory $difference_settlement_histories)
     {
         $this->difference_settlement_histories = $difference_settlement_histories;    
-        $this->base_path = "App\Http\Controllers\Manager\Log\DifferenceSettlement\\";
+        $this->base_path = "App\Http\Controllers\Log\DifferenceSettlement\\";
         $this->cols = [
             'difference_settlement_histories.*',
             'transactions.ord_num',
