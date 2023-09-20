@@ -73,7 +73,7 @@ watchEffect(() => {
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                     <template #name>휴대폰번호</template>
                     <template #input>
-                        <VTextField v-model="simple_pay_info.buyer_phone" type="number" name="phone"
+                        <VTextField v-model="simple_pay_info.buyer_phone" type="number" name="buyer_phone"
                             prepend-inner-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
                             :rules="[requiredValidator]" />
                     </template>
