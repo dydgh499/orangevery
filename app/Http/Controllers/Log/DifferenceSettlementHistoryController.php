@@ -172,7 +172,7 @@ class DifferenceSettlementHistoryController extends Controller
                 $path   = $this->base_path.$pg_name;
                 $pg     = new $path();
                 $datas  = $pg->response($date);
-                $res = $this->manyInsert($this->difference_settlement_histories, $payModules);
+                $res = $this->manyInsert($this->difference_settlement_histories, $datas);
             }
             catch(Exception $e)
             {   // pg사 발견못함
