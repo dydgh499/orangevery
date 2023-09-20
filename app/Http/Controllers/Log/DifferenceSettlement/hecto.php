@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Manager\Log\DifferenceSettlement;
+namespace App\Http\Controllers\Log\DifferenceSettlement;
 
 use App\Http\Traits\Log\DifferenceSettlement\Hecto\requestTrait;
 use App\Http\Traits\Log\DifferenceSettlement\Hecto\responseTrait;
