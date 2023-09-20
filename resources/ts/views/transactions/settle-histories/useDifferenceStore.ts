@@ -45,8 +45,8 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
         'id': 'NO.',
         'settle_result_code': '정산 결과',
         'card_company_result_code': '카드사 결과',
-        'settle_result_message': '정산 결과 메세지',
-        'card_company_result_message': '카드사 결과 메세지',
+        'settle_result_msg': '정산 결과 메세지',
+        'card_company_result_msg': '카드사 결과 메세지',
         'module_type': '거래 타입',
     }
     const { pgs, pss, terminals } = useStore()
@@ -54,6 +54,7 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
         headers['pg_id'] = 'PG사'
         headers['ps_id'] = '구간'
         headers['ps_fee'] = '구간 수수료'
+        headers['mcht_section_name'] = '카드사측 응답 구간'
     }
     headers['mcht_name'] = '가맹점'
     if(getUserLevel() >= 35)

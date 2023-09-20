@@ -29,7 +29,7 @@ trait responseTrait
             '1301' => '매입전 취소 거래', 
             '1302' => '당일 취소 거래', 
             '1401' => '차액 정산 매입결과 미수신', 
-            '9999' => '기타오류 (PG사 문의) (ex. 중복 전송, 최종하위사업자번호 오류 등.)',
+            '9999' => '기타오류 (PG사 문의)(ex. 중복 전송, 최종하위사업자번호 오류 등)',
         ];
         return isset($settle_codes[$code]) ? $settle_codes[$code] : '알수없는 코드';
     }
@@ -58,7 +58,7 @@ trait responseTrait
         return isset($card_compnay_codes[$code]) ? $card_compnay_codes[$code] : '알수없는 코드';
     }
 
-    private function getMchtSectionMessage($code)
+    private function getMchtSectionName($code)
     {
         $mcht_sections = [
             '0' => '영세',
@@ -104,13 +104,16 @@ trait responseTrait
             $records[] = [
                 'trans_id'   => $add_field,
                 'settle_result_code'    => $settle_result_code,
-                'card_company_result_code' => $settle_result_code,
+                'settle_result_msg'     => $this->getSettleMessage($settle_result_code),
+                'card_company_result_code'  => $card_company_result_code,
+                'card_company_result_msg'   => $this->getCardCompanyMessage($card_company_result_code),
+                'mcht_section_code' => $mcht_section_code,
+                'mcht_section_name'  => $this->getMchtSectionName($mcht_section_code),
                 'req_dt'    => $req_dt,
                 'settle_dt' => $settle_dt,
                 'supply_amount' => $supply_amount,
                 'vat_amount' => $vat_amount,
                 'settle_amount' => $settle_amount,
-                'mcht_section_code' => $mcht_section_code,
             ];
         }
         return $records;
