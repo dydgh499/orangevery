@@ -7,7 +7,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\DangerTransController;
-use App\Http\Controllers\Manager\Log\DifferenceSettlementHistoryController;
+use App\Http\Controllers\Log\DifferenceSettlementHistoryController;
 
 use App\Models\Log\DifferenceSettlementHistory;
 use App\Models\Log\MchtFeeChangeHistory;

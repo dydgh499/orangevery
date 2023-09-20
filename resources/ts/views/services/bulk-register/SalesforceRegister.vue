@@ -163,7 +163,7 @@ watchEffect(async () => {
                                 {{ levels.sales1_name }} = 15
                             </VChip>
                             <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales1_use">
-                                {{ levels.sales1_name }} = 13
+                                {{ levels.sales0_name }} = 13
                             </VChip>
                         </b>
                     </VCol>

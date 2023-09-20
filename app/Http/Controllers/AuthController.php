@@ -202,7 +202,10 @@ class AuthController extends Controller
                     'msg'       => "[".$brand->name."]\n인증번호 [$rand]을(를) 입력해주세요",
                 ];
                 $res = post("https://api.bonaeja.com/api/msg/v1/send", $sms);
-                return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1000, $res['body']['message']);
+                if($res['code'] == 500)
+                    return $this->extendResponse(1000, '통신 과정에서 에러가 발생했습니다.');
+                else
+                    return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1000, $res['body']['message']);
             }    
         }
     }
