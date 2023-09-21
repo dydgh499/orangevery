@@ -1,42 +1,27 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
+import { SettlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
 import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-
+import { getUserLevel } from '@axios'
 
 const { store, head, exporter } = useSearchStore()
+const { getSettleStyle, batchSettle, isSalesCol, movePartSettle } = SettlementFunctionCollect(store)
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
 store.params.level = 10 // taransaction model에서 필수
 
-const totals = ref(<any[]>([]))
 const { settle_types } = useStore()
 const mcht_settle_type = ref({ id: null, name: '전체' })
-const router = useRouter()
-
-const getSettleStyle = (parent_key: string) => {
-    if (parent_key === 'appr')
-        return 'color: rgb(var(--v-theme-primary));'
-    else if (parent_key === 'cxl')
-        return 'color: red;'
-    else if (parent_key === 'settle')
-        return 'font-weight: bold;'
-    else
-        return '' // 기본 스타일 또는 다른 스타일을 지정하고 싶은 경우 여기에 작성
-}
-const isSalesCol = (key: string) => {
-    const sales_cols = ['count', 'amount', 'trx_amount', 'settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
-    return sales_cols.find(obj => obj === key) ? true : false
-}
-const movePartSettle = (id: number) => {    
-    router.push('/transactions/settle/merchandises/part/' + id + '?dt=' + store.params.dt)
-}
+const totals = ref(<any[]>([]))
+const selected = ref<number[]>([])
+const all_selected = ref()
 
 onMounted(() => {
     watchEffect(async () => {
@@ -47,7 +32,9 @@ onMounted(() => {
         }
     })
 })
-
+watchEffect(() => {
+    selected.value = all_selected.value ? store.getItems.map(item => item['id']) : []
+})
 watchEffect(() => {
     store.setChartProcess()
     store.params.mcht_settle_type = mcht_settle_type.value.id
@@ -67,6 +54,11 @@ watchEffect(() => {
                 </template>
             </BaseIndexFilterCard>
         </template>
+        <template #index_extra_field>        
+            <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, true)" v-if="getUserLevel() >= 35">
+                일괄 정산하기
+            </VBtn>
+        </template>
         <template #headers>
             <tr>
                 <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
@@ -83,11 +75,14 @@ watchEffect(() => {
                             :content="'차감이 아닌 추가금 설정을 하시러면 금액 앞에 -(마이너스 기호)를 입력 후 차감버튼을 클릭해주세요.'">
                         </BaseQuestionTooltip>
                     </template>                    
-                    <template v-else-if="key == 'id'">
-                        <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
-                            :content="'하단 가맹점 고유번호를 클릭하여 부분정산 페이지로 이동할 수 있습니다.'">
-                        </BaseQuestionTooltip>
-                    </template>
+                    <template v-else-if="key == 'id'" >
+                        <div style="display: inline-flex; align-items: center; vertical-align: middle;">
+                            <VCheckbox v-model="all_selected" class="check-label" v-if="getUserLevel() >= 35" style="min-width: 1em;"/>
+                            <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
+                                :content="'하단 가맹점 고유번호를 클릭하여 부분정산 페이지로 이동할 수 있습니다.'">
+                            </BaseQuestionTooltip>
+                        </div>
+                    </template>                    
                     <template v-else>
                         <span>
                             {{ header.ko }}
@@ -139,8 +134,11 @@ watchEffect(() => {
                     </template>
                     <template v-else>
                         <td v-show="_header.visible" class='list-square'>
-                            <span v-if="_key === 'id'" class="edit-link" @click="movePartSettle(item[_key])">
-                                #{{ item[_key] }}
+                            <span v-if="_key === 'id'">
+                                <div style="display: inline-flex; align-items: center; vertical-align: middle;">
+                                    <VCheckbox v-model="selected" :value="item[_key]" class="check-label" style="min-inline-size: 1em;" v-if="getUserLevel() >= 35"/>
+                                    <span class="edit-link" @click="movePartSettle(item['id'], true)">#{{ item[_key] }}</span>
+                                </div>
                             </span>
                             <span v-else-if="isSalesCol(_key as string)" style="font-weight: bold;">
                                 {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}

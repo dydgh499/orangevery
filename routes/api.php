@@ -101,32 +101,42 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::get('dangers', [DangerTransController::class, 'index']);
             Route::delete('dangers/{id}', [DangerTransController::class, 'destroy']);
             Route::post('dangers/{id}/checked', [DangerTransController::class, 'checked']);
+            
             Route::prefix('settle')->group(function() {
-                Route::get('merchandises', [MchtSettleController::class, 'index']);
-                Route::get('merchandises/chart', [MchtSettleController::class, 'chart']);
-                Route::post('merchandises/deduct', [MchtSettleController::class, 'deduct']);
-                Route::get('merchandises/part', [MchtSettleController::class, 'part']);
-                Route::get('merchandises/part/chart', [MchtSettleController::class, 'partChart']);
-
-                Route::get('salesforces', [SalesSettleController::class, 'index']);
-                Route::get('salesforces/chart', [SalesSettleController::class, 'chart']);
-                Route::post('salesforces/deduct', [SalesSettleController::class, 'deduct']);
-                Route::get('salesforces/part', [SalesSettleController::class, 'part']);
-                Route::get('salesforces/part/chart', [SalesSettleController::class, 'partChart']);
+                Route::prefix('merchandises')->group(function() {
+                    Route::get('/', [MchtSettleController::class, 'index']);
+                    Route::get('/chart', [MchtSettleController::class, 'chart']);
+                    Route::post('/deduct', [MchtSettleController::class, 'deduct']);
+                    Route::get('/part', [MchtSettleController::class, 'part']);
+                    Route::get('/part/chart', [MchtSettleController::class, 'partChart']);
+                });
+                Route::prefix('salesforces')->group(function() {
+                    Route::get('/', [SalesSettleController::class, 'index']);
+                    Route::get('/chart', [SalesSettleController::class, 'chart']);
+                    Route::post('/deduct', [SalesSettleController::class, 'deduct']);
+                    Route::get('/part', [SalesSettleController::class, 'part']);
+                    Route::get('/part/chart', [SalesSettleController::class, 'partChart']);
+                });
             });
             Route::prefix('settle-histories')->group(function() {
                 Route::get('difference', [DifferenceSettlementHistoryController::class, 'index']);
-                Route::get('merchandises', [SettleHistoryController::class, 'indexMerchandise']);
-                Route::post('merchandises', [SettleHistoryController::class, 'createMerchandise']);
-                Route::post('merchandises/part', [SettleHistoryController::class, 'createMerchandisePart']);
-                Route::delete('merchandises/{id}', [SettleHistoryController::class, 'deleteMerchandise']);
-                Route::post('merchandises/{id}/deposit', [SettleHistoryController::class, 'depositMerchandise']);
 
-                Route::get('salesforces', [SettleHistoryController::class, 'indexSalesforce']);
-                Route::post('salesforces', [SettleHistoryController::class, 'createSalesforce']);
-                Route::post('salesforces/part', [SettleHistoryController::class, 'createSalesforcePart']);
-                Route::delete('salesforces/{id}', [SettleHistoryController::class, 'deleteSalesforce']);
-                Route::post('salesforces/{id}/deposit', [SettleHistoryController::class, 'depositSalesforce']);    
+                Route::prefix('merchandises')->group(function() {
+                    Route::get('/', [SettleHistoryController::class, 'indexMerchandise']);
+                    Route::post('/', [SettleHistoryController::class, 'createMerchandise']);
+                    Route::post('/part', [SettleHistoryController::class, 'createMerchandisePart']);
+                    Route::post('/batch', [SettleHistoryController::class, 'batchMerchandise']);
+                    Route::post('/{id}/deposit', [SettleHistoryController::class, 'depositMerchandise']);
+                    Route::delete('/{id}', [SettleHistoryController::class, 'deleteMerchandise']);
+                });
+                Route::prefix('salesforces')->group(function() {
+                    Route::get('/', [SettleHistoryController::class, 'indexSalesforce']);
+                    Route::post('/', [SettleHistoryController::class, 'createSalesforce']);
+                    Route::post('/part', [SettleHistoryController::class, 'createSalesforcePart']);
+                    Route::post('/batch', [SettleHistoryController::class, 'batchSalesforce']);    
+                    Route::post('/{id}/deposit', [SettleHistoryController::class, 'depositSalesforce']);    
+                    Route::delete('/{id}', [SettleHistoryController::class, 'deleteSalesforce']);    
+                });
             });
             
             Route::prefix('realtime-histories')->group(function() {

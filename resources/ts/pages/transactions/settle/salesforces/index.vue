@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/transactions/settle/useSalesforceStore'
+import { SettlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
 import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
@@ -7,16 +8,20 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { salesLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { getUserLevel } from '@axios'
 
 const { store, head, exporter } = useSearchStore()
+const { getSettleStyle, batchSettle, isSalesCol, movePartSettle } = SettlementFunctionCollect(store)
 const { settle_types } = useStore()
 const all_sales = salesLevels()
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
+
 const totals = ref(<any[]>([]))
-const router = useRouter()
 const mcht_settle_type = ref({ id: null, name: '전체' })
+const selected = ref<number[]>([])
+const all_selected = ref()
 
 provide('store', store)
 provide('head', head)
@@ -24,29 +29,6 @@ provide('exporter', exporter)
 
 store.params.level = all_sales[0].id
 store.params.is_base_trx = true
-
-const getSettleStyle = (parent_key: string) => {
-    if (parent_key === 'appr')
-        return 'color: rgb(var(--v-theme-primary));'
-    else if (parent_key === 'cxl')
-        return 'color: red;'
-    else if (parent_key === 'settle')
-        return 'font-weight: bold;'
-    else
-        return '' // 기본 스타일 또는 다른 스타일을 지정하고 싶은 경우 여기에 작성
-}
-const isSalesCol = (key: string) => {
-    const sales_cols = ['count', 'amount', 'trx_amount', 'settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
-    for (let i = 0; i < sales_cols.length; i++) {
-        if (sales_cols[i] === key)
-            return true
-    }
-    return false
-}
-
-const movePartSettle = (id: number) => {
-    router.push('/transactions/settle/salesforces/part/' + id + '?dt=' + store.params.dt + '&level=' + store.params.level)
-}
 
 onMounted(() => {
     watchEffect(async () => {
@@ -59,6 +41,9 @@ onMounted(() => {
 })
 
 watchEffect(() => {
+    selected.value = all_selected.value ? store.getItems.map(item => item['id']) : []
+})
+watchEffect(() => {
     store.setChartProcess()
     store.params.level = store.params.level
     store.params.settle_cycle = store.params.settle_cycle
@@ -69,6 +54,9 @@ watchEffect(() => {
 <template>
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :is_range_date="false">
         <template #index_extra_field>
+            <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, false)" v-if="getUserLevel() >= 35">
+                일괄 정산하기
+            </VBtn>
             <div class="demo-space-x">
                 <VSwitch v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" />
             </div>
@@ -111,9 +99,12 @@ watchEffect(() => {
                         </BaseQuestionTooltip>
                     </template>
                     <template v-else-if="key == 'id'">
-                        <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
-                            :content="'하단 영업점 고유번호를 클릭하여 부분정산 페이지로 이동할 수 있습니다.'">
-                        </BaseQuestionTooltip>
+                        <div style="display: inline-flex; align-items: center; vertical-align: middle;">
+                            <VCheckbox v-model="all_selected" class="check-label" v-if="getUserLevel() >= 35" style="min-width: 1em;"/>
+                            <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
+                                :content="'하단 영업점 고유번호를 클릭하여 부분정산 페이지로 이동할 수 있습니다.'">
+                            </BaseQuestionTooltip>
+                        </div>
                     </template>
                     <template v-else>
                         <span>
@@ -166,8 +157,11 @@ watchEffect(() => {
                     </template>
                     <template v-else>
                         <td v-show="_header.visible" class='list-square'>
-                            <span v-if="_key === 'id'" class="edit-link" @click="movePartSettle(item[_key])">
-                                #{{ item[_key] }}
+                            <span v-if="_key === 'id'">
+                                <div style="display: inline-flex; align-items: center; vertical-align: middle;">
+                                    <VCheckbox v-model="selected" :value="item[_key]" class="check-label" style="min-inline-size: 1em;" v-if="getUserLevel() >= 35"/>
+                                    <span class="edit-link" @click="movePartSettle(item['id'], false)">#{{ item[_key] }}</span>
+                                </div>
                             </span>
                             <span v-else-if="_key == 'level'">
                                 <VChip :color="store.getSelectIdColor(all_sales.find(obj => obj.id === item[_key])?.id)">

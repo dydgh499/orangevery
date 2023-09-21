@@ -236,6 +236,8 @@ return [
         'resident_num' => '주민등록번호',
         'acct_bank_name' => '은행명',
         'acct_bank_code' => '은행코드',
+        'acct_name' => '예금주',
+        'acct_num'  => '계좌번호',
         'trx_fee'   => '거래 수수료',
         'hold_fee'   => '보유금 수수료',
         'tid' => 'TID',

@@ -17,7 +17,7 @@ use App\Http\Traits\Settle\SettleHistoryTrait;
 use App\Http\Traits\Salesforce\UnderSalesTrait;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Log\CreateSettleHistoryRequest;
-
+use App\Http\Requests\Manager\Log\BatchSettleHistoryRequest;
 
 class SettleHistoryController extends Controller
 {
@@ -63,7 +63,7 @@ class SettleHistoryController extends Controller
             // 하위가 1000명이 넘으면 ..?
             $query = $query->whereIn('salesforces.id', $sales_ids);
         }
-        else
+        if($request->has('level'))
             $query = $query->where('settle_histories_salesforces.level', $request->level);
         $data = $this->getIndexData($request, $query, 'settle_histories_salesforces.id', $cols, 'settle_histories_salesforces.created_at');
         return $this->response(0, $data);
@@ -87,6 +87,20 @@ class SettleHistoryController extends Controller
         });
     }
 
+    public function batchMerchandise(BatchSettleHistoryRequest $request)
+    {
+        return DB::transaction(function () use($request) {
+            for ($i=0; $i < count($request->datas); $i++) 
+            { 
+                $data = $request->data('mcht_id', $request->datas[$i]);
+                $query = Transaction::where('mcht_id', $data['mcht_id']);
+                $c_res = $this->settle_mcht_hist->create($data);
+                $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);    
+            }
+            return $this->response($c_res && $u_res ? 1 : 990);    
+        });
+    }
+
     public function createSalesforce(CreateSettleHistoryRequest $request)
     {
         return DB::transaction(function () use($request) {
@@ -105,6 +119,23 @@ class SettleHistoryController extends Controller
         });
     }
 
+    public function batchSalesforce(BatchSettleHistoryRequest $request)
+    {
+        return DB::transaction(function () use($request) {
+            for ($i=0; $i < count($request->datas); $i++) 
+            { 
+                [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
+                $data = $request->data('sales_id', $request->datas[$i]);
+                $data['level'] = $request->level;
+
+                $query = Transaction::where($target_id, $data['sales_id']);
+                $c_res = $this->settle_sales_hist->create($data);
+                $u_res = $this->SetTransSettle($query, $target_settle_id, $c_res->id);
+                $s_res = Salesforce::where('id', $request->id)->update(['last_settle_dt' => $data['settle_dt']]);
+            }
+            return $this->response($c_res && $u_res ? 1 : 990);
+        });
+    }
 
     public function deleteMerchandise(Request $request, $id)
     {
@@ -130,6 +161,7 @@ class SettleHistoryController extends Controller
 
     public function depositSalesforce(Request $request, $id)
     {
+        $query = $orm->where('id', $id);
         return $this->deposit($this->settle_sales_hist, $id);
     }
 }
