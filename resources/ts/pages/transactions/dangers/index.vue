@@ -46,7 +46,7 @@ watchEffect(() => {
             </tr>
             <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                    <VCheckbox v-model="all_selected" :label="`${header.ko}`" class="check-label" v-if="key == 'id' && getUserLevel() >= 35"/>
+                    <VCheckbox v-model="all_selected" :label="`${header.ko}`" class="check-label" v-if="key == 'id' && getUserLevel() >= 35" style="min-width: 6em;"/>
                     <span v-else>
                         {{ header.ko }}
                     </span>
