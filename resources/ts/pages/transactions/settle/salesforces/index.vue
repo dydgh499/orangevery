@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/transactions/settle/useSalesforceStore'
 import { SettlementFunctionCollect } from '@/views/transactions/settle/Settle'
+import { selectFunctionCollect } from '@/views/selected'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
 import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
@@ -11,6 +12,7 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { getUserLevel } from '@axios'
 
 const { store, head, exporter } = useSearchStore()
+const { selected, all_selected } = selectFunctionCollect(store)
 const { getSettleStyle, batchSettle, isSalesCol, movePartSettle } = SettlementFunctionCollect(store)
 const { settle_types } = useStore()
 const all_sales = salesLevels()
@@ -20,8 +22,6 @@ const tax_types = settleTaxTypes()
 
 const totals = ref(<any[]>([]))
 const mcht_settle_type = ref({ id: null, name: '전체' })
-const selected = ref<number[]>([])
-const all_selected = ref()
 
 provide('store', store)
 provide('head', head)
@@ -40,9 +40,6 @@ onMounted(() => {
     })
 })
 
-watchEffect(() => {
-    selected.value = all_selected.value ? store.getItems.map(item => item['id']) : []
-})
 watchEffect(() => {
     store.setChartProcess()
     store.params.level = store.params.level

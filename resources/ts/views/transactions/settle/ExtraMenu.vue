@@ -8,7 +8,8 @@ interface Props {
     is_mcht: boolean
 }
 const props = defineProps<Props>()
-const { settle } = SettlementFunctionCollect()
+const store = <any>(inject('store'))
+const { settle } = SettlementFunctionCollect(store)
 
 </script>
 <template>

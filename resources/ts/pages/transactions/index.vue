@@ -3,6 +3,7 @@ import { module_types, installments, fin_trx_delays, cxl_types } from '@/views/m
 import { useSearchStore, realtimeResult, realtimeMessage, realtimeRetryMessage } from '@/views/transactions/useStore'
 import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import { selectFunctionCollect } from '@/views/selected'
 import { salesLevels } from '@/views/salesforces/useStore'
 import ExtraMenu from '@/views/transactions/ExtraMenu.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
@@ -17,6 +18,7 @@ import type { Options } from '@/views/types'
 import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
+const { selected, all_selected } = selectFunctionCollect(store)
 const { post } = useRequestStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
@@ -36,8 +38,6 @@ provide('realtimeHistories', realtimeHistories)
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
-const selected = ref<number[]>([])
-const all_selected = ref()
 
 store.params.level = 10
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
@@ -132,9 +132,6 @@ watchEffect(() => {
     store.setChartProcess()
     store.params.level = store.params.level
     store.params.mcht_settle_type = mcht_settle_type.value.id
-})
-watchEffect(() => {
-    selected.value = all_selected.value ? store.getItems.map(item => item['id']) : []
 })
 </script>
 <template>

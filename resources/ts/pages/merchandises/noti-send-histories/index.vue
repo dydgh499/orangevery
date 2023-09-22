@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/merchandises/noti-send-histories/useStore'
 import { useRequestStore } from '@/views/request'
+import { selectFunctionCollect } from '@/views/selected'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import ExtraMenu from '@/views/merchandises/noti-send-histories/ExtraMenu.vue'
@@ -8,6 +9,7 @@ import NotiDetailDialog from '@/layouts/dialogs/NotiDetailDialog.vue'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 
 const { store, head, exporter } = useSearchStore()
+const { selected, all_selected } = selectFunctionCollect(store)
 const { post } = useRequestStore()
 const notiDetail = ref()
 
@@ -17,9 +19,6 @@ provide('exporter', exporter)
 provide('notiDetail', notiDetail)
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
-
-const selected = ref<number[]>([])
-const all_selected = ref()
 
 const httpCodeColor = (http_code: number) => {
     if (http_code < 300)
@@ -42,9 +41,6 @@ const batchRetry = async() => {
         store.setTable()
     }
 }
-watchEffect(() => {
-    selected.value = all_selected.value ? store.getItems.map(item => item['id']) : []
-})
 </script>
 <template>
     <div>

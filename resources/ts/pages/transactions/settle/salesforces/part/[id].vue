@@ -3,6 +3,7 @@ import { module_types, installments } from '@/views/merchandises/pay-modules/use
 import { useSearchStore } from '@/views/transactions/settle/part/useSalesforceStore'
 import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import { selectFunctionCollect } from '@/views/selected'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
@@ -12,12 +13,11 @@ import corp from '@corp'
 
 const route = useRoute()
 const { store, head, exporter } = useSearchStore()
+const { selected, all_selected } = selectFunctionCollect(store)
 const { get, post } = useRequestStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
 const mcht_settle_type = ref({ id: null, name: '전체' })
-const selected = ref<number[]>([])
-const all_selected = ref()
 const user = ref(<any>({}))
 const settle = ref({
     'total_amount': 0,
@@ -139,9 +139,6 @@ watchEffect(() => {
     store.params.level = store.params.level
     store.params.mcht_settle_type = mcht_settle_type.value.id
     store.params.is_base_trx = store.params.is_base_trx
-})
-watchEffect(() => {
-    selected.value = all_selected.value ? store.getItems.map(item => item['id']) : []
 })
 watchEffect(() => {
     const _settle = {

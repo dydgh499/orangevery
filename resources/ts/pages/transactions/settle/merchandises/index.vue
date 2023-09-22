@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
 import { SettlementFunctionCollect } from '@/views/transactions/settle/Settle'
+import { selectFunctionCollect } from '@/views/selected'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
 import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
@@ -11,6 +12,8 @@ import { getUserLevel } from '@axios'
 
 const { store, head, exporter } = useSearchStore()
 const { getSettleStyle, batchSettle, isSalesCol, movePartSettle } = SettlementFunctionCollect(store)
+const { selected, all_selected } = selectFunctionCollect(store)
+
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
@@ -20,8 +23,6 @@ store.params.level = 10 // taransaction model에서 필수
 const { settle_types } = useStore()
 const mcht_settle_type = ref({ id: null, name: '전체' })
 const totals = ref(<any[]>([]))
-const selected = ref<number[]>([])
-const all_selected = ref()
 
 onMounted(() => {
     watchEffect(async () => {
@@ -31,9 +32,6 @@ onMounted(() => {
             totals.value.push(r.data)
         }
     })
-})
-watchEffect(() => {
-    selected.value = all_selected.value ? store.getItems.map(item => item['id']) : []
 })
 watchEffect(() => {
     store.setChartProcess()
