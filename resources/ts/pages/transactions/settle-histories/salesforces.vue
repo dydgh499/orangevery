@@ -1,19 +1,24 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/transactions/settle-histories/useSalesforceStore'
+import { selectFunctionCollect } from '@/views/selected'
+import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
 import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { salesLevels } from '@/views/salesforces/useStore'
+import { getLevelByIndex } from '@/views/salesforces/useStore'
+import { getUserLevel } from '@axios'
 
 
 const { store, head, exporter } = useSearchStore()
+const { selected, all_selected } = selectFunctionCollect(store)
+const { batchDeposit, batchCancel } = settlementHistoryFunctionCollect(store)
 const all_sales = salesLevels()
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-store.params.level = all_sales[0].id
 watchEffect(() => {    
     store.setChartProcess()
     store.params.level = store.params.level
@@ -33,6 +38,14 @@ watchEffect(() => {
                 </template>
             </BaseIndexFilterCard>
         </template>
+        <template #index_extra_field>
+            <VBtn prepend-icon="tabler:report-money" @click="batchDeposit(selected, false)" v-if="getUserLevel() >= 35">
+                일괄 이체하기
+            </VBtn>
+            <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchCancel(selected, false)" v-if="getUserLevel() >= 35" color="error">
+                일괄 정산취소
+            </VBtn>
+        </template>
         <template #headers>
             <tr>
                 <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
@@ -44,7 +57,8 @@ watchEffect(() => {
             </tr>
             <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                    <span>
+                    <VCheckbox v-model="all_selected" :label="`${header.ko}`" class="check-label" v-if="key == 'id' && getUserLevel() >= 35" style="min-width: 4em;"/>
+                    <span v-else>
                         {{ header.ko }}
                     </span>
                 </th>
@@ -64,18 +78,21 @@ watchEffect(() => {
                     <template v-else>
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key === 'id'">
-                                #{{ item[_key] }}
+                                <VCheckbox v-model="selected" :value="item[_key]" :label="`#${item[_key]}`" class="check-label" style="min-inline-size: 1em;" v-if="getUserLevel() >= 35"/>
+                                <span v-else> #{{ item[_key] }}</span>
                             </span>
                             <span v-else-if="_key.toString().includes('amount')" style="font-weight: bold;">
                                 {{ (item[_key] as number).toLocaleString() }}
                             </span>
                             <span v-else-if="_key == 'level'">
-                                <VChip :color="store.getSelectIdColor(all_sales.find(obj => obj.id === item[_key])?.id)">
+                                <VChip :color="store.getSelectIdColor(getLevelByIndex(item[_key]))">
                                     {{ all_sales.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key === 'deposit_status'">
-                                {{ item[_key] ? '입금완료' : '미입금' }}
+                                <VChip :color="store.booleanTypeColor(!item[_key])">
+                                    {{ item[_key] ? '입금완료' : '미입금' }}
+                                </VChip>
                             </span>
                             <span v-else-if="_key === 'extra_col'">
                                 <ExtraMenu :id="item['id']" :name="item['mcht_name']" :is_mcht="false" :item="item">

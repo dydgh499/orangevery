@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { SettlesHistories } from '@/views/types'
-import { axios } from '@axios'
-import { getLevelByIndex } from '@/views/salesforces/useStore'
-import { useSearchStore } from '@/views/transactions/useStore'
+import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 
 interface Props {
@@ -12,87 +10,28 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const { printer } = useSearchStore()
-
 const store = <any>(inject('store'))
-const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
-const errorHandler = <any>(inject('$errorHandler'))
+const { deposit, cancel, download } = settlementHistoryFunctionCollect(store)
 
-const commonRequest = async (page: string, method: string, params={}) => {
-    try {
-        const type = props.is_mcht ? 'merchandises' : 'salesforces'
-        const url = '/api/v1/manager/transactions/settle-histories/' + type + '/' + page
-        const res = await axios({
-            url: url,
-            method: method,
-            params: params,
-        })
-        snackbar.value.show('성공하였습니다.', 'success')
-        store.setTable()
-    }
-    catch (e: any) {
-        snackbar.value.show(e.response.data.message, 'error')
-        const r = errorHandler(e)
-    }
-}
-
-const deposit = async () => {
-    const deposit_after_text = props.item.status ? '입금취소처리' : '입금처리'
-    if (await alert.value.show('정말 ' + deposit_after_text + ' 하시겠습니까?')) {
-        commonRequest(props.item.id.toString() + '/deposit', 'post')
-    }
-}
-
-const cancel = async () => {
-    if (await alert.value.show('정말 정산취소 하시겠습니까?')) {
-        commonRequest(props.item.id.toString(), 'delete', {level: props.item.level})
-    }
-}
-const download = async () => {
-    if (await alert.value.show('정산매출을 다운로드 하시겠습니까?')) {
-        try {
-            const params:Record<string, string|number> = {
-                page: 1,
-                page_size: 99999999,
-            };
-            if(props.is_mcht)
-                params['mcht_settle_id'] = props.item.id
-            else {
-                const idx = getLevelByIndex(props.item.level)             
-                params['sales'+idx+'_settle_id'] = props.item.id
-            }
-
-            const res = await axios.get('/api/v1/manager/transactions', { params: params })
-            snackbar.value.show('엑셀 출력중 입니다..', 'success')
-            printer(1, res.data.content)
-            snackbar.value.show('성공하였습니다.', 'success')
-        }
-        catch (e: any) {
-            snackbar.value.show(e.response.data.message, 'error')
-            const r = errorHandler(e)
-        }
-    }
-}
 </script>
 <template>
     <VBtn icon size="x-small" color="default" variant="text">
         <VIcon size="22" icon="tabler-dots-vertical" />
         <VMenu activator="parent" width="230">
             <VList>
-                <VListItem value="deposit" @click="deposit()">
+                <VListItem value="deposit" @click="deposit(props.item, props.is_mcht)">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:report-money" />
                     </template>
-                    <VListItemTitle>입금처리</VListItemTitle>
+                    <VListItemTitle>{{ props.item.status ? '입금취소처리' : '입금처리' }}</VListItemTitle>
                 </VListItem>
-                <VListItem value="cancel" @click="cancel()">
+                <VListItem value="cancel" @click="cancel(props.item, props.is_mcht)">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:device-tablet-cancel" />
                     </template>
                     <VListItemTitle>정산취소</VListItemTitle>
                 </VListItem>
-                <VListItem value="download" @click="download()" style="width: fit-content;">
+                <VListItem value="download" @click="download(props.item, props.is_mcht)" style="width: fit-content;">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="vscode-icons:file-type-excel" />
                     </template>

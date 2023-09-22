@@ -161,7 +161,6 @@ class SettleHistoryController extends Controller
 
     public function depositSalesforce(Request $request, $id)
     {
-        $query = $orm->where('id', $id);
         return $this->deposit($this->settle_sales_hist, $id);
     }
 }

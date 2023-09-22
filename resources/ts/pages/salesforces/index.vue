@@ -5,6 +5,7 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
 import { salesLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
+import { getLevelByIndex } from '@/views/salesforces/useStore'
 import { user_info } from '@axios'
 
 const { store, head, exporter } = useSearchStore()
@@ -129,9 +130,8 @@ watchEffect(() => {
                                     {{ item[_key] }}
                                 </span>
                                 <span v-else-if="_key == 'level'">
-                                    <VChip
-                                        :color="store.getSelectIdColor(all_sales.find(obj => obj.id === item[_key])?.id)">
-                                        {{ all_sales.find(sales => sales.id === item[_key])?.title }}
+                                    <VChip :color="store.getSelectIdColor(getLevelByIndex(item[_key]))">
+                                        {{ all_sales.find(obj => obj.id === item[_key])?.title }}
                                     </VChip>
                                 </span>
                                 <span v-else-if="_key == 'settle_cycle'">

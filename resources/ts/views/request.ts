@@ -126,6 +126,21 @@ export const useRequestStore = defineStore('requestStore', () => {
             return errorHandler(e)
         }
     }
-    return { formRequest, update, remove, setOneObject, request, post, get }
+
+    const getPromises = (selected:number[], items:any[], url:string, method: string, params:any = {}) => {
+        const promises = []
+        for (let i = 0; i < selected.length; i++) {
+            const item:any = items.find(obj => obj['id'] === selected[i])
+            if(item) {
+                promises.push(axios({
+                    url: url,
+                    method: method,
+                    params: params,
+                }))
+            }
+        }
+        return promises
+    }
+    return { formRequest, update, remove, setOneObject, request, post, get, getPromises }
 })
 

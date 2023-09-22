@@ -120,7 +120,6 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             });
             Route::prefix('settle-histories')->group(function() {
                 Route::get('difference', [DifferenceSettlementHistoryController::class, 'index']);
-
                 Route::prefix('merchandises')->group(function() {
                     Route::get('/', [SettleHistoryController::class, 'indexMerchandise']);
                     Route::post('/', [SettleHistoryController::class, 'createMerchandise']);
