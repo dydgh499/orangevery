@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useSearchStore } from '@/views/transactions/dangers/useStore'
+import { selectFunctionCollect } from '@/views/selected'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import ExtraMenu from '@/views/transactions/dangers/ExtraMenu.vue'
+import { getUserLevel } from '@axios'
 
 const { store, head, exporter } = useSearchStore()
+const { selected, all_selected } = selectFunctionCollect(store)
 const { pgs, pss, terminals, } = useStore()
 const { settle_types } = useStore()
 
@@ -43,7 +46,8 @@ watchEffect(() => {
             </tr>
             <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                    <span>
+                    <VCheckbox v-model="all_selected" :label="`${header.ko}`" class="check-label" v-if="key == 'id' && getUserLevel() >= 35"/>
+                    <span v-else>
                         {{ header.ko }}
                     </span>
                 </th>
@@ -61,8 +65,9 @@ watchEffect(() => {
                     </template>
                     <template v-else>
                         <td v-show="_header.visible" class='list-square'>
-                            <span v-if="_key == `id`">
-                                #{{ item[_key] }}
+                            <span v-if="_key === 'id'">
+                                <VCheckbox v-model="selected" :value="item[_key]" :label="`#${item[_key]}`" class="check-label" v-if="getUserLevel() >= 35"/>
+                                <span v-else> #{{ item[_key] }}</span>
                             </span>
                             <span v-else-if="_key == 'module_type'">
                                 <VChip

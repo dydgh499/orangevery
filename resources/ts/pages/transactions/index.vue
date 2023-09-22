@@ -195,7 +195,7 @@ watchEffect(() => {
                             <span v-if="_key == 'id'">
                                 <div style="display: inline-flex; align-items: center; vertical-align: middle;">
                                     <VCheckbox v-if="getUserLevel() >= 50" v-model="selected" :value="item[_key]" class="check-label"/>
-                                    <span  class="edit-link" @click="store.edit(item['id'])">#{{ item[_key] }}</span>
+                                    <span class="edit-link" @click="store.edit(item['id'])">#{{ item[_key] }}</span>
                                 </div>
                             </span>
                             <span v-else-if="_key == 'module_type'">

@@ -5,8 +5,7 @@ import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-hi
 import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { salesLevels } from '@/views/salesforces/useStore'
-import { getLevelByIndex } from '@/views/salesforces/useStore'
+import { salesLevels, getLevelByIndex } from '@/views/salesforces/useStore'
 import { getUserLevel } from '@axios'
 
 
@@ -78,7 +77,7 @@ watchEffect(() => {
                     <template v-else>
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key === 'id'">
-                                <VCheckbox v-model="selected" :value="item[_key]" :label="`#${item[_key]}`" class="check-label" style="min-inline-size: 1em;" v-if="getUserLevel() >= 35"/>
+                                <VCheckbox v-model="selected" :value="item[_key]" :label="`#${item[_key]}`" class="check-label" v-if="getUserLevel() >= 35"/>
                                 <span v-else> #{{ item[_key] }}</span>
                             </span>
                             <span v-else-if="_key.toString().includes('amount')" style="font-weight: bold;">
