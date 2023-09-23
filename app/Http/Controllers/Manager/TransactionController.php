@@ -96,9 +96,9 @@ class TransactionController extends Controller
             $query = $query->where('transactions.mcht_settle_id', $request->mcht_settle_id);
 
         for ($i=0; $i < 6; $i++) { 
-            $col = 'transactions.sales'.$i.'_settle_id';
+            $col = 'sales'.$i.'_settle_id';
             if($request->has($col))
-                $query = $query->where($col, $request->input($col));
+                $query = $query->where('transactions.'.$col, $request->input($col));
         }
 
         if($request->is_use_realtime_deposit && $request->level == 10)

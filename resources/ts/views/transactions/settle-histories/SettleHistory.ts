@@ -54,7 +54,7 @@ export function settlementHistoryFunctionCollect(store: any) {
             if(is_mcht)
                 params['mcht_settle_id'] = item.id
             else {
-                const idx = getLevelByIndex(item.level)             
+                const idx = getLevelByIndex(item.level)
                 params['sales'+idx+'_settle_id'] = item.id
             }
             const res = await get('/api/v1/manager/transactions', { params: params })
