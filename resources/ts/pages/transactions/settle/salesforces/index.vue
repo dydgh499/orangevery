@@ -43,7 +43,7 @@ watchEffect(() => {
     store.setChartProcess()
     store.params.level = store.params.level
     store.params.settle_cycle = store.params.settle_cycle
-    store.params.mcht_settle_type = mcht_settle_type.value.id
+    store.params.mcht_settle_type = store.params.mcht_settle_type
     store.params.is_base_trx = store.params.is_base_trx
 })
 </script>
