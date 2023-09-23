@@ -131,7 +131,7 @@ class DifferenceSettlementHistoryController extends Controller
     {
         $brands = $this->getUseDifferentSettlementBrands();
         $date       = Carbon::now();
-        $str_date   = $date->copy()->subDay(1)->format('Y-m-d');
+        $yesterday  = $date->copy()->subDay(1)->format('Y-m-d');
 
         for ($i=0; $i<count($brands); $i++)
         {
@@ -142,7 +142,7 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('merchandises.is_delete', false)
                 ->where('payment_gateways.pg_type', $brands[$i]->above_pg_type)
                 ->where('transactions.brand_id', $brands[$i]->id)
-                ->where('transactions.trx_dt', $str_date)
+                ->where('transactions.trx_dt', $yesterday)
                 ->get(['transactions.*', 'merchandises.business_num']);
             try
             {
