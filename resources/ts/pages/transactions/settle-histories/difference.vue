@@ -4,14 +4,13 @@ import { useSearchStore, memo } from '@/views/transactions/settle-histories/useD
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
-import { user_info, getUserLevel } from '@axios'
+import { getUserLevel } from '@axios'
 import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
 const alert = <any>(inject('alert'))
-const mcht_settle_type = ref({ id: null, name: '전체' })
 
 provide('store', store)
 provide('head', head)
@@ -69,7 +68,7 @@ onMounted(() => {
 watchEffect(() => {
     store.setChartProcess()
     store.params.level = store.params.level
-    store.params.mcht_settle_type = mcht_settle_type.value.id
+    store.params.mcht_settle_type = store.params.mcht_settle_type
 })
 </script>
 <template>
@@ -83,9 +82,9 @@ watchEffect(() => {
                     </template>
                     <template #pg_extra_field>
                         <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
-                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
-                                item-value="id" return-object />
+                                item-value="id" />
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>

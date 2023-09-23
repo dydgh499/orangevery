@@ -26,7 +26,6 @@ const salesslip = ref()
 const cancelTran = ref()
 const realtimeHistories = ref()
 const levels = corp.pv_options.auth.levels
-const mcht_settle_type = ref({ id: null, name: '전체' })
 
 provide('store', store)
 provide('head', head)
@@ -131,7 +130,6 @@ onMounted(() => {
 watchEffect(() => {
     store.setChartProcess()
     store.params.level = store.params.level
-    store.params.mcht_settle_type = mcht_settle_type.value.id
 })
 </script>
 <template>
@@ -149,9 +147,9 @@ watchEffect(() => {
                     </template>
                     <template #pg_extra_field>
                         <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
-                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
-                                item-value="id" return-object />
+                                item-value="id" />
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>

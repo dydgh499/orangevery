@@ -17,7 +17,6 @@ const { selected, all_selected } = selectFunctionCollect(store)
 const { get, post } = useRequestStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
-const mcht_settle_type = ref({ id: null, name: '전체' })
 const user = ref(<any>({}))
 const settle = ref({
     'total_amount': 0,
@@ -137,7 +136,7 @@ onMounted(() => {
 watchEffect(() => {
     store.setChartProcess()
     store.params.level = store.params.level
-    store.params.mcht_settle_type = mcht_settle_type.value.id
+    store.params.mcht_settle_type = store.params.mcht_settle_type
     store.params.is_base_trx = store.params.is_base_trx
 })
 watchEffect(() => {
@@ -177,9 +176,9 @@ watchEffect(() => {
                     :sales="true">
                     <template #pg_extra_field>
                         <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
-                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
-                                item-value="id" return-object />
+                                item-value="id"/>
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>

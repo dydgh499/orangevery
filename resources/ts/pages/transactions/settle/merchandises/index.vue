@@ -21,7 +21,6 @@ provide('exporter', exporter)
 store.params.level = 10 // taransaction model에서 필수
 
 const { settle_types } = useStore()
-const mcht_settle_type = ref({ id: null, name: '전체' })
 const totals = ref(<any[]>([]))
 
 onMounted(() => {
@@ -35,7 +34,7 @@ onMounted(() => {
 })
 watchEffect(() => {
     store.setChartProcess()
-    store.params.mcht_settle_type = mcht_settle_type.value.id
+    store.params.mcht_settle_type = store.params.mcht_settle_type
 })
 </script>
 <template>
@@ -45,9 +44,9 @@ watchEffect(() => {
                 :sales="true">
                 <template #pg_extra_field>
                     <VCol cols="12" sm="3">
-                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
+                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                             :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
-                            item-value="id" return-object />
+                            item-value="id"/>
                     </VCol>
                 </template>
             </BaseIndexFilterCard>

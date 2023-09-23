@@ -20,9 +20,6 @@ provide('head', head)
 provide('exporter', exporter)
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
-
-const mcht_settle_type = ref({ id: null, name: '전체' })
-
 const batchCheck = async () => {
     if (await alert.value.show('정말 일괄 확인/확인취소 처리 하시겠습니까?')) {
         const promises = []
@@ -38,9 +35,6 @@ const batchCheck = async () => {
         store.setTable()
     }
 }
-watchEffect(() => {    
-    store.params.mcht_settle_type = mcht_settle_type.value.id
-})
 </script>
 <template>
     <BaseIndexView placeholder="가맹점 상호, MID, TID, 승인번호 검색" :metas="[]" :add="false" add_name="가맹점" :is_range_date="true">
@@ -48,9 +42,8 @@ watchEffect(() => {
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true" :sales="true">
                 <template #pg_extra_field>
                         <VCol cols="12" sm="3">
-                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
-                                :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name" item-value="id"
-                            return-object />
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
+                                :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name" item-value="id"/>
                         </VCol>
                     </template>
             </BaseIndexFilterCard>

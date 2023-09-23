@@ -21,7 +21,6 @@ const all_days = settleDays()
 const tax_types = settleTaxTypes()
 
 const totals = ref(<any[]>([]))
-const mcht_settle_type = ref({ id: null, name: '전체' })
 
 provide('store', store)
 provide('head', head)
@@ -72,9 +71,9 @@ watchEffect(() => {
                             item-title="title" item-value="id" create />
                     </VCol>
                     <VCol cols="12" sm="3">
-                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_settle_type"
+                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                             :items="[{ id: null, name: '전체' }].concat(settle_types)" label="가맹점 정산타입 필터" item-title="name"
-                            item-value="id" return-object />
+                            item-value="id"/>
                     </VCol>
                 </template>
             </BaseIndexFilterCard>
