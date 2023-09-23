@@ -90,7 +90,6 @@ watchEffect(() => {
         const dt = new Date(date.value)
         store.params.dt = formatDate(dt)
     }
-    date_selecter.value = null
 })
 </script>
 <template>
@@ -105,7 +104,7 @@ watchEffect(() => {
                                     :action-row="{ showNow: true }" :enable-seconds="true"
                                     :text-input="{ format: 'yyyy-MM-dd HH:mm:ss' }" locale="ko" :format-locale="ko" range
                                     multi-calendars :dark="theme === 'dark'" autocomplete="on" utc :format="getRangeFormat"
-                                    :teleport="true" input-class-name="search-input" />
+                                    :teleport="true" input-class-name="search-input" @update:modelValue="date_selecter = null"/>
                                 <VueDatePicker v-model="date" v-if="props.is_range_date == false"
                                     :text-input="{ format: 'yyyy-MM-dd' }" locale="ko" :format-locale="ko"
                                     :dark="theme === 'dark'" autocomplete="on" utc :format="formatDate" :teleport="true" />
