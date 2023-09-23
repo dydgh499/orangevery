@@ -10,6 +10,8 @@ import { pay_token, user_info } from '@axios'
 import { abilitiesPlugin } from '@casl/vue'
 import '@core-scss/template/index.scss'
 import '@styles/styles.scss'
+import VueDatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 
@@ -23,6 +25,7 @@ declare module '@vue/runtime-core' {
     export interface ComponentCustomProperties {
       $errorHandler: (e: any) => any;
       $formatDate: (e: Date) => string;
+      $formatTime: (e: Date) => string;
     }
 }
 
@@ -42,6 +45,12 @@ app.provide('$formatDate', function(date: Date) {
     const day = String(date.getDate()).padStart(2, '0')
     return `${year}-${month}-${day}`;
 });
+app.provide('$formatTime', function(date: Date) {
+    const hour = String(date.getHours()).padStart(2, '0')
+    const min = String(date.getMinutes()).padStart(2, '0')
+    const sec = String(date.getSeconds()).padStart(2, '0')
+    return `${hour}:${min}:${sec}`;
+});
 
 // Use plugins
 app.use(vuetify)
@@ -53,6 +62,7 @@ app.use(i18n)
 app.use(abilitiesPlugin, ability, {
   useGlobalProperties: true,
 })
+app.component('VueDatePicker', VueDatePicker)
 // app.use(VueVirtualScroller)
 
 // Mount vue app

@@ -16,8 +16,8 @@ class IndexRequest extends FormRequest
         $this->sub = [
             'page'      => 'required|integer',
             'page_size' => 'required|integer',
-            's_dt'  => 'string|date_format:Y-m-d',
-            'e_dt'  => 'string|date_format:Y-m-d',
+            's_dt'  => 'string',
+            'e_dt'  => 'string',
         ];
         $this->params = $this->getDocsParameters($this->keys);
         $this->params['page']['example']      = 1;

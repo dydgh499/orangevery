@@ -7,7 +7,6 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-
 const store = <any>(inject('store'))
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))

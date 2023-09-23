@@ -11,7 +11,7 @@ interface Props {
     add_name: string,
     is_range_date: boolean | null
 }
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 
 const store = <any>(inject('store'))
 const head = <any>(inject('head'))

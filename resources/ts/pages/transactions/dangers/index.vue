@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useSearchStore } from '@/views/transactions/dangers/useStore'
+import { useRequestStore } from '@/views/request'
 import { selectFunctionCollect } from '@/views/selected'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
@@ -10,14 +11,33 @@ import { getUserLevel } from '@axios'
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { pgs, pss, terminals, } = useStore()
+const { post } = useRequestStore()
+const { pgs, pss, terminals } = useStore()
 const { settle_types } = useStore()
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
 
 const mcht_settle_type = ref({ id: null, name: '전체' })
+
+const batchCheck = async () => {
+    if (await alert.value.show('정말 일괄 확인/확인취소 처리 하시겠습니까?')) {
+        const promises = []
+        for (let i = 0; i < selected.value.length; i++) {
+            const item:any = store.items.find(obj => obj['id'] === selected.value[i])
+            if(item) {
+                const url = `/api/v1/manager/transactions/dangers/${item.id}/checked`
+                promises.push(post(url, { checked : !item.is_checked }))
+            }
+        }
+        const results = await Promise.all(promises)
+        snackbar.value.show('성공하였습니다.', 'success')
+        store.setTable()
+    }
+}
 watchEffect(() => {    
     store.params.mcht_settle_type = mcht_settle_type.value.id
 })
@@ -34,7 +54,12 @@ watchEffect(() => {
                         </VCol>
                     </template>
             </BaseIndexFilterCard>
-        </template>
+        </template>        
+        <template #index_extra_field>
+                <VBtn prepend-icon="tabler:check" @click="batchCheck()" v-if="getUserLevel() >= 50">
+                    일괄 확인/확인취소
+                </VBtn>
+            </template>
         <template #headers>
             <tr>
                 <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"

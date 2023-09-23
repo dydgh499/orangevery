@@ -70,3 +70,14 @@ th {
   box-shadow: 0 3px 1px -2px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 20%)), 0 2px 2px 0 var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 14%)), 0 1px 5px 0 var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 12%)) !important;
   color: white !important;
 }
+
+.search-input {
+  min-inline-size: 25.35rem;
+}
+
+@media (max-width: 600px) {
+  .search-date,
+  .search-input {
+    min-inline-size: 100%;
+  }
+}
