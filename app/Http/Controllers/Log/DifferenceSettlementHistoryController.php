@@ -128,9 +128,9 @@ class DifferenceSettlementHistoryController extends Controller
     public function request()
     {
         $brands = $this->getUseDifferentSettlementBrands();
-        for ($i=0; $i < 60; $i++) 
+        for ($j=0; $j < 60; $j++) 
         { 
-            $date       = Carbon::now()->subDay(1+$i);
+            $date       = Carbon::now()->subDay(1+$j);
             $str_date   = $date->format('Y-m-d');
     
             for ($i=0; $i<count($brands); $i++)
