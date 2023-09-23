@@ -18,8 +18,8 @@ const formatTime = <any>(inject('$formatTime'))
 
 const { theme } = useThemeConfig()
 const range_date = ref(<string[]>(['', '']))
-const date = ref(<string>(''));
-console.log(theme.value)
+const date = ref(<string>(''))
+
 const handleEnterKey = (event: KeyboardEvent) => {
     if (event.keyCode === 13)
         store.setTable()
