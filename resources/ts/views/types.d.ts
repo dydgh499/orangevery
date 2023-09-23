@@ -435,6 +435,7 @@ export interface Transaction {
     is_use_realtime_deposit?: number,
     cxl_type?: number,
     fin_trx_delay?: number
+    realtime_result?: string,
 }
 
 export interface SalesSlip extends Transaction{
