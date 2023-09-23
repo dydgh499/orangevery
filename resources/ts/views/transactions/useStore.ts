@@ -41,9 +41,9 @@ export const realtimeRetryMessage = (item: Transaction):string => {
     {
         if(item.fin_trx_delay != 0)
         {
-            const formatDate = <any>(inject('$formatDate'))
+            const formatTime = <any>(inject('$formatTime'))
             const retry_able_time = (new Date(item.trx_dt as string)).getTime() + (item.fin_trx_delay as number * 60000)
-            return formatDate(retry_able_time)+'부터 재이체 가능'
+            return formatTime(retry_able_time)+'부터 재이체 가능'
         }
         else
             return ''
