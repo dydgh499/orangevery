@@ -5,7 +5,7 @@ import { SettlesHistories } from '@/views/types'
 import { axios } from '@axios'
 
 export function settlementHistoryFunctionCollect(store: any) {
-    const { post } = useRequestStore()
+    const { post, get } = useRequestStore()
     const { printer } = useSearchStore()
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
@@ -33,7 +33,7 @@ export function settlementHistoryFunctionCollect(store: any) {
             const res = await await axios({
                 url: url,
                 method: 'delete',
-                params: {level: item.level},
+                params: {level: is_mcht ? 10 : item.level},
             })
             if(res.status === 201) {
                 snackbar.value.show('성공하였습니다.', 'success')
@@ -46,26 +46,25 @@ export function settlementHistoryFunctionCollect(store: any) {
 
     const download = async (item: SettlesHistories, is_mcht: boolean) => {
         if (await alert.value.show('정산매출을 다운로드 하시겠습니까?')) {
-            try {
-                const params:Record<string, string|number> = {
-                    page: 1,
-                    page_size: 99999999,
-                };
-                if(is_mcht)
-                    params['mcht_settle_id'] = item.id
-                else {
-                    const idx = getLevelByIndex(item.level)             
-                    params['sales'+idx+'_settle_id'] = item.id
-                }
-                const res = await axios.get('/api/v1/manager/transactions', { params: params })
+            const params:Record<string, string|number> = {
+                page: 1,
+                page_size: 9999999,
+                level: is_mcht ? 10 : item.level
+            };
+            if(is_mcht)
+                params['mcht_settle_id'] = item.id
+            else {
+                const idx = getLevelByIndex(item.level)             
+                params['sales'+idx+'_settle_id'] = item.id
+            }
+            const res = await get('/api/v1/manager/transactions', { params: params })
+            if(res.status == 200) {
                 snackbar.value.show('엑셀 출력중 입니다..', 'success')
                 printer(1, res.data.content)
-                snackbar.value.show('성공하였습니다.', 'success')
+                snackbar.value.show('성공하였습니다.', 'success')    
             }
-            catch (e: any) {
-                snackbar.value.show(e.response.data.message, 'error')
-                const r = errorHandler(e)
-            }
+            else
+                snackbar.value.show(res.data.message, 'error')
         }
     }
 
