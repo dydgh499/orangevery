@@ -140,7 +140,7 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('merchandises.is_delete', false)
                 ->where('payment_gateways.pg_type', $brands[$i]->above_pg_type)
                 ->where('transactions.brand_id', $brands[$i]->id)
-                ->where('transactions.trx_dt', $str_date)
+                ->where('transactions.trx_dt', '<=', $str_date)
                 ->get(['transactions.*', 'merchandises.business_num']);
             try
             {
