@@ -20,7 +20,9 @@ class DifferenceSettlementHistoryController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait, TransactionTrait;
     protected $difference_settlement_histories;
-
+    protected $base_path = "App\Http\Controllers\Log\DifferenceSettlement\\";
+    protected $cols = [];
+    
     public function __construct(DifferenceSettlementHistory $difference_settlement_histories)
     {
         $this->difference_settlement_histories = $difference_settlement_histories;    
@@ -140,7 +142,7 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('merchandises.is_delete', false)
                 ->where('payment_gateways.pg_type', $brands[$i]->above_pg_type)
                 ->where('transactions.brand_id', $brands[$i]->id)
-                ->where('transactions.trx_dt', '<=', $str_date)
+                ->where('transactions.trx_dt', $str_date)
                 ->get(['transactions.*', 'merchandises.business_num']);
             try
             {
