@@ -19,7 +19,7 @@ const formatTime = <any>(inject('$formatTime'))
 const { theme } = useThemeConfig()
 const range_date = ref(<string[]>(['', '']))
 const date = ref(<string>(''));
-
+console.log(theme.value)
 const handleEnterKey = (event: KeyboardEvent) => {
     if (event.keyCode === 13)
         store.setTable()
@@ -90,15 +90,15 @@ watchEffect(() => {
                 <VRow>
                     <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">
                         <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">
-                            <div class="d-inline-flex search-input">
+                            <div class="d-inline-flex">
                                 <VueDatePicker v-model="range_date" v-if="props.is_range_date == true"
                                     :action-row="{ showNow: true }" :enable-seconds="true"
                                     :text-input="{ format: 'yyyy-MM-dd HH:mm:ss' }" locale="ko" :format-locale="ko" range
                                     multi-calendars :dark="theme === 'dark'" autocomplete="on" utc :format="getRangeFormat"
-                                    :teleport="true" />
+                                    :teleport="true" input-class-name="search-input"/>
                                 <VueDatePicker v-model="date" v-if="props.is_range_date == false"
                                     :text-input="{ format: 'yyyy-MM-dd' }" locale="ko" :format-locale="ko"
-                                    :dark="theme === 'dark'" autocomplete="on" utc :format="formatDate" :teleport="true" />
+                                    :dark="theme === 'dark'" autocomplete="on" utc :format="formatDate" :teleport="true"/>
                             </div>
                             <template v-if="head.path === 'transactions'">
                                 <VBtn variant="tonal" color="secondary" prepend-icon="ic-baseline-calendar-today"

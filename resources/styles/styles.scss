@@ -81,3 +81,17 @@ th {
     min-inline-size: 100%;
   }
 }
+
+// date Picker CSS
+.dp__theme_dark,
+.dp__theme_light {
+  --dp-border-color-hover: rgb(var(--v-global-theme-primary)) !important;
+}
+
+.dp__theme_dark {
+  --dp-background-color: rgb(var(--v-theme-background)) !important;
+}
+
+:root {
+  --dp-border-radius: 0.5em !important;
+}
