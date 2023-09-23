@@ -128,40 +128,36 @@ class DifferenceSettlementHistoryController extends Controller
     public function request()
     {
         $brands = $this->getUseDifferentSettlementBrands();
-        for ($j=0; $j < 60; $j++) 
-        { 
-            $date       = Carbon::now()->subDay(1+$j);
-            $str_date   = $date->format('Y-m-d');
-    
-            for ($i=0; $i<count($brands); $i++)
+        $date       = Carbon::now()->subDay(1);
+        $str_date   = $date->format('Y-m-d');
+
+        for ($i=0; $i<count($brands); $i++)
+        {
+            $pg_name = getPGType($brands[$i]->above_pg_type);
+            $trans   = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
+                ->join('payment_gateways', 'transactions.pg_id', '=', 'payment_gateways.id')
+                ->where('transactions.is_delete', false)
+                ->where('merchandises.is_delete', false)
+                ->where('payment_gateways.pg_type', $brands[$i]->above_pg_type)
+                ->where('transactions.brand_id', $brands[$i]->id)
+                ->where('transactions.trx_dt', '<=', $str_date)
+                ->get(['transactions.*', 'merchandises.business_num']);
+            try
             {
-                $pg_name = getPGType($brands[$i]->above_pg_type);
-                $trans   = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
-                    ->join('payment_gateways', 'transactions.pg_id', '=', 'payment_gateways.id')
-                    ->where('transactions.is_delete', false)
-                    ->where('merchandises.is_delete', false)
-                    ->where('payment_gateways.pg_type', $brands[$i]->above_pg_type)
-                    ->where('transactions.brand_id', $brands[$i]->id)
-                    ->where('transactions.trx_dt', $str_date)
-                    ->get(['transactions.*', 'merchandises.business_num']);
-                try
-                {
-                    $path   = $this->base_path.$pg_name;            
-                    $pg     = new $path();
-                    $pg->request($date, $brands[$i]->business_num, $brands[$i]->rep_mcht_id, $trans);    
-                }
-                catch(Exception $e)
-                {   // pg사 발견못함
-                    logging([
-                            'message' => $e->getMessage(),
-                            'brand' => json_decode(json_encode($brands[$i]), true),
-                        ],
-                        'PG사가 없습니다.'
-                    );
-                }
+                $path   = $this->base_path.$pg_name;            
+                $pg     = new $path();
+                $pg->request($date, $brands[$i]->business_num, $brands[$i]->rep_mcht_id, $trans);    
+            }
+            catch(Exception $e)
+            {   // pg사 발견못함
+                logging([
+                        'message' => $e->getMessage(),
+                        'brand' => json_decode(json_encode($brands[$i]), true),
+                    ],
+                    'PG사가 없습니다.'
+                );
             }
         }
-
     }
 
     public function response()
