@@ -43,13 +43,13 @@ const complaint = () => {
     })
 }
 const retryDeposit = async () => {
-    if (await alert.value.show('정말 해당 거래건을 실시간 재이체 하시겠습니까?')) {
+    if (await alert.value.show('정말 해당 가맹점의 거래건을 재이체(정산) 하시겠습니까?')) {
         const params = {
             'trx_id': props.item.id,
             'mid': props.item.mid,
             'tid': props.item.tid,
         }
-        const r = await post('/api/v1/manager/transactions/realtime-histories/deposit', params)
+        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/deposit', params)
         snackbar.value.show(r.data.message, r.data.result_cd == "0000" ? 'success' : 'warning')
         if(r.data.result_cd == "0000")
         {

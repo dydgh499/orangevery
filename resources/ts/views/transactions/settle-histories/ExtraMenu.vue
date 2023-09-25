@@ -12,7 +12,6 @@ interface Props {
 const props = defineProps<Props>()
 const store = <any>(inject('store'))
 const { deposit, cancel, download } = settlementHistoryFunctionCollect(store)
-
 </script>
 <template>
     <VBtn icon size="x-small" color="default" variant="text">

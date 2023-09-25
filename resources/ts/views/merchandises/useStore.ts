@@ -110,7 +110,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
 export const defaultItemInfo = () => {
     const path = 'merchandises'
     const item = reactive<Merchandise>({
-        id:0,
+        id: 0,
         acct_bank_code: null,
         acct_bank_name: '은행명',
         hold_fee: 0,
@@ -154,7 +154,8 @@ export const defaultItemInfo = () => {
         use_saleslip_prov: true,
         use_saleslip_sell: false,
         is_show_fee: false,
-        note: ''
+        note: '',
+        dev_fee: 0
     })
     return {
         path, item

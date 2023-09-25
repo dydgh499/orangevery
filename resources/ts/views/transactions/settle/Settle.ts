@@ -1,5 +1,7 @@
 import { useRequestStore } from '@/views/request'
 import { Settle } from '@/views/types'
+import { getUserLevel } from '@axios'
+import corp from '@corp'
 import { cloneDeep } from 'lodash'
 
 export function SettlementFunctionCollect(store: any) {
@@ -60,17 +62,15 @@ export function SettlementFunctionCollect(store: any) {
         if (await alert.value.show('정말 ' + name + '님을(를) 정산 하시겠습니까?')) {
             const params = cloneDeep(store.params)
             const p = getSettleFormat(item, is_mcht)
-            try {
-                const page = is_mcht ? 'merchandises' : 'salesforces'
-                const r = await post('/api/v1/manager/transactions/settle-histories/' + page, Object.assign(params, p))
+            const page = is_mcht ? 'merchandises' : 'salesforces'
+            const r = await post('/api/v1/manager/transactions/settle-histories/' + page, Object.assign(params, p))
+            if(r.status == 201) {
                 snackbar.value.show('성공하였습니다.', 'success')
                 store.setChartProcess()
-                store.setTable()
+                store.setTable()    
             }
-            catch (e: any) {
-                snackbar.value.show(e.response.data.message, 'error')
-                const r = errorHandler(e)
-            }
+            else
+                snackbar.value.show(r.data.message, 'error')
         }
     }
     
@@ -93,8 +93,27 @@ export function SettlementFunctionCollect(store: any) {
         const page = is_mcht ? 'merchandises' : 'salesforces'
         router.push('/transactions/settle/'+page+'/part/' + id + '?dt=' + store.params.dt)
     }
+
+    const isAbleMchtDepositCollect = (is_mcht: boolean) => {
+        return getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit && is_mcht
+    }
+
+    const settleCollect = async(name:string, item:Settle) => {
+        if (await alert.value.show('정말 '+name+'님에게 정산금을 이체한 후 정산 하시겠습니까?')) {
+            const params = cloneDeep(store.params)
+            const p = getSettleFormat(item, true)
+            const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/settle-collect', Object.assign(params, p))
+            if(r.status == 201) {
+                snackbar.value.show('성공하였습니다.', 'success')
+                store.setChartProcess()
+                store.setTable()    
+            }
+            else
+                snackbar.value.show(r.data.message, 'error')
+        }
+    }
     return {
-        batchSettle, settle, getSettleStyle, isSalesCol, movePartSettle
+        batchSettle, settle, getSettleStyle, isSalesCol, movePartSettle, isAbleMchtDepositCollect, settleCollect
     }
 }
 

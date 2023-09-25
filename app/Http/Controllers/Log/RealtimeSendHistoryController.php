@@ -19,7 +19,7 @@ class RealtimeSendHistoryController extends Controller
     public function __construct(RealtimeSendHistory $realtime_send_histories)
     {
         $this->realtime_send_histories = $realtime_send_histories;
-        $this->base_noti_url = $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes';
+        $this->base_noti_url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes';
     }
        
     /**
@@ -102,25 +102,14 @@ class RealtimeSendHistoryController extends Controller
         //
     }
 
+    /**
+     * 잔액조회
+     */
     public function getBalance(Request $request)
     {
         $data = $request->all();
         $url = $this->base_noti_url.'/get-balance';
         $res = post($url, $data);
         return $this->response(1, $res['body']);
-    }
-
-    public function deposit(Request $request)
-    {
-        $validated = $request->validate(['trx_id'=>'required', 'mid'=>'required', 'tid'=>'required']);
-        $data = $request->all();
-        $url = $this->base_noti_url.'/deposit';
-        $res = post($url, $data);
-        return $this->response(1, $res['body']);
-    }
-
-    public function depositCollect(Request $request)
-    {
-        
     }
 }

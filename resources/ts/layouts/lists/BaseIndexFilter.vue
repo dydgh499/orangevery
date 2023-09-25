@@ -31,8 +31,14 @@ const handleEnterKey = (event: KeyboardEvent) => {
         store.setTable()
 }
 const getRangeFormat = (dates: Date[]) => {
-    const s_date = formatDate(dates[0]) + " " + formatTime(dates[0])
-    const e_date = dates.length == 2 ? formatDate(dates[1]) + " " + formatTime(dates[1]) : ""
+    const setRangeFormat = (date: Date) => {
+        if(formatTime(date) === "00:00:00" || formatTime(date) === "23:59:59")
+            return formatDate(date)
+        else
+            return formatDate(date) + " " + formatTime(date)
+    }
+    const s_date = setRangeFormat(dates[0])
+    const e_date = setRangeFormat(dates[1])
     return s_date + "  -  " + e_date
 }
 const setDate = () => {

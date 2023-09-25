@@ -28,6 +28,7 @@ class SettleHistoryController extends Controller
     {
         $this->settle_mcht_hist = $settle_mcht_hist;
         $this->settle_sales_hist = $settle_sales_hist;
+        $this->base_noti_url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes';
     }
 
     public function indexMerchandise(IndexRequest $request)
@@ -162,5 +163,35 @@ class SettleHistoryController extends Controller
     public function depositSalesforce(Request $request, $id)
     {
         return $this->deposit($this->settle_sales_hist, $id);
+    }
+
+    /**
+     * 재이체
+     */
+    public function deposit(Request $request)
+    {
+        $validated = $request->validate(['trx_id'=>'required', 'mid'=>'required', 'tid'=>'required']);
+        $data = $request->all();
+        $url = $this->base_noti_url.'/deposit';
+        $res = post($url, $data);
+        return $this->response(1, $res['body']);
+    }
+
+    /**
+     * 모아서 출금(정산)
+     */
+    public function settleCollect(CreateSettleHistoryRequest $request)
+    {
+        $trx_ids = Transaction::where('mcht_id', $request->id)
+            ->globalFilter()
+            ->settleFilter('mcht_settle_id')
+            ->settleTransaction()
+            ->pluck('id')->toArray();
+        print_r($trx_ids);
+        /*
+        $url = $this->base_noti_url.'/deposit-collect-settle';
+        $res = post($url, $data);
+        */
+        return $this->response(1);        
     }
 }

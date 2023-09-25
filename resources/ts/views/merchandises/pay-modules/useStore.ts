@@ -44,6 +44,7 @@ export const comm_settle_types = <Options[]>([
     {id: 2, title:'개통월 M+2부터 적용'},
 ])
 export const fin_trx_delays = <Options[]>([
+    {id: -1, title:'모아서 출금(정산)'},
     {id: 0, title:'즉시입금'},
     {id: 15, title:'15분'},
     {id: 30, title:'30분'}, 

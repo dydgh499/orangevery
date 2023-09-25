@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -47,7 +48,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(200)->by(optional($request->user())->id ?: $request->ip())->response(function() use($request) {
+            return Limit::perMinute(400)->by(optional($request->user())->id ?: $request->ip())->response(function() use($request) {
                 $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all()];
                 Log::critical(__('auth.throttle', ["seconds"=> 60]), $logs);
                 return Response::json(['message'=>__('auth.throttle', ["seconds"=> 60])], 429);

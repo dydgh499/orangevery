@@ -127,6 +127,9 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                     Route::post('/batch', [SettleHistoryController::class, 'batchMerchandise']);
                     Route::post('/{id}/deposit', [SettleHistoryController::class, 'depositMerchandise']);
                     Route::delete('/{id}', [SettleHistoryController::class, 'deleteMerchandise']);
+                    
+                    Route::post('settle-collect', [SettleHistoryController::class, 'settleCollect']);
+                    Route::post('deposit', [SettleHistoryController::class, 'deposit']);
                 });
                 Route::prefix('salesforces')->group(function() {
                     Route::get('/', [SettleHistoryController::class, 'indexSalesforce']);
@@ -140,7 +143,6 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             
             Route::prefix('realtime-histories')->group(function() {
                 Route::post('get-balance', [RealtimeSendHistoryController::class, 'getBalance']);
-                Route::post('deposit', [RealtimeSendHistoryController::class, 'deposit']);
             });
             Route::apiResource('realtime-histories', RealtimeSendHistoryController::class);
         });

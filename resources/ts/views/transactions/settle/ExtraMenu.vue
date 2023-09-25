@@ -9,7 +9,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 const store = <any>(inject('store'))
-const { settle } = SettlementFunctionCollect(store)
+const { settle, isAbleMchtDepositCollect, settleCollect } = SettlementFunctionCollect(store)
 
 </script>
 <template>
@@ -22,6 +22,13 @@ const { settle } = SettlementFunctionCollect(store)
                         <VIcon size="24" class="me-3" icon="tabler-calculator" />
                     </template>
                     <VListItemTitle>정산하기</VListItemTitle>
+                </VListItem>
+                <VListItem value="retry-realtime-deposit" class="retry-realtime-deposit" @click="settleCollect(props.name, props.item)"
+                    v-if="isAbleMchtDepositCollect(props.is_mcht)">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="fa6-solid:money-bill-transfer" />
+                    </template>
+                    <VListItemTitle>정산 및 이체</VListItemTitle>
                 </VListItem>
             </VList>
         </VMenu>
