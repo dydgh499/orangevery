@@ -82,11 +82,13 @@ class hecto
         }
         $full_record .= $this->setEndRecord($total_count);
 
+        $result = false;
         if($this->main_connection_stat)
-            $this->main_sftp_connection->put($save_path, $full_record);
+            $result = $this->main_sftp_connection->put($save_path, $full_record);
         if($this->dr_connection_stat)
-            $this->dr_sftp_connection->put($save_path, $full_record);
+            $result = $this->dr_sftp_connection->put($save_path, $full_record);
 
+        
         logging(['result'=>$result, 'save_path'=>$save_path], 'hecto-difference-settlement-request');
     }
 
