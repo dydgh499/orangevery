@@ -157,7 +157,7 @@ class SettleHistoryController extends Controller
     
     public function depositMerchandise(Request $request, $id)
     {
-        return $this->depofsit($this->settle_mcht_hist, $id);
+        return $this->deposit($this->settle_mcht_hist, $id);
     }
 
     public function depositSalesforce(Request $request, $id)
