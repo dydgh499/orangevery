@@ -170,7 +170,7 @@ class SettleHistoryController extends Controller
     /**
      * 재이체
      */
-    public function settleDeposit(Request $request)
+    public function settleDepositMerchandise(Request $request)
     {
         $validated = $request->validate(['trx_id'=>'required', 'mid'=>'required', 'tid'=>'required']);
         $data = $request->all();
@@ -182,9 +182,8 @@ class SettleHistoryController extends Controller
     /**
      * 모아서 출금(정산)
      */
-    public function settleCollect(CreateSettleHistoryRequest $request)
+    public function settleCollectMerchandise(CreateSettleHistoryRequest $request)
     {
-        //mid, tid
         $trx_ids = Transaction::where('mcht_id', $request->id)
             ->globalFilter()
             ->settleFilter('mcht_settle_id')
