@@ -157,7 +157,7 @@ class SettleHistoryController extends Controller
     
     public function depositMerchandise(Request $request, $id)
     {
-        return $this->deposit($this->settle_mcht_hist, $id);
+        return $this->depofsit($this->settle_mcht_hist, $id);
     }
 
     public function depositSalesforce(Request $request, $id)
@@ -168,7 +168,7 @@ class SettleHistoryController extends Controller
     /**
      * 재이체
      */
-    public function deposit(Request $request)
+    public function settleDeposit(Request $request)
     {
         $validated = $request->validate(['trx_id'=>'required', 'mid'=>'required', 'tid'=>'required']);
         $data = $request->all();
@@ -182,12 +182,18 @@ class SettleHistoryController extends Controller
      */
     public function settleCollect(CreateSettleHistoryRequest $request)
     {
-        $trx_ids = Transaction::where('mcht_id', $request->id)
+        //mid, tid
+        $trans = Transaction::where('mcht_id', $request->id)
             ->globalFilter()
             ->settleFilter('mcht_settle_id')
             ->settleTransaction()
-            ->pluck('id')->toArray();
-        print_r($trx_ids);
+            ->get();
+        print_r(json_decode(json_encode($trans), true));
+        $data = $request->all();
+        $data['trx_ids'] = $trx_ids;
+        $info = [
+            'mcht_id'
+        ];
         /*
         $url = $this->base_noti_url.'/deposit-collect-settle';
         $res = post($url, $data);

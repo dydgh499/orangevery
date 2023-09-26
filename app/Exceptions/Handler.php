@@ -72,8 +72,14 @@ class Handler extends ExceptionHandler
         });
         $this->renderable(function (ValidationException $e, $request) {
             $exceptions = $e->errors();
-            $first_key  = array_key_first($exceptions);
-            return $this->extendResponse(1004, __($exceptions[$first_key][0]));
+            if($request->is('*/bulk-register*'))
+                return $this->storesResponse($exceptions);
+            else
+            {
+                $first_key  = array_key_first($exceptions);
+                return $this->extendResponse(1004, __($exceptions[$first_key][0]));    
+            }
+            
         });
     }
 }

@@ -129,7 +129,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                     Route::delete('/{id}', [SettleHistoryController::class, 'deleteMerchandise']);
                     
                     Route::post('settle-collect', [SettleHistoryController::class, 'settleCollect']);
-                    Route::post('deposit', [SettleHistoryController::class, 'deposit']);
+                    Route::post('settle-deposit', [SettleHistoryController::class, 'settleDeposit']);
                 });
                 Route::prefix('salesforces')->group(function() {
                     Route::get('/', [SettleHistoryController::class, 'indexSalesforce']);

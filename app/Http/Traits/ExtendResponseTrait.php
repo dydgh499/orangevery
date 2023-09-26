@@ -7,6 +7,27 @@ use Illuminate\Support\Facades\Log;
 
 trait ExtendResponseTrait 
 {
+    public function storesResponse($exceptions)
+    {
+        $data = [];
+        $msg = "";
+        foreach($exceptions as $key => $value)
+        {
+            if(preg_match('/[0-9]\.[a-z_-]+$/', $key, $keys))
+            {
+                $num = preg_replace("/[^0-9]*/s", "", $key);
+                $str = preg_replace("/[0-9]\./","", $key);
+                if($msg == "")
+                    $msg = preg_replace("/[0-9]\.[a-z_-]+/", __("validation.attributes.".$str), $exceptions[$key][0]);
+
+                if(isset($data[$str]) == false)
+                    $data[$str] = [];
+                array_push($data[$str], $num);
+            }
+        }
+        return Response::json(['code'=>1004, 'message'=>$msg, 'data'=>$data], 409);
+    }
+    
     public function extendResponse($code, $msg)
     {
         $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all()];
