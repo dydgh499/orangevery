@@ -147,8 +147,8 @@ class DifferenceSettlementHistoryController extends Controller
             try
             {
                 $path   = $this->base_path.$pg_name;            
-                $pg     = new $path();
-                $pg->request($date, $brands[$i]->business_num, $brands[$i]->rep_mcht_id, $trans);    
+                $pg     = new $path($brands[$i]->rep_mcht_id);
+                $pg->request($date, $brands[$i]->business_num, $trans);    
             }
             catch(Exception $e)
             {   // pg사 발견못함
