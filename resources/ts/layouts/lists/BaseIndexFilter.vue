@@ -32,7 +32,7 @@ const handleEnterKey = (event: KeyboardEvent) => {
         store.setTable()
 }
 const getDateFormat = (date: Date) => {    
-    return corp.pv_options.free.use_search_detail ? formatDate(date) + " " + formatTime(date) : formatDate(date)
+    return corp.pv_options.free.use_search_date_detail ? formatDate(date) + " " + formatTime(date) : formatDate(date)
 }
 const getRangeFormat = (dates: Date[]) => {
     const setRangeFormat = (date: Date) => {
@@ -113,7 +113,7 @@ watchEffect(() => {
                 <VRow>
                     <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">
                         <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">                            
-                            <template v-if="corp.pv_options.free.use_search_detail">
+                            <template v-if="corp.pv_options.free.use_search_date_detail">
                                 <div class="d-inline-flex">
                                     <VueDatePicker v-model="range_date" v-if="props.is_range_date == true"
                                         :enable-seconds="true"

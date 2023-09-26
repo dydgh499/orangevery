@@ -136,7 +136,7 @@ export const defaultItemInfo = () => {
                 use_hand_pay: false,
                 use_auth_pay: false,
                 use_simple_pay: false,
-                use_search_detail: true,
+                use_search_date_detail: true,
                 sales_slip: {
                     merchandise: {
                         comepany_name: '',

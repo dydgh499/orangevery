@@ -51,7 +51,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>기간상세조회 사용여부</template>
                             <template #input>
-                                <VSwitch v-model="props.item.free.use_search_detail" color="primary" />
+                                <VSwitch v-model="props.item.free.use_search_date_detail" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
