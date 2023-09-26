@@ -462,7 +462,7 @@ onMounted(() => {
                     <VCardItem>
                         <VCardTitle style="margin-bottom: 1em;">옵션</VCardTitle>
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>취소타입
                                 </template>
                                 <template #input>
@@ -472,7 +472,7 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
 
-                            <CreateHalfVCol :mdl="5" :mdr="7">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'이상거래 한도설정'"
                                         :content="'설정 금액 이상으로 결제가 발생할 시, 이상거래 관리 목록에 추가됩니다.'">
