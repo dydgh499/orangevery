@@ -499,7 +499,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3" v-if="corp.pv_options.paid.use_pay_limit && props.item.module_type != 0">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'일 결제 한도'"
                                         :content="'결제 한도 금액: 1,000,000원 = 100 입력(이하동일)<br><b>온라인 결제</b>만 적용 가능합니다.'">
@@ -512,7 +512,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3" v-if="corp.pv_options.paid.use_pay_limit && props.item.module_type != 0">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>월 결제 한도</template>
                                 <template #input>
                                     <VTextField prepend-inner-icon="tabler-currency-won"
@@ -531,7 +531,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3" v-if="corp.pv_options.paid.use_forb_pay_time && props.item.module_type != 0">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'결제금지 시간'"
                                         :content="'해당 시간대에는 <b>온라인 결제</b>를 발생시킬 수 없습니다.'">
@@ -547,7 +547,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3" v-if="corp.pv_options.paid.use_issuer_filter && props.item.module_type != 0">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'발급사 필터링'"
                                         :content="'해당 발급사로 결제된 카드는 강제취소됩니다.'">
@@ -562,7 +562,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3" v-if="props.item.module_type != 0">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>결제창 노출여부</template>
                                 <template #input>
                                     <BooleanRadio :radio="Boolean(props.item.show_pay_view)"
