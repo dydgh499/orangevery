@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { ko } from 'date-fns/locale';
+import corp from '@corp';
 
 interface Props {
     placeholder: string,
@@ -29,6 +30,9 @@ const dates = [
 const handleEnterKey = (event: KeyboardEvent) => {
     if (event.keyCode === 13)
         store.setTable()
+}
+const getDateFormat = (date: Date) => {    
+    return corp.pv_options.free.use_search_detail ? formatDate(date) + " " + formatTime(date) : formatDate(date)
 }
 const getRangeFormat = (dates: Date[]) => {
     const setRangeFormat = (date: Date) => {
@@ -70,16 +74,20 @@ const setDateRange = (type: string) => {
         s_date = new Date(date.getFullYear(), date.getMonth() - 3, 1, 0, 0, 0);
         e_date = new Date(date.getFullYear(), date.getMonth(), 0, 23, 59, 59);
     }
-    range_date.value[0] = formatDate(s_date) + " " + formatTime(s_date)
-    range_date.value[1] = formatDate(e_date) + " " + formatTime(e_date)
+    else {
+        s_date = new Date()
+        e_date = new Date()
+    }
+    range_date.value[0] = getDateFormat(s_date)
+    range_date.value[1] = getDateFormat(e_date)
 }
 
 if (props.is_range_date == true) {
     const date = new Date();
     const s_date = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0)
     const e_date = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59)
-    range_date.value[0] = formatDate(s_date) + " " + formatTime(s_date)
-    range_date.value[1] = formatDate(e_date) + " " + formatTime(e_date)
+    range_date.value[0] = getDateFormat(s_date)
+    range_date.value[1] = getDateFormat(e_date)
 }
 else if (props.is_range_date == false)
     date.value = formatDate(new Date())
@@ -89,8 +97,8 @@ watchEffect(() => {
     if (props.is_range_date == true) {
         const s_date = new Date(range_date.value[0])
         const e_date = new Date(range_date.value[1])
-        store.params.s_dt = formatDate(s_date) + " " + formatTime(s_date)
-        store.params.e_dt = formatDate(e_date) + " " + formatTime(e_date)
+        store.params.s_dt = getDateFormat(s_date)
+        store.params.e_dt = getDateFormat(e_date)
     }
     else if (props.is_range_date == false) {
         const dt = new Date(date.value)
@@ -104,17 +112,28 @@ watchEffect(() => {
             <VCardText>
                 <VRow>
                     <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">
-                        <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">
-                            <div class="d-inline-flex">
-                                <VueDatePicker v-model="range_date" v-if="props.is_range_date == true"
-                                    :action-row="{ showNow: true }" :enable-seconds="true"
-                                    :text-input="{ format: 'yyyy-MM-dd HH:mm:ss' }" locale="ko" :format-locale="ko" range
-                                    multi-calendars :dark="theme === 'dark'" autocomplete="on" utc :format="getRangeFormat"
-                                    :teleport="true" input-class-name="search-input" @update:modelValue="date_selecter = null"/>
-                                <VueDatePicker v-model="date" v-if="props.is_range_date == false"
-                                    :text-input="{ format: 'yyyy-MM-dd' }" locale="ko" :format-locale="ko"
-                                    :dark="theme === 'dark'" autocomplete="on" utc :format="formatDate" :teleport="true" />
-                            </div>
+                        <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">                            
+                            <template v-if="corp.pv_options.free.use_search_detail">
+                                <div class="d-inline-flex">
+                                    <VueDatePicker v-model="range_date" v-if="props.is_range_date == true"
+                                        :enable-seconds="true"
+                                        :text-input="{ format: 'yyyy-MM-dd HH:mm:ss' }" locale="ko" :format-locale="ko" range
+                                        multi-calendars :dark="theme === 'dark'" autocomplete="on" utc :format="getRangeFormat"
+                                        :teleport="true" input-class-name="search-input" @update:modelValue="date_selecter = null"
+                                        select-text="Search"/>
+                                    <VueDatePicker v-model="date" v-if="props.is_range_date == false"
+                                        :text-input="{ format: 'yyyy-MM-dd' }" locale="ko" :format-locale="ko"
+                                        :dark="theme === 'dark'" autocomplete="on" utc :format="formatDate" :teleport="true" />
+                                </div>
+                            </template>
+                            <template v-else>
+                                <VTextField type="date" v-model="range_date[0]" v-if="props.is_range_date == true"
+                                    prepend-inner-icon="ic-baseline-calendar-today" label="시작일 입력" single-line />
+                                <VTextField type="date" v-model="range_date[1]" v-if="props.is_range_date == true"
+                                prepend-inner-icon="ic-baseline-calendar-today" label="시작일 입력" single-line />
+                                <VTextField type="date" v-model="date" v-if="props.is_range_date == false"
+                                prepend-inner-icon="ic-baseline-calendar-today" label="검색일 입력" single-line />
+                            </template>
                             <template v-if="head.path === 'transactions'">
                                 <VSelect v-model="date_selecter" :items="[{ id: null, title: '기간 조회' }].concat(dates)"
                                     density="compact" variant="outlined" item-title="title" item-value="id"

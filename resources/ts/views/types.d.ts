@@ -240,6 +240,7 @@ interface FreeOption {
     use_hand_pay: boolean,
     use_auth_pay: boolean,
     use_simple_pay: boolean,
+    use_search_detail: boolean,
     sales_slip: {
         merchandise: {
             comepany_name: string,

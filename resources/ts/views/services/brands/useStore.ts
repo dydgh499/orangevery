@@ -136,6 +136,7 @@ export const defaultItemInfo = () => {
                 use_hand_pay: false,
                 use_auth_pay: false,
                 use_simple_pay: false,
+                use_search_detail: true,
                 sales_slip: {
                     merchandise: {
                         comepany_name: '',
@@ -144,7 +145,7 @@ export const defaultItemInfo = () => {
                         business_num: '',
                         addr: ''
                     }
-                }
+                },
             }),
             paid: reactive<PaidOption>({
                 use_acct_verification: false,
