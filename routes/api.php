@@ -28,7 +28,9 @@ use App\Http\Controllers\Log\RealtimeSendHistoryController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\NotiSendHistoryController;
 use App\Http\Controllers\Log\OperatorHistoryContoller;
-use App\Http\Controllers\Log\SettleHistoryController;
+use App\Http\Controllers\Log\MchtSettleHistoryController;
+use App\Http\Controllers\Log\SalesSettleHistoryController;
+
 use App\Http\Controllers\Log\DangerTransController;
 use App\Http\Controllers\Log\FailTransController;
 
@@ -120,25 +122,17 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             });
             Route::prefix('settle-histories')->group(function() {
                 Route::get('difference', [DifferenceSettlementHistoryController::class, 'index']);
-                Route::prefix('merchandises')->group(function() {
-                    Route::get('/', [SettleHistoryController::class, 'indexMerchandise']);
-                    Route::post('/', [SettleHistoryController::class, 'createMerchandise']);
-                    Route::post('/part', [SettleHistoryController::class, 'createMerchandisePart']);
-                    Route::post('/batch', [SettleHistoryController::class, 'batchMerchandise']);
-                    Route::post('/{id}/deposit', [SettleHistoryController::class, 'depositMerchandise']);
-                    Route::delete('/{id}', [SettleHistoryController::class, 'deleteMerchandise']);
-                    
-                    Route::post('settle-collect', [SettleHistoryController::class, 'settleCollectMerchandise']);
-                    Route::post('settle-deposit', [SettleHistoryController::class, 'settleDepositMerchandise']);
-                });
-                Route::prefix('salesforces')->group(function() {
-                    Route::get('/', [SettleHistoryController::class, 'indexSalesforce']);
-                    Route::post('/', [SettleHistoryController::class, 'createSalesforce']);
-                    Route::post('/part', [SettleHistoryController::class, 'createSalesforcePart']);
-                    Route::post('/batch', [SettleHistoryController::class, 'batchSalesforce']);    
-                    Route::post('/{id}/deposit', [SettleHistoryController::class, 'depositSalesforce']);    
-                    Route::delete('/{id}', [SettleHistoryController::class, 'deleteSalesforce']);    
-                });
+                Route::apiResource('merchandises', MchtSettleHistoryController::class);
+                Route::post('merchandises/part', [MchtSettleHistoryController::class, 'storePart']);
+                Route::post('merchandises/batch', [MchtSettleHistoryController::class, 'batch']);
+                Route::post('merchandises/{id}/deposit', [MchtSettleHistoryController::class, 'setDeposit']);                    
+                Route::post('merchandises/settle-collect', [MchtSettleHistoryController::class, 'settleCollect']);
+                Route::post('merchandises/settle-deposit', [MchtSettleHistoryController::class, 'settleDeposit']);
+                
+                Route::apiResource('salesforces', SalesSettleHistoryController::class);
+                Route::post('salesforces/part', [SalesSettleHistoryController::class, 'storePart']);
+                Route::post('salesforces/batch', [SalesSettleHistoryController::class, 'batch']);
+                Route::post('salesforces/{id}/deposit', [SalesSettleHistoryController::class, 'setDeposit']);
             });
             
             Route::prefix('realtime-histories')->group(function() {

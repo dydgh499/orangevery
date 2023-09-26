@@ -103,13 +103,14 @@ export function SettlementFunctionCollect(store: any) {
             const params = cloneDeep(store.params)
             const p = getSettleFormat(item, true)
             const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/settle-collect', Object.assign(params, p))
-            if(r.status == 201) {
+            if(r.data.result_cd == "0000")
+            {
                 snackbar.value.show('성공하였습니다.', 'success')
                 store.setChartProcess()
                 store.setTable()    
             }
             else
-                snackbar.value.show(r.data.message, 'error')
+                snackbar.value.show(r.data.result_msg, 'error')
         }
     }
     return {
