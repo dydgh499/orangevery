@@ -104,6 +104,7 @@ class PaymentModuleController extends Controller
                 $res = $this->payModules
                     ->where('brand_id', $request->user()->brand_id)
                     ->where('serial_num', $data['serial_num'])
+                    ->where('is_delete', false)
                     ->exists();
                 if($res)
                     return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
@@ -167,6 +168,7 @@ class PaymentModuleController extends Controller
                     ->where('brand_id', $request->user()->brand_id)
                     ->where('serial_num', $data['serial_num'])
                     ->where('id', '!=', $id)
+                    ->where('is_delete', false)
                     ->exists();
                 if($res)
                     return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
