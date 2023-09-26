@@ -97,7 +97,7 @@ export function SettlementFunctionCollect(store: any) {
     const isAbleMchtDepositCollect = (is_mcht: boolean) => {
         return getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit && is_mcht
     }
-i
+
     const settleCollect = async(name:string, item:Settle) => {
         if (await alert.value.show('정말 '+name+'님에게 정산금을 이체한 후 정산 하시겠습니까?')) {
             const params = cloneDeep(store.params)
