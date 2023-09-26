@@ -62,7 +62,7 @@ provide('exporter', exporter)
                                 <VCheckbox v-model="selected" :value="item[_key]" :label="`#${item[_key]}`" class="check-label" style="min-inline-size: 1em;" v-if="getUserLevel() >= 35"/>
                                 <span v-else> #{{ item[_key] }}</span>
                             </span>
-                            <span v-else-if="(_key).toString().includes('amount')" style="font-weight: bold;">
+                            <span v-else-if="(_key).toString().includes('amount') || (_key).toString().includes('_fee')" style="font-weight: bold;">
                                 {{ (item[_key] as number).toLocaleString() }}
                             </span>
                             <span v-else-if="_key === 'deposit_status'">

@@ -94,6 +94,8 @@ class SettleHistoryController extends Controller
             for ($i=0; $i < count($request->datas); $i++) 
             { 
                 $data = $request->data('mcht_id', $request->datas[$i]);
+                $data['settle_fee'] = $request->datas[$i]['settle_fee'];
+
                 $query = Transaction::where('mcht_id', $data['mcht_id']);
                 $c_res = $this->settle_mcht_hist->create($data);
                 $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);    
@@ -183,19 +185,18 @@ class SettleHistoryController extends Controller
     public function settleCollect(CreateSettleHistoryRequest $request)
     {
         //mid, tid
-        $trans = Transaction::where('mcht_id', $request->id)
+        $trx_ids = Transaction::where('mcht_id', $request->id)
             ->globalFilter()
             ->settleFilter('mcht_settle_id')
             ->settleTransaction()
-            ->get();
-        print_r(json_decode(json_encode($trans), true));
-        $data = $request->all();
+            ->pluck('id')->all();
+
+        $data = $request->data('mcht_id');
+        $data['settle_fee'] = $request->settle_fee;
         $data['trx_ids'] = $trx_ids;
-        $info = [
-            'mcht_id'
-        ];
+        print_r($data);
         /*
-        $url = $this->base_noti_url.'/deposit-collect-settle';
+        $url = $this->base_noti_url.'/settle-collect';
         $res = post($url, $data);
         */
         return $this->response(1);        

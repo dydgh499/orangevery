@@ -83,7 +83,7 @@ class CreateSettleHistoryRequest extends FormRequest
             'cxl_amount' => $this->cxl_amount,
             'appr_amount' => $this->appr_amount,
             'deduct_amount' => $this->deduct_amount,
-            'settle_amount' => $this->settle_amount,            
+            'settle_amount' => $this->settle_amount,
             'trx_amount'=> $this->trx_amount,
             'settle_dt' => $this->dt,
         ];
