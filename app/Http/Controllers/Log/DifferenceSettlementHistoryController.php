@@ -172,7 +172,7 @@ class DifferenceSettlementHistoryController extends Controller
             try
             {
                 $path   = $this->base_path.$pg_name;
-                $pg     = new $path();
+                $pg     = new $path($brands[$i]->rep_mcht_id);
                 $datas  = $pg->response($date);
                 $res = $this->manyInsert($this->difference_settlement_histories, $datas);
             }
