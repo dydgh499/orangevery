@@ -43,6 +43,7 @@ const addNewPaymodule = () => {
         pay_year_limit: 0,
         pay_month_limit: 0,
         pay_day_limit: 0,
+        pay_single_limit: 0,
         pay_disable_s_tm: null,
         pay_disable_e_tm: null,
         show_pay_view: true,

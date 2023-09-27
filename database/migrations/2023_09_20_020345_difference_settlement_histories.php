@@ -24,7 +24,10 @@ return new class extends Migration
             $table->date('settle_dt')->comment('정산 날짜');
             $table->integer('supply_amount')->comment('공급가액');
             $table->integer('vat_amount')->comment('부가세');
-            $table->integer('settle_amount')->comment('차액 정산금');
+            $table->integer('settle_amount')->comment('차액 정산금');            
+            $table->string('settle_result_msg', 50)->nullable()->comment('카드사 결과 메세지');
+            $table->string('card_company_result_msg', 150)->nullable()->comment('카드사 결과 메세지');
+            $table->string('mcht_section_name')->nullable()->comment('가맹점 구분명');            
             $table->timestamps();
         });
     }

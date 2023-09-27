@@ -498,13 +498,23 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
+                        
                         <VRow class="pt-3" v-if="corp.pv_options.paid.use_pay_limit && props.item.module_type != 0">
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>
-                                    <BaseQuestionTooltip :location="'top'" :text="'일 결제 한도'"
+                                    <BaseQuestionTooltip :location="'top'" :text="'단건 결제 한도'"
                                         :content="'결제 한도 금액: 1,000,000원 = 100 입력(이하동일)<br><b>온라인 결제</b>만 적용 가능합니다.'">
                                     </BaseQuestionTooltip>
                                 </template>
+                                <template #input>
+                                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_single_limit"
+                                        type="number" suffix="만원" :rules="[nullValidator]" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow class="pt-3" v-if="corp.pv_options.paid.use_pay_limit && props.item.module_type != 0">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>일 결제 한도</template>
                                 <template #input>
                                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_day_limit"
                                         type="number" suffix="만원" :rules="[nullValidator]" />

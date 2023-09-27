@@ -102,7 +102,16 @@ class PaymentModule
                 'USER_PK' => $mcht->USER_PK,
                 'created_at' => $this->current_time,
                 'updated_at' => $this->current_time,
+                //
+                'is_use_realtime_deposit' => $mcht->FIN_PK ? true : false,
+                'fin_id' => $mcht->FIN_PK,
+                'fin_trx_delay' => $mcht->RT_DELAY,
+                'cxl_type' => 2,
+                'comm_settle_type' => 0,
             ];
+            if($mcht->FIN_PK)
+                $item['cxl_type'] = $mcht->RT_CXL_TYPE;
+
             array_push($items, $item);
         }
         return $items;
@@ -144,7 +153,15 @@ class PaymentModule
                 'USER_PK' => $mcht->USER_PK,
                 'created_at' => $this->current_time,
                 'updated_at' => $this->current_time,
-            ];
+                'is_use_realtime_deposit' => $mcht->FIN_PK ? true : false,
+                'fin_id' => $mcht->FIN_PK,
+                'fin_trx_delay' => $mcht->RT_DELAY,
+                'cxl_type' => 2,
+                'comm_settle_type' => 0,
+            ];            
+            if($mcht->FIN_PK)
+                $item['cxl_type'] = $mcht->RT_CXL_TYPE;
+
             array_push($items, $item);
         }
         return $items;
@@ -182,6 +199,12 @@ class PaymentModule
                 'USER_PK' => $mcht->USER_PK,
                 'created_at' => $this->current_time,
                 'updated_at' => $this->current_time,
+                //
+                'is_use_realtime_deposit' => $mcht->FIN_PK ? true : false,
+                'fin_id' => $mcht->FIN_PK,
+                'fin_trx_delay' => $mcht->RT_DELAY,
+                'cxl_type' => 2,
+                'comm_settle_type' => 0,
             ];
             array_push($items, $item);
         }

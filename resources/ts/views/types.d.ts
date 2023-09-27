@@ -159,6 +159,7 @@ export interface PayModule {
     pay_year_limit: number,
     pay_month_limit: number,
     pay_day_limit: number,
+    pay_single_limit: number,
     pay_disable_s_tm: date | null,
     pay_disable_e_tm: date | null,
     contract_s_dt: date | null,
