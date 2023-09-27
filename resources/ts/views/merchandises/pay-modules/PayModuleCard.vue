@@ -486,7 +486,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3" v-if="corp.pv_options.paid.use_dup_pay_validation && props.item.module_type != 0">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'중복결제 허용회수'"
                                         :content="'입력된 카드번호를 통해 중복해서 결제가되었는지 검증합니다.<br>0 입력 시 허용회수를 검증하지 않으며, <b>온라인 결제</b>만 적용 가능합니다.'">
@@ -522,7 +522,7 @@ onMounted(() => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3" v-if="corp.pv_options.paid.use_pay_limit && props.item.module_type != 0">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>연 결제 한도</template>
                                 <template #input>
                                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_year_limit"
