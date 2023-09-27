@@ -345,6 +345,7 @@ class TransactionController extends Controller
         {
             $tran->brand_settle_amount = $trans[$i]['brand_settle_amount'];
             $tran->dev_settle_amount = $trans[$i]['dev_settle_amount'];
+            $tran->dev_realtime_settle_amount = $tran['dev_realtime_settle_amount'];
             $tran->mcht_settle_amount = $trans[$i]['mcht_settle_amount'];
             $tran->sales0_settle_amount = $trans[$i]['sales0_settle_amount'];
             $tran->sales1_settle_amount = $trans[$i]['sales1_settle_amount'];
