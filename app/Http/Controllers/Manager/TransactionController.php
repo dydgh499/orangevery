@@ -332,7 +332,7 @@ class TransactionController extends Controller
 
     public function _test()
     {
-        $dev_settle_type = 0;
+        $dev_settle_type = 1;
         $db_trans = $this->transactions
             ->where('ps_id', 182)
             ->orderBy('transactions.id', 'desc')
