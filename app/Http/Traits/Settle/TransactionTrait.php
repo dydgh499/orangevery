@@ -136,12 +136,17 @@ trait TransactionTrait
     
     public function getTotalCols($settle_key, $group_key=null)
     {
+        if($settle_key == 'dev_settle_amount')
+            $profit  = "(SUM($settle_key) + SUM(dev_realtime_settle_amount)) AS profit";
+        else
+            $profit = "SUM($settle_key) AS profit";
+
         $cols = [
             DB::raw("SUM(IF(is_cancel = 0, amount, 0)) AS appr_amount"),
             DB::raw("SUM(is_cancel = 0) AS appr_count"),
             DB::raw("SUM(IF(is_cancel = 1, amount, 0)) AS cxl_amount"),
             DB::raw("SUM(is_cancel = 1) AS cxl_count"),
-            DB::raw("SUM($settle_key) AS profit"),
+            DB::raw($profit),
         ];
         if($group_key)
             array_push($cols, $group_key);

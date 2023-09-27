@@ -41,7 +41,11 @@ class TransactionController extends Controller
     protected function getTransactionData($request, $query)
     {
         [$settle_key, $group_key] = $this->getSettleCol($request);
-        array_push($this->cols, $settle_key." AS profit");
+        if($settle_key == 'dev_settle_amount')
+            $profit = DB::raw("($settle_key + dev_realtime_settle_amount) AS profit");
+        else
+            $profit = "$settle_key AS profit";
+        array_push($this->cols, $profit);
 
         $page      = $request->input('page');
         $page_size = $request->input('page_size');
