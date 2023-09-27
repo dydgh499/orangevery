@@ -21,12 +21,13 @@ class PaymentModule
         $this->current_time = date('Y-m-d H:i:s');
     }
 
-    public function connectPGInfo($payvery_pgs, $paywell_to_payvery_pgs, $payvery_pss, $paywell_to_payvery_pss)
+    public function connectPGInfo($payvery_pgs, $paywell_to_payvery_pgs, $payvery_pss, $paywell_to_payvery_pss, $paywell_to_payvery_finance)
     {
         $this->payvery_pgs = $payvery_pgs;
         $this->payvery_pss = $payvery_pss;
         $this->paywell_to_payvery_pgs = $paywell_to_payvery_pgs;
         $this->paywell_to_payvery_pss = $paywell_to_payvery_pss;
+        $this->paywell_to_payvery_finance = $paywell_to_payvery_finance;
     }
 
     public function connectClsInfo($payvery_cls, $paywell_to_payvery_cls)
@@ -104,7 +105,7 @@ class PaymentModule
                 'updated_at' => $this->current_time,
                 //
                 'is_use_realtime_deposit' => $mcht->FIN_PK ? true : false,
-                'fin_id' => $mcht->FIN_PK,
+                'fin_id' => $mcht->FIN_PK ? $this->paywell_to_payvery_finance[$mcht->FIN_PK] : 0,
                 'fin_trx_delay' => $mcht->RT_DELAY,
                 'cxl_type' => 2,
                 'comm_settle_type' => 0,
@@ -154,11 +155,11 @@ class PaymentModule
                 'created_at' => $this->current_time,
                 'updated_at' => $this->current_time,
                 'is_use_realtime_deposit' => $mcht->FIN_PK ? true : false,
-                'fin_id' => $mcht->FIN_PK,
+                'fin_id' => $mcht->FIN_PK ? $this->paywell_to_payvery_finance[$mcht->FIN_PK] : 0,
                 'fin_trx_delay' => $mcht->RT_DELAY,
                 'cxl_type' => 2,
                 'comm_settle_type' => 0,
-            ];            
+            ];
             if($mcht->FIN_PK)
                 $item['cxl_type'] = $mcht->RT_CXL_TYPE;
 
@@ -201,11 +202,14 @@ class PaymentModule
                 'updated_at' => $this->current_time,
                 //
                 'is_use_realtime_deposit' => $mcht->FIN_PK ? true : false,
-                'fin_id' => $mcht->FIN_PK,
+                'fin_id' => $mcht->FIN_PK ? $this->paywell_to_payvery_finance[$mcht->FIN_PK] : 0,
                 'fin_trx_delay' => $mcht->RT_DELAY,
                 'cxl_type' => 2,
                 'comm_settle_type' => 0,
             ];
+            if($mcht->FIN_PK)
+                $item['cxl_type'] = $mcht->RT_CXL_TYPE;
+
             array_push($items, $item);
         }
         return $items;
@@ -246,7 +250,15 @@ class PaymentModule
                 'USER_PK' => $mcht->USER_PK,
                 'created_at' => $this->current_time,
                 'updated_at' => $this->current_time,
-            ];
+                //
+                'is_use_realtime_deposit' => $mcht->FIN_PK ? true : false,
+                'fin_id' => $mcht->FIN_PK ? $this->paywell_to_payvery_finance[$mcht->FIN_PK] : 0,
+                'fin_trx_delay' => $mcht->RT_DELAY,
+                'cxl_type' => 2,
+                'comm_settle_type' => 0,
+            ];            
+            if($mcht->FIN_PK)
+                $item['cxl_type'] = $mcht->RT_CXL_TYPE;
             array_push($items, $item);
         }
         return $items;
