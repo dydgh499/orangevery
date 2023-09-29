@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Models\Transaction;
 use App\Models\PaymentModule;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -22,12 +23,12 @@ use App\Enums\HistoryType;
 class PaymentModuleController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $payModules;
+    protected $pay_modules;
     protected $target;
 
-    public function __construct(PaymentModule $payModules)
+    public function __construct(PaymentModule $pay_modules)
     {
-        $this->payModules = $payModules;
+        $this->pay_modules = $pay_modules;
         $this->target = '결제모듈';
         $this->imgs = [];
     }
@@ -48,7 +49,10 @@ class PaymentModuleController extends Controller
     private function commonSelect($request, $is_all=false)
     {
         $search = $request->input('search', '');
-        $query = $this->payModules
+        $un_use = $request->input('un_use', '');
+        $un_use = $un_use === 'true' ? true : false;
+
+        $query = $this->pay_modules
             ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
             ->where('payment_modules.brand_id', $request->user()->brand_id);
         if($is_all == false)
@@ -62,6 +66,16 @@ class PaymentModuleController extends Controller
             $query = $query->where('payment_modules.mcht_id', $request->mcht_id);
         if($request->has('module_type'))
             $query = $query->where('payment_modules.module_type', $request->module_type);
+
+        if($un_use)
+        {
+            $before_month = Carbon::now()->subMonths(1)->format('Y-m-d');
+            $trans_pmod_ids = Transaction::where('brand_id', $request->user()->brand_id)
+                ->where('trx_dt', '>=', $before_month)
+                ->where('is_cancel', false)
+                ->distinct()->pluck('pmod_id')->all();
+            $query = $query->whereNotIn('payment_modules.id', $trans_pmod_ids);
+        }
 
         return $query->where(function ($query) use ($search) {
             return $query->where('payment_modules.mid', 'like', "%$search%")
@@ -101,7 +115,7 @@ class PaymentModuleController extends Controller
             $data = $request->data();
             if($data['module_type'] == 0 && $data['serial_num'] != '')
             {
-                $res = $this->payModules
+                $res = $this->pay_modules
                     ->where('brand_id', $request->user()->brand_id)
                     ->where('serial_num', $data['serial_num'])
                     ->where('module_type', 0)
@@ -112,10 +126,10 @@ class PaymentModuleController extends Controller
             }
 
             $res = DB::transaction(function () use($data) {
-                $res = $this->payModules->create($data);
+                $res = $this->pay_modules->create($data);
                 if($data['module_type'] != 0)
                 {
-                    $this->payModules
+                    $this->pay_modules
                         ->where('id', $res->id)
                         ->update(['pay_key' => $this->getNewPayKey($res->id)]);
                 }
@@ -141,7 +155,7 @@ class PaymentModuleController extends Controller
     {
         if($this->authCheck($request->user(), $id, 15))
         {
-            $data = $this->payModules->where('id', $id)->first();
+            $data = $this->pay_modules->where('id', $id)->first();
             return $data ? $this->response(0, $data) : $this->response(1000);
         }
         else
@@ -165,7 +179,7 @@ class PaymentModuleController extends Controller
 
             if($data['module_type'] == 0 && $data['serial_num'] != '')
             {
-                $res = $this->payModules
+                $res = $this->pay_modules
                     ->where('brand_id', $request->user()->brand_id)
                     ->where('serial_num', $data['serial_num'])
                     ->where('id', '!=', $id)
@@ -175,7 +189,7 @@ class PaymentModuleController extends Controller
                 if($res)
                     return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
             }
-            $res = $this->payModules->where('id', $id)->update($data);
+            $res = $this->pay_modules->where('id', $id)->update($data);
 
             operLogging(HistoryType::UPDATE, $this->target, $data, $data['note']);
             return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
@@ -194,8 +208,8 @@ class PaymentModuleController extends Controller
     {
         if($this->authCheck($request->user(), $id, 15))
         {
-            $res = $this->delete($this->payModules->where('id', $id));
-            $data = $this->payModules->where('id', $id)->first(['mcht_id', 'note']);
+            $res = $this->delete($this->pay_modules->where('id', $id));
+            $data = $this->pay_modules->where('id', $id)->first(['mcht_id', 'note']);
             
             operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->note);
             return $this->response($res, ['id'=>$id, 'mcht_id'=>$data->mcht_id]);
@@ -241,13 +255,13 @@ class PaymentModuleController extends Controller
         $brand_id = $request->user()->brand_id;
         $datas = $request->data();
 
-        $payModules = $datas->map(function ($data) use($current, $brand_id) {
+        $pay_modules = $datas->map(function ($data) use($current, $brand_id) {
             $data['brand_id'] = $brand_id;
             $data['created_at'] = $current;
             $data['updated_at'] = $current;
             return $data;
         })->toArray();
-        $res = $this->manyInsert($this->payModules, $payModules);
+        $res = $this->manyInsert($this->pay_modules, $pay_modules);
         return $this->response($res ? 1 : 990);        
     }
 
@@ -263,7 +277,7 @@ class PaymentModuleController extends Controller
             'merchandises.use_saleslip_prov',
             'merchandises.use_saleslip_sell',
         ];
-        $mcht = $this->payModules
+        $mcht = $this->pay_modules
             ->join('merchandises', 'merchandises.id', '=', 'payment_modules.mcht_id')
             ->where('payment_modules.id', $id)
             ->first($cols);
@@ -280,7 +294,7 @@ class PaymentModuleController extends Controller
         $cur_month = Carbon::now()->startOfMonth();
         $next_month = $cur_month->copy()->addMonth(1)->startOfMonth()->format('Y-m-d');
         $cur_month = $cur_month->format('Y-m-d');
-        $pay_modules = $this->payModules
+        $pay_modules = $this->pay_modules
             ->where('created_at', '>=', $cur_month)
             ->where('created_at', '<', $next_month)
             ->get(['tid']);
@@ -310,7 +324,7 @@ class PaymentModuleController extends Controller
     public function payKeyCreate(Request $request)
     {
         $pay_key = $this->getNewPayKey($request->id);
-        $res = $this->payModules
+        $res = $this->pay_modules
             ->where('id', $request->id)
             ->update(['pay_key' => $pay_key]);
         return $this->response(0, ['pay_key'=>$pay_key]);    

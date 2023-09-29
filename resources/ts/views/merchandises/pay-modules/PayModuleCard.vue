@@ -7,7 +7,7 @@ import {
     module_types, installments, abnormal_trans_limits, ship_out_stats, under_sales_types, 
     comm_settle_types, fin_trx_delays, cxl_types
  } from '@/views/merchandises/pay-modules/useStore'
-import { allLevels } from '@/views/salesforces/useStore'
+import { salesLevels } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
@@ -27,7 +27,6 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 
-const all_levels = allLevels()
 const { update, remove } = useRequestStore()
 const { pgs, pss, settle_types, terminals, finance_vans, psFilter, setFee } = useStore()
 
@@ -353,7 +352,11 @@ onMounted(() => {
                         <!-- 👉 정산일 -->
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>통신비 정산 타입</template>
+                                <template #name>
+                                    <BaseQuestionTooltip :location="'top'" :text="'통신비 정산 타입'"
+                                        :content="'통신비, 통신비 정산 타입, 개통일, 정산일, 정산주체가 설정되어있어야 적용됩니다.<br>ex)<br>통신비: 30,000<br>통신비 정산 타입: 개통월 M+2부터 적용<br>개통일: 2023-09-25<br>정산일: 1일<br>정산주체: 가맹점<br><br>통신비 차감적용일: 2023-11-01, 2023-12-01, 2024-01-01 ...'">
+                                    </BaseQuestionTooltip>
+                                    </template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.comm_settle_type"
                                         :items="comm_settle_types" prepend-inner-icon="ic-baseline-calendar-today" label="정산타입"
@@ -369,7 +372,7 @@ onMounted(() => {
                                 <template #input>
                                     <VTextField type="number" v-model="props.item.under_sales_amt"
                                         prepend-inner-icon="tabler-currency-won" placeholder="매출미달 차감금 입력"
-                                        persistent-placeholder suffix="만원" />
+                                        persistent-placeholder />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -411,7 +414,7 @@ onMounted(() => {
                                 <template #name>정산주체</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.comm_calc_level"
-                                        :items="all_levels" prepend-inner-icon="ph:share-network" label="정산자 선택"
+                                        :items="[{ id: 10, title: '가맹점' }].concat(salesLevels())" prepend-inner-icon="ph:share-network" label="정산자 선택"
                                         item-title="title" item-value="id" persistent-hint single-line />
                                 </template>
                             </CreateHalfVCol>

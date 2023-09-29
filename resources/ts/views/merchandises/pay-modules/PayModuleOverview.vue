@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { PayModule, Merchandise } from '@/views/types'
 import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue'
-import { getAllMerchandises } from '@/views/merchandises/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 const props = defineProps<Props>();
 const new_pay_modules = reactive<PayModule[]>([])
 const pay_modules = ref<PayModule[]>([])
-const merchandises = ref<Merchandise[]>([])
+const { mchts } = useSalesFilterStore()
 
 const addNewPaymodule = () => {
     new_pay_modules.push(<PayModule>{
@@ -28,9 +28,9 @@ const addNewPaymodule = () => {
         tid: '',
         serial_num: '',
         comm_settle_fee: 0,
-        comm_settle_day: 0,
+        comm_settle_day: 1,
         comm_settle_type: 0,
-        comm_calc_level: 0,
+        comm_calc_level: 10,
         under_sales_amt: 0,
         under_sales_limit:0,
         begin_dt: null,
@@ -56,12 +56,10 @@ const addNewPaymodule = () => {
 }
 if(props.item.id)
     pay_modules.value = await getAllPayModules(props.item.id)
-else
-    merchandises.value = await getAllMerchandises()
 </script>
 <template>
-    <PayModuleCard v-for="(item, index) in pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="merchandises"/>
-    <PayModuleCard v-for="(item, index) in new_pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="merchandises"/>
+    <PayModuleCard v-for="(item, index) in pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="mchts"/>
+    <PayModuleCard v-for="(item, index) in new_pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="mchts"/>
     <!-- 👉 submit -->
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">

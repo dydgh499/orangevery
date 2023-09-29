@@ -269,8 +269,7 @@ class PaymentModule
         $a = $this->getTerminalModule($paywell, $payvery, $brand_id, $before_brand_id);
         $b = $this->getHandModule($paywell, $payvery, $brand_id, $before_brand_id);
         $c = $this->getAuthModule($paywell, $payvery, $brand_id, $before_brand_id);
-        $d = $this->getEasyModule($paywell, $payvery, $brand_id, $before_brand_id);    
-
+        $d = $this->getEasyModule($paywell, $payvery, $brand_id, $before_brand_id);
         
         $a = $this->getPayveryFormat($a, 'USER_PK');
         $res = $this->manyInsert($payvery->table('payment_modules'), $a);

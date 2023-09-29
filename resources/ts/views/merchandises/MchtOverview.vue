@@ -13,7 +13,7 @@ interface Props {
     item: Merchandise,
 }
 const props = defineProps<Props>()
-const { sales, classification } = useSalesFilterStore()
+const { sales } = useSalesFilterStore()
 const { cus_filters } = useStore()
 const levels = corp.pv_options.auth.levels
 const fee_histories = ref(<any[]>([]))
@@ -35,7 +35,6 @@ const hintSalesApplyFee = (sales: any): string => {
         return ''
 }
 onMounted(async () => {
-    await classification()
     fee_histories.value = await feeApplyHistoires()
     props.item.sales0_fee = props.item.sales0_fee.toFixed(3)
     props.item.sales1_fee = props.item.sales1_fee.toFixed(3)
@@ -97,9 +96,9 @@ onMounted(async () => {
                                         :items="[{ id: null, sales_name: '선택안함' }].concat(sales[5].value)"
                                         prepend-inner-icon="ph:share-network" :label="levels.sales5_name + '선택'"
                                         item-title="sales_name" item-value="id" persistent-hint
-                                        :hint="hintSalesApplyFee(sales5)" return-object />
+                                        :hint="hintSalesApplyFee(sales5)" return-object/>
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                <VCol cols="12" :md="props.item.id ? 2 : 4">
                                     <VTextField v-model="props.item.sales5_fee" type="number" suffix="%"
                                         :rules="[requiredValidator]" />
                                 </VCol>
@@ -120,7 +119,7 @@ onMounted(async () => {
                                         item-title="sales_name" item-value="id" persistent-hint
                                         :hint="hintSalesApplyFee(sales4)" return-object />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                <VCol cols="12" :md="props.item.id ? 2 : 4">
                                     <VTextField v-model="props.item.sales4_fee" type="number" suffix="%"
                                         :rules="[requiredValidator]" />
                                 </VCol>
@@ -141,7 +140,7 @@ onMounted(async () => {
                                         item-title="sales_name" item-value="id" persistent-hint
                                         :hint="hintSalesApplyFee(sales3)" return-object />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                <VCol cols="12" :md="props.item.id ? 2 : 4">
                                     <VTextField v-model="props.item.sales3_fee" type="number" suffix="%"
                                         :rules="[requiredValidator]" />
                                 </VCol>
@@ -162,7 +161,7 @@ onMounted(async () => {
                                         item-title="sales_name" item-value="id" persistent-hint
                                         :hint="hintSalesApplyFee(sales2)" return-object />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                <VCol cols="12" :md="props.item.id ? 2 : 4">
                                     <VTextField v-model="props.item.sales2_fee" type="number" suffix="%"
                                         :rules="[requiredValidator]" />
                                 </VCol>
@@ -183,7 +182,7 @@ onMounted(async () => {
                                         item-title="sales_name" item-value="id" persistent-hint
                                         :hint="hintSalesApplyFee(sales1)" return-object />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                <VCol cols="12" :md="props.item.id ? 2 : 4">
                                     <VTextField v-model="props.item.sales1_fee" type="number" suffix="%"
                                         :rules="[requiredValidator]" />
                                 </VCol>
@@ -204,7 +203,7 @@ onMounted(async () => {
                                         item-title="sales_name" item-value="id" persistent-hint
                                         :hint="hintSalesApplyFee(sales0)" return-object />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                <VCol cols="12" :md="props.item.id ? 2 : 4">
                                     <VTextField v-model="props.item.sales0_fee" type="number" suffix="%"
                                         :rules="[requiredValidator]" />
                                 </VCol>
@@ -224,7 +223,7 @@ onMounted(async () => {
                                     <VTextField v-model="props.item.trx_fee" type="number" suffix="%"
                                         :rules="[requiredValidator]" />
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                <VCol cols="12" :md="props.item.id ? 2 : 4">
                                     <VTextField v-model="props.item.hold_fee" type="number" suffix="%"
                                         :rules="[requiredValidator]" />
                                 </VCol>

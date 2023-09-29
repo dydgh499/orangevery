@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Models\Transaction;
 use App\Models\PaymentModule;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -11,6 +12,7 @@ use App\Http\Traits\StoresTrait;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class TerminalController extends Controller
 {
@@ -34,6 +36,9 @@ class TerminalController extends Controller
     {
         $module_type = $request->input('module_type', '');
         $search = $request->input('search', '');
+        $un_use = $request->input('un_use', '');
+        $un_use = $un_use === 'true' ? true : false;
+        
         $query = $this->payModules
             ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
             ->where('payment_modules.is_delete', false);
@@ -48,6 +53,16 @@ class TerminalController extends Controller
         if($request->ship_out_stat != null)
             $query = $query->where('payment_modules.ship_out_stat', $request->ship_out_stat);
 
+        if($un_use)
+        {
+            $before_month = Carbon::now()->subMonths(1)->format('Y-m-d');
+            $trans_pmod_ids = Transaction::where('brand_id', $request->user()->brand_id)
+                ->where('trx_dt', '>=', $before_month)
+                ->where('is_cancel', false)
+                ->distinct()->pluck('pmod_id')->all();
+            $query = $query->whereNotIn('payment_modules.id', $trans_pmod_ids);
+        }
+        
         $query = $query->where(function ($query) use ($search) {
             return $query->where('payment_modules.mid', 'like', "%$search%")
                 ->orWhere('payment_modules.tid', 'like', "%$search%")

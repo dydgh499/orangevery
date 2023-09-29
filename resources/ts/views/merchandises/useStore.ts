@@ -3,7 +3,7 @@ import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { Merchandise } from '@/views/types'
-import { axios, getUserLevel } from '@axios'
+import { getUserLevel } from '@axios'
 import corp from '@corp'
 
 export const useSearchStore = defineStore('mchtSearchStore', () => {
@@ -160,10 +160,4 @@ export const defaultItemInfo = () => {
     return {
         path, item
     }
-}
-
-export const getAllMerchandises = async(module_type:number|null = null) => {
-    const url = '/api/v1/manager/merchandises/all' + (module_type != null ? '?module_type='+module_type : '')
-    const r = await axios.get(url)
-    return r.data.content
 }

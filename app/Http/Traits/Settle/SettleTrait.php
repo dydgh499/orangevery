@@ -53,8 +53,8 @@ trait SettleTrait
             ->globalFilter()
             ->settleTransaction()
             ->distinct()
-            ->get([$col])
-            ->pluck([$col]);
+            ->pluck($col)
+            ->all();
     }
 
     private function commonDeduct($orm, $col, $request)

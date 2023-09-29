@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import { getAllMerchandises } from '@/views/merchandises/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { requiredValidator, nullValidator } from '@validators'
-import type { Complaint, Merchandise, Options } from '@/views/types'
+import type { Complaint } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -13,21 +13,8 @@ interface Props {
 
 const props = defineProps<Props>()
 const { pgs } = useStore()
+const { mchts } = useSalesFilterStore()
 
-const merchandises = ref<Merchandise[]>([])
-const mcht = ref(<{id:number|null, mcht_name: string}>{ id: null, mcht_name: '가맹점 선택' })
-merchandises.value = await getAllMerchandises()
-if(props.item.mcht_id) {
-    const _mcht = merchandises.value.find(item => item.id === props.item.mcht_id)
-    mcht.value = {id: _mcht?.id as number, mcht_name: _mcht?.mcht_name as string}
-}
-
-onMounted(() => {
-    props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
-})
-watchEffect(() => {
-    props.item.mcht_id = mcht.value.id
-})
 </script>
 <template>
     <VRow class="match-height">
@@ -84,9 +71,9 @@ watchEffect(() => {
                     <CreateHalfVCol :mdl="3" :mdr="9">
                         <template #name>가맹점 선택</template>
                         <template #input>
-                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht" :items="merchandises"
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id" :items="mchts"
                                 prepend-inner-icon="tabler-building-store" label="가맹점 선택" item-title="mcht_name"
-                                item-value="id" single-line :rules=[nullValidator] return-object />
+                                item-value="id" single-line :rules=[nullValidator] />
                         </template>
                     </CreateHalfVCol>
                     <CreateHalfVCol :mdl="3" :mdr="9">

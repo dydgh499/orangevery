@@ -72,10 +72,18 @@ class SalesforceController extends Controller
         $data = $this->getIndexData($request, $query, 'id', $cols);
         $data = $this->getSettleInformation($data, $settle_key);
         // set terminals
-        $sales_id = collect($data['content'])->pluck('id')->all();
-        if(count($sales_id))
+        if(count($sales_ids))
         {
-
+            $settle_day  = date('d', strtotime($request->dt));
+            $pay_modules = collect(
+                Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
+                    ->whereIn("merchandises.".$target_id, $sales_ids)
+                    ->where('payment_modules.comm_settle_day', $settle_day)
+                    ->where('payment_modules.comm_calc_level', $level)
+                    ->where('payment_modules.begin_dt', '<', $request->dt)
+                    ->get(["payment_modules.*", "merchandises.".$target_id])
+            );
+            $data = $this->setTerminalCost($data, $pay_modules, $request->dt, $target_id);
         }
         // set total settle
         $data = $this->setSettleFinalAmount($data);
@@ -95,6 +103,7 @@ class SalesforceController extends Controller
             ],
             'terminal' => [
                 'amount' => 0,
+                'under_sales_amount' => 0,
             ],
             'settle' => [
                 'amount' => 0,
@@ -111,6 +120,7 @@ class SalesforceController extends Controller
             $transactions = $transactions->merge($data->transactions);
             $total['deduction']['amount'] += $data->deduction['amount'];
             $total['terminal']['amount'] += $data->terminal['amount'];
+            $total['terminal']['under_sales_amount'] += $data->terminal['under_sales_amount'];
             $total['settle']['amount'] += $data->settle['amount'];
             $total['settle']['deposit'] += $data->settle['deposit'];
             $total['settle']['transfer'] += $data->settle['transfer'];

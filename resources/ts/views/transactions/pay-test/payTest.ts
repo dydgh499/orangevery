@@ -1,7 +1,7 @@
 import { getAllPayModules, payModFilter } from '@/views/merchandises/pay-modules/useStore'
-import { getAllMerchandises } from '@/views/merchandises/useStore'
 import { pay } from '@/views/pay/pay'
 import type { Merchandise, PayGateway, PayModule } from '@/views/types'
+import { axios } from '@axios'
 
 export const payTest = (module_type:number) => {
     const pay_modules = reactive<PayModule[]>([])
@@ -17,6 +17,12 @@ export const payTest = (module_type:number) => {
         pmod_id.value = payModFilter(pay_modules, filter, pmod_id.value as number) ?? 0
         return filter
     })
+    
+    const getAllMerchandises = async(module_type:number|null = null) => {
+        const url = '/api/v1/manager/merchandises/all' + (module_type != null ? '?module_type='+module_type : '')
+        const r = await axios.get(url)
+        return r.data.content
+    }
     
     watchEffect(async() => { 
         Object.assign(pay_modules, await getAllPayModules())

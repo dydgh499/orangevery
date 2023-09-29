@@ -2,14 +2,14 @@
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useRegisterStore } from '@/views/services/bulk-register/PayModRegisterStore'
-import { getAllMerchandises } from '@/views/merchandises/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
 import { allLevels } from '@/views/salesforces/useStore'
 import SettleTypeExplainDialog from '@/views/services/bulk-register/SettleTypeExplainDialog.vue'
 import PGExplainDialog from '@/views/services/bulk-register/PGExplainDialog.vue'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { Registration } from '@/views/registration'
-import type { PayModule, Options, Merchandise } from '@/views/types'
+import type { PayModule, Options } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import corp from '@corp';
 
@@ -17,7 +17,7 @@ const { store } = useSearchStore()
 const { pgs, pss, settle_types, terminals } = useStore()
 const { head, headers } = useRegisterStore()
 
-const merchandises = ref<Merchandise[]>([])
+const { mchts } = useSalesFilterStore()
 const all_levels = allLevels()
 const auth_types: Options[] = [
     { id: 0, title: '비인증',},
@@ -37,7 +37,6 @@ const is_clear = ref<boolean>(false)
 
 const settleTypeExplain = ref()
 const pgExplain = ref()
-merchandises.value = await getAllMerchandises()
 
 const validate = () => {
     for (let i = 0; i < items.value.length; i++) {
@@ -46,7 +45,7 @@ const validate = () => {
         const settle_type = settle_types.find(item => item.id === items.value[i].settle_type)
         const module_type = module_types.find(item => item.id === items.value[i].module_type)
         const installment = installments.find(item => item.id === items.value[i].installment)
-        const mcht = merchandises.value.find(item => item.mcht_name === items.value[i].mcht_name)
+        const mcht = mchts.value.find(item => item.mcht_name === items.value[i].mcht_name)
 
         if (mcht == null) {
             snackbar.value.show((i + 1) + '번째 결제모듈의 가맹점 상호가 이상합니다.', 'error')

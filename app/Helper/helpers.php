@@ -187,7 +187,7 @@
             case 50;
                 return 6;
             default:
-                return -2;
+                return "UNKNOWUN";
         }
     }
 

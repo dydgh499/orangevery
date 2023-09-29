@@ -48,9 +48,15 @@ class MerchandiseController extends Controller
         $mcht_ids = collect($data['content'])->pluck('id')->all();
         if(count($mcht_ids))
         {
-            $query = PaymentModule::whereIn('mcht_id', $mcht_ids);
-            [$data, $pay_modules] = $this->setSettleTerminals($query, $data, 10, $request->dt);
-            $data = $this->setSettleUnderAmount($data, $pay_modules, 'mcht_id', $request->dt);
+            $settle_day     = date('d', strtotime($request->dt));
+            $pay_modules    = collect(
+                PaymentModule::whereIn('mcht_id', $mcht_ids)
+                ->where('comm_settle_day', $settle_day)
+                ->where('comm_calc_level', 10)
+                ->where('begin_dt', '<', $request->dt)
+                ->get()
+            );
+            $data = $this->setTerminalCost($data, $pay_modules, $request->dt, 'mcht_id');
         }
         // set total settle
         $data = $this->setSettleFinalAmount($data);
@@ -71,6 +77,7 @@ class MerchandiseController extends Controller
             ],
             'terminal' => [
                 'amount' => 0,
+                'under_sales_amount' => 0,
             ],
             'settle' => [
                 'amount' => 0,
@@ -87,6 +94,7 @@ class MerchandiseController extends Controller
             $transactions = $transactions->merge($data->transactions);
             $total['deduction']['amount'] += $data->deduction['amount'];
             $total['terminal']['amount'] += $data->terminal['amount'];
+            $total['terminal']['under_sales_amount'] += $data->terminal['under_sales_amount'];
             $total['settle']['amount'] += $data->settle['amount'];
             $total['settle']['deposit'] += $data->settle['deposit'];
             $total['settle']['transfer'] += $data->settle['transfer'];

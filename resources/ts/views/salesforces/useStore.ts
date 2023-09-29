@@ -1,6 +1,6 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
-import type { Options, Salesforce } from '@/views/types'
+import type { Merchandise, Options, Salesforce } from '@/views/types'
 import { axios, getUserLevel } from '@axios'
 import corp from '@corp'
 
@@ -142,7 +142,12 @@ export const feeApplyHistoires = async () => {
 
 export const useSalesFilterStore = () => {
     const sales = Array.from({ length: 6 }, () => ref<any[]>([]))
-    onMounted(() => { classification() })
+    const mchts = ref(<Merchandise[]>([]))
+    onMounted(() => { 
+        classification() 
+        getAllMchts()
+    })
+
     const classification = async () => {
         const r = await axios.get('/api/v1/manager/salesforces/classification')
         const keys = Object.keys(r.data);
@@ -150,8 +155,23 @@ export const useSalesFilterStore = () => {
             sales[index].value = r.data[keys[index]]
         }
     }
+
+    const getAllMchts = async() => {
+        const url = '/api/v1/manager/merchandises/all'
+        const r = await axios.get(url)
+        mchts.value = r.data.content
+    }
+
+    const getAllSales = () => {
+        return sales
+    }
+
+    const getUnderSales = () => {
+        return mchts
+    }
     return {
         sales,
+        mchts,
         classification,
     }
 }

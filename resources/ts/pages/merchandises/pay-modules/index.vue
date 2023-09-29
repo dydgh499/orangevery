@@ -57,7 +57,7 @@ onMounted(() => {
         }
     })
 })
-watchEffect(() => {    
+watchEffect(() => {
     store.setChartProcess()
     store.params.module_type = store.params.module_type
 })
@@ -73,6 +73,11 @@ watchEffect(() => {
                     </VCol>
                 </template>
             </BaseIndexFilterCard>
+        </template>
+        <template #index_extra_field>
+            <div class="demo-space-x">
+                <VSwitch v-model="store.params.un_use" label="최근 1달 미결제 결제모듈 조회" color="primary" />
+            </div>
         </template>
         <template #headers>
             <tr>

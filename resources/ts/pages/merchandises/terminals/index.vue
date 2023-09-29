@@ -8,8 +8,10 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { user_info, getUserLevel } from '@axios'
 
 const { pgs, pss, settle_types, terminals } = useStore()
-
 const { store, head, exporter } = useSearchStore()
+
+store.params.un_use = false
+
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
@@ -47,6 +49,11 @@ watchEffect(() => {
                     </VCol>
                 </template>
             </BaseIndexFilterCard>
+        </template>
+        <template #index_extra_field>
+            <div class="demo-space-x">
+                <VSwitch v-model="store.params.un_use" label="최근 1달 미결제 단말기 조회" color="primary" />
+            </div>
         </template>
         <template #headers>
             <tr>

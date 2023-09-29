@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import type { NotiUrl, Merchandise } from '@/views/types'
-import NotiCard from '@/views/merchandises/noti-urls/NotiCard.vue'
-
-import { getAllMerchandises } from '@/views/merchandises/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { getAllNotiUrls } from '@/views/merchandises/noti-urls/useStore'
+import NotiCard from '@/views/merchandises/noti-urls/NotiCard.vue'
 
 interface Props {
     item: Merchandise,
@@ -11,8 +10,8 @@ interface Props {
 const props = defineProps<Props>();
 const new_noti_urls = reactive<NotiUrl[]>([])
 const noti_urls = reactive<NotiUrl[]>([])
-const merchandises = ref<Merchandise[]>([])
 
+const { mchts } = useSalesFilterStore()
 const addNewNotiUrl = () => {
     new_noti_urls.push(<NotiUrl>{
         id: 0,
@@ -24,12 +23,11 @@ const addNewNotiUrl = () => {
 }
 if(props.item.id)
     Object.assign(noti_urls, await getAllNotiUrls(props.item.id))
-else
-    merchandises.value = await getAllMerchandises()
+
 </script>
 <template>
-    <NotiCard v-for="(item, index) in noti_urls" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="merchandises"/>
-    <NotiCard v-for="(item, index) in new_noti_urls" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="merchandises"/>
+    <NotiCard v-for="(item, index) in noti_urls" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="mchts"/>
+    <NotiCard v-for="(item, index) in new_noti_urls" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="mchts"/>
     <!-- 👉 submit -->
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">

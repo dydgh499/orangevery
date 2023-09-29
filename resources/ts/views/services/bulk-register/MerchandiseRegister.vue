@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { businessNumValidator, lengthValidatorV2 } from '@validators'
+import { lengthValidatorV2 } from '@validators'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useRegisterStore } from '@/views/services/bulk-register/MchtRegisterStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
@@ -15,7 +15,7 @@ interface extendMerchandise extends Merchandise {
 }
 
 const { cus_filters } = useStore()
-const { sales, classification } = useSalesFilterStore()
+const { sales } = useSalesFilterStore()
 const { head, headers, levels } = useRegisterStore()
 const { ExcelReader, isEmpty, openFilePicker, bulkRegister } = Registration()
 
@@ -24,8 +24,6 @@ const excel = ref()
 const items = ref<extendMerchandise[]>([])
 const is_clear = ref<boolean>(false)
 const banksExplain = ref()
-
-classification()
 
 const isNotExistSalesforce = (is_use: boolean, sales_idx: number, item_idx: number) => {
     const sales_id = 'sales' + sales_idx + '_id';
