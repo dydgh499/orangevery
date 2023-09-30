@@ -205,7 +205,20 @@ class AuthController extends Controller
                 if($res['code'] == 500)
                     return $this->extendResponse(1000, '통신 과정에서 에러가 발생했습니다.');
                 else
+                {
+                    if(10000000 < $bonaeja['min_balance_limit'])
+                    {
+                        $sms = [
+                            'user_id'   => $bonaeja['user_id'],
+                            'sender'    => $bonaeja['sender_phone'],
+                            'api_key'   => $bonaeja['api_key'],
+                            'receiver'  => $bonaeja['receive_phone'],
+                            'msg'       => "[".$brand->name."]\n예치금이 부족합니다. 예치금을 충전해주세요.(현재 잔액:".number_format(10000000)+"원)",
+                        ];
+                        $_res = post("https://api.bonaeja.com/api/msg/v1/send", $sms);    
+                    }
                     return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1000, $res['body']['message']);
+                }
             }    
         }
     }

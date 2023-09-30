@@ -306,7 +306,7 @@ class MerchandiseController extends Controller
         ];
         $data = $this->commonSelect($request);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-        $salesforces    = globalGetSalesByIds($sales_ids);
+        $salesforces    = globalGetSalesByIds($sales_ids, false);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
         return $this->response(0, $data);
     }

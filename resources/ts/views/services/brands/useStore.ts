@@ -185,7 +185,9 @@ export const defaultItemInfo = () => {
                 bonaeja: {
                     user_id: '',
                     api_key: '',
-                    sender_phone: ''
+                    sender_phone: '',
+                    receive_phone: '',
+                    min_balance_limit: 0
                 }
             })
         },

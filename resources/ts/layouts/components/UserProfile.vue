@@ -45,7 +45,7 @@ const logout = async () => {
     pay_token.value = ''
     user_info.value = {}
     ability.update(initialAbility)
-    location.href = '/'
+    router.replace('/')
 }
 user_info.value.profile_img = user_info.value.profile_img ? user_info.value.profile_img : avatars[Math.floor(Math.random() * avatars.length)]
 </script>

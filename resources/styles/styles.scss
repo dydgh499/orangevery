@@ -86,12 +86,11 @@ th {
 .dp__theme_dark,
 .dp__theme_light {
   --dp-border-color-hover: rgb(var(--v-global-theme-primary)) !important;
-}
-
-.dp__theme_dark {
-  --dp-background-color: rgb(var(--v-theme-background)) !important;
+  --dp-border-color: rgb(var(--v-border-color)) !important;
+  --dp-background-color: rgb(var(--v-theme-surface)) !important;
 }
 
 :root {
   --dp-border-radius: 0.3em !important;
+  --dp-button-height: 40px !important;
 }

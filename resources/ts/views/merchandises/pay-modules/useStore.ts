@@ -199,7 +199,8 @@ export const getAllPayModules = async(mcht_id:number|null=null) => {
     catch (e: any) {
         pay_token.value = ''
         user_info.value = {}
-        location.href = '/'
+        const router = useRouter()
+        router.replace('/')
         return []
     }
 }

@@ -201,9 +201,12 @@
         })->unique();
     }
 
-    function globalGetSalesByIds($sales_ids)
+    function globalGetSalesByIds($sales_ids, $is_all=true)
     {        
-        $salesforces = Salesforce::whereIn('id', $sales_ids)->get(['id', 'sales_name', 'settle_tax_type']);
+        $query = Salesforce::whereIn('id', $sales_ids);
+        if($is_all == false)
+            $query = $query->where('is_delete', false);
+        $salesforces = $query->get(['id', 'sales_name', 'settle_tax_type']);
         return globalGetIndexingByCollection($salesforces);
     }
 

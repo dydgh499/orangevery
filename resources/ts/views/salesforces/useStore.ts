@@ -25,6 +25,25 @@ export const getLevelByIndex = (level:number) => {
     }
 }
 
+export const getIndexByLevel = (idx:number) => {
+    switch(idx) {
+        case 0:
+            return 13;
+        case 1:
+            return 15;
+        case 2:
+            return 17;
+        case 3:
+            return 20;
+        case 4:
+            return 25;
+        case 5:
+            return 30;
+        default:
+            return 0;
+    }
+}
+
 export const settleDays = () => {
     return <Options[]>([
         {id:null, title: '적용안함'}, {id:0, title:'일요일'},
@@ -141,18 +160,20 @@ export const feeApplyHistoires = async () => {
 }
 
 export const useSalesFilterStore = () => {
+    const all_sales = Array.from({ length: 6 }, () => <any[]>([]))
     const sales = Array.from({ length: 6 }, () => ref<any[]>([]))
     const mchts = ref(<Merchandise[]>([]))
-    onMounted(() => { 
-        classification() 
-        getAllMchts()
+    onMounted(async () => { 
+        await classification() 
+        await getAllMchts()
     })
 
     const classification = async () => {
         const r = await axios.get('/api/v1/manager/salesforces/classification')
         const keys = Object.keys(r.data);
-        for (let index = 0; index < keys.length; index++) {           
-            sales[index].value = r.data[keys[index]]
+        for (let i = 0; i < keys.length; i++) {
+            all_sales[i] = r.data[keys[i]]
+            sales[i].value = r.data[keys[i]]
         }
     }
 
@@ -162,17 +183,65 @@ export const useSalesFilterStore = () => {
         mchts.value = r.data.content
     }
 
-    const getAllSales = () => {
-        return sales
+    const initAllSales = () => {
+        for (let i = 0; i < all_sales.length; i++) {
+            sales[i].value = [
+                { id: null, sales_name: '전체' },
+                ...all_sales[i]
+            ]
+        }
+    }
+    
+    const getAboveSalesFilter = (my_level: number, params: any) => {        
+        let _mcht = []
+        for (let i = my_level; i <= 5; i++) {
+            const sales_id = 'sales' + i + '_id'
+            const sales_name = 'sales' + i + '_name'
+            // sales_id가 포함된 가맹점 리스트 목록
+            if(params[sales_id]) {
+                _mcht = mchts.value.filter(obj => obj[sales_id] === params[sales_id])
+                if(_mcht.length === 0) {
+                    _mcht = all_sales[i].filter(obj => obj.id === params[sales_id])
+                            .map(obj => ({sales_id: obj.id, sales_name:obj.sales_name}))
+                }
+                return _mcht
+            }
+        }
+        // 모든 가맹점 리스트 목록(아무것도 선택된게 없을 때, 전체리턴)
+        return mchts.value
     }
 
-    const getUnderSales = () => {
-        return mchts
+    const setUnderSalesFilter = (my_level: number, params: any) => {
+        for (let i = 5; i >= 0; i--) {    
+            const sales_key = 'sales' + i    
+            if(levels[sales_key+'_use'] && my_level == i && !params[sales_key+'_id']) {           
+                initAllSales()
+                return
+            }            
+        }
+        
+        const _mchts = getAboveSalesFilter(my_level, params)
+        for (let i = 5; i >= 0; i--) {
+            const sales_key = 'sales' + i
+            // 가맹점목록에서 특정 level의 id와 name 목록을 가져옴
+            const map_sales = _mchts.map(obj => ({ id: obj[sales_key+'_id'], sales_name: obj[sales_key+'_name'] }))
+                        .filter(obj => obj.id !== null && obj.id !== 0 && obj.sales_name != '')
+                        .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i)
+            console.log(map_sales)
+            sales[i].value = [
+                { id: null, sales_name: '전체' },
+                ...map_sales
+            ]
+        }    
+        
     }
+    
     return {
         sales,
         mchts,
+        initAllSales,
         classification,
+        setUnderSalesFilter,
     }
 }
 

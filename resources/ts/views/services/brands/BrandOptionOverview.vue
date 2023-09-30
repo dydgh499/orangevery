@@ -124,6 +124,14 @@ const md = user_info.value.level == 50 ? 4 : 12
                         </VRow>
                         <VRow>
                             <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>API KEY</template>
+                                <template #input>
+                                    <VTextField prepend-inner-icon="ic-baseline-vpn-key"
+                                        v-model="props.item.auth.bonaeja.api_key"
+                                        placeholder="API KEY를 입력해주세요." type="text" />
+                                </template>
+                            </CreateHalfVCol>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>발신자 번호</template>
                                 <template #input>
                                     <VTextField prepend-inner-icon="tabler-device-mobile"
@@ -131,13 +139,23 @@ const md = user_info.value.level == 50 ? 4 : 12
                                         placeholder="연락처를 입력해주세요." type="text" />
                                 </template>
                             </CreateHalfVCol>
-
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>API KEY</template>
+                                <template #name>수신자 전화번호</template>
                                 <template #input>
-                                    <VTextField prepend-inner-icon="ic-baseline-vpn-key"
-                                        v-model="props.item.auth.bonaeja.api_key"
-                                        placeholder="API KEY를 입력해주세요." type="text" />
+                                    <VTextField type="number" v-model="props.item.auth.bonaeja.receive_phone"
+                                        prepend-inner-icon="tabler-device-mobile" placeholder="01012345678"
+                                        persistent-placeholder />
+                                </template>
+                            </CreateHalfVCol>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>
+                                    <BaseQuestionTooltip :location="'top'" text="유보금미달알림 상한금"
+                                        content="보유금액이 지정 상한금 미만으로 떨어지면, 수신자 전화번호에 알림이 전송됩니다." />
+                                </template>
+                                <template #input>
+                                    <VTextField type="number" v-model="props.item.auth.bonaeja.min_balance_limit"
+                                        prepend-inner-icon="tabler-currency-won" placeholder="유보금미달 알림금"
+                                        persistent-placeholder suffix="만원" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

@@ -5,21 +5,20 @@ export const useRequestStore = defineStore('requestStore', () => {
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
     const errorHandler = <any>(inject('$errorHandler'))
-
+    
     const request = async (back_url: string, params: any, is_redirect: boolean) => {
         try {
             const res = await axios(params);
             snackbar.value.show('성공하였습니다.', 'success')
-            if (is_redirect)
-            {
+            if (is_redirect) {
                 if(back_url == '/merchandises/pay-modules')
-                    setTimeout(function () { location.href = '/merchandises/edit/'+res.data.mcht_id }, 500)
+                    setTimeout(function () { router.push('/merchandises/edit/'+res.data.mcht_id) }, 500)
                 else if(back_url == '/merchandises/noti-urls')
-                    setTimeout(function () { location.href = '/merchandises/edit/'+res.data.mcht_id }, 500)
+                    setTimeout(function () { router.push('/merchandises/edit/'+res.data.mcht_id) }, 500)
                 else if(back_url == '/merchandises')
-                    setTimeout(function () { location.href = '/merchandises/edit/'+res.data.id }, 500)
+                    setTimeout(function () { router.push('/merchandises/edit/'+res.data.id) }, 500)
                 else
-                    setTimeout(function () { router.replace(back_url) }, 1000)
+                    setTimeout(function () { router.push(back_url) }, 1000)
             }
             else
                 location.reload()

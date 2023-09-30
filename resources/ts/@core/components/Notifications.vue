@@ -12,7 +12,6 @@ const props = withDefaults(defineProps<Props>(), {
     badgeProps: undefined,
 })
 
-const router = useRouter()
 const getLocaleString = (update_dt: Date) => {
     return update_dt.toLocaleString('ko-KR', {
         year: 'numeric',
