@@ -206,7 +206,7 @@ class AuthController extends Controller
                     return $this->extendResponse(1000, '통신 과정에서 에러가 발생했습니다.');
                 else
                 {
-                    if(10000000 < $bonaeja['min_balance_limit'])
+                    if(10000000 < (int)($bonaeja['min_balance_limit'] * 10000))
                     {
                         $sms = [
                             'user_id'   => $bonaeja['user_id'],

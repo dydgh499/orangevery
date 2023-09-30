@@ -173,7 +173,7 @@ onMounted(async () => {
                         </VRow>
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>발신 전화번호</template>
+                                <template #name>발신자 번호</template>
                                 <template #input>
                                     <VTextField type="number" v-model="props.item.sms_sender_phone"
                                         prepend-inner-icon="tabler-device-mobile" placeholder="07012345678"
@@ -183,7 +183,7 @@ onMounted(async () => {
                         </VRow>
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>수신자 전화번호</template>
+                                <template #name>수신자 번호</template>
                                 <template #input>
                                     <VTextField type="number" v-model="props.item.sms_receive_phone"
                                         prepend-inner-icon="tabler-device-mobile" placeholder="01012345678"
@@ -195,7 +195,7 @@ onMounted(async () => {
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" text="유보금미달알림 상한금"
-                                        content="보유금액이 지정 상한금 미만으로 떨어지면, 수신자 전화번호에 알림이 전송됩니다." />
+                                        content="보유금액이 지정 상한금 미만으로 떨어지면, 수신자 번호에 알림문자가 발송됩니다." />
                                 </template>
                                 <template #input>
                                     <VTextField type="number" v-model="props.item.min_balance_limit"

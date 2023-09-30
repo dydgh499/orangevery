@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Models\Salesforce;
 use App\Models\Merchandise;
 use App\Models\PaymentModule;
 use App\Models\NotiUrl;
