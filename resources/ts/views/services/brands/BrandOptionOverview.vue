@@ -248,6 +248,15 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>영업점 자동 세팅</template>
+                            <template #input>
+                                <VSwitch v-model="props.item.paid.use_sales_auth_setting" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    
                 </VCardItem>
             </VCard>
         </VCol>

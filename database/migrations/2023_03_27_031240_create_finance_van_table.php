@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->tinyInteger('fin_type')->nullable()->comment('실시간 타입');
             $table->tinyInteger('balance_status')->default(5)->comment('잔고 상태(0=잔고없음, 5=충분함)');
-            $table->float('dev_fee', 6, 4)->default(0)->comment('개발사 수수료');
+            $table->float('dev_fee', 6, 5)->default(0)->comment('개발사 수수료');
             $table->string('api_key', 50)->nullable()->comment('API_KEY');
             $table->string('sms_key', 50)->nullable()->comment('문자 API');
             $table->string('sms_id', 50)->nullable()->comment('문자 API ID');

@@ -6,6 +6,8 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import type { Salesforce } from '@/views/types'
 import { requiredValidator, nullValidator } from '@validators'
 import SalesforceBatchOverview from '@/views/salesforces/SalesforceBatchOverview.vue'
+import UnderAutoSettingOverview from '@/views/salesforces/under-auto-settings/UnderAutoSettingOverview.vue'
+import corp from '@corp'
 
 interface Props {
     item: Salesforce,
@@ -18,7 +20,7 @@ const tax_types = settleTaxTypes()
 
 </script>
 <template>
-    <VRow class="match-height">
+    <VRow>
         <!-- 👉 개인정보 -->
         <VCol cols="12" md="6">
             <VCard>
@@ -94,6 +96,16 @@ const tax_types = settleTaxTypes()
                                 prepend-inner-icon="twemoji-spiral-notepad" maxlength="100" />
                         </VCol>
                     </VRow>
+                </VCardItem>
+            </VCard>
+            <br>
+            <VCard v-if="corp.pv_options.paid.use_sales_auth_setting">
+                <VCardItem>
+                    <VCol cols="12">
+                        <VRow>
+                            <UnderAutoSettingOverview :item="props.item" />
+                        </VRow>
+                    </VCol>
                 </VCardItem>
             </VCard>
         </VCol>

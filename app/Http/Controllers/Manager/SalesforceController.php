@@ -143,7 +143,9 @@ class SalesforceController extends Controller
     {
         if($this->authCheck($request->user(), $id, 15))
         {
-            $data = $this->salesforces->where('id', $id)->first();
+            $data = $this->salesforces->where('id', $id)
+                ->with(['underAutoSettings'])
+                ->first();
             return $data ? $this->response(0, $data) : $this->response(1000);
         }
         else
@@ -203,7 +205,8 @@ class SalesforceController extends Controller
             $grouped = $this->salesforces
                 ->where('brand_id', $request->user()->brand_id)
                 ->where('is_delete', false)
-                ->get(['id', 'sales_name', 'level'])
+                ->with(['underAutoSettings'])
+                ->get(['id', 'sales_name', 'level'])       
                 ->groupBy('level');
                 
             if(isSalesforce($request))

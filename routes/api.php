@@ -22,6 +22,8 @@ use App\Http\Controllers\Manager\PostController;
 use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Manager\TransactionController;
 use App\Http\Controllers\Manager\SalesforceBatchController;
+use App\Http\Controllers\Manager\UnderAutoSettingController;
+
 
 use App\Http\Controllers\Log\DifferenceSettlementHistoryController;
 use App\Http\Controllers\Log\RealtimeSendHistoryController;
@@ -163,6 +165,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('set-show-pay-view', [SalesforceBatchController::class, 'setShowPayView']);
                 Route::post('set-noti-url', [SalesforceBatchController::class, 'setNotiUrl']);                
             });
+            Route::apiResource('under-auto-settings', UnderAutoSettingController::class);
         });
         Route::prefix('merchandises')->group(function() {
             Route::get('chart', [MerchandiseController::class, 'chart']);

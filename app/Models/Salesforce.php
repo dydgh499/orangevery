@@ -11,8 +11,10 @@ use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 
 use App\Models\Transaction;
+use App\Models\UnderAutoSetting;
 use App\Models\Log\SettleDeductSalesforce;
 use App\Models\Log\SettleHistorySalesforce;
+
 use App\Http\Traits\Models\AttributeTrait;
 
 class Salesforce extends Authenticatable
@@ -42,5 +44,10 @@ class Salesforce extends Authenticatable
             ->where('brand_id', request()->user()->brand_id)
             ->where('deduct_dt', request()->dt)
             ->select();
+    }
+
+    public function underAutoSettings()
+    {
+        return $this->hasMany(UnderAutoSetting::class, 'sales_id');
     }
 }

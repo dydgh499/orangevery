@@ -24,8 +24,6 @@ return new class extends Migration
         });
         Schema::table('payment_modules', function (Blueprint $table) {
             $table->tinyInteger('under_sales_type')->default(0)->comment('매출미달 적용타입');
-        });
-        Schema::table('payment_modules', function (Blueprint $table) {
             $table->integer('under_sales_limit')->default(0)->comment('매출미달 하한금액');
         });
         Schema::table('transactions', function (Blueprint $table) {

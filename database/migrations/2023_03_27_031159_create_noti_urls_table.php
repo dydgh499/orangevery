@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('mcht_id')->nullable()->comment('사용 가맹점 ID')->constrained('merchandises')->onDelete('SET NULL');
             $table->string('send_url')->comment('발송 url');
             $table->string('note', 200)->nullable()->comment('비고');
+            $table->boolean('noti_status')->default(true)->comment('사용 여부(0=미사용, 1=사용)');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });

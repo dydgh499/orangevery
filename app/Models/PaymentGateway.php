@@ -8,7 +8,7 @@ use App\Http\Traits\Models\AttributeTrait;
 
 class PaymentGateway extends Model
 {
-    use HasFactory;
+    use HasFactory, AttributeTrait;
     protected   $table      = 'payment_gateways';
     protected   $primaryKey = 'id';
     protected   $guarded    = [];

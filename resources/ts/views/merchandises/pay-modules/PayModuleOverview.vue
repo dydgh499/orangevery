@@ -7,7 +7,7 @@ import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 interface Props {
     item: Merchandise,
 }
-const props = defineProps<Props>();
+const props = defineProps<Props>()
 const new_pay_modules = reactive<PayModule[]>([])
 const pay_modules = ref<PayModule[]>([])
 const { mchts } = useSalesFilterStore()

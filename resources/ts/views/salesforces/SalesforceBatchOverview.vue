@@ -187,7 +187,7 @@ const setNotiUrl = () => {
         <CreateHalfVCol :mdl="0" :mdr="12">
             <template #name></template>
             <template #input>
-                영업점을 추가한 후 사용 가능합니다.
+                영업점을 추가하신 후 사용 가능합니다.
             </template>
         </CreateHalfVCol>
     </div>
@@ -367,7 +367,7 @@ const setNotiUrl = () => {
         <CreateHalfVCol :mdl="0" :mdr="12">
             <template #name></template>
             <template #input>
-                영업점을 추가한 후 사용 가능합니다.
+                영업점을 추가하신 후 사용 가능합니다.
             </template>
         </CreateHalfVCol>
     </div>
@@ -412,7 +412,7 @@ const setNotiUrl = () => {
         <CreateHalfVCol :mdl="0" :mdr="12">
             <template #name></template>
             <template #input>
-                영업점을 추가한 후 사용 가능합니다.
+                영업점을 추가하신 후 사용 가능합니다.
             </template>
         </CreateHalfVCol>
     </div>

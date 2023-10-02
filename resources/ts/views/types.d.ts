@@ -120,7 +120,35 @@ export interface Merchandise extends MerchandisePropertie, UserPropertie {
     [key: string]: number | string
 }
 
-export interface Salesforce extends SalesforcePropertie, UserPropertie {}
+export interface Salesforce extends SalesforcePropertie, UserPropertie {
+    under_auto_settings?: UnderAutoSetting[]
+}
+
+
+export interface UnderAutoSetting {
+    id: number,
+    sales_id: number,
+    sales5_id: number | null,
+    sales4_id: number | null,
+    sales3_id: number | null,
+    sales2_id: number | null,
+    sales1_id: number | null,
+    sales0_id: number | null,
+    sales5_fee: float,
+    sales4_fee: float,
+    sales3_fee: float,
+    sales2_fee: float,
+    sales1_fee: float,
+    sales0_fee: float,
+    sales5_name?: string | null,
+    sales4_name?: string | null,
+    sales3_name?: string | null,
+    sales2_name?: string | null,
+    sales1_name?: string | null,
+    sales0_name?: string | null,
+    note: string,
+    [key: string]: number | string,
+}
 
 export interface Operator extends BasePropertie{
     level: number
@@ -270,6 +298,7 @@ interface PaidOption {
     use_api_key_batch: boolean,
     use_sub_key_batch: boolean,
     use_pay_verification_mobile: boolean, //휴대폰인증 
+    use_sales_auth_setting: boolean,// 영업점 자동 세팅
 }
 interface AuthOption {
     levels: {
