@@ -7,8 +7,8 @@ import SettleContentSkeleton from '@/views/quick-view/SettleContentSkeleton.vue'
 import Recent30DaysRankOverview from '@/views/quick-view/Recent30DaysRankOverview.vue'
 import Recent30DaysContentOverview from '@/views/quick-view/Recent30DaysContentOverview.vue'
 import type { MchtRecentTransactions } from '@/views/types'
+import router from '@/router'
 
-const router = useRouter()
 const transactions = ref(<MchtRecentTransactions>({}))
 const is_skeleton = ref(true)
 const { get } = useRequestStore()

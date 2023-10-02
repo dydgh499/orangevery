@@ -4,6 +4,7 @@ import type { Post } from '@/views/types'
 import { types } from '@/views/posts/useStore'
 import PostReplyView from '@/views/posts/PostReplyView.vue'
 import ExtraMenu from '@/views/posts/ExtraMenu.vue'
+import router from '@/router'
 
 interface Props {
     post: Post,
@@ -13,7 +14,6 @@ const props = defineProps<Props>()
 
 const store = <any>(inject('store'))
 const head = <any>(inject('head'))
-const router = useRouter()
 
 provide('store', store)
 provide('head', head)

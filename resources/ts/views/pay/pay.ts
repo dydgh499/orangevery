@@ -1,11 +1,10 @@
+import router from '@/router'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Merchandise, PayGateway, SalesSlip } from '@/views/types'
 import { axios } from '@axios'
 import * as CryptoJS from 'crypto-js'
 
 export const pay = (module_type: number) => {
-    const router = useRouter()
-
     const pg_id = ref(<number>(0))
     const pmod_id = ref(<number>(0))
 

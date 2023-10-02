@@ -5,7 +5,7 @@ import type { SalesSlip, CancelPay } from '@/views/types'
 import { getUserLevel } from '@axios'
 import { StatusColors } from '@core/enums';
 import corp from '@corp'
-
+import router from '@/router'
 
 interface Props {
     item: SalesSlip,
@@ -23,8 +23,6 @@ const formatDate = <any>(inject('$formatDate'))
 const salesslip = <any>(inject('salesslip'))
 const cancelTran = <any>(inject('cancelTran'))
 const realtimeHistories = <any>(inject('realtimeHistories'))
-
-const router = useRouter()
 
 const complaint = () => {
     const params = {

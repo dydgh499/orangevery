@@ -1,3 +1,4 @@
+import router from '@/router'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -183,6 +184,7 @@ export const defaultItemInfo =  () => {
         fin_trx_delay: 15,
         cxl_type: 2,
         is_use_realtime_deposit: false,
+        pay_dupe_least: 0
     })
     //카드사 필터 및 다른 필터옵션들
     return {
@@ -199,7 +201,6 @@ export const getAllPayModules = async(mcht_id:number|null=null) => {
     catch (e: any) {
         pay_token.value = ''
         user_info.value = {}
-        const router = useRouter()
         router.replace('/')
         return []
     }

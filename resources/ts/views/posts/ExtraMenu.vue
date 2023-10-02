@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { Post } from '@/views/types'
+import router from '@/router'
 
 interface Props {
     item: Post,
 }
 
 const props = defineProps<Props>()
-const router = useRouter()
 
 </script>
 <template>

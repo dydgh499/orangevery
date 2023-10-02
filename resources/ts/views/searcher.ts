@@ -1,16 +1,15 @@
+import router from '@/router';
 import { useRequestStore } from '@/views/request';
 import type { Pagenation } from '@/views/types';
 import { user_info } from '@axios';
 import { StatusColors } from '@core/enums';
 import { cloneDeep } from 'lodash';
 
-
 export function Searcher(path: string) {
     const { get } = useRequestStore()
     const base_url = '/api/v1/manager/'+path
     // -----------------------------
     let items = ref(<[]>([]))
-    const router = useRouter()
     const params = reactive<any>({page:1, page_size:20})
     const pagenation = reactive<Pagenation>({ total_count: 0, total_page: 1 })
     const chart_process = ref(false)

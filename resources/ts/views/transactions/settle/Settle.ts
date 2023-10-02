@@ -1,3 +1,4 @@
+import router from '@/router'
 import { useRequestStore } from '@/views/request'
 import { Settle } from '@/views/types'
 import { getUserLevel } from '@axios'
@@ -9,7 +10,6 @@ export function SettlementFunctionCollect(store: any) {
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
     const errorHandler = <any>(inject('$errorHandler'))
-    const router = useRouter()
 
     const getSettleFormat = (item:Settle, is_mcht:boolean) => {
         return {            
