@@ -8,7 +8,7 @@ import NavbarNotifications from '@/layouts/components/NavbarNotifications.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import NavbarZoomSwitcher from '@/layouts/components/NavbarZoomSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
-
+import router from '@/router'
 // @layouts plugin
 import { VerticalNavLayout } from '@layouts'
 
@@ -21,7 +21,6 @@ import { user_info } from '@axios'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { config } from '@layouts/config'
 
-const router = useRouter()
 const alert = ref(null)
 const snackbar = ref(null)
 const loading = ref(null)

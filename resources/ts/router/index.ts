@@ -56,5 +56,3 @@ router.beforeEach(to => {
 })
 
 export default router
-
-//http://localhost/pay/hand?e=U2FsdGVkX1%2FUu4TQ%2Fyq52fuG%2FVsV153%2B0nPk3GZrEb2xhEQCkMKnWr6PhvwGxCmz2gW0qEq%2FmjcL9NKt79t%2Fog%3D%3D

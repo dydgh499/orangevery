@@ -5,6 +5,7 @@ import { useAppAbility } from '@/plugins/casl/useAppAbility'
 import { axios, pay_token, user_info } from '@axios'
 import { allLevels } from '@/views/salesforces/useStore'
 import { avatars } from '@/views/users/useStore'
+import router from '@/router'
 import corp from '@corp'
 
 const ability = useAppAbility()
@@ -29,7 +30,6 @@ else if (user_info.value.level <= 45) {
 else
     mytype = 3
 
-const router = useRouter()
 // 개발사는 이동할 수 없음
 const profile = () => {
     if(mytype < 3)

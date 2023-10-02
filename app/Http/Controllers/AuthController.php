@@ -198,7 +198,7 @@ class AuthController extends Controller
                     'sender'    => $bonaeja['sender_phone'],
                     'api_key'   => $bonaeja['api_key'],
                     'receiver'  => $bonaeja['receive_phone'],
-                    'msg'       => "[".$brand_name."] 예치금이 부족합니다. 예치금을 충전해주세요.(현재 잔액:".number_format($total_deposit)+"원)",
+                    'msg'       => "[".$brand_name."] 예치금이 부족합니다. 예치금을 충전해주세요.(현재 잔액:".number_format($total_deposit)."원)",
                 ];
                 $_res = post("https://api.bonaeja.com/api/msg/v1/send", $sms);
             }

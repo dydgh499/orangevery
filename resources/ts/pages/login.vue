@@ -9,7 +9,7 @@ import { themeConfig } from '@themeConfig'
 import { requiredValidatorV2 } from '@validators'
 import { VForm } from 'vuetify/components'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
-
+import router from '@/router'
 import authV2MaskDark from '@images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@images/pages/misc-mask-light.png'
 
@@ -22,8 +22,6 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 const isPasswordVisible = ref(false)
 
 const route = useRoute()
-const router = useRouter()
-
 const ability = useAppAbility()
 
 const errors = ref<Record<string, string | undefined>>({
