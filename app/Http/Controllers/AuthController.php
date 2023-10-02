@@ -178,6 +178,32 @@ class AuthController extends Controller
             return $this->extendResponse(1999, ['message'=> $res['body']['message']]);
     }
     
+    /*
+     * 예치금 잔액 검증
+     */
+    public function bonaejaDepositValidate($bonaeja, $brand_name)
+    {
+        $params = [
+            'user_id'   => $bonaeja['user_id'],
+            'api_key'   => $bonaeja['api_key'],
+        ];
+        $res = post("https://api.bonaeja.com/api/msg/v1/remain", $params);
+        if($res['body']['code'] == 100)
+        {
+            $total_deposit = $res['body']['data']['TOTAL_DEPOSIT'];
+            if($total_deposit < ($bonaeja['min_balance_limit'] * 10000))
+            {
+                $sms = [
+                    'user_id'   => $bonaeja['user_id'],
+                    'sender'    => $bonaeja['sender_phone'],
+                    'api_key'   => $bonaeja['api_key'],
+                    'receiver'  => $bonaeja['receive_phone'],
+                    'msg'       => "[".$brand_name."] 예치금이 부족합니다. 예치금을 충전해주세요.(현재 잔액:".number_format($total_deposit)+"원)",
+                ];
+                $_res = post("https://api.bonaeja.com/api/msg/v1/send", $sms);
+            }
+        }
+    }
 
     /*
      * 모바일 코드 발급
@@ -199,24 +225,14 @@ class AuthController extends Controller
                     'sender'    => $bonaeja['sender_phone'],
                     'api_key'   => $bonaeja['api_key'],
                     'receiver'  => $request->phone_num,
-                    'msg'       => "[".$brand->name."]\n인증번호 [$rand]을(를) 입력해주세요",
+                    'msg'       => "[".$brand->name."] 인증번호 [$rand]을(를) 입력해주세요",
                 ];
                 $res = post("https://api.bonaeja.com/api/msg/v1/send", $sms);
                 if($res['code'] == 500)
                     return $this->extendResponse(1000, '통신 과정에서 에러가 발생했습니다.');
                 else
                 {
-                    if(10000000 < (int)($bonaeja['min_balance_limit'] * 10000))
-                    {
-                        $sms = [
-                            'user_id'   => $bonaeja['user_id'],
-                            'sender'    => $bonaeja['sender_phone'],
-                            'api_key'   => $bonaeja['api_key'],
-                            'receiver'  => $bonaeja['receive_phone'],
-                            'msg'       => "[".$brand->name."]\n예치금이 부족합니다. 예치금을 충전해주세요.(현재 잔액:".number_format(10000000)+"원)",
-                        ];
-                        $_res = post("https://api.bonaeja.com/api/msg/v1/send", $sms);    
-                    }
+                    $this->bonaejaDepositValidate($bonaeja, $brand->name);
                     return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1000, $res['body']['message']);
                 }
             }    

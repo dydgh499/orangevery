@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('payment_modules', function (Blueprint $table) {
             $table->integer('pay_single_limit')->default(0)->comment('결제 단건 한도(단위:만원)');
+            $table->integer('pay_dupe_least')->default(0)->comment('중복거래 하한금');
         });
     }
 
@@ -23,6 +24,7 @@ return new class extends Migration
     {
         Schema::table('payment_modules', function (Blueprint $table) {
             $table->dropColumn('pay_single_limit');
+            $table->dropColumn('pay_dupe_least');
         });
     }
 };
