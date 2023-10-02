@@ -10,12 +10,14 @@ use Illuminate\Http\Request;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\StoresTrait;
+
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
 
 class DangerTransController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $danger_transactions, $cols;
 
     public function __construct(DangerTransaction $danger_transactions)
@@ -46,28 +48,35 @@ class DangerTransController extends Controller
 
     public function __invoke()
     {
-        $sub_query = DangerTransaction::query()->select('trans_id');
+        //pay_dupe_least 필터 적용
+        $sub_query = DangerTransaction::select('trans_id');
         // transactions 테이블에서 필요한 데이터 선택
-        $transactions = Transaction::query()
-            ->select('brand_id', 'mcht_id', DB::raw('MAX(id) AS trans_id'), 'module_type')
-            ->whereNotIn('id', $sub_query)
-            ->whereDate('trx_dt', '>=', now())
-            ->groupBy('card_num', 'issuer', 'brand_id', 'mcht_id', 'is_cancel', 'trx_dt', 'module_type')
-            ->havingRaw('COUNT(card_num) > 1 AND LENGTH(card_num) > 12')
-            ->havingRaw('COUNT(issuer) > 1 AND LENGTH(issuer) > 1')
-            ->havingRaw('COUNT(brand_id) > 1')
-            ->having('is_cancel', false)
-            ->get();
+        $transactions = Transaction::join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
+            ->whereNotIn('transactions.id', $sub_query)
+            ->whereDate('transactions.trx_dt', '>=', now())
+            ->whereRaw('transactions.amount > payment_modules.pay_dupe_least * 10000')
+            ->groupBy('transactions.card_num', 'transactions.issuer', 'transactions.brand_id', 'transactions.mcht_id', 'transactions.is_cancel', 'trx_dt', 'module_type')
+            ->havingRaw('COUNT(transactions.card_num) > 1 AND LENGTH(transactions.card_num) > 12')
+            ->havingRaw('COUNT(transactions.issuer) > 1 AND LENGTH(transactions.issuer) > 1')
+            ->havingRaw('COUNT(transactions.brand_id) > 1')
+            ->having('transactions.is_cancel', false)
+            ->get(['transactions.brand_id', 'transactions.mcht_id', DB::raw('MAX(transactions.id) AS trans_id'), 'transactions.module_type']);
         // 선택된 각 트랜잭션에 대해 danger_transactions 테이블에 삽입
+        $current = date('Y-m-d H:i:s');
+        $dangers = [];
         foreach ($transactions as $transaction) {
-            DangerTransaction::create([
+            $dangers[] = [
                 'brand_id' => $transaction->brand_id,
                 'mcht_id' => $transaction->mcht_id,
                 'trans_id' => $transaction->trans_id,
                 'module_type' => $transaction->module_type,
                 'danger_type' => 0,
-            ]);
+                'created_at' => $current,
+                'updated_at' => $current,
+            ];
         }
+        $res = $this->manyInsert(new DangerTransaction, $dangers);
+
     }
 
     private function commonSelect($request)

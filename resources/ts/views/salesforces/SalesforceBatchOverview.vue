@@ -25,6 +25,7 @@ const pg_id = ref()
 
 const abnormal_trans_limit = ref()
 const pay_dupe_limit = ref()
+const pay_dupe_least = ref()
 
 const pay_disable_s_tm = ref()
 const pay_disable_e_tm = ref()
@@ -55,7 +56,7 @@ const post = async (page: string, params: any) => {
     }
 }
 const common = computed(() => {
-        return {
+    return {
         'id': props.item.id,
         'level': props.item.level,
         'pg_id': pg_id.value
@@ -79,11 +80,18 @@ const setAbnormalTransLimit = () => {
         'abnormal_trans_limit': abnormal_trans_limit.value,
     })
 }
-const setDupPayValidation = () => {
-    post('set-dupe-pay-validation', {
+const setDupPayCountValidation = () => {
+    post('set-dupe-pay-count-validation', {
         ...common.value,
         'pay_dupe_limit': pay_dupe_limit.value,
     })
+}
+const setDupPayLeastValidation = () => {
+    post('set-dupe-pay-least-validation', {
+        ...common.value,
+        'pay_dupe_least': pay_dupe_least.value,
+    })
+
 }
 const setPayLimit = (type: string) => {
     post('set-pay-limit', {
@@ -211,12 +219,24 @@ const setNotiUrl = () => {
                 </div>
             </template>
         </CreateHalfVCol>
+        <CreateHalfVCol :mdl="3" :mdr="9">
+            <template #name>중복거래 하한금</template>
+            <template #input>
+                <div class="batch-container">
+                    <VTextField type="number" v-model="pay_dupe_least" prepend-inner-icon="tabler-currency-won" suffix="만원" />
+                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setDupPayLeastValidation()">
+                        즉시적용
+                        <VIcon end icon="tabler-direction-sign" />
+                    </VBtn>
+                </div>
+            </template>
+        </CreateHalfVCol>
         <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_dup_pay_validation">
             <template #name>중복결제 허용회수</template>
             <template #input>
                 <div class="batch-container">
                     <VTextField v-model="pay_dupe_limit" label="중복결제 허용회수" type="number" suffix="회 허용" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setDupPayValidation()">
+                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setDupPayCountValidation()">
                         즉시적용
                         <VIcon end icon="tabler-direction-sign" />
                     </VBtn>

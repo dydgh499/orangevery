@@ -156,6 +156,7 @@ export interface PayModule {
     installment: number,
     pay_dupe_limit:number,
     abnormal_trans_limit: number,
+    pay_dupe_least: number,
     pay_year_limit: number,
     pay_month_limit: number,
     pay_day_limit: number,

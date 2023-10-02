@@ -138,7 +138,7 @@ class SalesforceBatchController extends Controller
     /**
      * 중복결제 허용회수 적용 
      */
-    public function setDupPayValidation(Request $request)
+    public function setDupPayCountValidation(Request $request)
     {
         $cols = [
             'payment_modules.pay_dupe_limit' => $request->pay_dupe_limit
@@ -146,7 +146,19 @@ class SalesforceBatchController extends Controller
         $row = $this->payModuleBatch($request)->update($cols);
         return $this->response(1);
     }
-    
+
+    /**
+     * 중복결제 하한금 적용 
+     */
+    public function setDupPayLeastValidation(Request $request)
+    {
+        $cols = [
+            'payment_modules.pay_dupe_least' => $request->pay_dupe_least
+        ];
+        $row = $this->payModuleBatch($request)->update($cols);
+        return $this->response(1);
+    }
+
     /**
      * 결제한도 적용 
      */

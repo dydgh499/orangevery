@@ -152,7 +152,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('set-fee', [SalesforceBatchController::class, 'setFee']);
                 Route::post('set-custom-filter', [SalesforceBatchController::class, 'setCustomFilter']);
                 Route::post('set-abnormal-trans-limit', [SalesforceBatchController::class, 'setAbnormalTransLimit']);
-                Route::post('set-dupe-pay-validation', [SalesforceBatchController::class, 'setDupPayValidation']);
+                Route::post('set-dupe-pay-count-validation', [SalesforceBatchController::class, 'setDupPayCountValidation']);
+                Route::post('set-dupe-pay-least-validation', [SalesforceBatchController::class, 'setDupPayLeastValidation']);
                 Route::post('set-mid', [SalesforceBatchController::class, 'setMid']);
                 Route::post('set-tid', [SalesforceBatchController::class, 'setTid']);
                 Route::post('set-api-key', [SalesforceBatchController::class, 'setApiKey']);

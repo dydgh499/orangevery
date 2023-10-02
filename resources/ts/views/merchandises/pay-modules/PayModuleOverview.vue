@@ -40,6 +40,7 @@ const addNewPaymodule = () => {
         installment: 0,
         pay_dupe_limit:0,
         abnormal_trans_limit: 0,
+        pay_dupe_least: 0,
         pay_year_limit: 0,
         pay_month_limit: 0,
         pay_day_limit: 0,

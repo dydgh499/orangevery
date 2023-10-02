@@ -376,13 +376,13 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <!-- 👉 매출미달 상한금액 -->
+                        <!-- 👉 매출미달 하한금액 -->
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>매출미달 상한금</template>
+                                <template #name>매출미달 하한금</template>
                                 <template #input>
                                     <VTextField type="number" v-model="props.item.under_sales_limit"
-                                        prepend-inner-icon="tabler-currency-won" placeholder="매출미달 상한금 입력"
+                                        prepend-inner-icon="tabler-currency-won" placeholder="매출미달 하한금 입력"
                                         persistent-placeholder suffix="만원" />
                                 </template>
                             </CreateHalfVCol>
@@ -474,7 +474,6 @@ onMounted(() => {
                                         item-value="id" single-line/>
                                 </template>
                             </CreateHalfVCol>
-
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'이상거래 한도설정'"
@@ -485,6 +484,18 @@ onMounted(() => {
                                     <VSelect v-model="props.item.abnormal_trans_limit" :items="abnormal_trans_limits"
                                         prepend-inner-icon="jam-triangle-danger" label="이상거래 한도설정" item-title="title" 
                                         item-value="id" single-line/>
+                                </template>
+                            </CreateHalfVCol>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>
+                                    <BaseQuestionTooltip :location="'top'" :text="'중복거래 하한금'"
+                                        :content="'설정 금액 이하로 결제가 발생하는 건은 중복거래 탐지에서 무시됩니다.'">
+                                    </BaseQuestionTooltip>
+                                </template>
+                                <template #input>
+                                    <VTextField type="number" v-model="props.item.pay_dupe_least"
+                                        prepend-inner-icon="tabler-currency-won" placeholder="이상거래 상한금 입력"
+                                        persistent-placeholder suffix="만원" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

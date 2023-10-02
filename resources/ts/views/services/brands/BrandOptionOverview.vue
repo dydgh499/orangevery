@@ -149,8 +149,8 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </CreateHalfVCol>
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>
-                                    <BaseQuestionTooltip :location="'top'" text="유보금미달알림 상한금"
-                                        content="보유금액이 지정 상한금 미만으로 떨어지면, 수신자 번호에 알림문자가 발송됩니다." />
+                                    <BaseQuestionTooltip :location="'top'" text="유보금미달알림 하한금"
+                                        content="보유금액이 지정 하한금 미만으로 떨어지면, 수신자 번호에 알림문자가 발송됩니다." />
                                 </template>
                                 <template #input>
                                     <VTextField type="number" v-model="props.item.auth.bonaeja.min_balance_limit"

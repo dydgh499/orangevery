@@ -26,7 +26,7 @@ return new class extends Migration
             $table->tinyInteger('under_sales_type')->default(0)->comment('매출미달 적용타입');
         });
         Schema::table('payment_modules', function (Blueprint $table) {
-            $table->integer('under_sales_limit')->default(0)->comment('매출미달 상한금액');
+            $table->integer('under_sales_limit')->default(0)->comment('매출미달 하한금액');
         });
         Schema::table('transactions', function (Blueprint $table) {
             $table->boolean('pg_settle_type')->default(0)->comment('PG사 정산타입(0=주말포함, 1=주말제외)');
