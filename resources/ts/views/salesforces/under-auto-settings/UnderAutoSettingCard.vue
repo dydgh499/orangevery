@@ -18,7 +18,7 @@ const { update, remove } = useRequestStore()
 const levels = corp.pv_options.auth.levels
 
 const isAbleAutoSetting = (idx: number) => {
-    return (getLevelByIndex(props.salesforce.level) >= (6-idx)) && levels['sales'+(5-idx)+'_use']
+    return (getLevelByIndex(props.salesforce.level) >= (6-idx)) && levels['sales'+(6-idx)+'_use']
 }
 </script>
 <template>
