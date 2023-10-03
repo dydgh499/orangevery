@@ -39,6 +39,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:null, title:'선택안함'},
         {id:1, title:'쿠콘'},
         {id:2, title:'헥토파이낸셜'},
+        {id:3, title:'웰컴페이먼츠'},
     ])
     
     const fin_types = <Options[]>([
