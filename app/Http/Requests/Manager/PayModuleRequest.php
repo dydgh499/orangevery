@@ -90,6 +90,7 @@ class PayModuleRequest extends FormRequest
             'is_old_auth' => 'required',
             'is_use_realtime_deposit' => 'required',
             'show_pay_view' => 'required',
+            'comm_settle_fee' => 'numeric',
         ];
         return $this->getRules($this->keys, $sub);
     }
