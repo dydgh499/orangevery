@@ -39,6 +39,7 @@ trait requestTrait
         $brand_business_num = str_replace('-', '', $brand_business_num);
         $data_records = '';
         $total_amount = 0;
+        $total_count = 0;
         for ($i=0; $i < count($trans); $i++) 
         { 
             $business_num = str_replace('-', '', $trans[$i]->business_num);
@@ -74,9 +75,10 @@ trait requestTrait
                     $trx_id.$installment.$ord_num.$amount.$ori_amount.$ori_trx_dt.
                     $add_field.$filter;
                 $data_records .= $data_record."\n";
+                $total_count += 1;
             }
         }
-        return [$data_records, count($trans), $total_amount];
+        return [$data_records, $total_count, $total_amount];
     }
 
     private function setTotalRecord($total_count, $total_amount)

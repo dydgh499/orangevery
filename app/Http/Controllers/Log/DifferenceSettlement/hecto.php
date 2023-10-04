@@ -72,12 +72,15 @@ class hecto
             $mcht_trans = $trans->filter(function ($tran) use ($mcht_id) {
                 return $tran->mid == $mcht_id;
             })->values();
-            $header = $this->setHeaderRecord($mcht_id);
-            [$data_records, $count, $amount] = $this->setDataRecord($mcht_trans, $brand_business_num);
-            $total  = $this->setTotalRecord($count, $amount);
-
-            $full_record .= $header.$data_records.$total;
-            $total_count += $count;
+            if(count($mcht_trans) > 0)
+            {
+                $header = $this->setHeaderRecord($mcht_id);
+                [$data_records, $count, $amount] = $this->setDataRecord($mcht_trans, $brand_business_num);
+                $total  = $this->setTotalRecord($count, $amount);
+    
+                $full_record .= $header.$data_records.$total;
+                $total_count += $count;    
+            }
         }
         $full_record .= $this->setEndRecord($total_count);
 
