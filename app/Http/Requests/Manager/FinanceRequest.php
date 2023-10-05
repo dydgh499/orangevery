@@ -39,7 +39,6 @@ class FinanceRequest extends FormRequest
             'fin_type' => 'required',
             'dev_fee' => 'required|numeric',
             'min_balance_limit'=>'required',
-            'sms_receive_phone'=>'required',
             'corp_name'=>'required',
             'nick_name'=>'required',
         ];
