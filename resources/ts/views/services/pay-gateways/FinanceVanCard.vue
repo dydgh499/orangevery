@@ -159,7 +159,7 @@ onMounted(async () => {
                     <VCardItem>
                         <VCardTitle style="margin-bottom: 1em;">
                             <BaseQuestionTooltip :location="'top'" text="문자 알림 정보"
-                                :content="'예시)<br>[안녕하세요. ' + props.item.nick_name + ' 입니다.]<br><br>실시간 이체 잔액이 부족하오니 충전부탁드립니다.<br>(현재: 9,870,000원)'" />
+                                :content="'예시)<br>[' + props.item.nick_name + '] 실시간 이체 잔액이 부족하오니 충전부탁드립니다.<br>(현재: 9,870,000원)'" />
                         </VCardTitle>
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('sub_key', 80)->nullable()->comment('SUB KEY');
             $table->integer('min_balance_limit')->default(0)->comment('최소 알림금액(단위:만원)');
             $table->string('corp_code', 15)->nullable()->comment('법인 코드');
-            $table->string('corp_name', 20)->nullable()->comment('법인 명');
+            $table->string('corp_name', 50)->nullable()->comment('법인 명');
             $table->string('bank_code', 3)->nullable()->comment('은행 코드');
             $table->string('nick_name', 20)->nullable()->comment('별칭');
             $table->string('withdraw_acct_num', 20)->nullable()->comment('출금 통장 번호');
