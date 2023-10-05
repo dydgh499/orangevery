@@ -63,7 +63,6 @@ class AuthController extends Controller
         }
         else
             return $this->extendResponse(1000, __('auth.not_found_obj'));
-
     }
 
     public function __signIn($orm, $request)

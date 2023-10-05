@@ -4,10 +4,11 @@ namespace App\Http\Controllers\BeforeSystem;
 
 use App\Http\Traits\StoresTrait;
 use App\Http\Traits\BeforeSystem\BeforeSystemTrait;
+use App\Http\Traits\Settle\TransactionTrait;
 
-class Transactions
+class Transaction
 {
-    use StoresTrait, BeforeSystemTrait;
+    use StoresTrait, BeforeSystemTrait, TransactionTrait;
 
     public $paywell, $payvery, $paywell_to_payvery, $current_time;
     public function __construct()
@@ -32,11 +33,10 @@ class Transactions
         $this->paywell_to_payvery_sales = $paywell_to_payvery_sales;
     }
 
-    public function connectPmod($paywell_to_payvery_pmod)
+    public function connectPmod($payvery_mods)
     {
-        $this->paywell_to_payvery_pmod = $paywell_to_payvery_pmod;
+        $this->payvery_mods = $payvery_mods;
     }
-
 
     public function getPaywell($paywell_table, $brand_id, $before_brand_id)
     {
@@ -45,7 +45,12 @@ class Transactions
                 ->where('DNS_PK', $before_brand_id)
                 ->orderby('PK', 'DESC')
                 ->chunk(999, function($transactions) use($items, $brand_id) {
+                    $payvery_mods = collect($this->payvery_mods);
                     foreach ($transactions as $transaction) {
+                        $pmod = $payvery_mods->first(function($item) use($transaction) { 
+                            return $item['mcht_id'] == $transaction->USER_PK; 
+                        });
+                        $pmod_id = $pmod ? $pmod->id : 0;
                         $items[] = [
                             'brand_id' => $brand_id,
                             'mcht_id' => $this->paywell_to_payvery_mchts[$transaction->USER_PK],
@@ -84,16 +89,16 @@ class Transactions
                             //
                             'pg_id' => $this->paywell_to_payvery_pgs[$transaction->PGID_PK],
                             'ps_id' => $this->paywell_to_payvery_pss[$transaction->PGID_PK],
-                            'ps_fee' => 0,
-                            'pmod_id' => 0,
+                            'ps_fee' => $transaction->PG_FEE,
+                            'pmod_id' => $pmod_id,
                             'custom_id' => $this->paywell_to_payvery_cls[$transaction->CST_FL],
                             'terminal_id' => $this->paywell_to_payvery_cls[$transaction->WD_TYPE],
                             'mcht_fee' => $transaction->MD_FEE,
                             'hold_fee' => $transaction->HOLD_AMT_FEE,
                             'pg_settle_type' => 0,      //주말포함
                             'mcht_settle_type' => 0,    //D+1 통일
-                            'mcht_settle_fee' => 0,
-                            'mcht_settle_id' => 0,
+                            'mcht_settle_fee' => $transaction->MD_FEE,
+                            'mcht_settle_id' => -1,
                             'mcht_settle_amount' => 0,
                             
                             'trx_dt' => $transaction->TRADE_DT,
@@ -125,12 +130,21 @@ class Transactions
                             'updated_at' => $this->current_time,
                         ];
                     }
+                    $this->setSettleAmount($items, 0);
                 });
         $this->paywell = $items;
     }
 
     public function setPayvery($payvery_table, $brand_id)
     {
+        $transactions = collect($payvery_table->where('brand_id', $brand_id)->get());        
+        $this->paywell = array_values(array_filter($this->paywell, function($paywellItem) use ($transactions) {
+            $trans = $transactions->first(function($transactionItem) use($paywellItem) { 
+                return $transactionItem['trx_id'] == $paywellItem->trx_id; 
+            });
+        
+            return !$trans;
+        }));
         $items = $this->getPayveryFormat($this->paywell);
         $res   = $this->manyInsert($payvery_table, $items);
         if($res)

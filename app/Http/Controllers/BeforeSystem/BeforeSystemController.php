@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\BeforeSystem\Merchandise;
 use App\Http\Controllers\BeforeSystem\PaymentModule;
+use App\Http\Controllers\BeforeSystem\Transaction;
 
 class BeforeSystemController extends Controller
 {
@@ -150,5 +151,155 @@ class BeforeSystemController extends Controller
                 echo $mcht->DANGER_DPST_PR;
             }
         }
+    }
+
+    public function getPGs($brand_id, $before_brand_id)
+    {
+        $afs = $this->payvery->table('payment_gateways')->where('brand_id', $brand_id)->get();
+        $bfs = $this->paywell->table('agency_info')->where('DNS_PK', $before_brand_id)->get();
+        $afs = json_decode(json_encode($afs), true);
+        $bfs = json_decode(json_encode($bfs), true);
+        $items = [];
+        foreach($afs as $af)
+        {
+            $idx = array_search($af['pg_name'], array_column($bfs, 'PG_NM'));
+            if($idx !== false)
+            {
+                $key = $bfs[$idx]['PK'];
+                $items[$key] = $af['id'];
+            }
+        }
+        return $items;
+    }
+
+    public function getPSs($brand_id, $before_brand_id)
+    {
+        $afs = $this->payvery->table('payment_sections')
+            ->where('brand_id', $brand_id)
+            ->get();
+        $bfs = $this->paywell->table('agency_info')
+            ->where('DNS_PK', $before_brand_id)
+            ->where('ITEM_TYPE', -1)
+            ->get();
+        $afs = json_decode(json_encode($afs), true);
+        $bfs = json_decode(json_encode($bfs), true);
+
+        $items = [];
+        foreach($afs as $af)
+        {
+            $idx = array_search($af['name'], array_column($bfs, 'ITEM_NM'));
+            if($idx !== false)
+            {
+                $key = $bfs[$idx]['PK'];
+                $items[$key] = $af['id'];
+            }
+        }
+        return $items;
+    }
+
+    public function getCLs($brand_id, $before_brand_id)
+    {
+        $afs = $this->payvery->table('payment_sections')
+            ->where('brand_id', $brand_id)
+            ->get();
+        $bfs = $this->paywell->table('agency_info')
+            ->where('DNS_PK', $before_brand_id)
+            ->where(function ($query) {
+                return $query->where('ITEM_TYPE', 0)
+                    ->orWhere('ITEM_TYPE', 3);
+            })
+            ->get();
+        $afs = json_decode(json_encode($afs), true);
+        $bfs = json_decode(json_encode($bfs), true);
+
+        $items = [];
+        foreach($afs as $af)
+        {
+            $idx = array_search($af['name'], array_column($bfs, 'ITEM_NM'));
+            if($idx !== false)
+            {
+                $key = $bfs[$idx]['PK'];
+                $items[$key] = $af['id'];
+            }
+        }
+        return $items;
+    }
+
+    public function getMchts($brand_id, $before_brand_id)
+    {
+        $cols = [
+            'merchandise.*', 'user.ID', 'user.PW', 
+            'user.REP_NM', 'user.SECTORS', 'user.RESIDENT_NUM', 'user.BUSINESS_NUM',
+            'user.PHONE', 'user.ADDR', 'user.NICK_NM', 'user.NOTE',
+        ];
+        $afs = $this->payvery->table('merchandises')
+            ->where('brand_id', $brand_id)
+            ->get();
+        $bfs = $this->paywell->table('users')
+            ->join('merchandise', 'user.PK', '=', 'merchandise.USER_PK')
+            ->where('user.DNS_PK', $before_brand_id)
+            ->orderby('user.PK', 'DESC')
+            ->get(['user.NICK_NM', 'user.PK']);
+        $afs = json_decode(json_encode($afs), true);
+        $bfs = json_decode(json_encode($bfs), true);
+
+        $items = [];
+        foreach($afs as $af)
+        {
+            $idx = array_search($af['user_name'], array_column($bfs, 'ID'));
+            if($idx !== false)
+            {
+                $key = $bfs[$idx]['PK'];
+                $items[$key] = $af['id'];
+            }
+        }
+        return $items;
+    }
+
+    public function getSales($brand_id, $before_brand_id)
+    {
+        $afs = $this->payvery->table('salesforces')
+            ->where('brand_id', $brand_id)
+            ->get();
+        $bfs = $this->paywell->table('users')
+            ->whereIn('level', [15,20,30,35])
+            ->where('DNS_PK', $before_brand_id)
+            ->orderby('PK', 'DESC')
+            ->get();
+        $afs = json_decode(json_encode($afs), true);
+        $bfs = json_decode(json_encode($bfs), true);
+
+        $items = [];
+        foreach($afs as $af)
+        {
+            $idx = array_search($af['user_name'], array_column($bfs, 'ID'));
+            if($idx !== false)
+            {
+                $key = $bfs[$idx]['PK'];
+                $items[$key] = $af['id'];
+            }
+        }
+        return $items;
+    }
+
+    public function TransactionUpdate()
+    {
+        $brand_id = 2;
+        $before_brand_id = 15;
+        $payvery_mods = $this->payvery->table('payment_modules')->where('brand_id', $brand_id);
+        $paywell_to_payvery_pgs = $this->getPGs($brand_id, $before_brand_id);
+        $paywell_to_payvery_pss = $this->getPSs($brand_id, $before_brand_id);
+        $paywell_to_payvery_cls = $this->getCLs($brand_id, $before_brand_id);
+
+        $paywell_to_payvery_mchts = $this->getMchts($brand_id, $before_brand_id);
+        $paywell_to_payvery_sales = $this->getSales($brand_id, $before_brand_id);
+
+        $transaction = new Transaction();
+        $transaction->connectPGInfo($paywell_to_payvery_pgs, $paywell_to_payvery_pss, $paywell_to_payvery_cls, []);
+        $transaction->connectUsers($paywell_to_payvery_mchts, $paywell_to_payvery_sales);
+        $transaction->connectPmod($payvery_mods);
+
+        $transaction->getPaywell($this->paywell, $this->payvery, $brand_id, $before_brand_id);
+        $transaction->setPayvery($this->payvery->table('transactions'), $brand_id);
     }
 }
