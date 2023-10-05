@@ -10,7 +10,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     const store     = Searcher('merchandises')
     const head      = Header('merchandises', '가맹점 관리')
     const levels    = corp.pv_options.auth.levels
-    const paid      = corp.pv_options.paid;
+    const paid      = corp.pv_options.paid
     const { pgs }   = useStore()
 
     const headers: Record<string, string> = {
@@ -71,7 +71,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     if (getUserLevel() >= 35)
         headers['extra_col'] = '더보기'
     
-    head.main_headers.value = [];
+    head.main_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
 
@@ -104,8 +104,6 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
         getPGs,
     }
 })
-
-
 
 export const defaultItemInfo = () => {
     const path = 'merchandises'

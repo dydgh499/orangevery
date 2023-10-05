@@ -227,7 +227,7 @@ export const useSalesFilterStore = () => {
             const map_sales = _mchts.map(obj => ({ id: obj[sales_key+'_id'], sales_name: obj[sales_key+'_name'] }))
                         .filter(obj => obj.id !== null && obj.id !== 0 && obj.sales_name != '')
                         .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i)
-            console.log(map_sales)
+
             sales[i].value = [
                 { id: null, sales_name: '전체' },
                 ...map_sales

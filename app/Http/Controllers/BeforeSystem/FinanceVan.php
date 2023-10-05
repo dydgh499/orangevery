@@ -32,10 +32,12 @@ class FinanceVan
                 'balance_status' => $finance->BAL_STATUS,
                 'dev_fee' => $finance->DEV_FEE,
                 'api_key' => $finance->API_KEY,
+                /*
                 'sms_key' => $finance->SMS_KEY,
                 'sms_id' => $finance->SMS_ID,
                 'sms_sender_phone' => $finance->SMS_SENDER,
                 'sms_receive_phone' => $finance->REP_PHONE,
+                */
                 'min_balance_limit' => $finance->MIN_AMOUNT/10000,
                 'corp_code' => $finance->CORP_CD,
                 'corp_name' => $finance->CORP_NM,

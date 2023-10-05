@@ -74,6 +74,26 @@ onMounted(async () => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
+                        <VRow class="pt-3" v-if="getUserLevel() == 50">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
+                                <template #name>SUB KEY(HASH KEY)</template>
+                                <template #input>
+                                    <VTextField type="text" v-model="props.item.sub_key"
+                                        prepend-inner-icon="ic-baseline-vpn-key" placeholder="SUB KEY 입력"
+                                        persistent-placeholder />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow class="pt-3" v-if="getUserLevel() == 50">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
+                                <template #name>UID</template>
+                                <template #input>
+                                    <VTextField type="text" v-model="props.item.uid"
+                                        prepend-inner-icon="ic-baseline-vpn-key" placeholder="UID 입력"
+                                        persistent-placeholder />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
                         <VRow>
                             <VCol>
                                 <VTextarea v-model="props.item.nick_name" counter label="별칭(비고)"
@@ -151,46 +171,6 @@ onMounted(async () => {
                             <BaseQuestionTooltip :location="'top'" text="문자 알림 정보"
                                 :content="'예시)<br>[안녕하세요. ' + props.item.nick_name + ' 입니다.]<br><br>실시간 이체 잔액이 부족하오니 충전부탁드립니다.<br>(현재: 9,870,000원)'" />
                         </VCardTitle>
-                        <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>SMS KEY</template>
-                                <template #input>
-                                    <VTextField type="text" v-model="props.item.sms_key"
-                                        prepend-inner-icon="ic-baseline-vpn-key" placeholder="API KEY 입력"
-                                        persistent-placeholder />
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
-                        <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>SMS ID</template>
-                                <template #input>
-                                    <VTextField type="text" v-model="props.item.sms_id"
-                                        prepend-inner-icon="tabler-building-store" placeholder="SMS ID 입력"
-                                        persistent-placeholder />
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
-                        <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>발신자 번호</template>
-                                <template #input>
-                                    <VTextField type="number" v-model="props.item.sms_sender_phone"
-                                        prepend-inner-icon="tabler-device-mobile" placeholder="07012345678"
-                                        persistent-placeholder />
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
-                        <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>수신자 번호</template>
-                                <template #input>
-                                    <VTextField type="number" v-model="props.item.sms_receive_phone"
-                                        prepend-inner-icon="tabler-device-mobile" placeholder="01012345678"
-                                        persistent-placeholder />
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>

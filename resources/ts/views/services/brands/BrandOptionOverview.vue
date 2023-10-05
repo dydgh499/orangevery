@@ -110,8 +110,11 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <div v-if="props.item.paid.use_pay_verification_mobile">
-                        <VCardTitle class="pt-10">문자 발송정보</VCardTitle>
+                    <div>
+                        <VCardTitle class="pt-10">                            
+                            <BaseQuestionTooltip :location="'top'" text="문자 발송정보"
+                                        content="전산내 문자발송 서비스에 사용됩니다." />
+                            </VCardTitle>
                         <VRow class="pt-5">
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>회원 ID</template>

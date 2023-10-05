@@ -233,6 +233,8 @@ export interface FinanceVan {
     finance_company_num: number | null,
     fin_type: number | null,
     api_key: string,
+    sub_key: string,
+    uid: string,
     nick_name: string,
 
     dev_fee: number,
@@ -241,10 +243,6 @@ export interface FinanceVan {
     bank_code: string,
     withdraw_acct_num: string,
 
-    sms_key: string,
-    sms_id: string,
-    sms_sender_phone: string,
-    sms_receive_phone: string,
     min_balance_limit: number,
     balance_status?: number,
     balance?: number,
