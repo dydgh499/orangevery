@@ -266,7 +266,8 @@ return [
         'is_deposit' => '입금상태',
         
         //finance van
-        'sms_receive_phone' => '수신자 전화번호',
+        'receive_phone' => '수신자 전화번호',
+        'sender_phone' => '발신자 전화번호',
         'fin_type' => '금융 VAN 타입',
         'dev_fee' => '개발사 수수료',
         'min_balance_limit' => '유보금미달알림 하한금',
