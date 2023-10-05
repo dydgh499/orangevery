@@ -14,6 +14,8 @@ const addNewFinanceVan = () => {
         bank_code: '000',
         api_key: '',
         sub_key: '',
+        enc_key: '',
+        iv: '',
         min_balance_limit: 0,
         corp_code: '',
         corp_name: '',

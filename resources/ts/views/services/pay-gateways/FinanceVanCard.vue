@@ -84,6 +84,26 @@ onMounted(async () => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
+                        <VRow class="pt-3" v-if="getUserLevel() == 50">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
+                                <template #name>ENC KEY(암호화 키)</template>
+                                <template #input>
+                                    <VTextField type="text" v-model="props.item.enc_key"
+                                        prepend-inner-icon="ic-baseline-vpn-key" placeholder="ENC KEY 입력"
+                                        persistent-placeholder />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow class="pt-3" v-if="getUserLevel() == 50">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
+                                <template #name>Initial vector</template>
+                                <template #input>
+                                    <VTextField type="text" v-model="props.item.iv"
+                                        prepend-inner-icon="ic-baseline-vpn-key" placeholder="Initial vector 입력"
+                                        persistent-placeholder />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
                         <VRow>
                             <VCol>
                                 <VTextarea v-model="props.item.nick_name" counter label="별칭(비고)"

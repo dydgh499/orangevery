@@ -234,6 +234,8 @@ export interface FinanceVan {
     fin_type: number | null,
     api_key: string,
     sub_key: string,
+    enc_key: string,
+    iv: string,
     nick_name: string,
 
     dev_fee: number,
