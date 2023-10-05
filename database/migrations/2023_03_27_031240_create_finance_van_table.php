@@ -20,10 +20,7 @@ return new class extends Migration
             $table->tinyInteger('balance_status')->default(5)->comment('잔고 상태(0=잔고없음, 5=충분함)');
             $table->float('dev_fee', 6, 5)->default(0)->comment('개발사 수수료');
             $table->string('api_key', 50)->nullable()->comment('API_KEY');
-            $table->string('sms_key', 50)->nullable()->comment('문자 API');
-            $table->string('sms_id', 50)->nullable()->comment('문자 API ID');
-            $table->string('sms_sender_phone', 20)->nullable()->comment('문자 발신자');
-            $table->string('sms_receive_phone', 20)->nullable()->comment('문자 수신자 번호');
+            $table->string('sub_key', 80)->nullable()->comment('SUB KEY');
             $table->integer('min_balance_limit')->default(0)->comment('최소 알림금액(단위:만원)');
             $table->string('corp_code', 15)->nullable()->comment('법인 코드');
             $table->string('corp_name', 20)->nullable()->comment('법인 명');

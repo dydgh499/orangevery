@@ -84,16 +84,6 @@ onMounted(async () => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VRow class="pt-3" v-if="getUserLevel() == 50">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>UID</template>
-                                <template #input>
-                                    <VTextField type="text" v-model="props.item.uid"
-                                        prepend-inner-icon="ic-baseline-vpn-key" placeholder="UID 입력"
-                                        persistent-placeholder />
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
                         <VRow>
                             <VCol>
                                 <VTextarea v-model="props.item.nick_name" counter label="별칭(비고)"
@@ -131,7 +121,7 @@ onMounted(async () => {
                         </VRow>
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7" v-if="getUserLevel() == 50">
-                                <template #name>기관코드</template>
+                                <template #name>기관코드(GUID)</template>
                                 <template #input>
                                     <VTextField type="text" v-model="props.item.corp_code"
                                         prepend-inner-icon="ph:share-network" placeholder="기관코드 입력"

@@ -16,7 +16,6 @@ class FinanceRequest extends FormRequest
             'dev_fee',
             'api_key',
             'sub_key',
-            'uid',
             'min_balance_limit',
             'corp_code',
             'corp_name',
