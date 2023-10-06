@@ -169,7 +169,7 @@ class BeforeSystemController extends Controller
                 $items[$key] = $af['id'];
             }
         }
-        return $items;
+        return [$afs, $bfs, $items];
     }
 
     public function getPSs($brand_id, $before_brand_id)
@@ -194,7 +194,7 @@ class BeforeSystemController extends Controller
                 $items[$key] = $af['id'];
             }
         }
-        return $items;
+        return [$afs, $bfs, $items];
     }
 
     public function getCLs($brand_id, $before_brand_id)
@@ -222,7 +222,7 @@ class BeforeSystemController extends Controller
                 $items[$key] = $af['id'];
             }
         }
-        return $items;
+        return [$afs, $bfs, $items];
     }
 
     public function getMchts($brand_id, $before_brand_id)
@@ -239,7 +239,7 @@ class BeforeSystemController extends Controller
             ->join('merchandise', 'user.PK', '=', 'merchandise.USER_PK')
             ->where('user.DNS_PK', $before_brand_id)
             ->orderby('user.PK', 'DESC')
-            ->get(['user.NICK_NM', 'user.PK']);
+            ->get(['user.ID', 'user.PK']);
         $afs = json_decode(json_encode($afs), true);
         $bfs = json_decode(json_encode($bfs), true);
 
@@ -253,7 +253,7 @@ class BeforeSystemController extends Controller
                 $items[$key] = $af['id'];
             }
         }
-        return $items;
+        return [$afs, $bfs, $items];
     }
 
     public function getSales($brand_id, $before_brand_id)
@@ -279,24 +279,24 @@ class BeforeSystemController extends Controller
                 $items[$key] = $af['id'];
             }
         }
-        return $items;
+        return [$afs, $bfs, $items];
     }
 
     public function TransactionUpdate()
     {
         $brand_id = 2;
         $before_brand_id = 15;
-        $payvery_mods = $this->payvery->table('payment_modules')->where('brand_id', $brand_id);
-        $paywell_to_payvery_pgs = $this->getPGs($brand_id, $before_brand_id);
-        $paywell_to_payvery_pss = $this->getPSs($brand_id, $before_brand_id);
-        $paywell_to_payvery_cls = $this->getCLs($brand_id, $before_brand_id);
+        $payvery_mods = $this->payvery->table('payment_modules')->where('brand_id', $brand_id)->get();
+        [$pg_payvery, $pg_paywell, $pg_connect] = $this->getPGs($brand_id, $before_brand_id);
+        [$ps_payvery, $ps_paywell, $ps_connect] = $this->getPSs($brand_id, $before_brand_id);
+        [$cls_payvery, $cls_paywell, $cls_connect] = $this->getCLs($brand_id, $before_brand_id);
 
-        $paywell_to_payvery_mchts = $this->getMchts($brand_id, $before_brand_id);
-        $paywell_to_payvery_sales = $this->getSales($brand_id, $before_brand_id);
+        [$mcht_payvery, $mcht_paywell, $mcht_connect] = $this->getMchts($brand_id, $before_brand_id);
+        [$sales_payvery, $sales_paywell, $sales_connect] = $this->getSales($brand_id, $before_brand_id);
 
         $transaction = new Transaction();
-        $transaction->connectPGInfo($paywell_to_payvery_pgs, $paywell_to_payvery_pss, $paywell_to_payvery_cls, []);
-        $transaction->connectUsers($paywell_to_payvery_mchts, $paywell_to_payvery_sales);
+        $transaction->connectPGInfo($pg_connect, $ps_connect, $cls_connect, []);
+        $transaction->connectUsers($mcht_connect, $sales_connect, $mcht_payvery, $sales_payvery);
         $transaction->connectPmod($payvery_mods);
 
         $transaction->getPaywell($this->paywell->table('deposit'), $brand_id, $before_brand_id);
