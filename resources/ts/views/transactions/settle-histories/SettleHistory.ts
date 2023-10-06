@@ -88,7 +88,7 @@ export function settlementHistoryFunctionCollect(store: any) {
                 page: 1,
                 page_size: 9999999,
                 level: is_mcht ? 10 : item.level,
-                is_use_realtime_deposit: corp.pv_options.paid.use_realtime_deposit ? 1 : 0
+                is_use_realtime_deposit: Number(corp.pv_options.paid.use_realtime_deposit)
             };
             if(is_mcht)
                 params['mcht_settle_id'] = item.id

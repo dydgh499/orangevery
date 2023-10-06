@@ -18,7 +18,7 @@ provide('exporter', exporter)
 
 store.params.level = 10
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
-store.params.is_use_realtime_deposit = corp.pv_options.paid.use_realtime_deposit ? 1 : 0
+store.params.is_use_realtime_deposit = Number(corp.pv_options.paid.use_realtime_deposit)
 
 const metas = ref([
     {
