@@ -177,7 +177,7 @@ class BeforeSystemController extends Controller
         $afs = $this->payvery->table('payment_sections')
             ->where('brand_id', $brand_id)
             ->get();
-        $bfs = $this->paywell->table('agency_info')
+        $bfs = $this->paywell->table('item_classification')
             ->where('DNS_PK', $before_brand_id)
             ->where('ITEM_TYPE', -1)
             ->get();
@@ -202,7 +202,7 @@ class BeforeSystemController extends Controller
         $afs = $this->payvery->table('payment_sections')
             ->where('brand_id', $brand_id)
             ->get();
-        $bfs = $this->paywell->table('agency_info')
+        $bfs = $this->paywell->table('item_classification')
             ->where('DNS_PK', $before_brand_id)
             ->where(function ($query) {
                 return $query->where('ITEM_TYPE', 0)
@@ -235,7 +235,7 @@ class BeforeSystemController extends Controller
         $afs = $this->payvery->table('merchandises')
             ->where('brand_id', $brand_id)
             ->get();
-        $bfs = $this->paywell->table('users')
+        $bfs = $this->paywell->table('user')
             ->join('merchandise', 'user.PK', '=', 'merchandise.USER_PK')
             ->where('user.DNS_PK', $before_brand_id)
             ->orderby('user.PK', 'DESC')
@@ -261,7 +261,7 @@ class BeforeSystemController extends Controller
         $afs = $this->payvery->table('salesforces')
             ->where('brand_id', $brand_id)
             ->get();
-        $bfs = $this->paywell->table('users')
+        $bfs = $this->paywell->table('user')
             ->whereIn('level', [15,20,30,35])
             ->where('DNS_PK', $before_brand_id)
             ->orderby('PK', 'DESC')
@@ -299,7 +299,7 @@ class BeforeSystemController extends Controller
         $transaction->connectUsers($paywell_to_payvery_mchts, $paywell_to_payvery_sales);
         $transaction->connectPmod($payvery_mods);
 
-        $transaction->getPaywell($this->paywell, $this->payvery, $brand_id, $before_brand_id);
+        $transaction->getPaywell($this->paywell->table('deposit'), $brand_id, $before_brand_id);
         $transaction->setPayvery($this->payvery->table('transactions'), $brand_id);
     }
 }

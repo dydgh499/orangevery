@@ -130,7 +130,7 @@ class Transaction
                             'updated_at' => $this->current_time,
                         ];
                     }
-                    $this->setSettleAmount($items, 0);
+                    $items = $this->setSettleAmount($items, 0);
                 });
         $this->paywell = $items;
     }

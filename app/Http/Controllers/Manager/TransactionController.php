@@ -11,6 +11,7 @@ use App\Http\Requests\Manager\TransactionRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Database\QueryException;
 
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -79,14 +80,15 @@ class TransactionController extends Controller
         if($request->has('s_dt') && $request->has('e_dt'))
         {
             $query = $query->where(function($query) use($request) {
+                
                 $query->where(function($query) use($request) {
                     $query->where('transactions.is_cancel', false)
-                        ->where('transactions.trx_dt', '>=', $request->s_dt)
-                        ->where('transactions.trx_dt', '<=', $request->e_dt);
+                    ->whereRaw("concat(trx_dt, ' ', trx_tm) >= ?", [$request->s_dt])
+                    ->whereRaw("concat(trx_dt, ' ', trx_tm) <= ?", [$request->e_dt]);
                 })->orWhere(function($query) use($request) {
                     $query->where('transactions.is_cancel', true)
-                        ->where('transactions.cxl_dt', '>=', $request->s_dt)
-                        ->where('transactions.cxl_dt', '<=', $request->e_dt);
+                    ->whereRaw("concat(cxl_dt, ' ', cxl_tm) >= ?", [$request->s_dt])
+                    ->whereRaw("concat(cxl_dt, ' ', cxl_tm) <= ?", [$request->e_dt]);
                 });
             });
             $request->query->remove('s_dt');
