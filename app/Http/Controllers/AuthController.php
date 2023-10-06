@@ -43,7 +43,7 @@ class AuthController extends Controller
         if($brand)
         {
             $brand['color'] = $brand['theme_css']['main_color'];
-            $brand['pv_options']['auth']['bonaeja'] = [];
+            $brand['pv_options']['free']['bonaeja'] = [];
             return response(view('application', ['json' => $brand]))
                 ->withCookie('XSRF-TOKEN', csrf_token());
         }
@@ -214,7 +214,7 @@ class AuthController extends Controller
         $brand  = Brand::where('id', $request->brand_id)->first();
         if($brand)
         {
-            $bonaeja = $brand->pv_options->auth->bonaeja;
+            $bonaeja = $brand->pv_options->free->bonaeja;
             $rand   = random_int(100000, 999999);
             $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
             if($res)

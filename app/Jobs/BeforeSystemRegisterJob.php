@@ -21,6 +21,9 @@ use App\Http\Controllers\BeforeSystem\Salesforce;
 use App\Http\Controllers\BeforeSystem\Merchandise;
 use App\Http\Controllers\BeforeSystem\PaymentModule;
 
+use App\Http\Controllers\BeforeSystem\Transaction;
+use App\Http\Controllers\BeforeSystem\RealtimeSendHistory;
+
 use Illuminate\Support\Facades\Log;
 
 class BeforeSystemRegisterJob implements ShouldQueue
@@ -91,6 +94,7 @@ class BeforeSystemRegisterJob implements ShouldQueue
             $mcht->setPayvery($this->payvery->table('merchandises'), $this->brand_id);
             logging(['mcht'=>'ok'], 'before-system-register-job');
 
+            //쿠콘 고정
             $finance = new FinanceVan();
             $finance->getPaywell($this->paywell->table('finance_vans'), $this->brand_id, $this->before_brand_id);
             $finance->setPayvery($this->payvery->table('finance_vans'), $this->brand_id);
@@ -101,8 +105,34 @@ class BeforeSystemRegisterJob implements ShouldQueue
             $pmod->connectMchtInfo($mcht->payvery, $mcht->paywell_to_payvery);
             $pmod->getPaywell($this->paywell, $this->payvery, $this->brand_id, $this->before_brand_id);
             $pg->payvery_pgs = $pmod->payvery;  // 수기, 인증, 간편 관련 PG사 추가됨
-            
+
+
             logging(['paymod'=>'ok'], 'before-system-register-job');
+            $use_realtime_deposit = $brand->payvery['pv_options']['paid']['use_realtime_deposit'];
+            if($use_realtime_deposit)
+                $dev_settle_type = 0;
+            else
+            {
+                if($brand->payvery['pv_options']['auth']['levels']['dev_use'])
+                    $dev_settle_type = 1;
+                else
+                    $dev_settle_type = 0;
+            }
+            // 실시간일시 개발사 수수료 0.1 고정
+            $transaction = new Transaction($use_realtime_deposit, $dev_settle_type);
+            $transaction->connectPGInfo($pg->paywell_to_payvery, $ps->paywell_to_payvery, $cfic->paywell_to_payvery);
+            $transaction->connectUsers($mcht->paywell_to_payvery, $sale->paywell_to_payvery, $mcht->payvery, $sales->payvery);
+            $transaction->connectPmod($pmod->payvery);
+    
+            $transaction->getPaywell($this->paywell->table('deposit'), $this->brand_id, $this->before_brand_id);
+            $transaction->setPayvery($this->payvery->table('transactions'), $this->brand_id);
+            logging(['transactions'=>'ok'], 'before-system-register-job');
+
+            $realtime_logs = new RealtimeSendHistory();
+            $realtime_logs->connectUsers($mcht->paywell_to_payvery, $transaction->paywell_to_payvery, $mcht->payvery);
+            $realtime_logs->getPaywell($this->paywell->table('realtime_trans_log'), $this->brand_id, $this->before_brand_id);
+            $realtime_logs->setPayvery($this->payvery->table('realtime_send_histories'), $this->brand_id);
+            logging(['realtime histories'=>'ok'], 'before-system-register-job');
 
             $this->payvery->table('brands')->where('id', $this->brand_id)->update(['is_transfer'=>2]);
             return true;

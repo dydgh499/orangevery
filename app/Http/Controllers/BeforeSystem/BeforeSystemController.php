@@ -286,6 +286,9 @@ class BeforeSystemController extends Controller
     {
         $brand_id = 2;
         $before_brand_id = 15;
+        $use_realtime = false;
+        $dev_settle_type = 0;
+
         $payvery_mods = $this->payvery->table('payment_modules')->where('brand_id', $brand_id)->get();
         [$pg_payvery, $pg_paywell, $pg_connect] = $this->getPGs($brand_id, $before_brand_id);
         [$ps_payvery, $ps_paywell, $ps_connect] = $this->getPSs($brand_id, $before_brand_id);
@@ -294,8 +297,8 @@ class BeforeSystemController extends Controller
         [$mcht_payvery, $mcht_paywell, $mcht_connect] = $this->getMchts($brand_id, $before_brand_id);
         [$sales_payvery, $sales_paywell, $sales_connect] = $this->getSales($brand_id, $before_brand_id);
 
-        $transaction = new Transaction();
-        $transaction->connectPGInfo($pg_connect, $ps_connect, $cls_connect, []);
+        $transaction = new Transaction($use_realtime, $dev_settle_type);
+        $transaction->connectPGInfo($pg_connect, $ps_connect, $cls_connect);
         $transaction->connectUsers($mcht_connect, $sales_connect, $mcht_payvery, $sales_payvery);
         $transaction->connectPmod($payvery_mods);
 

@@ -16,7 +16,13 @@
                 'addr' => '',
             ]
         ];
-
+        public $bonaeja = [
+            'user_id'   => '',
+            'api_key'   => '',
+            'sender_phone' => '',
+            'receive_phone'=> '',
+            'min_balance_limit' => 0,
+        ];
         public function __construct(array $source)
         {
             foreach ($source as $property => $value) 
@@ -74,13 +80,6 @@
             'sales1_name'   => '대리점',
             'sales0_use'    => false,
             'sales0_name'   => '하위대리점'
-        ];
-        public $bonaeja = [
-            'user_id'   => '',
-            'api_key'   => '',
-            'sender_phone' => '',
-            'receive_phone'=> '',
-            'min_balance_limit' => 0,
         ];
         
         public function __construct(array $source)

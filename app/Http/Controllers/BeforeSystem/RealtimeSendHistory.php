@@ -5,7 +5,7 @@ namespace App\Http\Controllers\BeforeSystem;
 use App\Http\Traits\StoresTrait;
 use App\Http\Traits\BeforeSystem\BeforeSystemTrait;
 
-class FinanceVan
+class RealtimeSendHistory
 {
     use StoresTrait, BeforeSystemTrait;
 
@@ -18,28 +18,39 @@ class FinanceVan
         $this->current_time = date('Y-m-d H:i:s');
     }
 
+    public function connectUsers($connect_mchts, $connect_trans, $payvery_mchts)
+    {
+        $this->connect_mchts = $connect_mchts;
+        $this->connect_trans = $connect_trans;
+        $this->payvery_mchts = json_decode(json_encode($payvery_mchts), true);
+    }
+
     public function getPaywell($paywell_table, $brand_id, $before_brand_id)
     {
         $items = [];
-        $finances = $paywell_table
-                ->where('DNS_PK', $before_brand_id)
-                ->orderby('PK', 'DESC')
-                ->get();
-        foreach($finances as $finance) {
+        $logs = $paywell_table
+                ->join('deposit', 'realtime_trans_log.DPST_PK', '=', 'deposit.PK')
+                ->where('deposit.DNS_PK', $before_brand_id)
+                ->orderby('realtime_trans_log.PK', 'DESC')
+                ->get(['realtime_trans_log.*']);
+        foreach($logs as $log) {
             $item = [
                 'brand_id' => $brand_id,
-                'fin_type' => 1,
-                'balance_status' => $finance->BAL_STATUS,
-                'dev_fee' => $finance->DEV_FEE,
-                'api_key' => $finance->API_KEY,
-                'min_balance_limit' => $finance->MIN_AMOUNT/10000,
-                'corp_code' => $finance->CORP_CD,
-                'corp_name' => $finance->CORP_NM,
-                'bank_code' => $finance->BANK_CD,
-                'nick_name' => $finance->NICK_NM,
-                'withdraw_acct_num' => $finance->WDRW_ACCT_NO,
-                'finance_company_num' => 1,
-                'PK' => $finance->PK,
+                'trans_id' => $this->connect_trans[$log->DPST_PK],
+                'mcht_id'  => $this->connect_mchts[$log->USER_PK],
+                'request_type' => $log->RT_TYPE,
+
+                'finance_id' => 7,
+                'result_code' => $log->CODE,
+                'message' => $log->MSG,
+                'amount' => $log->AMOUNT,
+                
+                'acct_num' => $log->RCV_ACCT_NO,
+                'acct_bank_name' => $log->RCV_ACCT_NM,
+                'acct_bank_code' => $log->RCV_ACCT_CD,
+                'trans_seq_num' => $log->TRSC_SEQ_NO,
+
+                'PK' => $log->PK,
                 'created_at' => $this->current_time,
                 'updated_at' => $this->current_time,
             ];

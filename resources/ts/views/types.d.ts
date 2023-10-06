@@ -278,6 +278,13 @@ interface FreeOption {
             business_num: string,
             addr: string,
         }
+    },
+    bonaeja: {
+        user_id: string,
+        api_key: string,
+        sender_phone: string,
+        receive_phone: string,
+        min_balance_limit: number,
     }
 }
 interface PaidOption {
@@ -317,13 +324,6 @@ interface AuthOption {
         sales0_name:string,
         [key: string]: string|number,
     },
-    bonaeja: {
-        user_id: string,
-        api_key: string,
-        sender_phone: string,
-        receive_phone: string,
-        min_balance_limit: number,
-    }
 }
 interface ThemeCSS {
     main_color: string,

@@ -10,25 +10,29 @@ class Transaction
 {
     use StoresTrait, BeforeSystemTrait, TransactionTrait;
 
-    public $paywell, $payvery, $connect, $current_time;
+    public $paywell, $payvery, $paywell_to_payvery, $current_time;
     protected $connect_pgs, $connect_pss, $connect_cls, $connect_finance;
     protected $connect_mchts, $connect_sales, $payvery_mods;
-    protected $payvery_mchts, $payvery_sales;
-    
-    public function __construct()
+    protected $payvery_mchts, $payvery_sales, $payvery_finances;
+    protected $use_realtime, $dev_settle_type;
+
+    public function __construct($use_realtime, $dev_settle_type)
     {
         $this->paywell = [];
         $this->payvery = [];
-        $this->connect = [];
+        $this->paywell_to_payvery = [];
         $this->current_time = date('Y-m-d H:i:s');
+        $this->use_realtime = $use_realtime;
+        $this->dev_settle_type = $dev_settle_type;
     }
 
-    public function connectPGInfo($connect_pgs, $connect_pss, $connect_cls, $connect_finance)
+    public function connectPGInfo($connect_pgs, $connect_pss, $connect_cls)
     {
         $this->connect_pgs = $connect_pgs;
         $this->connect_pss = $connect_pss;
         $this->connect_cls = $connect_cls;
-        $this->connect_finance = $connect_finance;
+        $this->connect_finances = $connect_finances;
+        $this->payvery_finances = $payvery_finances;
     }
 
     public function connectUsers($connect_mchts, $connect_sales, $payvery_mchts, $payvery_sales)
@@ -36,13 +40,12 @@ class Transaction
         $this->connect_mchts = $connect_mchts;
         $this->connect_sales = $connect_sales;
 
-        $this->payvery_mchts = collect($payvery_mchts);
-        $this->payvery_sales = collect($payvery_sales);
+        $this->payvery_mchts = json_decode(json_encode($payvery_mchts), true);
     }
 
     public function connectPmod($payvery_mods)
     {
-        $this->payvery_mods = collect($payvery_mods);
+        $this->payvery_mods = json_decode(json_encode($payvery_mods), true);
     }
 
     public function getId($items, $id, $default=0)
@@ -57,17 +60,28 @@ class Transaction
                 ->where('DNS_PK', $before_brand_id)
                 ->orderby('PK', 'ASC')
                 ->chunk(999, function($transactions) use(&$items, $brand_id) {
+                    $payvery_mchts_ids = array_column($this->payvery_mchts, 'id');
                     foreach ($transactions as $transaction) {
                         $mcht_id = $this->getId($this->connect_mchts, $transaction->USER_PK);
                         if($mcht_id)
                         {
                             $mid = $transaction->MID;
                             $tid = $transaction->CAT_ID;
-                            $pmod = $this->payvery_mods->first(function($item) use($mcht_id, $mid, $tid) { 
-                                return $item->mcht_id == $mcht_id && $item->mid == $mid && $item->tid == $tid; 
-                            });
-                            $pmod_id = $pmod ? $pmod->id : 0;
-                            $module_type = $pmod ? $pmod->module_type : 0;
+
+                            $pmod_key = array_search(true, array_map(function($item) use($mcht_id, $mid, $tid) {
+                                return $item->mcht_id == $mcht_id && $item->mid == $mid && $item->tid == $tid;
+                            }, $this->payvery_mods));                            
+                            $pmod = ($pmod_key !== false) ? $this->payvery_mods[$pmod_key] : null;
+
+                            $idx = array_search($mcht_id, $payvery_mchts_ids);
+                            $mcht = $idx === false ? null : $this->payvery_mchts[$idx];
+
+                            $custom_id = $mcht ? $mcht['custom_id'] : 0;
+                            $pmod_id = $pmod ? $pmod['id'] : 0;
+                            $module_type = $pmod ? $pmod['module_type'] : 0;
+                            $terminal_id = $pmod ? $pmod['terminal_id'] : 0;
+                            $settle_type = $pmod ? $pmod['settle_type'] : 0;
+
                             $sales4_id = $this->getId($this->connect_sales, $transaction->SLSFC_PK);
                             $sales3_id = $this->getId($this->connect_sales, $transaction->BRANCH_PK);
                             $sales2_id = $this->getId($this->connect_sales, $transaction->DIST_PK);
@@ -76,13 +90,19 @@ class Transaction
                             $pg_id = $this->getId($this->connect_pgs, $transaction->PGID_PK);
                             $ps_id = $this->getId($this->connect_pss, $transaction->PG_SEC_PK);
 
-                            $cst_ft_id   = $this->getId($this->connect_cls, $transaction->CST_FL);
-                            $terminal_id = $this->getId($this->connect_cls, $transaction->WD_TYPE);
+                            $amount = $transaction->TRADE_PR;
+                            $dpst_fee = $transaction->DPST_FEE;
+                            if($transaction->IS_CANCEL)
+                            {
+                                $amount *= -1;
+                                $dpst_fee *= -1;
+                            }
                             $items[] = [
                                 'brand_id' => $brand_id,
                                 'mcht_id' => $mcht_id,
                                 'brand_settle_amount' => 0,
-                                'dev_realtime_fee' => 0,
+
+                                'dev_realtime_fee' => $this->use_realtime ? 0.001 : 0,
                                 'dev_realtime_settle_amount' => 0,
                                 
                                 'dev_fee' => $transaction->DEV_FEE,
@@ -118,13 +138,13 @@ class Transaction
                                 'ps_id' => $ps_id,
                                 'ps_fee' => $transaction->PG_FEE,
                                 'pmod_id' => $pmod_id,
-                                'custom_id' => $cst_ft_id,
+                                'custom_id' => $custom_id,
                                 'terminal_id' => $terminal_id,
                                 'mcht_fee' => $transaction->MD_FEE,
                                 'hold_fee' => $transaction->HOLD_AMT_FEE,
                                 'pg_settle_type' => 0,      //주말포함
-                                'mcht_settle_type' => 0,    //D+1 통일
-                                'mcht_settle_fee' => $transaction->MD_FEE,
+                                'mcht_settle_type' => $settle_type,    //D+1 통일
+                                'mcht_settle_fee' => $dpst_fee,
                                 'mcht_settle_id' => -1,
                                 'mcht_settle_amount' => 0,
                                 
@@ -133,7 +153,7 @@ class Transaction
                                 'cxl_dt' => $transaction->CXL_DT,
                                 'cxl_tm' => $transaction->CXL_TM,
                                 'is_cancel' => $transaction->IS_CANCEL,
-                                'amount' => $transaction->TRADE_PR,
+                                'amount' => $amount,
                                 'module_type' => $module_type,
                                 
                                 'ord_num' => $transaction->ORDER_NM,
@@ -160,7 +180,7 @@ class Transaction
                     }
                 });
         $items = json_decode(json_encode($items), true);
-        $items = $this->setSettleAmount($items, 0);
+        $items = $this->setSettleAmount($items, $this->dev_settle_type);
         $this->paywell = $items;
         print("complate transactions getPaywell - found:".count($this->paywell)."\n");
     }
@@ -185,7 +205,7 @@ class Transaction
         if($res)
         {
             $this->payvery = $this->getPayvery($payvery_table, $brand_id, $this->current_time);
-            $this->connect = $this->connect($this->payvery, $this->paywell);
+            $this->paywell_to_payvery = $this->connect($this->payvery, $this->paywell);
         }
     }
 }

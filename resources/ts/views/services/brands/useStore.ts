@@ -146,6 +146,13 @@ export const defaultItemInfo = () => {
                         addr: ''
                     }
                 },
+                bonaeja: {
+                    user_id: '',
+                    api_key: '',
+                    sender_phone: '',
+                    receive_phone: '',
+                    min_balance_limit: 0
+                }
             }),
             paid: reactive<PaidOption>({
                 use_acct_verification: false,
@@ -163,7 +170,8 @@ export const defaultItemInfo = () => {
                 use_tid_batch: false,
                 use_api_key_batch: false,
                 use_sub_key_batch: false,
-                use_pay_verification_mobile: false
+                use_pay_verification_mobile: false,
+                use_sales_auth_setting: false
             }),
             auth: reactive<AuthOption>({
                 levels: {
@@ -181,13 +189,6 @@ export const defaultItemInfo = () => {
                     sales1_name: '대리점',
                     sales0_use: false,
                     sales0_name: '하위대리점'
-                },
-                bonaeja: {
-                    user_id: '',
-                    api_key: '',
-                    sender_phone: '',
-                    receive_phone: '',
-                    min_balance_limit: 0
                 }
             })
         },
