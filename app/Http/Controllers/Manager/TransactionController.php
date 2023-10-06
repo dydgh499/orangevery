@@ -80,15 +80,16 @@ class TransactionController extends Controller
         if($request->has('s_dt') && $request->has('e_dt'))
         {
             $query = $query->where(function($query) use($request) {
-                
                 $query->where(function($query) use($request) {
+                    $search_format = $request->use_search_date_detail ? "concat(trx_dt, ' ', trx_tm)" : "trx_dt";
                     $query->where('transactions.is_cancel', false)
-                    ->whereRaw("concat(trx_dt, ' ', trx_tm) >= ?", [$request->s_dt])
-                    ->whereRaw("concat(trx_dt, ' ', trx_tm) <= ?", [$request->e_dt]);
+                        ->whereRaw("$search_format >= ?", [$request->s_dt])
+                        ->whereRaw("$search_format <= ?", [$request->e_dt]);
                 })->orWhere(function($query) use($request) {
+                    $search_format = $request->use_search_date_detail ? "concat(cxl_dt, ' ', cxl_tm)" : "cxl_dt";
                     $query->where('transactions.is_cancel', true)
-                    ->whereRaw("concat(cxl_dt, ' ', cxl_tm) >= ?", [$request->s_dt])
-                    ->whereRaw("concat(cxl_dt, ' ', cxl_tm) <= ?", [$request->e_dt]);
+                    ->whereRaw("$search_format >= ?", [$request->s_dt])
+                    ->whereRaw("$search_format <= ?", [$request->e_dt]);
                 });
             });
             $request->query->remove('s_dt');

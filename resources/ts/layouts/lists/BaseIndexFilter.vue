@@ -27,6 +27,9 @@ const dates = [
     { id: '1 mon', title: '1개월' },
     { id: '3 mon', title: '3개월' },
 ]
+
+store.params.use_search_date_detail = corp.pv_options.free.use_search_date_detail
+
 const handleEnterKey = (event: KeyboardEvent) => {
     if (event.keyCode === 13)
         store.setTable()
