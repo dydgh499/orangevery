@@ -123,11 +123,12 @@ class BeforeSystemRegisterJob implements ShouldQueue
             $transaction->connectPGInfo($pg->paywell_to_payvery, $ps->paywell_to_payvery, $cfic->paywell_to_payvery);
             $transaction->connectUsers($mcht->paywell_to_payvery, $sale->paywell_to_payvery, $mcht->payvery, $sales->payvery);
             $transaction->connectPmod($pmod->payvery);
-    
+
             $transaction->getPaywell($this->paywell->table('deposit'), $this->brand_id, $this->before_brand_id);
             $transaction->setPayvery($this->payvery->table('transactions'), $this->brand_id);
             logging(['transactions'=>'ok'], 'before-system-register-job');
 
+            //두리페이 고정
             $realtime_logs = new RealtimeSendHistory();
             $realtime_logs->connectUsers($mcht->paywell_to_payvery, $transaction->paywell_to_payvery, $mcht->payvery);
             $realtime_logs->getPaywell($this->paywell->table('realtime_trans_log'), $this->brand_id, $this->before_brand_id);

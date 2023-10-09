@@ -47,7 +47,7 @@ const metas = ref([
     },
 ])
 const isSalesCol = (key: string) => {
-    const sales_cols = ['amount', 'trx_amount', 'mcht_settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
+    const sales_cols = ['amount', 'supply_amount', 'vat_amount', 'settle_amount']
     for (let i = 0; i < sales_cols.length; i++) {
         if (sales_cols[i] === key)
             return true
