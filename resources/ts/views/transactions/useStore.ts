@@ -112,7 +112,10 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         headers['mcht_fee'] = '수수료'
         headers['hold_fee'] = '유보금 수수료'
     }
-
+    headers['resident_num'] = '주민등록번호'
+    headers['business_num'] = '사업자등록번호'
+    headers['nick_name'] = '대표자명'
+    
     if(getUserLevel() >= 35)
     {
         headers['custom_id'] = '커스텀필터'
