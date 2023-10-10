@@ -171,7 +171,9 @@ class SalesforceBatchController extends Controller
             $limit = $request->pay_month_limit;
         else if($request->type == 'year')
             $limit = $request->pay_year_limit;
-
+        else if($request->type == 'single')
+            $limit = $request->pay_single_limit;
+        
         $cols = [
             'payment_modules.'.$type => $limit
         ];

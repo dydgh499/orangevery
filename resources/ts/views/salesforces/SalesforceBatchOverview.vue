@@ -34,6 +34,7 @@ const pay_tid = ref()
 const api_key = ref()
 const sub_key = ref()
 
+const pay_single_limit = ref()
 const pay_day_limit = ref()
 const pay_month_limit = ref()
 const pay_year_limit = ref()
@@ -96,6 +97,7 @@ const setDupPayLeastValidation = () => {
 const setPayLimit = (type: string) => {
     post('set-pay-limit', {
         ...common.value,
+        'pay_single_limit': pay_single_limit.value,
         'pay_day_limit': pay_day_limit.value,
         'pay_month_limit': pay_month_limit.value,
         'pay_year_limit': pay_year_limit.value,
@@ -241,6 +243,20 @@ const setNotiUrl = () => {
                         <VIcon end icon="tabler-direction-sign" />
                     </VBtn>
                 </div>
+            </template>
+        </CreateHalfVCol>
+        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_pay_limit">
+            <template #name>단건 결제 한도</template>
+            <template #input>
+                <div class="batch-container">
+                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_single_limit" type="number"
+                        suffix="만원" />
+                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPayLimit('single')">
+                        즉시적용
+                        <VIcon end icon="tabler-direction-sign" />
+                    </VBtn>
+                </div>
+
             </template>
         </CreateHalfVCol>
         <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_pay_limit">
