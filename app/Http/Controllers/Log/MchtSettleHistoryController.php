@@ -65,6 +65,8 @@ class MchtSettleHistoryController extends Controller
     public function batch(BatchSettleHistoryRequest $request)
     {
         return DB::transaction(function () use($request) {
+            $c_res = true;
+            $u_res = true;
             for ($i=0; $i < count($request->datas); $i++) 
             { 
                 $data = $request->data('mcht_id', $request->datas[$i]);
