@@ -109,6 +109,7 @@ trait TransactionTrait
             $tran['brand_settle_amount'] = round($brand_profit - $dev_profit);
         }
         $tran['dev_realtime_settle_amount'] = $tran['amount'] * $tran['dev_realtime_fee'];
+        $tran['brand_settle_amount'] -= $tran['dev_realtime_settle_amount'];
         return $tran;
     }
 
