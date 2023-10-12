@@ -38,7 +38,7 @@ class RealtimeSendHistory
                 'brand_id' => $brand_id,
                 'trans_id' => $this->connect_trans[$log->DPST_PK],
                 'mcht_id'  => $this->connect_mchts[$log->USER_PK],
-                'request_type' => $log->RT_TYPE,
+                'request_type' => $log->KEY,
 
                 'finance_id' => 7,
                 'result_code' => $log->CODE,
