@@ -16,6 +16,7 @@ use App\Http\Controllers\BeforeSystem\Brand;
 use App\Http\Controllers\BeforeSystem\PaymentGateway;
 use App\Http\Controllers\BeforeSystem\PaymentSection;
 use App\Http\Controllers\BeforeSystem\Classification;
+use App\Http\Controllers\BeforeSystem\FinanceVan;
 
 use App\Http\Controllers\BeforeSystem\Salesforce;
 use App\Http\Controllers\BeforeSystem\Merchandise;
