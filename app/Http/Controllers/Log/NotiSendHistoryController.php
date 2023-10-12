@@ -74,7 +74,7 @@ class NotiSendHistoryController extends Controller
             ->orderby('created_at', 'asc')
             ->first($this->cols);
 
-        $res = $this->notiSender($noti->send_url, $tran, $noti->temp);
+        $res = $this->notiSender($noti->send_url, $noti, $noti->temp);
         $res = $this->save($res, $noti);
         return $this->response($res ? 1 : 990);
     }
@@ -91,7 +91,7 @@ class NotiSendHistoryController extends Controller
 
         foreach($notis as $noti)
         {
-            $res = $this->notiSender($noti->send_url, $tran, $noti->temp);
+            $res = $this->notiSender($noti->send_url, $noti, $noti->temp);
             $res = $this->save($res, $noti);
         }
         return $this->response(1);
