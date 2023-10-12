@@ -56,7 +56,7 @@ class NotiSendHistoryController extends Controller
             'http_code' => $res['code'],
             'message'   => json_encode($res['body']),
             'send_url'  => $noti->send_url,
-            'trans_id'  => $trans_id,
+            'trans_id'  => $noti->id,
             'brand_id'  => $noti->brand_id,
             'retry_count' => $noti->retry_count+1,
         ];
