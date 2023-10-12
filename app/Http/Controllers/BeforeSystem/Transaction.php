@@ -31,8 +31,6 @@ class Transaction
         $this->connect_pgs = $connect_pgs;
         $this->connect_pss = $connect_pss;
         $this->connect_cls = $connect_cls;
-        $this->connect_finances = $connect_finances;
-        $this->payvery_finances = $payvery_finances;
     }
 
     public function connectUsers($connect_mchts, $connect_sales, $payvery_mchts, $payvery_sales)
