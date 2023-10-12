@@ -111,7 +111,6 @@ trait TransactionTrait
         // 실시간 비용
         $tran['dev_realtime_settle_amount'] = round($tran['amount'] * $tran['dev_realtime_fee']);
         $tran['brand_settle_amount'] -= $tran['dev_realtime_settle_amount'];
-        logging($tran);
         return $tran;
     }
 

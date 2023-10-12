@@ -350,6 +350,7 @@ class TransactionController extends Controller
         $i=0;
         foreach($db_trans as $tran)
         {
+            logging($tran[$i]);
             $tran->brand_settle_amount = $trans[$i]['brand_settle_amount'];
             $tran->dev_settle_amount = $trans[$i]['dev_settle_amount'];
             $tran->dev_realtime_settle_amount = $tran[$i]['dev_realtime_settle_amount'];
