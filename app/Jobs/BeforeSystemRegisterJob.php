@@ -112,7 +112,7 @@ class BeforeSystemRegisterJob implements ShouldQueue
             // 실시간일시 개발사 수수료 0.1 고정
             $transaction = new Transaction($brand->use_realtime_deposit, $brand->dev_settle_type);
             $transaction->connectPGInfo($pg->paywell_to_payvery, $ps->paywell_to_payvery, $cfic->paywell_to_payvery);
-            $transaction->connectUsers($mcht->paywell_to_payvery, $sale->paywell_to_payvery, $mcht->payvery, $sales->payvery);
+            $transaction->connectUsers($mcht->paywell_to_payvery, $sale->paywell_to_payvery, $mcht->payvery, $sale->payvery);
             $transaction->connectPmod($pmod->payvery);
 
             $transaction->getPaywell($this->paywell->table('deposit'), $this->brand_id, $this->before_brand_id);
