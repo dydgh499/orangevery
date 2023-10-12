@@ -11,13 +11,16 @@ class Brand
 {
     use StoresTrait, BeforeSystemTrait;
 
-    public $paywell, $payvery, $paywell_to_payvery, $current_time;
+    public $paywell, $payvery, $paywell_to_payvery, $current_time, $use_realtime_deposit, $dev_settle_type;
     public function __construct()
     {
         $this->paywell = [];
         $this->payvery = [];
         $this->paywell_to_payvery = [];
         $this->current_time = date('Y-m-d H:i:s');
+
+        $this->use_realtime_deposit = false;
+        $this->dev_settle_type = 0;        
     }
 
     public function getPaywell($paywell_table, $brand_id, $before_brand_id)
@@ -66,6 +69,17 @@ class Brand
             $pv_options->auth->levels['sales1_name'] = '대리점';
             $pv_options->auth->levels['sales0_name'] = '하위 대리점';
 
+            $this->use_realtime_deposit = $pv_options->paid->use_realtime_deposit;
+            if($this->use_realtime_deposit)
+                $this->dev_settle_type = 0;
+            else
+            {
+                if($pv_options->auth->levels['dev_use'])
+                    $this->dev_settle_type = 1;
+                else
+                    $this->dev_settle_type = 0;
+            }
+    
             $item = [
                 'name' => $brand->SVC_NM,
                 'theme_css' => json_encode($theme_css),

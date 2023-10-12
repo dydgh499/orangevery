@@ -109,18 +109,8 @@ class BeforeSystemRegisterJob implements ShouldQueue
 
 
             logging(['paymod'=>'ok'], 'before-system-register-job');
-            $use_realtime_deposit = $brand->payvery['pv_options']['paid']['use_realtime_deposit'];
-            if($use_realtime_deposit)
-                $dev_settle_type = 0;
-            else
-            {
-                if($brand->payvery['pv_options']['auth']['levels']['dev_use'])
-                    $dev_settle_type = 1;
-                else
-                    $dev_settle_type = 0;
-            }
             // 실시간일시 개발사 수수료 0.1 고정
-            $transaction = new Transaction($use_realtime_deposit, $dev_settle_type);
+            $transaction = new Transaction($brand->use_realtime_deposit, $brand->dev_settle_type);
             $transaction->connectPGInfo($pg->paywell_to_payvery, $ps->paywell_to_payvery, $cfic->paywell_to_payvery);
             $transaction->connectUsers($mcht->paywell_to_payvery, $sale->paywell_to_payvery, $mcht->payvery, $sales->payvery);
             $transaction->connectPmod($pmod->payvery);
