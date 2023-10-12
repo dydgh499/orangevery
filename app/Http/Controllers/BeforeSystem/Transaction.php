@@ -66,10 +66,10 @@ class Transaction
                             $mid = $transaction->MID;
                             $tid = $transaction->CAT_ID;
 
-                            $pmod_key = array_search(true, array_map(function($item) use($mcht_id, $mid, $tid) {
-                                return $item->mcht_id == $mcht_id && $item->mid == $mid && $item->tid == $tid;
+                            $pmod_idx = array_search(true, array_map(function($item) use($mcht_id, $mid, $tid) {
+                                return $item['mcht_id'] == $mcht_id && $item['mid'] == $mid && $item['tid'] == $tid;
                             }, $this->payvery_mods));                            
-                            $pmod = ($pmod_key !== false) ? $this->payvery_mods[$pmod_key] : null;
+                            $pmod = ($pmod_idx !== false) ? $this->payvery_mods[$pmod_idx] : null;
 
                             $idx = array_search($mcht_id, $payvery_mchts_ids);
                             $mcht = $idx === false ? null : $this->payvery_mchts[$idx];
