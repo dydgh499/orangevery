@@ -4,6 +4,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { DateFilters } from '@core/enums'
 
 const { pgs, pss } = useStore()
 const { store, head, exporter } = useSearchStore()
@@ -13,7 +14,7 @@ provide('exporter', exporter)
 
 </script>
 <template>
-    <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="가맹점" :is_range_date="true">
+    <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="가맹점" :date_filter_type="DateFilters.DATE_RANGE">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true" :sales="true" />
         </template>

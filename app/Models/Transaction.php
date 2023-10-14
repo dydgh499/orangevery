@@ -54,7 +54,8 @@ class Transaction extends Model
 
     public function scopeSettleTransaction($query)
     {
-        $date = request()->dt;
+        $s_dt = request()->s_dt;
+        $e_dt = request()->e_dt;
         if(request()->input('is_base_trx', 'false') == 'true')
         {
             $trx_dt = 'trx_dt';
@@ -65,10 +66,14 @@ class Transaction extends Model
             $trx_dt = "AddBaseWorkingDays(trx_dt, mcht_settle_type+1, pg_settle_type)";
             $cxl_dt = "AddBaseWorkingDays(cxl_dt, mcht_settle_type+1, pg_settle_type)";
         }
-        return $query->where(function ($query) use ($date, $trx_dt) {      
-                $query->whereRaw("$trx_dt <= '$date'")->where('is_cancel', false);
-            })->orWhere(function ($query) use ($date ,$cxl_dt) {
-                $query->whereRaw("$cxl_dt <= '$date'")->where('is_cancel', true);
+        return $query->where(function ($query) use ($s_dt, $e_dt, $trx_dt) {     
+                $query->whereRaw("$trx_dt >= '$s_dt'")
+                    ->whereRaw("$trx_dt <= '$e_dt'")
+                    ->where('is_cancel', false);
+            })->orWhere(function ($query) use ($s_dt, $e_dt ,$cxl_dt) {
+                $query->whereRaw("$cxl_dt >= '$s_dt'")
+                    ->whereRaw("$cxl_dt <= '$e_dt'")
+                    ->where('is_cancel', true);
             });
     }
 

@@ -19,7 +19,7 @@ const addDeduction = async () => {
     const params = {
         'amount': deduction.value,
         'id': props.id,
-        'dt': store.params.dt
+        'e_dt': store.params.e_dt
     };
     const page = props.is_mcht ? 'merchandises' : 'salesforces'
     if (await alert.value.show('정말 ' + props.name + '님을(를) 추가차감하시겠습니까?')) {

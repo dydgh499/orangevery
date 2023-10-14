@@ -39,7 +39,7 @@ class BatchSettleHistoryRequest extends FormRequest
             'datas.*.appr_amount'   => 'nullable|integer', 
             'datas.*.deduct_amount' => 'nullable|integer',
             'datas.*.settle_amount' => 'nullable|integer',
-            'dt' => 'required|date',
+            'e_dt' => 'required|date',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -75,7 +75,7 @@ class BatchSettleHistoryRequest extends FormRequest
             'deduct_amount' => $data['deduct_amount'],
             'settle_amount' => $data['settle_amount'],            
             'trx_amount'=> $data['trx_amount'],
-            'settle_dt' => $this->dt,
+            'settle_dt' => $this->e_dt,
         ];
     }
 }

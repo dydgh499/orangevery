@@ -6,6 +6,7 @@ import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { getUserLevel } from '@axios'
+import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
@@ -17,7 +18,7 @@ provide('exporter', exporter)
 
 </script>
 <template>
-    <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="정산" :is_range_date="true">
+    <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.DATE_RANGE">
         <template #filter>
             <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="true" :sales="true" />
         </template>

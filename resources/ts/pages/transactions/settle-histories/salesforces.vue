@@ -7,7 +7,7 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { salesLevels, getLevelByIndex } from '@/views/salesforces/useStore'
 import { getUserLevel } from '@axios'
-
+import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
@@ -24,7 +24,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :is_range_date="true">
+    <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.DATE_RANGE">
         <template #filter>
             <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                 :sales="false">

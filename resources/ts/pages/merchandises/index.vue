@@ -6,6 +6,7 @@ import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { user_info } from '@axios'
+import { DateFilters } from '@core/enums'
 
 const { store, head, exporter, getModuleTypes, getPGs } = useSearchStore()
 const password = ref()
@@ -71,7 +72,7 @@ watchEffect(() => {
 <template>
     <div>
         <BaseIndexView placeholder="상호, 연락처, 대표자명, 사업자번호 검색" :metas="metas" :add="user_info.level >= 35" add_name="가맹점"
-            :is_range_date="null">
+            :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true"
                     :sales="true">

@@ -2,6 +2,7 @@
 import { useSearchStore } from '@/views/merchandises/fee-change-histories/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import ExtraMenu from '@/views/merchandises/fee-change-histories/ExtraMenu.vue'
+import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 provide('store', store)
@@ -10,7 +11,7 @@ provide('exporter', exporter)
 
 </script>
 <template>
-    <BaseIndexView placeholder="가맹점명 검색" :metas="[]" :add="false" add_name="가맹점" :is_range_date="true">
+    <BaseIndexView placeholder="가맹점명 검색" :metas="[]" :add="false" add_name="가맹점" :date_filter_type="DateFilters.DATE_RANGE">
         <template #index_extra_field>
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
                 :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" :eager="true" />

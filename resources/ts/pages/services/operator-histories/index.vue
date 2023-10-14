@@ -2,7 +2,7 @@
 import { useSearchStore, history_types } from '@/views/services/operator-histories/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import ExtraMenu from '@/views/services/operator-histories/ExtraMenu.vue'
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
+import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 
@@ -13,7 +13,7 @@ provide('exporter', exporter)
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="운영자명, 적용대상 검색" :metas="[]" :add="false" add_name="" :is_range_date="true">
+        <BaseIndexView placeholder="운영자명, 적용대상 검색" :metas="[]" :add="false" add_name="" :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
             </template>
             <template #index_extra_field>

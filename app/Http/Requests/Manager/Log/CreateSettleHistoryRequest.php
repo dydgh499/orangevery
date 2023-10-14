@@ -22,7 +22,7 @@ class CreateSettleHistoryRequest extends FormRequest
             'appr_amount', 
             'deduct_amount',
             'settle_amount',
-            'dt',
+            'e_dt',
         ];
     }
 
@@ -49,7 +49,7 @@ class CreateSettleHistoryRequest extends FormRequest
             'appr_amount' => 'required|integer', 
             'deduct_amount' => 'required|integer',
             'settle_amount' => 'required|integer',
-            'dt' => 'required|date',
+            'e_dt' => 'required|date',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -85,7 +85,7 @@ class CreateSettleHistoryRequest extends FormRequest
             'deduct_amount' => $this->deduct_amount,
             'settle_amount' => $this->settle_amount,
             'trx_amount'=> $this->trx_amount,
-            'settle_dt' => $this->dt,
+            'settle_dt' => $this->e_dt,
         ];
     }
 }

@@ -24,3 +24,10 @@ export const StatusColors = {
     Warning : 4,
     Error   : 5,
 } as const
+
+export const DateFilters = {
+    NOT_USE: null,
+    DATE : 0,
+    DATE_RANGE : 1,
+    SETTLE_RANGE : 2,
+} as const

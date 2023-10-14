@@ -4,6 +4,7 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import PostReplyView from '@/views/posts/PostReplyView.vue'
 import ExtraMenu from '@/views/posts/ExtraMenu.vue'
 import router from '@/router'
+import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 provide('store', store)
@@ -12,7 +13,7 @@ provide('exporter', exporter)
 
 </script>
 <template>
-    <BaseIndexView placeholder="게시글 검색" :metas="[]" :add="true" add_name="게시글" :is_range_date="null">
+    <BaseIndexView placeholder="게시글 검색" :metas="[]" :add="true" add_name="게시글" :date_filter_type="DateFilters.NOT_USE">
         <template #filter>
         </template>
         <template #index_extra_field>

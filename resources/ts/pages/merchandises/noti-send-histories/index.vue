@@ -7,6 +7,7 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import ExtraMenu from '@/views/merchandises/noti-send-histories/ExtraMenu.vue'
 import NotiDetailDialog from '@/layouts/dialogs/NotiDetailDialog.vue'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
+import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
@@ -44,7 +45,7 @@ const batchRetry = async() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="MID, TID, 승인번호 검색" :metas="[]" :add="false" add_name="가맹점" :is_range_date="true">
+        <BaseIndexView placeholder="MID, TID, 승인번호 검색" :metas="[]" :add="false" add_name="가맹점" :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">

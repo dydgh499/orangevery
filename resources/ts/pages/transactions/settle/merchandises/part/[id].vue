@@ -9,6 +9,7 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { getUserLevel } from '@axios'
 import { cloneDeep } from 'lodash'
+import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
 const route = useRoute()
@@ -70,7 +71,8 @@ const metas = ref([
 
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
 store.params.id = route.params.id
-store.params.dt = route.params.dt
+store.params.s_dt = route.params.s_dt
+store.params.e_dt = route.params.e_dt
 store.params.level = 10
 
 const isSalesCol = (key: string) => {
@@ -167,7 +169,7 @@ watchEffect(() => {
 <template>
     <div>
         <BaseIndexView placeholder="MID, TID, 승인번호, 거래번호 검색" :metas="metas" :add="false" add_name=""
-            :is_range_date="false">
+            :date_filter_type="DateFilters.SETTLE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">
@@ -234,7 +236,7 @@ watchEffect(() => {
                             </BaseQuestionTooltip>
                         </template>
                         <template v-else-if="key == 'id'">
-                            <VCheckbox v-model="all_selected" label="선택/취소" class="check-label"/>
+                            <VCheckbox v-model="all_selected" label="선택/취소" class="check-label" style="min-width: 7em;"/>
                         </template>
                         <template v-else>
                             <span>

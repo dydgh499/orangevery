@@ -5,6 +5,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import { getUserLevel } from '@axios'
+import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
@@ -74,7 +75,7 @@ watchEffect(() => {
 <template>
     <div>
         <BaseIndexView placeholder="MID, TID, 승인번호, 거래번호, 주민번호, 사업자번호 검색" :metas="metas" :add="false" add_name=""
-            :is_range_date="true">
+            :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">

@@ -32,7 +32,7 @@ class MerchandiseController extends Controller
     }
     private function commonQuery($request)
     {
-        $validated = $request->validate(['dt'=>'required|date']);
+        $validated = $request->validate(['s_dt'=>'required|date', 'e_dt'=>'required|date']);
         [$settle_key, $group_key] = $this->getSettleCol($request);
 
         $cols = array_merge($this->getDefaultCols(), ['mcht_name']);
@@ -42,21 +42,23 @@ class MerchandiseController extends Controller
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
                 ->where('mcht_name', 'like', "%$search%");            
         $query = $query->with(['transactions', 'deducts']);
-        $data = $this->getIndexData($request, $query, 'id', $cols);
+        $data = $this->getIndexData($request, $query, 'id', $cols, "created_at", false);
         $data = $this->getSettleInformation($data, $settle_key); 
         // set terminals
         $mcht_ids = collect($data['content'])->pluck('id')->all();
         if(count($mcht_ids))
         {
-            $settle_day     = date('d', strtotime($request->dt));
+            $settle_s_day   = date('d', strtotime($request->s_dt));
+            $settle_e_day   = date('d', strtotime($request->e_dt));
             $pay_modules    = collect(
                 PaymentModule::whereIn('mcht_id', $mcht_ids)
-                ->where('comm_settle_day', $settle_day)
+                ->where('comm_settle_day', '>=', $settle_s_day)
+                ->where('comm_settle_day', '<=', $settle_e_day)
                 ->where('comm_calc_level', 10)
-                ->where('begin_dt', '<', $request->dt)
+                ->where('begin_dt', '<', $request->s_dt)
                 ->get()
             );
-            $data = $this->setTerminalCost($data, $pay_modules, $request->dt, 'mcht_id');
+            $data = $this->setTerminalCost($data, $pay_modules, $request->s_dt, $request->s_dt, 'mcht_id');
         }
         // set total settle
         $data = $this->setSettleFinalAmount($data);

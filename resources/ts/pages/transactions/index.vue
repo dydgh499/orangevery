@@ -15,6 +15,7 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { user_info, getUserLevel } from '@axios'
 import type { Options } from '@/views/types'
+import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
@@ -135,7 +136,7 @@ watchEffect(() => {
 <template>
     <div>
         <BaseIndexView placeholder="MID, TID, 승인번호, 거래번호, 결제모듈 별칭, 주민번호, 사업자번호, 발급사, 매입사 검색" :metas="metas" :add="user_info.level >= 35" add_name="매출"
-            :is_range_date="true">
+            :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">

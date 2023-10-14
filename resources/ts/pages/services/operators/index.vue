@@ -3,6 +3,7 @@ import { useSearchStore, operator_levels } from '@/views/services/operators/useS
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
+import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 const password = ref()
@@ -15,7 +16,7 @@ provide('exporter', exporter)
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="ID 및 성명 검색" :metas="[]" :add="true" add_name="운영자" :is_range_date="null">
+        <BaseIndexView placeholder="ID 및 성명 검색" :metas="[]" :add="true" add_name="운영자" :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
             </template>
             <template #index_extra_field>

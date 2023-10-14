@@ -341,7 +341,7 @@ class TransactionController extends Controller
     {
         $dev_settle_type = 1;
         $db_trans = $this->transactions
-            ->where('brand_id', 15)
+            ->where('brand_id', 7)
             ->orderBy('transactions.id', 'desc')
             ->get();
         

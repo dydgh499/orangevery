@@ -59,11 +59,11 @@ trait SettleTrait
 
     private function commonDeduct($orm, $col, $request)
     {
-        $validated = $request->validate(['amount'=>'required|integer', 'dt'=>'required|date', 'id'=>'required']);
+        $validated = $request->validate(['amount'=>'required|integer', 'e_dt'=>'required|date', 'id'=>'required']);
         $res = $orm->create([
             'brand_id'  => $request->user()->brand_id,
             'amount'    => $request->amount * -1,
-            'deduct_dt' => $request->dt,
+            'deduct_dt' => $request->e_dt,
             $col   => $request->id,
         ]);
         return $this->response(1);

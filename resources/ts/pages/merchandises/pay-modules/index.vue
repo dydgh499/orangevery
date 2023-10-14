@@ -5,6 +5,7 @@ import { module_types, installments } from '@/views/merchandises/pay-modules/use
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { user_info } from '@axios'
+import { DateFilters } from '@core/enums'
 
 const { pgs, pss, settle_types } = useStore()
 const { store, head, exporter } = useSearchStore()
@@ -63,7 +64,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <BaseIndexView placeholder="MID, TID, 가맹점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="결제모듈" :is_range_date="null">
+    <BaseIndexView placeholder="MID, TID, 가맹점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="결제모듈" :date_filter_type="DateFilters.NOT_USE">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true" :sales="true">                
                 <template #pg_extra_field>

@@ -7,6 +7,7 @@ import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
 import { salesLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import { getLevelByIndex } from '@/views/salesforces/useStore'
 import { user_info } from '@axios'
+import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 const all_sales = salesLevels()
@@ -75,7 +76,7 @@ watchEffect(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="영업점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="영업점" :is_range_date="null">
+        <BaseIndexView placeholder="영업점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="영업점" :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                     :sales="false">

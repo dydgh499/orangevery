@@ -7,21 +7,24 @@ use Carbon\Carbon;
 
 trait ManagerTrait
 {
-    public function getIndexData($request, $query, $index_col='id', $cols=[], $date="created_at", $is_group=false)
+    public function getIndexData($request, $query, $index_col='id', $cols=[], $date="created_at", $is_date_filter=true)
     {
         $page      = $request->input('page');
         $page_size = $request->input('page_size');
         $sp = ($page - 1) * $page_size;
 
-        if($request->has('s_dt'))
+        if($is_date_filter)
         {
-            $s_dt = date($request->s_dt." 00:00:00");
-            $query = $query->where($date, '>=', $s_dt);
-        }
-        if($request->has('e_dt'))
-        {
-            $e_dt = date($request->e_dt." 23:59:59");
-            $query = $query->where($date, '<=', $e_dt);
+            if($request->has('s_dt'))
+            {
+                $s_dt = date($request->s_dt." 00:00:00");
+                $query = $query->where($date, '>=', $s_dt);
+            }
+            if($request->has('e_dt'))
+            {
+                $e_dt = date($request->e_dt." 23:59:59");
+                $query = $query->where($date, '<=', $e_dt);
+            }    
         }
 
         $min    = $query->min($index_col);
@@ -29,11 +32,7 @@ trait ManagerTrait
         if($min != NULL)
         {
             $con_query = $query->where($index_col, '>=', $min);
-            if($is_group)
-                $res['total']   = $con_query->get([$index_col])->count();
-            else
-                $res['total']   = $query->count();
-
+            $res['total']   = $query->count();
 
             $con_query = $con_query->orderBy($date, 'desc')->offset($sp)->limit($page_size);
             $res['content'] = count($cols) ? $con_query->get($cols) : $con_query->get();

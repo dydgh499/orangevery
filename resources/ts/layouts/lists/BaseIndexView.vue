@@ -9,7 +9,7 @@ interface Props {
     metas: any[],
     add: boolean,
     add_name: string,
-    is_range_date: boolean | null
+    date_filter_type: number | null
 }
 const props = defineProps<Props>()
 
@@ -36,7 +36,7 @@ onMounted(() => {
                 <br>
                 <VCard>
                     <BaseIndexFilter :placeholder="props.placeholder" :add="props.add" :add_name="props.add_name"
-                        :is_range_date="props.is_range_date">
+                        :date_filter_type="props.date_filter_type">
                         <template #index_extra_field>
                             <slot name="index_extra_field"></slot>
                         </template>

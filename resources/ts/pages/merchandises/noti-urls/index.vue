@@ -3,6 +3,7 @@ import { useSearchStore, noti_statuses } from '@/views/merchandises/noti-urls/us
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { user_info } from '@axios'
+import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 
@@ -14,7 +15,7 @@ provide('exporter', exporter)
 <template>
     <div>
         <BaseIndexView placeholder="가맹점 상호, 발송 URL 검색" :metas="[]" :add="user_info.level >= 35" add_name="노티"
-            :is_range_date="null">
+            :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="true"
                     :sales="true">
