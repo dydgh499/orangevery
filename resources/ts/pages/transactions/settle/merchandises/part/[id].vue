@@ -132,6 +132,7 @@ onMounted(() => {
             metas.value[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
         }
     })
+    snackbar.value.show('정산일은 검색 종료일('+store.params.e_dt+') 기준으로 진행됩니다.', 'success')
 })
 watchEffect(() => {
     store.setChartProcess()

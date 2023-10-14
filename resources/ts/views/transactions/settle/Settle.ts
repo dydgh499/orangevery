@@ -91,7 +91,9 @@ export function SettlementFunctionCollect(store: any) {
     
     const movePartSettle = (id: number, is_mcht: boolean) => {    
         const page = is_mcht ? 'merchandises' : 'salesforces'
-        router.push('/transactions/settle/'+page+'/part/' + id + '?s_dt=' + store.params.s_dt + "&e_dt=" + store.params.e_dt)
+        let url = '/transactions/settle/'+page+'/part/' + id + '?s_dt=' + store.params.s_dt + "&e_dt=" + store.params.e_dt
+        url += "&level=" + (is_mcht ? 10 : store.params.level)
+        router.push(url)
     }
 
     const isAbleMchtDepositCollect = (is_mcht: boolean) => {

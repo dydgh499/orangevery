@@ -22,6 +22,7 @@ const all_days = settleDays()
 const tax_types = settleTaxTypes()
 
 const totals = ref(<any[]>([]))
+const snackbar = <any>(inject('snackbar'))
 
 provide('store', store)
 provide('head', head)
@@ -38,6 +39,7 @@ onMounted(() => {
             totals.value.push(r.data)
         }
     })
+    snackbar.value.show('정산일은 검색 종료일('+store.params.e_dt+') 기준으로 진행됩니다.', 'success')
 })
 
 watchEffect(() => {

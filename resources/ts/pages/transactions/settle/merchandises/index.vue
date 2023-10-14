@@ -23,6 +23,7 @@ store.params.level = 10 // taransaction model에서 필수
 
 const { settle_types } = useStore()
 const totals = ref(<any[]>([]))
+const snackbar = <any>(inject('snackbar'))
 
 onMounted(() => {
     watchEffect(async () => {
@@ -32,6 +33,7 @@ onMounted(() => {
             totals.value.push(r.data)
         }
     })
+    snackbar.value.show('정산일은 검색 종료일('+store.params.e_dt+') 기준으로 진행됩니다.', 'success')
 })
 watchEffect(() => {
     store.setChartProcess()

@@ -30,33 +30,34 @@ class SalesforceController extends Controller
         $this->settleDeducts = $settleDeducts;
     }
 
-    private function commonSalesQuery($query, $date)
+    private function commonSalesQuery($query, $s_dt, $e_dt)
     {
-        if(Carbon::parse($date)->isLastOfMonth()) 
+        if(Carbon::parse($e_dt)->isLastOfMonth())
         { // 조회 일이 말일이면 settle_cycle 28인 영업자도 조회
-            $query = $query->where(function ($query) use ($date) {
-                $query->where('settle_day', Carbon::parse($date)->dayOfWeek)
+            $query = $query->where(function ($query) use ($e_dt) {
+                $query->where('settle_day', Carbon::parse($e_dt)->dayOfWeek)
                     ->orWhereNull('settle_day');
             });
         }
         else
         {   // 말일이 아니라면 settle_cycle 28인 영업자는 제외
             $query = $query
-                ->where('settle_day', Carbon::parse($date)->dayOfWeek)
+                ->where('settle_day', Carbon::parse($e_dt)->dayOfWeek)
                 ->where('settle_cycle', '!=', 28);
         }
-        return $query->whereRaw("'$date' > DATE_ADD(COALESCE(last_settle_dt, '2000-01-01'), INTERVAL(settle_cycle) DAY)");
+        return $query->whereRaw("'$e_dt' > DATE_ADD(COALESCE(last_settle_dt, '2000-01-01'), INTERVAL(settle_cycle) DAY)");
     }
 
     private function commonQuery($request)
     {
-        $validated = $request->validate(['dt'=>'required|date']);
+        $validated = $request->validate(['s_dt'=>'required|date', 'e_dt'=>'required|date']);
         [$settle_key, $group_key] = $this->getSettleCol($request);
 
         $cols   = array_merge($this->getDefaultCols(), ['sales_name', 'level', 'settle_cycle', 'settle_day', 'settle_tax_type', 'last_settle_dt']);
         $search = $request->input('search', '');
         $level  = $request->level;
-        $date   = $request->dt;
+        $s_dt   = $request->s_dt;
+        $e_dt   = $request->e_dt;
 
         [$target_id, $target_settle_id] =  $this->getTargetInfo($level);
         $sales_ids = $this->getExistTransUserIds($target_id, $target_settle_id);
@@ -67,23 +68,25 @@ class SalesforceController extends Controller
         if($request->settle_cycle)
             $query = $query->where('settle_cycle', $request->settle_cycle);
 
-        $query = $this->commonSalesQuery($query, $date);
+        $query = $this->commonSalesQuery($query, $s_dt, $e_dt);
         $query = $query->with(['transactions', 'deducts']);
-        $data = $this->getIndexData($request, $query, 'id', $cols);
+        $data = $this->getIndexData($request, $query, 'id', $cols, "created_at", false);
         $data = $this->getSettleInformation($data, $settle_key);
         // set terminals
         if(count($sales_ids))
         {
-            $settle_day  = date('d', strtotime($request->dt));
+            $settle_s_day   = date('d', strtotime($request->s_dt));
+            $settle_e_day   = date('d', strtotime($request->e_dt));
             $pay_modules = collect(
                 Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
                     ->whereIn("merchandises.".$target_id, $sales_ids)
-                    ->where('payment_modules.comm_settle_day', $settle_day)
+                    ->where('payment_modules.comm_settle_day', '>=', $settle_s_day)
+                    ->where('payment_modules.comm_settle_day', '<=', $settle_e_day)
                     ->where('payment_modules.comm_calc_level', $level)
-                    ->where('payment_modules.begin_dt', '<', $request->dt)
+                    ->where('payment_modules.begin_dt', '<', $request->s_dt)
                     ->get(["payment_modules.*", "merchandises.".$target_id])
             );
-            $data = $this->setTerminalCost($data, $pay_modules, $request->dt, $target_id);
+            $data = $this->setTerminalCost($data, $pay_modules, $request->s_dt, $request->s_dt, $target_id);
         }
         // set total settle
         $data = $this->setSettleFinalAmount($data);
@@ -143,10 +146,11 @@ class SalesforceController extends Controller
     public function part(Request $request)
     {
         $level  = $request->level;
-        $date   = $request->dt;
+        $s_dt   = $request->s_dt;
+        $e_dt   = $request->e_dt;
 
         $query = $this->salesforces->where('id', $request->id);
-        $sales = $this->commonSalesQuery($query, $date)->first();
+        $sales = $this->commonSalesQuery($query, $s_dt, $e_dt)->first();
         if($sales)
         {
             [$target_id, $target_settle_id] = $this->getTargetInfo($level);
@@ -172,11 +176,13 @@ class SalesforceController extends Controller
         ]);
         
         $level  = $request->level;
-        $date   = $request->dt;
+        $s_dt   = $request->s_dt;
+        $e_dt   = $request->e_dt;
+        
         [$settle_key, $group_key] = $this->getSettleCol($request);
 
         $query = $this->salesforces->where('id', $request->id);
-        $sales = $this->commonSalesQuery($query, $date)->first();
+        $sales = $this->commonSalesQuery($query, $s_dt, $e_dt)->first();
         if($sales)
         {
             $idx = globalLevelByIndex($request->level);

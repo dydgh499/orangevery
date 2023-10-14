@@ -134,6 +134,7 @@ onMounted(() => {
             metas.value[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
         }
     })
+    snackbar.value.show('정산일은 검색 종료일('+store.params.e_dt+') 기준으로 진행됩니다.', 'success')
 })
 watchEffect(() => {
     store.setChartProcess()
@@ -241,7 +242,7 @@ watchEffect(() => {
                             </BaseQuestionTooltip>
                         </template>
                         <template v-else-if="key == 'id'">
-                            <VCheckbox v-model="all_selected" label="선택/취소" class="check-label"/>
+                            <VCheckbox v-model="all_selected" label="선택/취소" class="check-label" style="min-width: 7em;"/>
                         </template>
                         <template v-else>
                             <span>
