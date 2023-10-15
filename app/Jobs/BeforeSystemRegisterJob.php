@@ -100,7 +100,7 @@ class BeforeSystemRegisterJob implements ShouldQueue
             $finance->getPaywell($this->paywell->table('finance_vans'), $this->brand_id, $this->before_brand_id);
             $finance->setPayvery($this->payvery->table('finance_vans'), $this->brand_id);
 
-            $pmod = new PaymentModule($pg->pg_companies);
+            $pmod = new PaymentModule($pg->pg_companies, $brand->use_realtime_deposit);
             $pmod->connectPGInfo($pg->payvery, $pg->paywell_to_payvery, $ps->payvery, $ps->paywell_to_payvery, $finance->paywell_to_payvery);
             $pmod->connectClsInfo($cfic->payvery, $cfic->paywell_to_payvery);
             $pmod->connectMchtInfo($mcht->payvery, $mcht->paywell_to_payvery);

@@ -11,14 +11,15 @@ class PaymentModule
 {
     use StoresTrait, BeforeSystemTrait;
 
-    public $paywell, $payvery, $paywell_to_payvery, $current_time;
-    public function __construct($pg_companies)
+    public $paywell, $payvery, $paywell_to_payvery, $current_time, $use_realtime_deposit;
+    public function __construct($pg_companies, $use_realtime_deposit)
     {
         $this->pg_companies = $pg_companies;
         $this->paywell = [];
         $this->payvery = [];
         $this->paywell_to_payvery = [];
         $this->current_time = date('Y-m-d H:i:s');
+        $this->use_realtime_deposit = $use_realtime_deposit;
     }
 
     public function connectPGInfo($payvery_pgs, $paywell_to_payvery_pgs, $payvery_pss, $paywell_to_payvery_pss, $paywell_to_payvery_finance)
@@ -85,8 +86,8 @@ class PaymentModule
                 'pg_id' => $mcht->PGID_PK ? $this->paywell_to_payvery_pgs[$mcht->PGID_PK] : null,
                 'ps_id' => $mcht->PG_SEC_PK ? $this->paywell_to_payvery_pss[$mcht->PG_SEC_PK] : null,
                 'module_type' => 0,
-                'settle_type' => 0,
-                'settle_fee' => 0,
+                'settle_type' => $this->use_realtime_deposit ? -1 : 0,
+                'settle_fee' => $mcht->DPST_FEE,
                 'mid' => $mcht->MID,
                 'tid' => $mcht->TID,
                 'serial_num' => $mcht->SERIAL_NUM,
@@ -136,6 +137,8 @@ class PaymentModule
                 'pg_id' => $this->getOnlinePGId($payvery, $mcht->M_PG, $brand_id),
                 'ps_id' => $mcht->PG_SEC_PK ? $this->paywell_to_payvery_pss[$mcht->PG_SEC_PK] : null,
                 'module_type' => 1,
+                'settle_type' => $this->use_realtime_deposit ? -1 : 0,
+                'settle_fee' => $mcht->DPST_FEE,
                 'api_key' => $mcht->M_KEY,
                 'sub_key' => $mcht->M_SUB_KEY,
                 'mid' => $mcht->M_MID,
