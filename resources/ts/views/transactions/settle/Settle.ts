@@ -26,6 +26,8 @@ export function SettlementFunctionCollect(store: any) {
             trx_amount: item.total_trx_amount,    // 총 거래 수수료(매출)
             level: is_mcht ? 10 : item.level,
             settle_fee: is_mcht ? item.settle_fee : 0,
+            comm_settle_amount: item.terminal.amount,
+            under_sales_amount: item.terminal.under_sales_amount,
         }
     }
     

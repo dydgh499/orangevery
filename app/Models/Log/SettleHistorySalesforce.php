@@ -12,7 +12,4 @@ class SettleHistorySalesforce extends Model
     protected   $table      = 'settle_histories_salesforces';
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
-    protected   $hidden     = [
-        'brand_id',
-    ];
 }

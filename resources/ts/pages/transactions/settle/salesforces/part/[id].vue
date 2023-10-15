@@ -27,6 +27,8 @@ const settle = ref({
     'trx_amount': 0,
     'settle_fee': 0,
     'deduct_amount': 0,
+    'comm_settle_amount':0,
+    'under_sales_amount':0,
 })
 const metas = ref([
     {
@@ -99,10 +101,14 @@ const partSettle = async () => {
     if(count)
     {
         if (await alert.value.show('정말 '+count+'개의 매출을 부분정산하시겠습니까?<br><br>NO. ['+str_selected+']')) {
-            const res = await post('/api/v1/manager/transactions/settle-histories/'+path+'/part', params)
-            snackbar.value.show('성공하였습니다.', 'success')
-            store.setChartProcess()
-            store.setTable()
+            const r = await post('/api/v1/manager/transactions/settle-histories/'+path+'/part', params)
+            if (r.status == 201) {
+                snackbar.value.show('성공하였습니다.', 'success')
+                store.setChartProcess()
+                store.setTable()
+            }
+            else
+                snackbar.value.show(r.data.message, 'error')
         }
     }
     else
@@ -151,6 +157,8 @@ watchEffect(() => {
         'trx_amount'    : 0,
         'settle_fee'    : 0,
         'deduct_amount' : 0,
+        'comm_settle_amount':0,
+        'under_sales_amount':0,
     }
     for (let i = 0; i < selected.value.length; i++) {
         const trans:any = store.getItems.find(item => item['id'] == selected.value[i])
@@ -163,7 +171,6 @@ watchEffect(() => {
             _settle.total_amount += trans['amount']
             _settle.settle_amount += trans['profit']
             _settle.trx_amount += trans['trx_amount']
-            _settle.settle_fee += trans['trx_amount']
         }
     }
     settle.value = _settle
@@ -195,6 +202,10 @@ watchEffect(() => {
                     </div>
                     <table>
                         <tr>
+                            <th>매출액 합계</th>
+                            <td><span>{{ settle.total_amount.toLocaleString() }}</span> &#8361;</td>
+                        </tr> 
+                        <tr>
                             <th>승인액 합계</th>
                             <td><span>{{ settle.appr_amount.toLocaleString() }}</span> &#8361;</td>
                         </tr>            
@@ -202,23 +213,19 @@ watchEffect(() => {
                             <th>취소액 합계</th>
                             <td><span>{{ settle.cxl_amount.toLocaleString() }}</span> &#8361;</td>
                         </tr>
-                        <tr>
-                            <th>거래 수수료</th>
-                            <td><span>{{ settle.trx_amount.toLocaleString() }}</span> &#8361;</td>
-                        </tr>
                     </table>
                     <table>
-                        <tr>
-                            <th>매출액 합계</th>
-                            <td><span>{{ settle.total_amount.toLocaleString() }}</span> &#8361;</td>
-                        </tr>            
                         <tr>
                             <th>정산액 합계</th>
                             <td><span>{{ settle.settle_amount.toLocaleString() }}</span> &#8361;</td>
                         </tr>
                         <tr>
-                            <th>입금 수수료</th>
-                            <td><span>{{ settle.settle_fee.toLocaleString() }}</span> &#8361;</td>
+                            <th>거래 수수료</th>
+                            <td><span>{{ settle.trx_amount.toLocaleString() }}</span> &#8361;</td>
+                        </tr>
+                        <tr>
+                            <th><br></th>
+                            <td><span></span></td>
                         </tr>
                     </table>
                 </div>

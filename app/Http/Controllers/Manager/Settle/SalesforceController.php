@@ -32,20 +32,14 @@ class SalesforceController extends Controller
 
     private function commonSalesQuery($query, $s_dt, $e_dt)
     {
-        if(Carbon::parse($e_dt)->isLastOfMonth())
-        { // 조회 일이 말일이면 settle_cycle 28인 영업자도 조회
-            $query = $query->where(function ($query) use ($e_dt) {
-                $query->where('settle_day', Carbon::parse($e_dt)->dayOfWeek)
-                    ->orWhereNull('settle_day');
-            });
-        }
-        else
-        {   // 말일이 아니라면 settle_cycle 28인 영업자는 제외
-            $query = $query
-                ->where('settle_day', Carbon::parse($e_dt)->dayOfWeek)
-                ->where('settle_cycle', '!=', 28);
-        }
-        return $query->whereRaw("'$e_dt' > DATE_ADD(COALESCE(last_settle_dt, '2000-01-01'), INTERVAL(settle_cycle) DAY)");
+        // 말일이 아니라면 settle_cycle 28인 영업자는 제외
+        if(Carbon::parse($e_dt)->isLastOfMonth() == false)
+            $query = $query->where('settle_cycle', '!=', 28);
+
+        return $query->where(function ($query) use ($e_dt) {
+            $query->where('settle_day', Carbon::parse($e_dt)->dayOfWeek)
+                ->orWhereNull('settle_day');
+        })->whereRaw("'$e_dt' > DATE_ADD(COALESCE(last_settle_dt, '2000-01-01'), INTERVAL(settle_cycle) DAY)");
     }
 
     private function commonQuery($request)
@@ -71,17 +65,20 @@ class SalesforceController extends Controller
         $query = $this->commonSalesQuery($query, $s_dt, $e_dt);
         $query = $query->with(['transactions', 'deducts']);
         $data = $this->getIndexData($request, $query, 'id', $cols, "created_at", false);
+
         $data = $this->getSettleInformation($data, $settle_key);
         // set terminals
         if(count($sales_ids))
         {
             $settle_s_day   = date('d', strtotime($request->s_dt));
             $settle_e_day   = date('d', strtotime($request->e_dt));
+            $settle_month   = date('Ym', strtotime($request->e_dt)); //202310
             $pay_modules = collect(
                 Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
                     ->whereIn("merchandises.".$target_id, $sales_ids)
                     ->where('payment_modules.comm_settle_day', '>=', $settle_s_day)
                     ->where('payment_modules.comm_settle_day', '<=', $settle_e_day)
+                    ->where('payment_modules.last_settle_month', '<', $settle_month)
                     ->where('payment_modules.comm_calc_level', $level)
                     ->where('payment_modules.begin_dt', '<', $request->s_dt)
                     ->get(["payment_modules.*", "merchandises.".$target_id])
@@ -180,23 +177,14 @@ class SalesforceController extends Controller
         $e_dt   = $request->e_dt;
         
         [$settle_key, $group_key] = $this->getSettleCol($request);
-
         $query = $this->salesforces->where('id', $request->id);
         $sales = $this->commonSalesQuery($query, $s_dt, $e_dt)->first();
         if($sales)
         {
             $idx = globalLevelByIndex($request->level);
-            $key = 'sales'.$idx;
-    
-            $query = Transaction::where($key.'_id', $request->id)
-                ->globalFilter()
-                ->settleFilter($key."_settle_id")
-                ->settleTransaction();
-    
-            $query = globalPGFilter($query, $request);
-            $query = globalSalesFilter($query, $request);
-            $query = globalAuthFilter($query, $request);
-    
+            $query = Transaction::query()
+                ->where($group_key, $request->id)
+                ->noSettlement("sales".$idx."_settle_id");
             $data = $this->getIndexData($request, $query);
             $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
             $salesforces    = globalGetSalesByIds($sales_ids);

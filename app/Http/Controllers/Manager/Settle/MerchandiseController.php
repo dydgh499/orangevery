@@ -50,12 +50,14 @@ class MerchandiseController extends Controller
         {
             $settle_s_day   = date('d', strtotime($request->s_dt));
             $settle_e_day   = date('d', strtotime($request->e_dt));
+            $settle_month   = date('Ym', strtotime($request->e_dt)); //202310
             $pay_modules    = collect(
                 PaymentModule::whereIn('mcht_id', $mcht_ids)
                 ->where('comm_settle_day', '>=', $settle_s_day)
                 ->where('comm_settle_day', '<=', $settle_e_day)
-                ->where('comm_calc_level', 10)
+                ->where('last_settle_month', '<', $settle_month)
                 ->where('begin_dt', '<', $request->s_dt)
+                ->where('comm_calc_level', 10)
                 ->get()
             );
             $data = $this->setTerminalCost($data, $pay_modules, $request->s_dt, $request->s_dt, 'mcht_id');
@@ -130,15 +132,10 @@ class MerchandiseController extends Controller
             'page_size' => 999999,
         ]);
         [$settle_key, $group_key] = $this->getSettleCol($request);
-        $query = Transaction::where('mcht_id', $request->id)
-            ->globalFilter()
-            ->settleFilter('mcht_settle_id')
-            ->settleTransaction();
-        $query = globalPGFilter($query, $request);
-        $query = globalSalesFilter($query, $request);
-        $query = globalAuthFilter($query, $request);
-        $cols = $this->getTotalCols($settle_key);
-        $chart = $query->first($cols);
+        $cols  = $this->getTotalCols($settle_key);
+        $chart = Transaction::where('mcht_id', $request->id)
+            ->noSettlement('mcht_settle_id')
+            ->first($cols);
         $chart = $this->setTransChartFormat($chart);
         return $this->response(0, $chart);
     }

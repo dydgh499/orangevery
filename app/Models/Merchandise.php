@@ -28,18 +28,26 @@ class Merchandise extends Authenticatable
 
     public function transactions()
     {
+        $cols = [
+            'id',
+            'mcht_id',
+            'amount',
+            'mcht_settle_amount',
+            'mcht_settle_fee',
+            'hold_fee',
+            'is_cancel',
+            'pmod_id',
+        ];
         return $this->hasMany(Transaction::class, 'mcht_id')
-            ->globalFilter()
-            ->settleFilter('mcht_settle_id')
-            ->settleTransaction()            
-            ->select();
+            ->noSettlement('mcht_settle_id')
+            ->select($cols);
     }
     
     public function deducts()
     {
         return $this->hasMany(SettleDeductMerchandise::class, 'mcht_id')
             ->where('brand_id', request()->user()->brand_id)
-            ->where('deduct_dt', request()->dt)
+            ->where('deduct_dt', request()->e_dt)
             ->select();
     }
     

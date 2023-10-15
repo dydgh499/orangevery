@@ -52,7 +52,7 @@ class Transaction extends Model
         return $query;
     }
 
-    public function scopeSettleTransaction($query)
+    public function scopeSettleDateTypeTransaction($query)
     {
         $s_dt = request()->s_dt;
         $e_dt = request()->e_dt;
@@ -77,28 +77,56 @@ class Transaction extends Model
             });
     }
 
-    public function scopeSettleFilter($query, $target)
+    public function scopeNoSettlement($query, $target)
     {
+        $query = globalPGFilter($query, request());
+        $query = globalSalesFilter($query, request());
+        $query = globalAuthFilter($query, request());
         return $query->whereNull($target)
-            ->where('brand_id', request()->user()->brand_id);
+            ->where('is_delete', false)
+            ->where('brand_id', request()->user()->brand_id)
+            ->settleDateTypeTransaction();
     }
 
-    public function scopeNullSettleFilter($query, $target, $id)
+    public function scopeSettleFilter($query, $target, $id)
     {
         return $query->where($target, $id)
             ->where('brand_id', request()->user()->brand_id);
     }
 
+    private function getProfitCol($level)
+    {
+        if($level == 10)
+            $settle_key = 'mcht_settle_amount';
+        else if($level < 35)
+            $settle_key = 'sales'.globalLevelByIndex($level).'_settle_amount';
+        else
+        {
+            $settle = $level == 50 ? 'dev' :'brand';
+            $settle_key = $settle."_settle_amount";
+        }
+        return $settle_key;
+    }
+
     public function getTrxAmountAttribute()
-    {   //거래 수수료(거래수수료 + 유보금 + 입금수수료)        
-        $trx_amount = $this->amount - $this->profit;
-        $trx_amount = request()->level == 10 ? $trx_amount - $this->mcht_settle_fee : $trx_amount;
-        return $trx_amount;
+    {   //거래 수수료(거래수수료 + 유보금 + 입금수수료)
+        $level = request()->level;
+        $settle_key = $this->getProfitCol($level);
+
+        if($level == 10)
+            return $this->amount - $this[$settle_key] + $this->mcht_settle_fee + round($this->amount * $this->hold_fee);
+        else
+            return $this->amount - $this[$settle_key];
     }
 
     public function getTotalTrxAmountAttribute()
     {
-        return $this->amount - $this->profit;
+        $level = request()->level;
+        $settle_key = $this->getProfitCol($level);
+        if($level == 50)
+            return $this->amount - $this[$settle_key] - $this->dev_realtime_settle_amount;
+        else
+            return $this->amount - $this[$settle_key];
     }
 
     public function getHoldAmountAttribute()

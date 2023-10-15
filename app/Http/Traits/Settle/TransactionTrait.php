@@ -187,8 +187,8 @@ trait TransactionTrait
         }
         else
         {
-            $settle = $request->level == 50 ? 'dev' :'brand';
             $group_key = 'brand_id';
+            $settle = $request->level == 50 ? 'dev' :'brand';
             $settle_key = $settle."_settle_amount";
         }
         return [$settle_key, $group_key];

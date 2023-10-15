@@ -33,6 +33,8 @@ const settle = ref({
     'trx_amount': 0,
     'settle_fee': 0,
     'deduct_amount': 0,
+    'comm_settle_amount':0,
+    'under_sales_amount':0,
 })
 const metas = ref([
     {
@@ -86,7 +88,7 @@ const isSalesCol = (key: string) => {
 const partSettle = async () => {
     const count = selected.value.length
     const str_selected = selected.value.join(',')
-    const params = Object.assign(cloneDeep(store.params), settle.value);
+    const params = Object.assign(cloneDeep(store.params), settle.value)
     const path = params.level == 10 ? 'merchandises' : 'salesforce'
 
     params.selected = selected.value
@@ -148,6 +150,8 @@ watchEffect(() => {
         'trx_amount'    : 0,
         'settle_fee'    : 0,
         'deduct_amount' : 0,
+        'comm_settle_amount':0,
+        'under_sales_amount':0,
     }
     for (let i = 0; i < selected.value.length; i++) {
         const trans:any = store.getItems.find(item => item['id'] == selected.value[i])
@@ -160,7 +164,7 @@ watchEffect(() => {
             _settle.total_amount += trans['amount']
             _settle.settle_amount += trans['profit']
             _settle.trx_amount += trans['trx_amount']
-            _settle.settle_fee += trans['trx_amount']
+            _settle.settle_fee += trans['mcht_settle_fee']
         }
 
     }
@@ -190,6 +194,10 @@ watchEffect(() => {
                 <div style="display: flex;">
                     <table>
                         <tr>
+                            <th>매출액 합계</th>
+                            <td><span>{{ settle.total_amount.toLocaleString() }}</span> &#8361;</td>
+                        </tr>
+                        <tr>
                             <th>승인액 합계</th>
                             <td><span>{{ settle.appr_amount.toLocaleString() }}</span> &#8361;</td>
                         </tr>            
@@ -197,19 +205,15 @@ watchEffect(() => {
                             <th>취소액 합계</th>
                             <td><span>{{ settle.cxl_amount.toLocaleString() }}</span> &#8361;</td>
                         </tr>
-                        <tr>
-                            <th>거래 수수료</th>
-                            <td><span>{{ settle.trx_amount.toLocaleString() }}</span> &#8361;</td>
-                        </tr>
                     </table>
                     <table>
                         <tr>
-                            <th>매출액 합계</th>
-                            <td><span>{{ settle.total_amount.toLocaleString() }}</span> &#8361;</td>
-                        </tr>            
-                        <tr>
                             <th>정산액 합계</th>
                             <td><span>{{ settle.settle_amount.toLocaleString() }}</span> &#8361;</td>
+                        </tr>
+                        <tr>
+                            <th>거래 수수료</th>
+                            <td><span>{{ settle.trx_amount.toLocaleString() }}</span> &#8361;</td>
                         </tr>
                         <tr>
                             <th>입금 수수료</th>

@@ -12,7 +12,4 @@ class SettleHistoryMerchandise extends Model
     protected   $table      = 'settle_histories_merchandises';
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
-    protected   $hidden     = [
-        'brand_id',
-    ];
 }

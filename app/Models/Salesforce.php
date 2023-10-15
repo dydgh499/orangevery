@@ -30,19 +30,25 @@ class Salesforce extends Authenticatable
 
     public function transactions()
     {
-        $idx = globalLevelByIndex(request()->level);        
+        $idx = globalLevelByIndex(request()->level);  
+        $cols = [
+            'id',
+            'is_cancel',
+            'pmod_id',
+            'amount',
+            'sales'.$idx.'_id',
+            'sales'.$idx.'_settle_amount',
+        ];
         return $this->hasMany(Transaction::class, 'sales'.$idx."_id")
-            ->globalFilter()
-            ->settleFilter('sales'.$idx.'_settle_id')
-            ->settleTransaction()
-            ->select();
+            ->noSettlement('sales'.$idx.'_settle_id')
+            ->select($cols);
     }
     
     public function deducts()
     {
         return $this->hasMany(SettleDeductSalesforce::class, 'sales_id')
             ->where('brand_id', request()->user()->brand_id)
-            ->where('deduct_dt', request()->dt)
+            ->where('deduct_dt', request()->e_dt)
             ->select();
     }
 

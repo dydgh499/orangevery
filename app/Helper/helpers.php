@@ -340,7 +340,6 @@
             $chart[$type]['settle_fee'] += $transaction->mcht_settle_fee;
             $chart[$type]['total_trx_amount'] += $transaction->total_trx_amount;
         }
-    
         // 전체 차트 값을 계산합니다.
         foreach ($chart['appr'] as $key => $value) {
             if ($key != 'count') { // 'count'는 더하지 않습니다.

@@ -548,6 +548,7 @@ export interface Settle extends TotalSettle, Bank {
     },
     terminal: {
         amount: number,
+        under_sales_amount: number,
     },
     sector: string,
     rep_name: string,

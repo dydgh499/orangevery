@@ -22,6 +22,8 @@ class CreateSettleHistoryRequest extends FormRequest
             'appr_amount', 
             'deduct_amount',
             'settle_amount',
+            'comm_settle_amount',
+            'under_sales_amount',
             'e_dt',
         ];
     }
@@ -40,7 +42,7 @@ class CreateSettleHistoryRequest extends FormRequest
     {
         $sub = [
             'id'        => 'required|integer',
-            'acct_name'   => 'required', 
+            'acct_name' => 'required', 
             'acct_num'  => 'required', 
             'acct_bank_name' => 'required', 
             'acct_bank_code' => 'required', 
@@ -86,6 +88,8 @@ class CreateSettleHistoryRequest extends FormRequest
             'settle_amount' => $this->settle_amount,
             'trx_amount'=> $this->trx_amount,
             'settle_dt' => $this->e_dt,
+            'comm_settle_amount' => $this->comm_settle_amount,
+            'under_sales_amount' => $this->under_sales_amount,
         ];
     }
 }

@@ -49,9 +49,7 @@ trait SettleTrait
 
     private function getExistTransUserIds($col, $target)
     {   //#date
-        return Transaction::settleFilter($target)    
-            ->globalFilter()
-            ->settleTransaction()
+        return Transaction::noSettlement($target)
             ->distinct()
             ->pluck($col)
             ->all();
@@ -85,9 +83,7 @@ trait SettleTrait
 
         $search = $request->input('search', '');
         $query = Transaction::where($target_id, $request->id)
-            ->globalFilter()
-            ->settleFilter($target_settle_id)
-            ->settleTransaction()
+            ->noSettlement($target_settle_id)
             ->where(function ($query) use ($search) {
                 return $query->where('mid', 'like', "%$search%")
                     ->orWhere('tid', 'like', "%$search%")

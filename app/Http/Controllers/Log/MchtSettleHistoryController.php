@@ -75,11 +75,11 @@ class MchtSettleHistoryController extends Controller
                 $query = Transaction::where('mcht_id', $data['mcht_id']);
                 $c_res = $this->settle_mcht_hist->create($data);
                 $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);    
+                $p_res = $this->SetPayModuleLastSettleMonth($data, 'mcht_settle_id', $c_res->id);
             }
             return $this->response($c_res && $u_res ? 1 : 990);    
         });
     }
-
 
     public function destroy(Request $request, $id)
     {
@@ -93,7 +93,6 @@ class MchtSettleHistoryController extends Controller
     {
         return $this->deposit($this->settle_mcht_hist, $id);
     }
-
 
     /**
      * 재이체
@@ -113,9 +112,7 @@ class MchtSettleHistoryController extends Controller
     public function settleCollect(CreateSettleHistoryRequest $request)
     {
         $trx_ids = Transaction::where('mcht_id', $request->id)
-            ->globalFilter()
-            ->settleFilter('mcht_settle_id')
-            ->settleTransaction()
+            ->noSettlement('mcht_settle_id')
             ->pluck('id')->all();
 
         $data = $request->data('mcht_id');
