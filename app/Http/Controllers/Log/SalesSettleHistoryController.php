@@ -84,7 +84,7 @@ class SalesSettleHistoryController extends Controller
                 $s_res = Salesforce::where('id', $request->id)->update(['last_settle_dt' => $data['settle_dt']]);
                 $p_res = $this->SetPayModuleLastSettleMonth($data, $target_settle_id, $c_res->id);
             }
-            return $this->response($c_res && $u_res ? 1 : 990);
+            return $this->response($c_res ? 1 : 990);
         });
     }
 

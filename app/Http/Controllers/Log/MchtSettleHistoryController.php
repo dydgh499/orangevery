@@ -66,7 +66,6 @@ class MchtSettleHistoryController extends Controller
     {
         return DB::transaction(function () use($request) {
             $c_res = true;
-            $u_res = true;
             for ($i=0; $i < count($request->datas); $i++) 
             { 
                 $data = $request->data('mcht_id', $request->datas[$i]);
@@ -77,7 +76,7 @@ class MchtSettleHistoryController extends Controller
                 $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);    
                 $p_res = $this->SetPayModuleLastSettleMonth($data, 'mcht_settle_id', $c_res->id);
             }
-            return $this->response($c_res && $u_res ? 1 : 990);    
+            return $this->response($c_res ? 1 : 990);    
         });
     }
 
