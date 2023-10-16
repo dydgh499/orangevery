@@ -5,7 +5,7 @@ import corp from '@corp'
 
 const { 
     pmod_id, installment, return_url, pay_url, 
-    pg_type, getSalesSlipInfo 
+    getSalesSlipInfo 
 } = pay(2)
 getSalesSlipInfo()
 
@@ -25,7 +25,7 @@ getSalesSlipInfo()
                                 결제하실 정보를 입력해주세요.
                             </div>
                             <AuthPayOverview :pmod_id="pmod_id || 0" :installment="installment || 0"
-                                :return_url="return_url" :pay_url="pay_url" :pg_type="pg_type" />
+                                :return_url="return_url" :pay_url="pay_url" />
                         </div>
                     </VCol>
                 </VRow>

@@ -13,18 +13,8 @@ export const pay = (module_type: number) => {
     const merchandise = ref(<Merchandise>({}))
 
     const { pgs } = useStore()
-    const pg_type = ref(<string>(''))
     const pay_url = ref(<string>(''))
     const return_url = new URL(window.location.href).origin + '/pay/result'
-
-    const pgTypeToPath = (pg_type: number) => {
-        const pg_paths = [
-            'paytus', 'koneps', 'aynil', 'welcome', 'hecto', 'lumen',
-            'payletter', 'wholebic', 'korpay', 'kppay', 'thepayone', 'ezpg',
-            'cmpay', 'kiwoom','wizzpay','nestpay','e2u','addone','saminching','wgp'
-        ];
-        return pg_paths[pg_type - 1]
-    }
 
     const getSalesSlipInfo = async () => {
         const urlParams = new URLSearchParams(window.location.search)
@@ -50,21 +40,20 @@ export const pay = (module_type: number) => {
             const pg: PayGateway = pgs.find(obj => obj.id === pg_id.value)
             console.log(pg)
             if (pg) {
-                pg_type.value = pgTypeToPath(pg.pg_type || 1)
                 let type = ''
                 if (module_type == 2)
                     type = 'auth'
                 else if (module_type == 3)
                     type = 'simple'
-                pay_url.value = process.env.NOTI_URL + '/v2/online/pay/' + type + '/' + pg_type.value
+                pay_url.value = process.env.NOTI_URL + '/v2/online/pay/' + type
                 console.log(pay_url.value)
             }
         }
     })
     return {
-        pg_id, pmod_id, is_old_auth, pg_type,
+        pg_id, pmod_id, is_old_auth,
         installment, merchandise, return_url,
-        pgs, pgTypeToPath, getSalesSlipInfo, pay_url,
+        pgs, getSalesSlipInfo, pay_url,
     }
 }
 

@@ -12,7 +12,6 @@ interface Props {
     installment: number,
     return_url: string,
     pay_url: string,
-    pg_type: string,
 }
 const props = defineProps<Props>()
 

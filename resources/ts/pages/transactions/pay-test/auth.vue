@@ -5,7 +5,7 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { payTest } from '@/views/transactions/pay-test/payTest'
 
 const { 
-    mcht_id, pmod_id, pg_type, installment, 
+    mcht_id, pmod_id, installment, 
     pay_url, return_url, merchandises, filterPayMod 
 } = payTest(2)
 </script>
@@ -21,10 +21,9 @@ const {
                                 <b>
                                     결제할 가맹점과 결제모듈을 선택하신 후 결제하기 버튼을 눌러주세요.
                                 </b>
-
                             </div>
                             <AuthPayOverview :pmod_id="pmod_id || 0" :installment="installment || 0"
-                                :return_url="return_url" :pay_url="pay_url" :pg_type="pg_type">
+                                :return_url="return_url" :pay_url="pay_url">
                                 <template #explain>
                                     <VCol cols="12">
                                         <VRow no-gutters>

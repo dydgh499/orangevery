@@ -1,12 +1,12 @@
 import { getAllPayModules, payModFilter } from '@/views/merchandises/pay-modules/useStore'
 import { pay } from '@/views/pay/pay'
-import type { Merchandise, PayGateway, PayModule } from '@/views/types'
+import type { Merchandise, PayModule } from '@/views/types'
 import { axios } from '@axios'
 
 export const payTest = (module_type:number) => {
     const pay_modules = reactive<PayModule[]>([])
     const merchandises = reactive<Merchandise[]>([])
-    const { pgTypeToPath, pmod_id, pg_id, is_old_auth, installment, merchandise, pg_type, pay_url, pgs } = pay(module_type)
+    const { pmod_id, pg_id, is_old_auth, installment, merchandise, pg_type, pay_url, pgs } = pay(module_type)
 
     const mcht_id = ref()
     const return_url = new URL(window.location.href).origin + '/transactions/pay-test/result'
@@ -38,15 +38,8 @@ export const payTest = (module_type:number) => {
             pg_id.value = pmod.pg_id ?? 0
         }
     })
-    
-    watchEffect(() => {
-        if (pgs.length > 0 && pg_id.value) {
-            const pg: PayGateway = pgs.find(obj => obj.id == pg_id.value)
-            pg_type.value = pgTypeToPath(pg.pg_type ?? 1)
-        }
-    })
     return {
-        mcht_id, pmod_id, pg_id, pg_type, installment, return_url, pay_url,
+        mcht_id, pmod_id, pg_id, installment, return_url, pay_url,
         merchandise, merchandises, is_old_auth, filterPayMod, pgs
     }
 }
