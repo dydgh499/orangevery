@@ -56,7 +56,7 @@ export const pay = (module_type: number) => {
                     type = 'auth'
                 else if (module_type == 3)
                     type = 'simple'
-                pay_url.value = process.env.NOTI_URL + '/v2/pay/' + type + '/' + pg_type.value
+                pay_url.value = process.env.NOTI_URL + '/v2/online/pay/' + type + '/' + pg_type.value
                 console.log(pay_url.value)
             }
         }
