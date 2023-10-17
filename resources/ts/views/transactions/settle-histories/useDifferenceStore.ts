@@ -34,7 +34,7 @@ Ex). 2월 개업 후 7월에 영세 우대 수수료 적용 시 2월~7월까지 
 <br>
 <h3>1.4 차액정산 결과 코드(헥토파이낸셜 검증 결과 코드)</h3>
 오류코드 오류메시지<br>
-<table>
+<table class="text-no-wrap" style="width: 100%;">
     <thead>
     <tr>
         <th>코드</th>
@@ -93,9 +93,9 @@ Ex). 2월 개업 후 7월에 영세 우대 수수료 적용 시 2월~7월까지 
 오류코드 오류메시지<br>
 <table>
     <thead>
-    <tr>
-        <th>코드</th>
-        <th>응답 메세지</th>
+        <tr>
+            <th>코드</th>
+            <th>응답 메세지</th>
         </tr>
     </thead>
     <tbody>
