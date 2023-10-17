@@ -124,6 +124,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             });
             Route::prefix('settle-histories')->group(function() {
                 Route::get('difference', [DifferenceSettlementHistoryController::class, 'index']);
+                Route::get('difference/chart', [DifferenceSettlementHistoryController::class, 'chart']);
+                
                 Route::apiResource('merchandises', MchtSettleHistoryController::class);
                 Route::post('merchandises/part', [MchtSettleHistoryController::class, 'storePart']);
                 Route::post('merchandises/batch', [MchtSettleHistoryController::class, 'batch']);
