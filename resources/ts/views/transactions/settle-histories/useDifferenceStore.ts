@@ -196,13 +196,10 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
         headers['ps_id'] = '구간'
         headers['ps_fee'] = '구간 수수료'
         headers['mcht_section_name'] = '카드사측 응답 구간'
+        headers['req_dt'] = '정산 요청 날짜'
+        headers['settle_dt'] = '정산 처리 날짜'
     }
     headers['mcht_name'] = '가맹점'
-    if(getUserLevel() >= 35)
-    {
-        headers['custom_id'] = '커스텀필터'
-        headers['terminal_id'] = '장비타입'
-    }
     headers['amount'] = '거래금액'
     headers['supply_amount'] = '공급가액'
     headers['vat_amount'] = '부가세'
@@ -211,10 +208,13 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
     headers['trx_dttm'] = '거래 시간'
     headers['cxl_dttm'] = '취소 시간'
     headers['installment'] = '할부'
-    if(getUserLevel() >= 13)
-    {
+    if(getUserLevel() >= 13) {
         headers['mid'] = 'MID'
         headers['tid'] = 'TID'    
+    }
+    if(getUserLevel() >= 35) {
+        headers['custom_id'] = '커스텀필터'
+        headers['terminal_id'] = '장비타입'
     }
     headers['appr_num'] = '승인번호'    
     headers['issuer'] = '발급사'
