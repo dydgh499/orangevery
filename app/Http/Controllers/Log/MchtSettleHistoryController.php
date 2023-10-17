@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Log;
 use Illuminate\Support\Facades\DB;
 use App\Models\Log\SettleHistoryMerchandise;
 use App\Models\Transaction;
+use App\Models\PaymentModule;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -113,8 +114,12 @@ class MchtSettleHistoryController extends Controller
         $trx_ids = Transaction::where('mcht_id', $request->id)
             ->noSettlement('mcht_settle_id')
             ->pluck('id')->all();
+        $finance_van = PaymentModule::join('finance_vans', 'payment_modules.id', '=', 'finance_vans.id')
+            ->where('payment_modules.mcht_id', $request->id)
+            ->first(['finance_vans.*']);
 
         $data = $request->data('mcht_id');
+        $data['finance_company_num'] = $finance_van->finance_company_num;
         $data['settle_fee'] = $request->settle_fee;
         $data['trx_ids'] = $trx_ids;
         $url = $this->base_noti_url.'/settle-collect';
