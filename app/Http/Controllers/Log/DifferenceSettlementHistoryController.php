@@ -117,6 +117,10 @@ class DifferenceSettlementHistoryController extends Controller
             DB::raw("SUM(difference_settlement_histories.vat_amount) AS vat_amount"),
             DB::raw("SUM(difference_settlement_histories.settle_amount) AS settle_amount"),
         ]);
+        $chart->amount          = (int)$chart->amount;
+        $chart->supply_amount   = (int)$chart->supply_amount;
+        $chart->vat_amount      = (int)$chart->vat_amount;
+        $chart->settle_amount   = (int)$chart->settle_amount;
         return $this->response(0, $chart);
     }
 
