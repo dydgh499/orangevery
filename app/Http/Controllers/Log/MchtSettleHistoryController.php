@@ -115,6 +115,8 @@ class MchtSettleHistoryController extends Controller
             ->noSettlement('mcht_settle_id')
             ->pluck('id')->all();
         $finance_van = PaymentModule::join('finance_vans', 'payment_modules.id', '=', 'finance_vans.id')
+            ->where('payment_modules.is_delete', false)
+            ->where('finance_vans.is_delete', false)
             ->where('payment_modules.mcht_id', $request->id)
             ->first(['finance_vans.*']);
 
