@@ -29,10 +29,10 @@ class Kernel extends ConsoleKernel
         $schedule->call(new DangerTransController(new DangerTransaction))->everySixHours();
 
         $schedule->call(function () {
-            (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->request();
+            (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleRequest();
         })->daily();
         $schedule->call(function () {
-            (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->response();
+            (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleResponse();
         })->dailyAt("04:30");
 
     }

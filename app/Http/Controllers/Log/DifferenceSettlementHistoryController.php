@@ -127,7 +127,7 @@ class DifferenceSettlementHistoryController extends Controller
             ->get(['business_num', 'rep_mcht_id', 'id', 'above_pg_type']);
     }
 
-    public function request()
+    public function differenceSettleRequest()
     {
         $brands = $this->getUseDifferentSettlementBrands();
         $date       = Carbon::now();
@@ -162,7 +162,7 @@ class DifferenceSettlementHistoryController extends Controller
         }
     }
 
-    public function response()
+    public function differenceSettleResponse()
     {
         $brands = $this->getUseDifferentSettlementBrands();
         $date       = Carbon::now();
