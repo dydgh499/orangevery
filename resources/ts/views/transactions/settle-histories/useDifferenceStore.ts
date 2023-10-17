@@ -186,10 +186,8 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
     const head  = Header('transactions/settle-histories/difference', '차액정산 이력')
     const headers: Record<string, string> = {
         'id': 'NO.',
-        'settle_result_code': '정산 결과',
-        'card_company_result_code': '카드사 결과',
-        'settle_result_msg': '정산 결과 메세지',
-        'card_company_result_msg': '카드사 결과 메세지',
+        'settle_result_msg': '정산 결과',
+        'card_company_result_msg': '카드사 결과',
         'module_type': '거래 타입',
     }
     const { pgs, pss, terminals } = useStore()
