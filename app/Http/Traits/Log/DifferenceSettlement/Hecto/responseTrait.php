@@ -73,6 +73,7 @@ trait responseTrait
     private function getDataRecord($contents)
     {
         $records = [];
+        $cur_date = date('Y-m-d H:i:s');
         $lines = explode("\n", $contents);
         $datas = array_filter($lines, function($line) {
             return substr($line, 0, 2) === DifferenceSettleHectoRecordType::DATA->value;
@@ -114,6 +115,8 @@ trait responseTrait
                 'supply_amount' => $supply_amount,
                 'vat_amount' => $vat_amount,
                 'settle_amount' => $settle_amount,
+                'created_at' => $cur_date,
+                'updated_at' => $cur_date,
             ];
         }
         return $records;
