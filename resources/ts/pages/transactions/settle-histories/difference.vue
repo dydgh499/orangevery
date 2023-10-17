@@ -25,7 +25,7 @@ const metas = ref([
     {
         icon: 'ic-outline-payments',
         color: 'primary',
-        title: '거래액 합계',
+        title: '요청 거래액 합계',
         percentage: 0,
         stats: '0',
     },
