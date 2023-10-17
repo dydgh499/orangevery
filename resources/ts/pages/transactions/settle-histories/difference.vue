@@ -68,7 +68,7 @@ onMounted(() => {
             metas.value[2]['stats'] = r.data.supply_amount.toLocaleString() + ' ￦'
             metas.value[3]['stats'] = r.data.settle_amount.toLocaleString() + ' ￦'
             metas.value[0]['percentage'] = r.data.amount ? 100 : 0
-            metas.value[1]['percentage'] = store.getPercentage(r.data.cxl.vat_amount, r.data.amount)
+            metas.value[1]['percentage'] = store.getPercentage(r.data.vat_amount, r.data.amount)
             metas.value[2]['percentage'] = store.getPercentage(r.data.supply_amount, r.data.amount)
             metas.value[3]['percentage'] = store.getPercentage(r.data.settle_amount, r.data.amount)
         }
