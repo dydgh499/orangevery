@@ -97,7 +97,7 @@ class hecto
     public function response(Carbon $date)
     {
         $req_date = $date->copy()->format('Ymd');
-        $res_path = "/edi_rsp/ST_PRFT_REQ_".$req_date;
+        $res_path = "/edi_rsp/ST_PRFT_RSP_".$req_date;
 
         if($this->main_connection_stat && $this->main_sftp_connection->exists($res_path))
             $contents = $this->main_sftp_connection->get($res_path);
@@ -107,7 +107,7 @@ class hecto
             $contents = null;
 
         $datas = $contents ? $this->getDataRecord($contents) : [];
-        logging(['datas'=>$datas], 'hecto-difference-settlement-response');
+        logging(['date'=>$req_date, 'datas'=>$datas], 'hecto-difference-settlement-response');
         return $datas;
     }
 }
