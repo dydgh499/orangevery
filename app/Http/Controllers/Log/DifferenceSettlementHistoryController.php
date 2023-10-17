@@ -166,25 +166,30 @@ class DifferenceSettlementHistoryController extends Controller
     {
         $brands = $this->getUseDifferentSettlementBrands();
         $date       = Carbon::now();
-        for ($i=0; $i<count($brands); $i++)
+        for ($j=0; $j<8; $j++)
         {
-            $pg_name = getPGType($brands[$i]->above_pg_type);
-            try
+            $dt = $date->copy()->subDay($j);
+            for ($i=0; $i<count($brands); $i++)
             {
-                $path   = $this->base_path.$pg_name;
-                $pg     = new $path($brands[$i]->rep_mcht_id);
-                $datas  = $pg->response($date);
-                $res = $this->manyInsert($this->difference_settlement_histories, $datas);
-            }
-            catch(Exception $e)
-            {   // pg사 발견못함
-                logging([
-                        'message' => $e->getMessage(),
-                        'brand' => json_decode(json_encode($brands[$i]), true),
-                    ],
-                    'PG사가 없습니다.'
-                );
+                $pg_name = getPGType($brands[$i]->above_pg_type);
+                try
+                {
+                    $path   = $this->base_path.$pg_name;
+                    $pg     = new $path($brands[$i]->rep_mcht_id);
+                    $datas  = $pg->response($dt);
+                    $res = $this->manyInsert($this->difference_settlement_histories, $datas);
+                }
+                catch(Exception $e)
+                {   // pg사 발견못함
+                    logging([
+                            'message' => $e->getMessage(),
+                            'brand' => json_decode(json_encode($brands[$i]), true),
+                        ],
+                        'PG사가 없습니다.'
+                    );
+                }
             }
         }
+
     }
 }

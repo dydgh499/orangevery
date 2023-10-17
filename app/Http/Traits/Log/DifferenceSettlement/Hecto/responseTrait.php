@@ -75,9 +75,9 @@ trait responseTrait
         $records = [];
         $cur_date = date('Y-m-d H:i:s');
         $lines = explode("\n", $contents);
-        $datas = array_filter($lines, function($line) {
+        $datas = array_values(array_filter($lines, function($line) {
             return substr($line, 0, 2) === DifferenceSettleHectoRecordType::DATA->value;
-        });
+        }));
         for ($i=0; $i < count($datas); $i++) 
         { 
             $data = $datas[$i];
@@ -91,33 +91,36 @@ trait responseTrait
             $settle_dt = $this->getNtypeField($data, 305, 8);
             $settle_result_code = $this->getAtypeField($data, 313, 4);
             $card_company_result_code = $this->getAtypeField($data, 317, 2);
-
-            if($is_cancel)
+            // 정산금이 존재할 때만
+            if($settle_amount > 0)
             {
-                $supply_amount *= -1;
-                $vat_amount *= -1;
-                $settle_amount *= -1;
+                if($is_cancel)
+                {
+                    $supply_amount *= -1;
+                    $vat_amount *= -1;
+                    $settle_amount *= -1;
+                }
+    
+                $req_dt     = Carbon::createFromFormat('Ymd', (string)$req_dt)->format('Y-m-d');
+                $settle_dt  = Carbon::createFromFormat('Ymd', (string)$settle_dt)->format('Y-m-d');
+    
+                $records[] = [
+                    'trans_id'   => $add_field,
+                    'settle_result_code'    => $settle_result_code,
+                    'settle_result_msg'     => $this->getSettleMessage($settle_result_code),
+                    'card_company_result_code'  => $card_company_result_code,
+                    'card_company_result_msg'   => $this->getCardCompanyMessage($card_company_result_code),
+                    'mcht_section_code' => $mcht_section_code,
+                    'mcht_section_name'  => $this->getMchtSectionName($mcht_section_code),
+                    'req_dt'    => $req_dt,
+                    'settle_dt' => $settle_dt,
+                    'supply_amount' => $supply_amount,
+                    'vat_amount' => $vat_amount,
+                    'settle_amount' => $settle_amount,
+                    'created_at' => $cur_date,
+                    'updated_at' => $cur_date,
+                ];
             }
-
-            $req_dt     = Carbon::createFromFormat('Ymd', (string)$req_dt)->format('Y-m-d');
-            $settle_dt  = Carbon::createFromFormat('Ymd', (string)$settle_dt)->format('Y-m-d');
-
-            $records[] = [
-                'trans_id'   => $add_field,
-                'settle_result_code'    => $settle_result_code,
-                'settle_result_msg'     => $this->getSettleMessage($settle_result_code),
-                'card_company_result_code'  => $card_company_result_code,
-                'card_company_result_msg'   => $this->getCardCompanyMessage($card_company_result_code),
-                'mcht_section_code' => $mcht_section_code,
-                'mcht_section_name'  => $this->getMchtSectionName($mcht_section_code),
-                'req_dt'    => $req_dt,
-                'settle_dt' => $settle_dt,
-                'supply_amount' => $supply_amount,
-                'vat_amount' => $vat_amount,
-                'settle_amount' => $settle_amount,
-                'created_at' => $cur_date,
-                'updated_at' => $cur_date,
-            ];
         }
         return $records;
     }
