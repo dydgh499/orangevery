@@ -59,10 +59,6 @@ watchEffect(() => {
                 {{ props.id == 0 ? "추가" : "수정" }}
                 <VIcon end icon="tabler-pencil" />
             </VBtn>
-            <VBtn type="button" color="secondary" variant="tonal" @click="vForm?.reset()">
-                리셋
-                <VIcon end icon="tabler-arrow-back" />
-            </VBtn>
             <VBtn type="button" color="error" v-if="props.id" @click="remove('/'+props.path, props.item)">
                 삭제
                 <VIcon size="22" icon="tabler-trash" />

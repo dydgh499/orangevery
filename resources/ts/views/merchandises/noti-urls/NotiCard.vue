@@ -75,10 +75,6 @@ watchEffect(() => {
                                     {{ props.item.id == 0 ? "추가" : "수정" }}
                                     <VIcon end icon="tabler-pencil" />
                                 </VBtn>
-                                <VBtn color="secondary" variant="tonal" @click="vForm?.reset()">
-                                    리셋
-                                    <VIcon end icon="tabler-arrow-back" />
-                                </VBtn>
                                 <VBtn type="button" color="error" v-if="props.item.id"
                                     @click="remove('/merchandises/noti-urls', props.item, false)">
                                     삭제
