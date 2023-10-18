@@ -124,6 +124,21 @@ class SalesforceBatchController extends Controller
     }
 
     /**
+     * 계좌정보 적용 
+    */
+    public function setAccountInfo(Request $request)
+    {
+        $cols = [
+            'acct_num' => $request->acct_num,
+            'acct_name' => $request->acct_name,
+            'acct_bank_code' => $request->acct_bank_code,
+            'acct_bank_name' => $request->acct_bank_name,
+        ];
+        $row = $this->merchandiseBatch($request)->update($cols);
+        return $this->response(1);
+    }
+    
+    /**
      * 이상거래 한도 적용 
      */
     public function setAbnormalTransLimit(Request $request)

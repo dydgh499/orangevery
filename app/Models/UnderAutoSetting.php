@@ -17,42 +17,7 @@ class UnderAutoSetting extends Model
         'brand_id',
     ];
 
-    protected function Sales5Fee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
-
-    protected function Sales4Fee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
-    
-    protected function Sales3Fee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
-
-    protected function Sales2Fee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
-
-    protected function Sales1Fee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => number_format($value * 100, 3),
-        );
-    }
-
-    protected function Sales0Fee() : Attribute
+    protected function SalesFee() : Attribute
     {
         return new Attribute(
             get: fn ($value) => number_format($value * 100, 3),

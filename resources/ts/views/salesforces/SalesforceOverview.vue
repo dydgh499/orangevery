@@ -6,7 +6,7 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import type { Salesforce } from '@/views/types'
 import { requiredValidator, nullValidator } from '@validators'
 import SalesforceBatchOverview from '@/views/salesforces/SalesforceBatchOverview.vue'
-import UnderAutoSettingOverview from '@/views/salesforces/under-auto-settings/UnderAutoSettingOverview.vue'
+import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
 import corp from '@corp'
 
 interface Props {
@@ -17,7 +17,6 @@ const all_sales = salesLevels()
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
-
 </script>
 <template>
     <VRow>
@@ -103,7 +102,7 @@ const tax_types = settleTaxTypes()
                 <VCardItem>
                     <VCol cols="12">
                         <VRow>
-                            <UnderAutoSettingOverview :item="props.item" />
+                            <UnderAutoSettingCard :item="props.item" />
                         </VRow>
                     </VCol>
                 </VCardItem>

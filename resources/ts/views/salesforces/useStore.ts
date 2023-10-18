@@ -21,7 +21,7 @@ export const getLevelByIndex = (level:number) => {
         case 30:
             return 5;
         default:
-            return 0;
+            return -1;
     }
 }
 

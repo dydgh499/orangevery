@@ -31,16 +31,15 @@ const hintSalesApplyFee = (sales_id: number): string => {
 
 const setSalesUnderAutoSetting = async (my_level: number) => {
     const setSalesAutoInfo = (my_level: number, under_auto_setting: UnderAutoSetting) => {
-        for (let i = my_level; i >= 0; i--) {    
-            const sales_key = 'sales' + i    
-            props.item[sales_key+'_id'] = under_auto_setting[sales_key+'_id']
-            props.item[sales_key+'_fee'] = under_auto_setting[sales_key+'_fee']
-        }
+        const sales_key = 'sales' + my_level   
+        props.item[sales_key+'_id'] = under_auto_setting.sales_id
+        props.item[sales_key+'_fee'] = under_auto_setting.sales_fee
     }
+
     const salesforce = sales[my_level].value.find(obj => obj.id === props.item['sales'+my_level+'_id'])
     if(salesforce.under_auto_settings.length ) {
         if(salesforce.under_auto_settings.length > 0) {
-            const idx = await underAutoSetting.value.show(salesforce.under_auto_settings, my_level)
+            const idx = await underAutoSetting.value.show(salesforce.under_auto_settings)
             setSalesAutoInfo(my_level, salesforce.under_auto_settings[idx])
         }
         else

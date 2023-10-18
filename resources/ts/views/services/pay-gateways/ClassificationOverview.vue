@@ -36,7 +36,7 @@ const addNewClassification = (items: Classification[], type: number) => {
                                 :base_count="0">
                             </ClassificationTr>
                             <ClassificationTr v-for="(item, index) in new_terminals" :key="index" :item="item"
-                                :base_count="terminals.length" :index="index">
+                                :base_count="terminals.length" :index="(index+terminals.length)">
                             </ClassificationTr>
                         </tbody>
                     </VTable>
@@ -50,7 +50,6 @@ const addNewClassification = (items: Classification[], type: number) => {
                     </VRow>
                 </VCardItem>
             </VCard>
-
         </VCol>
         <VCol cols="12" md="6">
             <VCard>
@@ -69,7 +68,7 @@ const addNewClassification = (items: Classification[], type: number) => {
                                 :base_count="0">
                             </ClassificationTr>
                             <ClassificationTr v-for="(item, index) in new_cus_filters" :key="index" :item="item"
-                                :base_count="cus_filters.length" :index="index">
+                                :base_count="cus_filters.length" :index="(index+cus_filters.length)">
                             </ClassificationTr>
                         </tbody>
                     </VTable>

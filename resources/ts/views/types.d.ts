@@ -128,26 +128,8 @@ export interface Salesforce extends SalesforcePropertie, UserPropertie {
 export interface UnderAutoSetting {
     id: number,
     sales_id: number,
-    sales5_id: number | null,
-    sales4_id: number | null,
-    sales3_id: number | null,
-    sales2_id: number | null,
-    sales1_id: number | null,
-    sales0_id: number | null,
-    sales5_fee: float,
-    sales4_fee: float,
-    sales3_fee: float,
-    sales2_fee: float,
-    sales1_fee: float,
-    sales0_fee: float,
-    sales5_name?: string | null,
-    sales4_name?: string | null,
-    sales3_name?: string | null,
-    sales2_name?: string | null,
-    sales1_name?: string | null,
-    sales0_name?: string | null,
+    sales_fee: number,
     note: string,
-    [key: string]: number | string,
 }
 
 export interface Operator extends BasePropertie{
