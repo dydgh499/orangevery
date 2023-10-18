@@ -51,7 +51,7 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(400)->by(optional($request->user())->id ?: $request->ip())->response(function() use($request) {
                 $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all()];
                 Log::critical(__('auth.throttle', ["seconds"=> 60]), $logs);
-                return Response::json(['message'=>__('auth.throttle', ["seconds"=> 60])], 429);
+                return response()->json(['message'=>__('auth.throttle', ["seconds"=> 60])], 429);
             });
         });
 
