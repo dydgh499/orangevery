@@ -2,8 +2,11 @@
 import type { FinanceVan } from '@/views/types'
 import FinanceVanCard from '@/views/services/pay-gateways/FinanceVanCard.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import { useRequestStore } from '@/views/request'
 
 const { finance_vans } = useStore()
+const { setNullRemove } = useRequestStore()
+
 const new_finance_vans = reactive<FinanceVan[]>([])
 const addNewFinanceVan = () => {
     new_finance_vans.push({
@@ -23,7 +26,10 @@ const addNewFinanceVan = () => {
         withdraw_acct_num: '',
     })
 }
-
+watchEffect(() => {
+    setNullRemove(finance_vans)
+    setNullRemove(new_finance_vans)
+})
 </script>
 <template>
     <FinanceVanCard v-for="finance_van in finance_vans" :key="finance_van.id" style="margin-top: 1em;" :item="finance_van"/>

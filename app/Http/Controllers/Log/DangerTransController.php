@@ -137,10 +137,8 @@ class DangerTransController extends Controller
     {
         if($this->authCheck($request->user(), $id, 35))
         {
-            $res = $this->danger_transactions
-                ->where('id', $id)
-                ->delete();
-            return $this->response($res);
+            $res = $this->delete($this->danger_transactions->where('mcht_id', $id));
+            return $this->response($res ? 1 : 990, ['id'=>$id]);
         }
         else
             return $this->response(951);

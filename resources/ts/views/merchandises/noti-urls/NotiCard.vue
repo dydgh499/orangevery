@@ -71,7 +71,7 @@ watchEffect(() => {
                         <VRow>
                             <VCol class="d-flex gap-4">
                                 <VBtn type="button" style="margin-left: auto;"
-                                    @click="update('/merchandises/noti-urls', props.item.id, props.item, vForm)">
+                                    @click="update('/merchandises/noti-urls', props.item, vForm, false)">
                                     {{ props.item.id == 0 ? "추가" : "수정" }}
                                     <VIcon end icon="tabler-pencil" />
                                 </VBtn>
@@ -80,7 +80,7 @@ watchEffect(() => {
                                     <VIcon end icon="tabler-arrow-back" />
                                 </VBtn>
                                 <VBtn type="button" color="error" v-if="props.item.id"
-                                    @click="remove('/merchandises/noti-urls', props.item.id)">
+                                    @click="remove('/merchandises/noti-urls', props.item, false)">
                                     삭제
                                     <VIcon end icon="tabler-trash" />
                                 </VBtn>

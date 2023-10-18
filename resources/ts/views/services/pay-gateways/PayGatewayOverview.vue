@@ -2,8 +2,10 @@
 import type { PayGateway } from '@/views/types'
 import PayGatewayCard from '@/views/services/pay-gateways/PayGatewayCard.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import { useRequestStore } from '@/views/request'
 
 const {pgs } = useStore()
+const { setNullRemove } = useRequestStore()
 const new_pay_gateways = reactive<PayGateway[]>([])
 const addNewPG = () => {
     new_pay_gateways.push({
@@ -19,6 +21,10 @@ const addNewPG = () => {
     })
 }
 
+watchEffect(() => {
+    setNullRemove(pgs)
+    setNullRemove(new_pay_gateways)
+})
 </script>
 <template>
     <PayGatewayCard v-for="pg in pgs" :key="pg.id" style="margin-top: 1em;" :item="pg"/>

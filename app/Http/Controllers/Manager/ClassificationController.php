@@ -83,7 +83,7 @@ class ClassificationController extends Controller
         $res = $this->classifications->where('id', $id)->update($data);
 
         operLogging(HistoryType::UPDATE, $this->target, $data, $data['name']);
-        return $this->response($res ? 1 : 990);
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
     /**
@@ -98,6 +98,6 @@ class ClassificationController extends Controller
 
         $data = $this->classifications->where('id', $id)->first(['name']);
         operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->name);
-        return $this->response($res ? 1 : 990);
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 }

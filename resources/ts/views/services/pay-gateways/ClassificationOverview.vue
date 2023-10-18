@@ -2,12 +2,13 @@
 import type { Classification } from '@/views/types'
 import ClassificationTr from '@/views/services/pay-gateways/ClassificationTr.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import { useRequestStore } from '@/views/request'
 
 const { terminals, cus_filters } = useStore()
+const { setNullRemove } = useRequestStore()
 
-
-const new_terminals = reactive<Classification[]>([]);
-const new_cus_filters = reactive<Classification[]>([]);
+const new_terminals = reactive<Classification[]>([])
+const new_cus_filters = reactive<Classification[]>([])
 const addNewClassification = (items: Classification[], type: number) => {
     items.push(<Classification>({
         id: 0,
@@ -16,6 +17,12 @@ const addNewClassification = (items: Classification[], type: number) => {
     )
 }
 
+watchEffect(() => {
+    setNullRemove(terminals)
+    setNullRemove(cus_filters)
+    setNullRemove(new_terminals)
+    setNullRemove(new_cus_filters)
+})
 </script>
 <template>
     <VRow class="match-height">

@@ -10,7 +10,7 @@ interface Props {
     id: number | string,
     path: string,
     tabs: Tab[],
-    item: object,
+    item: any,
 }
 const props = defineProps<Props>()
 
@@ -55,7 +55,7 @@ watchEffect(() => {
     </VForm>
     <VCard style="margin-top: 1em;" slot="button" v-show="hideConditions()">
         <VCol class="d-flex gap-4">
-            <VBtn type="button" style="margin-left: auto;" @click="formRequest('/'+props.path, Number(props.id), props.item, vForm)">
+            <VBtn type="button" style="margin-left: auto;" @click="formRequest('/'+props.path, props.item, vForm)">
                 {{ props.id == 0 ? "추가" : "수정" }}
                 <VIcon end icon="tabler-pencil" />
             </VBtn>
@@ -63,7 +63,7 @@ watchEffect(() => {
                 리셋
                 <VIcon end icon="tabler-arrow-back" />
             </VBtn>
-            <VBtn type="button" color="error" v-if="props.id" @click="remove('/'+props.path, Number(props.id))">
+            <VBtn type="button" color="error" v-if="props.id" @click="remove('/'+props.path, props.item)">
                 삭제
                 <VIcon size="22" icon="tabler-trash" />
             </VBtn>

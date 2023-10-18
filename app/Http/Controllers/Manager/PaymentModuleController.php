@@ -175,8 +175,6 @@ class PaymentModuleController extends Controller
         if($this->authCheck($request->user(), $id, 15))
         {
             $data = $request->data();
-            $data['pay_key'] = $request->pay_key;
-
             if($data['module_type'] == 0 && $data['serial_num'] != '')
             {
                 $res = $this->pay_modules

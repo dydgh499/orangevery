@@ -197,12 +197,12 @@ onMounted(async () => {
                         <VRow>
                             <VCol class="d-flex gap-4 pt-10">
                                 <VBtn type="button" style="margin-left: auto;"
-                                    @click="update('/services/finance-vans', props.item.id as number, props.item, vForm, false)">
+                                    @click="update('/services/finance-vans', props.item, vForm, false)">
                                     {{ props.item.id == 0 ? "추가" : "수정" }}
                                     <VIcon end icon="tabler-pencil" />
                                 </VBtn>
                                 <VBtn type="button" color="error" v-if="props.item.id"
-                                    @click="remove('/services/finance-vans', props.item.id, false)">
+                                    @click="remove('/services/finance-vans', props.item, false)">
                                     삭제
                                     <VIcon end icon="tabler-trash" />
                                 </VBtn>

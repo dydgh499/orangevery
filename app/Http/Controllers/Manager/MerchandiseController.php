@@ -276,7 +276,7 @@ class MerchandiseController extends Controller
         $data = $this->merchandises->where('id', $id)->first(['mcht_name']);
 
         operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->mcht_name);
-        return $this->response($res);
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
     /**

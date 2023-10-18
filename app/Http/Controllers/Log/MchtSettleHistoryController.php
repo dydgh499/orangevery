@@ -49,8 +49,7 @@ class MchtSettleHistoryController extends Controller
     {
         return DB::transaction(function () use($request) {
             $query = Transaction::where('mcht_id', $request->id);
-            $res = $this->createMerchandiseCommon($request, $query);
-            return $this->response($res ? 1 : 990);    
+            return $this->createMerchandiseCommon($request, $query);
         });
     }
 
@@ -58,8 +57,7 @@ class MchtSettleHistoryController extends Controller
     {
         return DB::transaction(function () use($request) {
             $query = Transaction::whereIn('id', $request->selected);
-            $res = $this->createMerchandiseCommon($request, $query);
-            return $this->response($res ? 1 : 990);    
+            return $this->createMerchandiseCommon($request, $query);
         });
     }
 
@@ -85,7 +83,7 @@ class MchtSettleHistoryController extends Controller
     {
         return DB::transaction(function () use($request, $id) {
             $res = $this->deleteMchtforceCommon( $request, $id, 'mcht_id', 'mcht_settle_id', 'mcht_id');
-            return $this->response($res ? 1 : 1000);
+            return $this->response($res ? 1 : 990, ['id'=>$id]);
         });
     }
 

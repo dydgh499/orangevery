@@ -16,7 +16,7 @@ const { remove } = useRequestStore()
         <VIcon size="22" icon="tabler-dots-vertical" />
         <VMenu activator="parent" width="230" offset="14px">
             <VList>
-                <VListItem value="history" @click="remove('/' + props.type + '/fee-change-histories', props.item.id, false)">
+                <VListItem value="history" @click="remove('/' + props.type + '/fee-change-histories', props.item, false)">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:receipt" />
                     </template>

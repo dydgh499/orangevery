@@ -13,7 +13,7 @@ const vForm = ref<VForm>()
 const props = defineProps<Props>()
 
 const { pss, pg_companies }  = useStore()
-const { update, remove } = useRequestStore()
+const { update, remove, setNullRemove } = useRequestStore()
 
 const new_pss = reactive<PaySection[]>([])
 
@@ -26,6 +26,16 @@ const addNewSection = () => {
         is_delete: true,
     })
 }
+const filterPss = computed(() => {
+    if (props.item.id != 0) {
+        const filter = pss.filter(item => {
+            return item.pg_id == props.item.id;
+        })
+        return filter
+    }
+    else
+        return []
+})
 
 watchEffect(() => {
     if (props.item.pg_type != 0 && props.item.pg_type != null) {
@@ -39,17 +49,10 @@ watchEffect(() => {
         }
     }
 })
-const filterPss = computed(() => {
-    if (props.item.id != 0) {
-        const filter = pss.filter(item => {
-            return item.pg_id == props.item.id;
-        })
-        return filter
-    }
-    else
-        return []
+watchEffect(() => {
+    setNullRemove(pss)
+    setNullRemove(new_pss)
 })
-
 </script>
 <template>
     <AppCardActions action-collapsed :title="props.item.pg_name">
@@ -141,7 +144,7 @@ const filterPss = computed(() => {
                         </VRow>
                         <VRow>
                             <VCol class="d-flex gap-4 pt-10">
-                                <VBtn type="button" style="margin-left: auto;" @click="update('/services/pay-gateways', props.item.id as number, props.item, vForm, false)">
+                                <VBtn type="button" style="margin-left: auto;" @click="update('/services/pay-gateways', props.item, vForm, false)">
                                     {{ props.item.id == 0 ? "추가" : "수정" }}
                                     <VIcon end icon="tabler-pencil" />
                                 </VBtn>
@@ -170,7 +173,7 @@ const filterPss = computed(() => {
                         <tbody>
                             <PaySectionTr v-for="(ps, index) in filterPss" :key="index" :item="ps" :index="index">
                             </PaySectionTr>
-                            <PaySectionTr v-for="(ps, index) in new_pss" :key="index" :item="ps" :index="index">
+                            <PaySectionTr v-for="(ps, index) in new_pss" :key="index" :item="ps" :index="(index + filterPss.length)">
                             </PaySectionTr>
                         </tbody>
                         <tfoot v-show="Boolean(props.item.id == 0)">

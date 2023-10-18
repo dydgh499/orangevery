@@ -2,11 +2,13 @@
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import UnderAutoSettingTr from '@/views/salesforces/under-auto-settings/UnderAutoSettingTr.vue'
 import type { Salesforce, UnderAutoSetting } from '@/views/types'
+import { useRequestStore } from '@/views/request'
 
 interface Props {
     item: Salesforce,
 }
 const props = defineProps<Props>()
+const { setNullRemove } = useRequestStore()
 const under_auto_settings = reactive<UnderAutoSetting[]>(props.item.under_auto_settings || [])
 const new_under_auto_settings = reactive<UnderAutoSetting[]>([])
 const addNewUnderAutoSetting = () => {
@@ -18,6 +20,10 @@ const addNewUnderAutoSetting = () => {
     })
     new_under_auto_settings.push(under_auto_setting)
 }
+watchEffect(() => {
+    setNullRemove(under_auto_settings)
+    setNullRemove(new_under_auto_settings)
+})
 </script>
 <template>
     <VCardTitle style="margin: 1em 0;">

@@ -169,7 +169,7 @@ class SalesforceController extends Controller
             $res = $this->salesforces->where('id', $id)->update($data);
 
             operLogging(HistoryType::UPDATE, $this->target, $data, $data['sales_name']);
-            return $this->response($res ? 1 : 990);
+            return $this->response($res ? 1 : 990, ['id'=>$id]);
         }
         else
             return $this->response(951);
@@ -186,11 +186,10 @@ class SalesforceController extends Controller
         if($this->authCheck($request->user(), $id, 15))
         {
             $res = $this->delete($this->salesforces->where('id', $id));
-
             $data = $this->salesforces->where('id', $id)->first(['sales_name']);
 
             operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->sales_name);
-            return $this->response($res);
+            return $this->response($res ? 1 : 990, ['id'=>$id]);
         }
         else
             return $this->response(951);

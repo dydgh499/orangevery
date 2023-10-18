@@ -94,7 +94,7 @@ class SalesSettleHistoryController extends Controller
         return DB::transaction(function () use($request, $id) {
             [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
             $res = $this->deleteSalesforceCommon($request, $id, $target_id, $target_settle_id, 'sales_id');
-            return $this->response($res ? 1 : 1000);
+            return $this->response($res ? 1 : 990, ['id'=>$id]);
         });
     }
 

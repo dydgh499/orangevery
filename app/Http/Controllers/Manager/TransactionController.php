@@ -214,7 +214,7 @@ class TransactionController extends Controller
             [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
             $res = $this->transactions->where('id', $id)->update($data);
             operLogging(HistoryType::UPDATE, $this->target, $data, "#".$id);
-            return $this->response($res ? 1 : 990);    
+            return $this->response($res ? 1 : 990, ['id'=>$id]);    
         }
         catch(QueryException $ex)
         {
@@ -237,7 +237,7 @@ class TransactionController extends Controller
         {
             $res = $this->transactions->where('id', $id)->delete();
             operLogging(HistoryType::DELETE, $this->target, ['id' => $id], "#".$id);
-            return $this->response(4);
+            return $this->response($res ? 1 : 990, ['id'=>$id]);
         }
         else
             return $this->response(951);

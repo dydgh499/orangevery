@@ -607,7 +607,7 @@ onMounted(() => {
                         <VRow>
                             <VCol class="d-flex gap-4">
                                 <VBtn type="button" style="margin-left: auto;"
-                                    @click="update('/merchandises/pay-modules', props.item.id, props.item, vForm)">
+                                    @click="update('/merchandises/pay-modules', props.item, vForm, false)">
                                     {{ props.item.id == 0 ? "추가" : "수정" }}
                                     <VIcon end icon="tabler-pencil" />
                                 </VBtn>
@@ -616,7 +616,7 @@ onMounted(() => {
                                     <VIcon end icon="tabler-arrow-back" />
                                 </VBtn>
                                 <VBtn type="button" color="error" v-if="props.item.id"
-                                    @click="remove('/merchandises/pay-modules', props.item.id)">
+                                    @click="remove('/merchandises/pay-modules', props.item, false)">
                                     삭제
                                     <VIcon end icon="tabler-trash" />
                                 </VBtn>

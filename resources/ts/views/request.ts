@@ -5,29 +5,42 @@ export const useRequestStore = defineStore('requestStore', () => {
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
     const errorHandler = <any>(inject('$errorHandler'))
-    
-    const request = async (back_url: string, params: any, is_redirect: boolean) => {
-        try {
-            const res = await axios(params);
-            snackbar.value.show('성공하였습니다.', 'success')
+
+    const deleteTreatment = (back_url: string, is_redirect: boolean, params: any, res: any) => {
+        if (res.status === 201) {
+            if (is_redirect)
+                setTimeout(function () { router.push(back_url) }, 1000)
+            else
+                params.id = -1
+        }
+    }
+    const afterTreatment = (back_url: string, is_redirect: boolean, params: any, res: any) => {
+        if (res.status === 201) {
+            params.id = res.data.id
             if (is_redirect) {
-                if(back_url == '/merchandises/pay-modules')
-                    setTimeout(function () { router.push('/merchandises/edit/'+res.data.mcht_id) }, 500)
-                else if(back_url == '/merchandises/noti-urls')
-                    setTimeout(function () { router.push('/merchandises/edit/'+res.data.mcht_id) }, 500)
-                else if(back_url == '/salesforces/under-auto-settings')
-                    setTimeout(function () { router.push('/salesforces/edit/'+res.data.sales_id) }, 500)
-                else if(back_url == '/merchandises')
-                    setTimeout(function () { router.push('/merchandises/edit/'+res.data.id) }, 500)
+                if (back_url == '/merchandises/pay-modules')
+                    setTimeout(function () { router.push('/merchandises/edit/' + res.data.mcht_id) }, 500)
+                else if (back_url == '/merchandises/noti-urls')
+                    setTimeout(function () { router.push('/merchandises/edit/' + res.data.mcht_id) }, 500)
+                else if (back_url == '/salesforces/under-auto-settings')
+                    setTimeout(function () { router.push('/salesforces/edit/' + res.data.sales_id) }, 500)
+                else if (back_url == '/merchandises')
+                    setTimeout(function () { router.push('/merchandises/edit/' + res.data.id) }, 500)
                 else
                     setTimeout(function () { router.push(back_url) }, 1000)
             }
-            else
-                location.reload()
+        }
+    }
+
+    const request = async (params: any) => {
+        try {
+            const res = await axios(params)
+            snackbar.value.show('성공하였습니다.', 'success')
+            return res
         }
         catch (e: any) {
             snackbar.value.show(e.response.data.message, 'error')
-            const r = errorHandler(e)
+            return errorHandler(e)
         }
     }
 
@@ -56,69 +69,68 @@ export const useRequestStore = defineStore('requestStore', () => {
         return { url, reqType }
     }
 
-    const formRequest = async (base_url: string, id: number, params: any, vForm: any, is_redirect: boolean = true) => {
-        const is_valid = await vForm.validate();
-        const { url, reqType } = getBaseSendInfo(base_url, id)
+    const formRequest = async (base_url: string, params: any, vForm: any, is_redirect: boolean = true) => {
+        const is_valid = await vForm.validate()
+        const { url, reqType } = getBaseSendInfo(base_url, params.id)
         if (is_valid.valid && await alert.value.show('정말 ' + reqType + '하시겠습니까?')) {
-            const formData = new FormData();
-            getFormParams(formData, params)
-            await request(base_url, {
+            const form_data = new FormData()
+            getFormParams(form_data, params)
+            const res = await request({
                 url: url,
-                data: formData,
-                method: id != 0 ? 'put' : 'post',
-                headers: { 'Content-Type': "multipart/form-data", }
-            }, is_redirect)
+                data: form_data,
+                method: params.id != 0 ? 'put' : 'post',
+                headers: { 'Content-Type': "multipart/form-data" }
+            })
+            afterTreatment(base_url, is_redirect, params, res)
         }
         else if (is_valid.valid == false)
             snackbar.value.show(reqType + '조건에 맞지않는 필드가 존재합니다.', 'warning')
     }
 
-    const update = async (base_url: string, id: number, params: any, vForm: any, is_redirect: boolean = true) => {
-        const is_valid = await vForm.validate();
-        const { url, reqType } = getBaseSendInfo(base_url, id)
+    const update = async (base_url: string, params: any, vForm: any, is_redirect: boolean = true) => {
+        const is_valid = await vForm.validate()
+        const { url, reqType } = getBaseSendInfo(base_url, params.id)
         if (is_valid.valid && await alert.value.show('정말 ' + reqType + '하시겠습니까?')) {
-            await request(base_url, {
-                url: url,
-                data: params,
-                method: id != 0 ? 'put' : 'post',
-            }, is_redirect)
+            const res = await request({ url: url, data: params, method: params.id != 0 ? 'put' : 'post' })
+            afterTreatment(base_url, is_redirect, params, res)
         }
         else if (is_valid.valid == false)
             snackbar.value.show(reqType + '조건에 맞지않는 필드가 존재합니다.', 'warning')
-
     }
 
-    const remove = async (base_url: string, id: number, is_redirect: boolean = true) => {
-        const { url, reqType } = getBaseSendInfo(base_url, id)
+    const remove = async (base_url: string, params: any, is_redirect: boolean = true) => {
+        const { url, reqType } = getBaseSendInfo(base_url, params.id)
         if (await alert.value.show('정말 삭제하시겠습니까?')) {
-            const params = {
-                url: url,
-                method: 'delete'
-            };
-            await request(base_url, params, is_redirect)
+            const res = await request({ url: url, method: 'delete' })
+            deleteTreatment(base_url, is_redirect, params, res)
         }
     }
+
+    const setNullRemove = (objects: any[]) => {
+        // findIndex는 배열에 1개만 존재할 경우 참조가 되지 않음
+        for (let i = 0; i < objects.length; i++) {
+            if (objects[i].id === -1) {
+                objects.splice(i, 1)
+                return
+            }
+        }
+    }
+
     const setOneObject = (base_url: string, id: number, obj: object) => {
         const { url, reqType } = getBaseSendInfo(base_url, id)
         axios.get(url)
-            .then(r => { Object.assign(obj, r.data); })
+            .then(r => { Object.assign(obj, r.data) })
             .catch(e => {
                 snackbar.value.show(e.response.data.message, 'error')
                 const r = errorHandler(e)
             })
     }
 
-    const post = async(url: string, params: any) => {
-        try {
-            return await axios.post(url, params)
-        }
-        catch (e: any) {
-            snackbar.value.show(e.response.data.message, 'error')
-            return errorHandler(e)
-        }
+    const post = async (url: string, params: any) => {
+        return await request({ url: url, data: params, method: 'post' })
     }
 
-    const get = async(url: string, params: any = {}) => {
+    const get = async (url: string, params: any = {}) => {
         try {
             return await axios.get(url, params)
         }
@@ -128,11 +140,11 @@ export const useRequestStore = defineStore('requestStore', () => {
         }
     }
 
-    const getPromises = (selected:number[], items:any[], url:string, method: string, params:any = {}) => {
+    const getPromises = (selected: number[], items: any[], url: string, method: string, params: any = {}) => {
         const promises = []
         for (let i = 0; i < selected.length; i++) {
-            const item:any = items.find(obj => obj['id'] === selected[i])
-            if(item) {
+            const item: any = items.find(obj => obj['id'] === selected[i])
+            if (item) {
                 promises.push(axios({
                     url: url,
                     method: method,
@@ -142,6 +154,6 @@ export const useRequestStore = defineStore('requestStore', () => {
         }
         return promises
     }
-    return { formRequest, update, remove, setOneObject, request, post, get, getPromises }
+    return { formRequest, update, remove, setOneObject, request, post, get, getPromises, setNullRemove }
 })
 

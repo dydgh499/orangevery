@@ -112,7 +112,7 @@ class PostController extends Controller
     {
         $data = $request->data();
         $res  = $this->posts->where('id', $id)->update($data);
-        return $this->response($res ? 1 : 990);
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
     /**
@@ -123,10 +123,10 @@ class PostController extends Controller
      * @urlParam id integer required 공지사항 PK
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $notice)
+    public function destroy(Post $notice, $id)
     {
-        $result = $this->delete($this->posts->where('id', $id));
-        return $this->response($result);
+        $res = $this->delete($this->posts->where('id', $id));
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
     /**

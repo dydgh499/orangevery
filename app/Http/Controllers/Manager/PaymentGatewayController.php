@@ -82,7 +82,7 @@ class PaymentGatewayController extends Controller
     {
         $data = $request->data();
         $res = $this->pay_gateways->where('id', $id)->update($data);
-        return $this->response($res ? 1 : 990);
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
     /**
@@ -96,7 +96,7 @@ class PaymentGatewayController extends Controller
         if($this->authCheck($request->user(), $id, 35))
         {
             $res = $this->delete($this->pay_gateways->where('id', $id));
-            return $this->response($res);
+            return $this->response($res ? 1 : 990, ['id'=>$id]);
         }
         else
             return $this->response(951);

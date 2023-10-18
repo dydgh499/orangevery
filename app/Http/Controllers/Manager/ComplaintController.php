@@ -87,7 +87,7 @@ class ComplaintController extends Controller
     {
         $data = $request->data();
         $res  = $this->complaints->where('id', $id)->update($data);
-        return $this->response($res ? 1 : 990);
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
     /**
@@ -100,7 +100,7 @@ class ComplaintController extends Controller
      */
     public function destroy(Post $notice)
     {
-        $result = $this->delete($this->complaints->where('id', $id));
-        return $this->response($result);
+        $res = $this->delete($this->complaints->where('id', $id));
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 }

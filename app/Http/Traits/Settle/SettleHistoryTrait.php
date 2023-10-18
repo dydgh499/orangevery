@@ -87,7 +87,7 @@ trait SettleHistoryTrait
         $c_res = $this->settle_mcht_hist->create($data);
         $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);
         $p_res = $this->SetPayModuleLastSettleMonth($data, 'mcht_settle_id', $c_res->id);
-        return $this->response($c_res ? 1 : 990);
+        return $this->response($c_res ? 1 : 990, ['id'=>$c_res->id]);
     }
 
     protected function createSalesforceCommon($request, $query, $target_settle_id)
@@ -100,7 +100,7 @@ trait SettleHistoryTrait
         $s_res = Salesforce::where('id', $request->id)->update(['last_settle_dt' => $request->dt]);
         $p_res = $this->SetPayModuleLastSettleMonth($data, $target_settle_id, $c_res->id);
 
-        return $this->response($c_res ? 1 : 990);
+        return $this->response($c_res ? 1 : 990, ['id'=>$c_res->id]);
     }
 
 

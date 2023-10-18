@@ -51,7 +51,7 @@ const detail = async () => {
                     </template>
                     <VListItemTitle>상세이력</VListItemTitle>
                 </VListItem>
-                <VListItem value="history" @click="remove('/merchandises/noti-send-histories', props.item.id, false)">
+                <VListItem value="history" @click="remove('/merchandises/noti-send-histories', props.item, false)">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:receipt" />
                     </template>

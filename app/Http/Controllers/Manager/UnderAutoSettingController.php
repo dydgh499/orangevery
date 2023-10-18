@@ -87,6 +87,6 @@ class UnderAutoSettingController extends Controller
     public function destroy(Request $request, $id)
     {
         $res = $this->under_auto_settings->where('id', $id)->delete();
-        return $this->response($res ? 1 : 990);
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 }

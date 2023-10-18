@@ -3,11 +3,14 @@ import type { PayModule, Merchandise } from '@/views/types'
 import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
+import { useRequestStore } from '@/views/request'
+
 
 interface Props {
     item: Merchandise,
 }
 const props = defineProps<Props>()
+const { setNullRemove } = useRequestStore()
 const new_pay_modules = reactive<PayModule[]>([])
 const pay_modules = ref<PayModule[]>([])
 const { mchts } = useSalesFilterStore()
@@ -57,6 +60,11 @@ const addNewPaymodule = () => {
 }
 if(props.item.id)
     pay_modules.value = await getAllPayModules(props.item.id)
+
+watchEffect(() => {
+    setNullRemove(pay_modules.value)
+    setNullRemove(new_pay_modules)
+})
 </script>
 <template>
     <PayModuleCard v-for="(item, index) in pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="mchts"/>

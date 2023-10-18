@@ -148,7 +148,6 @@ export interface PayModule {
     module_type: number,
     api_key: string,
     sub_key: string,
-    pay_key: string,
     mid: string,
     tid: string,
     serial_num: string,

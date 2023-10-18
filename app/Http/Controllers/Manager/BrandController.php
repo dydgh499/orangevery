@@ -128,7 +128,7 @@ class BrandController extends Controller
         
         $query  = $this->brands->where('id', $id);
         $res = $query->update($data);
-        return $this->response($res ? 1 : 990);
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
     /**
@@ -142,7 +142,7 @@ class BrandController extends Controller
     public function destroy(Request $request, $id)
     {
         $brand = $this->brands->where('id', $id)->first();
-        $result = $this->delete($this->brands->where('id', $id), ['logo_img', 'favicon_img']);
-        return $this->response($result);
+        $res = $this->delete($this->brands->where('id', $id), ['logo_img', 'favicon_img']);
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 }
