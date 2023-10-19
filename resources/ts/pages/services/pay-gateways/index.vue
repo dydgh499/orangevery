@@ -12,7 +12,7 @@ const tabs = <Tab[]>([
     { icon: 'ph-buildings', title: 'PG사 정보' },
     { icon: 'carbon-classification', title: '구분 정보' },
 ])
-if(corp.pv_options.paid.use_realtime_deposit && getUserLevel() >= 50)
+if(corp.pv_options.paid.use_realtime_deposit && getUserLevel() >= 40)
     tabs.push({icon: 'streamline:money-atm-card-2-deposit-money-payment-finance-atm-withdraw', title: '실시간 이체 모듈'})
 const path = 'services/pay-gateways'
 </script>
@@ -26,7 +26,7 @@ const path = 'services/pay-gateways'
                 <VWindowItem>
                     <ClassificationOverview />
                 </VWindowItem>
-                <VWindowItem v-if="corp.pv_options.paid.use_realtime_deposit && getUserLevel() >= 50">
+                <VWindowItem v-if="corp.pv_options.paid.use_realtime_deposit && getUserLevel() >= 40">
                     <FinanceVanOverview />
                 </VWindowItem>
 

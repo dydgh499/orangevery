@@ -600,7 +600,7 @@ onMounted(() => {
                         <!-- 👉 비고 -->
                         <VRow>
                             <VCol>
-                                <VTextarea v-model="props.item.note" counter label="결제모듈 별칭"
+                                <VTextarea v-model="props.item.note" counter label="결제모듈 별칭" placeholder='결제모듈 명칭을 적어주세요.😀'
                                     prepend-inner-icon="twemoji-spiral-notepad" />
                             </VCol>
                         </VRow>
