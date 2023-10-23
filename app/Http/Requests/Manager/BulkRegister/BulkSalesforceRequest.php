@@ -19,7 +19,6 @@ class BulkSalesforceRequest extends FormRequest
             'resident_num',
             'business_num',
             'sector',
-            'phone_num',
             'acct_num',
             'acct_name',
             'acct_bank_name',
