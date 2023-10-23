@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { requiredValidator, nullValidator } from '@validators'
+import { requiredValidator, nullValidator, businessNumValidator } from '@validators'
 import type { UserPropertie } from '@/views/types'
 import FileInput from '@/layouts/utils/FileInput.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
@@ -112,7 +112,7 @@ onMounted(async() => {
                             <template #input>
                                 <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
                                     prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
-                                    persistent-placeholder />
+                                    persistent-placeholder :rules="[businessNumValidator]"/>
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 주민등록 번호 -->

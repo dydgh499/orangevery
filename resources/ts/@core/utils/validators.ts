@@ -125,10 +125,9 @@ export const alphaDashValidator = (value: unknown) => {
 
     return /^[0-9A-Z_-]*$/i.test(valueAsString) || '모든 문자가 유효하지 않습니다.'
 }
-
 // custom
 export const businessNumValidator = (value: string) => {
-    return /^[0-9]{3}-[0-9]{2}-[0-9]{5}$/.test(value) || '유효한 사업자등록번호를 입력하세요.'
+    return (/^[0-9]{3}-[0-9]{2}-[0-9]{5}$/.test(value) || value.length <= 10) || '유효한 사업자등록번호를 입력하세요.'
 }
 
 export const extensionValidator = (files: File[], values: string[]) => {

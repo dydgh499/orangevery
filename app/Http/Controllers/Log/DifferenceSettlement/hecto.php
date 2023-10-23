@@ -62,19 +62,19 @@ class hecto
         $req_date = $date->format('Ymd');
         $save_path = "/edi_req/ST_PRFT_REQ_".$req_date;
 
-        $mcht_ids = $trans->pluck('mid')->unique()->all();
+        $mids = $trans->pluck('mid')->unique()->all();
 
         $total_count = 0;
         $full_record = $this->setStartRecord($req_date, $brand_business_num);
 
-        foreach($mcht_ids as $mcht_id)
+        foreach($mids as $mid)
         {
-            $mcht_trans = $trans->filter(function ($tran) use ($mcht_id) {
-                return $tran->mid == $mcht_id;
+            $mcht_trans = $trans->filter(function ($tran) use ($mid) {
+                return $tran->mid == $mid;
             })->values();
             if(count($mcht_trans) > 0)
             {
-                $header = $this->setHeaderRecord($mcht_id);
+                $header = $this->setHeaderRecord($mid);
                 [$data_records, $count, $amount] = $this->setDataRecord($mcht_trans, $brand_business_num);
                 $total  = $this->setTotalRecord($count, $amount);
     
