@@ -83,7 +83,7 @@ export const defaultItemInfo = () => {
         type: null,
         pg_id: null,
         entry_path: '',
-        is_deposit: false,
+        is_deposit: 0,
         note: '',
         mcht_name: null,
         pg_name: null,

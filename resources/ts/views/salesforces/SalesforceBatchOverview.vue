@@ -369,7 +369,7 @@ const setNotiUrl = () => {
             <template #name>결제창 노출여부</template>
             <template #input>
                 <div class="batch-container">
-                    <BooleanRadio :radio="Boolean(pay_module.show_pay_view)"
+                    <BooleanRadio :radio="pay_module.show_pay_view"
                         @update:radio="pay_module.show_pay_view = $event">
                         <template #true>노출</template>
                         <template #false>숨김</template>
@@ -455,12 +455,7 @@ const setNotiUrl = () => {
         <CreateHalfVCol :mdl="3" :mdr="9">
             <template #name>노티 사용 유무</template>
             <template #input>
-                <div class="batch-container">
-                    <BooleanRadio :radio="Boolean(noti.noti_status)" @update:radio="noti.noti_status = $event">
-                        <template #true>사용</template>
-                        <template #false>미사용</template>
-                    </BooleanRadio>
-                </div>
+                <VSwitch v-model="noti.noti_status" color="primary" />
             </template>
         </CreateHalfVCol>
         <VRow>

@@ -83,11 +83,7 @@ const tax_types = settleTaxTypes()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>화면 타입</template>
                             <template #input>
-                                <BooleanRadio :radio="Boolean(props.item.view_type)"
-                                    @update:radio="props.item.view_type = $event">
-                                    <template #true>상세보기</template>
-                                    <template #false>간편보기</template>
-                                </BooleanRadio>
+                                <VSwitch v-model="props.item.view_type" color="primary" :label="props.item.view_type ? '상세보기' : '간편보기'"/>
                             </template>
                         </CreateHalfVCol>
                         <VCol>

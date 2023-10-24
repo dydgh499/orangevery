@@ -163,7 +163,7 @@ export const defaultItemInfo =  () => {
         begin_dt: undefined,
         ship_out_dt: undefined,
         ship_out_stat: 0,
-        is_old_auth: false,
+        is_old_auth: 0,
         installment: 0,
         note: '장비',
         settle_fee: 0,
@@ -175,7 +175,7 @@ export const defaultItemInfo =  () => {
         pay_single_limit: 0,
         pay_disable_s_tm: null,
         pay_disable_e_tm: null,
-        show_pay_view: false,
+        show_pay_view: 0,
         pay_key: '',
         filter_issuers: [],
         contract_s_dt: null,
@@ -183,7 +183,7 @@ export const defaultItemInfo =  () => {
         fin_id: null,
         fin_trx_delay: 15,
         cxl_type: 2,
-        is_use_realtime_deposit: false,
+        is_use_realtime_deposit: 0,
         pay_dupe_least: 0
     })
     //카드사 필터 및 다른 필터옵션들

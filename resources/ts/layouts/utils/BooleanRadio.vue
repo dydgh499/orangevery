@@ -1,20 +1,14 @@
 <script setup lang="ts">
 interface Props {
-    radio: boolean,
+    radio: number,
 }
 const props = defineProps<Props>()
-const radioValue = ref(props.radio);
+const emits = defineEmits(['update:radio'])
 
-const emits = defineEmits(['update:radio']);
-watch(radioValue, (newValue) => {
-    if (newValue !== props.radio) {
-        emits('update:radio', newValue);
-    }
-});
 </script>
 <template>
-    <VRadioGroup v-model="radioValue" inline>
-        <VRadio :value="true">
+    <VRadioGroup v-model="props.radio" inline>
+        <VRadio :value="1" @click="emits('update:radio', 1)">
             <template #label>
                 <span>
                     <slot name="true"></slot>
@@ -22,7 +16,7 @@ watch(radioValue, (newValue) => {
             </template>
         </VRadio>
 
-        <VRadio :value="false">
+        <VRadio :value="0" @click="emits('update:radio', 0)">
             <template #label>
                 <span>
                     <slot name="false"></slot>

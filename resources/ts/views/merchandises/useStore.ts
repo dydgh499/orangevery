@@ -148,10 +148,10 @@ export const defaultItemInfo = () => {
         sales0_fee: 0,
         // options
         custom_id: null,
-        enabled: true,
-        use_saleslip_prov: true,
-        use_saleslip_sell: false,
-        is_show_fee: false,
+        enabled: 1,
+        use_saleslip_prov: 1,
+        use_saleslip_sell: 0,
+        is_show_fee: 0,
         note: '',
         dev_fee: 0
     })

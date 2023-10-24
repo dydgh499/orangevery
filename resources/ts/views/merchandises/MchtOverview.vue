@@ -148,7 +148,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="3" :mdr="9">
                                     <template #name>전산 사용상태</template>
                                     <template #input>
-                                        <BooleanRadio :radio="Boolean(props.item.enabled)"
+                                        <BooleanRadio :radio="props.item.enabled"
                                             @update:radio="props.item.enabled = $event">
                                             <template #true>ON</template>
                                             <template #false>OFF</template>
@@ -162,7 +162,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="3" :mdr="9">
                                     <template #name>가맹점 수수료율 노출</template>
                                     <template #input>
-                                        <BooleanRadio :radio="Boolean(props.item.is_show_fee)"
+                                        <BooleanRadio :radio="props.item.is_show_fee"
                                             @update:radio="props.item.is_show_fee = $event">
                                             <template #true>노출</template>
                                             <template #false>숨김</template>
@@ -177,7 +177,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="3" :mdr="9">
                                     <template #name>매출전표 공급자 정보</template>
                                     <template #input>
-                                        <BooleanRadio :radio="Boolean(props.item.use_saleslip_prov)"
+                                        <BooleanRadio :radio="props.item.use_saleslip_prov"
                                             @update:radio="props.item.use_saleslip_prov = $event">
                                             <template #true>PG사</template>
                                             <template #false>본사</template>
@@ -192,7 +192,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="3" :mdr="9">
                                     <template #name>매출전표 판매자 정보</template>
                                     <template #input>
-                                        <BooleanRadio :radio="Boolean(props.item.use_saleslip_sell)"
+                                        <BooleanRadio :radio="props.item.use_saleslip_sell"
                                             @update:radio="props.item.use_saleslip_sell = $event">
                                             <template #true>본사</template>
                                             <template #false>가맹점</template>

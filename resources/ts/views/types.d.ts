@@ -98,11 +98,11 @@ export interface MerchandisePropertie {
     trx_fee: float,
     hold_fee: float,
     // option
-    enabled: boolean,
+    enabled: number,
     custom_id: number | null,
-    use_saleslip_prov: boolean,
-    use_saleslip_sell: boolean,
-    is_show_fee: boolean,
+    use_saleslip_prov: number,
+    use_saleslip_sell: number,
+    is_show_fee: number,
     note: string,
 }
 
@@ -161,7 +161,7 @@ export interface PayModule {
     begin_dt: date | null,
     ship_out_dt: date | null,
     ship_out_stat: number | null,
-    is_old_auth: boolean,    
+    is_old_auth: number,    
     installment: number,
     pay_dupe_limit:number,
     abnormal_trans_limit: number,
@@ -174,13 +174,13 @@ export interface PayModule {
     pay_disable_e_tm: date | null,
     contract_s_dt: date | null,
     contract_e_dt: date | null,
-    show_pay_view: boolean,
+    show_pay_view: number,
     note: string,
     filter_issuers: string[],
     fin_id: number | null,
     fin_trx_delay: number,
     cxl_type: number,
-    is_use_realtime_deposit: boolean,
+    is_use_realtime_deposit: number,
 }
 
 export interface PayGateway {
@@ -582,7 +582,7 @@ export interface Complaint {
     pg_name: string | null,
     type: number | null,
     entry_path: string,
-    is_deposit: boolean,
+    is_deposit: number,
     complaint_status: number,
     note: string,
 }

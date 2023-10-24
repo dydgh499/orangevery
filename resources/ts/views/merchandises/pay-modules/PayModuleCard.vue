@@ -116,7 +116,7 @@ onMounted(() => {
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>수기결제 타입</template>
                                 <template #input>
-                                    <BooleanRadio :radio="Boolean(props.item.is_old_auth)"
+                                    <BooleanRadio :radio="props.item.is_old_auth"
                                         @update:radio="props.item.is_old_auth = $event">
                                         <template #true>구인증</template>
                                         <template #false>비인증</template>
@@ -278,8 +278,8 @@ onMounted(() => {
                             <VRow class="pt-3">
                                 <CreateHalfVCol :mdl="6" :mdr="6">
                                     <template #name>실시간 이체 사용 여부</template>
-                                    <template #input>                                        
-                                        <BooleanRadio :radio="Boolean(props.item.is_use_realtime_deposit)"
+                                    <template #input>
+                                        <BooleanRadio :radio="props.item.is_use_realtime_deposit"
                                             @update:radio="props.item.is_use_realtime_deposit = $event">
                                             <template #true>사용</template>
                                             <template #false>미사용</template>
@@ -589,7 +589,7 @@ onMounted(() => {
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>결제창 노출여부</template>
                                 <template #input>
-                                    <BooleanRadio :radio="Boolean(props.item.show_pay_view)"
+                                    <BooleanRadio :radio="props.item.show_pay_view"
                                         @update:radio="props.item.show_pay_view = $event">
                                         <template #true>노출</template>
                                         <template #false>숨김</template>
