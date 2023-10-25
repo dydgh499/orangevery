@@ -154,7 +154,7 @@ class DifferenceSettlementHistoryController extends Controller
                 ->whereNotIn('transactions.trans_id', function($query) {
                     $query->select('trans_id')->from('difference_settlement_histories');
                 })
-                ->where('transactions.trx_dt', '<', $yesterday)
+                ->where('transactions.trx_dt', '<=', $yesterday)
                 ->get(['transactions.*', 'merchandises.business_num']);
             try
             {
