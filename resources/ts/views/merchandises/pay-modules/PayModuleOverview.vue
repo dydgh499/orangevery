@@ -39,7 +39,7 @@ const addNewPaymodule = () => {
         begin_dt: null,
         ship_out_dt: null,
         ship_out_stat: 0,
-        is_old_auth: false,
+        is_old_auth: 0,
         installment: 0,
         pay_dupe_limit:0,
         abnormal_trans_limit: 0,
@@ -55,7 +55,7 @@ const addNewPaymodule = () => {
         fin_id: null,
         fin_trx_delay: 15,
         cxl_type: 2,
-        is_use_realtime_deposit: false,
+        is_use_realtime_deposit: 0,
     })
 }
 if(props.item.id)

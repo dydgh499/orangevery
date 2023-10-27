@@ -112,7 +112,7 @@ export interface SalesforcePropertie {
     settle_cycle: number,
     settle_day: number | null,
     level: number,
-    view_type: boolean,
+    view_type: number,
     note: string,
 }
 

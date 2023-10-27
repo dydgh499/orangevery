@@ -74,7 +74,7 @@ class SalesSettleHistoryController extends Controller
         return DB::transaction(function () use($request) {
             $c_res = true;
             for ($i=0; $i < count($request->datas); $i++) 
-            { 
+            {
                 [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
                 $data = $request->data('sales_id', $request->datas[$i]);
                 $data['level'] = $request->level;
@@ -88,7 +88,6 @@ class SalesSettleHistoryController extends Controller
             return $this->response($c_res ? 1 : 990);
         });
     }
-
 
     public function destroy(Request $request, $id)
     {
