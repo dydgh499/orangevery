@@ -4,6 +4,7 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import type { Salesforce } from '@/views/types'
 import { requiredValidator, nullValidator } from '@validators'
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import SalesforceBatchOverview from '@/views/salesforces/SalesforceBatchOverview.vue'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
 import corp from '@corp'
@@ -82,7 +83,11 @@ const tax_types = settleTaxTypes()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>화면 타입</template>
                             <template #input>
-                                <VSwitch v-model="props.item.view_type" color="primary" :label="props.item.view_type ? '상세보기' : '간편보기'"/>
+                                <BooleanRadio :radio="props.item.view_type" @update:radio="props.item.view_type = $event"
+                                    :rules="[nullValidator]">
+                                    <template #true>상세보기</template>
+                                    <template #false>간편보기</template>
+                                </BooleanRadio>
                             </template>
                         </CreateHalfVCol>
                         <VCol>
