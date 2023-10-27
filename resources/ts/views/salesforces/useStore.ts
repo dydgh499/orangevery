@@ -111,6 +111,7 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
         'level' : '등급',
         'user_name' : '영업점 ID',
         'sales_name': '영업점 상호',
+        'view_type' : '화면타입',
         'settle_cycle' : '정산 주기',
         'settle_day' : '정산 요일',
         'settle_tax_type': '정산 세율',
