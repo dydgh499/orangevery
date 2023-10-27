@@ -151,10 +151,7 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('merchandises.is_delete', false)
                 ->where('payment_gateways.pg_type', $brands[$i]->above_pg_type)
                 ->where('transactions.brand_id', $brands[$i]->id)
-                ->whereNotIn('transactions.id', function($query) {
-                    $query->select('trans_id')->from('difference_settlement_histories');
-                })
-                ->where('transactions.trx_dt', '<=', $yesterday)
+                ->where('transactions.trx_dt', $yesterday)
                 ->get(['transactions.*', 'merchandises.business_num']);
             try
             {

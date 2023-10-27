@@ -72,6 +72,7 @@ class SalesSettleHistoryController extends Controller
     public function batch(BatchSettleHistoryRequest $request)
     {
         return DB::transaction(function () use($request) {
+            $c_res = true;
             for ($i=0; $i < count($request->datas); $i++) 
             { 
                 [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
