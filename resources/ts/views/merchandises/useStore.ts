@@ -153,7 +153,9 @@ export const defaultItemInfo = () => {
         use_saleslip_sell: 0,
         is_show_fee: 0,
         note: '',
-        dev_fee: 0
+        dev_fee: 0,
+        use_regular_card: 0,
+        use_collect_withdraw: 0,
     })
     return {
         path, item

@@ -157,15 +157,29 @@ onMounted(async () => {
                                 </CreateHalfVCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12">
+                        <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card">
                             <VRow>
                                 <CreateHalfVCol :mdl="3" :mdr="9">
-                                    <template #name>가맹점 수수료율 노출</template>
+                                    <template #name>단골고객 사용여부</template>
                                     <template #input>
-                                        <BooleanRadio :radio="props.item.is_show_fee"
-                                            @update:radio="props.item.is_show_fee = $event">
-                                            <template #true>노출</template>
-                                            <template #false>숨김</template>
+                                        <BooleanRadio :radio="props.item.use_regular_card"
+                                            @update:radio="props.item.use_regular_card = $event">
+                                            <template #true>사용</template>
+                                            <template #false>미사용</template>
+                                        </BooleanRadio>
+                                    </template>
+                                </CreateHalfVCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12" v-if="corp.pv_options.paid.use_collect_withdraw">
+                            <VRow>
+                                <CreateHalfVCol :mdl="3" :mdr="9">
+                                    <template #name>모아서 출금</template>
+                                    <template #input>
+                                        <BooleanRadio :radio="props.item.use_collect_withdraw"
+                                            @update:radio="props.item.use_collect_withdraw = $event">
+                                            <template #true>사용</template>
+                                            <template #false>미사용</template>
                                         </BooleanRadio>
                                     </template>
                                 </CreateHalfVCol>

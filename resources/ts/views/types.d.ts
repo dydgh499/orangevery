@@ -103,6 +103,8 @@ export interface MerchandisePropertie {
     use_saleslip_prov: number,
     use_saleslip_sell: number,
     is_show_fee: number,
+    use_regular_card: number,
+    use_collect_withdraw: number,
     note: string,
 }
 
@@ -285,7 +287,9 @@ interface PaidOption {
     use_api_key_batch: boolean,
     use_sub_key_batch: boolean,
     use_pay_verification_mobile: boolean, //휴대폰인증 
-    use_sales_auth_setting: boolean,// 영업점 자동 세팅
+    use_sales_auth_setting: boolean, // 영업점 자동 세팅
+    use_regular_card: boolean,
+    use_collect_withdraw: boolean,
 }
 interface AuthOption {
     levels: {

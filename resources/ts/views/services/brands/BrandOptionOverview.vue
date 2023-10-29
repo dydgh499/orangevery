@@ -259,7 +259,22 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>단골고객 카드등록</template>
+                            <template #input>
+                                <VSwitch v-model="props.item.paid.use_regular_card" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow> 
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>모아서 출금</template>
+                            <template #input>
+                                <VSwitch v-model="props.item.paid.use_collect_withdraw" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
                 </VCardItem>
             </VCard>
         </VCol>
