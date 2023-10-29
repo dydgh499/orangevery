@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('payment_modules', function (Blueprint $table) {
             $table->date('contract_s_dt')->nullable()->comment('계약 시작일');
             $table->date('contract_e_dt')->nullable()->comment('계약 종료일');
-            $table->boolean('is_use_realtime_deposit')->default(false)->comment('실시간 이체 사용여부');
+            $table->boolean('use_realtime_deposit')->default(false)->comment('실시간 이체 사용여부');
         });
         Schema::table('finance_vans', function (Blueprint $table) {
             $table->tinyInteger('finance_company_num')->nullable()->comment('금융 VAN사 ID');
@@ -47,7 +47,7 @@ return new class extends Migration
         Schema::table('payment_modules', function (Blueprint $table) {
             $table->dropColumn('contract_s_dt');
             $table->dropColumn('contract_e_dt');
-            $table->dropColumn('is_use_realtime_deposit');
+            $table->dropColumn('use_realtime_deposit');
         });
         Schema::table('finance_vans', function (Blueprint $table) {
             $table->dropColumn('finance_company_num');

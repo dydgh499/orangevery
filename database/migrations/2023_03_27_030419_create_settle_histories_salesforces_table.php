@@ -27,6 +27,8 @@ return new class extends Migration
             $table->integer('cxl_amount')->default(0)->comment('취소액');
             $table->integer('appr_amount')->default(0)->comment('승인액');
             $table->integer('deduct_amount')->default(0)->comment('추가차감액');
+            $table->integer('comm_settle_amount')->default(0)->comment('통신비 정산금');
+            $table->integer('under_sales_amount')->default(0)->comment('매출미달 차감금');
             $table->integer('settle_amount')->default(0)->comment('정산액');
             $table->date('settle_dt')->comment('정산일');
             $table->date('deposit_dt')->nullable()->comment('입금일');

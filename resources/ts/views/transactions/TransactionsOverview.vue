@@ -46,7 +46,7 @@ const changePaymodEvent = () => {
             props.item.mid = pmod.mid
             props.item.tid = pmod.tid
 
-            if (pmod.is_use_realtime_deposit) {
+            if (pmod.use_realtime_deposit) {
                 const idx = finance_vans.find(obj => obj.id === pmod.fin_id)?.dev_fee
                 props.item.dev_realtime_fee = idx ? (finance_vans[idx].dev_fee * 100).toFixed(3) : 0
             }

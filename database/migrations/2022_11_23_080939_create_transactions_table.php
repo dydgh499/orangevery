@@ -17,29 +17,38 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->foreignId('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
+            
+            $table->integer('brand_settle_amount')->default(0)->comment('본사 정산금');
+            $table->integer('dev_settle_amount')->default(0)->comment('개발사 정산금');
             $table->float('dev_fee', 6, 5)->default(0)->comment('개발사 거래 수수료');
             $table->integer('dev_settle_id')->nullable()->comment('개발사 정산 ID');
             //
+            $table->integer('sales5_settle_amount')->default(0)->comment('하위대리점 정산금');
             $table->integer('sales5_id')->nullable()->comment('지사');
             $table->float('sales5_fee', 6, 5)->default(0)->comment('지사 수수료');
             $table->integer('sales5_settle_id')->nullable()->comment('지사 정산 ID');
             //
+            $table->integer('sales4_settle_amount')->default(0)->comment('대리점 정산금');
             $table->integer('sales4_id')->nullable()->comment('하위 지사');
             $table->float('sales4_fee', 6, 5)->default(0)->comment('하위 지사 수수료');
             $table->integer('sales4_settle_id')->nullable()->comment('하위 지사 정산 ID');
             //
+            $table->integer('sales3_settle_amount')->default(0)->comment('하위총판 정산금');
             $table->integer('sales3_id')->nullable()->comment('총판');
             $table->float('sales3_fee', 6, 5)->default(0)->comment('총판 수수료');
             $table->integer('sales3_settle_id')->nullable()->comment('총판 정산 ID');
             //
+            $table->integer('sales2_settle_amount')->default(0)->comment('총판 정산금');
             $table->integer('sales2_id')->nullable()->comment('하위 총판');
             $table->float('sales2_fee', 6, 5)->default(0)->comment('하위 총판 수수료');
             $table->integer('sales2_settle_id')->nullable()->comment('하위 총판 정산 ID');
             //
+            $table->integer('sales1_settle_amount')->default(0)->comment('하위 지사 정산금');
             $table->integer('sales1_id')->nullable()->comment('대리점');
             $table->float('sales1_fee', 6, 5)->default(0)->comment('대리점 수수료');
             $table->integer('sales1_settle_id')->nullable()->comment('대리점 정산 ID');
             //
+            $table->integer('sales0_settle_amount')->default(0)->comment('지사 정산금');
             $table->integer('sales0_id')->nullable()->comment('하위 대리점');
             $table->float('sales0_fee', 6, 5)->default(0)->comment('하위 대리점 거래 수수료');
             $table->integer('sales0_settle_id')->nullable()->comment('하위 대리점 정산 ID');
@@ -51,6 +60,7 @@ class CreateTransactionsTable extends Migration
             $table->integer('custom_id')->nullable()->default(0)->comment('커스텀 필터 ID');
             $table->integer('terminal_id')->nullable()->default(0)->comment('장비 타입 ID');
             //            
+            $table->integer('mcht_settle_amount')->default(0)->comment('가맹점 정산금');
             $table->float('mcht_fee', 6, 5)->comment('가맹점 수수료');
             $table->float('hold_fee', 6, 5)->comment('보유금액 수수료');      
             $table->tinyInteger('mcht_settle_type')->comment('가맹점 정산타입(D+1, D+2 ..)');

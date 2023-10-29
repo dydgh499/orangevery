@@ -47,7 +47,7 @@ class PayModuleRequest extends FormRequest
         $this->boolean_keys = [
             'is_old_auth',
             'show_pay_view',
-            'is_use_realtime_deposit',
+            'use_realtime_deposit',
         ];
         $this->nullable_keys = [
             'contract_s_dt',
@@ -88,7 +88,7 @@ class PayModuleRequest extends FormRequest
             'installment' => 'required',
             'note' => 'required',
             'is_old_auth' => 'required',
-            'is_use_realtime_deposit' => 'required',
+            'use_realtime_deposit' => 'required',
             'show_pay_view' => 'required',
             'comm_settle_fee' => 'required|numeric',
         ];

@@ -41,7 +41,7 @@ const snackbar = <any>(inject('snackbar'))
 
 store.params.level = 10
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
-store.params.is_use_realtime_deposit = Number(corp.pv_options.paid.use_realtime_deposit)
+store.params.use_realtime_deposit = Number(corp.pv_options.paid.use_realtime_deposit)
 
 const metas = ref([
     {

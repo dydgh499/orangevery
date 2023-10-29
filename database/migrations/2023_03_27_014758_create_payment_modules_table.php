@@ -53,10 +53,13 @@ return new class extends Migration
             $table->integer('pay_day_limit')->default(0)->comment('결제 일 한도(단위:만원)');
             $table->time('pay_disable_s_tm')->nullable()->comment('결제 금지 시작 시간');
             $table->time('pay_disable_e_tm')->nullable()->comment('결제 금지 종료 시간');
+            $table->integer('pay_single_limit')->default(0)->comment('결제 단건 한도(단위:만원)');
+            $table->integer('pay_dupe_least')->default(0)->comment('중복거래 하한금');
 
             $table->string('pay_key', 100)->default('')->comment('API KEY');
             $table->string('filter_issuers', 200)->default('[]')->comment('카드사 필터');
             $table->string('note', 200)->nullable()->default('')->comment('별칭');
+            $table->integer('last_settle_month')->length(3)->default(0)->comment('마지막 정산달');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });

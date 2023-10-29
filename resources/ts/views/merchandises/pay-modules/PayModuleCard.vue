@@ -279,8 +279,8 @@ onMounted(() => {
                                 <CreateHalfVCol :mdl="6" :mdr="6">
                                     <template #name>실시간 이체 사용 여부</template>
                                     <template #input>
-                                        <BooleanRadio :radio="props.item.is_use_realtime_deposit"
-                                            @update:radio="props.item.is_use_realtime_deposit = $event">
+                                        <BooleanRadio :radio="props.item.use_realtime_deposit"
+                                            @update:radio="props.item.use_realtime_deposit = $event">
                                             <template #true>사용</template>
                                             <template #false>미사용</template>
                                         </BooleanRadio>

@@ -41,7 +41,10 @@ class CreateBrandsTable extends Migration
             $table->integer('deposit_amount')->default(0)->comment('입금액');
             $table->datetime('last_dpst_at')->default('1970-01-01')->comment('마지막 입금일');
             $table->tinyInteger('is_transfer')->default(0)->comment('전산 이전 여부');
-            $table->boolean('is_delete')->default(false)->comment('삭제 여부');
+            $table->boolean('is_delete')->default(false)->comment('삭제 여부');            
+            $table->boolean('is_use_different_settlement')->default(false)->comment('차액정산 사용여부');
+            $table->string('rep_mcht_id', 20)->default('')->comment('상위 대표 가맹점 ID');
+            $table->tinyInteger('above_pg_type')->nullable()->comment('상위 PG사 타입(1,2,3,4,5 ...)');
             $table->timestamps();
         });
     }

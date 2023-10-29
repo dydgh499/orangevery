@@ -180,7 +180,7 @@ export interface PayModule {
     fin_id: number | null,
     fin_trx_delay: number,
     cxl_type: number,
-    is_use_realtime_deposit: number,
+    use_realtime_deposit: number,
 }
 
 export interface PayGateway {
@@ -447,7 +447,7 @@ export interface Transaction {
     resident_num?: string,
     business_num?: string,
     realtimes?: RealtimeHistory[],
-    is_use_realtime_deposit?: number,
+    use_realtime_deposit?: number,
     cxl_type?: number,
     fin_trx_delay?: number
     realtime_result?: string,

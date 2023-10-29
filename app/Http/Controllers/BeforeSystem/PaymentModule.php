@@ -105,7 +105,7 @@ class PaymentModule
                 'created_at' => $this->current_time,
                 'updated_at' => $this->current_time,
                 //
-                'is_use_realtime_deposit' => $mcht->FIN_PK ? true : false,
+                'use_realtime_deposit' => $mcht->FIN_PK ? true : false,
                 'fin_id' => $mcht->FIN_PK ? $this->paywell_to_payvery_finance[$mcht->FIN_PK] : 0,
                 'fin_trx_delay' => $mcht->RT_DELAY,
                 'cxl_type' => 2,
@@ -157,7 +157,7 @@ class PaymentModule
                 'USER_PK' => $mcht->USER_PK,
                 'created_at' => $this->current_time,
                 'updated_at' => $this->current_time,
-                'is_use_realtime_deposit' => $mcht->FIN_PK ? true : false,
+                'use_realtime_deposit' => $mcht->FIN_PK ? true : false,
                 'fin_id' => $mcht->FIN_PK ? $this->paywell_to_payvery_finance[$mcht->FIN_PK] : 0,
                 'fin_trx_delay' => $mcht->RT_DELAY,
                 'cxl_type' => 2,
@@ -204,7 +204,7 @@ class PaymentModule
                 'created_at' => $this->current_time,
                 'updated_at' => $this->current_time,
                 //
-                'is_use_realtime_deposit' => $mcht->FIN_PK ? true : false,
+                'use_realtime_deposit' => $mcht->FIN_PK ? true : false,
                 'fin_id' => $mcht->FIN_PK ? $this->paywell_to_payvery_finance[$mcht->FIN_PK] : 0,
                 'fin_trx_delay' => $mcht->RT_DELAY,
                 'cxl_type' => 2,
@@ -254,7 +254,7 @@ class PaymentModule
                 'created_at' => $this->current_time,
                 'updated_at' => $this->current_time,
                 //
-                'is_use_realtime_deposit' => $mcht->FIN_PK ? true : false,
+                'use_realtime_deposit' => $mcht->FIN_PK ? true : false,
                 'fin_id' => $mcht->FIN_PK ? $this->paywell_to_payvery_finance[$mcht->FIN_PK] : 0,
                 'fin_trx_delay' => $mcht->RT_DELAY,
                 'cxl_type' => 2,
