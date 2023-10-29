@@ -263,7 +263,7 @@ class SalesforceBatchController extends Controller
             }
         }
         $res = $this->manyInsert($notis, $datas);
-        $u_res = $this->merchandises->whereIn('id', $mcht_ids)->update(['is_use_noti' => true]);
+        $u_res = $this->merchandises->whereIn('id', $mcht_ids)->update(['use_noti' => true]);
 
         return $this->response(1, ['registered_notis'=>$registered_notis->pluck('id'), 'count'=>count($datas)]);
     }

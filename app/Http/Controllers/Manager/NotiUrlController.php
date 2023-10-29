@@ -65,10 +65,10 @@ class NotiUrlController extends Controller
     public function store(NotiRequest $request)
     {
         $data = $request->data();
-        $res = $this->noti_urls->create($data);//is_use_noti
+        $res = $this->noti_urls->create($data);//use_noti
         if($res)
         {
-            $this->merchandises->where('id', $data['mcht_id'])->update(['is_use_noti'=>true]);
+            $this->merchandises->where('id', $data['mcht_id'])->update(['use_noti'=>true]);
             operLogging(HistoryType::CREATE, $this->target, $data, $data['note']);
         }
         return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);
@@ -122,7 +122,7 @@ class NotiUrlController extends Controller
             $noti   = $this->noti_urls->where('id', $id)->first(['mcht_id', 'note']);
             $count  = $this->noti_urls->where('mcht_id', $noti->mcht_id)->where('is_delete', false)->count();
             if($count == 0)
-                $this->merchandises->where('id', $noti->mcht_id)->update(['is_use_noti'=>false]);
+                $this->merchandises->where('id', $noti->mcht_id)->update(['use_noti'=>false]);
 
             $data['mcht_id'] = $noti->mcht_id;
             operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $noti->note);

@@ -30,7 +30,7 @@ return new class extends Migration
             $table->integer('dev_realtime_settle_amount')->default(0)->comment('개발사 실시간 정산금');
         });
         Schema::table('merchandises', function (Blueprint $table) {
-            $table->boolean('is_use_noti')->default(false)->comment('노티 사용여부');
+            $table->boolean('use_noti')->default(false)->comment('노티 사용여부');
         });
         Schema::table('realtime_send_histories', function (Blueprint $table) {
             $table->foreignId('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
@@ -63,7 +63,7 @@ return new class extends Migration
             $table->dropColumn('dev_realtime_settle_amount');
         });
         Schema::table('merchandises', function (Blueprint $table) {
-            $table->dropColumn('is_use_noti');
+            $table->dropColumn('use_noti');
         });
         Schema::table('realtime_send_histories', function (Blueprint $table) {
             $table->dropColumn('mcht_id');
