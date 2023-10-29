@@ -103,7 +103,7 @@ watchEffect(() => {
                             <template #name>차액정산 사용여부</template>
                             <template #input>
                                 <div class="demo-space-x">
-                                    <VSwitch v-model="props.item.is_use_different_settlement" color="primary" />
+                                    <VSwitch v-model="props.item.use_different_settlement" color="primary" />
                                 </div>
                             </template>
                         </CreateHalfVCol>

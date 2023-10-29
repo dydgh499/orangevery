@@ -132,7 +132,7 @@ class DifferenceSettlementHistoryController extends Controller
     private function getUseDifferentSettlementBrands()
     {
         return Brand::where('is_delete', false)
-            ->where('is_use_different_settlement', true)
+            ->where('use_different_settlement', true)
             ->get(['business_num', 'rep_mcht_id', 'id', 'above_pg_type']);
     }
 

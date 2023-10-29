@@ -33,7 +33,7 @@ const getAbilitiesMenu = computed(() => {
             title: '영업점 정산 이력',
             to: 'transactions-settle-histories-salesforces',
         })
-        if (user_info.value.level >= 35 && corp.is_use_different_settlement) {
+        if (user_info.value.level >= 35 && corp.use_different_settlement) {
             settle_histories.push({
                 title: '차액 정산 이력',
                 to: 'transactions-settle-histories-difference',

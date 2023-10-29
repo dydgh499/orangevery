@@ -351,7 +351,7 @@ export interface Brand extends Contract {
     last_dpst_at: datetime,
 
     rep_mcht_id: string,
-    is_use_different_settlement: boolean,
+    use_different_settlement: boolean,
     above_pg_type: number,
     updated_at: datetime,
     created_at: datetime,

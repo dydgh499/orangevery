@@ -30,7 +30,7 @@ class BrandRequest extends FormRequest
             'dev_fee',
             'dev_settle_type',
             'fax_num',
-            'is_use_different_settlement',
+            'use_different_settlement',
             'rep_mcht_id',
             'above_pg_type',
         ];
@@ -95,7 +95,7 @@ class BrandRequest extends FormRequest
             $pvOptions = $this->input('pv_options');    
             $pvOptions = $this->convertToBoolean($pvOptions);
             $this->merge(['pv_options' => $pvOptions]);
-            $this->merge(['is_use_different_settlement' => $this->convertToBoolean($this->input('is_use_different_settlement'), false)]);
+            $this->merge(['use_different_settlement' => $this->convertToBoolean($this->input('use_different_settlement'), false)]);
         }
     }
 

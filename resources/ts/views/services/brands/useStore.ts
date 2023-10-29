@@ -210,7 +210,7 @@ export const defaultItemInfo = () => {
         extra_deposit_amount: 0,
         curr_deposit_amount: 0,
         rep_mcht_id: '',
-        is_use_different_settlement: false,
+        use_different_settlement: false,
         above_pg_type: 0
     })
 
