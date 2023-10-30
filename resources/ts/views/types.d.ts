@@ -548,6 +548,7 @@ export interface Settle extends TotalSettle, Bank {
     resident_num: string,
     business_num: string,
     addr: string,
+    use_collect_withdraw: number,
 }
 
 export interface SettlesHistories extends Bank{

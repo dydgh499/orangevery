@@ -35,7 +35,7 @@ class MerchandiseController extends Controller
         $validated = $request->validate(['s_dt'=>'required|date', 'e_dt'=>'required|date']);
         [$settle_key, $group_key] = $this->getSettleCol($request);
 
-        $cols = array_merge($this->getDefaultCols(), ['mcht_name']);
+        $cols = array_merge($this->getDefaultCols(), ['mcht_name', 'use_collect_withdraw']);
         $search = $request->input('search', '');
 
         $mcht_ids = $this->getExistTransUserIds('mcht_id', 'mcht_settle_id');

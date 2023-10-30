@@ -95,6 +95,19 @@ const getAbilitiesMenu = computed(() => {
         icon: { icon: 'ic-outline-payments' },
         to: 'transactions',
     });
+    
+    if(getUserLevel() == 10 && corp.pv_options.paid.use_collect_withdraw) {
+        payments.push({
+            title: '정산 관리',
+            icon: { icon: 'tabler-calculator' },
+            to: 'transactions-settle-merchandises',
+        },
+        {
+            title: '정산 이력',
+            icon: { icon: 'tabler:calendar-time' },
+            to: 'transactions-settle-histories-merchandises',
+        })
+    }
     return [
         { heading: '' },
         {

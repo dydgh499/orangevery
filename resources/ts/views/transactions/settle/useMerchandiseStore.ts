@@ -2,6 +2,7 @@ import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { DeductionHeader } from '@/views/types'
 import { getUserLevel } from '@axios'
+import corp from '@corp'
 
 export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {    
     const store = Searcher('transactions/settle/merchandises')
@@ -63,7 +64,7 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         'sector': '업종',
         'addr': '주소',
     };
-    if(getUserLevel() >= 35) {
+    if(getUserLevel() >= 35 || corp.pv_options.paid.use_collect_withdraw) {
         headers3['extra_col'] = '더보기'
     }
     
