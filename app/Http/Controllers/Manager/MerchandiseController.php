@@ -371,7 +371,10 @@ class MerchandiseController extends Controller
             'addr', 'business_num', 'resident_num', 'mcht_name', 'user_name',
             'nick_name', 'is_show_fee', 'use_saleslip_prov', 'use_saleslip_sell', 'use_regular_card'
         ];
-        $data = $this->merchandises->where('id', $id)->first($cols);
+        $data = $this->merchandises
+            ->where('id', $id)
+            ->with(['regularCreditCards'])
+            ->first($cols);
         return $this->response(0, $data);
     }
 }
