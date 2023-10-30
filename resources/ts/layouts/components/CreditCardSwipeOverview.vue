@@ -19,7 +19,7 @@ const getRef = (swiperInstance: any) => {
 const setCardNum = () => {
     const regular_credit_card = props.merchandise.regular_credit_cards[swiper.value.activeIndex]
     emits('update:card_num', regular_credit_card.card_num)
-    snackbar.value.show('카드를 선택하셨습니다.('+regular_credit_card.note+')', 'success')
+    snackbar.value.show('카드를 선택하셨습니다.(' + regular_credit_card.note + ')', 'success')
 }
 </script>
 

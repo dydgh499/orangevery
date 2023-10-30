@@ -368,7 +368,7 @@ class MerchandiseController extends Controller
     public function saleSlip(Request $request, $id)
     {
         $cols = [
-            'addr', 'business_num', 'resident_num', 'mcht_name', 'user_name',
+            'id', 'addr', 'business_num', 'resident_num', 'mcht_name', 'user_name',
             'nick_name', 'is_show_fee', 'use_saleslip_prov', 'use_saleslip_sell', 'use_regular_card'
         ];
         $data = $this->merchandises
