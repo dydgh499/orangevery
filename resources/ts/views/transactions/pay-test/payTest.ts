@@ -6,7 +6,7 @@ import { axios } from '@axios'
 export const payTest = (module_type:number) => {
     const pay_modules = reactive<PayModule[]>([])
     const merchandises = reactive<Merchandise[]>([])
-    const { pmod_id, pg_id, is_old_auth, installment, merchandise, pg_type, pay_url, pgs } = pay(module_type)
+    const { pmod_id, pg_id, is_old_auth, installment, merchandise, pay_url, pgs } = pay(module_type)
 
     const mcht_id = ref()
     const return_url = new URL(window.location.href).origin + '/transactions/pay-test/result'

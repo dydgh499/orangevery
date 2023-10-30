@@ -8,6 +8,7 @@ import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import UnderAutoSettingDialog from '@/layouts/dialogs/UnderAutoSettingDialog.vue'
+import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
 import corp from '@corp'
 
 interface Props {
@@ -52,7 +53,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-    <VRow class="match-height">
+    <VRow>
         <!-- 👉 개인정보 -->
         <VCol cols="12" md="6">
             <VCard>
@@ -216,6 +217,16 @@ onMounted(async () => {
                             </VRow>
                         </VCol>
                     </VRow>
+                </VCardItem>
+            </VCard>
+            <br>
+            <VCard v-if="props.item.use_regular_card">
+                <VCardItem>
+                    <VCol cols="12">
+                        <VRow>
+                            <RegularCreditCard :item="props.item" />
+                        </VRow>
+                    </VCol>
                 </VCardItem>
             </VCard>
         </VCol>

@@ -75,6 +75,7 @@ class MerchandiseController extends Controller
         $query = $this->merchandises
             ->join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
             ->where('payment_modules.is_delete', false)
+            ->with(['regularCreditCards'])
             ->distinct('payment_modules.mcht_id');
 
         $query = globalPGFilter($query, $request, 'payment_modules');
@@ -229,7 +230,9 @@ class MerchandiseController extends Controller
     {
         if($this->authCheck($request->user(), $id, 15))
         {
-            $data = $this->merchandises->where('id', $id)->first();
+            $data = $this->merchandises->where('id', $id)
+                ->with(['regularCreditCards'])
+                ->first();
             $data->setFeeFormatting(true);
             return $data ? $this->response(0, $data) : $this->response(1000);
         }
@@ -303,7 +306,7 @@ class MerchandiseController extends Controller
             'merchandises.hold_fee', 'merchandises.trx_fee',
             'merchandises.custom_id', 'merchandises.addr',
             'merchandises.business_num', 'merchandises.resident_num',
-            'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell',
+            'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell', 'merchandises.use_regular_card'
         ];
         $data = $this->commonSelect($request);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
@@ -366,7 +369,7 @@ class MerchandiseController extends Controller
     {
         $cols = [
             'addr', 'business_num', 'resident_num', 'mcht_name', 'user_name',
-            'nick_name', 'is_show_fee', 'use_saleslip_prov', 'use_saleslip_sell'
+            'nick_name', 'is_show_fee', 'use_saleslip_prov', 'use_saleslip_sell', 'use_regular_card'
         ];
         $data = $this->merchandises->where('id', $id)->first($cols);
         return $this->response(0, $data);

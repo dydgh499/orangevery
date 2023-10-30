@@ -118,8 +118,15 @@ export interface SalesforcePropertie {
     note: string,
 }
 
+export interface RegularCreditCard {
+    id: number,
+    mcht_id: number,
+    card_num: string,
+    note: string,
+}
+
 export interface Merchandise extends MerchandisePropertie, UserPropertie {    
-    [key: string]: number | string
+    regular_credit_cards?: RegularCreditCard[]
 }
 
 export interface Salesforce extends SalesforcePropertie, UserPropertie {
@@ -458,9 +465,9 @@ export interface Transaction {
 }
 
 export interface SalesSlip extends Transaction{
-    is_show_fee: boolean, 
-    use_saleslip_prov: boolean, 
-    use_saleslip_sell: boolean, 
+    is_show_fee: number, 
+    use_saleslip_prov: number, 
+    use_saleslip_sell: number, 
 }
 
 export interface Danger {

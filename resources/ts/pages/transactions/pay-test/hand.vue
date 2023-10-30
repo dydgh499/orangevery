@@ -25,8 +25,7 @@ provide('salesslip', salesslip)
                             <div style="text-align: center;">
                                 <b>
                                 결제할 가맹점과 결제모듈을 선택하신 후 결제하기 버튼을 눌러주세요.
-                            </b>
-                                
+                            </b>                                
                             </div>
                             <HandPayOverview :pmod_id="pmod_id || 0" :installment="installment || 0"
                                 :is_old_auth="is_old_auth || false" :merchandise="merchandise">

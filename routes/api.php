@@ -23,7 +23,7 @@ use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Manager\TransactionController;
 use App\Http\Controllers\Manager\SalesforceBatchController;
 use App\Http\Controllers\Manager\UnderAutoSettingController;
-
+use App\Http\Controllers\Manager\RegularCreditCardController;
 
 use App\Http\Controllers\Log\DifferenceSettlementHistoryController;
 use App\Http\Controllers\Log\RealtimeSendHistoryController;
@@ -194,7 +194,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::get('noti-send-histories/{trans_id}', [NotiSendHistoryController::class, 'detail']);
             Route::post('noti-send-histories/{trans_id}/retry', [NotiSendHistoryController::class, 'retry']);
             Route::post('noti-send-histories/batch-retry', [NotiSendHistoryController::class, 'batchRetry']);
-            
+                        
+            Route::apiResource('regular-credit-cards', RegularCreditCardController::class); 
             Route::apiResource('pay-modules', PaymentModuleController::class); 
             Route::apiResource('noti-urls', NotiUrlController::class); 
         });

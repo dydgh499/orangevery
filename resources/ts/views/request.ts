@@ -22,8 +22,10 @@ export const useRequestStore = defineStore('requestStore', () => {
                     setTimeout(function () { router.push('/merchandises/edit/' + res.data.mcht_id) }, 500)
                 else if (back_url == '/merchandises/noti-urls')
                     setTimeout(function () { router.push('/merchandises/edit/' + res.data.mcht_id) }, 500)
+                else if (back_url == '/merchandises/regular-credit-cards')
+                    setTimeout(function () { router.push('/merchandises/edit/' + res.data.mcht_id) }, 500)            
                 else if (back_url == '/salesforces/under-auto-settings')
-                    setTimeout(function () { router.push('/salesforces/edit/' + res.data.sales_id) }, 500)
+                    setTimeout(function () { router.push('/salesforces/edit/' + res.data.sales_id) }, 500)        
                 else if (back_url == '/merchandises')
                     setTimeout(function () { router.push('/merchandises/edit/' + res.data.id) }, 500)
                 else

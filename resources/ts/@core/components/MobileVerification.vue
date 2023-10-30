@@ -111,7 +111,7 @@ const countdownTimer = computed(() => {
 })
 </script>
 <template>
-    <div v-if="corp.pv_options.paid.use_pay_verification_mobile">
+    <div>
         <VCol cols="12" style="padding: 0;" v-if="button_status === 1">
             <div style="margin-top: 1.5em;">
                 <VCol>

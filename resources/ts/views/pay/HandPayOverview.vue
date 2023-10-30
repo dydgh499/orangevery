@@ -2,6 +2,7 @@
 import { installments } from '@/views/merchandises/pay-modules/useStore'
 import { requiredValidator, lengthValidatorV2 } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import CreditCardOverview from '@/layouts/components/CreditCardSwipeOverview.vue'
 import { reactive, watchEffect } from 'vue';
 import { VForm } from 'vuetify/components'
 import type { Merchandise, SalesSlip, Options, HandPay } from '@/views/types'
@@ -23,9 +24,14 @@ const errorHandler = <any>(inject('$errorHandler'))
 const salesslip = <any>(inject('salesslip'))
 
 const sale_slip = ref(<SalesSlip>({}))
-const hand_pay_info = reactive(<HandPay>({}))
+const hand_pay_info = reactive(<HandPay>({
+    yymm: '',
+    card_num: '',
+    buyer_name: '',
+}))
 const is_show = ref(false)
 const vForm = ref<VForm>()
+const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
 
 const urlParams = new URLSearchParams(window.location.search)
 hand_pay_info.item_name = urlParams.get('item_name') || ''
@@ -77,13 +83,12 @@ const pay = async () => {
 const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.installment || 0) })
 })
-
 watchEffect(() => {
+    console.log(is_show_pay_button.value)
     hand_pay_info.pmod_id = props.pmod_id
     hand_pay_info.is_old_auth = props.is_old_auth
     hand_pay_info.ord_num = props.pmod_id + "H" + Date.now().toString().substr(0, 10)
 })
-const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
 </script>
 <template>
     <VCard flat rounded>
@@ -92,12 +97,12 @@ const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile 
             </slot>
             <VDivider />
             <VForm ref="vForm" @submit.prevent="pay">
-                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; margin-top: 24px;">
+                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; margin: 12px 0;">
                     <template #name>상품명</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.item_name" type="text"
                             prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
-                            maxlength="100" :rules="[requiredValidator]" placeholder="상품명을 입력해주세요" counter />
+                            maxlength="100" :rules="[requiredValidator]" placeholder="상품명을 입력해주세요" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
@@ -107,14 +112,14 @@ const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile 
                             prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidator]" />
                     </template>
                 </CreateHalfVCol>
-                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 24px 0;">
+                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 12px 0;">
                     <template #name>구매자명</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.buyer_name" type="text" placeholder="구매자명을 입력해주세요"
                             :rules="[requiredValidator]" prepend-inner-icon="tabler-user" />
                     </template>
                 </CreateHalfVCol>
-                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
+                <CreateHalfVCol :mdl="4" :mdr="8" style=" padding: 0;">
                     <template #name>휴대폰번호</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.buyer_phone" type="number"
@@ -122,15 +127,18 @@ const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile 
                             :rules="[requiredValidator]" />
                     </template>
                 </CreateHalfVCol>
-                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-top: 24px;">
+                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 12px 0;">
                     <template #name>카드번호</template>
                     <template #input>
-                        <VTextField v-model="hand_pay_info.card_num" type="text" persistent-placeholder counter
+                        <CreditCardOverview :merchandise="props.merchandise" v-if="props.merchandise.use_regular_card" @update:default="hand_pay_info.card_num = $event"/>
+                        <div v-else>
+                            <VTextField  v-model="hand_pay_info.card_num" type="text" persistent-placeholder counter
                             prepend-inner-icon="emojione:credit-card" placeholder="카드번호를 입력해주세요"
                             :rules="[requiredValidator]" maxlength="18" autocomplete="cc-number" />
+                        </div>
                     </template>
                 </CreateHalfVCol>
-                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
+                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                     <template #name>유효기간</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.yymm" type="text" prepend-inner-icon="ic-baseline-calendar-today"
@@ -138,22 +146,22 @@ const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile 
                             :rules="[requiredValidator, lengthValidatorV2(hand_pay_info.yymm, 4)]" maxlength="4" />
                     </template>
                 </CreateHalfVCol>
-                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
+                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 12px 0;">
                     <template #name>할부기간</template>
                     <template #input>
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="hand_pay_info.installment"
-                            :items="filterInstallment" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
-                            label="할부기간 선택" item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
+                            :items="filterInstallment" prepend-inneer-icon="fluent-credit-card-clock-20-regular" item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
                     </template>
                 </CreateHalfVCol>
-                <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 0; padding-top: 12px;" v-if="hand_pay_info.is_old_auth">
+                <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 6px 0;" v-if="hand_pay_info.is_old_auth">
                     <template #name>생년월일(사업자등록번호)</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.auth_num" type="text" maxlength="10"
                             prepend-inner-icon="carbon:two-factor-authentication" />
                     </template>
                 </CreateHalfVCol>
-                <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 24px 0;" v-if="hand_pay_info.is_old_auth">
+                <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 6px 0;"
+                    v-if="hand_pay_info.is_old_auth">
                     <template #name>카드비밀번호 앞 2자리</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.card_pw" counter prepend-inner-icon="tabler-lock"
@@ -165,6 +173,7 @@ const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile 
 
                 <MobileVerification v-if="corp.pv_options.paid.use_pay_verification_mobile"
                     @update:pay_button="is_show_pay_button = $event" :phone_num="hand_pay_info.buyer_phone" />
+
                 <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">
                     <VBtn block type="submit">
                         결제하기

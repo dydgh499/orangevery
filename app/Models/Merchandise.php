@@ -10,6 +10,7 @@ use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Salesforce;
 use App\Models\Transaction;
+use App\Models\RegularCreditCard;
 use App\Models\Log\SettleDeductMerchandise;
 use App\Models\Log\SettleHistoryMerchandise;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -25,6 +26,11 @@ class Merchandise extends Authenticatable
     protected   $hidden     = ['user_pw'];
     protected   $guarded    = [];    
     protected   $feeFormatting = false;
+
+    public function regularCreditCards()
+    {
+        return $this->hasMany(RegularCreditCard::class, 'mcht_id');
+    }
 
     public function transactions()
     {

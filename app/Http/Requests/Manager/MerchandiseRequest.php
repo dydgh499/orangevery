@@ -27,6 +27,8 @@ class MerchandiseRequest extends FormRequest
             'enabled',
             'use_saleslip_prov',
             'use_saleslip_sell',
+            'use_regular_card',
+            'use_collect_withdraw',
             'is_show_fee',
             'note',
         ];
@@ -74,6 +76,9 @@ class MerchandiseRequest extends FormRequest
         $this->merge(['use_saleslip_prov' => $this->convertToBoolean($this->input('use_saleslip_prov'))]);
         $this->merge(['use_saleslip_sell' => $this->convertToBoolean($this->input('use_saleslip_sell'))]);
         $this->merge(['is_show_fee' => $this->convertToBoolean($this->input('is_show_fee'))]);
+        $this->merge(['is_show_fee' => $this->convertToBoolean($this->input('is_show_fee'))]);
+        $this->merge(['use_regular_card' => $this->convertToBoolean($this->input('use_regular_card'))]);
+        $this->merge(['use_collect_withdraw' => $this->convertToBoolean($this->input('use_collect_withdraw'))]);
     }
 
     public function bodyParameters()

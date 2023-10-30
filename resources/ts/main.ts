@@ -9,6 +9,7 @@ import router from '@/router'
 import { pay_token, user_info } from '@axios'
 import { abilitiesPlugin } from '@casl/vue'
 import '@core-scss/template/index.scss'
+import VueMask from '@devindex/vue-mask'
 import '@styles/styles.scss'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -64,6 +65,7 @@ app.use(abilitiesPlugin, ability, {
 })
 app.component('VueDatePicker', VueDatePicker)
 // app.use(VueVirtualScroller)
+app.use(VueMask)
 
 // Mount vue app
 app.mount('#app')
