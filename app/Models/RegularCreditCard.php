@@ -13,12 +13,4 @@ class RegularCreditCard extends Model
     protected   $table        = 'regular_credit_cards';
     protected   $primaryKey   = 'id';
     protected   $guarded      = [];
-    
-    protected function cardNum(): Attribute
-    {
-        return Attribute::make(
-            get: fn ($value) => $this->aes256_decode($value),
-            set: fn ($value) => $this->aes256_encode($value),
-        );
-    }
 }

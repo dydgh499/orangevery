@@ -18,6 +18,7 @@ const getRef = (swiperInstance: any) => {
 }
 const setCardNum = () => {
     const regular_credit_card = props.merchandise.regular_credit_cards[swiper.value.activeIndex]
+    console.log(regular_credit_card)
     emits('update:card_num', regular_credit_card.card_num)
     snackbar.value.show('카드를 선택하셨습니다.(' + regular_credit_card.note + ')', 'success')
 }
@@ -34,7 +35,7 @@ const setCardNum = () => {
                         <img src="https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/chip.png"
                             class="card-mark">
                     </div>
-                    <VChip size="default" variant="elevated" label>
+                    <VChip size="default" variant="elevated" label style="position: relative; top: 0.5em;">
                         <span v-if="regular_credit_card.card_num.length >= 16">
                             {{ regular_credit_card.card_num.slice(0, 4) + " **** **** " +
                                 regular_credit_card.card_num.slice(12, 16)

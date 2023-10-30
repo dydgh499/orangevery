@@ -127,15 +127,14 @@ watchEffect(() => {
                             :rules="[requiredValidator]" />
                     </template>
                 </CreateHalfVCol>
-                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 12px 0;">
+                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-top: 12px;">
                     <template #name>카드번호</template>
                     <template #input>
-                        <CreditCardOverview :merchandise="props.merchandise" v-if="props.merchandise.use_regular_card" @update:default="hand_pay_info.card_num = $event"/>
-                        <div v-else>
-                            <VTextField  v-model="hand_pay_info.card_num" type="text" persistent-placeholder counter
+                        <CreditCardOverview v-if="props.merchandise.use_regular_card" :merchandise="props.merchandise"
+                            @update:default="hand_pay_info.card_num = $event" />
+                        <VTextField v-else v-model="hand_pay_info.card_num" type="text" persistent-placeholder counter
                             prepend-inner-icon="emojione:credit-card" placeholder="카드번호를 입력해주세요"
                             :rules="[requiredValidator]" maxlength="18" autocomplete="cc-number" />
-                        </div>
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
@@ -150,7 +149,8 @@ watchEffect(() => {
                     <template #name>할부기간</template>
                     <template #input>
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="hand_pay_info.installment"
-                            :items="filterInstallment" prepend-inneer-icon="fluent-credit-card-clock-20-regular" item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
+                            :items="filterInstallment" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                            item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 6px 0;" v-if="hand_pay_info.is_old_auth">
@@ -160,8 +160,7 @@ watchEffect(() => {
                             prepend-inner-icon="carbon:two-factor-authentication" />
                     </template>
                 </CreateHalfVCol>
-                <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 6px 0;"
-                    v-if="hand_pay_info.is_old_auth">
+                <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 6px 0;" v-if="hand_pay_info.is_old_auth">
                     <template #name>카드비밀번호 앞 2자리</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.card_pw" counter prepend-inner-icon="tabler-lock"
