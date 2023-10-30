@@ -36,7 +36,7 @@ const setCardNum = () => {
                     </div>
                     <VChip size="default" variant="elevated" label>
                         <span v-if="regular_credit_card.card_num.length >= 16">
-                            {{ regular_credit_card.card_num.slice(0, 4) + "-****-****" +
+                            {{ regular_credit_card.card_num.slice(0, 4) + " **** **** " +
                                 regular_credit_card.card_num.slice(12, 16)
                             }}
                         </span>
