@@ -75,7 +75,7 @@ const setCardNum = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 18px;
+  border-radius: 12px;
   color: #fff;
   font-size: 22px;
   font-weight: bold;

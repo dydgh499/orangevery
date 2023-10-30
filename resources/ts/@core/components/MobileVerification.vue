@@ -28,8 +28,10 @@ const countdown_time = ref(180)
 let countdown_timer = <any>(null)
 
 digits.value = props.default.split('')
-if(getUserLevel() >= 35)
+if(getUserLevel() >= 35) {
     button_status.value = 2
+    emits('update:pay_button', true)
+}
 
 const handleKeyDown = (event: KeyboardEvent, index: number) => {
     if (event.code !== 'Tab' && event.code !== 'ArrowRight' && event.code !== 'ArrowLeft')

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
             $table->string('card_num', 100)->nullable()->comment('card_num');
-            $table->string('nick_name', 100)->nullable()->comment('nick_name');
+            $table->string('note', 100)->nullable()->comment('note');
             $table->timestamps();
         });
     }
