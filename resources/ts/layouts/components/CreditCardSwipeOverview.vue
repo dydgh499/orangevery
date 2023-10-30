@@ -55,7 +55,7 @@ const setCardNum = () => {
             <VBtn @click="setCardNum()">카드선택</VBtn>
         </div>
     </div>
-    <div style="margin: 1em; text-align: center;">선택 가능한 카드가 존재하지 않습니다.</div>
+    <div v-else style="margin: 1em; text-align: center;">선택 가능한 카드가 존재하지 않습니다.</div>
 </template>
 
 <style>
