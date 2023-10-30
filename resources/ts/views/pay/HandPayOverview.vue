@@ -131,7 +131,7 @@ watchEffect(() => {
                     <template #name>카드번호</template>
                     <template #input>
                         <CreditCardOverview v-if="props.merchandise.use_regular_card" :merchandise="props.merchandise"
-                            @update:default="hand_pay_info.card_num = $event" />
+                            @update:card_num="hand_pay_info.card_num = $event" />
                         <VTextField v-else v-model="hand_pay_info.card_num" type="text" persistent-placeholder counter
                             prepend-inner-icon="emojione:credit-card" placeholder="카드번호를 입력해주세요"
                             :rules="[requiredValidator]" maxlength="18" autocomplete="cc-number" />
