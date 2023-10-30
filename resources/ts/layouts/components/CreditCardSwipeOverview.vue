@@ -24,7 +24,7 @@ const setCardNum = () => {
 </script>
 
 <template>
-    <div style="margin: 1em;">
+    <div style="margin: 1em;" v-if="props.merchandise.regular_credit_cards?.length">
         <Swiper class="swiper" :modules="[EffectCards]" :pagination="true" :effect="'cards'" :grab-cursor="true"
             @swiper="getRef">
             <SwiperSlide class="slide" v-for="(regular_credit_card, key) in props.merchandise.regular_credit_cards"
@@ -55,6 +55,7 @@ const setCardNum = () => {
             <VBtn @click="setCardNum()">카드선택</VBtn>
         </div>
     </div>
+    <div style="margin: 1em; text-align: center;">선택 가능한 카드가 존재하지 않습니다.</div>
 </template>
 
 <style>
