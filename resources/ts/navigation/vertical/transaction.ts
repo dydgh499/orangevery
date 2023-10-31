@@ -2,10 +2,10 @@ import { user_info } from '@axios'
 import corp from '@corp'
 
 const getAbilitiesMenu = computed(() => {
-    const payments = <any>([])
-    const settles = <any>([])
-    const settle_histories = <any>([])
-    const risks = <any>([])
+    const payments = []
+    const settles = []
+    const settle_histories = []
+    const risks = []
     if (corp.pv_options.free.use_hand_pay) {
         payments.push({
             title: '수기 결제 테스트',
@@ -25,16 +25,14 @@ const getAbilitiesMenu = computed(() => {
         })
     }
     if (user_info.value.level > 10) {
-        settle_histories.concat([
-            {
-                title: '가맹점 정산 이력',
-                to: 'transactions-settle-histories-merchandises',
-            },
-            {
-                title: '영업점 정산 이력',
-                to: 'transactions-settle-histories-salesforces',
-            }
-        ])
+        settle_histories.push({
+            title: '가맹점 정산 이력',
+            to: 'transactions-settle-histories-merchandises',
+        })
+        settle_histories.push({
+            title: '영업점 정산 이력',
+            to: 'transactions-settle-histories-salesforces',
+        })
         if (user_info.value.level >= 35 && corp.use_different_settlement) {
             settle_histories.push({
                 title: '차액 정산 이력',
@@ -61,7 +59,6 @@ const getAbilitiesMenu = computed(() => {
             children: settle_histories
         })
     }
-    
     if (user_info.value.level > 10) {
         risks.push({
             title: '이상거래 관리',
