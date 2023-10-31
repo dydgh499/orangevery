@@ -1,26 +1,22 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
-import { SettlementFunctionCollect } from '@/views/transactions/settle/Settle'
+import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import { selectFunctionCollect } from '@/views/selected'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
 import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import DepositCollectDialog from '@/layouts/dialogs/DepositCollectDialog.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
-const { getSettleStyle, batchSettle, isSalesCol, movePartSettle } = SettlementFunctionCollect(store)
+const { getSettleStyle, batchSettle, isSalesCol, movePartSettle } = settlementFunctionCollect(store)
 const { selected, all_selected } = selectFunctionCollect(store)
-const depositCollect = ref()
-
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
-provide('depositCollect', depositCollect)
 
 store.params.level = 10 // taransaction model에서 필수
 
@@ -144,7 +140,7 @@ watchEffect(() => {
                                     <div style="display: inline-flex; align-items: center; vertical-align: middle;">
                                         <VCheckbox v-model="selected" :value="item[_key]" class="check-label"
                                             style="min-inline-size: 1em;" v-if="getUserLevel() >= 35" />
-                                        <span class="edit-link" @click="movePartSettle(item['id'], true)">#{{ item[_key]
+                                        <span class="edit-link" @click="movePartSettle(item, true)">#{{ item[_key]
                                         }}</span>
                                     </div>
                                 </span>
@@ -165,6 +161,5 @@ watchEffect(() => {
                 <!-- part -->
             </template>
         </BaseIndexView>
-        <DepositCollectDialog ref="depositCollect" />
     </div>
 </template>

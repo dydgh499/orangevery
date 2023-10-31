@@ -4,6 +4,7 @@ import { useSearchStore } from '@/views/transactions/settle/part/useMerchandiseS
 import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { selectFunctionCollect } from '@/views/selected'
+import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
@@ -15,6 +16,8 @@ import corp from '@corp'
 const route = useRoute()
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
+const { isAbleMchtDepositCollect } = settlementFunctionCollect(store)
+
 const { get, post } = useRequestStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
@@ -73,8 +76,8 @@ const metas = ref([
 
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
 store.params.id = route.params.id
-store.params.s_dt = route.params.s_dt
-store.params.e_dt = route.params.e_dt
+store.params.s_dt = route.query.s_dt
+store.params.e_dt = route.query.e_dt
 store.params.level = 10
 
 const isSalesCol = (key: string) => {
@@ -85,28 +88,48 @@ const isSalesCol = (key: string) => {
     }
     return false
 }
-const partSettle = async () => {
-    const count = selected.value.length
-    const str_selected = selected.value.join(',')
+const getPartSettleFormat = () => {
     const params = Object.assign(cloneDeep(store.params), settle.value)
-    const path = params.level == 10 ? 'merchandises' : 'salesforce'
-
     params.selected = selected.value
     params.acct_name = user.value.acct_name
     params.acct_num = user.value.acct_num
     params.acct_bank_name = user.value.acct_bank_name
     params.acct_bank_code = user.value.acct_bank_code
-    if(count)
-    {
-        if (await alert.value.show('정말 '+count+'개의 매출을 부분정산하시겠습니까?<br><br>NO. ['+str_selected+']')) {
-            const res = await post('/api/v1/manager/transactions/settle-histories/'+path+'/part', params)
-            snackbar.value.show('성공하였습니다', 'success')
-            store.setChartProcess()
-            store.setTable()
-        }
+    return params
+}
+const dialog = async (messge: string) => {
+    const count = selected.value.length
+    if(count) {
+        const str_selected = selected.value.join(',')
+        if (await alert.value.show(messge+'<br><br>NO. ['+str_selected+']'))
+            return true
     }
     else
         snackbar.value.show('부분정산할 매출을 선택해주세요.', 'warning')
+    return false
+}
+
+const partSettle = async () => {
+    const count = selected.value.length
+    if(await dialog('정말 '+count+'개의 매출을 부분정산하시겠습니까?')) {
+        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/part', getPartSettleFormat())
+        snackbar.value.show('성공하였습니다', 'success')
+        store.setChartProcess()
+        store.setTable()
+    }
+}
+
+const settleCollect = async () => {
+    if(await dialog('정말 정산금을 이체한 후 정산 하시겠습니까?')) {
+        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/settle-collect', getPartSettleFormat())
+        if(r.data.result_cd == "0000") {
+            snackbar.value.show('성공하였습니다.', 'success')
+            store.setChartProcess()
+            store.setTable()    
+        }
+        else
+            snackbar.value.show(r.data.result_msg, 'error')
+    }
 }
 
 const getUser = async () => {
@@ -190,6 +213,9 @@ watchEffect(() => {
             <template #index_extra_field>
                 <VBtn prepend-icon="tabler-calculator" @click="partSettle()">
                     부분정산
+                </VBtn>
+                <VBtn prepend-icon="fa6-solid:money-bill-transfer" @click="settleCollect()" v-if="isAbleMchtDepositCollect(parseInt(route.query.use_collect_withdraw as string))">
+                    정산 및 이체
                 </VBtn>
                 <div style="display: flex;">
                     <table>

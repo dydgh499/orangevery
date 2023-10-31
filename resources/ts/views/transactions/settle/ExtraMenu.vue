@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Settle } from '@/views/types'
-import { SettlementFunctionCollect } from '@/views/transactions/settle/Settle'
+import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import { getUserLevel } from '@axios'
 
 interface Props {
@@ -10,8 +10,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 const store = <any>(inject('store'))
-const { settle, isAbleMchtDepositCollect, settleCollect } = SettlementFunctionCollect(store)
-const depositCollect = <any>(inject('depositCollect'))
+const { settle } = settlementFunctionCollect(store)
 </script>
 <template>
     <VBtn icon size="x-small" color="default" variant="text">

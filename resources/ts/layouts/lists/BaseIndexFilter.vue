@@ -178,10 +178,6 @@ watchEffect(() => {
                                 @click="exporter(1)">
                                 엑셀 추출
                             </VBtn>
-                            <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-pdf2"
-                                @click="exporter(2)">
-                                PDF 추출
-                            </VBtn>
                         </div>
 
                         <div class="d-inline-flex align-center flex-wrap gap-4 float-right justify-center">

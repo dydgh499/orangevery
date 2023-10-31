@@ -74,8 +74,8 @@ provide('exporter', exporter)
 
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
 store.params.id = route.params.id
-store.params.s_dt = route.params.s_dt
-store.params.e_dt = route.params.e_dt
+store.params.s_dt = route.query.s_dt
+store.params.e_dt = route.query.e_dt
 store.params.level = route.query.level
 store.params.is_base_trx = true
 

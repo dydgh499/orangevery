@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/transactions/settle/useSalesforceStore'
-import { SettlementFunctionCollect } from '@/views/transactions/settle/Settle'
+import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import { selectFunctionCollect } from '@/views/selected'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
 import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
@@ -14,7 +14,7 @@ import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { getSettleStyle, batchSettle, isSalesCol, movePartSettle } = SettlementFunctionCollect(store)
+const { getSettleStyle, batchSettle, isSalesCol, movePartSettle } = settlementFunctionCollect(store)
 const { settle_types } = useStore()
 const all_sales = salesLevels()
 const all_cycles = settleCycles()
@@ -159,7 +159,7 @@ watchEffect(() => {
                             <span v-if="_key === 'id'">
                                 <div style="display: inline-flex; align-items: center; vertical-align: middle;">
                                     <VCheckbox v-model="selected" :value="item[_key]" class="check-label" style="min-inline-size: 1em;" v-if="getUserLevel() >= 35"/>
-                                    <span class="edit-link" @click="movePartSettle(item['id'], false)">#{{ item[_key] }}</span>
+                                    <span class="edit-link" @click="movePartSettle(item, false)">#{{ item[_key] }}</span>
                                 </div>
                             </span>
                             <span v-else-if="_key == 'level'">

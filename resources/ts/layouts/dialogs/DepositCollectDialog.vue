@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SettlementFunctionCollect } from '@/views/transactions/settle/Settle'
+import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { requiredValidator } from '@validators'
 import { Settle } from '@/views/types'
@@ -7,7 +7,7 @@ import { Settle } from '@/views/types'
 
 const alert = <any>(inject('alert'))
 const store = <any>(inject('store'))
-const { settleCollect } = SettlementFunctionCollect(store)
+const { settleCollect } = settlementFunctionCollect(store)
 
 const vForm = ref()
 const amount = ref()

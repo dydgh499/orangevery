@@ -75,7 +75,6 @@ class MerchandiseController extends Controller
         $query = $this->merchandises
             ->join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
             ->where('payment_modules.is_delete', false)
-            ->with(['regularCreditCards'])
             ->distinct('payment_modules.mcht_id');
 
         $query = globalPGFilter($query, $request, 'payment_modules');
@@ -373,7 +372,6 @@ class MerchandiseController extends Controller
         ];
         $data = $this->merchandises
             ->where('id', $id)
-            ->with(['regularCreditCards'])
             ->first($cols);
         return $this->response(0, $data);
     }

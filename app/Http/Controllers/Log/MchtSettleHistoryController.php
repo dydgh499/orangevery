@@ -109,9 +109,6 @@ class MchtSettleHistoryController extends Controller
      */
     public function settleCollect(CreateSettleHistoryRequest $request)
     {
-        $trx_ids = Transaction::where('mcht_id', $request->id)
-            ->noSettlement('mcht_settle_id')
-            ->pluck('id')->all();
         $pay_module = PaymentModule::where('is_delete', false)
             ->where('mcht_id', $request->id)
             ->where('fin_id', '!=', 0)
@@ -119,10 +116,10 @@ class MchtSettleHistoryController extends Controller
 
         $data = $request->data('mcht_id');
         $data['settle_fee'] = $request->settle_fee;
-        $data['trx_ids'] = $trx_ids;
+        $data['trx_ids'] = $request->selected;
         $data['fin_id'] = $pay_module->fin_id;
         $url = $this->base_noti_url.'/settle-collect';
         $res = post($url, $data);
-        return $this->response(1, $res['body']);        
+        return $this->response(1, $res['body']);
     }
 }
