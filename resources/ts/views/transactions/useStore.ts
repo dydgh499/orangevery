@@ -19,8 +19,6 @@ export const realtimeDetailClass = (history: RealtimeHistory) => {
 export const realtimeResult = (item: Transaction) => {
     if(item.is_cancel)
         return StatusColors.Default
-    else if(item.use_collect_withdraw)
-        return StatusColors.Info
     else if(item.use_realtime_deposit) //실시간 수수료 존재시(실시간 사용)
     {
         const is_success = item.realtimes?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
@@ -29,6 +27,8 @@ export const realtimeResult = (item: Transaction) => {
             return StatusColors.Success
         if(is_error)
             return StatusColors.Error
+        if(item.use_collect_withdraw && item.realtimes?.length == 0)
+            return StatusColors.Info
         if(item.realtimes?.length == 0) //요청 대기
             return StatusColors.Primary
     }
@@ -38,10 +38,8 @@ export const realtimeResult = (item: Transaction) => {
 
 export const realtimeRetryMessage = (item: Transaction):string => {
     const code = realtimeResult(item)
-    if(code === StatusColors.Primary)
-    {
-        if(item.fin_trx_delay != 0)
-        {
+    if(code === StatusColors.Primary) {
+        if(item.fin_trx_delay != 0) {
             const formatTime = <any>(inject('$formatTime'))
             const retry_able_time = (new Date(item.trx_dt as string)).getTime() + (item.fin_trx_delay as number * 60000)
             return formatTime(retry_able_time)+'부터 재이체 가능'
