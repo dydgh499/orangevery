@@ -46,16 +46,18 @@ onMounted(async () => {
                         <th>보내자 보유잔액: </th>
                         <td><span>{{ remain.balance.toLocaleString() }}</span> &#8361;</td>
                     </tr>
+                </table>
+                <table>                    
                     <tr>
-                        <th>단문발송가능 회수: </th>
+                        <th>SMS 발송가능 회수: </th>
                         <td><span>{{ remain.sms_count.toLocaleString() }}</span>건</td>
                     </tr>
                     <tr>
-                        <th>장문발송가능 회수: </th>
+                        <th>LMS 발송가능 회수: </th>
                         <td><span>{{ remain.lms_count.toLocaleString() }}</span> 건</td>
                     </tr>
                     <tr>
-                        <th>이미지발송가능 회수: </th>
+                        <th>MMS 발송가능 회수: </th>
                         <td><span>{{ remain.mms_count.toLocaleString() }}</span> 건</td>
                     </tr>
                 </table>

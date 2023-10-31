@@ -163,6 +163,7 @@ export const feeApplyHistoires = async () => {
 export const useSalesFilterStore = () => {
     const all_sales = Array.from({ length: 6 }, () => <any[]>([]))
     const sales = Array.from({ length: 6 }, () => ref<any[]>([]))
+
     const mchts = ref(<Merchandise[]>([]))
     onMounted(async () => { 
         await classification() 
@@ -183,27 +184,21 @@ export const useSalesFilterStore = () => {
         const r = await axios.get(url)
         mchts.value = r.data.content
     }
-
-    const initAllSales = () => {
-        for (let i = 0; i < all_sales.length; i++) {
-            sales[i].value = [
-                { id: null, sales_name: '전체' },
-                ...all_sales[i]
-            ]
-        }
-    }
     
     const getAboveSalesFilter = (my_level: number, params: any) => {        
         let _mcht = []
         for (let i = my_level; i <= 5; i++) {
-            const sales_id = 'sales' + i + '_id'
-            const sales_name = 'sales' + i + '_name'
+            const sales_key = 'sales' + i
             // sales_id가 포함된 가맹점 리스트 목록
-            if(params[sales_id]) {
-                _mcht = mchts.value.filter(obj => obj[sales_id] === params[sales_id])
+            if(params[sales_key + '_id']) {
+                _mcht = mchts.value.filter(obj => obj[sales_key + '_id'] === params[sales_key + '_id'])
                 if(_mcht.length === 0) {
-                    _mcht = all_sales[i].filter(obj => obj.id === params[sales_id])
-                            .map(obj => ({sales_id: obj.id, sales_name:obj.sales_name}))
+                    _mcht = all_sales[i]
+                        .filter(obj => obj.id === params[sales_key + '_id'])
+                        .map(obj => ({
+                            [sales_key + '_id'] : obj.id, 
+                            [sales_key + '_name'] :obj.sales_name
+                        }))
                 }
                 return _mcht
             }
@@ -212,29 +207,54 @@ export const useSalesFilterStore = () => {
         return mchts.value
     }
 
-    const setUnderSalesFilter = (my_level: number, params: any) => {
-        for (let i = 5; i >= 0; i--) {    
+    const initAllSales = () => {
+        for (let i = 0; i < all_sales.length-1; i++) {
+            sales[i].value = [
+                { id: null, sales_name: '전체' },
+                ...all_sales[i]
+            ]
+        }
+    }
+    
+    // 상위에 클릭된게 있는지 체크
+    const isAboveCheck = (curr_idx: number, params: any) => {
+        for (let i = curr_idx; i < all_sales.length; i++) {
             const sales_key = 'sales' + i    
-            if(levels[sales_key+'_use'] && my_level == i && !params[sales_key+'_id']) {           
-                initAllSales()
-                return
-            }            
+            if(params[sales_key+'_id'])
+                return true
+        }
+        return false
+    }
+
+    const setUnderSalesFilter = (my_level: number, params: any) => {
+        for (let i = all_sales.length - 1; i >= 0; i--) {    
+            const sales_key = 'sales' + i    
+            // 전산에서 사용하고 있는 영업점레벨이 전체를 선택했을때
+            if(levels[sales_key+'_use'] && my_level == i && !params[sales_key+'_id']) {
+                // 상위가 아무것도 클릭된게 없을 때
+                if(isAboveCheck(i, params) == false) {
+                    initAllSales()
+                    return    
+                }
+            }
         }
         
         const _mchts = getAboveSalesFilter(my_level, params)
-        for (let i = 5; i >= 0; i--) {
+        for (let i = all_sales.length - 1; i >= 0; i--) {
             const sales_key = 'sales' + i
             // 가맹점목록에서 특정 level의 id와 name 목록을 가져옴
-            const map_sales = _mchts.map(obj => ({ id: obj[sales_key+'_id'], sales_name: obj[sales_key+'_name'] }))
-                        .filter(obj => obj.id !== null && obj.id !== 0 && obj.sales_name != '')
+            const map_sales = _mchts.map(obj => ({ id: obj[sales_key + '_id'], sales_name: obj[sales_key + '_name'] }))
+                        .filter(obj => obj.id !== undefined && obj.id !== 0 && obj.sales_name != '')
                         .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i)
-
+            
             sales[i].value = [
                 { id: null, sales_name: '전체' },
                 ...map_sales
             ]
-        }    
-        
+            // 선택한 영업점이 영업점 목록에 없을 때 전체로 변경            
+            if(sales[i].value.find(obj => obj.id === params[sales_key+'_id']) === undefined)
+                params[sales_key+'_id'] = undefined
+        }
     }
     
     return {

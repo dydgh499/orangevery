@@ -462,6 +462,7 @@ export interface Transaction {
     cxl_type?: number,
     fin_trx_delay?: number
     realtime_result?: string,
+    use_collect_withdraw?: number,
 }
 
 export interface SalesSlip extends Transaction{

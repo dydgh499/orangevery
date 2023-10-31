@@ -19,17 +19,18 @@ export const realtimeDetailClass = (history: RealtimeHistory) => {
 export const realtimeResult = (item: Transaction) => {
     if(item.is_cancel)
         return StatusColors.Default
+    else if(item.use_collect_withdraw)
+        return StatusColors.Info
     else if(item.use_realtime_deposit) //실시간 수수료 존재시(실시간 사용)
     {
-        const log = item.realtimes?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
-        if(log) //성공
+        const is_success = item.realtimes?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
+        const is_error = item.realtimes?.find(obj => obj.result_code !== '0000' && obj.request_type === 6170)
+        if(is_success) //성공
             return StatusColors.Success
-        else if(item.realtimes?.length) // 실패
+        if(is_error)
             return StatusColors.Error
-        else if(item.realtimes?.length == 0) //요청 대기
+        if(item.realtimes?.length == 0) //요청 대기
             return StatusColors.Primary
-        else
-            return StatusColors.Info
     }
     else
         return StatusColors.Default
@@ -60,6 +61,8 @@ export const realtimeMessage = (item: Transaction):string => {
         return '이체 대기중'
     else if(code === StatusColors.Success)
         return '성공'
+    else if(code === StatusColors.Info)
+        return '모아서 출금예정'
     else if(code === StatusColors.Error)
         return '실패'
     else

@@ -31,7 +31,7 @@ class TransactionController extends Controller
         $this->cols = [
             'merchandises.mcht_name', 'merchandises.user_name', 'merchandises.nick_name',
             'merchandises.addr', 'merchandises.resident_num', 'merchandises.business_num', 
-            'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell', 'merchandises.is_show_fee',
+            'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell', 'merchandises.use_collect_withdraw', 'merchandises.is_show_fee',
             'transactions.*',
             'payment_modules.note', 'payment_modules.use_realtime_deposit', 'payment_modules.cxl_type', 'payment_modules.fin_trx_delay',
             DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
