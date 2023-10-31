@@ -327,4 +327,10 @@ class PaymentModuleController extends Controller
             ->update(['pay_key' => $pay_key]);
         return $this->response(0, ['pay_key'=>$pay_key]);    
     }
+
+    public function batchRemove(Request $request)
+    {
+        $res = $this->pay_modules->whereIn('id', $request->selected)->update(['is_delete' => true]);
+        return $this->response($res ? 1 : 990);
+    }
 }

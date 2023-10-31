@@ -102,9 +102,7 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>차액정산 사용여부</template>
                             <template #input>
-                                <div class="demo-space-x">
-                                    <VSwitch v-model="props.item.use_different_settlement" color="primary" />
-                                </div>
+                                <VSwitch v-model="props.item.use_different_settlement" color="primary" />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
@@ -136,9 +134,7 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name><span>{{ props.item.pv_options.auth.levels.dev_name }} 사용여부</span></template>
                             <template #input>
-                                <div class="demo-space-x">
-                                    <VSwitch v-model="props.item.pv_options.auth.levels.dev_use" color="primary" />
-                                </div>
+                                <VSwitch v-model="props.item.pv_options.auth.levels.dev_use" color="primary" />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">

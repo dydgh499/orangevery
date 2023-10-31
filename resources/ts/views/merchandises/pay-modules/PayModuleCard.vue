@@ -30,7 +30,7 @@ const errorHandler = <any>(inject('$errorHandler'))
 const { update, remove } = useRequestStore()
 const { pgs, pss, settle_types, terminals, finance_vans, psFilter, setFee } = useStore()
 
-const mcht = ref({ id: null, mcht_name: '선택안함' })
+const mcht = ref(null)
 const md = ref<number>(3)
 
 const tidCreate = async() => {
@@ -77,7 +77,7 @@ onMounted(() => {
     })
     watchEffect(() => {
         if(props.able_mcht_chanage)
-            props.item.mcht_id = mcht.value.id
+            props.item.mcht_id = mcht.value
     })
 })
 </script>
@@ -96,7 +96,7 @@ onMounted(() => {
                                 <template #input>
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht"
                                         :items="props.merchandises" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
-                                        item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] return-object :eager="true"/>
+                                        item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] :eager="true"/>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

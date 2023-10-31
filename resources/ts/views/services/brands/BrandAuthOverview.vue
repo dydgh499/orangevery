@@ -102,19 +102,15 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>{{ item.auth.levels.sales5_name }} 사용여부</span></template>
                             <template #input>
-                                <div class="demo-space-x">
-                                    <VSwitch v-model="item.auth.levels.sales5_use" color="primary" />
-                                </div>
+                                <VSwitch v-model="item.auth.levels.sales5_use" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>{{ item.auth.levels.sales4_name }} 사용여부</span></template>
-                            <template #input>                                
-                                <div class="demo-space-x">
-                                    <VSwitch v-model="item.auth.levels.sales4_use" color="primary" />
-                                </div>
+                            <template #input>      
+                                <VSwitch v-model="item.auth.levels.sales4_use" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -122,9 +118,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>{{ item.auth.levels.sales3_name }} 사용여부</span></template>
                             <template #input>
-                                <div class="demo-space-x">
-                                    <VSwitch v-model="item.auth.levels.sales3_use" color="primary" />
-                                </div>
+                                <VSwitch v-model="item.auth.levels.sales3_use" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -133,9 +127,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>{{ item.auth.levels.sales2_name }} 사용여부</span></template>
                             <template #input>
-                                <div class="demo-space-x">
-                                    <VSwitch v-model="item.auth.levels.sales2_use" color="primary" />
-                                </div>
+                                <VSwitch v-model="item.auth.levels.sales2_use" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -144,9 +136,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>{{ item.auth.levels.sales1_name }} 사용여부</span></template>
                             <template #input>
-                                <div class="demo-space-x">
-                                    <VSwitch v-model="item.auth.levels.sales1_use" color="primary" />
-                                </div>
+                                <VSwitch v-model="item.auth.levels.sales1_use" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -155,9 +145,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name><span>{{ item.auth.levels.sales0_name }} 사용여부</span></template>
                             <template #input>
-                                <div class="demo-space-x">
-                                    <VSwitch v-model="item.auth.levels.sales0_use" color="primary" />
-                                </div>
+                                <VSwitch v-model="item.auth.levels.sales0_use" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>

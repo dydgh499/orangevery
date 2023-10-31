@@ -14,7 +14,7 @@ import corp from '@corp'
 
 const route = useRoute()
 const { store, head, exporter } = useSearchStore()
-const { selected, all_selected } = selectFunctionCollect(store)
+const { selected, all_selected, dialog } = selectFunctionCollect(store)
 const { get, post } = useRequestStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
@@ -89,7 +89,6 @@ const isSalesCol = (key: string) => {
 }
 const partSettle = async () => {
     const count = selected.value.length
-    const str_selected = selected.value.join(',')
     const params = Object.assign(cloneDeep(store.params), settle.value);
     const path = params.level == 10 ? 'merchandises' : 'salesforces'
 
@@ -98,21 +97,17 @@ const partSettle = async () => {
     params.acct_num = user.value.acct_num
     params.acct_bank_name = user.value.acct_bank_name
     params.acct_bank_code = user.value.acct_bank_code
-    if(count)
-    {
-        if (await alert.value.show('정말 '+count+'개의 매출을 부분정산하시겠습니까?<br><br>NO. ['+str_selected+']')) {
-            const r = await post('/api/v1/manager/transactions/settle-histories/'+path+'/part', params)
-            if (r.status == 201) {
-                snackbar.value.show('성공하였습니다.', 'success')
-                store.setChartProcess()
-                store.setTable()
-            }
-            else
-                snackbar.value.show(r.data.message, 'error')
+
+    if (await dialog('정말 '+count+'개의 매출을 부분정산하시겠습니까?')) {
+        const r = await post('/api/v1/manager/transactions/settle-histories/'+path+'/part', params)
+        if (r.status == 201) {
+            snackbar.value.show('성공하였습니다.', 'success')
+            store.setChartProcess()
+            store.setTable()
         }
+        else
+            snackbar.value.show(r.data.message, 'error')
     }
-    else
-        snackbar.value.show('부분정산할 매출을 선택해주세요.', 'warning')
 }
 
 const getUser = async () => {
@@ -196,10 +191,10 @@ watchEffect(() => {
                 <VBtn prepend-icon="tabler-calculator" @click="partSettle()">
                     부분정산
                 </VBtn>
+                <div style="position: relative; top: 0.6em;">
+                    <VSwitch v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" />
+                </div>
                 <div style="display: flex;">
-                    <div class="demo-space-x">
-                        <VSwitch v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" />
-                    </div>
                     <table>
                         <tr>
                             <th>매출액 합계</th>
@@ -249,7 +244,10 @@ watchEffect(() => {
                             </BaseQuestionTooltip>
                         </template>
                         <template v-else-if="key == 'id'">
-                            <VCheckbox v-model="all_selected" label="선택/취소" class="check-label" style="min-width: 7em;"/>
+                            <div class='check-label-container'>
+                                <VCheckbox v-model="all_selected" class="check-label"/>
+                                <span>선택/취소</span>
+                            </div>
                         </template>
                         <template v-else>
                             <span>
@@ -264,7 +262,10 @@ watchEffect(() => {
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
                             <span v-if="_key == 'id'">
-                                <VCheckbox v-model="selected" :value="item[_key]" :label="`#${item[_key]}`" class="check-label"/>
+                                <div class='check-label-container'>
+                                    <VCheckbox v-model="selected" :value="item[_key]" class="check-label"/>
+                                    <span>#{{ item[_key] }}</span>
+                                </div>
                             </span>
                             <span v-else-if="_key == 'module_type'">
                                 <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">

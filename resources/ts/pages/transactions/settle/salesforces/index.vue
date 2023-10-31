@@ -56,7 +56,7 @@ watchEffect(() => {
             <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, false)" v-if="getUserLevel() >= 35">
                 일괄 정산하기
             </VBtn>
-            <div class="demo-space-x">
+            <div style="position: relative; top: 0.6em;">
                 <VSwitch v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" />
             </div>
         </template>
@@ -98,7 +98,7 @@ watchEffect(() => {
                         </BaseQuestionTooltip>
                     </template>
                     <template v-else-if="key == 'id'">
-                        <div style="display: inline-flex; align-items: center; vertical-align: middle;">
+                        <div class='check-label-container'>
                             <VCheckbox v-model="all_selected" class="check-label" v-if="getUserLevel() >= 35" style="min-width: 1em;"/>
                             <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
                                 :content="'하단 영업점 고유번호를 클릭하여 부분정산 페이지로 이동할 수 있습니다.'">
@@ -157,7 +157,7 @@ watchEffect(() => {
                     <template v-else>
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key === 'id'">
-                                <div style="display: inline-flex; align-items: center; vertical-align: middle;">
+                                <div class='check-label-container'>
                                     <VCheckbox v-model="selected" :value="item[_key]" class="check-label" style="min-inline-size: 1em;" v-if="getUserLevel() >= 35"/>
                                     <span class="edit-link" @click="movePartSettle(item, false)">#{{ item[_key] }}</span>
                                 </div>

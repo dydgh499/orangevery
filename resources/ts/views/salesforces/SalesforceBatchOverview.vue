@@ -22,8 +22,9 @@ const errorHandler = <any>(inject('$errorHandler'))
 const { pgs, cus_filters } = useStore()
 
 const merchandise = reactive<any>({
+    custom_filter_id: null,
+    custom_id: null,
     sales_fee: 0,
-    custom: { id: null, type: 1, name: '사용안함' },
     acct_num: "",
     acct_name: "",
     bank: { code: null, title: '선택안함' },
@@ -70,7 +71,8 @@ const common = computed(() => {
     return {
         'id': props.item.id,
         'level': props.item.level,
-        'pg_id': pay_module.pg_id
+        'pg_id': pay_module.pg_id,
+        'custom_filter_id': merchandise.custom_filter_id,
     }
 })
 const setFee = () => {
@@ -82,7 +84,7 @@ const setFee = () => {
 const setCustomFilter = () => {
     post('set-custom-filter', {
         ...common.value,
-        'custom_id': merchandise.custom.id,
+        'custom_id': merchandise.custom_id,
     })
 }
 
@@ -179,6 +181,17 @@ const setNotiUrl = () => {
     <div v-if="props.item.id != 0" style="width: 100%;">
         <CreateHalfVCol :mdl="3" :mdr="9">
             <template #name>
+                <BaseQuestionTooltip :location="'top'" :text="'커스텀 필터 적용'" :content="'해당 값을 선택하고 즉시적용을 클릭하면<br>해당 값과 가맹점의 커스텀 필터가 똑같은 가맹점만 일괄적용됩니다.'">
+                </BaseQuestionTooltip>
+            </template>
+            <template #input>
+                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.custom_filter_id"
+                        :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)"
+                        prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name" item-value="id" single-line />
+            </template>
+        </CreateHalfVCol>
+        <CreateHalfVCol :mdl="3" :mdr="9">
+            <template #name>
                 {{ corp.pv_options.auth.levels['sales' + getLevelByIndex(props.item.level) + '_name'] }}/수수료율</template>
             <template #input>
                 <div class="batch-container">
@@ -194,10 +207,9 @@ const setNotiUrl = () => {
             <template #name>커스텀 필터</template>
             <template #input>
                 <div class="batch-container">
-                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.custom"
+                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.custom_id"
                         :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)"
-                        prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name" item-value="id"
-                        persistent-hint return-object />
+                        prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name" item-value="id" single-line/>
                     <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setCustomFilter()">
                         즉시적용
                         <VIcon end icon="tabler-direction-sign" />
@@ -248,7 +260,7 @@ const setNotiUrl = () => {
     <div v-if="props.item.id != 0" style="width: 100%;">
         <CreateHalfVCol :mdl="3" :mdr="9">
             <template #name>
-                <BaseQuestionTooltip :location="'top'" :text="'PG사 필터'" :content="'해당 PG사가 적용되어있는 결제모듈에 한해 적용됩니다.'">
+                <BaseQuestionTooltip :location="'top'" :text="'PG사 필터 적용'" :content="'해당 값을 선택하고 즉시적용을 클릭하면<br>해당 값과 결제모듈의 PG사가 똑같은 결제모듈만 일괄적용됩니다.'">
                 </BaseQuestionTooltip>
             </template>
             <template #input>

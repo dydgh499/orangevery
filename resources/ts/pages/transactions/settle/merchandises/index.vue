@@ -77,13 +77,17 @@ watchEffect(() => {
                             </BaseQuestionTooltip>
                         </template>
                         <template v-else-if="key == 'id'">
-                            <div style="display: inline-flex; align-items: center; vertical-align: middle;">
-                                <VCheckbox v-model="all_selected" class="check-label" v-if="getUserLevel() >= 35"
-                                    style="min-width: 1em;" />
-                                <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
+                            <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 35">
+                                <VCheckbox v-model="all_selected" class="check-label"/>
+                                <span>                                    
+                                <BaseQuestionTooltip :location="'top'" :text="'선택/취소'"
                                     :content="'하단 가맹점 고유번호를 클릭하여 부분정산 페이지로 이동할 수 있습니다.'">
                                 </BaseQuestionTooltip>
+                                </span>
                             </div>
+                            <span v-else>
+                                {{ header.ko }}
+                            </span>
                         </template>
                         <template v-else>
                             <span>
@@ -137,11 +141,9 @@ watchEffect(() => {
                         <template v-else>
                             <td v-show="_header.visible" class='list-square'>
                                 <span v-if="_key === 'id'">
-                                    <div style="display: inline-flex; align-items: center; vertical-align: middle;">
-                                        <VCheckbox v-model="selected" :value="item[_key]" class="check-label"
-                                            style="min-inline-size: 1em;" v-if="getUserLevel() >= 35" />
-                                        <span class="edit-link" @click="movePartSettle(item, true)">#{{ item[_key]
-                                        }}</span>
+                                    <div class='check-label-container' v-if="getUserLevel() >= 35">
+                                        <VCheckbox v-model="selected" :value="item[_key]" class="check-label"/>
+                                        <span class="edit-link" @click="movePartSettle(item, true)">#{{ item[_key] }}</span>
                                     </div>
                                 </span>
                                 <span v-else-if="isSalesCol(_key as string)" style="font-weight: bold;">

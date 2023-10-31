@@ -52,7 +52,7 @@ watchEffect(() => {
             </BaseIndexFilterCard>
         </template>
         <template #index_extra_field>
-            <div class="demo-space-x">
+            <div style="position: relative; top: 0.6em;">
                 <VSwitch v-model="store.params.un_use" label="최근 1달 미결제 단말기 조회" color="primary" />
             </div>
         </template>

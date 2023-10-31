@@ -16,11 +16,11 @@ const props = defineProps<Props>()
 
 const { update, remove } = useRequestStore()
 
-const mcht = ref({ id: null, mcht_name: '선택안함' })
+const mcht = ref(null)
 
 watchEffect(() => {
     if(props.able_mcht_chanage)
-        props.item.mcht_id = mcht.value.id
+        props.item.mcht_id = mcht.value
 })
 
 </script>
@@ -37,7 +37,7 @@ watchEffect(() => {
                                 <template #input>
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht"
                                         :items="props.merchandises" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
-                                        item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] return-object />
+                                        item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -54,7 +54,7 @@ watchEffect(() => {
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>노티 사용 유무</template>
                                 <template #input>
-                                    <BooleanRadio :radio="Boolean(props.item.noti_status)"
+                                    <BooleanRadio :radio="props.item.noti_status"
                                         @update:radio="props.item.noti_status = $event" :rules="[nullValidator]">
                                         <template #true>사용</template>
                                         <template #false>미사용</template>

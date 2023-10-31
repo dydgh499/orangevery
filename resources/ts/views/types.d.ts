@@ -190,6 +190,7 @@ export interface PayModule {
     fin_trx_delay: number,
     cxl_type: number,
     use_realtime_deposit: number,
+    pay_key?: string,
 }
 
 export interface PayGateway {
@@ -734,7 +735,7 @@ export interface NotiUrl {
     id: number,
     mcht_id: number | null,
     send_url: string,
-    noti_status: boolean,
+    noti_status: number,
     note: string,
 }
 

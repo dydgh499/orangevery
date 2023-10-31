@@ -46,7 +46,7 @@ export const defaultItemInfo =  () => {
         mcht_id: 0,
         send_url: '',
         note: '비고(별칭)',
-        noti_status: true
+        noti_status: 1
     })
     //카드사 필터 및 다른 필터옵션들
     return {

@@ -18,7 +18,7 @@ const addNewNotiUrl = () => {
     new_noti_urls.push(<NotiUrl>{
         id: 0,
         send_url: '',
-        noti_status: true,
+        noti_status: 1,
         mcht_id: props.item.id,
         note: '비고',
     })

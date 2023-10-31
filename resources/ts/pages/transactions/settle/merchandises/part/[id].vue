@@ -15,7 +15,7 @@ import corp from '@corp'
 
 const route = useRoute()
 const { store, head, exporter } = useSearchStore()
-const { selected, all_selected } = selectFunctionCollect(store)
+const { selected, all_selected, dialog } = selectFunctionCollect(store)
 const { isAbleMchtDepositCollect } = settlementFunctionCollect(store)
 
 const { get, post } = useRequestStore()
@@ -96,17 +96,6 @@ const getPartSettleFormat = () => {
     params.acct_bank_name = user.value.acct_bank_name
     params.acct_bank_code = user.value.acct_bank_code
     return params
-}
-const dialog = async (messge: string) => {
-    const count = selected.value.length
-    if(count) {
-        const str_selected = selected.value.join(',')
-        if (await alert.value.show(messge+'<br><br>NO. ['+str_selected+']'))
-            return true
-    }
-    else
-        snackbar.value.show('부분정산할 매출을 선택해주세요.', 'warning')
-    return false
 }
 
 const partSettle = async () => {
@@ -267,7 +256,10 @@ watchEffect(() => {
                             </BaseQuestionTooltip>
                         </template>
                         <template v-else-if="key == 'id'">
-                            <VCheckbox v-model="all_selected" label="선택/취소" class="check-label" style="min-width: 7em;"/>
+                            <div class='check-label-container'>
+                                <VCheckbox v-model="all_selected" class="check-label"/>
+                                <span>선택/취소</span>
+                            </div>
                         </template>
                         <template v-else>
                             <span>
@@ -282,7 +274,10 @@ watchEffect(() => {
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
                             <span v-if="_key == 'id'">
-                                <VCheckbox v-model="selected" :value="item[_key]" :label="`#${item[_key]}`" class="check-label"/>
+                                <div class='check-label-container'>
+                                    <VCheckbox v-model="selected" :value="item[_key]" class="check-label"/>
+                                    <span>#{{ item[_key] }}</span>
+                                </div>
                             </span>
                             <span v-else-if="_key == 'module_type'">
                                 <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">

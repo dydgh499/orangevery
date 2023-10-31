@@ -24,19 +24,19 @@ use Illuminate\Support\Facades\DB;
 class SalesforceBatchController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $merchandises, $payModules;
+    protected $merchandises, $pay_modules;
 
-    public function __construct(Merchandise $merchandises, PaymentModule $payModules)
+    public function __construct(Merchandise $merchandises, PaymentModule $pay_modules)
     {
         $this->merchandises = $merchandises;
-        $this->payModules   = $payModules;
+        $this->pay_modules  = $pay_modules;
     }
 
     private function payModuleBatch($request)
     {
         $sales_key = $this->getSalesKeys($request);
         $sales_id = 'merchandises.'.$sales_key['sales_id'];
-        $query = $this->payModules
+        $query = $this->pay_modules
             ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
             ->where('payment_modules.brand_id', $request->user()->brand_id)
             ->where($sales_id, $request->id);
@@ -48,8 +48,11 @@ class SalesforceBatchController extends Controller
     private function merchandiseBatch($request)
     {
         $sales_key = $this->getSalesKeys($request);
-        return $this->merchandises->where('brand_id', $request->user()->brand_id)
+        $query = $this->merchandises->where('brand_id', $request->user()->brand_id)
             ->where($sales_key['sales_id'], $request->id);
+        if($request->custom_filter_id)
+            $query = $query->where('custom_id', $request->custom_filter_id);
+        return $query;
     }
 
     private function getSalesKeys($request)

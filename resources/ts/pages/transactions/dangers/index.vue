@@ -65,7 +65,10 @@ const batchCheck = async () => {
             </tr>
             <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                    <VCheckbox v-model="all_selected" :label="`${header.ko}`" class="check-label" v-if="key == 'id' && getUserLevel() >= 35" style="min-width: 6em;"/>
+                    <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 35">
+                        <VCheckbox v-model="all_selected" class="check-label"/>
+                        <span>선택/취소</span>
+                    </div>
                     <span v-else>
                         {{ header.ko }}
                     </span>
@@ -85,8 +88,10 @@ const batchCheck = async () => {
                     <template v-else>
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key === 'id'">
-                                <VCheckbox v-model="selected" :value="item[_key]" :label="`#${item[_key]}`" class="check-label" v-if="getUserLevel() >= 35"/>
-                                <span v-else> #{{ item[_key] }}</span>
+                                <div class='check-label-container' v-if="getUserLevel() >= 35">
+                                    <VCheckbox v-model="selected" :value="item[_key]" class="check-label"/>
+                                    <span>#{{ item[_key] }}</span>
+                                </div>
                             </span>
                             <span v-else-if="_key == 'module_type'">
                                 <VChip

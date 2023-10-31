@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import { useRequestStore } from '@/views/request'
+import { selectFunctionCollect } from '@/views/selected'
 import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { user_info } from '@axios'
 import { DateFilters } from '@core/enums'
+import { getUserLevel } from '@axios'
 
+const { request } = useRequestStore()
 const { pgs, pss, settle_types } = useStore()
 const { store, head, exporter } = useSearchStore()
+const { selected, all_selected, dialog } = selectFunctionCollect(store)
+
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
@@ -43,6 +49,17 @@ const metas = ref([
         stats: '0',
     },
 ])
+
+const batchDelete = async () => {
+    const count = selected.value.length
+    if (await dialog('정말 '+count+'개의 결제모듈을 일괄삭제 하시겠습니까?')) {
+        const params = { selected: selected.value }
+        const r = await request({ url: `/api/v1/manager/merchandises/pay-modules/batch-remove`, method: 'delete', params:params}, true)
+            store.setChartProcess()
+        store.setTable()
+    }
+}
+
 onMounted(() => {
     watchEffect(async() => {
         if(store.getChartProcess() === false) {
@@ -75,8 +92,11 @@ watchEffect(() => {
                 </template>
             </BaseIndexFilterCard>
         </template>
-        <template #index_extra_field>
-            <div class="demo-space-x">
+        <template #index_extra_field>            
+            <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchDelete()" v-if="getUserLevel() >= 35" color="error">
+                일괄 삭제
+            </VBtn>
+            <div style="position: relative; top: 0.6em;">
                 <VSwitch v-model="store.params.un_use" label="최근 1달 미결제 결제모듈 조회" color="primary" />
             </div>
         </template>
@@ -91,7 +111,11 @@ watchEffect(() => {
             </tr>
             <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                    <span>
+                    <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 35">
+                        <VCheckbox v-model="all_selected" class="check-label"/>
+                        <span>선택/취소</span>
+                    </div>
+                    <span v-else>
                         {{ header.ko }}
                     </span>
                 </th>
@@ -110,7 +134,10 @@ watchEffect(() => {
                     <template v-else>
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key == 'id'" class="edit-link" @click="store.edit(item['id'])">
-                                #{{ item[_key] }}
+                                <div class='check-label-container'>
+                                    <VCheckbox v-if="getUserLevel() >= 50" v-model="selected" :value="item[_key]" class="check-label"/>
+                                    <span class="edit-link" @click="store.edit(item['id'])">#{{ item[_key] }}</span>
+                                </div>
                             </span>
                             <span v-else-if="_key == 'note'" class="edit-link" @click="store.edit(item['id'])">
                                 {{ item[_key] }}
