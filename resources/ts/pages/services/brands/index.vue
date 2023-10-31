@@ -1,12 +1,33 @@
 <script setup lang="ts">
 import { useSearchStore, dev_settle_types } from '@/views/services/brands/useStore'
+import { useRequestStore } from '@/views/request'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { DateFilters } from '@core/enums'
+import corp from '@corp'
 
 const { store, head, exporter, boolToText } = useSearchStore()
+const { post } = useRequestStore()
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+
+const remain = ref({
+    sms_count: 0,
+    lms_count: 0,
+    mms_count: 0,
+    balance: 0,
+})
+const getbonaejaBalance = async () => {
+    const r = await post('/api/v1/bonaejas/balance', { brand_id: corp.id }, false)
+    remain.value.balance = r.data.data.TOTAL_DEPOSIT
+    remain.value.sms_count = r.data.data.SMS_CNT
+    remain.value.lms_count = r.data.data.LMS_CNT
+    remain.value.mms_count = r.data.data.MMS_CNT
+}
+
+onMounted(async () => {
+    await getbonaejaBalance()
+})
 /*
     금월 입금 받을 합계액
     금월 입금 함계액
@@ -18,11 +39,32 @@ provide('exporter', exporter)
         <template #index_extra_field>
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
                 :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" :eager="true" />
+            <div style="display: flex;">
+                <table>
+                    <tr
+                        :style="(corp.pv_options.free.bonaeja.min_balance_limit * 10000) < remain.balance ? '' : 'color:red'">
+                        <th>보내자 보유잔액: </th>
+                        <td><span>{{ remain.balance.toLocaleString() }}</span> &#8361;</td>
+                    </tr>
+                    <tr>
+                        <th>단문발송가능 회수: </th>
+                        <td><span>{{ remain.sms_count.toLocaleString() }}</span>건</td>
+                    </tr>
+                    <tr>
+                        <th>장문발송가능 회수: </th>
+                        <td><span>{{ remain.lms_count.toLocaleString() }}</span> 건</td>
+                    </tr>
+                    <tr>
+                        <th>이미지발송가능 회수: </th>
+                        <td><span>{{ remain.mms_count.toLocaleString() }}</span> 건</td>
+                    </tr>
+                </table>
+            </div>
         </template>
         <template #headers>
             <tr>
-                <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
-                    class='list-square' style="border-bottom: 0;">
+                <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index" class='list-square'
+                    style="border-bottom: 0;">
                     <span>
                         {{ head.main_headers[index] }}
                     </span>
@@ -66,14 +108,15 @@ provide('exporter', exporter)
                             <span v-else-if="_key == `main_color`">
                                 <div :style="`width: 90%; height: 50%;background:` + item.theme_css.main_color"></div>
                             </span>
-                            <span v-else-if="_key == `deposit_amount` || _key == `extra_deposit_amount` || _key == 'curr_deposit_amount'">
+                            <span
+                                v-else-if="_key == `deposit_amount` || _key == `extra_deposit_amount` || _key == 'curr_deposit_amount'">
                                 {{ item[_key].toLocaleString() }}
                             </span>
                             <span v-else-if="_key == `dev_fee`">
                                 {{ item[_key].toLocaleString() }}%
                             </span>
                             <span v-else-if="_key == 'dev_settle_type'">
-                                <VChip  :color="store.booleanTypeColor(!item[_key])">
+                                <VChip :color="store.booleanTypeColor(!item[_key])">
                                     {{ dev_settle_types.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
                             </span>

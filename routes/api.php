@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Message\MessageController;
+
 use App\Http\Controllers\Manager\DashboardController;
 use App\Http\Controllers\Manager\BrandController;
 use App\Http\Controllers\Manager\OperatorController;
@@ -60,11 +62,14 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
     Route::post('computational-transfer/login', [BeforeSystemController::class, 'login']);
     Route::post('computational-transfer/register', [BeforeSystemController::class, 'register']);
 
+    Route::prefix('bonaejas')->group(function() {
+        Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
+        Route::post('mobile-code-auth', [MessageController::class, 'mobileCodeAuth']);
+        Route::post('balance', [MessageController::class, 'getBalance']);
+    });
     Route::prefix('auth')->group(function() {
         Route::post('sign-in', [AuthController::class, 'signin']);
         Route::post('sign-up', [AuthController::class, 'signUp']);
-        Route::post('mobile-code-issuance', [AuthController::class, 'mobileCodeIssuence']);
-        Route::post('mobile-code-auth', [AuthController::class, 'mobileCodeAuth']);
         Route::middleware('auth:sanctum')->post('sign-out', [AuthController::class, 'signout']);
         Route::middleware('auth:sanctum')->post('ok', [AuthController::class, 'ok']);
         Route::middleware('auth:sanctum')->post('onwer-check', [AuthController::class, 'onwerCheck']);

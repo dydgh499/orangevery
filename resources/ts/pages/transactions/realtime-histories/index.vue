@@ -16,12 +16,11 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-
 const snackbar = <any>(inject('snackbar'))
-const setFianaceVansBalance = async () => {
+const getFianaceVansBalance = async () => {
     const promises = <any>[]
     for (let i = 0; i < finance_vans.length; i++)  {
-        promises.push(post('/api/v1/manager/transactions/realtime-histories/get-balance', finance_vans[i]))
+        promises.push(post('/api/v1/manager/transactions/realtime-histories/get-balance', finance_vans[i], false))
     }
     const results = await Promise.all(promises)
     for (let i = 0; i < results.length; i++) {
@@ -47,7 +46,7 @@ const getLogStyle = (item: RealtimeHistory) => {
         return '';
 }
 onMounted(async () => {
-    await setFianaceVansBalance()
+    await getFianaceVansBalance()
 })
 </script>
 <template>

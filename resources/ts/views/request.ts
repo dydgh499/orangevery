@@ -34,10 +34,11 @@ export const useRequestStore = defineStore('requestStore', () => {
         }
     }
 
-    const request = async (params: any) => {
+    const request = async (params: any, use_snackbar: boolean = true) => {
         try {
             const res = await axios(params)
-            snackbar.value.show('성공하였습니다.', 'success')
+            if(use_snackbar)
+                snackbar.value.show('성공하였습니다.', 'success')
             return res
         }
         catch (e: any) {
@@ -128,8 +129,8 @@ export const useRequestStore = defineStore('requestStore', () => {
             })
     }
 
-    const post = async (url: string, params: any) => {
-        return await request({ url: url, data: params, method: 'post' })
+    const post = async (url: string, params: any, use_snackbar :boolean = true) => {
+        return await request({ url: url, data: params, method: 'post' }, use_snackbar)
     }
 
     const get = async (url: string, params: any = {}) => {
