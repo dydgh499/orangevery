@@ -67,8 +67,7 @@ export const useSearchStore = defineStore('transSettlesMchtPartSearchStore', () 
     headers['trx_dttm'] = '거래 시간'
     headers['cxl_dttm'] = '취소 시간'
     headers['installment'] = '할부'
-    if(getUserLevel() >= 13)
-    {
+    if(getUserLevel() >= 13) {
         headers['mid'] = 'MID'
         headers['tid'] = 'TID'    
     }
@@ -81,8 +80,7 @@ export const useSearchStore = defineStore('transSettlesMchtPartSearchStore', () 
     headers['buyer_phone'] = '구매자 연락처'
     
     headers['item_name'] = '상품명'
-    if(getUserLevel() >= 13)
-    {
+    if(getUserLevel() >= 13) {
         headers['ord_num'] = '주문번호'
         headers['trx_id'] = '거래번호'
         headers['ori_trx_id'] = '원거래번호'

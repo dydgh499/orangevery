@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Log;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Log\SettleHistoryMerchandise;
-use App\Models\Log\SettleDeductMerchandise;
 use App\Models\Transaction;
 use App\Models\PaymentModule;
-
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -109,39 +107,22 @@ class MchtSettleHistoryController extends Controller
     /**
      * 모아서 출금(정산)
      */
-    public function settleCollect(Request $request)
+    public function settleCollect(CreateSettleHistoryRequest $request)
     {
-        return DB::transaction(function () use($request) {
-            $res = SettleDeductMerchandise::create([
-                'brand_id'  => $request->user()->brand_id,
-                'mcht_id'   => $request->id,
-                'amount'    => $request->amount * -1,
-                'deduct_dt' => $request->e_dt,
-            ]);
-            if($res->id)
-            {
-                $pay_module = PaymentModule::where('is_delete', false)
-                    ->where('mcht_id', $request->id)
-                    ->where('fin_id', '!=', 0)
-                    ->first();
-                $data = [
-                    'acct_name' => $request->acct_name,
-                    'acct_num' => $request->acct_num,
-                    'acct_bank_code' => $request->acct_bank_code,
-                    'acct_bank_name' => $request->acct_bank_name,
-                    'brand_id'  => $request->user()->brand_id,
-                    'mcht_id'   => $request->id,
-                    'amount'    => $request->amount * -1,
-                    'settle_dt' => $request->e_dt,
-                    'fin_id'    => $pay_module->fin_id
-                ];
-                $url = $this->base_noti_url.'/settle-collect';
-                $res = post($url, $data);
-                return $this->response(1, $res['body']);     
-            }
-            else
-                return $this->response(990);
-        });
-   
+        $trx_ids = Transaction::where('mcht_id', $request->id)
+            ->noSettlement('mcht_settle_id')
+            ->pluck('id')->all();
+        $pay_module = PaymentModule::where('is_delete', false)
+            ->where('mcht_id', $request->id)
+            ->where('fin_id', '!=', 0)
+            ->first();
+
+        $data = $request->data('mcht_id');
+        $data['settle_fee'] = $request->settle_fee;
+        $data['trx_ids'] = $trx_ids;
+        $data['fin_id'] = $pay_module->fin_id;
+        $url = $this->base_noti_url.'/settle-collect';
+        $res = post($url, $data);
+        return $this->response(1, $res['body']);        
     }
 }

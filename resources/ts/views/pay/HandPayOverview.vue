@@ -2,7 +2,6 @@
 import { installments } from '@/views/merchandises/pay-modules/useStore'
 import { requiredValidator, lengthValidatorV2 } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import CreditCardOverview from '@/layouts/components/CreditCardSwipeOverview.vue'
 import { reactive, watchEffect } from 'vue';
 import { VForm } from 'vuetify/components'
 import type { Merchandise, SalesSlip, Options, HandPay } from '@/views/types'
@@ -130,9 +129,7 @@ watchEffect(() => {
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-top: 12px;">
                     <template #name>카드번호</template>
                     <template #input>
-                        <CreditCardOverview v-if="props.merchandise.use_regular_card" :merchandise="props.merchandise"
-                            @update:card_num="hand_pay_info.card_num = $event" />
-                        <VTextField v-else v-model="hand_pay_info.card_num" type="text" persistent-placeholder counter
+                        <VTextField v-model="hand_pay_info.card_num" type="text" persistent-placeholder counter
                             prepend-inner-icon="emojione:credit-card" placeholder="카드번호를 입력해주세요"
                             :rules="[requiredValidator]" maxlength="18" autocomplete="cc-number" />
                     </template>

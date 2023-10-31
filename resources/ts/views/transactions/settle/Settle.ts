@@ -102,18 +102,11 @@ export function SettlementFunctionCollect(store: any) {
         return (getUserLevel() == 10 || getUserLevel() >= 35) && corp.pv_options.paid.use_realtime_deposit && is_mcht && item.use_collect_withdraw
     }
 
-    const settleCollect = async(item:Settle, amount: number) => {
-        if (await alert.value.show('정말 '+item.mcht_name+'님에게 출금 하시겠습니까?')) {
-            const params = {
-                id: item.id,
-                acct_name: item.acct_name,
-                acct_num: item.acct_num,
-                acct_bank_code: item.acct_bank_code,
-                acct_bank_name: item.acct_bank_name,
-                e_dt: store.params.e_dt,
-                amount: amount,
-            }
-            const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/settle-collect', params)
+    const settleCollect = async(name:string, item:Settle) => {
+        if (await alert.value.show('정말 '+name+'님에게 정산금을 이체한 후 정산 하시겠습니까?')) {
+            const params = cloneDeep(store.params)
+            const p = getSettleFormat(item, true)
+            const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/settle-collect', Object.assign(params, p))
             if(r.data.result_cd == "0000")
             {
                 snackbar.value.show('성공하였습니다.', 'success')

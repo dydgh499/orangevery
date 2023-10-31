@@ -24,13 +24,6 @@ const depositCollect = <any>(inject('depositCollect'))
                     </template>
                     <VListItemTitle>정산하기</VListItemTitle>
                 </VListItem>
-                <VListItem value="retry-realtime-deposit" class="retry-realtime-deposit" @click="depositCollect.show(props.item)"
-                    v-if="isAbleMchtDepositCollect(props.is_mcht, props.item)">
-                    <template #prepend>
-                        <VIcon size="24" class="me-3" icon="fa6-solid:money-bill-transfer" />
-                    </template>
-                    <VListItemTitle>정산 및 이체</VListItemTitle>
-                </VListItem>
             </VList>
         </VMenu>
     </VBtn>
