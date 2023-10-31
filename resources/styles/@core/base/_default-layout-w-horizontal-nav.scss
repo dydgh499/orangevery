@@ -40,6 +40,7 @@
 
   // TODO: Use Vuetify grid sass variable here
   .layout-page-content {
+    min-block-size: 105vh;
     padding-block: 1.5rem;
   }
 }

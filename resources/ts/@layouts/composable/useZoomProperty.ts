@@ -1,3 +1,4 @@
+import { pay_token } from '@axios'
 import { themeConfig } from '@themeConfig'
 
 export const useZoomProperty = () => {
@@ -27,7 +28,10 @@ export const useZoomProperty = () => {
     watchEffect(() => {
         setZoom()
     })
-
+    watchEffect(() => {
+        if(pay_token.value == '')
+            zoom.value = 100
+    })
     return {
         zoom,
         zoomIn,
