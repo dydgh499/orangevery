@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { realtimeResult } from '@/views/transactions/useStore'
+import { realtimeResult, isRetryAble } from '@/views/transactions/useStore'
 import { useRequestStore } from '@/views/request'
 import type { SalesSlip, CancelPay } from '@/views/types'
 import { getUserLevel } from '@axios'
@@ -103,7 +103,7 @@ const isRealtimeTransaction = () => {
                     <VListItemTitle>민원처리</VListItemTitle>
                 </VListItem>
                 <VListItem value="retry-realtime-deposit" class="retry-realtime-deposit" @click="retryDeposit()"
-                    v-if="isRealtimeTransaction() && realtimeResult(props.item) == StatusColors.Error">
+                    v-if="isRealtimeTransaction() && realtimeResult(props.item) == StatusColors.Error && isRetryAble(props.item)">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="fa6-solid:money-bill-transfer" />
                     </template>

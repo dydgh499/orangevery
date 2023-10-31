@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { module_types, installments, fin_trx_delays, cxl_types } from '@/views/merchandises/pay-modules/useStore'
-import { useSearchStore, realtimeResult, realtimeMessage, realtimeRetryMessage } from '@/views/transactions/useStore'
+import { useSearchStore, realtimeResult, realtimeMessage } from '@/views/transactions/useStore'
 import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { selectFunctionCollect } from '@/views/selected'
@@ -234,8 +234,6 @@ watchEffect(() => {
                             <span v-else-if="_key == 'realtime_result'">
                                 <VChip :color="store.getSelectIdColor(realtimeResult(item))">
                                     {{ realtimeMessage(item) }}
-                                    <br>
-                                    {{ realtimeRetryMessage(item) }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'extra_col'">

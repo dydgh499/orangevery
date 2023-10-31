@@ -22,7 +22,7 @@ export const realtimeResult = (item: Transaction) => {
     else if(item.use_realtime_deposit) //실시간 수수료 존재시(실시간 사용)
     {
         const is_success = item.realtimes?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
-        const is_error = item.realtimes?.find(obj => obj.result_code !== '0000' && obj.request_type === 6170)
+        const is_error = item.realtimes?.find(obj => obj.result_code !== '0000')
         if(is_success) //성공
             return StatusColors.Success
         if(is_error)
@@ -36,27 +36,15 @@ export const realtimeResult = (item: Transaction) => {
         return StatusColors.Default
 }
 
-export const realtimeRetryMessage = (item: Transaction):string => {
-    const code = realtimeResult(item)
-    if(code === StatusColors.Primary) {
-        if(item.fin_trx_delay != 0) {
-            const formatTime = <any>(inject('$formatTime'))
-            const retry_able_time = (new Date(item.trx_dt as string)).getTime() + (item.fin_trx_delay as number * 60000)
-            return formatTime(retry_able_time)+'부터 재이체 가능'
-        }
-        else
-            return ''
-    }
-    else
-        return ''
-}
-
 export const realtimeMessage = (item: Transaction):string => {
     const code = realtimeResult(item)
     if(code === StatusColors.Default)
         return 'N/A'
-    else if(code === StatusColors.Primary)
-        return '이체 대기중'
+    else if(code === StatusColors.Primary) {
+        const formatTime = <any>(inject('$formatTime'))
+        const retry_able_time = (new Date(item.trx_dt as string)).getTime() + (item.fin_trx_delay as number * 60000)
+        return formatTime(retry_able_time)+'초 이체예정'
+    }
     else if(code === StatusColors.Success)
         return '성공'
     else if(code === StatusColors.Info)
@@ -65,6 +53,11 @@ export const realtimeMessage = (item: Transaction):string => {
         return '실패'
     else
         return '알수없는 상태'
+}
+
+export const isRetryAble = (item: Transaction) => {
+    const retry_able_time = (new Date(item.trx_dt as string)).getTime() + (item.fin_trx_delay as number * 60000)
+    return retry_able_time > Date.now() ? true : false
 }
 
 export const useSearchStore = defineStore('transSearchStore', () => {    
