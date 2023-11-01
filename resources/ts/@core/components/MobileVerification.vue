@@ -122,7 +122,7 @@ const countdownTimer = computed(() => {
                     </h6>
                     <div ref="ref_opt_comp" class="d-flex align-center gap-4">
                         <VTextField v-for="i in props.totalInput" :key="i" :model-value="digits[i - 1]"
-                            v-bind="defaultStyle" maxlength="1" @keydown="handleKeyDown($event, i)" />
+                            v-bind="defaultStyle" maxlength="1" @keydown="handleKeyDown($event, i)" class="vertify-number"/>
                     </div>
                 </VCol>
                 <VCol class="retry-container">
@@ -157,11 +157,11 @@ const countdownTimer = computed(() => {
   justify-content: space-between;
 }
 
-.v-field__field {
+.vertify-number {
   input {
-    padding: 0.1rem;
-    font-size: 1.25rem;
-    text-align: center;
+    padding: 0.1rem !important;
+    font-size: 1.25rem !important;
+    text-align: center !important;
   }
 }
 </style>
