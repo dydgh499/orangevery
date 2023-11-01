@@ -48,11 +48,11 @@ const deposit = async () => {
             <VCol cols="12" md="4">
                 <VCard>
                     <VCardItem>
-                        <VCardTitle style="margin-bottom: 1em;">본사 지정계좌 출금</VCardTitle>
+                        <VCardTitle style="margin-bottom: 1em;">본사 지정계좌 이체</VCardTitle>
                         <VDivider style="margin: 1em 0;" />
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>출금 이체 모듈 선택</template>
+                                <template #name>출금 이체모듈 선택</template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="withdraw_acct" :items="finance_vans"
                                         label="출금 이체모듈 선택" item-title="nick_name" item-value="id" 
@@ -68,7 +68,7 @@ const deposit = async () => {
                                 </template>
                             </CreateHalfVCol>
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>출금 금액 입력</template>
+                                <template #name>출금금액 입력</template>
                                 <template #input>
                                     <VTextField v-model="amount" type="number" suffix="￦" placeholder="출금금액 입력"
                                         prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidator]" />
@@ -78,7 +78,7 @@ const deposit = async () => {
                         <VRow>
                         <VCol class="d-flex gap-4">
                             <VBtn type="button" style="margin-left: auto;" @click="deposit()">
-                                입금계좌로 이체
+                                지정계좌로 이체
                                 <VIcon end icon="fa6-solid:money-bill-transfer" />
                             </VBtn>
                         </VCol>

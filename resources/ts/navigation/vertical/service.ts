@@ -34,7 +34,7 @@ const getAbilitiesMenu = computed(() => {
         })
         if(corp.pv_options.paid.use_head_office_withdraw) {
             operations[0].children.push({
-                title: '본사 지정계좌 출금',
+                title: '본사 지정계좌 이체',
                 to: 'services-head-office-withdraw',
             })
         }
