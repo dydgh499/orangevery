@@ -158,7 +158,7 @@ const countdownTimer = computed(() => {
 }
 
 .vertify-number {
-  input {
+  .v-field__input {
     padding: 0.1rem !important;
     font-size: 1.25rem !important;
     text-align: center !important;
