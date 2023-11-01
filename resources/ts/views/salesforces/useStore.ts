@@ -174,7 +174,7 @@ export const useSalesFilterStore = () => {
         const r = await axios.get('/api/v1/manager/salesforces/classification')
         const keys = Object.keys(r.data);
         for (let i = 0; i < keys.length; i++) {
-            all_sales[i] = r.data[keys[i]]
+            all_sales[i] = r.data[keys[i]].sort((a:Salesforce, b:Salesforce) => a.sales_name.localeCompare(b.sales_name))
             sales[i].value = r.data[keys[i]]
         }
     }
@@ -182,7 +182,7 @@ export const useSalesFilterStore = () => {
     const getAllMchts = async() => {
         const url = '/api/v1/manager/merchandises/all'
         const r = await axios.get(url)
-        mchts.value = r.data.content
+        mchts.value = r.data.content.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name))
     }
     
     const getAboveSalesFilter = (my_level: number, params: any) => {        
@@ -211,7 +211,7 @@ export const useSalesFilterStore = () => {
         for (let i = 0; i < all_sales.length-1; i++) {
             sales[i].value = [
                 { id: null, sales_name: '전체' },
-                ...all_sales[i]
+                ...all_sales[i].sort((a, b) => a.sales_name.localeCompare(b.sales_name))
             ]
         }
     }
@@ -249,7 +249,7 @@ export const useSalesFilterStore = () => {
             
             sales[i].value = [
                 { id: null, sales_name: '전체' },
-                ...map_sales
+                ...map_sales.sort((a, b) => a.sales_name.localeCompare(b.sales_name))
             ]
             // 선택한 영업점이 영업점 목록에 없을 때 전체로 변경            
             if(sales[i].value.find(obj => obj.id === params[sales_key+'_id']) === undefined)

@@ -69,11 +69,11 @@ export const useStore = defineStore('payGatewayStore', () => {
     onMounted(async () => {
         try {
             const r = await axios.get('/api/v1/manager/services/pay-gateways/detail')
-            Object.assign(pgs.value, r.data.pay_gateways)
-            Object.assign(pss.value, r.data.pay_sections)
-            Object.assign(terminals.value, r.data.terminals)
-            Object.assign(cus_filters.value, r.data.custom_filters)
-            Object.assign(finance_vans.value, r.data.finance_vans)
+            Object.assign(pgs.value, r.data.pay_gateways.sort((a:PayGateway, b:PayGateway) => a.pg_name.localeCompare(b.pg_name)))
+            Object.assign(pss.value, r.data.pay_sections.sort((a:PaySection, b:PaySection) => a.name.localeCompare(b.name)))
+            Object.assign(terminals.value, r.data.terminals.sort((a:Classification, b:Classification) => a.name.localeCompare(b.name)))
+            Object.assign(cus_filters.value, r.data.custom_filters.sort((a:Classification, b:Classification) => a.name.localeCompare(b.name)))
+            Object.assign(finance_vans.value, r.data.finance_vans.sort((a:FinanceVan, b:FinanceVan) => a.nick_name.localeCompare(b.nick_name)))
         }
         catch(e) {
             // 가맹점 수기결제시 필요

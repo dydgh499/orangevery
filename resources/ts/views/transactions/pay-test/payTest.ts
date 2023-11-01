@@ -21,12 +21,12 @@ export const payTest = (module_type:number) => {
     const getAllMerchandises = async(module_type:number|null = null) => {
         const url = '/api/v1/manager/merchandises/all' + (module_type != null ? '?module_type='+module_type : '')
         const r = await axios.get(url)
-        return r.data.content
+        return r.data.content.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name))
     }
     
     watchEffect(async() => { 
         Object.assign(pay_modules, await getAllPayModules())
-        Object.assign(merchandises, await getAllMerchandises(module_type))    
+        Object.assign(merchandises, await getAllMerchandises(module_type))
     })
 
     watchEffect(() => { 

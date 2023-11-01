@@ -152,8 +152,8 @@ onMounted(async () => {
                                                 v-model="props.item['sales' + (6 - i) + '_id']"
                                                 :items="[{ id: 0, sales_name: '선택안함' }].concat(sales[6 - i].value)"
                                                 prepend-inner-icon="ph:share-network"
-                                                :label="levels['sales' + (6 - i) + '_name'] + ' 선택'" item-title="sales_name"
-                                                item-value="id" single-line :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])"/>
+                                                :label="levels['sales'+(6-i)+'_name'] + ' 선택'" item-title="sales_name"
+                                                item-value="id" persistent-hint single-line :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])"/>
                                         </VCol>
                                         <VCol>
                                             <VTextField v-model="props.item['sales' + (6 - i) + '_fee']" type="number" suffix="%"

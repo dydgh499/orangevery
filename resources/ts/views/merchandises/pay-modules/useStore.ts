@@ -203,7 +203,7 @@ export const getAllPayModules = async(mcht_id:number|null=null) => {
     const url = '/api/v1/manager/merchandises/pay-modules/all' + (mcht_id != null ? '?mcht_id='+mcht_id : '')
     try {
         const r = await axios.get(url)
-        return r.data.content
+        return r.data.content.sort((a:PayModule, b:PayModule) => a.note.localeCompare(b.note))
     }
     catch (e: any) {
         pay_token.value = ''

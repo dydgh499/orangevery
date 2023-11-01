@@ -196,7 +196,7 @@ export interface PayModule {
 export interface PayGateway {
     id: number | null,
     pg_type: number | null,
-    pg_name: string | null,
+    pg_name: string,
     rep_name: string,
     company_name: string,
     business_num: string,
@@ -298,6 +298,7 @@ interface PaidOption {
     use_sales_auth_setting: boolean, // 영업점 자동 세팅
     use_regular_card: boolean,
     use_collect_withdraw: boolean,
+    use_noti: boolean,
 }
 interface AuthOption {
     levels: {

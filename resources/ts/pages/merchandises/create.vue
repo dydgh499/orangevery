@@ -8,14 +8,17 @@ import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOvervie
 import { defaultItemInfo } from '@/views/merchandises/useStore'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import type { Tab } from '@/views/types'
+import corp from '@corp'
 
 const {path, item } = defaultItemInfo()
 const tabs = <Tab[]>([
     { icon: 'tabler-user-check', title: '개인정보' },
     { icon: 'ph-buildings', title: '가맹점정보' },
     { icon: 'ic-outline-send-to-mobile', title: '결제모듈정보(가맹점 추가 후 가능)' },
-    { icon: 'streamline:interface-time-alarm-notification-alert-bell-wake-clock-alarm', title: '노티정보(가맹점 추가 후 가능)' },
 ])
+if(corp.pv_options.paid.use_noti) {
+    tabs.push({ icon: 'streamline:interface-time-alarm-notification-alert-bell-wake-clock-alarm', title: '노티정보(가맹점 추가 후 가능)' })
+}
 const id = ref<number>(0)
 
 </script>
