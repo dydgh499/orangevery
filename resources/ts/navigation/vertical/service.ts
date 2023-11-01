@@ -1,3 +1,4 @@
+import corp from '@/plugins/corp'
 import { getUserLevel } from '@axios'
 
 const getAbilitiesMenu = computed(() => {
@@ -18,7 +19,7 @@ const getAbilitiesMenu = computed(() => {
                 title: 'PG사 관리',
                 to: 'services-pay-gateways',
             })    
-        }        
+        }
         operations[0].children.push({
             title: '운영자 관리',
             to: 'services-operators',
@@ -31,6 +32,12 @@ const getAbilitiesMenu = computed(() => {
             title: '대량 등록',
             to: 'services-bulk-register',
         })
+        if(corp.pv_options.paid.use_head_office_withdraw) {
+            operations[0].children.push({
+                title: '본사 지정계좌 출금',
+                to: 'services-head-office-withdraw',
+            })
+        }
         operations[0].children.push({
             title: '이전 전산 연동',
             to: 'services-computational-transfer',

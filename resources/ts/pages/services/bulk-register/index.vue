@@ -1,6 +1,5 @@
 
 <script setup lang="ts">
-import corp from '@corp'
 import type { Tab } from '@/views/types'
 
 import SalesforceRegister from '@/views/services/bulk-register/SalesforceRegister.vue'

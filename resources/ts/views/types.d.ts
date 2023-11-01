@@ -298,6 +298,7 @@ interface PaidOption {
     use_sales_auth_setting: boolean, // 영업점 자동 세팅
     use_regular_card: boolean,
     use_collect_withdraw: boolean,
+    use_head_office_withdraw: boolean,
     use_noti: boolean,
 }
 interface AuthOption {
@@ -770,4 +771,8 @@ export interface NotiFormat {
     cxl_dttm: string,
     is_cancel: boolean,
     temp: string,
+}
+
+export interface HeadOffceAccount extends Bank {
+    id: number,
 }

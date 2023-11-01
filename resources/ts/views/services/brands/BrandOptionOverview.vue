@@ -355,6 +355,14 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>본사 지정계좌 출금</template>
+                            <template #input>
+                                <VSwitch v-model="props.item.paid.use_head_office_withdraw" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
                 </VCardItem>
             </VCard>
         </VCol>

@@ -1,7 +1,6 @@
 
 <script setup lang="ts">
 import { settleCycles, settleDays } from '@/views/salesforces/useStore'
-import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
