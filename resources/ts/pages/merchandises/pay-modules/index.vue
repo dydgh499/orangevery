@@ -9,10 +9,9 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { user_info } from '@axios'
 import { DateFilters } from '@core/enums'
 import { getUserLevel } from '@axios'
-import corp from '@corp'
 
 const { request } = useRequestStore()
-const { pgs, pss, settle_types } = useStore()
+const { pgs, pss, settle_types, finance_vans } = useStore()
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected, dialog } = selectFunctionCollect(store)
 
@@ -169,6 +168,9 @@ watchEffect(() => {
                                 <VChip :color="store.booleanTypeColor(item[_key])">
                                     {{ cxl_types.find(settle_type => settle_type['id'] === item[_key])?.title }}
                                 </VChip>
+                            </span>
+                            <span v-else-if="_key == 'fin_id'">
+                                {{ finance_vans.find(settle_type => settle_type['id'] === item[_key])?.nick_name }}
                             </span>
                             <span v-else-if="_key == 'fin_trx_delay'">
                                 {{ fin_trx_delays.find(settle_type => settle_type['id'] === item[_key])?.title }}

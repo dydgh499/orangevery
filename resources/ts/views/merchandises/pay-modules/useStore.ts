@@ -102,10 +102,12 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         headers1['pg_id'] = 'PG사명'
         headers1['ps_id'] = '구간'
         headers1['settle_fee'] = '입금수수료'
+        headers1['cxl_type'] = '취소타입'
     }
-    if(corp.pv_options.paid.use_realtime_deposit)
+    if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit)
     {
         headers2['use_realtime_deposit'] = '실시간 사용여부'
+        headers2['fin_id'] = '이체 모듈 타입'
         headers2['fin_trx_delay'] = '이체 딜레이'
     }
     if(corp.pv_options.paid.use_online_pay)

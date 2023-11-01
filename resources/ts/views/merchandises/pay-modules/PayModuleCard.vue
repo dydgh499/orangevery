@@ -277,7 +277,7 @@ onMounted(() => {
                             <VCardTitle style="margin: 1em 0;">실시간 이체</VCardTitle>
                             <VRow class="pt-3">
                                 <CreateHalfVCol :mdl="6" :mdr="6">
-                                    <template #name>실시간 이체 사용 여부</template>
+                                    <template #name>실시간 사용여부</template>
                                     <template #input>
                                         <BooleanRadio :radio="props.item.use_realtime_deposit"
                                             @update:radio="props.item.use_realtime_deposit = $event">
