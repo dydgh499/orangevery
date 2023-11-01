@@ -27,41 +27,42 @@ const defaultStyle = {
 const countdown_time = ref(180)
 let countdown_timer = <any>(null)
 
-button_status.value = 1
-
 digits.value = props.default.split('')
-if(getUserLevel() >= 35) {
+if (getUserLevel() >= 35) {
     button_status.value = 2
     emits('update:pay_button', true)
 }
 
 const handleKeyDown = (index: number) => {
     if (ref_opt_comp.value !== null && index > 0) {
-        const cur_ele = ref_opt_comp.value.children[index - 1].querySelector('input')
+        const children = ref_opt_comp.value.children
+        const cur_ele = <HTMLInputElement>(children[index - 1].querySelector('input'))
         const value = cur_ele.value
 
-    if (value === '') {
-        if (index > 1) {
-            const inputEl = ref_opt_comp.value.children[index - 2].querySelector('input')
-            if (inputEl)
-                inputEl.focus()
+        // backspace
+        if (value === '') {
+            if (index > 1) {
+                const inputEl = children[index - 2].querySelector('input')
+                if (inputEl)
+                    inputEl.focus()
+            }
         }
-    }
-    const numberRegExp = /^([0-9])$/
-    if (numberRegExp.test(value)) {
-        if (ref_opt_comp.value !== null && index !== 0 && index < ref_opt_comp.value.children.length) {
-            const inputEl = ref_opt_comp.value.children[index].querySelector('input')
-            if (inputEl)
-                inputEl.focus()
+        const numberRegExp = /^([0-9])$/
+        if (numberRegExp.test(value)) {
+            if (ref_opt_comp.value !== null && index !== 0 && index < children.length) {
+                const inputEl = children[index].querySelector('input')
+                if (inputEl)
+                    inputEl.focus()
+            }
         }
-    }
-    digits.value[index - 1] = value
-    if (digits.value.join('').length === props.totalInput)
-        verification()
+
+        digits.value[index - 1] = value
+        if (digits.value.join('').length === props.totalInput)
+            verification()
     }
 }
 const timer = () => {
-    if(countdown_time.value === 0)
+    if (countdown_time.value === 0)
         clearInterval(countdown_timer)
     else
         countdown_time.value--
@@ -101,9 +102,9 @@ const verification = async () => {
     }
 }
 const countdownTimer = computed(() => {
-    if(countdown_time.value > 0) {
-        const min = parseInt((countdown_time.value/60).toString())
-        const sec = countdown_time.value%60
+    if (countdown_time.value > 0) {
+        const min = parseInt((countdown_time.value / 60).toString())
+        const sec = countdown_time.value % 60
         return `${min}:${sec < 10 ? '0' + sec : sec}`
     }
     else
@@ -120,12 +121,12 @@ const countdownTimer = computed(() => {
                     </h6>
                     <div ref="ref_opt_comp" class="d-flex align-center gap-4">
                         <VTextField v-for="i in props.totalInput" :key="i" :model-value="digits[i - 1]"
-                            v-bind="defaultStyle" maxlength="1" @input="handleKeyDown(i)"/>
+                            v-bind="defaultStyle" maxlength="1" @input="handleKeyDown(i)" />
                     </div>
                 </VCol>
                 <VCol class="retry-container">
                     <span @click="requestCodeIssuance()" class="text-primary retry-text">인증번호 재발송</span>
-                    <span> 
+                    <span>
                         <span>만료시간:</span>
                         <span id="countdown" class="text-primary">{{ countdownTimer }}</span>
                     </span>
