@@ -153,7 +153,7 @@ watchEffect(() => {
                 <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 6px 0;" v-if="hand_pay_info.is_old_auth">
                     <template #name>생년월일(사업자등록번호)</template>
                     <template #input>
-                        <VTextField v-model="hand_pay_info.auth_num" type="text" maxlength="10"
+                        <VTextField v-model="hand_pay_info.auth_num" type="number" maxlength="10"
                             prepend-inner-icon="carbon:two-factor-authentication" />
                     </template>
                 </CreateHalfVCol>
@@ -162,7 +162,7 @@ watchEffect(() => {
                     <template #input>
                         <VTextField v-model="hand_pay_info.card_pw" counter prepend-inner-icon="tabler-lock"
                             :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
-                            :type="is_show ? 'text' : 'password'" persistent-placeholder
+                            :type="is_show ? 'number' : 'password'" persistent-placeholder
                             @click:append-inner="is_show = !is_show" autocomplete maxlength="2" />
                     </template>
                 </CreateHalfVCol>
