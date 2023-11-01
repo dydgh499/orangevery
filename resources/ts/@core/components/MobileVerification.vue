@@ -120,7 +120,7 @@ const countdownTimer = computed(() => {
                         6자리 인증번호를 입력해주세요.
                     </h6>
                     <div ref="ref_opt_comp" class="d-flex align-center gap-4">
-                        <VTextField v-for="i in props.totalInput" :key="i" :model-value="digits[i - 1]"
+                        <VTextField v-for="i in props.totalInput" :key="i" :model-value="digits[i - 1]" type="number"
                             v-bind="defaultStyle" maxlength="1" @input="handleKeyDown(i)" />
                     </div>
                 </VCol>

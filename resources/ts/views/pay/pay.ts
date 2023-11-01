@@ -38,7 +38,6 @@ export const pay = (module_type: number) => {
     watchEffect(() => {
         if (pgs.length > 0 && pg_id.value) {
             const pg: PayGateway = pgs.find(obj => obj.id === pg_id.value)
-            console.log(pg)
             if (pg) {
                 let type = ''
                 if (module_type == 2)
@@ -46,7 +45,6 @@ export const pay = (module_type: number) => {
                 else if (module_type == 3)
                     type = 'simple'
                 pay_url.value = process.env.NOTI_URL + '/v2/online/pay/' + type
-                console.log(pay_url.value)
             }
         }
     })

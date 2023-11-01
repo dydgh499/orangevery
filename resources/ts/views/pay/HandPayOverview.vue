@@ -137,7 +137,7 @@ watchEffect(() => {
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                     <template #name>유효기간</template>
                     <template #input>
-                        <VTextField v-model="hand_pay_info.yymm" type="text" prepend-inner-icon="ic-baseline-calendar-today"
+                        <VTextField v-model="hand_pay_info.yymm" type="number" prepend-inner-icon="ic-baseline-calendar-today"
                             placeholder="(MM/YY:0324)"
                             :rules="[requiredValidator, lengthValidatorV2(hand_pay_info.yymm, 4)]" maxlength="4" />
                     </template>
