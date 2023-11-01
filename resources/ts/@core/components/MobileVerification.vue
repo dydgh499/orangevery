@@ -2,6 +2,8 @@
 import corp from '@corp';
 import { useRequestStore } from '@/views/request'
 import { getUserLevel } from '@axios'
+import { fontStyle } from 'html2canvas/dist/types/css/property-descriptors/font-style';
+import { textAlign } from 'html2canvas/dist/types/css/property-descriptors/text-align';
 
 interface Props {
     totalInput?: number,
@@ -122,7 +124,7 @@ const countdownTimer = computed(() => {
                     </h6>
                     <div ref="ref_opt_comp" class="d-flex align-center gap-4">
                         <VTextField v-for="i in props.totalInput" :key="i" :model-value="digits[i - 1]"
-                            v-bind="defaultStyle" maxlength="1" @keydown="handleKeyDown($event, i)" class="vertify-number"/>
+                            v-bind="defaultStyle" maxlength="1" @keydown="handleKeyDown($event, i)"/>
                     </div>
                 </VCol>
                 <VCol class="retry-container">
@@ -157,9 +159,13 @@ const countdownTimer = computed(() => {
   justify-content: space-between;
 }
 
-.vertify-number .v-input__slot input {
+:deep(.v-field__input) {
   padding: 0.1rem !important;
   font-size: 1.25rem !important;
   text-align: center !important;
+}
+
+#countdown {
+  margin-inline-start: 0.5em;
 }
 </style>
