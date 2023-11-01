@@ -165,8 +165,8 @@ watchEffect(() => {
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'use_realtime_deposit'">
-                                <VChip :color="store.booleanTypeColor(item[_key])">
-                                    {{ cxl_types.find(settle_type => settle_type['id'] === item[_key])?.title }}
+                                <VChip :color="store.booleanTypeColor(!item[_key])">
+                                    {{ item[_key] ? '사용' : '미사용' }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'fin_id'">
