@@ -38,7 +38,7 @@ class MessageController extends Controller
     /*
      * 예치금 잔액 검증
      */
-    private function bonaejaDepositValidate($brand, $brand_name)
+    private function bonaejaDepositValidate($bonaeja, $brand_name)
     {
         $params = [
             'user_id'   => $bonaeja['user_id'],
