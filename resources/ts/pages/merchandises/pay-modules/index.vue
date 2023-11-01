@@ -3,12 +3,13 @@ import { useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useRequestStore } from '@/views/request'
 import { selectFunctionCollect } from '@/views/selected'
-import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
+import { module_types, installments, fin_trx_delays, cxl_types } from '@/views/merchandises/pay-modules/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { user_info } from '@axios'
 import { DateFilters } from '@core/enums'
 import { getUserLevel } from '@axios'
+import corp from '@corp'
 
 const { request } = useRequestStore()
 const { pgs, pss, settle_types } = useStore()
@@ -158,6 +159,19 @@ watchEffect(() => {
                             </span>
                             <span v-else-if="_key == 'settle_type'">
                                 {{ settle_types.find(settle_type => settle_type['id'] === item[_key])?.name }}
+                            </span>
+                            <span v-else-if="_key == 'cxl_type'">
+                                <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
+                                    {{ cxl_types.find(settle_type => settle_type['id'] === item[_key])?.title }}
+                                </VChip>
+                            </span>
+                            <span v-else-if="_key == 'use_realtime_deposit'">
+                                <VChip :color="store.booleanTypeColor(item[_key])">
+                                    {{ cxl_types.find(settle_type => settle_type['id'] === item[_key])?.title }}
+                                </VChip>
+                            </span>
+                            <span v-else-if="_key == 'fin_trx_delay'">
+                                {{ fin_trx_delays.find(settle_type => settle_type['id'] === item[_key])?.title }}
                             </span>
                             <span v-else>
                                 {{ item[_key] }}

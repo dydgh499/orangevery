@@ -89,9 +89,9 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         'settle_type' : '정산일',
         'mid' : 'MID',
         'tid' : 'TID',
+        'installment' : '최대할부한도',
     }        
     const headers3: Record<string, string> = {
-        'installment' : '최대할부한도',
         'contract_s_dt': '계약 시작일',
         'contract_e_dt':  '계약 종료일',
         'created_at' : '생성시간',
@@ -102,6 +102,11 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         headers1['pg_id'] = 'PG사명'
         headers1['ps_id'] = '구간'
         headers1['settle_fee'] = '입금수수료'
+    }
+    if(corp.pv_options.paid.use_realtime_deposit)
+    {
+        headers2['use_realtime_deposit'] = '실시간 사용여부'
+        headers2['fin_trx_delay'] = '이체 딜레이'
     }
     if(corp.pv_options.paid.use_online_pay)
         headers2['pay_key'] = '결제 KEY'
