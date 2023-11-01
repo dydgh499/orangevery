@@ -23,6 +23,7 @@ class PayModuleRequest extends FormRequest
             'sub_key',
             'mid',
             'tid',
+            'cxl_type',
             'serial_num',
             'comm_settle_fee',
             'comm_settle_day',
