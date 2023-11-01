@@ -144,7 +144,7 @@ const countdownTimer = computed(() => {
     </div>
 </template>
 
-<style>
+<style scoped>
 .retry-text {
   cursor: pointer;
   font-size: 0.9em;
