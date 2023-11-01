@@ -144,7 +144,7 @@ const countdownTimer = computed(() => {
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style>
 .retry-text {
   cursor: pointer;
   font-size: 0.9em;
@@ -157,11 +157,9 @@ const countdownTimer = computed(() => {
   justify-content: space-between;
 }
 
-.vertify-number {
-  .v-field__input {
-    padding: 0.1rem !important;
-    font-size: 1.25rem !important;
-    text-align: center !important;
-  }
+.vertify-number .v-input__slot input {
+  padding: 0.1rem !important;
+  font-size: 1.25rem !important;
+  text-align: center !important;
 }
 </style>
