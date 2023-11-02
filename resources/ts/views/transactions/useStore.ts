@@ -182,8 +182,8 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         if(code === StatusColors.Default)
             return 'N/A'
         else if(code === StatusColors.Primary) {
-            const retry_able_time = new Date((new Date(item.trx_dt as string)).getTime() + (item.fin_trx_delay as number * 60000))
-            return formatTime(retry_able_time)+'초 이체예정'
+            const retry_able_time = (new Date(item.trx_dttm as string)).getTime() + (item.fin_trx_delay as number * 60000)
+            return formatTime(new Date(retry_able_time))+'초 이체예정'
         }
         else if(code === StatusColors.Success)
             return '성공'
