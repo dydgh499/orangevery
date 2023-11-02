@@ -28,7 +28,7 @@ trait ExtendResponseTrait
         return Response::json(['code'=>1004, 'message'=>$msg, 'data'=>$data], 409);
     }
     
-    public function extendResponse($code, $msg)
+    public function extendResponse($code, $msg, $data=[])
     {
         $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all()];
         if($code == 990)
@@ -46,7 +46,7 @@ trait ExtendResponseTrait
         else if($code < 5)
             $http_code = '20'.$code;
 
-        return Response::json(['code'=>$code, 'message'=>$msg], $http_code, [], JSON_UNESCAPED_UNICODE);        
+        return Response::json(['code'=>$code, 'message'=>$msg], $http_code, $data, JSON_UNESCAPED_UNICODE);        
     }
     
     public function response($code, $data=[])

@@ -90,8 +90,8 @@ export const useStore = defineStore('payGatewayStore', () => {
         }
         const results = await Promise.all(promises)
         for (let i = 0; i < results.length; i++) {
-            console.log(results[i])
-            const data = results[i].data['data']
+            const data = results[i].data
+            console.log(data)
             if(data['result_cd'] == "0000") {
                 finance_vans[i].value.balance = <number>(parseInt(data['data']['WDRW_CAN_AMT']))
             } 

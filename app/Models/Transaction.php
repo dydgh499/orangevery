@@ -114,7 +114,7 @@ class Transaction extends Model
         $settle_key = $this->getProfitCol($level);
 
         if($level == 10)
-            return $this->amount - $this[$settle_key] + $this->mcht_settle_fee + round($this->amount * $this->hold_fee);
+            return $this->amount - $this[$settle_key] - $this->mcht_settle_fee;
         else
             return $this->amount - $this[$settle_key];
     }
