@@ -61,7 +61,10 @@ class SalesforceController extends Controller
         $search = $request->input('search', '');
         $query = $this->salesforces
             ->where('brand_id', $request->user()->brand_id)
-            ->where('sales_name', 'like', "%$search%");
+            ->where(function ($query) use ($search) {
+                return $query->where('sales_name', 'like', "%$search%")
+                ->orWhere('user_name', 'like', "%$search%");
+        });
 
         if($is_all == false)
             $query = $query->where('is_delete', false);

@@ -100,10 +100,12 @@ class MerchandiseController extends Controller
                 ->where($full_parent.'brand_id', $request->user()->brand_id)
                 ->where(function ($query) use ($search, $full_parent) {
             return $query->where('mcht_name', 'like', "%$search%")
+                ->orWhere($full_parent.'user_name', 'like', "%$search%")
                 ->orWhere($full_parent.'phone_num', 'like', "%$search%")
                 ->orWhere($full_parent.'business_num', 'like', "%$search%")
                 ->orWhere($full_parent.'nick_name', 'like', "%$search%");
         });
+
         if($is_all == false)
             $query = $query->where($full_parent.'is_delete', false);
         return $query;
