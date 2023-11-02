@@ -114,7 +114,7 @@ trait TransactionTrait
         return $tran;
     }
 
-    protected function setSettleAmount($trans, $dev_settle_type)
+    public function setSettleAmount($trans, $dev_settle_type)
     {
         $sales_ids = collect($trans)->flatMap(function ($tran) {
             return [
