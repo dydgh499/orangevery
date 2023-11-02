@@ -1,10 +1,12 @@
 import router from '@/router'
+import { useHeadOfficeAccountStore } from '@/views/services/head-office-withdraw/useStore'
 import { axios } from '@axios'
 
 export const useRequestStore = defineStore('requestStore', () => {
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
     const errorHandler = <any>(inject('$errorHandler'))
+    const { head_office_accounts } = useHeadOfficeAccountStore()
 
     const deleteTreatment = (back_url: string, is_redirect: boolean, params: any, res: any) => {
         if (res.status === 201) {
@@ -16,7 +18,22 @@ export const useRequestStore = defineStore('requestStore', () => {
     }
     const afterTreatment = (back_url: string, is_redirect: boolean, params: any, res: any) => {
         if (res.status === 201) {
-            params.id = res.data.id
+            if(params.id == 0) {
+                params.id = res.data.id
+                if(back_url == '/services/head-office-accounts')
+                    head_office_accounts.value.push(params)
+                /*
+                else if (back_url == '/merchandises/pay-modules')
+
+                else if (back_url == '/merchandises/noti-urls')
+
+                else if (back_url == '/merchandises/regular-credit-cards')
+
+                else if (back_url == '/salesforces/under-auto-settings')
+
+                else if (back_url == '/merchandises')
+                */
+            }
             if (is_redirect) {
                 if (back_url == '/merchandises/pay-modules')
                     setTimeout(function () { router.push('/merchandises/edit/' + res.data.mcht_id) }, 500)

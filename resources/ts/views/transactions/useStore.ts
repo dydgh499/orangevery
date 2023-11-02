@@ -42,7 +42,7 @@ export const realtimeMessage = (item: Transaction):string => {
         return 'N/A'
     else if(code === StatusColors.Primary) {
         const formatTime = <any>(inject('$formatTime'))
-        const retry_able_time = (new Date(item.trx_dt as string)).getTime() + (item.fin_trx_delay as number * 60000)
+        const retry_able_time = new Date((new Date(item.trx_dt as string)).getTime() + (item.fin_trx_delay as number * 60000))
         return formatTime(retry_able_time)+'초 이체예정'
     }
     else if(code === StatusColors.Success)
@@ -56,7 +56,7 @@ export const realtimeMessage = (item: Transaction):string => {
 }
 
 export const isRetryAble = (item: Transaction) => {
-    const retry_able_time = (new Date(item.trx_dt as string)).getTime() + (item.fin_trx_delay as number * 60000)
+    const retry_able_time = new Date(new Date(item.trx_dt as string)).getTime() + (item.fin_trx_delay as number * 60000)
     return retry_able_time > Date.now() ? true : false
 }
 
