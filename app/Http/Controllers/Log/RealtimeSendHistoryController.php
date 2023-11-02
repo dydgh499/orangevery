@@ -110,7 +110,8 @@ class RealtimeSendHistoryController extends Controller
         $data = $request->all();
         $url = $this->base_noti_url.'/get-balance';
         $res = post($url, $data);
-        print_r($res['body']);
-        return $this->extendResponse($res['body']['result_cd'] == "0000" ? 1 : 2000, $res['body']['result_msg'], $res['body']['data']);
+        $res = $res['body']['data'];
+        print_r($res);
+        return $this->extendResponse($res['result_cd'] == "0000" ? 1 : 2000, $res['result_msg'], $res['data']);
     }
 }
