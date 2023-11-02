@@ -36,7 +36,7 @@ app.provide('$errorHandler', function(e: any) {
     if(e.response.status == 401 || e.response.status == 403) {
         pay_token.value = ''
         user_info.value = {}
-        router.replace('/')
+        location.href = '/'
     }
     return e.response
 });

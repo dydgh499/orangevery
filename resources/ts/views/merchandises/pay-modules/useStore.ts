@@ -1,4 +1,3 @@
-import router from '@/router'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -208,7 +207,7 @@ export const getAllPayModules = async(mcht_id:number|null=null) => {
     catch (e: any) {
         pay_token.value = ''
         user_info.value = {}
-        router.replace('/')
+        location.href = '/'
         return []
     }
 }
