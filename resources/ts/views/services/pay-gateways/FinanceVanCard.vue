@@ -42,7 +42,7 @@ onMounted(async () => {
                 <VCol cols="12" md="4">
                     <VCardItem>
                         <VCardTitle style="margin-bottom: 1em;">
-                            <BaseQuestionTooltip :location="'top'" text="금융 VAN 정보" :content="'해당 정보는 보안상 '+corp.pv_options.auth.levels.dev_name+'만 보여집니다.'" />
+                            금융 VAN 정보
                         </VCardTitle>
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
@@ -118,11 +118,13 @@ onMounted(async () => {
                 <VCol cols="12" md="4">
                     <VCardItem>
                         <VCardTitle style="margin-bottom: 1em;">
-                            <BaseQuestionTooltip :location="'top'" text="연동 정보" :content="'해당 정보는 보안상 '+corp.pv_options.auth.levels.dev_name+'만 보여집니다.'"/>
+                            연동 정보
                         </VCardTitle>
                         <VRow class="pt-3" v-if="getUserLevel() == 50">
                             <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>{{ corp.pv_options.auth.levels.dev_name }} 수수료</template>
+                                <template #name>
+                                    <BaseQuestionTooltip :location="'top'" :text="corp.pv_options.auth.levels.dev_name+' 수수료'" :content="'해당 정보는 보안상 '+corp.pv_options.auth.levels.dev_name+'만 보여집니다.'"/>
+                                </template>
                                 <template #input>
                                     <VTextField type="text" v-model="props.item.dev_fee"
                                         prepend-inner-icon="ph:share-network" placeholder="0.1" suffix="%"
@@ -179,7 +181,7 @@ onMounted(async () => {
                     <VCardItem>
                         <VCardTitle style="margin-bottom: 1em;">
                             <BaseQuestionTooltip :location="'top'" text="문자 알림 정보"
-                                :content="'예시)<br>[' + props.item.nick_name + '] 실시간 이체 잔액이 부족하오니 충전부탁드립니다.<br>(현재: 9,870,000원)'" />
+                                :content="'예시)<br>[' + props.item.nick_name + '] 실시간 이체 잔액이 부족하오니 충전부탁드립니다.<br><br>(현재: 9,870,000원)'" />
                         </VCardTitle>
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
