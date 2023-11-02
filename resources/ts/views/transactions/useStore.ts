@@ -36,25 +36,6 @@ export const realtimeResult = (item: Transaction) => {
         return StatusColors.Default
 }
 
-export const realtimeMessage = (item: Transaction):string => {
-    const code = realtimeResult(item)
-    if(code === StatusColors.Default)
-        return 'N/A'
-    else if(code === StatusColors.Primary) {
-        const formatTime = <any>(inject('$formatTime'))
-        const retry_able_time = new Date((new Date(item.trx_dt as string)).getTime() + (item.fin_trx_delay as number * 60000))
-        return formatTime(retry_able_time)+'초 이체예정'
-    }
-    else if(code === StatusColors.Success)
-        return '성공'
-    else if(code === StatusColors.Info)
-        return '모아서 출금예정'
-    else if(code === StatusColors.Error)
-        return '실패'
-    else
-        return '알수없는 상태'
-}
-
 export const isRetryAble = (item: Transaction) => {
     const retry_able_time = new Date(new Date(item.trx_dt as string)).getTime() + (item.fin_trx_delay as number * 60000)
     return retry_able_time > Date.now() ? true : false
@@ -63,6 +44,8 @@ export const isRetryAble = (item: Transaction) => {
 export const useSearchStore = defineStore('transSearchStore', () => {    
     const store = Searcher('transactions')
     const head  = Header('transactions', '매출 관리')
+    
+    const formatTime = <any>(inject('$formatTime'))
     const levels = corp.pv_options.auth.levels
     const headers: Record<string, string> = {
         'id': 'NO.',
@@ -194,11 +177,30 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
     }
+    const realtimeMessage = (item: Transaction):string => {
+        const code = realtimeResult(item)
+        if(code === StatusColors.Default)
+            return 'N/A'
+        else if(code === StatusColors.Primary) {
+            const retry_able_time = new Date((new Date(item.trx_dt as string)).getTime() + (item.fin_trx_delay as number * 60000))
+            return formatTime(retry_able_time)+'초 이체예정'
+        }
+        else if(code === StatusColors.Success)
+            return '성공'
+        else if(code === StatusColors.Info)
+            return '모아서 출금예정'
+        else if(code === StatusColors.Error)
+            return '실패'
+        else
+            return '알수없는 상태'
+    }
+
     return {
         store,
         head,
         exporter,
         printer,
+        realtimeMessage,
     }
 })
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { module_types, installments, fin_trx_delays, cxl_types } from '@/views/merchandises/pay-modules/useStore'
-import { useSearchStore, realtimeResult, realtimeMessage } from '@/views/transactions/useStore'
+import { useSearchStore, realtimeResult } from '@/views/transactions/useStore'
 import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { selectFunctionCollect } from '@/views/selected'
@@ -18,7 +18,7 @@ import type { Options } from '@/views/types'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
-const { store, head, exporter } = useSearchStore()
+const { store, head, exporter, realtimeMessage } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { post } = useRequestStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
