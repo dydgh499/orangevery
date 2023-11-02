@@ -168,12 +168,12 @@ watchEffect(() => {
                                 :content="'총 거래 수수료 = 금액 - (거래 수수료 + 유보금 + 입금 수수료)'">
                             </BaseQuestionTooltip>
                         </template>
-                        <template v-else-if="key == 'mcht_settle_fee'">
+                        <template v-else-if="key == 'mcht_settle_fee' && store.params.level == 10">
                             <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
                                 :content="'입금 수수료는 가맹점만 적용됩니다.'">
                             </BaseQuestionTooltip>
                         </template>
-                        <template v-else-if="key == 'hold_amount'">
+                        <template v-else-if="key == 'hold_amount' && store.params.level == 10">
                             <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
                                 :content="'유보금은 가맹점만 적용됩니다.'">
                             </BaseQuestionTooltip>
