@@ -44,7 +44,7 @@ onMounted(async () => {
                         <VCardTitle style="margin-bottom: 1em;">
                             <BaseQuestionTooltip :location="'top'" text="금융 VAN 정보" :content="'해당 정보는 보안상 '+corp.pv_options.auth.levels.dev_name+'만 보여집니다.'" />
                         </VCardTitle>
-                        <VRow class="pt-3" v-if="getUserLevel() == 50">
+                        <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>금융 VAN</template>
                                 <template #input>
@@ -54,7 +54,7 @@ onMounted(async () => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VRow class="pt-3" v-if="getUserLevel() == 50">
+                        <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>타입</template>
                                 <template #input>
@@ -64,7 +64,7 @@ onMounted(async () => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VRow class="pt-3" v-if="getUserLevel() == 50">
+                        <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>API KEY</template>
                                 <template #input>
@@ -74,7 +74,7 @@ onMounted(async () => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VRow class="pt-3" v-if="getUserLevel() == 50">
+                        <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>SUB KEY(HASH KEY)</template>
                                 <template #input>
@@ -84,7 +84,7 @@ onMounted(async () => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VRow class="pt-3" v-if="getUserLevel() == 50">
+                        <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>ENC KEY(암호화 키)</template>
                                 <template #input>
@@ -94,7 +94,7 @@ onMounted(async () => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VRow class="pt-3" v-if="getUserLevel() == 50">
+                        <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>Initial vector</template>
                                 <template #input>
@@ -130,7 +130,7 @@ onMounted(async () => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VRow class="pt-3" v-if="getUserLevel() == 50">
+                        <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>기관명</template>
                                 <template #input>
@@ -140,7 +140,7 @@ onMounted(async () => {
                             </CreateHalfVCol>
                         </VRow>
                         <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="5" :mdr="7" v-if="getUserLevel() == 50">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>기관코드(GUID)</template>
                                 <template #input>
                                     <VTextField type="text" v-model="props.item.corp_code"
@@ -149,7 +149,7 @@ onMounted(async () => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VRow class="pt-3" v-if="getUserLevel() == 50">
+                        <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>은행</template>
                                 <template #input>
