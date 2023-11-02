@@ -28,7 +28,7 @@ const withdrawAcctBalance = () => {
 const withdrawAcctHint = () => {
     const finance_van = <FinanceVan>(finance_vans.find(obj => obj.id == withdraw_acct.value))
     if(finance_van)
-        return `계좌번호: ${finance_van.withdraw_acct_num}, 은행코드: ${finance_van.bank_code}`
+        return `은행코드: ${finance_van.bank_code}, 계좌번호: ${finance_van.withdraw_acct_num}`
     else
         return ``
 }
@@ -60,7 +60,11 @@ const deposit = async () => {
                         <VDivider style="margin: 1em 0;" />
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>출금 이체모듈 선택<br>{{ withdrawAcctBalance() }}</template>
+                                <template #name>출금 이체모듈 선택<br>
+                                    <h4>
+                                        {{ withdrawAcctBalance() }}
+                                    </h4>
+                                </template>
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="withdraw_acct" :items="finance_vans"
                                         label="출금 이체모듈 선택" item-title="nick_name" item-value="id" 

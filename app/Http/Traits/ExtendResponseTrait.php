@@ -25,7 +25,7 @@ trait ExtendResponseTrait
                 array_push($data[$str], $num);
             }
         }
-        return Response::json(['code'=>1004, 'message'=>$msg, 'data'=>$data], 409);
+        return Response::json(['code'=>1004, 'message'=>$msg, 'data'=>$data], 409, [], JSON_UNESCAPED_UNICODE);
     }
     
     public function extendResponse($code, $msg, $data=[])
@@ -46,7 +46,7 @@ trait ExtendResponseTrait
         else if($code < 5)
             $http_code = '20'.$code;
 
-        return Response::json(['code'=>$code, 'message'=>$msg], $http_code, $data, JSON_UNESCAPED_UNICODE);        
+        return Response::json(['code'=>$code, 'message'=>$msg, 'data'=>$data], $http_code, [], JSON_UNESCAPED_UNICODE);        
     }
     
     public function response($code, $data=[])

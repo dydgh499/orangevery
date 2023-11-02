@@ -91,13 +91,12 @@ export const useStore = defineStore('payGatewayStore', () => {
         const results = await Promise.all(promises)
         for (let i = 0; i < results.length; i++) {
             const data = results[i].data
-            console.log(data)
-            if(data['result_cd'] == "0000") {
-                finance_vans[i].value.balance = <number>(parseInt(data['data']['WDRW_CAN_AMT']))
+            if(data.code == 1) {
+                finance_vans.value[i].balance = <number>(parseInt(data['data']['WDRW_CAN_AMT']))
             } 
             else {
-                finance_vans[i].value.balance = 0
-                const message = finance_vans[i].value.nick_name+'의 잔고를 불러오는 도중 에러가 발생하였습니다.<br><br>'+data['result_msg']+'('+data['result_cd']+')'
+                finance_vans.value[i].balance = 0
+                const message = finance_vans.value[i].nick_name+'의 잔고를 불러오는 도중 에러가 발생하였습니다.<br><br>'+data['message']+'('+data['code']+')'
                 snackbar.value.show(message, 'error')
             }
         }
