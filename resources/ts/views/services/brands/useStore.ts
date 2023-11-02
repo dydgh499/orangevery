@@ -21,29 +21,9 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
         'company_name': '회사명',
         'ceo_name': '대표자명',
         'phone_num': '연락처',
-        'free': {
-            'use_hand_pay': '수기결제',
-            'use_auth_pay': '인증결제',
-            'use_simple_pay': '간편결제',
-        },
     }
-    head.main_headers.value = [
-        '서비스 정보',
-        '무료옵션',
-    ]
+    head.main_headers.value = []
     if (user_info.value.level == 50) {
-        headers['paid'] = {
-            'subsidiary_use_control': '가맹점 전산 ON/OFF',
-            'use_acct_verification': '예금주 검증',
-            'use_dup_pay_validation': '중복결제',
-            'use_forb_pay_time': '결제금지시간',
-            'use_pay_limit': '결제한도',
-            'use_hand_pay_drct': '수기결제 직접입력',
-            'use_hand_pay_sms': '수기결제 SMS',
-            'use_issuer_filter': '카드사 필터링',
-            'use_realtime_deposit': '실시간 결제모듈',
-            'use_online_pay': '온라인 결제',
-        }
         headers['deposit_day'] = '입금일'
         headers['deposit_amount'] = '입금액'
         headers['extra_deposit_amount'] = '부가입금액'
@@ -55,7 +35,6 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
         headers['created_at'] = '생성시간'
         headers['updated_at'] = '업데이트시간'
         headers['extra_col'] = '더보기'
-        head.main_headers.value.push('유료옵션')
     }
 
     head.headers.value = head.initHeader(headers, {})
@@ -74,24 +53,6 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
         let datas = r.data.content;
         for (let i = 0; i < datas.length; i++) {
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
-            if (user_info.value.level == 50)
-            {
-                datas[i].free.use_hand_pay = boolToText(datas[i].free.use_hand_pay)
-                datas[i].free.use_auth_pay = boolToText(datas[i].free.use_auth_pay)
-                datas[i].free.use_simple_pay = boolToText(datas[i].free.use_simple_pay)
-
-                datas[i].paid.subsidiary_use_control = boolToText(datas[i].paid.subsidiary_use_control)
-                datas[i].paid.use_acct_verification = boolToText(datas[i].paid.use_acct_verification)
-                datas[i].paid.use_dup_pay_validation = boolToText(datas[i].paid.use_dup_pay_validation)
-
-                datas[i].paid.use_forb_pay_time = boolToText(datas[i].paid.use_forb_pay_time)
-                datas[i].paid.use_pay_limit = boolToText(datas[i].paid.use_pay_limit)
-                datas[i].paid.use_hand_pay_drct = boolToText(datas[i].paid.use_hand_pay_drct)
-
-                datas[i].paid.use_hand_pay_sms = boolToText(datas[i].paid.use_hand_pay_sms)
-                datas[i].paid.use_issuer_filter = boolToText(datas[i].paid.use_issuer_filter)
-                datas[i].paid.use_realtime_deposit = boolToText(datas[i].paid.use_realtime_deposit)
-            }
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }

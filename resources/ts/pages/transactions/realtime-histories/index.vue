@@ -1,41 +1,17 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/transactions/realtime-histories/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { useRequestStore } from '@/views/request'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import type { RealtimeHistory } from '@/views/types'
-import { onMounted } from 'vue'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
-const { post } = useRequestStore()
 const { finance_vans } = useStore()
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
-
-const snackbar = <any>(inject('snackbar'))
-const getFianaceVansBalance = async () => {
-    const promises = <any>[]
-    for (let i = 0; i < finance_vans.length; i++)  {
-        promises.push(post('/api/v1/manager/transactions/realtime-histories/get-balance', finance_vans[i], false))
-    }
-    const results = await Promise.all(promises)
-    for (let i = 0; i < results.length; i++) {
-        console.log(results[i])
-        const data = results[i].data['data']
-        if(data['result_cd'] == "0000") {
-            finance_vans[i].balance = parseInt(data['data']['WDRW_CAN_AMT'])
-        } 
-        else {
-            finance_vans[i].balance = 0
-            const message = finance_vans[i].nick_name+'의 잔고를 불러오는 도중 에러가 발생하였습니다.<br><br>'+data['result_msg']+'('+data['result_cd']+')'
-            snackbar.value.show(message, 'error')
-        }
-    }
-}
 
 const getLogStyle = (item: RealtimeHistory) => {
     if(item.result_code === '0000' && item.request_type === 6170)
@@ -45,9 +21,6 @@ const getLogStyle = (item: RealtimeHistory) => {
     else
         return '';
 }
-onMounted(async () => {
-    await getFianaceVansBalance()
-})
 </script>
 <template>
     <BaseIndexView placeholder="가맹점 상호, 계좌번호, 승인번호 검색" :metas="[]" :add="false" add_name="실시간 이체 이력" :date_filter_type="DateFilters.DATE_RANGE">

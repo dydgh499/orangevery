@@ -258,6 +258,7 @@ export const useSalesFilterStore = () => {
     }
     
     return {
+        all_sales,
         sales,
         mchts,
         initAllSales,

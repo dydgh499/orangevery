@@ -1,5 +1,5 @@
+import { useRequestStore } from '@/views/request'
 import type { Classification, FinanceVan, Options, PayGateway, PaySection } from '@/views/types'
-import { axios } from '@axios'
 
 export const settle_types = <Options[]>([
     {id:0, title:'주말 포함하여 정산'},
@@ -7,6 +7,8 @@ export const settle_types = <Options[]>([
 ])
 
 export const useStore = defineStore('payGatewayStore', () => {
+    const { get, post } = useRequestStore()
+    const snackbar = <any>(inject('snackbar'))
     const pgs = ref<PayGateway[]>([])
     const pss = ref<PaySection[]>([])
     const terminals   = ref<Classification[]>([])
@@ -68,18 +70,39 @@ export const useStore = defineStore('payGatewayStore', () => {
     ]
     onMounted(async () => {
         try {
-            const r = await axios.get('/api/v1/manager/services/pay-gateways/detail')
+            const r = await get('/api/v1/manager/services/pay-gateways/detail')
             Object.assign(pgs.value, r.data.pay_gateways.sort((a:PayGateway, b:PayGateway) => a.pg_name.localeCompare(b.pg_name)))
             Object.assign(pss.value, r.data.pay_sections.sort((a:PaySection, b:PaySection) => a.name.localeCompare(b.name)))
             Object.assign(terminals.value, r.data.terminals.sort((a:Classification, b:Classification) => a.name.localeCompare(b.name)))
             Object.assign(cus_filters.value, r.data.custom_filters.sort((a:Classification, b:Classification) => a.name.localeCompare(b.name)))
             Object.assign(finance_vans.value, r.data.finance_vans.sort((a:FinanceVan, b:FinanceVan) => a.nick_name.localeCompare(b.nick_name)))
+            getFianaceVansBalance()
         }
         catch(e) {
             // 가맹점 수기결제시 필요
             //errorHandler(e)
         }
     })
+    const getFianaceVansBalance = async () => {
+        const promises = <any>[]
+        for (let i = 0; i < finance_vans.value.length; i++)  {
+            promises.push(post('/api/v1/manager/transactions/realtime-histories/get-balance', finance_vans.value[i], false))
+        }
+        const results = await Promise.all(promises)
+        for (let i = 0; i < results.length; i++) {
+            console.log(results[i])
+            const data = results[i].data['data']
+            if(data['result_cd'] == "0000") {
+                finance_vans[i].value.balance = <number>(parseInt(data['data']['WDRW_CAN_AMT']))
+            } 
+            else {
+                finance_vans[i].value.balance = 0
+                const message = finance_vans[i].value.nick_name+'의 잔고를 불러오는 도중 에러가 발생하였습니다.<br><br>'+data['result_msg']+'('+data['result_cd']+')'
+                snackbar.value.show(message, 'error')
+            }
+        }
+    }
+
     const setFee = (items: PaySection[], id: number | null) => {
         if(id != null)
         {
@@ -108,6 +131,6 @@ export const useStore = defineStore('payGatewayStore', () => {
     return {
         pgs, pss, terminals, settle_types, cus_filters, finance_vans, 
         pg_companies, finance_companies, fin_types,
-        psFilter, setFee,
+        psFilter, setFee, getFianaceVansBalance,
     }
 })

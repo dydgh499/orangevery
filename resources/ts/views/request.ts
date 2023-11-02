@@ -1,12 +1,13 @@
 import router from '@/router'
-import { useHeadOfficeAccountStore } from '@/views/services/head-office-withdraw/useStore'
+import { getLevelByIndex, useSalesFilterStore } from '@/views/salesforces/useStore'
+import type { Merchandise } from '@/views/types'
 import { axios } from '@axios'
 
 export const useRequestStore = defineStore('requestStore', () => {
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
     const errorHandler = <any>(inject('$errorHandler'))
-    const { head_office_accounts } = useHeadOfficeAccountStore()
+    const { sales, all_sales, mchts } = useSalesFilterStore()
 
     const deleteTreatment = (back_url: string, is_redirect: boolean, params: any, res: any) => {
         if (res.status === 201) {
@@ -18,19 +19,16 @@ export const useRequestStore = defineStore('requestStore', () => {
     }
     const afterTreatment = (back_url: string, is_redirect: boolean, params: any, res: any) => {
         if (res.status === 201) {
-            params.id = res.data.id
             if(params.id == 0) {
-                /*
-                else if (back_url == '/merchandises/pay-modules')
-
-                else if (back_url == '/merchandises/noti-urls')
-
-                else if (back_url == '/merchandises/regular-credit-cards')
-
-                else if (back_url == '/salesforces/under-auto-settings')
-
-                else if (back_url == '/merchandises')
-                */
+                params.id = res.data.id
+                if (back_url == 'salesforces') {
+                    const idx = getLevelByIndex(params.level)
+                    all_sales[idx].push(params)
+                }
+                else if (back_url == '/merchandises') {
+                    mchts.value.push(params)
+                    mchts.value.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name))
+                }
             }
             if (is_redirect) {
                 if (back_url == '/merchandises/pay-modules')
@@ -57,7 +55,8 @@ export const useRequestStore = defineStore('requestStore', () => {
             return res
         }
         catch (e: any) {
-            snackbar.value.show(e.response.data.message, 'error')
+            if(use_snackbar)
+                snackbar.value.show(e.response.data.message, 'error')
             return errorHandler(e)
         }
     }
