@@ -10,7 +10,6 @@ interface Props {
 const props = defineProps<Props>()
 const { setNullRemove } = useRequestStore()
 const under_auto_settings = reactive<UnderAutoSetting[]>(props.item.under_auto_settings || [])
-const new_under_auto_settings = reactive<UnderAutoSetting[]>([])
 const addNewUnderAutoSetting = () => {
     const under_auto_setting = <UnderAutoSetting>({
         id: 0,
@@ -18,11 +17,10 @@ const addNewUnderAutoSetting = () => {
         sales_fee: 0,
         note: "D+1",
     })
-    new_under_auto_settings.push(under_auto_setting)
+    under_auto_settings.push(under_auto_setting)
 }
 watchEffect(() => {
     setNullRemove(under_auto_settings)
-    setNullRemove(new_under_auto_settings)
 })
 </script>
 <template>
@@ -42,8 +40,6 @@ watchEffect(() => {
         <tbody>
             <UnderAutoSettingTr v-for="(item, index) in under_auto_settings"
                 :key="item.id" style="margin-top: 1em;" :item="item" :index="index" />
-            <UnderAutoSettingTr v-for="(item, index) in new_under_auto_settings" :key="index"
-                style="margin-top: 1em;" :item="item" :index="(index+under_auto_settings.length)" />
         </tbody>
         <tfoot v-show="Boolean(props.item.id == 0)">
             <tr>

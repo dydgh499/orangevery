@@ -7,21 +7,16 @@ import { useRequestStore } from '@/views/request'
 const { terminals, cus_filters } = useStore()
 const { setNullRemove } = useRequestStore()
 
-const new_terminals = reactive<Classification[]>([])
-const new_cus_filters = reactive<Classification[]>([])
 const addNewClassification = (items: Classification[], type: number) => {
     items.push(<Classification>({
         id: 0,
         type: type,
-    })
-    )
+    }))
 }
 
 watchEffect(() => {
     setNullRemove(terminals)
     setNullRemove(cus_filters)
-    setNullRemove(new_terminals)
-    setNullRemove(new_cus_filters)
 })
 </script>
 <template>
@@ -42,14 +37,11 @@ watchEffect(() => {
                             <ClassificationTr v-for="(item, index) in terminals" :key="index" :item="item" :index="index"
                                 :base_count="0">
                             </ClassificationTr>
-                            <ClassificationTr v-for="(item, index) in new_terminals" :key="index" :item="item"
-                                :base_count="terminals.length" :index="(index+terminals.length)">
-                            </ClassificationTr>
                         </tbody>
                     </VTable>
                     <VRow>
                         <VCol class="d-flex gap-4 pt-10">
-                            <VBtn type="button" style="margin-left: auto;" @click="addNewClassification(new_terminals, 0)">
+                            <VBtn type="button" style="margin-left: auto;" @click="addNewClassification(terminals, 0)">
                                 장비 종류
                                 <VIcon end icon="tabler-plus" />
                             </VBtn>
@@ -74,15 +66,12 @@ watchEffect(() => {
                             <ClassificationTr v-for="(item, index) in cus_filters" :key="index" :item="item" :index="index"
                                 :base_count="0">
                             </ClassificationTr>
-                            <ClassificationTr v-for="(item, index) in new_cus_filters" :key="index" :item="item"
-                                :base_count="cus_filters.length" :index="(index+cus_filters.length)">
-                            </ClassificationTr>
                         </tbody>
                     </VTable>
                     <VRow>
                         <VCol class="d-flex gap-4 pt-10">
                             <VBtn type="button" style="margin-left: auto;"
-                                @click="addNewClassification(new_cus_filters, 1)">
+                                @click="addNewClassification(cus_filters, 1)">
                                 커스텀 필터 추가
                                 <VIcon end icon="tabler-plus" />
                             </VBtn>

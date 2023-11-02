@@ -6,9 +6,8 @@ import { useRequestStore } from '@/views/request'
 
 const {pgs } = useStore()
 const { setNullRemove } = useRequestStore()
-const new_pay_gateways = reactive<PayGateway[]>([])
 const addNewPG = () => {
-    new_pay_gateways.push({
+    pgs.push(<PayGateway>({
         id: 0,
         pg_type: null,
         pg_name: '',
@@ -18,17 +17,15 @@ const addNewPG = () => {
         phone_num: '',
         addr:'',
         settle_type:0,
-    })
+    }))
 }
 
 watchEffect(() => {
     setNullRemove(pgs)
-    setNullRemove(new_pay_gateways)
 })
 </script>
 <template>
     <PayGatewayCard v-for="pg in pgs" :key="pg.id" style="margin-top: 1em;" :item="pg"/>
-    <PayGatewayCard v-for="(new_pg, index) in new_pay_gateways" :key="index" style="margin-top: 1em;" :item="new_pg"/>
     <!-- 👉 submit -->
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">

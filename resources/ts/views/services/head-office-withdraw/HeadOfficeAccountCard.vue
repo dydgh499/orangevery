@@ -8,18 +8,15 @@ import { useRequestStore } from '@/views/request'
 const { setNullRemove } = useRequestStore()
 const { head_office_accounts } = useHeadOfficeAccountStore()
 
-const new_head_office_accounts = reactive<HeadOffceAccount[]>([])
-
 const addNewHeadOffceAccount = () => {
     const head_office_account = <HeadOffceAccount>({
         id: 0,
         acct_bank_name: '은행명',
     })
-    new_head_office_accounts.push(head_office_account)
+    head_office_accounts.push(head_office_account)
 }
 watchEffect(() => {
     setNullRemove(head_office_accounts)
-    setNullRemove(new_head_office_accounts)
 })
 </script>
 <template>
@@ -41,10 +38,8 @@ watchEffect(() => {
         <tbody>
             <HeadOfficeAccountTr v-for="(item, index) in head_office_accounts"
                 :key="item.id" style="margin-top: 1em;" :item="item" :index="index" />
-            <HeadOfficeAccountTr v-for="(item, index) in new_head_office_accounts" :key="index"
-                style="margin-top: 1em;" :item="item" :index="(index+head_office_accounts.length)" />
         </tbody>
-        <tfoot v-show="Boolean(head_office_accounts.length + new_head_office_accounts.length == 0)">
+        <tfoot v-show="Boolean(head_office_accounts.length == 0)">
             <tr>
                 <td colspan="4" class="text-center">
                     지정계좌를 등록해주세요.

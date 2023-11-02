@@ -10,19 +10,17 @@ interface Props {
 const props = defineProps<Props>()
 const { setNullRemove } = useRequestStore()
 const regular_credit_cards = reactive<RegularCreditCard[]>(props.item.regular_credit_cards || [])
-const new_regular_credit_cards = reactive<RegularCreditCard[]>([])
 const addNewRegularCreditCard = () => {
     const regular_credit_card = <RegularCreditCard>({
         id: 0,
         mcht_id: props.item.id,
         card_num: '',
-        nick_name: "",
+        note: "",
     })
-    new_regular_credit_cards.push(regular_credit_card)
+    regular_credit_cards.push(regular_credit_card)
 }
 watchEffect(() => {
     setNullRemove(regular_credit_cards)
-    setNullRemove(new_regular_credit_cards)
 })
 </script>
 <template>
@@ -42,8 +40,6 @@ watchEffect(() => {
         <tbody>
             <RegularCreditCardTr v-for="(item, index) in regular_credit_cards"
                 :key="item.id" style="margin-top: 1em;" :item="item" :index="index" />
-            <RegularCreditCardTr v-for="(item, index) in new_regular_credit_cards" :key="index"
-                style="margin-top: 1em;" :item="item" :index="(index+regular_credit_cards.length)" />
         </tbody>
         <tfoot v-show="Boolean(props.item.id == 0)">
             <tr>

@@ -7,9 +7,8 @@ import { useRequestStore } from '@/views/request'
 const { finance_vans } = useStore()
 const { setNullRemove } = useRequestStore()
 
-const new_finance_vans = reactive<FinanceVan[]>([])
 const addNewFinanceVan = () => {
-    new_finance_vans.push({
+    finance_vans.push(<FinanceVan>({
         id: 0,
         finance_company_num: null,
         fin_type: null,
@@ -24,16 +23,14 @@ const addNewFinanceVan = () => {
         corp_name: '',
         nick_name: '금융 VAN 명칭을 적어주세요.😀',
         withdraw_acct_num: '',
-    })
+    }))
 }
 watchEffect(() => {
     setNullRemove(finance_vans)
-    setNullRemove(new_finance_vans)
 })
 </script>
 <template>
     <FinanceVanCard v-for="finance_van in finance_vans" :key="finance_van.id" style="margin-top: 1em;" :item="finance_van"/>
-    <FinanceVanCard v-for="(new_finance_van, index) in new_finance_vans" :key="index" style="margin-top: 1em;" :item="new_finance_van"/>
     <!-- 👉 submit -->
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">

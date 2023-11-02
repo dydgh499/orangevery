@@ -18,10 +18,8 @@ export const useRequestStore = defineStore('requestStore', () => {
     }
     const afterTreatment = (back_url: string, is_redirect: boolean, params: any, res: any) => {
         if (res.status === 201) {
+            params.id = res.data.id
             if(params.id == 0) {
-                params.id = res.data.id
-                if(back_url == '/services/head-office-accounts')
-                    head_office_accounts.value.push(params)
                 /*
                 else if (back_url == '/merchandises/pay-modules')
 

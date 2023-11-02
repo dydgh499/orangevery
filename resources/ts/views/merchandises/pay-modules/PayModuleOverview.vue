@@ -11,12 +11,11 @@ interface Props {
 }
 const props = defineProps<Props>()
 const { setNullRemove } = useRequestStore()
-const new_pay_modules = reactive<PayModule[]>([])
-const pay_modules = ref<PayModule[]>([])
+const pay_modules = reactive<PayModule[]>([])
 const { mchts } = useSalesFilterStore()
 
 const addNewPaymodule = () => {
-    new_pay_modules.push(<PayModule>{
+    pay_modules.push(<PayModule>{
         id: 0,
         mcht_id: props.item.id,
         pg_id: 0,
@@ -59,16 +58,14 @@ const addNewPaymodule = () => {
     })
 }
 if(props.item.id)
-    pay_modules.value = await getAllPayModules(props.item.id)
+    Object.assign(pay_modules, await getAllPayModules(props.item.id))
 
 watchEffect(() => {
-    setNullRemove(pay_modules.value)
-    setNullRemove(new_pay_modules)
+    setNullRemove(pay_modules)
 })
 </script>
 <template>
     <PayModuleCard v-for="(item, index) in pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="mchts"/>
-    <PayModuleCard v-for="(item, index) in new_pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="mchts"/>
     <!-- 👉 submit -->
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">

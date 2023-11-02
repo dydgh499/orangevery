@@ -25,7 +25,7 @@ const withdrawAcctHint = () => {
         return ``
 }
 const depositAcctHint = () => {
-    const head_office_account = <HeadOffceAccount>(head_office_accounts.value.find(obj => obj.id == deposit_acct.value))
+    const head_office_account = <HeadOffceAccount>(head_office_accounts.find(obj => obj.id == deposit_acct.value))
     if(head_office_account)
         return `예금주: ${head_office_account.acct_name}, 은행명: ${head_office_account.acct_bank_name}`
     else

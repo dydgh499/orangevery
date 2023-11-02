@@ -15,12 +15,10 @@ const props = defineProps<Props>()
 const { pss, pg_companies }  = useStore()
 const { update, remove, setNullRemove } = useRequestStore()
 
-const new_pss = reactive<PaySection[]>([])
-
 const addNewSection = () => {
-    new_pss.push({
+    pss.push({
         id: 0,
-        pg_id: props.item.id,
+        pg_id: props.item.id as number,
         name: '',
         trx_fee: 0,
         is_delete: true,
@@ -51,7 +49,6 @@ watchEffect(() => {
 })
 watchEffect(() => {
     setNullRemove(pss)
-    setNullRemove(new_pss)
 })
 </script>
 <template>
@@ -172,8 +169,6 @@ watchEffect(() => {
                         </thead>
                         <tbody>
                             <PaySectionTr v-for="(ps, index) in filterPss" :key="index" :item="ps" :index="index">
-                            </PaySectionTr>
-                            <PaySectionTr v-for="(ps, index) in new_pss" :key="index" :item="ps" :index="(index + filterPss.length)">
                             </PaySectionTr>
                         </tbody>
                         <tfoot v-show="Boolean(props.item.id == 0)">

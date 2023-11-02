@@ -2,8 +2,9 @@
 import type { HeadOffceAccount } from '@/views/types'
 import { axios } from '@axios'
 
-export const useHeadOfficeAccountStore = () => {
+export const useHeadOfficeAccountStore = defineStore('useHeadOfficeAccountStore', () => {
     const head_office_accounts = ref(<HeadOffceAccount[]>([]))
+
     const getHeadOfficeAccount = async() => {
         const url = '/api/v1/manager/services/head-office-accounts'
         const r = await axios.get(url)
@@ -13,4 +14,4 @@ export const useHeadOfficeAccountStore = () => {
         await getHeadOfficeAccount() 
     })
     return {head_office_accounts}
-}
+})
