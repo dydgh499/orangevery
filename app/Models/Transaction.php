@@ -163,11 +163,4 @@ class Transaction extends Model
     {
         return $this->cxl_dt." ".$this->cxl_tm;
     }
-    
-    protected function mchtSettleFee() : Attribute
-    {
-        return new Attribute(
-            get: fn ($value) => request()->level == 10 ? $value : 0,
-        );
-    }
 }
