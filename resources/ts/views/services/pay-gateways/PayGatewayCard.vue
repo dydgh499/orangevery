@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { businessNumValidator, requiredValidator } from '@validators'
-import type { PayGateway, PaySection } from '@/views/types'
+import type { PayGateway } from '@/views/types'
 import { VForm } from 'vuetify/components'
-import { useStore, settle_types } from '@/views/services/pay-gateways/useStore'
+import { useStore, pg_settle_types } from '@/views/services/pay-gateways/useStore'
 import PaySectionTr from '@/views/services/pay-gateways/PaySectionTr.vue'
 import { useRequestStore } from '@/views/request'
 
@@ -134,7 +134,7 @@ watchEffect(() => {
                                 <label>정산타입</label>
                             </VCol>
                             <VCol>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type" :items="settle_types"
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type" :items="pg_settle_types"
                                     prepend-inner-icon="tabler-calculator" label="정산타입 선택" item-title="title" item-value="id"
                                     single-line :rules="[requiredValidator]" />
                             </VCol>
