@@ -284,10 +284,10 @@ class BeforeSystemController extends Controller
 
     public function TransactionUpdate()
     {
-        $brand_id = 2;
-        $before_brand_id = 15;
-        $use_realtime = false;
-        $dev_settle_type = 0;
+        $brand_id = 15;
+        $before_brand_id = 21;
+        $use_realtime = true;
+        $dev_settle_type = 1;
 
         $payvery_mods = $this->payvery->table('payment_modules')->where('brand_id', $brand_id)->get();
         [$pg_payvery, $pg_paywell, $pg_connect] = $this->getPGs($brand_id, $before_brand_id);
@@ -302,7 +302,9 @@ class BeforeSystemController extends Controller
         $transaction->connectUsers($mcht_connect, $sales_connect, $mcht_payvery, $sales_payvery);
         $transaction->connectPmod($payvery_mods);
 
-        $transaction->getPaywell($this->paywell->table('deposit'), $brand_id, $before_brand_id);
-        $transaction->setPayvery($this->payvery->table('transactions'), $brand_id);
+        $before_query = $this->paywell->table('deposit')->where('TRADE_DT', '<', '2023-11-01')->where('TRADE_DT', '>', '2023-09-30');
+        $current_query = $this->payvery->table('transactions')->where('trx_dt', '<', '2023-11-01')->where('trx_dt', '>', '2023-09-30');
+        $transaction->getPaywell($before_query, $brand_id, $before_brand_id);
+        $transaction->setPayvery($current_query, $brand_id);
     }
 }

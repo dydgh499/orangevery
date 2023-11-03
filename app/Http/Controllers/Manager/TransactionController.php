@@ -99,6 +99,8 @@ class TransactionController extends Controller
         $query = globalSalesFilter($query, $request, 'transactions');
         $query = globalAuthFilter($query, $request, 'transactions');
 
+        if($request->only_cancel && $request->only_cancel == 'true')
+            $query = $query->where('transactions.is_cancel', true);
         if($request->has('mcht_settle_id'))
             $query = $query->where('transactions.mcht_settle_id', $request->mcht_settle_id);
 

@@ -34,6 +34,7 @@ const withdrawAcctHint = () => {
     else
         return ``
 }
+
 const depositAcctHint = () => {
     const head_office_account = <HeadOffceAccount>(head_office_accounts.find(obj => obj.id == head_office_acct_id.value))
     if(head_office_account)
@@ -41,6 +42,7 @@ const depositAcctHint = () => {
     else
         return ``
 }
+
 const deposit = async () => {
     if(amount.value) {
         if(await alert.value.show('정말 '+amount.value+'원을 이체하시겠습니까?')) {

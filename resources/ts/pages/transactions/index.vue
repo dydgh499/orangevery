@@ -42,6 +42,7 @@ const snackbar = <any>(inject('snackbar'))
 store.params.level = 10
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
 store.params.use_realtime_deposit = Number(corp.pv_options.paid.use_realtime_deposit)
+store.params.only_cancel = false
 
 const metas = ref([
     {
@@ -131,6 +132,7 @@ onMounted(() => {
 watchEffect(() => {
     store.setChartProcess()
     store.params.level = store.params.level
+    store.params.only_cancel = store.params.only_cancel
 })
 </script>
 <template>
@@ -159,6 +161,9 @@ watchEffect(() => {
                 <VBtn prepend-icon="tabler-calculator" @click="batchRetry()" v-if="getUserLevel() >= 50">
                     일괄 재발송
                 </VBtn>
+                <div style="position: relative; top: 0.6em;">
+                    <VSwitch v-model="store.params.only_cancel" label="취소매출 조회" color="primary" />
+                </div>
             </template>
             <template #headers>
                 <tr>
