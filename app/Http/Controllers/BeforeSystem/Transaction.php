@@ -116,7 +116,7 @@ class Transaction
                             $amount = $transaction->TRADE_PR;
                             $dpst_fee = $transaction->DPST_FEE;
                             if($transaction->IS_CANCEL)
-                            {
+                            {  
                                 $amount *= -1;
                                 $dpst_fee *= -1;
                             }

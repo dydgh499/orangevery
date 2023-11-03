@@ -157,9 +157,12 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         });
         Route::prefix('salesforces')->group(function() {
             Route::get('chart', [SalesforceController::class, 'chart']);
-            Route::get('fee-apply-histories', [SalesforceController::class, 'feeApplyHistories']);
+            Route::get('fee-apply-histories', [SalesforceController::class, 'feeApplyHistories']);            
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
-            Route::delete('{id}', [FeeChangeHistoryController::class, 'deleteSalesforce']);
+            Route::prefix('fee-change-histories')->group(function() {
+                Route::delete('{id}', [FeeChangeHistoryController::class, 'deleteSalesforce']);
+                Route::post('{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
+            });
             Route::get('classification', [SalesforceController::class, 'classification']);
             Route::post('password-change', [SalesforceController::class, 'passwordChange']);
             Route::post('bulk-register', [SalesforceController::class, 'bulkRegister']);

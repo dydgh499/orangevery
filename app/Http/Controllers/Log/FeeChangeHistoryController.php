@@ -102,6 +102,7 @@ class FeeChangeHistoryController extends Controller
         $data = $this->getIndexData($request, $query, 'sf_fee_change_histories.id', ['sf_fee_change_histories.*', 'merchandises.mcht_name'], 'sf_fee_change_histories.created_at');
         return $this->response(0, $data);
     }
+    
     private function deleteHistory($orm, $target, $id)
     {
         $query      = $orm->where('id', $id);
