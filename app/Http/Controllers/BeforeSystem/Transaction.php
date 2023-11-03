@@ -61,6 +61,18 @@ class Transaction
                     $payvery_mchts_ids = array_column($this->payvery_mchts, 'id');
                     foreach ($transactions as $transaction) {
                         $mcht_id = $this->getId($this->connect_mchts, $transaction->USER_PK);
+                        if(!$mcht_id)
+                        {
+                            $idx = array_search($transaction->MD_NM, array_column($this->payvery_mchts, 'mcht_name'));
+                            if($idx !== false)
+                            {
+                                $mcht = $this->payvery_mchts[$idx];
+                                print("found mcht by merchandise name - found:".$mcht['mcht_name']."\n");
+                                $mcht_id = $this->payvery_mchts[$idx]['id'];
+                            }
+                            else
+                                print("*** not found mcht by merchandise name - found:".$transaction->MD_NM." *** \n");
+                        }
                         if($mcht_id)
                         {
                             $mid = $transaction->MID;
