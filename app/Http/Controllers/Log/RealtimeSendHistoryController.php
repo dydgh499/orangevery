@@ -113,4 +113,19 @@ class RealtimeSendHistoryController extends Controller
         $res = $res['body']['data'];
         return $this->extendResponse($res['result_cd'] == "0000" ? 1 : 2000, $res['result_msg'], $res['data']);
     }
+
+    /**
+     * 본사지정계좌 출금
+     */
+    public function headOfficeTransfer(Request $request)
+    {
+        $data = $request->all();
+        $data['brand_id'] = $request->user()->brand_id;
+        $url = $this->base_noti_url.'/head-office-transfer';
+        $res = post($url, $data);
+        if($res['code'] == 201)
+            return $this->extendResponse(1, $res['body']['result_msg']);
+        else
+            return $this->extendResponse(2000, $res['body']['result_msg']);
+    }
 }

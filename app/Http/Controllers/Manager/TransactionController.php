@@ -362,6 +362,7 @@ class TransactionController extends Controller
             $tran->sales5_settle_amount = $trans[$i]['sales5_settle_amount'];
             $tran->save();
             $i++;
+            echo $i."\n";
         }
     }
     static public function test()

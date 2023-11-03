@@ -3,22 +3,24 @@
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import HeadOfficeAccountCard from '@/views/services/head-office-withdraw/HeadOfficeAccountCard.vue'
 import { useHeadOfficeAccountStore } from '@/views/services/head-office-withdraw/useStore'
+import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { HeadOffceAccount, FinanceVan } from '@/views/types'
 import { requiredValidator } from '@validators'
 
 const { head_office_accounts } = useHeadOfficeAccountStore()
+const { post } = useRequestStore()
 const { finance_vans } = useStore()
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 
-const withdraw_acct = ref()
-const deposit_acct = ref()
+const fin_id = ref(null)
+const head_office_acct_id = ref(null)
 const amount = ref(0)
 
 const withdrawAcctBalance = () => {
-    const finance_van = <FinanceVan>(finance_vans.find(obj => obj.id == withdraw_acct.value))
+    const finance_van = <FinanceVan>(finance_vans.find(obj => obj.id == fin_id.value))
     if(finance_van)
         return `출금 가능잔액: ${finance_van.balance?.toLocaleString()}원`
     else
@@ -26,14 +28,14 @@ const withdrawAcctBalance = () => {
 }
 
 const withdrawAcctHint = () => {
-    const finance_van = <FinanceVan>(finance_vans.find(obj => obj.id == withdraw_acct.value))
+    const finance_van = <FinanceVan>(finance_vans.find(obj => obj.id == fin_id.value))
     if(finance_van)
         return `은행코드: ${finance_van.bank_code}, 계좌번호: ${finance_van.withdraw_acct_num}`
     else
         return ``
 }
 const depositAcctHint = () => {
-    const head_office_account = <HeadOffceAccount>(head_office_accounts.find(obj => obj.id == deposit_acct.value))
+    const head_office_account = <HeadOffceAccount>(head_office_accounts.find(obj => obj.id == head_office_acct_id.value))
     if(head_office_account)
         return `예금주: ${head_office_account.acct_name}, 은행명: ${head_office_account.acct_bank_name}`
     else
@@ -42,7 +44,12 @@ const depositAcctHint = () => {
 const deposit = async () => {
     if(amount.value) {
         if(await alert.value.show('정말 '+amount.value+'원을 이체하시겠습니까?')) {
-
+            const params = {
+                fin_id: fin_id.value,
+                head_office_acct_id: head_office_acct_id.value,
+                amount: amount.value
+            }
+            const r = await post('/api/v1/manager/transactions/realtime-histories/head-office-transfer', params)
         }
     }
     else
@@ -66,7 +73,7 @@ const deposit = async () => {
                                     </h4>
                                 </template>
                                 <template #input>
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="withdraw_acct" :items="finance_vans"
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="fin_id" :items="finance_vans"
                                         label="출금 이체모듈 선택" item-title="nick_name" item-value="id" 
                                         persistent-hint single-line  :hint="withdrawAcctHint()"/>
                                 </template>
@@ -74,7 +81,7 @@ const deposit = async () => {
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>지정계좌 선택</template>
                                 <template #input>
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="deposit_acct"
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="head_office_acct_id"
                                         :items="head_office_accounts" label="입금 계좌 선택" item-title="acct_num" item-value="id"
                                         persistent-hint single-line  :hint="depositAcctHint()" />
                                 </template>
