@@ -71,26 +71,39 @@ class Transaction
                                 $mcht_id = $this->payvery_mchts[$idx]['id'];
                             }
                             else
-                                print("*** not found mcht by merchandise name - found:".$transaction->MD_NM." *** \n");
+                                $mcht_id = -1;
                         }
-                        if($mcht_id)
+                        if($mcht_id || $mcht_id == -1)
                         {
                             $mid = $transaction->MID;
                             $tid = $transaction->CAT_ID;
 
-                            $pmod_idx = array_search(true, array_map(function($item) use($mcht_id, $mid, $tid) {
-                                return $item['mcht_id'] == $mcht_id && $item['mid'] == $mid && $item['tid'] == $tid;
-                            }, $this->payvery_mods));                            
-                            $pmod = ($pmod_idx !== false) ? $this->payvery_mods[$pmod_idx] : null;
-
-                            $idx = array_search($mcht_id, $payvery_mchts_ids);
-                            $mcht = $idx === false ? null : $this->payvery_mchts[$idx];
-
-                            $custom_id = $mcht ? $mcht['custom_id'] : 0;
-                            $pmod_id = $pmod ? $pmod['id'] : 0;
-                            $module_type = $pmod ? $pmod['module_type'] : 0;
-                            $terminal_id = $pmod ? $pmod['terminal_id'] : 0;
-                            $settle_type = $pmod ? $pmod['settle_type'] : 0;
+                            if($mcht_id != -1)
+                            {
+                                $pmod_idx = array_search(true, array_map(function($item) use($mcht_id, $mid, $tid) {
+                                    return $item['mcht_id'] == $mcht_id && $item['mid'] == $mid && $item['tid'] == $tid;
+                                }, $this->payvery_mods));
+                                $pmod = ($pmod_idx !== false) ? $this->payvery_mods[$pmod_idx] : null;
+    
+                                $idx = array_search($mcht_id, $payvery_mchts_ids);
+                                $mcht = $idx === false ? null : $this->payvery_mchts[$idx];
+    
+                                $custom_id = $mcht ? $mcht['custom_id'] : 0;
+                                $pmod_id = $pmod ? $pmod['id'] : 0;
+                                $module_type = $pmod ? $pmod['module_type'] : 0;
+                                $terminal_id = $pmod ? $pmod['terminal_id'] : 0;
+                                $settle_type = $pmod ? $pmod['settle_type'] : 0;    
+                            }
+                            else
+                            {
+                                $mcht_id = 1;
+                                $custom_id = 0;
+                                $pmod_id = -1;
+                                $module_type = 0;
+                                $terminal_id = 0;
+                                $settle_type = 0;
+                                print("*** not found mcht by merchandise name - found:".$transaction->MD_NM." *** \n");
+                            }
 
                             $sales4_id = $this->getId($this->connect_sales, $transaction->SLSFC_PK);
                             $sales3_id = $this->getId($this->connect_sales, $transaction->BRANCH_PK);
