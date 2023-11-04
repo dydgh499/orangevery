@@ -16,6 +16,7 @@
     "@floating-ui/dom": "1.2.7",
     "@tabler/icons": "2.17.0",
     "@vuepic/vue-datepicker": "^6.1.0",
+    "@vuetify/nightly": "^3.3.23-master.2023-11-03",
     "@vueup/vue-quill": "^1.2.0",
     "@vueuse/core": "10.1.0",
     "@vueuse/math": "10.1.0",
@@ -47,7 +48,6 @@
     "vue-virtual-scroller": "^2.0.0-beta.8",
     "vue3-apexcharts": "1.4.1",
     "vue3-perfect-scrollbar": "1.6.1",
-    "vuetify": "3.2.1",
     "webfontloader": "1.6.28",
     "xlsx": "^0.18.5"
   },

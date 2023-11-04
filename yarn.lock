@@ -2293,6 +2293,11 @@
     find-cache-dir "^3.3.2"
     upath "^2.0.1"
 
+"@vuetify/nightly@^3.3.23-master.2023-11-03":
+  version "3.3.23-master.2023-11-03"
+  resolved "https://registry.yarnpkg.com/@vuetify/nightly/-/nightly-3.3.23-master.2023-11-03.tgz#6558606629cacf255d0aca82ac4aba7dac603a79"
+  integrity sha512-XNcEFTZfMEQFL4PNRIxsi0cNCan2+MVhpw3klXNVNmE95y0B6TtYjgu7nnJgVOnJQPWvxA77JOey+5jyfjFECg==
+
 "@vueup/vue-quill@^1.2.0":
   version "1.2.0"
   resolved "https://registry.npmjs.org/@vueup/vue-quill/-/vue-quill-1.2.0.tgz"
@@ -7833,11 +7838,6 @@ vue@3.2.47:
     "@vue/runtime-dom" "3.2.47"
     "@vue/server-renderer" "3.2.47"
     "@vue/shared" "3.2.47"
-
-vuetify@3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.2.1.tgz#caa1d306a3ef8d52d300be4c7f6d94dc4fd897e4"
-  integrity sha512-XOGfDuDGG4j/dJSu73JrkfrGB141LoiLyoZecGtUou24xMf17Rnk+pzOH+YYRVgQ7HFc4kG95DzFmAXS5ysEGA==
 
 webfontloader@1.6.28:
   version "1.6.28"
