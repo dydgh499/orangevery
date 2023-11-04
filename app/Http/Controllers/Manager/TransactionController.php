@@ -345,11 +345,11 @@ class TransactionController extends Controller
             ->where('brand_id', 15)
             ->where(function ($query) {
                 return $query->where('trx_dt', '>=', '2023-10-01')
-                    ->trx_dt('cxl_dt', '<=', '2023-10-31');
+                    ->where('trx_dt', '<=', '2023-10-31');
             })
             ->orWhere(function ($query) {
                 return $query->where('cxl_dt', '>=', '2023-10-01')
-                    ->trx_dt('cxl_dt', '<=', '2023-10-31');
+                    ->where('cxl_dt', '<=', '2023-10-31');
             })
             ->orderBy('transactions.id', 'desc')
             ->get();
