@@ -24,16 +24,6 @@ const filterPgs = computed(() => {
 })
 
 onMounted(() => {
-    if(route.query.pg_id)
-        store.params.pg_id = route.query.pg_id
-    if(route.query.ps_id)
-        store.params.ps_id = route.query.ps_id
-    if(route.query.settle_type)
-        store.params.settle_type = route.query.settle_type
-    if(route.query.terminal)
-        store.params.terminal = route.query.terminal
-    if(route.query.custom_id)
-        store.params.custom_id = route.query.custom_id
     watchEffect(() => {
         store.setChartProcess()
         store.params.pg_id = store.params.pg_id

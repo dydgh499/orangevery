@@ -38,14 +38,39 @@ const {
     date,
     date_selecter,
 } = DateSetter(props, formatDate, formatTime)
-
-store.params.use_search_date_detail = Number(corp.pv_options.free.use_search_date_detail)
-
 const enable = ref(true)
 const format = ref({})
 const time_picker = ref(true)
 const search = ref(<string>(''))
 
+
+const queryToStoreParams = () => {
+    const str_keys = ['search', 's_dt', 'e_dt', 'dt']
+    const keys = Object.keys(route.query).filter(key => !str_keys.includes(key));
+    for (let i = 0; i < keys.length; i++) {
+        store.params[keys[i]] = route.query[keys[i]] != null ? parseInt(route.query[keys[i]] as string) : null
+    }
+
+    if(!store.params.page)
+        store.params.page = 1
+    if(!store.params.page_size)
+        store.params.page_size = 20
+
+    if (route.query.search) {
+        store.params.search = route.query.search
+        search.value = store.params.search
+    }
+    console.log(store.params)
+}
+
+const handleEnterKey = (event: KeyboardEvent) => {
+    if (event.keyCode === 13) {
+        store.setTable()
+        store.updateQueryString({ search: search.value })
+    }
+}
+
+store.params.use_search_date_detail = Number(corp.pv_options.free.use_search_date_detail)
 if(props.date_filter_type == DateFilters.DATE_RANGE) {
     enable.value = true
     format.value = { format: 'yyyy-MM-dd HH:mm:ss' }
@@ -56,19 +81,9 @@ else if(props.date_filter_type == DateFilters.SETTLE_RANGE) {
     format.value = { format: 'yyyy-MM-dd ' }
     time_picker.value = false
 }
-
-const handleEnterKey = (event: KeyboardEvent) => {
-    if (event.keyCode === 13) {
-        store.setTable()
-        store.updateQueryString({ search: search.value })
-    }
-}
-if (route.query.search) {
-    store.params.search = route.query.search
-    search.value = store.params.search
-}
+init()
+queryToStoreParams()
 onMounted(() => {
-    init(store.params)
     watchEffect(() => {
         store.setChartProcess()
         dateChanged(store)

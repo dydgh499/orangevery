@@ -21,6 +21,7 @@ provide('head', head)
 provide('exporter', exporter)
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
+
 const batchCheck = async () => {
     if (await alert.value.show('정말 일괄 확인/확인취소 처리 하시겠습니까?')) {
         const promises = []

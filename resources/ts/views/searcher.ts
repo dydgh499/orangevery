@@ -17,12 +17,12 @@ export function Searcher(path: string) {
     const is_skeleton   = ref(true)
     let before_search = ''
 
+
     const getChartProcess = () => {
         return chart_process.value
     }
 
     const setChartProcess = () => {
-        params.page = 1
         chart_process.value = false
     }
 
@@ -32,10 +32,6 @@ export function Searcher(path: string) {
     const edit = (id: number = 0) => {
         if(user_info.value.level > 30)
             router.push('/' + path + '/edit/' + id)
-    }
-    const getSearch = () => {
-        const search = (document.getElementById('search') as HTMLInputElement)
-        return search ? search.value : ''
     }
     
     const getChartData = async() => {
@@ -47,6 +43,11 @@ export function Searcher(path: string) {
 
     const getPercentage = (n:number, d:number) => {
           return d === 0 ? 0 : Number(((n / d) * 100).toFixed(2))
+    }
+
+    const getSearch = () => {
+        const search = (document.getElementById('search') as HTMLInputElement)
+        return search ? search.value : ''
     }
 
     const getParams = () => {
@@ -188,9 +189,7 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
         range_date.value[1] = getDateFormat(e_date)
     }
 
-    const init = (params: any) => {
-        if (route.query.level)
-            params.level = route.query.level
+    const init = () => {
         if (route.query.s_dt && route.query.e_dt) {
             range_date.value[0] = route.query.s_dt as string
             range_date.value[1] = route.query.e_dt as string
