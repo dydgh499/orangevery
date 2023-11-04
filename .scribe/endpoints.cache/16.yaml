@@ -105,12 +105,12 @@ endpoints:
         name: id
         description: '이상거래 PK'
         required: true
-        example: 11
+        example: 12
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 11
+      id: 12
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -146,12 +146,12 @@ endpoints:
         name: id
         description: 'The ID of the danger.'
         required: true
-        example: et
+        example: eum
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: et
+      id: eum
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -159,12 +159,12 @@ endpoints:
         name: checked
         description: ''
         required: true
-        example: veritatis
+        example: voluptatem
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      checked: veritatis
+      checked: voluptatem
     fileParameters: []
     responses: []
     responseFields: []

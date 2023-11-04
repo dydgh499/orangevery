@@ -103,12 +103,12 @@ endpoints:
         name: id
         description: 'The ID of the fee change history.'
         required: true
-        example: at
+        example: dolorem
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: at
+      id: dolorem
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -144,7 +144,7 @@ endpoints:
         name: user
         description: ''
         required: true
-        example: id
+        example: occaecati
         type: string
         enumValues: []
         custom: []
@@ -152,13 +152,13 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: aut
+        example: nesciunt
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      user: id
-      type: aut
+      user: occaecati
+      type: nesciunt
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -271,12 +271,12 @@ endpoints:
         name: id
         description: 'The ID of the fee change history.'
         required: true
-        example: est
+        example: quidem
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: est
+      id: quidem
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -312,7 +312,7 @@ endpoints:
         name: user
         description: ''
         required: true
-        example: rerum
+        example: consectetur
         type: string
         enumValues: []
         custom: []
@@ -320,13 +320,13 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: laboriosam
+        example: ut
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      user: rerum
-      type: laboriosam
+      user: consectetur
+      type: ut
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

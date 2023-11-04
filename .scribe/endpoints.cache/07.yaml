@@ -135,7 +135,7 @@ endpoints:
         name: search
         description: 검색어(제목)
         required: false
-        example: fuga
+        example: eum
         type: string
         enumValues: []
         custom: []
@@ -143,7 +143,7 @@ endpoints:
         name: type
         description: '검색타입(0=공지사항, 1=FAQ, 2=1:1문의)'
         required: false
-        example: delectus
+        example: esse
         type: string
         enumValues: []
         custom: []
@@ -152,8 +152,8 @@ endpoints:
       page_size: 20
       s_dt: '2023-10-14'
       e_dt: '2023-10-15'
-      search: fuga
-      type: delectus
+      search: eum
+      type: esse
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -216,7 +216,7 @@ endpoints:
         name: title
         description: 제목.
         required: true
-        example: qui
+        example: aut
         type: string
         enumValues: []
         custom: []
@@ -224,7 +224,7 @@ endpoints:
         name: content
         description: 본문.
         required: true
-        example: quia
+        example: vel
         type: string
         enumValues: []
         custom: []
@@ -232,7 +232,7 @@ endpoints:
         name: type
         description: 타입.
         required: true
-        example: et
+        example: similique
         type: string
         enumValues: []
         custom: []
@@ -240,15 +240,15 @@ endpoints:
         name: is_reply
         description: validation.attributes.is_reply.
         required: true
-        example: dolorum
+        example: molestias
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      title: qui
-      content: quia
-      type: et
-      is_reply: dolorum
+      title: aut
+      content: vel
+      type: similique
+      is_reply: molestias
     fileParameters: []
     responses: []
     responseFields: []
@@ -280,12 +280,12 @@ endpoints:
         name: id
         description: '공지사항 PK'
         required: true
-        example: 11
+        example: 4
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 11
+      id: 4
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -331,12 +331,12 @@ endpoints:
         name: id
         description: '공지사항 PK'
         required: true
-        example: 7
+        example: 6
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 7
+      id: 6
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -360,7 +360,7 @@ endpoints:
         name: title
         description: 제목.
         required: true
-        example: voluptas
+        example: minus
         type: string
         enumValues: []
         custom: []
@@ -368,7 +368,7 @@ endpoints:
         name: content
         description: 본문.
         required: true
-        example: iusto
+        example: qui
         type: string
         enumValues: []
         custom: []
@@ -376,7 +376,7 @@ endpoints:
         name: type
         description: 타입.
         required: true
-        example: velit
+        example: voluptatibus
         type: string
         enumValues: []
         custom: []
@@ -384,15 +384,15 @@ endpoints:
         name: is_reply
         description: validation.attributes.is_reply.
         required: true
-        example: totam
+        example: mollitia
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      title: voluptas
-      content: iusto
-      type: velit
-      is_reply: totam
+      title: minus
+      content: qui
+      type: voluptatibus
+      is_reply: mollitia
     fileParameters: []
     responses: []
     responseFields: []
@@ -424,12 +424,12 @@ endpoints:
         name: id
         description: '공지사항 PK'
         required: true
-        example: 15
+        example: 18
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 15
+      id: 18
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

@@ -73,7 +73,7 @@ endpoints:
         name: acct_bank_name
         description: 은행명.
         required: true
-        example: deleniti
+        example: eius
         type: string
         enumValues: []
         custom: []
@@ -81,7 +81,7 @@ endpoints:
         name: acct_bank_code
         description: 은행코드.
         required: true
-        example: rerum
+        example: est
         type: string
         enumValues: []
         custom: []
@@ -89,7 +89,7 @@ endpoints:
         name: acct_num
         description: 계좌번호.
         required: true
-        example: qui
+        example: reiciendis
         type: string
         enumValues: []
         custom: []
@@ -97,15 +97,15 @@ endpoints:
         name: acct_name
         description: 예금주.
         required: true
-        example: sunt
+        example: voluptatem
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      acct_bank_name: deleniti
-      acct_bank_code: rerum
-      acct_num: qui
-      acct_name: sunt
+      acct_bank_name: eius
+      acct_bank_code: est
+      acct_num: reiciendis
+      acct_name: voluptatem
     fileParameters: []
     responses: []
     responseFields: []
@@ -137,12 +137,12 @@ endpoints:
         name: id
         description: '정기등록카드 PK'
         required: true
-        example: 7
+        example: 14
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 7
+      id: 14
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -188,12 +188,12 @@ endpoints:
         name: id
         description: '정기등록카드 PK'
         required: true
-        example: 4
+        example: 11
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 4
+      id: 11
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -201,7 +201,7 @@ endpoints:
         name: acct_bank_name
         description: 은행명.
         required: true
-        example: placeat
+        example: nostrum
         type: string
         enumValues: []
         custom: []
@@ -209,7 +209,7 @@ endpoints:
         name: acct_bank_code
         description: 은행코드.
         required: true
-        example: provident
+        example: et
         type: string
         enumValues: []
         custom: []
@@ -217,7 +217,7 @@ endpoints:
         name: acct_num
         description: 계좌번호.
         required: true
-        example: perferendis
+        example: velit
         type: string
         enumValues: []
         custom: []
@@ -225,15 +225,15 @@ endpoints:
         name: acct_name
         description: 예금주.
         required: true
-        example: sequi
+        example: id
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      acct_bank_name: placeat
-      acct_bank_code: provident
-      acct_num: perferendis
-      acct_name: sequi
+      acct_bank_name: nostrum
+      acct_bank_code: et
+      acct_num: velit
+      acct_name: id
     fileParameters: []
     responses: []
     responseFields: []
@@ -265,12 +265,12 @@ endpoints:
         name: id
         description: '정기등록카드 PK'
         required: true
-        example: 6
+        example: 13
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 6
+      id: 13
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

@@ -60,7 +60,7 @@ endpoints:
         name: search
         description: '검색어(mid, tid)'
         required: false
-        example: fugit
+        example: dolorem
         type: string
         enumValues: []
         custom: []
@@ -69,7 +69,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-10-14'
       e_dt: '2023-10-15'
-      search: fugit
+      search: dolorem
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []

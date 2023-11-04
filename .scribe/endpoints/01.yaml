@@ -14,7 +14,7 @@ endpoints:
         PG사 API 입니다. 본사 이상권한이 요구됩니다.
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: '매출전표 PG사 정보 API'
       description: ''
       authenticated: false
       custom: []
@@ -24,14 +24,14 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: 'The ID of the pay gateway.'
+        description: 'PG사 id'
         required: true
-        example: rem
-        type: string
+        example: 12
+        type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: rem
+      id: 12
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -200,7 +200,7 @@ endpoints:
         name: pg_type
         description: 'PG 타입.'
         required: true
-        example: ipsa
+        example: ut
         type: string
         enumValues: []
         custom: []
@@ -208,7 +208,7 @@ endpoints:
         name: pg_name
         description: 'PG사 별칭.'
         required: true
-        example: facilis
+        example: debitis
         type: string
         enumValues: []
         custom: []
@@ -260,18 +260,9 @@ endpoints:
         type: string
         enumValues: []
         custom: []
-      user_pw:
-        name: user_pw
-        description: '유저 패스워드'
-        required: false
-        example: hic
-        type: string
-        enumValues: []
-        custom: []
     cleanBodyParameters:
-      pg_type: ipsa
-      pg_name: facilis
-      user_pw: hic
+      pg_type: ut
+      pg_name: debitis
     fileParameters: []
     responses: []
     responseFields: []
@@ -301,14 +292,14 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: '유저 PK'
+        description: 'PG사 id'
         required: true
-        example: 6
+        example: 10
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 6
+      id: 10
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -352,14 +343,14 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: '유저 PK'
+        description: 'PG사 id'
         required: true
-        example: 13
+        example: 10
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 13
+      id: 10
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -367,7 +358,7 @@ endpoints:
         name: pg_type
         description: 'PG 타입.'
         required: true
-        example: aut
+        example: et
         type: string
         enumValues: []
         custom: []
@@ -375,7 +366,7 @@ endpoints:
         name: pg_name
         description: 'PG사 별칭.'
         required: true
-        example: adipisci
+        example: sint
         type: string
         enumValues: []
         custom: []
@@ -428,8 +419,8 @@ endpoints:
         enumValues: []
         custom: []
     cleanBodyParameters:
-      pg_type: aut
-      pg_name: adipisci
+      pg_type: et
+      pg_name: sint
     fileParameters: []
     responses: []
     responseFields: []
@@ -459,14 +450,14 @@ endpoints:
     urlParameters:
       id:
         name: id
-        description: '유저 PK'
+        description: 'PG사 id'
         required: true
-        example: 2
+        example: 18
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 2
+      id: 18
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

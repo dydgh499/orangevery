@@ -94,7 +94,7 @@ endpoints:
         name: mcht_id
         description: 가맹점.
         required: true
-        example: similique
+        example: expedita
         type: string
         enumValues: []
         custom: []
@@ -222,7 +222,7 @@ endpoints:
         name: mcht_fee
         description: validation.attributes.mcht_fee.
         required: true
-        example: magni
+        example: dolor
         type: string
         enumValues: []
         custom: []
@@ -230,7 +230,7 @@ endpoints:
         name: hold_fee
         description: '보유금 수수료.'
         required: true
-        example: a
+        example: id
         type: string
         enumValues: []
         custom: []
@@ -254,7 +254,7 @@ endpoints:
         name: module_type
         description: '결제모듈 타입.'
         required: true
-        example: accusantium
+        example: cum
         type: string
         enumValues: []
         custom: []
@@ -262,7 +262,7 @@ endpoints:
         name: pg_id
         description: PG사.
         required: true
-        example: voluptates
+        example: quod
         type: string
         enumValues: []
         custom: []
@@ -270,7 +270,7 @@ endpoints:
         name: pmod_id
         description: validation.attributes.pmod_id.
         required: true
-        example: provident
+        example: et
         type: string
         enumValues: []
         custom: []
@@ -278,7 +278,7 @@ endpoints:
         name: ps_id
         description: 구간.
         required: true
-        example: molestias
+        example: et
         type: string
         enumValues: []
         custom: []
@@ -294,7 +294,7 @@ endpoints:
         name: ps_fee
         description: validation.attributes.ps_fee.
         required: true
-        example: voluptatem
+        example: et
         type: string
         enumValues: []
         custom: []
@@ -302,7 +302,7 @@ endpoints:
         name: mcht_settle_fee
         description: validation.attributes.mcht_settle_fee.
         required: true
-        example: odit
+        example: reiciendis
         type: string
         enumValues: []
         custom: []
@@ -310,7 +310,7 @@ endpoints:
         name: mcht_settle_type
         description: validation.attributes.mcht_settle_type.
         required: true
-        example: odit
+        example: dolor
         type: string
         enumValues: []
         custom: []
@@ -318,7 +318,7 @@ endpoints:
         name: trx_dt
         description: validation.attributes.trx_dt.
         required: true
-        example: est
+        example: quae
         type: string
         enumValues: []
         custom: []
@@ -326,7 +326,7 @@ endpoints:
         name: trx_tm
         description: validation.attributes.trx_tm.
         required: true
-        example: facere
+        example: ea
         type: string
         enumValues: []
         custom: []
@@ -334,7 +334,7 @@ endpoints:
         name: amount
         description: validation.attributes.amount.
         required: true
-        example: ullam
+        example: dolores
         type: string
         enumValues: []
         custom: []
@@ -342,7 +342,7 @@ endpoints:
         name: ord_num
         description: validation.attributes.ord_num.
         required: true
-        example: doloribus
+        example: eaque
         type: string
         enumValues: []
         custom: []
@@ -350,7 +350,7 @@ endpoints:
         name: trx_id
         description: validation.attributes.trx_id.
         required: true
-        example: eum
+        example: rerum
         type: string
         enumValues: []
         custom: []
@@ -358,7 +358,7 @@ endpoints:
         name: card_num
         description: 카드번호.
         required: true
-        example: quisquam
+        example: qui
         type: string
         enumValues: []
         custom: []
@@ -366,7 +366,7 @@ endpoints:
         name: installment
         description: 할부.
         required: true
-        example: consectetur
+        example: eos
         type: string
         enumValues: []
         custom: []
@@ -382,7 +382,7 @@ endpoints:
         name: acquirer
         description: validation.attributes.acquirer.
         required: true
-        example: tempore
+        example: aut
         type: string
         enumValues: []
         custom: []
@@ -390,7 +390,7 @@ endpoints:
         name: appr_num
         description: 승인번호.
         required: true
-        example: aut
+        example: hic
         type: string
         enumValues: []
         custom: []
@@ -451,25 +451,25 @@ endpoints:
         enumValues: []
         custom: []
     cleanBodyParameters:
-      mcht_id: similique
-      mcht_fee: magni
-      hold_fee: a
-      module_type: accusantium
-      pg_id: voluptates
-      pmod_id: provident
-      ps_id: molestias
-      ps_fee: voluptatem
-      mcht_settle_fee: odit
-      mcht_settle_type: odit
-      trx_dt: est
-      trx_tm: facere
-      amount: ullam
-      ord_num: doloribus
-      trx_id: eum
-      card_num: quisquam
-      installment: consectetur
-      acquirer: tempore
-      appr_num: aut
+      mcht_id: expedita
+      mcht_fee: dolor
+      hold_fee: id
+      module_type: cum
+      pg_id: quod
+      pmod_id: et
+      ps_id: et
+      ps_fee: et
+      mcht_settle_fee: reiciendis
+      mcht_settle_type: dolor
+      trx_dt: quae
+      trx_tm: ea
+      amount: dolores
+      ord_num: eaque
+      trx_id: rerum
+      card_num: qui
+      installment: eos
+      acquirer: aut
+      appr_num: hic
     fileParameters: []
     responses: []
     responseFields: []
@@ -691,7 +691,7 @@ endpoints:
         name: mcht_id
         description: 가맹점.
         required: true
-        example: accusantium
+        example: aut
         type: string
         enumValues: []
         custom: []
@@ -819,7 +819,7 @@ endpoints:
         name: mcht_fee
         description: validation.attributes.mcht_fee.
         required: true
-        example: dolores
+        example: qui
         type: string
         enumValues: []
         custom: []
@@ -827,7 +827,7 @@ endpoints:
         name: hold_fee
         description: '보유금 수수료.'
         required: true
-        example: et
+        example: dolor
         type: string
         enumValues: []
         custom: []
@@ -851,7 +851,7 @@ endpoints:
         name: module_type
         description: '결제모듈 타입.'
         required: true
-        example: accusamus
+        example: ipsum
         type: string
         enumValues: []
         custom: []
@@ -859,7 +859,7 @@ endpoints:
         name: pg_id
         description: PG사.
         required: true
-        example: doloribus
+        example: temporibus
         type: string
         enumValues: []
         custom: []
@@ -867,7 +867,7 @@ endpoints:
         name: pmod_id
         description: validation.attributes.pmod_id.
         required: true
-        example: saepe
+        example: enim
         type: string
         enumValues: []
         custom: []
@@ -875,7 +875,7 @@ endpoints:
         name: ps_id
         description: 구간.
         required: true
-        example: facilis
+        example: velit
         type: string
         enumValues: []
         custom: []
@@ -891,7 +891,7 @@ endpoints:
         name: ps_fee
         description: validation.attributes.ps_fee.
         required: true
-        example: cumque
+        example: est
         type: string
         enumValues: []
         custom: []
@@ -899,7 +899,7 @@ endpoints:
         name: mcht_settle_fee
         description: validation.attributes.mcht_settle_fee.
         required: true
-        example: doloribus
+        example: molestiae
         type: string
         enumValues: []
         custom: []
@@ -907,7 +907,7 @@ endpoints:
         name: mcht_settle_type
         description: validation.attributes.mcht_settle_type.
         required: true
-        example: sit
+        example: recusandae
         type: string
         enumValues: []
         custom: []
@@ -915,7 +915,7 @@ endpoints:
         name: trx_dt
         description: validation.attributes.trx_dt.
         required: true
-        example: eos
+        example: iusto
         type: string
         enumValues: []
         custom: []
@@ -923,7 +923,7 @@ endpoints:
         name: trx_tm
         description: validation.attributes.trx_tm.
         required: true
-        example: modi
+        example: error
         type: string
         enumValues: []
         custom: []
@@ -931,7 +931,7 @@ endpoints:
         name: amount
         description: validation.attributes.amount.
         required: true
-        example: sed
+        example: earum
         type: string
         enumValues: []
         custom: []
@@ -939,7 +939,7 @@ endpoints:
         name: ord_num
         description: validation.attributes.ord_num.
         required: true
-        example: totam
+        example: corporis
         type: string
         enumValues: []
         custom: []
@@ -947,7 +947,7 @@ endpoints:
         name: trx_id
         description: validation.attributes.trx_id.
         required: true
-        example: illum
+        example: consequatur
         type: string
         enumValues: []
         custom: []
@@ -955,7 +955,7 @@ endpoints:
         name: card_num
         description: 카드번호.
         required: true
-        example: quo
+        example: ullam
         type: string
         enumValues: []
         custom: []
@@ -963,7 +963,7 @@ endpoints:
         name: installment
         description: 할부.
         required: true
-        example: voluptates
+        example: quae
         type: string
         enumValues: []
         custom: []
@@ -979,7 +979,7 @@ endpoints:
         name: acquirer
         description: validation.attributes.acquirer.
         required: true
-        example: mollitia
+        example: ea
         type: string
         enumValues: []
         custom: []
@@ -987,7 +987,7 @@ endpoints:
         name: appr_num
         description: 승인번호.
         required: true
-        example: vero
+        example: doloribus
         type: string
         enumValues: []
         custom: []
@@ -1051,31 +1051,31 @@ endpoints:
         name: user_pw
         description: '유저 패스워드'
         required: false
-        example: non
+        example: et
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      mcht_id: accusantium
-      mcht_fee: dolores
-      hold_fee: et
-      module_type: accusamus
-      pg_id: doloribus
-      pmod_id: saepe
-      ps_id: facilis
-      ps_fee: cumque
-      mcht_settle_fee: doloribus
-      mcht_settle_type: sit
-      trx_dt: eos
-      trx_tm: modi
-      amount: sed
-      ord_num: totam
-      trx_id: illum
-      card_num: quo
-      installment: voluptates
-      acquirer: mollitia
-      appr_num: vero
-      user_pw: non
+      mcht_id: aut
+      mcht_fee: qui
+      hold_fee: dolor
+      module_type: ipsum
+      pg_id: temporibus
+      pmod_id: enim
+      ps_id: velit
+      ps_fee: est
+      mcht_settle_fee: molestiae
+      mcht_settle_type: recusandae
+      trx_dt: iusto
+      trx_tm: error
+      amount: earum
+      ord_num: corporis
+      trx_id: consequatur
+      card_num: ullam
+      installment: quae
+      acquirer: ea
+      appr_num: doloribus
+      user_pw: et
     fileParameters: []
     responses: []
     responseFields: []
@@ -1107,12 +1107,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 4
+        example: 8
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 4
+      id: 8
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -1158,12 +1158,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 9
+        example: 3
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 9
+      id: 3
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -1171,7 +1171,7 @@ endpoints:
         name: mcht_id
         description: 가맹점.
         required: true
-        example: minima
+        example: iure
         type: string
         enumValues: []
         custom: []
@@ -1299,7 +1299,7 @@ endpoints:
         name: mcht_fee
         description: validation.attributes.mcht_fee.
         required: true
-        example: laborum
+        example: illo
         type: string
         enumValues: []
         custom: []
@@ -1307,7 +1307,7 @@ endpoints:
         name: hold_fee
         description: '보유금 수수료.'
         required: true
-        example: aut
+        example: hic
         type: string
         enumValues: []
         custom: []
@@ -1331,7 +1331,7 @@ endpoints:
         name: module_type
         description: '결제모듈 타입.'
         required: true
-        example: consequatur
+        example: quam
         type: string
         enumValues: []
         custom: []
@@ -1339,7 +1339,7 @@ endpoints:
         name: pg_id
         description: PG사.
         required: true
-        example: qui
+        example: consequatur
         type: string
         enumValues: []
         custom: []
@@ -1347,7 +1347,7 @@ endpoints:
         name: pmod_id
         description: validation.attributes.pmod_id.
         required: true
-        example: illo
+        example: adipisci
         type: string
         enumValues: []
         custom: []
@@ -1355,7 +1355,7 @@ endpoints:
         name: ps_id
         description: 구간.
         required: true
-        example: et
+        example: laudantium
         type: string
         enumValues: []
         custom: []
@@ -1371,7 +1371,7 @@ endpoints:
         name: ps_fee
         description: validation.attributes.ps_fee.
         required: true
-        example: laborum
+        example: harum
         type: string
         enumValues: []
         custom: []
@@ -1379,7 +1379,7 @@ endpoints:
         name: mcht_settle_fee
         description: validation.attributes.mcht_settle_fee.
         required: true
-        example: porro
+        example: laudantium
         type: string
         enumValues: []
         custom: []
@@ -1387,7 +1387,7 @@ endpoints:
         name: mcht_settle_type
         description: validation.attributes.mcht_settle_type.
         required: true
-        example: aliquam
+        example: quisquam
         type: string
         enumValues: []
         custom: []
@@ -1395,7 +1395,7 @@ endpoints:
         name: trx_dt
         description: validation.attributes.trx_dt.
         required: true
-        example: placeat
+        example: rerum
         type: string
         enumValues: []
         custom: []
@@ -1403,7 +1403,7 @@ endpoints:
         name: trx_tm
         description: validation.attributes.trx_tm.
         required: true
-        example: dolorem
+        example: illum
         type: string
         enumValues: []
         custom: []
@@ -1411,7 +1411,7 @@ endpoints:
         name: amount
         description: validation.attributes.amount.
         required: true
-        example: et
+        example: fugiat
         type: string
         enumValues: []
         custom: []
@@ -1419,7 +1419,7 @@ endpoints:
         name: ord_num
         description: validation.attributes.ord_num.
         required: true
-        example: vero
+        example: officia
         type: string
         enumValues: []
         custom: []
@@ -1427,7 +1427,7 @@ endpoints:
         name: trx_id
         description: validation.attributes.trx_id.
         required: true
-        example: vel
+        example: voluptatem
         type: string
         enumValues: []
         custom: []
@@ -1435,7 +1435,7 @@ endpoints:
         name: card_num
         description: 카드번호.
         required: true
-        example: quod
+        example: ut
         type: string
         enumValues: []
         custom: []
@@ -1443,7 +1443,7 @@ endpoints:
         name: installment
         description: 할부.
         required: true
-        example: voluptas
+        example: ad
         type: string
         enumValues: []
         custom: []
@@ -1459,7 +1459,7 @@ endpoints:
         name: acquirer
         description: validation.attributes.acquirer.
         required: true
-        example: rerum
+        example: velit
         type: string
         enumValues: []
         custom: []
@@ -1467,7 +1467,7 @@ endpoints:
         name: appr_num
         description: 승인번호.
         required: true
-        example: mollitia
+        example: doloremque
         type: string
         enumValues: []
         custom: []
@@ -1528,25 +1528,25 @@ endpoints:
         enumValues: []
         custom: []
     cleanBodyParameters:
-      mcht_id: minima
-      mcht_fee: laborum
-      hold_fee: aut
-      module_type: consequatur
-      pg_id: qui
-      pmod_id: illo
-      ps_id: et
-      ps_fee: laborum
-      mcht_settle_fee: porro
-      mcht_settle_type: aliquam
-      trx_dt: placeat
-      trx_tm: dolorem
-      amount: et
-      ord_num: vero
-      trx_id: vel
-      card_num: quod
-      installment: voluptas
-      acquirer: rerum
-      appr_num: mollitia
+      mcht_id: iure
+      mcht_fee: illo
+      hold_fee: hic
+      module_type: quam
+      pg_id: consequatur
+      pmod_id: adipisci
+      ps_id: laudantium
+      ps_fee: harum
+      mcht_settle_fee: laudantium
+      mcht_settle_type: quisquam
+      trx_dt: rerum
+      trx_tm: illum
+      amount: fugiat
+      ord_num: officia
+      trx_id: voluptatem
+      card_num: ut
+      installment: ad
+      acquirer: velit
+      appr_num: doloremque
     fileParameters: []
     responses: []
     responseFields: []
@@ -1578,12 +1578,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 17
+        example: 12
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 17
+      id: 12
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

@@ -109,7 +109,7 @@ endpoints:
         name: mcht_id
         description: 가맹점.
         required: true
-        example: exercitationem
+        example: enim
         type: string
         enumValues: []
         custom: []
@@ -117,7 +117,7 @@ endpoints:
         name: send_url
         description: '전송 URL.'
         required: true
-        example: et
+        example: totam
         type: string
         enumValues: []
         custom: []
@@ -125,7 +125,7 @@ endpoints:
         name: noti_status
         description: '노티 사용 상태.'
         required: true
-        example: sed
+        example: suscipit
         type: string
         enumValues: []
         custom: []
@@ -138,9 +138,9 @@ endpoints:
         enumValues: []
         custom: []
     cleanBodyParameters:
-      mcht_id: exercitationem
-      send_url: et
-      noti_status: sed
+      mcht_id: enim
+      send_url: totam
+      noti_status: suscipit
     fileParameters: []
     responses: []
     responseFields: []
@@ -172,12 +172,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 5
+        example: 16
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 5
+      id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -236,7 +236,7 @@ endpoints:
         name: mcht_id
         description: 가맹점.
         required: true
-        example: voluptatum
+        example: omnis
         type: string
         enumValues: []
         custom: []
@@ -244,7 +244,7 @@ endpoints:
         name: send_url
         description: '전송 URL.'
         required: true
-        example: ipsum
+        example: nostrum
         type: string
         enumValues: []
         custom: []
@@ -252,7 +252,7 @@ endpoints:
         name: noti_status
         description: '노티 사용 상태.'
         required: true
-        example: a
+        example: inventore
         type: string
         enumValues: []
         custom: []
@@ -265,9 +265,9 @@ endpoints:
         enumValues: []
         custom: []
     cleanBodyParameters:
-      mcht_id: voluptatum
-      send_url: ipsum
-      noti_status: a
+      mcht_id: omnis
+      send_url: nostrum
+      noti_status: inventore
     fileParameters: []
     responses: []
     responseFields: []
@@ -299,12 +299,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 1
+        example: 16
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 1
+      id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

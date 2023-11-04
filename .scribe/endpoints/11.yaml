@@ -107,7 +107,7 @@ endpoints:
         name: pg_id
         description: PG사.
         required: true
-        example: pariatur
+        example: culpa
         type: string
         enumValues: []
         custom: []
@@ -115,7 +115,7 @@ endpoints:
         name: name
         description: 이름.
         required: true
-        example: nihil
+        example: veniam
         type: string
         enumValues: []
         custom: []
@@ -123,14 +123,14 @@ endpoints:
         name: trx_fee
         description: '거래 수수료.'
         required: true
-        example: quaerat
+        example: perspiciatis
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      pg_id: pariatur
-      name: nihil
-      trx_fee: quaerat
+      pg_id: culpa
+      name: veniam
+      trx_fee: perspiciatis
     fileParameters: []
     responses: []
     responseFields: []
@@ -162,12 +162,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 5
+        example: 8
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 5
+      id: 8
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -213,12 +213,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 16
+        example: 11
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 16
+      id: 11
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -226,7 +226,7 @@ endpoints:
         name: pg_id
         description: PG사.
         required: true
-        example: velit
+        example: eos
         type: string
         enumValues: []
         custom: []
@@ -234,7 +234,7 @@ endpoints:
         name: name
         description: 이름.
         required: true
-        example: necessitatibus
+        example: enim
         type: string
         enumValues: []
         custom: []
@@ -242,14 +242,14 @@ endpoints:
         name: trx_fee
         description: '거래 수수료.'
         required: true
-        example: ut
+        example: dicta
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      pg_id: velit
-      name: necessitatibus
-      trx_fee: ut
+      pg_id: eos
+      name: enim
+      trx_fee: dicta
     fileParameters: []
     responses: []
     responseFields: []
@@ -281,12 +281,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 10
+        example: 9
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 10
+      id: 9
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

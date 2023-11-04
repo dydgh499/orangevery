@@ -62,7 +62,7 @@ endpoints:
         name: search
         description: 검색어(제목)
         required: false
-        example: laboriosam
+        example: ducimus
         type: string
         enumValues: []
         custom: []
@@ -71,7 +71,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-10-14'
       e_dt: '2023-10-15'
-      search: laboriosam
+      search: ducimus
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -118,7 +118,7 @@ endpoints:
         name: card_num
         description: 카드번호.
         required: true
-        example: et
+        example: corporis
         type: string
         enumValues: []
         custom: []
@@ -126,13 +126,13 @@ endpoints:
         name: note
         description: 비고.
         required: true
-        example: fugiat
+        example: dignissimos
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      card_num: et
-      note: fugiat
+      card_num: corporis
+      note: dignissimos
     fileParameters: []
     responses: []
     responseFields: []
@@ -164,12 +164,12 @@ endpoints:
         name: id
         description: '정기등록카드 PK'
         required: true
-        example: 3
+        example: 16
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 3
+      id: 16
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -215,12 +215,12 @@ endpoints:
         name: id
         description: '정기등록카드 PK'
         required: true
-        example: 8
+        example: 6
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 8
+      id: 6
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -228,7 +228,7 @@ endpoints:
         name: card_num
         description: 카드번호.
         required: true
-        example: voluptas
+        example: mollitia
         type: string
         enumValues: []
         custom: []
@@ -236,13 +236,13 @@ endpoints:
         name: note
         description: 비고.
         required: true
-        example: incidunt
+        example: inventore
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      card_num: voluptas
-      note: incidunt
+      card_num: mollitia
+      note: inventore
     fileParameters: []
     responses: []
     responseFields: []
@@ -274,12 +274,12 @@ endpoints:
         name: id
         description: '정기등록카드 PK'
         required: true
-        example: 15
+        example: 7
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 15
+      id: 7
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

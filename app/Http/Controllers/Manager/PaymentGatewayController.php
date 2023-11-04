@@ -50,8 +50,6 @@ class PaymentGatewayController extends Controller
      * 추가
      *
      * 대리점 이상 가능
-     *
-     * @bodyParam user_pw string 유저 패스워드
      */
     public function store(PayGatewayRequest $request)
     {
@@ -65,7 +63,7 @@ class PaymentGatewayController extends Controller
      *
      * 가맹점 이상 가능
      *
-     * @urlParam id integer required 유저 PK
+     * @urlParam id integer required PG사 id
      */
     public function show(Request $request, $id)
     {
@@ -78,7 +76,7 @@ class PaymentGatewayController extends Controller
      *
      * 가맹점 이상 가능
      *
-     * @urlParam id integer required 유저 PK
+     * @urlParam id integer required PG사 id
      */
     public function update(PayGatewayRequest $request, $id)
     {
@@ -90,7 +88,7 @@ class PaymentGatewayController extends Controller
     /**
      * 단일삭제
      *
-     * @urlParam id integer required 유저 PK
+     * @urlParam id integer required PG사 id
      */
     public function destroy(Request $request, $id)
     {
@@ -122,6 +120,11 @@ class PaymentGatewayController extends Controller
         return $this->response(0, $data);
     }
 
+    /**
+     * 매출전표 PG사 정보 API
+     *
+     * @urlParam id integer required PG사 id
+     */
     public function saleSlip(Request $request, $id)
     {
         $cols = ['id', 'pg_type' ,'company_name', 'business_num', 'rep_name', 'addr'];      

@@ -69,12 +69,12 @@ endpoints:
         name: search
         description: '검색어(유저 ID)'
         required: false
-        example: aut
+        example: et
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
-      search: aut
+      search: et
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -117,12 +117,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 6
+        example: 11
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 6
+      id: 11
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -167,12 +167,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 7
+        example: 5
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 7
+      id: 5
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -338,7 +338,7 @@ endpoints:
         name: search
         description: '검색어(mid, tid)'
         required: false
-        example: qui
+        example: tempora
         type: string
         enumValues: []
         custom: []
@@ -355,7 +355,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-10-14'
       e_dt: '2023-10-15'
-      search: qui
+      search: tempora
       module_type: 3
     bodyParameters: []
     cleanBodyParameters: []
@@ -403,7 +403,7 @@ endpoints:
         name: mcht_id
         description: 가맹점.
         required: true
-        example: deserunt
+        example: et
         type: string
         enumValues: []
         custom: []
@@ -411,7 +411,7 @@ endpoints:
         name: pg_id
         description: PG사.
         required: true
-        example: qui
+        example: harum
         type: string
         enumValues: []
         custom: []
@@ -419,7 +419,7 @@ endpoints:
         name: ps_id
         description: 구간.
         required: true
-        example: rerum
+        example: sapiente
         type: string
         enumValues: []
         custom: []
@@ -427,7 +427,7 @@ endpoints:
         name: settle_fee
         description: '입금 수수료.'
         required: true
-        example: quia
+        example: enim
         type: string
         enumValues: []
         custom: []
@@ -451,7 +451,7 @@ endpoints:
         name: module_type
         description: '결제모듈 타입.'
         required: true
-        example: molestiae
+        example: officiis
         type: string
         enumValues: []
         custom: []
@@ -507,7 +507,7 @@ endpoints:
         name: comm_settle_fee
         description: 통신비.
         required: true
-        example: 896.0933
+        example: 37179.402641
         type: number
         enumValues: []
         custom: []
@@ -547,7 +547,7 @@ endpoints:
         name: abnormal_trans_limit
         description: '이상거래 상한금.'
         required: true
-        example: corporis
+        example: odit
         type: string
         enumValues: []
         custom: []
@@ -555,7 +555,7 @@ endpoints:
         name: pay_dupe_limit
         description: '중복결제 허용회수.'
         required: true
-        example: rem
+        example: necessitatibus
         type: string
         enumValues: []
         custom: []
@@ -563,7 +563,7 @@ endpoints:
         name: pay_dupe_least
         description: '중복결제 하한금.'
         required: true
-        example: aliquid
+        example: quod
         type: string
         enumValues: []
         custom: []
@@ -595,7 +595,7 @@ endpoints:
         name: pay_year_limit
         description: '연 결제 한도.'
         required: true
-        example: quo
+        example: labore
         type: string
         enumValues: []
         custom: []
@@ -603,7 +603,7 @@ endpoints:
         name: pay_month_limit
         description: '월 결제 한도.'
         required: true
-        example: dolor
+        example: saepe
         type: string
         enumValues: []
         custom: []
@@ -611,7 +611,7 @@ endpoints:
         name: pay_day_limit
         description: '일 결제 한도.'
         required: true
-        example: quidem
+        example: ut
         type: string
         enumValues: []
         custom: []
@@ -619,7 +619,7 @@ endpoints:
         name: pay_single_limit
         description: '단건 결제 한도.'
         required: true
-        example: tempora
+        example: provident
         type: string
         enumValues: []
         custom: []
@@ -643,7 +643,7 @@ endpoints:
         name: installment
         description: 할부.
         required: true
-        example: iste
+        example: sequi
         type: string
         enumValues: []
         custom: []
@@ -651,7 +651,7 @@ endpoints:
         name: note
         description: 비고.
         required: true
-        example: quis
+        example: tempore
         type: string
         enumValues: []
         custom: []
@@ -659,7 +659,7 @@ endpoints:
         name: is_old_auth
         description: '비인증/구인증 여부.'
         required: true
-        example: nisi
+        example: saepe
         type: string
         enumValues: []
         custom: []
@@ -667,7 +667,7 @@ endpoints:
         name: use_realtime_deposit
         description: validation.attributes.use_realtime_deposit.
         required: true
-        example: et
+        example: magnam
         type: string
         enumValues: []
         custom: []
@@ -675,30 +675,30 @@ endpoints:
         name: show_pay_view
         description: '결제창 노출여부.'
         required: true
-        example: et
+        example: alias
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      mcht_id: deserunt
-      pg_id: qui
-      ps_id: rerum
-      settle_fee: quia
+      mcht_id: et
+      pg_id: harum
+      ps_id: sapiente
+      settle_fee: enim
       settle_type: veritatis
-      module_type: molestiae
-      comm_settle_fee: 896.0933
-      abnormal_trans_limit: corporis
-      pay_dupe_limit: rem
-      pay_dupe_least: aliquid
-      pay_year_limit: quo
-      pay_month_limit: dolor
-      pay_day_limit: quidem
-      pay_single_limit: tempora
-      installment: iste
-      note: quis
-      is_old_auth: nisi
-      use_realtime_deposit: et
-      show_pay_view: et
+      module_type: officiis
+      comm_settle_fee: 37179.402641
+      abnormal_trans_limit: odit
+      pay_dupe_limit: necessitatibus
+      pay_dupe_least: quod
+      pay_year_limit: labore
+      pay_month_limit: saepe
+      pay_day_limit: ut
+      pay_single_limit: provident
+      installment: sequi
+      note: tempore
+      is_old_auth: saepe
+      use_realtime_deposit: magnam
+      show_pay_view: alias
     fileParameters: []
     responses: []
     responseFields: []
@@ -730,12 +730,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 2
+        example: 5
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 2
+      id: 5
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -781,12 +781,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 16
+        example: 10
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 16
+      id: 10
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -794,7 +794,7 @@ endpoints:
         name: mcht_id
         description: 가맹점.
         required: true
-        example: eos
+        example: incidunt
         type: string
         enumValues: []
         custom: []
@@ -802,7 +802,7 @@ endpoints:
         name: pg_id
         description: PG사.
         required: true
-        example: nobis
+        example: id
         type: string
         enumValues: []
         custom: []
@@ -810,7 +810,7 @@ endpoints:
         name: ps_id
         description: 구간.
         required: true
-        example: sed
+        example: vel
         type: string
         enumValues: []
         custom: []
@@ -818,7 +818,7 @@ endpoints:
         name: settle_fee
         description: '입금 수수료.'
         required: true
-        example: est
+        example: quo
         type: string
         enumValues: []
         custom: []
@@ -826,7 +826,7 @@ endpoints:
         name: settle_type
         description: 정산일.
         required: true
-        example: id
+        example: eligendi
         type: string
         enumValues: []
         custom: []
@@ -842,7 +842,7 @@ endpoints:
         name: module_type
         description: '결제모듈 타입.'
         required: true
-        example: non
+        example: qui
         type: string
         enumValues: []
         custom: []
@@ -898,7 +898,7 @@ endpoints:
         name: comm_settle_fee
         description: 통신비.
         required: true
-        example: 1301864.526597
+        example: 163.3
         type: number
         enumValues: []
         custom: []
@@ -938,7 +938,7 @@ endpoints:
         name: abnormal_trans_limit
         description: '이상거래 상한금.'
         required: true
-        example: nostrum
+        example: rerum
         type: string
         enumValues: []
         custom: []
@@ -946,7 +946,7 @@ endpoints:
         name: pay_dupe_limit
         description: '중복결제 허용회수.'
         required: true
-        example: ratione
+        example: rem
         type: string
         enumValues: []
         custom: []
@@ -954,7 +954,7 @@ endpoints:
         name: pay_dupe_least
         description: '중복결제 하한금.'
         required: true
-        example: ut
+        example: at
         type: string
         enumValues: []
         custom: []
@@ -986,7 +986,7 @@ endpoints:
         name: pay_year_limit
         description: '연 결제 한도.'
         required: true
-        example: odit
+        example: perspiciatis
         type: string
         enumValues: []
         custom: []
@@ -994,7 +994,7 @@ endpoints:
         name: pay_month_limit
         description: '월 결제 한도.'
         required: true
-        example: cupiditate
+        example: minima
         type: string
         enumValues: []
         custom: []
@@ -1002,7 +1002,7 @@ endpoints:
         name: pay_day_limit
         description: '일 결제 한도.'
         required: true
-        example: quasi
+        example: alias
         type: string
         enumValues: []
         custom: []
@@ -1010,7 +1010,7 @@ endpoints:
         name: pay_single_limit
         description: '단건 결제 한도.'
         required: true
-        example: soluta
+        example: dolorem
         type: string
         enumValues: []
         custom: []
@@ -1034,7 +1034,7 @@ endpoints:
         name: installment
         description: 할부.
         required: true
-        example: quisquam
+        example: adipisci
         type: string
         enumValues: []
         custom: []
@@ -1042,7 +1042,7 @@ endpoints:
         name: note
         description: 비고.
         required: true
-        example: quo
+        example: numquam
         type: string
         enumValues: []
         custom: []
@@ -1050,7 +1050,7 @@ endpoints:
         name: is_old_auth
         description: '비인증/구인증 여부.'
         required: true
-        example: sint
+        example: qui
         type: string
         enumValues: []
         custom: []
@@ -1058,7 +1058,7 @@ endpoints:
         name: use_realtime_deposit
         description: validation.attributes.use_realtime_deposit.
         required: true
-        example: ut
+        example: possimus
         type: string
         enumValues: []
         custom: []
@@ -1066,30 +1066,30 @@ endpoints:
         name: show_pay_view
         description: '결제창 노출여부.'
         required: true
-        example: nulla
+        example: sed
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      mcht_id: eos
-      pg_id: nobis
-      ps_id: sed
-      settle_fee: est
-      settle_type: id
-      module_type: non
-      comm_settle_fee: 1301864.526597
-      abnormal_trans_limit: nostrum
-      pay_dupe_limit: ratione
-      pay_dupe_least: ut
-      pay_year_limit: odit
-      pay_month_limit: cupiditate
-      pay_day_limit: quasi
-      pay_single_limit: soluta
-      installment: quisquam
-      note: quo
-      is_old_auth: sint
-      use_realtime_deposit: ut
-      show_pay_view: nulla
+      mcht_id: incidunt
+      pg_id: id
+      ps_id: vel
+      settle_fee: quo
+      settle_type: eligendi
+      module_type: qui
+      comm_settle_fee: 163.3
+      abnormal_trans_limit: rerum
+      pay_dupe_limit: rem
+      pay_dupe_least: at
+      pay_year_limit: perspiciatis
+      pay_month_limit: minima
+      pay_day_limit: alias
+      pay_single_limit: dolorem
+      installment: adipisci
+      note: numquam
+      is_old_auth: qui
+      use_realtime_deposit: possimus
+      show_pay_view: sed
     fileParameters: []
     responses: []
     responseFields: []
@@ -1121,12 +1121,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 14
+        example: 1
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 14
+      id: 1
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

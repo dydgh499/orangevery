@@ -30,7 +30,7 @@ endpoints:
         name: domain
         description: ''
         required: true
-        example: laudantium
+        example: culpa
         type: string
         enumValues: []
         custom: []
@@ -38,7 +38,7 @@ endpoints:
         name: user_name
         description: ''
         required: true
-        example: dignissimos
+        example: expedita
         type: string
         enumValues: []
         custom: []
@@ -46,14 +46,14 @@ endpoints:
         name: user_pw
         description: ''
         required: true
-        example: ut
+        example: vel
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      domain: laudantium
-      user_name: dignissimos
-      user_pw: ut
+      domain: culpa
+      user_name: expedita
+      user_pw: vel
     fileParameters: []
     responses: []
     responseFields: []
@@ -89,12 +89,12 @@ endpoints:
         name: token
         description: ''
         required: true
-        example: perferendis
+        example: laboriosam
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      token: perferendis
+      token: laboriosam
     fileParameters: []
     responses: []
     responseFields: []

@@ -107,7 +107,7 @@ endpoints:
         name: type
         description: 타입.
         required: true
-        example: molestiae
+        example: repellendus
         type: string
         enumValues: []
         custom: []
@@ -115,13 +115,13 @@ endpoints:
         name: name
         description: 이름.
         required: true
-        example: voluptatem
+        example: excepturi
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      type: molestiae
-      name: voluptatem
+      type: repellendus
+      name: excepturi
     fileParameters: []
     responses: []
     responseFields: []
@@ -153,12 +153,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 19
+        example: 13
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 19
+      id: 13
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -204,12 +204,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 19
+        example: 6
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 19
+      id: 6
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -217,7 +217,7 @@ endpoints:
         name: type
         description: 타입.
         required: true
-        example: quia
+        example: praesentium
         type: string
         enumValues: []
         custom: []
@@ -225,13 +225,13 @@ endpoints:
         name: name
         description: 이름.
         required: true
-        example: illo
+        example: eos
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      type: quia
-      name: illo
+      type: praesentium
+      name: eos
     fileParameters: []
     responses: []
     responseFields: []
@@ -263,12 +263,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 13
+        example: 19
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 13
+      id: 19
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

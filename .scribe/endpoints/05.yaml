@@ -38,7 +38,7 @@ endpoints:
         name: user_name
         description: '유저 ID.'
         required: true
-        example: dolore
+        example: soluta
         type: string
         enumValues: []
         custom: []
@@ -46,14 +46,14 @@ endpoints:
         name: user_pw
         description: 패스워드.
         required: true
-        example: enim
+        example: animi
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
       brand_id: 1
-      user_name: dolore
-      user_pw: enim
+      user_name: soluta
+      user_pw: animi
     fileParameters: []
     responses: []
     responseFields: []
@@ -89,7 +89,7 @@ endpoints:
         name: brand_id
         description: ''
         required: true
-        example: quia
+        example: fuga
         type: string
         enumValues: []
         custom: []
@@ -97,7 +97,7 @@ endpoints:
         name: ceo_name
         description: ''
         required: true
-        example: molestias
+        example: distinctio
         type: string
         enumValues: []
         custom: []
@@ -105,7 +105,7 @@ endpoints:
         name: phone_num
         description: ''
         required: true
-        example: ducimus
+        example: rerum
         type: string
         enumValues: []
         custom: []
@@ -113,7 +113,7 @@ endpoints:
         name: business_num
         description: ''
         required: true
-        example: qui
+        example: occaecati
         type: string
         enumValues: []
         custom: []
@@ -121,7 +121,7 @@ endpoints:
         name: user_name
         description: ''
         required: true
-        example: tenetur
+        example: iure
         type: string
         enumValues: []
         custom: []
@@ -129,17 +129,17 @@ endpoints:
         name: user_pw
         description: ''
         required: true
-        example: illum
+        example: dolore
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      brand_id: quia
-      ceo_name: molestias
-      phone_num: ducimus
-      business_num: qui
-      user_name: tenetur
-      user_pw: illum
+      brand_id: fuga
+      ceo_name: distinctio
+      phone_num: rerum
+      business_num: occaecati
+      user_name: iure
+      user_pw: dolore
     fileParameters: []
     responses: []
     responseFields: []

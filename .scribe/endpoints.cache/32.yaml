@@ -62,7 +62,7 @@ endpoints:
         name: search
         description: 검색어(제목)
         required: false
-        example: at
+        example: atque
         type: string
         enumValues: []
         custom: []
@@ -71,7 +71,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-10-14'
       e_dt: '2023-10-15'
-      search: at
+      search: atque
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -118,7 +118,7 @@ endpoints:
         name: mcht_id
         description: 가맹점.
         required: true
-        example: libero
+        example: veniam
         type: string
         enumValues: []
         custom: []
@@ -126,7 +126,7 @@ endpoints:
         name: tid
         description: TID.
         required: true
-        example: et
+        example: sed
         type: string
         enumValues: []
         custom: []
@@ -134,7 +134,7 @@ endpoints:
         name: cust_name
         description: 고객명.
         required: true
-        example: libero
+        example: magnam
         type: string
         enumValues: []
         custom: []
@@ -142,7 +142,7 @@ endpoints:
         name: appr_dt
         description: '승인일. value 값이 유효한 날짜가 아닙니다.'
         required: true
-        example: '2023-11-05T01:36:04'
+        example: '2023-11-05T01:37:14'
         type: string
         enumValues: []
         custom: []
@@ -150,7 +150,7 @@ endpoints:
         name: appr_num
         description: 승인번호.
         required: true
-        example: autem
+        example: et
         type: string
         enumValues: []
         custom: []
@@ -158,7 +158,7 @@ endpoints:
         name: phone_num
         description: 휴대폰번호.
         required: true
-        example: et
+        example: minima
         type: string
         enumValues: []
         custom: []
@@ -182,7 +182,7 @@ endpoints:
         name: issuer
         description: 발급사.
         required: true
-        example: illo
+        example: dolore
         type: string
         enumValues: []
         custom: []
@@ -190,7 +190,7 @@ endpoints:
         name: pg_id
         description: PG사.
         required: true
-        example: perferendis
+        example: in
         type: string
         enumValues: []
         custom: []
@@ -198,7 +198,7 @@ endpoints:
         name: type
         description: 타입.
         required: true
-        example: provident
+        example: dolores
         type: string
         enumValues: []
         custom: []
@@ -206,7 +206,7 @@ endpoints:
         name: entry_path
         description: 유입경로.
         required: true
-        example: enim
+        example: non
         type: string
         enumValues: []
         custom: []
@@ -214,7 +214,7 @@ endpoints:
         name: is_deposit
         description: 입금상태.
         required: true
-        example: quia
+        example: rerum
         type: string
         enumValues: []
         custom: []
@@ -222,7 +222,7 @@ endpoints:
         name: complaint_status
         description: validation.attributes.complaint_status.
         required: true
-        example: deleniti
+        example: mollitia
         type: string
         enumValues: []
         custom: []
@@ -235,18 +235,18 @@ endpoints:
         enumValues: []
         custom: []
     cleanBodyParameters:
-      mcht_id: libero
-      tid: et
-      cust_name: libero
-      appr_dt: '2023-11-05T01:36:04'
-      appr_num: autem
-      phone_num: et
-      issuer: illo
-      pg_id: perferendis
-      type: provident
-      entry_path: enim
-      is_deposit: quia
-      complaint_status: deleniti
+      mcht_id: veniam
+      tid: sed
+      cust_name: magnam
+      appr_dt: '2023-11-05T01:37:14'
+      appr_num: et
+      phone_num: minima
+      issuer: dolore
+      pg_id: in
+      type: dolores
+      entry_path: non
+      is_deposit: rerum
+      complaint_status: mollitia
     fileParameters: []
     responses: []
     responseFields: []
@@ -278,12 +278,12 @@ endpoints:
         name: id
         description: '공지사항 PK'
         required: true
-        example: 10
+        example: 13
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 10
+      id: 13
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -329,12 +329,12 @@ endpoints:
         name: id
         description: '공지사항 PK'
         required: true
-        example: 4
+        example: 11
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 4
+      id: 11
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -342,7 +342,7 @@ endpoints:
         name: mcht_id
         description: 가맹점.
         required: true
-        example: molestiae
+        example: delectus
         type: string
         enumValues: []
         custom: []
@@ -350,7 +350,7 @@ endpoints:
         name: tid
         description: TID.
         required: true
-        example: autem
+        example: consequuntur
         type: string
         enumValues: []
         custom: []
@@ -358,7 +358,7 @@ endpoints:
         name: cust_name
         description: 고객명.
         required: true
-        example: qui
+        example: dolor
         type: string
         enumValues: []
         custom: []
@@ -366,7 +366,7 @@ endpoints:
         name: appr_dt
         description: '승인일. value 값이 유효한 날짜가 아닙니다.'
         required: true
-        example: '2023-11-05T01:36:04'
+        example: '2023-11-05T01:37:14'
         type: string
         enumValues: []
         custom: []
@@ -374,7 +374,7 @@ endpoints:
         name: appr_num
         description: 승인번호.
         required: true
-        example: nesciunt
+        example: molestiae
         type: string
         enumValues: []
         custom: []
@@ -382,7 +382,7 @@ endpoints:
         name: phone_num
         description: 휴대폰번호.
         required: true
-        example: voluptatum
+        example: consequatur
         type: string
         enumValues: []
         custom: []
@@ -406,7 +406,7 @@ endpoints:
         name: issuer
         description: 발급사.
         required: true
-        example: sunt
+        example: ad
         type: string
         enumValues: []
         custom: []
@@ -414,7 +414,7 @@ endpoints:
         name: pg_id
         description: PG사.
         required: true
-        example: provident
+        example: libero
         type: string
         enumValues: []
         custom: []
@@ -422,7 +422,7 @@ endpoints:
         name: type
         description: 타입.
         required: true
-        example: sunt
+        example: minus
         type: string
         enumValues: []
         custom: []
@@ -430,7 +430,7 @@ endpoints:
         name: entry_path
         description: 유입경로.
         required: true
-        example: at
+        example: aut
         type: string
         enumValues: []
         custom: []
@@ -438,7 +438,7 @@ endpoints:
         name: is_deposit
         description: 입금상태.
         required: true
-        example: impedit
+        example: hic
         type: string
         enumValues: []
         custom: []
@@ -446,7 +446,7 @@ endpoints:
         name: complaint_status
         description: validation.attributes.complaint_status.
         required: true
-        example: in
+        example: nulla
         type: string
         enumValues: []
         custom: []
@@ -459,18 +459,18 @@ endpoints:
         enumValues: []
         custom: []
     cleanBodyParameters:
-      mcht_id: molestiae
-      tid: autem
-      cust_name: qui
-      appr_dt: '2023-11-05T01:36:04'
-      appr_num: nesciunt
-      phone_num: voluptatum
-      issuer: sunt
-      pg_id: provident
-      type: sunt
-      entry_path: at
-      is_deposit: impedit
-      complaint_status: in
+      mcht_id: delectus
+      tid: consequuntur
+      cust_name: dolor
+      appr_dt: '2023-11-05T01:37:14'
+      appr_num: molestiae
+      phone_num: consequatur
+      issuer: ad
+      pg_id: libero
+      type: minus
+      entry_path: aut
+      is_deposit: hic
+      complaint_status: nulla
     fileParameters: []
     responses: []
     responseFields: []
@@ -502,12 +502,12 @@ endpoints:
         name: id
         description: '공지사항 PK'
         required: true
-        example: 11
+        example: 13
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 11
+      id: 13
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

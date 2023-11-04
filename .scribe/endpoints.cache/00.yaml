@@ -28,12 +28,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 2
+        example: 14
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 2
+      id: 14
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -123,12 +123,12 @@ endpoints:
         name: search
         description: '검색어(유저 ID)'
         required: false
-        example: occaecati
+        example: voluptatem
         type: string
         enumValues: []
         custom: []
     cleanQueryParameters:
-      search: occaecati
+      search: voluptatem
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -175,7 +175,7 @@ endpoints:
         name: id
         description: ''
         required: true
-        example: 16
+        example: 20
         type: integer
         enumValues: []
         custom: []
@@ -183,13 +183,13 @@ endpoints:
         name: user_pw
         description: ''
         required: true
-        example: ipsa
+        example: officia
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      id: 16
-      user_pw: ipsa
+      id: 20
+      user_pw: officia
     fileParameters: []
     responses: []
     responseFields: []
@@ -287,7 +287,7 @@ endpoints:
         name: search
         description: '검색어(가맹점상호, 휴대폰번호, 대표자명)'
         required: false
-        example: aut
+        example: asperiores
         type: string
         enumValues: []
         custom: []
@@ -296,7 +296,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-10-14'
       e_dt: '2023-10-15'
-      search: aut
+      search: asperiores
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -343,7 +343,7 @@ endpoints:
         name: user_name
         description: '유저 ID.'
         required: true
-        example: similique
+        example: dolor
         type: string
         enumValues: []
         custom: []
@@ -359,7 +359,7 @@ endpoints:
         name: mcht_name
         description: '가맹점 상호.'
         required: true
-        example: omnis
+        example: vero
         type: string
         enumValues: []
         custom: []
@@ -367,7 +367,7 @@ endpoints:
         name: addr
         description: 주소.
         required: true
-        example: laudantium
+        example: aliquam
         type: string
         enumValues: []
         custom: []
@@ -399,7 +399,7 @@ endpoints:
         name: acct_bank_name
         description: 은행명.
         required: true
-        example: perferendis
+        example: maiores
         type: string
         enumValues: []
         custom: []
@@ -447,7 +447,7 @@ endpoints:
         name: use_saleslip_prov
         description: '매출전표 공급자 정보.'
         required: true
-        example: true
+        example: false
         type: boolean
         enumValues: []
         custom: []
@@ -455,7 +455,7 @@ endpoints:
         name: use_saleslip_sell
         description: '매출전표 판매자 정보.'
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         custom: []
@@ -535,20 +535,20 @@ endpoints:
         name: user_pw
         description: '유저 패스워드'
         required: false
-        example: corporis
+        example: consequatur
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      user_name: similique
-      mcht_name: omnis
-      addr: laudantium
-      acct_bank_name: perferendis
+      user_name: dolor
+      mcht_name: vero
+      addr: aliquam
+      acct_bank_name: maiores
       enabled: true
-      use_saleslip_prov: true
-      use_saleslip_sell: false
+      use_saleslip_prov: false
+      use_saleslip_sell: true
       is_show_fee: false
-      user_pw: corporis
+      user_pw: consequatur
     fileParameters:
       passbook_file: null
       contract_file: null
@@ -585,12 +585,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 16
+        example: 6
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 16
+      id: 6
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -636,12 +636,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 17
+        example: 12
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 17
+      id: 12
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -649,7 +649,7 @@ endpoints:
         name: user_name
         description: '유저 ID.'
         required: true
-        example: et
+        example: velit
         type: string
         enumValues: []
         custom: []
@@ -665,7 +665,7 @@ endpoints:
         name: mcht_name
         description: '가맹점 상호.'
         required: true
-        example: autem
+        example: non
         type: string
         enumValues: []
         custom: []
@@ -673,7 +673,7 @@ endpoints:
         name: addr
         description: 주소.
         required: true
-        example: excepturi
+        example: quos
         type: string
         enumValues: []
         custom: []
@@ -705,7 +705,7 @@ endpoints:
         name: acct_bank_name
         description: 은행명.
         required: true
-        example: quia
+        example: laboriosam
         type: string
         enumValues: []
         custom: []
@@ -745,7 +745,7 @@ endpoints:
         name: enabled
         description: validation.attributes.enabled.
         required: true
-        example: true
+        example: false
         type: boolean
         enumValues: []
         custom: []
@@ -753,7 +753,7 @@ endpoints:
         name: use_saleslip_prov
         description: '매출전표 공급자 정보.'
         required: true
-        example: true
+        example: false
         type: boolean
         enumValues: []
         custom: []
@@ -761,7 +761,7 @@ endpoints:
         name: use_saleslip_sell
         description: '매출전표 판매자 정보.'
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         custom: []
@@ -785,7 +785,7 @@ endpoints:
         name: is_show_fee
         description: '가맹점 수수료율 노출여부.'
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         custom: []
@@ -838,14 +838,14 @@ endpoints:
         enumValues: []
         custom: []
     cleanBodyParameters:
-      user_name: et
-      mcht_name: autem
-      addr: excepturi
-      acct_bank_name: quia
-      enabled: true
-      use_saleslip_prov: true
-      use_saleslip_sell: false
-      is_show_fee: false
+      user_name: velit
+      mcht_name: non
+      addr: quos
+      acct_bank_name: laboriosam
+      enabled: false
+      use_saleslip_prov: false
+      use_saleslip_sell: true
+      is_show_fee: true
     fileParameters:
       passbook_file: null
       contract_file: null
@@ -882,12 +882,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 7
+        example: 6
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 7
+      id: 6
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

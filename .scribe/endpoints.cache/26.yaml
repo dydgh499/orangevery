@@ -109,7 +109,7 @@ endpoints:
         name: note
         description: 비고.
         required: true
-        example: ullam
+        example: dolor
         type: string
         enumValues: []
         custom: []
@@ -117,13 +117,13 @@ endpoints:
         name: sales_fee
         description: validation.attributes.sales_fee.
         required: true
-        example: 3095068.9606602
+        example: 64.35774
         type: number
         enumValues: []
         custom: []
     cleanBodyParameters:
-      note: ullam
-      sales_fee: 3095068.9606602
+      note: dolor
+      sales_fee: 64.35774
     fileParameters: []
     responses: []
     responseFields: []
@@ -155,12 +155,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 20
+        example: 12
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 20
+      id: 12
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -206,12 +206,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 2
+        example: 18
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 2
+      id: 18
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -219,7 +219,7 @@ endpoints:
         name: note
         description: 비고.
         required: true
-        example: perspiciatis
+        example: delectus
         type: string
         enumValues: []
         custom: []
@@ -227,13 +227,13 @@ endpoints:
         name: sales_fee
         description: validation.attributes.sales_fee.
         required: true
-        example: 462341741.49265
+        example: 17.8
         type: number
         enumValues: []
         custom: []
     cleanBodyParameters:
-      note: perspiciatis
-      sales_fee: 462341741.49265
+      note: delectus
+      sales_fee: 17.8
     fileParameters: []
     responses: []
     responseFields: []
@@ -265,12 +265,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 9
+        example: 7
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 9
+      id: 7
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

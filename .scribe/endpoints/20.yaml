@@ -107,7 +107,7 @@ endpoints:
         name: id
         description: validation.attributes.id.
         required: true
-        example: 3
+        example: 16
         type: integer
         enumValues: []
         custom: []
@@ -115,7 +115,7 @@ endpoints:
         name: acct_name
         description: 예금주.
         required: true
-        example: similique
+        example: vel
         type: string
         enumValues: []
         custom: []
@@ -123,7 +123,7 @@ endpoints:
         name: acct_num
         description: 계좌번호.
         required: true
-        example: beatae
+        example: voluptatum
         type: string
         enumValues: []
         custom: []
@@ -131,7 +131,7 @@ endpoints:
         name: acct_bank_name
         description: 은행명.
         required: true
-        example: ea
+        example: incidunt
         type: string
         enumValues: []
         custom: []
@@ -139,7 +139,7 @@ endpoints:
         name: acct_bank_code
         description: 은행코드.
         required: true
-        example: adipisci
+        example: voluptatem
         type: string
         enumValues: []
         custom: []
@@ -147,7 +147,7 @@ endpoints:
         name: total_amount
         description: validation.attributes.total_amount.
         required: true
-        example: 10
+        example: 20
         type: integer
         enumValues: []
         custom: []
@@ -155,7 +155,7 @@ endpoints:
         name: cxl_amount
         description: validation.attributes.cxl_amount.
         required: true
-        example: 19
+        example: 13
         type: integer
         enumValues: []
         custom: []
@@ -163,7 +163,7 @@ endpoints:
         name: appr_amount
         description: validation.attributes.appr_amount.
         required: true
-        example: 17
+        example: 6
         type: integer
         enumValues: []
         custom: []
@@ -171,7 +171,7 @@ endpoints:
         name: deduct_amount
         description: validation.attributes.deduct_amount.
         required: true
-        example: 17
+        example: 19
         type: integer
         enumValues: []
         custom: []
@@ -179,7 +179,7 @@ endpoints:
         name: settle_amount
         description: validation.attributes.settle_amount.
         required: true
-        example: 4
+        example: 6
         type: integer
         enumValues: []
         custom: []
@@ -203,22 +203,22 @@ endpoints:
         name: e_dt
         description: '종료일. value 값이 유효한 날짜가 아닙니다.'
         required: true
-        example: '2023-11-05T01:36:04'
+        example: '2023-11-05T01:37:14'
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      id: 3
-      acct_name: similique
-      acct_num: beatae
-      acct_bank_name: ea
-      acct_bank_code: adipisci
-      total_amount: 10
-      cxl_amount: 19
-      appr_amount: 17
-      deduct_amount: 17
-      settle_amount: 4
-      e_dt: '2023-11-05T01:36:04'
+      id: 16
+      acct_name: vel
+      acct_num: voluptatum
+      acct_bank_name: incidunt
+      acct_bank_code: voluptatem
+      total_amount: 20
+      cxl_amount: 13
+      appr_amount: 6
+      deduct_amount: 19
+      settle_amount: 6
+      e_dt: '2023-11-05T01:37:14'
     fileParameters: []
     responses: []
     responseFields: []
@@ -295,7 +295,7 @@ endpoints:
         name: id
         description: validation.attributes.id.
         required: true
-        example: 14
+        example: 11
         type: integer
         enumValues: []
         custom: []
@@ -303,7 +303,7 @@ endpoints:
         name: acct_name
         description: 예금주.
         required: true
-        example: et
+        example: ab
         type: string
         enumValues: []
         custom: []
@@ -311,7 +311,7 @@ endpoints:
         name: acct_num
         description: 계좌번호.
         required: true
-        example: eum
+        example: odit
         type: string
         enumValues: []
         custom: []
@@ -319,7 +319,7 @@ endpoints:
         name: acct_bank_name
         description: 은행명.
         required: true
-        example: tempora
+        example: ut
         type: string
         enumValues: []
         custom: []
@@ -327,7 +327,7 @@ endpoints:
         name: acct_bank_code
         description: 은행코드.
         required: true
-        example: et
+        example: minima
         type: string
         enumValues: []
         custom: []
@@ -335,7 +335,7 @@ endpoints:
         name: total_amount
         description: validation.attributes.total_amount.
         required: true
-        example: 16
+        example: 6
         type: integer
         enumValues: []
         custom: []
@@ -343,7 +343,7 @@ endpoints:
         name: cxl_amount
         description: validation.attributes.cxl_amount.
         required: true
-        example: 5
+        example: 15
         type: integer
         enumValues: []
         custom: []
@@ -351,7 +351,7 @@ endpoints:
         name: appr_amount
         description: validation.attributes.appr_amount.
         required: true
-        example: 7
+        example: 19
         type: integer
         enumValues: []
         custom: []
@@ -359,7 +359,7 @@ endpoints:
         name: deduct_amount
         description: validation.attributes.deduct_amount.
         required: true
-        example: 9
+        example: 12
         type: integer
         enumValues: []
         custom: []
@@ -367,7 +367,7 @@ endpoints:
         name: settle_amount
         description: validation.attributes.settle_amount.
         required: true
-        example: 4
+        example: 3
         type: integer
         enumValues: []
         custom: []
@@ -391,22 +391,22 @@ endpoints:
         name: e_dt
         description: '종료일. value 값이 유효한 날짜가 아닙니다.'
         required: true
-        example: '2023-11-05T01:36:04'
+        example: '2023-11-05T01:37:14'
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      id: 14
-      acct_name: et
-      acct_num: eum
-      acct_bank_name: tempora
-      acct_bank_code: et
-      total_amount: 16
-      cxl_amount: 5
-      appr_amount: 7
-      deduct_amount: 9
-      settle_amount: 4
-      e_dt: '2023-11-05T01:36:04'
+      id: 11
+      acct_name: ab
+      acct_num: odit
+      acct_bank_name: ut
+      acct_bank_code: minima
+      total_amount: 6
+      cxl_amount: 15
+      appr_amount: 19
+      deduct_amount: 12
+      settle_amount: 3
+      e_dt: '2023-11-05T01:37:14'
     fileParameters: []
     responses: []
     responseFields: []
@@ -442,7 +442,7 @@ endpoints:
         name: e_dt
         description: 'value 값이 유효한 날짜가 아닙니다.'
         required: true
-        example: '2023-11-05T01:36:04'
+        example: '2023-11-05T01:37:14'
         type: string
         enumValues: []
         custom: []
@@ -459,7 +459,7 @@ endpoints:
         name: 'datas[].id'
         description: ''
         required: true
-        example: 9
+        example: 19
         type: integer
         enumValues: []
         custom: []
@@ -499,7 +499,7 @@ endpoints:
         name: 'datas[].total_amount'
         description: ''
         required: false
-        example: 2
+        example: 14
         type: integer
         enumValues: []
         custom: []
@@ -507,7 +507,7 @@ endpoints:
         name: 'datas[].cxl_amount'
         description: ''
         required: false
-        example: 15
+        example: 5
         type: integer
         enumValues: []
         custom: []
@@ -515,7 +515,7 @@ endpoints:
         name: 'datas[].appr_amount'
         description: ''
         required: false
-        example: 20
+        example: 11
         type: integer
         enumValues: []
         custom: []
@@ -523,7 +523,7 @@ endpoints:
         name: 'datas[].deduct_amount'
         description: ''
         required: false
-        example: 11
+        example: 14
         type: integer
         enumValues: []
         custom: []
@@ -531,7 +531,7 @@ endpoints:
         name: 'datas[].settle_amount'
         description: ''
         required: false
-        example: 4
+        example: 18
         type: integer
         enumValues: []
         custom: []
@@ -539,7 +539,7 @@ endpoints:
         name: 'datas[].comm_settle_amount'
         description: ''
         required: false
-        example: 2
+        example: 18
         type: integer
         enumValues: []
         custom: []
@@ -547,22 +547,22 @@ endpoints:
         name: 'datas[].under_sales_amount'
         description: ''
         required: false
-        example: 19
+        example: 5
         type: integer
         enumValues: []
         custom: []
     cleanBodyParameters:
-      e_dt: '2023-11-05T01:36:04'
+      e_dt: '2023-11-05T01:37:14'
       datas:
         -
-          id: 9
-          total_amount: 2
-          cxl_amount: 15
-          appr_amount: 20
-          deduct_amount: 11
-          settle_amount: 4
-          comm_settle_amount: 2
-          under_sales_amount: 19
+          id: 19
+          total_amount: 14
+          cxl_amount: 5
+          appr_amount: 11
+          deduct_amount: 14
+          settle_amount: 18
+          comm_settle_amount: 18
+          under_sales_amount: 5
     fileParameters: []
     responses: []
     responseFields: []
@@ -639,7 +639,7 @@ endpoints:
         name: id
         description: validation.attributes.id.
         required: true
-        example: 8
+        example: 4
         type: integer
         enumValues: []
         custom: []
@@ -647,7 +647,7 @@ endpoints:
         name: acct_name
         description: 예금주.
         required: true
-        example: omnis
+        example: optio
         type: string
         enumValues: []
         custom: []
@@ -655,7 +655,7 @@ endpoints:
         name: acct_num
         description: 계좌번호.
         required: true
-        example: cum
+        example: unde
         type: string
         enumValues: []
         custom: []
@@ -663,7 +663,7 @@ endpoints:
         name: acct_bank_name
         description: 은행명.
         required: true
-        example: fuga
+        example: doloremque
         type: string
         enumValues: []
         custom: []
@@ -671,7 +671,7 @@ endpoints:
         name: acct_bank_code
         description: 은행코드.
         required: true
-        example: aliquam
+        example: est
         type: string
         enumValues: []
         custom: []
@@ -679,7 +679,7 @@ endpoints:
         name: total_amount
         description: validation.attributes.total_amount.
         required: true
-        example: 19
+        example: 14
         type: integer
         enumValues: []
         custom: []
@@ -687,7 +687,7 @@ endpoints:
         name: cxl_amount
         description: validation.attributes.cxl_amount.
         required: true
-        example: 6
+        example: 18
         type: integer
         enumValues: []
         custom: []
@@ -695,7 +695,7 @@ endpoints:
         name: appr_amount
         description: validation.attributes.appr_amount.
         required: true
-        example: 11
+        example: 5
         type: integer
         enumValues: []
         custom: []
@@ -703,7 +703,7 @@ endpoints:
         name: deduct_amount
         description: validation.attributes.deduct_amount.
         required: true
-        example: 4
+        example: 20
         type: integer
         enumValues: []
         custom: []
@@ -711,7 +711,7 @@ endpoints:
         name: settle_amount
         description: validation.attributes.settle_amount.
         required: true
-        example: 7
+        example: 3
         type: integer
         enumValues: []
         custom: []
@@ -735,22 +735,22 @@ endpoints:
         name: e_dt
         description: '종료일. value 값이 유효한 날짜가 아닙니다.'
         required: true
-        example: '2023-11-05T01:36:04'
+        example: '2023-11-05T01:37:14'
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      id: 8
-      acct_name: omnis
-      acct_num: cum
-      acct_bank_name: fuga
-      acct_bank_code: aliquam
-      total_amount: 19
-      cxl_amount: 6
-      appr_amount: 11
-      deduct_amount: 4
-      settle_amount: 7
-      e_dt: '2023-11-05T01:36:04'
+      id: 4
+      acct_name: optio
+      acct_num: unde
+      acct_bank_name: doloremque
+      acct_bank_code: est
+      total_amount: 14
+      cxl_amount: 18
+      appr_amount: 5
+      deduct_amount: 20
+      settle_amount: 3
+      e_dt: '2023-11-05T01:37:14'
     fileParameters: []
     responses: []
     responseFields: []
@@ -786,7 +786,7 @@ endpoints:
         name: trx_id
         description: ''
         required: true
-        example: molestias
+        example: dolorem
         type: string
         enumValues: []
         custom: []
@@ -794,7 +794,7 @@ endpoints:
         name: mid
         description: ''
         required: true
-        example: perferendis
+        example: voluptatem
         type: string
         enumValues: []
         custom: []
@@ -802,14 +802,14 @@ endpoints:
         name: tid
         description: ''
         required: true
-        example: voluptate
+        example: quia
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      trx_id: molestias
-      mid: perferendis
-      tid: voluptate
+      trx_id: dolorem
+      mid: voluptatem
+      tid: quia
     fileParameters: []
     responses: []
     responseFields: []

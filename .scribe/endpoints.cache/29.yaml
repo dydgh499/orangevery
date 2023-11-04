@@ -105,12 +105,12 @@ endpoints:
         name: trans_id
         description: 'The ID of the trans.'
         required: true
-        example: nulla
+        example: molestiae
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      trans_id: nulla
+      trans_id: molestiae
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -155,12 +155,12 @@ endpoints:
         name: trans_id
         description: 'The ID of the trans.'
         required: true
-        example: non
+        example: rerum
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      trans_id: non
+      trans_id: rerum
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

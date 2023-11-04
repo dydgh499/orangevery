@@ -30,7 +30,7 @@ endpoints:
         name: phone_num
         description: ''
         required: true
-        example: rerum
+        example: voluptatem
         type: string
         enumValues: []
         custom: []
@@ -38,13 +38,13 @@ endpoints:
         name: brand_id
         description: ''
         required: true
-        example: necessitatibus
+        example: maiores
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      phone_num: rerum
-      brand_id: necessitatibus
+      phone_num: voluptatem
+      brand_id: maiores
     fileParameters: []
     responses: []
     responseFields: []

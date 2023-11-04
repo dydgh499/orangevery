@@ -30,7 +30,7 @@ endpoints:
         name: id
         description: ''
         required: true
-        example: 3
+        example: 4
         type: integer
         enumValues: []
         custom: []
@@ -38,13 +38,13 @@ endpoints:
         name: user_pw
         description: ''
         required: true
-        example: voluptatem
+        example: maiores
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      id: 3
-      user_pw: voluptatem
+      id: 4
+      user_pw: maiores
     fileParameters: []
     responses: []
     responseFields: []
@@ -157,7 +157,7 @@ endpoints:
         name: user_name
         description: '유저 ID.'
         required: true
-        example: unde
+        example: cumque
         type: string
         enumValues: []
         custom: []
@@ -165,7 +165,7 @@ endpoints:
         name: nick_name
         description: 유저명(별칭).
         required: true
-        example: aliquam
+        example: velit
         type: string
         enumValues: []
         custom: []
@@ -173,7 +173,7 @@ endpoints:
         name: phone_num
         description: 휴대폰번호.
         required: true
-        example: recusandae
+        example: dolorem
         type: string
         enumValues: []
         custom: []
@@ -197,16 +197,16 @@ endpoints:
         name: user_pw
         description: ''
         required: true
-        example: saepe
+        example: quas
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      user_name: unde
-      nick_name: aliquam
-      phone_num: recusandae
+      user_name: cumque
+      nick_name: velit
+      phone_num: dolorem
       level: non
-      user_pw: saepe
+      user_pw: quas
     fileParameters:
       profile_file: null
     responses: []
@@ -239,12 +239,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 18
+        example: 19
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 18
+      id: 19
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -290,12 +290,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 6
+        example: 19
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 6
+      id: 19
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -303,7 +303,7 @@ endpoints:
         name: user_name
         description: '유저 ID.'
         required: true
-        example: ut
+        example: voluptatem
         type: string
         enumValues: []
         custom: []
@@ -311,7 +311,7 @@ endpoints:
         name: nick_name
         description: 유저명(별칭).
         required: true
-        example: sint
+        example: autem
         type: string
         enumValues: []
         custom: []
@@ -319,7 +319,7 @@ endpoints:
         name: phone_num
         description: 휴대폰번호.
         required: true
-        example: iusto
+        example: laudantium
         type: string
         enumValues: []
         custom: []
@@ -327,7 +327,7 @@ endpoints:
         name: level
         description: 유저등급.
         required: true
-        example: quas
+        example: optio
         type: string
         enumValues: []
         custom: []
@@ -340,10 +340,10 @@ endpoints:
         enumValues: []
         custom: []
     cleanBodyParameters:
-      user_name: ut
-      nick_name: sint
-      phone_num: iusto
-      level: quas
+      user_name: voluptatem
+      nick_name: autem
+      phone_num: laudantium
+      level: optio
     fileParameters:
       profile_file: null
     responses: []
@@ -376,12 +376,12 @@ endpoints:
         name: id
         description: '유저 PK'
         required: true
-        example: 5
+        example: 10
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 5
+      id: 10
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

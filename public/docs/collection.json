@@ -10,7 +10,7 @@
     ],
     "info": {
         "name": "redvery",
-        "_postman_id": "5f2ea72d-046d-4d51-a7e3-b70db7e30ad2",
+        "_postman_id": "c96117fa-58bb-4b43-b8db-edab9149afbc",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
     },
@@ -41,7 +41,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"brand_id\":1,\"user_name\":\"dolore\",\"user_pw\":\"enim\"}"
+                            "raw": "{\"brand_id\":1,\"user_name\":\"soluta\",\"user_pw\":\"animi\"}"
                         },
                         "description": "",
                         "auth": {
@@ -72,7 +72,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"brand_id\":\"quia\",\"ceo_name\":\"molestias\",\"phone_num\":\"ducimus\",\"business_num\":\"qui\",\"user_name\":\"tenetur\",\"user_pw\":\"illum\"}"
+                            "raw": "{\"brand_id\":\"fuga\",\"ceo_name\":\"distinctio\",\"phone_num\":\"rerum\",\"business_num\":\"occaecati\",\"user_name\":\"iure\",\"user_pw\":\"dolore\"}"
                         },
                         "description": "",
                         "auth": {
@@ -165,7 +165,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"domain\":\"laudantium\",\"user_name\":\"dignissimos\",\"user_pw\":\"ut\"}"
+                            "raw": "{\"domain\":\"culpa\",\"user_name\":\"expedita\",\"user_pw\":\"vel\"}"
                         },
                         "description": "",
                         "auth": {
@@ -196,7 +196,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"token\":\"perferendis\"}"
+                            "raw": "{\"token\":\"laboriosam\"}"
                         },
                         "description": "",
                         "auth": {
@@ -244,12 +244,12 @@
                                 },
                                 {
                                     "key": "search",
-                                    "value": "delectus",
+                                    "value": "cupiditate",
                                     "description": "\uac80\uc0c9\uc5b4(\ube0c\ub79c\ub4dc \uba85)",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/v1\/manager\/services\/brands?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=delectus"
+                            "raw": "{{baseUrl}}\/api\/v1\/manager\/services\/brands?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=cupiditate"
                         },
                         "method": "GET",
                         "header": [
@@ -315,79 +315,79 @@
                             "formdata": [
                                 {
                                     "key": "name",
-                                    "value": "laboriosam",
+                                    "value": "fuga",
                                     "type": "text",
                                     "description": "\uc774\ub984(\ube0c\ub79c\ub4dc\uba85)."
                                 },
                                 {
                                     "key": "dns",
-                                    "value": "sunt",
+                                    "value": "sed",
                                     "type": "text",
                                     "description": "DNS."
                                 },
                                 {
                                     "key": "ceo_name",
-                                    "value": "eos",
+                                    "value": "doloribus",
                                     "type": "text",
                                     "description": "\ub300\ud45c\uc790\uba85."
                                 },
                                 {
                                     "key": "addr",
-                                    "value": "delectus",
+                                    "value": "dignissimos",
                                     "type": "text",
                                     "description": "\uc8fc\uc18c."
                                 },
                                 {
                                     "key": "phone_num",
-                                    "value": "at",
+                                    "value": "perspiciatis",
                                     "type": "text",
                                     "description": "\ud734\ub300\ud3f0\ubc88\ud638."
                                 },
                                 {
                                     "key": "company_name",
-                                    "value": "eaque",
+                                    "value": "omnis",
                                     "type": "text",
                                     "description": "\ubc95\uc778 \uc0c1\ud638."
                                 },
                                 {
                                     "key": "business_num",
-                                    "value": "at",
+                                    "value": "natus",
                                     "type": "text",
                                     "description": "\uc0ac\uc5c5\uc790\ub4f1\ub85d\ubc88\ud638."
                                 },
                                 {
                                     "key": "deposit_day",
-                                    "value": "omnis",
+                                    "value": "ut",
                                     "type": "text",
                                     "description": "\uc785\uae08\uc77c."
                                 },
                                 {
                                     "key": "deposit_amount",
-                                    "value": "dolorem",
+                                    "value": "beatae",
                                     "type": "text",
                                     "description": "\uc785\uae08\uc561."
                                 },
                                 {
                                     "key": "extra_deposit_amount",
-                                    "value": 20207940.7465977,
+                                    "value": 731214,
                                     "type": "text",
                                     "description": "validation.attributes.extra_deposit_amount."
                                 },
                                 {
                                     "key": "dev_fee",
-                                    "value": 38999.529,
+                                    "value": 495570.13,
                                     "type": "text",
                                     "description": "\uac1c\ubc1c\uc0ac \uc218\uc218\ub8cc."
                                 },
                                 {
                                     "key": "dev_settle_type",
-                                    "value": 167815813.4340802,
+                                    "value": 4.11,
                                     "type": "text",
                                     "description": "validation.attributes.dev_settle_type."
                                 },
                                 {
                                     "key": "pv_options",
-                                    "value": "repellat",
+                                    "value": "nulla",
                                     "type": "text",
                                     "description": ""
                                 },
@@ -452,7 +452,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "6",
+                                    "value": "20",
                                     "description": "\ube0c\ub79c\ub4dc PK"
                                 }
                             ]
@@ -508,7 +508,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "5",
+                                    "value": "13",
                                     "description": "\ube0c\ub79c\ub4dc PK"
                                 }
                             ]
@@ -529,79 +529,79 @@
                             "formdata": [
                                 {
                                     "key": "name",
-                                    "value": "perferendis",
+                                    "value": "enim",
                                     "type": "text",
                                     "description": "\uc774\ub984(\ube0c\ub79c\ub4dc\uba85)."
                                 },
                                 {
                                     "key": "dns",
-                                    "value": "in",
+                                    "value": "dolor",
                                     "type": "text",
                                     "description": "DNS."
                                 },
                                 {
                                     "key": "ceo_name",
-                                    "value": "molestiae",
+                                    "value": "inventore",
                                     "type": "text",
                                     "description": "\ub300\ud45c\uc790\uba85."
                                 },
                                 {
                                     "key": "addr",
-                                    "value": "voluptates",
+                                    "value": "et",
                                     "type": "text",
                                     "description": "\uc8fc\uc18c."
                                 },
                                 {
                                     "key": "phone_num",
-                                    "value": "assumenda",
+                                    "value": "repudiandae",
                                     "type": "text",
                                     "description": "\ud734\ub300\ud3f0\ubc88\ud638."
                                 },
                                 {
                                     "key": "company_name",
-                                    "value": "natus",
+                                    "value": "alias",
                                     "type": "text",
                                     "description": "\ubc95\uc778 \uc0c1\ud638."
                                 },
                                 {
                                     "key": "business_num",
-                                    "value": "sapiente",
+                                    "value": "et",
                                     "type": "text",
                                     "description": "\uc0ac\uc5c5\uc790\ub4f1\ub85d\ubc88\ud638."
                                 },
                                 {
                                     "key": "deposit_day",
-                                    "value": "ut",
+                                    "value": "et",
                                     "type": "text",
                                     "description": "\uc785\uae08\uc77c."
                                 },
                                 {
                                     "key": "deposit_amount",
-                                    "value": "architecto",
+                                    "value": "expedita",
                                     "type": "text",
                                     "description": "\uc785\uae08\uc561."
                                 },
                                 {
                                     "key": "extra_deposit_amount",
-                                    "value": 3419047.8587466,
+                                    "value": 61040.451,
                                     "type": "text",
                                     "description": "validation.attributes.extra_deposit_amount."
                                 },
                                 {
                                     "key": "dev_fee",
-                                    "value": 3414.72283947,
+                                    "value": 18.9,
                                     "type": "text",
                                     "description": "\uac1c\ubc1c\uc0ac \uc218\uc218\ub8cc."
                                 },
                                 {
                                     "key": "dev_settle_type",
-                                    "value": 19,
+                                    "value": 7981,
                                     "type": "text",
                                     "description": "validation.attributes.dev_settle_type."
                                 },
                                 {
                                     "key": "pv_options",
-                                    "value": "ut",
+                                    "value": "aspernatur",
                                     "type": "text",
                                     "description": ""
                                 },
@@ -671,7 +671,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "9",
+                                    "value": "3",
                                     "description": "\ube0c\ub79c\ub4dc PK"
                                 }
                             ]
@@ -796,7 +796,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"type\":\"molestiae\",\"name\":\"voluptatem\"}"
+                            "raw": "{\"type\":\"repellendus\",\"name\":\"excepturi\"}"
                         },
                         "description": "\ub300\ub9ac\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -817,7 +817,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "19",
+                                    "value": "13",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -873,7 +873,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "19",
+                                    "value": "6",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -891,7 +891,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"type\":\"quia\",\"name\":\"illo\"}"
+                            "raw": "{\"type\":\"praesentium\",\"name\":\"eos\"}"
                         },
                         "description": "\uac00\ub9f9\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -912,7 +912,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "13",
+                                    "value": "19",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -975,12 +975,12 @@
                                 },
                                 {
                                     "key": "search",
-                                    "value": "at",
+                                    "value": "atque",
                                     "description": "\uac80\uc0c9\uc5b4(\uc81c\ubaa9)",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/v1\/manager\/complaints?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=at"
+                            "raw": "{{baseUrl}}\/api\/v1\/manager\/complaints?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=atque"
                         },
                         "method": "GET",
                         "header": [
@@ -1043,7 +1043,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"mcht_id\":\"libero\",\"tid\":\"et\",\"cust_name\":\"libero\",\"appr_dt\":\"2023-11-05T01:36:04\",\"appr_num\":\"autem\",\"phone_num\":\"et\",\"issuer\":\"illo\",\"pg_id\":\"perferendis\",\"type\":\"provident\",\"entry_path\":\"enim\",\"is_deposit\":\"quia\",\"complaint_status\":\"deleniti\"}"
+                            "raw": "{\"mcht_id\":\"veniam\",\"tid\":\"sed\",\"cust_name\":\"magnam\",\"appr_dt\":\"2023-11-05T01:37:14\",\"appr_num\":\"et\",\"phone_num\":\"minima\",\"issuer\":\"dolore\",\"pg_id\":\"in\",\"type\":\"dolores\",\"entry_path\":\"non\",\"is_deposit\":\"rerum\",\"complaint_status\":\"mollitia\"}"
                         },
                         "description": "\ub9c8\uc2a4\ud130 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -1064,7 +1064,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "10",
+                                    "value": "13",
                                     "description": "\uacf5\uc9c0\uc0ac\ud56d PK"
                                 }
                             ]
@@ -1120,7 +1120,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "4",
+                                    "value": "11",
                                     "description": "\uacf5\uc9c0\uc0ac\ud56d PK"
                                 }
                             ]
@@ -1138,7 +1138,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"mcht_id\":\"molestiae\",\"tid\":\"autem\",\"cust_name\":\"qui\",\"appr_dt\":\"2023-11-05T01:36:04\",\"appr_num\":\"nesciunt\",\"phone_num\":\"voluptatum\",\"issuer\":\"sunt\",\"pg_id\":\"provident\",\"type\":\"sunt\",\"entry_path\":\"at\",\"is_deposit\":\"impedit\",\"complaint_status\":\"in\"}"
+                            "raw": "{\"mcht_id\":\"delectus\",\"tid\":\"consequuntur\",\"cust_name\":\"dolor\",\"appr_dt\":\"2023-11-05T01:37:14\",\"appr_num\":\"molestiae\",\"phone_num\":\"consequatur\",\"issuer\":\"ad\",\"pg_id\":\"libero\",\"type\":\"minus\",\"entry_path\":\"aut\",\"is_deposit\":\"hic\",\"complaint_status\":\"nulla\"}"
                         },
                         "description": "\ub9c8\uc2a4\ud130 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -1159,7 +1159,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "11",
+                                    "value": "13",
                                     "description": "\uacf5\uc9c0\uc0ac\ud56d PK"
                                 }
                             ]
@@ -1274,7 +1274,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "11",
+                                    "value": "12",
                                     "description": "\uc774\uc0c1\uac70\ub798 PK"
                                 }
                             ]
@@ -1310,7 +1310,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "et",
+                                    "value": "eum",
                                     "description": "The ID of the danger."
                                 }
                             ]
@@ -1328,7 +1328,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"checked\":\"veritatis\"}"
+                            "raw": "{\"checked\":\"voluptatem\"}"
                         },
                         "description": "",
                         "auth": {
@@ -1905,7 +1905,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "at",
+                                    "value": "dolorem",
                                     "description": "The ID of the fee change history."
                                 }
                             ]
@@ -1941,13 +1941,13 @@
                                 {
                                     "id": "user",
                                     "key": "user",
-                                    "value": "id",
+                                    "value": "occaecati",
                                     "description": ""
                                 },
                                 {
                                     "id": "type",
                                     "key": "type",
-                                    "value": "aut",
+                                    "value": "nesciunt",
                                     "description": ""
                                 }
                             ]
@@ -2056,7 +2056,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "est",
+                                    "value": "quidem",
                                     "description": "The ID of the fee change history."
                                 }
                             ]
@@ -2092,13 +2092,13 @@
                                 {
                                     "id": "user",
                                     "key": "user",
-                                    "value": "rerum",
+                                    "value": "consectetur",
                                     "description": ""
                                 },
                                 {
                                     "id": "type",
                                     "key": "type",
-                                    "value": "laboriosam",
+                                    "value": "ut",
                                     "description": ""
                                 }
                             ]
@@ -2223,7 +2223,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"finance_company_num\":\"aut\",\"fin_type\":\"vero\",\"dev_fee\":2742436.0581949,\"min_balance_limit\":\"modi\",\"corp_name\":\"eaque\",\"nick_name\":\"rerum\"}"
+                            "raw": "{\"finance_company_num\":\"adipisci\",\"fin_type\":\"eum\",\"dev_fee\":150.1,\"min_balance_limit\":\"quia\",\"corp_name\":\"eius\",\"nick_name\":\"laudantium\"}"
                         },
                         "description": "\ubcf8\uc0ac \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -2244,7 +2244,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "5",
+                                    "value": "11",
                                     "description": "\uae08\uc735 VAN PK"
                                 }
                             ]
@@ -2300,7 +2300,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "17",
+                                    "value": "15",
                                     "description": "\uae08\uc735 VAN PK"
                                 }
                             ]
@@ -2318,7 +2318,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"finance_company_num\":\"sint\",\"fin_type\":\"nisi\",\"dev_fee\":173769.927,\"min_balance_limit\":\"est\",\"corp_name\":\"voluptatum\",\"nick_name\":\"harum\"}"
+                            "raw": "{\"finance_company_num\":\"est\",\"fin_type\":\"fuga\",\"dev_fee\":19.007165443,\"min_balance_limit\":\"sit\",\"corp_name\":\"omnis\",\"nick_name\":\"excepturi\"}"
                         },
                         "description": "\ubcf8\uc0ac \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -2339,7 +2339,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "16",
+                                    "value": "2",
                                     "description": "\uae08\uc735VAN PK"
                                 }
                             ]
@@ -2439,7 +2439,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"acct_bank_name\":\"deleniti\",\"acct_bank_code\":\"rerum\",\"acct_num\":\"qui\",\"acct_name\":\"sunt\"}"
+                            "raw": "{\"acct_bank_name\":\"eius\",\"acct_bank_code\":\"est\",\"acct_num\":\"reiciendis\",\"acct_name\":\"voluptatem\"}"
                         },
                         "description": "\ub9c8\uc2a4\ud130 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -2460,7 +2460,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "7",
+                                    "value": "14",
                                     "description": "\uc815\uae30\ub4f1\ub85d\uce74\ub4dc PK"
                                 }
                             ]
@@ -2516,7 +2516,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "4",
+                                    "value": "11",
                                     "description": "\uc815\uae30\ub4f1\ub85d\uce74\ub4dc PK"
                                 }
                             ]
@@ -2534,7 +2534,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"acct_bank_name\":\"placeat\",\"acct_bank_code\":\"provident\",\"acct_num\":\"perferendis\",\"acct_name\":\"sequi\"}"
+                            "raw": "{\"acct_bank_name\":\"nostrum\",\"acct_bank_code\":\"et\",\"acct_num\":\"velit\",\"acct_name\":\"id\"}"
                         },
                         "description": "\ub9c8\uc2a4\ud130 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -2555,7 +2555,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "6",
+                                    "value": "13",
                                     "description": "\uc815\uae30\ub4f1\ub85d\uce74\ub4dc PK"
                                 }
                             ]
@@ -2680,7 +2680,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"id\":3,\"acct_name\":\"similique\",\"acct_num\":\"beatae\",\"acct_bank_name\":\"ea\",\"acct_bank_code\":\"adipisci\",\"total_amount\":10,\"cxl_amount\":19,\"appr_amount\":17,\"deduct_amount\":17,\"settle_amount\":4,\"e_dt\":\"2023-11-05T01:36:04\"}"
+                            "raw": "{\"id\":16,\"acct_name\":\"vel\",\"acct_num\":\"voluptatum\",\"acct_bank_name\":\"incidunt\",\"acct_bank_code\":\"voluptatem\",\"total_amount\":20,\"cxl_amount\":13,\"appr_amount\":6,\"deduct_amount\":19,\"settle_amount\":6,\"e_dt\":\"2023-11-05T01:37:14\"}"
                         },
                         "description": "",
                         "auth": {
@@ -2747,7 +2747,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"id\":14,\"acct_name\":\"et\",\"acct_num\":\"eum\",\"acct_bank_name\":\"tempora\",\"acct_bank_code\":\"et\",\"total_amount\":16,\"cxl_amount\":5,\"appr_amount\":7,\"deduct_amount\":9,\"settle_amount\":4,\"e_dt\":\"2023-11-05T01:36:04\"}"
+                            "raw": "{\"id\":11,\"acct_name\":\"ab\",\"acct_num\":\"odit\",\"acct_bank_name\":\"ut\",\"acct_bank_code\":\"minima\",\"total_amount\":6,\"cxl_amount\":15,\"appr_amount\":19,\"deduct_amount\":12,\"settle_amount\":3,\"e_dt\":\"2023-11-05T01:37:14\"}"
                         },
                         "description": "",
                         "auth": {
@@ -2778,7 +2778,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"e_dt\":\"2023-11-05T01:36:04\",\"datas\":[{\"id\":9,\"total_amount\":2,\"cxl_amount\":15,\"appr_amount\":20,\"deduct_amount\":11,\"settle_amount\":4,\"comm_settle_amount\":2,\"under_sales_amount\":19}]}"
+                            "raw": "{\"e_dt\":\"2023-11-05T01:37:14\",\"datas\":[{\"id\":19,\"total_amount\":14,\"cxl_amount\":5,\"appr_amount\":11,\"deduct_amount\":14,\"settle_amount\":18,\"comm_settle_amount\":18,\"under_sales_amount\":5}]}"
                         },
                         "description": "",
                         "auth": {
@@ -2845,7 +2845,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"id\":8,\"acct_name\":\"omnis\",\"acct_num\":\"cum\",\"acct_bank_name\":\"fuga\",\"acct_bank_code\":\"aliquam\",\"total_amount\":19,\"cxl_amount\":6,\"appr_amount\":11,\"deduct_amount\":4,\"settle_amount\":7,\"e_dt\":\"2023-11-05T01:36:04\"}"
+                            "raw": "{\"id\":4,\"acct_name\":\"optio\",\"acct_num\":\"unde\",\"acct_bank_name\":\"doloremque\",\"acct_bank_code\":\"est\",\"total_amount\":14,\"cxl_amount\":18,\"appr_amount\":5,\"deduct_amount\":20,\"settle_amount\":3,\"e_dt\":\"2023-11-05T01:37:14\"}"
                         },
                         "description": "",
                         "auth": {
@@ -2876,7 +2876,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"trx_id\":\"molestias\",\"mid\":\"perferendis\",\"tid\":\"voluptate\"}"
+                            "raw": "{\"trx_id\":\"dolorem\",\"mid\":\"voluptatem\",\"tid\":\"quia\"}"
                         },
                         "description": "",
                         "auth": {
@@ -2903,7 +2903,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "2",
+                                    "value": "14",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -3012,12 +3012,12 @@
                             "query": [
                                 {
                                     "key": "search",
-                                    "value": "occaecati",
+                                    "value": "voluptatem",
                                     "description": "\uac80\uc0c9\uc5b4(\uc720\uc800 ID)",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/v1\/manager\/merchandises\/all?search=occaecati"
+                            "raw": "{{baseUrl}}\/api\/v1\/manager\/merchandises\/all?search=voluptatem"
                         },
                         "method": "GET",
                         "header": [
@@ -3080,7 +3080,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"id\":16,\"user_pw\":\"ipsa\"}"
+                            "raw": "{\"id\":20,\"user_pw\":\"officia\"}"
                         },
                         "description": "\uac00\ub9f9\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -3150,12 +3150,12 @@
                                 },
                                 {
                                     "key": "search",
-                                    "value": "aut",
+                                    "value": "asperiores",
                                     "description": "\uac80\uc0c9\uc5b4(\uac00\ub9f9\uc810\uc0c1\ud638, \ud734\ub300\ud3f0\ubc88\ud638, \ub300\ud45c\uc790\uba85)",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/v1\/manager\/merchandises?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=aut"
+                            "raw": "{{baseUrl}}\/api\/v1\/manager\/merchandises?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=asperiores"
                         },
                         "method": "GET",
                         "header": [
@@ -3221,25 +3221,25 @@
                             "formdata": [
                                 {
                                     "key": "user_name",
-                                    "value": "similique",
+                                    "value": "dolor",
                                     "type": "text",
                                     "description": "\uc720\uc800 ID."
                                 },
                                 {
                                     "key": "mcht_name",
-                                    "value": "omnis",
+                                    "value": "vero",
                                     "type": "text",
                                     "description": "\uac00\ub9f9\uc810 \uc0c1\ud638."
                                 },
                                 {
                                     "key": "addr",
-                                    "value": "laudantium",
+                                    "value": "aliquam",
                                     "type": "text",
                                     "description": "\uc8fc\uc18c."
                                 },
                                 {
                                     "key": "acct_bank_name",
-                                    "value": "perferendis",
+                                    "value": "maiores",
                                     "type": "text",
                                     "description": "\uc740\ud589\uba85."
                                 },
@@ -3251,13 +3251,13 @@
                                 },
                                 {
                                     "key": "use_saleslip_prov",
-                                    "value": true,
+                                    "value": false,
                                     "type": "text",
                                     "description": "\ub9e4\ucd9c\uc804\ud45c \uacf5\uae09\uc790 \uc815\ubcf4."
                                 },
                                 {
                                     "key": "use_saleslip_sell",
-                                    "value": false,
+                                    "value": true,
                                     "type": "text",
                                     "description": "\ub9e4\ucd9c\uc804\ud45c \ud310\ub9e4\uc790 \uc815\ubcf4."
                                 },
@@ -3269,7 +3269,7 @@
                                 },
                                 {
                                     "key": "user_pw",
-                                    "value": "corporis",
+                                    "value": "consequatur",
                                     "type": "text",
                                     "description": "\uc720\uc800 \ud328\uc2a4\uc6cc\ub4dc"
                                 },
@@ -3319,7 +3319,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "16",
+                                    "value": "6",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -3375,7 +3375,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "17",
+                                    "value": "12",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -3396,49 +3396,49 @@
                             "formdata": [
                                 {
                                     "key": "user_name",
-                                    "value": "et",
+                                    "value": "velit",
                                     "type": "text",
                                     "description": "\uc720\uc800 ID."
                                 },
                                 {
                                     "key": "mcht_name",
-                                    "value": "autem",
+                                    "value": "non",
                                     "type": "text",
                                     "description": "\uac00\ub9f9\uc810 \uc0c1\ud638."
                                 },
                                 {
                                     "key": "addr",
-                                    "value": "excepturi",
+                                    "value": "quos",
                                     "type": "text",
                                     "description": "\uc8fc\uc18c."
                                 },
                                 {
                                     "key": "acct_bank_name",
-                                    "value": "quia",
+                                    "value": "laboriosam",
                                     "type": "text",
                                     "description": "\uc740\ud589\uba85."
                                 },
                                 {
                                     "key": "enabled",
-                                    "value": true,
+                                    "value": false,
                                     "type": "text",
                                     "description": "validation.attributes.enabled."
                                 },
                                 {
                                     "key": "use_saleslip_prov",
-                                    "value": true,
+                                    "value": false,
                                     "type": "text",
                                     "description": "\ub9e4\ucd9c\uc804\ud45c \uacf5\uae09\uc790 \uc815\ubcf4."
                                 },
                                 {
                                     "key": "use_saleslip_sell",
-                                    "value": false,
+                                    "value": true,
                                     "type": "text",
                                     "description": "\ub9e4\ucd9c\uc804\ud45c \ud310\ub9e4\uc790 \uc815\ubcf4."
                                 },
                                 {
                                     "key": "is_show_fee",
-                                    "value": false,
+                                    "value": true,
                                     "type": "text",
                                     "description": "\uac00\ub9f9\uc810 \uc218\uc218\ub8cc\uc728 \ub178\ucd9c\uc5ec\ubd80."
                                 },
@@ -3493,7 +3493,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "7",
+                                    "value": "6",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -3545,7 +3545,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"phone_num\":\"rerum\",\"brand_id\":\"necessitatibus\"}"
+                            "raw": "{\"phone_num\":\"voluptatem\",\"brand_id\":\"maiores\"}"
                         },
                         "description": "",
                         "auth": {
@@ -3704,7 +3704,7 @@
                                 {
                                     "id": "trans_id",
                                     "key": "trans_id",
-                                    "value": "nulla",
+                                    "value": "molestiae",
                                     "description": "The ID of the trans."
                                 }
                             ]
@@ -3760,7 +3760,7 @@
                                 {
                                     "id": "trans_id",
                                     "key": "trans_id",
-                                    "value": "non",
+                                    "value": "rerum",
                                     "description": "The ID of the trans."
                                 }
                             ]
@@ -3913,7 +3913,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"mcht_id\":\"exercitationem\",\"send_url\":\"et\",\"noti_status\":\"sed\"}"
+                            "raw": "{\"mcht_id\":\"enim\",\"send_url\":\"totam\",\"noti_status\":\"suscipit\"}"
                         },
                         "description": "\ub300\ub9ac\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -3934,7 +3934,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "5",
+                                    "value": "16",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -4008,7 +4008,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"mcht_id\":\"voluptatum\",\"send_url\":\"ipsum\",\"noti_status\":\"a\"}"
+                            "raw": "{\"mcht_id\":\"omnis\",\"send_url\":\"nostrum\",\"noti_status\":\"inventore\"}"
                         },
                         "description": "\uac00\ub9f9\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -4029,7 +4029,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "1",
+                                    "value": "16",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -4154,7 +4154,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"user_pw\":\"provident\"}"
+                            "raw": "{\"user_pw\":\"et\"}"
                         },
                         "description": "\uc6b4\uc601\uc790 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -4175,7 +4175,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "2",
+                                    "value": "18",
                                     "description": "\uc601\uc5c5\uc790 \uc774\ub825 PK"
                                 }
                             ]
@@ -4231,7 +4231,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "illo",
+                                    "value": "delectus",
                                     "description": "The ID of the operator history."
                                 }
                             ]
@@ -4267,7 +4267,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "12",
+                                    "value": "3",
                                     "description": "\uc774\uc0c1\uac70\ub798 PK"
                                 }
                             ]
@@ -4319,7 +4319,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"id\":3,\"user_pw\":\"voluptatem\"}"
+                            "raw": "{\"id\":4,\"user_pw\":\"maiores\"}"
                         },
                         "description": "",
                         "auth": {
@@ -4426,19 +4426,19 @@
                             "formdata": [
                                 {
                                     "key": "user_name",
-                                    "value": "unde",
+                                    "value": "cumque",
                                     "type": "text",
                                     "description": "\uc720\uc800 ID."
                                 },
                                 {
                                     "key": "nick_name",
-                                    "value": "aliquam",
+                                    "value": "velit",
                                     "type": "text",
                                     "description": "\uc720\uc800\uba85(\ubcc4\uce6d)."
                                 },
                                 {
                                     "key": "phone_num",
-                                    "value": "recusandae",
+                                    "value": "dolorem",
                                     "type": "text",
                                     "description": "\ud734\ub300\ud3f0\ubc88\ud638."
                                 },
@@ -4450,7 +4450,7 @@
                                 },
                                 {
                                     "key": "user_pw",
-                                    "value": "saepe",
+                                    "value": "quas",
                                     "type": "text",
                                     "description": ""
                                 },
@@ -4480,7 +4480,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "18",
+                                    "value": "19",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -4536,7 +4536,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "6",
+                                    "value": "19",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -4557,25 +4557,25 @@
                             "formdata": [
                                 {
                                     "key": "user_name",
-                                    "value": "ut",
+                                    "value": "voluptatem",
                                     "type": "text",
                                     "description": "\uc720\uc800 ID."
                                 },
                                 {
                                     "key": "nick_name",
-                                    "value": "sint",
+                                    "value": "autem",
                                     "type": "text",
                                     "description": "\uc720\uc800\uba85(\ubcc4\uce6d)."
                                 },
                                 {
                                     "key": "phone_num",
-                                    "value": "iusto",
+                                    "value": "laudantium",
                                     "type": "text",
                                     "description": "\ud734\ub300\ud3f0\ubc88\ud638."
                                 },
                                 {
                                     "key": "level",
-                                    "value": "quas",
+                                    "value": "optio",
                                     "type": "text",
                                     "description": "\uc720\uc800\ub4f1\uae09."
                                 },
@@ -4610,7 +4610,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "5",
+                                    "value": "10",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -4641,7 +4641,7 @@
             "description": "\nPG\uc0ac API \uc785\ub2c8\ub2e4. \ubcf8\uc0ac \uc774\uc0c1\uad8c\ud55c\uc774 \uc694\uad6c\ub429\ub2c8\ub2e4.",
             "item": [
                 {
-                    "name": "GET api\/v1\/pay-gateways\/{id}\/sale-slip",
+                    "name": "\ub9e4\ucd9c\uc804\ud45c PG\uc0ac \uc815\ubcf4 API",
                     "request": {
                         "url": {
                             "host": "{{baseUrl}}",
@@ -4652,8 +4652,8 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "rem",
-                                    "description": "The ID of the pay gateway."
+                                    "value": "12",
+                                    "description": "PG\uc0ac id"
                                 }
                             ]
                         },
@@ -4847,7 +4847,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"pg_type\":\"ipsa\",\"pg_name\":\"facilis\",\"user_pw\":\"hic\"}"
+                            "raw": "{\"pg_type\":\"ut\",\"pg_name\":\"debitis\"}"
                         },
                         "description": "\ub300\ub9ac\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -4868,8 +4868,8 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "6",
-                                    "description": "\uc720\uc800 PK"
+                                    "value": "10",
+                                    "description": "PG\uc0ac id"
                                 }
                             ]
                         },
@@ -4924,8 +4924,8 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "13",
-                                    "description": "\uc720\uc800 PK"
+                                    "value": "10",
+                                    "description": "PG\uc0ac id"
                                 }
                             ]
                         },
@@ -4942,7 +4942,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"pg_type\":\"aut\",\"pg_name\":\"adipisci\"}"
+                            "raw": "{\"pg_type\":\"et\",\"pg_name\":\"sint\"}"
                         },
                         "description": "\uac00\ub9f9\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -4963,8 +4963,8 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "2",
-                                    "description": "\uc720\uc800 PK"
+                                    "value": "18",
+                                    "description": "PG\uc0ac id"
                                 }
                             ]
                         },
@@ -5050,12 +5050,12 @@
                             "query": [
                                 {
                                     "key": "search",
-                                    "value": "aut",
+                                    "value": "et",
                                     "description": "\uac80\uc0c9\uc5b4(\uc720\uc800 ID)",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/v1\/manager\/merchandises\/pay-modules\/all?search=aut"
+                            "raw": "{{baseUrl}}\/api\/v1\/manager\/merchandises\/pay-modules\/all?search=et"
                         },
                         "method": "GET",
                         "header": [
@@ -5108,7 +5108,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "6",
+                                    "value": "11",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -5164,7 +5164,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "7",
+                                    "value": "5",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -5305,7 +5305,7 @@
                                 },
                                 {
                                     "key": "search",
-                                    "value": "qui",
+                                    "value": "tempora",
                                     "description": "\uac80\uc0c9\uc5b4(mid, tid)",
                                     "disabled": false
                                 },
@@ -5316,7 +5316,7 @@
                                     "disabled": false
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/v1\/manager\/merchandises\/pay-modules?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=qui&module_type=3"
+                            "raw": "{{baseUrl}}\/api\/v1\/manager\/merchandises\/pay-modules?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=tempora&module_type=3"
                         },
                         "method": "GET",
                         "header": [
@@ -5379,7 +5379,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"mcht_id\":\"deserunt\",\"pg_id\":\"qui\",\"ps_id\":\"rerum\",\"settle_fee\":\"quia\",\"settle_type\":\"veritatis\",\"module_type\":\"molestiae\",\"comm_settle_fee\":896.0933,\"abnormal_trans_limit\":\"corporis\",\"pay_dupe_limit\":\"rem\",\"pay_dupe_least\":\"aliquid\",\"pay_year_limit\":\"quo\",\"pay_month_limit\":\"dolor\",\"pay_day_limit\":\"quidem\",\"pay_single_limit\":\"tempora\",\"installment\":\"iste\",\"note\":\"quis\",\"is_old_auth\":\"nisi\",\"use_realtime_deposit\":\"et\",\"show_pay_view\":\"et\"}"
+                            "raw": "{\"mcht_id\":\"et\",\"pg_id\":\"harum\",\"ps_id\":\"sapiente\",\"settle_fee\":\"enim\",\"settle_type\":\"veritatis\",\"module_type\":\"officiis\",\"comm_settle_fee\":37179.402641,\"abnormal_trans_limit\":\"odit\",\"pay_dupe_limit\":\"necessitatibus\",\"pay_dupe_least\":\"quod\",\"pay_year_limit\":\"labore\",\"pay_month_limit\":\"saepe\",\"pay_day_limit\":\"ut\",\"pay_single_limit\":\"provident\",\"installment\":\"sequi\",\"note\":\"tempore\",\"is_old_auth\":\"saepe\",\"use_realtime_deposit\":\"magnam\",\"show_pay_view\":\"alias\"}"
                         },
                         "description": "\ub300\ub9ac\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -5400,7 +5400,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "2",
+                                    "value": "5",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -5456,7 +5456,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "16",
+                                    "value": "10",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -5474,7 +5474,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"mcht_id\":\"eos\",\"pg_id\":\"nobis\",\"ps_id\":\"sed\",\"settle_fee\":\"est\",\"settle_type\":\"id\",\"module_type\":\"non\",\"comm_settle_fee\":1301864.526597,\"abnormal_trans_limit\":\"nostrum\",\"pay_dupe_limit\":\"ratione\",\"pay_dupe_least\":\"ut\",\"pay_year_limit\":\"odit\",\"pay_month_limit\":\"cupiditate\",\"pay_day_limit\":\"quasi\",\"pay_single_limit\":\"soluta\",\"installment\":\"quisquam\",\"note\":\"quo\",\"is_old_auth\":\"sint\",\"use_realtime_deposit\":\"ut\",\"show_pay_view\":\"nulla\"}"
+                            "raw": "{\"mcht_id\":\"incidunt\",\"pg_id\":\"id\",\"ps_id\":\"vel\",\"settle_fee\":\"quo\",\"settle_type\":\"eligendi\",\"module_type\":\"qui\",\"comm_settle_fee\":163.3,\"abnormal_trans_limit\":\"rerum\",\"pay_dupe_limit\":\"rem\",\"pay_dupe_least\":\"at\",\"pay_year_limit\":\"perspiciatis\",\"pay_month_limit\":\"minima\",\"pay_day_limit\":\"alias\",\"pay_single_limit\":\"dolorem\",\"installment\":\"adipisci\",\"note\":\"numquam\",\"is_old_auth\":\"qui\",\"use_realtime_deposit\":\"possimus\",\"show_pay_view\":\"sed\"}"
                         },
                         "description": "\uac00\ub9f9\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -5495,7 +5495,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "14",
+                                    "value": "1",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -5620,7 +5620,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"pg_id\":\"pariatur\",\"name\":\"nihil\",\"trx_fee\":\"quaerat\"}"
+                            "raw": "{\"pg_id\":\"culpa\",\"name\":\"veniam\",\"trx_fee\":\"perspiciatis\"}"
                         },
                         "description": "\ub300\ub9ac\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -5641,7 +5641,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "5",
+                                    "value": "8",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -5697,7 +5697,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "16",
+                                    "value": "11",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -5715,7 +5715,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"pg_id\":\"velit\",\"name\":\"necessitatibus\",\"trx_fee\":\"ut\"}"
+                            "raw": "{\"pg_id\":\"eos\",\"name\":\"enim\",\"trx_fee\":\"dicta\"}"
                         },
                         "description": "\uac00\ub9f9\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -5736,7 +5736,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "10",
+                                    "value": "9",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -5875,18 +5875,18 @@
                                 },
                                 {
                                     "key": "search",
-                                    "value": "fuga",
+                                    "value": "eum",
                                     "description": "\uac80\uc0c9\uc5b4(\uc81c\ubaa9)",
                                     "disabled": false
                                 },
                                 {
                                     "key": "type",
-                                    "value": "delectus",
+                                    "value": "esse",
                                     "description": "\uac80\uc0c9\ud0c0\uc785(0=\uacf5\uc9c0\uc0ac\ud56d, 1=FAQ, 2=1:1\ubb38\uc758)",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/v1\/manager\/posts?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=fuga&type=delectus"
+                            "raw": "{{baseUrl}}\/api\/v1\/manager\/posts?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=eum&type=esse"
                         },
                         "method": "GET",
                         "header": [
@@ -5949,7 +5949,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"qui\",\"content\":\"quia\",\"type\":\"et\",\"is_reply\":\"dolorum\"}"
+                            "raw": "{\"title\":\"aut\",\"content\":\"vel\",\"type\":\"similique\",\"is_reply\":\"molestias\"}"
                         },
                         "description": "\ub9c8\uc2a4\ud130 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -5970,7 +5970,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "11",
+                                    "value": "4",
                                     "description": "\uacf5\uc9c0\uc0ac\ud56d PK"
                                 }
                             ]
@@ -6026,7 +6026,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "7",
+                                    "value": "6",
                                     "description": "\uacf5\uc9c0\uc0ac\ud56d PK"
                                 }
                             ]
@@ -6044,7 +6044,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"title\":\"voluptas\",\"content\":\"iusto\",\"type\":\"velit\",\"is_reply\":\"totam\"}"
+                            "raw": "{\"title\":\"minus\",\"content\":\"qui\",\"type\":\"voluptatibus\",\"is_reply\":\"mollitia\"}"
                         },
                         "description": "\ub9c8\uc2a4\ud130 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -6065,7 +6065,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "15",
+                                    "value": "18",
                                     "description": "\uacf5\uc9c0\uc0ac\ud56d PK"
                                 }
                             ]
@@ -6328,7 +6328,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"user_pw\":\"laudantium\"}"
+                            "raw": "{\"user_pw\":\"eaque\"}"
                         },
                         "description": "\uc6b4\uc601\uc790 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -6349,7 +6349,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "2",
+                                    "value": "3",
                                     "description": "\uc601\uc5c5\uc790 \uc774\ub825 PK"
                                 }
                             ]
@@ -6405,7 +6405,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "voluptatibus",
+                                    "value": "veritatis",
                                     "description": "The ID of the realtime history."
                                 }
                             ]
@@ -6441,7 +6441,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "15",
+                                    "value": "19",
                                     "description": "\uc774\uc0c1\uac70\ub798 PK"
                                 }
                             ]
@@ -6504,12 +6504,12 @@
                                 },
                                 {
                                     "key": "search",
-                                    "value": "laboriosam",
+                                    "value": "ducimus",
                                     "description": "\uac80\uc0c9\uc5b4(\uc81c\ubaa9)",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/v1\/manager\/merchandises\/regular-credit-cards?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=laboriosam"
+                            "raw": "{{baseUrl}}\/api\/v1\/manager\/merchandises\/regular-credit-cards?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=ducimus"
                         },
                         "method": "GET",
                         "header": [
@@ -6572,7 +6572,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"card_num\":\"et\",\"note\":\"fugiat\"}"
+                            "raw": "{\"card_num\":\"corporis\",\"note\":\"dignissimos\"}"
                         },
                         "description": "\ub9c8\uc2a4\ud130 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -6593,7 +6593,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "3",
+                                    "value": "16",
                                     "description": "\uc815\uae30\ub4f1\ub85d\uce74\ub4dc PK"
                                 }
                             ]
@@ -6649,7 +6649,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "8",
+                                    "value": "6",
                                     "description": "\uc815\uae30\ub4f1\ub85d\uce74\ub4dc PK"
                                 }
                             ]
@@ -6667,7 +6667,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"card_num\":\"voluptas\",\"note\":\"incidunt\"}"
+                            "raw": "{\"card_num\":\"mollitia\",\"note\":\"inventore\"}"
                         },
                         "description": "\ub9c8\uc2a4\ud130 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -6688,7 +6688,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "15",
+                                    "value": "7",
                                     "description": "\uc815\uae30\ub4f1\ub85d\uce74\ub4dc PK"
                                 }
                             ]
@@ -6813,7 +6813,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"id\":13,\"acct_name\":\"doloremque\",\"acct_num\":\"consequatur\",\"acct_bank_name\":\"modi\",\"acct_bank_code\":\"atque\",\"total_amount\":17,\"cxl_amount\":15,\"appr_amount\":18,\"deduct_amount\":3,\"settle_amount\":8,\"e_dt\":\"2023-11-05T01:36:04\"}"
+                            "raw": "{\"id\":6,\"acct_name\":\"ut\",\"acct_num\":\"dignissimos\",\"acct_bank_name\":\"quia\",\"acct_bank_code\":\"et\",\"total_amount\":8,\"cxl_amount\":9,\"appr_amount\":14,\"deduct_amount\":7,\"settle_amount\":6,\"e_dt\":\"2023-11-05T01:37:14\"}"
                         },
                         "description": "",
                         "auth": {
@@ -6880,7 +6880,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"id\":3,\"acct_name\":\"eveniet\",\"acct_num\":\"aut\",\"acct_bank_name\":\"consectetur\",\"acct_bank_code\":\"harum\",\"total_amount\":11,\"cxl_amount\":8,\"appr_amount\":20,\"deduct_amount\":5,\"settle_amount\":13,\"e_dt\":\"2023-11-05T01:36:04\"}"
+                            "raw": "{\"id\":7,\"acct_name\":\"laboriosam\",\"acct_num\":\"pariatur\",\"acct_bank_name\":\"non\",\"acct_bank_code\":\"ut\",\"total_amount\":13,\"cxl_amount\":14,\"appr_amount\":20,\"deduct_amount\":11,\"settle_amount\":20,\"e_dt\":\"2023-11-05T01:37:14\"}"
                         },
                         "description": "",
                         "auth": {
@@ -6911,7 +6911,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"e_dt\":\"2023-11-05T01:36:04\",\"datas\":[{\"id\":20,\"total_amount\":6,\"cxl_amount\":3,\"appr_amount\":20,\"deduct_amount\":3,\"settle_amount\":4,\"comm_settle_amount\":12,\"under_sales_amount\":18}]}"
+                            "raw": "{\"e_dt\":\"2023-11-05T01:37:14\",\"datas\":[{\"id\":20,\"total_amount\":5,\"cxl_amount\":14,\"appr_amount\":19,\"deduct_amount\":18,\"settle_amount\":8,\"comm_settle_amount\":4,\"under_sales_amount\":2}]}"
                         },
                         "description": "",
                         "auth": {
@@ -7348,7 +7348,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"send_url\":\"voluptate\"}"
+                            "raw": "{\"send_url\":\"cumque\"}"
                         },
                         "description": "\uac00\ub9f9\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -7529,7 +7529,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"id\":1,\"user_pw\":\"est\"}"
+                            "raw": "{\"id\":6,\"user_pw\":\"maxime\"}"
                         },
                         "description": "",
                         "auth": {
@@ -7599,12 +7599,12 @@
                                 },
                                 {
                                     "key": "search",
-                                    "value": "explicabo",
+                                    "value": "odio",
                                     "description": "\uac80\uc0c9\uc5b4(\uc720\uc800 ID)",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/v1\/manager\/salesforces?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=explicabo"
+                            "raw": "{{baseUrl}}\/api\/v1\/manager\/salesforces?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=odio"
                         },
                         "method": "GET",
                         "header": [
@@ -7670,49 +7670,49 @@
                             "formdata": [
                                 {
                                     "key": "user_name",
-                                    "value": "veniam",
+                                    "value": "aspernatur",
                                     "type": "text",
                                     "description": "\uc720\uc800 ID."
                                 },
                                 {
                                     "key": "sales_name",
-                                    "value": "quo",
+                                    "value": "quos",
                                     "type": "text",
                                     "description": "\uc601\uc5c5\uc810 \uc0c1\ud638."
                                 },
                                 {
                                     "key": "view_type",
-                                    "value": "odio",
+                                    "value": "reiciendis",
                                     "type": "text",
                                     "description": "validation.attributes.view_type."
                                 },
                                 {
                                     "key": "level",
-                                    "value": "cumque",
+                                    "value": "aut",
                                     "type": "text",
                                     "description": "\uc720\uc800\ub4f1\uae09."
                                 },
                                 {
                                     "key": "acct_bank_name",
-                                    "value": "consectetur",
+                                    "value": "omnis",
                                     "type": "text",
                                     "description": "\uc740\ud589\uba85."
                                 },
                                 {
                                     "key": "settle_tax_type",
-                                    "value": "laudantium",
+                                    "value": "quo",
                                     "type": "text",
                                     "description": "validation.attributes.settle_tax_type."
                                 },
                                 {
                                     "key": "settle_cycle",
-                                    "value": "quam",
+                                    "value": "ut",
                                     "type": "text",
                                     "description": "validation.attributes.settle_cycle."
                                 },
                                 {
                                     "key": "user_pw",
-                                    "value": "enim",
+                                    "value": "aut",
                                     "type": "text",
                                     "description": "\uc720\uc800 \ud328\uc2a4\uc6cc\ub4dc"
                                 },
@@ -7762,7 +7762,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "7",
+                                    "value": "18",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -7818,7 +7818,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "5",
+                                    "value": "8",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -7839,43 +7839,43 @@
                             "formdata": [
                                 {
                                     "key": "user_name",
-                                    "value": "quas",
+                                    "value": "adipisci",
                                     "type": "text",
                                     "description": "\uc720\uc800 ID."
                                 },
                                 {
                                     "key": "sales_name",
-                                    "value": "nemo",
+                                    "value": "hic",
                                     "type": "text",
                                     "description": "\uc601\uc5c5\uc810 \uc0c1\ud638."
                                 },
                                 {
                                     "key": "view_type",
-                                    "value": "provident",
+                                    "value": "perferendis",
                                     "type": "text",
                                     "description": "validation.attributes.view_type."
                                 },
                                 {
                                     "key": "level",
-                                    "value": "blanditiis",
+                                    "value": "qui",
                                     "type": "text",
                                     "description": "\uc720\uc800\ub4f1\uae09."
                                 },
                                 {
                                     "key": "acct_bank_name",
-                                    "value": "quibusdam",
+                                    "value": "voluptatem",
                                     "type": "text",
                                     "description": "\uc740\ud589\uba85."
                                 },
                                 {
                                     "key": "settle_tax_type",
-                                    "value": "provident",
+                                    "value": "quo",
                                     "type": "text",
                                     "description": "validation.attributes.settle_tax_type."
                                 },
                                 {
                                     "key": "settle_cycle",
-                                    "value": "quis",
+                                    "value": "nulla",
                                     "type": "text",
                                     "description": "validation.attributes.settle_cycle."
                                 },
@@ -7930,7 +7930,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "14",
+                                    "value": "9",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -8495,12 +8495,12 @@
                                 },
                                 {
                                     "key": "search",
-                                    "value": "fugit",
+                                    "value": "dolorem",
                                     "description": "\uac80\uc0c9\uc5b4(mid, tid)",
                                     "disabled": false
                                 }
                             ],
-                            "raw": "{{baseUrl}}\/api\/v1\/manager\/merchandises\/terminals?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=fugit"
+                            "raw": "{{baseUrl}}\/api\/v1\/manager\/merchandises\/terminals?page=1&page_size=20&s_dt=2023-10-14&e_dt=2023-10-15&search=dolorem"
                         },
                         "method": "GET",
                         "header": [
@@ -8625,7 +8625,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"mcht_id\":\"similique\",\"mcht_fee\":\"magni\",\"hold_fee\":\"a\",\"module_type\":\"accusantium\",\"pg_id\":\"voluptates\",\"pmod_id\":\"provident\",\"ps_id\":\"molestias\",\"ps_fee\":\"voluptatem\",\"mcht_settle_fee\":\"odit\",\"mcht_settle_type\":\"odit\",\"trx_dt\":\"est\",\"trx_tm\":\"facere\",\"amount\":\"ullam\",\"ord_num\":\"doloribus\",\"trx_id\":\"eum\",\"card_num\":\"quisquam\",\"installment\":\"consectetur\",\"acquirer\":\"tempore\",\"appr_num\":\"aut\"}"
+                            "raw": "{\"mcht_id\":\"expedita\",\"mcht_fee\":\"dolor\",\"hold_fee\":\"id\",\"module_type\":\"cum\",\"pg_id\":\"quod\",\"pmod_id\":\"et\",\"ps_id\":\"et\",\"ps_fee\":\"et\",\"mcht_settle_fee\":\"reiciendis\",\"mcht_settle_type\":\"dolor\",\"trx_dt\":\"quae\",\"trx_tm\":\"ea\",\"amount\":\"dolores\",\"ord_num\":\"eaque\",\"trx_id\":\"rerum\",\"card_num\":\"qui\",\"installment\":\"eos\",\"acquirer\":\"aut\",\"appr_num\":\"hic\"}"
                         },
                         "description": "",
                         "auth": {
@@ -8830,7 +8830,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"mcht_id\":\"accusantium\",\"mcht_fee\":\"dolores\",\"hold_fee\":\"et\",\"module_type\":\"accusamus\",\"pg_id\":\"doloribus\",\"pmod_id\":\"saepe\",\"ps_id\":\"facilis\",\"ps_fee\":\"cumque\",\"mcht_settle_fee\":\"doloribus\",\"mcht_settle_type\":\"sit\",\"trx_dt\":\"eos\",\"trx_tm\":\"modi\",\"amount\":\"sed\",\"ord_num\":\"totam\",\"trx_id\":\"illum\",\"card_num\":\"quo\",\"installment\":\"voluptates\",\"acquirer\":\"mollitia\",\"appr_num\":\"vero\",\"user_pw\":\"non\"}"
+                            "raw": "{\"mcht_id\":\"aut\",\"mcht_fee\":\"qui\",\"hold_fee\":\"dolor\",\"module_type\":\"ipsum\",\"pg_id\":\"temporibus\",\"pmod_id\":\"enim\",\"ps_id\":\"velit\",\"ps_fee\":\"est\",\"mcht_settle_fee\":\"molestiae\",\"mcht_settle_type\":\"recusandae\",\"trx_dt\":\"iusto\",\"trx_tm\":\"error\",\"amount\":\"earum\",\"ord_num\":\"corporis\",\"trx_id\":\"consequatur\",\"card_num\":\"ullam\",\"installment\":\"quae\",\"acquirer\":\"ea\",\"appr_num\":\"doloribus\",\"user_pw\":\"et\"}"
                         },
                         "description": "\ub300\ub9ac\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -8851,7 +8851,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "4",
+                                    "value": "8",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -8907,7 +8907,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "9",
+                                    "value": "3",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -8925,7 +8925,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"mcht_id\":\"minima\",\"mcht_fee\":\"laborum\",\"hold_fee\":\"aut\",\"module_type\":\"consequatur\",\"pg_id\":\"qui\",\"pmod_id\":\"illo\",\"ps_id\":\"et\",\"ps_fee\":\"laborum\",\"mcht_settle_fee\":\"porro\",\"mcht_settle_type\":\"aliquam\",\"trx_dt\":\"placeat\",\"trx_tm\":\"dolorem\",\"amount\":\"et\",\"ord_num\":\"vero\",\"trx_id\":\"vel\",\"card_num\":\"quod\",\"installment\":\"voluptas\",\"acquirer\":\"rerum\",\"appr_num\":\"mollitia\"}"
+                            "raw": "{\"mcht_id\":\"iure\",\"mcht_fee\":\"illo\",\"hold_fee\":\"hic\",\"module_type\":\"quam\",\"pg_id\":\"consequatur\",\"pmod_id\":\"adipisci\",\"ps_id\":\"laudantium\",\"ps_fee\":\"harum\",\"mcht_settle_fee\":\"laudantium\",\"mcht_settle_type\":\"quisquam\",\"trx_dt\":\"rerum\",\"trx_tm\":\"illum\",\"amount\":\"fugiat\",\"ord_num\":\"officia\",\"trx_id\":\"voluptatem\",\"card_num\":\"ut\",\"installment\":\"ad\",\"acquirer\":\"velit\",\"appr_num\":\"doloremque\"}"
                         },
                         "description": "\uac00\ub9f9\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -8946,7 +8946,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "17",
+                                    "value": "12",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -9071,7 +9071,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"note\":\"ullam\",\"sales_fee\":3095068.9606601973}"
+                            "raw": "{\"note\":\"dolor\",\"sales_fee\":64.35774}"
                         },
                         "description": "\ub300\ub9ac\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -9092,7 +9092,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "20",
+                                    "value": "12",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -9148,7 +9148,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "2",
+                                    "value": "18",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]
@@ -9166,7 +9166,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\"note\":\"perspiciatis\",\"sales_fee\":462341741.492654}"
+                            "raw": "{\"note\":\"delectus\",\"sales_fee\":17.8}"
                         },
                         "description": "\uac00\ub9f9\uc810 \uc774\uc0c1 \uac00\ub2a5",
                         "auth": {
@@ -9187,7 +9187,7 @@
                                 {
                                     "id": "id",
                                     "key": "id",
-                                    "value": "9",
+                                    "value": "7",
                                     "description": "\uc720\uc800 PK"
                                 }
                             ]

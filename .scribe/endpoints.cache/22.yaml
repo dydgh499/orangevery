@@ -173,12 +173,12 @@ endpoints:
         name: user_pw
         description: '유저 패스워드'
         required: false
-        example: laudantium
+        example: eaque
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      user_pw: laudantium
+      user_pw: eaque
     fileParameters: []
     responses: []
     responseFields: []
@@ -210,12 +210,12 @@ endpoints:
         name: id
         description: '영업자 이력 PK'
         required: true
-        example: 2
+        example: 3
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 2
+      id: 3
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -261,12 +261,12 @@ endpoints:
         name: id
         description: 'The ID of the realtime history.'
         required: true
-        example: voluptatibus
+        example: veritatis
         type: string
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: voluptatibus
+      id: veritatis
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -302,12 +302,12 @@ endpoints:
         name: id
         description: '이상거래 PK'
         required: true
-        example: 15
+        example: 19
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 15
+      id: 19
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

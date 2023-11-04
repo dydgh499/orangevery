@@ -30,11 +30,11 @@ paths:
                 user_name:
                   type: string
                   description: '유저 ID.'
-                  example: dolore
+                  example: soluta
                 user_pw:
                   type: string
                   description: 패스워드.
-                  example: enim
+                  example: animi
               required:
                 - brand_id
                 - user_name
@@ -59,27 +59,27 @@ paths:
                 brand_id:
                   type: string
                   description: ''
-                  example: quia
+                  example: fuga
                 ceo_name:
                   type: string
                   description: ''
-                  example: molestias
+                  example: distinctio
                 phone_num:
                   type: string
                   description: ''
-                  example: ducimus
+                  example: rerum
                 business_num:
                   type: string
                   description: ''
-                  example: qui
+                  example: occaecati
                 user_name:
                   type: string
                   description: ''
-                  example: tenetur
+                  example: iure
                 user_pw:
                   type: string
                   description: ''
-                  example: illum
+                  example: dolore
               required:
                 - brand_id
                 - ceo_name
@@ -127,15 +127,15 @@ paths:
                 domain:
                   type: string
                   description: ''
-                  example: laudantium
+                  example: culpa
                 user_name:
                   type: string
                   description: ''
-                  example: dignissimos
+                  example: expedita
                 user_pw:
                   type: string
                   description: ''
-                  example: ut
+                  example: vel
               required:
                 - domain
                 - user_name
@@ -160,7 +160,7 @@ paths:
                 token:
                   type: string
                   description: ''
-                  example: perferendis
+                  example: laboriosam
               required:
                 - token
       security: []
@@ -214,12 +214,12 @@ paths:
           in: query
           name: search
           description: '검색어(브랜드 명)'
-          example: delectus
+          example: cupiditate
           required: false
           schema:
             type: string
             description: '검색어(브랜드 명)'
-            example: delectus
+            example: cupiditate
       responses:
         401:
           description: ''
@@ -258,11 +258,11 @@ paths:
                 name:
                   type: string
                   description: 이름(브랜드명).
-                  example: laboriosam
+                  example: fuga
                 dns:
                   type: string
                   description: DNS.
-                  example: sunt
+                  example: sed
                 og_description:
                   type: string
                   description: '메타태그 오픈그래프 내용.'
@@ -270,15 +270,15 @@ paths:
                 ceo_name:
                   type: string
                   description: 대표자명.
-                  example: eos
+                  example: doloribus
                 addr:
                   type: string
                   description: 주소.
-                  example: delectus
+                  example: dignissimos
                 phone_num:
                   type: string
                   description: 휴대폰번호.
-                  example: at
+                  example: perspiciatis
                 fax_num:
                   type: string
                   description: 팩스번호.
@@ -286,7 +286,7 @@ paths:
                 company_name:
                   type: string
                   description: '법인 상호.'
-                  example: eaque
+                  example: omnis
                 pvcy_rep_name:
                   type: string
                   description: '개인정보 책임자명.'
@@ -294,27 +294,27 @@ paths:
                 business_num:
                   type: string
                   description: 사업자등록번호.
-                  example: at
+                  example: natus
                 deposit_day:
                   type: string
                   description: 입금일.
-                  example: omnis
+                  example: ut
                 deposit_amount:
                   type: string
                   description: 입금액.
-                  example: dolorem
+                  example: beatae
                 extra_deposit_amount:
                   type: number
                   description: validation.attributes.extra_deposit_amount.
-                  example: 20207940.746598
+                  example: 731214.0
                 dev_fee:
                   type: number
                   description: '개발사 수수료.'
-                  example: 38999.529
+                  example: 495570.13
                 dev_settle_type:
                   type: number
                   description: validation.attributes.dev_settle_type.
-                  example: 167815813.43408
+                  example: 4.11
                 use_different_settlement:
                   type: string
                   description: validation.attributes.use_different_settlement.
@@ -362,7 +362,7 @@ paths:
                 pv_options:
                   type: string
                   description: ''
-                  example: repellat
+                  example: nulla
               required:
                 - name
                 - dns
@@ -422,11 +422,11 @@ paths:
                 name:
                   type: string
                   description: 이름(브랜드명).
-                  example: perferendis
+                  example: enim
                 dns:
                   type: string
                   description: DNS.
-                  example: in
+                  example: dolor
                 og_description:
                   type: string
                   description: '메타태그 오픈그래프 내용.'
@@ -434,15 +434,15 @@ paths:
                 ceo_name:
                   type: string
                   description: 대표자명.
-                  example: molestiae
+                  example: inventore
                 addr:
                   type: string
                   description: 주소.
-                  example: voluptates
+                  example: et
                 phone_num:
                   type: string
                   description: 휴대폰번호.
-                  example: assumenda
+                  example: repudiandae
                 fax_num:
                   type: string
                   description: 팩스번호.
@@ -450,7 +450,7 @@ paths:
                 company_name:
                   type: string
                   description: '법인 상호.'
-                  example: natus
+                  example: alias
                 pvcy_rep_name:
                   type: string
                   description: '개인정보 책임자명.'
@@ -458,27 +458,27 @@ paths:
                 business_num:
                   type: string
                   description: 사업자등록번호.
-                  example: sapiente
+                  example: et
                 deposit_day:
                   type: string
                   description: 입금일.
-                  example: ut
+                  example: et
                 deposit_amount:
                   type: string
                   description: 입금액.
-                  example: architecto
+                  example: expedita
                 extra_deposit_amount:
                   type: number
                   description: validation.attributes.extra_deposit_amount.
-                  example: 3419047.8587466
+                  example: 61040.451
                 dev_fee:
                   type: number
                   description: '개발사 수수료.'
-                  example: 3414.72283947
+                  example: 18.9
                 dev_settle_type:
                   type: number
                   description: validation.attributes.dev_settle_type.
-                  example: 19.0
+                  example: 7981.0
                 use_different_settlement:
                   type: string
                   description: validation.attributes.use_different_settlement.
@@ -526,7 +526,7 @@ paths:
                 pv_options:
                   type: string
                   description: ''
-                  example: ut
+                  example: aspernatur
               required:
                 - name
                 - dns
@@ -556,7 +556,7 @@ paths:
         in: path
         name: id
         description: '브랜드 PK'
-        example: 6
+        example: 20
         required: true
         schema:
           type: integer
@@ -644,11 +644,11 @@ paths:
                 type:
                   type: string
                   description: 타입.
-                  example: molestiae
+                  example: repellendus
                 name:
                   type: string
                   description: 이름.
-                  example: voluptatem
+                  example: excepturi
               required:
                 - type
                 - name
@@ -697,11 +697,11 @@ paths:
                 type:
                   type: string
                   description: 타입.
-                  example: quia
+                  example: praesentium
                 name:
                   type: string
                   description: 이름.
-                  example: illo
+                  example: eos
               required:
                 - type
                 - name
@@ -720,7 +720,7 @@ paths:
         in: path
         name: id
         description: '유저 PK'
-        example: 19
+        example: 13
         required: true
         schema:
           type: integer
@@ -774,12 +774,12 @@ paths:
           in: query
           name: search
           description: 검색어(제목)
-          example: at
+          example: atque
           required: false
           schema:
             type: string
             description: 검색어(제목)
-            example: at
+            example: atque
       responses:
         401:
           description: ''
@@ -818,27 +818,27 @@ paths:
                 mcht_id:
                   type: string
                   description: 가맹점.
-                  example: libero
+                  example: veniam
                 tid:
                   type: string
                   description: TID.
-                  example: et
+                  example: sed
                 cust_name:
                   type: string
                   description: 고객명.
-                  example: libero
+                  example: magnam
                 appr_dt:
                   type: string
                   description: '승인일. value 값이 유효한 날짜가 아닙니다.'
-                  example: '2023-11-05T01:36:04'
+                  example: '2023-11-05T01:37:14'
                 appr_num:
                   type: string
                   description: 승인번호.
-                  example: autem
+                  example: et
                 phone_num:
                   type: string
                   description: 휴대폰번호.
-                  example: et
+                  example: minima
                 hand_cust_name:
                   type: string
                   description: 수기작성성함.
@@ -850,27 +850,27 @@ paths:
                 issuer:
                   type: string
                   description: 발급사.
-                  example: illo
+                  example: dolore
                 pg_id:
                   type: string
                   description: PG사.
-                  example: perferendis
+                  example: in
                 type:
                   type: string
                   description: 타입.
-                  example: provident
+                  example: dolores
                 entry_path:
                   type: string
                   description: 유입경로.
-                  example: enim
+                  example: non
                 is_deposit:
                   type: string
                   description: 입금상태.
-                  example: quia
+                  example: rerum
                 complaint_status:
                   type: string
                   description: validation.attributes.complaint_status.
-                  example: deleniti
+                  example: mollitia
                 note:
                   type: string
                   description: 비고.
@@ -933,27 +933,27 @@ paths:
                 mcht_id:
                   type: string
                   description: 가맹점.
-                  example: molestiae
+                  example: delectus
                 tid:
                   type: string
                   description: TID.
-                  example: autem
+                  example: consequuntur
                 cust_name:
                   type: string
                   description: 고객명.
-                  example: qui
+                  example: dolor
                 appr_dt:
                   type: string
                   description: '승인일. value 값이 유효한 날짜가 아닙니다.'
-                  example: '2023-11-05T01:36:04'
+                  example: '2023-11-05T01:37:14'
                 appr_num:
                   type: string
                   description: 승인번호.
-                  example: nesciunt
+                  example: molestiae
                 phone_num:
                   type: string
                   description: 휴대폰번호.
-                  example: voluptatum
+                  example: consequatur
                 hand_cust_name:
                   type: string
                   description: 수기작성성함.
@@ -965,27 +965,27 @@ paths:
                 issuer:
                   type: string
                   description: 발급사.
-                  example: sunt
+                  example: ad
                 pg_id:
                   type: string
                   description: PG사.
-                  example: provident
+                  example: libero
                 type:
                   type: string
                   description: 타입.
-                  example: sunt
+                  example: minus
                 entry_path:
                   type: string
                   description: 유입경로.
-                  example: at
+                  example: aut
                 is_deposit:
                   type: string
                   description: 입금상태.
-                  example: impedit
+                  example: hic
                 complaint_status:
                   type: string
                   description: validation.attributes.complaint_status.
-                  example: in
+                  example: nulla
                 note:
                   type: string
                   description: 비고.
@@ -1018,7 +1018,7 @@ paths:
         in: path
         name: id
         description: '공지사항 PK'
-        example: 10
+        example: 13
         required: true
         schema:
           type: integer
@@ -1103,7 +1103,7 @@ paths:
         in: path
         name: id
         description: '이상거래 PK'
-        example: 11
+        example: 12
         required: true
         schema:
           type: integer
@@ -1126,7 +1126,7 @@ paths:
                 checked:
                   type: string
                   description: ''
-                  example: veritatis
+                  example: voluptatem
               required:
                 - checked
       security: []
@@ -1135,7 +1135,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the danger.'
-        example: et
+        example: eum
         required: true
         schema:
           type: string
@@ -1548,7 +1548,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the fee change history.'
-        example: at
+        example: dolorem
         required: true
         schema:
           type: string
@@ -1567,7 +1567,7 @@ paths:
         in: path
         name: user
         description: ''
-        example: id
+        example: occaecati
         required: true
         schema:
           type: string
@@ -1575,7 +1575,7 @@ paths:
         in: path
         name: type
         description: ''
-        example: aut
+        example: nesciunt
         required: true
         schema:
           type: string
@@ -1660,7 +1660,7 @@ paths:
         in: path
         name: id
         description: 'The ID of the fee change history.'
-        example: est
+        example: quidem
         required: true
         schema:
           type: string
@@ -1679,7 +1679,7 @@ paths:
         in: path
         name: user
         description: ''
-        example: rerum
+        example: consectetur
         required: true
         schema:
           type: string
@@ -1687,7 +1687,7 @@ paths:
         in: path
         name: type
         description: ''
-        example: laboriosam
+        example: ut
         required: true
         schema:
           type: string
@@ -1775,15 +1775,15 @@ paths:
                 finance_company_num:
                   type: string
                   description: validation.attributes.finance_company_num.
-                  example: aut
+                  example: adipisci
                 fin_type:
                   type: string
                   description: '금융 VAN 타입.'
-                  example: vero
+                  example: eum
                 dev_fee:
                   type: number
                   description: '개발사 수수료.'
-                  example: 2742436.0581949
+                  example: 150.1
                 api_key:
                   type: string
                   description: validation.attributes.api_key.
@@ -1803,7 +1803,7 @@ paths:
                 min_balance_limit:
                   type: string
                   description: '유보금미달알림 하한금.'
-                  example: modi
+                  example: quia
                 corp_code:
                   type: string
                   description: validation.attributes.corp_code.
@@ -1811,7 +1811,7 @@ paths:
                 corp_name:
                   type: string
                   description: 법인명.
-                  example: eaque
+                  example: eius
                 bank_code:
                   type: string
                   description: validation.attributes.bank_code.
@@ -1819,7 +1819,7 @@ paths:
                 nick_name:
                   type: string
                   description: 유저명(별칭).
-                  example: rerum
+                  example: laudantium
                 withdraw_acct_num:
                   type: string
                   description: validation.attributes.withdraw_acct_num.
@@ -1876,15 +1876,15 @@ paths:
                 finance_company_num:
                   type: string
                   description: validation.attributes.finance_company_num.
-                  example: sint
+                  example: est
                 fin_type:
                   type: string
                   description: '금융 VAN 타입.'
-                  example: nisi
+                  example: fuga
                 dev_fee:
                   type: number
                   description: '개발사 수수료.'
-                  example: 173769.927
+                  example: 19.007165443
                 api_key:
                   type: string
                   description: validation.attributes.api_key.
@@ -1904,7 +1904,7 @@ paths:
                 min_balance_limit:
                   type: string
                   description: '유보금미달알림 하한금.'
-                  example: est
+                  example: sit
                 corp_code:
                   type: string
                   description: validation.attributes.corp_code.
@@ -1912,7 +1912,7 @@ paths:
                 corp_name:
                   type: string
                   description: 법인명.
-                  example: voluptatum
+                  example: omnis
                 bank_code:
                   type: string
                   description: validation.attributes.bank_code.
@@ -1920,7 +1920,7 @@ paths:
                 nick_name:
                   type: string
                   description: 유저명(별칭).
-                  example: harum
+                  example: excepturi
                 withdraw_acct_num:
                   type: string
                   description: validation.attributes.withdraw_acct_num.
@@ -1947,7 +1947,7 @@ paths:
         in: path
         name: id
         description: '금융 VAN PK'
-        example: 5
+        example: 11
         required: true
         schema:
           type: integer
@@ -1995,19 +1995,19 @@ paths:
                 acct_bank_name:
                   type: string
                   description: 은행명.
-                  example: deleniti
+                  example: eius
                 acct_bank_code:
                   type: string
                   description: 은행코드.
-                  example: rerum
+                  example: est
                 acct_num:
                   type: string
                   description: 계좌번호.
-                  example: qui
+                  example: reiciendis
                 acct_name:
                   type: string
                   description: 예금주.
-                  example: sunt
+                  example: voluptatem
               required:
                 - acct_bank_name
                 - acct_bank_code
@@ -2058,19 +2058,19 @@ paths:
                 acct_bank_name:
                   type: string
                   description: 은행명.
-                  example: placeat
+                  example: nostrum
                 acct_bank_code:
                   type: string
                   description: 은행코드.
-                  example: provident
+                  example: et
                 acct_num:
                   type: string
                   description: 계좌번호.
-                  example: perferendis
+                  example: velit
                 acct_name:
                   type: string
                   description: 예금주.
-                  example: sequi
+                  example: id
               required:
                 - acct_bank_name
                 - acct_bank_code
@@ -2091,7 +2091,7 @@ paths:
         in: path
         name: id
         description: '정기등록카드 PK'
-        example: 7
+        example: 14
         required: true
         schema:
           type: integer
@@ -2179,43 +2179,43 @@ paths:
                 id:
                   type: integer
                   description: validation.attributes.id.
-                  example: 3
+                  example: 16
                 acct_name:
                   type: string
                   description: 예금주.
-                  example: similique
+                  example: vel
                 acct_num:
                   type: string
                   description: 계좌번호.
-                  example: beatae
+                  example: voluptatum
                 acct_bank_name:
                   type: string
                   description: 은행명.
-                  example: ea
+                  example: incidunt
                 acct_bank_code:
                   type: string
                   description: 은행코드.
-                  example: adipisci
+                  example: voluptatem
                 total_amount:
                   type: integer
                   description: validation.attributes.total_amount.
-                  example: 10
+                  example: 20
                 cxl_amount:
                   type: integer
                   description: validation.attributes.cxl_amount.
-                  example: 19
+                  example: 13
                 appr_amount:
                   type: integer
                   description: validation.attributes.appr_amount.
-                  example: 17
+                  example: 6
                 deduct_amount:
                   type: integer
                   description: validation.attributes.deduct_amount.
-                  example: 17
+                  example: 19
                 settle_amount:
                   type: integer
                   description: validation.attributes.settle_amount.
-                  example: 4
+                  example: 6
                 comm_settle_amount:
                   type: string
                   description: validation.attributes.comm_settle_amount.
@@ -2227,7 +2227,7 @@ paths:
                 e_dt:
                   type: string
                   description: '종료일. value 값이 유효한 날짜가 아닙니다.'
-                  example: '2023-11-05T01:36:04'
+                  example: '2023-11-05T01:37:14'
               required:
                 - id
                 - acct_name
@@ -2279,43 +2279,43 @@ paths:
                 id:
                   type: integer
                   description: validation.attributes.id.
-                  example: 14
+                  example: 11
                 acct_name:
                   type: string
                   description: 예금주.
-                  example: et
+                  example: ab
                 acct_num:
                   type: string
                   description: 계좌번호.
-                  example: eum
+                  example: odit
                 acct_bank_name:
                   type: string
                   description: 은행명.
-                  example: tempora
+                  example: ut
                 acct_bank_code:
                   type: string
                   description: 은행코드.
-                  example: et
+                  example: minima
                 total_amount:
                   type: integer
                   description: validation.attributes.total_amount.
-                  example: 16
+                  example: 6
                 cxl_amount:
                   type: integer
                   description: validation.attributes.cxl_amount.
-                  example: 5
+                  example: 15
                 appr_amount:
                   type: integer
                   description: validation.attributes.appr_amount.
-                  example: 7
+                  example: 19
                 deduct_amount:
                   type: integer
                   description: validation.attributes.deduct_amount.
-                  example: 9
+                  example: 12
                 settle_amount:
                   type: integer
                   description: validation.attributes.settle_amount.
-                  example: 4
+                  example: 3
                 comm_settle_amount:
                   type: string
                   description: validation.attributes.comm_settle_amount.
@@ -2327,7 +2327,7 @@ paths:
                 e_dt:
                   type: string
                   description: '종료일. value 값이 유효한 날짜가 아닙니다.'
-                  example: '2023-11-05T01:36:04'
+                  example: '2023-11-05T01:37:14'
               required:
                 - id
                 - acct_name
@@ -2360,7 +2360,7 @@ paths:
                 e_dt:
                   type: string
                   description: 'value 값이 유효한 날짜가 아닙니다.'
-                  example: '2023-11-05T01:36:04'
+                  example: '2023-11-05T01:37:14'
                 datas:
                   type: array
                   description: ''
@@ -2372,7 +2372,7 @@ paths:
                       id:
                         type: integer
                         description: ''
-                        example: 9
+                        example: 19
                       acct_name:
                         type: string
                         description: ''
@@ -2392,31 +2392,31 @@ paths:
                       total_amount:
                         type: integer
                         description: ''
-                        example: 2
+                        example: 14
                       cxl_amount:
                         type: integer
                         description: ''
-                        example: 15
+                        example: 5
                       appr_amount:
                         type: integer
                         description: ''
-                        example: 20
+                        example: 11
                       deduct_amount:
                         type: integer
                         description: ''
-                        example: 11
+                        example: 14
                       settle_amount:
                         type: integer
                         description: ''
-                        example: 4
+                        example: 18
                       comm_settle_amount:
                         type: integer
                         description: ''
-                        example: 2
+                        example: 18
                       under_sales_amount:
                         type: integer
                         description: ''
-                        example: 19
+                        example: 5
                     required:
                       - id
               required:
@@ -2461,43 +2461,43 @@ paths:
                 id:
                   type: integer
                   description: validation.attributes.id.
-                  example: 8
+                  example: 4
                 acct_name:
                   type: string
                   description: 예금주.
-                  example: omnis
+                  example: optio
                 acct_num:
                   type: string
                   description: 계좌번호.
-                  example: cum
+                  example: unde
                 acct_bank_name:
                   type: string
                   description: 은행명.
-                  example: fuga
+                  example: doloremque
                 acct_bank_code:
                   type: string
                   description: 은행코드.
-                  example: aliquam
+                  example: est
                 total_amount:
                   type: integer
                   description: validation.attributes.total_amount.
-                  example: 19
+                  example: 14
                 cxl_amount:
                   type: integer
                   description: validation.attributes.cxl_amount.
-                  example: 6
+                  example: 18
                 appr_amount:
                   type: integer
                   description: validation.attributes.appr_amount.
-                  example: 11
+                  example: 5
                 deduct_amount:
                   type: integer
                   description: validation.attributes.deduct_amount.
-                  example: 4
+                  example: 20
                 settle_amount:
                   type: integer
                   description: validation.attributes.settle_amount.
-                  example: 7
+                  example: 3
                 comm_settle_amount:
                   type: string
                   description: validation.attributes.comm_settle_amount.
@@ -2509,7 +2509,7 @@ paths:
                 e_dt:
                   type: string
                   description: '종료일. value 값이 유효한 날짜가 아닙니다.'
-                  example: '2023-11-05T01:36:04'
+                  example: '2023-11-05T01:37:14'
               required:
                 - id
                 - acct_name
@@ -2542,15 +2542,15 @@ paths:
                 trx_id:
                   type: string
                   description: ''
-                  example: molestias
+                  example: dolorem
                 mid:
                   type: string
                   description: ''
-                  example: perferendis
+                  example: voluptatem
                 tid:
                   type: string
                   description: ''
-                  example: voluptate
+                  example: quia
               required:
                 - trx_id
                 - mid
@@ -2579,7 +2579,7 @@ paths:
         in: path
         name: id
         description: '유저 PK'
-        example: 2
+        example: 14
         required: true
         schema:
           type: integer
@@ -2619,12 +2619,12 @@ paths:
           in: query
           name: search
           description: '검색어(유저 ID)'
-          example: occaecati
+          example: voluptatem
           required: false
           schema:
             type: string
             description: '검색어(유저 ID)'
-            example: occaecati
+            example: voluptatem
       responses:
         401:
           description: ''
@@ -2664,11 +2664,11 @@ paths:
                 id:
                   type: integer
                   description: ''
-                  example: 16
+                  example: 20
                 user_pw:
                   type: string
                   description: ''
-                  example: ipsa
+                  example: officia
               required:
                 - id
                 - user_pw
@@ -2733,12 +2733,12 @@ paths:
           in: query
           name: search
           description: '검색어(가맹점상호, 휴대폰번호, 대표자명)'
-          example: aut
+          example: asperiores
           required: false
           schema:
             type: string
             description: '검색어(가맹점상호, 휴대폰번호, 대표자명)'
-            example: aut
+            example: asperiores
       responses:
         401:
           description: ''
@@ -2777,7 +2777,7 @@ paths:
                 user_name:
                   type: string
                   description: '유저 ID.'
-                  example: similique
+                  example: dolor
                 nick_name:
                   type: string
                   description: 유저명(별칭).
@@ -2785,11 +2785,11 @@ paths:
                 mcht_name:
                   type: string
                   description: '가맹점 상호.'
-                  example: omnis
+                  example: vero
                 addr:
                   type: string
                   description: 주소.
-                  example: laudantium
+                  example: aliquam
                 sector:
                   type: string
                   description: validation.attributes.sector.
@@ -2805,7 +2805,7 @@ paths:
                 acct_bank_name:
                   type: string
                   description: 은행명.
-                  example: perferendis
+                  example: maiores
                 acct_bank_code:
                   type: string
                   description: 은행코드.
@@ -2829,11 +2829,11 @@ paths:
                 use_saleslip_prov:
                   type: boolean
                   description: '매출전표 공급자 정보.'
-                  example: true
+                  example: false
                 use_saleslip_sell:
                   type: boolean
                   description: '매출전표 판매자 정보.'
-                  example: false
+                  example: true
                 use_regular_card:
                   type: string
                   description: '단골고객 기능 사용여부.'
@@ -2873,7 +2873,7 @@ paths:
                 user_pw:
                   type: string
                   description: '유저 패스워드'
-                  example: corporis
+                  example: consequatur
               required:
                 - user_name
                 - mcht_name
@@ -2928,7 +2928,7 @@ paths:
                 user_name:
                   type: string
                   description: '유저 ID.'
-                  example: et
+                  example: velit
                 nick_name:
                   type: string
                   description: 유저명(별칭).
@@ -2936,11 +2936,11 @@ paths:
                 mcht_name:
                   type: string
                   description: '가맹점 상호.'
-                  example: autem
+                  example: non
                 addr:
                   type: string
                   description: 주소.
-                  example: excepturi
+                  example: quos
                 sector:
                   type: string
                   description: validation.attributes.sector.
@@ -2956,7 +2956,7 @@ paths:
                 acct_bank_name:
                   type: string
                   description: 은행명.
-                  example: quia
+                  example: laboriosam
                 acct_bank_code:
                   type: string
                   description: 은행코드.
@@ -2976,15 +2976,15 @@ paths:
                 enabled:
                   type: boolean
                   description: validation.attributes.enabled.
-                  example: true
+                  example: false
                 use_saleslip_prov:
                   type: boolean
                   description: '매출전표 공급자 정보.'
-                  example: true
+                  example: false
                 use_saleslip_sell:
                   type: boolean
                   description: '매출전표 판매자 정보.'
-                  example: false
+                  example: true
                 use_regular_card:
                   type: string
                   description: '단골고객 기능 사용여부.'
@@ -2996,7 +2996,7 @@ paths:
                 is_show_fee:
                   type: boolean
                   description: '가맹점 수수료율 노출여부.'
-                  example: false
+                  example: true
                 note:
                   type: string
                   description: 비고.
@@ -3045,7 +3045,7 @@ paths:
         in: path
         name: id
         description: '유저 PK'
-        example: 16
+        example: 6
         required: true
         schema:
           type: integer
@@ -3068,11 +3068,11 @@ paths:
                 phone_num:
                   type: string
                   description: ''
-                  example: rerum
+                  example: voluptatem
                 brand_id:
                   type: string
                   description: ''
-                  example: necessitatibus
+                  example: maiores
               required:
                 - phone_num
                 - brand_id
@@ -3212,7 +3212,7 @@ paths:
         in: path
         name: trans_id
         description: 'The ID of the trans.'
-        example: nulla
+        example: molestiae
         required: true
         schema:
           type: string
@@ -3231,7 +3231,7 @@ paths:
         in: path
         name: trans_id
         description: 'The ID of the trans.'
-        example: non
+        example: rerum
         required: true
         schema:
           type: string
@@ -3329,15 +3329,15 @@ paths:
                 mcht_id:
                   type: string
                   description: 가맹점.
-                  example: exercitationem
+                  example: enim
                 send_url:
                   type: string
                   description: '전송 URL.'
-                  example: et
+                  example: totam
                 noti_status:
                   type: string
                   description: '노티 사용 상태.'
-                  example: sed
+                  example: suscipit
                 note:
                   type: string
                   description: 비고.
@@ -3391,15 +3391,15 @@ paths:
                 mcht_id:
                   type: string
                   description: 가맹점.
-                  example: voluptatum
+                  example: omnis
                 send_url:
                   type: string
                   description: '전송 URL.'
-                  example: ipsum
+                  example: nostrum
                 noti_status:
                   type: string
                   description: '노티 사용 상태.'
-                  example: a
+                  example: inventore
                 note:
                   type: string
                   description: 비고.
@@ -3423,7 +3423,7 @@ paths:
         in: path
         name: id
         description: '유저 PK'
-        example: 5
+        example: 16
         required: true
         schema:
           type: integer
@@ -3511,7 +3511,7 @@ paths:
                 user_pw:
                   type: string
                   description: '유저 패스워드'
-                  example: provident
+                  example: et
       security: []
   '/api/v1/manager/services/operator-histories/{id}':
     get:
@@ -3562,7 +3562,7 @@ paths:
         in: path
         name: id
         description: '영업자 이력 PK'
-        example: 2
+        example: 18
         required: true
         schema:
           type: integer
@@ -3585,11 +3585,11 @@ paths:
                 id:
                   type: integer
                   description: ''
-                  example: 3
+                  example: 4
                 user_pw:
                   type: string
                   description: ''
-                  example: voluptatem
+                  example: maiores
               required:
                 - id
                 - user_pw
@@ -3678,15 +3678,15 @@ paths:
                 user_name:
                   type: string
                   description: '유저 ID.'
-                  example: unde
+                  example: cumque
                 nick_name:
                   type: string
                   description: 유저명(별칭).
-                  example: aliquam
+                  example: velit
                 phone_num:
                   type: string
                   description: 휴대폰번호.
-                  example: recusandae
+                  example: dolorem
                 level:
                   type: string
                   description: 유저등급.
@@ -3698,7 +3698,7 @@ paths:
                 user_pw:
                   type: string
                   description: ''
-                  example: saepe
+                  example: quas
               required:
                 - user_name
                 - nick_name
@@ -3750,19 +3750,19 @@ paths:
                 user_name:
                   type: string
                   description: '유저 ID.'
-                  example: ut
+                  example: voluptatem
                 nick_name:
                   type: string
                   description: 유저명(별칭).
-                  example: sint
+                  example: autem
                 phone_num:
                   type: string
                   description: 휴대폰번호.
-                  example: iusto
+                  example: laudantium
                 level:
                   type: string
                   description: 유저등급.
-                  example: quas
+                  example: optio
                 profile_file:
                   type: string
                   format: binary
@@ -3787,14 +3787,14 @@ paths:
         in: path
         name: id
         description: '유저 PK'
-        example: 18
+        example: 19
         required: true
         schema:
           type: integer
   '/api/v1/pay-gateways/{id}/sale-slip':
     get:
-      summary: ''
-      operationId: getApiV1PayGatewaysIdSaleSlip
+      summary: '매출전표 PG사 정보 API'
+      operationId: PGAPI
       description: ''
       parameters: []
       responses:
@@ -3814,11 +3814,11 @@ paths:
       -
         in: path
         name: id
-        description: 'The ID of the pay gateway.'
-        example: rem
+        description: 'PG사 id'
+        example: 12
         required: true
         schema:
-          type: string
+          type: integer
   /api/v1/manager/services/pay-gateways/detail:
     get:
       summary: '조회 API'
@@ -3929,11 +3929,11 @@ paths:
                 pg_type:
                   type: string
                   description: 'PG 타입.'
-                  example: ipsa
+                  example: ut
                 pg_name:
                   type: string
                   description: 'PG사 별칭.'
-                  example: facilis
+                  example: debitis
                 rep_name:
                   type: string
                   description: validation.attributes.rep_name.
@@ -3958,10 +3958,6 @@ paths:
                   type: string
                   description: 정산일.
                   example: null
-                user_pw:
-                  type: string
-                  description: '유저 패스워드'
-                  example: hic
               required:
                 - pg_type
                 - pg_name
@@ -4010,11 +4006,11 @@ paths:
                 pg_type:
                   type: string
                   description: 'PG 타입.'
-                  example: aut
+                  example: et
                 pg_name:
                   type: string
                   description: 'PG사 별칭.'
-                  example: adipisci
+                  example: sint
                 rep_name:
                   type: string
                   description: validation.attributes.rep_name.
@@ -4056,8 +4052,8 @@ paths:
       -
         in: path
         name: id
-        description: '유저 PK'
-        example: 6
+        description: 'PG사 id'
+        example: 10
         required: true
         schema:
           type: integer
@@ -4097,12 +4093,12 @@ paths:
           in: query
           name: search
           description: '검색어(유저 ID)'
-          example: aut
+          example: et
           required: false
           schema:
             type: string
             description: '검색어(유저 ID)'
-            example: aut
+            example: et
       responses:
         401:
           description: ''
@@ -4154,7 +4150,7 @@ paths:
         in: path
         name: id
         description: '유저 PK'
-        example: 6
+        example: 11
         required: true
         schema:
           type: integer
@@ -4173,7 +4169,7 @@ paths:
         in: path
         name: id
         description: '유저 PK'
-        example: 7
+        example: 5
         required: true
         schema:
           type: integer
@@ -4257,12 +4253,12 @@ paths:
           in: query
           name: search
           description: '검색어(mid, tid)'
-          example: qui
+          example: tempora
           required: false
           schema:
             type: string
             description: '검색어(mid, tid)'
-            example: qui
+            example: tempora
         -
           in: query
           name: module_type
@@ -4311,19 +4307,19 @@ paths:
                 mcht_id:
                   type: string
                   description: 가맹점.
-                  example: deserunt
+                  example: et
                 pg_id:
                   type: string
                   description: PG사.
-                  example: qui
+                  example: harum
                 ps_id:
                   type: string
                   description: 구간.
-                  example: rerum
+                  example: sapiente
                 settle_fee:
                   type: string
                   description: '입금 수수료.'
-                  example: quia
+                  example: enim
                 settle_type:
                   type: string
                   description: 정산일.
@@ -4335,7 +4331,7 @@ paths:
                 module_type:
                   type: string
                   description: '결제모듈 타입.'
-                  example: molestiae
+                  example: officiis
                 api_key:
                   type: string
                   description: validation.attributes.api_key.
@@ -4363,7 +4359,7 @@ paths:
                 comm_settle_fee:
                   type: number
                   description: 통신비.
-                  example: 896.0933
+                  example: 37179.402641
                 comm_settle_day:
                   type: string
                   description: '통신비 정산일.'
@@ -4383,15 +4379,15 @@ paths:
                 abnormal_trans_limit:
                   type: string
                   description: '이상거래 상한금.'
-                  example: corporis
+                  example: odit
                 pay_dupe_limit:
                   type: string
                   description: '중복결제 허용회수.'
-                  example: rem
+                  example: necessitatibus
                 pay_dupe_least:
                   type: string
                   description: '중복결제 하한금.'
-                  example: aliquid
+                  example: quod
                 under_sales_type:
                   type: string
                   description: validation.attributes.under_sales_type.
@@ -4407,19 +4403,19 @@ paths:
                 pay_year_limit:
                   type: string
                   description: '연 결제 한도.'
-                  example: quo
+                  example: labore
                 pay_month_limit:
                   type: string
                   description: '월 결제 한도.'
-                  example: dolor
+                  example: saepe
                 pay_day_limit:
                   type: string
                   description: '일 결제 한도.'
-                  example: quidem
+                  example: ut
                 pay_single_limit:
                   type: string
                   description: '단건 결제 한도.'
-                  example: tempora
+                  example: provident
                 pay_disable_s_tm:
                   type: string
                   description: validation.attributes.pay_disable_s_tm.
@@ -4431,23 +4427,23 @@ paths:
                 installment:
                   type: string
                   description: 할부.
-                  example: iste
+                  example: sequi
                 note:
                   type: string
                   description: 비고.
-                  example: quis
+                  example: tempore
                 is_old_auth:
                   type: string
                   description: '비인증/구인증 여부.'
-                  example: nisi
+                  example: saepe
                 use_realtime_deposit:
                   type: string
                   description: validation.attributes.use_realtime_deposit.
-                  example: et
+                  example: magnam
                 show_pay_view:
                   type: string
                   description: '결제창 노출여부.'
-                  example: et
+                  example: alias
               required:
                 - mcht_id
                 - pg_id
@@ -4513,23 +4509,23 @@ paths:
                 mcht_id:
                   type: string
                   description: 가맹점.
-                  example: eos
+                  example: incidunt
                 pg_id:
                   type: string
                   description: PG사.
-                  example: nobis
+                  example: id
                 ps_id:
                   type: string
                   description: 구간.
-                  example: sed
+                  example: vel
                 settle_fee:
                   type: string
                   description: '입금 수수료.'
-                  example: est
+                  example: quo
                 settle_type:
                   type: string
                   description: 정산일.
-                  example: id
+                  example: eligendi
                 terminal_id:
                   type: string
                   description: validation.attributes.terminal_id.
@@ -4537,7 +4533,7 @@ paths:
                 module_type:
                   type: string
                   description: '결제모듈 타입.'
-                  example: non
+                  example: qui
                 api_key:
                   type: string
                   description: validation.attributes.api_key.
@@ -4565,7 +4561,7 @@ paths:
                 comm_settle_fee:
                   type: number
                   description: 통신비.
-                  example: 1301864.526597
+                  example: 163.3
                 comm_settle_day:
                   type: string
                   description: '통신비 정산일.'
@@ -4585,15 +4581,15 @@ paths:
                 abnormal_trans_limit:
                   type: string
                   description: '이상거래 상한금.'
-                  example: nostrum
+                  example: rerum
                 pay_dupe_limit:
                   type: string
                   description: '중복결제 허용회수.'
-                  example: ratione
+                  example: rem
                 pay_dupe_least:
                   type: string
                   description: '중복결제 하한금.'
-                  example: ut
+                  example: at
                 under_sales_type:
                   type: string
                   description: validation.attributes.under_sales_type.
@@ -4609,19 +4605,19 @@ paths:
                 pay_year_limit:
                   type: string
                   description: '연 결제 한도.'
-                  example: odit
+                  example: perspiciatis
                 pay_month_limit:
                   type: string
                   description: '월 결제 한도.'
-                  example: cupiditate
+                  example: minima
                 pay_day_limit:
                   type: string
                   description: '일 결제 한도.'
-                  example: quasi
+                  example: alias
                 pay_single_limit:
                   type: string
                   description: '단건 결제 한도.'
-                  example: soluta
+                  example: dolorem
                 pay_disable_s_tm:
                   type: string
                   description: validation.attributes.pay_disable_s_tm.
@@ -4633,23 +4629,23 @@ paths:
                 installment:
                   type: string
                   description: 할부.
-                  example: quisquam
+                  example: adipisci
                 note:
                   type: string
                   description: 비고.
-                  example: quo
+                  example: numquam
                 is_old_auth:
                   type: string
                   description: '비인증/구인증 여부.'
-                  example: sint
+                  example: qui
                 use_realtime_deposit:
                   type: string
                   description: validation.attributes.use_realtime_deposit.
-                  example: ut
+                  example: possimus
                 show_pay_view:
                   type: string
                   description: '결제창 노출여부.'
-                  example: nulla
+                  example: sed
               required:
                 - mcht_id
                 - pg_id
@@ -4685,7 +4681,7 @@ paths:
         in: path
         name: id
         description: '유저 PK'
-        example: 2
+        example: 5
         required: true
         schema:
           type: integer
@@ -4773,15 +4769,15 @@ paths:
                 pg_id:
                   type: string
                   description: PG사.
-                  example: pariatur
+                  example: culpa
                 name:
                   type: string
                   description: 이름.
-                  example: nihil
+                  example: veniam
                 trx_fee:
                   type: string
                   description: '거래 수수료.'
-                  example: quaerat
+                  example: perspiciatis
               required:
                 - pg_id
                 - name
@@ -4831,15 +4827,15 @@ paths:
                 pg_id:
                   type: string
                   description: PG사.
-                  example: velit
+                  example: eos
                 name:
                   type: string
                   description: 이름.
-                  example: necessitatibus
+                  example: enim
                 trx_fee:
                   type: string
                   description: '거래 수수료.'
-                  example: ut
+                  example: dicta
               required:
                 - pg_id
                 - name
@@ -4859,7 +4855,7 @@ paths:
         in: path
         name: id
         description: '유저 PK'
-        example: 5
+        example: 8
         required: true
         schema:
           type: integer
@@ -4949,22 +4945,22 @@ paths:
           in: query
           name: search
           description: 검색어(제목)
-          example: fuga
+          example: eum
           required: false
           schema:
             type: string
             description: 검색어(제목)
-            example: fuga
+            example: eum
         -
           in: query
           name: type
           description: '검색타입(0=공지사항, 1=FAQ, 2=1:1문의)'
-          example: delectus
+          example: esse
           required: false
           schema:
             type: string
             description: '검색타입(0=공지사항, 1=FAQ, 2=1:1문의)'
-            example: delectus
+            example: esse
       responses:
         401:
           description: ''
@@ -5011,19 +5007,19 @@ paths:
                 title:
                   type: string
                   description: 제목.
-                  example: qui
+                  example: aut
                 content:
                   type: string
                   description: 본문.
-                  example: quia
+                  example: vel
                 type:
                   type: string
                   description: 타입.
-                  example: et
+                  example: similique
                 is_reply:
                   type: string
                   description: validation.attributes.is_reply.
-                  example: dolorum
+                  example: molestias
               required:
                 - title
                 - content
@@ -5082,19 +5078,19 @@ paths:
                 title:
                   type: string
                   description: 제목.
-                  example: voluptas
+                  example: minus
                 content:
                   type: string
                   description: 본문.
-                  example: iusto
+                  example: qui
                 type:
                   type: string
                   description: 타입.
-                  example: velit
+                  example: voluptatibus
                 is_reply:
                   type: string
                   description: validation.attributes.is_reply.
-                  example: totam
+                  example: mollitia
               required:
                 - title
                 - content
@@ -5115,7 +5111,7 @@ paths:
         in: path
         name: id
         description: '공지사항 PK'
-        example: 11
+        example: 4
         required: true
         schema:
           type: integer
@@ -5259,7 +5255,7 @@ paths:
                 user_pw:
                   type: string
                   description: '유저 패스워드'
-                  example: laudantium
+                  example: eaque
       security: []
   '/api/v1/manager/transactions/realtime-histories/{id}':
     get:
@@ -5310,7 +5306,7 @@ paths:
         in: path
         name: id
         description: '영업자 이력 PK'
-        example: 2
+        example: 3
         required: true
         schema:
           type: integer
@@ -5364,12 +5360,12 @@ paths:
           in: query
           name: search
           description: 검색어(제목)
-          example: laboriosam
+          example: ducimus
           required: false
           schema:
             type: string
             description: 검색어(제목)
-            example: laboriosam
+            example: ducimus
       responses:
         401:
           description: ''
@@ -5408,11 +5404,11 @@ paths:
                 card_num:
                   type: string
                   description: 카드번호.
-                  example: et
+                  example: corporis
                 note:
                   type: string
                   description: 비고.
-                  example: fugiat
+                  example: dignissimos
               required:
                 - card_num
                 - note
@@ -5461,11 +5457,11 @@ paths:
                 card_num:
                   type: string
                   description: 카드번호.
-                  example: voluptas
+                  example: mollitia
                 note:
                   type: string
                   description: 비고.
-                  example: incidunt
+                  example: inventore
               required:
                 - card_num
                 - note
@@ -5484,7 +5480,7 @@ paths:
         in: path
         name: id
         description: '정기등록카드 PK'
-        example: 3
+        example: 16
         required: true
         schema:
           type: integer
@@ -5572,43 +5568,43 @@ paths:
                 id:
                   type: integer
                   description: validation.attributes.id.
-                  example: 13
+                  example: 6
                 acct_name:
                   type: string
                   description: 예금주.
-                  example: doloremque
+                  example: ut
                 acct_num:
                   type: string
                   description: 계좌번호.
-                  example: consequatur
+                  example: dignissimos
                 acct_bank_name:
                   type: string
                   description: 은행명.
-                  example: modi
+                  example: quia
                 acct_bank_code:
                   type: string
                   description: 은행코드.
-                  example: atque
+                  example: et
                 total_amount:
                   type: integer
                   description: validation.attributes.total_amount.
-                  example: 17
+                  example: 8
                 cxl_amount:
                   type: integer
                   description: validation.attributes.cxl_amount.
-                  example: 15
+                  example: 9
                 appr_amount:
                   type: integer
                   description: validation.attributes.appr_amount.
-                  example: 18
+                  example: 14
                 deduct_amount:
                   type: integer
                   description: validation.attributes.deduct_amount.
-                  example: 3
+                  example: 7
                 settle_amount:
                   type: integer
                   description: validation.attributes.settle_amount.
-                  example: 8
+                  example: 6
                 comm_settle_amount:
                   type: string
                   description: validation.attributes.comm_settle_amount.
@@ -5620,7 +5616,7 @@ paths:
                 e_dt:
                   type: string
                   description: '종료일. value 값이 유효한 날짜가 아닙니다.'
-                  example: '2023-11-05T01:36:04'
+                  example: '2023-11-05T01:37:14'
               required:
                 - id
                 - acct_name
@@ -5672,31 +5668,31 @@ paths:
                 id:
                   type: integer
                   description: validation.attributes.id.
-                  example: 3
+                  example: 7
                 acct_name:
                   type: string
                   description: 예금주.
-                  example: eveniet
+                  example: laboriosam
                 acct_num:
                   type: string
                   description: 계좌번호.
-                  example: aut
+                  example: pariatur
                 acct_bank_name:
                   type: string
                   description: 은행명.
-                  example: consectetur
+                  example: non
                 acct_bank_code:
                   type: string
                   description: 은행코드.
-                  example: harum
+                  example: ut
                 total_amount:
                   type: integer
                   description: validation.attributes.total_amount.
-                  example: 11
+                  example: 13
                 cxl_amount:
                   type: integer
                   description: validation.attributes.cxl_amount.
-                  example: 8
+                  example: 14
                 appr_amount:
                   type: integer
                   description: validation.attributes.appr_amount.
@@ -5704,11 +5700,11 @@ paths:
                 deduct_amount:
                   type: integer
                   description: validation.attributes.deduct_amount.
-                  example: 5
+                  example: 11
                 settle_amount:
                   type: integer
                   description: validation.attributes.settle_amount.
-                  example: 13
+                  example: 20
                 comm_settle_amount:
                   type: string
                   description: validation.attributes.comm_settle_amount.
@@ -5720,7 +5716,7 @@ paths:
                 e_dt:
                   type: string
                   description: '종료일. value 값이 유효한 날짜가 아닙니다.'
-                  example: '2023-11-05T01:36:04'
+                  example: '2023-11-05T01:37:14'
               required:
                 - id
                 - acct_name
@@ -5753,7 +5749,7 @@ paths:
                 e_dt:
                   type: string
                   description: 'value 값이 유효한 날짜가 아닙니다.'
-                  example: '2023-11-05T01:36:04'
+                  example: '2023-11-05T01:37:14'
                 datas:
                   type: array
                   description: ''
@@ -5785,31 +5781,31 @@ paths:
                       total_amount:
                         type: integer
                         description: ''
-                        example: 6
+                        example: 5
                       cxl_amount:
                         type: integer
                         description: ''
-                        example: 3
+                        example: 14
                       appr_amount:
                         type: integer
                         description: ''
-                        example: 20
+                        example: 19
                       deduct_amount:
                         type: integer
                         description: ''
-                        example: 3
+                        example: 18
                       settle_amount:
                         type: integer
                         description: ''
-                        example: 4
+                        example: 8
                       comm_settle_amount:
                         type: integer
                         description: ''
-                        example: 12
+                        example: 4
                       under_sales_amount:
                         type: integer
                         description: ''
-                        example: 18
+                        example: 2
                     required:
                       - id
               required:
@@ -5984,7 +5980,7 @@ paths:
                 send_url:
                   type: string
                   description: ''
-                  example: voluptate
+                  example: cumque
               required:
                 - send_url
       security: []
@@ -6085,11 +6081,11 @@ paths:
                 id:
                   type: integer
                   description: ''
-                  example: 1
+                  example: 6
                 user_pw:
                   type: string
                   description: ''
-                  example: est
+                  example: maxime
               required:
                 - id
                 - user_pw
@@ -6154,12 +6150,12 @@ paths:
           in: query
           name: search
           description: '검색어(유저 ID)'
-          example: explicabo
+          example: odio
           required: false
           schema:
             type: string
             description: '검색어(유저 ID)'
-            example: explicabo
+            example: odio
       responses:
         401:
           description: ''
@@ -6198,7 +6194,7 @@ paths:
                 user_name:
                   type: string
                   description: '유저 ID.'
-                  example: veniam
+                  example: aspernatur
                 nick_name:
                   type: string
                   description: 유저명(별칭).
@@ -6206,15 +6202,15 @@ paths:
                 sales_name:
                   type: string
                   description: '영업점 상호.'
-                  example: quo
+                  example: quos
                 view_type:
                   type: string
                   description: validation.attributes.view_type.
-                  example: odio
+                  example: reiciendis
                 level:
                   type: string
                   description: 유저등급.
-                  example: cumque
+                  example: aut
                 resident_num:
                   type: string
                   description: 주민등록번호.
@@ -6226,7 +6222,7 @@ paths:
                 acct_bank_name:
                   type: string
                   description: 은행명.
-                  example: consectetur
+                  example: omnis
                 acct_bank_code:
                   type: string
                   description: 은행코드.
@@ -6250,11 +6246,11 @@ paths:
                 settle_tax_type:
                   type: string
                   description: validation.attributes.settle_tax_type.
-                  example: laudantium
+                  example: quo
                 settle_cycle:
                   type: string
                   description: validation.attributes.settle_cycle.
-                  example: quam
+                  example: ut
                 settle_day:
                   type: string
                   description: validation.attributes.settle_day.
@@ -6286,7 +6282,7 @@ paths:
                 user_pw:
                   type: string
                   description: '유저 패스워드'
-                  example: enim
+                  example: aut
               required:
                 - user_name
                 - sales_name
@@ -6340,7 +6336,7 @@ paths:
                 user_name:
                   type: string
                   description: '유저 ID.'
-                  example: quas
+                  example: adipisci
                 nick_name:
                   type: string
                   description: 유저명(별칭).
@@ -6348,15 +6344,15 @@ paths:
                 sales_name:
                   type: string
                   description: '영업점 상호.'
-                  example: nemo
+                  example: hic
                 view_type:
                   type: string
                   description: validation.attributes.view_type.
-                  example: provident
+                  example: perferendis
                 level:
                   type: string
                   description: 유저등급.
-                  example: blanditiis
+                  example: qui
                 resident_num:
                   type: string
                   description: 주민등록번호.
@@ -6368,7 +6364,7 @@ paths:
                 acct_bank_name:
                   type: string
                   description: 은행명.
-                  example: quibusdam
+                  example: voluptatem
                 acct_bank_code:
                   type: string
                   description: 은행코드.
@@ -6392,11 +6388,11 @@ paths:
                 settle_tax_type:
                   type: string
                   description: validation.attributes.settle_tax_type.
-                  example: provident
+                  example: quo
                 settle_cycle:
                   type: string
                   description: validation.attributes.settle_cycle.
-                  example: quis
+                  example: nulla
                 settle_day:
                   type: string
                   description: validation.attributes.settle_day.
@@ -6448,7 +6444,7 @@ paths:
         in: path
         name: id
         description: '유저 PK'
-        example: 7
+        example: 18
         required: true
         schema:
           type: integer
@@ -6810,12 +6806,12 @@ paths:
           in: query
           name: search
           description: '검색어(mid, tid)'
-          example: fugit
+          example: dolorem
           required: false
           schema:
             type: string
             description: '검색어(mid, tid)'
-            example: fugit
+            example: dolorem
       responses:
         401:
           description: ''
@@ -6875,7 +6871,7 @@ paths:
                 mcht_id:
                   type: string
                   description: 가맹점.
-                  example: similique
+                  example: expedita
                 dev_fee:
                   type: string
                   description: '개발사 수수료.'
@@ -6939,11 +6935,11 @@ paths:
                 mcht_fee:
                   type: string
                   description: validation.attributes.mcht_fee.
-                  example: magni
+                  example: dolor
                 hold_fee:
                   type: string
                   description: '보유금 수수료.'
-                  example: a
+                  example: id
                 mid:
                   type: string
                   description: validation.attributes.mid.
@@ -6955,19 +6951,19 @@ paths:
                 module_type:
                   type: string
                   description: '결제모듈 타입.'
-                  example: accusantium
+                  example: cum
                 pg_id:
                   type: string
                   description: PG사.
-                  example: voluptates
+                  example: quod
                 pmod_id:
                   type: string
                   description: validation.attributes.pmod_id.
-                  example: provident
+                  example: et
                 ps_id:
                   type: string
                   description: 구간.
-                  example: molestias
+                  example: et
                 terminal_id:
                   type: string
                   description: validation.attributes.terminal_id.
@@ -6975,43 +6971,43 @@ paths:
                 ps_fee:
                   type: string
                   description: validation.attributes.ps_fee.
-                  example: voluptatem
+                  example: et
                 mcht_settle_fee:
                   type: string
                   description: validation.attributes.mcht_settle_fee.
-                  example: odit
+                  example: reiciendis
                 mcht_settle_type:
                   type: string
                   description: validation.attributes.mcht_settle_type.
-                  example: odit
+                  example: dolor
                 trx_dt:
                   type: string
                   description: validation.attributes.trx_dt.
-                  example: est
+                  example: quae
                 trx_tm:
                   type: string
                   description: validation.attributes.trx_tm.
-                  example: facere
+                  example: ea
                 amount:
                   type: string
                   description: validation.attributes.amount.
-                  example: ullam
+                  example: dolores
                 ord_num:
                   type: string
                   description: validation.attributes.ord_num.
-                  example: doloribus
+                  example: eaque
                 trx_id:
                   type: string
                   description: validation.attributes.trx_id.
-                  example: eum
+                  example: rerum
                 card_num:
                   type: string
                   description: 카드번호.
-                  example: quisquam
+                  example: qui
                 installment:
                   type: string
                   description: 할부.
-                  example: consectetur
+                  example: eos
                 issuer:
                   type: string
                   description: 발급사.
@@ -7019,11 +7015,11 @@ paths:
                 acquirer:
                   type: string
                   description: validation.attributes.acquirer.
-                  example: tempore
+                  example: aut
                 appr_num:
                   type: string
                   description: 승인번호.
-                  example: aut
+                  example: hic
                 cxl_dt:
                   type: string
                   description: validation.attributes.cxl_dt.
@@ -7233,7 +7229,7 @@ paths:
                 mcht_id:
                   type: string
                   description: 가맹점.
-                  example: accusantium
+                  example: aut
                 dev_fee:
                   type: string
                   description: '개발사 수수료.'
@@ -7297,11 +7293,11 @@ paths:
                 mcht_fee:
                   type: string
                   description: validation.attributes.mcht_fee.
-                  example: dolores
+                  example: qui
                 hold_fee:
                   type: string
                   description: '보유금 수수료.'
-                  example: et
+                  example: dolor
                 mid:
                   type: string
                   description: validation.attributes.mid.
@@ -7313,19 +7309,19 @@ paths:
                 module_type:
                   type: string
                   description: '결제모듈 타입.'
-                  example: accusamus
+                  example: ipsum
                 pg_id:
                   type: string
                   description: PG사.
-                  example: doloribus
+                  example: temporibus
                 pmod_id:
                   type: string
                   description: validation.attributes.pmod_id.
-                  example: saepe
+                  example: enim
                 ps_id:
                   type: string
                   description: 구간.
-                  example: facilis
+                  example: velit
                 terminal_id:
                   type: string
                   description: validation.attributes.terminal_id.
@@ -7333,43 +7329,43 @@ paths:
                 ps_fee:
                   type: string
                   description: validation.attributes.ps_fee.
-                  example: cumque
+                  example: est
                 mcht_settle_fee:
                   type: string
                   description: validation.attributes.mcht_settle_fee.
-                  example: doloribus
+                  example: molestiae
                 mcht_settle_type:
                   type: string
                   description: validation.attributes.mcht_settle_type.
-                  example: sit
+                  example: recusandae
                 trx_dt:
                   type: string
                   description: validation.attributes.trx_dt.
-                  example: eos
+                  example: iusto
                 trx_tm:
                   type: string
                   description: validation.attributes.trx_tm.
-                  example: modi
+                  example: error
                 amount:
                   type: string
                   description: validation.attributes.amount.
-                  example: sed
+                  example: earum
                 ord_num:
                   type: string
                   description: validation.attributes.ord_num.
-                  example: totam
+                  example: corporis
                 trx_id:
                   type: string
                   description: validation.attributes.trx_id.
-                  example: illum
+                  example: consequatur
                 card_num:
                   type: string
                   description: 카드번호.
-                  example: quo
+                  example: ullam
                 installment:
                   type: string
                   description: 할부.
-                  example: voluptates
+                  example: quae
                 issuer:
                   type: string
                   description: 발급사.
@@ -7377,11 +7373,11 @@ paths:
                 acquirer:
                   type: string
                   description: validation.attributes.acquirer.
-                  example: mollitia
+                  example: ea
                 appr_num:
                   type: string
                   description: 승인번호.
-                  example: vero
+                  example: doloribus
                 cxl_dt:
                   type: string
                   description: validation.attributes.cxl_dt.
@@ -7413,7 +7409,7 @@ paths:
                 user_pw:
                   type: string
                   description: '유저 패스워드'
-                  example: non
+                  example: et
               required:
                 - mcht_id
                 - mcht_fee
@@ -7479,7 +7475,7 @@ paths:
                 mcht_id:
                   type: string
                   description: 가맹점.
-                  example: minima
+                  example: iure
                 dev_fee:
                   type: string
                   description: '개발사 수수료.'
@@ -7543,11 +7539,11 @@ paths:
                 mcht_fee:
                   type: string
                   description: validation.attributes.mcht_fee.
-                  example: laborum
+                  example: illo
                 hold_fee:
                   type: string
                   description: '보유금 수수료.'
-                  example: aut
+                  example: hic
                 mid:
                   type: string
                   description: validation.attributes.mid.
@@ -7559,19 +7555,19 @@ paths:
                 module_type:
                   type: string
                   description: '결제모듈 타입.'
-                  example: consequatur
+                  example: quam
                 pg_id:
                   type: string
                   description: PG사.
-                  example: qui
+                  example: consequatur
                 pmod_id:
                   type: string
                   description: validation.attributes.pmod_id.
-                  example: illo
+                  example: adipisci
                 ps_id:
                   type: string
                   description: 구간.
-                  example: et
+                  example: laudantium
                 terminal_id:
                   type: string
                   description: validation.attributes.terminal_id.
@@ -7579,43 +7575,43 @@ paths:
                 ps_fee:
                   type: string
                   description: validation.attributes.ps_fee.
-                  example: laborum
+                  example: harum
                 mcht_settle_fee:
                   type: string
                   description: validation.attributes.mcht_settle_fee.
-                  example: porro
+                  example: laudantium
                 mcht_settle_type:
                   type: string
                   description: validation.attributes.mcht_settle_type.
-                  example: aliquam
+                  example: quisquam
                 trx_dt:
                   type: string
                   description: validation.attributes.trx_dt.
-                  example: placeat
+                  example: rerum
                 trx_tm:
                   type: string
                   description: validation.attributes.trx_tm.
-                  example: dolorem
+                  example: illum
                 amount:
                   type: string
                   description: validation.attributes.amount.
-                  example: et
+                  example: fugiat
                 ord_num:
                   type: string
                   description: validation.attributes.ord_num.
-                  example: vero
+                  example: officia
                 trx_id:
                   type: string
                   description: validation.attributes.trx_id.
-                  example: vel
+                  example: voluptatem
                 card_num:
                   type: string
                   description: 카드번호.
-                  example: quod
+                  example: ut
                 installment:
                   type: string
                   description: 할부.
-                  example: voluptas
+                  example: ad
                 issuer:
                   type: string
                   description: 발급사.
@@ -7623,11 +7619,11 @@ paths:
                 acquirer:
                   type: string
                   description: validation.attributes.acquirer.
-                  example: rerum
+                  example: velit
                 appr_num:
                   type: string
                   description: 승인번호.
-                  example: mollitia
+                  example: doloremque
                 cxl_dt:
                   type: string
                   description: validation.attributes.cxl_dt.
@@ -7691,7 +7687,7 @@ paths:
         in: path
         name: id
         description: '유저 PK'
-        example: 4
+        example: 8
         required: true
         schema:
           type: integer
@@ -7779,11 +7775,11 @@ paths:
                 note:
                   type: string
                   description: 비고.
-                  example: ullam
+                  example: dolor
                 sales_fee:
                   type: number
                   description: validation.attributes.sales_fee.
-                  example: 3095068.9606602
+                  example: 64.35774
               required:
                 - note
                 - sales_fee
@@ -7832,11 +7828,11 @@ paths:
                 note:
                   type: string
                   description: 비고.
-                  example: perspiciatis
+                  example: delectus
                 sales_fee:
                   type: number
                   description: validation.attributes.sales_fee.
-                  example: 462341741.49265
+                  example: 17.8
               required:
                 - note
                 - sales_fee
@@ -7855,7 +7851,7 @@ paths:
         in: path
         name: id
         description: '유저 PK'
-        example: 20
+        example: 12
         required: true
         schema:
           type: integer

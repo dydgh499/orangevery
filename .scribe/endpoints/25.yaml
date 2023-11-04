@@ -446,12 +446,12 @@ endpoints:
         name: send_url
         description: ''
         required: true
-        example: voluptate
+        example: cumque
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      send_url: voluptate
+      send_url: cumque
     fileParameters: []
     responses: []
     responseFields: []

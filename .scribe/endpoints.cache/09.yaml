@@ -62,7 +62,7 @@ endpoints:
         name: search
         description: '검색어(브랜드 명)'
         required: false
-        example: delectus
+        example: cupiditate
         type: string
         enumValues: []
         custom: []
@@ -71,7 +71,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-10-14'
       e_dt: '2023-10-15'
-      search: delectus
+      search: cupiditate
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -118,7 +118,7 @@ endpoints:
         name: name
         description: 이름(브랜드명).
         required: true
-        example: laboriosam
+        example: fuga
         type: string
         enumValues: []
         custom: []
@@ -126,7 +126,7 @@ endpoints:
         name: dns
         description: DNS.
         required: true
-        example: sunt
+        example: sed
         type: string
         enumValues: []
         custom: []
@@ -142,7 +142,7 @@ endpoints:
         name: ceo_name
         description: 대표자명.
         required: true
-        example: eos
+        example: doloribus
         type: string
         enumValues: []
         custom: []
@@ -150,7 +150,7 @@ endpoints:
         name: addr
         description: 주소.
         required: true
-        example: delectus
+        example: dignissimos
         type: string
         enumValues: []
         custom: []
@@ -158,7 +158,7 @@ endpoints:
         name: phone_num
         description: 휴대폰번호.
         required: true
-        example: at
+        example: perspiciatis
         type: string
         enumValues: []
         custom: []
@@ -174,7 +174,7 @@ endpoints:
         name: company_name
         description: '법인 상호.'
         required: true
-        example: eaque
+        example: omnis
         type: string
         enumValues: []
         custom: []
@@ -190,7 +190,7 @@ endpoints:
         name: business_num
         description: 사업자등록번호.
         required: true
-        example: at
+        example: natus
         type: string
         enumValues: []
         custom: []
@@ -198,7 +198,7 @@ endpoints:
         name: deposit_day
         description: 입금일.
         required: true
-        example: omnis
+        example: ut
         type: string
         enumValues: []
         custom: []
@@ -206,7 +206,7 @@ endpoints:
         name: deposit_amount
         description: 입금액.
         required: true
-        example: dolorem
+        example: beatae
         type: string
         enumValues: []
         custom: []
@@ -214,7 +214,7 @@ endpoints:
         name: extra_deposit_amount
         description: validation.attributes.extra_deposit_amount.
         required: true
-        example: 20207940.746598
+        example: 731214.0
         type: number
         enumValues: []
         custom: []
@@ -222,7 +222,7 @@ endpoints:
         name: dev_fee
         description: '개발사 수수료.'
         required: true
-        example: 38999.529
+        example: 495570.13
         type: number
         enumValues: []
         custom: []
@@ -230,7 +230,7 @@ endpoints:
         name: dev_settle_type
         description: validation.attributes.dev_settle_type.
         required: true
-        example: 167815813.43408
+        example: 4.11
         type: number
         enumValues: []
         custom: []
@@ -326,24 +326,24 @@ endpoints:
         name: pv_options
         description: ''
         required: true
-        example: repellat
+        example: nulla
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      name: laboriosam
-      dns: sunt
-      ceo_name: eos
-      addr: delectus
-      phone_num: at
-      company_name: eaque
-      business_num: at
-      deposit_day: omnis
-      deposit_amount: dolorem
-      extra_deposit_amount: 20207940.746598
-      dev_fee: 38999.529
-      dev_settle_type: 167815813.43408
-      pv_options: repellat
+      name: fuga
+      dns: sed
+      ceo_name: doloribus
+      addr: dignissimos
+      phone_num: perspiciatis
+      company_name: omnis
+      business_num: natus
+      deposit_day: ut
+      deposit_amount: beatae
+      extra_deposit_amount: 731214.0
+      dev_fee: 495570.13
+      dev_settle_type: 4.11
+      pv_options: nulla
     fileParameters:
       logo_file: null
       favicon_file: null
@@ -383,12 +383,12 @@ endpoints:
         name: id
         description: '브랜드 PK'
         required: true
-        example: 6
+        example: 20
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 6
+      id: 20
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -434,12 +434,12 @@ endpoints:
         name: id
         description: '브랜드 PK'
         required: true
-        example: 5
+        example: 13
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 5
+      id: 13
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -447,7 +447,7 @@ endpoints:
         name: name
         description: 이름(브랜드명).
         required: true
-        example: perferendis
+        example: enim
         type: string
         enumValues: []
         custom: []
@@ -455,7 +455,7 @@ endpoints:
         name: dns
         description: DNS.
         required: true
-        example: in
+        example: dolor
         type: string
         enumValues: []
         custom: []
@@ -471,7 +471,7 @@ endpoints:
         name: ceo_name
         description: 대표자명.
         required: true
-        example: molestiae
+        example: inventore
         type: string
         enumValues: []
         custom: []
@@ -479,7 +479,7 @@ endpoints:
         name: addr
         description: 주소.
         required: true
-        example: voluptates
+        example: et
         type: string
         enumValues: []
         custom: []
@@ -487,7 +487,7 @@ endpoints:
         name: phone_num
         description: 휴대폰번호.
         required: true
-        example: assumenda
+        example: repudiandae
         type: string
         enumValues: []
         custom: []
@@ -503,7 +503,7 @@ endpoints:
         name: company_name
         description: '법인 상호.'
         required: true
-        example: natus
+        example: alias
         type: string
         enumValues: []
         custom: []
@@ -519,7 +519,7 @@ endpoints:
         name: business_num
         description: 사업자등록번호.
         required: true
-        example: sapiente
+        example: et
         type: string
         enumValues: []
         custom: []
@@ -527,7 +527,7 @@ endpoints:
         name: deposit_day
         description: 입금일.
         required: true
-        example: ut
+        example: et
         type: string
         enumValues: []
         custom: []
@@ -535,7 +535,7 @@ endpoints:
         name: deposit_amount
         description: 입금액.
         required: true
-        example: architecto
+        example: expedita
         type: string
         enumValues: []
         custom: []
@@ -543,7 +543,7 @@ endpoints:
         name: extra_deposit_amount
         description: validation.attributes.extra_deposit_amount.
         required: true
-        example: 3419047.8587466
+        example: 61040.451
         type: number
         enumValues: []
         custom: []
@@ -551,7 +551,7 @@ endpoints:
         name: dev_fee
         description: '개발사 수수료.'
         required: true
-        example: 3414.72283947
+        example: 18.9
         type: number
         enumValues: []
         custom: []
@@ -559,7 +559,7 @@ endpoints:
         name: dev_settle_type
         description: validation.attributes.dev_settle_type.
         required: true
-        example: 19.0
+        example: 7981.0
         type: number
         enumValues: []
         custom: []
@@ -655,24 +655,24 @@ endpoints:
         name: pv_options
         description: ''
         required: true
-        example: ut
+        example: aspernatur
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      name: perferendis
-      dns: in
-      ceo_name: molestiae
-      addr: voluptates
-      phone_num: assumenda
-      company_name: natus
-      business_num: sapiente
-      deposit_day: ut
-      deposit_amount: architecto
-      extra_deposit_amount: 3419047.8587466
-      dev_fee: 3414.72283947
-      dev_settle_type: 19.0
-      pv_options: ut
+      name: enim
+      dns: dolor
+      ceo_name: inventore
+      addr: et
+      phone_num: repudiandae
+      company_name: alias
+      business_num: et
+      deposit_day: et
+      deposit_amount: expedita
+      extra_deposit_amount: 61040.451
+      dev_fee: 18.9
+      dev_settle_type: 7981.0
+      pv_options: aspernatur
     fileParameters:
       logo_file: null
       favicon_file: null
@@ -712,12 +712,12 @@ endpoints:
         name: id
         description: '브랜드 PK'
         required: true
-        example: 9
+        example: 3
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 9
+      id: 3
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
