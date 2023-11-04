@@ -82,14 +82,9 @@ watchEffect(() => {
                     :sales="false">
                     <template #sales_extra_field>
                         <VCol cols="12" sm="3">
-                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level"
-                                :items="[{ id: null, title: '전체' }].concat(salesLevels())" :label="`등급 선택`"
-                                item-title="title" item-value="id" create />
-                        </VCol>
-                        <VCol cols="12" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
                                 :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`정산주기 선택`"
-                                item-title="title" item-value="id" create />
+                                item-title="title" item-value="id" />
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>

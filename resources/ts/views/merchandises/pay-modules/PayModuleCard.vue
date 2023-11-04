@@ -581,7 +581,7 @@ onMounted(() => {
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.filter_issuers" label="필터링할 발급사 선택"
                                         :items="issuers" prepend-inner-icon="ph-buildings"
                                         item-title="title" item-value="code" multiple chips closable-chips single-line
-                                        create />
+                                        />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

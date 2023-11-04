@@ -18,7 +18,7 @@ provide('exporter', exporter)
         </template>
         <template #index_extra_field>
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" :eager="true" />
+                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager />
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.type"
                 :items="types" prepend-inner-icon="fxemoji-notepage" label="게시글 타입"
                 item-title="title" item-value="id" style="min-width: 11em;"/>

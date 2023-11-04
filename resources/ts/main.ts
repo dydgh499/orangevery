@@ -41,16 +41,24 @@ app.provide('$errorHandler', function(e: any) {
     return e.response
 });
 app.provide('$formatDate', function(date: Date) {
-    const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const day = String(date.getDate()).padStart(2, '0')
-    return `${year}-${month}-${day}`;
+    if(date) {
+        const year = date.getFullYear()
+        const month = String(date.getMonth() + 1).padStart(2, '0')
+        const day = String(date.getDate()).padStart(2, '0')
+        return `${year}-${month}-${day}`;
+    }
+    else
+        return `2023-12-01`
 });
 app.provide('$formatTime', function(date: Date) {
-    const hour = String(date.getHours()).padStart(2, '0')
-    const min = String(date.getMinutes()).padStart(2, '0')
-    const sec = String(date.getSeconds()).padStart(2, '0')
-    return `${hour}:${min}:${sec}`;
+    if(date) {
+        const hour = String(date.getHours()).padStart(2, '0')
+        const min = String(date.getMinutes()).padStart(2, '0')
+        const sec = String(date.getSeconds()).padStart(2, '0')
+        return `${hour}:${min}:${sec}`;    
+    }
+    else
+        return `00:00:00`
 });
 
 // Use plugins

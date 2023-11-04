@@ -13,17 +13,20 @@ interface Props {
 }
 const props = defineProps<Props>()
 
+const route = useRoute()
 const store = <any>(inject('store'))
 const head = <any>(inject('head'))
 const filter = ref(null)
 
+
 onMounted(() => {
     head.filter = filter.value
+    store.params.page = route.query.page ? route.query.page : 1
+    store.params.page_size = route.query.page_size ? route.query.page_size : 20
     watchEffect(() => {
         store.setTable()
     })
 });
-
 
 </script>
 <template>
@@ -77,9 +80,9 @@ onMounted(() => {
                         style=" padding-right: 0 !important;padding-left: 0 !important;">
                         <span class="text-sm text-disabled" style="padding-left: 10px;">
                             {{ store.pagenationCouputed }}
-                        </span>
+                        </span>                        
                         <VPagination v-model="store.params.page" size="small" :total-visible="10"
-                            :length="store.pagenation.total_page" />
+                            :length="store.pagenation.total_page" @update:modelValue="store.updateQueryString({page: store.params.page})" />
                     </VCardText>
                 </VCard>
             </VCol>

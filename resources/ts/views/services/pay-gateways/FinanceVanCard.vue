@@ -50,7 +50,7 @@ onMounted(async () => {
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.finance_company_num"
                                         density="compact" variant="outlined" :items="finance_companies" label="금융 VAN 선택"
-                                        :eager="true" item-title="title" item-value="id" :rules="[requiredValidator]" />
+                                        eager item-title="title" item-value="id" :rules="[requiredValidator]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -160,7 +160,7 @@ onMounted(async () => {
                                         prepend-inner-icon="ph-buildings" label="은행 선택"
                                         :hint="`${bank.title}, 은행 코드: ${bank.code ? bank.code : '000'} `" item-title="title"
                                         item-value="code" persistent-hint return-object single-line :rules="[nullValidator]"
-                                        create />
+                                        />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

@@ -65,13 +65,9 @@ watchEffect(() => {
                 :sales="true">
                 <template #sales_extra_field>
                     <VCol cols="12" sm="3">
-                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="salesLevels()"
-                            :label="`조회등급`" item-title="title" item-value="id" create />
-                    </VCol>
-                    <VCol cols="12" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
                             :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`영업점 정산주기 필터`"
-                            item-title="title" item-value="id" create />
+                            item-title="title" item-value="id" />
                     </VCol>
                     <VCol cols="12" sm="3">
                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"

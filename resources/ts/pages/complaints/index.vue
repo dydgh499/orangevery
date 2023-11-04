@@ -13,7 +13,7 @@ provide('exporter', exporter)
     <BaseIndexView placeholder="TID 검색" :metas="[]" :add="true" add_name="민원" :date_filter_type="DateFilters.NOT_USE">
         <template #index_extra_field>
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" :eager="true" />
+                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager />
         </template>
         <template #headers>
             <tr>

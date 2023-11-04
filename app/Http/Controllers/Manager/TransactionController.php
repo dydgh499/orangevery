@@ -343,7 +343,11 @@ class TransactionController extends Controller
         $dev_settle_type = 1;
         $db_trans = $this->transactions
             ->where('brand_id', 15)
-            ->where('mcht_settle_id', -1)
+            ->where('trx_dt', '2023-10-13')
+            ->where(function ($query) use ($search) {
+                return $query->where('trx_dt', '2023-10-13')
+                    ->orWhere('cxl_dt', '2023-10-13');
+            })
             ->orderBy('transactions.id', 'desc')
             ->get();
         

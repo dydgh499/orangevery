@@ -160,7 +160,7 @@ export const feeApplyHistoires = async () => {
     return r.data
 }
 
-export const useSalesFilterStore = () => {
+export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     const all_sales = Array.from({ length: 6 }, () => <any[]>([]))
     const sales = Array.from({ length: 6 }, () => ref<any[]>([]))
 
@@ -265,7 +265,7 @@ export const useSalesFilterStore = () => {
         classification,
         setUnderSalesFilter,
     }
-}
+})
 
 export const defaultItemInfo = () => {
     const path = 'salesforces'

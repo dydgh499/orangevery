@@ -2,7 +2,8 @@ import router from '@/router';
 import { useRequestStore } from '@/views/request';
 import type { Pagenation } from '@/views/types';
 import { user_info } from '@axios';
-import { StatusColors } from '@core/enums';
+import { DateFilters, StatusColors } from '@core/enums';
+import corp from '@corp';
 import { cloneDeep } from 'lodash';
 
 export function Searcher(path: string) {
@@ -10,7 +11,7 @@ export function Searcher(path: string) {
     const base_url = '/api/v1/manager/'+path
     // -----------------------------
     let items = ref(<[]>([]))
-    const params = reactive<any>({page:1, page_size:20})
+    const params = reactive<any>({})
     const pagenation = reactive<Pagenation>({ total_count: 0, total_page: 1 })
     const chart_process = ref(false)
     const is_skeleton   = ref(true)
@@ -38,8 +39,7 @@ export function Searcher(path: string) {
     }
     
     const getChartData = async() => {
-        const p = cloneDeep(params)
-        p.search = getSearch()        
+        const p = getParams()
         const r = await get(base_url+'/chart', { params: p })
         chart_process.value = true
         return r
@@ -49,15 +49,23 @@ export function Searcher(path: string) {
           return d === 0 ? 0 : Number(((n / d) * 100).toFixed(2))
     }
 
-    const setTable = async() => {
+    const getParams = () => {
         const p = cloneDeep(params)
         p.search = getSearch()        
         if(before_search != p.search) {
             setChartProcess()
             before_search = p.search
         }
-        
-        const r = await get(base_url, { params: p })        
+        return p
+    }
+
+    const updateQueryString = (obj: any) => {
+        router.push({query: {...router.currentRoute.value.query, ...obj}})
+    }
+    
+    const setTable = async() => {
+        const p = getParams()
+        const r = await get(base_url, {params: p})
         if (r.status == 200) {
             let l_page = r.data.total / params.page_size
             items.value = r.data.content
@@ -66,6 +74,7 @@ export function Searcher(path: string) {
         }
         is_skeleton.value = false
         return r.data.content
+        
     }
     const getAllDataFormat = () => {
         const p  = cloneDeep(params)  
@@ -104,10 +113,137 @@ export function Searcher(path: string) {
         return items.value
     })
     return {
-        setTable, getItems, base_url,
+        setTable, getItems, base_url, updateQueryString,
         items, params, pagenation, getChartProcess, setChartProcess,
         create, edit, getChartData, getPercentage,
         get, booleanTypeColor, getSelectIdColor, getAllDataFormat,
         pagenationCouputed, is_skeleton
+    }
+}
+
+export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
+    const range_date = ref(<string[]>(['', '']))
+    const date = ref(<string>(''))
+    const date_selecter = ref()
+    const route = useRoute()
+
+    const getDateFormat = (date: Date) => {
+        if (corp.pv_options.free.use_search_date_detail && props.date_filter_type == DateFilters.DATE_RANGE)
+            return formatDate(date) + " " + formatTime(date)
+        else
+            return formatDate(date)
+    }
+    const getRangeFormat = (dates: Date[]) => {
+        if (props.date_filter_type == DateFilters.DATE_RANGE) {
+            const setRangeFormat = (date: Date) => {
+                if (formatTime(date) === "00:00:00" || formatTime(date) === "23:59:59")
+                    return formatDate(date)
+                else
+                    return formatDate(date) + " " + formatTime(date)
+            }
+            const s_date = setRangeFormat(dates[0])
+            const e_date = setRangeFormat(dates[1])
+            return s_date + "  -  " + e_date
+        }
+        else if (props.date_filter_type == DateFilters.SETTLE_RANGE) {
+
+            return formatDate(dates[0]) + "  -  " + formatDate(dates[1])
+        }
+    }
+
+    const setDate = () => {
+        if (date_selecter.value) {
+            setDateRange(date_selecter.value)
+        }
+    }
+    const setDateRange = (type: string) => {
+        let s_date = undefined
+        let e_date = undefined
+        const date = new Date();
+        if (type == 'today') {
+            s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+            e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
+        }
+        else if (type == '1 day') {
+            s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 0, 0, 0);
+            e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 23, 59, 59);
+        }
+        else if (type == '3 day') {
+            s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 3, 0, 0, 0);
+            e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 23, 59, 59);
+        }
+        else if (type == '1 mon') {
+            s_date = new Date(date.getFullYear(), date.getMonth() - 1, 1, 0, 0, 0)
+            e_date = new Date(date.getFullYear(), date.getMonth(), 0, 23, 59, 59)
+        }
+        else if (type == '3 mon') {
+            s_date = new Date(date.getFullYear(), date.getMonth() - 3, 1, 0, 0, 0);
+            e_date = new Date(date.getFullYear(), date.getMonth(), 0, 23, 59, 59);
+        }
+        else {
+            s_date = new Date()
+            e_date = new Date()
+        }
+        range_date.value[0] = getDateFormat(s_date)
+        range_date.value[1] = getDateFormat(e_date)
+    }
+
+    const init = (params: any) => {
+        if (route.query.search) {
+            params.search = route.query.search
+            const search = (document.getElementById('search') as HTMLInputElement)
+            search.value = params.search
+        }
+        if (route.query.level)
+            params.level = route.query.level
+        if (route.query.s_dt && route.query.e_dt) {
+            range_date.value[0] = route.query.s_dt as string
+            range_date.value[1] = route.query.e_dt as string
+        }
+        else if (route.query.dt)
+            date.value = route.query.dt as string
+        else {
+            if (props.date_filter_type == DateFilters.DATE_RANGE) {
+                const date = new Date()
+                const s_date = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0)
+                const e_date = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59)
+                range_date.value[0] = getDateFormat(s_date)
+                range_date.value[1] = getDateFormat(e_date)
+            }
+            else if (props.date_filter_type == DateFilters.SETTLE_RANGE) {
+                const date = new Date()
+                const s_date = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0)
+                const e_date = date
+                range_date.value[0] = getDateFormat(s_date)
+                range_date.value[1] = getDateFormat(e_date)
+            }
+            else if (props.date_filter_type == DateFilters.DATE)
+                date.value = formatDate(new Date())
+        }
+    }
+
+    const dateChanged = (store: any) => {
+        if (props.date_filter_type == DateFilters.DATE_RANGE || props.date_filter_type == DateFilters.SETTLE_RANGE) {
+            const s_date = new Date(range_date.value[0])
+            const e_date = new Date(range_date.value[1])
+            store.params.s_dt = getDateFormat(s_date)
+            store.params.e_dt = getDateFormat(e_date)
+            store.updateQueryString({ s_dt: store.params.s_dt, e_dt: store.params.e_dt })
+        }
+        else if (props.date_filter_type == DateFilters.DATE) {
+            const dt = new Date(date.value)
+            store.params.dt = formatDate(dt)
+            store.updateQueryString({ dt: store.params.dt })
+        }
+    }
+
+    return {
+        getRangeFormat,
+        setDate,
+        init,
+        dateChanged,
+        range_date,
+        date,
+        date_selecter,
     }
 }

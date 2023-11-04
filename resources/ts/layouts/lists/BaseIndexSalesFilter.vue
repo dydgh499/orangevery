@@ -6,30 +6,39 @@ import { user_info } from '@axios'
 interface Props {
     show: boolean,
 }
+const route = useRoute()
 const props = defineProps<Props>();
 const store = <any>(inject('store'))
 const { sales, setUnderSalesFilter } = useSalesFilterStore()
-setUnderSalesFilter(6, store.params)
-
 const levels = corp.pv_options.auth.levels
 
-watchEffect(() => {    
-    store.setChartProcess()
-    store.params.sales5_id = store.params.sales5_id
-    store.params.sales4_id = store.params.sales4_id
-    store.params.sales3_id = store.params.sales3_id
-    store.params.sales2_id = store.params.sales2_id
-    store.params.sales1_id = store.params.sales1_id
-    store.params.sales0_id = store.params.sales0_id
+onMounted(() => {
+    for (let i = 0; i < 6; i++) {
+        const idx = (5 - i)
+        if (route.query['sales' + idx + '_id']) {
+            store.params['sales' + idx + '_id'] = route.query['sales' + idx + '_id']
+        }
+    }
+    watchEffect(() => {
+        store.setChartProcess()
+        store.params.sales5_id = store.params.sales5_id
+        store.params.sales4_id = store.params.sales4_id
+        store.params.sales3_id = store.params.sales3_id
+        store.params.sales2_id = store.params.sales2_id
+        store.params.sales1_id = store.params.sales1_id
+        store.params.sales0_id = store.params.sales0_id
+    })
 })
 </script>
 <template>
     <VRow>
         <template v-for="i in 6" :key="i">
-            <VCol :cols="12" :sm="3" v-if="levels['sales'+(6-i)+'_use'] && props.show && user_info.level >= getIndexByLevel(6-i)">
-                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params['sales'+(6-i)+'_id']"
-                    :items="sales[6-i].value" :label="levels['sales'+(6-i)+'_name'] + ' 필터'"
-                    item-title="sales_name" item-value="id" @update:modelValue="setUnderSalesFilter(6-i, store.params)"/>
+            <VCol :cols="12" :sm="3"
+                v-if="levels['sales' + (6 - i) + '_use'] && props.show && user_info.level >= getIndexByLevel(6 - i)">
+                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params['sales' + (6 - i) + '_id']"
+                    :items="sales[6 - i].value" :label="levels['sales' + (6 - i) + '_name'] + ' 필터'" item-title="sales_name"
+                    item-value="id"
+                    @update:modelValue="[store.updateQueryString({ ['sales' + (6 - i) + '_id']: store.params['sales' + (6 - i) + '_id'] }), setUnderSalesFilter(6 - i, store.params)]" />
             </VCol>
         </template>
         <slot name="sales_extra_field"></slot>

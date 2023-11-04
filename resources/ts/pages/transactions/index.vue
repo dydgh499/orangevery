@@ -145,7 +145,7 @@ watchEffect(() => {
                     <template #sales_extra_field>
                         <VCol cols="12" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="getAllLevels()"
-                                :label="`등급 선택`" item-title="title" item-value="id" create />
+                                :label="`등급 선택`" item-title="title" item-value="id" />
                         </VCol>
                     </template>
                     <template #pg_extra_field>

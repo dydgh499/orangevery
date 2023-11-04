@@ -34,7 +34,7 @@ const {
                                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_id"
                                                         :items="merchandises" prepend-inner-icon="tabler-building-store"
                                                         label="가맹점 선택" item-title="mcht_name" item-value="id" single-line
-                                                        create :eager="true" />
+                                                        eager />
                                                 </template>
                                             </CreateHalfVCol>
                                         </VRow>
@@ -47,7 +47,7 @@ const {
                                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="pmod_id"
                                                         :items="filterPayMod" prepend-inner-icon="ic-outline-send-to-mobile"
                                                         label="결제모듈 선택" item-title="note" item-value="id" single-line
-                                                        create :eager="true" />
+                                                        eager />
                                                 </template>
                                             </CreateHalfVCol>
                                         </VRow>

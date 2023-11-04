@@ -26,18 +26,10 @@ watchEffect(() => {
 <template>
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.DATE_RANGE">
         <template #filter>
-            <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
-                :sales="false">
-                <template #sales_extra_field>
-                    <VCol cols="12" sm="3">
-                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level"
-                            :items="[{ id: null, title: '전체' }].concat(salesLevels())" :label="`등급 선택`" item-title="title"
-                            item-value="id" create />
-                    </VCol>
-                </template>
-            </BaseIndexFilterCard>
         </template>
-        <template #index_extra_field>
+        <template #index_extra_field>            
+            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
+                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager />
             <VBtn prepend-icon="tabler:report-money" @click="batchDeposit(selected, false)" v-if="getUserLevel() >= 35">
                 일괄 입금/미입금처리
             </VBtn>

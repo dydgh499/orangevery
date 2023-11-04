@@ -2,6 +2,8 @@
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { ko } from 'date-fns/locale'
 import { DateFilters } from '@core/enums'
+import { salesLevels } from '@/views/salesforces/useStore'
+import { DateSetter } from '@/views/searcher'
 import corp from '@corp'
 
 interface Props {
@@ -10,17 +12,14 @@ interface Props {
     add_name: string,
     date_filter_type: number | null,
 }
+
 const props = defineProps<Props>()
 const store = <any>(inject('store'))
 const head = <any>(inject('head'))
 const exporter = <any>(inject('exporter'))
 const formatDate = <any>(inject('$formatDate'))
 const formatTime = <any>(inject('$formatTime'))
-const date_selecter = ref()
-
 const { theme } = useThemeConfig()
-const range_date = ref(<string[]>(['', '']))
-const date = ref(<string>(''))
 const dates = [
     { id: 'today', title: '당일' },
     { id: '1 day', title: '어제' },
@@ -28,6 +27,15 @@ const dates = [
     { id: '1 mon', title: '1개월' },
     { id: '3 mon', title: '3개월' },
 ]
+const {
+    getRangeFormat,
+    setDate,
+    init,
+    dateChanged,
+    range_date,
+    date,
+    date_selecter,
+} = DateSetter(props, formatDate, formatTime)
 
 store.params.use_search_date_detail = Number(corp.pv_options.free.use_search_date_detail)
 
@@ -35,96 +43,20 @@ const handleEnterKey = (event: KeyboardEvent) => {
     if (event.keyCode === 13)
         store.setTable()
 }
-const getDateFormat = (date: Date) => {
-    if (corp.pv_options.free.use_search_date_detail && props.date_filter_type == DateFilters.DATE_RANGE)
-        return formatDate(date) + " " + formatTime(date)
-    else
-        return formatDate(date)
-}
-const getRangeFormat = (dates: Date[]) => {
-    if (props.date_filter_type == DateFilters.DATE_RANGE) {
-        const setRangeFormat = (date: Date) => {
-            if (formatTime(date) === "00:00:00" || formatTime(date) === "23:59:59")
-                return formatDate(date)
-            else
-                return formatDate(date) + " " + formatTime(date)
-        }
-        const s_date = setRangeFormat(dates[0])
-        const e_date = setRangeFormat(dates[1])
-        return s_date + "  -  " + e_date
-    }
-    else if(props.date_filter_type == DateFilters.SETTLE_RANGE) {
-        
-        return formatDate(dates[0]) + "  -  " + formatDate(dates[1])
-    }
-}
-const setDate = () => {
-    if (date_selecter.value) {
-        setDateRange(date_selecter.value)
-    }
-}
-const setDateRange = (type: string) => {
-    let s_date = undefined
-    let e_date = undefined
-    const date = new Date();
-    if (type == 'today') {
-        s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
-        e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
-    }
-    else if (type == '1 day') {
-        s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 0, 0, 0);
-        e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 23, 59, 59);
-    }
-    else if (type == '3 day') {
-        s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 3, 0, 0, 0);
-        e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 23, 59, 59);
-    }
-    else if (type == '1 mon') {
-        s_date = new Date(date.getFullYear(), date.getMonth() - 1, 1, 0, 0, 0)
-        e_date = new Date(date.getFullYear(), date.getMonth(), 0, 23, 59, 59)
-    }
-    else if (type == '3 mon') {
-        s_date = new Date(date.getFullYear(), date.getMonth() - 3, 1, 0, 0, 0);
-        e_date = new Date(date.getFullYear(), date.getMonth(), 0, 23, 59, 59);
-    }
-    else {
-        s_date = new Date()
-        e_date = new Date()
-    }
-    range_date.value[0] = getDateFormat(s_date)
-    range_date.value[1] = getDateFormat(e_date)
+
+const updateSearchQuery = () => {
+    const search = (document.getElementById('search') as HTMLInputElement).value
+    //store.updateQueryString({ search: search })
 }
 
-if (props.date_filter_type == DateFilters.DATE_RANGE) {
-    const date = new Date()
-    const s_date = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0)
-    const e_date = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59)
-    range_date.value[0] = getDateFormat(s_date)
-    range_date.value[1] = getDateFormat(e_date)
-}
-else if (props.date_filter_type == DateFilters.SETTLE_RANGE) {
-    const date = new Date()
-    const s_date = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0)
-    const e_date = date
-    range_date.value[0] = getDateFormat(s_date)
-    range_date.value[1] = getDateFormat(e_date)
-}
-else if (props.date_filter_type == DateFilters.DATE)
-    date.value = formatDate(new Date())
-
-watchEffect(() => {
-    store.setChartProcess()
-    if (props.date_filter_type == DateFilters.DATE_RANGE || props.date_filter_type == DateFilters.SETTLE_RANGE) {
-        const s_date = new Date(range_date.value[0])
-        const e_date = new Date(range_date.value[1])
-        store.params.s_dt = getDateFormat(s_date)
-        store.params.e_dt = getDateFormat(e_date)
-    }
-    else if (props.date_filter_type == DateFilters.DATE) {
-        const dt = new Date(date.value)
-        store.params.dt = formatDate(dt)
-    }
+onMounted(() => {
+    init(store.params)
+    watchEffect(() => {
+        store.setChartProcess()
+        dateChanged(store)
+    })
 })
+
 </script>
 <template>
     <div class="d-inline-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
@@ -140,14 +72,15 @@ watchEffect(() => {
                                             :text-input="{ format: 'yyyy-MM-dd HH:mm:ss' }" locale="ko" :format-locale="ko"
                                             range multi-calendars :dark="theme === 'dark'" autocomplete="on" utc
                                             :format="getRangeFormat" :teleport="true" input-class-name="search-input"
-                                            @update:modelValue="date_selecter = null" select-text="Search" time-picker-inline/>
+                                            @update:modelValue="date_selecter = null" select-text="Search"
+                                            time-picker-inline />
                                     </template>
                                     <template v-else-if="props.date_filter_type == DateFilters.SETTLE_RANGE">
-                                        <VueDatePicker v-model="range_date"
-                                            :text-input="{ format: 'yyyy-MM-dd' }" locale="ko" :format-locale="ko" range
-                                            multi-calendars :dark="theme === 'dark'" autocomplete="on" utc
-                                            :format="getRangeFormat" :teleport="true" input-class-name="search-input"
-                                            @update:modelValue="date_selecter = null" select-text="Search" :enable-time-picker="false"/>
+                                        <VueDatePicker v-model="range_date" :text-input="{ format: 'yyyy-MM-dd' }"
+                                            locale="ko" :format-locale="ko" range multi-calendars :dark="theme === 'dark'"
+                                            autocomplete="on" utc :format="getRangeFormat" :teleport="true"
+                                            input-class-name="search-input" @update:modelValue="date_selecter = null"
+                                            select-text="Search" :enable-time-picker="false" />
                                     </template>
                                     <template v-else-if="props.date_filter_type == DateFilters.DATE">
                                         <VueDatePicker v-model="date" :text-input="{ format: 'yyyy-MM-dd' }" locale="ko"
@@ -174,15 +107,22 @@ watchEffect(() => {
                                     density="compact" variant="outlined" item-title="title" item-value="id"
                                     style="min-width: 10em;" @update:modelValue="setDate()" label="기간 조회" />
                             </template>
+                            <template
+                                v-else-if="head.path === 'salesforces' || head.path === 'transactions/settle/salesforces' || head.path === 'transactions/settle-histories/salesforces'">
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level"
+                                    style="min-width: 10em;" :items="[{ id: null, title: '전체' }].concat(salesLevels())"
+                                    :label="`조회등급`" item-title="title" item-value="id"
+                                    @update:modelValue="store.updateQueryString({ level: store.params.level })" />
+                            </template>
                             <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel"
                                 @click="exporter(1)">
                                 엑셀 추출
                             </VBtn>
                         </div>
-
                         <div class="d-inline-flex align-center flex-wrap gap-4 float-right justify-center">
                             <VTextField id="search" :placeholder="props.placeholder" density="compact"
-                                @keyup.enter="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input">
+                                @keyup="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input"
+                                @input="updateSearchQuery()">
                                 <VTooltip activator="parent" location="top">
                                     {{ props.placeholder }}
                                 </VTooltip>
