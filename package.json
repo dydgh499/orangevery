@@ -18,7 +18,6 @@
     "@mdi/font": "5.9.55",
     "@tabler/icons": "2.17.0",
     "@vuepic/vue-datepicker": "^6.1.0",
-    "@vuetify/nightly": "^3.3.23-master.2023-11-03",
     "@vueup/vue-quill": "^1.2.0",
     "@vueuse/core": "10.1.0",
     "@vueuse/math": "10.1.0",
