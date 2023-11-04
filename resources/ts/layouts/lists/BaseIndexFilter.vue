@@ -13,6 +13,7 @@ interface Props {
     date_filter_type: number | null,
 }
 
+const route = useRoute()
 const props = defineProps<Props>()
 const store = <any>(inject('store'))
 const head = <any>(inject('head'))
@@ -32,6 +33,7 @@ const {
     setDate,
     init,
     dateChanged,
+    updateRangeDateQuery,
     range_date,
     date,
     date_selecter,
@@ -39,16 +41,32 @@ const {
 
 store.params.use_search_date_detail = Number(corp.pv_options.free.use_search_date_detail)
 
+const enable = ref(true)
+const format = ref({})
+const time_picker = ref(true)
+const search = ref(<string>(''))
+
+if(props.date_filter_type == DateFilters.DATE_RANGE) {
+    enable.value = true
+    format.value = { format: 'yyyy-MM-dd HH:mm:ss' }
+    time_picker.value = true
+}
+else if(props.date_filter_type == DateFilters.SETTLE_RANGE) {
+    enable.value = false
+    format.value = { format: 'yyyy-MM-dd ' }
+    time_picker.value = false
+}
+
 const handleEnterKey = (event: KeyboardEvent) => {
-    if (event.keyCode === 13)
+    if (event.keyCode === 13) {
         store.setTable()
+        store.updateQueryString({ search: search.value })
+    }
 }
-
-const updateSearchQuery = () => {
-    const search = (document.getElementById('search') as HTMLInputElement).value
-    //store.updateQueryString({ search: search })
+if (route.query.search) {
+    store.params.search = route.query.search
+    search.value = store.params.search
 }
-
 onMounted(() => {
     init(store.params)
     watchEffect(() => {
@@ -67,25 +85,19 @@ onMounted(() => {
                         <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">
                             <template v-if="corp.pv_options.free.use_search_date_detail">
                                 <div class="d-inline-flex">
-                                    <template v-if="props.date_filter_type == DateFilters.DATE_RANGE">
-                                        <VueDatePicker v-model="range_date" :enable-seconds="true"
-                                            :text-input="{ format: 'yyyy-MM-dd HH:mm:ss' }" locale="ko" :format-locale="ko"
-                                            range multi-calendars :dark="theme === 'dark'" autocomplete="on" utc
-                                            :format="getRangeFormat" :teleport="true" input-class-name="search-input"
-                                            @update:modelValue="date_selecter = null" select-text="Search"
-                                            time-picker-inline />
-                                    </template>
-                                    <template v-else-if="props.date_filter_type == DateFilters.SETTLE_RANGE">
-                                        <VueDatePicker v-model="range_date" :text-input="{ format: 'yyyy-MM-dd' }"
-                                            locale="ko" :format-locale="ko" range multi-calendars :dark="theme === 'dark'"
-                                            autocomplete="on" utc :format="getRangeFormat" :teleport="true"
-                                            input-class-name="search-input" @update:modelValue="date_selecter = null"
-                                            select-text="Search" :enable-time-picker="false" />
+                                    <template v-if="props.date_filter_type == DateFilters.DATE_RANGE || props.date_filter_type == DateFilters.SETTLE_RANGE">
+                                        <VueDatePicker v-model="range_date" :enable-seconds="enable"
+                                            :text-input="format" locale="ko" :format-locale="ko" 
+                                            range multi-calendars :dark="theme === 'dark'" autocomplete="on" utc 
+                                            :format="getRangeFormat" :teleport="true" input-class-name="search-input" 
+                                            select-text="Search" :enable-time-picker="time_picker"
+                                            @update:modelValue="updateRangeDateQuery(store)" />
                                     </template>
                                     <template v-else-if="props.date_filter_type == DateFilters.DATE">
                                         <VueDatePicker v-model="date" :text-input="{ format: 'yyyy-MM-dd' }" locale="ko"
                                             :format-locale="ko" :dark="theme === 'dark'" autocomplete="on" utc
-                                            :format="formatDate" :teleport="true" />
+                                            :format="formatDate" :teleport="true"
+                                            @update:modelValue="store.updateQueryString({ dt: date })" />
                                     </template>
                                 </div>
                             </template>
@@ -105,7 +117,7 @@ onMounted(() => {
                             <template v-if="head.path === 'transactions'">
                                 <VSelect v-model="date_selecter" :items="[{ id: null, title: '기간 조회' }].concat(dates)"
                                     density="compact" variant="outlined" item-title="title" item-value="id"
-                                    style="min-width: 10em;" @update:modelValue="setDate()" label="기간 조회" />
+                                    style="min-width: 10em;" @update:modelValue="[setDate(), updateRangeDateQuery(store)]" label="기간 조회" />
                             </template>
                             <template
                                 v-else-if="head.path === 'salesforces' || head.path === 'transactions/settle/salesforces' || head.path === 'transactions/settle-histories/salesforces'">
@@ -120,14 +132,13 @@ onMounted(() => {
                             </VBtn>
                         </div>
                         <div class="d-inline-flex align-center flex-wrap gap-4 float-right justify-center">
-                            <VTextField id="search" :placeholder="props.placeholder" density="compact"
-                                @keyup="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input"
-                                @input="updateSearchQuery()">
+                            <VTextField id="search" :placeholder="props.placeholder" density="compact" v-model="search"
+                                @keyup="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input">
                                 <VTooltip activator="parent" location="top">
                                     {{ props.placeholder }}
                                 </VTooltip>
                             </VTextField>
-                            <VBtn prepend-icon="tabler:search" @click="store.setTable()">
+                            <VBtn prepend-icon="tabler:search" @click="store.setTable(); store.updateQueryString({ search: search })" >
                                 검색
                             </VBtn>
                             <VBtn variant="tonal" color="secondary" prepend-icon="tabler-filter"

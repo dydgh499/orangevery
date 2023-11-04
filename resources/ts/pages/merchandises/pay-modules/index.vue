@@ -87,7 +87,7 @@ watchEffect(() => {
                 <template #pg_extra_field>
                     <VCol cols="12" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type" :items="[{ id: null, title: '전체' }].concat(module_types)"
-                             label="모듈타입 필터" item-title="title" item-value="id" />
+                             label="모듈타입 필터" item-title="title" item-value="id" @update:modelValue="store.updateQueryString({module_type: store.params.module_type})" />
                     </VCol>
                 </template>
             </BaseIndexFilterCard>
@@ -97,7 +97,7 @@ watchEffect(() => {
                 일괄 삭제
             </VBtn>
             <div style="position: relative; top: 0.6em;">
-                <VSwitch v-model="store.params.un_use" label="최근 1달 미결제 결제모듈 조회" color="primary" />
+                <VSwitch v-model="store.params.un_use" label="최근 1달 미결제 결제모듈 조회" color="primary" @update:modelValue="store.updateQueryString({un_use: store.params.un_use})" />
             </div>
         </template>
         <template #headers>

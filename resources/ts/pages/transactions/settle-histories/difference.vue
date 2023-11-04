@@ -87,13 +87,11 @@ watchEffect(() => {
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">
-                    <template #sales_extra_field>
-                    </template>
                     <template #pg_extra_field>
                         <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
-                                item-value="id" />
+                                item-value="id"  @update:modelValue="store.updateQueryString({settle_types: store.params.settle_types})"/>
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>

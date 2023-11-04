@@ -25,10 +25,10 @@ const batchCheck = async () => {
     if (await alert.value.show('정말 일괄 확인/확인취소 처리 하시겠습니까?')) {
         const promises = []
         for (let i = 0; i < selected.value.length; i++) {
-            const item:any = store.items.find(obj => obj['id'] === selected.value[i])
-            if(item) {
+            const item: any = store.items.find(obj => obj['id'] === selected.value[i])
+            if (item) {
                 const url = `/api/v1/manager/transactions/dangers/${item.id}/checked`
-                promises.push(post(url, { checked : !item.is_checked }))
+                promises.push(post(url, { checked: !item.is_checked }))
             }
         }
         const results = await Promise.all(promises)
@@ -38,22 +38,25 @@ const batchCheck = async () => {
 }
 </script>
 <template>
-    <BaseIndexView placeholder="가맹점 상호, MID, TID, 승인번호 검색" :metas="[]" :add="false" add_name="가맹점" :date_filter_type="DateFilters.DATE_RANGE">
+    <BaseIndexView placeholder="가맹점 상호, MID, TID, 승인번호 검색" :metas="[]" :add="false" add_name="가맹점"
+        :date_filter_type="DateFilters.DATE_RANGE">
         <template #filter>
-            <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true" :sales="true">
+            <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
+                :sales="true">
                 <template #pg_extra_field>
-                        <VCol cols="12" sm="3">
-                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
-                                :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name" item-value="id"/>
-                        </VCol>
-                    </template>
+                    <VCol cols="12" sm="3">
+                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
+                            :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
+                            item-value="id" @update:modelValue="store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})"/>
+                    </VCol>
+                </template>
             </BaseIndexFilterCard>
-        </template>        
+        </template>
         <template #index_extra_field>
-                <VBtn prepend-icon="tabler:check" @click="batchCheck()" v-if="getUserLevel() >= 35">
-                    일괄 확인/확인취소
-                </VBtn>
-            </template>
+            <VBtn prepend-icon="tabler:check" @click="batchCheck()" v-if="getUserLevel() >= 35">
+                일괄 확인/확인취소
+            </VBtn>
+        </template>
         <template #headers>
             <tr>
                 <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
@@ -66,7 +69,7 @@ const batchCheck = async () => {
             <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                     <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 35">
-                        <VCheckbox v-model="all_selected" class="check-label"/>
+                        <VCheckbox v-model="all_selected" class="check-label" />
                         <span>선택/취소</span>
                     </div>
                     <span v-else>
@@ -79,7 +82,8 @@ const batchCheck = async () => {
             <tr v-for="(item, index) in store.getItems" :key="index">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <template v-if="head.getDepth(_header, 0) != 1">
-                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible" class='list-square'>
+                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
+                            class='list-square'>
                             <span>
                                 {{ item[_key][__key] }}
                             </span>
@@ -89,16 +93,15 @@ const batchCheck = async () => {
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key === 'id'">
                                 <div class='check-label-container' v-if="getUserLevel() >= 35">
-                                    <VCheckbox v-model="selected" :value="item[_key]" class="check-label"/>
+                                    <VCheckbox v-model="selected" :value="item[_key]" class="check-label" />
                                     <span>#{{ item[_key] }}</span>
                                 </div>
                             </span>
                             <span v-else-if="_key == 'module_type'">
-                                <VChip
-                                    :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
+                                <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
                                     {{ module_types.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
-                            </span>        
+                            </span>
                             <span v-else-if="_key == 'installment'">
                                 {{ installments.find(inst => inst['id'] === item[_key])?.title as string }}
                             </span>
@@ -115,12 +118,12 @@ const batchCheck = async () => {
                                 {{ (item[_key] as number).toLocaleString() }}
                             </span>
                             <span v-else-if="_key == `danger_type`">
-                                <VChip :color="store.booleanTypeColor(!item[_key])" >
+                                <VChip :color="store.booleanTypeColor(!item[_key])">
                                     {{ item[_key] ? '한도초과' : '중복결제' }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == `is_checked`">
-                                <VChip :color="store.booleanTypeColor(!item[_key])" >
+                                <VChip :color="store.booleanTypeColor(!item[_key])">
                                     {{ item[_key] ? '확인' : '미확인' }}
                                 </VChip>
                             </span>
@@ -135,5 +138,4 @@ const batchCheck = async () => {
                 </template>
             </tr>
         </template>
-    </BaseIndexView>
-</template>
+    </BaseIndexView></template>

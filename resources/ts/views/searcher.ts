@@ -189,11 +189,6 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
     }
 
     const init = (params: any) => {
-        if (route.query.search) {
-            params.search = route.query.search
-            const search = (document.getElementById('search') as HTMLInputElement)
-            search.value = params.search
-        }
         if (route.query.level)
             params.level = route.query.level
         if (route.query.s_dt && route.query.e_dt) {
@@ -228,13 +223,18 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
             const e_date = new Date(range_date.value[1])
             store.params.s_dt = getDateFormat(s_date)
             store.params.e_dt = getDateFormat(e_date)
-            store.updateQueryString({ s_dt: store.params.s_dt, e_dt: store.params.e_dt })
         }
         else if (props.date_filter_type == DateFilters.DATE) {
             const dt = new Date(date.value)
             store.params.dt = formatDate(dt)
-            store.updateQueryString({ dt: store.params.dt })
         }
+    }
+
+    const updateRangeDateQuery = (store: any) => {
+        date_selecter.value = null
+        const s_date = new Date(range_date.value[0])
+        const e_date = new Date(range_date.value[1])
+        store.updateQueryString({ s_dt: getDateFormat(s_date), e_dt: getDateFormat(e_date) })
     }
 
     return {
@@ -242,6 +242,7 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
         setDate,
         init,
         dateChanged,
+        updateRangeDateQuery,
         range_date,
         date,
         date_selecter,

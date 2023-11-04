@@ -26,8 +26,6 @@ const getLogStyle = (item: RealtimeHistory) => {
     <BaseIndexView placeholder="가맹점 상호, 계좌번호, 승인번호 검색" :metas="[]" :add="false" add_name="실시간 이체 이력" :date_filter_type="DateFilters.DATE_RANGE">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true" :sales="true">
-                <template #pg_extra_field>
-                </template>
             </BaseIndexFilterCard>
         </template>
         <template #index_extra_field>

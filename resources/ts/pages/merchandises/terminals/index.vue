@@ -46,14 +46,14 @@ watchEffect(() => {
                     <VCol cols="12" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.ship_out_stat"
                             :items="[{ id: null, title: '전체' }].concat(ship_out_stats)" label="출고타입 필터" item-title="title"
-                            item-value="id" />
+                            item-value="id" @update:modelValue="store.updateQueryString({ship_out_stat: store.params.ship_out_stat})" />
                     </VCol>
                 </template>
             </BaseIndexFilterCard>
         </template>
         <template #index_extra_field>
             <div style="position: relative; top: 0.6em;">
-                <VSwitch v-model="store.params.un_use" label="최근 1달 미결제 단말기 조회" color="primary" />
+                <VSwitch v-model="store.params.un_use" label="최근 1달 미결제 단말기 조회" color="primary"  @update:modelValue="store.updateQueryString({un_use: store.params.un_use})"/>
             </div>
         </template>
         <template #headers>

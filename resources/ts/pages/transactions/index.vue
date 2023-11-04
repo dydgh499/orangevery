@@ -145,14 +145,14 @@ watchEffect(() => {
                     <template #sales_extra_field>
                         <VCol cols="12" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="getAllLevels()"
-                                :label="`등급 선택`" item-title="title" item-value="id" />
+                                :label="`등급 선택`" item-title="title" item-value="id" @update:modelValue="store.updateQueryString({level: store.params.level})"/>
                         </VCol>
                     </template>
                     <template #pg_extra_field>
                         <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
-                                item-value="id" />
+                                item-value="id" @update:modelValue="store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})"/>
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>
@@ -162,7 +162,7 @@ watchEffect(() => {
                     일괄 재발송
                 </VBtn>
                 <div style="position: relative; top: 0.6em;">
-                    <VSwitch v-model="store.params.only_cancel" label="취소매출 조회" color="primary" />
+                    <VSwitch v-model="store.params.only_cancel" label="취소매출 조회" color="primary" @update:modelValue="store.updateQueryString({only_cancel: store.params.only_cancel})"/>
                 </div>
             </template>
             <template #headers>

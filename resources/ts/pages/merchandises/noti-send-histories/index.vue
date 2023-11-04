@@ -53,7 +53,7 @@ const batchRetry = async () => {
                         <VCol cols="12" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"
                                 :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 필터" item-title="title"
-                                item-value="id" />
+                                item-value="id" @update:modelValue="store.updateQueryString({module_type: store.params.module_type})" />
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>

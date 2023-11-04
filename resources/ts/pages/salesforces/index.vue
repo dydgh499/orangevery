@@ -84,7 +84,7 @@ watchEffect(() => {
                         <VCol cols="12" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
                                 :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`정산주기 선택`"
-                                item-title="title" item-value="id" />
+                                item-title="title" item-value="id" @update:modelValue="store.updateQueryString({settle_cycle: store.params.settle_cycle})"/>
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>

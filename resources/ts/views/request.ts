@@ -7,7 +7,7 @@ export const useRequestStore = defineStore('requestStore', () => {
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
     const errorHandler = <any>(inject('$errorHandler'))
-    const { sales, all_sales, mchts } = useSalesFilterStore()
+    const { all_sales, mchts } = useSalesFilterStore()
 
     const deleteTreatment = (back_url: string, is_redirect: boolean, params: any, res: any) => {
         if (res.status === 201) {
@@ -26,8 +26,8 @@ export const useRequestStore = defineStore('requestStore', () => {
                     all_sales[idx].push(params)
                 }
                 else if (back_url == '/merchandises') {
-                    mchts.value.push(params)
-                    mchts.value.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name))
+                    mchts.push(params)
+                    mchts.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name))
                 }
             }
             if (is_redirect) {
@@ -42,7 +42,7 @@ export const useRequestStore = defineStore('requestStore', () => {
                 else if (back_url == '/merchandises')
                     setTimeout(function () { router.push('/merchandises/edit/' + res.data.id) }, 500)
                 else
-                    setTimeout(function () { router.push(back_url) }, 1000)
+                    setTimeout(function () { router.back() }, 1000)
             }
         }
     }
