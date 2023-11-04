@@ -15,6 +15,11 @@ use App\Http\Traits\StoresTrait;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @group Danger-Transaction API
+ *
+ * 이상거래 API 입니다.
+ */
 class DangerTransController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
@@ -131,7 +136,6 @@ class DangerTransController extends Controller
      * 단일삭제
      *
      * @urlParam id integer required 이상거래 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
     {

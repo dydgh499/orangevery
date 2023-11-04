@@ -9,11 +9,7 @@ use App\Http\Traits\FormRequestTrait;
 class LoginRequest extends FormRequest
 {
     use FormRequestTrait;
-
-    public function __construct()
-    {
-        $this->keys = ['brand_id', 'user_name','user_pw'];
-    }
+    public $keys = ['brand_id', 'user_name','user_pw'];
 
     public function authorize()
     {

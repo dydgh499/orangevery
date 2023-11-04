@@ -8,31 +8,35 @@ use App\Http\Traits\FormRequestTrait;
 class MerchandiseRequest extends FormRequest
 {
     use FormRequestTrait;
+    public $keys = [
+        'user_name',
+        'nick_name',
+        'mcht_name',
+        'addr',
+        'sector',
+        'resident_num',
+        'business_num',
+        'acct_bank_name',
+        'acct_bank_code',
+        'acct_num',
+        'acct_name',
+        'phone_num',
+        'enabled',
+        'use_saleslip_prov',
+        'use_saleslip_sell',
+        'use_regular_card',
+        'use_collect_withdraw',
+        'is_show_fee',
+        'note',
+    ];
+    public $file_keys = [
+        'passbook_file',
+        'contract_file',
+        'bsin_lic_file',
+        'id_file',
+        'profile_file',
 
-    public function __construct()
-    {
-        $this->keys = [
-            'user_name',
-            'nick_name',
-            'mcht_name',
-            'addr',
-            'sector',
-            'resident_num',
-            'business_num',
-            'acct_bank_name',
-            'acct_bank_code',
-            'acct_num',
-            'acct_name',
-            'phone_num',
-            'enabled',
-            'use_saleslip_prov',
-            'use_saleslip_sell',
-            'use_regular_card',
-            'use_collect_withdraw',
-            'is_show_fee',
-            'note',
-        ];
-    }
+    ];
 
     public function authorize()
     {
@@ -83,7 +87,7 @@ class MerchandiseRequest extends FormRequest
 
     public function bodyParameters()
     {
-        $params = $this->getDocsParameters($this->keys);
+        $params = array_merge($this->getDocsParameters($this->keys), $this->getDocsParameters($this->file_keys));
         $params['passbook_file']['description']  .= '(max-width:500px 이상은 리사이징)';
         $params['contract_file']['description']  .= '(max-width:500px 이상은 리사이징)';
         $params['bsin_lic_file']['description']  .= '(max-width:500px 이상은 리사이징)';

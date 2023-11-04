@@ -11,6 +11,11 @@ use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+/**
+ * @group Regular Credit Card API
+ *
+ * 지정 신용 카드 API 입니다.
+ */
 class RegularCreditCardController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
@@ -38,7 +43,6 @@ class RegularCreditCardController extends Controller
      *
      * 마스터 이상 가능
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(RegularCreditCardRequest $request)
     {

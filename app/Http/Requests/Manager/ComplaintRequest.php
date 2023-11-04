@@ -8,27 +8,23 @@ use App\Http\Traits\FormRequestTrait;
 class ComplaintRequest extends FormRequest
 {
     use FormRequestTrait;
-
-    public function __construct()
-    {
-        $this->keys = [
-            'mcht_id',
-            'tid',
-            'cust_name',
-            'appr_dt',
-            'appr_num',
-            'phone_num',
-            'hand_cust_name',
-            'hand_phone_num',
-            'issuer',
-            'pg_id',
-            'type',
-            'entry_path',
-            'is_deposit',
-            'complaint_status',
-            'note',
-        ];
-    }
+    public $keys = [
+        'mcht_id',
+        'tid',
+        'cust_name',
+        'appr_dt',
+        'appr_num',
+        'phone_num',
+        'hand_cust_name',
+        'hand_phone_num',
+        'issuer',
+        'pg_id',
+        'type',
+        'entry_path',
+        'is_deposit',
+        'complaint_status',
+        'note',
+    ];
 
     public function authorize()
     {

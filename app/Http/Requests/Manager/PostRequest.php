@@ -8,18 +8,14 @@ use App\Http\Traits\FormRequestTrait;
 class PostRequest extends FormRequest
 {
     use FormRequestTrait;
-
-    public function __construct()
-    {
-        $this->keys = [
-            'parent_id',
-            'writer',
-            'title',
-            'content',
-            'type',
-            'is_reply',
-        ];
-    }
+    public $keys = [
+        'parent_id',
+        'writer',
+        'title',
+        'content',
+        'type',
+        'is_reply',
+    ];
 
     public function authorize()
     {

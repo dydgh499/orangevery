@@ -1,0 +1,462 @@
+name: 'Salesforce-Batch API'
+description: |-
+
+  영업자의 일괄적용 group 입니다.
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/salesforces/batch/set-fee
+    metadata:
+      groupName: 'Salesforce-Batch API'
+      groupDescription: |-
+
+        영업자의 일괄적용 group 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '수수료율 적용'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/salesforces/batch/set-custom-filter
+    metadata:
+      groupName: 'Salesforce-Batch API'
+      groupDescription: |-
+
+        영업자의 일괄적용 group 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '커스텀 필터 적용'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/salesforces/batch/set-account-info
+    metadata:
+      groupName: 'Salesforce-Batch API'
+      groupDescription: |-
+
+        영업자의 일괄적용 group 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '계좌정보 적용'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/salesforces/batch/set-abnormal-trans-limit
+    metadata:
+      groupName: 'Salesforce-Batch API'
+      groupDescription: |-
+
+        영업자의 일괄적용 group 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '이상거래 한도 적용'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/salesforces/batch/set-dupe-pay-count-validation
+    metadata:
+      groupName: 'Salesforce-Batch API'
+      groupDescription: |-
+
+        영업자의 일괄적용 group 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '중복결제 허용회수 적용'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/salesforces/batch/set-dupe-pay-least-validation
+    metadata:
+      groupName: 'Salesforce-Batch API'
+      groupDescription: |-
+
+        영업자의 일괄적용 group 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '중복결제 하한금 적용'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/salesforces/batch/set-mid
+    metadata:
+      groupName: 'Salesforce-Batch API'
+      groupDescription: |-
+
+        영업자의 일괄적용 group 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'MID 일괄적용'
+      description: '가맹점 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/salesforces/batch/set-tid
+    metadata:
+      groupName: 'Salesforce-Batch API'
+      groupDescription: |-
+
+        영업자의 일괄적용 group 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'TID 일괄적용'
+      description: '가맹점 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/salesforces/batch/set-api-key
+    metadata:
+      groupName: 'Salesforce-Batch API'
+      groupDescription: |-
+
+        영업자의 일괄적용 group 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'API KEY 일괄적용'
+      description: '가맹점 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/salesforces/batch/set-sub-key
+    metadata:
+      groupName: 'Salesforce-Batch API'
+      groupDescription: |-
+
+        영업자의 일괄적용 group 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'SUB KEY 일괄적용'
+      description: '가맹점 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/salesforces/batch/set-pay-limit
+    metadata:
+      groupName: 'Salesforce-Batch API'
+      groupDescription: |-
+
+        영업자의 일괄적용 group 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '결제한도 적용'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/salesforces/batch/set-pay-disable-time
+    metadata:
+      groupName: 'Salesforce-Batch API'
+      groupDescription: |-
+
+        영업자의 일괄적용 group 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '결제금지시간 적용'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/salesforces/batch/set-show-pay-view
+    metadata:
+      groupName: 'Salesforce-Batch API'
+      groupDescription: |-
+
+        영업자의 일괄적용 group 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '결제창 노출여부 적용'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/salesforces/batch/set-noti-url
+    metadata:
+      groupName: 'Salesforce-Batch API'
+      groupDescription: |-
+
+        영업자의 일괄적용 group 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '노티 URL 일괄등록'
+      description: '가맹점 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      send_url:
+        name: send_url
+        description: ''
+        required: true
+        example: voluptate
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      send_url: voluptate
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

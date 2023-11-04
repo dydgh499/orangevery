@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 /**
- * @group Post API
+ * @group Complaint API
  *
  * 민원조회 API 입니다. 조회를 제외하고 마스터 이상권한이 요구됩니다.
  */
@@ -52,7 +52,6 @@ class ComplaintController extends Controller
      *
      * 마스터 이상 가능
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(ComplaintRequest $request)
     {

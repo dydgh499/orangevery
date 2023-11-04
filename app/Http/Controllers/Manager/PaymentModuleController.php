@@ -20,6 +20,11 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Enums\HistoryType;
 
+/**
+ * @group Payment Module API
+ *
+ * 결제모듈 API 입니다.
+ */
 class PaymentModuleController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
@@ -33,6 +38,11 @@ class PaymentModuleController extends Controller
         $this->imgs = [];
     }
 
+    /**
+     * 차트 데이터 출력
+     *
+     * 가맹점 이상 가능
+     */
     public function chart(Request $request)
     {
         $request->merge([
@@ -106,7 +116,6 @@ class PaymentModuleController extends Controller
      *
      * 대리점 이상 가능
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(PayModuleRequest $request)
     {
@@ -149,7 +158,6 @@ class PaymentModuleController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $id)
     {
@@ -168,7 +176,6 @@ class PaymentModuleController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update(PayModuleRequest $request, $id)
     {
@@ -200,7 +207,6 @@ class PaymentModuleController extends Controller
      * 단일삭제
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
     {
@@ -247,6 +253,11 @@ class PaymentModuleController extends Controller
         return $this->response(0, $data);
     }
     
+    /**
+     * 대량등록
+     *
+     * 운영자 이상 가능
+     */
     public function bulkRegister(BulkPayModuleRequest $request)
     {
         $current = date('Y-m-d H:i:s');
@@ -263,6 +274,11 @@ class PaymentModuleController extends Controller
         return $this->response($res ? 1 : 990);        
     }
 
+    /**
+     * 영수증 정보조회
+     *
+     * @urlParam id integer required 유저 PK
+     */
     public function salesSlip(Request $request, $id)
     {
         $cols = [
@@ -282,7 +298,11 @@ class PaymentModuleController extends Controller
         return $this->response(0, $mcht);        
     }
 
-    
+    /**
+     * TID 발급
+     *
+     * @urlParam id integer required 유저 PK
+     */
     public function tidCreate(Request $request)
     {
         //0523070000 pg(2) + ym(2) + idx(4)
@@ -319,6 +339,9 @@ class PaymentModuleController extends Controller
         return $id.Str::random(64 - strlen((string)$id));
     }
 
+    /**
+     * PAY KEY 발급
+     */
     public function payKeyCreate(Request $request)
     {
         $pay_key = $this->getNewPayKey($request->id);
@@ -328,6 +351,9 @@ class PaymentModuleController extends Controller
         return $this->response(0, ['pay_key'=>$pay_key]);    
     }
 
+    /**
+     * 일괄삭제
+     */
     public function batchRemove(Request $request)
     {
         $res = $this->pay_modules->whereIn('id', $request->selected)->update(['is_delete' => true]);

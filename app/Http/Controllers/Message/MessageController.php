@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
 
+/**
+ * @group Message API
+ *
+ * 문자 발송 API 입니다.
+ */
 class MessageController extends Controller
 {
     use ExtendResponseTrait;

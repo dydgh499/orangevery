@@ -17,6 +17,11 @@ use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Log\CreateSettleHistoryRequest;
 use App\Http\Requests\Manager\Log\BatchSettleHistoryRequest;
 
+/**
+ * @group Merchandise-Settle-History API
+ *
+ * 가맹점 정산이력 API 입니다.
+ */
 class MchtSettleHistoryController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, SettleHistoryTrait;

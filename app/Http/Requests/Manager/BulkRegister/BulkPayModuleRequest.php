@@ -8,45 +8,41 @@ use App\Http\Traits\FormRequestTrait;
 class BulkPayModuleRequest extends FormRequest
 {
     use FormRequestTrait;
-
-    public function __construct()
-    {
-        $this->integer_keys = [
-            'terminal_id',
-            'comm_settle_fee',
-            'comm_settle_day',
-            'comm_calc_level',
-            'under_sales_amt',
-            'is_old_auth',
-            'show_pay_view',
-            'abnormal_trans_limit',
-            'pay_dupe_limit',
-            'pay_year_limit',
-            'pay_month_limit',
-            'pay_day_limit',
-            'pg_id',
-            'ps_id',
-            'settle_type',
-            'module_type',
-            'mcht_id',
-            'installment',
-        ];
-        $this->string_keys = [
-            'api_key',
-            'sub_key',
-            'mid',
-            'tid',
-            'serial_num',
-            'note',
-        ];
-        $this->nullable_keys = [
-            'begin_dt',
-            'ship_out_dt',
-            'ship_out_stat',
-            'pay_disable_s_tm',
-            'pay_disable_e_tm',
-        ];
-    }
+    public $integer_keys = [
+        'terminal_id',
+        'comm_settle_fee',
+        'comm_settle_day',
+        'comm_calc_level',
+        'under_sales_amt',
+        'is_old_auth',
+        'show_pay_view',
+        'abnormal_trans_limit',
+        'pay_dupe_limit',
+        'pay_year_limit',
+        'pay_month_limit',
+        'pay_day_limit',
+        'pg_id',
+        'ps_id',
+        'settle_type',
+        'module_type',
+        'mcht_id',
+        'installment',
+    ];
+    public $string_keys = [
+        'api_key',
+        'sub_key',
+        'mid',
+        'tid',
+        'serial_num',
+        'note',
+    ];
+    public $nullable_keys = [
+        'begin_dt',
+        'ship_out_dt',
+        'ship_out_stat',
+        'pay_disable_s_tm',
+        'pay_disable_e_tm',
+    ];
 
     public function authorize()
     {
@@ -74,6 +70,11 @@ class BulkPayModuleRequest extends FormRequest
         return $sub;
     }
     
+    public function bodyParameters()
+    {
+        return array_merge($this->getDocsParameters($this->integer_keys), $this->getDocsParameters($this->string_keys), $this->getDocsParameters($this->nullable_keys));
+    }
+
     public function data()
     {
         $datas = [];

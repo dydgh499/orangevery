@@ -9,24 +9,21 @@ class CreateSettleHistoryRequest extends FormRequest
 {
     use FormRequestTrait;
 
-    public function __construct()
-    {
-        $this->keys = [
-            'id',
-            'acct_name', 
-            'acct_num', 
-            'acct_bank_name', 
-            'acct_bank_code', 
-            'total_amount',
-            'cxl_amount', 
-            'appr_amount', 
-            'deduct_amount',
-            'settle_amount',
-            'comm_settle_amount',
-            'under_sales_amount',
-            'e_dt',
-        ];
-    }
+    public $keys = [
+        'id',
+        'acct_name', 
+        'acct_num', 
+        'acct_bank_name', 
+        'acct_bank_code', 
+        'total_amount',
+        'cxl_amount', 
+        'appr_amount', 
+        'deduct_amount',
+        'settle_amount',
+        'comm_settle_amount',
+        'under_sales_amount',
+        'e_dt',
+    ];
 
     public function authorize()
     {

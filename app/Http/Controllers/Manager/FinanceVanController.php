@@ -15,7 +15,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Enums\HistoryType;
 
-
+/**
+ * @group FinanceVan API
+ *
+ * 금융벤 API입니다.
+ */
 class FinanceVanController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
@@ -48,7 +52,6 @@ class FinanceVanController extends Controller
      *
      * 본사 이상 가능
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(FinanceRequest $request)
     {
@@ -65,7 +68,6 @@ class FinanceVanController extends Controller
      * 본사 이상 가능
      *
      * @urlParam id integer required 금융 VAN PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $id)
     {
@@ -79,7 +81,6 @@ class FinanceVanController extends Controller
      * 본사 이상 가능
      *
      * @urlParam id integer required 금융 VAN PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update(FinanceRequest $request, $id)
     {
@@ -93,7 +94,6 @@ class FinanceVanController extends Controller
      * 단일삭제
      *
      * @urlParam id integer required 금융VAN PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
     {

@@ -12,6 +12,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Enums\HistoryType;
 
+/**
+ * @group Classification API
+ *
+ * 구분 관리 메뉴에서 사용될 API 입니다. 조회를 제외하고 마스터 이상권한이 요구됩니다.
+ */
 class ClassificationController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
@@ -44,7 +49,6 @@ class ClassificationController extends Controller
      *
      * 대리점 이상 가능
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(ClassificationReqeust $request)
     {
@@ -61,7 +65,6 @@ class ClassificationController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $id)
     {
@@ -75,7 +78,6 @@ class ClassificationController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update(ClassificationReqeust $request, $id)
     {
@@ -90,7 +92,6 @@ class ClassificationController extends Controller
      * 단일삭제
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
     {

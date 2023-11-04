@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
 /**
  * @group Operator API
  *
@@ -57,7 +58,6 @@ class OperatorController extends Controller
      *
      * 대리점 이상 가능
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(OperatorReqeust $request)
     {
@@ -75,7 +75,6 @@ class OperatorController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $id)
     {
@@ -89,7 +88,6 @@ class OperatorController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update(OperatorReqeust $request, $id)
     {
@@ -103,7 +101,6 @@ class OperatorController extends Controller
      * 단일삭제
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
     {

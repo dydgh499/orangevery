@@ -8,15 +8,11 @@ use App\Http\Traits\FormRequestTrait;
 class PaySectionRequest extends FormRequest
 {
     use FormRequestTrait;
-    
-    public function __construct()
-    {
-        $this->keys = [
-            'pg_id',
-            'name',
-            'trx_fee',
-        ];
-    }
+    public $keys = [
+        'pg_id',
+        'name',
+        'trx_fee',
+    ];
 
     public function authorize()
     {

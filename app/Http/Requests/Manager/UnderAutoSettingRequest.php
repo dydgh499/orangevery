@@ -9,16 +9,13 @@ class UnderAutoSettingRequest extends FormRequest
 {
     use FormRequestTrait;
     
-    public function __construct()
-    {
-        $this->keys = [
-            'note',
-        ];
-        $this->integer_keys = [
-            'sales_id',
-            'sales_fee',
-        ];
-    }
+    public $keys = [
+        'note',
+    ];
+    public $integer_keys = [
+        'sales_id',
+        'sales_fee',
+    ];
 
     public function authorize()
     {
@@ -46,9 +43,9 @@ class UnderAutoSettingRequest extends FormRequest
 
     public function bodyParameters()
     {
-        $params = $this->getDocsParameters($this->keys);
-        return $params;
+        return array_merge($this->getDocsParameters($this->keys), $this->getDocsParameters($this->integer_keys));
     }
+    
     public function data()
     {
         $data = array_merge($this->getParmasBaseKey(), $this->getParmasBaseKeyV2($this->integer_keys, 0));

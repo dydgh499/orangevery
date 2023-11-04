@@ -11,6 +11,11 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\TransactionTrait;
 use App\Http\Requests\Manager\IndexRequest;
 
+/**
+ * @group Noti-Send-History API
+ *
+ * 노티 발송이력 API 입니다.
+ */
 class NotiSendHistoryController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, TransactionTrait;

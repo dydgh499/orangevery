@@ -14,6 +14,11 @@ use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+/**
+ * @group Payment Gateway API
+ *
+ * PG사 API 입니다. 본사 이상권한이 요구됩니다.
+ */
 class PaymentGatewayController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
@@ -47,7 +52,6 @@ class PaymentGatewayController extends Controller
      * 대리점 이상 가능
      *
      * @bodyParam user_pw string 유저 패스워드
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(PayGatewayRequest $request)
     {
@@ -62,7 +66,6 @@ class PaymentGatewayController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $id)
     {
@@ -76,7 +79,6 @@ class PaymentGatewayController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update(PayGatewayRequest $request, $id)
     {
@@ -89,7 +91,6 @@ class PaymentGatewayController extends Controller
      * 단일삭제
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
     {

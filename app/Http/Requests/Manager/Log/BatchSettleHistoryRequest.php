@@ -8,12 +8,7 @@ use App\Http\Traits\FormRequestTrait;
 class BatchSettleHistoryRequest extends FormRequest
 {
     use FormRequestTrait;
-
-    public function __construct()
-    {
-        $this->keys = [
-        ];
-    }
+    public $keys = [];
 
     public function authorize()
     {

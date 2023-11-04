@@ -19,6 +19,11 @@ use App\Http\Traits\Settle\TransactionTrait;
 
 use App\Http\Requests\Manager\IndexRequest;
 
+/**
+ * @group Settle-Salesforce API
+ *
+ * 영업점 정산 API 입니다.
+ */
 class SalesforceController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, SettleTrait, SettleTerminalTrait, TransactionTrait;
@@ -89,7 +94,12 @@ class SalesforceController extends Controller
         $data = $this->setSettleFinalAmount($data);
         return $data;
     }
-
+    
+    /**
+     * 차트 데이터 출력
+     *
+     * 가맹점 이상 가능
+     */
     public function chart(Request $request)
     {
         $request = $request->merge([

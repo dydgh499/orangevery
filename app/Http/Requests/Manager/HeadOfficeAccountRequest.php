@@ -8,27 +8,18 @@ use App\Http\Traits\FormRequestTrait;
 class HeadOfficeAccountRequest extends FormRequest
 {
     use FormRequestTrait;
-
-    public function __construct()
-    {
-        $this->keys = [
-            'acct_bank_name',
-            'acct_bank_code',
-            'acct_num',
-            'acct_name',
-        ];
-    }
+    public $keys = [
+        'acct_bank_name',
+        'acct_bank_code',
+        'acct_num',
+        'acct_name',
+    ];
 
     public function authorize(): bool
     {
         return $this->user()->tokenCan(10) ? true : false;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
-     */
     public function rules(): array
     {
         $sub = [
@@ -50,6 +41,7 @@ class HeadOfficeAccountRequest extends FormRequest
         $params = $this->getDocsParameters($this->keys);
         return $params;
     }
+    
     public function data()
     {
         $data = $this->getParmasBaseKey();

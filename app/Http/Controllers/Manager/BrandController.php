@@ -84,7 +84,6 @@ class BrandController extends Controller
      *
      * 개발사 이상 가능
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(BrandRequest $request)
     {
@@ -105,7 +104,6 @@ class BrandController extends Controller
      * 브랜드 이상 가능
      *
      * @urlParam id integer required 브랜드 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $id)
     {
@@ -119,7 +117,6 @@ class BrandController extends Controller
      * 개발사 이상, 또는 로그인한 브랜드 ID와 같은 계정(본인)만 가능
      *
      * @urlParam id integer required 브랜드 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update(BrandRequest $request, $id)
     {
@@ -137,7 +134,6 @@ class BrandController extends Controller
      * 개발사 이상 가능
      *
      * @urlParam id integer required 브랜드 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
     {

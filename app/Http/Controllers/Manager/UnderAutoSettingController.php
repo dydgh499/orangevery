@@ -13,6 +13,11 @@ use App\Enums\HistoryType;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+/**
+ * @group Under Auto Setting API
+ *
+ * 영업점 수수료율 세팅 API 입니다.
+ */
 class UnderAutoSettingController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
@@ -40,7 +45,6 @@ class UnderAutoSettingController extends Controller
      *
      * 대리점 이상 가능
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(UnderAutoSettingRequest $request)
     {
@@ -55,7 +59,6 @@ class UnderAutoSettingController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $id)
     {
@@ -69,7 +72,6 @@ class UnderAutoSettingController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update(UnderAutoSettingRequest $request, $id)
     {
@@ -82,7 +84,6 @@ class UnderAutoSettingController extends Controller
      * 단일삭제
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
     {

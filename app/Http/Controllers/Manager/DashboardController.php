@@ -16,6 +16,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
+/**
+ * @group Dashboard API
+ *
+ * 대쉬보드 API입니다.
+ */
 class DashboardController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;

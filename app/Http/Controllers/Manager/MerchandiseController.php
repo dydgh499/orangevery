@@ -59,6 +59,11 @@ class MerchandiseController extends Controller
         $this->pay_mod_cols = ['mcht_id', 'mid', 'tid', 'module_type', 'pg_id'];
     }
 
+    /**
+     * 차트 데이터 출력
+     *
+     * 가맹점 이상 가능
+     */
     public function chart(Request $request)
     {
         $request->merge([
@@ -171,7 +176,6 @@ class MerchandiseController extends Controller
      * 대리점 이상 가능
      *
      * @bodyParam user_pw string 유저 패스워드
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(MerchandiseRequest $request)
     {
@@ -225,7 +229,6 @@ class MerchandiseController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $id)
     {
@@ -247,7 +250,6 @@ class MerchandiseController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update(MerchandiseRequest $request, $id)
     {
@@ -269,7 +271,6 @@ class MerchandiseController extends Controller
      * 단일삭제
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
     {
@@ -316,6 +317,11 @@ class MerchandiseController extends Controller
         return $this->response(0, $data);
     }
 
+    /**
+     * 패스워드 변경
+     *
+     * 가맹점 이상 가능
+     */
     public function passwordChange(Request $request)
     {
         $validated = $request->validate(['id'=>'required|integer', 'user_pw'=>'required']);
@@ -325,6 +331,11 @@ class MerchandiseController extends Controller
         return $this->response($res ? 1 : 990);        
     }
 
+    /**
+     * 대량등록
+     *
+     * 운영자 이상 가능
+     */
     public function bulkRegister(BulkMerchandiseRequest $request)
     {
         $current = date('Y-m-d H:i:s');
@@ -364,7 +375,6 @@ class MerchandiseController extends Controller
      * 영수증 정보조회
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function saleSlip(Request $request, $id)
     {

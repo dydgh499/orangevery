@@ -15,7 +15,11 @@ use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
 use App\Enums\HistoryType;
 
-
+/**
+ * @group Fee-Change-History API
+ *
+ * 수수료율 변경이력 API 입니다.
+ */
 class FeeChangeHistoryController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;

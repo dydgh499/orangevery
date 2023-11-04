@@ -1,0 +1,283 @@
+name: 'Head Office Account API'
+description: |-
+
+  본사 지정계좌 API입니다.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/manager/services/head-office-accounts
+    metadata:
+      groupName: 'Head Office Account API'
+      groupDescription: |-
+
+        본사 지정계좌 API입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 목록출력
+      description: '가맹점 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"code":950,"message":"로그인 정보가 정확하지 않습니다."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/services/head-office-accounts
+    metadata:
+      groupName: 'Head Office Account API'
+      groupDescription: |-
+
+        본사 지정계좌 API입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 추가
+      description: '마스터 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      acct_bank_name:
+        name: acct_bank_name
+        description: 은행명.
+        required: true
+        example: deleniti
+        type: string
+        enumValues: []
+        custom: []
+      acct_bank_code:
+        name: acct_bank_code
+        description: 은행코드.
+        required: true
+        example: rerum
+        type: string
+        enumValues: []
+        custom: []
+      acct_num:
+        name: acct_num
+        description: 계좌번호.
+        required: true
+        example: qui
+        type: string
+        enumValues: []
+        custom: []
+      acct_name:
+        name: acct_name
+        description: 예금주.
+        required: true
+        example: sunt
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      acct_bank_name: deleniti
+      acct_bank_code: rerum
+      acct_num: qui
+      acct_name: sunt
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/manager/services/head-office-accounts/{id}'
+    metadata:
+      groupName: 'Head Office Account API'
+      groupDescription: |-
+
+        본사 지정계좌 API입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 단일조회
+      description: '가맹점 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: '정기등록카드 PK'
+        required: true
+        example: 7
+        type: integer
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: 7
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"code":950,"message":"로그인 정보가 정확하지 않습니다."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/manager/services/head-office-accounts/{id}'
+    metadata:
+      groupName: 'Head Office Account API'
+      groupDescription: |-
+
+        본사 지정계좌 API입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 업데이트
+      description: '마스터 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: '정기등록카드 PK'
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: 4
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      acct_bank_name:
+        name: acct_bank_name
+        description: 은행명.
+        required: true
+        example: placeat
+        type: string
+        enumValues: []
+        custom: []
+      acct_bank_code:
+        name: acct_bank_code
+        description: 은행코드.
+        required: true
+        example: provident
+        type: string
+        enumValues: []
+        custom: []
+      acct_num:
+        name: acct_num
+        description: 계좌번호.
+        required: true
+        example: perferendis
+        type: string
+        enumValues: []
+        custom: []
+      acct_name:
+        name: acct_name
+        description: 예금주.
+        required: true
+        example: sequi
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      acct_bank_name: placeat
+      acct_bank_code: provident
+      acct_num: perferendis
+      acct_name: sequi
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/manager/services/head-office-accounts/{id}'
+    metadata:
+      groupName: 'Head Office Account API'
+      groupDescription: |-
+
+        본사 지정계좌 API입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 단일삭제
+      description: '마스터 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: '정기등록카드 PK'
+        required: true
+        example: 6
+        type: integer
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: 6
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

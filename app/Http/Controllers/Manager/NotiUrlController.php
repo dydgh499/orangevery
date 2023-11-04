@@ -14,6 +14,11 @@ use App\Enums\HistoryType;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+/**
+ * @group Noti URL API
+ *
+ * 노티 URL API입니다.
+ */
 class NotiUrlController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
@@ -60,7 +65,6 @@ class NotiUrlController extends Controller
      *
      * 대리점 이상 가능
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(NotiRequest $request)
     {
@@ -80,7 +84,6 @@ class NotiUrlController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $id)
     {
@@ -94,7 +97,6 @@ class NotiUrlController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update(NotiRequest $request, $id)
     {
@@ -111,7 +113,6 @@ class NotiUrlController extends Controller
      * 단일삭제
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
     {

@@ -17,6 +17,11 @@ use App\Http\Controllers\BeforeSystem\Merchandise;
 use App\Http\Controllers\BeforeSystem\PaymentModule;
 use App\Http\Controllers\BeforeSystem\Transaction;
 
+/**
+ * @group Before-System-Sync API
+ *
+ * 이전 전산 양방향 연동 API 입니다.
+ */
 class BeforeSystemController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;

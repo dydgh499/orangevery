@@ -8,26 +8,23 @@ use App\Http\Traits\FormRequestTrait;
 class BulkSalesforceRequest extends FormRequest
 {
     use FormRequestTrait;
-    public function __construct()
-    {
-        $this->keys = [
-            'user_name',
-            'user_pw',
-            'sales_name',
-            'nick_name',
-            'level'    ,
-            'resident_num',
-            'business_num',
-            'sector',
-            'acct_num',
-            'acct_name',
-            'acct_bank_name',
-            'acct_bank_code',
-            'settle_tax_type',
-            'settle_cycle',
-            'settle_day',
-        ];
-    }
+    public $keys = [
+        'user_name',
+        'user_pw',
+        'sales_name',
+        'nick_name',
+        'level'    ,
+        'resident_num',
+        'business_num',
+        'sector',
+        'acct_num',
+        'acct_name',
+        'acct_bank_name',
+        'acct_bank_code',
+        'settle_tax_type',
+        'settle_cycle',
+        'settle_day',
+    ];
 
     public function authorize()
     {
@@ -58,6 +55,12 @@ class BulkSalesforceRequest extends FormRequest
             '*.settle_cycle' => 'required',
         ];
         return $sub;
+    }
+    
+    public function bodyParameters()
+    {
+        $params = $this->getDocsParameters($this->keys);
+        return $params;
     }
 
     public function data()

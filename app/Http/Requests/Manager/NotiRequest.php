@@ -8,16 +8,12 @@ use App\Http\Traits\FormRequestTrait;
 class NotiRequest extends FormRequest
 {
     use FormRequestTrait;
-    
-    public function __construct()
-    {
-        $this->keys = [
-            'mcht_id',
-            'send_url',
-            'noti_status',
-            'note',
-        ];
-    }
+    public $keys = [
+        'mcht_id',
+        'send_url',
+        'noti_status',
+        'note',
+    ];
 
     public function authorize()
     {

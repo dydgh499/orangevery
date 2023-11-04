@@ -8,27 +8,22 @@ use App\Http\Traits\FormRequestTrait;
 class FinanceRequest extends FormRequest
 {
     use FormRequestTrait;
-    public function __construct()
-    {
-        $this->keys = [
-            'finance_company_num',
-            'fin_type',
-            'dev_fee',
-            'api_key',
-            'sub_key',
-            'enc_key',
-            'iv',
-            'min_balance_limit',
-            'corp_code',
-            'corp_name',
-            'bank_code',
-            'nick_name',
-            'withdraw_acct_num',
-        ];
-    }
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+    public $keys = [
+        'finance_company_num',
+        'fin_type',
+        'dev_fee',
+        'api_key',
+        'sub_key',
+        'enc_key',
+        'iv',
+        'min_balance_limit',
+        'corp_code',
+        'corp_name',
+        'bank_code',
+        'nick_name',
+        'withdraw_acct_num',
+    ];
+
     public function authorize()
     {
         return $this->user()->tokenCan(35) ? true : false;

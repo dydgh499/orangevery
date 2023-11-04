@@ -11,6 +11,11 @@ use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+/**
+ * @group Payment Section API
+ *
+ * PG사 구간 API입니다.
+ */
 class PaymentSectionController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
@@ -41,7 +46,6 @@ class PaymentSectionController extends Controller
      *
      * 대리점 이상 가능
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(PaySectionRequest $request)
     {
@@ -56,7 +60,6 @@ class PaymentSectionController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $id)
     {
@@ -70,7 +73,6 @@ class PaymentSectionController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update(PaySectionRequest $request, $id)
     {
@@ -83,7 +85,6 @@ class PaymentSectionController extends Controller
      * 단일삭제
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
     {

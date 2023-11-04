@@ -11,6 +11,11 @@ use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+/**
+ * @group Realtime-Send-History API
+ *
+ * 실시간 이체이력 API 입니다.
+ */
 class RealtimeSendHistoryController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
@@ -64,7 +69,6 @@ class RealtimeSendHistoryController extends Controller
      * 운영자 이상 가능
      *
      * @bodyParam user_pw string 유저 패스워드
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -77,7 +81,6 @@ class RealtimeSendHistoryController extends Controller
      * 운영자 이상 가능
      *
      * @urlParam id integer required 영업자 이력 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
@@ -95,7 +98,6 @@ class RealtimeSendHistoryController extends Controller
      * 단일삭제
      *
      * @urlParam id integer required 이상거래 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {

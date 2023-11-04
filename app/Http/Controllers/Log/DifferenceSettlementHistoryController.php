@@ -13,9 +13,13 @@ use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\TransactionTrait;
-
 use App\Http\Requests\Manager\IndexRequest;
 
+/**
+ * @group Difference-Settlement-History API
+ *
+ * 차액정산 이력 API 입니다.
+ */
 class DifferenceSettlementHistoryController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait, TransactionTrait;

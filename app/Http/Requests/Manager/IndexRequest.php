@@ -9,22 +9,13 @@ use App\Http\Traits\FormRequestTrait;
 class IndexRequest extends FormRequest
 {
     use FormRequestTrait;
-
-    public function __construct()
-    {
-        $this->keys = ['page','page_size','s_dt', 'e_dt'];
-        $this->sub = [
-            'page'      => 'required|integer',
-            'page_size' => 'required|integer',
-            's_dt'  => 'string',
-            'e_dt'  => 'string',
-        ];
-        $this->params = $this->getDocsParameters($this->keys);
-        $this->params['page']['example']      = 1;
-        $this->params['page_size']['example'] = 20;
-        $this->params['s_dt']['example']      = '2023-10-14';
-        $this->params['e_dt']['example']      = '2023-10-15';
-    }
+    public $keys = ['page','page_size','s_dt', 'e_dt'];
+    public $sub = [
+        'page'      => 'required|integer',
+        'page_size' => 'required|integer',
+        's_dt'  => 'string',
+        'e_dt'  => 'string',
+    ];
 
     public function authorize()
     {
@@ -35,6 +26,7 @@ class IndexRequest extends FormRequest
     {
         return $this->getRules($this->keys, $this->sub);
     }
+
     public function attributes()
     {
         return $this->getAttributes($this->keys);
@@ -42,6 +34,11 @@ class IndexRequest extends FormRequest
 
     public function queryParameters()
     {
+        $this->params = $this->getDocsParameters($this->keys);
+        $this->params['page']['example']      = 1;
+        $this->params['page_size']['example'] = 20;
+        $this->params['s_dt']['example']      = '2023-10-14';
+        $this->params['e_dt']['example']      = '2023-10-15';
         return $this->params;
     }
     public function bodyParameters()

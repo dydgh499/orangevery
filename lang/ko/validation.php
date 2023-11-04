@@ -145,6 +145,8 @@ return [
         'favicon_file'  => '파비콘',
         'passbook_file' => '통장 사본 이미지',
         'contract_file' => '계약서 이미지',
+        'bsin_lic_file' => '사업자등록증 이미지',
+        'profile_file' => '프로필 이미지',
         'id_file'    => '신분증 사본 이미지',
         'og_file'    => '오픈 그래프 이미지',
         'deposit_day' => '입금일',
@@ -213,6 +215,9 @@ return [
         'mcht_name' => '가맹점 상호',
         'mcht_user_name' => '가맹점 ID',
         'addr'  => '주소',
+        'use_regular_card' => '단골고객 기능 사용여부',
+        'use_collect_withdraw' => '모아서 출금 사용여부',
+        'is_show_fee' => '가맹점 수수료율 노출여부',
         //
         'tags' => '태그',
         'files' => '파일',
@@ -272,5 +277,10 @@ return [
         'dev_fee' => '개발사 수수료',
         'min_balance_limit' => '유보금미달알림 하한금',
         'corp_name' => '법인명',
+        //noti
+        'noti_status' => '노티 사용 상태',
+        //
+        'pg_type' => 'PG 타입',
+        'pg_name' => 'PG사 별칭',
     ],
 ];

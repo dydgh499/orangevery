@@ -8,24 +8,25 @@ use App\Http\Traits\FormRequestTrait;
 class BulkMerchandiseRequest extends FormRequest
 {
     use FormRequestTrait;
+    public $keys = [
+        'mcht_name',
+        'user_name',
+        'user_pw',
+        'nick_name',
+        'resident_num',
+        'business_num',
+        'sector',
+        'addr',
+        'phone_num',
+        'acct_num',
+        'acct_name',
+        'acct_bank_name',
+        'acct_bank_code',
+    ];
 
-    public function __construct()
+    public function bodyParameters()
     {
-        $this->keys = [
-            'mcht_name',
-            'user_name',
-            'user_pw',
-            'nick_name',
-            'resident_num',
-            'business_num',
-            'sector',
-            'addr',
-            'phone_num',
-            'acct_num',
-            'acct_name',
-            'acct_bank_name',
-            'acct_bank_code',
-        ];
+        return $this->getDocsParameters($this->keys);
     }
 
     public function authorize()

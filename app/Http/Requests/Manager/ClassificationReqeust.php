@@ -8,14 +8,10 @@ use App\Http\Traits\FormRequestTrait;
 class ClassificationReqeust extends FormRequest
 {
     use FormRequestTrait;
-    
-    public function __construct()
-    {
-        $this->keys = [
-            'type',
-            'name',
-        ];
-    }
+    public $keys = [
+        'type',
+        'name',
+    ];
 
     public function authorize()
     {

@@ -1,0 +1,105 @@
+name: 'Before-System-Sync API'
+description: |-
+
+  이전 전산 양방향 연동 API 입니다.
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/computational-transfer/login
+    metadata:
+      groupName: 'Before-System-Sync API'
+      groupDescription: |-
+
+        이전 전산 양방향 연동 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      domain:
+        name: domain
+        description: ''
+        required: true
+        example: laudantium
+        type: string
+        enumValues: []
+        custom: []
+      user_name:
+        name: user_name
+        description: ''
+        required: true
+        example: dignissimos
+        type: string
+        enumValues: []
+        custom: []
+      user_pw:
+        name: user_pw
+        description: ''
+        required: true
+        example: ut
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      domain: laudantium
+      user_name: dignissimos
+      user_pw: ut
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/computational-transfer/register
+    metadata:
+      groupName: 'Before-System-Sync API'
+      groupDescription: |-
+
+        이전 전산 양방향 연동 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      token:
+        name: token
+        description: ''
+        required: true
+        example: perferendis
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      token: perferendis
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

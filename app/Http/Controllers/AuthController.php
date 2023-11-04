@@ -34,7 +34,6 @@ class AuthController extends Controller
      *
      * @bodyParam dns string required 검증할 DNS 입력 Example: localhost
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function domain(Request $request)
     {
@@ -86,8 +85,7 @@ class AuthController extends Controller
      * 로그인(관리자)
      * @unauthenticated
      *
-     * @queryParam brand_id integer required 브랜드 ID Example: 1
-     * @return \Illuminate\Http\JsonResponse
+     * @bodyParam brand_id integer required 브랜드 ID Example: 1
      */
     public function signIn(LoginRequest $request)
     {
@@ -112,7 +110,6 @@ class AuthController extends Controller
     /**
      * 로그아웃
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function signOut(Request $request)
     {
@@ -127,7 +124,6 @@ class AuthController extends Controller
      *
      * 본사 등급으로 회원가입 합니다.
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function signUp(Request $request)
     {

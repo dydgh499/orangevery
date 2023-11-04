@@ -1,0 +1,214 @@
+name: 'Auth API'
+description: |-
+
+  인증관련 API 입니다.
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/auth/sign-in
+    metadata:
+      groupName: 'Auth API'
+      groupDescription: |-
+
+        인증관련 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 로그인(관리자)
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      brand_id:
+        name: brand_id
+        description: '브랜드 ID'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        custom: []
+      user_name:
+        name: user_name
+        description: '유저 ID.'
+        required: true
+        example: dolore
+        type: string
+        enumValues: []
+        custom: []
+      user_pw:
+        name: user_pw
+        description: 패스워드.
+        required: true
+        example: enim
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      brand_id: 1
+      user_name: dolore
+      user_pw: enim
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/auth/sign-up
+    metadata:
+      groupName: 'Auth API'
+      groupDescription: |-
+
+        인증관련 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 회원가입(본사)
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      brand_id:
+        name: brand_id
+        description: ''
+        required: true
+        example: quia
+        type: string
+        enumValues: []
+        custom: []
+      ceo_name:
+        name: ceo_name
+        description: ''
+        required: true
+        example: molestias
+        type: string
+        enumValues: []
+        custom: []
+      phone_num:
+        name: phone_num
+        description: ''
+        required: true
+        example: ducimus
+        type: string
+        enumValues: []
+        custom: []
+      business_num:
+        name: business_num
+        description: ''
+        required: true
+        example: qui
+        type: string
+        enumValues: []
+        custom: []
+      user_name:
+        name: user_name
+        description: ''
+        required: true
+        example: tenetur
+        type: string
+        enumValues: []
+        custom: []
+      user_pw:
+        name: user_pw
+        description: ''
+        required: true
+        example: illum
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      brand_id: quia
+      ceo_name: molestias
+      phone_num: ducimus
+      business_num: qui
+      user_name: tenetur
+      user_pw: illum
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/auth/sign-out
+    metadata:
+      groupName: 'Auth API'
+      groupDescription: |-
+
+        인증관련 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 로그아웃
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/auth/onwer-check
+    metadata:
+      groupName: 'Auth API'
+      groupDescription: |-
+
+        인증관련 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

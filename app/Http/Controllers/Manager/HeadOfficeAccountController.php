@@ -11,6 +11,11 @@ use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+/**
+ * @group Head Office Account API
+ *
+ * 본사 지정계좌 API입니다.
+ */
 class HeadOfficeAccountController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
@@ -43,7 +48,6 @@ class HeadOfficeAccountController extends Controller
      *
      * 마스터 이상 가능
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(HeadOfficeAccountRequest $request)
     {

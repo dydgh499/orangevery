@@ -19,6 +19,11 @@ use App\Http\Traits\Settle\TransactionTrait;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @group Settle-Merchandise API
+ *
+ * 가맹점 정산 API 입니다.
+ */
 class MerchandiseController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, SettleTrait, SettleTerminalTrait, TransactionTrait;
@@ -66,7 +71,12 @@ class MerchandiseController extends Controller
         $data = $this->setSettleFinalAmount($data);
         return $data;
     }
-
+    
+    /**
+     * 차트 데이터 출력
+     *
+     * 가맹점 이상 가능
+     */
     public function chart(Request $request)
     {
         $request = $request->merge([

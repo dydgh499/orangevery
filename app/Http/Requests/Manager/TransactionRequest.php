@@ -8,42 +8,39 @@ use App\Http\Traits\FormRequestTrait;
 class TransactionRequest extends FormRequest
 {
     use FormRequestTrait;
-    public function __construct()
-    {
-        $this->keys = [
-            'mcht_id',
-            'dev_fee', 'dev_realtime_fee',
-            'sales5_id', 'sales5_fee',
-            'sales4_id', 'sales4_fee',
-            'sales3_id', 'sales3_fee',
-            'sales2_id', 'sales2_fee',
-            'sales1_id', 'sales1_fee',
-            'sales0_id', 'sales0_fee',
-            'custom_id', 'mcht_fee', 'hold_fee',
-            'mid','tid',
-            'module_type',
-            'pg_id', 'pmod_id', 'ps_id',
-            'terminal_id',
-            'ps_fee',
-            'mcht_settle_fee', 'mcht_settle_type',
-            'trx_dt',
-            'trx_tm',
-            'amount',
-            'ord_num',
-            'trx_id',
-            'card_num',
-            'installment',
-            'issuer',
-            'acquirer',
-            'appr_num',
-            'cxl_dt', 
-            'cxl_tm', 
-            'ori_trx_id',   //
-            'buyer_name',   //
-            'buyer_phone',  //
-            'item_name',    //
-        ];
-    }
+    public $keys = [
+        'mcht_id',
+        'dev_fee', 'dev_realtime_fee',
+        'sales5_id', 'sales5_fee',
+        'sales4_id', 'sales4_fee',
+        'sales3_id', 'sales3_fee',
+        'sales2_id', 'sales2_fee',
+        'sales1_id', 'sales1_fee',
+        'sales0_id', 'sales0_fee',
+        'custom_id', 'mcht_fee', 'hold_fee',
+        'mid','tid',
+        'module_type',
+        'pg_id', 'pmod_id', 'ps_id',
+        'terminal_id',
+        'ps_fee',
+        'mcht_settle_fee', 'mcht_settle_type',
+        'trx_dt',
+        'trx_tm',
+        'amount',
+        'ord_num',
+        'trx_id',
+        'card_num',
+        'installment',
+        'issuer',
+        'acquirer',
+        'appr_num',
+        'cxl_dt', 
+        'cxl_tm', 
+        'ori_trx_id',   //
+        'buyer_name',   //
+        'buyer_phone',  //
+        'item_name',    //
+    ];
 
     public function authorize()
     {

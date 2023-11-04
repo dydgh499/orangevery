@@ -8,28 +8,25 @@ use App\Http\Traits\FormRequestTrait;
 class SalesforceRequest extends FormRequest
 {
     use FormRequestTrait;
-    public function __construct()
-    {
-        $this->keys = [
-            'user_name',
-            'nick_name',
-            'sales_name',
-            'view_type',
-            'level',
-            'resident_num',
-            'business_num',
-            'acct_bank_name',
-            'acct_bank_code',
-            'acct_num',
-            'acct_name',
-            'addr',
-            'phone_num',
-            'settle_tax_type',
-            'settle_cycle',
-            'settle_day',
-            'note',
-        ];
-    }
+    public $keys = [
+        'user_name',
+        'nick_name',
+        'sales_name',
+        'view_type',
+        'level',
+        'resident_num',
+        'business_num',
+        'acct_bank_name',
+        'acct_bank_code',
+        'acct_num',
+        'acct_name',
+        'addr',
+        'phone_num',
+        'settle_tax_type',
+        'settle_cycle',
+        'settle_day',
+        'note',
+    ];
 
     public function authorize()
     {

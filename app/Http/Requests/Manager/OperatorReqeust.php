@@ -8,16 +8,12 @@ use App\Http\Traits\FormRequestTrait;
 class OperatorReqeust extends FormRequest
 {
     use FormRequestTrait;
-    
-    public function __construct()
-    {
-        $this->keys = [
-            'user_name',
-            'nick_name',
-            'phone_num',
-            'level',
-        ];
-    }
+    public $keys = [
+        'user_name',
+        'nick_name',
+        'phone_num',
+        'level',
+    ];
 
     public function authorize()
     {

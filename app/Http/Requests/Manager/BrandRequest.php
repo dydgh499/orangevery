@@ -11,39 +11,36 @@ use App\Models\Options\ThemeCSS;
 class BrandRequest extends FormRequest
 {
     use FormRequestTrait;
-    public function __construct()
-    {
-        $this->keys = [
-            'name',
-            'dns',
-            'og_description',
-            'ceo_name',
-            'addr',
-            'phone_num',
-            'fax_num',
-            'company_name',
-            'pvcy_rep_name',
-            'business_num',
-            'deposit_day',
-            'deposit_amount',
-            'extra_deposit_amount',
-            'dev_fee',
-            'dev_settle_type',
-            'fax_num',
-            'use_different_settlement',
-            'rep_mcht_id',
-            'above_pg_type',
-        ];
-        $this->file_keys = [   
-            'logo_file',         
-            'favicon_file',
-            'passbook_file',
-            'contract_file',
-            'bsin_lic_file',
-            'id_file',
-            'og_file',
-        ];
-    }
+    public $keys = [
+        'name',
+        'dns',
+        'og_description',
+        'ceo_name',
+        'addr',
+        'phone_num',
+        'fax_num',
+        'company_name',
+        'pvcy_rep_name',
+        'business_num',
+        'deposit_day',
+        'deposit_amount',
+        'extra_deposit_amount',
+        'dev_fee',
+        'dev_settle_type',
+        'fax_num',
+        'use_different_settlement',
+        'rep_mcht_id',
+        'above_pg_type',
+    ];
+    public $file_keys = [   
+        'logo_file',         
+        'favicon_file',
+        'passbook_file',
+        'contract_file',
+        'bsin_lic_file',
+        'id_file',
+        'og_file',
+    ];
 
     public function authorize()
     {
@@ -101,7 +98,7 @@ class BrandRequest extends FormRequest
 
     public function bodyParameters()
     {
-        $params = $this->getDocsParameters($this->keys);
+        $params = array_merge($this->getDocsParameters($this->keys), $this->getDocsParameters($this->file_keys));
         $params['logo_file']['description']      .= '(max-width:256px 이상은 리사이징)';
         $params['favicon_file']['description']   .= '(max-width:32px 이상은 리사이징)';
         $params['passbook_file']['description']  .= '(max-width:500px 이상은 리사이징)';
@@ -109,7 +106,6 @@ class BrandRequest extends FormRequest
         $params['bsin_lic_file']['description']  .= '(max-width:500px 이상은 리사이징)';
         $params['id_file']['description']    .= '(max-width:500px 이상은 리사이징)';
         $params['og_file']['description']    .= '(max-width:1200px 이상은 리사이징)';
-        $params['theme_css']['description'] .= '(테마 CSS 내용 작성)';
         $params['name']['description']      .= '(브랜드명)';
         return $params;
     }

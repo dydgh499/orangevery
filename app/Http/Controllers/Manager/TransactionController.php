@@ -17,6 +17,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Enums\HistoryType;
 
+/**
+ * @group Transaction API
+ *
+ * 거래 API 입니다.
+ */
 class TransactionController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, TransactionTrait;
@@ -151,7 +156,6 @@ class TransactionController extends Controller
      * 대리점 이상 가능
      *
      * @bodyParam user_pw string 유저 패스워드
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(TransactionRequest $request)
     {
@@ -178,7 +182,6 @@ class TransactionController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $id)
     {
@@ -206,7 +209,6 @@ class TransactionController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update(TransactionRequest $request, $id)
     {
@@ -231,7 +233,6 @@ class TransactionController extends Controller
      * 단일삭제
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
     {
@@ -248,7 +249,6 @@ class TransactionController extends Controller
     /**
      * 취소매출 생성
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function cancel(TransactionRequest $request)
     {
@@ -283,7 +283,6 @@ class TransactionController extends Controller
     /**
      * 수기결제
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function handPay(Request $request)
     {
@@ -311,7 +310,6 @@ class TransactionController extends Controller
     /**
      * 결제취소
      *
-     * @return \Illuminate\Http\JsonResponse
      */
     public function payCancel(Request $request)
     {

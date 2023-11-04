@@ -12,6 +12,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
+/**
+ * @group Quick-View API
+ *
+ * 간편보기 API 입니다.
+ */
 class QuickViewController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, TransactionTrait;

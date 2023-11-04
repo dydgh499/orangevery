@@ -19,6 +19,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Enums\HistoryType;
 
+/**
+ * @group Salesforce API
+ *
+ * 영업자 API 입니다.
+ */
 class SalesforceController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait, UnderSalesTrait;
@@ -43,7 +48,12 @@ class SalesforceController extends Controller
             ],
         ];
     }
-
+    
+    /**
+     * 차트 데이터 출력
+     *
+     * 가맹점 이상 가능
+     */
     public function chart(Request $request)
     {
         $request->merge([
@@ -102,7 +112,6 @@ class SalesforceController extends Controller
      * 대리점 이상 가능
      *
      * @bodyParam user_pw string 유저 패스워드
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(SalesforceRequest $request)
     {
@@ -140,7 +149,6 @@ class SalesforceController extends Controller
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request, $id)
     {
@@ -161,7 +169,6 @@ class SalesforceController extends Controller
      * 영업점 이상 가능
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function update(SalesforceRequest $request, $id)
     {
@@ -182,7 +189,6 @@ class SalesforceController extends Controller
      * 단일삭제
      *
      * @urlParam id integer required 유저 PK
-     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
     {

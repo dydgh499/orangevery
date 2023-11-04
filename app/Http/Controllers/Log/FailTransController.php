@@ -10,6 +10,11 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
 
+/**
+ * @group Fail-Transaction-History API
+ *
+ * 거래시도 실패이력 API 입니다.
+ */
 class FailTransController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;

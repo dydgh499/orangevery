@@ -8,14 +8,10 @@ use App\Http\Traits\FormRequestTrait;
 class RegularCreditCardRequest extends FormRequest
 {
     use FormRequestTrait;
-
-    public function __construct()
-    {
-        $this->keys = [
-            'card_num',
-            'note',
-        ];
-    }
+    public $keys = [
+        'card_num',
+        'note',
+    ];
 
     public function authorize(): bool
     {

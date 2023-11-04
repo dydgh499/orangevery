@@ -8,41 +8,32 @@ use App\Http\Traits\FormRequestTrait;
 class PayGatewayRequest extends FormRequest
 {
     use FormRequestTrait;
-
-    public function __construct()
-    {
-        $this->keys = [
-            'pg_type',
-            'pg_name',
-            'rep_name',
-            'company_name',
-            'business_num',
-            'phone_num',
-            'addr',
-            'settle_type',
-        ];
-    }
+    public $keys = [
+        'pg_type',
+        'pg_name',
+        'rep_name',
+        'company_name',
+        'business_num',
+        'phone_num',
+        'addr',
+        'settle_type',
+    ];
 
     public function authorize()
     {
         return $this->user()->tokenCan(10) ? true : false;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         $sub = [
             'pg_type' => 'required',
             'pg_name' => 'required',
-            'rep_name',
-            'company_name',
-            'business_num',
-            'phone_num',
-            'addr',
+            'rep_name' => 'nullable',
+            'company_name' => 'nullable',
+            'business_num' => 'nullable',
+            'phone_num' => 'nullable',
+            'addr' => 'nullable',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -57,6 +48,7 @@ class PayGatewayRequest extends FormRequest
         $params = $this->getDocsParameters($this->keys);
         return $params;
     }
+
     public function data()
     {
         $data = $this->getParmasBaseKey();

@@ -1,0 +1,1598 @@
+name: 'Transaction API'
+description: |-
+
+  거래 API 입니다.
+endpoints:
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/transactions/hand-pay
+    metadata:
+      groupName: 'Transaction API'
+      groupDescription: |-
+
+        거래 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 수기결제
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/transactions/batch-retry
+    metadata:
+      groupName: 'Transaction API'
+      groupDescription: |-
+
+        거래 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/transactions/cancel
+    metadata:
+      groupName: 'Transaction API'
+      groupDescription: |-
+
+        거래 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '취소매출 생성'
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      mcht_id:
+        name: mcht_id
+        description: 가맹점.
+        required: true
+        example: similique
+        type: string
+        enumValues: []
+        custom: []
+      dev_fee:
+        name: dev_fee
+        description: '개발사 수수료.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      dev_realtime_fee:
+        name: dev_realtime_fee
+        description: validation.attributes.dev_realtime_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales5_id:
+        name: sales5_id
+        description: validation.attributes.sales5_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales5_fee:
+        name: sales5_fee
+        description: validation.attributes.sales5_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales4_id:
+        name: sales4_id
+        description: validation.attributes.sales4_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales4_fee:
+        name: sales4_fee
+        description: validation.attributes.sales4_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales3_id:
+        name: sales3_id
+        description: validation.attributes.sales3_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales3_fee:
+        name: sales3_fee
+        description: validation.attributes.sales3_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales2_id:
+        name: sales2_id
+        description: validation.attributes.sales2_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales2_fee:
+        name: sales2_fee
+        description: validation.attributes.sales2_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales1_id:
+        name: sales1_id
+        description: validation.attributes.sales1_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales1_fee:
+        name: sales1_fee
+        description: validation.attributes.sales1_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales0_id:
+        name: sales0_id
+        description: validation.attributes.sales0_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales0_fee:
+        name: sales0_fee
+        description: validation.attributes.sales0_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      custom_id:
+        name: custom_id
+        description: validation.attributes.custom_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      mcht_fee:
+        name: mcht_fee
+        description: validation.attributes.mcht_fee.
+        required: true
+        example: magni
+        type: string
+        enumValues: []
+        custom: []
+      hold_fee:
+        name: hold_fee
+        description: '보유금 수수료.'
+        required: true
+        example: a
+        type: string
+        enumValues: []
+        custom: []
+      mid:
+        name: mid
+        description: validation.attributes.mid.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      tid:
+        name: tid
+        description: TID.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      module_type:
+        name: module_type
+        description: '결제모듈 타입.'
+        required: true
+        example: accusantium
+        type: string
+        enumValues: []
+        custom: []
+      pg_id:
+        name: pg_id
+        description: PG사.
+        required: true
+        example: voluptates
+        type: string
+        enumValues: []
+        custom: []
+      pmod_id:
+        name: pmod_id
+        description: validation.attributes.pmod_id.
+        required: true
+        example: provident
+        type: string
+        enumValues: []
+        custom: []
+      ps_id:
+        name: ps_id
+        description: 구간.
+        required: true
+        example: molestias
+        type: string
+        enumValues: []
+        custom: []
+      terminal_id:
+        name: terminal_id
+        description: validation.attributes.terminal_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      ps_fee:
+        name: ps_fee
+        description: validation.attributes.ps_fee.
+        required: true
+        example: voluptatem
+        type: string
+        enumValues: []
+        custom: []
+      mcht_settle_fee:
+        name: mcht_settle_fee
+        description: validation.attributes.mcht_settle_fee.
+        required: true
+        example: odit
+        type: string
+        enumValues: []
+        custom: []
+      mcht_settle_type:
+        name: mcht_settle_type
+        description: validation.attributes.mcht_settle_type.
+        required: true
+        example: odit
+        type: string
+        enumValues: []
+        custom: []
+      trx_dt:
+        name: trx_dt
+        description: validation.attributes.trx_dt.
+        required: true
+        example: est
+        type: string
+        enumValues: []
+        custom: []
+      trx_tm:
+        name: trx_tm
+        description: validation.attributes.trx_tm.
+        required: true
+        example: facere
+        type: string
+        enumValues: []
+        custom: []
+      amount:
+        name: amount
+        description: validation.attributes.amount.
+        required: true
+        example: ullam
+        type: string
+        enumValues: []
+        custom: []
+      ord_num:
+        name: ord_num
+        description: validation.attributes.ord_num.
+        required: true
+        example: doloribus
+        type: string
+        enumValues: []
+        custom: []
+      trx_id:
+        name: trx_id
+        description: validation.attributes.trx_id.
+        required: true
+        example: eum
+        type: string
+        enumValues: []
+        custom: []
+      card_num:
+        name: card_num
+        description: 카드번호.
+        required: true
+        example: quisquam
+        type: string
+        enumValues: []
+        custom: []
+      installment:
+        name: installment
+        description: 할부.
+        required: true
+        example: consectetur
+        type: string
+        enumValues: []
+        custom: []
+      issuer:
+        name: issuer
+        description: 발급사.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      acquirer:
+        name: acquirer
+        description: validation.attributes.acquirer.
+        required: true
+        example: tempore
+        type: string
+        enumValues: []
+        custom: []
+      appr_num:
+        name: appr_num
+        description: 승인번호.
+        required: true
+        example: aut
+        type: string
+        enumValues: []
+        custom: []
+      cxl_dt:
+        name: cxl_dt
+        description: validation.attributes.cxl_dt.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      cxl_tm:
+        name: cxl_tm
+        description: validation.attributes.cxl_tm.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      ori_trx_id:
+        name: ori_trx_id
+        description: validation.attributes.ori_trx_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      buyer_name:
+        name: buyer_name
+        description: validation.attributes.buyer_name.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      buyer_phone:
+        name: buyer_phone
+        description: validation.attributes.buyer_phone.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      item_name:
+        name: item_name
+        description: validation.attributes.item_name.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      0:
+        name: '0'
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      mcht_id: similique
+      mcht_fee: magni
+      hold_fee: a
+      module_type: accusantium
+      pg_id: voluptates
+      pmod_id: provident
+      ps_id: molestias
+      ps_fee: voluptatem
+      mcht_settle_fee: odit
+      mcht_settle_type: odit
+      trx_dt: est
+      trx_tm: facere
+      amount: ullam
+      ord_num: doloribus
+      trx_id: eum
+      card_num: quisquam
+      installment: consectetur
+      acquirer: tempore
+      appr_num: aut
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/transactions/pay-cancel
+    metadata:
+      groupName: 'Transaction API'
+      groupDescription: |-
+
+        거래 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 결제취소
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/manager/transactions/chart
+    metadata:
+      groupName: 'Transaction API'
+      groupDescription: |-
+
+        거래 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '차트 데이터 출력'
+      description: '가맹점 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: '페이지 번호.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        custom: []
+      page_size:
+        name: page_size
+        description: '페이지 사이즈.'
+        required: true
+        example: 20
+        type: integer
+        enumValues: []
+        custom: []
+      s_dt:
+        name: s_dt
+        description: 시작일.
+        required: false
+        example: '2023-10-14'
+        type: string
+        enumValues: []
+        custom: []
+      e_dt:
+        name: e_dt
+        description: 종료일.
+        required: false
+        example: '2023-10-15'
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      page: 1
+      page_size: 20
+      s_dt: '2023-10-14'
+      e_dt: '2023-10-15'
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"code":950,"message":"로그인 정보가 정확하지 않습니다."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/manager/transactions
+    metadata:
+      groupName: 'Transaction API'
+      groupDescription: |-
+
+        거래 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 목록출력
+      description: '가맹점 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: '페이지 번호.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        custom: []
+      page_size:
+        name: page_size
+        description: '페이지 사이즈.'
+        required: true
+        example: 20
+        type: integer
+        enumValues: []
+        custom: []
+      s_dt:
+        name: s_dt
+        description: 시작일.
+        required: false
+        example: '2023-10-14'
+        type: string
+        enumValues: []
+        custom: []
+      e_dt:
+        name: e_dt
+        description: 종료일.
+        required: false
+        example: '2023-10-15'
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      page: 1
+      page_size: 20
+      s_dt: '2023-10-14'
+      e_dt: '2023-10-15'
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"code":950,"message":"로그인 정보가 정확하지 않습니다."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/transactions
+    metadata:
+      groupName: 'Transaction API'
+      groupDescription: |-
+
+        거래 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 추가
+      description: '대리점 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      mcht_id:
+        name: mcht_id
+        description: 가맹점.
+        required: true
+        example: accusantium
+        type: string
+        enumValues: []
+        custom: []
+      dev_fee:
+        name: dev_fee
+        description: '개발사 수수료.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      dev_realtime_fee:
+        name: dev_realtime_fee
+        description: validation.attributes.dev_realtime_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales5_id:
+        name: sales5_id
+        description: validation.attributes.sales5_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales5_fee:
+        name: sales5_fee
+        description: validation.attributes.sales5_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales4_id:
+        name: sales4_id
+        description: validation.attributes.sales4_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales4_fee:
+        name: sales4_fee
+        description: validation.attributes.sales4_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales3_id:
+        name: sales3_id
+        description: validation.attributes.sales3_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales3_fee:
+        name: sales3_fee
+        description: validation.attributes.sales3_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales2_id:
+        name: sales2_id
+        description: validation.attributes.sales2_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales2_fee:
+        name: sales2_fee
+        description: validation.attributes.sales2_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales1_id:
+        name: sales1_id
+        description: validation.attributes.sales1_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales1_fee:
+        name: sales1_fee
+        description: validation.attributes.sales1_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales0_id:
+        name: sales0_id
+        description: validation.attributes.sales0_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales0_fee:
+        name: sales0_fee
+        description: validation.attributes.sales0_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      custom_id:
+        name: custom_id
+        description: validation.attributes.custom_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      mcht_fee:
+        name: mcht_fee
+        description: validation.attributes.mcht_fee.
+        required: true
+        example: dolores
+        type: string
+        enumValues: []
+        custom: []
+      hold_fee:
+        name: hold_fee
+        description: '보유금 수수료.'
+        required: true
+        example: et
+        type: string
+        enumValues: []
+        custom: []
+      mid:
+        name: mid
+        description: validation.attributes.mid.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      tid:
+        name: tid
+        description: TID.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      module_type:
+        name: module_type
+        description: '결제모듈 타입.'
+        required: true
+        example: accusamus
+        type: string
+        enumValues: []
+        custom: []
+      pg_id:
+        name: pg_id
+        description: PG사.
+        required: true
+        example: doloribus
+        type: string
+        enumValues: []
+        custom: []
+      pmod_id:
+        name: pmod_id
+        description: validation.attributes.pmod_id.
+        required: true
+        example: saepe
+        type: string
+        enumValues: []
+        custom: []
+      ps_id:
+        name: ps_id
+        description: 구간.
+        required: true
+        example: facilis
+        type: string
+        enumValues: []
+        custom: []
+      terminal_id:
+        name: terminal_id
+        description: validation.attributes.terminal_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      ps_fee:
+        name: ps_fee
+        description: validation.attributes.ps_fee.
+        required: true
+        example: cumque
+        type: string
+        enumValues: []
+        custom: []
+      mcht_settle_fee:
+        name: mcht_settle_fee
+        description: validation.attributes.mcht_settle_fee.
+        required: true
+        example: doloribus
+        type: string
+        enumValues: []
+        custom: []
+      mcht_settle_type:
+        name: mcht_settle_type
+        description: validation.attributes.mcht_settle_type.
+        required: true
+        example: sit
+        type: string
+        enumValues: []
+        custom: []
+      trx_dt:
+        name: trx_dt
+        description: validation.attributes.trx_dt.
+        required: true
+        example: eos
+        type: string
+        enumValues: []
+        custom: []
+      trx_tm:
+        name: trx_tm
+        description: validation.attributes.trx_tm.
+        required: true
+        example: modi
+        type: string
+        enumValues: []
+        custom: []
+      amount:
+        name: amount
+        description: validation.attributes.amount.
+        required: true
+        example: sed
+        type: string
+        enumValues: []
+        custom: []
+      ord_num:
+        name: ord_num
+        description: validation.attributes.ord_num.
+        required: true
+        example: totam
+        type: string
+        enumValues: []
+        custom: []
+      trx_id:
+        name: trx_id
+        description: validation.attributes.trx_id.
+        required: true
+        example: illum
+        type: string
+        enumValues: []
+        custom: []
+      card_num:
+        name: card_num
+        description: 카드번호.
+        required: true
+        example: quo
+        type: string
+        enumValues: []
+        custom: []
+      installment:
+        name: installment
+        description: 할부.
+        required: true
+        example: voluptates
+        type: string
+        enumValues: []
+        custom: []
+      issuer:
+        name: issuer
+        description: 발급사.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      acquirer:
+        name: acquirer
+        description: validation.attributes.acquirer.
+        required: true
+        example: mollitia
+        type: string
+        enumValues: []
+        custom: []
+      appr_num:
+        name: appr_num
+        description: 승인번호.
+        required: true
+        example: vero
+        type: string
+        enumValues: []
+        custom: []
+      cxl_dt:
+        name: cxl_dt
+        description: validation.attributes.cxl_dt.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      cxl_tm:
+        name: cxl_tm
+        description: validation.attributes.cxl_tm.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      ori_trx_id:
+        name: ori_trx_id
+        description: validation.attributes.ori_trx_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      buyer_name:
+        name: buyer_name
+        description: validation.attributes.buyer_name.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      buyer_phone:
+        name: buyer_phone
+        description: validation.attributes.buyer_phone.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      item_name:
+        name: item_name
+        description: validation.attributes.item_name.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      0:
+        name: '0'
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      user_pw:
+        name: user_pw
+        description: '유저 패스워드'
+        required: false
+        example: non
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      mcht_id: accusantium
+      mcht_fee: dolores
+      hold_fee: et
+      module_type: accusamus
+      pg_id: doloribus
+      pmod_id: saepe
+      ps_id: facilis
+      ps_fee: cumque
+      mcht_settle_fee: doloribus
+      mcht_settle_type: sit
+      trx_dt: eos
+      trx_tm: modi
+      amount: sed
+      ord_num: totam
+      trx_id: illum
+      card_num: quo
+      installment: voluptates
+      acquirer: mollitia
+      appr_num: vero
+      user_pw: non
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/manager/transactions/{id}'
+    metadata:
+      groupName: 'Transaction API'
+      groupDescription: |-
+
+        거래 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 단일조회
+      description: '가맹점 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: '유저 PK'
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: 4
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"code":950,"message":"로그인 정보가 정확하지 않습니다."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/manager/transactions/{id}'
+    metadata:
+      groupName: 'Transaction API'
+      groupDescription: |-
+
+        거래 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 업데이트
+      description: '가맹점 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: '유저 PK'
+        required: true
+        example: 9
+        type: integer
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: 9
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      mcht_id:
+        name: mcht_id
+        description: 가맹점.
+        required: true
+        example: minima
+        type: string
+        enumValues: []
+        custom: []
+      dev_fee:
+        name: dev_fee
+        description: '개발사 수수료.'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      dev_realtime_fee:
+        name: dev_realtime_fee
+        description: validation.attributes.dev_realtime_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales5_id:
+        name: sales5_id
+        description: validation.attributes.sales5_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales5_fee:
+        name: sales5_fee
+        description: validation.attributes.sales5_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales4_id:
+        name: sales4_id
+        description: validation.attributes.sales4_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales4_fee:
+        name: sales4_fee
+        description: validation.attributes.sales4_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales3_id:
+        name: sales3_id
+        description: validation.attributes.sales3_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales3_fee:
+        name: sales3_fee
+        description: validation.attributes.sales3_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales2_id:
+        name: sales2_id
+        description: validation.attributes.sales2_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales2_fee:
+        name: sales2_fee
+        description: validation.attributes.sales2_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales1_id:
+        name: sales1_id
+        description: validation.attributes.sales1_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales1_fee:
+        name: sales1_fee
+        description: validation.attributes.sales1_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales0_id:
+        name: sales0_id
+        description: validation.attributes.sales0_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      sales0_fee:
+        name: sales0_fee
+        description: validation.attributes.sales0_fee.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      custom_id:
+        name: custom_id
+        description: validation.attributes.custom_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      mcht_fee:
+        name: mcht_fee
+        description: validation.attributes.mcht_fee.
+        required: true
+        example: laborum
+        type: string
+        enumValues: []
+        custom: []
+      hold_fee:
+        name: hold_fee
+        description: '보유금 수수료.'
+        required: true
+        example: aut
+        type: string
+        enumValues: []
+        custom: []
+      mid:
+        name: mid
+        description: validation.attributes.mid.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      tid:
+        name: tid
+        description: TID.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      module_type:
+        name: module_type
+        description: '결제모듈 타입.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        custom: []
+      pg_id:
+        name: pg_id
+        description: PG사.
+        required: true
+        example: qui
+        type: string
+        enumValues: []
+        custom: []
+      pmod_id:
+        name: pmod_id
+        description: validation.attributes.pmod_id.
+        required: true
+        example: illo
+        type: string
+        enumValues: []
+        custom: []
+      ps_id:
+        name: ps_id
+        description: 구간.
+        required: true
+        example: et
+        type: string
+        enumValues: []
+        custom: []
+      terminal_id:
+        name: terminal_id
+        description: validation.attributes.terminal_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      ps_fee:
+        name: ps_fee
+        description: validation.attributes.ps_fee.
+        required: true
+        example: laborum
+        type: string
+        enumValues: []
+        custom: []
+      mcht_settle_fee:
+        name: mcht_settle_fee
+        description: validation.attributes.mcht_settle_fee.
+        required: true
+        example: porro
+        type: string
+        enumValues: []
+        custom: []
+      mcht_settle_type:
+        name: mcht_settle_type
+        description: validation.attributes.mcht_settle_type.
+        required: true
+        example: aliquam
+        type: string
+        enumValues: []
+        custom: []
+      trx_dt:
+        name: trx_dt
+        description: validation.attributes.trx_dt.
+        required: true
+        example: placeat
+        type: string
+        enumValues: []
+        custom: []
+      trx_tm:
+        name: trx_tm
+        description: validation.attributes.trx_tm.
+        required: true
+        example: dolorem
+        type: string
+        enumValues: []
+        custom: []
+      amount:
+        name: amount
+        description: validation.attributes.amount.
+        required: true
+        example: et
+        type: string
+        enumValues: []
+        custom: []
+      ord_num:
+        name: ord_num
+        description: validation.attributes.ord_num.
+        required: true
+        example: vero
+        type: string
+        enumValues: []
+        custom: []
+      trx_id:
+        name: trx_id
+        description: validation.attributes.trx_id.
+        required: true
+        example: vel
+        type: string
+        enumValues: []
+        custom: []
+      card_num:
+        name: card_num
+        description: 카드번호.
+        required: true
+        example: quod
+        type: string
+        enumValues: []
+        custom: []
+      installment:
+        name: installment
+        description: 할부.
+        required: true
+        example: voluptas
+        type: string
+        enumValues: []
+        custom: []
+      issuer:
+        name: issuer
+        description: 발급사.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      acquirer:
+        name: acquirer
+        description: validation.attributes.acquirer.
+        required: true
+        example: rerum
+        type: string
+        enumValues: []
+        custom: []
+      appr_num:
+        name: appr_num
+        description: 승인번호.
+        required: true
+        example: mollitia
+        type: string
+        enumValues: []
+        custom: []
+      cxl_dt:
+        name: cxl_dt
+        description: validation.attributes.cxl_dt.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      cxl_tm:
+        name: cxl_tm
+        description: validation.attributes.cxl_tm.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      ori_trx_id:
+        name: ori_trx_id
+        description: validation.attributes.ori_trx_id.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      buyer_name:
+        name: buyer_name
+        description: validation.attributes.buyer_name.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      buyer_phone:
+        name: buyer_phone
+        description: validation.attributes.buyer_phone.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      item_name:
+        name: item_name
+        description: validation.attributes.item_name.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      0:
+        name: '0'
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      mcht_id: minima
+      mcht_fee: laborum
+      hold_fee: aut
+      module_type: consequatur
+      pg_id: qui
+      pmod_id: illo
+      ps_id: et
+      ps_fee: laborum
+      mcht_settle_fee: porro
+      mcht_settle_type: aliquam
+      trx_dt: placeat
+      trx_tm: dolorem
+      amount: et
+      ord_num: vero
+      trx_id: vel
+      card_num: quod
+      installment: voluptas
+      acquirer: rerum
+      appr_num: mollitia
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/manager/transactions/{id}'
+    metadata:
+      groupName: 'Transaction API'
+      groupDescription: |-
+
+        거래 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 단일삭제
+      description: ''
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: '유저 PK'
+        required: true
+        example: 17
+        type: integer
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: 17
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []

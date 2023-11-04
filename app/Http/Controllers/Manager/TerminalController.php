@@ -14,6 +14,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
+/**
+ * @group Terminal API
+ *
+ * 장비 API 입니다.
+ */
 class TerminalController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;

@@ -1,0 +1,520 @@
+name: 'Complaint API'
+description: |-
+
+  민원조회 API 입니다. 조회를 제외하고 마스터 이상권한이 요구됩니다.
+endpoints:
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/manager/complaints
+    metadata:
+      groupName: 'Complaint API'
+      groupDescription: |-
+
+        민원조회 API 입니다. 조회를 제외하고 마스터 이상권한이 요구됩니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 목록출력
+      description: '가맹점 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: '페이지 번호.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        custom: []
+      page_size:
+        name: page_size
+        description: '페이지 사이즈.'
+        required: true
+        example: 20
+        type: integer
+        enumValues: []
+        custom: []
+      s_dt:
+        name: s_dt
+        description: 시작일.
+        required: false
+        example: '2023-10-14'
+        type: string
+        enumValues: []
+        custom: []
+      e_dt:
+        name: e_dt
+        description: 종료일.
+        required: false
+        example: '2023-10-15'
+        type: string
+        enumValues: []
+        custom: []
+      search:
+        name: search
+        description: 검색어(제목)
+        required: false
+        example: at
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      page: 1
+      page_size: 20
+      s_dt: '2023-10-14'
+      e_dt: '2023-10-15'
+      search: at
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"code":950,"message":"로그인 정보가 정확하지 않습니다."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/manager/complaints
+    metadata:
+      groupName: 'Complaint API'
+      groupDescription: |-
+
+        민원조회 API 입니다. 조회를 제외하고 마스터 이상권한이 요구됩니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 추가
+      description: '마스터 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      mcht_id:
+        name: mcht_id
+        description: 가맹점.
+        required: true
+        example: libero
+        type: string
+        enumValues: []
+        custom: []
+      tid:
+        name: tid
+        description: TID.
+        required: true
+        example: et
+        type: string
+        enumValues: []
+        custom: []
+      cust_name:
+        name: cust_name
+        description: 고객명.
+        required: true
+        example: libero
+        type: string
+        enumValues: []
+        custom: []
+      appr_dt:
+        name: appr_dt
+        description: '승인일. value 값이 유효한 날짜가 아닙니다.'
+        required: true
+        example: '2023-11-05T01:36:04'
+        type: string
+        enumValues: []
+        custom: []
+      appr_num:
+        name: appr_num
+        description: 승인번호.
+        required: true
+        example: autem
+        type: string
+        enumValues: []
+        custom: []
+      phone_num:
+        name: phone_num
+        description: 휴대폰번호.
+        required: true
+        example: et
+        type: string
+        enumValues: []
+        custom: []
+      hand_cust_name:
+        name: hand_cust_name
+        description: 수기작성성함.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      hand_phone_num:
+        name: hand_phone_num
+        description: 수기작성연락처.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      issuer:
+        name: issuer
+        description: 발급사.
+        required: true
+        example: illo
+        type: string
+        enumValues: []
+        custom: []
+      pg_id:
+        name: pg_id
+        description: PG사.
+        required: true
+        example: perferendis
+        type: string
+        enumValues: []
+        custom: []
+      type:
+        name: type
+        description: 타입.
+        required: true
+        example: provident
+        type: string
+        enumValues: []
+        custom: []
+      entry_path:
+        name: entry_path
+        description: 유입경로.
+        required: true
+        example: enim
+        type: string
+        enumValues: []
+        custom: []
+      is_deposit:
+        name: is_deposit
+        description: 입금상태.
+        required: true
+        example: quia
+        type: string
+        enumValues: []
+        custom: []
+      complaint_status:
+        name: complaint_status
+        description: validation.attributes.complaint_status.
+        required: true
+        example: deleniti
+        type: string
+        enumValues: []
+        custom: []
+      note:
+        name: note
+        description: 비고.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      mcht_id: libero
+      tid: et
+      cust_name: libero
+      appr_dt: '2023-11-05T01:36:04'
+      appr_num: autem
+      phone_num: et
+      issuer: illo
+      pg_id: perferendis
+      type: provident
+      entry_path: enim
+      is_deposit: quia
+      complaint_status: deleniti
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: 'api/v1/manager/complaints/{id}'
+    metadata:
+      groupName: 'Complaint API'
+      groupDescription: |-
+
+        민원조회 API 입니다. 조회를 제외하고 마스터 이상권한이 요구됩니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 단일조회
+      description: '가맹점 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: '공지사항 PK'
+        required: true
+        example: 10
+        type: integer
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: 10
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"code":950,"message":"로그인 정보가 정확하지 않습니다."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+        custom: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/v1/manager/complaints/{id}'
+    metadata:
+      groupName: 'Complaint API'
+      groupDescription: |-
+
+        민원조회 API 입니다. 조회를 제외하고 마스터 이상권한이 요구됩니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 업데이트
+      description: '마스터 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: '공지사항 PK'
+        required: true
+        example: 4
+        type: integer
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: 4
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      mcht_id:
+        name: mcht_id
+        description: 가맹점.
+        required: true
+        example: molestiae
+        type: string
+        enumValues: []
+        custom: []
+      tid:
+        name: tid
+        description: TID.
+        required: true
+        example: autem
+        type: string
+        enumValues: []
+        custom: []
+      cust_name:
+        name: cust_name
+        description: 고객명.
+        required: true
+        example: qui
+        type: string
+        enumValues: []
+        custom: []
+      appr_dt:
+        name: appr_dt
+        description: '승인일. value 값이 유효한 날짜가 아닙니다.'
+        required: true
+        example: '2023-11-05T01:36:04'
+        type: string
+        enumValues: []
+        custom: []
+      appr_num:
+        name: appr_num
+        description: 승인번호.
+        required: true
+        example: nesciunt
+        type: string
+        enumValues: []
+        custom: []
+      phone_num:
+        name: phone_num
+        description: 휴대폰번호.
+        required: true
+        example: voluptatum
+        type: string
+        enumValues: []
+        custom: []
+      hand_cust_name:
+        name: hand_cust_name
+        description: 수기작성성함.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      hand_phone_num:
+        name: hand_phone_num
+        description: 수기작성연락처.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      issuer:
+        name: issuer
+        description: 발급사.
+        required: true
+        example: sunt
+        type: string
+        enumValues: []
+        custom: []
+      pg_id:
+        name: pg_id
+        description: PG사.
+        required: true
+        example: provident
+        type: string
+        enumValues: []
+        custom: []
+      type:
+        name: type
+        description: 타입.
+        required: true
+        example: sunt
+        type: string
+        enumValues: []
+        custom: []
+      entry_path:
+        name: entry_path
+        description: 유입경로.
+        required: true
+        example: at
+        type: string
+        enumValues: []
+        custom: []
+      is_deposit:
+        name: is_deposit
+        description: 입금상태.
+        required: true
+        example: impedit
+        type: string
+        enumValues: []
+        custom: []
+      complaint_status:
+        name: complaint_status
+        description: validation.attributes.complaint_status.
+        required: true
+        example: in
+        type: string
+        enumValues: []
+        custom: []
+      note:
+        name: note
+        description: 비고.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      mcht_id: molestiae
+      tid: autem
+      cust_name: qui
+      appr_dt: '2023-11-05T01:36:04'
+      appr_num: nesciunt
+      phone_num: voluptatum
+      issuer: sunt
+      pg_id: provident
+      type: sunt
+      entry_path: at
+      is_deposit: impedit
+      complaint_status: in
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - DELETE
+    uri: 'api/v1/manager/complaints/{id}'
+    metadata:
+      groupName: 'Complaint API'
+      groupDescription: |-
+
+        민원조회 API 입니다. 조회를 제외하고 마스터 이상권한이 요구됩니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 단일삭제
+      description: '마스터 이상 가능'
+      authenticated: false
+      custom: []
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        name: id
+        description: '공지사항 PK'
+        required: true
+        example: 11
+        type: integer
+        enumValues: []
+        custom: []
+    cleanUrlParameters:
+      id: 11
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+    custom: []
