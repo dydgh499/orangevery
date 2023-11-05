@@ -76,7 +76,7 @@ class NotiSendHistoryController extends Controller
         $noti  = $this->noti_send_histories
             ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')
             ->where('noti_send_histories.trans_id', $trans_id)
-            ->orderby('created_at', 'desc')
+            ->orderby('retry_count', 'desc')
             ->first($this->cols);
 
         $res = $this->notiSender($noti->send_url, $noti, $noti->temp);
