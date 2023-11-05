@@ -2,6 +2,7 @@
 import { user_info, getUserLevel } from '@axios'
 import { useRequestStore } from '@/views/request'
 import CardLayout from '@/views/quick-view/CardLayout.vue'
+import PWASnackbar from '@/layouts/snackbars/PWASnackbar.vue'
 import SettleContentOverview from '@/views/quick-view/SettleContentOverview.vue'
 import SettleContentSkeleton from '@/views/quick-view/SettleContentSkeleton.vue'
 import Recent30DaysRankOverview from '@/views/quick-view/Recent30DaysRankOverview.vue'
@@ -11,6 +12,7 @@ import router from '@/router'
 
 const transactions = ref(<MchtRecentTransactions>({}))
 const is_skeleton = ref(true)
+const pwaSnackbar = ref(null)
 const { get } = useRequestStore()
 const my_level = getUserLevel()
 
@@ -79,5 +81,6 @@ else
                 </template>
             </CardLayout>
         </VRow>
+        <PWASnackbar ref="pwaSnackbar"/>
     </section>
 </template>

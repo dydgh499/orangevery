@@ -16,6 +16,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="{{ $json['name'] }}">
     <meta name="theme-color" content="{{ $json['color'] }}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="manifest" id="my-manifest" data-pwa-version="2.1" href=''>
     <link rel="apple-touch-icon" sizes="180x180" href="{{ $json['favicon_img'] }}">
     <link rel="stylesheet" type="text/css" href="/loader.css" />
     @vite(['resources/ts/main.ts'])
