@@ -7,7 +7,7 @@ const show = () => {
 };
 
 const loadJS = () => {
-    
+
 }
 const loadManifest = () => {
     const logo = new Image();
@@ -39,6 +39,11 @@ const loadManifest = () => {
 }
 
 loadManifest()
+if('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js', { scope: '/build/' })
+    })
+}
 defineExpose({
     show
 });
