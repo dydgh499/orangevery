@@ -94,6 +94,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::get('bonaejas/chart', [MessageController::class, 'chart']);
             Route::get('pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
             Route::post('operators/password-change', [OperatorController::class, 'passwordChange']);
+            Route::get('brands/chart', [BrandController::class, 'chart']);
             
             Route::apiResource('brands', BrandController::class);
             Route::apiResource('operators', OperatorController::class);

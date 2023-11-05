@@ -1,67 +1,58 @@
 <script setup lang="ts">
 import { useSearchStore, dev_settle_types } from '@/views/services/brands/useStore'
-import { useRequestStore } from '@/views/request'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { DateFilters } from '@core/enums'
+import { getUserLevel, user_info } from '@axios';
 import corp from '@corp'
-
 const { store, head, exporter, boolToText } = useSearchStore()
-const { post } = useRequestStore()
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-const remain = ref({
-    sms_count: 0,
-    lms_count: 0,
-    mms_count: 0,
-    balance: 0,
-})
-const getbonaejaBalance = async () => {
-    const r = await post('/api/v1/bonaejas/balance', { brand_id: corp.id }, false)
-    remain.value.balance = r.data.data.TOTAL_DEPOSIT
-    remain.value.sms_count = r.data.data.SMS_CNT
-    remain.value.lms_count = r.data.data.LMS_CNT
-    remain.value.mms_count = r.data.data.MMS_CNT
-}
-
+const metas = ref()
 onMounted(async () => {
-    await getbonaejaBalance()
+    if(getUserLevel() == 50 && corp.id == parseInt(process.env.MAIN_BRAND_ID as string)) {
+        metas.value = [
+            {
+                icon: 'ic-outline-payments',
+                color: 'primary',
+                title: '총 입금액 합계',
+                stats: '0',
+            },
+            {
+                icon: 'ic-outline-payments',
+                color: 'default',
+                title: '입금액 합계',
+                stats: '0',
+            },
+            {
+                icon: 'ic-outline-payments',
+                color: 'success',
+                title: '부가입금액 합계',
+                stats: '0',
+            },
+            {
+                icon: 'ic-outline-payments',
+                color: 'info',
+                title: '현재입금액 합계',
+                stats: '0',
+            },
+        ]
+        const r = await store.getChartData()
+        if(r.status == 200) {
+            metas.value[0]['stats'] = parseInt(r.data.total_deposit_amount).toLocaleString() + ' ₩'
+            metas.value[1]['stats'] = parseInt(r.data.deposit_amount).toLocaleString() + '₩'
+            metas.value[2]['stats'] = parseInt(r.data.extra_deposit_amount).toLocaleString() + '₩'
+            metas.value[3]['stats'] = parseInt(r.data.curr_deposit_amount).toLocaleString() + '₩'
+        }
+    }
 })
-/*
-    금월 입금 받을 합계액
-    금월 입금 함계액
-    금월 중간 입금 합계액
-*/
 </script>
 <template>
-    <BaseIndexView placeholder="서비스명" :metas="[]" :add="true" add_name="서비스" :date_filter_type="DateFilters.NOT_USE">
+    <BaseIndexView placeholder="서비스명" :metas="metas" :add="true" add_name="서비스" :date_filter_type="DateFilters.NOT_USE">
         <template #index_extra_field>
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
                 :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
-            <div style="display: flex;">
-                <table>
-                    <tr
-                        :style="(corp.pv_options.free.bonaeja.min_balance_limit * 10000) < remain.balance ? '' : 'color:red'">
-                        <th>보내자 보유잔액: </th>
-                        <td><span>{{ remain.balance.toLocaleString() }}</span> &#8361;</td>
-                    </tr>
-                </table>
-                <table>                    
-                    <tr>
-                        <th>SMS 발송가능 회수: </th>
-                        <td><span>{{ remain.sms_count.toLocaleString() }}</span>건</td>
-                    </tr>
-                    <tr>
-                        <th>LMS 발송가능 회수: </th>
-                        <td><span>{{ remain.lms_count.toLocaleString() }}</span> 건</td>
-                    </tr>
-                    <tr>
-                        <th>MMS 발송가능 회수: </th>
-                        <td><span>{{ remain.mms_count.toLocaleString() }}</span> 건</td>
-                    </tr>
-                </table>
-            </div>
         </template>
         <template #headers>
             <tr>

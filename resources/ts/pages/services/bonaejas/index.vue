@@ -18,25 +18,25 @@ provide('exporter', exporter)
 
 const metas = ref([
     {
-        icon: 'tabler-user-check',
+        icon: 'ic-outline-payments',
         color: 'primary',
         title: '보내자 보유 잔액',
         stats: '0',
     },
     {
-        icon: 'tabler-user-exclamation',
+        icon: 'majesticons:message',
         color: 'default',
         title: 'SMS 발송가능 회수',
         stats: '0',
     },
     {
-        icon: 'tabler-user-check',
+        icon: 'majesticons:message',
         color: 'success',
         title: 'LMS 발송가능 회수',
         stats: '0',
     },
     {
-        icon: 'tabler-user-exclamation',
+        icon: 'majesticons:message',
         color: 'info',
         title: 'MMS 발송가능 회수',
         stats: '0',
@@ -45,10 +45,12 @@ const metas = ref([
 
 onMounted(async () => {
     const r = await store.getChartData()
-    metas.value[0]['stats'] = r.data.data.TOTAL_DEPOSIT.toLocaleString() + ' ₩'
-    metas.value[1]['stats'] = r.data.data.SMS_CNT.toLocaleString() + '건'
-    metas.value[2]['stats'] = r.data.data.LMS_CNT.toLocaleString() + '건'
-    metas.value[3]['stats'] = r.data.data.MMS_CNT.toLocaleString() + '건'
+    if(r.status == 200) {
+        metas.value[0]['stats'] = r.data.data.TOTAL_DEPOSIT.toLocaleString() + ' ₩'
+        metas.value[1]['stats'] = r.data.data.SMS_CNT.toLocaleString() + '건'
+        metas.value[2]['stats'] = r.data.data.LMS_CNT.toLocaleString() + '건'
+        metas.value[3]['stats'] = r.data.data.MMS_CNT.toLocaleString() + '건'
+    }
 })
 </script>
 <template>

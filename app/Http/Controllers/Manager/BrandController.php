@@ -7,6 +7,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\BrandRequest;
 use App\Http\Requests\Manager\IndexRequest;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -47,6 +48,22 @@ class BrandController extends Controller
                 2000,
             ],
         ];
+    }
+
+    /**
+     * 차트 데이터 출력
+     *
+     * 브랜드 이상 가능
+     */
+    public function chart(Request $request)
+    {
+        $chart = $this->brands->first([
+            DB::raw("(SUM(deposit_amount) + SUM(extra_deposit_amount)) AS total_deposit_amount"),
+            DB::raw("SUM(deposit_amount) AS deposit_amount"),
+            DB::raw("SUM(extra_deposit_amount) AS extra_deposit_amount"),
+            DB::raw("SUM(curr_deposit_amount) AS curr_deposit_amount"),
+        ]);
+        return $this->response(0, $chart);
     }
 
     /**
