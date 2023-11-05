@@ -6,6 +6,39 @@ const show = () => {
     visible.value = true
 };
 
+const loadJS = () => {
+    
+}
+const loadManifest = () => {
+    const logo = new Image();
+    logo.src = corp.logo_img;
+    const manifest = {
+            "version": "2.1",
+            "lang" : "ko",
+            "name" : corp.name,
+            "scope" : "https://" + corp.dns,
+            "display" : "fullscreen",
+            "start_url" : "https://" + corp.dns,
+            "short_name" : corp.name,
+            "description" : "",
+            "orientation" : "portrait",
+            "background_color": corp.theme_css['main_color'],
+            "theme_color": corp.theme_css['main_color'],
+            "generated" : "true",
+            "icons": [
+                {
+                    "src": corp.logo_img,
+                    "sizes": "72x72 96x96 128x128 144x144 152x152 192x192 384x384 512x512 120x120 180x180",
+                },
+            ]
+    };
+    const stringManifest = JSON.stringify(manifest);
+    const blob = new Blob([stringManifest], {type: 'application/json'});
+    const manifestURL = URL.createObjectURL(blob);
+    document.querySelector('#my-manifest').setAttribute('href', manifestURL);
+}
+
+loadManifest()
 defineExpose({
     show
 });
