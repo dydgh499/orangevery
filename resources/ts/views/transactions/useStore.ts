@@ -19,8 +19,8 @@ export const realtimeDetailClass = (history: RealtimeHistory) => {
 export const realtimeResult = (item: Transaction) => {
     if(item.is_cancel)
         return StatusColors.Default
-    else if(item.use_realtime_deposit) //실시간 수수료 존재시(실시간 사용)
-    {
+    else if(item.use_realtime_deposit) {
+        //실시간 수수료 존재시(실시간 사용)    
         const is_success = item.realtimes?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
         const is_error  = item.realtimes?.find(obj => obj.result_code !== '0000')
         const is_cancel = item.realtimes?.find(obj => obj.request_type === -2)
