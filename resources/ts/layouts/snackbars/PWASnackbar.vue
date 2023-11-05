@@ -15,7 +15,6 @@ const isMobile = {
 let deferredPrompt: any;
 
 const createShortcut = async () => {
-    console.log(deferredPrompt)
     deferredPrompt.prompt();
     const choiceResult = await deferredPrompt.userChoice
     if (choiceResult.outcome === 'accepted') {
@@ -63,25 +62,22 @@ onMounted(() => {
     }
 
     const loadServiceWorker = async () => {
-        // deferredPrompt
-
-
         // service Worker
         if ("serviceWorker" in navigator) {
             const registration = await navigator.serviceWorker
             console.log("Service worker registration succeeded:", registration);
 
+            // deferredPrompt
             window.addEventListener('beforeinstallprompt', (e) => {
                 console.log("beforeinstallprompt");
                 e.preventDefault();
                 deferredPrompt = e;
 
-                if (!readCookie(shortcut) && (isMobile.Android() || isMobile.Windows())) {
+                if (!readCookie(shortcut) ) {
                     setTimeout(function () {
                         visible.value = true
                     }, 5000)
                 }
-
             });
         } else
             console.log("Service workers are not supported.");
