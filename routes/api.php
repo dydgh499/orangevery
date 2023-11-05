@@ -215,7 +215,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
 
             Route::get('noti-send-histories', [NotiSendHistoryController::class, 'index']);
             Route::prefix('noti-send-histories')->group(function() {
-                Route::get('{trans_id}', [NotiSendHistoryController::class, 'detail']);
+                Route::get('{trans_id}', [NotiSendHistoryController::class, 'show']);
                 Route::post('{trans_id}/retry', [NotiSendHistoryController::class, 'retry']);
                 Route::post('batch-retry', [NotiSendHistoryController::class, 'batchRetry']);    
             });

@@ -24,7 +24,7 @@ class NotiSendHistoryController extends Controller
     public function __construct(NotiSendHistory $noti_send_histories)
     {
         $this->noti_send_histories = $noti_send_histories;
-        $this->cols = ['transactions.*', 'noti_send_histories.send_url', 'noti_send_histories.retry_count'];
+        $this->cols = ['transactions.*', 'noti_send_histories.send_url', 'noti_send_histories.retry_count', 'noti_send_histories.temp'];
     }
 
     public function index(IndexRequest $request)
@@ -102,7 +102,10 @@ class NotiSendHistoryController extends Controller
         return $this->response(1);
     }
     
-    public function detail(Request $request, $trans_id)
+    /*
+     * 노티 상세정보 확인
+     */
+    public function show(Request $request, $trans_id)
     {
         $noti  = $this->noti_send_histories
             ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')
