@@ -132,10 +132,9 @@ watchEffect(() => {
                             </template>
                             <template
                                 v-else-if="head.path === 'salesforces' || head.path === 'transactions/settle/salesforces' || head.path === 'transactions/settle-histories/salesforces'">
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level"
-                                    style="min-width: 10em;" :items="[{ id: null, title: '전체' }].concat(salesLevels())"
-                                    :label="`조회등급`" item-title="title" item-value="id"
-                                    @update:modelValue="store.updateQueryString({ level: store.params.level })" />
+                                <VSelect v-model="store.params.level" :items="[{ id: null, title: '전체' }].concat(salesLevels())"
+                                    density="compact" variant="outlined" item-title="title" item-value="id" 
+                                    style="min-width: 10em;" @update:modelValue="store.updateQueryString({ level: store.params.level })" />
                             </template>
                             <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel"
                                 @click="exporter(1)">

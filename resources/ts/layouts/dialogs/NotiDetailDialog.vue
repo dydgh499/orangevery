@@ -13,7 +13,7 @@ defineExpose({
 });
 </script>
 <template>
-    <VDialog v-model="visible" max-width="600">
+    <VDialog v-model="visible" max-width="900">
         <!-- Dialog close btn -->
         <DialogCloseBtn @click="visible = false" />
         <!-- Dialog Content -->

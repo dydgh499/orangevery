@@ -20,6 +20,10 @@
   color: #000 !important;
 }
 
+.v-input--density-compact {
+  --v-input-chips-margin-bottom: 0 !important;
+}
+
 .list-square {
   font-size: 0.875rem !important;
   padding-block: 0;
@@ -93,5 +97,5 @@ th {
 
 :root {
   --dp-border-radius: 0.3em !important;
-  --dp-button-height: 40px !important;
+  --dp-button-height: 41px !important;
 }
