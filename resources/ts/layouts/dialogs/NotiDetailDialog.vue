@@ -112,12 +112,14 @@ defineExpose({
                         <tr>
                             <td class='list-square'>취소여부</td>
                             <td class='list-square'>is_cancel</td>
-                            <td class='list-square'>{{ noti.is_cancel }}</td>
+                            <td class='list-square'>{{ noti.is_cancel ? '취소' : '승인' }}</td>
                         </tr>
                         <tr>
                             <td class='list-square'>예약필드</td>
                             <td class='list-square'>temp</td>
-                            <td class='list-square'>{{ noti.temp }}</td>
+                            <td class='list-square' style="max-width: 5em;">
+                                    {{ noti.temp }}
+                            </td>
                         </tr>
                     </tbody>
                 </VTable>
