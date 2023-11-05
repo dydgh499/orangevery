@@ -149,11 +149,6 @@ onMounted(() => {
     snackbar.value.show('정산일은 검색 종료일('+store.params.e_dt+') 기준으로 진행됩니다.', 'success')
 })
 watchEffect(() => {
-    store.setChartProcess()
-    store.params.level = store.params.level
-    store.params.mcht_settle_type = store.params.mcht_settle_type
-})
-watchEffect(() => {
     const _settle = {
         'appr_amount'   : 0,
         'cxl_amount'    : 0,

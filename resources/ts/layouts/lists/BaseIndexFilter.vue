@@ -60,7 +60,6 @@ const queryToStoreParams = () => {
         store.params.search = route.query.search
         search.value = store.params.search
     }
-    console.log(store.params)
 }
 
 const handleEnterKey = (event: KeyboardEvent) => {
@@ -83,11 +82,8 @@ else if(props.date_filter_type == DateFilters.SETTLE_RANGE) {
 }
 init()
 queryToStoreParams()
-onMounted(() => {
-    watchEffect(() => {
-        store.setChartProcess()
-        dateChanged(store)
-    })
+watchEffect(() => {
+    dateChanged(store)
 })
 
 </script>
@@ -106,13 +102,13 @@ onMounted(() => {
                                             range multi-calendars :dark="theme === 'dark'" autocomplete="on" utc 
                                             :format="getRangeFormat" :teleport="true" input-class-name="search-input" 
                                             select-text="Search" :enable-time-picker="time_picker"
-                                            @update:modelValue="updateRangeDateQuery(store)" />
+                                            @update:modelValue="[updateRangeDateQuery(store)]"/>
                                     </template>
                                     <template v-else-if="props.date_filter_type == DateFilters.DATE">
                                         <VueDatePicker v-model="date" :text-input="{ format: 'yyyy-MM-dd' }" locale="ko"
                                             :format-locale="ko" :dark="theme === 'dark'" autocomplete="on" utc
                                             :format="formatDate" :teleport="true"
-                                            @update:modelValue="store.updateQueryString({ dt: date })" />
+                                            @update:modelValue="[store.updateQueryString({ dt: date })]" />
                                     </template>
                                 </div>
                             </template>
@@ -160,7 +156,7 @@ onMounted(() => {
                                 @click="head.filter.show()">
                                 검색 필터
                             </VBtn>
-                            <VBtn prepend-icon="tabler-plus" @click="store.create()" v-if="props.add">
+                            <VBtn prepend-icon="tabler-plus" @click="store.edit(0)" v-if="props.add">
                                 {{ props.add_name }} 추가
                             </VBtn>
                             <slot name="index_extra_field"></slot>

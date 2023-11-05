@@ -66,7 +66,6 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
     Route::prefix('bonaejas')->group(function() {
         Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
         Route::post('mobile-code-auth', [MessageController::class, 'mobileCodeAuth']);
-        Route::post('balance', [MessageController::class, 'getBalance']);
     });
     Route::prefix('auth')->group(function() {
         Route::post('sign-in', [AuthController::class, 'signin']);
@@ -90,6 +89,9 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::post('upload', [PostController::class, 'upload']);    
         });
         Route::prefix('services')->group(function() {
+            
+            Route::get('bonaejas', [MessageController::class, 'index']);
+            Route::get('bonaejas/chart', [MessageController::class, 'chart']);
             Route::get('pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
             Route::post('operators/password-change', [OperatorController::class, 'passwordChange']);
             

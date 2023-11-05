@@ -6,85 +6,8 @@ import { DateFilters, StatusColors } from '@core/enums';
 import corp from '@corp';
 import { cloneDeep } from 'lodash';
 
-export function Searcher(path: string) {
-    const { get } = useRequestStore()
-    const base_url = '/api/v1/manager/'+path
-    // -----------------------------
-    let items = ref(<[]>([]))
-    const params = reactive<any>({})
-    const pagenation = reactive<Pagenation>({ total_count: 0, total_page: 1 })
-    const chart_process = ref(false)
-    const is_skeleton   = ref(true)
-    let before_search = ''
 
-
-    const getChartProcess = () => {
-        return chart_process.value
-    }
-
-    const setChartProcess = () => {
-        chart_process.value = false
-    }
-
-    const create = () => {
-        router.push('/' + path + '/create')
-    }
-    const edit = (id: number = 0) => {
-        if(user_info.value.level > 30)
-            router.push('/' + path + '/edit/' + id)
-    }
-    
-    const getChartData = async() => {
-        const p = getParams()
-        const r = await get(base_url+'/chart', { params: p })
-        chart_process.value = true
-        return r
-    }
-
-    const getPercentage = (n:number, d:number) => {
-          return d === 0 ? 0 : Number(((n / d) * 100).toFixed(2))
-    }
-
-    const getSearch = () => {
-        const search = (document.getElementById('search') as HTMLInputElement)
-        return search ? search.value : ''
-    }
-
-    const getParams = () => {
-        const p = cloneDeep(params)
-        p.search = getSearch()        
-        if(before_search != p.search) {
-            setChartProcess()
-            before_search = p.search
-        }
-        return p
-    }
-
-    const updateQueryString = (obj: any) => {
-        router.push({query: {...router.currentRoute.value.query, ...obj}})
-    }
-    
-    const setTable = async() => {
-        const p = getParams()
-        const r = await get(base_url, {params: p})
-        if (r.status == 200) {
-            let l_page = r.data.total / params.page_size
-            items.value = r.data.content
-            pagenation.total_count = r.data.total
-            pagenation.total_page = parseInt(String(l_page > Math.floor(l_page) ? l_page + 1 : l_page))
-        }
-        is_skeleton.value = false
-        return r.data.content
-        
-    }
-    const getAllDataFormat = () => {
-        const p  = cloneDeep(params)  
-        p.search = getSearch()
-        p.page_size = 99999999
-        p.page = 1
-        return p
-    }
-
+const StatusColorSetter = () => {
     const booleanTypeColor = (type: boolean | null) => {
         return Boolean(type) ? "default" : "success";
     };
@@ -105,18 +28,129 @@ export function Searcher(path: string) {
         else
             return 'default'
     }
+    return {
+        booleanTypeColor,
+        getSelectIdColor,
+    }
+}
+
+const chartSetter = (base_url: string) => {
+    const { get } = useRequestStore()
+    const chart_process = ref(false)
+
+    const getChartProcess = () => {
+        return chart_process.value
+    }
+    const setChartProcess = () => {
+        chart_process.value = false
+    }
+
+    const _getChartData = async(params: any) => {
+        const r = await get(base_url+'/chart', { params: params })
+        chart_process.value = true
+        return r
+    }
+    const getPercentage = (n:number, d:number) => {
+        return d === 0 ? 0 : Number(((n / d) * 100).toFixed(2))
+    }
+
+    return {
+        getChartProcess,
+        setChartProcess,
+        _getChartData,
+        getPercentage,
+    }
+}
+
+export const Searcher = (path: string) => {
+    const { get } = useRequestStore()
+    const base_url = '/api/v1/manager/'+path
+    // -----------------------------
+    let items = ref(<[]>([]))
+    let before_search   = ''
+    const params        = reactive<any>({})
+    const pagenation    = reactive<Pagenation>({ total_count: 0, total_page: 1 })
+    const is_skeleton   = ref(true)
+    const {
+        getChartProcess,
+        setChartProcess,
+        _getChartData,
+        getPercentage,
+    } = chartSetter(base_url)
+    const {
+        booleanTypeColor,
+        getSelectIdColor,
+    } = StatusColorSetter()
+    
+    const getChartData = async() => { return _getChartData(getParams()) }
+
+    const edit = (id: number = 0) => {
+        if(user_info.value.level > 30) {
+            if(id == 0)
+                router.push('/' + path + '/create')
+            else
+                router.push('/' + path + '/edit/' + id)
+        }
+    }
+
+    const getSearch = () => {
+        const search = (document.getElementById('search') as HTMLInputElement)
+        return search ? search.value : ''
+    }
+
+    const getParams = () => {
+        const p = cloneDeep(params)
+        p.search = getSearch()        
+        if(before_search != p.search) {
+            setChartProcess()
+            before_search = p.search
+        }
+        return p
+    }
+
+    const updateQueryString = (obj: any) => {
+        router.push({query: {...router.currentRoute.value.query, ...obj}})
+
+        const is_chart_update = Object.keys(obj).some(key => !['page', 'page_size'].includes(key))
+        if(is_chart_update) 
+            setChartProcess()
+    }
+    
+    const setTable = async() => {
+        const p = getParams()
+        const r = await get(base_url, {params: p})
+        if (r.status == 200) {
+            let l_page = r.data.total / params.page_size
+            items.value = r.data.content
+            pagenation.total_count = r.data.total
+            pagenation.total_page = parseInt(String(l_page > Math.floor(l_page) ? l_page + 1 : l_page))
+        }
+        is_skeleton.value = false
+        return r.data.content        
+    }
+    
     const pagenationCouputed = computed(() => {
         const firstIndex = items.value.length ? ((params.page - 1) * params.page_size) + 1 : 0
         const lastIndex = items.value.length + ((params.page - 1) * params.page_size)
         return `총 ${pagenation.total_count}개 항목 중 ${firstIndex} ~ ${lastIndex}개 표시`
     })
+    
+    const getAllDataFormat = () => {
+        const p  = cloneDeep(params)  
+        p.search = getSearch()
+        p.page_size = 99999999
+        p.page = 1
+        return p
+    }
+
     const getItems = computed(() => {
         return items.value
     })
+    
     return {
         setTable, getItems, base_url, updateQueryString,
         items, params, pagenation, getChartProcess, setChartProcess,
-        create, edit, getChartData, getPercentage,
+        edit, getChartData, getPercentage,
         get, booleanTypeColor, getSelectIdColor, getAllDataFormat,
         pagenationCouputed, is_skeleton
     }
@@ -153,10 +187,10 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
     }
 
     const setDate = () => {
-        if (date_selecter.value) {
+        if (date_selecter.value)
             setDateRange(date_selecter.value)
-        }
     }
+
     const setDateRange = (type: string) => {
         let s_date = undefined
         let e_date = undefined

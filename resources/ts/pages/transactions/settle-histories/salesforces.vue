@@ -17,10 +17,6 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-watchEffect(() => {    
-    store.setChartProcess()
-    store.params.level = store.params.level
-})
 </script>
 <template>
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.DATE_RANGE">
@@ -28,7 +24,7 @@ watchEffect(() => {
         </template>
         <template #index_extra_field>            
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager @update:modelValue="store.updateQueryString({page_size: store.params.page_size})"/>
+                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager @update:modelValue="[store.updateQueryString({page_size: store.params.page_size})]"/>
             <VBtn prepend-icon="tabler:report-money" @click="batchDeposit(selected, false)" v-if="getUserLevel() >= 35">
                 일괄 입금/미입금처리
             </VBtn>

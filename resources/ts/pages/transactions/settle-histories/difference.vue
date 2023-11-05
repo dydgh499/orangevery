@@ -74,11 +74,6 @@ onMounted(() => {
         }
     })
 })
-watchEffect(() => {
-    store.setChartProcess()
-    store.params.level = store.params.level
-    store.params.mcht_settle_type = store.params.mcht_settle_type
-})
 </script>
 <template>
     <div>
@@ -91,7 +86,7 @@ watchEffect(() => {
                         <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
-                                item-value="id"  @update:modelValue="store.updateQueryString({settle_types: store.params.settle_types})"/>
+                                item-value="id"  @update:modelValue="[store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})]"/>
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>

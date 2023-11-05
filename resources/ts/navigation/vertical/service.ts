@@ -29,6 +29,10 @@ const getAbilitiesMenu = computed(() => {
             to: 'services-operator-histories',
         })
         operations[0].children.push({
+            title: '문자발송 이력',
+            to: 'services-bonaejas',
+        })
+        operations[0].children.push({
             title: '대량 등록',
             to: 'services-bulk-register',
         })

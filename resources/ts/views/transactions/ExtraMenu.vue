@@ -49,8 +49,7 @@ const retryDeposit = async () => {
         }
         const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/settle-deposit', params)
         snackbar.value.show(r.data.message, r.data.result_cd == "0000" ? 'success' : 'warning')
-        if(r.data.result_cd == "0000")
-        {
+        if(r.data.result_cd == "0000") {
             store.setChartProcess()
             store.setTable()
         }

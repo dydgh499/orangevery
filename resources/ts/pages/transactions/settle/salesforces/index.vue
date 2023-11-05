@@ -42,13 +42,6 @@ onMounted(() => {
     snackbar.value.show('정산일은 검색 종료일('+store.params.e_dt+') 기준으로 진행됩니다.', 'success')
 })
 
-watchEffect(() => {
-    store.setChartProcess()
-    store.params.level = store.params.level
-    store.params.settle_cycle = store.params.settle_cycle
-    store.params.mcht_settle_type = store.params.mcht_settle_type
-    store.params.is_base_trx = store.params.is_base_trx
-})
 </script>
 <template>
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.SETTLE_RANGE">
@@ -57,7 +50,7 @@ watchEffect(() => {
                 일괄 정산하기
             </VBtn>
             <div style="position: relative; top: 0.6em;">
-                <VSwitch v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" />
+                <VSwitch v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" @update:modelValue="[store.updateQueryString({is_base_trx: store.params.is_base_trx})]"/>
             </div>
         </template>
         <template #filter>
@@ -67,12 +60,12 @@ watchEffect(() => {
                     <VCol cols="12" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
                             :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`영업점 정산주기 필터`"
-                            item-title="title" item-value="id" @update:modelValue="store.updateQueryString({settle_cycle: store.params.settle_cycle})" />
+                            item-title="title" item-value="id" @update:modelValue="[store.updateQueryString({settle_cycle: store.params.settle_cycle})]" />
                     </VCol>
                     <VCol cols="12" sm="3">
                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                             :items="[{ id: null, name: '전체' }].concat(settle_types)" label="가맹점 정산타입 필터" item-title="name"
-                            item-value="id" @update:modelValue="store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})"/>
+                            item-value="id" @update:modelValue="[store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})]"/>
                     </VCol>
                 </template>
             </BaseIndexFilterCard>

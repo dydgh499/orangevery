@@ -1,0 +1,65 @@
+import { Header } from '@/views/headers';
+import { Searcher } from '@/views/searcher';
+
+export const useSearchStore = defineStore('bonaejaSearchStore', () => {
+    const store = Searcher('services/bonaejas')
+    const head = Header('services/bonaejas', '문자발송 관리')
+    const headers: Record<string, string | object> = {
+        'code': '결과코드',
+        'type': '메세지 타입',
+        'sender': '발신자 전화번호',
+        'receiver': '수신자 전화번호',
+        'msg': '메세지 내용',
+        'created_at': '발송시간',
+    }
+    head.main_headers.value = []
+    head.headers.value = head.initHeader(headers, {})
+    head.flat_headers.value = head.setFlattenHeaders()
+
+    const getCodeTypeString = (code: number) => {
+        if(code == 1000)
+            return '성공'
+        else if(code == 500)
+            return '전송중'
+        else
+            return '에러'
+    }
+
+    const getCodeTypeColor = (code: number) => {
+        if(code == 1000)
+            return 'success'
+        else if(code == 500)
+            return 'info'
+        else
+            return 'error'
+    }
+
+    const getMessegeTypeColor = (type: string) => {
+        if(type == 'sms')
+            return 'default'
+        else if(type == 'lms')
+            return 'success'
+        else if(type == 'mms')
+            return 'info'
+        else
+            return 'warning'
+    }
+
+    const exporter = async (type: number) => {
+        const keys = Object.keys(headers);
+        const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
+        let datas = r.data.content;
+        for (let i = 0; i < datas.length; i++) {
+            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
+        }
+        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
+    }
+    return {
+        store,
+        head,
+        exporter,
+        getCodeTypeString,
+        getCodeTypeColor,
+        getMessegeTypeColor,
+    }
+})

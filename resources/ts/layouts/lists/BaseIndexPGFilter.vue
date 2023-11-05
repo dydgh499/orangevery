@@ -23,16 +23,6 @@ const filterPgs = computed(() => {
     return filter
 })
 
-onMounted(() => {
-    watchEffect(() => {
-        store.setChartProcess()
-        store.params.pg_id = store.params.pg_id
-        store.params.ps_id = store.params.ps_id
-        store.params.terminal = store.params.terminal
-        store.params.custom_id = store.params.custom_id
-        store.params.settle_type = store.params.settle_type
-    })
-    })
 </script>
 <template>
     <VRow>

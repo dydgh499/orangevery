@@ -55,7 +55,7 @@ const batchDelete = async () => {
     if (await dialog('정말 '+count+'개의 결제모듈을 일괄삭제 하시겠습니까?')) {
         const params = { selected: selected.value }
         const r = await request({ url: `/api/v1/manager/merchandises/pay-modules/batch-remove`, method: 'delete', params:params}, true)
-            store.setChartProcess()
+        store.setChartProcess()
         store.setTable()
     }
 }
@@ -74,10 +74,6 @@ onMounted(() => {
             metas.value[3]['percentage'] = store.getPercentage((r.data.this_week_del * -1), r.data.total)            
         }
     })
-})
-watchEffect(() => {
-    store.setChartProcess()
-    store.params.module_type = store.params.module_type
 })
 </script>
 <template>

@@ -65,7 +65,6 @@ const metas = ref([
     },
 ])
 
-const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 
 provide('store', store)
@@ -134,41 +133,35 @@ onMounted(() => {
             metas.value[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
             metas.value[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
         }
+    })    
+    watchEffect(() => {
+        const _settle = {
+            'appr_amount'   : 0,
+            'cxl_amount'    : 0,
+            'total_amount'  : 0,
+            'settle_amount' : 0,
+            'trx_amount'    : 0,
+            'settle_fee'    : 0,
+            'deduct_amount' : 0,
+            'comm_settle_amount':0,
+            'under_sales_amount':0,
+        }
+        for (let i = 0; i < selected.value.length; i++) {
+            const trans:any = store.getItems.find(item => item['id'] == selected.value[i])
+            if(trans) {
+                if(trans['is_cancel'])
+                    _settle.cxl_amount += trans['amount']
+                else
+                    _settle.appr_amount += trans['amount']
+
+                _settle.total_amount += trans['amount']
+                _settle.settle_amount += trans['profit']
+                _settle.trx_amount += trans['trx_amount']
+            }
+        }
+        settle.value = _settle
     })
     snackbar.value.show('정산일은 검색 종료일('+store.params.e_dt+') 기준으로 진행됩니다.', 'success')
-})
-watchEffect(() => {
-    store.setChartProcess()
-    store.params.level = store.params.level
-    store.params.mcht_settle_type = store.params.mcht_settle_type
-    store.params.is_base_trx = store.params.is_base_trx
-})
-watchEffect(() => {
-    const _settle = {
-        'appr_amount'   : 0,
-        'cxl_amount'    : 0,
-        'total_amount'  : 0,
-        'settle_amount' : 0,
-        'trx_amount'    : 0,
-        'settle_fee'    : 0,
-        'deduct_amount' : 0,
-        'comm_settle_amount':0,
-        'under_sales_amount':0,
-    }
-    for (let i = 0; i < selected.value.length; i++) {
-        const trans:any = store.getItems.find(item => item['id'] == selected.value[i])
-        if(trans) {
-            if(trans['is_cancel'])
-                _settle.cxl_amount += trans['amount']
-            else
-                _settle.appr_amount += trans['amount']
-
-            _settle.total_amount += trans['amount']
-            _settle.settle_amount += trans['profit']
-            _settle.trx_amount += trans['trx_amount']
-        }
-    }
-    settle.value = _settle
 })
 </script>
 <template>
@@ -182,7 +175,7 @@ watchEffect(() => {
                         <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
-                                item-value="id" @update:modelValue="store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})"/>
+                                item-value="id" @update:modelValue="[store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})]"/>
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>
@@ -192,7 +185,7 @@ watchEffect(() => {
                     부분정산
                 </VBtn>
                 <div style="position: relative; top: 0.6em;">
-                    <VSwitch v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" />
+                    <VSwitch v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" @update:modelValue="[store.updateQueryString({is_base_trx: store.params.is_base_trx})]"/>
                 </div>
                 <div style="display: flex;">
                     <table>

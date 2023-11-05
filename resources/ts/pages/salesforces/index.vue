@@ -68,11 +68,6 @@ onMounted(() => {
         }
     })
 })
-watchEffect(() => {    
-        store.setChartProcess()
-        store.params.level = store.params.level
-        store.params.settle_cycle = store.params.settle_cycle
-    })
 </script>
 <template>
     <div>

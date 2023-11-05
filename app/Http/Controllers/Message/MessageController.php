@@ -19,12 +19,34 @@ class MessageController extends Controller
 {
     use ExtendResponseTrait;
 
+    public function index(Request $request)
+    {
+        $brand = Brand::where('id', $request->user()->brand_id)->first();
+        if($brand)
+        {
+            $bonaeja = $brand->pv_options->free->bonaeja;
+            $params = [
+                'user_id'   => $bonaeja['user_id'],
+                'api_key'   => $bonaeja['api_key'],
+                'page'      => $request->page,
+                'page_size' => $request->page_size,
+                's_dt'      => $request->s_dt,
+                'e_dt'      => $request->e_dt,
+            ];
+            $res = post("https://api.bonaeja.com/api/msg/v1/list", $params);
+            if($res['code'] == 500)
+                return $this->extendResponse(1000, '통신 과정에서 에러가 발생했습니다.');
+            else
+                return $this->response(0, $res['body']['data']);
+        }
+    }
+
     /*
      * 잔액 조회
      */
-    public function getBalance(Request $request)
+    public function chart(Request $request)
     {
-        $brand = Brand::where('id', $request->brand_id)->first();
+        $brand = Brand::where('id', $request->user()->brand_id)->first();
         if($brand)
         {
             $bonaeja = $brand->pv_options->free->bonaeja;

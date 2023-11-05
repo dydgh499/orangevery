@@ -129,11 +129,6 @@ onMounted(() => {
         }
     })
 })
-watchEffect(() => {
-    store.setChartProcess()
-    store.params.level = store.params.level
-    store.params.only_cancel = store.params.only_cancel
-})
 </script>
 <template>
     <div>

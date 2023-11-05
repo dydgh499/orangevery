@@ -16,18 +16,7 @@ for (let i = 0; i < 6; i++) {
     if (route.query['sales' + idx + '_id'])
         store.params['sales' + idx + '_id'] = parseInt(route.query['sales' + idx + '_id'] as string)            
 }
-onMounted(() => {
 
-    watchEffect(() => {
-        store.setChartProcess()
-        store.params.sales5_id = store.params.sales5_id
-        store.params.sales4_id = store.params.sales4_id
-        store.params.sales3_id = store.params.sales3_id
-        store.params.sales2_id = store.params.sales2_id
-        store.params.sales1_id = store.params.sales1_id
-        store.params.sales0_id = store.params.sales0_id
-    })
-})
 </script>
 <template>
     <VRow>
