@@ -23,6 +23,7 @@ export const StatusColors = {
     Info    : 3,
     Warning : 4,
     Error   : 5,
+    Cancel  : 6,
 } as const
 
 export const DateFilters = {

@@ -22,12 +22,16 @@ export const realtimeResult = (item: Transaction) => {
     else if(item.use_realtime_deposit) //실시간 수수료 존재시(실시간 사용)
     {
         const is_success = item.realtimes?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
-        const is_error = item.realtimes?.find(obj => obj.result_code !== '0000')
-        if(is_success) //성공
+        const is_error  = item.realtimes?.find(obj => obj.result_code !== '0000')
+        const is_cancel = item.realtimes?.find(obj => obj.request_type === -2)
+        if(is_success)  //성공
             return StatusColors.Success
-        if(is_error)
+        if(is_error)    // 에러
             return StatusColors.Error
-        if(item.use_collect_withdraw && item.realtimes?.length == 0)
+        if(is_cancel)   // 취소
+            return StatusColors.Cancel
+
+        if(item.use_collect_withdraw && item.realtimes?.length == 0)    // 모아서 출금
             return StatusColors.Info
         if(item.realtimes?.length == 0) //요청 대기
             return StatusColors.Primary
@@ -177,6 +181,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
     }
+
     const realtimeMessage = (item: Transaction):string => {
         const code = realtimeResult(item)
         if(code === StatusColors.Default)
@@ -191,6 +196,8 @@ export const useSearchStore = defineStore('transSearchStore', () => {
             return '모아서 출금예정'
         else if(code === StatusColors.Error)
             return '실패'
+        else if(code === StatusColors.Cancel)
+            return '취소'
         else
             return '알수없는 상태'
     }
