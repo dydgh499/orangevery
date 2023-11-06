@@ -43,7 +43,7 @@ class BrandController extends Controller
                 'logins',
             ],
             'sizes'     => [
-                85, 32, 500,
+                96, 32, 500,
                 500, 500, 1200, 500,
                 2000,
             ],
