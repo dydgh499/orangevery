@@ -16,7 +16,6 @@ export const useSearchStore = defineStore('failSearchStore', () => {
         'amount': '결제시도 금액',
         'result_cd': '실패 코드',
         'result_msg': '실패 메세지',
-        'pg_id': 'PG사',
         'trx_dttm': '결제시도시간',
     }
     head.main_headers.value = [];
