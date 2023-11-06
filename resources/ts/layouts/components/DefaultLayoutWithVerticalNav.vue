@@ -16,6 +16,7 @@ import AlertDialog from '@/layouts/dialogs/AlertDialog.vue'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import LoadingDialog from '@/layouts/dialogs/LoadingDialog.vue'
 import PayLinkDialog from '@/layouts/dialogs/PayLinkDialog.vue'
+import PWASnackbar from '@/layouts/snackbars/PWASnackbar.vue'
 
 import { user_info } from '@axios'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
@@ -25,6 +26,7 @@ const alert = ref(null)
 const snackbar = ref(null)
 const loading = ref(null)
 const payLink = ref(null)
+const pwaSnackbar = ref(null)
 
 const is_pay_link = ref(router.currentRoute.value.path.includes('/pay/'))
 
@@ -89,6 +91,7 @@ const { width: windowWidth } = useWindowSize()
             <Snackbar ref="snackbar" />
             <AlertDialog ref="alert" />
             <LoadingDialog ref="loading" />
+            <PWASnackbar ref="pwaSnackbar"/>
         </RouterView>
     </div>
 </template>
