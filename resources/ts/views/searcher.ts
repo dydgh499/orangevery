@@ -66,8 +66,8 @@ export const Searcher = (path: string) => {
     const { get } = useRequestStore()
     const base_url = '/api/v1/manager/'+path
     // -----------------------------
-    let items = shallowRef(<[]>([]))
     let before_search   = ''
+    const items         = shallowRef(<[]>([]))
     const params        = reactive<any>({})
     const pagenation    = reactive<Pagenation>({ total_count: 0, total_page: 1 })
     const is_skeleton   = ref(true)
