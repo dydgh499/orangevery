@@ -4,7 +4,6 @@ import { createCookie, readCookie } from '@/layouts/snackbars/pwa'
 
 const shortcut = corp.dns + '-shortcut'
 const visible = ref(false)
-
 const service_worker = ref(false)
 const before_install_prompt = ref(false)
 
@@ -96,7 +95,7 @@ onMounted(() => {
         });
         caches.keys().then(cacheNames => {
             cacheNames.forEach(cacheName => {
-                caches.delete(cacheName);
+                caches.delete(cacheName)
             });
         });
     }
@@ -104,7 +103,7 @@ onMounted(() => {
     loadBeforeInstallPrompt()
     loadServiceWorker()
     deleteWorkboxRuntimeCashes()
-    
+
     watchEffect(() => {
         if(before_install_prompt.value && service_worker.value) {
             if (!readCookie(shortcut) ) {
