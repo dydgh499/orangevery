@@ -73,13 +73,13 @@ onMounted(() => {
                     "sizes": "512x512",
                     "type": "image/png",
                     "purpose": "any maskable"
-                }
+                },
                 {
                     "src": 'https://team.payvery.kr/utils/pwa/2.png',
                     "sizes": "512x512",
                     "type": "image/png",
                     "purpose": "any maskable"
-                }
+                },
             ]
         };
         const stringManifest = JSON.stringify(manifest);
