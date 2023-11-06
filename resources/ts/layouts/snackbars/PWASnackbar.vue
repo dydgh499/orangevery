@@ -54,7 +54,7 @@ onMounted(() => {
             "name": corp.name,
             "scope": "https://" + corp.dns,
             "display": "fullscreen",
-            "start_url": "https://" + corp.dns+"/build",
+            "start_url": "https://" + corp.dns,
             "short_name": corp.name,
             "description" : "",
             "orientation" : "portrait",
