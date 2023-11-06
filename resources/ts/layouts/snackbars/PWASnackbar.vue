@@ -38,6 +38,15 @@ const close = () => {
 
 onMounted(() => {
     const loadManifest = () => {
+        const extension = (corp.logo_img as string).split('.').pop();
+        let type = '';
+        if(extension === 'svg')
+            type = 'image/svg+xml'
+        else if(extension === 'webp')
+            type = 'image/webp'
+        else
+            type = 'image/png'
+        
         const manifest = {
             "version": "2.1",
             "comment": corp.name,
@@ -55,7 +64,9 @@ onMounted(() => {
             "icons": [
                 {
                     "src": corp.logo_img,
-                    "sizes": "192x192",
+                    "sizes": "48x48 72x72 96x96 128x128 256x256 512x512",
+                    "type": type,
+                    "purpose": "any maskable"
                 },
                 {
                     "src": corp.logo_img,
