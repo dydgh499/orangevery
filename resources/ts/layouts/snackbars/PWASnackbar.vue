@@ -38,15 +38,42 @@ const close = () => {
 
 onMounted(() => {
     const loadManifest = () => {
+        const logo = new Image();
         const extension = (corp.logo_img as string).split('.').pop();
         let type = '';
-        if(extension === 'svg')
+        if(extension === 'svg') {
             type = 'image/svg+xml'
+            logo.onload = function() {
+                const aspectRatio = logo.width / logo.height;
+                let width, height;
+
+                // 가로 또는 세로 중 더 큰 길이를 512px로 설정
+                if (aspectRatio > 1) { // 가로가 더 긴 경우
+                    width = 512;
+                    height = Math.round(512 / aspectRatio);
+                } else { // 세로가 더 긴 경우
+                    width = Math.round(512 * aspectRatio);
+                    height = 512;
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width; // 계산된 너비
+                canvas.height = height; // 계산된 높이
+                const ctx = canvas.getContext('2d');
+                // 이미지를 캔버스에 비율을 유지하면서 그림
+                ctx.drawImage(logo, 0, 0, width, height);
+                // 캔버스의 내용을 PNG URL로 변환
+                const dataURL = canvas.toDataURL('image/png');
+                logo.src = dataURL
+                console.log(logo.src)
+            };
+        }
         else if(extension === 'webp')
             type = 'image/webp'
         else
             type = 'image/png'
 
+        logo.src = corp.logo_img as string        
         const manifest = {
             "version": "2.1",
             "comment": corp.name,
