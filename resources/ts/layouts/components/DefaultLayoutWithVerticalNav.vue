@@ -72,6 +72,7 @@ const { width: windowWidth } = useWindowSize()
             <Snackbar ref="snackbar" />
             <AlertDialog ref="alert" />
             <LoadingDialog ref="loading" />
+            <PWASnackbar ref="pwaSnackbar"/>
         </RouterView>
 
         <!-- 👉 Footer -->
@@ -91,7 +92,6 @@ const { width: windowWidth } = useWindowSize()
             <Snackbar ref="snackbar" />
             <AlertDialog ref="alert" />
             <LoadingDialog ref="loading" />
-            <PWASnackbar ref="pwaSnackbar"/>
         </RouterView>
     </div>
 </template>
