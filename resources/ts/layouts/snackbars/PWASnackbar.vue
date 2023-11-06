@@ -59,7 +59,7 @@ onMounted(() => {
             "description" : "",
             "orientation" : "portrait",
             "background_color": 'white',
-            "theme_color": corp.theme_css['main_color'],
+            "theme_color": 'white',
             "generated": "true",
             "icons": [
                 {
