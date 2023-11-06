@@ -139,7 +139,7 @@ onMounted(() => {
     <VSnackbar v-model="visible" vertical transaction="scroll-y-reverse-transition" :timeout="60000" variant="flat">
         <div class="pwa-container">
             <img :src="corp.logo_img || ''" width="100" height="100">
-            <span style="font-weight: bold;">바로가기를 생성할까요?</span>
+            <span style="margin: 1em 0;font-weight: bold;">바로가기를 생성할까요?</span>
             <br>
             <span>전산을 빠르게 접근할 수 있는 바로가기가 홈스크린에 생성됩니다.</span>
         </div>
