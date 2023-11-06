@@ -4,6 +4,10 @@ import { createCookie, readCookie } from '@/layouts/snackbars/pwa'
 
 const shortcut = corp.dns + '-shortcut'
 const visible = ref(false)
+
+const service_worker = ref(false)
+const before_install_prompt = ref(false)
+
 const isMobile = {
     Android: function () { return navigator.userAgent.match(/Android/i); },
     iOS: function () { return navigator.userAgent.match(/iPhone|iPad|iPod/i); },
@@ -61,29 +65,37 @@ onMounted(() => {
         document.querySelector('#my-manifest').setAttribute('href', manifestURL);
     }
 
+    const loadBeforeInstallPrompt = () => {
+        // deferredPrompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log("beforeinstallprompt registration succeeded:", e);
+            e.preventDefault();
+            deferredPrompt = e;
+            before_install_prompt.value = true
+        });
+    }
+
     const loadServiceWorker = async () => {
         // service Worker
         if ("serviceWorker" in navigator) {
             const registration = await navigator.serviceWorker
             console.log("Service worker registration succeeded:", registration);
-
-            // deferredPrompt
-            window.addEventListener('beforeinstallprompt', (e) => {
-                console.log("beforeinstallprompt");
-                e.preventDefault();
-                deferredPrompt = e;
-
-                if (!readCookie(shortcut) ) {
-                    setTimeout(function () {
-                        visible.value = true
-                    }, 5000)
-                }
-            });
+            service_worker.value = true
         } else
             console.log("Service workers are not supported.");
     }
     loadManifest()
+    loadBeforeInstallPrompt()
     loadServiceWorker()
+    watchEffect(() => {
+        if(before_install_prompt.value && service_worker.value) {
+            if (!readCookie(shortcut) ) {
+                setTimeout(function () {
+                    visible.value = true
+                }, 5000)
+            }
+        }
+    })
 })
 
 </script>
