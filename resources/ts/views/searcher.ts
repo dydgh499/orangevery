@@ -66,7 +66,7 @@ export const Searcher = (path: string) => {
     const { get } = useRequestStore()
     const base_url = '/api/v1/manager/'+path
     // -----------------------------
-    let items = ref(<[]>([]))
+    let items = shallowRef(<[]>([]))
     let before_search   = ''
     const params        = reactive<any>({})
     const pagenation    = reactive<Pagenation>({ total_count: 0, total_page: 1 })

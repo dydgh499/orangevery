@@ -16,10 +16,9 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import { createPinia } from 'pinia'
 import { createApp } from 'vue'
 
-/*
 import VueVirtualScroller from 'vue-virtual-scroller'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-*/
+
 loadFonts()
 
 declare module '@vue/runtime-core' {
@@ -72,7 +71,7 @@ app.use(abilitiesPlugin, ability, {
   useGlobalProperties: true,
 })
 app.component('VueDatePicker', VueDatePicker)
-// app.use(VueVirtualScroller)
+app.use(VueVirtualScroller)
 app.use(VueMask)
 
 // Mount vue app

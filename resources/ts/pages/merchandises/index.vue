@@ -51,7 +51,7 @@ const defaultValue = (values: any[]) => {
 }
 onMounted(() => {
     watchEffect(async () => {
-        if(store.getChartProcess() === false) {
+        if (store.getChartProcess() === false) {
             const r = await store.getChartData()
             metas.value[0]['stats'] = r.data.this_month_add.toLocaleString()
             metas.value[1]['stats'] = (r.data.this_month_del * -1).toLocaleString()
@@ -76,7 +76,8 @@ onMounted(() => {
                         <VCol cols="12" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"
                                 :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 필터" item-title="title"
-                                item-value="id" @update:modelValue="[store.updateQueryString({module_type: store.params.module_type})]" />
+                                item-value="id"
+                                @update:modelValue="[store.updateQueryString({ module_type: store.params.module_type })]" />
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>
@@ -90,9 +91,11 @@ onMounted(() => {
                     </th>
                 </tr>
             </template>
+            <template #test>
+            </template>
             <template #body>
                 <tr v-for="(item, index) in store.getItems" :key="index">
-                    <template v-for="(_header, _key, _index) in head.headers" :key="_index">                        
+                    <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
                                 #{{ item[_key] }}
@@ -106,20 +109,21 @@ onMounted(() => {
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'mids'">
-                                <VSelect style="min-width: 10em;" :value="defaultValue(item['mids'])"
-                                    :items="item['mids']" :menu-props="{ maxHeight: 400 }"/>
+                                <VSelect style="min-width: 10em;" :value="defaultValue(item['mids'])" :items="item['mids']"
+                                    :menu-props="{ maxHeight: 400 }" />
                             </span>
                             <span v-else-if="_key == 'tids'">
-                                <VSelect style="min-width: 10em;" :value="defaultValue(item['tids'])"
-                                    :items="item['tids']" :menu-props="{ maxHeight: 400 }"/>
+                                <VSelect style="min-width: 10em;" :value="defaultValue(item['tids'])" :items="item['tids']"
+                                    :menu-props="{ maxHeight: 400 }" />
                             </span>
                             <span v-else-if="_key == 'module_types'">
-                                <VSelect style="min-width: 10em;" :value="defaultValue(getModuleTypes(item['module_types']))"
-                                    :items="getModuleTypes(item['module_types'])" :menu-props="{ maxHeight: 400 }"/>
+                                <VSelect style="min-width: 10em;"
+                                    :value="defaultValue(getModuleTypes(item['module_types']))"
+                                    :items="getModuleTypes(item['module_types'])" :menu-props="{ maxHeight: 400 }" />
                             </span>
                             <span v-else-if="_key == 'pgs'">
                                 <VSelect style="min-width: 10em;" :value="defaultValue(getPGs(item['pgs']))"
-                                    :items="getPGs(item['pgs'])" :menu-props="{ maxHeight: 400 }"/>
+                                    :items="getPGs(item['pgs'])" :menu-props="{ maxHeight: 400 }" />
                             </span>
                             <span v-else-if="_key == 'enabled'">
                                 <VChip :color="store.booleanTypeColor(!item[_key])">
@@ -136,6 +140,20 @@ onMounted(() => {
                     </template>
                 </tr>
             </template>
-    </BaseIndexView>
-    <PasswordChangeDialog ref="password" />
-</div></template>
+        </BaseIndexView>
+        <PasswordChangeDialog ref="password" />
+    </div>
+</template>
+<style>
+.scroller {
+  block-size: 100%;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  block-size: 32%;
+  padding-block: 0;
+  padding-inline: 12px;
+}
+</style>

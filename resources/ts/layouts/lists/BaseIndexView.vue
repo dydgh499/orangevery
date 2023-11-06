@@ -41,6 +41,9 @@ onMounted(() => {
                         </template>
                     </BaseIndexFilter>
                     <VDivider />
+                    <slot name="test">
+
+                    </slot>
                     <VTable class="text-no-wrap">
                         <!-- 👉 table head -->
                         <thead>
