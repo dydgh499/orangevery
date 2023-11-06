@@ -41,14 +41,15 @@ onMounted(() => {
     const loadManifest = () => {
         const manifest = {
             "version": "2.1",
+            "comment": corp.name,
             "lang": "ko",
             "name": corp.name,
             "scope": "https://" + corp.dns,
             "display": "fullscreen",
             "start_url": "https://" + corp.dns+"/build",
             "short_name": corp.name,
-            "description": "",
-            "orientation": "portrait",
+            "description" : "",
+            "orientation" : "portrait",
             "background_color": 'white',
             "theme_color": corp.theme_css['main_color'],
             "generated": "true",
@@ -82,15 +83,28 @@ onMounted(() => {
     const loadServiceWorker = async () => {
         // service Worker
         if ("serviceWorker" in navigator) {
-            const registration = await navigator.serviceWorker
-            console.log("Service worker registration succeeded:", registration);
-            service_worker.value = true
-        } else
+            navigator.serviceWorker.register('/service-worker.js').then((registration) => {
+                console.log("Service worker registration succeeded:", registration);
+                service_worker.value = true
+            });
+        } 
+        else
             console.log("Service workers are not supported.");
+    }
+    const deleteWorkboxRuntimeCashes = () => {
+        caches.delete('workbox-runtime').then(function () {
+        });
+        caches.keys().then(cacheNames => {
+            cacheNames.forEach(cacheName => {
+                caches.delete(cacheName);
+            });
+        });
     }
     loadManifest()
     loadBeforeInstallPrompt()
     loadServiceWorker()
+    deleteWorkboxRuntimeCashes()
+    
     watchEffect(() => {
         if(before_install_prompt.value && service_worker.value) {
             if (!readCookie(shortcut) ) {
