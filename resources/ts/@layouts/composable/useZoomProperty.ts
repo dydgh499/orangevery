@@ -29,7 +29,7 @@ export const useZoomProperty = () => {
     })
     watchEffect(() => {
         if(pay_token.value == '') 
-            zoom.value = 100
+            document.documentElement.style.setProperty('zoom', `100%`)
     })
     return {
         zoom,

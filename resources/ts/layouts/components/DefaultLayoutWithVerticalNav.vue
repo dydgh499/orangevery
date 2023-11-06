@@ -68,11 +68,11 @@ const { width: windowWidth } = useWindowSize()
             <Transition :name="appRouteTransition" mode="out-in">
                 <Component :is="Component" />
             </Transition>
-            <PayLinkDialog ref="payLink" />
             <Snackbar ref="snackbar" />
+            <PWASnackbar ref="pwaSnackbar"/>
             <AlertDialog ref="alert" />
             <LoadingDialog ref="loading" />
-            <PWASnackbar ref="pwaSnackbar"/>
+            <PayLinkDialog ref="payLink" />
         </RouterView>
 
         <!-- 👉 Footer -->

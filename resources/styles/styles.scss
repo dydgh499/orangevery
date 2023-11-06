@@ -1,5 +1,9 @@
 // Write your overrides
 
+body {
+  background: rgb(var(--v-theme-background));
+}
+
 .v-field__outline {
   --v-field-border-opacity: 0.78 !important;
 }

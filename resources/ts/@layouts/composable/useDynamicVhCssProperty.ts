@@ -8,7 +8,6 @@ export const useDynamicVhCssProperty = () => {
     const updateVh = () => {
         const offset = window.innerHeight * ((100 - zoom.value) / 100)
         vh.value = (window.innerHeight + offset) * 0.01
-        document.documentElement.style.setProperty('--vh', `${vh.value}px`)
     }
 
     watchEffect(() => {
