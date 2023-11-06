@@ -35,6 +35,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:18, name:'에드원', rep_name: '김춘걸', company_name: '주식회사 에드원', business_num: '114-81-90678', phone_num: '554-4002', addr: '서울시 영등포구 당산로 41길 11, E동 1109호 (당산동 4가, 당산 SK V1센터)'},
         {id:19, name:'삼인칭', rep_name: '윤건', company_name: '주식회사 삼인칭', business_num: '489-87-00733', phone_num: '1833-4854', addr: '서울특별시 마포구 큰우물로 76, 403호(도화동, 고려빌딩'},
         {id:20, name:'WGP', rep_name: '우강섭', company_name: '(주)윈글로벌페이', business_num: '648-86-00577', phone_num: '1877-7590', addr: '[12918] 경기도 하남시 조정대로 45, 미사센텀비즈 F348호'},
+        {id:21, name:'브라이트픽스(구)', rep_name: '박용은', company_name: '(주)브라이트픽스', business_num: '235-88-01772', phone_num: '02-6336-0999', addr: '주소 서울특별시 금천구 가산디지털2로 166, 216~217호(가산동, 에이스K1타워)'},
     ]
 
     const finance_companies = <Options[]>([
