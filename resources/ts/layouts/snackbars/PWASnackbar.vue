@@ -46,7 +46,7 @@ onMounted(() => {
             type = 'image/webp'
         else
             type = 'image/png'
-        
+
         const manifest = {
             "version": "2.1",
             "comment": corp.name,
@@ -68,10 +68,6 @@ onMounted(() => {
                     "type": type,
                     "purpose": "any maskable"
                 },
-                {
-                    "src": corp.logo_img,
-                    "sizes": "512x512",
-                },                
             ]
         };
         const stringManifest = JSON.stringify(manifest);
