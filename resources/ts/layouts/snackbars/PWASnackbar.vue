@@ -55,8 +55,12 @@ onMounted(() => {
             "icons": [
                 {
                     "src": corp.logo_img,
-                    "sizes": "192x192 512x512",
+                    "sizes": "192x192",
                 },
+                {
+                    "src": corp.logo_img,
+                    "sizes": "512x512",
+                },                
             ]
         };
         const stringManifest = JSON.stringify(manifest);
