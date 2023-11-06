@@ -51,7 +51,7 @@ onMounted(() => {
             "icons": [
                 {
                     "src": corp.logo_img,
-                    "sizes": "72x72 96x96 128x128 144x144 152x152 192x192 384x384 512x512 120x120 180x180",
+                    "sizes": "192x192 512x512",
                 },
             ]
         };
@@ -93,7 +93,7 @@ onMounted(() => {
             <img :src="corp.logo_img || ''" width="100" height="100">
             <span style="font-weight: bold;">바로가기를 생성할까요?</span>
             <br>
-            <span>전산을 빠르게 접근할 수 있는 바로가기가 홈화면에 생성됩니다.</span>
+            <span>전산을 빠르게 접근할 수 있는 바로가기가 홈스크린에 생성됩니다.</span>
         </div>
         <template #actions>
             <VBtn color="success" @click="createShortcut()">
