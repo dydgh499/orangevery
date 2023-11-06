@@ -45,7 +45,7 @@ const validate = () => {
         const settle_type = settle_types.find(item => item.id === items.value[i].settle_type)
         const module_type = module_types.find(item => item.id === items.value[i].module_type)
         const installment = installments.find(item => item.id === items.value[i].installment)
-        const mcht = mchts.value.find(item => item.mcht_name === items.value[i].mcht_name)
+        const mcht = mchts.find(item => item.mcht_name === items.value[i].mcht_name)
 
         if (mcht == null) {
             snackbar.value.show((i + 1) + '번째 결제모듈의 가맹점 상호가 이상합니다.', 'error')
