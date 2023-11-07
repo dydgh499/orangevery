@@ -64,7 +64,7 @@ class TransactionController extends Controller
         $query  = $this->transactions
             ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
-            ->globlaFilter();
+            ->globalFilter();
 
         if($search != '')
         {
