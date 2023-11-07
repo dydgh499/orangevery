@@ -59,6 +59,7 @@ const chartSetter = (base_url: string) => {
         setChartProcess,
         _getChartData,
         getPercentage,
+        chart_process,
     }
 }
 
@@ -69,7 +70,7 @@ export const Searcher = (path: string) => {
     let before_search   = ''
     const items         = shallowRef(<[]>([]))
     const params        = reactive<any>({})
-    const pagenation    = reactive<Pagenation>({ total_count: 0, total_page: 1 })
+    const pagenation    = reactive<Pagenation>({ total_count: 0, total_page: 1, total_range: 0})
     const is_skeleton   = ref(true)
     const {
         getChartProcess,
@@ -82,7 +83,7 @@ export const Searcher = (path: string) => {
         getSelectIdColor,
     } = StatusColorSetter()
     
-    const getChartData = async() => { return _getChartData(getParams()) }
+    const getChartData = async() => { return _getChartData(getParams())  }
 
     const edit = (id: number = 0) => {
         if(user_info.value.level > 30) {
@@ -110,8 +111,7 @@ export const Searcher = (path: string) => {
 
     const updateQueryString = (obj: any) => {
         router.push({query: {...router.currentRoute.value.query, ...obj}})
-
-        const is_chart_update = Object.keys(obj).some(key => !['page', 'page_size'].includes(key))
+        const is_chart_update = Object.keys(obj).some(key => !['page', 'page_size', 'search'].includes(key))
         if(is_chart_update) 
             setChartProcess()
     }
@@ -121,17 +121,19 @@ export const Searcher = (path: string) => {
         const r = await get(base_url, {params: p})
         if (r.status == 200) {
             let l_page = r.data.total / params.page_size
+
             items.value = r.data.content
+            pagenation.total_range = r.data.content.length
             pagenation.total_count = r.data.total
             pagenation.total_page = parseInt(String(l_page > Math.floor(l_page) ? l_page + 1 : l_page))
         }
         is_skeleton.value = false
-        return r.data.content        
+        return r.data.content
     }
     
     const pagenationCouputed = computed(() => {
-        const firstIndex = items.value.length ? ((params.page - 1) * params.page_size) + 1 : 0
-        const lastIndex = items.value.length + ((params.page - 1) * params.page_size)
+        const firstIndex = pagenation.total_range ? ((params.page - 1) * params.page_size) + 1 : 0
+        const lastIndex = pagenation.total_range + ((params.page - 1) * params.page_size)
         return `총 ${pagenation.total_count}개 항목 중 ${firstIndex} ~ ${lastIndex}개 표시`
     })
     

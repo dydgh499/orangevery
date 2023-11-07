@@ -64,8 +64,7 @@ class TransactionController extends Controller
         $query  = $this->transactions
             ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
-            ->where('transactions.brand_id', $request->user()->brand_id)
-            ->where('transactions.is_delete', false);
+            ->globlaFilter();
 
         if($search != '')
         {
@@ -100,9 +99,6 @@ class TransactionController extends Controller
             $request->query->remove('s_dt');
             $request->query->remove('e_dt');
         }
-        $query = globalPGFilter($query, $request, 'transactions');
-        $query = globalSalesFilter($query, $request, 'transactions');
-        $query = globalAuthFilter($query, $request, 'transactions');
 
         if($request->only_cancel && $request->only_cancel == 'true')
             $query = $query->where('transactions.is_cancel', true);

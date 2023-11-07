@@ -4,6 +4,7 @@ import { ko } from 'date-fns/locale'
 import { DateFilters } from '@core/enums'
 import { salesLevels } from '@/views/salesforces/useStore'
 import { DateSetter } from '@/views/searcher'
+import type { Options } from '@/views/types'
 import corp from '@corp'
 
 interface Props {
@@ -38,6 +39,7 @@ const {
     date,
     date_selecter,
 } = DateSetter(props, formatDate, formatTime)
+
 const enable = ref(true)
 const format = ref({})
 const time_picker = ref(true)
@@ -51,9 +53,9 @@ const queryToStoreParams = () => {
         store.params[keys[i]] = route.query[keys[i]] != null ? parseInt(route.query[keys[i]] as string) : null
     }
 
-    if(!store.params.page)
+    if (!store.params.page)
         store.params.page = 1
-    if(!store.params.page_size)
+    if (!store.params.page_size)
         store.params.page_size = 20
 
     if (route.query.search) {
@@ -69,13 +71,20 @@ const handleEnterKey = (event: KeyboardEvent) => {
     }
 }
 
-store.params.use_search_date_detail = Number(corp.pv_options.free.use_search_date_detail)
-if(props.date_filter_type == DateFilters.DATE_RANGE) {
+const getSalesforceItems = computed(() => {
+    if(head.path === 'salesforces' || head.path === 'transactions/settle-histories/salesforces')
+        return [<Options>({ id: null, title: '전체' })].concat(salesLevels())
+    else
+        return salesLevels()
+})
+
+if (props.date_filter_type == DateFilters.DATE_RANGE) {
+    store.params.use_search_date_detail = Number(corp.pv_options.free.use_search_date_detail)
     enable.value = true
     format.value = { format: 'yyyy-MM-dd HH:mm:ss' }
     time_picker.value = true
 }
-else if(props.date_filter_type == DateFilters.SETTLE_RANGE) {
+else if (props.date_filter_type == DateFilters.SETTLE_RANGE) {
     enable.value = false
     format.value = { format: 'yyyy-MM-dd ' }
     time_picker.value = false
@@ -96,13 +105,14 @@ watchEffect(() => {
                         <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">
                             <template v-if="corp.pv_options.free.use_search_date_detail">
                                 <div class="d-inline-flex">
-                                    <template v-if="props.date_filter_type == DateFilters.DATE_RANGE || props.date_filter_type == DateFilters.SETTLE_RANGE">
-                                        <VueDatePicker v-model="range_date" :enable-seconds="enable"
-                                            :text-input="format" locale="ko" :format-locale="ko" 
-                                            range multi-calendars :dark="theme === 'dark'" autocomplete="on" utc 
-                                            :format="getRangeFormat" :teleport="true" input-class-name="search-input" 
-                                            select-text="Search" :enable-time-picker="time_picker"
-                                            @update:modelValue="[updateRangeDateQuery(store)]"/>
+                                    <template
+                                        v-if="props.date_filter_type == DateFilters.DATE_RANGE || props.date_filter_type == DateFilters.SETTLE_RANGE">
+                                        <VueDatePicker v-model="range_date" :enable-seconds="enable" :text-input="format"
+                                            locale="ko" :format-locale="ko" range multi-calendars :dark="theme === 'dark'"
+                                            autocomplete="on" utc :format="getRangeFormat" :teleport="true"
+                                            input-class-name="search-input" select-text="Search"
+                                            :enable-time-picker="time_picker"
+                                            @update:modelValue="[updateRangeDateQuery(store)]" />
                                     </template>
                                     <template v-else-if="props.date_filter_type == DateFilters.DATE">
                                         <VueDatePicker v-model="date" :text-input="{ format: 'yyyy-MM-dd' }" locale="ko"
@@ -128,13 +138,15 @@ watchEffect(() => {
                             <template v-if="head.path === 'transactions'">
                                 <VSelect v-model="date_selecter" :items="[{ id: null, title: '기간 조회' }].concat(dates)"
                                     density="compact" variant="outlined" item-title="title" item-value="id"
-                                    style="min-width: 10em;" @update:modelValue="[setDate(), updateRangeDateQuery(store)]" label="기간 조회" />
+                                    style="min-width: 10em;" @update:modelValue="[setDate(), updateRangeDateQuery(store)]"
+                                    label="기간 조회" />
                             </template>
                             <template
                                 v-else-if="head.path === 'salesforces' || head.path === 'transactions/settle/salesforces' || head.path === 'transactions/settle-histories/salesforces'">
-                                <VSelect v-model="store.params.level" :items="[{ id: null, title: '전체' }].concat(salesLevels())"
-                                    density="compact" variant="outlined" item-title="title" item-value="id" 
-                                    style="min-width: 10em;" @update:modelValue="store.updateQueryString({ level: store.params.level })" />
+                                <VSelect v-model="store.params.level"
+                                    :items="getSalesforceItems" density="compact"
+                                    variant="outlined" item-title="title" item-value="id" style="min-width: 10em;"
+                                    @update:modelValue="store.updateQueryString({ level: store.params.level })" />
                             </template>
                             <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel"
                                 @click="exporter(1)">
@@ -148,7 +160,8 @@ watchEffect(() => {
                                     {{ props.placeholder }}
                                 </VTooltip>
                             </VTextField>
-                            <VBtn prepend-icon="tabler:search" @click="store.setTable(); store.updateQueryString({ search: search })" >
+                            <VBtn prepend-icon="tabler:search"
+                                @click="store.setTable(); store.updateQueryString({ search: search })">
                                 검색
                             </VBtn>
                             <VBtn variant="tonal" color="secondary" prepend-icon="tabler-filter"
@@ -164,5 +177,4 @@ watchEffect(() => {
                 </VRow>
             </VCardText>
         </VCol>
-    </div>
-</template>
+</div></template>

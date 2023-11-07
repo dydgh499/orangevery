@@ -13,7 +13,7 @@ export type SearchHeader = {
 }
 //------------------------------
 export interface Options {
-    id: number,
+    id: number | null,
     title: string,
 }
 export interface StringOptions {
@@ -24,6 +24,7 @@ export interface StringOptions {
 export interface Pagenation {
     total_count: number,
     total_page: number,
+    total_range: number,
 }
 export interface FilterItem {
     ko: string;

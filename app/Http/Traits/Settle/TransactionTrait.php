@@ -247,7 +247,7 @@ trait TransactionTrait
                     ->orderBy("cxl_dttm", 'desc')
                     ->offset($sp)
                     ->limit($page_size);
-            $res['content'] = $con_query->get($this->cols);
+            $res['content'] = $con_query->get($cols);
         }
         else
         {

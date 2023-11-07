@@ -23,4 +23,3 @@ self.addEventListener("activate", (e) => {
 self.addEventListener("fetch", (e) => {
     console.log("[Service Worker] fetched resource " + e.request.url);
 });
-

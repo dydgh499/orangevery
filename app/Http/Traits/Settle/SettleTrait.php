@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Traits\Settle;
+use Illuminate\Support\Facades\DB;
 use App\Models\Transaction;
 
 trait SettleTrait
@@ -77,35 +78,26 @@ trait SettleTrait
 
     protected function partSettleCommonQuery($request, $target_id, $target_settle_id)
     {
-        $cols = ['transactions.*'];
+        $cols = [
+            'transactions.*', 
+            DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
+            DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
+            'merchandises.mcht_name',
+        ];
         [$settle_key, $group_key] = $this->getSettleCol($request);
         array_push($cols, $settle_key." AS profit");
 
         $search = $request->input('search', '');
-        $query = Transaction::where($target_id, $request->id)
+        $query = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
+            ->where("transactions.".$target_id, $request->id)
             ->noSettlement($target_settle_id)
             ->where(function ($query) use ($search) {
-                return $query->where('mid', 'like', "%$search%")
-                    ->orWhere('tid', 'like', "%$search%")
-                    ->orWhere('trx_id', 'like', "%$search%")
-                    ->orWhere('appr_num', 'like', "%$search%");
-            })
-            ->with(['mcht']);
-
-        $query = globalPGFilter($query, $request);
-        $query = globalSalesFilter($query, $request);
-        $query = globalAuthFilter($query, $request);
-
-        $data = $this->getIndexData($request, $query, 'id', $cols);
-        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-        $salesforces    = globalGetSalesByIds($sales_ids);
-        $data['content'] = globalMappingSales($salesforces, $data['content']);
-
-        foreach($data['content'] as $content) 
-        {
-            $content->mcht_name = $content->mcht['mcht_name'];
-            $content->makeHidden(['mcht']);
-        }
+                return $query->where('transactions.mid', 'like', "%$search%")
+                    ->orWhere('transactions.tid', 'like', "%$search%")
+                    ->orWhere('transactions.trx_id', 'like', "%$search%")
+                    ->orWhere('transactions.appr_num', 'like', "%$search%");
+            });
+        $data = $this->transPagenation($query, 'transactions', $cols, $request->page, $request->page_size);
         return $data;
     }
 

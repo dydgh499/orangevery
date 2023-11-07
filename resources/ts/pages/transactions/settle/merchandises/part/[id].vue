@@ -24,7 +24,6 @@ const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
-const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 
 const user = ref(<any>({}))
@@ -101,8 +100,7 @@ const getPartSettleFormat = () => {
 const partSettle = async () => {
     const count = selected.value.length
     if(await dialog('정말 '+count+'개의 매출을 부분정산하시겠습니까?')) {
-        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/part', getPartSettleFormat())
-        snackbar.value.show('성공하였습니다', 'success')
+        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/part', getPartSettleFormat(), true)
         store.setChartProcess()
         store.setTable()
     }
@@ -110,9 +108,8 @@ const partSettle = async () => {
 
 const settleCollect = async () => {
     if(await dialog('정말 정산금을 이체한 후 정산 하시겠습니까?')) {
-        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/settle-collect', getPartSettleFormat())
+        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/settle-collect', getPartSettleFormat(), true)
         if(r.data.result_cd == "0000") {
-            snackbar.value.show('성공하였습니다.', 'success')
             store.setChartProcess()
             store.setTable()    
         }

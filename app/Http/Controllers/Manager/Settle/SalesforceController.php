@@ -162,6 +162,9 @@ class SalesforceController extends Controller
         {
             [$target_id, $target_settle_id] = $this->getTargetInfo($level);
             $data = $this->partSettleCommonQuery($request, $target_id, $target_settle_id);
+            $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+            $salesforces    = globalGetSalesByIds($sales_ids);
+            $data['content'] = globalMappingSales($salesforces, $data['content']);            
         }
         else
         {

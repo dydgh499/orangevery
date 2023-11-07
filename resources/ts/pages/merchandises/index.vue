@@ -91,8 +91,6 @@ onMounted(() => {
                     </th>
                 </tr>
             </template>
-            <template #test>
-            </template>
             <template #body>
                 <tr v-for="(item, index) in store.getItems" :key="index">
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">

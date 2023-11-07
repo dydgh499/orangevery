@@ -45,10 +45,12 @@ class Transaction extends Model
 
     public function scopeGlobalFilter($query)
     {
-        $query = $query->where('is_delete', false);
-        $query = globalPGFilter($query, request());
-        $query = globalSalesFilter($query, request());
-        $query = globalAuthFilter($query, request());
+        $query = $query
+            ->where('transactions.is_delete', false)
+            ->where('transactions.brand_id', request()->user()->brand_id);
+        $query = globalPGFilter($query, request(), 'transactions');
+        $query = globalSalesFilter($query, request(), 'transactions');
+        $query = globalAuthFilter($query, request(), 'transactions');
         return $query;
     }
 
@@ -58,33 +60,29 @@ class Transaction extends Model
         $e_dt = request()->e_dt;
         if(request()->input('is_base_trx', 'false') == 'true')
         {
-            $trx_dt = 'trx_dt';
-            $cxl_dt = 'cxl_dt';
+            $trx_dt = 'transactions.trx_dt';
+            $cxl_dt = 'transactions.cxl_dt';
         }
         else
         {
-            $trx_dt = "AddBaseWorkingDays(trx_dt, mcht_settle_type+1, pg_settle_type)";
-            $cxl_dt = "AddBaseWorkingDays(cxl_dt, mcht_settle_type+1, pg_settle_type)";
+            $trx_dt = "AddBaseWorkingDays(transactions.trx_dt, transactions.mcht_settle_type+1, transactions.pg_settle_type)";
+            $cxl_dt = "AddBaseWorkingDays(transactions.cxl_dt, transactions.mcht_settle_type+1, transactions.pg_settle_type)";
         }
         return $query->where(function ($query) use ($s_dt, $e_dt, $trx_dt) {     
                 $query->whereRaw("$trx_dt >= '$s_dt'")
                     ->whereRaw("$trx_dt <= '$e_dt'")
-                    ->where('is_cancel', false);
+                    ->where('transactions.is_cancel', false);
             })->orWhere(function ($query) use ($s_dt, $e_dt ,$cxl_dt) {
                 $query->whereRaw("$cxl_dt >= '$s_dt'")
                     ->whereRaw("$cxl_dt <= '$e_dt'")
-                    ->where('is_cancel', true);
+                    ->where('transactions.is_cancel', true);
             });
     }
 
     public function scopeNoSettlement($query, $target)
     {
-        $query = globalPGFilter($query, request());
-        $query = globalSalesFilter($query, request());
-        $query = globalAuthFilter($query, request());
         return $query->whereNull($target)
-            ->where('is_delete', false)
-            ->where('brand_id', request()->user()->brand_id)
+            ->globalFilter()
             ->settleDateTypeTransaction();
     }
 
@@ -92,6 +90,28 @@ class Transaction extends Model
     {
         return $query->where($target, $id)
             ->where('brand_id', request()->user()->brand_id);
+    }
+
+    public function scopeDateFilter($query)
+    {   // s_dt, e_dt, use_search_date_detail
+        $request = request();
+        if($request->has('s_dt') && $request->has('e_dt'))
+        {
+            $query = $query->where(function($query) use($request) {
+                $query->where(function($query) use($request) {
+                    $search_format = $request->use_search_date_detail ? "concat(trx_dt, ' ', trx_tm)" : "trx_dt";
+                    $query->where('transactions.is_cancel', false)
+                        ->whereRaw("$search_format >= ?", [$request->s_dt])
+                        ->whereRaw("$search_format <= ?", [$request->e_dt]);
+                })->orWhere(function($query) use($request) {
+                    $search_format = $request->use_search_date_detail ? "concat(cxl_dt, ' ', cxl_tm)" : "cxl_dt";
+                    $query->where('transactions.is_cancel', true)
+                    ->whereRaw("$search_format >= ?", [$request->s_dt])
+                    ->whereRaw("$search_format <= ?", [$request->e_dt]);
+                });
+            });
+        }
+        return $query;
     }
 
     private function getProfitCol($level)
