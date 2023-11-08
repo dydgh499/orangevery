@@ -17,7 +17,7 @@ provide('operDetail', operDetail)
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="운영자명, 적용대상 검색" :metas="[]" :add="false" add_name="" :date_filter_type="DateFilters.DATE_RANGE">
+        <BaseIndexView placeholder="운영자명, 적용대상, 상세이력 검색" :metas="[]" :add="false" add_name="" :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
             </template>
             <template #index_extra_field>

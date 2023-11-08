@@ -46,7 +46,8 @@ class OperatorHistoryContoller extends Controller
         {
             $query = $query->where(function ($query) use ($search) {
                 return $query->where('operators.nick_name', 'like', "%$search%")
-                    ->orWhere('operator_histories.history_title', 'like', "%$search%");
+                    ->orWhere('operator_histories.history_title', 'like', "%$search%")
+                    ->orWhere('operator_histories.history_detail', 'like', "%$search%");
             });
         }
 
