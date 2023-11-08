@@ -1,15 +1,34 @@
 <script setup lang="ts">
 import { OperatorHistory } from '@/views/types'
 import { history_types } from '@/views/services/operator-histories/useStore'
+import corp from '@corp'
 
 const visible = ref(false)
 const history = ref(<OperatorHistory>({}))
 const store = <any>(inject('store'))
 
+const changeKeyName = () => {
+    const keys = [
+        'sales0_id','sales1_id','sales2_id','sales3_id','sales4_id','sales5_id',    
+        'sales0_fee','sales1_fee','sales2_fee','sales3_fee','sales4_fee','sales5_fee',
+    ]
+    keys.forEach((key) => {
+        if("validation.attributes." + key in history.value.history_detail) {
+            const level = key.slice(0, 6)
+            let key_name = corp.pv_options.auth.levels[level+'_name']
+            if(key.includes('fee'))
+                key_name += ' 수수료';
+
+            history.value.history_detail[key_name] = history.value.history_detail['validation.attributes.'+key]            
+            delete history.value.history_detail['validation.attributes.'+key]
+        }
+    })
+}
+
 const show = (_history: any) => {
-    delete _history.브랜드
     visible.value = true
     history.value = _history
+    changeKeyName()
 }
 
 const title = computed(() => {

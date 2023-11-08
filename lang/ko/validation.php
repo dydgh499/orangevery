@@ -129,6 +129,7 @@ return [
         'user_name' => '유저 ID',
         'user_pw'   => '패스워드',
         'login_type'=> '로그인 타입',
+        'profile_img' => '프로필 이미지',
         //brand
         'dns'       => 'DNS',
         'logo_img'  => '로고 이미지',

@@ -749,8 +749,8 @@ export interface OperatorHistory {
     history_type: number,
     history_title: string,
     history_target: string,
-    history_detail?: string | object,
-    created_at: datetime,
+    history_detail: any,
+    created_at: string,
 }
 
 export interface NotiFormat {
