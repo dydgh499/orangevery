@@ -6,6 +6,7 @@ import ExtraMenu from '@/views/services/operator-histories/ExtraMenu.vue'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
+
 const operDetail = ref()
 
 provide('store', store)
@@ -55,7 +56,7 @@ provide('operDetail', operDetail)
                                 </span>
                                 <span v-else-if="_key == `history_type`">
                                     <VChip
-                                        :color="store.getSelectIdColor(history_types.find(obj => obj.id === item[_key])?.id)">
+                                        :color="store.getSelectIdColor(history_types.find(obj => obj.id === item[_key])?.id as number)">
                                         {{ history_types.find(obj => obj.id === item[_key])?.title }}
                                     </VChip>
                                 </span>
@@ -71,6 +72,6 @@ provide('operDetail', operDetail)
                 </tr>
             </template>
         </BaseIndexView>
-        <OperDetailDialog ref="operDetail"/>
+        <OperDetailDialog ref="operDetail" />
     </div>
 </template>

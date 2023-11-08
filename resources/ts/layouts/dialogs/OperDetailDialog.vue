@@ -4,7 +4,10 @@ import { history_types } from '@/views/services/operator-histories/useStore'
 
 const visible = ref(false)
 const history = ref(<OperatorHistory>({}))
-const show = (_history: OperatorHistory) => {
+const store = <any>(inject('store'))
+
+const show = (_history: any) => {
+    delete _history.브랜드
     visible.value = true
     history.value = _history
 }
@@ -16,17 +19,6 @@ const title = computed(() => {
         return ""
 })
 
-const content = computed(() => {
-    if(history.value)
-    {
-        let type = history_types.find(obj => obj.id === history.value.history_type)?.title
-        if(history.value.history_type != 3,4)
-            type +="("+history.value.history_target+")"
-        return type
-    }
-    else
-        return ""
-})
 defineExpose({
     show
 });
@@ -37,10 +29,21 @@ defineExpose({
         <DialogCloseBtn @click="visible = false" />
         <!-- Dialog Content -->
         <VCard :title="title">
-            <b>{{ content }}</b>
-            <br>
-            <b>{{ history.created_at }}</b>
             <VCardText>
+                <b>
+                    <div class="d-flex justify-space-between">
+                        <h6 class="text-base font-weight-semibold me-3">
+                            {{ history.history_target }}
+                            {{ history.history_title ? " - "+history.history_title : ''}}
+                            <VChip :color="store.getSelectIdColor(history.history_type)">
+                                {{ history_types.find(history_type => history_type['id'] === history.history_type)?.title  }}
+                            </VChip>   
+                        </h6>
+                        <span class="text-sm">
+                            활동시간: {{ history.created_at }}
+                        </span>
+                    </div>
+                </b>
                 <VTable class="text-no-wrap" style="width: 100%;">
                     <thead>
                         <tr>
@@ -51,7 +54,7 @@ defineExpose({
                     <tbody>
                         <tr v-for="(hist, key) in history.history_detail" :key="key">
                             <th class='list-square'>{{ key }}</th>
-                            <td class='list-square'>{{ hist[key] }}</td>
+                            <td class='list-square'>{{ hist }}</td>
                         </tr>
                     </tbody>
                 </VTable>

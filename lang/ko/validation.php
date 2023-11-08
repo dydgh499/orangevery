@@ -129,10 +129,6 @@ return [
         'user_name' => '유저 ID',
         'user_pw'   => '패스워드',
         'login_type'=> '로그인 타입',
-        //advertisement
-        'ad_name'   => '광고명',
-        'ad_img'    => '광고이미지',
-        'ad_type'   => '광고타입',
         //brand
         'dns'       => 'DNS',
         'logo_img'  => '로고 이미지',
@@ -155,24 +151,17 @@ return [
         'ceo_name'    => '대표자명',
         'phone_num' => '연락처',
         'fax_num'   => '팩스번호',
-        'template_id'   => '템플릿 ID',
         'theme_css' => 'JSON 포멧의 CSS',
         'company_name'    => '법인 상호',
-        'pvcy_rep_name'   => '개인정보 책임자명',
         'business_num'  => '사업자등록번호',
-        'stamp_max_size'    => '스탬프 쿠폰변환 최소개수',
-        'stamp_save_count'  => '상품당 스탬프 저장개수',
-        'coupon_model_id'   => '쿠폰 발행시 발행될 쿠폰 ID',
-        'point_min_amount'  => '포인트 최소 사용 금액',
         'sales_name' => '영업점 상호',
+        'view_type'  => '화면타입',
+        'settle_tax_type' => '정산 세율',
+        'settle_cycle' => '정산 주기',
+        'settle_day' => '정산일',
         'send_url'  => '전송 URL',
-        //coupon publish
-        'user_id'   => '유저',
         //device
         'mcht_id'   => '가맹점',
-        'partner_id'=> '협럭사',
-        'mac_addr'  => '맥주소',
-        'comment'   => '비고',
         //index form
         'page'      => '페이지 번호',
         'page_size' => '페이지 사이즈',
@@ -181,37 +170,11 @@ return [
         //notice
         'title'     => '제목',
         'content'   => '본문',  //product
-        //notification
-        'noti_type' => '알림 타입',
-        'redirect_url'  => '이동 URL',
-        'noti_s_dttm'   => '알림시작일',
-        'noti_days'     => '알림날짜(일요일~토요일(0~6))',
-        //option
-        'prod_id'   => '상품',
-        'group_id'  => '그룹번호',
-        'price' => '가격',
-        //order
-        'prod_name'   => '상품명',
-        'prod_amt'  => '상품가격',
-        'card_num'  => '카드번호',
-        'status'    => '주문상태',
-        'instmt'    => '할부',
-        'trade_amt' => '거래금액',
-        //point
-        'purchase_price'=> '결제금액',
-        'use_amount'    => '적립포인트',
         'is_cancel'     => '취소 여부',
         'created_at'    => '생성시간',
-        //product
-        'cate_id'   => '카테고리',
-        'product_img'   => '상품 이미지',
-        //stamp
-        'use_status'    => '사용상태',
-        'use_dt'    => '사용일',
         //user
         'level' => '유저등급',
         'nick_name' => '유저명(별칭)',
-        'birth_date'=> '생년월일',
         'mcht_name' => '가맹점 상호',
         'mcht_user_name' => '가맹점 ID',
         'addr'  => '주소',
@@ -270,6 +233,26 @@ return [
         'entry_path' => '유입경로',
         'is_deposit' => '입금상태',
         
+        'terminal_id' => '장비',
+        'api_key' => 'API KEY',
+        'sub_key' => 'SUB KEY(License)',
+        'mid' => 'MID',
+        'serial_num' => '시리얼번호',
+        'ship_out_stat' => '출고 상태',
+        'under_sales_type' => '통신비 정산 타입',
+        'under_sales_amt' => '매출미달 차감금',
+        'under_sales_limit' => '매출미달 상한금',
+        'pay_disable_s_tm' => '결제금지 시작시간',
+        'pay_disable_e_tm' => '결제금지 종료시간',
+        'cxl_type'      => '취소 여부',
+        'contract_s_dt' => '계약 시작시간',
+        'contract_e_dt' => '계약 종료시간',
+        'begin_dt' => '계약 시작일',
+        'ship_out_dt' => '출고일',
+        'fin_id' => '금융벤 ID',
+        'fin_trx_delay' => '실시간 이체 딜레이',
+        'use_realtime_deposit' => '실시간 이체 사용여부',
+        'filter_issuers' => '카드사 필터',
         //finance van
         'receive_phone' => '수신자 전화번호',
         'sender_phone' => '발신자 전화번호',
@@ -282,5 +265,10 @@ return [
         //
         'pg_type' => 'PG 타입',
         'pg_name' => 'PG사 별칭',
+        //
+        'sector' => '업종',
+        'enabled' => '전산 활성화 여부',
+        'custom_id' => '커스텀 필터',
+        'id' => '고유번호',
     ],
 ];

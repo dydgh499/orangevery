@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { OperatorHistory } from '@/views/types'
-import { axios } from '@axios'
+import { useRequestStore } from '@/views/request'
 
 interface Props {
     item: OperatorHistory,
@@ -8,23 +8,14 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const snackbar = <any>(inject('snackbar'))
-const errorHandler = <any>(inject('$errorHandler'))
+const { get } = useRequestStore()
 const operDetail = <any>(inject('operDetail'))
 
 const check = async () => {
-    try {
-        snackbar.value.show('준비중입니다.', 'warning')
-        const r = await axios.get(`/api/v1/manager/services/operator-histories/${props.item.id}`)
-        console.log(r.data)
-        operDetail.show(r.data)
-    }
-    catch (e: any) {
-        snackbar.value.show(e.response.data.message, 'error')
-        const r = errorHandler(e)
-    }
+    const r = await get(`/api/v1/manager/services/operator-histories/${props.item.id}`)
+    console.log(r.data)
+    operDetail.value.show(r.data)
 }
-
 </script>
 <template>
     <VBtn icon size="x-small" color="default" variant="text">

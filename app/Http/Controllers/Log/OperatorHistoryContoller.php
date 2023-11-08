@@ -8,6 +8,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
 
+use App\Models\Options\PvOptions;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -78,6 +79,36 @@ class OperatorHistoryContoller extends Controller
         return $this->operator_histories->create($data);
     }
 
+    private function paidOptionFilter($data)
+    {
+        $conv_history_detail = json_decode($data->history_detail, true);
+        $pv_options = new PvOptions($data->pv_options);
+        
+        if($pv_options->paid->use_issuer_filter === false)
+            unset($conv_history_detail['filter_issuers']);
+        if($pv_options->paid->use_forb_pay_time === false)
+        {
+            unset($conv_history_detail['pay_disable_s_tm']);   
+            unset($conv_history_detail['pay_disable_e_tm']);            
+        }
+        if($pv_options->paid->use_pay_limit === false)
+        {
+            unset($conv_history_detail['pay_year_limit']);   
+            unset($conv_history_detail['pay_month_limit']);   
+            unset($conv_history_detail['pay_day_limit']);
+            unset($conv_history_detail['pay_single_limit']);            
+        }
+        if($pv_options->paid->use_regular_card === false)
+            unset($conv_history_detail['use_regular_card']);
+        if($pv_options->paid->use_collect_withdraw === false)
+            unset($conv_history_detail['use_collect_withdraw']);  
+        if($pv_options->paid->use_noti === false)
+            unset($conv_history_detail['use_noti']);
+        if(isset($conv_history_detail['brand_id']))
+            unset($conv_history_detail['brand_id']);
+        return $conv_history_detail;
+    }
+
     /**
      * 단일조회(상세조회)
      *
@@ -88,11 +119,12 @@ class OperatorHistoryContoller extends Controller
     public function show($id)
     {
         $data = $this->operator_histories
-        ->join('operators', 'operator_histories.oper_id', '=', 'operators.id')
-        ->where('operator_histories.id', $id)
-        ->first(['operator_histories.*', 'operators.nick_name']);
+            ->join('operators', 'operator_histories.oper_id', '=', 'operators.id')
+            ->join('brands', 'operator_histories.brand_id', '=', 'brands.id')
+            ->where('operator_histories.id', $id)
+            ->first(['operator_histories.*', 'operators.nick_name', 'brands.pv_options']);
 
-        $history_detail = json_decode($data->history_detail, true);
+        $history_detail = $this->paidOptionFilter($data);
         $conv_history_detail = [];
         foreach($history_detail as $key => $value)
         {
