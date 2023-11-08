@@ -125,7 +125,7 @@ watchEffect(async () => {
                 <VCol>
                     하단 컬럼들은 숫자로 매칭되는 값들입니다.
                     <br>
-                    엑셀 작성시 <b clas="important-text">입력하실 내용에 매칭되는 숫자를 작성</b>해주세요.
+                    엑셀 작성시 <b class="important-text">입력하실 내용에 매칭되는 숫자를 작성</b>해주세요.
                 </VCol>
                 <VCol>
                     컬럼 우측의 <b>O표시는 필수 입력값, X표시는 옵션 입력값</b>을 의미합니다.
