@@ -34,15 +34,26 @@ export const realtimeResult = (item: Transaction) => {
         if(item.use_collect_withdraw && item.realtimes?.length == 0)    // 모아서 출금
             return StatusColors.Info
         if(item.realtimes?.length == 0) //요청 대기
-            return StatusColors.Primary
+        {            
+            const retry_able_time = (new Date(item.trx_dttm as string)).getTime() + (item.fin_trx_delay as number * 60000)
+            const offset_time = new Date(retry_able_time) - new Date() 
+
+            if(offset_time > 0) //요청 대기
+                return StatusColors.Primary
+            else //대기시간 초과
+                return StatusColors.Timeout
+        }
     }
     else
         return StatusColors.Default
 }
 
 export const isRetryAble = (item: Transaction) => {
-    const retry_able_time = new Date(new Date(item.trx_dt as string)).getTime() + (item.fin_trx_delay as number * 60000)
-    return retry_able_time > Date.now() ? true : false
+    const result = realtimeResult(item)
+    if(result == StatusColors.Error || result == StatusColors.Timeout)
+        return true
+    else
+        return false
 }
 
 export const useSearchStore = defineStore('transSearchStore', () => {    
@@ -198,6 +209,8 @@ export const useSearchStore = defineStore('transSearchStore', () => {
             return '실패'
         else if(code === StatusColors.Cancel)
             return '취소'
+        else if(code === StatusColors.Timeout)
+            return '이체예정시간 초과'
         else
             return '알수없는 상태'
     }

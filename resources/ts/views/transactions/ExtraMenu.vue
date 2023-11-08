@@ -102,7 +102,7 @@ const isRealtimeTransaction = () => {
                     <VListItemTitle>민원처리</VListItemTitle>
                 </VListItem>
                 <VListItem value="retry-realtime-deposit" class="retry-realtime-deposit" @click="retryDeposit()"
-                    v-if="isRealtimeTransaction() && realtimeResult(props.item) == StatusColors.Error && isRetryAble(props.item)">
+                    v-if="isRealtimeTransaction() && isRetryAble(props.item)">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="fa6-solid:money-bill-transfer" />
                     </template>
