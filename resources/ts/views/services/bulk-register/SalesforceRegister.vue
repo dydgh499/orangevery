@@ -35,8 +35,6 @@ const validate = () => {
         const settle_cycle = all_cycles.find(sales => sales.id === saleses.value[i].settle_cycle)
         const settle_day = all_days.find(sales => sales.id === saleses.value[i].settle_day)
         const settle_tax_type = tax_types.find(sales => sales.id === saleses.value[i].settle_tax_type)
-
-        const acct_bank_code = banks.find(sales => sales.code === saleses.value[i].acct_bank_code)
         const acct_bank_name = banks.find(sales => sales.title === saleses.value[i].acct_bank_name)
 
         if (isEmpty(saleses.value[i].user_name)) {
@@ -91,16 +89,14 @@ const validate = () => {
             snackbar.value.show((i + 1) + '번째 영업점의 예금주는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
-        else if (acct_bank_code == null) {
-            snackbar.value.show((i + 1) + '번째 영업점의 은행코드가 이상합니다.', 'error')
-            is_clear.value = false
-        }
         else if (acct_bank_name == null) {
             snackbar.value.show((i + 1) + '번째 영업점의 입금은행명이 이상합니다.', 'error')
             is_clear.value = false
         }
-        else
+        else {
+            saleses.value[i].acct_bank_code = banks.find(sales => sales.title === saleses.value[i].acct_bank_name)?.code as string
             is_clear.value = true
+        }
 
         if (is_clear.value == false)
             return
@@ -122,77 +118,83 @@ watchEffect(async () => {
 <template>
     <VCard style='margin-top: 1em;'>
         <VRow style="padding: 1em;">
-            <VCol>
+            <VCol class="pb-0">
                 <VCol>
                     <UsageTooltip />
                 </VCol>
                 <VCol>
                     하단 컬럼들은 숫자로 매칭되는 값들입니다.
                     <br>
-                    엑셀 작성시 입력하실 내용에 매칭되는 숫자를 작성해주세요.
+                    엑셀 작성시 <b clas="important-text">입력하실 내용에 매칭되는 숫자를 작성</b>해주세요.
                 </VCol>
                 <VCol>
                     컬럼 우측의 <b>O표시는 필수 입력값, X표시는 옵션 입력값</b>을 의미합니다.
                 </VCol>
             </VCol>
-            <CreateHalfVCol :mdl="6" :mdr="6">
+            <VDivider/>
+            <CreateHalfVCol :mdl="8" :mdr="4">
                 <template #name>
-                    <VCol>
-                        <b>등급
-                            <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales5_use">
-                                {{ levels.sales5_name }} = 30
-                            </VChip>
-                            <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales4_use">
-                                {{ levels.sales4_name }} = 25
-                            </VChip>
-                            <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales3_use">
-                                {{ levels.sales3_name }} = 20
-                            </VChip>
-                            <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales2_use">
-                                {{ levels.sales2_name }} = 17
-                            </VChip>
-                            <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales1_use">
-                                {{ levels.sales1_name }} = 15
-                            </VChip>
-                            <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales1_use">
-                                {{ levels.sales0_name }} = 13
-                            </VChip>
-                        </b>
+                    <VCol class="pb-0">
+                        <b>등급</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales5_use">
+                            {{ levels.sales5_name }} = 30
+                        </VChip>
+                        <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales4_use">
+                            {{ levels.sales4_name }} = 25
+                        </VChip>
+                        <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales3_use">
+                            {{ levels.sales3_name }} = 20
+                        </VChip>
+                        <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales2_use">
+                            {{ levels.sales2_name }} = 17
+                        </VChip>
+                        <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales1_use">
+                            {{ levels.sales1_name }} = 15
+                        </VChip>
+                        <VChip color="primary" style="margin: 0.5em;" v-if="levels.sales1_use">
+                            {{ levels.sales0_name }} = 13
+                        </VChip>
                     </VCol>
-                    <VCol>
-                        <b>정산세율
-                            <VChip color="primary" style="margin: 0.5em;" v-for="(tax_type, key) in tax_types" :key="key">
-                                {{ tax_type.title }} = {{ tax_type.id }}
-                            </VChip>
-                        </b>
+                    <VCol class="pb-0">
+                        <b>정산세율</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(tax_type, key) in tax_types" :key="key">
+                            {{ tax_type.title }} = {{ tax_type.id }}
+                        </VChip>
                     </VCol>
-                    <VCol>
-                        <b>정산주기
-                            <VChip color="primary" style="margin: 0.5em;" v-for="(all_cycle, key) in all_cycles" :key="key">
-                                {{ all_cycle.title }} = {{ all_cycle.id }}
-                            </VChip>
-                        </b>
+                    <VCol class="pb-0">
+                        <b>정산주기</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(all_cycle, key) in all_cycles" :key="key">
+                            {{ all_cycle.title }} = {{ all_cycle.id }}
+                        </VChip>
                     </VCol>
-                    <VCol>
-                        <b>정산일
-                            <VChip color="primary" style="margin: 0.5em;" v-for="(all_day, key) in all_days" :key="key">
-                                {{ all_day.title }} = {{ all_day.id != null ? all_day.id : -1 }}
-                            </VChip>
-                        </b>
+                    <VCol class="pb-0">
+                        <b>정산일</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(all_day, key) in all_days" :key="key">
+                            {{ all_day.title }} = {{ all_day.id != null ? all_day.id : -1 }}
+                        </VChip>                        
                     </VCol>
-                    <VCol>
-                        <b>입금은행명/은행코드 테이블 </b>
+                </template>
+                <template #input>
+                    <VCol class="pb-0">
+                        <b>은행명/은행코드 테이블 </b>
+                        <br>
                         <VBtn size="small" color="success" variant="tonal" @click="banksExplain.show()" style="margin: 0.5em;">
                             상세정보 확인
                         </VBtn>
                     </VCol>
-                </template>
-                <template #input>
                     <VCol>
-                        <b>사업자등록번호 입력 주의사항: </b><span>정확한 사업자등록번호 입력(예:123-13-12345)</span>
+                        <b>사업자등록번호 입력 주의사항</b>
+                        <br>
+                        <span>- 정확한 사업자등록번호 입력(예:123-13-12345)</span>
                     </VCol>
                     <VCol>
-                        <b>주민등록번호 입력 주의사항: </b><span>14자리 입력(예:800101-7654321)</span>
+                        <b>주민등록번호 입력 주의사항</b>
+                        <br>
+                        <span>- 14자리 입력(예:800101-7654321)</span>
                     </VCol>
                 </template>
             </CreateHalfVCol>
@@ -283,4 +285,9 @@ watchEffect(async () => {
     </VCard>
     <BanksExplainDialog ref="banksExplain" />
 </template>
+<style scoped>
+.important-text {
+  color: red;
+}
+</style>
 

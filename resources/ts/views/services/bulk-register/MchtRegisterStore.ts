@@ -45,7 +45,6 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
     headers['acct_num'] = '계좌번호(O)'
     headers['acct_name'] = '예금주(O)'
     headers['acct_bank_name'] = '입금은행명(O)'
-    headers['acct_bank_code'] = '은행코드(O)'
     headers['custom_id'] = '커스텀 필터(X)'
 
     head.main_headers.value = [];

@@ -108,78 +108,83 @@ watchEffect(async () => {
 <template>
     <VCard style='margin-top: 1em;'>
         <VRow style="padding: 1em;">
-            <VCol>
+            <VCol style="padding-bottom: 0;">
                 <VCol>
                     <UsageTooltip />
                 </VCol>
                 <VCol>
                     하단 컬럼들은 숫자로 매칭되는 값들입니다.
                     <br>
-                    엑셀 작성시 입력하실 내용에 매칭되는 숫자를 작성해주세요.
+                    엑셀 작성시 <b class="important-text">입력하실 내용에 매칭되는 숫자를 작성</b>해주세요.
                 </VCol>
                 <VCol>
                     컬럼 우측의 <b>O표시는 필수 입력값, X표시는 옵션 입력값</b>을 의미합니다.
                 </VCol>
             </VCol>
-            <CreateHalfVCol :mdl="6" :mdr="6">
-                <template #name>                    
-                    <VCol>
-                        <b>가맹점/통신비 정산타입 </b>
-                        <VBtn size="small" color="success" variant="tonal" @click="settleTypeExplain.show()" style="margin: 0.5em;">
-                            상세정보 확인
-                        </VBtn>
-                    </VCol>                    
-                    <VCol>
-                        <b>통신비 정산주체
-                            <VChip color="primary" style="margin: 0.5em;" v-for="(level, key) in all_levels" :key="key">
-                                {{ level.title }} = {{ level.id }}
-                            </VChip>
-                        </b>
-                    </VCol>    
-                    <VCol>
-                        <b>PG사/구간명 </b>
-                        <VBtn size="small" color="success" variant="tonal" @click="pgExplain.show()" style="margin: 0.5em;">
-                            상세정보 확인
-                        </VBtn>
+            <VDivider/>
+            <CreateHalfVCol :mdl="8" :mdr="4">
+                <template #name>
+                    <VCol class="pb-0">
+                        <b>수기결제 여부</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(auth, key) in auth_types" :key="key">
+                            {{ auth.title }} = {{ auth.id }}
+                        </VChip>
+                    </VCol>
+                    <VCol class="pb-0">                        
+                        <b>결제창 노출여부(기본:노출)</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(view, key) in view_types" :key="key">
+                            {{ view.title }} = {{ view.id }}
+                        </VChip>
+                    </VCol>
+                    <VCol class="pb-0">
+                        <b>통신비 정산주체</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(level, key) in all_levels" :key="key">
+                            {{ level.title }} = {{ level.id }}
+                        </VChip>
                     </VCol>               
-                    <VCol>
-                        <b>결제모듈 타입
-                            <VChip color="primary" style="margin: 0.5em;" v-for="(module, key) in module_types" :key="key">
-                                {{ module.title }} = {{ module.id }}
-                            </VChip>
-                        </b>
+                    <VCol class="pb-0">
+                        <b>결제모듈 타입</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(module, key) in module_types" :key="key">
+                            {{ module.title }} = {{ module.id }}
+                        </VChip>
                     </VCol>                    
-                    <VCol>
-                        <b>장비 종류
-                            <VChip color="primary" style="margin: 0.5em;" v-for="(terminal, key) in terminals" :key="key">
-                                {{ terminal.name }} = {{ terminal.id }}
-                            </VChip>
-                            <span v-if="terminals.length == 0">
-                                "운영 관리 - PG사 관리"에서 커스텀 필터 추가 후 입력 가능합니다.
-                            </span>
-                        </b>
+                    <VCol class="pb-0">
+                        <b>장비 종류</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(terminal, key) in terminals" :key="key">
+                            {{ terminal.name }} = {{ terminal.id }}
+                        </VChip>
+                        <b v-if="terminals.length == 0" class="important-text">"운영 관리 - PG사 관리"에서 커스텀 필터 추가 후 입력 가능합니다.</b>
                     </VCol> 
                 </template>
                 <template #input>
-                    <VCol>
-                        <b>수기결제 여부
-                            <VChip color="primary" style="margin: 0.5em;" v-for="(auth, key) in auth_types" :key="key">
-                                {{ auth.title }} = {{ auth.id }}
-                            </VChip>
-                        </b>
+                    <VCol class="pb-0">
+                        <b>가맹점/통신비 정산타입</b>
+                        <br>
+                        <VBtn size="small" color="success" variant="tonal" @click="settleTypeExplain.show()" style="margin: 0.5em;">
+                            상세정보 확인
+                        </VBtn>
+                    </VCol>       
+                    <VCol class="pb-0">
+                        <b>PG사/구간명</b>
+                        <br>
+                        <VBtn size="small" color="success" variant="tonal" @click="pgExplain.show()" style="margin: 0.5em;">
+                            상세정보 확인
+                        </VBtn>
                     </VCol>
-                    <VCol>                        
-                        <b>결제창 노출여부(기본:노출) ->
-                            <VChip color="primary" style="margin: 0.5em;" v-for="(view, key) in view_types" :key="key">
-                                {{ view.title }} = {{ view.id }}
-                            </VChip>
-                        </b>
-                    </VCol>
                     <VCol>
-                        <b>할부 한도 입력시 주의사항: </b><span>숫자만 입력(예: 0,2,3,4...11)</span>
+                        <b>할부 한도 입력시 주의사항</b>
+                        <br>
+                        <span>- 숫자만 입력(예: 0,2,3,4...11)</span>
                     </VCol>
                     <VCol v-if="corp.pv_options.paid.use_pay_limit">
-                        <b>결제 한도 입력시 주의사항: </b><span>만원 단위로 숫자만 입력(예: 100만원=100)</span>
+                        <b>결제 한도 입력시 주의사항</b>
+                        <br>
+                        <span>- 만원 단위로 숫자만 입력(예: 100만원=100)</span>
                     </VCol>
                 </template>
             </CreateHalfVCol>
@@ -273,4 +278,9 @@ watchEffect(async () => {
     <SettleTypeExplainDialog ref="settleTypeExplain" />
     <PGExplainDialog ref="pgExplain" />
 </template>
+<style scoped>
+.important-text {
+  color: red;
+}
+</style>
 

@@ -16,13 +16,14 @@ const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
-
-
 const is_show = ref(false)
-const bank = ref(<any>({ code: null, title: '선택안함' }))
 
-const onwerCheck = async() => {
-    if(await alert.value.show('정말 예금주 검증을 하시겠습니까?')) {
+const setAcctBankName = () => {
+    const bank = banks.find(obj => obj.code == props.item.acct_bank_code)
+    props.item.acct_bank_name = bank ? bank.title : '선택안함'
+}
+const onwerCheck = async () => {
+    if (await alert.value.show('정말 예금주 검증을 하시겠습니까?')) {
         try {
             const params = {
                 acct_cd: props.item.acct_bank_code,
@@ -38,19 +39,6 @@ const onwerCheck = async() => {
         }
     }
 }
-onMounted(async() => {
-    watchEffect(() => {
-        if(props.item.acct_bank_code !== null &&  props.item.acct_bank_code != "000") {
-            bank.value = banks.find(obj => obj.code == props.item.acct_bank_code)
-        }
-    })
-    watchEffect(() => {
-        if(bank.value) {
-            props.item.acct_bank_code = bank.value?.code || null
-            props.item.acct_bank_name = bank.value?.title || '선택안함'
-        }
-    })
-})
 </script>
 <template>
     <VRow class="match-height">
@@ -66,7 +54,7 @@ onMounted(async() => {
                             <template #input>
                                 <VTextField type='text' v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
                                     placeholder="아이디 입력" persistent-placeholder :rules="[requiredValidator]"
-                                    maxlength="30"/>
+                                    maxlength="30" />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Password -->
@@ -112,7 +100,7 @@ onMounted(async() => {
                             <template #input>
                                 <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
                                     prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
-                                    persistent-placeholder :rules="[businessNumValidator]"/>
+                                    persistent-placeholder :rules="[businessNumValidator]" />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 주민등록 번호 -->
@@ -121,8 +109,7 @@ onMounted(async() => {
                             <template #input>
                                 <VTextField id="residentFirstHorizontalIcons" v-model="props.item.resident_num" type="text"
                                     counter prepend-inner-icon="carbon-identification" placeholder="800101-7654321"
-                                    persistent-placeholder
-                                    maxlength="14" />
+                                    persistent-placeholder maxlength="14" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -147,18 +134,17 @@ onMounted(async() => {
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>은행</template>
                             <template #input>
-                                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bank"
+                                <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.acct_bank_code"
                                     :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
-                                    label="은행 선택" :hint="`${bank.title}, 은행 코드: ${bank.code ? bank.code : '000'} `"
-                                    item-title="title" item-value="code" persistent-hint return-object single-line
-                                    :rules="[nullValidator]" create />
+                                    label="은행 선택" item-title="title" item-value="code" persistent-hint single-line
+                                    :hint="`${props.item.acct_bank_name}, 은행 코드: ${props.item.acct_bank_code ? props.item.acct_bank_code : '000'} `"                                    
+                                    :rules="[nullValidator]" @update:modelValue="setAcctBankName()" />
                             </template>
                         </CreateHalfVCol>
-                        <VCol cols="12" v-if="corp.pv_options.paid.use_acct_verification" >
-                            <VBtn @click="onwerCheck"
-                            prepend-icon="ri:pass-valid-line" class="float-right">
+                        <VCol cols="12" v-if="corp.pv_options.paid.use_acct_verification">
+                            <VBtn @click="onwerCheck" prepend-icon="ri:pass-valid-line" class="float-right">
                                 예금주 검증
-                            </VBtn>                            
+                            </VBtn>
                         </VCol>
                     </VRow>
                 </VCardItem>
@@ -167,11 +153,10 @@ onMounted(async() => {
                     <VRow class="pt-5">
                         <VCol cols="12">
                             <VRow no-gutters>
-                                <SwiperPreview :items="avatars" :default_img="props.item.profile_img ?? avatars[Math.floor(Math.random() * avatars.length)]"
-                                    :item_name="'프로필'" :lmd="10" :rmd="2"
-                                    @update:file="props.item.profile_file = $event"
-                                    @update:default="props.item.profile_img = $event"
-                                >
+                                <SwiperPreview :items="avatars"
+                                    :default_img="props.item.profile_img ?? avatars[Math.floor(Math.random() * avatars.length)]"
+                                    :item_name="'프로필'" :lmd="10" :rmd="2" @update:file="props.item.profile_file = $event"
+                                    @update:default="props.item.profile_img = $event">
                                 </SwiperPreview>
                             </VRow>
                         </VCol>

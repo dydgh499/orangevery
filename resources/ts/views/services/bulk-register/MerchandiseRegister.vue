@@ -48,7 +48,6 @@ const isNotExistCustomFilter = (custom_id: number | null) => {
 }
 const validate = () => {
     for (let i = 0; i < items.value.length; i++) {
-        const acct_bank_code = banks.find(sales => sales.code === items.value[i].acct_bank_code)
         const acct_bank_name = banks.find(sales => sales.title === items.value[i].acct_bank_name)
 
         if (isNotExistSalesforce(levels.sales5_use, 5, i)) {
@@ -107,16 +106,14 @@ const validate = () => {
             snackbar.value.show((i + 1) + '번째 가맹점의 예금주는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
-        else if (acct_bank_code == null) {
-            snackbar.value.show((i + 1) + '번째 가맹점의 은행코드가 이상합니다.', 'error')
-            is_clear.value = false
-        }
         else if (acct_bank_name == null) {
             snackbar.value.show((i + 1) + '번째 가맹점의 입금은행명이 이상합니다.', 'error')
             is_clear.value = false
         }
-        else
+        else {
+            items.value[i].acct_bank_code = banks.find(sales => sales.title === items.value[i].acct_bank_name)?.code as string
             is_clear.value = true
+        }
 
         if (is_clear.value == false)
             return
@@ -140,47 +137,53 @@ watchEffect(async () => {
 <template>
     <VCard style='margin-top: 1em;'>
         <VRow style="padding: 1em;">
-            <VCol>
+            <VCol style="padding-bottom: 0;">
                 <VCol>
                     <UsageTooltip />
                 </VCol>
                 <VCol>
                     하단 컬럼들은 숫자로 매칭되는 값들입니다.
                     <br>
-                    엑셀 작성시 입력하실 내용에 매칭되는 숫자를 작성해주세요.
+                    엑셀 작성시 <b class="important-text">입력하실 내용에 매칭되는 숫자를 작성</b>해주세요.
                 </VCol>
                 <VCol>
                     컬럼 우측의 <b>O표시는 필수 입력값, X표시는 옵션 입력값</b>을 의미합니다.
                 </VCol>
             </VCol>
-            <CreateHalfVCol :mdl="6" :mdr="6">
+            <VDivider/>
+            <CreateHalfVCol :mdl="8" :mdr="4">
                 <template #name>
-                    <VCol>
-                        <b>커스텀 필터
-                            <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in cus_filters" :key="key">
-                                {{ cus.name }} = {{ cus.id }}
-                            </VChip>
-                            <span v-if="cus_filters.length == 0">
-                                "운영 관리 - PG사 관리"에서 커스텀 필터 추가 후 입력 가능합니다.
-                            </span>
-                        </b>
+                    <VCol class="pb-0">
+                        <b>커스텀 필터</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in cus_filters" :key="key">
+                            {{ cus.name }} = {{ cus.id }}
+                        </VChip>
+                        <b v-if="cus_filters.length == 0" class="important-text">"운영 관리 - PG사 관리"에서 커스텀 필터 추가 후 입력 가능합니다.</b>                        
                     </VCol>
-                    <VCol>
-                        <b>입금은행명/은행코드 테이블 </b>
+                </template>
+                <template #input>
+                    <VCol class="pb-0">
+                        <b>은행명/은행코드 테이블 </b>
+                        <br>
                         <VBtn size="small" color="success" variant="tonal" @click="banksExplain.show()" style="margin: 0.5em;">
                             상세정보 확인
                         </VBtn>
                     </VCol>
-                </template>
-                <template #input>
                     <VCol>
-                        <b>수수료 입력 주의사항: </b><span>%제외 및 실수만 입력(예: 5.00)</span>
+                        <b class="important-text">수수료 입력 주의사항</b>
+                        <br>
+                        <span>- % 제외 및 실수만 입력(예: 5.00)</span>
                     </VCol>
                     <VCol>
-                        <b>사업자등록번호 입력 주의사항: </b><span>정확한 사업자등록번호 입력(예:123-13-12345)</span>
+                        <b>사업자등록번호 입력 주의사항</b>
+                        <br>
+                        <span>- 정확한 사업자등록번호 입력(예:123-13-12345)</span>
                     </VCol>
                     <VCol>
-                        <b>주민등록번호 입력 주의사항: </b><span>14자리 입력(예:800101-7654321)</span>
+                        <b>주민등록번호 입력 주의사항</b>
+                        <br>
+                        <span>- 14자리 입력(예:800101-7654321)</span>
                     </VCol>
                 </template>
             </CreateHalfVCol>
@@ -258,4 +261,8 @@ watchEffect(async () => {
     </VCard>
     <BanksExplainDialog ref="banksExplain" />
 </template>
-
+<style scoped>
+.important-text {
+  color: red;
+}
+</style>

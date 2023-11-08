@@ -72,7 +72,7 @@ const handleEnterKey = (event: KeyboardEvent) => {
 }
 
 const getSalesforceItems = computed(() => {
-    if(head.path === 'salesforces' || head.path === 'transactions/settle-histories/salesforces')
+    if (head.path === 'salesforces' || head.path === 'transactions/settle-histories/salesforces')
         return [<Options>({ id: null, title: '전체' })].concat(salesLevels())
     else
         return salesLevels()
@@ -103,29 +103,31 @@ watchEffect(() => {
                 <VRow>
                     <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">
                         <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">
-                            <template v-if="props.date_filter_type == DateFilters.DATE_RANGE || props.date_filter_type == DateFilters.SETTLE_RANGE">
-                                    <template v-if="corp.pv_options.free.use_search_date_detail">
-                                        <div class="d-inline-flex">
+                            <template
+                                v-if="props.date_filter_type == DateFilters.DATE_RANGE || props.date_filter_type == DateFilters.SETTLE_RANGE">
+                                <template v-if="corp.pv_options.free.use_search_date_detail">
+                                    <div class="d-inline-flex">
                                         <VueDatePicker v-model="range_date" :enable-seconds="enable" :text-input="format"
                                             locale="ko" :format-locale="ko" range multi-calendars :dark="theme === 'dark'"
                                             autocomplete="on" utc :format="getRangeFormat" :teleport="true"
                                             input-class-name="search-input" select-text="Search"
                                             :enable-time-picker="time_picker"
                                             @update:modelValue="[updateRangeDateQuery(store)]" />
-                                        </div>
-                                    </template>                                    
+                                    </div>
+                                </template>
                                 <template v-else>
                                     <VTextField type="date" v-model="range_date[0]"
-                                        prepend-inner-icon="ic-baseline-calendar-today" label="시작일 입력" single-line @update:modelValue="[store.updateQueryString({ s_dt: date })]"/>
+                                        prepend-inner-icon="ic-baseline-calendar-today" label="시작일 입력" single-line
+                                        @update:modelValue="[store.updateQueryString({ s_dt: date })]" />
                                     <VTextField type="date" v-model="range_date[1]"
-                                        prepend-inner-icon="ic-baseline-calendar-today" label="종료일 입력" single-line @update:modelValue="[store.updateQueryString({ e_dt: date })]"/>
+                                        prepend-inner-icon="ic-baseline-calendar-today" label="종료일 입력" single-line
+                                        @update:modelValue="[store.updateQueryString({ e_dt: date })]" />
                                 </template>
                             </template>
                             <template v-else-if="props.date_filter_type == DateFilters.DATE">
                                 <VueDatePicker v-model="date" :text-input="{ format: 'yyyy-MM-dd' }" locale="ko"
-                                    :format-locale="ko" :dark="theme === 'dark'" autocomplete="on" utc
-                                    :format="formatDate" :teleport="true"
-                                    @update:modelValue="[store.updateQueryString({ dt: date })]" />
+                                    :format-locale="ko" :dark="theme === 'dark'" autocomplete="on" utc :format="formatDate"
+                                    :teleport="true" @update:modelValue="[store.updateQueryString({ dt: date })]" />
                             </template>
                             <template v-if="head.path === 'transactions'">
                                 <VSelect v-model="date_selecter" :items="[{ id: null, title: '기간 조회' }].concat(dates)"
@@ -135,8 +137,7 @@ watchEffect(() => {
                             </template>
                             <template
                                 v-else-if="head.path === 'salesforces' || head.path === 'transactions/settle/salesforces' || head.path === 'transactions/settle-histories/salesforces'">
-                                <VSelect v-model="store.params.level"
-                                    :items="getSalesforceItems" density="compact"
+                                <VSelect v-model="store.params.level" :items="getSalesforceItems" density="compact"
                                     variant="outlined" item-title="title" item-value="id" style="min-width: 10em;"
                                     @update:modelValue="store.updateQueryString({ level: store.params.level })" />
                             </template>
@@ -169,4 +170,5 @@ watchEffect(() => {
                 </VRow>
             </VCardText>
         </VCol>
-</div></template>
+    </div>
+</template>

@@ -15,8 +15,7 @@ export const useRegisterStore = defineStore('salesRegisterStore', () => {
         sector: '업종(O)',
         acct_num: '계좌번호(O)',
         acct_name: '예금주(O)', 
-        acct_bank_name: '입금은행명(O)', 
-        acct_bank_code: '은행코드(O)',
+        acct_bank_name: '입금은행명(O)',
         settle_tax_type: '정산세율(O)', 
         settle_cycle: '정산주기(O)', 
         settle_day: '정산일(O)'
