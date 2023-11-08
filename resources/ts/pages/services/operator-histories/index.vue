@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { useSearchStore, history_types } from '@/views/services/operator-histories/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import OperDetailDialog from '@/layouts/dialogs/OperDetailDialog.vue'
 import ExtraMenu from '@/views/services/operator-histories/ExtraMenu.vue'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
+const operDetail = ref()
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+provide('operDetail', operDetail)
 
 </script>
 <template>
@@ -68,5 +71,6 @@ provide('exporter', exporter)
                 </tr>
             </template>
         </BaseIndexView>
+        <OperDetailDialog ref="operDetail"/>
     </div>
 </template>

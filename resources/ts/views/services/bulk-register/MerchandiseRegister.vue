@@ -6,7 +6,7 @@ import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { banks } from '@/views/users/useStore'
 import type { Merchandise } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import BanksExplainDialog from '@/views/services/bulk-register/BanksExplainDialog.vue'
+import BanksExplainDialog from '@/layouts/dialogs/BanksExplainDialog.vue'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { Registration } from '@/views/registration'
 

@@ -12,7 +12,7 @@ const addNewFinanceVan = () => {
         id: 0,
         finance_company_num: null,
         fin_type: null,
-        dev_fee: 0.1,
+        dev_fee: 0,
         bank_code: '000',
         api_key: '',
         sub_key: '',

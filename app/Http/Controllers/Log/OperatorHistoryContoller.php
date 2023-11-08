@@ -87,7 +87,18 @@ class OperatorHistoryContoller extends Controller
      */
     public function show($id)
     {
-        $data = $this->operator_histories->where('id', $id)->first();
+        $data = $this->operator_histories
+        ->join('operators', 'operator_histories.oper_id', '=', 'operators.id')
+        ->where('operator_histories.id', $id)
+        ->first(['operator_histories.*', 'operators.nick_name']);
+
+        $history_detail = json_decode($data->history_detail, true);
+        $conv_history_detail = [];
+        foreach($history_detail as $key => $value)
+        {
+            $conv_history_detail[__('validation.attributes.'.$key)] = $history_detail[$key];
+        }
+        $data->history_detail = $conv_history_detail;
         return $this->response($data ? 0 : 1000, $data);
     }
 

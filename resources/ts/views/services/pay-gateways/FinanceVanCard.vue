@@ -164,7 +164,7 @@ onMounted(async () => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VRow class="pt-3" v-if="getUserLevel() == 50">
+                        <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>출금 통장번호</template>
                                 <template #input>

@@ -749,7 +749,7 @@ export interface OperatorHistory {
     history_type: number,
     history_title: string,
     history_target: string,
-    history_detail?: string,
+    history_detail?: string | object,
     created_at: datetime,
 }
 
