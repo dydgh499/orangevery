@@ -4,7 +4,7 @@ import { useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useRegisterStore } from '@/views/services/bulk-register/PayModRegisterStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { module_types, installments, fin_trx_delays, cxl_types } from '@/views/merchandises/pay-modules/useStore'
-import { allLevels } from '@/views/salesforces/useStore'
+import { salesLevels } from '@/views/salesforces/useStore'
 import SettleTypeExplainDialog from '@/views/services/bulk-register/SettleTypeExplainDialog.vue'
 import PGExplainDialog from '@/views/services/bulk-register/PGExplainDialog.vue'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
@@ -16,9 +16,9 @@ import corp from '@corp';
 const { store } = useSearchStore()
 const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
 const { head, headers } = useRegisterStore()
-
 const { mchts } = useSalesFilterStore()
-const all_levels = allLevels()
+
+const all_levels =[{id: 10, title: '가맹점'}, ...salesLevels()]
 const auth_types: Options[] = [
     { id: 0, title: '비인증',},
     { id: 1, title: '구인증',},
