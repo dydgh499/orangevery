@@ -48,6 +48,10 @@ const validate = () => {
         const installment = installments.find(item => item.id === items.value[i].installment)
         const mcht = mchts.find(item => item.mcht_name == items.value[i].mcht_name)
 
+        const finance_van = corp.pv_options.paid.use_realtime_deposit ? finance_vans.find(item => item.id === items.value[i].fin_id) : true
+        const fin_trx_delay = corp.pv_options.paid.use_realtime_deposit ? fin_trx_delays.find(item => item.id === items.value[i].fin_trx_delay) : true
+        const cxl_type = corp.pv_options.paid.use_realtime_deposit ? cxl_types.find(item => item.id === items.value[i].cxl_type) : true
+        
         if (mcht == null) {
             snackbar.value.show((i + 1) + '번째 결제모듈의 가맹점 상호가 이상합니다.', 'error')
             is_clear.value = false
@@ -82,6 +86,21 @@ const validate = () => {
         }
         else if (installment == null) {
             snackbar.value.show((i + 1) + '번째 결제모듈의 할부기간이 이상합니다.', 'error')
+            is_clear.value = false
+        }
+        else if(finance_van == null)
+        {
+            snackbar.value.show((i + 1) + '번째 금융 VAN을 찾을 수 없습니다.', 'error')
+            is_clear.value = false
+        }
+        else if(fin_trx_delay == null)
+        {
+            snackbar.value.show((i + 1) + '번째 이체 딜레이 타입을 찾을 수 없습니다.', 'error')
+            is_clear.value = false
+        }
+        else if(cxl_type == null)
+        {
+            snackbar.value.show((i + 1) + '번째 취소 타입을 찾을 수 없습니다.', 'error')
             is_clear.value = false
         }
         else
@@ -181,14 +200,14 @@ watchEffect(async () => {
                             <b v-if="finance_vans.length == 0" class="important-text">"운영 관리 - PG사 관리 - 실시간 이체 모듈"에서 금융 VAN 추가 후 입력 가능합니다.</b>
                         </VCol>
                         <VCol class="pb-0">
-                            <b>이체 달레이(기본: 즉시입금)</b>
+                            <b>이체 달레이</b>
                             <br>
                             <VChip color="primary" style="margin: 0.5em;" v-for="(fin_trx_delay, key) in fin_trx_delays" :key="key">
                                 {{ fin_trx_delay.title }} = {{ fin_trx_delay.id }}
                             </VChip>
                         </VCol>
                         <VCol class="pb-0">
-                            <b>취소 타입(기본: 취소금지)</b>
+                            <b>취소 타입</b>
                             <br>
                             <VChip color="primary" style="margin: 0.5em;" v-for="(cxl_type, key) in cxl_types" :key="key">
                                 {{ cxl_type.title }} = {{ cxl_type.id }}
