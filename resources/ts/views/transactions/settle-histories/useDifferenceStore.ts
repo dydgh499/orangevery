@@ -237,6 +237,37 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
     
+    const metas = ref([
+        {
+            icon: 'ic-outline-payments',
+            color: 'primary',
+            title: '요청 거래액 합계',
+            percentage: 0,
+            stats: '0',
+        },
+        {
+            icon: 'ic-outline-payments',
+            color: 'error',
+            title: '부가세 합계',
+            percentage: 0,
+            stats: '0',
+        },
+        {
+            icon: 'ic-outline-payments',
+            color: 'success',
+            title: '공급가액 합계',
+            percentage: 0,
+            stats: '0',
+        },
+        {
+            icon: 'ic-outline-payments',
+            color: 'warning',
+            title: '차액정산금 합계',
+            percentage: 0,
+            stats: '0',
+        },
+    ])
+
     const exporter = async (type: number) => {      
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         printer(type, r.data.content)
@@ -253,10 +284,28 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
     }
+    
+    onMounted(() => {
+        watchEffect(async () => {
+            if (store.getChartProcess() === false) {
+                const r = await store.getChartData()
+                metas.value[0]['stats'] = r.data.amount.toLocaleString() + ' ￦'
+                metas.value[1]['stats'] = r.data.vat_amount.toLocaleString() + ' ￦'
+                metas.value[2]['stats'] = r.data.supply_amount.toLocaleString() + ' ￦'
+                metas.value[3]['stats'] = r.data.settle_amount.toLocaleString() + ' ￦'
+                metas.value[0]['percentage'] = r.data.amount ? 100 : 0
+                metas.value[1]['percentage'] = store.getPercentage(r.data.vat_amount, r.data.amount)
+                metas.value[2]['percentage'] = store.getPercentage(r.data.supply_amount, r.data.amount)
+                metas.value[3]['percentage'] = store.getPercentage(r.data.settle_amount, r.data.amount)
+            }
+        })
+    })
+
     return {
         store,
         head,
         exporter,
         printer,
+        metas,
     }
 })

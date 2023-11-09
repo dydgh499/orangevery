@@ -2,51 +2,12 @@
 import { useSearchStore, dev_settle_types } from '@/views/services/brands/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { DateFilters } from '@core/enums'
-import { getUserLevel, user_info } from '@axios';
-import corp from '@corp'
-const { store, head, exporter, boolToText } = useSearchStore()
+const { store, head, exporter, boolToText, metas } = useSearchStore()
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-const metas = ref()
-onMounted(async () => {
-    if(getUserLevel() == 50 && corp.id == parseInt(process.env.MAIN_BRAND_ID as string)) {
-        metas.value = [
-            {
-                icon: 'ic-outline-payments',
-                color: 'primary',
-                title: '총 입금액 합계',
-                stats: '0',
-            },
-            {
-                icon: 'ic-outline-payments',
-                color: 'default',
-                title: '입금액 합계',
-                stats: '0',
-            },
-            {
-                icon: 'ic-outline-payments',
-                color: 'success',
-                title: '부가입금액 합계',
-                stats: '0',
-            },
-            {
-                icon: 'ic-outline-payments',
-                color: 'info',
-                title: '현재입금액 합계',
-                stats: '0',
-            },
-        ]
-        const r = await store.getChartData()
-        if(r.status == 200) {
-            metas.value[0]['stats'] = parseInt(r.data.total_deposit_amount).toLocaleString() + ' ₩'
-            metas.value[1]['stats'] = parseInt(r.data.deposit_amount).toLocaleString() + '₩'
-            metas.value[2]['stats'] = parseInt(r.data.extra_deposit_amount).toLocaleString() + '₩'
-            metas.value[3]['stats'] = parseInt(r.data.curr_deposit_amount).toLocaleString() + '₩'
-        }
-    }
-})
+
 </script>
 <template>
     <BaseIndexView placeholder="서비스명" :metas="metas" :add="true" add_name="서비스" :date_filter_type="DateFilters.NOT_USE">

@@ -188,32 +188,27 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
         }
     }
 
-    const setDate = () => {
-        if (date_selecter.value)
-            setDateRange(date_selecter.value)
-    }
-
-    const setDateRange = (type: string) => {
+    const setDateRange = (store: any) => {
         let s_date = undefined
         let e_date = undefined
         const date = new Date();
-        if (type == 'today') {
+        if (date_selecter.value == 'today') {
             s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
             e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
         }
-        else if (type == '1 day') {
+        else if (date_selecter.value == '1 day') {
             s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 0, 0, 0);
             e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 23, 59, 59);
         }
-        else if (type == '3 day') {
+        else if (date_selecter.value == '3 day') {
             s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 3, 0, 0, 0);
             e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 23, 59, 59);
         }
-        else if (type == '1 mon') {
+        else if (date_selecter.value == '1 mon') {
             s_date = new Date(date.getFullYear(), date.getMonth() - 1, 1, 0, 0, 0)
             e_date = new Date(date.getFullYear(), date.getMonth(), 0, 23, 59, 59)
         }
-        else if (type == '3 mon') {
+        else if (date_selecter.value == '3 mon') {
             s_date = new Date(date.getFullYear(), date.getMonth() - 3, 1, 0, 0, 0);
             e_date = new Date(date.getFullYear(), date.getMonth(), 0, 23, 59, 59);
         }
@@ -223,6 +218,7 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
         }
         range_date.value[0] = getDateFormat(s_date)
         range_date.value[1] = getDateFormat(e_date)
+        store.updateQueryString({ s_dt: range_date.value[0], e_dt:range_date.value[1] })
     }
 
     const init = () => {
@@ -266,7 +262,6 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
     }
 
     const updateRangeDateQuery = (store: any) => {
-        date_selecter.value = null
         const s_date = new Date(range_date.value[0])
         const e_date = new Date(range_date.value[1])
         store.updateQueryString({ s_dt: getDateFormat(s_date), e_dt: getDateFormat(e_date) })
@@ -274,7 +269,7 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
 
     return {
         getRangeFormat,
-        setDate,
+        setDateRange,
         init,
         dateChanged,
         updateRangeDateQuery,

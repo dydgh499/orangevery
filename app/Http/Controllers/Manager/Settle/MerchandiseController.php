@@ -137,6 +137,7 @@ class MerchandiseController extends Controller
 
     public function partChart(Request $request)
     {
+        $search = $request->input('search', '');
         $request = $request->merge([
             'page' => 1,
             'page_size' => 999999,
@@ -145,6 +146,12 @@ class MerchandiseController extends Controller
         $cols  = $this->getTotalCols($settle_key);
         $chart = Transaction::where('mcht_id', $request->id)
             ->noSettlement('mcht_settle_id')
+            ->where(function ($query) use ($search) {
+                return $query->where('transactions.mid', 'like', "%$search%")
+                    ->orWhere('transactions.tid', 'like', "%$search%")
+                    ->orWhere('transactions.trx_id', 'like', "%$search%")
+                    ->orWhere('transactions.appr_num', 'like', "%$search%");
+            })
             ->first($cols);
         $chart = $this->setTransChartFormat($chart);
         return $this->response(0, $chart);

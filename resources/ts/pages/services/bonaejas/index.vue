@@ -9,49 +9,14 @@ const {
     exporter, 
     getCodeTypeString,
     getCodeTypeColor,
-    getMessegeTypeColor
+    getMessegeTypeColor,
+    metas
 } = useSearchStore()
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-const metas = ref([
-    {
-        icon: 'ic-outline-payments',
-        color: 'primary',
-        title: '보내자 보유 잔액',
-        stats: '0',
-    },
-    {
-        icon: 'majesticons:message',
-        color: 'default',
-        title: 'SMS 발송가능 회수',
-        stats: '0',
-    },
-    {
-        icon: 'majesticons:message',
-        color: 'success',
-        title: 'LMS 발송가능 회수',
-        stats: '0',
-    },
-    {
-        icon: 'majesticons:message',
-        color: 'info',
-        title: 'MMS 발송가능 회수',
-        stats: '0',
-    },
-])
-
-onMounted(async () => {
-    const r = await store.getChartData()
-    if(r.status == 200) {
-        metas.value[0]['stats'] = r.data.data.TOTAL_DEPOSIT.toLocaleString() + ' ₩'
-        metas.value[1]['stats'] = r.data.data.SMS_CNT.toLocaleString() + '건'
-        metas.value[2]['stats'] = r.data.data.LMS_CNT.toLocaleString() + '건'
-        metas.value[3]['stats'] = r.data.data.MMS_CNT.toLocaleString() + '건'
-    }
-})
 </script>
 <template>
     <BaseIndexView placeholder="검색어" :metas="metas" :add="false" add_name="" :date_filter_type="DateFilters.SETTLE_RANGE">

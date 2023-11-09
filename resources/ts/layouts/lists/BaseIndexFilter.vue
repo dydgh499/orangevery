@@ -31,7 +31,7 @@ const dates = [
 ]
 const {
     getRangeFormat,
-    setDate,
+    setDateRange,
     init,
     dateChanged,
     updateRangeDateQuery,
@@ -86,14 +86,11 @@ if (props.date_filter_type == DateFilters.DATE_RANGE) {
 }
 else if (props.date_filter_type == DateFilters.SETTLE_RANGE) {
     enable.value = false
-    format.value = { format: 'yyyy-MM-dd ' }
+    format.value = { format: 'yyyy-MM-dd' }
     time_picker.value = false
 }
 init()
 queryToStoreParams()
-watchEffect(() => {
-    dateChanged(store)
-})
 
 </script>
 <template>
@@ -112,27 +109,27 @@ watchEffect(() => {
                                             autocomplete="on" utc :format="getRangeFormat" :teleport="true"
                                             input-class-name="search-input" select-text="Search"
                                             :enable-time-picker="time_picker"
-                                            @update:modelValue="[updateRangeDateQuery(store)]" />
+                                            @update:modelValue="[dateChanged(store), updateRangeDateQuery(store)]" />
                                     </div>
                                 </template>
                                 <template v-else>
                                     <VTextField type="date" v-model="range_date[0]"
                                         prepend-inner-icon="ic-baseline-calendar-today" label="시작일 입력" single-line
-                                        @update:modelValue="[store.updateQueryString({ s_dt: date })]" />
+                                        @update:modelValue="[dateChanged(store), store.updateQueryString({ s_dt: range_date[0] })]" />
                                     <VTextField type="date" v-model="range_date[1]"
                                         prepend-inner-icon="ic-baseline-calendar-today" label="종료일 입력" single-line
-                                        @update:modelValue="[store.updateQueryString({ e_dt: date })]" />
+                                        @update:modelValue="[dateChanged(store), store.updateQueryString({ e_dt: range_date[1] })]" />
                                 </template>
                             </template>
                             <template v-else-if="props.date_filter_type == DateFilters.DATE">
                                 <VueDatePicker v-model="date" :text-input="{ format: 'yyyy-MM-dd' }" locale="ko"
                                     :format-locale="ko" :dark="theme === 'dark'" autocomplete="on" utc :format="formatDate"
-                                    :teleport="true" @update:modelValue="[store.updateQueryString({ dt: date })]" />
+                                    :teleport="true" @update:modelValue="[dateChanged(store), store.updateQueryString({ dt: date })]" />
                             </template>
                             <template v-if="head.path === 'transactions'">
                                 <VSelect v-model="date_selecter" :items="[{ id: null, title: '기간 조회' }].concat(dates)"
                                     density="compact" variant="outlined" item-title="title" item-value="id"
-                                    style="min-width: 10em;" @update:modelValue="[setDate(), updateRangeDateQuery(store)]"
+                                    style="min-width: 10em;" @update:modelValue="[setDateRange(store), dateChanged(store)]"
                                     label="기간 조회" />
                             </template>
                             <template

@@ -156,6 +156,41 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
     
+    const metas = ref([
+        {
+            icon: 'ic-outline-payments',
+            color: 'primary',
+            title: '승인액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        },
+        {
+            icon: 'ic-outline-payments',
+            color: 'error',
+            title: '취소액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        },
+        {
+            icon: 'ic-outline-payments',
+            color: 'success',
+            title: '매출액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        },
+        {
+            icon: 'ic-outline-payments',
+            color: 'warning',
+            title: '정산액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        },
+    ])
+
     const exporter = async (type: number) => {      
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         printer(type, r.data.content)
@@ -215,10 +250,31 @@ export const useSearchStore = defineStore('transSearchStore', () => {
             return '알수없는 상태'
     }
 
+    onMounted(() => {
+        watchEffect(async () => {
+            if (store.getChartProcess() === false) {
+                const r = await store.getChartData()
+                metas.value[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
+                metas.value[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
+                metas.value[2]['stats'] = r.data.amount.toLocaleString() + ' ￦'
+                metas.value[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
+                metas.value[0]['subtitle'] = r.data.appr.count.toLocaleString() + '건'
+                metas.value[1]['subtitle'] = r.data.cxl.count.toLocaleString() + '건'
+                metas.value[2]['subtitle'] = r.data.count.toLocaleString() + '건'
+                metas.value[3]['subtitle'] = r.data.count.toLocaleString() + '건'
+                metas.value[0]['percentage'] = r.data.appr.amount ? 100 : 0
+                metas.value[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
+                metas.value[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
+                metas.value[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
+            }
+        })
+    })
+
     return {
         store,
         head,
         exporter,
+        metas,
         printer,
         realtimeMessage,
     }

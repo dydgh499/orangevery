@@ -92,6 +92,41 @@ export const useSearchStore = defineStore('transSettlesMchtPartSearchStore', () 
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
     
+    const metas = ref([
+        {
+            icon: 'ic-outline-payments',
+            color: 'primary',
+            title: '승인액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        },
+        {
+            icon: 'ic-outline-payments',
+            color: 'error',
+            title: '취소액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        },
+        {
+            icon: 'ic-outline-payments',
+            color: 'success',
+            title: '매출액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        },
+        {
+            icon: 'ic-outline-payments',
+            color: 'warning',
+            title: '정산액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        },
+    ])
+
     const exporter = async (type: number) => {      
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         printer(type, r.data.content)
@@ -130,5 +165,6 @@ export const useSearchStore = defineStore('transSettlesMchtPartSearchStore', () 
         head,
         exporter,
         printer,
+        metas,
     }
 })

@@ -78,6 +78,7 @@ trait SettleTrait
 
     protected function partSettleCommonQuery($request, $target_id, $target_settle_id)
     {
+        $search = $request->input('search', '');
         $cols = [
             'transactions.*', 
             DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
@@ -87,7 +88,6 @@ trait SettleTrait
         [$settle_key, $group_key] = $this->getSettleCol($request);
         array_push($cols, $settle_key." AS profit");
 
-        $search = $request->input('search', '');
         $query = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
             ->where("transactions.".$target_id, $request->id)
             ->noSettlement($target_settle_id)

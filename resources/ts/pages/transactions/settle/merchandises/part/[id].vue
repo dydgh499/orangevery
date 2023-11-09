@@ -14,7 +14,7 @@ import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
 const route = useRoute()
-const { store, head, exporter } = useSearchStore()
+const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected, dialog } = selectFunctionCollect(store)
 const { isAbleMchtDepositCollect } = settlementFunctionCollect(store)
 
@@ -38,40 +38,7 @@ const settle = ref({
     'comm_settle_amount':0,
     'under_sales_amount':0,
 })
-const metas = ref([
-    {
-        icon: 'ic-outline-payments',
-        color: 'primary',
-        title: '승인액 합계',
-        stats: '0',
-        percentage: 0,
-        subtitle: '0건',
-    },
-    {
-        icon: 'ic-outline-payments',
-        color: 'error',
-        title: '취소액 합계',
-        stats: '0',
-        percentage: 0,
-        subtitle: '0건',
-    },
-    {
-        icon: 'ic-outline-payments',
-        color: 'success',
-        title: '매출액 합계',
-        stats: '0',
-        percentage: 0,
-        subtitle: '0건',
-    },
-    {
-        icon: 'ic-outline-payments',
-        color: 'warning',
-        title: '정산액 합계',
-        stats: '0',
-        percentage: 0,
-        subtitle: '0건',
-    },
-])
+
 
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
 store.params.id = route.params.id
@@ -117,30 +84,28 @@ const settleCollect = async () => {
             snackbar.value.show(r.data.result_msg, 'error')
     }
 }
-
 const getUser = async () => {
     const path = store.params.level == 10 ? 'merchandises' : 'salesforce'
     const res = await get('/api/v1/manager/'+path+'/'+store.params.id)
     user.value = res.data
 }
-
 onMounted(() => {
     getUser()
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
             const r = await store.getChartData()
-            metas.value[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
-            metas.value[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
-            metas.value[2]['stats'] = r.data.amount.toLocaleString() + ' ￦'
-            metas.value[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
-            metas.value[0]['subtitle'] = r.data.appr.count.toLocaleString() + '건'
-            metas.value[1]['subtitle'] = r.data.cxl.count.toLocaleString() + '건'
-            metas.value[2]['subtitle'] = r.data.count.toLocaleString() + '건'
-            metas.value[3]['subtitle'] = r.data.count.toLocaleString() + '건'
-            metas.value[0]['percentage'] = r.data.appr.amount ? 100 : 0
-            metas.value[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
-            metas.value[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
-            metas.value[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
+            metas[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
+            metas[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
+            metas[2]['stats'] = r.data.amount.toLocaleString() + ' ￦'
+            metas[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
+            metas[0]['subtitle'] = r.data.appr.count.toLocaleString() + '건'
+            metas[1]['subtitle'] = r.data.cxl.count.toLocaleString() + '건'
+            metas[2]['subtitle'] = r.data.count.toLocaleString() + '건'
+            metas[3]['subtitle'] = r.data.count.toLocaleString() + '건'
+            metas[0]['percentage'] = r.data.appr.amount ? 100 : 0
+            metas[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
+            metas[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
+            metas[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
         }
     })
     snackbar.value.show('정산일은 검색 종료일('+store.params.e_dt+') 기준으로 진행됩니다.', 'success')

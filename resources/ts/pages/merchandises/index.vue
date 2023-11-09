@@ -9,7 +9,7 @@ import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { user_info } from '@axios'
 import { DateFilters } from '@core/enums'
 
-const { store, head, exporter } = useSearchStore()
+const { store, head, exporter, metas } = useSearchStore()
 const { pgs }   = useStore()
 const password = ref()
 
@@ -18,54 +18,6 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
-const metas = ref([
-    {
-        icon: 'tabler-user-check',
-        color: 'primary',
-        title: '금월 추가된 가맹점',
-        stats: '0',
-        percentage: 0,
-    },
-    {
-        icon: 'tabler-user-exclamation',
-        color: 'error',
-        title: '금월 감소한 가맹점',
-        percentage: 0,
-        stats: '0',
-    },
-    {
-        icon: 'tabler-user-check',
-        color: 'primary',
-        title: '금주 추가된 가맹점',
-        percentage: 0,
-        stats: '0',
-    },
-    {
-        icon: 'tabler-user-exclamation',
-        color: 'error',
-        title: '금주 감소한 가맹점',
-        percentage: 0,
-        stats: '0',
-    },
-])
-const defaultValue = (values: any[]) => {
-    return values.length ? values[0] : ''
-}
-onMounted(() => {
-    watchEffect(async () => {
-        if (store.getChartProcess() === false) {
-            const r = await store.getChartData()
-            metas.value[0]['stats'] = r.data.this_month_add.toLocaleString()
-            metas.value[1]['stats'] = (r.data.this_month_del * -1).toLocaleString()
-            metas.value[2]['stats'] = r.data.this_week_add.toLocaleString()
-            metas.value[3]['stats'] = (r.data.this_week_del * -1).toLocaleString()
-            metas.value[0]['percentage'] = store.getPercentage(r.data.this_month_add, r.data.total)
-            metas.value[1]['percentage'] = store.getPercentage((r.data.this_month_del * -1), r.data.total)
-            metas.value[2]['percentage'] = store.getPercentage(r.data.this_week_add, r.data.total)
-            metas.value[3]['percentage'] = store.getPercentage((r.data.this_week_del * -1), r.data.total)
-        }
-    })
-})
 </script>
 <template>
     <div>

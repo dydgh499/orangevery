@@ -134,6 +134,37 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
     
+    const metas = ref([
+        {
+            icon: 'tabler-user-check',
+            color: 'primary',
+            title: '금월 추가된 영업점',
+            stats: '0',
+            percentage: 0,
+        },
+        {
+            icon: 'tabler-user-exclamation',
+            color: 'error',
+            title: '금월 감소한 영업점',
+            percentage: 0,
+            stats: '0',
+        },
+        {
+            icon: 'tabler-user-check',
+            color: 'primary',
+            title: '금주 추가된 영업점',
+            percentage: 0,
+            stats: '0',
+        },
+        {
+            icon: 'tabler-user-exclamation',
+            color: 'error',
+            title: '금주 감소한 영업점',
+            percentage: 0,
+            stats: '0',
+        },
+    ])
+
     const exporter = async (type: number) => {
         const keys = Object.keys(headers);
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
@@ -148,10 +179,28 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }
+
+    onMounted(() => {
+        watchEffect(async() => {
+            if(store.getChartProcess() === false) {
+                const r = await store.getChartData()
+                metas.value[0]['stats'] = r.data.this_month_add.toLocaleString()
+                metas.value[1]['stats'] = (r.data.this_month_del * -1).toLocaleString()
+                metas.value[2]['stats'] = r.data.this_week_add.toLocaleString()
+                metas.value[3]['stats'] = (r.data.this_week_del * -1).toLocaleString()  
+                metas.value[0]['percentage'] = store.getPercentage(r.data.this_month_add, r.data.total)
+                metas.value[1]['percentage'] = store.getPercentage((r.data.this_month_del * -1), r.data.total)
+                metas.value[2]['percentage'] = store.getPercentage(r.data.this_week_add, r.data.total)
+                metas.value[3]['percentage'] = store.getPercentage((r.data.this_week_del * -1), r.data.total)
+            }
+        })
+    })
+    
     return {
         store,
         head,
         exporter,
+        metas,
     }
 })
 
