@@ -188,7 +188,7 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
         }
     }
 
-    const setDateRange = (store: any) => {
+    const setDateRange = () => {
         let s_date = undefined
         let e_date = undefined
         const date = new Date();
@@ -218,10 +218,9 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
         }
         range_date.value[0] = getDateFormat(s_date)
         range_date.value[1] = getDateFormat(e_date)
-        store.updateQueryString({ s_dt: range_date.value[0], e_dt:range_date.value[1] })
     }
 
-    const init = () => {
+    const init = (store: any) => {
         if (route.query.s_dt && route.query.e_dt) {
             range_date.value[0] = route.query.s_dt as string
             range_date.value[1] = route.query.e_dt as string
@@ -243,9 +242,11 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
                 range_date.value[0] = getDateFormat(s_date)
                 range_date.value[1] = getDateFormat(e_date)
             }
-            else if (props.date_filter_type == DateFilters.DATE)
+            else if (props.date_filter_type == DateFilters.DATE){
                 date.value = formatDate(new Date())
+            }
         }
+        dateChanged(store)
     }
 
     const dateChanged = (store: any) => {
@@ -254,10 +255,12 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
             const e_date = new Date(range_date.value[1])
             store.params.s_dt = getDateFormat(s_date)
             store.params.e_dt = getDateFormat(e_date)
+            updateRangeDateQuery(store)
         }
         else if (props.date_filter_type == DateFilters.DATE) {
             const dt = new Date(date.value)
             store.params.dt = formatDate(dt)
+            store.updateQueryString({ dt: store.params.dt })
         }
     }
 
@@ -272,7 +275,6 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
         setDateRange,
         init,
         dateChanged,
-        updateRangeDateQuery,
         range_date,
         date,
         date_selecter,
