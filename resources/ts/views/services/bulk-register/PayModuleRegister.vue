@@ -235,8 +235,8 @@ watchEffect(async () => {
                         <br>
                         <span>- 숫자만 입력(예: 0,2,3,4...11)</span>
                     </VCol>
-                    <VCol v-if="corp.pv_options.paid.use_pay_limit">
-                        <b>결제 한도 입력시 주의사항</b>
+                    <VCol>
+                        <b class="important-text">한도 입력시 주의사항</b>
                         <br>
                         <span>- 만원 단위로 숫자만 입력(예: 100만원=100)</span>
                     </VCol>
