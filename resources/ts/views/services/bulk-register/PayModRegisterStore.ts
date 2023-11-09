@@ -29,6 +29,8 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         'installment': '할부 한도(O)',
         'show_pay_view': '결제창 노출여부(X)',
         'abnormal_trans_limit': '이상거래 한도(X)',
+        'cxl_types': '취소 타입(X)',
+        'pay_dupe_least': '중복거래 하한금(X)',
         'note': '별칭(O)',
     };
     if(corp.pv_options.paid.use_dup_pay_validation) {
@@ -48,9 +50,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         headers['use_realtime_deposit'] = '실시간 사용여부(X)'
         headers['fin_id'] = '이체 모듈 타입(X)'
         headers['fin_trx_delay'] = '이체 딜레이(X)'
-        headers['cxl_types'] = '취소 타입(X)'
     }
-
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()

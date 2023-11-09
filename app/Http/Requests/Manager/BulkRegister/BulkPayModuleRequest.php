@@ -16,6 +16,7 @@ class BulkPayModuleRequest extends FormRequest
         'under_sales_amt',
         'is_old_auth',
         'show_pay_view',
+        'pay_dupe_least',
         'abnormal_trans_limit',
         'pay_dupe_limit',
         'pay_year_limit',
@@ -27,6 +28,7 @@ class BulkPayModuleRequest extends FormRequest
         'module_type',
         'mcht_id',
         'installment',
+        'cxl_types',
     ];
     public $string_keys = [
         'api_key',
