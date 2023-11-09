@@ -24,12 +24,14 @@ defineExpose({
         <VCard title="PG사/구간명 정보">
             <VCardText>
                 <template v-for="(pg, key) in pgs" :key="key">
-                    <span style="font-weight: bold;">{{ pg.pg_name }} -> {{ pg.id }}</span>
+                    <span style="font-weight: bold;">PG사명: {{ pg.pg_name }}</span>
+                    <br>
+                    <b>입력 값: <span style="color: red;">{{ pg.id }}</span></b>
                     <VTable class="text-no-wrap" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th class='list-square'>{{ pg.pg_name }} 구간명</th>
-                                <th class='list-square'>입력값</th>
+                                <th class='list-square'>입력 값</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -18,7 +18,7 @@ const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
 const { head, headers } = useRegisterStore()
 const { mchts } = useSalesFilterStore()
 
-const all_levels =[{id: 10, title: '가맹점'}, ...salesLevels()]
+const all_levels = [{id: 10, title: '가맹점'}, ...salesLevels()]
 const auth_types: Options[] = [
     { id: 0, title: '비인증',},
     { id: 1, title: '구인증',},
