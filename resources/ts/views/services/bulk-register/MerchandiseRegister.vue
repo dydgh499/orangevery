@@ -47,6 +47,8 @@ const isNotExistCustomFilter = (custom_id: number | null) => {
         return false
 }
 const validate = () => {
+    const user_names = new Set()
+    const mcht_names = new Set()
     for (let i = 0; i < items.value.length; i++) {
         const acct_bank_name = banks.find(sales => sales.title === items.value[i].acct_bank_name)
         items.value[i].sales0_name = items.value[i].sales0_name?.trim()
@@ -55,6 +57,22 @@ const validate = () => {
         items.value[i].sales3_name = items.value[i].sales3_name?.trim()
         items.value[i].sales4_name = items.value[i].sales4_name?.trim()
         items.value[i].sales5_name = items.value[i].sales5_name?.trim()
+
+        if(user_names.has(items.value[i].user_name)) {
+            snackbar.value.show((i + 1) + '번째 아이디가 중복됩니다.', 'error')
+            is_clear.value = false
+            return
+        }
+        else
+            user_names.add(items.value[i].user_name)
+
+        if(mcht_names.has(items.value[i].mcht_name)) {
+            snackbar.value.show((i + 1) + '번째 상호가 중복됩니다.', 'error')
+            is_clear.value = false
+            return
+        }
+        else
+            mcht_names.add(items.value[i].mcht_name)
 
         if (isNotExistSalesforce(levels.sales5_use, 5, i)) {
             snackbar.value.show((i + 1) + '번째 ' + levels.sales5_name + '이(가) 존재하지 않습니다.', 'error')

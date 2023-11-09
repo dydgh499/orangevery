@@ -107,17 +107,25 @@ onMounted(() => {
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'mids'">
-                                <VSelect style="min-width: 10em;" :value="defaultValue(item['mids'])" :items="item['mids']"
-                                    :menu-props="{ maxHeight: 400 }" />
+                                <select>
+                                    <option v-for="(mid, key) in item['mids']" :key="key">
+                                        {{ mid }}
+                                    </option>
+                                </select>
                             </span>
                             <span v-else-if="_key == 'tids'">
-                                <VSelect style="min-width: 10em;" :value="defaultValue(item['tids'])" :items="item['tids']"
-                                    :menu-props="{ maxHeight: 400 }" />
+                                <select>
+                                    <option v-for="(tid, key) in item['tids']" :key="key">
+                                        {{ tid }}
+                                    </option>
+                                </select>
                             </span>
                             <span v-else-if="_key == 'module_types'">
-                                <VSelect style="min-width: 10em;"
-                                    :value="defaultValue(getModuleTypes(item['module_types']))"
-                                    :items="getModuleTypes(item['module_types'])" :menu-props="{ maxHeight: 400 }" />
+                                <select>
+                                    <option v-for="(module_type, key) in item['module_types']" :key="key">
+                                        {{ getModuleTypes(module_type) }}
+                                    </option>
+                                </select>
                             </span>
                             <span v-else-if="_key == 'pgs'">
                                 <VSelect style="min-width: 10em;" :value="defaultValue(getPGs(item['pgs']))"

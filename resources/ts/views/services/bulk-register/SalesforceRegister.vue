@@ -28,6 +28,7 @@ const levels = corp.pv_options.auth.levels
 
 
 const validate = () => {
+    const user_names = new Set()
     for (let i = 0; i < saleses.value.length; i++) {
         saleses.value[i].settle_day = saleses.value[i].settle_day == -1 ? null : saleses.value[i].settle_day;
 
@@ -36,6 +37,14 @@ const validate = () => {
         const settle_day = all_days.find(sales => sales.id === saleses.value[i].settle_day)
         const settle_tax_type = tax_types.find(sales => sales.id === saleses.value[i].settle_tax_type)
         const acct_bank_name = banks.find(sales => sales.title === saleses.value[i].acct_bank_name)
+
+        if(user_names.has(saleses.value[i].user_name)) {
+            snackbar.value.show((i + 1) + '번째 아이디가 중복됩니다.', 'error')
+            is_clear.value = false
+            return
+        }
+        else
+            user_names.add(saleses.value[i].user_name)
 
         if (isEmpty(saleses.value[i].user_name)) {
             snackbar.value.show((i + 1) + '번째 영업점의 아이디는 필수로 입력해야합니다.', 'error')

@@ -29,7 +29,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         'installment': '할부 한도(O)',
         'show_pay_view': '결제창 노출여부(X)',
         'abnormal_trans_limit': '이상거래 한도(X)',
-        'cxl_types': '취소 타입(X)',
+        'cxl_type': '취소 타입(X)',
         'pay_dupe_least': '중복거래 하한금(X)',
         'note': '별칭(O)',
     };
