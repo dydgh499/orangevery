@@ -49,6 +49,12 @@ const isNotExistCustomFilter = (custom_id: number | null) => {
 const validate = () => {
     for (let i = 0; i < items.value.length; i++) {
         const acct_bank_name = banks.find(sales => sales.title === items.value[i].acct_bank_name)
+        items.value[i].sales0_name = items.value[i].sales0_name?.trim()
+        items.value[i].sales1_name = items.value[i].sales1_name?.trim()
+        items.value[i].sales2_name = items.value[i].sales2_name?.trim()
+        items.value[i].sales3_name = items.value[i].sales3_name?.trim()
+        items.value[i].sales4_name = items.value[i].sales4_name?.trim()
+        items.value[i].sales5_name = items.value[i].sales5_name?.trim()
 
         if (isNotExistSalesforce(levels.sales5_use, 5, i)) {
             snackbar.value.show((i + 1) + '번째 ' + levels.sales5_name + '이(가) 존재하지 않습니다.', 'error')
