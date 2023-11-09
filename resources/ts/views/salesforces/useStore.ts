@@ -163,8 +163,8 @@ export const feeApplyHistoires = async () => {
 export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     const all_sales = Array.from({ length: 6 }, () => <any[]>([]))
     const sales = Array.from({ length: 6 }, () => ref<any[]>([]))
-
     const mchts = ref(<Merchandise[]>([]))
+    
     onMounted(async () => { 
         await classification() 
         await getAllMchts()
