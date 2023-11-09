@@ -4,19 +4,16 @@ import { requiredValidator, lengthValidatorV2 } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { reactive, watchEffect } from 'vue';
 import { VForm } from 'vuetify/components'
-import type { Merchandise, SalesSlip, Options, HandPay } from '@/views/types'
+import type { Merchandise, PayModule, SalesSlip, Options, HandPay } from '@/views/types'
 import { cloneDeep } from 'lodash'
 import { axios } from '@axios'
 import corp from '@corp'
 
 interface Props {
-    pmod_id: number,
-    installment: number,
-    is_old_auth: boolean,
-    merchandise: Merchandise
+    pay_module: PayModule,
+    merchandise: Merchandise,
 }
 const props = defineProps<Props>()
-
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
@@ -80,13 +77,13 @@ const pay = async () => {
         snackbar.value.show('결제모듈을 선택해주세요.', 'error')
 }
 const filterInstallment = computed(() => {
-    return installments.filter((obj: Options) => { return obj.id <= (props.installment || 0) })
+    return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
 })
 watchEffect(() => {
     console.log(is_show_pay_button.value)
-    hand_pay_info.pmod_id = props.pmod_id
-    hand_pay_info.is_old_auth = props.is_old_auth
-    hand_pay_info.ord_num = props.pmod_id + "H" + Date.now().toString().substr(0, 10)
+    hand_pay_info.pmod_id = props.pay_module.id
+    hand_pay_info.is_old_auth = props.pay_module.is_old_auth
+    hand_pay_info.ord_num = props.pay_module.id + "H" + Date.now().toString().substr(0, 10)
 })
 </script>
 <template>

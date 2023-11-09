@@ -1,57 +1,48 @@
 import router from '@/router'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import type { Merchandise, PayGateway, SalesSlip } from '@/views/types'
+import type { Merchandise, PayGateway, PayModule, SalesSlip } from '@/views/types'
 import { axios } from '@axios'
 import * as CryptoJS from 'crypto-js'
 
 export const pay = (module_type: number) => {
-    const pg_id = ref(<number>(0))
-    const pmod_id = ref(<number>(0))
-
-    const is_old_auth = ref(<boolean>(false))
-    const installment = ref(<number>(0))
+    const route = useRoute()
     const merchandise = ref(<Merchandise>({}))
-
+    const pay_module = ref(<PayModule>{})
     const { pgs } = useStore()
-    const pay_url = ref(<string>(''))
-    const return_url = new URL(window.location.href).origin + '/pay/result'
 
-    const getSalesSlipInfo = async () => {
-        const urlParams = new URLSearchParams(window.location.search)
-        const encrypt = decodeURIComponent(urlParams.get('e') || '')
+    const return_url = new URL(window.location.href).origin + '/pay/result'
+    const pay_url = ref(<string>(''))
+    if (module_type == 2)
+        pay_url.value = process.env.NOTI_URL + '/v2/online/pay/auth'
+    else if (module_type == 3)
+        pay_url.value = process.env.NOTI_URL + '/v2/online/pay/simple'
+
+    const updatePayModule = () => {
+        const encrypt = decodeURIComponent(route.query.e as string)
         const enc = CryptoJS.AES.decrypt(encrypt, '^^_masking_^^').toString(CryptoJS.enc.Utf8)
         const params = JSON.parse(enc)
 
-        if (params.m != null && params.p != null && params.m != 0 && params.p != 0) {
-            pmod_id.value = params.p
-            is_old_auth.value = params.o
-            installment.value = params.i
-            pg_id.value = params.g
-
-            axios.get('/api/v1/merchandises/' + params.m + '/sale-slip')
-                .then(r => { Object.assign(merchandise.value, r.data as Merchandise) })
-                .catch(e => { router.replace('/404') })
+        if (params.m && params.p) {
+            pay_module.value.id = params.p
+            pay_module.value.mcht_id = params.m
+            pay_module.value.is_old_auth = params.o
+            pay_module.value.installment = params.i
+            pay_module.value.pg_id = params.g
+            updateMerchandise(pay_module.value.mcht_id as number)
         }
         else
             router.replace('/404')
     }
-    watchEffect(() => {
-        if (pgs.length > 0 && pg_id.value) {
-            const pg: PayGateway = pgs.find(obj => obj.id === pg_id.value)
-            if (pg) {
-                let type = ''
-                if (module_type == 2)
-                    type = 'auth'
-                else if (module_type == 3)
-                    type = 'simple'
-                pay_url.value = process.env.NOTI_URL + '/v2/online/pay/' + type
-            }
-        }
-    })
+
+    const updateMerchandise = (mcht_id: number) => {
+        axios.get('/api/v1/merchandises/' + mcht_id + '/sale-slip')
+            .then(r => { Object.assign(merchandise.value, r.data as Merchandise) })
+            .catch(e => { router.replace('/404') })
+    }
+
     return {
-        pg_id, pmod_id, is_old_auth,
-        installment, merchandise, return_url,
-        pgs, getSalesSlipInfo, pay_url,
+        merchandise, pay_module, return_url, pay_url,
+        pgs, updatePayModule, updateMerchandise,
     }
 }
 

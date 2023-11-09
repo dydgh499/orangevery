@@ -5,11 +5,8 @@ import Footer from '@/layouts/components/Footer.vue'
 import { pay } from '@/views/pay/pay'
 import corp from '@corp'
 
-const { 
-    pmod_id, is_old_auth, installment, 
-    merchandise, pgs, getSalesSlipInfo 
-} = pay(1)
-getSalesSlipInfo()
+const { pay_module, merchandise, pgs, updatePayModule } = pay(1)
+updatePayModule()
 
 const salesslip = ref()
 provide('salesslip', salesslip)
@@ -29,8 +26,7 @@ provide('salesslip', salesslip)
                                 <br>
                                 결제하실 정보를 입력해주세요.
                             </div>
-                            <HandPayOverview :pmod_id="pmod_id || 0" :installment="installment || 0"
-                                :is_old_auth="is_old_auth || false" :merchandise="merchandise">
+                            <HandPayOverview :pay_module="pay_module" :merchandise="merchandise">
                                 <template #explain>
                                 </template>
                             </HandPayOverview>

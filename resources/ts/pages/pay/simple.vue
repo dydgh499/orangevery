@@ -4,11 +4,8 @@ import SimplePayOverview from '@/views/pay/SimplePayOverview.vue'
 import { pay } from '@/views/pay/pay'
 import corp from '@corp'
 
-const {
-    pmod_id, installment, return_url, pay_url,
-    getSalesSlipInfo
-} = pay(3)
-getSalesSlipInfo()
+const { pay_module, merchandise, updatePayModule, return_url, pay_url } = pay(3)
+updatePayModule()
 
 </script>
 <template>
@@ -25,8 +22,8 @@ getSalesSlipInfo()
                                 <br>
                                 결제하실 정보를 입력해주세요.
                             </div>
-                            <SimplePayOverview :pmod_id="pmod_id || 0" :installment="installment || 0"
-                                :return_url="return_url" :pay_url="pay_url" />
+                            <SimplePayOverview :pay_module="pay_module" :merchandise="merchandise" :return_url="return_url"
+                                :pay_url="pay_url" />
                         </div>
                     </VCol>
                 </VRow>

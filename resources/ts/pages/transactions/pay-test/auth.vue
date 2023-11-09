@@ -5,8 +5,8 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { payTest } from '@/views/transactions/pay-test/payTest'
 
 const { 
-    mcht_id, pmod_id, installment, 
-    pay_url, return_url, merchandises, filterPayMod 
+    mcht_id, pmod_id, pay_module, merchandise,
+    pay_url, return_url, merchandises, pay_modules
 } = payTest(2)
 </script>
 <template>
@@ -22,7 +22,7 @@ const {
                                     결제할 가맹점과 결제모듈을 선택하신 후 결제하기 버튼을 눌러주세요.
                                 </b>
                             </div>
-                            <AuthPayOverview :pmod_id="pmod_id || 0" :installment="installment || 0"
+                            <AuthPayOverview :pay_module="pay_module" :merchandise="merchandise"
                                 :return_url="return_url" :pay_url="pay_url">
                                 <template #explain>
                                     <VCol cols="12">
@@ -44,7 +44,7 @@ const {
                                                 <template #name>결제모듈 선택</template>
                                                 <template #input>
                                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="pmod_id"
-                                                        :items="filterPayMod" prepend-inner-icon="ic-outline-send-to-mobile"
+                                                        :items="pay_modules" prepend-inner-icon="ic-outline-send-to-mobile"
                                                         label="결제모듈 선택" item-title="note" item-value="id" single-line eager />
                                                 </template>
                                             </CreateHalfVCol>

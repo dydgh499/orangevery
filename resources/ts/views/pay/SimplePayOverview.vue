@@ -4,14 +4,14 @@ import { requiredValidator } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { reactive, watchEffect } from 'vue';
 import { VForm } from 'vuetify/components'
-import type { Options, SimplePay } from '@/views/types'
+import type { Options, SimplePay, PayModule, Merchandise } from '@/views/types'
 import corp from '@corp'
 
 interface Props {
-    pmod_id: number,
-    installment: number,
     return_url: string,
     pay_url: string,
+    pay_module: PayModule, 
+    merchandise: Merchandise,
 }
 const props = defineProps<Props>()
 
@@ -26,13 +26,13 @@ simple_pay_info.buyer_phone = urlParams.get('phone_num') || ''
 simple_pay_info.amount = Number(urlParams.get('amount') || '')
 
 const filterInstallment = computed(() => {
-    return installments.filter((obj: Options) => { return obj.id <= (props.installment || 0) })
+    return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
 })
 
 watchEffect(() => {
-    simple_pay_info.pmod_id = props.pmod_id
+    simple_pay_info.pmod_id = props.pay_module.id
     simple_pay_info.return_url = props.return_url
-    simple_pay_info.ord_num = props.pmod_id + "S" + Date.now().toString().substr(0, 10)
+    simple_pay_info.ord_num = props.pay_module.id + "S" + Date.now().toString().substr(0, 10)
 })
 </script>
 <template>

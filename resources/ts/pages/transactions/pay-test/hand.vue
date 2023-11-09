@@ -6,8 +6,7 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { payTest } from '@/views/transactions/pay-test/payTest'
 
 const {
-    mcht_id, pmod_id, pgs, is_old_auth, installment, 
-    merchandise, merchandises, filterPayMod 
+    mcht_id, pmod_id, pgs, merchandise, merchandises, pay_modules, pay_module
 } = payTest(1)
 
 const salesslip = ref()
@@ -24,11 +23,10 @@ provide('salesslip', salesslip)
                             <br>
                             <div style="text-align: center;">
                                 <b>
-                                결제할 가맹점과 결제모듈을 선택하신 후 결제하기 버튼을 눌러주세요.
-                            </b>                                
+                                    결제할 가맹점과 결제모듈을 선택하신 후 결제하기 버튼을 눌러주세요.
+                                </b>
                             </div>
-                            <HandPayOverview :pmod_id="pmod_id || 0" :installment="installment || 0"
-                                :is_old_auth="is_old_auth || false" :merchandise="merchandise">
+                            <HandPayOverview :pay_module="pay_module" :merchandise="merchandise">
                                 <template #explain>
                                     <VCol cols="12">
                                         <VRow no-gutters>
@@ -37,8 +35,7 @@ provide('salesslip', salesslip)
                                                 <template #input>
                                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_id"
                                                         :items="merchandises" prepend-inner-icon="tabler-building-store"
-                                                        label="가맹점 선택" item-title="mcht_name" item-value="id" single-line
-                                                        eager />
+                                                        item-title="mcht_name" item-value="id" single-line eager />
                                                 </template>
                                             </CreateHalfVCol>
                                         </VRow>
@@ -49,8 +46,8 @@ provide('salesslip', salesslip)
                                                 <template #name>결제모듈 선택</template>
                                                 <template #input>
                                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="pmod_id"
-                                                        :items="filterPayMod" prepend-inner-icon="ic-outline-send-to-mobile"
-                                                        label="결제모듈 선택" item-title="note" item-value="id" single-line eager />
+                                                        :items="pay_modules" prepend-inner-icon="ic-outline-send-to-mobile"
+                                                        item-title="note" item-value="id" single-line eager />
                                                 </template>
                                             </CreateHalfVCol>
                                         </VRow>
@@ -62,6 +59,6 @@ provide('salesslip', salesslip)
                 </VRow>
             </VCardText>
         </VCard>
-        <SalesSlipDialog ref="salesslip" :pgs="pgs"/>
+        <SalesSlipDialog ref="salesslip" :pgs="pgs" />
     </section>
 </template>

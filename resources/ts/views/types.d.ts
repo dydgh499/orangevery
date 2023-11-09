@@ -647,7 +647,7 @@ export interface BasePay {
 }
 
 export interface HandPay extends BasePay{
-    is_old_auth: boolean,
+    is_old_auth: number,
     card_num: string,
     yymm: string,
     auth_num?: string,

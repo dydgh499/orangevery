@@ -32,15 +32,15 @@ use App\Models\Log\SfFeeChangeHistory;
 class MerchandiseController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $merchandises, $payModules;
+    protected $merchandises, $pay_modules;
     protected $target;
     protected $imgs;
     protected $pay_mod_cols;
 
-    public function __construct(Merchandise $merchandises, PaymentModule $payModules)
+    public function __construct(Merchandise $merchandises, PaymentModule $pay_modules)
     {
         $this->merchandises = $merchandises;
-        $this->payModules = $payModules;
+        $this->pay_modules = $pay_modules;
         $this->target = '가맹점';
         $this->imgs = [
             'params'    => [
@@ -144,7 +144,7 @@ class MerchandiseController extends Controller
             $data = $this->byNormalIndex($request, $is_all);
         // payment modules sections
         $mcht_ids = collect($data['content'])->pluck('id')->all();
-        $pay_modules = $this->payModules
+        $pay_modules = $this->pay_modules
             ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
             ->whereIn('mcht_id', $mcht_ids)
@@ -275,7 +275,7 @@ class MerchandiseController extends Controller
     public function destroy(Request $request, $id)
     {
         $res = $this->delete($this->merchandises->where('id', $id));
-        $res = $this->delete($this->payModules->where('mcht_id', $id));
+        $res = $this->delete($this->pay_modules->where('mcht_id', $id));
         $res = $this->delete(NotiUrl::where('mcht_id', $id));
 
         $data = $this->merchandises->where('id', $id)->first(['mcht_name']);
@@ -297,23 +297,24 @@ class MerchandiseController extends Controller
             'page' => 1,
             'page_size' => 99999999,
         ]);
-        $cols = [
-            'merchandises.id', 'merchandises.mcht_name',
-            'merchandises.sales5_id', 'merchandises.sales5_fee',
-            'merchandises.sales4_id', 'merchandises.sales4_fee',
-            'merchandises.sales3_id', 'merchandises.sales3_fee',
-            'merchandises.sales2_id', 'merchandises.sales2_fee',
-            'merchandises.sales1_id', 'merchandises.sales1_fee',
-            'merchandises.sales0_id', 'merchandises.sales0_fee',
-            'merchandises.hold_fee', 'merchandises.trx_fee',
-            'merchandises.custom_id', 'merchandises.addr',
-            'merchandises.business_num', 'merchandises.resident_num',
-            'merchandises.use_saleslip_prov', 'merchandises.use_saleslip_sell', 'merchandises.use_regular_card'
-        ];
-        $data = $this->commonSelect($request);
-        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-        $salesforces    = globalGetSalesByIds($sales_ids, false);
-        $data['content'] = globalMappingSales($salesforces, $data['content']);
+        $cols = ['merchandises.id', 'merchandises.mcht_name', 'merchandises.created_at'];
+        if($request->has('module_type'))
+        {
+            $query = $this->pay_modules
+                ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+                ->where('payment_modules.is_delete', false)
+                ->where('merchandises.is_delete', false)
+                ->where('payment_modules.brand_id', $request->user()->brand_id)
+                ->where('payment_modules.module_type', $request->module_type)
+                ->distinct('payment_modules.mcht_id');
+        }
+        else
+        {
+            $query = $this->merchandises
+                ->where('merchandises.is_delete', false)
+                ->where('merchandises.brand_id', $request->user()->brand_id);
+        }
+        $data = $this->getIndexData($request, $query, 'merchandises.id', $cols, 'merchandises.created_at');
         return $this->response(0, $data);
     }
 
