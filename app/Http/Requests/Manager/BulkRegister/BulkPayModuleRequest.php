@@ -28,7 +28,7 @@ class BulkPayModuleRequest extends FormRequest
         'module_type',
         'mcht_id',
         'installment',
-        'cxl_types',
+        'cxl_type',
         'use_realtime_deposit',
     ];
     public $string_keys = [
