@@ -3,7 +3,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useRegisterStore } from '@/views/services/bulk-register/PayModRegisterStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
+import { module_types, installments, fin_trx_delays, cxl_types } from '@/views/merchandises/pay-modules/useStore'
 import { allLevels } from '@/views/salesforces/useStore'
 import SettleTypeExplainDialog from '@/views/services/bulk-register/SettleTypeExplainDialog.vue'
 import PGExplainDialog from '@/views/services/bulk-register/PGExplainDialog.vue'
@@ -14,7 +14,7 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import corp from '@corp';
 
 const { store } = useSearchStore()
-const { pgs, pss, settle_types, terminals } = useStore()
+const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
 const { head, headers } = useRegisterStore()
 
 const { mchts } = useSalesFilterStore()
@@ -159,8 +159,42 @@ watchEffect(async () => {
                         <VChip color="primary" style="margin: 0.5em;" v-for="(terminal, key) in terminals" :key="key">
                             {{ terminal.name }} = {{ terminal.id }}
                         </VChip>
-                        <b v-if="terminals.length == 0" class="important-text">"운영 관리 - PG사 관리"에서 커스텀 필터 추가 후 입력 가능합니다.</b>
-                    </VCol> 
+                        <b v-if="terminals.length == 0" class="important-text">"운영 관리 - PG사 관리 - 구분 정보"에서 커스텀 필터 추가 후 입력 가능합니다.</b>
+                    </VCol>
+                    <template v-if="corp.pv_options.paid.use_realtime_deposit">
+                        <VCol class="pb-0" >                        
+                            <b>실시간 사용여부(기본:미사용)</b>
+                            <br>
+                            <VChip color="primary" style="margin: 0.5em;">
+                                미사용 = 0
+                            </VChip>
+                            <VChip color="primary" style="margin: 0.5em;">
+                                사용 = 1
+                            </VChip>
+                        </VCol>
+                        <VCol class="pb-0">
+                            <b>이체 모듈 타입</b>
+                            <br>
+                            <VChip color="primary" style="margin: 0.5em;" v-for="(finance_van, key) in finance_vans" :key="key">
+                                {{ finance_van.nick_name }} = {{ finance_van.id }}
+                            </VChip>
+                            <b v-if="finance_vans.length == 0" class="important-text">"운영 관리 - PG사 관리 - 실시간 이체 모듈"에서 금융 VAN 추가 후 입력 가능합니다.</b>
+                        </VCol>
+                        <VCol class="pb-0">
+                            <b>이체 달레이(기본: 즉시입금)</b>
+                            <br>
+                            <VChip color="primary" style="margin: 0.5em;" v-for="(fin_trx_delay, key) in fin_trx_delays" :key="key">
+                                {{ fin_trx_delay.title }} = {{ fin_trx_delay.id }}
+                            </VChip>
+                        </VCol>
+                        <VCol class="pb-0">
+                            <b>취소 타입(기본: 취소금지)</b>
+                            <br>
+                            <VChip color="primary" style="margin: 0.5em;" v-for="(cxl_type, key) in cxl_types" :key="key">
+                                {{ cxl_type.title }} = {{ cxl_type.id }}
+                            </VChip>
+                        </VCol>
+                    </template>
                 </template>
                 <template #input>
                     <VCol class="pb-0">

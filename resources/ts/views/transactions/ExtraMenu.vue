@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { realtimeResult, isRetryAble } from '@/views/transactions/useStore'
+import { isRetryAble } from '@/views/transactions/useStore'
 import { useRequestStore } from '@/views/request'
 import type { SalesSlip, CancelPay } from '@/views/types'
 import { getUserLevel } from '@axios'
-import { StatusColors } from '@core/enums';
 import corp from '@corp'
 import router from '@/router'
 
@@ -47,9 +46,8 @@ const retryDeposit = async () => {
             'mid': props.item.mid,
             'tid': props.item.tid,
         }
-        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/settle-deposit', params)
-        snackbar.value.show(r.data.message, r.data.result_cd == "0000" ? 'success' : 'warning')
-        if(r.data.result_cd == "0000") {
+        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/settle-deposit', params, true)
+        if(r.status == 201) {
             store.setChartProcess()
             store.setTable()
         }

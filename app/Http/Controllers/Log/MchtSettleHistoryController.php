@@ -106,7 +106,8 @@ class MchtSettleHistoryController extends Controller
         $data = $request->all();
         $url = $this->base_noti_url.'/deposit';
         $res = post($url, $data);
-        return $this->response(1, $res['body']);
+        
+        return $this->extendResponse($res['body']['result_cd'] == '0000' ? 1 : $res['body']['result_cd'], $res['body']['message']);
     }
 
     /**

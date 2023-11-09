@@ -43,7 +43,14 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         headers['pay_disable_s_tm'] = '결제금지 시작시간(X)'
         headers['pay_disable_e_tm'] = '결제금지 종료시간(X)'
     }
-    
+    if(corp.pv_options.paid.use_realtime_deposit)
+    {
+        headers['use_realtime_deposit'] = '실시간 사용여부(X)'
+        headers['fin_id'] = '이체 모듈 타입(X)'
+        headers['fin_trx_delay'] = '이체 딜레이(X)'
+        headers['cxl_types'] = '취소 타입(X)'
+    }
+
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
