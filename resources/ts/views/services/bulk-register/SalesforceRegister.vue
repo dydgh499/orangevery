@@ -106,7 +106,6 @@ const validate = () => {
             saleses.value[i].acct_bank_code = banks.find(sales => sales.title === saleses.value[i].acct_bank_name)?.code as string
             is_clear.value = true
         }
-
         if (is_clear.value == false)
             return
     }

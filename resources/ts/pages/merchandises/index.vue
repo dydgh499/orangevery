@@ -3,12 +3,14 @@ import { useSearchStore } from '@/views/merchandises/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
+import { useStore } from '@/views/services/pay-gateways/useStore'
 import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { user_info } from '@axios'
 import { DateFilters } from '@core/enums'
 
-const { store, head, exporter, getModuleTypes, getPGs } = useSearchStore()
+const { store, head, exporter } = useSearchStore()
+const { pgs }   = useStore()
 const password = ref()
 
 provide('password', password)
@@ -107,29 +109,32 @@ onMounted(() => {
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'mids'">
-                                <select>
+                                <select class="custom-select">
                                     <option v-for="(mid, key) in item['mids']" :key="key">
                                         {{ mid }}
                                     </option>
                                 </select>
                             </span>
                             <span v-else-if="_key == 'tids'">
-                                <select>
+                                <select class="custom-select">
                                     <option v-for="(tid, key) in item['tids']" :key="key">
                                         {{ tid }}
                                     </option>
                                 </select>
                             </span>
                             <span v-else-if="_key == 'module_types'">
-                                <select>
+                                <select class="custom-select">
                                     <option v-for="(module_type, key) in item['module_types']" :key="key">
-                                        {{ getModuleTypes(module_type) }}
+                                        {{ module_types.find(module => module.id === module_type)?.title }}
                                     </option>
                                 </select>
                             </span>
                             <span v-else-if="_key == 'pgs'">
-                                <VSelect style="min-width: 10em;" :value="defaultValue(getPGs(item['pgs']))"
-                                    :items="getPGs(item['pgs'])" :menu-props="{ maxHeight: 400 }" />
+                                <select class="custom-select">
+                                    <option v-for="(_pg, key) in item['pgs']" :key="key">
+                                        {{ pgs.find(pg => pg.id === _pg)?.pg_name }}
+                                    </option>
+                                </select>
                             </span>
                             <span v-else-if="_key == 'enabled'">
                                 <VChip :color="store.booleanTypeColor(!item[_key])">
@@ -150,16 +155,13 @@ onMounted(() => {
         <PasswordChangeDialog ref="password" />
     </div>
 </template>
-<style>
-.scroller {
-  block-size: 100%;
-}
-
-.user {
-  display: flex;
-  align-items: center;
-  block-size: 32%;
-  padding-block: 0;
-  padding-inline: 12px;
+<style scoped>
+.custom-select {
+  border: 1px solid rgba(var(--v-border-color));
+  border-radius: 0.5em;
+  min-inline-size: 7em;
+  padding-block: 0.3em;
+  padding-inline: 0.5em;
+  text-align: center;
 }
 </style>
