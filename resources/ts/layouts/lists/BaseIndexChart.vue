@@ -29,7 +29,7 @@ watchEffect(() => {
                     <h6 class="text-h6">
                         {{ meta.stats }}
                     </h6>
-                    <span :class="meta.percentage > 0 ? 'text-success' : 'text-error'" v-if="meta.percentage">({{ meta.percentage }}%)</span>
+                    <span :class="meta.percentage > 0 ? 'text-success' : 'text-error'">({{ meta.percentage }}%)</span>
                 </div>
                 <span>{{ meta.subtitle }}</span>
             </div>

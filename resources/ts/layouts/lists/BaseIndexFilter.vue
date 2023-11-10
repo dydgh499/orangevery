@@ -61,6 +61,7 @@ const queryToStoreParams = () => {
         store.params.search = route.query.search
         search.value = store.params.search
     }
+    store.updateQueryString(store.params)
 }
 
 const handleEnterKey = (event: KeyboardEvent) => {
