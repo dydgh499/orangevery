@@ -31,7 +31,7 @@ export const realtimeResult = (item: Transaction) => {
         if(is_cancel)   // 취소
             return StatusColors.Cancel
 
-        if(item.use_collect_withdraw && item.realtimes?.length == 0)    // 모아서 출금
+        if(item.fin_trx_delay == -1 && item.realtimes?.length == 0)    // 모아서 출금
             return StatusColors.Info
         if(item.realtimes?.length == 0) //요청 대기
         {            
