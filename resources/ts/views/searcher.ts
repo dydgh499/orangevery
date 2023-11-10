@@ -255,7 +255,7 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
             const e_date = new Date(range_date.value[1])
             store.params.s_dt = getDateFormat(s_date)
             store.params.e_dt = getDateFormat(e_date)
-            updateRangeDateQuery(store)
+            store.updateQueryString({ s_dt: getDateFormat(s_date), e_dt: getDateFormat(e_date) })
         }
         else if (props.date_filter_type == DateFilters.DATE) {
             const dt = new Date(date.value)
@@ -263,13 +263,7 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
             store.updateQueryString({ dt: store.params.dt })
         }
     }
-
-    const updateRangeDateQuery = (store: any) => {
-        const s_date = new Date(range_date.value[0])
-        const e_date = new Date(range_date.value[1])
-        store.updateQueryString({ s_dt: getDateFormat(s_date), e_dt: getDateFormat(e_date) })
-    }
-
+    
     return {
         getRangeFormat,
         setDateRange,

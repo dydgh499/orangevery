@@ -136,7 +136,7 @@ queryToStoreParams()
                                 v-else-if="head.path === 'salesforces' || head.path === 'transactions/settle/salesforces' || head.path === 'transactions/settle-histories/salesforces'">
                                 <VSelect v-model="store.params.level" :items="getSalesforceItems" density="compact"
                                     variant="outlined" item-title="title" item-value="id" style="min-width: 10em;"
-                                    @update:modelValue="store.updateQueryString({ level: store.params.level })" />
+                                    @update:modelValue="store.updateQueryString(store.params)" />
                             </template>
                             <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel"
                                 @click="exporter(1)">

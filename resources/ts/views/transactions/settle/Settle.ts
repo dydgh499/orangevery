@@ -92,7 +92,6 @@ export function settlementFunctionCollect(store: any) {
     }
 
     const isAbleMchtDepositCollect = (use_collect_withdraw: number) => {
-        console.log(use_collect_withdraw)
         return (getUserLevel() == 10 || getUserLevel() >= 35) && corp.pv_options.paid.use_realtime_deposit && use_collect_withdraw
     }
     
