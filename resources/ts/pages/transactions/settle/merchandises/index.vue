@@ -137,7 +137,7 @@ onMounted(() => {
                         <template v-else>
                             <td v-show="_header.visible" class='list-square'>
                                 <span v-if="_key === 'id'">
-                                    <div class='check-label-container' v-if="getUserLevel() >= 35">
+                                    <div class='check-label-container'>
                                         <VCheckbox v-model="selected" :value="item[_key]" class="check-label"/>
                                         <span class="edit-link" @click="movePartSettle(item, true)">#{{ item[_key] }}</span>
                                     </div>
