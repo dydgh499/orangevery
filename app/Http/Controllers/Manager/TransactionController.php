@@ -193,6 +193,7 @@ class TransactionController extends Controller
             $data->sales2_fee = number_format($data->sales2_fee * 100, 3);
             $data->sales1_fee = number_format($data->sales1_fee * 100, 3);
             $data->sales0_fee = number_format($data->sales0_fee * 100, 3);
+            $data->dev_fee    = number_format($data->dev_fee * 100, 3);
         }
         else
             return $this->response(1000);
@@ -214,7 +215,7 @@ class TransactionController extends Controller
             [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
             $res = $this->transactions->where('id', $id)->update($data);
             operLogging(HistoryType::UPDATE, $this->target, $data, "#".$id);
-            return $this->response($res ? 1 : 990, ['id'=>$id]);    
+            return $this->response($res ? 1 : 990, ['id'=>$id]);
         }
         catch(QueryException $ex)
         {
