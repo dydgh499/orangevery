@@ -5,6 +5,7 @@ import type { Tab } from '@/views/types'
 import SalesforceRegister from '@/views/services/bulk-register/SalesforceRegister.vue'
 import MerchandiseRegister from '@/views/services/bulk-register/MerchandiseRegister.vue'
 import PayModuleRegister from '@/views/services/bulk-register/PayModuleRegister.vue'
+import RegularCardRegister from '@/views/services/bulk-register/RegularCardRegister.vue'
 
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import corp from '@corp'
@@ -34,6 +35,12 @@ if(corp.pv_options.paid.use_regular_card)
                     <Suspense>
                         <PayModuleRegister>
                         </PayModuleRegister>
+                    </Suspense>
+                </VWindowItem>
+                <VWindowItem>
+                    <Suspense>
+                        <RegularCardRegister>
+                        </RegularCardRegister>
                     </Suspense>
                 </VWindowItem>
             </template>

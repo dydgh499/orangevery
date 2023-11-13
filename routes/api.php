@@ -221,6 +221,9 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             });
                         
             Route::apiResource('regular-credit-cards', RegularCreditCardController::class); 
+            Route::prefix('regular-credit-cards')->group(function() {
+                Route::post('bulk-register', [RegularCreditCardController::class, 'bulkRegister']);
+            });
             Route::apiResource('noti-urls', NotiUrlController::class); 
         });
         Route::apiResource('complaints', ComplaintController::class);

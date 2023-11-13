@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Manager;
 use App\Models\RegularCreditCard;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\StoresTrait;
 
+use App\Http\Requests\Manager\BulkRegister\BulkRegularCardRequest;
 use App\Http\Requests\Manager\RegularCreditCardRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;
@@ -18,7 +20,7 @@ use Illuminate\Http\Request;
  */
 class RegularCreditCardController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $cards;
 
     public function __construct(RegularCreditCard $cards)
@@ -92,5 +94,23 @@ class RegularCreditCardController extends Controller
     {
         $res = $this->cards->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);
+    }
+    /**
+     * 대량등록
+     *
+     * 운영자 이상 가능
+     */
+    public function bulkRegister(BulkRegularCardRequest $request)
+    {
+        $current = date('Y-m-d H:i:s');
+        $datas = $request->data();
+
+        $cards = $datas->map(function ($data) use($current) {
+            $data['created_at'] = $current;
+            $data['updated_at'] = $current;
+            return $data;
+        })->toArray();
+        $res = $this->manyInsert($this->cards, $cards);
+        return $this->response($res ? 1 : 990);
     }
 }

@@ -198,7 +198,7 @@ watchEffect(async () => {
                             {{ cus.title }} = {{ cus.id }}
                         </VChip>
                     </VCol>
-                    <VCol class="pb-0" v-if="corp.pv_options.paid.use_collect_withdraw">
+                    <VCol class="pb-0" v-if="corp.pv_options.paid.use_regular_card">
                         <b>단골고객 사용여부</b>
                         <br>
                         <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
@@ -228,13 +228,6 @@ watchEffect(async () => {
                         <b>주민등록번호 입력 주의사항</b>
                         <br>
                         <span>- 14자리 입력(예:800101-7654321)</span>
-                    </VCol>
-                    <VCol v-if="corp.pv_options.paid.use_regular_card">
-                        <b>단골고객 카드정보 목록 입력 주의사항</b>
-                        <br>
-                        <span>- <b>,</b>로 구분하여 카드정보 작성(예: 1234000000005678,4321000012345678)</span>
-                        <br>
-                        <span>- 별칭란은 "카드정보"로 공통 등록됩니다.</span>
                     </VCol>
                 </template>
             </CreateHalfVCol>

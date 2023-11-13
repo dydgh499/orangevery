@@ -122,6 +122,7 @@ export interface SalesforcePropertie {
 export interface RegularCreditCard {
     id: number,
     mcht_id: number,
+    mcht_name?: string,
     card_num: string,
     note: string,
 }
