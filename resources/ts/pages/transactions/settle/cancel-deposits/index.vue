@@ -42,40 +42,33 @@ provide('exporter', exporter)
         <template #body>
             <tr v-for="(item, index) in store.getItems" :key="index">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                    <template v-if="head.getDepth(_header, 0) != 1">
-                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
-                            class='list-square'>
-                        </td>
-                    </template>
-                    <template v-else>
-                        <td v-show="_header.visible" class='list-square'>
-                            <span v-if="_key == 'id'" class="edit-link">
-                                #{{ item[_key] }}
-                            </span>
-                            <span v-else-if="_key == 'deposit_amount'">
-                                {{ item.deposit_amount.toLocaleString() }}
-                            </span>
-                            <span v-else-if="_key == 'total_trx_amount'">
-                                {{ (item.amount - item.profit).toLocaleString() }}
-                            </span>
-                            <span v-else-if="_key == 'amount'" style="color: red !important;">
-                                {{ (item.amount).toLocaleString() }}
-                            </span>
-                            <span v-else-if="_key == 'profit'">
-                                {{ (item.profit).toLocaleString() }}
-                            </span>
-                            <span v-else-if="_key == 'cxl_dttm'" style="color: red !important;">
-                                {{ item[_key] }}
-                            </span>
-                            <span v-else-if="_key == 'trx_dttm'" class="text-primary">
-                                {{ item[_key] }}
-                            </span>                            
-                            <span v-else-if="_key == 'installment'">
-                                {{ installments.find(inst => inst['id'] === item[_key])?.title }}
-                            </span>
-                            <span v-else>{{ item[_key] }}</span>
-                        </td>
-                    </template>
+                    <td v-show="_header.visible" class='list-square'>
+                        <span v-if="_key == 'id'" class="edit-link">
+                            #{{ item[_key] }}
+                        </span>
+                        <span v-else-if="_key == 'deposit_amount'">
+                            {{ item.deposit_amount.toLocaleString() }}
+                        </span>
+                        <span v-else-if="_key == 'total_trx_amount'">
+                            {{ (item.amount - item.profit).toLocaleString() }}
+                        </span>
+                        <span v-else-if="_key == 'amount'" style="color: red !important;">
+                            {{ (item.amount).toLocaleString() }}
+                        </span>
+                        <span v-else-if="_key == 'profit'">
+                            {{ (item.profit).toLocaleString() }}
+                        </span>
+                        <span v-else-if="_key == 'cxl_dttm'" style="color: red !important;">
+                            {{ item[_key] }}
+                        </span>
+                        <span v-else-if="_key == 'trx_dttm'" class="text-primary">
+                            {{ item[_key] }}
+                        </span>                            
+                        <span v-else-if="_key == 'installment'">
+                            {{ installments.find(inst => inst['id'] === item[_key])?.title }}
+                        </span>
+                        <span v-else>{{ item[_key] }}</span>
+                    </td>
                 </template>
             </tr>
         </template>

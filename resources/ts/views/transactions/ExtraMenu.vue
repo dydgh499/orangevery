@@ -129,7 +129,7 @@ const isRealtimeTransaction = () => {
                     <VListItemTitle>결제취소하기</VListItemTitle>
                 </VListItem>
                 <VListItem value="cancel-deposit" @click="cancelDeposit.show(props.item)"
-                    v-if="getUserLevel() >= 35 && props.item.is_cancel">
+                    v-if="getUserLevel() >= 50 && props.item.is_cancel">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="material-symbols:account-balance" />
                     </template>

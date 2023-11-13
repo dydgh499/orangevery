@@ -51,7 +51,7 @@ const getAbilitiesMenu = computed(() => {
                 to: 'transactions-settle-histories-difference',
             })
         }
-        if (user_info.value.level >= 35 ) {
+        if (user_info.value.level >= 50 ) {
             settle_childs.push({
                 title: '입금내역 관리',
                 to: 'transactions-settle-cancel-deposits',
