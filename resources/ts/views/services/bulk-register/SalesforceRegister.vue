@@ -114,7 +114,8 @@ const validate = () => {
 }
 
 const salesRegister = async () => {
-    const result = await bulkRegister('영업점', 'salesforces', saleses.value)
+    if(await bulkRegister('영업점', 'salesforces', saleses.value))
+        location.reload()
 }
 watchEffect(async () => {
     if (excel.value) {

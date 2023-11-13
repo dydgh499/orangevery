@@ -116,7 +116,8 @@ const validate = () => {
     is_clear.value = true
 }
 const payModRegister = async () => {
-    const result = await bulkRegister('결제모듈', 'merchandises/pay-modules', items.value)
+    if(await bulkRegister('결제모듈', 'merchandises/pay-modules', items.value))
+        location.reload()
 }
 watchEffect(async () => {
     if (excel.value) {

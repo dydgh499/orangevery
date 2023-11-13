@@ -7,12 +7,15 @@ import MerchandiseRegister from '@/views/services/bulk-register/MerchandiseRegis
 import PayModuleRegister from '@/views/services/bulk-register/PayModuleRegister.vue'
 
 import CreateForm from '@/layouts/utils/CreateForm.vue'
+import corp from '@corp'
 
 const tabs = <Tab[]>([
     { icon: 'tabler-user', title: '영업점 등록' },
     { icon: 'tabler-building-store', title: '가맹점 등록' },
     { icon: 'ic-outline-send-to-mobile', title: '결제모듈 등록' },
 ])
+if(corp.pv_options.paid.use_regular_card)
+    tabs.push({ icon: 'emojione:credit-card', title: '단골고객 카드정보 등록' })
 
 </script>
 <template>

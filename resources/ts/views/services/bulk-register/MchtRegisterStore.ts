@@ -33,7 +33,7 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
     }
     headers['user_name'] = '가맹점 ID(O)'
     headers['user_pw'] = '가맹점 패스워드(O)'
-    headers['trx_fee'] = '수수료(X)'
+    headers['trx_fee'] = '가맹점 수수료(X)'
     headers['hold_fee'] = '유보금 수수료(X)'
     headers['mcht_name'] = '상호(O)'
     headers['nick_name'] = '대표자명(O)'
@@ -46,6 +46,11 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
     headers['acct_name'] = '예금주(O)'
     headers['acct_bank_name'] = '입금은행명(O)'
     headers['custom_id'] = '커스텀 필터(X)'
+
+    if(corp.pv_options.paid.use_collect_withdraw) 
+        headers['use_collect_withdraw'] = '모아서 출금 사용여부(X)'
+    if(corp.pv_options.paid.use_regular_card) 
+        headers['use_regular_card'] = '단골고객 사용여부(X)'
 
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})

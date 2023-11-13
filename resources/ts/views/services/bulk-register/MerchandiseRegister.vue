@@ -4,11 +4,12 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useRegisterStore } from '@/views/services/bulk-register/MchtRegisterStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { banks } from '@/views/users/useStore'
-import type { Merchandise } from '@/views/types'
+import type { Merchandise, Options } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BanksExplainDialog from '@/layouts/dialogs/BanksExplainDialog.vue'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { Registration } from '@/views/registration'
+import corp from '@corp'
 
 interface extendMerchandise extends Merchandise {
     [key: string]: any;
@@ -24,6 +25,10 @@ const excel = ref()
 const items = ref<extendMerchandise[]>([])
 const is_clear = ref<boolean>(false)
 const banksExplain = ref()
+const use_types: Options[] = [
+    { id: 0, title: '미사용',},
+    { id: 1, title: '사용',},
+]
 
 const isNotExistSalesforce = (is_use: boolean, sales_idx: number, item_idx: number) => {
     const sales_id = 'sales' + sales_idx + '_id';
@@ -147,7 +152,8 @@ const validate = () => {
 }
 
 const mchtRegister = async () => {
-    const result = await bulkRegister('가맹점', 'merchandises', items.value)
+    if(await bulkRegister('가맹점', 'merchandises', items.value))
+        location.reload()
 }
 
 watchEffect(async () => {
@@ -185,6 +191,20 @@ watchEffect(async () => {
                         </VChip>
                         <b v-if="cus_filters.length == 0" class="important-text">"운영 관리 - PG사 관리"에서 커스텀 필터 추가 후 입력 가능합니다.</b>                        
                     </VCol>
+                    <VCol class="pb-0" v-if="corp.pv_options.paid.use_collect_withdraw">
+                        <b>모아서 출금 사용여부</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
+                            {{ cus.title }} = {{ cus.id }}
+                        </VChip>
+                    </VCol>
+                    <VCol class="pb-0" v-if="corp.pv_options.paid.use_collect_withdraw">
+                        <b>단골고객 사용여부</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
+                            {{ cus.title }} = {{ cus.id }}
+                        </VChip>
+                    </VCol>
                 </template>
                 <template #input>
                     <VCol class="pb-0">
@@ -208,6 +228,13 @@ watchEffect(async () => {
                         <b>주민등록번호 입력 주의사항</b>
                         <br>
                         <span>- 14자리 입력(예:800101-7654321)</span>
+                    </VCol>
+                    <VCol v-if="corp.pv_options.paid.use_regular_card">
+                        <b>단골고객 카드정보 목록 입력 주의사항</b>
+                        <br>
+                        <span>- <b>,</b>로 구분하여 카드정보 작성(예: 1234000000005678,4321000012345678)</span>
+                        <br>
+                        <span>- 별칭란은 "카드정보"로 공통 등록됩니다.</span>
                     </VCol>
                 </template>
             </CreateHalfVCol>
