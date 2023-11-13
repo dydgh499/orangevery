@@ -145,7 +145,7 @@ watchEffect(() => {
                                     {{ props.item.id == 0 ? "추가" : "수정" }}
                                     <VIcon end icon="tabler-pencil" />
                                 </VBtn>
-                                <VBtn type="button" color="error" v-if="props.item.id" @click="remove('/services/pay-gateways', props.item.id, false)">
+                                <VBtn type="button" color="error" v-if="props.item.id" @click="remove('/services/pay-gateways', props.item, false)">
                                     삭제
                                     <VIcon end icon="tabler-trash" />
                                 </VBtn>

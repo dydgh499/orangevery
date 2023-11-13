@@ -34,6 +34,8 @@ class PaymentGateway
             ["id" => 19, "pg_name" => '삼인칭', "rep_name" => '윤건', "company_name" => '주식회사 삼인칭', "business_num" => '489-87-00733', "phone_num" => '1833-4854', "addr" => '서울특별시 마포구 큰우물로 76, 403호(도화동, 고려빌딩)'],
             ["id" => 20, "pg_name" => 'WGP', "rep_name" => '우강섭', "company_name" => '(주)윈글로벌페이', "business_num" => '648-86-00577', "phone_num" => '1877-7590', "addr" => '[12918] 경기도 하남시 조정대로 45, 미사센텀비즈 F348호'],
             ["id" => 21, "pg_name" => '브라이트픽스(C3)', "rep_name" => '박용은', "company_name" => '(주)브라이트픽스', "business_num" => '235-88-01772', "phone_num" => '02-6336-0999', "addr" => '주소 서울특별시 금천구 가산디지털2로 166, 216~217호(가산동, 에이스K1타워)'],
+            ["id" => 22, "pg_name" => '다날페이', "rep_name" => '박지만, 백현숙', "company_name" => 'DANAL', "business_num" => '113-81-44055', "phone_num" => '1566-3355', "addr" => '13591 경기도 성남시 분당구 분당로 55 퍼스트타워 9층'],
+            ["id" => 23, "pg_name" => '바움피엔에스', "rep_name" => '윤건, 안용희', "company_name" => '바움피엔에스 주식회사', "business_num" => '836-87-00147', "phone_num" => '1833-6199', "addr" => '인천시 연수구 인천타워대로 323 (송도 센트로드 Office A동 2907-9호)'],
         ];
         $this->paywell = [];
         $this->payvery = [];
