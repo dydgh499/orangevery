@@ -468,6 +468,8 @@ export interface Transaction {
     fin_trx_delay?: number
     realtime_result?: string,
     use_collect_withdraw?: number,
+    profit?: number,
+    trx_amount?: number,    
 }
 
 export interface SalesSlip extends Transaction{

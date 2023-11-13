@@ -65,6 +65,9 @@ class CreateMerchandisesTable extends Migration
             $table->boolean('enabled')->default(true)->comment('사용 여부(0=미사용, 1=사용)');
             $table->boolean('use_saleslip_prov')->default(true)->comment('매출전표 공급자 사용 여부(0=사용, 1=본사)');
             $table->boolean('use_saleslip_sell')->default(false)->comment('매출전표 판매자 사용 여부(0=사용, 1=본사)');
+            $table->boolean('use_noti')->default(false)->comment('노티 사용여부');
+            $table->boolean('use_regular_card')->default(false)->comment('정기 카드 사용여부(단골고객)');
+            $table->boolean('use_collect_withdraw')->default(false)->comment('모아서 출금여부');
             $table->boolean('is_show_fee')->default(false)->comment('수수료율 노출여부');
             $table->string('note', 100)->nullable()->comment('메모');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');

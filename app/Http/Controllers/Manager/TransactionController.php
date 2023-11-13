@@ -81,25 +81,7 @@ class TransactionController extends Controller
                     ->orWhere('merchandises.business_num', 'like', "%$search%");
             });
         }
-        if($request->has('s_dt') && $request->has('e_dt'))
-        {
-            $query = $query->where(function($query) use($request) {
-                $query->where(function($query) use($request) {
-                    $search_format = $request->use_search_date_detail ? "concat(trx_dt, ' ', trx_tm)" : "trx_dt";
-                    $query->where('transactions.is_cancel', false)
-                        ->whereRaw("$search_format >= ?", [$request->s_dt])
-                        ->whereRaw("$search_format <= ?", [$request->e_dt]);
-                })->orWhere(function($query) use($request) {
-                    $search_format = $request->use_search_date_detail ? "concat(cxl_dt, ' ', cxl_tm)" : "cxl_dt";
-                    $query->where('transactions.is_cancel', true)
-                    ->whereRaw("$search_format >= ?", [$request->s_dt])
-                    ->whereRaw("$search_format <= ?", [$request->e_dt]);
-                });
-            });
-            $request->query->remove('s_dt');
-            $request->query->remove('e_dt');
-        }
-
+        $query = $this->transDateFilter($query, $request->s_dt, $request->e_dt, $request->use_search_date_detail);
         if($request->only_cancel && $request->only_cancel == 'true')
             $query = $query->where('transactions.is_cancel', true);
         if($request->has('mcht_settle_id'))

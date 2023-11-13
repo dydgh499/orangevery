@@ -24,6 +24,7 @@ use App\Http\Controllers\Manager\ClassificationController;
 use App\Http\Controllers\Manager\PostController;
 use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Manager\TransactionController;
+use App\Http\Controllers\Manager\CancelDepositController;
 use App\Http\Controllers\Manager\SalesforceBatchController;
 use App\Http\Controllers\Manager\UnderAutoSettingController;
 use App\Http\Controllers\Manager\RegularCreditCardController;
@@ -133,6 +134,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                     Route::get('/part', [SalesSettleController::class, 'part']);
                     Route::get('/part/chart', [SalesSettleController::class, 'partChart']);
                 });
+                Route::apiResource('cancel-deposits', CancelDepositController::class);
             });
             Route::prefix('settle-histories')->group(function() {
                 Route::get('difference', [DifferenceSettlementHistoryController::class, 'index']);
@@ -150,12 +152,11 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('salesforces/batch', [SalesSettleHistoryController::class, 'batch']);
                 Route::post('salesforces/{id}/deposit', [SalesSettleHistoryController::class, 'setDeposit']);
             });
-            
             Route::prefix('realtime-histories')->group(function() {
                 Route::post('get-balance', [RealtimeSendHistoryController::class, 'getBalance']);
                 Route::post('head-office-transfer', [RealtimeSendHistoryController::class, 'headOfficeTransfer']);
                 
-            });
+            });            
             Route::apiResource('realtime-histories', RealtimeSendHistoryController::class);
         });
         Route::prefix('salesforces')->group(function() {

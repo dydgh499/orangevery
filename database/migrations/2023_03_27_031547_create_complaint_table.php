@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->foreignId('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
+            $table->tinyInteger('complaint_status')->default(0)->comment('민원상태(0=처리전, 1=처리중, 2=처리완료)');
             $table->string('tid', 50)->default('')->comment('tid');
             $table->string('cust_name', 50)->default('')->comment('고객명');
             $table->date('appr_dt')->default('1970-01-01')->comment('승인일');
@@ -31,6 +32,7 @@ return new class extends Migration
             $table->boolean('is_deposit')->default(false)->comment('입금상태');
             $table->string('note', 255)->nullable()->default('')->comment('내용');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
+            
             $table->timestamps();
         });
     }

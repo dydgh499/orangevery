@@ -62,10 +62,8 @@ class DifferenceSettlementHistoryController extends Controller
 
     public function index(IndexRequest $request)
     {
-        $page       = $request->input('page');
-        $page_size  = $request->input('page_size');
         $query = $this->commonSelect($request);
-        return $this->transPagenation($query, 'difference_settlement_histories', $this->cols, $page, $page_size);
+        return $this->transPagenation($query, 'difference_settlement_histories', $this->cols, $request->page, $request->page_size);
     }
 
     public function commonSelect($request)
@@ -89,23 +87,7 @@ class DifferenceSettlementHistoryController extends Controller
                     ->orWhere('merchandises.business_num', 'like', "%$search%");
             });
         }
-        if($request->has('s_dt') && $request->has('e_dt'))
-        {
-            $query = $query->where(function($query) use($request) {
-                $query->where(function($query) use($request) {
-                    $query->where('transactions.is_cancel', false)
-                        ->where('transactions.trx_dt', '>=', $request->s_dt)
-                        ->where('transactions.trx_dt', '<=', $request->e_dt);
-                })->orWhere(function($query) use($request) {
-                    $query->where('transactions.is_cancel', true)
-                        ->where('transactions.cxl_dt', '>=', $request->s_dt)
-                        ->where('transactions.cxl_dt', '<=', $request->e_dt);
-                });
-            });
-            $request->query->remove('s_dt');
-            $request->query->remove('e_dt');
-        }
-
+        $query = $this->transDateFilter($query, $request->s_dt, $request->e_dt, $request->use_search_date_detail);
         $query = globalPGFilter($query, $request, 'transactions');
         $query = globalSalesFilter($query, $request, 'transactions');
         $query = globalAuthFilter($query, $request, 'transactions');

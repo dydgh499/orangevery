@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('send_url')->comment('발송 url');
             $table->tinyInteger('retry_count')->comment('재시도 회수');
             $table->string('message')->comment('내용');
+            $table->string('temp', 500)->nullable()->comment('임시 값');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('phone_num',20)->nullable()->comment('휴대폰 번호');
             $table->tinyInteger('level')->default(0)->comment('유저 레벨');
             $table->string('profile_img')->nullable()->comment('프로필 이미지');
+            $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });
     }

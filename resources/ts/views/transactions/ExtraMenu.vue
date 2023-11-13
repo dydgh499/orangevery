@@ -21,6 +21,7 @@ const formatDate = <any>(inject('$formatDate'))
 
 const salesslip = <any>(inject('salesslip'))
 const cancelTran = <any>(inject('cancelTran'))
+const cancelDeposit = <any>(inject('cancelDeposit'))
 const realtimeHistories = <any>(inject('realtimeHistories'))
 
 const complaint = () => {
@@ -85,7 +86,7 @@ const isRealtimeTransaction = () => {
 <template>
     <VBtn icon size="x-small" color="default" variant="text">
         <VIcon size="22" icon="tabler-dots-vertical" />
-        <VMenu activator="parent" width="230">
+        <VMenu activator="parent" width="250">
             <VList>
                 <VListItem value="saleslip" @click="salesslip.show(props.item)">
                     <template #prepend>
@@ -111,7 +112,7 @@ const isRealtimeTransaction = () => {
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:history" />
                     </template>
-                    <VListItemTitle>실시간 상세이력 확인</VListItemTitle>
+                    <VListItemTitle>실시간 상세이력</VListItemTitle>
                 </VListItem>
                 <VListItem value="cancelTrans" @click="cancelTran.show(props.item)"
                     v-if="getUserLevel() >= 35 && props.item.is_cancel == false">
@@ -126,6 +127,13 @@ const isRealtimeTransaction = () => {
                         <VIcon size="24" class="me-3" icon="tabler:world-cancel" />
                     </template>
                     <VListItemTitle>결제취소하기</VListItemTitle>
+                </VListItem>
+                <VListItem value="cancel-deposit" @click="cancelDeposit.show(props.item)"
+                    v-if="getUserLevel() >= 35 && props.item.is_cancel">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="material-symbols:account-balance" />
+                    </template>
+                    <VListItemTitle>입금내역등록</VListItemTitle>
                 </VListItem>
             </VList>
         </VMenu>

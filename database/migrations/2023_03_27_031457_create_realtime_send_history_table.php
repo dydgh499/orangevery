@@ -17,7 +17,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('brand_id')->nullable()->comment('브랜드 ID')->constrained('brands')->onDelete('SET NULL');
             $table->foreignId('trans_id')->nullable()->comment('거래 ID')->constrained('transactions')->onDelete('SET NULL');
+            $table->foreignId('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
             $table->string('result_code', 5)->comment('응답 CODE');
+            $table->integer('request_type')->nullable()->comment('요청 타입');
+            $table->integer('finance_id')->nullable()->comment('금융 VAN ID');
             $table->string('message')->comment('내용');
             $table->integer('amount')->comment('거래 금액');
             $table->string('acct_num', 20)->nullable()->comment('계좌번호');
@@ -25,6 +28,7 @@ return new class extends Migration
             $table->string('acct_bank_code', 3)->nullable()->comment('은행코드');
             $table->string('trans_seq_num', 20)->nullable()->comment('요청 ID');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
+            
             $table->timestamps();
         });
     }

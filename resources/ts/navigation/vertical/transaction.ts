@@ -4,6 +4,7 @@ import corp from '@corp'
 const getAbilitiesMenu = computed(() => {
     const payments = []
     const settles = []
+    let settle_childs = []
     const settle_histories = []
     const risks = []
     if (corp.pv_options.free.use_hand_pay) {
@@ -25,6 +26,17 @@ const getAbilitiesMenu = computed(() => {
         })
     }
     if (user_info.value.level > 10) {
+        settle_childs = [
+            {
+                title: '가맹점 정산 관리',
+                to: 'transactions-settle-merchandises',
+            },
+            {
+                title: '영업점 정산 관리',
+                to: 'transactions-settle-salesforces',
+            },
+        ]
+
         settle_histories.push({
             title: '가맹점 정산 이력',
             to: 'transactions-settle-histories-merchandises',
@@ -39,19 +51,16 @@ const getAbilitiesMenu = computed(() => {
                 to: 'transactions-settle-histories-difference',
             })
         }
+        if (user_info.value.level >= 35 ) {
+            settle_childs.push({
+                title: '입금내역 관리',
+                to: 'transactions-settle-cancel-deposits',
+            })
+        }
         settles.push({
             title: '정산 관리',
             icon: { icon: 'tabler-calculator' },
-            children: [
-                {
-                    title: '가맹점 정산 관리',
-                    to: 'transactions-settle-merchandises',
-                },
-                {
-                    title: '영업점 정산 관리',
-                    to: 'transactions-settle-salesforces',
-                },
-            ]
+            children: settle_childs,
         },
         {
             title: '정산 이력',

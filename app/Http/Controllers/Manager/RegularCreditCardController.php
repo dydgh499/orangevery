@@ -95,6 +95,7 @@ class RegularCreditCardController extends Controller
         $res = $this->cards->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
+    
     /**
      * 대량등록
      *

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { module_types, installments, fin_trx_delays, cxl_types } from '@/views/merchandises/pay-modules/useStore'
+import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
 import { useSearchStore, realtimeResult } from '@/views/transactions/useStore'
 import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -9,6 +9,7 @@ import ExtraMenu from '@/views/transactions/ExtraMenu.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
 import CancelTransDialog from '@/layouts/dialogs/CancelTransDialog.vue'
+import CancelDepositDialog from '@/layouts/dialogs/CancelDepositDialog.vue'
 import RealtimeHistoriesDialog from '@/layouts/dialogs/RealtimeHistoriesDialog.vue'
 
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
@@ -25,6 +26,7 @@ const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
 const salesslip = ref()
 const cancelTran = ref()
+const cancelDeposit = ref()
 const realtimeHistories = ref()
 const levels = corp.pv_options.auth.levels
 
@@ -34,6 +36,7 @@ provide('exporter', exporter)
 
 provide('salesslip', salesslip)
 provide('cancelTran', cancelTran)
+provide('cancelDeposit', cancelDeposit)
 provide('realtimeHistories', realtimeHistories)
 
 const alert = <any>(inject('alert'))
@@ -201,6 +204,7 @@ const batchRetry = async() => {
         </BaseIndexView>
         <SalesSlipDialog ref="salesslip" :pgs="pgs" />
         <CancelTransDialog ref="cancelTran" />
+        <CancelDepositDialog ref="cancelDeposit" />
         <RealtimeHistoriesDialog ref="realtimeHistories" />
     </div>
 </template>

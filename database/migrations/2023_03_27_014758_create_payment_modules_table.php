@@ -32,7 +32,9 @@ return new class extends Migration
             $table->tinyInteger('comm_settle_day')->default(0)->comment('통신비 정산일');
             $table->smallInteger('comm_settle_fee')->default(0)->comment('통신비 입금 수수료');
             $table->tinyInteger('comm_settle_day')->default(0)->comment('통신비 정산 타입(개통월 부터=0, 개통월 익월=1, 개통월 익익월=2)');
-            $table->tinyInteger('comm_calc_level')->default(0)->comment('정산주체(sales id), -1=본인, 125=개발사, 128=본사');
+            $table->tinyInteger('comm_calc_level')->default(0)->comment('정산주체(sales id), -1=본인, 125=개발사, 128=본사');            
+            $table->tinyInteger('under_sales_type')->default(0)->comment('매출미달 적용타입');
+            $table->integer('under_sales_limit')->default(0)->comment('매출미달 하한금액');
             $table->integer('under_sales_amt')->default(0)->comment('매출미달 차감금');
             $table->date('begin_dt')->nullable()->comment('개통일');
             $table->date('ship_out_dt')->nullable()->comment('출고일');
@@ -54,7 +56,10 @@ return new class extends Migration
             $table->time('pay_disable_s_tm')->nullable()->comment('결제 금지 시작 시간');
             $table->time('pay_disable_e_tm')->nullable()->comment('결제 금지 종료 시간');
             $table->integer('pay_single_limit')->default(0)->comment('결제 단건 한도(단위:만원)');
-            $table->integer('pay_dupe_least')->default(0)->comment('중복거래 하한금');
+            $table->integer('pay_dupe_least')->default(0)->comment('중복거래 하한금');            
+            $table->date('contract_s_dt')->nullable()->comment('계약 시작일');
+            $table->date('contract_e_dt')->nullable()->comment('계약 종료일');
+            $table->boolean('use_realtime_deposit')->default(false)->comment('실시간 이체 사용여부');
 
             $table->string('pay_key', 100)->default('')->comment('API KEY');
             $table->string('filter_issuers', 200)->default('[]')->comment('카드사 필터');

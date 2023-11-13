@@ -40,20 +40,10 @@ trait SettleTerminalTrait
             };    
         };
         $getUnderSalesGroup = function($pmod_ids, $s_dt, $e_dt) {
-            return $under_sales = Transaction::whereIn('pmod_id', $pmod_ids)
-                ->where(function($query) use ($s_dt, $e_dt) {
-                    $query->where(function($query) use($s_dt, $e_dt) {
-                        $query->where('is_cancel', false)
-                            ->where('trx_dt', '>=', $s_dt)
-                            ->where('trx_dt', '<=', $e_dt);
-                    })->orWhere(function($query) use($s_dt, $e_dt) {
-                        $query->where('is_cancel', true)
-                            ->where('cxl_dt', '>=', $s_dt)
-                            ->where('cxl_dt', '<=', $e_dt);
-                    });
-                })
-                ->groupby('pmod_id')
-                ->get([DB::raw('SUM(amount) AS total_amount'), 'pmod_id']);
+                $query = Transaction::whereIn('pmod_id', $pmod_ids);     
+                $query = $this->transDateFilter($query, $s_dt, $e_dt, null);    //IN TransactionTrait.php
+                return $under_sales = $query->groupby('pmod_id')
+                        ->get([DB::raw('SUM(amount) AS total_amount'), 'pmod_id']);
         };
         //작월 1일 ~ 작월 말일
         $under_sales1 = $pay_modules->filter($underSettleDivision(1))->values();
