@@ -55,6 +55,7 @@ const chartSetter = (base_url: string) => {
     }
 
     return {
+        get,
         getChartProcess,
         setChartProcess,
         _getChartData,
@@ -64,7 +65,6 @@ const chartSetter = (base_url: string) => {
 }
 
 export const Searcher = (path: string) => {
-    const { get } = useRequestStore()
     const base_url = '/api/v1/manager/'+path
     // -----------------------------
     let before_search   = ''
@@ -73,6 +73,7 @@ export const Searcher = (path: string) => {
     const pagenation    = reactive<Pagenation>({ total_count: 0, total_page: 1, total_range: 0})
     const is_skeleton   = ref(true)
     const {
+        get,
         getChartProcess,
         setChartProcess,
         _getChartData,
@@ -255,7 +256,7 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
             const e_date = new Date(range_date.value[1])
             store.params.s_dt = getDateFormat(s_date)
             store.params.e_dt = getDateFormat(e_date)
-            store.updateQueryString({ s_dt: getDateFormat(s_date), e_dt: getDateFormat(e_date) })
+            store.updateQueryString({ s_dt: store.params.s_dt, e_dt: store.params.e_dt })
         }
         else if (props.date_filter_type == DateFilters.DATE) {
             const dt = new Date(date.value)
