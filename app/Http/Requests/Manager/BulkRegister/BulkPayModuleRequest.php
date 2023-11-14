@@ -10,6 +10,7 @@ class BulkPayModuleRequest extends FormRequest
     use FormRequestTrait;
     public $integer_keys = [
         'terminal_id',
+        'settle_fee',
         'comm_settle_fee',
         'comm_settle_day',
         'comm_calc_level',
