@@ -103,23 +103,25 @@ trait responseTrait
     
                 $req_dt     = Carbon::createFromFormat('Ymd', (string)$req_dt)->format('Y-m-d');
                 $settle_dt  = Carbon::createFromFormat('Ymd', (string)$settle_dt)->format('Y-m-d');
-    
-                $records[] = [
-                    'trans_id'   => $add_field,
-                    'settle_result_code'    => $settle_result_code,
-                    'settle_result_msg'     => $this->getSettleMessage($settle_result_code),
-                    'card_company_result_code'  => $card_company_result_code,
-                    'card_company_result_msg'   => $this->getCardCompanyMessage($card_company_result_code),
-                    'mcht_section_code' => $mcht_section_code,
-                    'mcht_section_name'  => $this->getMchtSectionName($mcht_section_code),
-                    'req_dt'    => $req_dt,
-                    'settle_dt' => $settle_dt,
-                    'supply_amount' => $supply_amount,
-                    'vat_amount' => $vat_amount,
-                    'settle_amount' => $settle_amount,
-                    'created_at' => $cur_date,
-                    'updated_at' => $cur_date,
-                ];
+                if((int)$add_field != 0)
+                {
+                    $records[] = [
+                        'trans_id'   => $add_field,
+                        'settle_result_code'    => $settle_result_code,
+                        'settle_result_msg'     => $this->getSettleMessage($settle_result_code),
+                        'card_company_result_code'  => $card_company_result_code,
+                        'card_company_result_msg'   => $this->getCardCompanyMessage($card_company_result_code),
+                        'mcht_section_code' => $mcht_section_code,
+                        'mcht_section_name'  => $this->getMchtSectionName($mcht_section_code),
+                        'req_dt'    => $req_dt,
+                        'settle_dt' => $settle_dt,
+                        'supply_amount' => $supply_amount,
+                        'vat_amount' => $vat_amount,
+                        'settle_amount' => $settle_amount,
+                        'created_at' => $cur_date,
+                        'updated_at' => $cur_date,
+                    ];
+                }
             }
         }
         return $records;
