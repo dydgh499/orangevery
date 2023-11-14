@@ -1,21 +1,25 @@
 <script lang="ts" setup>
 import { axios } from '@axios'
 
+const active_count = ref(0)
 const visible = ref(false)
 axios.interceptors.request.use((config) => {
-    visible.value = true
+    active_count.value++
     return config;
 }, (error) => {
-    visible.value = false
+    active_count.value++
     return Promise.reject(error);
 });
 axios.interceptors.response.use((response) => {
-    visible.value = false
+    active_count.value--
     return response;
 }, (error) => {
-    visible.value = false
+    active_count.value--
     return Promise.reject(error);
 });
+watchEffect(() => {
+    visible.value = active_count.value ? true : false
+})
 </script>
 <template>
     <VDialog v-model="visible" width="300">
