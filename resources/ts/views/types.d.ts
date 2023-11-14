@@ -302,6 +302,7 @@ interface PaidOption {
     use_collect_withdraw: boolean,
     use_head_office_withdraw: boolean,
     use_noti: boolean,
+    cancel_deposit: boolean, //입금 내역 관리
 }
 interface AuthOption {
     levels: {
