@@ -92,9 +92,6 @@ class TransactionController extends Controller
             if($request->has($col))
                 $query = $query->where('transactions.'.$col, $request->input($col));
         }
-
-        if($request->use_realtime_deposit && $request->level == 10)
-            $query = $query->with(['realtimes']);
         return $query;
     }
 
@@ -121,6 +118,15 @@ class TransactionController extends Controller
     public function index(IndexRequest $request)
     {
         $query = $this->commonSelect($request);
+
+        $with = [];
+        if($request->use_realtime_deposit && $request->level == 10)
+            $with[] = 'realtimes';
+        if($request->use_cancel_deposit)
+            $with[] = 'cancelDeposits';
+        if(count($with))
+            $query = $query->with($with);
+
         $data   = $this->getTransactionData($request, $query);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);

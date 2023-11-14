@@ -1,76 +1,96 @@
 <script setup lang="ts">
-import type { Transaction } from '@/views/types'
+import type { Transaction, CancelDeposit } from '@/views/types'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
+import { VForm } from 'vuetify/components'
 
-const store = <any>(inject('store'))
-const alert = <any>(inject('alert'))
-const { post } = useRequestStore()
+const formatDate = <any>(inject('$formatDate'))
+const { update, remove } = useRequestStore()
 
 const visible = ref(false)
-const trans = ref<Transaction>({})
-
-const vForm = ref()
-const deposit_amount = ref()
-const deposit_history = ref()
+const trans = ref<Transaction>()
+const vForm = ref<VForm>()
 
 const show = (item: Transaction) => {
     trans.value = item
     visible.value = true
+    addNewCancelDeposit()
 }
 
-const submit = async () => {
-    const is_valid = await vForm.value.validate();
-    if (is_valid.valid && await alert.value.show('정말 해당 취소건의 입금내역을 등록 하시겠습니까?')) {
-        const params = {
-            trans_id: trans.value.id,
-            deposit_amount: deposit_amount.value,
-            deposit_history: deposit_history.value,
-        }
-        const r = await post('/api/v1/manager/transactions/cancel-deposits', params)
-        store.setTable()
-        visible.value = false
-    }
+const addNewCancelDeposit = () => {
+    trans.value?.cancel_deposits?.unshift(<CancelDeposit>({
+        id: 0,
+        trans_id: trans.value?.id,
+        deposit_amount: 0,
+        deposit_history: '',
+        deposit_date: formatDate(new Date()),
+    }))
 }
-
+const closeDialog = () => {
+    visible.value = false
+    Object.assign(trans.value?.cancel_deposits as CancelDeposit[], trans.value?.cancel_deposits?.filter(item => item.id !== 0))
+}
+const totalSettleAmount = computed(() => {
+    const total_cancel_deposit = trans.value?.cancel_deposits?.reduce((sum, item) => {
+        return parseInt(sum) + (item.deposit_amount ? parseInt(item.deposit_amount) : 0)
+    }, 0) 
+    return parseInt(trans.value?.profit) + parseInt(total_cancel_deposit)
+})
 defineExpose({
     show
 });
+onMounted(() => {
+})
 </script>
 <template>
-    <VDialog v-model="visible" max-width="800">
+    <VDialog v-model="visible" max-width="1000">
         <!-- Dialog close btn -->
-        <DialogCloseBtn @click="visible = false" />
+        <DialogCloseBtn @click="closeDialog()" />
         <!-- Dialog Content -->
-        <VCard title="입금내역 등록">
+        <VCard title="가맹점 입금내역 등록">
             <VCardText>
+                <VForm ref="vForm">
+                </VForm>
                 <VTable class="text-no-wrap" style="width: 100%; margin: 1em 0;">
                     <thead>
                         <tr>
                             <th class='list-square' style="width: 25%;">가맹점명</th>
-                            <th class='list-square' style="width: 10%;">입금일자</th>
+                            <th class='list-square' style="width: 25%;">입금일자</th>
                             <th class='list-square' style="width: 25%;">입금금액</th>
-                            <th class='list-square' style="width: 40%;">입금내역</th>
+                            <th class='list-square' style="width: 25%;">입금내역</th>
+                            <th class='list-square' style="width: 25%;">수정/삭제</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr v-for="(_cancel_deposit, key) in trans?.cancel_deposits" :key="key">
                             <td class='list-square'>{{ trans?.mcht_name }}</td>
-                            <td class='list-square'>{{ trans.trx_dt }}</td>
                             <td class='list-square'>
-                                <VForm ref="vForm">
-                                    <VTextField v-model="deposit_amount" type="number" />
-                                </VForm>
+                                <VTextField v-model="_cancel_deposit.deposit_date" type="date" />
                             </td>
                             <td class='list-square'>
-                                <VForm ref="vForm">
-                                    <VTextField v-model="deposit_history" type="string" />
-                                </VForm>
+                                <VTextField v-model="_cancel_deposit.deposit_amount" type="number" />
+                            </td>
+                            <td class='list-square'>
+                                <VTextField v-model="_cancel_deposit.deposit_history" type="string" />
+                            </td>
+                            <td class="text-center">
+                                <VCol class="d-flex gap-4">
+                                    <VBtn type="button" color="default" variant="text"
+                                        @click="update('/transactions/settle/cancel-deposits', _cancel_deposit, vForm, false)">
+                                        {{ _cancel_deposit.id == 0 ? "추가" : "수정" }}
+                                        <VIcon end icon="tabler-pencil" />
+                                    </VBtn>
+                                    <VBtn type="button" color="default" variant="text" v-if="_cancel_deposit.id"
+                                        @click="remove('/transactions/settle/cancel-deposits', _cancel_deposit, false)">
+                                        삭제
+                                        <VIcon end icon="tabler-trash" />
+                                    </VBtn>
+                                </VCol>
                             </td>
                         </tr>
                     </tbody>
                 </VTable>
-                <VTable class="text-no-wrap table-content" style="width: 100%;">
+                <VTable class="text-no-wrap table-content" style="width: 100%; margin: 1em 0;">
                     <thead>
                         <tr>
                             <th class='list-square table-th'>취소일자</th>
@@ -88,7 +108,8 @@ defineExpose({
                             <th class='list-square table-th'>승인번호</th>
                             <th class='list-square table-td'>{{ trans?.appr_num }}</th>
                             <th class='list-square table-th'>매입사/할부</th>
-                            <th class='list-square table-td'>{{ trans?.acquirer + " / " + installments.find(inst => inst['id'] === trans?.installment)?.title }}</th>
+                            <th class='list-square table-td'>{{ trans?.acquirer + " / " + installments.find(inst =>
+                                inst['id'] === trans?.installment)?.title }}</th>
                         </tr>
                         <tr>
                             <th class='list-square table-th'>취소금액</th>
@@ -100,18 +121,10 @@ defineExpose({
                             <th class='list-square table-th'>수수료</th>
                             <th class='list-square table-td'>{{ trans?.trx_amount.toLocaleString() }}</th>
                             <th class='list-square table-th'>미차감잔액</th>
-                            <th class='list-square table-td text-primary'>{{ trans?.profit.toLocaleString() }}</th>
+                            <th class='list-square table-td text-primary'>{{ totalSettleAmount.toLocaleString() }}</th>
                         </tr>
                     </thead>
                 </VTable>
-            </VCardText>
-            <VCardText class="d-flex justify-end gap-3 flex-wrap">
-                <VBtn color="secondary" variant="tonal" @click="visible = false">
-                    취소
-                </VBtn>
-                <VBtn @click="submit()">
-                    생성
-                </VBtn>
             </VCardText>
         </VCard>
     </VDialog>

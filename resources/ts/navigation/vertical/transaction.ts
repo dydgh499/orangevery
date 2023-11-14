@@ -51,7 +51,7 @@ const getAbilitiesMenu = computed(() => {
                 to: 'transactions-settle-histories-difference',
             })
         }
-        if (corp.pv_options.paid.cancel_deposit) {
+        if (corp.pv_options.paid.use_cancel_deposit) {
             settle_childs.push({
                 title: '입금내역 관리',
                 to: 'transactions-settle-cancel-deposits',

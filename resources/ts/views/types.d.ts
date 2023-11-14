@@ -302,7 +302,7 @@ interface PaidOption {
     use_collect_withdraw: boolean,
     use_head_office_withdraw: boolean,
     use_noti: boolean,
-    cancel_deposit: boolean, //입금 내역 관리
+    use_cancel_deposit: boolean, //입금 내역 관리
 }
 interface AuthOption {
     levels: {
@@ -464,6 +464,7 @@ export interface Transaction {
     resident_num?: string,
     business_num?: string,
     realtimes?: RealtimeHistory[],
+    cancel_deposits?: CancelDeposit[],
     use_realtime_deposit?: number,
     cxl_type?: number,
     fin_trx_delay?: number
@@ -780,4 +781,15 @@ export interface NotiFormat {
 
 export interface HeadOffceAccount extends Bank {
     id: number,
+}
+
+export interface CancelDeposit {
+    id: number,
+    trans_id: number,
+    mcht_name?: string,
+    deposit_amount: number,
+    deposit_history: string,
+    deposit_date: string,
+    created_at: string,
+    updated_at: string,
 }

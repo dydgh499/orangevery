@@ -100,7 +100,11 @@ const onwerCheck = async () => {
                             <template #input>
                                 <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
                                     prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
-                                    persistent-placeholder :rules="[businessNumValidator]" />
+                                    persistent-placeholder :rules="[businessNumValidator]">
+                                    <VTooltip activator="parent" location="top" v-if="corp.use_different_settlement">
+                                        {{ "사업자번호를 입력하지 않거나, 정확하게 입력하지 않으면 차액정산대상에서 제외됩니다." }}
+                                    </VTooltip>
+                                </VTextField>
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 주민등록 번호 -->

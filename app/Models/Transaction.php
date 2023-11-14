@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Salesforce;
 use App\Models\Merchandise;
+use App\Models\CancelDeposit;
 use App\Models\Log\RealtimeSendHistory;
 
 use App\Http\Traits\Models\AttributeTrait;
@@ -26,7 +27,6 @@ class Transaction extends Model
         'dev_settle_amount',
         'dev_settle_id',
         'mcht_settle_amount',
-        'mcht_settle_id',
         'sales0_settle_amount',
         'sales0_settle_id',
         'sales1_settle_amount',
@@ -160,6 +160,13 @@ class Transaction extends Model
     public function realtimes()
     {
         return $this->hasMany(RealtimeSendHistory::class, 'trans_id')
+            ->orderby('id', 'desc')
+            ->select();
+    }
+
+    public function cancelDeposits()
+    {
+        return $this->hasMany(CancelDeposit::class, 'trans_id')
             ->orderby('id', 'desc')
             ->select();
     }

@@ -43,10 +43,10 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 
 store.params.level = 10
-store.params.dev_use = corp.pv_options.auth.levels.dev_use
+store.params.dev_use = Number(corp.pv_options.auth.levels.dev_use)
 store.params.use_realtime_deposit = Number(corp.pv_options.paid.use_realtime_deposit)
-store.params.only_cancel = false
-
+store.params.use_cancel_deposit = Number(corp.pv_options.paid.use_cancel_deposit)
+store.params.only_cancel = 0
 
 const getAllLevels = () => {
     const sales = salesLevels()

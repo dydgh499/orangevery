@@ -156,7 +156,6 @@ class DifferenceSettlementHistoryController extends Controller
             }
         }
     }
-
     public function differenceSettleResponse()
     {
         $brands = $this->getUseDifferentSettlementBrands();

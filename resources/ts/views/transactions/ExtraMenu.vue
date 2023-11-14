@@ -82,6 +82,9 @@ const isCancelSafeDate = () => {
 const isRealtimeTransaction = () => {
     return getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit
 }
+const isUseCancelDeposit = () => {
+    return getUserLevel() >= 35 && corp.pv_options.paid.use_cancel_deposit && props.item.is_cancel && !props.item.mcht_settle_id
+}
 </script>
 <template>
     <VBtn icon size="x-small" color="default" variant="text">
@@ -129,7 +132,7 @@ const isRealtimeTransaction = () => {
                     <VListItemTitle>결제취소하기</VListItemTitle>
                 </VListItem>
                 <VListItem value="cancel-deposit" @click="cancelDeposit.show(props.item)"
-                    v-if="getUserLevel() >= 35 && props.item.is_cancel && corp.pv_options.paid.cancel_deposit">
+                    v-if="isUseCancelDeposit()">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="material-symbols:account-balance" />
                     </template>

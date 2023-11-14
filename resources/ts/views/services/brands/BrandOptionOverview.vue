@@ -367,7 +367,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>입금내역 관리</template>
                             <template #input>
-                                <VSwitch v-model="props.item.paid.cancel_deposit" color="primary" />
+                                <VSwitch v-model="props.item.paid.use_cancel_deposit" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>

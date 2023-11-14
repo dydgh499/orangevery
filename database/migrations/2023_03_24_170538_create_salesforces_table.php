@@ -29,10 +29,10 @@ return new class extends Migration
             $table->string('business_num', 20)->nullable()->comment('사업자등록번호');
             $table->string('sector', 20)->nullable()->comment('업종');
             //
-            $table->string('passbook_img', 100)->nullable()->comment('통장 사본');
-            $table->string('id_img', 100)->nullable()->comment('신분증 사본');
-            $table->string('contract_img', 100)->nullable()->comment('계약서 사본');
-            $table->string('bsin_lic_img', 100)->nullable()->comment('사업자 등록증 사본');
+            $table->string('passbook_img', 150)->nullable()->comment('통장 사본');
+            $table->string('id_img', 150)->nullable()->comment('신분증 사본');
+            $table->string('contract_img', 150)->nullable()->comment('계약서 사본');
+            $table->string('bsin_lic_img', 150)->nullable()->comment('사업자 등록증 사본');
             $table->string('acct_num', 20)->nullable()->comment('계좌번호');
             $table->string('acct_name', 50)->nullable()->comment('예금주명');
             $table->string('acct_bank_name', 30)->nullable()->comment('입금은행명');

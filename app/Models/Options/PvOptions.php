@@ -56,7 +56,7 @@
         public $use_collect_withdraw = false;   // 모아서 출금
         public $use_head_office_withdraw = false; // 가상계좌 출금
         public $use_noti = false;               //노티 사용여부
-        public $cancel_deposit = false;         //취소입금건 관리 사용여부
+        public $use_cancel_deposit = false;     //취소입금건 관리 사용여부
 
         public function __construct(array $source)
         {

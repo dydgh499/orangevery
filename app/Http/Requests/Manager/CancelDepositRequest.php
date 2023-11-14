@@ -12,6 +12,7 @@ class CancelDepositRequest extends FormRequest
         'trans_id',
         'deposit_amount',
         'deposit_history',
+        'deposit_date',
     ];
 
     public function authorize(): bool
@@ -30,6 +31,7 @@ class CancelDepositRequest extends FormRequest
             'trans_id' => 'required',
             'deposit_amount' => 'required',
             'deposit_history' => 'required',
+            'deposit_date' => 'required',
         ];
         return $this->getRules($this->keys, $sub);
     }
