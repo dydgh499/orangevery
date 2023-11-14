@@ -9,6 +9,8 @@ class BulkPayModuleRequest extends FormRequest
 {
     use FormRequestTrait;
     public $integer_keys = [
+        'module_type',
+        'fin_trx_delay',
         'terminal_id',
         'settle_fee',
         'comm_settle_fee',
@@ -41,6 +43,7 @@ class BulkPayModuleRequest extends FormRequest
         'note',
     ];
     public $nullable_keys = [
+        'fin_id',
         'begin_dt',
         'ship_out_dt',
         'ship_out_stat',
