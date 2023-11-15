@@ -24,6 +24,7 @@ const hand_pay_info = reactive(<HandPay>({
     yymm: '',
     card_num: '',
     buyer_name: '',
+    installment: 0,
 }))
 const is_show = ref(false)
 const vForm = ref<VForm>()

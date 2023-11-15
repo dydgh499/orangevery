@@ -24,6 +24,7 @@ simple_pay_info.item_name = urlParams.get('item_name') || ''
 simple_pay_info.buyer_name = urlParams.get('buyer_name') || ''
 simple_pay_info.buyer_phone = urlParams.get('phone_num') || ''
 simple_pay_info.amount = Number(urlParams.get('amount') || '')
+simple_pay_info.installment = 0
 
 const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })

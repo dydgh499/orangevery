@@ -24,6 +24,7 @@ auth_pay_info.item_name = urlParams.get('item_name') || ''
 auth_pay_info.buyer_name = urlParams.get('buyer_name') || ''
 auth_pay_info.buyer_phone = urlParams.get('phone_num') || ''
 auth_pay_info.amount = Number(urlParams.get('amount') || '')
+auth_pay_info.installment = 0
 
 const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
