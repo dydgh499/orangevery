@@ -31,10 +31,3 @@ updatePayModule()
         </VCard>
     </section>
 </template>
-<style>
-@media (min-width: 700px) {
-  #pay-container {
-    inline-size: 700px;
-  }
-}
-</style>

@@ -549,7 +549,8 @@ export interface Settle extends TotalSettle, Bank {
     settle: {
         amount:number,       // 정산금액
         deposit:number,      // 입금금액
-        transfer: string,    // 이체금액    
+        transfer: number,    // 이체금액
+        cancel_deposit?: number,
     },
     terminal: {
         amount: number,

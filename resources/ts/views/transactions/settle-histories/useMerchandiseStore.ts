@@ -1,11 +1,12 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { getUserLevel } from '@axios'
+import corp from '@corp'
 
 export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', () => {    
     const store = Searcher('transactions/settle-histories/merchandises')
     const head  = Header('transactions/settle-histories/merchandises', '가맹점 정산이력')
-    const headers:Record<string, string | object> = {
+    const headers_1:Record<string, string | object> = {
         'id': 'NO.',
         'user_name' : '가맹점 ID',
         'mcht_name' : '상호',
@@ -17,6 +18,10 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
         'comm_settle_amount': '통신비',
         'under_sales_amount': '매출미달 차감금',
         'deduct_amount': '추가차감액',
+
+    };
+    const headers_2:Record<string, string | object> = {}
+    const headers_3:Record<string, string | object> = {
         'settle_amount': '정산액',
         'settle_dt': '정산일',
         'deposit_dt': '입금일',
@@ -26,12 +31,17 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
         'acct_name': '예금주',
         'acct_num': '계좌번호',
         'created_at': '생성시간',
-    };
-    if(getUserLevel() >= 35) {
-        headers['extra_col'] = '더보기'
     }
+    if(corp.pv_options.paid.use_cancel_deposit)
+        headers_2['cancel_deposit'] = '취소입금합계'
+    if(getUserLevel() >= 35)
+        headers_3['extra_col'] = '더보기'
     
-    head.main_headers.value = [];
+    const headers:Record<string, string | object> = {
+        ...headers_1,
+        ...headers_2,
+        ...headers_3,
+    }
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
 

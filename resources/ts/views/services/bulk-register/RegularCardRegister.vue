@@ -5,12 +5,13 @@ import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { Registration } from '@/views/registration'
 import type { RegularCreditCard } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { isEmpty } from '@core/utils'
 
 const { head, headers } = useRegisterStore()
 const { mchts } = useSalesFilterStore()
 
 
-const { ExcelReader, isEmpty, openFilePicker, bulkRegister } = Registration()
+const { ExcelReader, openFilePicker, bulkRegister } = Registration()
 
 const snackbar = <any>(inject('snackbar'))
 

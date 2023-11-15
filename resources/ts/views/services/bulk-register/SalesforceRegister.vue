@@ -10,10 +10,11 @@ import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { Registration } from '@/views/registration'
 import { banks } from '@/views/users/useStore'
 import corp from '@corp'
+import { isEmpty } from '@core/utils'
 
 const { store } = useSearchStore()
 const { head, headers } = useRegisterStore()
-const { ExcelReader, isEmpty, openFilePicker, bulkRegister } = Registration()
+const { ExcelReader, openFilePicker, bulkRegister } = Registration()
 const snackbar = <any>(inject('snackbar'))
 const all_sales = salesLevels()
 const all_cycles = settleCycles()

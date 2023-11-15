@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\DB;
 /**
  * @group Settle-Merchandise API
  *
- * 가맹점 정산 API 입니다.
+ * 가맹점 정산 관리 API 입니다.
  */
 class MerchandiseController extends Controller
 {
@@ -99,6 +99,7 @@ class MerchandiseController extends Controller
                 'under_sales_amount' => 0,
             ],
             'settle' => [
+                'cancel_deposit' => 0,
                 'amount' => 0,
                 'deposit' => 0,
                 'transfer' => 0,
@@ -114,6 +115,8 @@ class MerchandiseController extends Controller
             $total['deduction']['amount'] += $data->deduction['amount'];
             $total['terminal']['amount'] += $data->terminal['amount'];
             $total['terminal']['under_sales_amount'] += $data->terminal['under_sales_amount'];
+
+            $total['settle']['cancel_deposit'] += $data->settle['cancel_deposit'];
             $total['settle']['amount'] += $data->settle['amount'];
             $total['settle']['deposit'] += $data->settle['deposit'];
             $total['settle']['transfer'] += $data->settle['transfer'];

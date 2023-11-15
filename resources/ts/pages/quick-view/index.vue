@@ -8,25 +8,53 @@ import Recent30DaysRankOverview from '@/views/quick-view/Recent30DaysRankOvervie
 import Recent30DaysContentOverview from '@/views/quick-view/Recent30DaysContentOverview.vue'
 import type { MchtRecentTransactions } from '@/views/types'
 import router from '@/router'
+import corp from '@corp'
+import { useQuickVuewStore } from '@/views/quick-view/useStore'
 
 const transactions = ref(<MchtRecentTransactions>({}))
 const is_skeleton = ref(true)
 const { get } = useRequestStore()
+const { hands, getEncryptParams } = useQuickVuewStore()
+
+const formatDate = <any>(inject('$formatDate'))
 const my_level = getUserLevel()
 
 if(my_level >= 35)  //본사
     router.replace('dashboards')
-else
-{
+else {
     get('/api/v1/quick-view?level='+my_level)
         .then(r => { transactions.value = r.data as MchtRecentTransactions; })
         .catch(e => { console.log(e) })
+}
 
-    watchEffect(() => {
-        if(Object.keys(transactions.value).length)
-            is_skeleton.value = false
+const toHandPayLink = () => {    
+    location.href = '/pay/hand?e=' + getEncryptParams(hands[0])
+}
+
+const toWithDrawLink = () => {
+    const date = new Date();
+    const s_dt = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0)
+    const e_dt = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59)
+    const url = "/transactions/settle/merchandises/part/"+user_info.value.id
+    const params = {
+        s_dt: formatDate(s_dt),
+        e_dt: formatDate(e_dt),
+        use_collect_withdraw: 1,
+        level: 10,
+        dev_use: Number(corp.pv_options.auth.levels.dev_use),
+        page: 1,
+        page_size: 20,
+    }    
+    router.push({
+        path: url,
+        query: params
     })
 }
+
+watchEffect(() => {
+    if(Object.keys(transactions.value).length)
+        is_skeleton.value = false
+})
 </script>
 <template>
     <section>
@@ -39,17 +67,25 @@ else
                             <span style="font-size: 0.9em;">님 안녕하세요 !</span>
                         </div>
                     </VCol>
-                    <VCol>
-                        <div class="d-flex justify-space-evenly">
-                            <VBtn variant="tonal" @click="router.push('/posts?type=0')">
-                                공지사항
-                                <VIcon end icon="svg-spinners:bars-scale-middle" color="primary" />
-                            </VBtn>
-                            <VBtn variant="tonal" @click="router.push('/posts?type=2')">
-                                1:1 문의
-                                <VIcon end icon="twemoji:adhesive-bandage" />
-                            </VBtn>
-                        </div>
+                    <VCol cols="12" style="text-align: center;">
+                        <VBtn variant="tonal" @click="router.push('/posts?type=0')" class="shortcut-button">
+                            공지사항
+                            <VIcon end icon="svg-spinners:bars-scale-middle" color="primary" />
+                        </VBtn>
+                        <VBtn variant="tonal" @click="router.push('/posts?type=2')" class="shortcut-button">
+                            1:1 문의
+                            <VIcon end icon="twemoji:adhesive-bandage" />
+                        </VBtn>
+                        <VBtn variant="tonal" @click="toHandPayLink()" class="shortcut-button"
+                            v-if="hands.length > 0">
+                            수기결제
+                            <VIcon end icon="fluent-payment-32-regular" />
+                        </VBtn>
+                        <VBtn variant="tonal" @click="toWithDrawLink()" class="shortcut-button"
+                            v-if="user_info.use_collect_withdraw">
+                            출금하기
+                            <VIcon end icon="tabler-calculator" />
+                        </VBtn>
                     </VCol>
                 </template>
             </CardLayout>
@@ -81,3 +117,8 @@ else
         </VRow>
     </section>
 </template>
+<style>
+  .shortcut-button {
+    margin: 0.5em;
+  }
+</style>

@@ -157,7 +157,7 @@ watchEffect(() => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="tabler-calculator" @click="partSettle()">
+                <VBtn prepend-icon="tabler-calculator" @click="partSettle()" v-if="getUserLevel() >= 35">
                     부분정산
                 </VBtn>
                 <VBtn prepend-icon="fa6-solid:money-bill-transfer" @click="settleCollect()" v-if="isAbleMchtDepositCollect(parseInt(route.query.use_collect_withdraw as string))">

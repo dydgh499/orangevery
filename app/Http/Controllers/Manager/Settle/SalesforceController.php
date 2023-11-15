@@ -22,7 +22,7 @@ use App\Http\Requests\Manager\IndexRequest;
 /**
  * @group Settle-Salesforce API
  *
- * 영업점 정산 API 입니다.
+ * 영업점 정산 관리 API 입니다.
  */
 class SalesforceController extends Controller
 {

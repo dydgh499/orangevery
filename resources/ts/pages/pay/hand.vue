@@ -42,7 +42,8 @@ onMounted(async () => {
             <VCardText>
                 <footer class="layout-footer">
                     <div class="footer-content-container">
-                        <Footer />
+                        <Footer>
+                        </Footer>
                     </div>
                 </footer>
             </VCardText>
@@ -50,10 +51,3 @@ onMounted(async () => {
         <SalesSlipDialog ref="salesslip" :pgs="pgs" />
     </section>
 </template>
-<style>
-@media (min-width: 700px) {
-  #pay-container {
-    inline-size: 700px;
-  }
-}
-</style>

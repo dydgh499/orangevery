@@ -30,8 +30,7 @@ onMounted(() => {
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
             const r = await store.getChartData()
-            totals.value = []
-            totals.value.push(r.data)
+            totals.value = [r.data]
         }
     })
     snackbar.value.show('정산일은 검색 종료일(' + store.params.e_dt + ') 기준으로 진행됩니다.', 'success')

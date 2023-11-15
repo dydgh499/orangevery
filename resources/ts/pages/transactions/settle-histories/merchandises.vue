@@ -16,6 +16,9 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
+const isNumberFormatCol = (_key: string) => {
+    return _key.includes('amount') || _key.includes('_fee') || _key.includes('_deposit')
+}
 </script>
 <template>
     <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.DATE_RANGE">
@@ -69,7 +72,7 @@ provide('exporter', exporter)
                                 </div>
                                 <span v-else> #{{ item[_key] }}</span>
                             </span>
-                            <span v-else-if="(_key).toString().includes('amount') || (_key).toString().includes('_fee')" style="font-weight: bold;">
+                            <span v-else-if="isNumberFormatCol(_key.toString())" style="font-weight: bold;">
                                 {{ (item[_key] as number).toLocaleString() }}
                             </span>
                             <span v-else-if="_key === 'deposit_status'">

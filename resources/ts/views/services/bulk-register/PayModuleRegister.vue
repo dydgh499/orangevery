@@ -12,6 +12,7 @@ import { Registration } from '@/views/registration'
 import type { PayModule, Options } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import corp from '@corp';
+import { isEmpty } from '@core/utils'
 
 const { store } = useSearchStore()
 const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
@@ -27,7 +28,7 @@ const view_types: Options[] = [
     { id: 0, title: '숨김',},
     { id: 1, title: '노출',},
 ]
-const { ExcelReader, isEmpty, openFilePicker, bulkRegister } = Registration()
+const { ExcelReader, openFilePicker, bulkRegister } = Registration()
 
 const snackbar = <any>(inject('snackbar'))
 

@@ -10,6 +10,7 @@ import BanksExplainDialog from '@/layouts/dialogs/BanksExplainDialog.vue'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { Registration } from '@/views/registration'
 import corp from '@corp'
+import { isEmpty } from '@core/utils'
 
 interface extendMerchandise extends Merchandise {
     [key: string]: any;
@@ -18,7 +19,7 @@ interface extendMerchandise extends Merchandise {
 const { cus_filters } = useStore()
 const { sales } = useSalesFilterStore()
 const { head, headers, levels } = useRegisterStore()
-const { ExcelReader, isEmpty, openFilePicker, bulkRegister } = Registration()
+const { ExcelReader, openFilePicker, bulkRegister } = Registration()
 
 const snackbar = <any>(inject('snackbar'))
 const excel = ref()

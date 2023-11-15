@@ -28,6 +28,7 @@ export function settlementFunctionCollect(store: any) {
             settle_fee: is_mcht ? item.settle_fee : 0,
             comm_settle_amount: item.terminal.amount,
             under_sales_amount: item.terminal.under_sales_amount,
+            cancel_deposit: item.settle.cancel_deposit || 0
         }
     }
     
