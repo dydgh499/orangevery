@@ -2,6 +2,7 @@
 import corp from '@corp';
 import { useRequestStore } from '@/views/request'
 import { getUserLevel } from '@axios'
+import { axios } from '@axios';
 
 interface Props {
     totalInput?: number,
@@ -16,7 +17,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emits = defineEmits(['update:pay_button'])
 
-const { post } = useRequestStore()
 const snackbar = <any>(inject('snackbar'))
 const button_status = ref(0)
 const digits = ref<string[]>([])
@@ -68,7 +68,7 @@ const timer = () => {
         countdown_time.value--
 }
 const requestCodeIssuance = async () => {
-    const r = await post('/api/v1/bonaejas/mobile-code-issuance', { phone_num: props.phone_num, brand_id: corp.id })
+    const r = await axios.post('/api/v1/bonaejas/mobile-code-issuance', { phone_num: props.phone_num, brand_id: corp.id })
     if (r.status == 200) {
         snackbar.value.show('입력하신 휴대폰번호로 인증번호를 보냈습니다!<br>6자리 인증번호를 입력해주세요.', 'success')
         button_status.value = 1
@@ -87,7 +87,7 @@ const verification = async () => {
         await requestCodeIssuance()
     }
     else if (button_status.value === 1) {
-        const r = await post('/api/v1/bonaejas/mobile-code-auth', { phone_num: props.phone_num, verification_number: digits.value.join('') })
+        const r = await axios.post('/api/v1/bonaejas/mobile-code-auth', { phone_num: props.phone_num, verification_number: digits.value.join('') })
         if (r.status == 200) {
             emits('update:pay_button', true)
             button_status.value = 2
