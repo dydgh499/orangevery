@@ -1,14 +1,16 @@
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { pay } from '@/views/pay/pay'
+import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Merchandise, PayModule } from '@/views/types'
 import { axios } from '@axios'
 
 export const payTest = (module_type:number) => {
     const mcht_id = ref()
     const pmod_id = ref()
+    const { pgs } = useStore()
     const pay_modules = ref<PayModule[]>([])
     const merchandises = ref<Merchandise[]>([])
-    const { merchandise, pay_module, pay_url, pgs, updateMerchandise } = pay(module_type)
+    const { merchandise, pay_module, pay_url, updateMerchandise } = pay(module_type)
     const return_url = new URL(window.location.href).origin + '/transactions/pay-test/result'
 
     axios.get('/api/v1/manager/merchandises/all?module_type=' + module_type).then((r) => {

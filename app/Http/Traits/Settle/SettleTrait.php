@@ -31,7 +31,7 @@ trait SettleTrait
             $content->deduction = [
                 'input' => null,
                 'amount' => $content->deducts->sum('amount'),
-            ];            
+            ];
             $content->terminal = [
                 'amount' => 0,
                 'under_sales_amount' => 0,
@@ -109,7 +109,19 @@ trait SettleTrait
             $settle = $content['profit'] + $content->deduction['amount'];
             $settle += $content->terminal['amount'];
             $settle += $content->terminal['under_sales_amount'];
+
+            if(request()->use_cancel_deposit)
+            {
+                $cancel_deposit = $content->transactions->reduce(function($carry, $transaction) {
+                    return $carry + $transaction->cancelDeposits->sum('deposit_amount');
+                }, 0);
+            }
+            else
+                $cancel_deposit = 0;
+
+            $settle += $cancel_deposit;
             $content->settle = [
+                'cancel_deposit' => $cancel_deposit,
                 'amount'    => $settle,
                 'deposit'   => $settle,
                 'transfer'  => $settle,

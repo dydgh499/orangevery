@@ -45,10 +45,15 @@ class MerchandiseController extends Controller
 
         $mcht_ids = $this->getExistTransUserIds('mcht_id', 'mcht_settle_id');
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
-                ->where('mcht_name', 'like', "%$search%");            
-        $query = $query->with(['transactions', 'deducts']);
+                ->where('mcht_name', 'like', "%$search%"); 
+            
+        if($request->use_cancel_deposit)
+            $query = $query->with(['transactions.cancelDeposits', 'deducts']);
+        else
+            $query = $query->with(['transactions', 'deducts']);
+        
         $data = $this->getIndexData($request, $query, 'id', $cols, "created_at", false);
-        $data = $this->getSettleInformation($data, $settle_key); 
+        $data = $this->getSettleInformation($data, $settle_key);
         // set terminals
         $mcht_ids = collect($data['content'])->pluck('id')->all();
         if(count($mcht_ids))

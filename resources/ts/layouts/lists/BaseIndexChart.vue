@@ -5,18 +5,18 @@ interface Props {
 }
 const props = defineProps<Props>()
 const store = <any>(inject('store'))
+store.chart_process = false
 
-const is_skeleton = ref(true)
 watchEffect(() => {
     if(store.getChartProcess())
-        is_skeleton.value = false
+        store.is_skeleton = false
 })
 </script>
 <template>
     <VCol v-for="meta in props.metas" :key="meta.title" cols="12" sm="6" lg="3">
     <VCard>
         <VCardText class="d-flex justify-space-between">
-            <div v-if="is_skeleton">
+            <div v-if="store.is_skeleton">
                 <span>{{ meta.title }}</span>
                 <div class="d-flex align-center gap-2 my-1">
                     <SkeletonBox :width="'3em'"/>

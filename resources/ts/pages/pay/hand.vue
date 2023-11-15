@@ -4,13 +4,20 @@ import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
 import Footer from '@/layouts/components/Footer.vue'
 import { pay } from '@/views/pay/pay'
 import corp from '@corp'
+import { useRequestStore } from '@/views/request'
 
-const { pay_module, merchandise, pgs, updatePayModule } = pay(1)
-updatePayModule()
-
+const { post } = useRequestStore()
+const { pay_module, merchandise, updatePayModule } = pay(1)
 const salesslip = ref()
+const pgs = ref([])
+
+updatePayModule()
 provide('salesslip', salesslip)
 
+onMounted(async () => {
+    const res = await post('/api/v1/pay-gateways/' + pay_module.value.pg_id + '/sale-slip', {}, false)
+    pgs.value = res.data
+})
 </script>
 <template>
     <section>

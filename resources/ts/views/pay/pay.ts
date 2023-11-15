@@ -1,5 +1,4 @@
 import router from '@/router'
-import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Merchandise, PayGateway, PayModule, SalesSlip } from '@/views/types'
 import { axios } from '@axios'
 import * as CryptoJS from 'crypto-js'
@@ -8,7 +7,6 @@ export const pay = (module_type: number) => {
     const route = useRoute()
     const merchandise = ref(<Merchandise>({}))
     const pay_module = ref(<PayModule>{})
-    const { pgs } = useStore()
 
     const return_url = new URL(window.location.href).origin + '/pay/result'
     const pay_url = ref(<string>(''))
@@ -42,7 +40,7 @@ export const pay = (module_type: number) => {
 
     return {
         merchandise, pay_module, return_url, pay_url,
-        pgs, updatePayModule, updateMerchandise,
+        updatePayModule, updateMerchandise,
     }
 }
 

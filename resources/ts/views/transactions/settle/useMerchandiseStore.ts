@@ -2,6 +2,7 @@ import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { DeductionHeader } from '@/views/types'
 import { getUserLevel } from '@axios'
+import corp from '@corp'
 
 export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {    
     const store = Searcher('transactions/settle/merchandises')
@@ -37,21 +38,23 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         'profit': '정산액',
     }
     const headers2:DeductionHeader = {'deduction': {}}
-    if(getUserLevel() >= 35) {
+    if(getUserLevel() >= 35)
         headers2['deduction']['input'] = '추가차감입력'
-    }
     headers2['deduction']['amount'] = '차감완료금'
+
+    const settles:any = {}
+    if(corp.pv_options.paid.use_cancel_deposit)
+        settles['cancel_deposit'] = '취소입금합계'
+    settles['amount'] = '정산금액'
+    settles['deposit'] = '입금금액'
+    settles['transfer'] = '이체금액'
 
     const headers3:Record<string, string | object> = {
         'terminal': {
             'amount': '통신비',
             'under_sales_amount': '매출미달차감금',
         },
-        'settle': {
-            'amount': '정산금액',
-            'deposit': '입금금액',
-            'transfer': '이체금액',
-        },
+        'settle': settles,
         'acct_bank_name': '은행',
         'acct_bank_code': '은행코드',
         'acct_name': '예금주',

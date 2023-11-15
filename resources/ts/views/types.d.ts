@@ -379,6 +379,9 @@ export interface DeductionHeader {
         input?: string;
         amount?: string;
     };
+    cancel_deposit?: {
+        amount?: string;
+    }
 };
 
 export interface Transaction {

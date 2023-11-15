@@ -44,7 +44,6 @@ const format = ref({})
 const time_picker = ref(true)
 const search = ref(<string>(''))
 
-
 const queryToStoreParams = () => {
     const str_keys = ['search', 's_dt', 'e_dt', 'dt']
     const keys = Object.keys(route.query).filter(key => !str_keys.includes(key));

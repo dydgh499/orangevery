@@ -90,7 +90,6 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::post('upload', [PostController::class, 'upload']);    
         });
         Route::prefix('services')->group(function() {
-            
             Route::get('bonaejas', [MessageController::class, 'index']);
             Route::get('bonaejas/chart', [MessageController::class, 'chart']);
             Route::get('pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
@@ -104,9 +103,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('pay-sections', PaymentSectionController::class);
             Route::apiResource('finance-vans', FinanceVanController::class);
             Route::apiResource('classifications', ClassificationController::class);
-            Route::apiResource('head-office-accounts', HeadOfficeAccountController::class);
-
-            
+            Route::apiResource('head-office-accounts', HeadOfficeAccountController::class);            
         });
         Route::prefix('transactions')->group(function() {
             Route::post('batch-retry', [TransactionController::class, 'batchRetry']);

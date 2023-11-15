@@ -10,6 +10,7 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
+import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
 const { getSettleStyle, batchSettle, isSalesCol, movePartSettle } = settlementFunctionCollect(store)
@@ -19,6 +20,7 @@ provide('head', head)
 provide('exporter', exporter)
 
 store.params.level = 10 // taransaction model에서 필수
+store.params.use_cancel_deposit = Number(corp.pv_options.paid.use_cancel_deposit)
 
 const { settle_types } = useStore()
 const totals = ref(<any[]>([]))
