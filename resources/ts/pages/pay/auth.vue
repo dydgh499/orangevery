@@ -11,21 +11,17 @@ updatePayModule()
     <section>
         <VCard rounded>
             <VCardText>
-                <VRow>
-                    <VCol cols="12" md="12" style="padding: 0;">
-                        <div id="pay-container">
-                            <div style="text-align: center;">
-                                <img :src="corp.logo_img || ''" width="100" height="100">
-                                <br>
-                                <b>환영합니다 !</b>
-                                <br>
-                                결제하실 정보를 입력해주세요.
-                            </div>
-                            <AuthPayOverview :pay_module="pay_module" :merchandise="merchandise" :return_url="return_url"
-                                :pay_url="pay_url" />
-                        </div>
-                    </VCol>
-                </VRow>
+                <div id="pay-container">
+                    <div style="text-align: center;">
+                        <img :src="corp.logo_img || ''" width="100" height="100">
+                        <br>
+                        <b>환영합니다 !</b>
+                        <br>
+                        결제하실 정보를 입력해주세요.
+                    </div>
+                    <AuthPayOverview :pay_module="pay_module" :merchandise="merchandise" :return_url="return_url"
+                        :pay_url="pay_url" />
+                </div>
             </VCardText>
         </VCard>
     </section>
