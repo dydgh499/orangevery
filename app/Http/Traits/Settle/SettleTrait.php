@@ -97,6 +97,14 @@ trait SettleTrait
                     ->orWhere('transactions.trx_id', 'like', "%$search%")
                     ->orWhere('transactions.appr_num', 'like', "%$search%");
             });
+        if($request->use_collect_withdraw)
+        {
+            // 모아서 출금건만 가능
+            $query = $query
+                ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
+                ->where('merchandises.use_collect_withdraw', true)
+                ->where('payment_modules.fin_trx_delay', -1);
+        }
         $data = $this->transPagenation($query, 'transactions', $cols, $request->page, $request->page_size);
         return $data;
     }
