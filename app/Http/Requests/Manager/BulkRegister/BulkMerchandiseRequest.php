@@ -89,12 +89,12 @@ class BulkMerchandiseRequest extends FormRequest
                 $key = $this->keys[$j];
                 $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : '';
             }
-            for ($j=0; $j < count($this->integer_keys) ; $j++) 
+            for ($j=0; $j < count($this->integer_keys); $j++) 
             {
                 $key = $this->integer_keys[$j];
                 $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : 0;
             }
-            for ($j=0; $j < count($this->nullable_keys) ; $j++) 
+            for ($j=0; $j < count($this->nullable_keys); $j++) 
             {
                 $key = $this->nullable_keys[$j];
                 $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : null;

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { isRetryAble } from '@/views/transactions/useStore'
+import { isRetryAble, realtimeResult } from '@/views/transactions/useStore'
 import { useRequestStore } from '@/views/request'
 import type { SalesSlip, CancelPay } from '@/views/types'
 import { getUserLevel } from '@axios'
+import { StatusColors } from '@core/enums'
 import corp from '@corp'
 import router from '@/router'
 
@@ -125,7 +126,7 @@ const isUseCancelDeposit = () => {
                     <VListItemTitle>취소매출생성</VListItemTitle>
                 </VListItem>
                 <VListItem value="cancel" class="pg-cancel" @click="payCanceled()"
-                    v-if="(isCancelSafeDate() || getUserLevel() >= 35) && props.item.is_cancel == false">
+                    v-if="(isCancelSafeDate() || getUserLevel() >= 35) && props.item.is_cancel == false && realtimeResult(props.item) != StatusColors.Success">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:world-cancel" />
                     </template>

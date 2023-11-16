@@ -321,6 +321,25 @@ class TransactionController extends Controller
         return $this->response(1);
     }
 
+    /*
+     * 가맹점별 매출집계
+     */
+    public function mchtGroups(Request $request)
+    {
+        $cols = [
+            'merchandises.id', 'merchandises.mcht_name', 'merchandises.resident_num', 
+            'merchandises.business_num', 'merchandises.nick_name', 'merchandises.addr', 
+            'merchandises.sector', 'merchandises.custom_id',
+        ];
+        $cols = array_merge($cols , $this->getTotalCols('mcht_settle_amount'));
+        $query = $this->commonSelect($request);
+        $grouped = $query
+            ->groupBy('merchandises.id')
+            ->orderBy('merchandises.mcht_name')
+            ->get($cols);
+        return $grouped;
+    }
+
     public function _test()
     {
         $dev_settle_type = 0;
@@ -463,6 +482,7 @@ class TransactionController extends Controller
             echo $i."\n";
         }
     }
+
     static public function test()
     {
         $ist = new TransactionController(new Transaction);

@@ -19,7 +19,7 @@ import type { Options } from '@/views/types'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
-const { store, head, exporter, metas, realtimeMessage } = useSearchStore()
+const { store, head, exporter, metas, realtimeMessage, mchtGroup } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { post } = useRequestStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
@@ -59,6 +59,7 @@ const getAllLevels = () => {
         sales.push(<Options>({ id: 50, title: levels.dev_name }))
     return sales
 }
+
 const isSalesCol = (key: string) => {
     const sales_cols = ['amount', 'trx_amount', 'mcht_settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
     for (let i = 0; i < sales_cols.length; i++) {
@@ -67,6 +68,7 @@ const isSalesCol = (key: string) => {
     }
     return false
 }
+
 const batchRetry = async() => {
     if(await alert.value.show('정말 일괄 재발송하시겠습니까?'))
     {
@@ -105,14 +107,12 @@ const batchRetry = async() => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
+                <VBtn prepend-icon="tabler-calculator" @click="mchtGroup()" size="small">
+                    가맹점별 매출집계
+                </VBtn>
                 <VBtn prepend-icon="tabler-calculator" @click="batchRetry()" v-if="getUserLevel() >= 50" size="small">
                     일괄 재발송
                 </VBtn>
-                <!--
-                <VBtn prepend-icon="tabler-calculator" @click="batchRetry()" v-if="getUserLevel() >= 50" size="small">
-                    가맹점별 엑셀추출
-                </VBtn>
-                -->
                 <div style="position: relative; top: 0.6em;">
                     <VSwitch v-model="store.params.only_cancel" label="취소매출 조회" color="primary" @update:modelValue="store.updateQueryString({only_cancel: store.params.only_cancel})"/>
                 </div>
