@@ -129,7 +129,7 @@ queryToStoreParams()
                                 <VSelect v-model="date_selecter" :items="[{ id: null, title: '기간 조회' }].concat(dates)"
                                     density="compact" variant="outlined" item-title="title" item-value="id"
                                     style="min-width: 10em;" @update:modelValue="[setDateRange(), dateChanged(store)]"
-                                    label="기간 조회" />
+                                     />
                             </template>
                             <template
                                 v-else-if="head.path === 'salesforces' || head.path === 'transactions/settle/salesforces' || head.path === 'transactions/settle-histories/salesforces'">
@@ -137,27 +137,27 @@ queryToStoreParams()
                                     variant="outlined" item-title="title" item-value="id" style="min-width: 10em;"
                                     @update:modelValue="store.updateQueryString({level:store.params.level})" />
                             </template>
-                            <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel"
-                                @click="exporter(1)">
-                                엑셀 추출
-                            </VBtn>
                         </div>
                         <div class="d-inline-flex align-center flex-wrap gap-4 float-right justify-center">
                             <VTextField id="search" :placeholder="props.placeholder" density="compact" v-model="search"
-                                @keyup="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input">
+                                @keyup="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input"  size="small">
                                 <VTooltip activator="parent" location="top">
                                     {{ props.placeholder }}
                                 </VTooltip>
                             </VTextField>
-                            <VBtn prepend-icon="tabler:search"
+                            <VBtn prepend-icon="tabler:search"  size="small"
                                 @click="store.setTable(); store.updateQueryString({ search: search })">
                                 검색
                             </VBtn>
-                            <VBtn variant="tonal" color="secondary" prepend-icon="tabler-filter"
+                            <VBtn variant="tonal" color="secondary" prepend-icon="tabler-filter"  size="small"
                                 @click="head.filter.show()">
                                 검색 필터
                             </VBtn>
-                            <VBtn prepend-icon="tabler-plus" @click="store.edit(0)" v-if="props.add">
+                            <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel"  size="small"
+                                @click="exporter(1)">
+                                엑셀 추출
+                            </VBtn>
+                            <VBtn prepend-icon="tabler-plus" @click="store.edit(0)" v-if="props.add"  size="small">
                                 {{ props.add_name }} 추가
                             </VBtn>
                             <slot name="index_extra_field"></slot>

@@ -86,3 +86,15 @@ onMounted(() => {
         <SearchFilterDialog ref="filter" />
     </section>
 </template>
+<style>
+.search-input {
+  min-inline-size: 18.35rem;
+}
+
+@media (max-width: 600px) {
+  .search-date,
+  .search-input {
+    min-inline-size: 100%;
+  }
+}
+</style>

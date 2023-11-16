@@ -84,7 +84,7 @@ const batchRetry = async() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="MID, TID, 승인번호, 거래번호, 결제모듈 별칭, 주민번호, 사업자번호, 발급사, 매입사 검색" :metas="metas" :add="user_info.level >= 35" add_name="매출"
+        <BaseIndexView placeholder="상호, MID, TID, 승인번호, 거래번호, 결제모듈 별칭, 주민번호, 사업자번호, 발급사, 매입사 검색" :metas="metas" :add="user_info.level >= 35" add_name="매출"
             :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
@@ -105,9 +105,14 @@ const batchRetry = async() => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="tabler-calculator" @click="batchRetry()" v-if="getUserLevel() >= 50">
+                <VBtn prepend-icon="tabler-calculator" @click="batchRetry()" v-if="getUserLevel() >= 50" size="small">
                     일괄 재발송
                 </VBtn>
+                <!--
+                <VBtn prepend-icon="tabler-calculator" @click="batchRetry()" v-if="getUserLevel() >= 50" size="small">
+                    가맹점별 엑셀추출
+                </VBtn>
+                -->
                 <div style="position: relative; top: 0.6em;">
                     <VSwitch v-model="store.params.only_cancel" label="취소매출 조회" color="primary" @update:modelValue="store.updateQueryString({only_cancel: store.params.only_cancel})"/>
                 </div>

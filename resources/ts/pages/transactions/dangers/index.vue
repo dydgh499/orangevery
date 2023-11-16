@@ -54,7 +54,7 @@ const batchCheck = async () => {
             </BaseIndexFilterCard>
         </template>
         <template #index_extra_field>
-            <VBtn prepend-icon="tabler:check" @click="batchCheck()" v-if="getUserLevel() >= 35">
+            <VBtn prepend-icon="tabler:check" @click="batchCheck()" v-if="getUserLevel() >= 35"  size="small">
                 일괄 확인/확인취소
             </VBtn>
         </template>

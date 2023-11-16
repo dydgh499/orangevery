@@ -31,8 +31,8 @@ const getLogStyle = (item: RealtimeHistory) => {
         <template #index_extra_field>
             <table>
                 <tr v-for="(finance_van, key) in finance_vans" :key="key" :style="finance_van.balance_status ? '' : 'color:red'">
-                    <th>{{ finance_van.nick_name }} 잔액: </th>
-                    <td><span>{{ finance_van.balance ? finance_van.balance.toLocaleString() : 0 }}</span> &#8361;</td>
+                    <th style="text-align: start;">{{ finance_van.nick_name }} 잔액: </th>
+                    <td style="text-align: end;">{{ finance_van.balance ? finance_van.balance.toLocaleString() : 0 }} &#8361;</td>
                 </tr>
             </table>
         </template>

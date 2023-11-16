@@ -82,17 +82,6 @@ th {
   color: white !important;
 }
 
-.search-input {
-  min-inline-size: 18.35rem;
-}
-
-@media (max-width: 600px) {
-  .search-date,
-  .search-input {
-    min-inline-size: 100%;
-  }
-}
-
 // date Picker CSS
 .dp__theme_dark,
 .dp__theme_light {
@@ -104,4 +93,10 @@ th {
 :root {
   --dp-border-radius: 0.3em !important;
   --dp-button-height: 41px !important;
+}
+
+.v-input--density-compact .v-field--variant-outlined,
+.v-input--density-compact .v-field--single-line,
+.v-input--density-compact .v-field--no-label {
+  --v-field-padding-bottom: 1px !important;
 }

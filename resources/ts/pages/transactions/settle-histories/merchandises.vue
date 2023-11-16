@@ -26,10 +26,10 @@ const isNumberFormatCol = (_key: string) => {
             <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="true" :sales="true" />
         </template>
         <template #index_extra_field>
-            <VBtn prepend-icon="tabler:report-money" @click="batchDeposit(selected, true)" v-if="getUserLevel() >= 35">
+            <VBtn prepend-icon="tabler:report-money" @click="batchDeposit(selected, true)" v-if="getUserLevel() >= 35"  size="small">
                 일괄 입금/미입금처리
             </VBtn>
-            <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchCancel(selected, true)" v-if="getUserLevel() >= 35" color="error">
+            <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchCancel(selected, true)" v-if="getUserLevel() >= 35" color="error"  size="small">
                 일괄 정산취소
             </VBtn>
         </template>

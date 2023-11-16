@@ -147,7 +147,7 @@ onMounted(() => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="tabler-calculator" @click="partSettle()">
+                <VBtn prepend-icon="tabler-calculator" @click="partSettle()" size="small">
                     부분정산
                 </VBtn>
                 <div style="position: relative; top: 0.6em;">

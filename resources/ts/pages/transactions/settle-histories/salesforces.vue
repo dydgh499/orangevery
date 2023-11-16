@@ -25,10 +25,10 @@ provide('exporter', exporter)
         <template #index_extra_field>            
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
                 :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager @update:modelValue="[store.updateQueryString({page_size: store.params.page_size})]"/>
-            <VBtn prepend-icon="tabler:report-money" @click="batchDeposit(selected, false)" v-if="getUserLevel() >= 35">
+            <VBtn prepend-icon="tabler:report-money" @click="batchDeposit(selected, false)" v-if="getUserLevel() >= 35"  size="small">
                 일괄 입금/미입금처리
             </VBtn>
-            <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchCancel(selected, false)" v-if="getUserLevel() >= 35" color="error">
+            <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchCancel(selected, false)" v-if="getUserLevel() >= 35" color="error"  size="small">
                 일괄 정산취소
             </VBtn>
         </template>

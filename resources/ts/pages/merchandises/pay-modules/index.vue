@@ -45,7 +45,7 @@ const batchDelete = async () => {
             </BaseIndexFilterCard>
         </template>
         <template #index_extra_field>            
-            <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchDelete()" v-if="getUserLevel() >= 35" color="error">
+            <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchDelete()" v-if="getUserLevel() >= 35" color="error" size="small">
                 일괄 삭제
             </VBtn>
             <div style="position: relative; top: 0.6em;">
