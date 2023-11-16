@@ -97,7 +97,8 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         headers['sales0_name'] = levels.sales0_name
         headers['sales0_fee'] = '수수료'
     }
-    headers['mcht_name'] = '가맹점'
+    headers['user_name'] = '가맹점 ID'
+    headers['mcht_name'] = '가맹점 상호'
 
     if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13)
     {
