@@ -102,13 +102,13 @@ th {
 }
 
 @media (max-width: 600px) {
-  .dp__instance_calendar {
+  .dp__menu_inner {
     block-size: 38em !important;
   }
 }
 
 @media (min-width: 600px) {
-  .dp__instance_calendar {
+  .dp__menu_inner {
     block-size: 23em !important;
   }
 }
