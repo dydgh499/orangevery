@@ -46,7 +46,9 @@ class CollectWithdrawController extends Controller
             'merchandises.mcht_name',
         ];
         $query = $this->collect_withdraws->join('merchandises', 'merchandises.id', '=', 'collect_withdraws.mcht_id')
-            ->where('mcht_name', 'like', "%$search%");
+            ->where('collect_withdraws.brand_id', $request->user()->brand_id)
+            ->where('merchandises.mcht_name', 'like', "%$search%");
+            
         $query = globalSalesFilter($query, $request, 'merchandises');
         return $this->getIndexData($request, $query, 'collect_withdraws.id', $cols, 'collect_withdraws.created_at');
     }
