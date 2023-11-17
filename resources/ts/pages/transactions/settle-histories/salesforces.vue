@@ -17,6 +17,19 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
+const totals = ref(<any[]>([]))
+
+const isNumberFormatCol = (_key: string) => {
+    return _key.includes('amount') || _key.includes('_fee') || _key.includes('_deposit')
+}
+onMounted(() => {
+    watchEffect(async () => {
+        if (store.getChartProcess() === false) {
+            const r = await store.getChartData()
+            totals.value = [r.data]
+        }
+    })
+})
 </script>
 <template>
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.DATE_RANGE">
@@ -54,17 +67,20 @@ provide('exporter', exporter)
             </tr>
         </template>
         <template #body>
-            <tr v-for="(item, index) in store.getItems" :key="index">
+            <!-- chart -->
+            <tr v-for="(item, key) in totals" :key="key">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                    <template v-if="head.getDepth(_header, 0) != 1">
-                        <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
-                            class='list-square'>
-                            <span>
-                                {{ item[_key][__key] }}
+                        <td v-show="_header.visible" class='list-square'>
+                            <span v-if="_key === 'id'">합계</span>
+                            <span v-else-if="isNumberFormatCol(_key.toString())" style="font-weight: bold;">
+                                {{ item[_key] ? parseInt(item[_key]).toLocaleString() : 0}}
                             </span>
                         </td>
-                    </template>
-                    <template v-else>
+                </template>
+            </tr>            
+            <!-- normal -->
+            <tr v-for="(item, index) in store.getItems" :key="index">
+                <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key === 'id'">
                                 <div class='check-label-container' v-if="getUserLevel() >= 35">
@@ -73,7 +89,7 @@ provide('exporter', exporter)
                                 </div>
                                 <span v-else> #{{ item[_key] }}</span>
                             </span>
-                            <span v-else-if="_key.toString().includes('amount')" style="font-weight: bold;">
+                            <span v-else-if="isNumberFormatCol(_key.toString())" style="font-weight: bold;">
                                 {{ (item[_key] as number).toLocaleString() }}
                             </span>
                             <span v-else-if="_key == 'level'">
@@ -94,7 +110,6 @@ provide('exporter', exporter)
                                 {{ item[_key] }}
                             </span>
                         </td>
-                    </template>
                 </template>
             </tr>
         </template>

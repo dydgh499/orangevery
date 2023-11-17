@@ -33,10 +33,8 @@ class SalesSettleHistoryController extends Controller
         $this->settle_sales_hist = $settle_sales_hist;
     }
 
-
-    public function index(IndexRequest $request)
+    private function commonQuery($request)
     {
-        $cols = ['salesforces.user_name', 'salesforces.sales_name', 'salesforces.level', 'settle_histories_salesforces.*'];
         $search = $request->input('search', '');
         $query  = $this->settle_sales_hist
                 ->join('salesforces', 'settle_histories_salesforces.sales_id', 'salesforces.id')
@@ -52,6 +50,29 @@ class SalesSettleHistoryController extends Controller
         }
         if($request->has('level'))
             $query = $query->where('settle_histories_salesforces.level', $request->level);
+        return $query;
+    }
+
+    public function chart(Request $request)
+    {
+        $query = $this->commonQuery($request);
+        $total = $query->first([
+            DB::raw("SUM(appr_amount) AS appr_amount"),
+            DB::raw("SUM(cxl_amount) AS cxl_amount"),
+            DB::raw("SUM(total_amount) AS total_amount"),
+            DB::raw("SUM(trx_amount) AS trx_amount"),
+            DB::raw("SUM(comm_settle_amount) AS comm_settle_amount"),
+            DB::raw("SUM(under_sales_amount) AS under_sales_amount"),
+            DB::raw("SUM(deduct_amount) AS deduct_amount"),
+            DB::raw("SUM(settle_amount) AS settle_amount"),
+        ]);
+        return $this->response(0, $total);
+    }
+
+    public function index(IndexRequest $request)
+    {
+        $cols = ['salesforces.user_name', 'salesforces.sales_name', 'salesforces.level', 'settle_histories_salesforces.*'];
+        $query = $this->commonQuery($request);
         $data = $this->getIndexData($request, $query, 'settle_histories_salesforces.id', $cols, 'settle_histories_salesforces.created_at');
         return $this->response(0, $data);
     }

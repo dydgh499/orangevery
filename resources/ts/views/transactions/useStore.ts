@@ -70,7 +70,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         'module_type': '거래 타입',
         'note': '결제모듈 별칭',
     }
-    const { pgs, pss, terminals } = useStore()
+    const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
     if(getUserLevel() >= 35) {
         headers['pg_id'] = 'PG사'
         headers['ps_id'] = '구간'
@@ -208,7 +208,9 @@ export const useSearchStore = defineStore('transSearchStore', () => {
             datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_name as string
             datas[i]['ps_id'] =  pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
             datas[i]['terminal_id'] = terminals.find(terminal => terminal['id'] === datas[i]['terminal_id'])?.name as string
-
+            datas[i]['custom_id'] = cus_filters.find(cus => cus.id === datas[i]['custom_id'])?.name as string
+            datas[i]['mcht_settle_type'] = settle_types.find(settle_type => settle_type.id === datas[i]['mcht_settle_type'])?.name as string
+            
             if(levels.sales5_use)
                 datas[i]['sales5_fee'] = (datas[i]['sales5_fee'] * 100).toFixed(3)
             if(levels.sales4_use)
@@ -282,7 +284,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
                 r.data[i]['trx_supply_amount'],
                 r.data[i]['trx_tax_amount'],
                 r.data[i]['profit'],
-                r.data[i]['custom_id'],
+                cus_filters.find(cus => cus.id === r.data[i]['custom_id'])?.name,
             ])
         }
 

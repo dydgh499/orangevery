@@ -194,28 +194,28 @@ export const DateSetter = (props: any, formatDate: any, formatTime: any) => {
         let e_date = undefined
         const date = new Date();
         if (date_selecter.value == 'today') {
-            s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
-            e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59);
+            s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0)
+            e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59)
         }
         else if (date_selecter.value == '1 day') {
-            s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 0, 0, 0);
-            e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 23, 59, 59);
+            s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 0, 0, 0)
+            e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 23, 59, 59)
         }
         else if (date_selecter.value == '3 day') {
-            s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 3, 0, 0, 0);
-            e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 23, 59, 59);
+            s_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 3, 0, 0, 0)
+            e_date = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1, 23, 59, 59)
         }
         else if (date_selecter.value == '1 mon') {
             s_date = new Date(date.getFullYear(), date.getMonth() - 1, 1, 0, 0, 0)
             e_date = new Date(date.getFullYear(), date.getMonth(), 0, 23, 59, 59)
         }
         else if (date_selecter.value == '3 mon') {
-            s_date = new Date(date.getFullYear(), date.getMonth() - 3, 1, 0, 0, 0);
-            e_date = new Date(date.getFullYear(), date.getMonth(), 0, 23, 59, 59);
+            s_date = new Date(date.getFullYear(), date.getMonth() - 3, 1, 0, 0, 0)
+            e_date = new Date(date.getFullYear(), date.getMonth(), 0, 23, 59, 59)
         }
         else {
-            s_date = new Date()
-            e_date = new Date()
+            s_date = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0)
+            e_date = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59)
         }
         range_date.value[0] = getDateFormat(s_date)
         range_date.value[1] = getDateFormat(e_date)

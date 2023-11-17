@@ -139,21 +139,24 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                     Route::get('/part/chart', [SalesSettleController::class, 'partChart']);
                 });
             });
+
             Route::prefix('settle-histories')->group(function() {
                 Route::get('difference', [DifferenceSettlementHistoryController::class, 'index']);
                 Route::get('difference/chart', [DifferenceSettlementHistoryController::class, 'chart']);
                 
-                Route::apiResource('merchandises', MchtSettleHistoryController::class);
+                Route::get('merchandises/chart', [MchtSettleHistoryController::class, 'chart']);
                 Route::post('merchandises/part', [MchtSettleHistoryController::class, 'storePart']);
                 Route::post('merchandises/batch', [MchtSettleHistoryController::class, 'batch']);
                 Route::post('merchandises/{id}/deposit', [MchtSettleHistoryController::class, 'setDeposit']);                    
                 Route::post('merchandises/settle-collect', [MchtSettleHistoryController::class, 'settleCollect']);
                 Route::post('merchandises/settle-deposit', [MchtSettleHistoryController::class, 'settleDeposit']);
+                Route::apiResource('merchandises', MchtSettleHistoryController::class);
                 
-                Route::apiResource('salesforces', SalesSettleHistoryController::class);
+                Route::get('salesforces/chart', [SalesSettleHistoryController::class, 'chart']);
                 Route::post('salesforces/part', [SalesSettleHistoryController::class, 'storePart']);
                 Route::post('salesforces/batch', [SalesSettleHistoryController::class, 'batch']);
                 Route::post('salesforces/{id}/deposit', [SalesSettleHistoryController::class, 'setDeposit']);
+                Route::apiResource('salesforces', SalesSettleHistoryController::class);
             });
             Route::prefix('realtime-histories')->group(function() {
                 Route::post('get-balance', [RealtimeSendHistoryController::class, 'getBalance']);

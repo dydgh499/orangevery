@@ -125,7 +125,7 @@ queryToStoreParams()
                                     :format-locale="ko" :dark="theme === 'dark'" autocomplete="on" utc :format="formatDate"
                                     :teleport="true" @update:modelValue="[dateChanged(store)]" />
                             </template>
-                            <template v-if="head.path === 'transactions'">
+                            <template v-if="head.path === 'transactions' || head.path === 'transactions/settle-histories/merchandises' || head.path === 'transactions/settle-histories/salesforces'">
                                 <VSelect v-model="date_selecter" :items="[{ id: null, title: '기간 조회' }].concat(dates)"
                                     density="compact" variant="outlined" item-title="title" item-value="id"
                                     style="min-width: 10em;" @update:modelValue="[setDateRange(), dateChanged(store)]"

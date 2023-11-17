@@ -33,9 +33,8 @@ class MchtSettleHistoryController extends Controller
         $this->base_noti_url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes';
     }
 
-    public function index(IndexRequest $request)
+    private function commonQuery($request)
     {
-        $cols = ['merchandises.user_name', 'merchandises.mcht_name', 'settle_histories_merchandises.*'];
         $search = $request->input('search', '');
         $query  = $this->settle_mcht_hist
                 ->join('merchandises', 'settle_histories_merchandises.mcht_id', 'merchandises.id')
@@ -45,7 +44,32 @@ class MchtSettleHistoryController extends Controller
 
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
+        return $query;
+    }
+    
+    public function chart(Request $request)
+    {
+        $query = $this->commonQuery($request);
+        $total = $query->first([
+            DB::raw("SUM(appr_amount) AS appr_amount"),
+            DB::raw("SUM(cxl_amount) AS cxl_amount"),
+            DB::raw("SUM(total_amount) AS total_amount"),
+            DB::raw("SUM(trx_amount) AS trx_amount"),
+            DB::raw("SUM(settle_fee) AS settle_fee"),
+            DB::raw("SUM(comm_settle_amount) AS comm_settle_amount"),
+            DB::raw("SUM(under_sales_amount) AS under_sales_amount"),
+            DB::raw("SUM(deduct_amount) AS deduct_amount"),
+            DB::raw("SUM(cancel_deposit_amount) AS cancel_deposit_amount"),
+            DB::raw("SUM(collect_withdraw_amount) AS collect_withdraw_amount"),
+            DB::raw("SUM(settle_amount) AS settle_amount"),
+        ]);
+        return $this->response(0, $total);
+    }
 
+    public function index(IndexRequest $request)
+    {
+        $cols = ['merchandises.user_name', 'merchandises.mcht_name', 'settle_histories_merchandises.*'];
+        $query = $this->commonQuery($request);
         $data = $this->getIndexData($request, $query, 'settle_histories_merchandises.id', $cols, 'settle_histories_merchandises.created_at');
         return $this->response(0, $data);
     }
