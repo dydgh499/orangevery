@@ -21,10 +21,15 @@ provide('exporter', exporter)
 
 store.params.level = 10 // taransaction model에서 필수
 store.params.use_cancel_deposit = Number(corp.pv_options.paid.use_cancel_deposit)
+store.params.use_collect_withdraw = Number(corp.pv_options.paid.use_collect_withdraw)
 
 const { settle_types } = useStore()
 const totals = ref(<any[]>([]))
 const snackbar = <any>(inject('snackbar'))
+
+const isExtendSettleCols = (parent_key: string, key: string) => {
+    return parent_key === 'settle' && (key === 'cancel_deposit_amount' || key === 'collect_withdraw_amount')
+}
 
 onMounted(() => {
     watchEffect(async () => {
@@ -103,17 +108,17 @@ onMounted(() => {
                                 class='list-square'>
                                 <span v-if="_key == 'deduction' && (__key as string) == 'input'">
                                 </span>
+                                <span v-else-if="isExtendSettleCols(_key as string ,__key as string)" style="color: red; font-weight: bold;">
+                                    {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0}}
+                                </span>
                                 <span v-else :style="getSettleStyle(_key as string)">
-                                    {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0 }}
+                                    {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0}}
                                 </span>
                             </td>
                         </template>
                         <template v-else>
                             <td v-show="_header.visible" class='list-square'>
-                                <span v-if="isSalesCol(_key as string)" style="font-weight: bold;">
-                                    {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
-                                </span>
-                                <span v-else>
+                                <span>
                                     {{ item[_key] }}
                                 </span>
                             </td>
@@ -130,8 +135,11 @@ onMounted(() => {
                                     <AddDeductBtn :id="item['id']" :name="item['mcht_name']" :is_mcht="true">
                                     </AddDeductBtn>
                                 </span>
+                                <span v-else-if="isExtendSettleCols(_key as string ,__key as string)" style="color: red; font-weight: bold;">
+                                    {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0}}
+                                </span>
                                 <span v-else :style="getSettleStyle(_key as string)">
-                                    {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0 }}
+                                    {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0}}
                                 </span>
                             </td>
                         </template>

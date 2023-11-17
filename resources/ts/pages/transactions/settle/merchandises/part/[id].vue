@@ -4,7 +4,6 @@ import { useSearchStore } from '@/views/transactions/settle/part/useMerchandiseS
 import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { selectFunctionCollect } from '@/views/selected'
-import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
@@ -16,7 +15,6 @@ import corp from '@corp'
 const route = useRoute()
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected, dialog } = selectFunctionCollect(store)
-const { isAbleMchtDepositCollect } = settlementFunctionCollect(store)
 
 const { get, post } = useRequestStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
@@ -73,17 +71,6 @@ const partSettle = async () => {
     }
 }
 
-const settleCollect = async () => {
-    if(await dialog('정말 정산금을 이체한 후 정산 하시겠습니까?')) {
-        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/settle-collect', getPartSettleFormat(), true)
-        if(r.data.result_cd == "0000") {
-            store.setChartProcess()
-            store.setTable()    
-        }
-        else
-            snackbar.value.show(r.data.result_msg, 'error')
-    }
-}
 const getUser = async () => {
     const path = store.params.level == 10 ? 'merchandises' : 'salesforce'
     const res = await get('/api/v1/manager/'+path+'/'+store.params.id)
@@ -160,11 +147,6 @@ watchEffect(() => {
                 <VBtn prepend-icon="tabler-calculator" @click="partSettle()" v-if="getUserLevel() >= 35" size="small">
                     부분정산
                 </VBtn>
-                <!--
-                <VBtn prepend-icon="fa6-solid:money-bill-transfer" @click="settleCollect()" v-if="isAbleMchtDepositCollect(parseInt(route.query.use_collect_withdraw as string))" size="small">
-                    정산 및 이체
-                </VBtn>
-                -->
                 <div style="display: flex;">
                     <table>
                         <tr>

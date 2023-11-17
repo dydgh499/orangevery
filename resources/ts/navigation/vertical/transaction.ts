@@ -36,12 +36,6 @@ const getAbilitiesMenu = computed(() => {
                 to: 'transactions-settle-salesforces',
             },
         ]
-        if(corp.pv_options.paid.use_collect_withdraw) {
-            settle_childs.push({
-                title: '가맹점 모아서 출금',
-                to: 'transactions-settle-merchandises-self-settle'
-            })
-        }
         settle_histories.push({
             title: '가맹점 정산 이력',
             to: 'transactions-settle-histories-merchandises',
@@ -58,8 +52,14 @@ const getAbilitiesMenu = computed(() => {
         }
         if (corp.pv_options.paid.use_cancel_deposit) {
             settle_childs.push({
-                title: '입금내역 관리',
+                title: '취소 수기 입금',
                 to: 'transactions-settle-cancel-deposits',
+            })
+        }
+        if(corp.pv_options.paid.use_collect_withdraw) {
+            settle_childs.push({
+                title: '가맹점 직접출금',
+                to: 'transactions-settle-merchandises-self-settle'
             })
         }
         settles.push({

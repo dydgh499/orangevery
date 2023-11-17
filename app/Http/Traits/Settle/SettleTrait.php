@@ -118,18 +118,19 @@ trait SettleTrait
             $settle += $content->terminal['amount'];
             $settle += $content->terminal['under_sales_amount'];
 
-            if(request()->use_cancel_deposit)
-            {
-                $cancel_deposit = $content->transactions->reduce(function($carry, $transaction) {
-                    return $carry + $transaction->cancelDeposits->sum('deposit_amount');
-                }, 0);
-            }
-            else
-                $cancel_deposit = 0;
+            $cancel_deposit = request()->use_cancel_deposit ? $content->transactions->reduce(function($carry, $transaction) {
+                return $carry + $transaction->cancelDeposits->sum('deposit_amount');
+            }, 0) : 0;
+
+            $collect_withdraw = request()->use_collect_withdraw ? $content->transactions->reduce(function($carry, $transaction) {
+                return $carry + $transaction->collectWithdraw->sum('withdraw_amount');
+            }, 0) : 0;
 
             $settle += $cancel_deposit;
+            $settle -= $collect_withdraw;
             $content->settle = [
-                'cancel_deposit' => $cancel_deposit,
+                'cancel_deposit_amount'   => $cancel_deposit,
+                'collect_withdraw_amount' => $collect_withdraw,
                 'amount'    => $settle,
                 'deposit'   => $settle,
                 'transfer'  => $settle,

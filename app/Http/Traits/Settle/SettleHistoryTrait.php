@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Traits\Settle;
+use App\Models\CollectWithdraw;
 use App\Models\Transaction;
 use App\Models\PaymentModule;
 use App\Models\Salesforce;
@@ -8,6 +9,9 @@ use Carbon\Carbon;
 
 trait SettleHistoryTrait
 {
+    /*
+    * 정산 - 거래건
+    */
     protected function SetTransSettle($query, $target_settle_id, $resource_id)
     {
         return $query
@@ -15,6 +19,9 @@ trait SettleHistoryTrait
             ->update([$target_settle_id => $resource_id]);
     }
 
+    /*
+    * 정산취소 - 거래건
+    */
     protected function SetNullTransSettle($request, $target_id, $target_settle_id, $user_id)
     {
         return Transaction::query()
@@ -23,6 +30,9 @@ trait SettleHistoryTrait
             ->update([$target_settle_id => null]);
     }
 
+    /*
+    * 이체하기 - 가맹점, 영업점 공통
+    */
     protected function deposit($orm, $id)
     {
         $query = $orm->where('id', $id);
@@ -55,6 +65,9 @@ trait SettleHistoryTrait
             ->all();
     }
 
+    /*
+    * 정산 - 통신비
+    */
     protected function SetPayModuleLastSettleMonth($data, $target_settle_id, $settle_id)
     {
         if($settle_id && ($data['comm_settle_amount'] || $data['under_sales_amount']))
@@ -66,6 +79,37 @@ trait SettleHistoryTrait
         return true;
     }
 
+    /*
+    * 정산 - 모아서출금합계
+    */
+    protected function SetCollectWithdraw($data, $settle_id)
+    {
+        if($data['collect_withdraw_amount'])
+        {
+            return CollectWithdraw::where('mcht_id', $data['mcht_id'])
+                    ->whereNull('mcht_settle_id')
+                    ->update(['mcht_settle_id' => $settle_id]);
+        }
+        return true;
+    }
+
+    /*
+    * 정산 취소 - 모아서출금합계
+    */
+    protected function SetNullCollectWithdraw($data)
+    {
+        if($data['collect_withdraw_amount'])
+        {
+            return CollectWithdraw::where('mcht_id', $data['mcht_id'])
+                    ->where('mcht_settle_id', $data['id'])
+                    ->update(['mcht_settle_id' => null]);
+        }
+        return true;
+    }
+
+    /*
+    * 정산 취소 - 통신비
+    */
     protected function RollbackPayModuleLastSettleMonth($data, $target_settle_id)
     {
         if($data['comm_settle_amount'] || $data['under_sales_amount'])
@@ -77,67 +121,5 @@ trait SettleHistoryTrait
             return PaymentModule::whereIn('id', $pmod_ids)->update(['last_settle_month' => $settle_month]);
         }
         return true;
-    }
-
-    protected function createMerchandiseCommon($request, $query)
-    {
-        $data = $request->data('mcht_id');
-        $data['settle_fee'] = $request->settle_fee;
-        $data['cancel_deposit'] =  $request->cancel_deposit;
-        
-        $c_res = $this->settle_mcht_hist->create($data);
-        $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);
-        $p_res = $this->SetPayModuleLastSettleMonth($data, 'mcht_settle_id', $c_res->id);
-        return $this->response($c_res ? 1 : 990, ['id'=>$c_res->id]);
-    }
-
-    protected function createSalesforceCommon($request, $query, $target_settle_id)
-    {
-        $data = $request->data('sales_id');
-        $data['level'] = $request->level;
-
-        $c_res = $this->settle_sales_hist->create($data);
-        $u_res = $this->SetTransSettle($query, $target_settle_id, $c_res->id);
-        $s_res = Salesforce::where('id', $request->id)->update(['last_settle_dt' => $request->dt]);
-        $p_res = $this->SetPayModuleLastSettleMonth($data, $target_settle_id, $c_res->id);
-
-        return $this->response($c_res ? 1 : 990, ['id'=>$c_res->id]);
-    }
-
-
-    protected function deleteMchtforceCommon($request, $id, $target_id, $target_settle_id, $user_id)
-    {
-        $query = $this->settle_mcht_hist->where('id', $id);
-        $hist  = $query->first()->toArray();
-        if($hist)
-        {
-            $request = $request->merge(['id' => $id]);
-            // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
-            $p_res = $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
-            $u_res = $this->SetNullTransSettle($request, $target_id, $target_settle_id, $hist[$user_id]);
-            $d_res = $query->update(['is_delete' => true]);
-            return $this->response($d_res ? 1 : 990);    
-        }
-        else
-            return $this->response(1000);
-
-    }
-
-    protected function deleteSalesforceCommon($request, $id, $target_id, $target_settle_id, $user_id)
-    {
-        $query = $this->settle_sales_hist->where('id', $id);
-        $hist  = $query->first()->toArray();
-        if($hist)
-        {
-            $request = $request->merge(['id' => $id]);
-            // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
-            $p_res = $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
-            $u_res = $this->SetNullTransSettle($request, $target_id, $target_settle_id, $hist[$user_id]);
-            $d_res = $query->update(['is_delete' => true]);
-            $s_res = Salesforce::where('id', $hist[$user_id])->update(['last_settle_dt' => null]);
-            return $this->response(1);
-        }
-        else
-            return $this->response(1000);
     }
 }

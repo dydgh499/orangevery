@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->foreignId('mcht_id')->nullable()->comment('사용 가맹점 ID')->constrained('merchandises')->onDelete('SET NULL');
+            $table->integer('mcht_settle_id')->nullable()->comment('정산 ID');
             $table->integer('withdraw_amount')->default(0)->comment('출금 금액');
             $table->date('withdraw_date')->nullable()->comment('출금 날짜');
             $table->string('acct_num', 20)->nullable()->comment('계좌번호');

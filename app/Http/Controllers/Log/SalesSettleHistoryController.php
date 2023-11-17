@@ -102,6 +102,37 @@ class SalesSettleHistoryController extends Controller
             return $this->response($res ? 1 : 990, ['id'=>$id]);
         });
     }
+    
+    protected function createSalesforceCommon($request, $query, $target_settle_id)
+    {
+        $data = $request->data('sales_id');
+        $data['level'] = $request->level;
+
+        $c_res = $this->settle_sales_hist->create($data);
+        $u_res = $this->SetTransSettle($query, $target_settle_id, $c_res->id);
+        $s_res = Salesforce::where('id', $request->id)->update(['last_settle_dt' => $request->dt]);
+        $p_res = $this->SetPayModuleLastSettleMonth($data, $target_settle_id, $c_res->id);
+
+        return $this->response($c_res ? 1 : 990, ['id'=>$c_res->id]);
+    }
+    
+    protected function deleteSalesforceCommon($request, $id, $target_id, $target_settle_id, $user_id)
+    {
+        $query = $this->settle_sales_hist->where('id', $id);
+        $hist  = $query->first()->toArray();
+        if($hist)
+        {
+            $request = $request->merge(['id' => $id]);
+            // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
+            $p_res = $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
+            $u_res = $this->SetNullTransSettle($request, $target_id, $target_settle_id, $hist[$user_id]);
+            $d_res = $query->update(['is_delete' => true]);
+            $s_res = Salesforce::where('id', $hist[$user_id])->update(['last_settle_dt' => null]);
+            return $this->response(1);
+        }
+        else
+            return $this->response(1000);
+    }
 
     public function setDeposit(Request $request, $id)
     {

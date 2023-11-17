@@ -33,7 +33,9 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
         'created_at': '생성시간',
     }
     if(corp.pv_options.paid.use_cancel_deposit)
-        headers_2['cancel_deposit'] = '취소입금합계'
+        headers_2['cancel_deposit_amount'] = '취소입금합계'
+    if(corp.pv_options.paid.use_collect_withdraw)
+        headers_2['collect_withdraw_amount'] = '직접출금합계'
     if(getUserLevel() >= 35)
         headers_3['extra_col'] = '더보기'
     

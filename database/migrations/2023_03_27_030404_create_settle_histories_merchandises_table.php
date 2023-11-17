@@ -29,7 +29,8 @@ return new class extends Migration
             $table->integer('deduct_amount')->default(0)->comment('추가차감액');
             $table->integer('comm_settle_amount')->default(0)->comment('통신비 정산금');
             $table->integer('under_sales_amount')->default(0)->comment('매출미달 차감금');
-            $table->integer('cancel_deposit')->default(0)->comment('취소입금액');
+            $table->integer('cancel_deposit_amount')->default(0)->comment('취소입금액');
+            $table->integer('collect_withdraw_amount')->default(0)->comment('직접출금액');
             $table->integer('settle_amount')->default(0)->comment('정산액');
             $table->date('settle_dt')->comment('정산일');
             $table->date('deposit_dt')->nullable()->comment('입금일');

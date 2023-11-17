@@ -37,6 +37,7 @@ class MerchandiseController extends Controller
     }
     private function commonQuery($request)
     {
+        $with = ['deducts'];
         $validated = $request->validate(['s_dt'=>'required|date', 'e_dt'=>'required|date']);
         [$settle_key, $group_key] = $this->getSettleCol($request);
 
@@ -46,13 +47,15 @@ class MerchandiseController extends Controller
         $mcht_ids = $this->getExistTransUserIds('mcht_id', 'mcht_settle_id');
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
                 ->where('mcht_name', 'like', "%$search%"); 
-            
+
+        if($request->use_collect_withdraw)
+            $with[] = 'transactions.collectWithdraw';    
         if($request->use_cancel_deposit)
-            $query = $query->with(['transactions.cancelDeposits', 'deducts']);
+            $with[] = 'transactions.cancelDeposits';
         else
-            $query = $query->with(['transactions', 'deducts']);
-        
-        $data = $this->getIndexData($request, $query, 'id', $cols, "created_at", false);
+            $with[] = 'transactions';
+
+        $data = $this->getIndexData($request, $query->with($with), 'id', $cols, "created_at", false);
         $data = $this->getSettleInformation($data, $settle_key);
         // set terminals
         $mcht_ids = collect($data['content'])->pluck('id')->all();
@@ -99,7 +102,8 @@ class MerchandiseController extends Controller
                 'under_sales_amount' => 0,
             ],
             'settle' => [
-                'cancel_deposit' => 0,
+                'cancel_deposit_amount' => 0,
+                'collect_withdraw_amount' => 0,
                 'amount' => 0,
                 'deposit' => 0,
                 'transfer' => 0,
@@ -116,7 +120,8 @@ class MerchandiseController extends Controller
             $total['terminal']['amount'] += $data->terminal['amount'];
             $total['terminal']['under_sales_amount'] += $data->terminal['under_sales_amount'];
 
-            $total['settle']['cancel_deposit'] += $data->settle['cancel_deposit'];
+            $total['settle']['cancel_deposit_amount'] += $data->settle['cancel_deposit_amount'];
+            $total['settle']['collect_withdraw_amount'] += $data->settle['collect_withdraw_amount'];
             $total['settle']['amount'] += $data->settle['amount'];
             $total['settle']['deposit'] += $data->settle['deposit'];
             $total['settle']['transfer'] += $data->settle['transfer'];

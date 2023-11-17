@@ -74,11 +74,14 @@ class MchtSettleHistoryController extends Controller
             { 
                 $data = $request->data('mcht_id', $request->datas[$i]);
                 $data['settle_fee'] = $request->datas[$i]['settle_fee'];
+                $data['cancel_deposit_amount'] = $request->datas[$i]['cancel_deposit_amount'];
+                $data['collect_withdraw_amount'] = $request->datas[$i]['collect_withdraw_amount'];
 
                 $query = Transaction::where('mcht_id', $data['mcht_id']);
                 $c_res = $this->settle_mcht_hist->create($data);
                 $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);    
                 $p_res = $this->SetPayModuleLastSettleMonth($data, 'mcht_settle_id', $c_res->id);
+                $cw_res= $this->SetCollectWithdraw($data, $c_res->id);
             }
             return $this->response($c_res ? 1 : 990);    
         });
@@ -90,6 +93,42 @@ class MchtSettleHistoryController extends Controller
             $res = $this->deleteMchtforceCommon( $request, $id, 'mcht_id', 'mcht_settle_id', 'mcht_id');
             return $this->response($res ? 1 : 990, ['id'=>$id]);
         });
+    }
+
+
+    protected function createMerchandiseCommon($request, $query)
+    {
+        $data = $request->data('mcht_id');
+        $data['settle_fee'] = $request->settle_fee;
+        $data['cancel_deposit_amount']      = $request->cancel_deposit_amount;
+        $data['collect_withdraw_amount']    = $request->collect_withdraw_amount;
+        
+        $c_res = $this->settle_mcht_hist->create($data);
+        $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);
+        $p_res = $this->SetPayModuleLastSettleMonth($data, 'mcht_settle_id', $c_res->id);
+        $cw_res= $this->SetCollectWithdraw($data, $c_res->id);
+
+        return $this->response($c_res ? 1 : 990, ['id'=>$c_res->id]);
+    }
+
+
+    protected function deleteMchtforceCommon($request, $id, $target_id, $target_settle_id, $user_id)
+    {
+        $query = $this->settle_mcht_hist->where('id', $id);
+        $hist  = $query->first()->toArray();
+        if($hist)
+        {
+            $request = $request->merge(['id' => $id]);
+            // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
+            $p_res = $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
+            $u_res = $this->SetNullTransSettle($request, $target_id, $target_settle_id, $hist[$user_id]);
+            $cw_res= $this->SetNullCollectWithdraw($hist);
+            $d_res = $query->update(['is_delete' => true]);
+            return $this->response($d_res ? 1 : 990);    
+        }
+        else
+            return $this->response(1000);
+
     }
 
     public function setDeposit(Request $request, $id)

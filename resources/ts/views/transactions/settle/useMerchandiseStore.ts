@@ -44,7 +44,10 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
 
     const settles:any = {}
     if(corp.pv_options.paid.use_cancel_deposit)
-        settles['cancel_deposit'] = '취소입금합계'
+        settles['cancel_deposit_amount'] = '취소입금합계'
+    if(corp.pv_options.paid.use_collect_withdraw)
+        settles['collect_withdraw_amount'] = '직접출금합계'
+
     settles['amount'] = '정산금액'
     settles['deposit'] = '입금금액'
     settles['transfer'] = '이체금액'
