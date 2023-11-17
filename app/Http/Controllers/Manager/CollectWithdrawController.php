@@ -81,9 +81,10 @@ class CollectWithdrawController extends Controller
             {
                 $data = $request->data();
                 $res = $this->collect_withdraws->create($data);
+                return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
             }
-    
-            return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
+            else
+                return $this->extendResponse(2000, $res['body']['result_msg']);
         }
         else
             return $this->extendResponse(1000, "활성화된 실시간 모듈을 찾을 수 없습니다.");
