@@ -32,7 +32,7 @@ onMounted(() => {
 })
 </script>
 <template>
-    <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.DATE_RANGE">
+    <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.SETTLE_RANGE">
         <template #filter>
         </template>
         <template #index_extra_field>            

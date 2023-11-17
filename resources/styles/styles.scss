@@ -100,3 +100,15 @@ th {
 .v-input--density-compact .v-field--no-label {
   --v-field-padding-bottom: 1px !important;
 }
+
+@media (max-width: 600px) {
+  .dp__instance_calendar {
+    block-size: 38em !important;
+  }
+}
+
+@media (min-width: 600px) {
+  .dp__instance_calendar {
+    block-size: 23em !important;
+  }
+}
