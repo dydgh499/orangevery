@@ -24,7 +24,7 @@ trait ManagerTrait
             {
                 $e_dt = date($request->e_dt." 23:59:59");
                 $query = $query->where($date, '<=', $e_dt);
-            }    
+            }
         }
 
         $min    = $query->min($index_col);

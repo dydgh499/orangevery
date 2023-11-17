@@ -55,7 +55,10 @@ class SalesSettleHistoryController extends Controller
 
     public function chart(Request $request)
     {
-        $query = $this->commonQuery($request);
+        $query = $this->commonQuery($request)
+            ->where('settle_histories_salesforces.created_at', '>=', $request->s_dt)
+            ->where('settle_histories_salesforces.created_at', '<=', $request->e_dt);
+
         $total = $query->first([
             DB::raw("SUM(appr_amount) AS appr_amount"),
             DB::raw("SUM(cxl_amount) AS cxl_amount"),
