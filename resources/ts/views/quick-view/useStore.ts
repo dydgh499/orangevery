@@ -118,5 +118,6 @@ export const useQuickVuewStore = defineStore('useQuickVuewStore', () => {
         hands,
         auths,
         simples,
+        payment_modules,
     }
 })

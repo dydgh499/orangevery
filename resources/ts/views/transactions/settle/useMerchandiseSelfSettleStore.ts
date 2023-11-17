@@ -1,0 +1,40 @@
+import { Header } from '@/views/headers'
+import { Searcher } from '@/views/searcher'
+
+export const useSearchStore = defineStore('merchandiseSelfSettleSearchStore', () => {
+    const store = Searcher('transactions/settle/merchandises/collect-withdraws')
+    const head  = Header('transactions/settle/merchandises/collect-withdraws', '모아서 출금 이력')
+    const headers:Record<string, string> = {
+        'id': 'NO.',
+        'mcht_name': '가맹점 상호',
+        'withdraw_amount': '출금일자',
+        'withdraw_date': '출금금액',
+        'acct_num': '계좌번호',
+        'acct_name': '예금주',
+        'acct_bank_name': '입금은행명',
+        'acct_bank_code': '은행코드',
+        'created_at': '생성시간',
+    }
+
+    head.main_headers.value = []
+    head.headers.value = head.initHeader(headers, {})
+    head.flat_headers.value = head.setFlattenHeaders()
+    
+    const exporter = async (type: number) => {      
+        const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
+        printer(type, r.data.content)
+    }
+    
+    const printer = (type:number, datas: []) => {
+        const keys = Object.keys(headers);
+        for (let i = 0; i <datas.length; i++) {
+            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
+        }
+        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
+    }
+    return {
+        store,
+        head,
+        exporter,
+    }
+})

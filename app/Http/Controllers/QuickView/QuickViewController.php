@@ -153,4 +153,37 @@ class QuickViewController extends Controller
         $res = asPost("https://apis.aligo.in/send/", $sms);
         return $this->response(1);
     }
+    
+    /**
+     * 출금가능 잔액
+     *
+     * 가맹점 전용
+     *
+     * @urlParam id integer required 정기등록카드 PK
+     * @return \Illuminate\Http\Response
+     */
+    public function withdrawAbleAmount(Request $request)
+    {
+        $request->merge([
+            's_dt' => '2000-01-01',  
+            'e_dt' => Carbon::now()->format('Y-m-d'),
+        ]);
+        $transactions = Transaction::where('mcht_id', $request->user()->id)
+            ->noSettlement('mcht_settle_id')
+            ->with(['cancelDeposits', 'collectWithdraw'])
+            ->get(['id', 'mcht_id', 'mcht_settle_amount as profit']);
+
+        $cancel_deposit = $transactions->reduce(function($carry, $transaction) {
+            return $carry + $transaction->cancelDeposits->sum('deposit_amount');
+        }, 0);
+
+        $profit = $transactions->reduce(function($carry, $transaction) {
+            return $carry + $transaction->profit;
+        }, 0);
+        $params = [
+            'profit' => $profit + $cancel_deposit
+        ];
+
+        return $this->response(0, $params);
+    }
 }

@@ -36,7 +36,12 @@ const getAbilitiesMenu = computed(() => {
                 to: 'transactions-settle-salesforces',
             },
         ]
-
+        if(corp.pv_options.paid.use_collect_withdraw) {
+            settle_childs.push({
+                title: '가맹점 모아서 출금',
+                to: 'transactions-settle-merchandises-self-settle'
+            })
+        }
         settle_histories.push({
             title: '가맹점 정산 이력',
             to: 'transactions-settle-histories-merchandises',

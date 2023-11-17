@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { user_info, getUserLevel } from '@axios'
 import { useRequestStore } from '@/views/request'
+import { useQuickVuewStore } from '@/views/quick-view/useStore'
 import CardLayout from '@/views/quick-view/CardLayout.vue'
 import SettleContentOverview from '@/views/quick-view/SettleContentOverview.vue'
 import SettleContentSkeleton from '@/views/quick-view/SettleContentSkeleton.vue'
@@ -8,16 +9,17 @@ import Recent30DaysRankOverview from '@/views/quick-view/Recent30DaysRankOvervie
 import Recent30DaysContentOverview from '@/views/quick-view/Recent30DaysContentOverview.vue'
 import type { MchtRecentTransactions } from '@/views/types'
 import router from '@/router'
-import corp from '@corp'
-import { useQuickVuewStore } from '@/views/quick-view/useStore'
 
 const transactions = ref(<MchtRecentTransactions>({}))
 const is_skeleton = ref(true)
-const { get } = useRequestStore()
+const { get, post } = useRequestStore()
 const { hands, getEncryptParams } = useQuickVuewStore()
 
-const formatDate = <any>(inject('$formatDate'))
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
 const my_level = getUserLevel()
+const amount = ref(0)
+const able_balance = ref(0)
 
 if(my_level >= 35)  //본사
     router.replace('dashboards')
@@ -31,29 +33,34 @@ const toHandPayLink = () => {
     location.href = '/pay/hand?e=' + getEncryptParams(hands[0])
 }
 
-const toWithDrawLink = () => {
-    const date = new Date();
-    const s_dt = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0)
-    const e_dt = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59)
-    const url = "/transactions/settle/merchandises/part/"+user_info.value.id
-    const params = {
-        s_dt: formatDate(s_dt),
-        e_dt: formatDate(e_dt),
-        use_collect_withdraw: 1,
-        level: 10,
-        dev_use: Number(corp.pv_options.auth.levels.dev_use),
-        page: 1,
-        page_size: 20,
-    }    
-    router.push({
-        path: url,
-        query: params
-    })
+const getWithdrawAbleAmount = async() => {
+    const r = await get('/api/v1/quick-view/withdraw-able-amount', {})
+    able_balance.value = Number(r.data.profit)
 }
+
+const requestWithdraw = async() => {
+    if(able_balance.value >= amount.value) {
+        if(amount.value) {
+            if(await alert.value.show('정말 '+amount.value+'원을 출금하시겠습니까?')) {
+                const r = await post('/api/v1/manager/transactions/settle/merchandises/collect-withdraws', {
+                    withdraw_amount: amount.value,
+                })
+            }
+        }
+        else
+            snackbar.value.show('출금 금액을 입력해주세요.', 'warning')
+    }
+    else
+        snackbar.value.show('출금 가능 금액을 초과하였습니다.', 'warning')
+}
+
+
 
 watchEffect(() => {
     if(Object.keys(transactions.value).length)
         is_skeleton.value = false
+    if(getUserLevel() == 10 && user_info.value.use_collect_withdraw)
+        getWithdrawAbleAmount()
 })
 </script>
 <template>
@@ -81,11 +88,36 @@ watchEffect(() => {
                             수기결제
                             <VIcon end icon="fluent-payment-32-regular" />
                         </VBtn>
-                        <VBtn variant="tonal" @click="toWithDrawLink()" class="shortcut-button"
-                            v-if="user_info.use_collect_withdraw">
-                            출금하기
-                            <VIcon end icon="tabler-calculator" />
-                        </VBtn>
+                    </VCol>
+                </template>
+            </CardLayout>
+            <CardLayout :padding="true" v-if="getUserLevel() == 10 && user_info.use_collect_withdraw">
+                <template #content>
+                    <VCol class="d-flex justify-space-between small-font">
+                        <div>
+                            <div>
+                                <span>출금가능 금액</span>                                
+                            </div>
+                            <div style="font-weight: bold;">
+                                {{ able_balance.toLocaleString() }}원
+                            </div>
+                        </div>
+                        <VAvatar rounded variant="tonal" icon="fa6-solid:money-bill-transfer" />
+                    </VCol>
+                    <VCol style="padding-top: 0;" class="d-flex justify-space-between small-font">
+                        <div>
+                            <div>
+                                <span>출금금액 입력</span>
+                            </div>
+                            <div style="display: inline-flex;">
+                                <VTextField v-model="amount" type="number" suffix="￦" placeholder="출금금액 입력"
+                                    prepend-inner-icon="ic:outline-price-change" />
+                                <VBtn type="button" @click="requestWithdraw()" style="margin-left: 0.5em;">
+                                    출금하기
+                                    <VIcon end icon="fa6-solid:money-bill-transfer" />
+                                </VBtn>
+                            </div>
+                        </div>
                     </VCol>
                 </template>
             </CardLayout>

@@ -76,12 +76,12 @@ onMounted(() => {
                             <td class="text-center">
                                 <VCol class="d-flex gap-4">
                                     <VBtn type="button" color="default" variant="text"
-                                        @click="update('/transactions/settle/cancel-deposits', _cancel_deposit, vForm, false)">
+                                        @click="update('/transactions/settle/merchandises/cancel-deposits', _cancel_deposit, vForm, false)">
                                         {{ _cancel_deposit.id == 0 ? "추가" : "수정" }}
                                         <VIcon end icon="tabler-pencil" />
                                     </VBtn>
                                     <VBtn type="button" color="default" variant="text" v-if="_cancel_deposit.id"
-                                        @click="remove('/transactions/settle/cancel-deposits', _cancel_deposit, false)">
+                                        @click="remove('/transactions/settle/merchandises/cancel-deposits', _cancel_deposit, false)">
                                         삭제
                                         <VIcon end icon="tabler-trash" />
                                     </VBtn>

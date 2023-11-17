@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Salesforce;
 use App\Models\Merchandise;
 use App\Models\CancelDeposit;
+use App\Models\CollectWithdraw;
 use App\Models\Log\RealtimeSendHistory;
 
 use App\Http\Traits\Models\AttributeTrait;
@@ -167,6 +168,13 @@ class Transaction extends Model
     public function cancelDeposits()
     {
         return $this->hasMany(CancelDeposit::class, 'trans_id')
+            ->orderby('id', 'desc')
+            ->select();
+    }
+
+    public function collectWithdraw()
+    {
+        return $this->hasMany(CollectWithdraw::class, 'mcht_id')
             ->orderby('id', 'desc')
             ->select();
     }

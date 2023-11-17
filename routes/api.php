@@ -25,6 +25,7 @@ use App\Http\Controllers\Manager\PostController;
 use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Manager\TransactionController;
 use App\Http\Controllers\Manager\CancelDepositController;
+use App\Http\Controllers\Manager\CollectWithdrawController;
 use App\Http\Controllers\Manager\SalesforceBatchController;
 use App\Http\Controllers\Manager\UnderAutoSettingController;
 use App\Http\Controllers\Manager\RegularCreditCardController;
@@ -126,6 +127,9 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                     Route::post('/deduct', [MchtSettleController::class, 'deduct']);
                     Route::get('/part', [MchtSettleController::class, 'part']);
                     Route::get('/part/chart', [MchtSettleController::class, 'partChart']);
+                    
+                    Route::apiResource('collect-withdraws', CollectWithdrawController::class);
+                    Route::apiResource('cancel-deposits', CancelDepositController::class);
                 });
                 Route::prefix('salesforces')->group(function() {
                     Route::get('/', [SalesSettleController::class, 'index']);
@@ -134,7 +138,6 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                     Route::get('/part', [SalesSettleController::class, 'part']);
                     Route::get('/part/chart', [SalesSettleController::class, 'partChart']);
                 });
-                Route::apiResource('cancel-deposits', CancelDepositController::class);
             });
             Route::prefix('settle-histories')->group(function() {
                 Route::get('difference', [DifferenceSettlementHistoryController::class, 'index']);
@@ -225,7 +228,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             });
             Route::apiResource('noti-urls', NotiUrlController::class); 
         });
-        Route::apiResource('complaints', ComplaintController::class);
+
         Route::apiResource('salesforces', SalesforceController::class);
         Route::apiResource('transactions', TransactionController::class);
         Route::apiResource('merchandises', MerchandiseController::class);
@@ -234,6 +237,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
 
     Route::prefix('quick-view')->middleware('auth:sanctum')->group(function() {
         Route::get('', [QuickViewController::class, 'index']);
+        Route::get('withdraw-able-amount', [QuickViewController::class, 'withdrawAbleAmount']);        
         Route::post('sms-link-send', [QuickViewController::class, 'smslinkSend']);
     });
 });

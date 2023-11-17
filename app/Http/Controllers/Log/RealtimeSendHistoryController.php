@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Log;
 
+use App\Models\Log\HeadOfficeAccount;
 use App\Models\Log\RealtimeSendHistory;
 
 use App\Http\Traits\ManagerTrait;
@@ -122,8 +123,10 @@ class RealtimeSendHistoryController extends Controller
     public function headOfficeTransfer(Request $request)
     {
         $data = $request->all();
-        $data['brand_id'] = $request->user()->brand_id;
-        $url = $this->base_noti_url.'/head-office-transfer';
+        $privacy = HeadOfficeAccount::where('id', $request->head_office_acct_id)->first();
+        $data = array_merge($data, $privacy->toArray());
+
+        $url = $this->base_noti_url.'/single-deposit';
         $res = post($url, $data);
         if($res['code'] == 201)
             return $this->extendResponse(1, $res['body']['result_msg']);
