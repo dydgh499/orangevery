@@ -179,14 +179,12 @@ class QuickViewController extends Controller
         $withdraw_amount = $transactions->reduce(function($carry, $transaction) {
             return $carry + $transaction->collectWithdraw->sum('withdraw_amount');
         }, 0);
-
         $profit = $transactions->reduce(function($carry, $transaction) {
             return $carry + $transaction->profit;
         }, 0);
-        $params = [
-            'profit' => $profit + $cancel_deposit - $withdraw_amount
-        ];
 
-        return $this->response(0, $params);
+        return $this->response(0, [
+            'profit' => $profit + $cancel_deposit - $withdraw_amount
+        ]);
     }
 }
