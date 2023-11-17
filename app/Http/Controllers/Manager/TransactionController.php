@@ -332,7 +332,8 @@ class TransactionController extends Controller
             'merchandises.sector', 'merchandises.custom_id',
         ];
         $cols = array_merge($cols , $this->getTotalCols('mcht_settle_amount'));
-        $query = $this->commonSelect($request);
+        $query = $this->commonSelect($request);        
+        $query = $this->transDateFilter($query, $request->s_dt, $request->e_dt, $request->use_search_date_detail);
         $grouped = $query
             ->groupBy('merchandises.id')
             ->orderBy('merchandises.mcht_name')

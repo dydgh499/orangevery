@@ -113,7 +113,7 @@ export const Searcher = (path: string) => {
     const updateQueryString = (obj: any) => {
         router.push({query: {...router.currentRoute.value.query, ...obj}})
         const is_chart_update = Object.keys(obj).some(key => !['page', 'page_size', 'search'].includes(key))
-        if(is_chart_update) 
+        if(is_chart_update)
             setChartProcess()
     }
     

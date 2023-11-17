@@ -5,11 +5,12 @@ interface Props {
 }
 const props = defineProps<Props>()
 const store = <any>(inject('store'))
-store.chart_process = false
 
-watchEffect(() => {
-    if(store.getChartProcess())
-        store.is_skeleton = false
+onMounted (() => {
+    watchEffect(async () => {        
+        if(store.getChartProcess())
+            store.is_skeleton = false
+    })
 })
 </script>
 <template>

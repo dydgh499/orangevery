@@ -199,6 +199,39 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         printer(type, r.data.content)
     }
+    
+    const printer = (type:number, datas: Transaction[]) => {
+        const keys = Object.keys(headers);
+        for (let i = 0; i <datas.length; i++) {
+            datas[i]['module_type'] = module_types.find(module_type => module_type['id'] === datas[i]['module_type'])?.title as string
+            datas[i]['installment'] = installments.find(inst => inst['id'] === datas[i]['installment'])?.title as string
+            datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_name as string
+            datas[i]['ps_id'] =  pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
+            datas[i]['terminal_id'] = terminals.find(terminal => terminal['id'] === datas[i]['terminal_id'])?.name as string
+
+            if(levels.sales5_use)
+                datas[i]['sales5_fee'] = (datas[i]['sales5_fee'] * 100).toFixed(3)
+            if(levels.sales4_use)
+                datas[i]['sales4_fee'] = (datas[i]['sales4_fee'] * 100).toFixed(3)
+            if(levels.sales3_use)
+                datas[i]['sales3_fee'] = (datas[i]['sales3_fee'] * 100).toFixed(3)
+            if(levels.sales2_use)
+                datas[i]['sales2_fee'] = (datas[i]['sales2_fee'] * 100).toFixed(3)
+            if(levels.sales1_use)
+                datas[i]['sales1_fee'] = (datas[i]['sales1_fee'] * 100).toFixed(3)
+            if(levels.sales0_use)
+                datas[i]['sales0_fee'] = (datas[i]['sales0_fee'] * 100).toFixed(3)
+
+            if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit)
+                datas[i]['realtime_result'] = realtimeMessage(datas[i])
+            
+            datas[i]['mcht_fee'] = (datas[i]['mcht_fee'] * 100).toFixed(3)
+            datas[i]['hold_fee'] = (datas[i]['hold_fee'] * 100).toFixed(3)
+            datas[i]['ps_fee'] = (datas[i]['ps_fee'] * 100).toFixed(3)
+            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
+        }
+        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
+    }
 
     const mchtGroup = async() => {
         const url = '/api/v1/manager/transactions/merchandises/groups'
@@ -260,39 +293,6 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         XLSX.writeFile(wb, "가맹점별 매출집계_" + date + ".xlsx")
     }
     
-    const printer = (type:number, datas: Transaction[]) => {
-        const keys = Object.keys(headers);
-        for (let i = 0; i <datas.length; i++) {
-            datas[i]['module_type'] = module_types.find(module_type => module_type['id'] === datas[i]['module_type'])?.title as string
-            datas[i]['installment'] = installments.find(inst => inst['id'] === datas[i]['installment'])?.title as string
-            datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_name as string
-            datas[i]['ps_id'] =  pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
-            datas[i]['terminal_id'] = terminals.find(terminal => terminal['id'] === datas[i]['terminal_id'])?.name as string
-
-            if(levels.sales5_use)
-                datas[i]['sales5_fee'] = (datas[i]['sales5_fee'] * 100).toFixed(3)
-            if(levels.sales4_use)
-                datas[i]['sales4_fee'] = (datas[i]['sales4_fee'] * 100).toFixed(3)
-            if(levels.sales3_use)
-                datas[i]['sales3_fee'] = (datas[i]['sales3_fee'] * 100).toFixed(3)
-            if(levels.sales2_use)
-                datas[i]['sales2_fee'] = (datas[i]['sales2_fee'] * 100).toFixed(3)
-            if(levels.sales1_use)
-                datas[i]['sales1_fee'] = (datas[i]['sales1_fee'] * 100).toFixed(3)
-            if(levels.sales0_use)
-                datas[i]['sales0_fee'] = (datas[i]['sales0_fee'] * 100).toFixed(3)
-
-            if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit)
-                datas[i]['realtime_result'] = realtimeMessage(datas[i])
-            
-            datas[i]['mcht_fee'] = (datas[i]['mcht_fee'] * 100).toFixed(3)
-            datas[i]['hold_fee'] = (datas[i]['hold_fee'] * 100).toFixed(3)
-            datas[i]['ps_fee'] = (datas[i]['ps_fee'] * 100).toFixed(3)
-            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
-        }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
-    }
-
     const realtimeMessage = (item: Transaction):string => {
         const code = realtimeResult(item)
         if(code === StatusColors.Default)
@@ -314,26 +314,6 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         else
             return '알수없는 상태'
     }
-
-    onMounted(() => {
-        watchEffect(async () => {
-            if (store.getChartProcess() === false) {
-                const r = await store.getChartData()
-                metas.value[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
-                metas.value[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
-                metas.value[2]['stats'] = r.data.amount.toLocaleString() + ' ￦'
-                metas.value[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
-                metas.value[0]['subtitle'] = r.data.appr.count.toLocaleString() + '건'
-                metas.value[1]['subtitle'] = r.data.cxl.count.toLocaleString() + '건'
-                metas.value[2]['subtitle'] = r.data.count.toLocaleString() + '건'
-                metas.value[3]['subtitle'] = r.data.count.toLocaleString() + '건'
-                metas.value[0]['percentage'] = r.data.appr.amount ? 100 : 0
-                metas.value[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
-                metas.value[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
-                metas.value[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
-            }
-        })
-    })
 
     return {
         store,

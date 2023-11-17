@@ -140,7 +140,7 @@ queryToStoreParams()
                         </div>
                         <div class="d-inline-flex align-center flex-wrap gap-4 float-right justify-center">
                             <VTextField id="search" :placeholder="props.placeholder" density="compact" v-model="search"
-                                @keyup="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input"  size="small">
+                                @keyup="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input">
                                 <VTooltip activator="parent" location="top">
                                     {{ props.placeholder }}
                                 </VTooltip>

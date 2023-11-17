@@ -18,6 +18,21 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
+onMounted(() => {
+    watchEffect(async() => {
+        if(store.getChartProcess() === false) {
+            const r = await store.getChartData()
+            metas[0]['stats'] = r.data.this_month_add.toLocaleString()
+            metas[1]['stats'] = (r.data.this_month_del * -1).toLocaleString()
+            metas[2]['stats'] = r.data.this_week_add.toLocaleString()
+            metas[3]['stats'] = (r.data.this_week_del * -1).toLocaleString()  
+            metas[0]['percentage'] = store.getPercentage(r.data.this_month_add, r.data.total)
+            metas[1]['percentage'] = store.getPercentage((r.data.this_month_del * -1), r.data.total)
+            metas[2]['percentage'] = store.getPercentage(r.data.this_week_add, r.data.total)
+            metas[3]['percentage'] = store.getPercentage((r.data.this_week_del * -1), r.data.total)            
+        }
+    })
+})
 </script>
 <template>
     <div>

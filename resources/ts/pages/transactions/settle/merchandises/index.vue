@@ -148,7 +148,8 @@ onMounted(() => {
                                 <span v-if="_key === 'id'">
                                     <div class='check-label-container'>
                                         <VCheckbox v-model="selected" :value="item[_key]" class="check-label"/>
-                                        <span class="edit-link" @click="movePartSettle(item, true)">#{{ item[_key] }}</span>
+                                        <span class="edit-link" @click="movePartSettle(item, true)" v-if="getUserLevel() >= 35">#{{ item[_key] }}</span>
+                                        <span class="edit-link" v-else>#{{ item[_key] }}</span>
                                     </div>
                                 </span>
                                 <span v-else-if="isSalesCol(_key as string)" style="font-weight: bold;">

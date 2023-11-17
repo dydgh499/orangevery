@@ -284,22 +284,6 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
     }
-    
-    onMounted(() => {
-        watchEffect(async () => {
-            if (store.getChartProcess() === false) {
-                const r = await store.getChartData()
-                metas.value[0]['stats'] = r.data.amount.toLocaleString() + ' ￦'
-                metas.value[1]['stats'] = r.data.vat_amount.toLocaleString() + ' ￦'
-                metas.value[2]['stats'] = r.data.supply_amount.toLocaleString() + ' ￦'
-                metas.value[3]['stats'] = r.data.settle_amount.toLocaleString() + ' ￦'
-                metas.value[0]['percentage'] = r.data.amount ? 100 : 0
-                metas.value[1]['percentage'] = store.getPercentage(r.data.vat_amount, r.data.amount)
-                metas.value[2]['percentage'] = store.getPercentage(r.data.supply_amount, r.data.amount)
-                metas.value[3]['percentage'] = store.getPercentage(r.data.settle_amount, r.data.amount)
-            }
-        })
-    })
 
     return {
         store,

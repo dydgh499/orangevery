@@ -1,14 +1,12 @@
 
 <script setup lang="ts">
-import { useRequestStore } from '@/views/request'
 import { useSearchStore } from '@/views/transactions/settle/useMerchandiseSelfSettleStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { DateFilters } from '@core/enums'
-import { getUserLevel, user_info } from '@axios'
+import { getUserLevel } from '@axios'
 
 const { store, head, exporter } = useSearchStore()
-const { post } = useRequestStore()
 
 provide('store', store)
 provide('head', head)
