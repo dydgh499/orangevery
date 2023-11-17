@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Models\PaymentModules;
+use App\Models\PaymentModule;
 use App\Models\CollectWithdraw;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -59,7 +59,7 @@ class CollectWithdrawController extends Controller
      */
     public function store(CollectWithdrawRequest $request)
     {
-        $pay_module = PaymentModules::where('mcht_id', $request->user()->id)
+        $pay_module = PaymentModule::where('mcht_id', $request->user()->id)
             ->where('use_realtime_deposit', true)
             ->where('fin_id', '>', 0)
             ->where('is_delete', false)
