@@ -4,6 +4,7 @@ namespace App\Http\Requests\Manager;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
+use Carbon\Carbon;
 
 class CollectWithdrawRequest extends FormRequest
 {
