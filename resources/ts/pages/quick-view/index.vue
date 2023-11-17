@@ -45,6 +45,8 @@ const requestWithdraw = async() => {
                 const r = await post('/api/v1/manager/transactions/settle/merchandises/collect-withdraws', {
                     withdraw_amount: amount.value,
                 })
+                if(r.status == 201)
+                    getWithdrawAbleAmount()
             }
         }
         else
