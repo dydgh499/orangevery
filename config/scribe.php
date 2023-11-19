@@ -231,7 +231,7 @@ return [
         /*
          * The name of the auth parameter (eg token, key, apiKey) or header (eg Authorization, Api-Key).
          */
-        'name' => 'api-toke',
+        'name' => 'access-token',
 
         /*
          * The value of the parameter to be used by Scribe to authenticate response calls.
