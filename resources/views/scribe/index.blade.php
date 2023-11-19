@@ -104,7 +104,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-19 20:20:09</li>
+        <li>마지막 업데이트:  2023-11-19 20:40:16</li>
     </ul>
 </div>
 
