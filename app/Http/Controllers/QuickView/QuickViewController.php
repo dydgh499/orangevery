@@ -157,9 +157,6 @@ class QuickViewController extends Controller
     /**
      * 출금가능 잔액
      *
-     * 가맹점 전용
-     *
-     * @urlParam id integer required 정기등록카드 PK
      * @return \Illuminate\Http\Response
      */
     public function withdrawAbleAmount(Request $request)

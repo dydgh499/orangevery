@@ -20,13 +20,13 @@ const props = defineProps({
 })
 
 const files = ref(props.file)
-const preview = ref<string>(props.preview == undefined ? '/icons/img-preview.svg' : props.preview)
+const preview = ref<string>(props.preview == undefined ? '/utils/icons/img-preview.svg' : props.preview)
 
 const emits = defineEmits(['update:file']);
 watchEffect(() => {
     if(files.value != undefined)
     {
-        preview.value = files.value.length ? URL.createObjectURL(files.value[0]) : '/icons/img-preview.svg'
+        preview.value = files.value.length ? URL.createObjectURL(files.value[0]) : '/utils/icons/img-preview.svg'
         emits('update:file', files.value ? files.value[0] : files.value)
     }
 })

@@ -9,7 +9,7 @@ const props = defineProps<Props>()
 
 const visable = ref(false);
 const zoomIn = () => {
-    if (props.preview != '/icons/img-preview.svg')
+    if (props.preview != '/utils/icons/img-preview.svg')
         visable.value = !visable.value
 }
 </script>

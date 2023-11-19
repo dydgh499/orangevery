@@ -19,9 +19,9 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         $sub = [
-            'brand_id'  => 'required',
-            'user_name' => 'required',
-            'user_pw'   => 'required',
+            'brand_id'  => 'required|numeric',
+            'user_name' => 'required|string',
+            'user_pw'   => 'required|string',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -34,17 +34,11 @@ class LoginRequest extends FormRequest
     public function bodyParameters()
     {
         $params = $this->getDocsParameters($this->keys);
+        
+        $params['brand_id']['description'] = '법인코드를 의미하며 TYINT: 12, MNWORKS: 14가 요구됩니다.';
+        $params['brand_id']['example']     = 12;
+        $params['user_name']['example']    = 'test0001';
+        $params['user_pw']['example']      = 'test0001';
         return $params;
-    }
-
-    public function data($level=0, $bid)
-    {
-        $data = [
-            'brand_id'  => $bid,
-            'user_name' => $this->input('user_name'),
-            'user_pw'   => Hash::make($this->input('user_pw')),
-            'level'     => $level,
-        ];
-        return $data;
     }
 }

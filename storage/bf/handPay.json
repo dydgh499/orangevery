@@ -1,0 +1,17 @@
+{
+    "result_cd":"0000",
+    "result_msg":"성공하였습니다.",
+    "mid":"testmid0001",
+    "tid":"testtid0001",
+    "amount":1000,
+    "appr_num":"08132436",
+    "item_name":"메가커피 아메리카노 L",
+    "trx_id":"000000102301023123012301",
+    "acquirer":"비씨",
+    "issuer":"비씨",
+    "card_num":"12340000000005678",
+    
+    "installment":"00",
+    "method":"수기",
+    "trx_dttm":"2023-04-30 11:11:11"
+}

@@ -20,7 +20,7 @@ const emits = defineEmits(['update:file']);
 watchEffect(() => {
     if(files.value != undefined)
     {
-        preview.value = files.value.length ? URL.createObjectURL(files.value[0]) : '/icons/img-preview.svg'
+        preview.value = files.value.length ? URL.createObjectURL(files.value[0]) : '/utils/icons/img-preview.svg'
         emits('update:file', files.value ? files.value[0] : files.value)
     }
 })

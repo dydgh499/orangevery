@@ -68,7 +68,7 @@ trait ExtendResponseTrait
             //---------- business logic error ------------- (1000 ~ 1999)
             case 1000:  $msg = __("validation.not_found_obj"); break;
             case 1001:  $msg = __("validation.already_exsit", ['attribute'=>'데이터']); break;
-            case 1002:  $msg = __("validation.running_out_point"); break;
+            case 1002:  $msg = "출금가능 금액을 초과하였습니다."; break;
             case 1003:  $msg = __("validation.wrong_point_price"); break;
             //user (1100~1199)
             case 1100:  $msg = "패스워드가 틀립니다."; break;

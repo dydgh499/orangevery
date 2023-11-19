@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Facade;
 
 return [
-
+    'docs_password' => '0409',
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -14,7 +14,6 @@ return [
     | any other location as required by the application or its packages.
     |
     */
-
     'name' => env('APP_NAME', 'Laravel'),
 
     /*

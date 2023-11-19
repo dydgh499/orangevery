@@ -90,6 +90,10 @@ th {
   --dp-background-color: rgb(var(--v-theme-surface)) !important;
 }
 
+.dp__calendar {
+  block-size: 18em !important;
+}
+
 :root {
   --dp-border-radius: 0.3em !important;
   --dp-button-height: 41px !important;
@@ -99,8 +103,4 @@ th {
 .v-input--density-compact .v-field--single-line,
 .v-input--density-compact .v-field--no-label {
   --v-field-padding-bottom: 1px !important;
-}
-
-.dp__calendar {
-  block-size: 18em !important;
 }

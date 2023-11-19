@@ -10,7 +10,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const files = ref(<File[]>([]))
-const preview = ref<string>('/icons/img-preview.svg')
+const preview = ref<string>('/utils/icons/img-preview.svg')
 const previewStyle = `
     border: 2px solid rgb(130, 130, 130);
     border-radius: 0.5em;
@@ -25,7 +25,7 @@ const emits = defineEmits(['update:file']);
 watchEffect(() => {
     if(files.value != undefined)
     {
-        preview.value = files.value.length ? URL.createObjectURL(files.value[0]) : '/icons/img-preview.svg'
+        preview.value = files.value.length ? URL.createObjectURL(files.value[0]) : '/utils/icons/img-preview.svg'
         emits('update:file', files.value ? files.value[0] : files.value)
     }
 })

@@ -1,0 +1,22 @@
+[
+    {
+        "id":1,
+        "is_old_auth":1,
+        "module_type":1,
+        "installment":12,
+        "pay_year_limit":1,
+        "pay_month_limit":2,
+        "pay_day_limit":0,
+        "pay_single_limit":3
+    },
+    {
+        "id":5,
+        "is_old_auth":0,
+        "module_type":1,
+        "installment":12,
+        "pay_year_limit":1,
+        "pay_month_limit":2,
+        "pay_day_limit":0,
+        "pay_single_limit":3
+    }    
+]

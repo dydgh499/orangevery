@@ -9,18 +9,18 @@ return [
     /*
      * The HTML <title> for the generated documentation. If this is empty, Scribe will infer it from config('app.name').
      */
-    'title' => null,
+    'title' => 'PV BF Mobile API',
 
     /*
      * A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
      */
-    'description' => '',
+    'description' => '본 문서는 PAYVERY와 BF간 인터페이스에 대하여 기술합니다.',
 
     /*
      * The base URL displayed in the docs. If this is empty, Scribe will use the value of config('app.url') at generation time.
      * If you're using `laravel` type, you can set this to a dynamic string, like '{{ config("app.tenant_url") }}' to get a dynamic base URL.
      */
-    'base_url' => null,
+    'base_url' => 'https://team.payvery.kr',
 
     /*
      * Tell Scribe what routes to generate documentation for.
@@ -37,7 +37,7 @@ return [
                 /*
                  * Match only routes whose paths match this pattern (use * as a wildcard to match any characters). Example: 'users/*'.
                  */
-                'prefixes' => ['api/*'],
+                'prefixes' => ['api/v1/bf/*'],
 
                 /*
                  * Match only routes whose domains match this pattern (use * as a wildcard to match any characters). Example: 'api.*'.
@@ -139,7 +139,7 @@ return [
      * - "static" will generate a static HTMl page in the /public/docs folder,
      * - "laravel" will generate the documentation as a Blade view, so you can add routing and authentication.
      */
-    'type' => 'static',
+    'type' => 'laravel',
 
     /*
      * Settings for `static` type output.
@@ -166,19 +166,21 @@ return [
          * URL path to use for the docs endpoint (if `add_routes` is true).
          * By default, `/docs` opens the HTML page, `/docs.postman` opens the Postman collection, and `/docs.openapi` the OpenAPI spec.
          */
-        'docs_url' => '/docs',
+        'docs_url' => 'docs/bf',
 
         /*
          * Directory within `public` in which to store CSS and JS assets.
          * By default, assets are stored in `public/vendor/scribe`.
          * If set, assets will be stored in `public/{{assets_directory}}`
          */
-        'assets_directory' => null,
+        'assets_directory' => 'scribe',
 
         /*
          * Middleware to attach to the docs endpoint (if `add_routes` is true).
          */
-        'middleware' => [],
+        'middleware' => [
+            \App\Http\Middleware\DocAuthenticate::class,
+        ],
     ],
 
     'try_it_out' => [
@@ -192,12 +194,12 @@ return [
          * The base URL for the API tester to use (for example, you can set this to your staging URL).
          * Leave as null to use the current app URL when generating (config("app.url")).
          */
-        'base_url' => null,
+        'base_url' => 'https://team.payvery.kr',
 
         /**
          * Fetch a CSRF token before each request, and add it as an X-XSRF-TOKEN header. Needed if you're using Laravel Sanctum.
          */
-        'use_csrf' => false,
+        'use_csrf' => true,
 
         /**
          * The URL to fetch the CSRF token from (if `use_csrf` is true).
@@ -212,13 +214,13 @@ return [
         /*
          * Set this to true if any endpoints in your API use authentication.
          */
-        'enabled' => false,
+        'enabled' => true,
 
         /*
          * Set this to true if your API should be authenticated by default. If so, you must also set `enabled` (above) to true.
          * You can then use @unauthenticated or @authenticated on individual endpoints to change their status from the default.
          */
-        'default' => false,
+        'default' => true,
 
         /*
          * Where is the auth value meant to be sent in a request?
@@ -229,7 +231,7 @@ return [
         /*
          * The name of the auth parameter (eg token, key, apiKey) or header (eg Authorization, Api-Key).
          */
-        'name' => 'key',
+        'name' => 'api-toke',
 
         /*
          * The value of the parameter to be used by Scribe to authenticate response calls.
@@ -242,23 +244,89 @@ return [
          * Placeholder your users will see for the auth parameter in the example requests.
          * Set this to null if you want Scribe to use a random value as placeholder instead.
          */
-        'placeholder' => '{YOUR_AUTH_KEY}',
+        'placeholder' => '{ACCESS_TOKEN}',
 
         /*
          * Any extra authentication-related info for your users. For instance, you can describe how to find or generate their auth credentials.
          * Markdown and HTML are supported.
          */
-        'extra_info' => 'You can retrieve your token by visiting your dashboard and clicking <b>Generate API token</b>.',
+        'extra_info' => '',
     ],
 
     /*
      * Text to place in the "Introduction" section, right after the `description`. Markdown and HTML are supported.
      */
     'intro_text' => <<<INTRO
-This documentation aims to provide all the information you need to work with our API.
-
-<aside>As you scroll, you'll see code examples for working with the API in different programming languages in the dark area to the right (or as part of the content on mobile).
-You can switch the language used with the tabs at the top right (or from the nav menu at the top left on mobile).</aside>
+<h2 id="response-format">응답코드 정의</h1>
+<p>API 요청의 성공/실패 유무는 HTTP status code로 판별합니다.</p>
+<p>Status code (200, 201, 204)인 경우에만 정상 응답이며, 이외의 상태코드의 값은 정상응답이 아닌 것으로 판단합니다.</p>
+<table>
+    <thead>
+        <tr>
+            <th>Status Code</th>
+            <th>Response Type</th>
+            <th>Response Body</th>
+        </tr>
+        <tr>
+            <td>200</td>
+            <td>조회 성공</td>
+            <td>존재</td>
+        </tr>
+        <tr>
+            <td>201</td>
+            <td>추가 및 수정 성공</td>
+            <td>미존재</td>
+        </tr>
+        <tr>
+            <td>204</td>
+            <td>삭제 성공</td>
+            <td>미존재</td>
+        </tr>
+    </thead>
+</table>
+<h2 id="response-error">에러코드 표</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Status Code</th>
+            <th>Code</th>
+            <th>Message</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>401</td>
+            <td>950</td>
+            <td>Authentication token is missing or incorrect</td>
+            <td>인증 토큰 누락</td>
+        </tr>
+        <tr>
+            <td>403</td>
+            <td>951</td>
+            <td>You do not have permission</td>
+            <td>권한 인증 실패</td>
+        </tr>
+        <tr>
+            <td>419</td>
+            <td>953</td>
+            <td>CSRF token mismatch</td>
+            <td>CSRF 토큰 누락</td>
+        </tr>
+        <tr>
+            <td>500</td>
+            <td>990 ~ 999</td>
+            <td>오류 상세 메세지</td>
+            <td>시스템 에러 발생</td>
+        </tr>
+        <tr>
+            <td>409</td>
+            <td>1000 ~ 1999</td>
+            <td>오류 상세 메세지</td>
+            <td>비즈니스 로직 처리 에러</td>
+        </tr>
+    </tbody>
+</table>
 INTRO
     ,
 
@@ -269,8 +337,10 @@ INTRO
      *
      */
     'example_languages' => [
-        'bash',
         'javascript',
+        'php',
+        'python',
+        'bash',
     ],
 
     /*
@@ -346,7 +416,7 @@ INTRO
      * - 'logo' => 'img/logo.png' // for `laravel` type
      *
      */
-    'logo' => false,
+    'logo' => '/logo.svg',
 
     /**
      * Customize the "Last updated" value displayed in the docs by specifying tokens and formats.
@@ -358,7 +428,7 @@ INTRO
      * The format you pass to `date` will be passed to PHP's `date()` function.
      * The format you pass to `git` can be either "short" or "long".
      */
-    'last_updated' => 'Last updated: {date:F j, Y}',
+    'last_updated' => '마지막 업데이트: {date: Y-m-d H:i:s}',
 
     'examples' => [
         /*

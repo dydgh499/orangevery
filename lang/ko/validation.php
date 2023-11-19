@@ -182,6 +182,9 @@ return [
         'use_regular_card' => '단골고객 기능 사용여부',
         'use_collect_withdraw' => '모아서 출금 사용여부',
         'is_show_fee' => '가맹점 수수료율 노출여부',
+        'sector' => '업종',
+        'enabled' => '전산 활성화 여부',
+        'custom_id' => '커스텀 필터',
         //
         'tags' => '태그',
         'files' => '파일',
@@ -267,9 +270,21 @@ return [
         'pg_type' => 'PG 타입',
         'pg_name' => 'PG사 별칭',
         //
-        'sector' => '업종',
-        'enabled' => '전산 활성화 여부',
-        'custom_id' => '커스텀 필터',
         'id' => '고유번호',
+        // pay
+        'pmod_id'   => '결제모듈 고유번호',
+        'amount'    => '구매금액',
+        'ord_num'   => '주문번호',
+        'return_url' => 'Return URL',
+        'card_num'  => '카드번호',
+        'yymm'      => '유효기간',
+        'auth_num'   => '인증정보',  //opt
+        'card_pw'   => '카드 비밀번호', //opt
+        'temp'      => '임시 값',
+        'item_name' => '상품명',
+        'buyer_name' => '구매자명',
+        'buyer_phone' => '휴대폰 번호',
+        // cancel
+        'trx_id'    => '거래번호',
     ],
 ];
