@@ -9,6 +9,8 @@ use App\Http\Controllers\Manager\TransactionController;
 
 use App\Models\Merchandise;
 use App\Models\PaymentModule;
+use App\Models\Transaction;
+use App\Models\CollectWithdraw;
 
 use App\Http\Requests\Manager\LoginRequest;
 use App\Http\Requests\Manager\CollectWithdrawRequest;
@@ -34,6 +36,7 @@ class BfController extends Controller
      * 로그인
      * 
      * @unauthenticated
+     * 
      * @responseFile 200 storage/bf/login.json
      * @responseField access_token string Bearer 토큰 값
      * @responseField user object 유저정보
@@ -99,7 +102,7 @@ class BfController extends Controller
      */
     public function withdrawsBalance(Request $request)
     {
-        $inst = new QuickViewController();
+        $inst = new QuickViewController(new Transaction);
         return $inst->withdrawAbleAmount($request);
         
     }
@@ -113,12 +116,12 @@ class BfController extends Controller
      */
     public function withdrawsStore(CollectWithdrawRequest $request)
     {
-        $inst = new QuickViewController();
+        $inst = new QuickViewController(new Transaction);
         $json = $inst->withdrawAbleAmount($request);
         $body = json_decode($result->getContent(), true);
         if($body['profit'] >= $request->withdraw_amount)
         {
-            $inst = new CollectWithdrawController();
+            $inst = new CollectWithdrawController(new CollectWithdraw);
             return $inst->store($request);    
         }
         else
@@ -146,7 +149,7 @@ class BfController extends Controller
      */
     public function handPay(HandPayRequest $request)
     {        
-        $inst = new TransactionController();
+        $inst = new TransactionController(new Transaction);
         return $inst->handPay($request);
     }
 }
