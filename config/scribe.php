@@ -139,7 +139,7 @@ return [
      * - "static" will generate a static HTMl page in the /public/docs folder,
      * - "laravel" will generate the documentation as a Blade view, so you can add routing and authentication.
      */
-    'type' => 'laravel',
+    'type' => 'static',
 
     /*
      * Settings for `static` type output.
@@ -166,7 +166,7 @@ return [
          * URL path to use for the docs endpoint (if `add_routes` is true).
          * By default, `/docs` opens the HTML page, `/docs.postman` opens the Postman collection, and `/docs.openapi` the OpenAPI spec.
          */
-        'docs_url' => 'docs/bf',
+        'docs_url' => 'docs',
 
         /*
          * Directory within `public` in which to store CSS and JS assets.
@@ -178,9 +178,7 @@ return [
         /*
          * Middleware to attach to the docs endpoint (if `add_routes` is true).
          */
-        'middleware' => [
-            \App\Http\Middleware\DocAuthenticate::class,
-        ],
+        'middleware' => [],
     ],
 
     'try_it_out' => [

@@ -1,0 +1,323 @@
+openapi: 3.0.3
+info:
+  title: 'PV BF Mobile API'
+  description: '본 문서는 PAYVERY와 BF간 인터페이스에 대하여 기술합니다.'
+  version: 1.0.0
+servers:
+  -
+    url: 'https://team.payvery.kr'
+paths:
+  /api/v1/bf/sign-in:
+    post:
+      summary: 로그인
+      operationId: ''
+      description: ''
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  access_token: 9658|zoJ9RPe65DDaIor9jPapdpctuALtWkvMjGFrWn7a034f9c9f
+                  user:
+                    id: 12
+                    user_name: test0001
+                    level: 10
+                properties:
+                  access_token:
+                    type: string
+                    example: 9658|zoJ9RPe65DDaIor9jPapdpctuALtWkvMjGFrWn7a034f9c9f
+                    description: 'Bearer 토큰 값'
+                  user:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 12
+                      user_name:
+                        type: string
+                        example: test0001
+                      level:
+                        type: integer
+                        example: 10
+      tags:
+        - 'BF Mobile API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                brand_id:
+                  type: number
+                  description: '법인코드를 의미하며 TYINT: 12, MNWORKS: 14가 요구됩니다.'
+                  example: 12.0
+                user_name:
+                  type: string
+                  description: '유저 ID.'
+                  example: test0001
+                user_pw:
+                  type: string
+                  description: 패스워드.
+                  example: test0001
+              required:
+                - brand_id
+                - user_name
+                - user_pw
+      security: []
+  /api/v1/bf/pay-modules:
+    get:
+      summary: '결제모듈 정보 조회'
+      operationId: ''
+      description: '결제모듈 정보를 불러옵니다.<br>한도 및 수기결제에 필요한 데이터들을 조회합니다.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                example:
+                  -
+                    id: 1
+                    is_old_auth: 1
+                    module_type: 1
+                    installment: 12
+                    pay_year_limit: 1
+                    pay_month_limit: 2
+                    pay_day_limit: 0
+                    pay_single_limit: 3
+                  -
+                    id: 5
+                    is_old_auth: 0
+                    module_type: 1
+                    installment: 12
+                    pay_year_limit: 1
+                    pay_month_limit: 2
+                    pay_day_limit: 0
+                    pay_single_limit: 3
+      tags:
+        - 'BF Mobile API'
+  /api/v1/bf/withdraws/balance:
+    get:
+      summary: '출금가능금액 조회'
+      operationId: ''
+      description: '출금가능한금액을 조회합니다.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  profit: 412320
+                properties:
+                  profit:
+                    type: integer
+                    example: 412320
+                    description: 출금가능한도
+      tags:
+        - 'BF Mobile API'
+  /api/v1/bf/withdraws:
+    post:
+      summary: 출금요청
+      operationId: ''
+      description: '출금가능한금액을 조회합니다.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  id: 123
+                properties:
+                  id:
+                    type: integer
+                    example: 123
+                    description: '출금요청 고유번호'
+      tags:
+        - 'BF Mobile API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                withdraw_amount:
+                  type: number
+                  description: '출금요청할 금액.<br>출금가능금액을 초과할 수 없습니다.'
+                  example: 1000.0
+              required:
+                - withdraw_amount
+  /api/v1/bf/pay/hand:
+    post:
+      summary: 수기결제
+      operationId: ''
+      description: '수기결제 API 입니다.'
+      parameters: []
+      responses:
+        201:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  result_cd: '0000'
+                  result_msg: 성공하였습니다.
+                  mid: testmid0001
+                  tid: testtid0001
+                  amount: 1000
+                  appr_num: '08132436'
+                  item_name: '메가커피 아메리카노 L'
+                  trx_id: '000000102301023123012301'
+                  acquirer: 비씨
+                  issuer: 비씨
+                  card_num: '12340000000005678'
+                  installment: '00'
+                  method: 수기
+                  trx_dttm: '2023-04-30 11:11:11'
+                properties:
+                  result_cd:
+                    type: string
+                    example: '0000'
+                  result_msg:
+                    type: string
+                    example: 성공하였습니다.
+                  mid:
+                    type: string
+                    example: testmid0001
+                    description: '가맹점 MID'
+                  tid:
+                    type: string
+                    example: testtid0001
+                    description: '단말기 TID'
+                  amount:
+                    type: integer
+                    example: 1000
+                    description: 거래금액
+                  appr_num:
+                    type: string
+                    example: '08132436'
+                    description: 승인번호
+                  item_name:
+                    type: string
+                    example: '메가커피 아메리카노 L'
+                    description: 상품명
+                  trx_id:
+                    type: string
+                    example: '000000102301023123012301'
+                    description: 거래번호
+                  acquirer:
+                    type: string
+                    example: 비씨
+                    description: 매입사명
+                  issuer:
+                    type: string
+                    example: 비씨
+                    description: 발급사명
+                  card_num:
+                    type: string
+                    example: '12340000000005678'
+                    description: 카드번호
+                  installment:
+                    type: string
+                    example: '00'
+                    description: 할부기간
+                  method:
+                    type: string
+                    example: 수기
+                    description: 결제방식
+                  trx_dttm:
+                    type: string
+                    example: '2023-04-30 11:11:11'
+                    description: 거래시간
+      tags:
+        - 'BF Mobile API'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pmod_id:
+                  type: number
+                  description: '결제모듈 고유번호.'
+                  example: 1023.0
+                yymm:
+                  type: number
+                  description: '4자리 YYMM 유효기간.'
+                  example: 2311.0
+                card_num:
+                  type: string
+                  description: 카드번호.
+                  example: '1234000000005678'
+                buyer_name:
+                  type: string
+                  description: 구매자명.
+                  example: 홍길동
+                buyer_phone:
+                  type: string
+                  description: '휴대폰 번호.'
+                  example: '01000000000'
+                installment:
+                  type: number
+                  description: '할부기간(0=일시불,2,3,4,5,6,7,8,9,10,11).<br>결제모듈의 할부한도를 초과할 수 없습니다.'
+                  example: 0.0
+                amount:
+                  type: string
+                  description: 구매금액.
+                  example: 10000
+                ord_num:
+                  type: string
+                  description: '중복되지 않는 주문번호.<br>50자 이하로 작성해야합니다.'
+                  example: 1700385517624H102302
+                item_name:
+                  type: string
+                  description: 상품명.
+                  example: '메가커피 아메리카노 L'
+                auth_num:
+                  type: string
+                  description: '인증정보<b>(구인증 필수 값)</b>.<br>카도번호 소유주가 법인인경우 사업자번호, 개인인경우 주민등록번호 앞자리를 입력합니다.'
+                  example: '901212'
+                card_pw:
+                  type: string
+                  description: '카드비밀번호 앞 2자리<b>(구인증 필수 값)</b>.'
+                  example: '34'
+              required:
+                - pmod_id
+                - yymm
+                - card_num
+                - buyer_name
+                - buyer_phone
+                - installment
+                - amount
+                - ord_num
+                - item_name
+tags:
+  -
+    name: 'BF Mobile API'
+    description: "\nBF Mobile과 PAYVERY간 API 입니다."
+components:
+  securitySchemes:
+    default:
+      type: http
+      scheme: bearer
+      description: ''
+security:
+  -
+    default: []

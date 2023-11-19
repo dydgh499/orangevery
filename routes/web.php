@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +14,4 @@ use App\Http\Controllers\AuthController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::prefix('docs')->middleware('auth.docs')->group(function() {    
-    Route::get('{any}');
-});
 Route::get('{any}', [AuthController::class, 'domain'])->where('any','.*');
