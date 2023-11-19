@@ -46,7 +46,7 @@
     </span>
 </a>
 <div class="tocify-wrapper">
-        <div style="display: inline-flex; align-items: center; text-align: center; vertical-align: middle; padding: 1em; justify-content: center;">
+        <div style="display: inline-flex; align-items: center; text-align: center; vertical-align: middle; padding: 1em; justify-content: left;">
         <img src="/logo.svg" alt="logo" class="logo" width="20%"/>
         <span style='margin-left: 0.5em; font-size: 1.7em;'>PAYVERY</span>
     </div>
