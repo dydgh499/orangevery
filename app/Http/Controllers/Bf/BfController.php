@@ -146,6 +146,7 @@ class BfController extends Controller
      * @responseField installment string 할부기간
      * @responseField method string 결제방식
      * @responseField trx_dttm string 거래시간
+     * @responseField is_cancel integer 취소여부
      */
     public function handPay(HandPayRequest $request)
     {        

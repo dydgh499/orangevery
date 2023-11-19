@@ -102,7 +102,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-19 23:26:40</li>
+        <li>마지막 업데이트:  2023-11-20 00:15:04</li>
     </ul>
 </div>
 
@@ -1149,20 +1149,22 @@ response.json()</code></pre></div>
                 <pre>
 
 <code class="language-json">{
-    &quot;result_cd&quot;: &quot;0000&quot;,
-    &quot;result_msg&quot;: &quot;성공하였습니다.&quot;,
-    &quot;mid&quot;: &quot;testmid0001&quot;,
-    &quot;tid&quot;: &quot;testtid0001&quot;,
-    &quot;amount&quot;: 1000,
-    &quot;appr_num&quot;: &quot;08132436&quot;,
+    &quot;mid&quot;: &quot;wel000707m&quot;,
+    &quot;tid&quot;: &quot;90387&quot;,
+    &quot;amount&quot;: 100,
+    &quot;ord_num&quot;: &quot;1704385517624H102402&quot;,
+    &quot;appr_num&quot;: &quot;57480451&quot;,
     &quot;item_name&quot;: &quot;메가커피 아메리카노 L&quot;,
-    &quot;trx_id&quot;: &quot;000000102301023123012301&quot;,
-    &quot;acquirer&quot;: &quot;비씨&quot;,
-    &quot;issuer&quot;: &quot;비씨&quot;,
-    &quot;card_num&quot;: &quot;12340000000005678&quot;,
+    &quot;pg_id&quot;: 112,
+    &quot;trx_id&quot;: &quot;202311200495962&quot;,
+    &quot;acquirer&quot;: &quot;IBK&quot;,
+    &quot;issuer&quot;: &quot;IBK&quot;,
+    &quot;card_num&quot;: &quot;414003******3964&quot;,
     &quot;installment&quot;: &quot;00&quot;,
+    &quot;buyer_name&quot;: &quot;홍길동&quot;,
+    &quot;trx_dttm&quot;: &quot;2023-11-20 00:09:39&quot;,
     &quot;method&quot;: &quot;수기&quot;,
-    &quot;trx_dttm&quot;: &quot;2023-04-30 11:11:11&quot;
+    &quot;is_cancel&quot;: 0
 }</code>
  </pre>
     </span>
@@ -1462,6 +1464,13 @@ response.json()</code></pre></div>
  &nbsp;
 <br>
 <p>거래시간</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>is_cancel</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>취소여부</p>
         </div>
                 
 

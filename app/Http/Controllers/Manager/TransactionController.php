@@ -287,7 +287,13 @@ class TransactionController extends Controller
         $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/hand';
         $res = post($url, $data);
         if($res['body']['result_cd'] === "0000")
-            return $this->response(1, $res['body']);
+        {
+            $data = $res['body'];
+            unset($data['result_cd']);
+            unset($data['result_msg']);
+            unset($data['temp']);
+            return $this->extendResponse(1, $res['body']['result_msg'], $data);
+        }
         else
             return $this->extendResponse(1999, $res['body']['result_msg']);
     }
