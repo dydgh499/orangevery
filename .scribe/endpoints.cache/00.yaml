@@ -209,7 +209,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer Ve48Z5Pakcv6bd3a1ghE6fD'
+      - 'Bearer dZa8f13ehVv6DE4kg5cPab6'
     controller: null
     method: null
     route: null
@@ -262,7 +262,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer v5f61kgaca4ZD68hdeV3EbP'
+      - 'Bearer D66dV1hafcPevbEk843a5Zg'
     controller: null
     method: null
     route: null
@@ -324,7 +324,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer f6cDa15E4PV6Zakbh3ed8vg'
+      - 'Bearer 4b8a36heZvEfV1Dgca5kP6d'
     controller: null
     method: null
     route: null
@@ -578,7 +578,7 @@ endpoints:
         custom: []
       trx_dttm:
         name: trx_dttm
-        description: 거래시간
+        description: '거래시간(Y-m-d H:i:s)'
         required: false
         example: null
         type: string
@@ -595,7 +595,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer k1aed6Vf3bgvZ8E4cP5Dah6'
+      - 'Bearer Va3eb8DE416ka5dhvZ6gcfP'
     controller: null
     method: null
     route: null

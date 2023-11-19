@@ -134,7 +134,6 @@ class BfController extends Controller
      * 수기결제 API 입니다.
      * @responseFile 201 storage/bf/handPay.json
      * @responseField mid string 가맹점 MID
-     * @responseField mid string 가맹점 MID
      * @responseField tid string 단말기 TID
      * @responseField amount integer 거래금액
      * @responseField ord_num string 가맹점 주문번호
@@ -146,7 +145,7 @@ class BfController extends Controller
      * @responseField card_num string 카드번호
      * @responseField installment string 할부기간
      * @responseField method string 결제방식
-     * @responseField trx_dttm string 거래시간
+     * @responseField trx_dttm string 거래시간(Y-m-d H:i:s)
      * @responseField is_cancel integer 취소여부
      */
     public function handPay(HandPayRequest $request)

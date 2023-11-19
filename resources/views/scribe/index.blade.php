@@ -102,7 +102,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-20 00:24:22</li>
+        <li>마지막 업데이트:  2023-11-20 00:26:04</li>
     </ul>
 </div>
 
@@ -1463,7 +1463,7 @@ response.json()</code></pre></div>
 <small>string</small>&nbsp;
  &nbsp;
 <br>
-<p>거래시간</p>
+<p>거래시간(Y-m-d H:i:s)</p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>is_cancel</code></b>&nbsp;&nbsp;
