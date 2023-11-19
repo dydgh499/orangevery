@@ -1,5 +1,8 @@
+@php
+    $uri = request()->input('uri', '');
+@endphp
 <script> alert('패스워드가 올바르지 않습니다.'); </script>
-<form name="form" method="post" action="/docs/bf">
+<form name="form" method="post" action="{{ $uri }}">
     @csrf 
     <fieldset>
         <legend>문서를 확인하기 위해서 비밀번호를 입력해주세요.</legend>
