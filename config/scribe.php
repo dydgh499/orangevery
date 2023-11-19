@@ -139,7 +139,7 @@ return [
      * - "static" will generate a static HTMl page in the /public/docs folder,
      * - "laravel" will generate the documentation as a Blade view, so you can add routing and authentication.
      */
-    'type' => 'static',
+    'type' => 'laravel',
 
     /*
      * Settings for `static` type output.
@@ -160,13 +160,13 @@ return [
          * Whether to automatically create a docs endpoint for you to view your generated docs.
          * If this is false, you can still set up routing manually.
          */
-        'add_routes' => true,
+        'add_routes' => false,
 
         /*
          * URL path to use for the docs endpoint (if `add_routes` is true).
          * By default, `/docs` opens the HTML page, `/docs.postman` opens the Postman collection, and `/docs.openapi` the OpenAPI spec.
          */
-        'docs_url' => 'docs',
+        'docs_url' => 'docs/bf',
 
         /*
          * Directory within `public` in which to store CSS and JS assets.
@@ -178,7 +178,9 @@ return [
         /*
          * Middleware to attach to the docs endpoint (if `add_routes` is true).
          */
-        'middleware' => [],
+        'middleware' => [
+            \App\Http\Middleware\DocAuthenticate::class,
+        ],
     ],
 
     'try_it_out' => [
@@ -348,7 +350,7 @@ INTRO
      * Setting `laravel.add_routes` to true (above) will also add a route for the collection.
      */
     'postman' => [
-        'enabled' => true,
+        'enabled' => false,
 
         /*
          * Manually override some generated content in the spec. Dot notation is supported.
@@ -365,7 +367,7 @@ INTRO
      * Setting `laravel.add_routes` to true (above) will also add a route for the spec.
      */
     'openapi' => [
-        'enabled' => true,
+        'enabled' => false,
 
         /*
          * Manually override some generated content in the spec. Dot notation is supported.

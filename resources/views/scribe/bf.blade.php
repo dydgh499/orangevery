@@ -31,9 +31,9 @@
         var useCsrf = Boolean(1);
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="../docs/js/tryitout-4.25.0.js"></script>
+    <script src="{{ asset("/scribe/js/tryitout-4.25.0.js") }}"></script>
 
-    <script src="../docs/js/theme-default-4.25.0.js"></script>
+    <script src="{{ asset("/scribe/js/theme-default-4.25.0.js") }}"></script>
 
 </head>
 
@@ -42,7 +42,7 @@
 <a href="#" id="nav-button">
     <span>
         MENU
-        <img src="../docs/images/navbar.png" alt="navbar-image"/>
+        <img src="{{ asset("/scribe/images/navbar.png") }}" alt="navbar-image"/>
     </span>
 </a>
 <div class="tocify-wrapper">
@@ -98,13 +98,11 @@
             </div>
 
     <ul class="toc-footer" id="toc-footer">
-                    <li style="padding-bottom: 5px;"><a href="../docs/collection.json">View Postman collection</a></li>
-                            <li style="padding-bottom: 5px;"><a href="../docs/openapi.yaml">View OpenAPI spec</a></li>
-                <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
+                        <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-19 21:00:25</li>
+        <li>마지막 업데이트:  2023-11-19 21:22:36</li>
     </ul>
 </div>
 

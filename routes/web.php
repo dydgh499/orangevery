@@ -14,4 +14,14 @@ use Illuminate\Support\Facades\Response;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::view('password', 'password')->name('password');
+Route::prefix('docs')->middleware('auth.docs')->group(function() {
+    Route::any('{corp}', function($corp) {
+        $viewPath = "scribe.$corp";
+        if (view()->exists($viewPath)) {
+            return view($viewPath);
+        }
+        return view('scribe.{corp}');
+    });
+});
 Route::get('{any}', [AuthController::class, 'domain'])->where('any','.*');

@@ -15,6 +15,6 @@ class DocAuthenticate
         if($inputpass === $password)
             return $next($request);
         else
-            return view('password', ['result'=>false]);
+            return redirect('password?uri='.request()->route()->uri());
     }
 }
