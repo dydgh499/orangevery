@@ -148,6 +148,14 @@ endpoints:
         description: ''
         custom: []
     responseFields:
+      id:
+        name: id
+        description: '결제모듈 고유번호'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
       is_old_auth:
         name: is_old_auth
         description: '비인증, 구인증 여부(비인증=0, 구인증=1)'
@@ -169,7 +177,7 @@ endpoints:
         description: 할부한도(0~12)
         required: false
         example: null
-        type: integer
+        type: string
         enumValues: []
         custom: []
       pay_year_limit:
@@ -199,7 +207,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer haDke1f65cEdZ8b6vPg3V4a'
+      - 'Bearer 6hEea5PZcvdD16akV38g4bf'
     controller: null
     method: null
     route: null
@@ -252,7 +260,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer a8vVfgd3PEZk416aDbech65'
+      - 'Bearer h8PgEZ6kevdcD4f3Vaa1b65'
     controller: null
     method: null
     route: null
@@ -314,7 +322,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer e1f6khPadZ3g564vEcaDV8b'
+      - 'Bearer gakZf58hb36ve614adVEDPc'
     controller: null
     method: null
     route: null
@@ -575,7 +583,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 5dZ68baVg31E4Pc6kfhvaDe'
+      - 'Bearer k4EhZe1VgafDcd6Pb8a53v6'
     controller: null
     method: null
     route: null

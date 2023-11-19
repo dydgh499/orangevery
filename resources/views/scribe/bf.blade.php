@@ -98,11 +98,11 @@
             </div>
 
     <ul class="toc-footer" id="toc-footer">
-                        <li><a>Documentation powered by Payvery ✍</a></li>
+                                        <li><a>Documentation powered by Payvery ✍</a></li>
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-19 21:22:36</li>
+        <li>마지막 업데이트:  2023-11-19 22:25:31</li>
     </ul>
 </div>
 
@@ -601,6 +601,13 @@ response.json()</code></pre></div>
     <h3>응답</h3>
     <h4 class="fancy-heading-panel"><b>응답 필드</b></h4>
     <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>결제모듈 고유번호</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>is_old_auth</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
@@ -616,7 +623,7 @@ response.json()</code></pre></div>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>installment</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
+<small>string</small>&nbsp;
  &nbsp;
 <br>
 <p>할부한도(0~12)</p>
