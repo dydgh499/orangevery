@@ -15,6 +15,6 @@ use App\Http\Controllers\AuthController;
 */
 
 Route::prefix('docs')->middleware('auth.docs')->group(function() {    
-    Route::get('{any}', view('scribe.index'));
+    Route::get('{any}');
 });
 Route::get('{any}', [AuthController::class, 'domain'])->where('any','.*');
