@@ -199,7 +199,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 654Pvbce3kEVh1d6f8DZaag'
+      - 'Bearer vZ6gcD4e1E63abhPadkVf85'
     controller: null
     method: null
     route: null
@@ -252,7 +252,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 5kPgE3V4ha68cZ1dfDea6vb'
+      - 'Bearer bE5hce6D6vVP8ad1agfkZ43'
     controller: null
     method: null
     route: null
@@ -314,7 +314,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer dV6vhP1ec84aZa6b5gkfED3'
+      - 'Bearer 4eDv6ZVaPb1f86da3gkEc5h'
     controller: null
     method: null
     route: null
@@ -459,8 +459,7 @@ endpoints:
               "trx_id":"000000102301023123012301",
               "acquirer":"비씨",
               "issuer":"비씨",
-              "card_num":"12340000000005678",
-              
+              "card_num":"12340000000005678",    
               "installment":"00",
               "method":"수기",
               "trx_dttm":"2023-04-30 11:11:11"
@@ -490,7 +489,7 @@ endpoints:
         description: 거래금액
         required: false
         example: null
-        type: string
+        type: integer
         enumValues: []
         custom: []
       ord_num:
@@ -576,7 +575,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer DV4kgEdfeh6aba6PZ185c3v'
+      - 'Bearer 4g6ZaPDkbf1E65eh8dcVv3a'
     controller: null
     method: null
     route: null

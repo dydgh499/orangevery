@@ -67,12 +67,12 @@ class BfController extends Controller
      *
      * 결제모듈 정보를 불러옵니다.<br>한도 및 수기결제에 필요한 데이터들을 조회합니다.
      * @responseFile 200 storage/bf/payModules.json
-     * @responseField is_old_auth int 비인증, 구인증 여부(비인증=0, 구인증=1)
-     * @responseField module_type int 모듈타입(0=장비, 1=수기결제, 2=인증결제, 3=간편결제)
-     * @responseField installment int 할부한도(0~12)
-     * @responseField pay_year_limit int 연결제 한도(만 단위)
-     * @responseField pay_month_limit int 월결제 한도(만 단위)
-     * @responseField pay_single_limit int 일결제 한도(만 단위)
+     * @responseField is_old_auth integer 비인증, 구인증 여부(비인증=0, 구인증=1)
+     * @responseField module_type integer 모듈타입(0=장비, 1=수기결제, 2=인증결제, 3=간편결제)
+     * @responseField installment integer 할부한도(0~12)
+     * @responseField pay_year_limit integer 연결제 한도(만 단위)
+     * @responseField pay_month_limit integer 월결제 한도(만 단위)
+     * @responseField pay_single_limit integer 일결제 한도(만 단위)
      */
     public function payModules(Request $request)
     {
@@ -94,7 +94,7 @@ class BfController extends Controller
      *
      * 출금가능한금액을 조회합니다.
      * @responseFile 200 storage/bf/withdrawsBalance.json
-     * @responseField profit int 출금가능한도
+     * @responseField profit integer 출금가능한도
      */
     public function withdrawsBalance(Request $request)
     {
@@ -108,7 +108,7 @@ class BfController extends Controller
      *
      * 출금가능한금액을 조회합니다.
      * @responseFile 201 storage/bf/withdrawsStore.json
-     * @responseField id int 출금요청 고유번호
+     * @responseField id integer 출금요청 고유번호
      */
     public function withdrawsStore(CollectWithdrawRequest $request)
     {
@@ -131,7 +131,7 @@ class BfController extends Controller
      * @responseFile 201 storage/bf/handPay.json
      * @responseField mid string 가맹점 MID
      * @responseField tid string 단말기 TID
-     * @responseField amount string 거래금액
+     * @responseField amount integer 거래금액
      * @responseField ord_num string 가맹점 주문번호
      * @responseField appr_num string 승인번호
      * @responseField item_name string 상품명

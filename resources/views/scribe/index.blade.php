@@ -104,7 +104,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-19 20:16:25</li>
+        <li>마지막 업데이트:  2023-11-19 20:20:09</li>
     </ul>
 </div>
 
@@ -288,7 +288,7 @@ response.json()</code></pre></div>
         </blockquote>
                 <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;access_token&quot;: &quot;9658|zoJ9RPe65DDaIor9jPapdpctuALtWkvMjGFrWn7a034f9c9f&quot;,
     &quot;user&quot;: {
         &quot;id&quot;: 12,
@@ -494,7 +494,7 @@ response.json()</code></pre></div>
         </blockquote>
                 <pre>
 
-<code class="language-json" style="max-height: 300px;">[
+<code class="language-json">[
     {
         &quot;id&quot;: 1,
         &quot;is_old_auth&quot;: 1,
@@ -719,7 +719,7 @@ response.json()</code></pre></div>
         </blockquote>
                 <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;profit&quot;: 412320
 }</code>
  </pre>
@@ -905,7 +905,7 @@ response.json()</code></pre></div>
         </blockquote>
                 <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;id&quot;: 123
 }</code>
  </pre>
@@ -1143,7 +1143,7 @@ response.json()</code></pre></div>
         </blockquote>
                 <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;result_cd&quot;: &quot;0000&quot;,
     &quot;result_msg&quot;: &quot;성공하였습니다.&quot;,
     &quot;mid&quot;: &quot;testmid0001&quot;,
@@ -1383,7 +1383,7 @@ response.json()</code></pre></div>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>amount</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
+<small>integer</small>&nbsp;
  &nbsp;
 <br>
 <p>거래금액</p>

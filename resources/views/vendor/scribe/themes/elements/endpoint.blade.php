@@ -247,7 +247,7 @@
                                         @else
                                             @php($parsed = json_decode($response->content))
                                             {{-- If response is a JSON string, prettify it. Otherwise, just print it --}}
-                                            <pre><code style="max-height: 300px;"
+                                            <pre><code
                                                        class="language-json sl-overflow-x-auto sl-overflow-y-auto">{!! htmlentities($parsed != null ? json_encode($parsed, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : $response->content) !!}</code></pre>
                                         @endif
                                     </div>
