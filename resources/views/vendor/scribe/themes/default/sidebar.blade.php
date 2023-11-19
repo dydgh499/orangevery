@@ -63,7 +63,7 @@
         @if($metadata['openapi_spec_url'])
             <li style="padding-bottom: 5px;"><a href="{!! $metadata['openapi_spec_url'] !!}">{!! u::trans("scribe::links.openapi") !!}</a></li>
         @endif
-        <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
+                        <li><a>Documentation powered by Payvery ✍</a></li>
     </ul>
 
     <ul class="toc-footer" id="last-updated">

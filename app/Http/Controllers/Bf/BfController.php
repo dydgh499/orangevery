@@ -69,7 +69,7 @@ class BfController extends Controller
      * @responseFile 200 storage/bf/payModules.json
      * @responseField is_old_auth integer 비인증, 구인증 여부(비인증=0, 구인증=1)
      * @responseField module_type integer 모듈타입(0=장비, 1=수기결제, 2=인증결제, 3=간편결제)
-     * @responseField installment integer 할부한도(0~12)
+     * @responseField installment string 할부한도(0~12)
      * @responseField pay_year_limit integer 연결제 한도(만 단위)
      * @responseField pay_month_limit integer 월결제 한도(만 단위)
      * @responseField pay_single_limit integer 일결제 한도(만 단위)

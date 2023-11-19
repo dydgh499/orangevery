@@ -98,7 +98,7 @@
             </div>
 
     <ul class="toc-footer" id="toc-footer">
-                        <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
+                        <li><a>Documentation powered by Payvery ✍</a></li>
     </ul>
 
     <ul class="toc-footer" id="last-updated">
