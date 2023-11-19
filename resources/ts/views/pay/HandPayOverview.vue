@@ -44,29 +44,25 @@ const pay = async () => {
             try {
                 const params = cloneDeep(hand_pay_info)
                 const r = await axios.post('/api/v1/transactions/hand-pay', params)
-                if(r.status == 201) {
-                    const data = r.data.data
-                    sale_slip.value.acquirer = data.acquirer
-                    sale_slip.value.issuer = data.issuer
-                    sale_slip.value.amount = data.amount
-                    sale_slip.value.buyer_name = data.buyer_name
-                    sale_slip.value.card_num = data.card_num
-                    sale_slip.value.item_name = data.item_name
-                    sale_slip.value.appr_num = data.appr_num
-                    sale_slip.value.installment = data.installment
-                    sale_slip.value.trx_dttm = data.trx_dttm
-                    sale_slip.value.is_cancel = Boolean(data.is_cancel)
+                sale_slip.value.acquirer = r.data.acquirer
+                sale_slip.value.issuer = r.data.issuer
+                sale_slip.value.amount = r.data.amount
+                sale_slip.value.buyer_name = r.data.buyer_name
+                sale_slip.value.card_num = r.data.card_num
+                sale_slip.value.item_name = r.data.item_name
+                sale_slip.value.appr_num = r.data.appr_num
+                sale_slip.value.installment = r.data.installment
+                sale_slip.value.trx_dttm = r.data.trx_dttm
+                sale_slip.value.is_cancel = Boolean(r.data.is_cancel)
 
-                    sale_slip.value.addr = props.merchandise.addr
-                    sale_slip.value.business_num = props.merchandise.business_num
-                    sale_slip.value.resident_num = props.merchandise.resident_num
-                    sale_slip.value.mcht_name = props.merchandise.mcht_name
-                    sale_slip.value.nick_name = props.merchandise.nick_name
-                    sale_slip.value.is_show_fee = props.merchandise.is_show_fee
-                    sale_slip.value.use_saleslip_prov = props.merchandise.use_saleslip_prov
-                    sale_slip.value.use_saleslip_sell = props.merchandise.use_saleslip_sell
-
-                }
+                sale_slip.value.addr = props.merchandise.addr
+                sale_slip.value.business_num = props.merchandise.business_num
+                sale_slip.value.resident_num = props.merchandise.resident_num
+                sale_slip.value.mcht_name = props.merchandise.mcht_name
+                sale_slip.value.nick_name = props.merchandise.nick_name
+                sale_slip.value.is_show_fee = props.merchandise.is_show_fee
+                sale_slip.value.use_saleslip_prov = props.merchandise.use_saleslip_prov
+                sale_slip.value.use_saleslip_sell = props.merchandise.use_saleslip_sell
 
                 salesslip.value.show(sale_slip.value)
                 snackbar.value.show('성공하였습니다.', 'success')

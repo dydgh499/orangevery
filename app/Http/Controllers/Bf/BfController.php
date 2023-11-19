@@ -134,6 +134,7 @@ class BfController extends Controller
      * 수기결제 API 입니다.
      * @responseFile 201 storage/bf/handPay.json
      * @responseField mid string 가맹점 MID
+     * @responseField mid string 가맹점 MID
      * @responseField tid string 단말기 TID
      * @responseField amount integer 거래금액
      * @responseField ord_num string 가맹점 주문번호

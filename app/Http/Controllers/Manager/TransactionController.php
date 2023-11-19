@@ -292,7 +292,7 @@ class TransactionController extends Controller
             unset($data['result_cd']);
             unset($data['result_msg']);
             unset($data['temp']);
-            return $this->extendResponse(1, $res['body']['result_msg'], $data);
+            return $this->response(1, $data);
         }
         else
             return $this->extendResponse(1999, $res['body']['result_msg']);
