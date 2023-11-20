@@ -1,3 +1,4 @@
+import router from '@/router';
 import { Header } from '@/views/headers';
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore';
 import { useRequestStore } from '@/views/request';
@@ -235,9 +236,9 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        
     }
 
-    const mchtGroup = async() => {
+    const mchtGroup = async() => {        
         const url = '/api/v1/manager/transactions/merchandises/groups'
-        const r = await get(url, store.params)
+        const r = await get(url, {params: router.currentRoute.value.query})
         const datas = []
         datas.push([
                 'NO.',
