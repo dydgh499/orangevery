@@ -172,14 +172,6 @@ class Transaction extends Model
             ->select();
     }
 
-    public function collectWithdraw()
-    {
-        return $this->hasMany(CollectWithdraw::class, 'mcht_id', 'mcht_id')
-            ->whereNull('mcht_settle_id')
-            ->orderby('id', 'desc')
-            ->select();
-    }
-
     public function mcht()
     {
         return $this->belongsTo(Merchandise::class, 'mcht_id')->select([

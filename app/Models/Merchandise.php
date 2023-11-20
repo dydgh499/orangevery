@@ -48,7 +48,15 @@ class Merchandise extends Authenticatable
             ->noSettlement('mcht_settle_id')
             ->select($cols);
     }
-    
+
+    public function collectWithdraws()
+    {
+        return $this->hasMany(CollectWithdraw::class, 'mcht_id')
+            ->whereNull('mcht_settle_id')
+            ->groupBy('mcht_id')
+            ->selectRaw('mcht_id, SUM(withdraw_amount) as total_withdraw_amount');
+    }
+
     public function deducts()
     {
         return $this->hasMany(SettleDeductMerchandise::class, 'mcht_id')

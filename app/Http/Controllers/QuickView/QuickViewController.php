@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\QuickView;
 
 use App\Models\Transaction;
+use App\Models\CollectWithdraw;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\TransactionTrait;
@@ -167,21 +168,23 @@ class QuickViewController extends Controller
         ]);
         $transactions = Transaction::where('mcht_id', $request->user()->id)
             ->noSettlement('mcht_settle_id')
-            ->with(['cancelDeposits', 'collectWithdraw'])
+            ->with(['cancelDeposits'])
             ->get(['id', 'mcht_id', 'mcht_settle_amount as profit']);
+
+        $withdraw = CollectWithdraw::where('mcht_id', $request->user()->id)
+            ->whereNull('mcht_settle_id')
+            ->first([DB::raw('SUM(withdraw_amount) as total_withdraw_amount')]);
 
         $cancel_deposit = $transactions->reduce(function($carry, $transaction) {
             return $carry + $transaction->cancelDeposits->sum('deposit_amount');
         }, 0);
-        $withdraw_amount = $transactions->reduce(function($carry, $transaction) {
-            return $carry + $transaction->collectWithdraw->sum('withdraw_amount');
-        }, 0);
+        
         $profit = $transactions->reduce(function($carry, $transaction) {
             return $carry + $transaction->profit;
         }, 0);
 
         return $this->response(0, [
-            'profit' => $profit + $cancel_deposit - $withdraw_amount
+            'profit' => $profit + $cancel_deposit - $withdraw->total_withdraw_amount
         ]);
     }
 }

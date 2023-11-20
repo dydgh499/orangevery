@@ -35,6 +35,7 @@ class MerchandiseController extends Controller
         $this->settleDeducts = $settleDeducts;
 
     }
+
     private function commonQuery($request)
     {
         $with = ['deducts'];
@@ -49,7 +50,8 @@ class MerchandiseController extends Controller
                 ->where('mcht_name', 'like', "%$search%"); 
 
         if($request->use_collect_withdraw)
-            $with[] = 'transactions.collectWithdraw';    
+            $query = $query->with(['collectWithdraws']);
+
         if($request->use_cancel_deposit)
             $with[] = 'transactions.cancelDeposits';
         else

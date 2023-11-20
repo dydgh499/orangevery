@@ -118,7 +118,10 @@ onMounted(() => {
                         </template>
                         <template v-else>
                             <td v-show="_header.visible" class='list-square'>
-                                <span>
+                                <span v-if="isSalesCol(_key as string)" style="font-weight: bold;">
+                                    {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
+                                </span>
+                                <span v-else>
                                     {{ item[_key] }}
                                 </span>
                             </td>
