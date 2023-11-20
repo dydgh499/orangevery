@@ -20,9 +20,9 @@ class PaymentModule extends Model
         'brand_id',
     ];
     
-    protected function payLimitAmount()
+    public function payLimitAmount()
     {
-        $this->hasMany(Transaction::class, 'pmod_id')
+        return $this->hasMany(Transaction::class, 'pmod_id')
             ->where('trx_dt', '>=', Carbon::now()->subYear()->toDateString())
             ->selectRaw('
                 SUM(amount) as total_amount,
