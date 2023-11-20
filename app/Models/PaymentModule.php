@@ -20,7 +20,7 @@ class PaymentModule extends Model
         'brand_id',
     ];
     
-    protected function PayLimitAmount()
+    protected function payLimitAmount()
     {
         $this->hasMany(Transaction::class, 'pmod_id')
             ->where('trx_dt', '>=', Carbon::now()->subYear()->toDateString())
