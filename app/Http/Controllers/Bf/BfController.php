@@ -72,7 +72,6 @@ class BfController extends Controller
      * @responseFile 200 storage/bf/payModules.json
      * @responseField id integer 결제모듈 고유번호
      * @responseField is_old_auth integer 비인증, 구인증 여부(비인증=0, 구인증=1)
-     * @responseField module_type integer 모듈타입(0=장비, 1=수기결제, 2=인증결제, 3=간편결제)
      * @responseField installment string 할부한도(0~12)
      * @responseField pay_year_limit integer 연결제 한도(만 단위)
      * @responseField pay_month_limit integer 월결제 한도(만 단위)
@@ -80,16 +79,23 @@ class BfController extends Controller
      */
     public function payModules(Request $request)
     {
-        $pay_modules = PaymentModule::where('mcht_id', $request->user()->id)->get([
+        $pay_modules = PaymentModule::where('mcht_id', $request->user()->id)
+            ->where('module_type', 1)
+            ->get([
                 'id',
                 'is_old_auth',
-                'module_type',
                 'installment',
                 'pay_year_limit',
                 'pay_month_limit',
                 'pay_day_limit',
                 'pay_single_limit',
-        ]);
+            ])
+            ->with(['PayLimitAmount']);
+        /*
+        -  당일 사용금액 추가
+        -  당월 사용금액 추가
+        -  결제 가능금액 추가 
+        */
         return $this->response(0, $pay_modules);
     }
 
