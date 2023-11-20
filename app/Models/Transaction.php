@@ -175,7 +175,7 @@ class Transaction extends Model
     public function collectWithdraw()
     {
         return $this->hasMany(CollectWithdraw::class, 'mcht_id', 'mcht_id')
-            ->whereNotNull('mcht_settle_id')
+            ->whereNull('mcht_settle_id')
             ->orderby('id', 'desc')
             ->select();
     }
