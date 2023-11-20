@@ -102,7 +102,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-20 15:35:07</li>
+        <li>마지막 업데이트:  2023-11-20 15:45:55</li>
     </ul>
 </div>
 
@@ -498,20 +498,28 @@ response.json()</code></pre></div>
         &quot;is_old_auth&quot;: 1,
         &quot;module_type&quot;: 1,
         &quot;installment&quot;: 12,
-        &quot;pay_year_limit&quot;: 1,
-        &quot;pay_month_limit&quot;: 2,
+        &quot;pay_year_limit&quot;: 100,
+        &quot;pay_month_limit&quot;: 200,
         &quot;pay_day_limit&quot;: 0,
-        &quot;pay_single_limit&quot;: 3
+        &quot;pay_single_limit&quot;: 300,
+        &quot;pay_year_amount&quot;: 3640000,
+        &quot;pay_month_amount&quot;: 3640000,
+        &quot;pay_day_amount&quot;: 1640000,
+        &quot;pay_able_amount&quot;: -2640000
     },
     {
         &quot;id&quot;: 5,
         &quot;is_old_auth&quot;: 0,
         &quot;module_type&quot;: 1,
         &quot;installment&quot;: 12,
-        &quot;pay_year_limit&quot;: 1,
-        &quot;pay_month_limit&quot;: 2,
+        &quot;pay_year_limit&quot;: 100,
+        &quot;pay_month_limit&quot;: 200,
         &quot;pay_day_limit&quot;: 0,
-        &quot;pay_single_limit&quot;: 3
+        &quot;pay_single_limit&quot;: 300,
+        &quot;pay_year_amount&quot;: 3640000,
+        &quot;pay_month_amount&quot;: 3640000,
+        &quot;pay_day_amount&quot;: 1640000,
+        &quot;pay_able_amount&quot;: -2640000
     }
 ]</code>
  </pre>

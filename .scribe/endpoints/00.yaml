@@ -128,20 +128,28 @@ endpoints:
                   "is_old_auth":1,
                   "module_type":1,
                   "installment":12,
-                  "pay_year_limit":1,
-                  "pay_month_limit":2,
+                  "pay_year_limit":100,
+                  "pay_month_limit":200,
                   "pay_day_limit":0,
-                  "pay_single_limit":3
+                  "pay_single_limit":300,
+                  "pay_year_amount": 3640000,
+                  "pay_month_amount": 3640000,
+                  "pay_day_amount": 1640000,
+                  "pay_able_amount":-2640000
               },
               {
                   "id":5,
                   "is_old_auth":0,
                   "module_type":1,
                   "installment":12,
-                  "pay_year_limit":1,
-                  "pay_month_limit":2,
+                  "pay_year_limit":100,
+                  "pay_month_limit":200,
                   "pay_day_limit":0,
-                  "pay_single_limit":3
+                  "pay_single_limit":300,
+                  "pay_year_amount": 3640000,
+                  "pay_month_amount": 3640000,
+                  "pay_day_amount": 1640000,
+                  "pay_able_amount":-2640000
               }    
           ]
         headers: []
@@ -231,7 +239,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6eafcVd5EhaDZ8bvP46k13g'
+      - 'Bearer b8d3f6ZcaED4ekaV6hgv1P5'
     controller: null
     method: null
     route: null
@@ -284,7 +292,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer gbdD8ZV56vPk43ehEac16af'
+      - 'Bearer c468P5efvbg6ZEVDad1akh3'
     controller: null
     method: null
     route: null
@@ -346,7 +354,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer VbdDZefc1ha8a634gEPvk65'
+      - 'Bearer 4vaZE5dcDPkh83fV1g66bea'
     controller: null
     method: null
     route: null
@@ -617,7 +625,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer vfP318e6dagEaVc546hbDkZ'
+      - 'Bearer 6Vc1ev5dkgaDb36Z4hf8PaE'
     controller: null
     method: null
     route: null
