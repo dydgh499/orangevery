@@ -21,6 +21,7 @@ const my_level = getUserLevel()
 const amount = ref(0)
 const able_balance = ref(0)
 
+get('/api/v1/bf/pay-modules')
 if(my_level >= 35)  //본사
     router.replace('dashboards')
 else {

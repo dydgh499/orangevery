@@ -76,6 +76,10 @@ class BfController extends Controller
      * @responseField pay_year_limit integer 연결제 한도(만 단위)
      * @responseField pay_month_limit integer 월결제 한도(만 단위)
      * @responseField pay_single_limit integer 일결제 한도(만 단위)
+     * @responseField pay_year_amount integer 연결제 금액
+     * @responseField pay_month_amount integer 월결제 금액
+     * @responseField pay_day_amount integer 일결제 금액
+     * @responseField pay_able_amount integer 결제 가능금액(연,월,일,결제한도가 지정되지 않은 경우 null로 반환합니다.)
      */
     public function payModules(Request $request)
     {
@@ -91,11 +95,34 @@ class BfController extends Controller
                 'pay_day_limit',
                 'pay_single_limit',
             ]);
-        /*
-        -  당일 사용금액 추가
-        -  당월 사용금액 추가
-        -  결제 가능금액 추가 
-        */
+        $isDownPayAbleAmount = function($current_amount, $next_amount) {
+            return $current_amount > $next_amount ? $next_amount : $current_amount;
+        };
+        foreach($pay_modules as $pay_module)
+        {
+            $pay_module->pay_year_amount = (int)$pay_module->payLimitAmount[0]->pay_year_amount;
+            $pay_module->pay_month_amount = (int)$pay_module->payLimitAmount[0]->pay_month_amount;
+            $pay_module->pay_day_amount = (int)$pay_module->payLimitAmount[0]->pay_day_amount;
+
+            $pay_module->makeHidden(['payLimitAmount']);
+            $pay_able_amounts = [];
+
+            // 연한도 검증
+            if($pay_module->pay_year_limit)
+                $pay_able_amounts[] = ($pay_module->pay_year_limit * 10000) - $pay_module->pay_year_amount;
+            // 월한도 검증
+            if($pay_module->pay_month_limit)
+                $pay_able_amounts[] = ($pay_module->pay_month_limit * 10000) - $pay_module->pay_month_amount;
+            // 일한도 검증
+            if($pay_module->pay_day_limit)
+                $pay_able_amounts[] = ($pay_module->pay_day_limit * 10000) - $pay_module->pay_day_amount;
+
+            if(count($pay_able_amounts) > 0)
+                $pay_module->pay_able_amount = min($pay_able_amounts);
+            else
+                $pay_module->pay_able_amount = null;
+
+        }
         return $this->response(0, $pay_modules);
     }
 

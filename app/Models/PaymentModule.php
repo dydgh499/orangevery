@@ -25,12 +25,12 @@ class PaymentModule extends Model
         return $this->hasMany(Transaction::class, 'pmod_id')
             ->where('trx_dt', '>=', Carbon::now()->subYear()->toDateString())
             ->selectRaw('
-                SUM(amount) as total_amount,
-                SUM(CASE WHEN trx_dt = CURDATE() THEN amount ELSE 0 END) as daily_amount,
-                SUM(CASE WHEN MONTH(trx_dt) = MONTH(CURRENT_DATE()) AND YEAR(trx_dt) = YEAR(CURRENT_DATE()) THEN amount ELSE 0 END) as month_amount,
-                SUM(CASE WHEN YEAR(trx_dt) = YEAR(CURRENT_DATE()) THEN amount ELSE 0 END) as year_amount
+                pmod_id,
+                SUM(CASE WHEN trx_dt = CURDATE() THEN amount ELSE 0 END) as pay_day_amount,
+                SUM(CASE WHEN MONTH(trx_dt) = MONTH(CURRENT_DATE()) AND YEAR(trx_dt) = YEAR(CURRENT_DATE()) THEN amount ELSE 0 END) as pay_month_amount,
+                SUM(CASE WHEN YEAR(trx_dt) = YEAR(CURRENT_DATE()) THEN amount ELSE 0 END) as pay_year_amount
             ')
-            ->groupBy(DB::raw('YEAR(trx_dt)'), DB::raw('MONTH(trx_dt)'), DB::raw('DAY(trx_dt)')); 
+            ->groupBy('pmod_id'); 
     }
 
     protected function beginDt(): Attribute

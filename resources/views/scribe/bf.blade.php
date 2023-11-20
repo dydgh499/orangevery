@@ -31,9 +31,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="{{ asset("/scribe/js/tryitout-4.25.0.js") }}"></script>
+    <script src="../docs/js/tryitout-4.25.0.js"></script>
 
-    <script src="{{ asset("/scribe/js/theme-default-4.25.0.js") }}"></script>
+    <script src="../docs/js/theme-default-4.25.0.js"></script>
 
 </head>
 
@@ -42,7 +42,7 @@
 <a href="#" id="nav-button">
     <span>
         MENU
-        <img src="{{ asset("/scribe/images/navbar.png") }}" alt="navbar-image"/>
+        <img src="../docs/images/navbar.png" alt="navbar-image"/>
     </span>
 </a>
 <div class="tocify-wrapper">
@@ -102,7 +102,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-20 00:26:04</li>
+        <li>마지막 업데이트:  2023-11-20 15:31:47</li>
     </ul>
 </div>
 
@@ -615,13 +615,6 @@ response.json()</code></pre></div>
 <p>비인증, 구인증 여부(비인증=0, 구인증=1)</p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>module_type</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>모듈타입(0=장비, 1=수기결제, 2=인증결제, 3=간편결제)</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>installment</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
  &nbsp;
@@ -648,6 +641,34 @@ response.json()</code></pre></div>
  &nbsp;
 <br>
 <p>일결제 한도(만 단위)</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>pay_year_amount</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>연결제 금액</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>pay_month_amount</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>월결제 금액</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>pay_day_amount</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>일결제 금액</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>pay_able_amount</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>결제 가능금액(연,월,일,결제한도가 지정되지 않은 경우 null로 반환합니다.)</p>
         </div>
                         <h2 id="bf-mobile-api-GETapi-v1-bf-withdraws-balance">출금가능금액 조회</h2>
 

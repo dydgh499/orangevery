@@ -166,14 +166,6 @@ endpoints:
         type: integer
         enumValues: []
         custom: []
-      module_type:
-        name: module_type
-        description: '모듈타입(0=장비, 1=수기결제, 2=인증결제, 3=간편결제)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
       installment:
         name: installment
         description: 할부한도(0~12)
@@ -206,10 +198,42 @@ endpoints:
         type: integer
         enumValues: []
         custom: []
+      pay_year_amount:
+        name: pay_year_amount
+        description: '연결제 금액'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_month_amount:
+        name: pay_month_amount
+        description: '월결제 금액'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_day_amount:
+        name: pay_day_amount
+        description: '일결제 금액'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_able_amount:
+        name: pay_able_amount
+        description: '결제 가능금액(연,월,일,결제한도가 지정되지 않은 경우 null로 반환합니다.)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
     auth:
       - headers
       - Authorization
-      - 'Bearer dZa8f13ehVv6DE4kg5cPab6'
+      - 'Bearer ZkcdaVv3b816gh4fPa65eDE'
     controller: null
     method: null
     route: null
@@ -262,7 +286,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer D66dV1hafcPevbEk843a5Zg'
+      - 'Bearer bZaDh1g4kvPd6V386aE5ecf'
     controller: null
     method: null
     route: null
@@ -324,7 +348,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 4b8a36heZvEfV1Dgca5kP6d'
+      - 'Bearer 1fE5vaDah6ec46dkPbg3V8Z'
     controller: null
     method: null
     route: null
@@ -595,7 +619,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer Va3eb8DE416ka5dhvZ6gcfP'
+      - 'Bearer 5a8vPD3V6ch6ga4dkbE1eZf'
     controller: null
     method: null
     route: null
