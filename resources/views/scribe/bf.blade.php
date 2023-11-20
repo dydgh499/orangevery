@@ -31,9 +31,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="../docs/js/tryitout-4.25.0.js"></script>
+    <script src="{{ asset("/vendor/scribe/js/tryitout-4.25.0.js") }}"></script>
 
-    <script src="../docs/js/theme-default-4.25.0.js"></script>
+    <script src="{{ asset("/vendor/scribe/js/theme-default-4.25.0.js") }}"></script>
 
 </head>
 
@@ -42,7 +42,7 @@
 <a href="#" id="nav-button">
     <span>
         MENU
-        <img src="../docs/images/navbar.png" alt="navbar-image"/>
+        <img src="{{ asset("/vendor/scribe/images/navbar.png") }}" alt="navbar-image"/>
     </span>
 </a>
 <div class="tocify-wrapper">
@@ -102,7 +102,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-20 15:31:47</li>
+        <li>마지막 업데이트:  2023-11-20 15:35:07</li>
     </ul>
 </div>
 
