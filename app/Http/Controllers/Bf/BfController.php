@@ -14,6 +14,7 @@ use App\Models\Transaction;
 use App\Models\CollectWithdraw;
 use App\Models\RealtimeSendHistory;
 
+use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\LoginRequest;
 use App\Http\Requests\Manager\CollectWithdrawRequest;
 use App\Http\Requests\Pay\HandPayRequest;
