@@ -101,7 +101,7 @@ class Transaction extends Model
                 })
                 ->orWhere(function ($query) {
                     return $query->where('request_type', -2)
-                    ->where('result_code', '-1'); //취소건
+                    ->where('result_code', '-2'); //취소건
                 });
             });
         // fail trans ids
