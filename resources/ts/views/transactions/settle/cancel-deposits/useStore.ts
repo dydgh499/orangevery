@@ -1,7 +1,7 @@
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 
-export const useSearchStore = defineStore('bonaejaSearchStore', () => {
+export const useSearchStore = defineStore('cancelDepositSearchStore', () => {
     const store = Searcher('transactions/settle/merchandises/cancel-deposits')
     const head = Header('transactions/settle/merchandises/cancel-deposits', '입금내역 관리')
     const headers: Record<string, string> = {
