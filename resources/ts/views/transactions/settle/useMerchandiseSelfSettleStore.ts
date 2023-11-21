@@ -2,8 +2,8 @@ import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 
 export const useSearchStore = defineStore('merchandiseSelfSettleSearchStore', () => {
-    const store = Searcher('transactions/settle/merchandises/self-settle')
-    const head  = Header('transactions/settle/merchandises/self-settle', '모아서 출금 이력')
+    const store = Searcher('transactions/settle/merchandises/collect-withdraws')
+    const head  = Header('transactions/settle/merchandises/collect-withdraws', '모아서 출금 이력')
     const headers:Record<string, string> = {
         'id': 'NO.',
         'mcht_name': '가맹점 상호',
