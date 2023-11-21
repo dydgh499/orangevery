@@ -108,7 +108,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-21 21:42:55</li>
+        <li>마지막 업데이트:  2023-11-21 22:00:27</li>
     </ul>
 </div>
 
@@ -445,7 +445,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "sint",
+    "search": "quaerat",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -477,7 +477,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'sint',
+            'search' =&gt; 'quaerat',
         ],
     ]
 );
@@ -495,7 +495,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'sint',
+  'search': 'quaerat',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -509,7 +509,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/pay-modules?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=sint" \
+    --get "https://team.payvery.kr/api/v1/bf/pay-modules?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=quaerat" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -525,77 +525,46 @@ response.json()</code></pre></div>
 <code class="language-json">{
     &quot;page&quot;: &quot;1&quot;,
     &quot;page_size&quot;: &quot;20&quot;,
-    &quot;total&quot;: 7,
+    &quot;total&quot;: 3,
     &quot;content&quot;: [
         {
-            &quot;mcht_name&quot;: &quot;런비지니스클럽.&quot;,
-            &quot;user_name&quot;: &quot;3828a&quot;,
-            &quot;nick_name&quot;: &quot;문대하&quot;,
-            &quot;addr&quot;: &quot;경기도 고양시 일산동구    중앙로 1171,  지하2층&quot;,
-            &quot;resident_num&quot;: &quot;0&quot;,
-            &quot;business_num&quot;: &quot;0&quot;,
-            &quot;use_saleslip_prov&quot;: 1,
-            &quot;use_saleslip_sell&quot;: 0,
-            &quot;use_collect_withdraw&quot;: 0,
-            &quot;is_show_fee&quot;: 0,
-            &quot;id&quot;: 544935,
-            &quot;brand_id&quot;: 14,
-            &quot;mcht_id&quot;: 99714,
-            &quot;dev_realtime_fee&quot;: 0,
-            &quot;dev_realtime_settle_amount&quot;: 0,
-            &quot;dev_fee&quot;: 0,
+            &quot;id&quot;: 545443,
             &quot;sales5_id&quot;: 9572,
-            &quot;sales5_fee&quot;: 0.044,
             &quot;sales4_id&quot;: 9608,
-            &quot;sales4_fee&quot;: 0.05,
             &quot;sales3_id&quot;: 9609,
-            &quot;sales3_fee&quot;: 0.05,
             &quot;sales2_id&quot;: null,
-            &quot;sales2_fee&quot;: 0,
             &quot;sales1_id&quot;: null,
-            &quot;sales1_fee&quot;: 0,
             &quot;sales0_id&quot;: null,
+            &quot;sales5_fee&quot;: 0.044,
+            &quot;sales4_fee&quot;: 0.05,
+            &quot;sales3_fee&quot;: 0.05,
+            &quot;sales2_fee&quot;: 0,
+            &quot;sales1_fee&quot;: 0,
             &quot;sales0_fee&quot;: 0,
-            &quot;pg_id&quot;: 119,
-            &quot;ps_id&quot;: 255,
-            &quot;ps_fee&quot;: 0.0255,
-            &quot;pmod_id&quot;: 57841,
-            &quot;custom_id&quot;: 203,
-            &quot;terminal_id&quot;: 210,
+            &quot;ps_fee&quot;: 0.015,
             &quot;mcht_fee&quot;: 0.08,
             &quot;hold_fee&quot;: 0,
-            &quot;pg_settle_type&quot;: 1,
-            &quot;mcht_settle_type&quot;: 0,
             &quot;mcht_settle_fee&quot;: 0,
-            &quot;mcht_settle_id&quot;: null,
-            &quot;trx_dt&quot;: &quot;2023-11-21&quot;,
-            &quot;trx_tm&quot;: &quot;18:44:53&quot;,
-            &quot;cxl_dt&quot;: null,
-            &quot;cxl_tm&quot;: null,
             &quot;is_cancel&quot;: 0,
             &quot;amount&quot;: 1000,
-            &quot;module_type&quot;: 0,
-            &quot;ord_num&quot;: &quot;20231121184453157369&quot;,
-            &quot;mid&quot;: &quot;kowelcome238&quot;,
-            &quot;tid&quot;: &quot;1046977423&quot;,
-            &quot;trx_id&quot;: &quot;202311210527474&quot;,
+            &quot;module_type&quot;: 1,
+            &quot;ord_num&quot;: &quot;57839H1700562509&quot;,
+            &quot;mid&quot;: &quot;wel000764m&quot;,
+            &quot;tid&quot;: &quot;57839&quot;,
+            &quot;trx_id&quot;: &quot;202311210528348&quot;,
             &quot;ori_trx_id&quot;: null,
-            &quot;card_num&quot;: &quot;&quot;,
-            &quot;issuer&quot;: &quot;현대카드&quot;,
-            &quot;acquirer&quot;: &quot;현대카드&quot;,
-            &quot;appr_num&quot;: &quot;00188428&quot;,
+            &quot;card_num&quot;: &quot;467309******5166&quot;,
+            &quot;issuer&quot;: &quot;국민&quot;,
+            &quot;acquirer&quot;: &quot;국민&quot;,
+            &quot;appr_num&quot;: &quot;30018849&quot;,
             &quot;installment&quot;: 0,
-            &quot;buyer_name&quot;: &quot;-&quot;,
-            &quot;buyer_phone&quot;: &quot;&quot;,
-            &quot;item_name&quot;: &quot;1046977423&quot;,
-            &quot;is_delete&quot;: 0,
-            &quot;created_at&quot;: &quot;2023-11-21 18:47:55&quot;,
-            &quot;updated_at&quot;: &quot;2023-11-21 18:47:55&quot;,
-            &quot;note&quot;: &quot;장비&quot;,
-            &quot;use_realtime_deposit&quot;: 0,
-            &quot;cxl_type&quot;: 2,
+            &quot;buyer_name&quot;: &quot;ㅁㅁㅁ&quot;,
+            &quot;buyer_phone&quot;: &quot;01000000000&quot;,
+            &quot;item_name&quot;: &quot;ㅁㅁㅁㅁㅁ&quot;,
+            &quot;note&quot;: &quot;수기결제&quot;,
+            &quot;cxl_type&quot;: 1,
             &quot;fin_trx_delay&quot;: 15,
-            &quot;trx_dttm&quot;: &quot;2023-11-21 18:44:53&quot;,
+            &quot;trx_dttm&quot;: &quot; &quot;,
             &quot;cxl_dttm&quot;: &quot; &quot;,
             &quot;profit&quot;: 920,
             &quot;sales0_name&quot;: &quot;&quot;,
@@ -604,80 +573,49 @@ response.json()</code></pre></div>
             &quot;sales3_name&quot;: &quot;61.지환Q(대5)&quot;,
             &quot;sales4_name&quot;: &quot;61.파주Q(지5)&quot;,
             &quot;sales5_name&quot;: &quot;61.n미소비씨(총)&quot;,
-            &quot;trx_amount&quot;: 80,
+            &quot;trx_amount&quot;: 1000,
             &quot;hold_amount&quot;: 0,
-            &quot;total_trx_amount&quot;: 80
+            &quot;total_trx_amount&quot;: 1000
         },
         {
-            &quot;mcht_name&quot;: &quot;런비지니스클럽.&quot;,
-            &quot;user_name&quot;: &quot;3828a&quot;,
-            &quot;nick_name&quot;: &quot;문대하&quot;,
-            &quot;addr&quot;: &quot;경기도 고양시 일산동구    중앙로 1171,  지하2층&quot;,
-            &quot;resident_num&quot;: &quot;0&quot;,
-            &quot;business_num&quot;: &quot;0&quot;,
-            &quot;use_saleslip_prov&quot;: 1,
-            &quot;use_saleslip_sell&quot;: 0,
-            &quot;use_collect_withdraw&quot;: 0,
-            &quot;is_show_fee&quot;: 0,
-            &quot;id&quot;: 544723,
-            &quot;brand_id&quot;: 14,
-            &quot;mcht_id&quot;: 99714,
-            &quot;dev_realtime_fee&quot;: 0,
-            &quot;dev_realtime_settle_amount&quot;: 0,
-            &quot;dev_fee&quot;: 0,
+            &quot;id&quot;: 543690,
             &quot;sales5_id&quot;: 9572,
-            &quot;sales5_fee&quot;: 0.044,
             &quot;sales4_id&quot;: 9608,
-            &quot;sales4_fee&quot;: 0.05,
             &quot;sales3_id&quot;: 9609,
-            &quot;sales3_fee&quot;: 0.05,
             &quot;sales2_id&quot;: null,
-            &quot;sales2_fee&quot;: 0,
             &quot;sales1_id&quot;: null,
-            &quot;sales1_fee&quot;: 0,
             &quot;sales0_id&quot;: null,
+            &quot;sales5_fee&quot;: 0.044,
+            &quot;sales4_fee&quot;: 0.05,
+            &quot;sales3_fee&quot;: 0.05,
+            &quot;sales2_fee&quot;: 0,
+            &quot;sales1_fee&quot;: 0,
             &quot;sales0_fee&quot;: 0,
-            &quot;pg_id&quot;: 119,
-            &quot;ps_id&quot;: 255,
-            &quot;ps_fee&quot;: 0.0255,
-            &quot;pmod_id&quot;: 57841,
-            &quot;custom_id&quot;: 203,
-            &quot;terminal_id&quot;: 210,
+            &quot;ps_fee&quot;: 0.015,
             &quot;mcht_fee&quot;: 0.08,
             &quot;hold_fee&quot;: 0,
-            &quot;pg_settle_type&quot;: 1,
-            &quot;mcht_settle_type&quot;: 0,
             &quot;mcht_settle_fee&quot;: 0,
-            &quot;mcht_settle_id&quot;: null,
-            &quot;trx_dt&quot;: &quot;2023-11-21&quot;,
-            &quot;trx_tm&quot;: &quot;18:22:24&quot;,
-            &quot;cxl_dt&quot;: &quot;2023-11-21&quot;,
-            &quot;cxl_tm&quot;: &quot;18:23:29&quot;,
             &quot;is_cancel&quot;: 1,
             &quot;amount&quot;: -1000,
-            &quot;module_type&quot;: 0,
-            &quot;ord_num&quot;: &quot;20231121182224134803&quot;,
-            &quot;mid&quot;: &quot;kowelcome238&quot;,
-            &quot;tid&quot;: &quot;1046977423&quot;,
-            &quot;trx_id&quot;: &quot;202311210526961&quot;,
-            &quot;ori_trx_id&quot;: &quot;202311210526961&quot;,
-            &quot;card_num&quot;: &quot;&quot;,
-            &quot;issuer&quot;: &quot;현대카드&quot;,
-            &quot;acquirer&quot;: &quot;현대카드&quot;,
-            &quot;appr_num&quot;: &quot;00564100&quot;,
+            &quot;module_type&quot;: 1,
+            &quot;ord_num&quot;: &quot;57839H1700548889&quot;,
+            &quot;mid&quot;: &quot;wel000764m&quot;,
+            &quot;tid&quot;: &quot;57839&quot;,
+            &quot;trx_id&quot;: &quot;202311210523140&quot;,
+            &quot;ori_trx_id&quot;: &quot;202311210523140&quot;,
+            &quot;card_num&quot;: &quot;538720******2287&quot;,
+            &quot;issuer&quot;: &quot;우리&quot;,
+            &quot;acquirer&quot;: &quot;우리&quot;,
+            &quot;appr_num&quot;: &quot;33597580&quot;,
             &quot;installment&quot;: 0,
-            &quot;buyer_name&quot;: &quot;-&quot;,
-            &quot;buyer_phone&quot;: &quot;&quot;,
-            &quot;item_name&quot;: &quot;1046977423&quot;,
-            &quot;is_delete&quot;: 0,
-            &quot;created_at&quot;: &quot;2023-11-21 18:27:53&quot;,
-            &quot;updated_at&quot;: &quot;2023-11-21 18:27:53&quot;,
-            &quot;note&quot;: &quot;장비&quot;,
-            &quot;use_realtime_deposit&quot;: 0,
-            &quot;cxl_type&quot;: 2,
+            &quot;buyer_name&quot;: &quot;ㅁㅁㅁ&quot;,
+            &quot;buyer_phone&quot;: &quot;01000000000&quot;,
+            &quot;item_name&quot;: &quot;ㅁㅁㅁㅁㅁ&quot;,
+            &quot;note&quot;: &quot;수기결제&quot;,
+            &quot;cxl_type&quot;: 1,
             &quot;fin_trx_delay&quot;: 15,
-            &quot;trx_dttm&quot;: &quot;2023-11-21 18:22:24&quot;,
-            &quot;cxl_dttm&quot;: &quot;2023-11-21 18:23:29&quot;,
+            &quot;trx_dttm&quot;: &quot; &quot;,
+            &quot;cxl_dttm&quot;: &quot; &quot;,
             &quot;profit&quot;: -920,
             &quot;sales0_name&quot;: &quot;&quot;,
             &quot;sales1_name&quot;: &quot;&quot;,
@@ -685,79 +623,48 @@ response.json()</code></pre></div>
             &quot;sales3_name&quot;: &quot;61.지환Q(대5)&quot;,
             &quot;sales4_name&quot;: &quot;61.파주Q(지5)&quot;,
             &quot;sales5_name&quot;: &quot;61.n미소비씨(총)&quot;,
-            &quot;trx_amount&quot;: -80,
+            &quot;trx_amount&quot;: -1000,
             &quot;hold_amount&quot;: 0,
-            &quot;total_trx_amount&quot;: -80
+            &quot;total_trx_amount&quot;: -1000
         },
         {
-            &quot;mcht_name&quot;: &quot;런비지니스클럽.&quot;,
-            &quot;user_name&quot;: &quot;3828a&quot;,
-            &quot;nick_name&quot;: &quot;문대하&quot;,
-            &quot;addr&quot;: &quot;경기도 고양시 일산동구    중앙로 1171,  지하2층&quot;,
-            &quot;resident_num&quot;: &quot;0&quot;,
-            &quot;business_num&quot;: &quot;0&quot;,
-            &quot;use_saleslip_prov&quot;: 1,
-            &quot;use_saleslip_sell&quot;: 0,
-            &quot;use_collect_withdraw&quot;: 0,
-            &quot;is_show_fee&quot;: 0,
-            &quot;id&quot;: 544716,
-            &quot;brand_id&quot;: 14,
-            &quot;mcht_id&quot;: 99714,
-            &quot;dev_realtime_fee&quot;: 0,
-            &quot;dev_realtime_settle_amount&quot;: 0,
-            &quot;dev_fee&quot;: 0,
+            &quot;id&quot;: 543678,
             &quot;sales5_id&quot;: 9572,
-            &quot;sales5_fee&quot;: 0.044,
             &quot;sales4_id&quot;: 9608,
-            &quot;sales4_fee&quot;: 0.05,
             &quot;sales3_id&quot;: 9609,
-            &quot;sales3_fee&quot;: 0.05,
             &quot;sales2_id&quot;: null,
-            &quot;sales2_fee&quot;: 0,
             &quot;sales1_id&quot;: null,
-            &quot;sales1_fee&quot;: 0,
             &quot;sales0_id&quot;: null,
+            &quot;sales5_fee&quot;: 0.044,
+            &quot;sales4_fee&quot;: 0.05,
+            &quot;sales3_fee&quot;: 0.05,
+            &quot;sales2_fee&quot;: 0,
+            &quot;sales1_fee&quot;: 0,
             &quot;sales0_fee&quot;: 0,
-            &quot;pg_id&quot;: 119,
-            &quot;ps_id&quot;: 255,
-            &quot;ps_fee&quot;: 0.0255,
-            &quot;pmod_id&quot;: 57841,
-            &quot;custom_id&quot;: 203,
-            &quot;terminal_id&quot;: 210,
+            &quot;ps_fee&quot;: 0.015,
             &quot;mcht_fee&quot;: 0.08,
             &quot;hold_fee&quot;: 0,
-            &quot;pg_settle_type&quot;: 1,
-            &quot;mcht_settle_type&quot;: 0,
             &quot;mcht_settle_fee&quot;: 0,
-            &quot;mcht_settle_id&quot;: null,
-            &quot;trx_dt&quot;: &quot;2023-11-21&quot;,
-            &quot;trx_tm&quot;: &quot;18:22:24&quot;,
-            &quot;cxl_dt&quot;: null,
-            &quot;cxl_tm&quot;: null,
             &quot;is_cancel&quot;: 0,
             &quot;amount&quot;: 1000,
-            &quot;module_type&quot;: 0,
-            &quot;ord_num&quot;: &quot;20231121182224134803&quot;,
-            &quot;mid&quot;: &quot;kowelcome238&quot;,
-            &quot;tid&quot;: &quot;1046977423&quot;,
-            &quot;trx_id&quot;: &quot;202311210526961&quot;,
+            &quot;module_type&quot;: 1,
+            &quot;ord_num&quot;: &quot;57839H1700548889&quot;,
+            &quot;mid&quot;: &quot;wel000764m&quot;,
+            &quot;tid&quot;: &quot;57839&quot;,
+            &quot;trx_id&quot;: &quot;202311210523140&quot;,
             &quot;ori_trx_id&quot;: null,
-            &quot;card_num&quot;: &quot;&quot;,
-            &quot;issuer&quot;: &quot;현대카드&quot;,
-            &quot;acquirer&quot;: &quot;현대카드&quot;,
-            &quot;appr_num&quot;: &quot;00564100&quot;,
+            &quot;card_num&quot;: &quot;538720******2287&quot;,
+            &quot;issuer&quot;: &quot;우리&quot;,
+            &quot;acquirer&quot;: &quot;우리&quot;,
+            &quot;appr_num&quot;: &quot;33597580&quot;,
             &quot;installment&quot;: 0,
-            &quot;buyer_name&quot;: &quot;-&quot;,
-            &quot;buyer_phone&quot;: &quot;&quot;,
-            &quot;item_name&quot;: &quot;1046977423&quot;,
-            &quot;is_delete&quot;: 0,
-            &quot;created_at&quot;: &quot;2023-11-21 18:27:41&quot;,
-            &quot;updated_at&quot;: &quot;2023-11-21 18:27:41&quot;,
-            &quot;note&quot;: &quot;장비&quot;,
-            &quot;use_realtime_deposit&quot;: 0,
-            &quot;cxl_type&quot;: 2,
+            &quot;buyer_name&quot;: &quot;ㅁㅁㅁ&quot;,
+            &quot;buyer_phone&quot;: &quot;01000000000&quot;,
+            &quot;item_name&quot;: &quot;ㅁㅁㅁㅁㅁ&quot;,
+            &quot;note&quot;: &quot;수기결제&quot;,
+            &quot;cxl_type&quot;: 1,
             &quot;fin_trx_delay&quot;: 15,
-            &quot;trx_dttm&quot;: &quot;2023-11-21 18:22:24&quot;,
+            &quot;trx_dttm&quot;: &quot; &quot;,
             &quot;cxl_dttm&quot;: &quot; &quot;,
             &quot;profit&quot;: 920,
             &quot;sales0_name&quot;: &quot;&quot;,
@@ -766,333 +673,9 @@ response.json()</code></pre></div>
             &quot;sales3_name&quot;: &quot;61.지환Q(대5)&quot;,
             &quot;sales4_name&quot;: &quot;61.파주Q(지5)&quot;,
             &quot;sales5_name&quot;: &quot;61.n미소비씨(총)&quot;,
-            &quot;trx_amount&quot;: 80,
+            &quot;trx_amount&quot;: 1000,
             &quot;hold_amount&quot;: 0,
-            &quot;total_trx_amount&quot;: 80
-        },
-        {
-            &quot;mcht_name&quot;: &quot;런비지니스클럽.&quot;,
-            &quot;user_name&quot;: &quot;3828a&quot;,
-            &quot;nick_name&quot;: &quot;문대하&quot;,
-            &quot;addr&quot;: &quot;경기도 고양시 일산동구    중앙로 1171,  지하2층&quot;,
-            &quot;resident_num&quot;: &quot;0&quot;,
-            &quot;business_num&quot;: &quot;0&quot;,
-            &quot;use_saleslip_prov&quot;: 1,
-            &quot;use_saleslip_sell&quot;: 0,
-            &quot;use_collect_withdraw&quot;: 0,
-            &quot;is_show_fee&quot;: 0,
-            &quot;id&quot;: 544715,
-            &quot;brand_id&quot;: 14,
-            &quot;mcht_id&quot;: 99714,
-            &quot;dev_realtime_fee&quot;: 0,
-            &quot;dev_realtime_settle_amount&quot;: 0,
-            &quot;dev_fee&quot;: 0,
-            &quot;sales5_id&quot;: 9572,
-            &quot;sales5_fee&quot;: 0.044,
-            &quot;sales4_id&quot;: 9608,
-            &quot;sales4_fee&quot;: 0.05,
-            &quot;sales3_id&quot;: 9609,
-            &quot;sales3_fee&quot;: 0.05,
-            &quot;sales2_id&quot;: null,
-            &quot;sales2_fee&quot;: 0,
-            &quot;sales1_id&quot;: null,
-            &quot;sales1_fee&quot;: 0,
-            &quot;sales0_id&quot;: null,
-            &quot;sales0_fee&quot;: 0,
-            &quot;pg_id&quot;: 119,
-            &quot;ps_id&quot;: 255,
-            &quot;ps_fee&quot;: 0.0255,
-            &quot;pmod_id&quot;: 57841,
-            &quot;custom_id&quot;: 203,
-            &quot;terminal_id&quot;: 210,
-            &quot;mcht_fee&quot;: 0.08,
-            &quot;hold_fee&quot;: 0,
-            &quot;pg_settle_type&quot;: 1,
-            &quot;mcht_settle_type&quot;: 0,
-            &quot;mcht_settle_fee&quot;: 0,
-            &quot;mcht_settle_id&quot;: null,
-            &quot;trx_dt&quot;: &quot;2023-11-21&quot;,
-            &quot;trx_tm&quot;: &quot;18:20:51&quot;,
-            &quot;cxl_dt&quot;: &quot;2023-11-21&quot;,
-            &quot;cxl_tm&quot;: &quot;18:21:50&quot;,
-            &quot;is_cancel&quot;: 1,
-            &quot;amount&quot;: -1000,
-            &quot;module_type&quot;: 0,
-            &quot;ord_num&quot;: &quot;20231121182051173976&quot;,
-            &quot;mid&quot;: &quot;kowelcome238&quot;,
-            &quot;tid&quot;: &quot;1046977423&quot;,
-            &quot;trx_id&quot;: &quot;202311210526939&quot;,
-            &quot;ori_trx_id&quot;: &quot;202311210526939&quot;,
-            &quot;card_num&quot;: &quot;&quot;,
-            &quot;issuer&quot;: &quot;현대카드&quot;,
-            &quot;acquirer&quot;: &quot;현대카드&quot;,
-            &quot;appr_num&quot;: &quot;00152894&quot;,
-            &quot;installment&quot;: 0,
-            &quot;buyer_name&quot;: &quot;-&quot;,
-            &quot;buyer_phone&quot;: &quot;&quot;,
-            &quot;item_name&quot;: &quot;1046977423&quot;,
-            &quot;is_delete&quot;: 0,
-            &quot;created_at&quot;: &quot;2023-11-21 18:27:36&quot;,
-            &quot;updated_at&quot;: &quot;2023-11-21 18:27:36&quot;,
-            &quot;note&quot;: &quot;장비&quot;,
-            &quot;use_realtime_deposit&quot;: 0,
-            &quot;cxl_type&quot;: 2,
-            &quot;fin_trx_delay&quot;: 15,
-            &quot;trx_dttm&quot;: &quot;2023-11-21 18:20:51&quot;,
-            &quot;cxl_dttm&quot;: &quot;2023-11-21 18:21:50&quot;,
-            &quot;profit&quot;: -920,
-            &quot;sales0_name&quot;: &quot;&quot;,
-            &quot;sales1_name&quot;: &quot;&quot;,
-            &quot;sales2_name&quot;: &quot;&quot;,
-            &quot;sales3_name&quot;: &quot;61.지환Q(대5)&quot;,
-            &quot;sales4_name&quot;: &quot;61.파주Q(지5)&quot;,
-            &quot;sales5_name&quot;: &quot;61.n미소비씨(총)&quot;,
-            &quot;trx_amount&quot;: -80,
-            &quot;hold_amount&quot;: 0,
-            &quot;total_trx_amount&quot;: -80
-        },
-        {
-            &quot;mcht_name&quot;: &quot;런비지니스클럽.&quot;,
-            &quot;user_name&quot;: &quot;3828a&quot;,
-            &quot;nick_name&quot;: &quot;문대하&quot;,
-            &quot;addr&quot;: &quot;경기도 고양시 일산동구    중앙로 1171,  지하2층&quot;,
-            &quot;resident_num&quot;: &quot;0&quot;,
-            &quot;business_num&quot;: &quot;0&quot;,
-            &quot;use_saleslip_prov&quot;: 1,
-            &quot;use_saleslip_sell&quot;: 0,
-            &quot;use_collect_withdraw&quot;: 0,
-            &quot;is_show_fee&quot;: 0,
-            &quot;id&quot;: 544714,
-            &quot;brand_id&quot;: 14,
-            &quot;mcht_id&quot;: 99714,
-            &quot;dev_realtime_fee&quot;: 0,
-            &quot;dev_realtime_settle_amount&quot;: 0,
-            &quot;dev_fee&quot;: 0,
-            &quot;sales5_id&quot;: 9572,
-            &quot;sales5_fee&quot;: 0.044,
-            &quot;sales4_id&quot;: 9608,
-            &quot;sales4_fee&quot;: 0.05,
-            &quot;sales3_id&quot;: 9609,
-            &quot;sales3_fee&quot;: 0.05,
-            &quot;sales2_id&quot;: null,
-            &quot;sales2_fee&quot;: 0,
-            &quot;sales1_id&quot;: null,
-            &quot;sales1_fee&quot;: 0,
-            &quot;sales0_id&quot;: null,
-            &quot;sales0_fee&quot;: 0,
-            &quot;pg_id&quot;: 119,
-            &quot;ps_id&quot;: 255,
-            &quot;ps_fee&quot;: 0.0255,
-            &quot;pmod_id&quot;: 57841,
-            &quot;custom_id&quot;: 203,
-            &quot;terminal_id&quot;: 210,
-            &quot;mcht_fee&quot;: 0.08,
-            &quot;hold_fee&quot;: 0,
-            &quot;pg_settle_type&quot;: 1,
-            &quot;mcht_settle_type&quot;: 0,
-            &quot;mcht_settle_fee&quot;: 0,
-            &quot;mcht_settle_id&quot;: null,
-            &quot;trx_dt&quot;: &quot;2023-11-21&quot;,
-            &quot;trx_tm&quot;: &quot;18:20:51&quot;,
-            &quot;cxl_dt&quot;: null,
-            &quot;cxl_tm&quot;: null,
-            &quot;is_cancel&quot;: 0,
-            &quot;amount&quot;: 1000,
-            &quot;module_type&quot;: 0,
-            &quot;ord_num&quot;: &quot;20231121182051173976&quot;,
-            &quot;mid&quot;: &quot;kowelcome238&quot;,
-            &quot;tid&quot;: &quot;1046977423&quot;,
-            &quot;trx_id&quot;: &quot;202311210526939&quot;,
-            &quot;ori_trx_id&quot;: null,
-            &quot;card_num&quot;: &quot;&quot;,
-            &quot;issuer&quot;: &quot;현대카드&quot;,
-            &quot;acquirer&quot;: &quot;현대카드&quot;,
-            &quot;appr_num&quot;: &quot;00152894&quot;,
-            &quot;installment&quot;: 0,
-            &quot;buyer_name&quot;: &quot;-&quot;,
-            &quot;buyer_phone&quot;: &quot;&quot;,
-            &quot;item_name&quot;: &quot;1046977423&quot;,
-            &quot;is_delete&quot;: 0,
-            &quot;created_at&quot;: &quot;2023-11-21 18:27:29&quot;,
-            &quot;updated_at&quot;: &quot;2023-11-21 18:27:29&quot;,
-            &quot;note&quot;: &quot;장비&quot;,
-            &quot;use_realtime_deposit&quot;: 0,
-            &quot;cxl_type&quot;: 2,
-            &quot;fin_trx_delay&quot;: 15,
-            &quot;trx_dttm&quot;: &quot;2023-11-21 18:20:51&quot;,
-            &quot;cxl_dttm&quot;: &quot; &quot;,
-            &quot;profit&quot;: 920,
-            &quot;sales0_name&quot;: &quot;&quot;,
-            &quot;sales1_name&quot;: &quot;&quot;,
-            &quot;sales2_name&quot;: &quot;&quot;,
-            &quot;sales3_name&quot;: &quot;61.지환Q(대5)&quot;,
-            &quot;sales4_name&quot;: &quot;61.파주Q(지5)&quot;,
-            &quot;sales5_name&quot;: &quot;61.n미소비씨(총)&quot;,
-            &quot;trx_amount&quot;: 80,
-            &quot;hold_amount&quot;: 0,
-            &quot;total_trx_amount&quot;: 80
-        },
-        {
-            &quot;mcht_name&quot;: &quot;런비지니스클럽.&quot;,
-            &quot;user_name&quot;: &quot;3828a&quot;,
-            &quot;nick_name&quot;: &quot;문대하&quot;,
-            &quot;addr&quot;: &quot;경기도 고양시 일산동구    중앙로 1171,  지하2층&quot;,
-            &quot;resident_num&quot;: &quot;0&quot;,
-            &quot;business_num&quot;: &quot;0&quot;,
-            &quot;use_saleslip_prov&quot;: 1,
-            &quot;use_saleslip_sell&quot;: 0,
-            &quot;use_collect_withdraw&quot;: 0,
-            &quot;is_show_fee&quot;: 0,
-            &quot;id&quot;: 543207,
-            &quot;brand_id&quot;: 14,
-            &quot;mcht_id&quot;: 99714,
-            &quot;dev_realtime_fee&quot;: 0,
-            &quot;dev_realtime_settle_amount&quot;: 0,
-            &quot;dev_fee&quot;: 0,
-            &quot;sales5_id&quot;: 9572,
-            &quot;sales5_fee&quot;: 0.044,
-            &quot;sales4_id&quot;: 9608,
-            &quot;sales4_fee&quot;: 0.05,
-            &quot;sales3_id&quot;: 9609,
-            &quot;sales3_fee&quot;: 0.05,
-            &quot;sales2_id&quot;: null,
-            &quot;sales2_fee&quot;: 0,
-            &quot;sales1_id&quot;: null,
-            &quot;sales1_fee&quot;: 0,
-            &quot;sales0_id&quot;: null,
-            &quot;sales0_fee&quot;: 0,
-            &quot;pg_id&quot;: 119,
-            &quot;ps_id&quot;: 255,
-            &quot;ps_fee&quot;: 0.0255,
-            &quot;pmod_id&quot;: 57841,
-            &quot;custom_id&quot;: 203,
-            &quot;terminal_id&quot;: 210,
-            &quot;mcht_fee&quot;: 0.08,
-            &quot;hold_fee&quot;: 0,
-            &quot;pg_settle_type&quot;: 1,
-            &quot;mcht_settle_type&quot;: 0,
-            &quot;mcht_settle_fee&quot;: 0,
-            &quot;mcht_settle_id&quot;: null,
-            &quot;trx_dt&quot;: &quot;2023-11-21&quot;,
-            &quot;trx_tm&quot;: &quot;13:37:18&quot;,
-            &quot;cxl_dt&quot;: &quot;2023-11-21&quot;,
-            &quot;cxl_tm&quot;: &quot;13:37:40&quot;,
-            &quot;is_cancel&quot;: 1,
-            &quot;amount&quot;: -1005,
-            &quot;module_type&quot;: 0,
-            &quot;ord_num&quot;: &quot;20231121133718187244&quot;,
-            &quot;mid&quot;: &quot;kowelcome238&quot;,
-            &quot;tid&quot;: &quot;1046977423&quot;,
-            &quot;trx_id&quot;: &quot;202311210520606&quot;,
-            &quot;ori_trx_id&quot;: &quot;202311210520606&quot;,
-            &quot;card_num&quot;: &quot;&quot;,
-            &quot;issuer&quot;: &quot;삼성카드&quot;,
-            &quot;acquirer&quot;: &quot;삼성카드&quot;,
-            &quot;appr_num&quot;: &quot;77224946&quot;,
-            &quot;installment&quot;: 0,
-            &quot;buyer_name&quot;: &quot;-&quot;,
-            &quot;buyer_phone&quot;: &quot;&quot;,
-            &quot;item_name&quot;: &quot;1046977423&quot;,
-            &quot;is_delete&quot;: 0,
-            &quot;created_at&quot;: &quot;2023-11-21 13:42:41&quot;,
-            &quot;updated_at&quot;: &quot;2023-11-21 13:42:41&quot;,
-            &quot;note&quot;: &quot;장비&quot;,
-            &quot;use_realtime_deposit&quot;: 0,
-            &quot;cxl_type&quot;: 2,
-            &quot;fin_trx_delay&quot;: 15,
-            &quot;trx_dttm&quot;: &quot;2023-11-21 13:37:18&quot;,
-            &quot;cxl_dttm&quot;: &quot;2023-11-21 13:37:40&quot;,
-            &quot;profit&quot;: -925,
-            &quot;sales0_name&quot;: &quot;&quot;,
-            &quot;sales1_name&quot;: &quot;&quot;,
-            &quot;sales2_name&quot;: &quot;&quot;,
-            &quot;sales3_name&quot;: &quot;61.지환Q(대5)&quot;,
-            &quot;sales4_name&quot;: &quot;61.파주Q(지5)&quot;,
-            &quot;sales5_name&quot;: &quot;61.n미소비씨(총)&quot;,
-            &quot;trx_amount&quot;: -80,
-            &quot;hold_amount&quot;: 0,
-            &quot;total_trx_amount&quot;: -80
-        },
-        {
-            &quot;mcht_name&quot;: &quot;런비지니스클럽.&quot;,
-            &quot;user_name&quot;: &quot;3828a&quot;,
-            &quot;nick_name&quot;: &quot;문대하&quot;,
-            &quot;addr&quot;: &quot;경기도 고양시 일산동구    중앙로 1171,  지하2층&quot;,
-            &quot;resident_num&quot;: &quot;0&quot;,
-            &quot;business_num&quot;: &quot;0&quot;,
-            &quot;use_saleslip_prov&quot;: 1,
-            &quot;use_saleslip_sell&quot;: 0,
-            &quot;use_collect_withdraw&quot;: 0,
-            &quot;is_show_fee&quot;: 0,
-            &quot;id&quot;: 543206,
-            &quot;brand_id&quot;: 14,
-            &quot;mcht_id&quot;: 99714,
-            &quot;dev_realtime_fee&quot;: 0,
-            &quot;dev_realtime_settle_amount&quot;: 0,
-            &quot;dev_fee&quot;: 0,
-            &quot;sales5_id&quot;: 9572,
-            &quot;sales5_fee&quot;: 0.044,
-            &quot;sales4_id&quot;: 9608,
-            &quot;sales4_fee&quot;: 0.05,
-            &quot;sales3_id&quot;: 9609,
-            &quot;sales3_fee&quot;: 0.05,
-            &quot;sales2_id&quot;: null,
-            &quot;sales2_fee&quot;: 0,
-            &quot;sales1_id&quot;: null,
-            &quot;sales1_fee&quot;: 0,
-            &quot;sales0_id&quot;: null,
-            &quot;sales0_fee&quot;: 0,
-            &quot;pg_id&quot;: 119,
-            &quot;ps_id&quot;: 255,
-            &quot;ps_fee&quot;: 0.0255,
-            &quot;pmod_id&quot;: 57841,
-            &quot;custom_id&quot;: 203,
-            &quot;terminal_id&quot;: 210,
-            &quot;mcht_fee&quot;: 0.08,
-            &quot;hold_fee&quot;: 0,
-            &quot;pg_settle_type&quot;: 1,
-            &quot;mcht_settle_type&quot;: 0,
-            &quot;mcht_settle_fee&quot;: 0,
-            &quot;mcht_settle_id&quot;: null,
-            &quot;trx_dt&quot;: &quot;2023-11-21&quot;,
-            &quot;trx_tm&quot;: &quot;13:37:18&quot;,
-            &quot;cxl_dt&quot;: null,
-            &quot;cxl_tm&quot;: null,
-            &quot;is_cancel&quot;: 0,
-            &quot;amount&quot;: 1005,
-            &quot;module_type&quot;: 0,
-            &quot;ord_num&quot;: &quot;20231121133718187244&quot;,
-            &quot;mid&quot;: &quot;kowelcome238&quot;,
-            &quot;tid&quot;: &quot;1046977423&quot;,
-            &quot;trx_id&quot;: &quot;202311210520606&quot;,
-            &quot;ori_trx_id&quot;: null,
-            &quot;card_num&quot;: &quot;&quot;,
-            &quot;issuer&quot;: &quot;삼성카드&quot;,
-            &quot;acquirer&quot;: &quot;삼성카드&quot;,
-            &quot;appr_num&quot;: &quot;77224946&quot;,
-            &quot;installment&quot;: 0,
-            &quot;buyer_name&quot;: &quot;-&quot;,
-            &quot;buyer_phone&quot;: &quot;&quot;,
-            &quot;item_name&quot;: &quot;1046977423&quot;,
-            &quot;is_delete&quot;: 0,
-            &quot;created_at&quot;: &quot;2023-11-21 13:42:36&quot;,
-            &quot;updated_at&quot;: &quot;2023-11-21 13:42:36&quot;,
-            &quot;note&quot;: &quot;장비&quot;,
-            &quot;use_realtime_deposit&quot;: 0,
-            &quot;cxl_type&quot;: 2,
-            &quot;fin_trx_delay&quot;: 15,
-            &quot;trx_dttm&quot;: &quot;2023-11-21 13:37:18&quot;,
-            &quot;cxl_dttm&quot;: &quot; &quot;,
-            &quot;profit&quot;: 925,
-            &quot;sales0_name&quot;: &quot;&quot;,
-            &quot;sales1_name&quot;: &quot;&quot;,
-            &quot;sales2_name&quot;: &quot;&quot;,
-            &quot;sales3_name&quot;: &quot;61.지환Q(대5)&quot;,
-            &quot;sales4_name&quot;: &quot;61.파주Q(지5)&quot;,
-            &quot;sales5_name&quot;: &quot;61.n미소비씨(총)&quot;,
-            &quot;trx_amount&quot;: 80,
-            &quot;hold_amount&quot;: 0,
-            &quot;total_trx_amount&quot;: 80
+            &quot;total_trx_amount&quot;: 1000
         }
     ]
 }</code>
@@ -1229,10 +812,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-pay-modules"
-               value="sint"
+               value="quaerat"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>sint</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>quaerat</code></p>
             </div>
                 </form>
 
@@ -1278,32 +861,81 @@ response.json()</code></pre></div>
 
             </summary>
                                                 <div style="margin-left: 28px; clear: unset;">
-                        <b style="line-height: 2;"><code>use_saleslip_prov</code></b>&nbsp;&nbsp;
+                        <b style="line-height: 2;"><code>sales5_fee</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>매출전표 공급자 표기정보(0=본사, 1=PG사)</p>
+<p>총판 수수료(%)</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
-                        <b style="line-height: 2;"><code>use_saleslip_sell</code></b>&nbsp;&nbsp;
+                        <b style="line-height: 2;"><code>sales4_fee</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>매출전표 판매자 표기정보(0=가맹점, 1=본사)</p>
+<p>지사 수수료(%)</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
-                        <b style="line-height: 2;"><code>is_show_fee</code></b>&nbsp;&nbsp;
+                        <b style="line-height: 2;"><code>sales3_fee</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>가맹점 수수료율 노출여부(0=숨김, 1=노출)</p>
+<p>대리점2 수수료(%)</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
-                        <b style="line-height: 2;"><code>use_realtime_deposit</code></b>&nbsp;&nbsp;
+                        <b style="line-height: 2;"><code>sales2_fee</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>실시간 이체 사용 매출건(0=안함, 1=사용)</p>
+<p>대리점3 수수료(%)</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>sales1_fee</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>대리점4 수수료(%)</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>sales0_fee</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>대리점4 수수료(%)</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>ps_fee</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>PG사 구간 수수료(%)</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>mcht_fee</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>가맹점 수수료(%)</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>hold_fee</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>유보금 수수료(%)</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>is_cancel</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>취소여부(0=승인, 1=취소)</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>cxl_type</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>취소 타입취소타입(0=취소금지, 1=이체시간 -5분, 2=당일허용)</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
                         <b style="line-height: 2;"><code>amount</code></b>&nbsp;&nbsp;
@@ -1325,6 +957,13 @@ response.json()</code></pre></div>
  &nbsp;
 <br>
 <p>가맹점 거래 수수료</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>fin_trx_delay</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>이체 딜레이(분)</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
                         <b style="line-height: 2;"><code>mcht_settle_fee</code></b>&nbsp;&nbsp;
@@ -1373,7 +1012,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "expedita",
+    "search": "tempore",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1405,7 +1044,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'expedita',
+            'search' =&gt; 'tempore',
         ],
     ]
 );
@@ -1423,7 +1062,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'expedita',
+  'search': 'tempore',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1437,7 +1076,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=expedita" \
+    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=tempore" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1630,10 +1269,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-transactions"
-               value="expedita"
+               value="tempore"
                data-component="query">
     <br>
-<p>검색어(승인번호, 계좌번호) <br>예시: <code>expedita</code></p>
+<p>검색어(승인번호, 계좌번호) <br>예시: <code>tempore</code></p>
             </div>
                 </form>
 
