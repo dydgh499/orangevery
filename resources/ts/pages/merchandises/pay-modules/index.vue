@@ -61,9 +61,7 @@ onMounted(() => {
             <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchDelete()" v-if="getUserLevel() >= 35" color="error" size="small">
                 일괄 삭제
             </VBtn>
-            <div style="position: relative; top: 0.6em;">
-                <VSwitch v-model="store.params.un_use" label="최근 1달 미결제 결제모듈 조회" color="primary" @update:modelValue="store.updateQueryString({un_use: store.params.un_use})" />
-            </div>
+            <VSwitch hide-details false-value='0' true-value='1' v-model="store.params.un_use" label="최근 1달 미결제 결제모듈 조회" color="warning" @update:modelValue="store.updateQueryString({un_use: store.params.un_use})" />
         </template>
         <template #headers>
             <tr>

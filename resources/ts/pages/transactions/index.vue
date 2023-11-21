@@ -43,10 +43,15 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 
 store.params.level = 10
-store.params.dev_use = Number(corp.pv_options.auth.levels.dev_use)
-store.params.use_realtime_deposit = Number(corp.pv_options.paid.use_realtime_deposit)
-store.params.use_cancel_deposit = Number(corp.pv_options.paid.use_cancel_deposit)
-store.params.only_cancel = 0
+// 개발사 사용여부
+if (Number(corp.pv_options.auth.levels.dev_use))
+    store.params.dev_use = 1
+// 실시간이체 사용여부
+if (Number(corp.pv_options.paid.use_realtime_deposit))
+    store.params.use_realtime_deposit = 1
+// 취소입금 사용여부
+if (Number(corp.pv_options.paid.use_cancel_deposit))
+    store.params.use_cancel_deposit = 1
 
 const getAllLevels = () => {
     const sales = salesLevels()
@@ -69,13 +74,12 @@ const isSalesCol = (key: string) => {
     return false
 }
 
-const batchRetry = async() => {
-    if(await alert.value.show('정말 일괄 재발송하시겠습니까?'))
-    {
-        const params = { selected : selected.value }
+const batchRetry = async () => {
+    if (await alert.value.show('정말 일괄 재발송하시겠습니까?')) {
+        const params = { selected: selected.value }
         const url = '/api/v1/manager/transactions/batch-retry'
         const r = await post(url, params)
-        if(r.status == 201)
+        if (r.status == 201)
             snackbar.value.show('성공하였습니다.', 'success')
         else
             snackbar.value.show(r.data.message, 'error')
@@ -105,22 +109,24 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="상호, MID, TID, 승인번호, 거래번호, 결제모듈 별칭, 주민번호, 사업자번호, 발급사, 매입사 검색" :metas="metas" :add="user_info.level >= 35" add_name="매출"
-            :date_filter_type="DateFilters.DATE_RANGE">
+        <BaseIndexView placeholder="상호, MID, TID, 승인번호, 거래번호, 결제모듈 별칭, 주민번호, 사업자번호, 발급사, 매입사 검색" :metas="metas"
+            :add="user_info.level >= 35" add_name="매출" :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">
                     <template #sales_extra_field>
                         <VCol cols="12" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="getAllLevels()"
-                                :label="`등급 선택`" item-title="title" item-value="id" @update:modelValue="store.updateQueryString({level: store.params.level})"/>
+                                :label="`등급 선택`" item-title="title" item-value="id"
+                                @update:modelValue="store.updateQueryString({ level: store.params.level })" />
                         </VCol>
                     </template>
                     <template #pg_extra_field>
                         <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
-                                item-value="id" @update:modelValue="store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})"/>
+                                item-value="id"
+                                @update:modelValue="store.updateQueryString({ mcht_settle_type: store.params.mcht_settle_type })" />
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>
@@ -132,8 +138,12 @@ onMounted(() => {
                 <VBtn prepend-icon="tabler-calculator" @click="batchRetry()" v-if="getUserLevel() >= 50" size="small">
                     일괄 재발송
                 </VBtn>
-                <div style="position: relative; top: 0.6em;">
-                    <VSwitch v-model="store.params.only_cancel" label="취소매출 조회" color="primary" @update:modelValue="store.updateQueryString({only_cancel: store.params.only_cancel})"/>
+                <div>
+                    <VSwitch hide-details false-value='0' true-value='1' v-model="store.params.only_realtime_fail" label="즉시출금 실패건 조회" color="error"
+                        @update:modelValue="store.updateQueryString({ only_realtime_fail: store.params.only_realtime_fail })" 
+                        v-if="corp.pv_options.paid.use_realtime_deposit"/>
+                    <VSwitch hide-details false-value='0' true-value='1' v-model="store.params.only_cancel" label="취소매출 조회" color="error"
+                        @update:modelValue="store.updateQueryString({ only_cancel: store.params.only_cancel })" />
                 </div>
             </template>
             <template #headers>
@@ -156,7 +166,7 @@ onMounted(() => {
                         </template>
                         <template v-else>
                             <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 50">
-                                <VCheckbox v-model="all_selected" class="check-label"/>
+                                <VCheckbox v-model="all_selected" class="check-label" />
                                 <span>선택/취소</span>
                             </div>
                             <span v-else>
@@ -172,7 +182,8 @@ onMounted(() => {
                         <td v-if="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
                             <span v-if="_key == 'id'">
                                 <div class='check-label-container'>
-                                    <VCheckbox v-if="getUserLevel() >= 50" v-model="selected" :value="item[_key]" class="check-label"/>
+                                    <VCheckbox v-if="getUserLevel() >= 50" v-model="selected" :value="item[_key]"
+                                        class="check-label" />
                                     <span class="edit-link" @click="store.edit(item['id'])">#{{ item[_key] }}</span>
                                 </div>
                             </span>
@@ -230,5 +241,4 @@ onMounted(() => {
         <CancelTransDialog ref="cancelTran" />
         <CancelDepositDialog ref="cancelDeposit" />
         <RealtimeHistoriesDialog ref="realtimeHistories" />
-    </div>
-</template>
+</div></template>

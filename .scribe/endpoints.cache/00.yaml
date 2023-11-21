@@ -152,7 +152,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: quaerat
+        example: non
         type: string
         enumValues: []
         custom: []
@@ -161,7 +161,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: quaerat
+      search: non
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -181,13 +181,11 @@ endpoints:
                       "sales3_id": 9609,
                       "sales2_id": null,
                       "sales1_id": null,
-                      "sales0_id": null,
                       "sales5_fee": 0.044,
                       "sales4_fee": 0.05,
                       "sales3_fee": 0.05,
                       "sales2_fee": 0,
                       "sales1_fee": 0,
-                      "sales0_fee": 0,
                       "ps_fee": 0.015,
                       "mcht_fee": 0.08,
                       "hold_fee": 0,
@@ -231,13 +229,11 @@ endpoints:
                       "sales3_id": 9609,
                       "sales2_id": null,
                       "sales1_id": null,
-                      "sales0_id": null,
                       "sales5_fee": 0.044,
                       "sales4_fee": 0.05,
                       "sales3_fee": 0.05,
                       "sales2_fee": 0,
                       "sales1_fee": 0,
-                      "sales0_fee": 0,
                       "ps_fee": 0.015,
                       "mcht_fee": 0.08,
                       "hold_fee": 0,
@@ -281,13 +277,11 @@ endpoints:
                       "sales3_id": 9609,
                       "sales2_id": null,
                       "sales1_id": null,
-                      "sales0_id": null,
                       "sales5_fee": 0.044,
                       "sales4_fee": 0.05,
                       "sales3_fee": 0.05,
                       "sales2_fee": 0,
                       "sales1_fee": 0,
-                      "sales0_fee": 0,
                       "ps_fee": 0.015,
                       "mcht_fee": 0.08,
                       "hold_fee": 0,
@@ -362,6 +356,14 @@ endpoints:
         type: 'object[]'
         enumValues: []
         custom: []
+      'content.*.ps_fee':
+        name: 'content.*.ps_fee'
+        description: 'PG사 구간 수수료(%)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
       'content.*.sales5_fee':
         name: 'content.*.sales5_fee'
         description: '총판 수수료(%)'
@@ -397,22 +399,6 @@ endpoints:
       'content.*.sales1_fee':
         name: 'content.*.sales1_fee'
         description: '대리점4 수수료(%)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      'content.*.sales0_fee':
-        name: 'content.*.sales0_fee'
-        description: '대리점4 수수료(%)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      'content.*.ps_fee':
-        name: 'content.*.ps_fee'
-        description: 'PG사 구간 수수료(%)'
         required: false
         example: null
         type: integer
@@ -509,7 +495,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer aDdbkv63gcP4VaE516fZ8eh'
+      - 'Bearer aVEfade66g3kD1cvbh4ZP58'
     controller: null
     method: null
     route: null
@@ -572,7 +558,7 @@ endpoints:
         name: search
         description: '검색어(승인번호, 계좌번호)'
         required: false
-        example: tempore
+        example: ut
         type: string
         enumValues: []
         custom: []
@@ -581,7 +567,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: tempore
+      search: ut
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -731,7 +717,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer kD6eav3d48bhPE65cagZ1fV'
+      - 'Bearer 361hfZacD6g8VabevEkd54P'
     controller: null
     method: null
     route: null
@@ -899,7 +885,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 5gcab8v3V6dP4hf1aDEe6Zk'
+      - 'Bearer g46vVaab8DPdEh6Zf3c15ek'
     controller: null
     method: null
     route: null
@@ -952,7 +938,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer E8baD1f4hdP6Vvk3Zea65gc'
+      - 'Bearer g6VEaP348165aehvZkfdbcD'
     controller: null
     method: null
     route: null
@@ -1014,7 +1000,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer EhDZ8g5vf1baVack664edP3'
+      - 'Bearer aVfbcE8h3gdae546Z1P6Dkv'
     controller: null
     method: null
     route: null
@@ -1285,7 +1271,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer aVhfEbDk8a51gv36ced46ZP'
+      - 'Bearer vDVEha6851d4a6kPZfcebg3'
     controller: null
     method: null
     route: null

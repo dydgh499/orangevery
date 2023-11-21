@@ -214,14 +214,13 @@ class BfController extends Controller
      * @responseField page_size string 조회 사이즈
      * @responseField total string 총 개수
      * @responseField content object[] 결과
+     * @responseField content.*.ps_fee integer PG사 구간 수수료(%)
      * @responseField content.*.sales5_fee integer 총판 수수료(%)
      * @responseField content.*.sales4_fee integer 지사 수수료(%)
      * @responseField content.*.sales3_fee integer 대리점1 수수료(%)
      * @responseField content.*.sales3_fee integer 대리점2 수수료(%)
      * @responseField content.*.sales2_fee integer 대리점3 수수료(%)
      * @responseField content.*.sales1_fee integer 대리점4 수수료(%)
-     * @responseField content.*.sales0_fee integer 대리점4 수수료(%)
-     * @responseField content.*.ps_fee integer PG사 구간 수수료(%)
      * @responseField content.*.mcht_fee integer 가맹점 수수료(%)
      * @responseField content.*.hold_fee integer 유보금 수수료(%)
      * @responseField content.*.is_cancel integer 취소여부(0=승인, 1=취소)
@@ -246,8 +245,8 @@ class BfController extends Controller
         $inst   = new TransactionController(new Transaction);
         $inst->cols = [
             'transactions.id',
-            'transactions.sales5_id','transactions.sales4_id','transactions.sales3_id', 'transactions.sales2_id','transactions.sales1_id','transactions.sales0_id',
-            'transactions.sales5_fee','transactions.sales4_fee','transactions.sales3_fee', 'transactions.sales2_fee','transactions.sales1_fee','transactions.sales0_fee', 
+            'transactions.sales5_id','transactions.sales4_id','transactions.sales3_id', 'transactions.sales2_id','transactions.sales1_id',
+            'transactions.sales5_fee','transactions.sales4_fee','transactions.sales3_fee', 'transactions.sales2_fee','transactions.sales1_fee',
             'transactions.ps_fee','transactions.mcht_fee','transactions.hold_fee','transactions.mcht_settle_fee','transactions.is_cancel',
             'transactions.amount','transactions.module_type','transactions.ord_num','transactions.mid','transactions.tid',
             'transactions.trx_id','transactions.ori_trx_id','transactions.card_num','transactions.issuer','transactions.acquirer',

@@ -115,6 +115,25 @@ class Transaction extends Model
         return $query;
     }
 
+    public function scopeFailRealtime($query, $trx_ids)
+    {
+        // success histories
+        $sub_query = RealtimeSendHistory::select('trans_id')
+            ->where('brand_id', request()->user()->brand_id)
+            ->where('request_type', 6170)
+            ->where('result_code', '0000');
+        // fail trans ids
+        $trans_ids = RealtimeSendHistory::where('brand_id', request()->user()->brand_id)
+            ->where('request_type', '!=', 6170)
+            ->where('result_code', '!=', '0000')
+            ->whereIn('trans_id', $trx_ids)
+            ->whereNotIn('trans_id', $sub_query)
+            ->groupBy('trans_id')
+            ->pluck('trans_id')
+            ->all();
+        return $query->whereIn('transactions.id', $trans_ids);
+    }
+    
     private function getProfitCol($level)
     {
         if($level == 10)

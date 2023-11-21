@@ -63,12 +63,9 @@ class TransactionController extends Controller
         $search = $request->input('search', '');
         $query  = $this->transactions
             ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
-            ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
-            ->globalFilter();
-
-        if($search != '')
-        {
-            $query = $query->where(function ($query) use ($search) {
+            ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')            
+            ->globalFilter()
+            ->where(function ($query) use ($search) {
                 return $query->where('transactions.mid', 'like', "%$search%")
                     ->orWhere('transactions.tid', 'like', "%$search%")
                     ->orWhere('transactions.trx_id', 'like', "%$search%")
@@ -79,15 +76,23 @@ class TransactionController extends Controller
                     ->orWhere('merchandises.mcht_name', 'like', "%$search%")
                     ->orWhere('merchandises.resident_num', 'like', "%$search%")
                     ->orWhere('merchandises.business_num', 'like', "%$search%");
-            });
-        }
+            });       
         $query = $this->transDateFilter($query, $request->s_dt, $request->e_dt, $request->use_search_date_detail);
-        if($request->only_cancel && $request->only_cancel == 'true')
+
+        if($request->only_cancel)
             $query = $query->where('transactions.is_cancel', true);
-        if($request->has('mcht_settle_id'))
+
+        if($request->mcht_settle_id)
             $query = $query->where('transactions.mcht_settle_id', $request->mcht_settle_id);
 
-        for ($i=0; $i < 6; $i++) { 
+        if($request->only_realtime_fail)
+        {
+            $trx_ids = $query->pluck('transactions.id')->all();
+            $query = $query->failRealtime($trx_ids);            
+        }
+
+        for ($i=0; $i < 6; $i++) 
+        {
             $col = 'sales'.$i.'_settle_id';
             if($request->has($col))
                 $query = $query->where('transactions.'.$col, $request->input($col));

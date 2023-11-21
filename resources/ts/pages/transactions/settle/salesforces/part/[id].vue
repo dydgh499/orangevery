@@ -42,7 +42,7 @@ store.params.id = route.params.id
 store.params.s_dt = route.query.s_dt
 store.params.e_dt = route.query.e_dt
 store.params.level = route.query.level
-store.params.is_base_trx = true
+store.params.is_base_trx = 1
 
 const isSalesCol = (key: string) => {
     const sales_cols = ['amount', 'trx_amount', 'mcht_settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
@@ -150,9 +150,7 @@ onMounted(() => {
                 <VBtn prepend-icon="tabler-calculator" @click="partSettle()" size="small">
                     부분정산
                 </VBtn>
-                <div style="position: relative; top: 0.6em;">
-                    <VSwitch v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" @update:modelValue="[store.updateQueryString({is_base_trx: store.params.is_base_trx})]"/>
-                </div>
+                <VSwitch hide-details false-value='0' true-value='1' v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" @update:modelValue="[store.updateQueryString({is_base_trx: store.params.is_base_trx})]"/>
                 <div style="display: flex;">
                     <table>
                         <tr>

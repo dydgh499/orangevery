@@ -108,7 +108,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-21 22:00:27</li>
+        <li>마지막 업데이트:  2023-11-22 00:38:23</li>
     </ul>
 </div>
 
@@ -445,7 +445,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "quaerat",
+    "search": "non",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -477,7 +477,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'quaerat',
+            'search' =&gt; 'non',
         ],
     ]
 );
@@ -495,7 +495,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'quaerat',
+  'search': 'non',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -509,7 +509,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/pay-modules?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=quaerat" \
+    --get "https://team.payvery.kr/api/v1/bf/pay-modules?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=non" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -534,13 +534,11 @@ response.json()</code></pre></div>
             &quot;sales3_id&quot;: 9609,
             &quot;sales2_id&quot;: null,
             &quot;sales1_id&quot;: null,
-            &quot;sales0_id&quot;: null,
             &quot;sales5_fee&quot;: 0.044,
             &quot;sales4_fee&quot;: 0.05,
             &quot;sales3_fee&quot;: 0.05,
             &quot;sales2_fee&quot;: 0,
             &quot;sales1_fee&quot;: 0,
-            &quot;sales0_fee&quot;: 0,
             &quot;ps_fee&quot;: 0.015,
             &quot;mcht_fee&quot;: 0.08,
             &quot;hold_fee&quot;: 0,
@@ -584,13 +582,11 @@ response.json()</code></pre></div>
             &quot;sales3_id&quot;: 9609,
             &quot;sales2_id&quot;: null,
             &quot;sales1_id&quot;: null,
-            &quot;sales0_id&quot;: null,
             &quot;sales5_fee&quot;: 0.044,
             &quot;sales4_fee&quot;: 0.05,
             &quot;sales3_fee&quot;: 0.05,
             &quot;sales2_fee&quot;: 0,
             &quot;sales1_fee&quot;: 0,
-            &quot;sales0_fee&quot;: 0,
             &quot;ps_fee&quot;: 0.015,
             &quot;mcht_fee&quot;: 0.08,
             &quot;hold_fee&quot;: 0,
@@ -634,13 +630,11 @@ response.json()</code></pre></div>
             &quot;sales3_id&quot;: 9609,
             &quot;sales2_id&quot;: null,
             &quot;sales1_id&quot;: null,
-            &quot;sales0_id&quot;: null,
             &quot;sales5_fee&quot;: 0.044,
             &quot;sales4_fee&quot;: 0.05,
             &quot;sales3_fee&quot;: 0.05,
             &quot;sales2_fee&quot;: 0,
             &quot;sales1_fee&quot;: 0,
-            &quot;sales0_fee&quot;: 0,
             &quot;ps_fee&quot;: 0.015,
             &quot;mcht_fee&quot;: 0.08,
             &quot;hold_fee&quot;: 0,
@@ -812,10 +806,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-pay-modules"
-               value="quaerat"
+               value="non"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>quaerat</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>non</code></p>
             </div>
                 </form>
 
@@ -861,6 +855,13 @@ response.json()</code></pre></div>
 
             </summary>
                                                 <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>ps_fee</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>PG사 구간 수수료(%)</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
                         <b style="line-height: 2;"><code>sales5_fee</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
@@ -894,20 +895,6 @@ response.json()</code></pre></div>
  &nbsp;
 <br>
 <p>대리점4 수수료(%)</p>
-                    </div>
-                                                                <div style="margin-left: 28px; clear: unset;">
-                        <b style="line-height: 2;"><code>sales0_fee</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>대리점4 수수료(%)</p>
-                    </div>
-                                                                <div style="margin-left: 28px; clear: unset;">
-                        <b style="line-height: 2;"><code>ps_fee</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>PG사 구간 수수료(%)</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
                         <b style="line-height: 2;"><code>mcht_fee</code></b>&nbsp;&nbsp;
@@ -1012,7 +999,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "tempore",
+    "search": "ut",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1044,7 +1031,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'tempore',
+            'search' =&gt; 'ut',
         ],
     ]
 );
@@ -1062,7 +1049,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'tempore',
+  'search': 'ut',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1076,7 +1063,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=tempore" \
+    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=ut" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1269,10 +1256,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-transactions"
-               value="tempore"
+               value="ut"
                data-component="query">
     <br>
-<p>검색어(승인번호, 계좌번호) <br>예시: <code>tempore</code></p>
+<p>검색어(승인번호, 계좌번호) <br>예시: <code>ut</code></p>
             </div>
                 </form>
 

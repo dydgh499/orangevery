@@ -29,7 +29,7 @@ provide('head', head)
 provide('exporter', exporter)
 
 store.params.level = all_sales[0].id
-store.params.is_base_trx = true
+store.params.is_base_trx = 1
 
 onMounted(() => {
     watchEffect(async () => {
@@ -49,9 +49,7 @@ onMounted(() => {
             <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, false)" v-if="getUserLevel() >= 35" size="small">
                 일괄 정산하기
             </VBtn>
-            <div style="position: relative; top: 0.6em;">
-                <VSwitch v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" @update:modelValue="[store.updateQueryString({is_base_trx: store.params.is_base_trx})]"/>
-            </div>
+            <VSwitch hide-details false-value='0' true-value='1' v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" @update:modelValue="[store.updateQueryString({is_base_trx: store.params.is_base_trx})]"/>
         </template>
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
