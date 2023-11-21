@@ -152,7 +152,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: sint
+        example: culpa
         type: string
         enumValues: []
         custom: []
@@ -161,7 +161,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: sint
+      search: culpa
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -779,33 +779,89 @@ endpoints:
         type: 'object[]'
         enumValues: []
         custom: []
-      'content.*.use_saleslip_prov':
-        name: 'content.*.use_saleslip_prov'
-        description: '매출전표 공급자 표기정보(0=본사, 1=PG사)'
+      'content.*.sales5_fee':
+        name: 'content.*.sales5_fee'
+        description: '총판 수수료(%)'
         required: false
         example: null
         type: integer
         enumValues: []
         custom: []
-      'content.*.use_saleslip_sell':
-        name: 'content.*.use_saleslip_sell'
-        description: '매출전표 판매자 표기정보(0=가맹점, 1=본사)'
+      'content.*.sales4_fee':
+        name: 'content.*.sales4_fee'
+        description: '지사 수수료(%)'
         required: false
         example: null
         type: integer
         enumValues: []
         custom: []
-      'content.*.is_show_fee':
-        name: 'content.*.is_show_fee'
-        description: '가맹점 수수료율 노출여부(0=숨김, 1=노출)'
+      'content.*.sales3_fee':
+        name: 'content.*.sales3_fee'
+        description: '대리점2 수수료(%)'
         required: false
         example: null
         type: integer
         enumValues: []
         custom: []
-      'content.*.use_realtime_deposit':
-        name: 'content.*.use_realtime_deposit'
-        description: '실시간 이체 사용 매출건(0=안함, 1=사용)'
+      'content.*.sales2_fee':
+        name: 'content.*.sales2_fee'
+        description: '대리점3 수수료(%)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.sales1_fee':
+        name: 'content.*.sales1_fee'
+        description: '대리점4 수수료(%)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.sales0_fee':
+        name: 'content.*.sales0_fee'
+        description: '대리점4 수수료(%)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.ps_fee':
+        name: 'content.*.ps_fee'
+        description: 'PG사 구간 수수료(%)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.mcht_fee':
+        name: 'content.*.mcht_fee'
+        description: '가맹점 수수료(%)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.hold_fee':
+        name: 'content.*.hold_fee'
+        description: '유보금 수수료(%)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.is_cancel':
+        name: 'content.*.is_cancel'
+        description: '취소여부(0=승인, 1=취소)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.cxl_type':
+        name: 'content.*.cxl_type'
+        description: '취소 타입취소타입(0=취소금지, 1=이체시간 -5분, 2=당일허용)'
         required: false
         example: null
         type: integer
@@ -830,6 +886,14 @@ endpoints:
       'content.*.trx_amount':
         name: 'content.*.trx_amount'
         description: '가맹점 거래 수수료'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.fin_trx_delay':
+        name: 'content.*.fin_trx_delay'
+        description: '이체 딜레이(분)'
         required: false
         example: null
         type: integer
@@ -862,7 +926,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 43Z6cDa6VP8e5hgadvb1kfE'
+      - 'Bearer 5Davg1bd6f3E46Pak8eZcVh'
     controller: null
     method: null
     route: null
@@ -925,7 +989,7 @@ endpoints:
         name: search
         description: '검색어(승인번호, 계좌번호)'
         required: false
-        example: expedita
+        example: nulla
         type: string
         enumValues: []
         custom: []
@@ -934,7 +998,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: expedita
+      search: nulla
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -1084,7 +1148,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 4V8g6ZEec3hPbf65Daak1vd'
+      - 'Bearer 4aePZdE56c1hbD63v8Vkafg'
     controller: null
     method: null
     route: null
@@ -1252,7 +1316,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer vf14Vd6ZPgEbh8ac356akeD'
+      - 'Bearer Zev1dVPag8E66a3Dbck4hf5'
     controller: null
     method: null
     route: null
@@ -1305,7 +1369,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer v86geVcbEP5aDf1Zk43had6'
+      - 'Bearer dk1Z468ahfg3b6aEeDcP5vV'
     controller: null
     method: null
     route: null
@@ -1367,7 +1431,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer c6Eegkhd3Z8ab6vVfDPa451'
+      - 'Bearer 3Ze5bvaf186hgPdaDEckV46'
     controller: null
     method: null
     route: null
@@ -1638,7 +1702,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer E6hPV5Zac68gbdev4kD3a1f'
+      - 'Bearer 686DE15che3agvPZfd4bkaV'
     controller: null
     method: null
     route: null

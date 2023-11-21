@@ -214,13 +214,22 @@ class BfController extends Controller
      * @responseField page_size string 조회 사이즈
      * @responseField total string 총 개수
      * @responseField content object[] 결과
-     * @responseField content.*.use_saleslip_prov integer 매출전표 공급자 표기정보(0=본사, 1=PG사)
-     * @responseField content.*.use_saleslip_sell integer 매출전표 판매자 표기정보(0=가맹점, 1=본사)
-     * @responseField content.*.is_show_fee integer 가맹점 수수료율 노출여부(0=숨김, 1=노출)
-     * @responseField content.*.use_realtime_deposit integer 실시간 이체 사용 매출건(0=안함, 1=사용)
+     * @responseField content.*.sales5_fee integer 총판 수수료(%)
+     * @responseField content.*.sales4_fee integer 지사 수수료(%)
+     * @responseField content.*.sales3_fee integer 대리점1 수수료(%)
+     * @responseField content.*.sales3_fee integer 대리점2 수수료(%)
+     * @responseField content.*.sales2_fee integer 대리점3 수수료(%)
+     * @responseField content.*.sales1_fee integer 대리점4 수수료(%)
+     * @responseField content.*.sales0_fee integer 대리점4 수수료(%)
+     * @responseField content.*.ps_fee integer PG사 구간 수수료(%)
+     * @responseField content.*.mcht_fee integer 가맹점 수수료(%)
+     * @responseField content.*.hold_fee integer 유보금 수수료(%)
+     * @responseField content.*.is_cancel integer 취소여부(0=승인, 1=취소)
+     * @responseField content.*.cxl_type integer 취소 타입취소타입(0=취소금지, 1=이체시간 -5분, 2=당일허용)
      * @responseField content.*.amount integer 거래금액
      * @responseField content.*.profit integer 가맹점 정산금액
      * @responseField content.*.trx_amount integer 가맹점 거래 수수료
+     * @responseField content.*.fin_trx_delay integer 이체 딜레이(분)
      * @responseField content.*.mcht_settle_fee integer 가맹점 입금 수수료
      * @responseField content.*.total_trx_amount integer 가맹점 총 거래 수수료(입금 수수료 + 거래 수수료)
      * @responseField content.*.hold_amount integer 가맹점 유보금 수수료
@@ -236,8 +245,8 @@ class BfController extends Controller
         ]);
         $inst   = new TransactionController(new Transaction);
         $inst->cols = [
-            'transactions.sales5_id','transactions.sales4_id','transactions.sales3_id','transactions.sales2_id','transactions.sales1_id',
-            'transactions.sales5_fee','transactions.sales4_fee','transactions.sales3_fee','transactions.sales2_fee','transactions.sales1_fee',
+            'transactions.sales5_id','transactions.sales4_id','transactions.sales3_id', 'transactions.sales2_id','transactions.sales1_id','transactions.sales0_id',
+            'transactions.sales5_fee','transactions.sales4_fee','transactions.sales3_fee', 'transactions.sales2_fee','transactions.sales1_fee','transactions.sales0_fee', 
             'transactions.ps_fee','transactions.mcht_fee','transactions.hold_fee','transactions.mcht_settle_fee','transactions.is_cancel',
             'transactions.amount','transactions.module_type','transactions.ord_num','transactions.mid','transactions.tid',
             'transactions.trx_id','transactions.ori_trx_id','transactions.card_num','transactions.issuer','transactions.acquirer',
