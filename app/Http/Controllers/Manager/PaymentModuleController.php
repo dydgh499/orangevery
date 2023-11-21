@@ -59,9 +59,6 @@ class PaymentModuleController extends Controller
     private function commonSelect($request, $is_all=false)
     {
         $search = $request->input('search', '');
-        $un_use = $request->input('un_use', '');
-        $un_use = $un_use === 'true' ? true : false;
-
         $query = $this->pay_modules
             ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
             ->where('payment_modules.brand_id', $request->user()->brand_id);
@@ -77,7 +74,7 @@ class PaymentModuleController extends Controller
         if($request->has('module_type'))
             $query = $query->where('payment_modules.module_type', $request->module_type);
 
-        if($un_use)
+        if($request->un_use)
         {
             $before_month = Carbon::now()->subMonths(1)->format('Y-m-d');
             $trans_pmod_ids = Transaction::where('brand_id', $request->user()->brand_id)

@@ -39,11 +39,7 @@ class TerminalController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $module_type = $request->input('module_type', '');
         $search = $request->input('search', '');
-        $un_use = $request->input('un_use', '');
-        $un_use = $un_use === 'true' ? true : false;
-        
         $query = $this->payModules
             ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
             ->where('payment_modules.is_delete', false);
@@ -58,7 +54,7 @@ class TerminalController extends Controller
         if($request->ship_out_stat != null)
             $query = $query->where('payment_modules.ship_out_stat', $request->ship_out_stat);
 
-        if($un_use)
+        if($request->un_use)
         {
             $before_month = Carbon::now()->subMonths(1)->format('Y-m-d');
             $trans_pmod_ids = Transaction::where('brand_id', $request->user()->brand_id)
