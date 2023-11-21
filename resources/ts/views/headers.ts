@@ -10,22 +10,20 @@ export const Header = (_path: string, file_name: string) => {
     const path = _path
     let header_count = 0;
 
-    const _initHeader = (_headers: object, result: Filter): Filter => {
+    const initHeader = (_headers: object, result: Filter): Filter => {
         for (const [key, value] of Object.entries(_headers)) {
             if (typeof value === 'object')
-                result[key] = _initHeader(value, {})
-            else
-                result[key] = { ko: value, visible: true, idx: header_count++ };
+                result[key] = initHeader(value, {})
+            else {
+                if(headers.value[key])
+                    result[key] = headers.value[key]
+                else
+                    result[key] = { ko: value, visible: true, idx: header_count++ };
+            }
         }
         return result;
     }
 
-    const initHeader = (_headers: object, result: Filter): Filter => {
-        if(Object.keys(headers.value))
-            return headers.value
-        else
-            return _initHeader(_headers, result)
-    }
     const getDepth = (item: object, _depth: number): number => {
         if (_.isObject(item)) {
             let maxDepth = 0;
@@ -41,6 +39,7 @@ export const Header = (_path: string, file_name: string) => {
         else
             return _depth;
     };
+
     const getColspans = (): number[] => {
         let colspans: number[] = [];
         let colspan: number = 0;
@@ -60,6 +59,7 @@ export const Header = (_path: string, file_name: string) => {
         })
         return colspans
     }
+
     const getFullColspans = () => {
         let colspans: number[] = []
         let colspan = 0

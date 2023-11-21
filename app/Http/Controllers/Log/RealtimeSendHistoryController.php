@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Log;
 
-use App\Models\Log\HeadOfficeAccount;
+use App\Models\HeadOfficeAccount;
 use App\Models\Log\RealtimeSendHistory;
 
 use App\Http\Traits\ManagerTrait;
