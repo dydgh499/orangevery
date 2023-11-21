@@ -12,7 +12,7 @@ use App\Models\Merchandise;
 use App\Models\PaymentModule;
 use App\Models\Transaction;
 use App\Models\CollectWithdraw;
-use App\Models\RealtimeSendHistory;
+use App\Models\Log\RealtimeSendHistory;
 
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\LoginRequest;
@@ -209,7 +209,23 @@ class BfController extends Controller
      * @queryParam s_dt string 검색 시작일 Example: 2023-11-01
      * @queryParam e_dt string 검색 종료일 Example: 2023-11-30
      * @queryParam search string 검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)
+     * @responseFile 201 storage/bf/transactionIndex.json
+     * @responseField page string 조회 페이지
+     * @responseField page_size string 조회 사이즈
+     * @responseField total string 총 개수
+     * @responseField content object[] 결과
+     * @responseField content.*.use_saleslip_prov integer 매출전표 공급자 표기정보(0=본사, 1=PG사)
+     * @responseField content.*.use_saleslip_sell integer 매출전표 판매자 표기정보(0=가맹점, 1=본사)
+     * @responseField content.*.is_show_fee integer 가맹점 수수료율 노출여부(0=숨김, 1=노출)
+     * @responseField content.*.use_realtime_deposit integer 실시간 이체 사용 매출건(0=안함, 1=사용)
+     * @responseField content.*.amount integer 거래금액
+     * @responseField content.*.profit integer 가맹점 정산금액
+     * @responseField content.*.trx_amount integer 가맹점 거래 수수료
+     * @responseField content.*.mcht_settle_fee integer 가맹점 입금 수수료
+     * @responseField content.*.total_trx_amount integer 가맹점 총 거래 수수료(입금 수수료 + 거래 수수료)
+     * @responseField content.*.hold_amount integer 가맹점 유보금 수수료
      */
+    
     public function transactionIndex(IndexRequest $request)
     {
         $request->merge([
