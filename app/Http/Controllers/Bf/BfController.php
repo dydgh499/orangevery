@@ -106,8 +106,8 @@ class BfController extends Controller
             else
             {
                 $pay_module->pay_year_amount = 0;
-                $pay_module->pay_year_amount = 0;
-                $pay_module->pay_year_amount = 0;
+                $pay_module->pay_month_amount = 0;
+                $pay_module->pay_day_amount = 0;
             }
 
             $pay_module->makeHidden(['payLimitAmount']);
