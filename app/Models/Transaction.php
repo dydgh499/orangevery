@@ -80,6 +80,7 @@ class Transaction extends Model
             });
     }
 
+    // 정산 안한 것들 조회
     public function scopeNoSettlement($query, $target)
     {
         return $query->whereNull($target)
@@ -87,41 +88,22 @@ class Transaction extends Model
             ->settleDateTypeTransaction();
     }
 
-    public function scopeSettleFilter($query, $target, $id)
-    {
-        return $query->where($target, $id)
-            ->where('brand_id', request()->user()->brand_id);
-    }
-
-    public function scopeDateFilter($query)
-    {   // s_dt, e_dt, use_search_date_detail
-        $request = request();
-        if($request->has('s_dt') && $request->has('e_dt'))
-        {
-            $query = $query->where(function($query) use($request) {
-                $query->where(function($query) use($request) {
-                    $search_format = $request->use_search_date_detail ? "concat(trx_dt, ' ', trx_tm)" : "trx_dt";
-                    $query->where('transactions.is_cancel', false)
-                        ->whereRaw("$search_format >= ?", [$request->s_dt])
-                        ->whereRaw("$search_format <= ?", [$request->e_dt]);
-                })->orWhere(function($query) use($request) {
-                    $search_format = $request->use_search_date_detail ? "concat(cxl_dt, ' ', cxl_tm)" : "cxl_dt";
-                    $query->where('transactions.is_cancel', true)
-                    ->whereRaw("$search_format >= ?", [$request->s_dt])
-                    ->whereRaw("$search_format <= ?", [$request->e_dt]);
-                });
-            });
-        }
-        return $query;
-    }
-
+    // 실시간 실패 거래건 조회
     public function scopeFailRealtime($query, $trx_ids)
     {
         // success histories
         $sub_query = RealtimeSendHistory::select('trans_id')
             ->where('brand_id', request()->user()->brand_id)
-            ->where('request_type', 6170)
-            ->where('result_code', '0000');
+            ->where(function ($query) {
+                return $query->where(function ($query) {
+                    return $query->where('request_type', 6170)
+                    ->where('result_code', '0000'); // 성공건
+                })
+                ->orWhere(function ($query) {
+                    return $query->where('request_type', -2)
+                    ->where('result_code', '-1'); //취소건
+                });
+            });
         // fail trans ids
         $trans_ids = RealtimeSendHistory::where('brand_id', request()->user()->brand_id)
             ->where('request_type', '!=', 6170)

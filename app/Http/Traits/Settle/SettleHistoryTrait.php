@@ -24,9 +24,9 @@ trait SettleHistoryTrait
     */
     protected function SetNullTransSettle($request, $target_id, $target_settle_id, $user_id)
     {
-        return Transaction::query()
+        return Transaction::where('brand_id', request()->user()->brand_id)
             ->where($target_id, $user_id)
-            ->settleFilter($target_settle_id, $request->id)
+            ->where($target_settle_id, $request->id)
             ->update([$target_settle_id => null]);
     }
 
