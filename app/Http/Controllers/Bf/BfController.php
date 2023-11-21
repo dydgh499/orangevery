@@ -245,16 +245,15 @@ class BfController extends Controller
         ]);
         $inst   = new TransactionController(new Transaction);
         $inst->cols = [
+            'transactions.id',
             'transactions.sales5_id','transactions.sales4_id','transactions.sales3_id', 'transactions.sales2_id','transactions.sales1_id','transactions.sales0_id',
             'transactions.sales5_fee','transactions.sales4_fee','transactions.sales3_fee', 'transactions.sales2_fee','transactions.sales1_fee','transactions.sales0_fee', 
             'transactions.ps_fee','transactions.mcht_fee','transactions.hold_fee','transactions.mcht_settle_fee','transactions.is_cancel',
             'transactions.amount','transactions.module_type','transactions.ord_num','transactions.mid','transactions.tid',
             'transactions.trx_id','transactions.ori_trx_id','transactions.card_num','transactions.issuer','transactions.acquirer',
             'transactions.appr_num','transactions.installment','transactions.buyer_name','transactions.buyer_phone','transactions.item_name',
-            'payment_modules.note', 
-            'payment_modules.cxl_type', 'payment_modules.fin_trx_delay',
-            DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
-            DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
+            'payment_modules.note', 'payment_modules.cxl_type', 'payment_modules.fin_trx_delay',
+            DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"), DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
         ];
         $query  = $inst->commonSelect($request);
         $data   = $inst->getTransactionData($request, $query);
