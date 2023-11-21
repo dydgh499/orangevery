@@ -44,7 +44,7 @@ class TransactionController extends Controller
         ];
     }
 
-    protected function getTransactionData($request, $query)
+    public function getTransactionData($request, $query)
     {
         [$settle_key, $group_key] = $this->getSettleCol($request);
         if($settle_key == 'dev_settle_amount')

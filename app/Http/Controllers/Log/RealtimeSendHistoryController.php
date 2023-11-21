@@ -27,20 +27,10 @@ class RealtimeSendHistoryController extends Controller
         $this->realtime_send_histories = $realtime_send_histories;
         $this->base_noti_url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes';
     }
-       
-    /**
-     * 목록출력
-     *
-     */
-    public function index(IndexRequest $request)
+    
+    public function commonSelect($request)
     {
         $search = $request->input('search', '');
-        $cols = [
-            'merchandises.mcht_name',
-            'transactions.appr_num',
-            'transactions.trx_id',
-            'realtime_send_histories.*',
-        ];
         $query  = $this->realtime_send_histories
             ->join('transactions', 'realtime_send_histories.trans_id', '=', 'transactions.id')
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
@@ -60,6 +50,22 @@ class RealtimeSendHistoryController extends Controller
                     ->orWhere('realtime_send_histories.acct_num', 'like', "%$search%");
             });
         }
+        return $query;
+    }
+
+    /**
+     * 목록출력
+     *
+     */
+    public function index(IndexRequest $request)
+    {
+        $cols = [
+            'merchandises.mcht_name',
+            'transactions.appr_num',
+            'transactions.trx_id',
+            'realtime_send_histories.*',
+        ];
+        $query = $this->commonSelect($request);
         $data = $this->getIndexData($request, $query, 'realtime_send_histories.id', $cols, 'realtime_send_histories.created_at');
         return $this->response(0, $data);
     }

@@ -6,11 +6,13 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\Manager\CollectWithdrawController;
 use App\Http\Controllers\Manager\TransactionController;
+use App\Http\Controllers\Manager\Log\RealtimeSendHistoryController;
 
 use App\Models\Merchandise;
 use App\Models\PaymentModule;
 use App\Models\Transaction;
 use App\Models\CollectWithdraw;
+use App\Models\RealtimeSendHistory;
 
 use App\Http\Requests\Manager\LoginRequest;
 use App\Http\Requests\Manager\CollectWithdrawRequest;
@@ -66,13 +68,13 @@ class BfController extends Controller
 
     
     /**
-     * 결제모듈 정보 조회
+     * 결제모듈정보 조회
      *
-     * 결제모듈 정보를 불러옵니다.<br>한도 및 수기결제에 필요한 데이터들을 조회합니다.
+     * 결제모듈정보를 불러옵니다.<br>한도 및 수기결제에 필요한 데이터들을 조회합니다.
      * @responseFile 200 storage/bf/payModules.json
      * @responseField id integer 결제모듈 고유번호
      * @responseField module_type integer 모듈 타입(0=장비, 1=수기, 2=인증, 3=간편)
-     * @responseField settle_fee integer 정산 수수료
+     * @responseField settle_fee integer 입금 수수료
      * @responseField is_old_auth integer 비인증, 구인증 여부(비인증=0, 구인증=1)
      * @responseField installment string 할부한도(0~12)
      * @responseField pay_year_limit integer 연결제 한도(만 단위)
@@ -92,6 +94,7 @@ class BfController extends Controller
                 'id',
                 'is_old_auth',
                 'module_type',
+                'settle_fee',
                 'installment',
                 'pay_year_limit',
                 'pay_month_limit',
@@ -193,5 +196,49 @@ class BfController extends Controller
     {        
         $inst = new TransactionController(new Transaction);
         return $inst->handPay($request);
+    }
+
+    /**
+     * 결제내역 조회
+     *
+     * 로그인한 가맹점의 결제내역을 조회합니다.<br>검색어:MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭
+     */
+    public function transactionIndex(IndexRequest $request)
+    {
+        $request->merge([
+            'level' => 10,
+            'use_search_date_detail' => 0,
+            'use_realtime_deposit'   => 0,
+            'use_cancel_deposit'     => 0,
+        ]);
+        $inst   = new TransactionController(new Transaction);
+        $query  = $inst->commonSelect($request);
+        $data   = $inst->getTransactionData($request, $query);
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
+        return $this->response(0, $data);
+    }
+
+    /**
+     * 실시간 이체내역 조회
+     *
+     * 로그인한 가맹점의 실시간 이체내역을 조회합니다.<br>검색어: 승인번호, 계좌번호
+     */
+    public function realtimeHistoryIndex(IndexRequest $request)
+    {
+        $cols = [
+            'merchandises.mcht_name',
+            'transactions.appr_num',
+            'transactions.trx_id',
+            'realtime_send_histories.*',
+        ];
+        $inst = new RealtimeSendHistoryController(new RealtimeSendHistory);
+        $query = $inst->commonSelect($request);
+        $query = $query->where('transactions.mcht_id', $request->user()->id);
+
+        $data = $this->getIndexData($request, $query, 'realtime_send_histories.id', $cols, 'realtime_send_histories.created_at');
+        return $this->response(0, $data);
+
     }
 }

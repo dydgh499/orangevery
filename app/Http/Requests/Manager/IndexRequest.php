@@ -13,8 +13,9 @@ class IndexRequest extends FormRequest
     public $sub = [
         'page'      => 'required|integer',
         'page_size' => 'required|integer',
-        's_dt'  => 'string',
-        'e_dt'  => 'string',
+        's_dt'  => 'nullable|string',
+        'e_dt'  => 'nullable|string',
+        'search' => 'nullable',
     ];
 
     public function authorize()

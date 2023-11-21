@@ -105,8 +105,98 @@ endpoints:
         BF Mobile과 PAYVERY간 API 입니다.
       subgroup: ''
       subgroupDescription: ''
-      title: '결제모듈 정보 조회'
-      description: '결제모듈 정보를 불러옵니다.<br>한도 및 수기결제에 필요한 데이터들을 조회합니다.'
+      title: '결제내역 조회'
+      description: '로그인한 가맹점의 결제내역을 조회합니다.<br>검색어:MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {ACCESS_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"code":950,"message":"로그인 정보가 정확하지 않습니다."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer c6Pgka6EvaZ3eDh8d4fV5b1'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/bf/transactions
+    metadata:
+      groupName: 'BF Mobile API'
+      groupDescription: |-
+
+        BF Mobile과 PAYVERY간 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '실시간 이체내역 조회'
+      description: '로그인한 가맹점의 실시간 이체내역을 조회합니다.<br>검색어: 승인번호, 계좌번호'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {ACCESS_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"code":950,"message":"로그인 정보가 정확하지 않습니다."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer vaegac4fV3dEh1866PZ5bkD'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/bf/realtime-histories
+    metadata:
+      groupName: 'BF Mobile API'
+      groupDescription: |-
+
+        BF Mobile과 PAYVERY간 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '결제모듈정보 조회'
+      description: '결제모듈정보를 불러옵니다.<br>한도 및 수기결제에 필요한 데이터들을 조회합니다.'
       authenticated: true
       custom: []
     headers:
@@ -161,6 +251,22 @@ endpoints:
       id:
         name: id
         description: '결제모듈 고유번호'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      module_type:
+        name: module_type
+        description: '모듈 타입(0=장비, 1=수기, 2=인증, 3=간편)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      settle_fee:
+        name: settle_fee
+        description: '입금 수수료'
         required: false
         example: null
         type: integer
@@ -241,7 +347,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer b8d3f6ZcaED4ekaV6hgv1P5'
+      - 'Bearer h6aVkga35Ec4PeZ8f6vDbd1'
     controller: null
     method: null
     route: null
@@ -294,7 +400,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer c468P5efvbg6ZEVDad1akh3'
+      - 'Bearer ef56hkgdP3c6v84aZVE1Dab'
     controller: null
     method: null
     route: null
@@ -356,7 +462,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 4vaZE5dcDPkh83fV1g66bea'
+      - 'Bearer d1gVhP6Dvcfbe5EZ8aa43k6'
     controller: null
     method: null
     route: null
@@ -627,7 +733,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6Vc1ev5dkgaDb36Z4hf8PaE'
+      - 'Bearer 6ef18vh6DV43EgdaZa5ckPb'
     controller: null
     method: null
     route: null
