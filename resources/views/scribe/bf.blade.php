@@ -108,7 +108,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-21 21:18:24</li>
+        <li>마지막 업데이트:  2023-11-21 21:25:15</li>
     </ul>
 </div>
 
@@ -429,7 +429,7 @@ response.json()</code></pre></div>
 <small class="badge badge-darkred">인증 필요</small>
 </p>
 
-<p>로그인한 가맹점의 결제내역을 조회합니다.<br>검색어:MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭</p>
+<p>로그인한 가맹점의 결제내역을 조회합니다.</p>
 
 <span id="example-requests-GETapi-v1-bf-pay-modules">
 <blockquote>예시 요청:</blockquote>
@@ -439,6 +439,16 @@ response.json()</code></pre></div>
     <pre><code class="language-javascript">const url = new URL(
     "https://team.payvery.kr/api/v1/bf/pay-modules"
 );
+
+const params = {
+    "page": "1",
+    "page_size": "20",
+    "s_dt": "2023-11-01",
+    "e_dt": "2023-11-30",
+    "search": "delectus",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
 
 const headers = {
     "Authorization": "Bearer {ACCESS_TOKEN}",
@@ -462,6 +472,13 @@ $response = $client-&gt;get(
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
+        'query' =&gt; [
+            'page' =&gt; '1',
+            'page_size' =&gt; '20',
+            's_dt' =&gt; '2023-11-01',
+            'e_dt' =&gt; '2023-11-30',
+            'search' =&gt; 'delectus',
+        ],
     ]
 );
 $body = $response-&gt;getBody();
@@ -473,19 +490,26 @@ print_r(json_decode((string) $body));</code></pre></div>
 import json
 
 url = 'https://team.payvery.kr/api/v1/bf/pay-modules'
+params = {
+  'page': '1',
+  'page_size': '20',
+  's_dt': '2023-11-01',
+  'e_dt': '2023-11-30',
+  'search': 'delectus',
+}
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
 
-response = requests.request('GET', url, headers=headers)
+response = requests.request('GET', url, headers=headers, params=params)
 response.json()</code></pre></div>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/pay-modules" \
+    --get "https://team.payvery.kr/api/v1/bf/pay-modules?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=delectus" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -591,7 +615,63 @@ vary: Origin
     <br>
 <p><br>예시: <code>application/json</code></p>
             </div>
-                        </form>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>page</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="page"                data-endpoint="GETapi-v1-bf-pay-modules"
+               value="1"
+               data-component="query">
+    <br>
+<p>조회 페이지 <br>예시: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>page_size</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="page_size"                data-endpoint="GETapi-v1-bf-pay-modules"
+               value="20"
+               data-component="query">
+    <br>
+<p>조회 사이즈 <br>예시: <code>20</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>s_dt</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i><b>optional</b></i> &nbsp;
+                <input type="text" style="display: none"
+                              name="s_dt"                data-endpoint="GETapi-v1-bf-pay-modules"
+               value="2023-11-01"
+               data-component="query">
+    <br>
+<p>검색 시작일 <br>예시: <code>2023-11-01</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>e_dt</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i><b>optional</b></i> &nbsp;
+                <input type="text" style="display: none"
+                              name="e_dt"                data-endpoint="GETapi-v1-bf-pay-modules"
+               value="2023-11-30"
+               data-component="query">
+    <br>
+<p>검색 종료일 <br>예시: <code>2023-11-30</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i><b>optional</b></i> &nbsp;
+                <input type="text" style="display: none"
+                              name="search"                data-endpoint="GETapi-v1-bf-pay-modules"
+               value="delectus"
+               data-component="query">
+    <br>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) Example: <br>예시: <code>delectus</code></p>
+            </div>
+                </form>
 
                     <h2 id="bf-mobile-api-GETapi-v1-bf-transactions">실시간 이체내역 조회</h2>
 
@@ -599,7 +679,7 @@ vary: Origin
 <small class="badge badge-darkred">인증 필요</small>
 </p>
 
-<p>로그인한 가맹점의 실시간 이체내역을 조회합니다.<br>검색어: 승인번호, 계좌번호</p>
+<p>로그인한 가맹점의 실시간 이체내역을 조회합니다.</p>
 
 <span id="example-requests-GETapi-v1-bf-transactions">
 <blockquote>예시 요청:</blockquote>
@@ -609,6 +689,16 @@ vary: Origin
     <pre><code class="language-javascript">const url = new URL(
     "https://team.payvery.kr/api/v1/bf/transactions"
 );
+
+const params = {
+    "page": "1",
+    "page_size": "20",
+    "s_dt": "2023-11-01",
+    "e_dt": "2023-11-30",
+    "search": "perferendis",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
 
 const headers = {
     "Authorization": "Bearer {ACCESS_TOKEN}",
@@ -632,6 +722,13 @@ $response = $client-&gt;get(
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
+        'query' =&gt; [
+            'page' =&gt; '1',
+            'page_size' =&gt; '20',
+            's_dt' =&gt; '2023-11-01',
+            'e_dt' =&gt; '2023-11-30',
+            'search' =&gt; 'perferendis',
+        ],
     ]
 );
 $body = $response-&gt;getBody();
@@ -643,19 +740,26 @@ print_r(json_decode((string) $body));</code></pre></div>
 import json
 
 url = 'https://team.payvery.kr/api/v1/bf/transactions'
+params = {
+  'page': '1',
+  'page_size': '20',
+  's_dt': '2023-11-01',
+  'e_dt': '2023-11-30',
+  'search': 'perferendis',
+}
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 }
 
-response = requests.request('GET', url, headers=headers)
+response = requests.request('GET', url, headers=headers, params=params)
 response.json()</code></pre></div>
 
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/transactions" \
+    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=perferendis" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -761,7 +865,63 @@ vary: Origin
     <br>
 <p><br>예시: <code>application/json</code></p>
             </div>
-                        </form>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>page</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="page"                data-endpoint="GETapi-v1-bf-transactions"
+               value="1"
+               data-component="query">
+    <br>
+<p>조회 페이지 <br>예시: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>page_size</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="page_size"                data-endpoint="GETapi-v1-bf-transactions"
+               value="20"
+               data-component="query">
+    <br>
+<p>조회 사이즈 <br>예시: <code>20</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>s_dt</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i><b>optional</b></i> &nbsp;
+                <input type="text" style="display: none"
+                              name="s_dt"                data-endpoint="GETapi-v1-bf-transactions"
+               value="2023-11-01"
+               data-component="query">
+    <br>
+<p>검색 시작일 <br>예시: <code>2023-11-01</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>e_dt</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i><b>optional</b></i> &nbsp;
+                <input type="text" style="display: none"
+                              name="e_dt"                data-endpoint="GETapi-v1-bf-transactions"
+               value="2023-11-30"
+               data-component="query">
+    <br>
+<p>검색 종료일 <br>예시: <code>2023-11-30</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i><b>optional</b></i> &nbsp;
+                <input type="text" style="display: none"
+                              name="search"                data-endpoint="GETapi-v1-bf-transactions"
+               value="perferendis"
+               data-component="query">
+    <br>
+<p>검색어(승인번호, 계좌번호) Example: <br>예시: <code>perferendis</code></p>
+            </div>
+                </form>
 
                     <h2 id="bf-mobile-api-GETapi-v1-bf-realtime-histories">결제모듈정보 조회</h2>
 

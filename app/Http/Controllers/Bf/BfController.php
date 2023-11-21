@@ -202,7 +202,13 @@ class BfController extends Controller
     /**
      * 결제내역 조회
      *
-     * 로그인한 가맹점의 결제내역을 조회합니다.<br>검색어:MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭
+     * 로그인한 가맹점의 결제내역을 조회합니다.
+     * 
+     * @queryParam page integer required 조회 페이지 Example: 1
+     * @queryParam page_size integer required 조회 사이즈 Example: 20
+     * @queryParam s_dt string 검색 시작일 Example: 2023-11-01
+     * @queryParam e_dt string 검색 종료일 Example: 2023-11-30
+     * @queryParam search string 검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) Example:
      */
     public function transactionIndex(IndexRequest $request)
     {
@@ -224,7 +230,13 @@ class BfController extends Controller
     /**
      * 실시간 이체내역 조회
      *
-     * 로그인한 가맹점의 실시간 이체내역을 조회합니다.<br>검색어: 승인번호, 계좌번호
+     * 로그인한 가맹점의 실시간 이체내역을 조회합니다.
+     *
+     * @queryParam page integer required 조회 페이지 Example: 1
+     * @queryParam page_size integer required 조회 사이즈 Example: 20
+     * @queryParam s_dt string 검색 시작일 Example: 2023-11-01
+     * @queryParam e_dt string 검색 종료일 Example: 2023-11-30
+     * @queryParam search string 검색어(승인번호, 계좌번호) Example:
      */
     public function realtimeHistoryIndex(IndexRequest $request)
     {

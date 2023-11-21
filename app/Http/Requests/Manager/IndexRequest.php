@@ -15,7 +15,6 @@ class IndexRequest extends FormRequest
         'page_size' => 'required|integer',
         's_dt'  => 'nullable|string',
         'e_dt'  => 'nullable|string',
-        'search' => 'nullable',
     ];
 
     public function authorize()

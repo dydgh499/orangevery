@@ -104,7 +104,7 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: '결제내역 조회'
-      description: '로그인한 가맹점의 결제내역을 조회합니다.<br>검색어:MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭'
+      description: '로그인한 가맹점의 결제내역을 조회합니다.'
       authenticated: true
       custom: []
     headers:
@@ -113,8 +113,53 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: '조회 페이지'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        custom: []
+      page_size:
+        name: page_size
+        description: '조회 사이즈'
+        required: true
+        example: 20
+        type: integer
+        enumValues: []
+        custom: []
+      s_dt:
+        name: s_dt
+        description: '검색 시작일'
+        required: false
+        example: '2023-11-01'
+        type: string
+        enumValues: []
+        custom: []
+      e_dt:
+        name: e_dt
+        description: '검색 종료일'
+        required: false
+        example: '2023-11-30'
+        type: string
+        enumValues: []
+        custom: []
+      search:
+        name: search
+        description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) Example:'
+        required: false
+        example: delectus
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      page: 1
+      page_size: 20
+      s_dt: '2023-11-01'
+      e_dt: '2023-11-30'
+      search: delectus
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -132,7 +177,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer c6Pgka6EvaZ3eDh8d4fV5b1'
+      - 'Bearer 6413VP865hegcfbDEaavdZk'
     controller: null
     method: null
     route: null
@@ -149,7 +194,7 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: '실시간 이체내역 조회'
-      description: '로그인한 가맹점의 실시간 이체내역을 조회합니다.<br>검색어: 승인번호, 계좌번호'
+      description: '로그인한 가맹점의 실시간 이체내역을 조회합니다.'
       authenticated: true
       custom: []
     headers:
@@ -158,8 +203,53 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: '조회 페이지'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        custom: []
+      page_size:
+        name: page_size
+        description: '조회 사이즈'
+        required: true
+        example: 20
+        type: integer
+        enumValues: []
+        custom: []
+      s_dt:
+        name: s_dt
+        description: '검색 시작일'
+        required: false
+        example: '2023-11-01'
+        type: string
+        enumValues: []
+        custom: []
+      e_dt:
+        name: e_dt
+        description: '검색 종료일'
+        required: false
+        example: '2023-11-30'
+        type: string
+        enumValues: []
+        custom: []
+      search:
+        name: search
+        description: '검색어(승인번호, 계좌번호) Example:'
+        required: false
+        example: perferendis
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      page: 1
+      page_size: 20
+      s_dt: '2023-11-01'
+      e_dt: '2023-11-30'
+      search: perferendis
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -177,7 +267,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer vaegac4fV3dEh1866PZ5bkD'
+      - 'Bearer vDdEbha3P56Zakf16Vc48eg'
     controller: null
     method: null
     route: null
@@ -345,7 +435,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer h6aVkga35Ec4PeZ8f6vDbd1'
+      - 'Bearer gevP46cbkEZ3hf681aDdV5a'
     controller: null
     method: null
     route: null
@@ -398,7 +488,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer ef56hkgdP3c6v84aZVE1Dab'
+      - 'Bearer 4a5E63hvkdb81Va6ZgfecDP'
     controller: null
     method: null
     route: null
@@ -460,7 +550,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer d1gVhP6Dvcfbe5EZ8aa43k6'
+      - 'Bearer dfEa6Dbg6kP1vh8Ze4V53ca'
     controller: null
     method: null
     route: null
@@ -731,7 +821,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6ef18vh6DV43EgdaZa5ckPb'
+      - 'Bearer 3kb166VDa8vdZEfeah5c4gP'
     controller: null
     method: null
     route: null
