@@ -208,14 +208,14 @@ watchEffect(async () => {
                                 {{ fin_trx_delay.title }} = {{ fin_trx_delay.id }}
                             </VChip>
                         </VCol>
-                        <VCol class="pb-0">
-                            <b>취소 타입</b>
-                            <br>
-                            <VChip color="primary" style="margin: 0.5em;" v-for="(cxl_type, key) in cxl_types" :key="key">
-                                {{ cxl_type.title }} = {{ cxl_type.id }}
-                            </VChip>
-                        </VCol>
                     </template>
+                    <VCol class="pb-0">
+                        <b>취소 타입</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(cxl_type, key) in cxl_types" :key="key">
+                            {{ cxl_type.title }} = {{ cxl_type.id }}
+                        </VChip>
+                    </VCol>
                 </template>
                 <template #input>
                     <VCol class="pb-0">

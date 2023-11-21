@@ -10,14 +10,21 @@ export const Header = (_path: string, file_name: string) => {
     const path = _path
     let header_count = 0;
 
-    const initHeader = (_headers: object, result: Filter): Filter => {
+    const _initHeader = (_headers: object, result: Filter): Filter => {
         for (const [key, value] of Object.entries(_headers)) {
             if (typeof value === 'object')
-                result[key] = initHeader(value, {})
+                result[key] = _initHeader(value, {})
             else
                 result[key] = { ko: value, visible: true, idx: header_count++ };
         }
         return result;
+    }
+
+    const initHeader = (_headers: object, result: Filter): Filter => {
+        if(Object.keys(headers.value))
+            return headers.value
+        else
+            return _initHeader(_headers, result)
     }
     const getDepth = (item: object, _depth: number): number => {
         if (_.isObject(item)) {
