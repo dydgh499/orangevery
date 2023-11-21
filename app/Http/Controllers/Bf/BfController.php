@@ -236,6 +236,7 @@ class BfController extends Controller
         ]);
         $inst   = new TransactionController(new Transaction);
         $inst->cols = [
+            'transactions.sales5_id','transactions.sales4_id','transactions.sales3_id','transactions.sales2_id','transactions.sales1_id',
             'transactions.sales5_fee','transactions.sales4_fee','transactions.sales3_fee','transactions.sales2_fee','transactions.sales1_fee',
             'transactions.ps_fee','transactions.mcht_fee','transactions.hold_fee','transactions.mcht_settle_fee','transactions.is_cancel',
             'transactions.amount','transactions.module_type','transactions.ord_num','transactions.mid','transactions.tid',
