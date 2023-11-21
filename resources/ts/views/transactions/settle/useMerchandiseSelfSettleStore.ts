@@ -7,8 +7,8 @@ export const useSearchStore = defineStore('merchandiseSelfSettleSearchStore', ()
     const headers:Record<string, string> = {
         'id': 'NO.',
         'mcht_name': '가맹점 상호',
-        'withdraw_amount': '출금일자',
-        'withdraw_date': '출금금액',
+        'withdraw_amount': '출금금액',
+        'withdraw_date': '출금일자',
         'acct_num': '계좌번호',
         'acct_name': '예금주',
         'acct_bank_name': '입금은행명',

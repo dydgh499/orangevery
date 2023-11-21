@@ -71,6 +71,8 @@ class BfController extends Controller
      * 결제모듈 정보를 불러옵니다.<br>한도 및 수기결제에 필요한 데이터들을 조회합니다.
      * @responseFile 200 storage/bf/payModules.json
      * @responseField id integer 결제모듈 고유번호
+     * @responseField module_type integer 모듈 타입(0=장비, 1=수기, 2=인증, 3=간편)
+     * @responseField settle_fee integer 정산 수수료
      * @responseField is_old_auth integer 비인증, 구인증 여부(비인증=0, 구인증=1)
      * @responseField installment string 할부한도(0~12)
      * @responseField pay_year_limit integer 연결제 한도(만 단위)
@@ -89,6 +91,7 @@ class BfController extends Controller
             ->get([
                 'id',
                 'is_old_auth',
+                'module_type',
                 'installment',
                 'pay_year_limit',
                 'pay_month_limit',

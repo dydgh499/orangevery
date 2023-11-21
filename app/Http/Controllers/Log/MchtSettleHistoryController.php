@@ -168,7 +168,7 @@ class MchtSettleHistoryController extends Controller
      */
     public function settleDeposit(Request $request)
     {
-        $validated = $request->validate(['trx_id'=>'required', 'mid'=>'required', 'tid'=>'required']);
+        $validated = $request->validate(['trx_id'=>'required', 'mid'=>'required', 'tid'=>'nullable']);
         $data = $request->all();
         $url = $this->base_noti_url.'/deposit';
         $res = post($url, $data);

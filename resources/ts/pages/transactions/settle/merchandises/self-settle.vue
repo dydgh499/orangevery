@@ -54,6 +54,9 @@ provide('exporter', exporter)
                                 <span v-if="_key == 'id' || _key == 'trans_id'">
                                     #{{ item[_key] }}
                                 </span>
+                                <span v-else-if="_key == 'withdraw_amount'">
+                                    {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
+                                </span>
                                 <span v-else>
                                     {{ item[_key] }}
                                 </span>
