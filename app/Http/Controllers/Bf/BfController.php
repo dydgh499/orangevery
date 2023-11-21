@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\Manager\CollectWithdrawController;
 use App\Http\Controllers\Manager\TransactionController;
-use App\Http\Controllers\Manager\Log\RealtimeSendHistoryController;
+use App\Http\Controllers\Log\RealtimeSendHistoryController;
 
 use App\Models\Merchandise;
 use App\Models\PaymentModule;
@@ -208,7 +208,7 @@ class BfController extends Controller
      * @queryParam page_size integer required 조회 사이즈 Example: 20
      * @queryParam s_dt string 검색 시작일 Example: 2023-11-01
      * @queryParam e_dt string 검색 종료일 Example: 2023-11-30
-     * @queryParam search string 검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) Example:
+     * @queryParam search string 검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)
      */
     public function transactionIndex(IndexRequest $request)
     {
@@ -236,7 +236,7 @@ class BfController extends Controller
      * @queryParam page_size integer required 조회 사이즈 Example: 20
      * @queryParam s_dt string 검색 시작일 Example: 2023-11-01
      * @queryParam e_dt string 검색 종료일 Example: 2023-11-30
-     * @queryParam search string 검색어(승인번호, 계좌번호) Example:
+     * @queryParam search string 검색어(승인번호, 계좌번호)
      */
     public function realtimeHistoryIndex(IndexRequest $request)
     {
