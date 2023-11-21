@@ -235,6 +235,17 @@ class BfController extends Controller
             'use_cancel_deposit'     => 0,
         ]);
         $inst   = new TransactionController(new Transaction);
+        $inst->cols = [
+            'transactions.sales5_fee','transactions.sales4_fee','transactions.sales3_fee','transactions.sales2_fee','transactions.sales1_fee',
+            'transactions.ps_fee','transactions.mcht_fee','transactions.hold_fee','transactions.mcht_settle_fee','transactions.is_cancel',
+            'transactions.amount','transactions.module_type','transactions.ord_num','transactions.mid','transactions.tid',
+            'transactions.trx_id','transactions.ori_trx_id','transactions.card_num','transactions.issuer','transactions.acquirer',
+            'transactions.appr_num','transactions.installment','transactions.buyer_name','transactions.buyer_phone','transactions.item_name',
+            'payment_modules.note', 
+            'payment_modules.cxl_type', 'payment_modules.fin_trx_delay',
+            DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
+            DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
+        ];
         $query  = $inst->commonSelect($request);
         $data   = $inst->getTransactionData($request, $query);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
@@ -275,17 +286,6 @@ class BfController extends Controller
             'realtime_send_histories.*',
         ];
         $inst = new RealtimeSendHistoryController(new RealtimeSendHistory);
-        $inst->cols = [
-            'transactions.sales5_fee','transactions.sales4_fee','transactions.sales3_fee','transactions.sales2_fee','transactions.sales1_fee',
-            'transactions.ps_fee','transactions.mcht_fee','transactions.hold_fee','transactions.mcht_settle_fee','transactions.is_cancel',
-            'transactions.amount','transactions.module_type','transactions.ord_num','transactions.mid','transactions.tid',
-            'transactions.trx_id','transactions.ori_trx_id','transactions.card_num','transactions.issuer','transactions.acquirer',
-            'transactions.appr_num','transactions.installment','transactions.buyer_name','transactions.buyer_phone','transactions.item_name',
-            'payment_modules.note', 
-            'payment_modules.cxl_type', 'payment_modules.fin_trx_delay',
-            DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
-            DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
-        ];
         $query = $inst->commonSelect($request);
         $query = $query->where('transactions.mcht_id', $request->user()->id);
 
