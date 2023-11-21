@@ -95,18 +95,23 @@ class BfController extends Controller
                 'pay_day_limit',
                 'pay_single_limit',
             ]);
-        $isDownPayAbleAmount = function($current_amount, $next_amount) {
-            return $current_amount > $next_amount ? $next_amount : $current_amount;
-        };
         foreach($pay_modules as $pay_module)
         {
-            $pay_module->pay_year_amount = (int)$pay_module->payLimitAmount[0]->pay_year_amount;
-            $pay_module->pay_month_amount = (int)$pay_module->payLimitAmount[0]->pay_month_amount;
-            $pay_module->pay_day_amount = (int)$pay_module->payLimitAmount[0]->pay_day_amount;
+            if(count($pay_module->payLimitAmount))
+            {
+                $pay_module->pay_year_amount = (int)$pay_module->payLimitAmount[0]->pay_year_amount;
+                $pay_module->pay_month_amount = (int)$pay_module->payLimitAmount[0]->pay_month_amount;
+                $pay_module->pay_day_amount = (int)$pay_module->payLimitAmount[0]->pay_day_amount;                    
+            }
+            else
+            {
+                $pay_module->pay_year_amount = 0;
+                $pay_module->pay_year_amount = 0;
+                $pay_module->pay_year_amount = 0;
+            }
 
             $pay_module->makeHidden(['payLimitAmount']);
             $pay_able_amounts = [];
-
             // 연한도 검증
             if($pay_module->pay_year_limit)
                 $pay_able_amounts[] = ($pay_module->pay_year_limit * 10000) - $pay_module->pay_year_amount;
