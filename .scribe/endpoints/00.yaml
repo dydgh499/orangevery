@@ -148,9 +148,9 @@ endpoints:
         custom: []
       search:
         name: search
-        description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) Example:'
+        description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: delectus
+        example: sint
         type: string
         enumValues: []
         custom: []
@@ -159,25 +159,708 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: delectus
+      search: sint
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"code":950,"message":"로그인 정보가 정확하지 않습니다."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          vary: Origin
-        description: null
+        status: 201
+        content: |
+          {
+              "page": "1",
+              "page_size": "20",
+              "total": 7,
+              "content": [
+                  {
+                      "mcht_name": "런비지니스클럽.",
+                      "user_name": "3828a",
+                      "nick_name": "문대하",
+                      "addr": "경기도 고양시 일산동구    중앙로 1171,  지하2층",
+                      "resident_num": "0",
+                      "business_num": "0",
+                      "use_saleslip_prov": 1,
+                      "use_saleslip_sell": 0,
+                      "use_collect_withdraw": 0,
+                      "is_show_fee": 0,
+                      "id": 544935,
+                      "brand_id": 14,
+                      "mcht_id": 99714,
+                      "dev_realtime_fee": 0,
+                      "dev_realtime_settle_amount": 0,
+                      "dev_fee": 0,
+                      "sales5_id": 9572,
+                      "sales5_fee": 0.044,
+                      "sales4_id": 9608,
+                      "sales4_fee": 0.05,
+                      "sales3_id": 9609,
+                      "sales3_fee": 0.05,
+                      "sales2_id": null,
+                      "sales2_fee": 0,
+                      "sales1_id": null,
+                      "sales1_fee": 0,
+                      "sales0_id": null,
+                      "sales0_fee": 0,
+                      "pg_id": 119,
+                      "ps_id": 255,
+                      "ps_fee": 0.0255,
+                      "pmod_id": 57841,
+                      "custom_id": 203,
+                      "terminal_id": 210,
+                      "mcht_fee": 0.08,
+                      "hold_fee": 0,
+                      "pg_settle_type": 1,
+                      "mcht_settle_type": 0,
+                      "mcht_settle_fee": 0,
+                      "mcht_settle_id": null,
+                      "trx_dt": "2023-11-21",
+                      "trx_tm": "18:44:53",
+                      "cxl_dt": null,
+                      "cxl_tm": null,
+                      "is_cancel": 0,
+                      "amount": 1000,
+                      "module_type": 0,
+                      "ord_num": "20231121184453157369",
+                      "mid": "kowelcome238",
+                      "tid": "1046977423",
+                      "trx_id": "202311210527474",
+                      "ori_trx_id": null,
+                      "card_num": "",
+                      "issuer": "현대카드",
+                      "acquirer": "현대카드",
+                      "appr_num": "00188428",
+                      "installment": 0,
+                      "buyer_name": "-",
+                      "buyer_phone": "",
+                      "item_name": "1046977423",
+                      "is_delete": 0,
+                      "created_at": "2023-11-21 18:47:55",
+                      "updated_at": "2023-11-21 18:47:55",
+                      "note": "장비",
+                      "use_realtime_deposit": 0,
+                      "cxl_type": 2,
+                      "fin_trx_delay": 15,
+                      "trx_dttm": "2023-11-21 18:44:53",
+                      "cxl_dttm": " ",
+                      "profit": 920,
+                      "sales0_name": "",
+                      "sales1_name": "",
+                      "sales2_name": "",
+                      "sales3_name": "61.지환Q(대5)",
+                      "sales4_name": "61.파주Q(지5)",
+                      "sales5_name": "61.n미소비씨(총)",
+                      "trx_amount": 80,
+                      "hold_amount": 0,
+                      "total_trx_amount": 80
+                  },
+                  {
+                      "mcht_name": "런비지니스클럽.",
+                      "user_name": "3828a",
+                      "nick_name": "문대하",
+                      "addr": "경기도 고양시 일산동구    중앙로 1171,  지하2층",
+                      "resident_num": "0",
+                      "business_num": "0",
+                      "use_saleslip_prov": 1,
+                      "use_saleslip_sell": 0,
+                      "use_collect_withdraw": 0,
+                      "is_show_fee": 0,
+                      "id": 544723,
+                      "brand_id": 14,
+                      "mcht_id": 99714,
+                      "dev_realtime_fee": 0,
+                      "dev_realtime_settle_amount": 0,
+                      "dev_fee": 0,
+                      "sales5_id": 9572,
+                      "sales5_fee": 0.044,
+                      "sales4_id": 9608,
+                      "sales4_fee": 0.05,
+                      "sales3_id": 9609,
+                      "sales3_fee": 0.05,
+                      "sales2_id": null,
+                      "sales2_fee": 0,
+                      "sales1_id": null,
+                      "sales1_fee": 0,
+                      "sales0_id": null,
+                      "sales0_fee": 0,
+                      "pg_id": 119,
+                      "ps_id": 255,
+                      "ps_fee": 0.0255,
+                      "pmod_id": 57841,
+                      "custom_id": 203,
+                      "terminal_id": 210,
+                      "mcht_fee": 0.08,
+                      "hold_fee": 0,
+                      "pg_settle_type": 1,
+                      "mcht_settle_type": 0,
+                      "mcht_settle_fee": 0,
+                      "mcht_settle_id": null,
+                      "trx_dt": "2023-11-21",
+                      "trx_tm": "18:22:24",
+                      "cxl_dt": "2023-11-21",
+                      "cxl_tm": "18:23:29",
+                      "is_cancel": 1,
+                      "amount": -1000,
+                      "module_type": 0,
+                      "ord_num": "20231121182224134803",
+                      "mid": "kowelcome238",
+                      "tid": "1046977423",
+                      "trx_id": "202311210526961",
+                      "ori_trx_id": "202311210526961",
+                      "card_num": "",
+                      "issuer": "현대카드",
+                      "acquirer": "현대카드",
+                      "appr_num": "00564100",
+                      "installment": 0,
+                      "buyer_name": "-",
+                      "buyer_phone": "",
+                      "item_name": "1046977423",
+                      "is_delete": 0,
+                      "created_at": "2023-11-21 18:27:53",
+                      "updated_at": "2023-11-21 18:27:53",
+                      "note": "장비",
+                      "use_realtime_deposit": 0,
+                      "cxl_type": 2,
+                      "fin_trx_delay": 15,
+                      "trx_dttm": "2023-11-21 18:22:24",
+                      "cxl_dttm": "2023-11-21 18:23:29",
+                      "profit": -920,
+                      "sales0_name": "",
+                      "sales1_name": "",
+                      "sales2_name": "",
+                      "sales3_name": "61.지환Q(대5)",
+                      "sales4_name": "61.파주Q(지5)",
+                      "sales5_name": "61.n미소비씨(총)",
+                      "trx_amount": -80,
+                      "hold_amount": 0,
+                      "total_trx_amount": -80
+                  },
+                  {
+                      "mcht_name": "런비지니스클럽.",
+                      "user_name": "3828a",
+                      "nick_name": "문대하",
+                      "addr": "경기도 고양시 일산동구    중앙로 1171,  지하2층",
+                      "resident_num": "0",
+                      "business_num": "0",
+                      "use_saleslip_prov": 1,
+                      "use_saleslip_sell": 0,
+                      "use_collect_withdraw": 0,
+                      "is_show_fee": 0,
+                      "id": 544716,
+                      "brand_id": 14,
+                      "mcht_id": 99714,
+                      "dev_realtime_fee": 0,
+                      "dev_realtime_settle_amount": 0,
+                      "dev_fee": 0,
+                      "sales5_id": 9572,
+                      "sales5_fee": 0.044,
+                      "sales4_id": 9608,
+                      "sales4_fee": 0.05,
+                      "sales3_id": 9609,
+                      "sales3_fee": 0.05,
+                      "sales2_id": null,
+                      "sales2_fee": 0,
+                      "sales1_id": null,
+                      "sales1_fee": 0,
+                      "sales0_id": null,
+                      "sales0_fee": 0,
+                      "pg_id": 119,
+                      "ps_id": 255,
+                      "ps_fee": 0.0255,
+                      "pmod_id": 57841,
+                      "custom_id": 203,
+                      "terminal_id": 210,
+                      "mcht_fee": 0.08,
+                      "hold_fee": 0,
+                      "pg_settle_type": 1,
+                      "mcht_settle_type": 0,
+                      "mcht_settle_fee": 0,
+                      "mcht_settle_id": null,
+                      "trx_dt": "2023-11-21",
+                      "trx_tm": "18:22:24",
+                      "cxl_dt": null,
+                      "cxl_tm": null,
+                      "is_cancel": 0,
+                      "amount": 1000,
+                      "module_type": 0,
+                      "ord_num": "20231121182224134803",
+                      "mid": "kowelcome238",
+                      "tid": "1046977423",
+                      "trx_id": "202311210526961",
+                      "ori_trx_id": null,
+                      "card_num": "",
+                      "issuer": "현대카드",
+                      "acquirer": "현대카드",
+                      "appr_num": "00564100",
+                      "installment": 0,
+                      "buyer_name": "-",
+                      "buyer_phone": "",
+                      "item_name": "1046977423",
+                      "is_delete": 0,
+                      "created_at": "2023-11-21 18:27:41",
+                      "updated_at": "2023-11-21 18:27:41",
+                      "note": "장비",
+                      "use_realtime_deposit": 0,
+                      "cxl_type": 2,
+                      "fin_trx_delay": 15,
+                      "trx_dttm": "2023-11-21 18:22:24",
+                      "cxl_dttm": " ",
+                      "profit": 920,
+                      "sales0_name": "",
+                      "sales1_name": "",
+                      "sales2_name": "",
+                      "sales3_name": "61.지환Q(대5)",
+                      "sales4_name": "61.파주Q(지5)",
+                      "sales5_name": "61.n미소비씨(총)",
+                      "trx_amount": 80,
+                      "hold_amount": 0,
+                      "total_trx_amount": 80
+                  },
+                  {
+                      "mcht_name": "런비지니스클럽.",
+                      "user_name": "3828a",
+                      "nick_name": "문대하",
+                      "addr": "경기도 고양시 일산동구    중앙로 1171,  지하2층",
+                      "resident_num": "0",
+                      "business_num": "0",
+                      "use_saleslip_prov": 1,
+                      "use_saleslip_sell": 0,
+                      "use_collect_withdraw": 0,
+                      "is_show_fee": 0,
+                      "id": 544715,
+                      "brand_id": 14,
+                      "mcht_id": 99714,
+                      "dev_realtime_fee": 0,
+                      "dev_realtime_settle_amount": 0,
+                      "dev_fee": 0,
+                      "sales5_id": 9572,
+                      "sales5_fee": 0.044,
+                      "sales4_id": 9608,
+                      "sales4_fee": 0.05,
+                      "sales3_id": 9609,
+                      "sales3_fee": 0.05,
+                      "sales2_id": null,
+                      "sales2_fee": 0,
+                      "sales1_id": null,
+                      "sales1_fee": 0,
+                      "sales0_id": null,
+                      "sales0_fee": 0,
+                      "pg_id": 119,
+                      "ps_id": 255,
+                      "ps_fee": 0.0255,
+                      "pmod_id": 57841,
+                      "custom_id": 203,
+                      "terminal_id": 210,
+                      "mcht_fee": 0.08,
+                      "hold_fee": 0,
+                      "pg_settle_type": 1,
+                      "mcht_settle_type": 0,
+                      "mcht_settle_fee": 0,
+                      "mcht_settle_id": null,
+                      "trx_dt": "2023-11-21",
+                      "trx_tm": "18:20:51",
+                      "cxl_dt": "2023-11-21",
+                      "cxl_tm": "18:21:50",
+                      "is_cancel": 1,
+                      "amount": -1000,
+                      "module_type": 0,
+                      "ord_num": "20231121182051173976",
+                      "mid": "kowelcome238",
+                      "tid": "1046977423",
+                      "trx_id": "202311210526939",
+                      "ori_trx_id": "202311210526939",
+                      "card_num": "",
+                      "issuer": "현대카드",
+                      "acquirer": "현대카드",
+                      "appr_num": "00152894",
+                      "installment": 0,
+                      "buyer_name": "-",
+                      "buyer_phone": "",
+                      "item_name": "1046977423",
+                      "is_delete": 0,
+                      "created_at": "2023-11-21 18:27:36",
+                      "updated_at": "2023-11-21 18:27:36",
+                      "note": "장비",
+                      "use_realtime_deposit": 0,
+                      "cxl_type": 2,
+                      "fin_trx_delay": 15,
+                      "trx_dttm": "2023-11-21 18:20:51",
+                      "cxl_dttm": "2023-11-21 18:21:50",
+                      "profit": -920,
+                      "sales0_name": "",
+                      "sales1_name": "",
+                      "sales2_name": "",
+                      "sales3_name": "61.지환Q(대5)",
+                      "sales4_name": "61.파주Q(지5)",
+                      "sales5_name": "61.n미소비씨(총)",
+                      "trx_amount": -80,
+                      "hold_amount": 0,
+                      "total_trx_amount": -80
+                  },
+                  {
+                      "mcht_name": "런비지니스클럽.",
+                      "user_name": "3828a",
+                      "nick_name": "문대하",
+                      "addr": "경기도 고양시 일산동구    중앙로 1171,  지하2층",
+                      "resident_num": "0",
+                      "business_num": "0",
+                      "use_saleslip_prov": 1,
+                      "use_saleslip_sell": 0,
+                      "use_collect_withdraw": 0,
+                      "is_show_fee": 0,
+                      "id": 544714,
+                      "brand_id": 14,
+                      "mcht_id": 99714,
+                      "dev_realtime_fee": 0,
+                      "dev_realtime_settle_amount": 0,
+                      "dev_fee": 0,
+                      "sales5_id": 9572,
+                      "sales5_fee": 0.044,
+                      "sales4_id": 9608,
+                      "sales4_fee": 0.05,
+                      "sales3_id": 9609,
+                      "sales3_fee": 0.05,
+                      "sales2_id": null,
+                      "sales2_fee": 0,
+                      "sales1_id": null,
+                      "sales1_fee": 0,
+                      "sales0_id": null,
+                      "sales0_fee": 0,
+                      "pg_id": 119,
+                      "ps_id": 255,
+                      "ps_fee": 0.0255,
+                      "pmod_id": 57841,
+                      "custom_id": 203,
+                      "terminal_id": 210,
+                      "mcht_fee": 0.08,
+                      "hold_fee": 0,
+                      "pg_settle_type": 1,
+                      "mcht_settle_type": 0,
+                      "mcht_settle_fee": 0,
+                      "mcht_settle_id": null,
+                      "trx_dt": "2023-11-21",
+                      "trx_tm": "18:20:51",
+                      "cxl_dt": null,
+                      "cxl_tm": null,
+                      "is_cancel": 0,
+                      "amount": 1000,
+                      "module_type": 0,
+                      "ord_num": "20231121182051173976",
+                      "mid": "kowelcome238",
+                      "tid": "1046977423",
+                      "trx_id": "202311210526939",
+                      "ori_trx_id": null,
+                      "card_num": "",
+                      "issuer": "현대카드",
+                      "acquirer": "현대카드",
+                      "appr_num": "00152894",
+                      "installment": 0,
+                      "buyer_name": "-",
+                      "buyer_phone": "",
+                      "item_name": "1046977423",
+                      "is_delete": 0,
+                      "created_at": "2023-11-21 18:27:29",
+                      "updated_at": "2023-11-21 18:27:29",
+                      "note": "장비",
+                      "use_realtime_deposit": 0,
+                      "cxl_type": 2,
+                      "fin_trx_delay": 15,
+                      "trx_dttm": "2023-11-21 18:20:51",
+                      "cxl_dttm": " ",
+                      "profit": 920,
+                      "sales0_name": "",
+                      "sales1_name": "",
+                      "sales2_name": "",
+                      "sales3_name": "61.지환Q(대5)",
+                      "sales4_name": "61.파주Q(지5)",
+                      "sales5_name": "61.n미소비씨(총)",
+                      "trx_amount": 80,
+                      "hold_amount": 0,
+                      "total_trx_amount": 80
+                  },
+                  {
+                      "mcht_name": "런비지니스클럽.",
+                      "user_name": "3828a",
+                      "nick_name": "문대하",
+                      "addr": "경기도 고양시 일산동구    중앙로 1171,  지하2층",
+                      "resident_num": "0",
+                      "business_num": "0",
+                      "use_saleslip_prov": 1,
+                      "use_saleslip_sell": 0,
+                      "use_collect_withdraw": 0,
+                      "is_show_fee": 0,
+                      "id": 543207,
+                      "brand_id": 14,
+                      "mcht_id": 99714,
+                      "dev_realtime_fee": 0,
+                      "dev_realtime_settle_amount": 0,
+                      "dev_fee": 0,
+                      "sales5_id": 9572,
+                      "sales5_fee": 0.044,
+                      "sales4_id": 9608,
+                      "sales4_fee": 0.05,
+                      "sales3_id": 9609,
+                      "sales3_fee": 0.05,
+                      "sales2_id": null,
+                      "sales2_fee": 0,
+                      "sales1_id": null,
+                      "sales1_fee": 0,
+                      "sales0_id": null,
+                      "sales0_fee": 0,
+                      "pg_id": 119,
+                      "ps_id": 255,
+                      "ps_fee": 0.0255,
+                      "pmod_id": 57841,
+                      "custom_id": 203,
+                      "terminal_id": 210,
+                      "mcht_fee": 0.08,
+                      "hold_fee": 0,
+                      "pg_settle_type": 1,
+                      "mcht_settle_type": 0,
+                      "mcht_settle_fee": 0,
+                      "mcht_settle_id": null,
+                      "trx_dt": "2023-11-21",
+                      "trx_tm": "13:37:18",
+                      "cxl_dt": "2023-11-21",
+                      "cxl_tm": "13:37:40",
+                      "is_cancel": 1,
+                      "amount": -1005,
+                      "module_type": 0,
+                      "ord_num": "20231121133718187244",
+                      "mid": "kowelcome238",
+                      "tid": "1046977423",
+                      "trx_id": "202311210520606",
+                      "ori_trx_id": "202311210520606",
+                      "card_num": "",
+                      "issuer": "삼성카드",
+                      "acquirer": "삼성카드",
+                      "appr_num": "77224946",
+                      "installment": 0,
+                      "buyer_name": "-",
+                      "buyer_phone": "",
+                      "item_name": "1046977423",
+                      "is_delete": 0,
+                      "created_at": "2023-11-21 13:42:41",
+                      "updated_at": "2023-11-21 13:42:41",
+                      "note": "장비",
+                      "use_realtime_deposit": 0,
+                      "cxl_type": 2,
+                      "fin_trx_delay": 15,
+                      "trx_dttm": "2023-11-21 13:37:18",
+                      "cxl_dttm": "2023-11-21 13:37:40",
+                      "profit": -925,
+                      "sales0_name": "",
+                      "sales1_name": "",
+                      "sales2_name": "",
+                      "sales3_name": "61.지환Q(대5)",
+                      "sales4_name": "61.파주Q(지5)",
+                      "sales5_name": "61.n미소비씨(총)",
+                      "trx_amount": -80,
+                      "hold_amount": 0,
+                      "total_trx_amount": -80
+                  },
+                  {
+                      "mcht_name": "런비지니스클럽.",
+                      "user_name": "3828a",
+                      "nick_name": "문대하",
+                      "addr": "경기도 고양시 일산동구    중앙로 1171,  지하2층",
+                      "resident_num": "0",
+                      "business_num": "0",
+                      "use_saleslip_prov": 1,
+                      "use_saleslip_sell": 0,
+                      "use_collect_withdraw": 0,
+                      "is_show_fee": 0,
+                      "id": 543206,
+                      "brand_id": 14,
+                      "mcht_id": 99714,
+                      "dev_realtime_fee": 0,
+                      "dev_realtime_settle_amount": 0,
+                      "dev_fee": 0,
+                      "sales5_id": 9572,
+                      "sales5_fee": 0.044,
+                      "sales4_id": 9608,
+                      "sales4_fee": 0.05,
+                      "sales3_id": 9609,
+                      "sales3_fee": 0.05,
+                      "sales2_id": null,
+                      "sales2_fee": 0,
+                      "sales1_id": null,
+                      "sales1_fee": 0,
+                      "sales0_id": null,
+                      "sales0_fee": 0,
+                      "pg_id": 119,
+                      "ps_id": 255,
+                      "ps_fee": 0.0255,
+                      "pmod_id": 57841,
+                      "custom_id": 203,
+                      "terminal_id": 210,
+                      "mcht_fee": 0.08,
+                      "hold_fee": 0,
+                      "pg_settle_type": 1,
+                      "mcht_settle_type": 0,
+                      "mcht_settle_fee": 0,
+                      "mcht_settle_id": null,
+                      "trx_dt": "2023-11-21",
+                      "trx_tm": "13:37:18",
+                      "cxl_dt": null,
+                      "cxl_tm": null,
+                      "is_cancel": 0,
+                      "amount": 1005,
+                      "module_type": 0,
+                      "ord_num": "20231121133718187244",
+                      "mid": "kowelcome238",
+                      "tid": "1046977423",
+                      "trx_id": "202311210520606",
+                      "ori_trx_id": null,
+                      "card_num": "",
+                      "issuer": "삼성카드",
+                      "acquirer": "삼성카드",
+                      "appr_num": "77224946",
+                      "installment": 0,
+                      "buyer_name": "-",
+                      "buyer_phone": "",
+                      "item_name": "1046977423",
+                      "is_delete": 0,
+                      "created_at": "2023-11-21 13:42:36",
+                      "updated_at": "2023-11-21 13:42:36",
+                      "note": "장비",
+                      "use_realtime_deposit": 0,
+                      "cxl_type": 2,
+                      "fin_trx_delay": 15,
+                      "trx_dttm": "2023-11-21 13:37:18",
+                      "cxl_dttm": " ",
+                      "profit": 925,
+                      "sales0_name": "",
+                      "sales1_name": "",
+                      "sales2_name": "",
+                      "sales3_name": "61.지환Q(대5)",
+                      "sales4_name": "61.파주Q(지5)",
+                      "sales5_name": "61.n미소비씨(총)",
+                      "trx_amount": 80,
+                      "hold_amount": 0,
+                      "total_trx_amount": 80
+                  }
+              ]
+          }
+        headers: []
+        description: ''
         custom: []
-    responseFields: []
+    responseFields:
+      page:
+        name: page
+        description: '조회 페이지'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      page_size:
+        name: page_size
+        description: '조회 사이즈'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      total:
+        name: total
+        description: '총 개수'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      content:
+        name: content
+        description: 결과
+        required: false
+        example: null
+        type: 'object[]'
+        enumValues: []
+        custom: []
+      'content.*.use_saleslip_prov':
+        name: 'content.*.use_saleslip_prov'
+        description: '매출전표 공급자 표기정보(0=본사, 1=PG사)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.use_saleslip_sell':
+        name: 'content.*.use_saleslip_sell'
+        description: '매출전표 판매자 표기정보(0=가맹점, 1=본사)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.is_show_fee':
+        name: 'content.*.is_show_fee'
+        description: '가맹점 수수료율 노출여부(0=숨김, 1=노출)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.use_realtime_deposit':
+        name: 'content.*.use_realtime_deposit'
+        description: '실시간 이체 사용 매출건(0=안함, 1=사용)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.amount':
+        name: 'content.*.amount'
+        description: 거래금액
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.profit':
+        name: 'content.*.profit'
+        description: '가맹점 정산금액'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.trx_amount':
+        name: 'content.*.trx_amount'
+        description: '가맹점 거래 수수료'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.mcht_settle_fee':
+        name: 'content.*.mcht_settle_fee'
+        description: '가맹점 입금 수수료'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.total_trx_amount':
+        name: 'content.*.total_trx_amount'
+        description: '가맹점 총 거래 수수료(입금 수수료 + 거래 수수료)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.hold_amount':
+        name: 'content.*.hold_amount'
+        description: '가맹점 유보금 수수료'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
     auth:
       - headers
       - Authorization
-      - 'Bearer 6413VP865hegcfbDEaavdZk'
+      - 'Bearer 43Z6cDa6VP8e5hgadvb1kfE'
     controller: null
     method: null
     route: null
@@ -238,9 +921,9 @@ endpoints:
         custom: []
       search:
         name: search
-        description: '검색어(승인번호, 계좌번호) Example:'
+        description: '검색어(승인번호, 계좌번호)'
         required: false
-        example: perferendis
+        example: expedita
         type: string
         enumValues: []
         custom: []
@@ -249,25 +932,157 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: perferendis
+      search: expedita
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
     responses:
       -
-        status: 401
-        content: '{"code":950,"message":"로그인 정보가 정확하지 않습니다."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          vary: Origin
-        description: null
+        status: 201
+        content: |
+          {
+              "page": "1",
+              "page_size": "20",
+              "total": 2,
+              "content": [
+                  {
+                      "mcht_name": "런비지니스클럽",
+                      "appr_num": "30018849",
+                      "trx_id": "202311210528348",
+                      "id": 36455,
+                      "trans_id": 545443,
+                      "mcht_id": 99713,
+                      "finance_id": 16,
+                      "result_code": "0000",
+                      "request_type": 6170,
+                      "message": "이체 성공",
+                      "amount": 920,
+                      "acct_num": "16610204163775",
+                      "acct_bank_name": "국민은행",
+                      "acct_bank_code": "004",
+                      "trans_seq_num": "22119433199713",
+                      "is_delete": 0,
+                      "created_at": "2023-11-21 19:43:31",
+                      "updated_at": "2023-11-21 19:43:31"
+                  },
+                  {
+                      "mcht_name": "런비지니스클럽",
+                      "appr_num": "33597580",
+                      "trx_id": "202311210523140",
+                      "id": 36391,
+                      "trans_id": 543678,
+                      "mcht_id": 99713,
+                      "finance_id": 16,
+                      "result_code": "-2",
+                      "request_type": -2,
+                      "message": "취소된 입금건으로 이체하지 않았습니다.(543690)",
+                      "amount": 920,
+                      "acct_num": "",
+                      "acct_bank_name": "국민은행",
+                      "acct_bank_code": "",
+                      "trans_seq_num": "22115564399713",
+                      "is_delete": 0,
+                      "created_at": "2023-11-21 15:56:43",
+                      "updated_at": "2023-11-21 15:56:43"
+                  }
+              ]
+          }
+        headers: []
+        description: ''
         custom: []
-    responseFields: []
+    responseFields:
+      page:
+        name: page
+        description: '조회 페이지'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      page_size:
+        name: page_size
+        description: '조회 사이즈'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      total:
+        name: total
+        description: '총 개수'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      content:
+        name: content
+        description: 결과
+        required: false
+        example: null
+        type: 'object[]'
+        enumValues: []
+        custom: []
+      'content.*.result_code':
+        name: 'content.*.result_code'
+        description: 결과코드(0000=정상)
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.request_type':
+        name: 'content.*.request_type'
+        description: '요청타입(6170=이체조회, 6140=이체요청)<br>request_type:6170, result_code:0000 인 것만 성공 이체건으로 인식합니다.'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.message':
+        name: 'content.*.message'
+        description: '결과 메세지'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.acct_num':
+        name: 'content.*.acct_num'
+        description: '이체 계좌번호'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.acct_bank_name':
+        name: 'content.*.acct_bank_name'
+        description: '이체 은행명'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.acct_bank_code':
+        name: 'content.*.acct_bank_code'
+        description: '이체 은행코드'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.trans_seq_num':
+        name: 'content.*.trans_seq_num'
+        description: '이체번호(고유 값 아님)'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
     auth:
       - headers
       - Authorization
-      - 'Bearer vDdEbha3P56Zakf16Vc48eg'
+      - 'Bearer 4V8g6ZEec3hPbf65Daak1vd'
     controller: null
     method: null
     route: null
@@ -435,7 +1250,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer gevP46cbkEZ3hf681aDdV5a'
+      - 'Bearer vf14Vd6ZPgEbh8ac356akeD'
     controller: null
     method: null
     route: null
@@ -488,7 +1303,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 4a5E63hvkdb81Va6ZgfecDP'
+      - 'Bearer v86geVcbEP5aDf1Zk43had6'
     controller: null
     method: null
     route: null
@@ -550,7 +1365,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer dfEa6Dbg6kP1vh8Ze4V53ca'
+      - 'Bearer c6Eegkhd3Z8ab6vVfDPa451'
     controller: null
     method: null
     route: null
@@ -821,7 +1636,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 3kb166VDa8vdZEfeah5c4gP'
+      - 'Bearer E6hPV5Zac68gbdev4kD3a1f'
     controller: null
     method: null
     route: null

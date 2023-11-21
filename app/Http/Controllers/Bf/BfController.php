@@ -253,6 +253,18 @@ class BfController extends Controller
      * @queryParam s_dt string 검색 시작일 Example: 2023-11-01
      * @queryParam e_dt string 검색 종료일 Example: 2023-11-30
      * @queryParam search string 검색어(승인번호, 계좌번호)
+     * @responseFile 201 storage/bf/realtimeHistoryIndex.json
+     * @responseField page string 조회 페이지
+     * @responseField page_size string 조회 사이즈
+     * @responseField total string 총 개수
+     * @responseField content object[] 결과
+     * @responseField content.*.result_code string 결과코드(0000=정상)
+     * @responseField content.*.request_type integer 요청타입(6170=이체조회, 6140=이체요청)<br>request_type:6170, result_code:0000 인 것만 성공 이체건으로 인식합니다.
+     * @responseField content.*.message string 결과 메세지
+     * @responseField content.*.acct_num string 이체 계좌번호
+     * @responseField content.*.acct_bank_name string 이체 은행명
+     * @responseField content.*.acct_bank_code string 이체 은행코드
+     * @responseField content.*.trans_seq_num string 이체번호(고유 값 아님)
      */
     public function realtimeHistoryIndex(IndexRequest $request)
     {
