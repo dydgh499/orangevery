@@ -59,7 +59,7 @@ class Transaction extends Model
     {
         $s_dt = request()->s_dt;
         $e_dt = request()->e_dt;
-        if(request()->input('is_base_trx', 'false') == 'true')
+        if(request()->is_base_trx)
         {
             $trx_dt = 'transactions.trx_dt';
             $cxl_dt = 'transactions.cxl_dt';
