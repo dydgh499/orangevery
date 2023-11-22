@@ -20,6 +20,7 @@ const { cus_filters } = useStore()
 const { sales } = useSalesFilterStore()
 const { head, headers, levels } = useRegisterStore()
 const { ExcelReader, openFilePicker, bulkRegister } = Registration()
+console.log(headers)
 
 const snackbar = <any>(inject('snackbar'))
 const excel = ref()

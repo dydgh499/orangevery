@@ -4,7 +4,7 @@ import { Header } from '@/views/headers';
 import corp from '@corp';
 
 export const useRegisterStore = defineStore('payModRegisterStore', () => {
-    const head  = Header('salesforces', '결제모듈 대량등록 포멧')
+    const head  = Header('pay-modules/bulk-register', '결제모듈 대량등록 포멧')
     const headers: Record<string, string> = {
         'mcht_name': '가맹점 상호(O)',
         'pg_id': 'PG사명(O)',

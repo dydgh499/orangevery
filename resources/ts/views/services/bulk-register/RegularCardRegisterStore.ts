@@ -1,6 +1,6 @@
 import { Header } from '@/views/headers';
 export const useRegisterStore = defineStore('regularCardRegisterStore', () => {
-    const head = Header('salesforces', '단골고객 카드정보 대량등록 포멧')
+    const head = Header('regular-cards/bulk-register', '단골고객 카드정보 대량등록 포멧')
 
     const headers: Record<string, string> = {
         mcht_name: '가맹점 상호(O)',

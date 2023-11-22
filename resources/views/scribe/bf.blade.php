@@ -31,9 +31,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="{{ asset("/vendor/scribe/js/tryitout-4.25.0.js") }}"></script>
+    <script src="../docs/js/tryitout-4.25.0.js"></script>
 
-    <script src="{{ asset("/vendor/scribe/js/theme-default-4.25.0.js") }}"></script>
+    <script src="../docs/js/theme-default-4.25.0.js"></script>
 
 </head>
 
@@ -42,7 +42,7 @@
 <a href="#" id="nav-button">
     <span>
         MENU
-        <img src="{{ asset("/vendor/scribe/images/navbar.png") }}" alt="navbar-image"/>
+        <img src="../docs/images/navbar.png" alt="navbar-image"/>
     </span>
 </a>
 <div class="tocify-wrapper">
@@ -82,13 +82,13 @@
                                 <a href="#bf-mobile-api-POSTapi-v1-bf-sign-in">로그인</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="bf-mobile-api-GETapi-v1-bf-pay-modules">
-                                <a href="#bf-mobile-api-GETapi-v1-bf-pay-modules">결제내역 조회</a>
+                                <a href="#bf-mobile-api-GETapi-v1-bf-pay-modules">결제모듈정보 조회</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="bf-mobile-api-GETapi-v1-bf-transactions">
-                                <a href="#bf-mobile-api-GETapi-v1-bf-transactions">실시간 이체내역 조회</a>
+                                <a href="#bf-mobile-api-GETapi-v1-bf-transactions">결제내역 조회</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="bf-mobile-api-GETapi-v1-bf-realtime-histories">
-                                <a href="#bf-mobile-api-GETapi-v1-bf-realtime-histories">결제모듈정보 조회</a>
+                                <a href="#bf-mobile-api-GETapi-v1-bf-realtime-histories">실시간 이체내역 조회</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="bf-mobile-api-GETapi-v1-bf-withdraws-balance">
                                 <a href="#bf-mobile-api-GETapi-v1-bf-withdraws-balance">출금가능금액 조회</a>
@@ -108,7 +108,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-22 00:38:23</li>
+        <li>마지막 업데이트:  2023-11-22 14:41:25</li>
     </ul>
 </div>
 
@@ -423,13 +423,13 @@ response.json()</code></pre></div>
 <br>
 <p>유저정보</p>
         </div>
-                        <h2 id="bf-mobile-api-GETapi-v1-bf-pay-modules">결제내역 조회</h2>
+                        <h2 id="bf-mobile-api-GETapi-v1-bf-pay-modules">결제모듈정보 조회</h2>
 
 <p>
 <small class="badge badge-darkred">인증 필요</small>
 </p>
 
-<p>로그인한 가맹점의 결제내역을 조회합니다.</p>
+<p>결제모듈정보를 불러옵니다.<br>한도 및 수기결제에 필요한 데이터들을 조회합니다.</p>
 
 <span id="example-requests-GETapi-v1-bf-pay-modules">
 <blockquote>예시 요청:</blockquote>
@@ -439,16 +439,6 @@ response.json()</code></pre></div>
     <pre><code class="language-javascript">const url = new URL(
     "https://team.payvery.kr/api/v1/bf/pay-modules"
 );
-
-const params = {
-    "page": "1",
-    "page_size": "20",
-    "s_dt": "2023-11-01",
-    "e_dt": "2023-11-30",
-    "search": "non",
-};
-Object.keys(params)
-    .forEach(key =&gt; url.searchParams.append(key, params[key]));
 
 const headers = {
     "Authorization": "Bearer {ACCESS_TOKEN}",
@@ -472,13 +462,6 @@ $response = $client-&gt;get(
             'Content-Type' =&gt; 'application/json',
             'Accept' =&gt; 'application/json',
         ],
-        'query' =&gt; [
-            'page' =&gt; '1',
-            'page_size' =&gt; '20',
-            's_dt' =&gt; '2023-11-01',
-            'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'non',
-        ],
     ]
 );
 $body = $response-&gt;getBody();
@@ -490,12 +473,304 @@ print_r(json_decode((string) $body));</code></pre></div>
 import json
 
 url = 'https://team.payvery.kr/api/v1/bf/pay-modules'
+headers = {
+  'Authorization': 'Bearer {ACCESS_TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('GET', url, headers=headers)
+response.json()</code></pre></div>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "https://team.payvery.kr/api/v1/bf/pay-modules" \
+    --header "Authorization: Bearer {ACCESS_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-bf-pay-modules">
+            <blockquote>
+            <p>예시 응답 (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json">[
+    {
+        &quot;id&quot;: 1,
+        &quot;is_old_auth&quot;: 1,
+        &quot;module_type&quot;: 1,
+        &quot;installment&quot;: 12,
+        &quot;pay_year_limit&quot;: 100,
+        &quot;pay_month_limit&quot;: 200,
+        &quot;pay_day_limit&quot;: 0,
+        &quot;pay_single_limit&quot;: 300,
+        &quot;pay_year_amount&quot;: 3640000,
+        &quot;pay_month_amount&quot;: 3640000,
+        &quot;pay_day_amount&quot;: 1640000,
+        &quot;pay_able_amount&quot;: -2640000
+    },
+    {
+        &quot;id&quot;: 5,
+        &quot;is_old_auth&quot;: 0,
+        &quot;module_type&quot;: 1,
+        &quot;installment&quot;: 12,
+        &quot;pay_year_limit&quot;: 100,
+        &quot;pay_month_limit&quot;: 200,
+        &quot;pay_day_limit&quot;: 0,
+        &quot;pay_single_limit&quot;: 300,
+        &quot;pay_year_amount&quot;: 3640000,
+        &quot;pay_month_amount&quot;: 3640000,
+        &quot;pay_day_amount&quot;: 1640000,
+        &quot;pay_able_amount&quot;: -2640000
+    }
+]</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-bf-pay-modules" hidden>
+    <blockquote>받은 응답<span
+                id="execution-response-status-GETapi-v1-bf-pay-modules"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-bf-pay-modules"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-bf-pay-modules" hidden>
+    <blockquote>오류로 인해 요청이 실패했습니다.:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-bf-pay-modules">
+
+팁: 네트워크에 제대로 연결되어 있는지 확인하세요.
+해당 API의 관리자인 경우 API가 실행 중이고 CORS를 활성화했는지 확인하세요.
+디버깅 정보는 개발자 도구 콘솔에서 확인할 수 있습니다.</code></pre>
+</span>
+<form id="form-GETapi-v1-bf-pay-modules" data-method="GET"
+      data-path="api/v1/bf/pay-modules"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-bf-pay-modules', this);">
+    <h3>
+        요청&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="border-color: #2196f3; background-color: #2196f3; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-bf-pay-modules"
+                    onclick="tryItOut('GETapi-v1-bf-pay-modules');">시도하기 ⚡
+            </button>
+            <button type="button"
+                    style="border-color: #dfa1a5; background-color: #dfa1a5; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-bf-pay-modules"
+                    onclick="cancelTryOut('GETapi-v1-bf-pay-modules');" hidden>취소 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="border-color: #81f18e; background-color: #81f18e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-bf-pay-modules"
+                    data-initial-text="요청 💥"
+                    data-loading-text="⏱ 요청중..."
+                    hidden>요청 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/bf/pay-modules</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>헤더</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-bf-pay-modules"
+               value="Bearer {ACCESS_TOKEN}"
+               data-component="header">
+    <br>
+<p><br>예시: <code>Bearer {ACCESS_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-bf-pay-modules"
+               value="application/json"
+               data-component="header">
+    <br>
+<p><br>예시: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-bf-pay-modules"
+               value="application/json"
+               data-component="header">
+    <br>
+<p><br>예시: <code>application/json</code></p>
+            </div>
+                        </form>
+
+    <h3>응답</h3>
+    <h4 class="fancy-heading-panel"><b>응답 필드</b></h4>
+    <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>결제모듈 고유번호</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>module_type</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>모듈 타입(0=장비, 1=수기, 2=인증, 3=간편)</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>settle_fee</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>입금 수수료</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>is_old_auth</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>비인증, 구인증 여부(비인증=0, 구인증=1)</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>installment</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>할부한도(0~12)</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>pay_year_limit</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>연결제 한도(만 단위)</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>pay_month_limit</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>월결제 한도(만 단위)</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>pay_single_limit</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>일결제 한도(만 단위)</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>pay_year_amount</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>연결제 금액</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>pay_month_amount</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>월결제 금액</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>pay_day_amount</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>일결제 금액</p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>pay_able_amount</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>결제 가능금액(연,월,일,결제한도가 지정되지 않은 경우 null로 반환합니다.)</p>
+        </div>
+                        <h2 id="bf-mobile-api-GETapi-v1-bf-transactions">결제내역 조회</h2>
+
+<p>
+<small class="badge badge-darkred">인증 필요</small>
+</p>
+
+<p>로그인한 가맹점의 결제내역을 조회합니다.</p>
+
+<span id="example-requests-GETapi-v1-bf-transactions">
+<blockquote>예시 요청:</blockquote>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://team.payvery.kr/api/v1/bf/transactions"
+);
+
+const params = {
+    "page": "1",
+    "page_size": "20",
+    "s_dt": "2023-11-01",
+    "e_dt": "2023-11-30",
+    "search": "consequuntur",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Authorization": "Bearer {ACCESS_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'https://team.payvery.kr/api/v1/bf/transactions',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {ACCESS_TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'page' =&gt; '1',
+            'page_size' =&gt; '20',
+            's_dt' =&gt; '2023-11-01',
+            'e_dt' =&gt; '2023-11-30',
+            'search' =&gt; 'consequuntur',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'https://team.payvery.kr/api/v1/bf/transactions'
 params = {
   'page': '1',
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'non',
+  'search': 'consequuntur',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -509,14 +784,14 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/pay-modules?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=non" \
+    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=consequuntur" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 </span>
 
-<span id="example-responses-GETapi-v1-bf-pay-modules">
+<span id="example-responses-GETapi-v1-bf-transactions">
             <blockquote>
             <p>예시 응답 (201):</p>
         </blockquote>
@@ -675,43 +950,43 @@ response.json()</code></pre></div>
 }</code>
  </pre>
     </span>
-<span id="execution-results-GETapi-v1-bf-pay-modules" hidden>
+<span id="execution-results-GETapi-v1-bf-transactions" hidden>
     <blockquote>받은 응답<span
-                id="execution-response-status-GETapi-v1-bf-pay-modules"></span>:
+                id="execution-response-status-GETapi-v1-bf-transactions"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-bf-pay-modules"
+    <pre class="json"><code id="execution-response-content-GETapi-v1-bf-transactions"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-v1-bf-pay-modules" hidden>
+<span id="execution-error-GETapi-v1-bf-transactions" hidden>
     <blockquote>오류로 인해 요청이 실패했습니다.:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-bf-pay-modules">
+    <pre><code id="execution-error-message-GETapi-v1-bf-transactions">
 
 팁: 네트워크에 제대로 연결되어 있는지 확인하세요.
 해당 API의 관리자인 경우 API가 실행 중이고 CORS를 활성화했는지 확인하세요.
 디버깅 정보는 개발자 도구 콘솔에서 확인할 수 있습니다.</code></pre>
 </span>
-<form id="form-GETapi-v1-bf-pay-modules" data-method="GET"
-      data-path="api/v1/bf/pay-modules"
+<form id="form-GETapi-v1-bf-transactions" data-method="GET"
+      data-path="api/v1/bf/transactions"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-bf-pay-modules', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-bf-transactions', this);">
     <h3>
         요청&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="border-color: #2196f3; background-color: #2196f3; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-v1-bf-pay-modules"
-                    onclick="tryItOut('GETapi-v1-bf-pay-modules');">시도하기 ⚡
+                    id="btn-tryout-GETapi-v1-bf-transactions"
+                    onclick="tryItOut('GETapi-v1-bf-transactions');">시도하기 ⚡
             </button>
             <button type="button"
                     style="border-color: #dfa1a5; background-color: #dfa1a5; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-v1-bf-pay-modules"
-                    onclick="cancelTryOut('GETapi-v1-bf-pay-modules');" hidden>취소 🛑
+                    id="btn-canceltryout-GETapi-v1-bf-transactions"
+                    onclick="cancelTryOut('GETapi-v1-bf-transactions');" hidden>취소 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="border-color: #81f18e; background-color: #81f18e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-v1-bf-pay-modules"
+                    id="btn-executetryout-GETapi-v1-bf-transactions"
                     data-initial-text="요청 💥"
                     data-loading-text="⏱ 요청중..."
                     hidden>요청 💥
@@ -719,7 +994,7 @@ response.json()</code></pre></div>
             </h3>
             <p>
             <small class="badge badge-green">GET</small>
-            <b><code>api/v1/bf/pay-modules</code></b>
+            <b><code>api/v1/bf/transactions</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>헤더</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -727,7 +1002,7 @@ response.json()</code></pre></div>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-bf-pay-modules"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-bf-transactions"
                value="Bearer {ACCESS_TOKEN}"
                data-component="header">
     <br>
@@ -738,7 +1013,7 @@ response.json()</code></pre></div>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-v1-bf-pay-modules"
+                              name="Content-Type"                data-endpoint="GETapi-v1-bf-transactions"
                value="application/json"
                data-component="header">
     <br>
@@ -749,7 +1024,7 @@ response.json()</code></pre></div>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-v1-bf-pay-modules"
+                              name="Accept"                data-endpoint="GETapi-v1-bf-transactions"
                value="application/json"
                data-component="header">
     <br>
@@ -761,7 +1036,7 @@ response.json()</code></pre></div>
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="page"                data-endpoint="GETapi-v1-bf-pay-modules"
+               step="any"               name="page"                data-endpoint="GETapi-v1-bf-transactions"
                value="1"
                data-component="query">
     <br>
@@ -772,7 +1047,7 @@ response.json()</code></pre></div>
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="page_size"                data-endpoint="GETapi-v1-bf-pay-modules"
+               step="any"               name="page_size"                data-endpoint="GETapi-v1-bf-transactions"
                value="20"
                data-component="query">
     <br>
@@ -783,7 +1058,7 @@ response.json()</code></pre></div>
 <small>string</small>&nbsp;
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
-                              name="s_dt"                data-endpoint="GETapi-v1-bf-pay-modules"
+                              name="s_dt"                data-endpoint="GETapi-v1-bf-transactions"
                value="2023-11-01"
                data-component="query">
     <br>
@@ -794,7 +1069,7 @@ response.json()</code></pre></div>
 <small>string</small>&nbsp;
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
-                              name="e_dt"                data-endpoint="GETapi-v1-bf-pay-modules"
+                              name="e_dt"                data-endpoint="GETapi-v1-bf-transactions"
                value="2023-11-30"
                data-component="query">
     <br>
@@ -805,11 +1080,11 @@ response.json()</code></pre></div>
 <small>string</small>&nbsp;
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
-                              name="search"                data-endpoint="GETapi-v1-bf-pay-modules"
-               value="non"
+                              name="search"                data-endpoint="GETapi-v1-bf-transactions"
+               value="consequuntur"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>non</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>consequuntur</code></p>
             </div>
                 </form>
 
@@ -977,7 +1252,7 @@ response.json()</code></pre></div>
         </div>
                                         </details>
         </div>
-                        <h2 id="bf-mobile-api-GETapi-v1-bf-transactions">실시간 이체내역 조회</h2>
+                        <h2 id="bf-mobile-api-GETapi-v1-bf-realtime-histories">실시간 이체내역 조회</h2>
 
 <p>
 <small class="badge badge-darkred">인증 필요</small>
@@ -985,13 +1260,13 @@ response.json()</code></pre></div>
 
 <p>로그인한 가맹점의 실시간 이체내역을 조회합니다.</p>
 
-<span id="example-requests-GETapi-v1-bf-transactions">
+<span id="example-requests-GETapi-v1-bf-realtime-histories">
 <blockquote>예시 요청:</blockquote>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://team.payvery.kr/api/v1/bf/transactions"
+    "https://team.payvery.kr/api/v1/bf/realtime-histories"
 );
 
 const params = {
@@ -999,7 +1274,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "ut",
+    "search": "qui",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1019,7 +1294,7 @@ fetch(url, {
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'https://team.payvery.kr/api/v1/bf/transactions',
+    'https://team.payvery.kr/api/v1/bf/realtime-histories',
     [
         'headers' =&gt; [
             'Authorization' =&gt; 'Bearer {ACCESS_TOKEN}',
@@ -1031,7 +1306,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'ut',
+            'search' =&gt; 'qui',
         ],
     ]
 );
@@ -1043,13 +1318,13 @@ print_r(json_decode((string) $body));</code></pre></div>
     <pre><code class="language-python">import requests
 import json
 
-url = 'https://team.payvery.kr/api/v1/bf/transactions'
+url = 'https://team.payvery.kr/api/v1/bf/realtime-histories'
 params = {
   'page': '1',
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'ut',
+  'search': 'qui',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1063,14 +1338,14 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=ut" \
+    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=qui" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 </span>
 
-<span id="example-responses-GETapi-v1-bf-transactions">
+<span id="example-responses-GETapi-v1-bf-realtime-histories">
             <blockquote>
             <p>예시 응답 (201):</p>
         </blockquote>
@@ -1125,43 +1400,43 @@ response.json()</code></pre></div>
 }</code>
  </pre>
     </span>
-<span id="execution-results-GETapi-v1-bf-transactions" hidden>
+<span id="execution-results-GETapi-v1-bf-realtime-histories" hidden>
     <blockquote>받은 응답<span
-                id="execution-response-status-GETapi-v1-bf-transactions"></span>:
+                id="execution-response-status-GETapi-v1-bf-realtime-histories"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-bf-transactions"
+    <pre class="json"><code id="execution-response-content-GETapi-v1-bf-realtime-histories"
       data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
 </span>
-<span id="execution-error-GETapi-v1-bf-transactions" hidden>
+<span id="execution-error-GETapi-v1-bf-realtime-histories" hidden>
     <blockquote>오류로 인해 요청이 실패했습니다.:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-bf-transactions">
+    <pre><code id="execution-error-message-GETapi-v1-bf-realtime-histories">
 
 팁: 네트워크에 제대로 연결되어 있는지 확인하세요.
 해당 API의 관리자인 경우 API가 실행 중이고 CORS를 활성화했는지 확인하세요.
 디버깅 정보는 개발자 도구 콘솔에서 확인할 수 있습니다.</code></pre>
 </span>
-<form id="form-GETapi-v1-bf-transactions" data-method="GET"
-      data-path="api/v1/bf/transactions"
+<form id="form-GETapi-v1-bf-realtime-histories" data-method="GET"
+      data-path="api/v1/bf/realtime-histories"
       data-authed="1"
       data-hasfiles="0"
       data-isarraybody="0"
       autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-bf-transactions', this);">
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-bf-realtime-histories', this);">
     <h3>
         요청&nbsp;&nbsp;&nbsp;
                     <button type="button"
                     style="border-color: #2196f3; background-color: #2196f3; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-v1-bf-transactions"
-                    onclick="tryItOut('GETapi-v1-bf-transactions');">시도하기 ⚡
+                    id="btn-tryout-GETapi-v1-bf-realtime-histories"
+                    onclick="tryItOut('GETapi-v1-bf-realtime-histories');">시도하기 ⚡
             </button>
             <button type="button"
                     style="border-color: #dfa1a5; background-color: #dfa1a5; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-v1-bf-transactions"
-                    onclick="cancelTryOut('GETapi-v1-bf-transactions');" hidden>취소 🛑
+                    id="btn-canceltryout-GETapi-v1-bf-realtime-histories"
+                    onclick="cancelTryOut('GETapi-v1-bf-realtime-histories');" hidden>취소 🛑
             </button>&nbsp;&nbsp;
             <button type="submit"
                     style="border-color: #81f18e; background-color: #81f18e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-v1-bf-transactions"
+                    id="btn-executetryout-GETapi-v1-bf-realtime-histories"
                     data-initial-text="요청 💥"
                     data-loading-text="⏱ 요청중..."
                     hidden>요청 💥
@@ -1169,7 +1444,7 @@ response.json()</code></pre></div>
             </h3>
             <p>
             <small class="badge badge-green">GET</small>
-            <b><code>api/v1/bf/transactions</code></b>
+            <b><code>api/v1/bf/realtime-histories</code></b>
         </p>
                 <h4 class="fancy-heading-panel"><b>헤더</b></h4>
                                 <div style="padding-left: 28px; clear: unset;">
@@ -1177,7 +1452,7 @@ response.json()</code></pre></div>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-bf-transactions"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-bf-realtime-histories"
                value="Bearer {ACCESS_TOKEN}"
                data-component="header">
     <br>
@@ -1188,7 +1463,7 @@ response.json()</code></pre></div>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-v1-bf-transactions"
+                              name="Content-Type"                data-endpoint="GETapi-v1-bf-realtime-histories"
                value="application/json"
                data-component="header">
     <br>
@@ -1199,7 +1474,7 @@ response.json()</code></pre></div>
 &nbsp;
  &nbsp;
                 <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-v1-bf-transactions"
+                              name="Accept"                data-endpoint="GETapi-v1-bf-realtime-histories"
                value="application/json"
                data-component="header">
     <br>
@@ -1211,7 +1486,7 @@ response.json()</code></pre></div>
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="page"                data-endpoint="GETapi-v1-bf-transactions"
+               step="any"               name="page"                data-endpoint="GETapi-v1-bf-realtime-histories"
                value="1"
                data-component="query">
     <br>
@@ -1222,7 +1497,7 @@ response.json()</code></pre></div>
 <small>integer</small>&nbsp;
  &nbsp;
                 <input type="number" style="display: none"
-               step="any"               name="page_size"                data-endpoint="GETapi-v1-bf-transactions"
+               step="any"               name="page_size"                data-endpoint="GETapi-v1-bf-realtime-histories"
                value="20"
                data-component="query">
     <br>
@@ -1233,7 +1508,7 @@ response.json()</code></pre></div>
 <small>string</small>&nbsp;
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
-                              name="s_dt"                data-endpoint="GETapi-v1-bf-transactions"
+                              name="s_dt"                data-endpoint="GETapi-v1-bf-realtime-histories"
                value="2023-11-01"
                data-component="query">
     <br>
@@ -1244,7 +1519,7 @@ response.json()</code></pre></div>
 <small>string</small>&nbsp;
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
-                              name="e_dt"                data-endpoint="GETapi-v1-bf-transactions"
+                              name="e_dt"                data-endpoint="GETapi-v1-bf-realtime-histories"
                value="2023-11-30"
                data-component="query">
     <br>
@@ -1255,11 +1530,11 @@ response.json()</code></pre></div>
 <small>string</small>&nbsp;
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
-                              name="search"                data-endpoint="GETapi-v1-bf-transactions"
-               value="ut"
+                              name="search"                data-endpoint="GETapi-v1-bf-realtime-histories"
+               value="qui"
                data-component="query">
     <br>
-<p>검색어(승인번호, 계좌번호) <br>예시: <code>ut</code></p>
+<p>검색어(승인번호, 계좌번호) <br>예시: <code>qui</code></p>
             </div>
                 </form>
 
@@ -1356,281 +1631,6 @@ response.json()</code></pre></div>
                                     </details>
         </div>
                                         </details>
-        </div>
-                        <h2 id="bf-mobile-api-GETapi-v1-bf-realtime-histories">결제모듈정보 조회</h2>
-
-<p>
-<small class="badge badge-darkred">인증 필요</small>
-</p>
-
-<p>결제모듈정보를 불러옵니다.<br>한도 및 수기결제에 필요한 데이터들을 조회합니다.</p>
-
-<span id="example-requests-GETapi-v1-bf-realtime-histories">
-<blockquote>예시 요청:</blockquote>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "https://team.payvery.kr/api/v1/bf/realtime-histories"
-);
-
-const headers = {
-    "Authorization": "Bearer {ACCESS_TOKEN}",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-
-<div class="php-example">
-    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
-$response = $client-&gt;get(
-    'https://team.payvery.kr/api/v1/bf/realtime-histories',
-    [
-        'headers' =&gt; [
-            'Authorization' =&gt; 'Bearer {ACCESS_TOKEN}',
-            'Content-Type' =&gt; 'application/json',
-            'Accept' =&gt; 'application/json',
-        ],
-    ]
-);
-$body = $response-&gt;getBody();
-print_r(json_decode((string) $body));</code></pre></div>
-
-
-<div class="python-example">
-    <pre><code class="language-python">import requests
-import json
-
-url = 'https://team.payvery.kr/api/v1/bf/realtime-histories'
-headers = {
-  'Authorization': 'Bearer {ACCESS_TOKEN}',
-  'Content-Type': 'application/json',
-  'Accept': 'application/json'
-}
-
-response = requests.request('GET', url, headers=headers)
-response.json()</code></pre></div>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/realtime-histories" \
-    --header "Authorization: Bearer {ACCESS_TOKEN}" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-v1-bf-realtime-histories">
-            <blockquote>
-            <p>예시 응답 (200):</p>
-        </blockquote>
-                <pre>
-
-<code class="language-json">[
-    {
-        &quot;id&quot;: 1,
-        &quot;is_old_auth&quot;: 1,
-        &quot;module_type&quot;: 1,
-        &quot;installment&quot;: 12,
-        &quot;pay_year_limit&quot;: 100,
-        &quot;pay_month_limit&quot;: 200,
-        &quot;pay_day_limit&quot;: 0,
-        &quot;pay_single_limit&quot;: 300,
-        &quot;pay_year_amount&quot;: 3640000,
-        &quot;pay_month_amount&quot;: 3640000,
-        &quot;pay_day_amount&quot;: 1640000,
-        &quot;pay_able_amount&quot;: -2640000
-    },
-    {
-        &quot;id&quot;: 5,
-        &quot;is_old_auth&quot;: 0,
-        &quot;module_type&quot;: 1,
-        &quot;installment&quot;: 12,
-        &quot;pay_year_limit&quot;: 100,
-        &quot;pay_month_limit&quot;: 200,
-        &quot;pay_day_limit&quot;: 0,
-        &quot;pay_single_limit&quot;: 300,
-        &quot;pay_year_amount&quot;: 3640000,
-        &quot;pay_month_amount&quot;: 3640000,
-        &quot;pay_day_amount&quot;: 1640000,
-        &quot;pay_able_amount&quot;: -2640000
-    }
-]</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-v1-bf-realtime-histories" hidden>
-    <blockquote>받은 응답<span
-                id="execution-response-status-GETapi-v1-bf-realtime-histories"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-v1-bf-realtime-histories"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-GETapi-v1-bf-realtime-histories" hidden>
-    <blockquote>오류로 인해 요청이 실패했습니다.:</blockquote>
-    <pre><code id="execution-error-message-GETapi-v1-bf-realtime-histories">
-
-팁: 네트워크에 제대로 연결되어 있는지 확인하세요.
-해당 API의 관리자인 경우 API가 실행 중이고 CORS를 활성화했는지 확인하세요.
-디버깅 정보는 개발자 도구 콘솔에서 확인할 수 있습니다.</code></pre>
-</span>
-<form id="form-GETapi-v1-bf-realtime-histories" data-method="GET"
-      data-path="api/v1/bf/realtime-histories"
-      data-authed="1"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-bf-realtime-histories', this);">
-    <h3>
-        요청&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="border-color: #2196f3; background-color: #2196f3; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-v1-bf-realtime-histories"
-                    onclick="tryItOut('GETapi-v1-bf-realtime-histories');">시도하기 ⚡
-            </button>
-            <button type="button"
-                    style="border-color: #dfa1a5; background-color: #dfa1a5; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-v1-bf-realtime-histories"
-                    onclick="cancelTryOut('GETapi-v1-bf-realtime-histories');" hidden>취소 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="border-color: #81f18e; background-color: #81f18e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-v1-bf-realtime-histories"
-                    data-initial-text="요청 💥"
-                    data-loading-text="⏱ 요청중..."
-                    hidden>요청 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/v1/bf/realtime-histories</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>헤더</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-bf-realtime-histories"
-               value="Bearer {ACCESS_TOKEN}"
-               data-component="header">
-    <br>
-<p><br>예시: <code>Bearer {ACCESS_TOKEN}</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-v1-bf-realtime-histories"
-               value="application/json"
-               data-component="header">
-    <br>
-<p><br>예시: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-v1-bf-realtime-histories"
-               value="application/json"
-               data-component="header">
-    <br>
-<p><br>예시: <code>application/json</code></p>
-            </div>
-                        </form>
-
-    <h3>응답</h3>
-    <h4 class="fancy-heading-panel"><b>응답 필드</b></h4>
-    <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>결제모듈 고유번호</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>module_type</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>모듈 타입(0=장비, 1=수기, 2=인증, 3=간편)</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>settle_fee</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>입금 수수료</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>is_old_auth</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>비인증, 구인증 여부(비인증=0, 구인증=1)</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>installment</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-<br>
-<p>할부한도(0~12)</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>pay_year_limit</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>연결제 한도(만 단위)</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>pay_month_limit</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>월결제 한도(만 단위)</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>pay_single_limit</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>일결제 한도(만 단위)</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>pay_year_amount</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>연결제 금액</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>pay_month_amount</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>월결제 금액</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>pay_day_amount</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>일결제 금액</p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>pay_able_amount</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-<br>
-<p>결제 가능금액(연,월,일,결제한도가 지정되지 않은 경우 null로 반환합니다.)</p>
         </div>
                         <h2 id="bf-mobile-api-GETapi-v1-bf-withdraws-balance">출금가능금액 조회</h2>
 

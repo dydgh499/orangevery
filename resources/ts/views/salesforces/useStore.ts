@@ -100,7 +100,7 @@ export const allLevels = () => {
 
 export const useSearchStore = defineStore('salesSearchStore', () => {
     const store = Searcher('salesforces')
-    const head  = Header('salesforces', '결제모듈 관리')
+    const head  = Header('salesforces', '영업점 관리')
     const all_sales = salesLevels()
     const all_cycles = settleCycles()
     const all_days = settleDays()

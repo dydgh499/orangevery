@@ -1,6 +1,6 @@
 import { Header } from '@/views/headers';
 export const useRegisterStore = defineStore('salesRegisterStore', () => {
-    const head = Header('salesforces', '영업점 대량등록 포멧')
+    const head = Header('salesforces/bulk-register', '영업점 대량등록 포멧')
 
     const headers: Record<string, string> = {
         user_name: '아이디(O)',

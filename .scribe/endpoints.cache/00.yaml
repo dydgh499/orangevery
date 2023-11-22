@@ -105,6 +105,174 @@ endpoints:
         BF Mobile과 PAYVERY간 API 입니다.
       subgroup: ''
       subgroupDescription: ''
+      title: '결제모듈정보 조회'
+      description: '결제모듈정보를 불러옵니다.<br>한도 및 수기결제에 필요한 데이터들을 조회합니다.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {ACCESS_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |
+          [
+              {
+                  "id":1,
+                  "is_old_auth":1,
+                  "module_type":1,
+                  "installment":12,
+                  "pay_year_limit":100,
+                  "pay_month_limit":200,
+                  "pay_day_limit":0,
+                  "pay_single_limit":300,
+                  "pay_year_amount": 3640000,
+                  "pay_month_amount": 3640000,
+                  "pay_day_amount": 1640000,
+                  "pay_able_amount":-2640000
+              },
+              {
+                  "id":5,
+                  "is_old_auth":0,
+                  "module_type":1,
+                  "installment":12,
+                  "pay_year_limit":100,
+                  "pay_month_limit":200,
+                  "pay_day_limit":0,
+                  "pay_single_limit":300,
+                  "pay_year_amount": 3640000,
+                  "pay_month_amount": 3640000,
+                  "pay_day_amount": 1640000,
+                  "pay_able_amount":-2640000
+              }    
+          ]
+        headers: []
+        description: ''
+        custom: []
+    responseFields:
+      id:
+        name: id
+        description: '결제모듈 고유번호'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      module_type:
+        name: module_type
+        description: '모듈 타입(0=장비, 1=수기, 2=인증, 3=간편)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      settle_fee:
+        name: settle_fee
+        description: '입금 수수료'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      is_old_auth:
+        name: is_old_auth
+        description: '비인증, 구인증 여부(비인증=0, 구인증=1)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      installment:
+        name: installment
+        description: 할부한도(0~12)
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      pay_year_limit:
+        name: pay_year_limit
+        description: '연결제 한도(만 단위)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_month_limit:
+        name: pay_month_limit
+        description: '월결제 한도(만 단위)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_single_limit:
+        name: pay_single_limit
+        description: '일결제 한도(만 단위)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_year_amount:
+        name: pay_year_amount
+        description: '연결제 금액'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_month_amount:
+        name: pay_month_amount
+        description: '월결제 금액'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_day_amount:
+        name: pay_day_amount
+        description: '일결제 금액'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_able_amount:
+        name: pay_able_amount
+        description: '결제 가능금액(연,월,일,결제한도가 지정되지 않은 경우 null로 반환합니다.)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer kDZga8dv4V56ahecEPbf163'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/bf/transactions
+    metadata:
+      groupName: 'BF Mobile API'
+      groupDescription: |-
+
+        BF Mobile과 PAYVERY간 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
       title: '결제내역 조회'
       description: '로그인한 가맹점의 결제내역을 조회합니다.'
       authenticated: true
@@ -152,7 +320,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: non
+        example: consequuntur
         type: string
         enumValues: []
         custom: []
@@ -161,7 +329,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: non
+      search: consequuntur
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -495,7 +663,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer aVEfade66g3kD1cvbh4ZP58'
+      - 'Bearer Z3f5aPbce4E8DdgV1ha6v6k'
     controller: null
     method: null
     route: null
@@ -503,7 +671,7 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/bf/transactions
+    uri: api/v1/bf/realtime-histories
     metadata:
       groupName: 'BF Mobile API'
       groupDescription: |-
@@ -558,7 +726,7 @@ endpoints:
         name: search
         description: '검색어(승인번호, 계좌번호)'
         required: false
-        example: ut
+        example: qui
         type: string
         enumValues: []
         custom: []
@@ -567,7 +735,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: ut
+      search: qui
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -717,175 +885,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 361hfZacD6g8VabevEkd54P'
-    controller: null
-    method: null
-    route: null
-    custom: []
-  -
-    httpMethods:
-      - GET
-    uri: api/v1/bf/realtime-histories
-    metadata:
-      groupName: 'BF Mobile API'
-      groupDescription: |-
-
-        BF Mobile과 PAYVERY간 API 입니다.
-      subgroup: ''
-      subgroupDescription: ''
-      title: '결제모듈정보 조회'
-      description: '결제모듈정보를 불러옵니다.<br>한도 및 수기결제에 필요한 데이터들을 조회합니다.'
-      authenticated: true
-      custom: []
-    headers:
-      Authorization: 'Bearer {ACCESS_TOKEN}'
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        status: 200
-        content: |
-          [
-              {
-                  "id":1,
-                  "is_old_auth":1,
-                  "module_type":1,
-                  "installment":12,
-                  "pay_year_limit":100,
-                  "pay_month_limit":200,
-                  "pay_day_limit":0,
-                  "pay_single_limit":300,
-                  "pay_year_amount": 3640000,
-                  "pay_month_amount": 3640000,
-                  "pay_day_amount": 1640000,
-                  "pay_able_amount":-2640000
-              },
-              {
-                  "id":5,
-                  "is_old_auth":0,
-                  "module_type":1,
-                  "installment":12,
-                  "pay_year_limit":100,
-                  "pay_month_limit":200,
-                  "pay_day_limit":0,
-                  "pay_single_limit":300,
-                  "pay_year_amount": 3640000,
-                  "pay_month_amount": 3640000,
-                  "pay_day_amount": 1640000,
-                  "pay_able_amount":-2640000
-              }    
-          ]
-        headers: []
-        description: ''
-        custom: []
-    responseFields:
-      id:
-        name: id
-        description: '결제모듈 고유번호'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      module_type:
-        name: module_type
-        description: '모듈 타입(0=장비, 1=수기, 2=인증, 3=간편)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      settle_fee:
-        name: settle_fee
-        description: '입금 수수료'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      is_old_auth:
-        name: is_old_auth
-        description: '비인증, 구인증 여부(비인증=0, 구인증=1)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      installment:
-        name: installment
-        description: 할부한도(0~12)
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        custom: []
-      pay_year_limit:
-        name: pay_year_limit
-        description: '연결제 한도(만 단위)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      pay_month_limit:
-        name: pay_month_limit
-        description: '월결제 한도(만 단위)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      pay_single_limit:
-        name: pay_single_limit
-        description: '일결제 한도(만 단위)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      pay_year_amount:
-        name: pay_year_amount
-        description: '연결제 금액'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      pay_month_amount:
-        name: pay_month_amount
-        description: '월결제 금액'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      pay_day_amount:
-        name: pay_day_amount
-        description: '일결제 금액'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-      pay_able_amount:
-        name: pay_able_amount
-        description: '결제 가능금액(연,월,일,결제한도가 지정되지 않은 경우 null로 반환합니다.)'
-        required: false
-        example: null
-        type: integer
-        enumValues: []
-        custom: []
-    auth:
-      - headers
-      - Authorization
-      - 'Bearer g46vVaab8DPdEh6Zf3c15ek'
+      - 'Bearer bkvfe615PZc6h3E8D4dgVaa'
     controller: null
     method: null
     route: null
@@ -938,7 +938,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer g6VEaP348165aehvZkfdbcD'
+      - 'Bearer Ddka4fV6e153E6vPbZh8gca'
     controller: null
     method: null
     route: null
@@ -1000,7 +1000,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer aVfbcE8h3gdae546Z1P6Dkv'
+      - 'Bearer k6E3fPD8vahbg56aecV1dZ4'
     controller: null
     method: null
     route: null
@@ -1271,7 +1271,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer vDVEha6851d4a6kPZfcebg3'
+      - 'Bearer 3vaf8Db4E6Zhkg5dPac61eV'
     controller: null
     method: null
     route: null
