@@ -123,7 +123,7 @@ onMounted(() => {
                                 </span>
                                 <span v-else-if="_key == 'view_type'">
                                     <VChip
-                                        :color="store.booleanTypeColor(item[_key])">
+                                        :color="store.booleanTypeColor(!item[_key])">
                                         {{ item[_key] ? '상세보기' : '간편보기' }}
                                     </VChip>
                                 </span>
