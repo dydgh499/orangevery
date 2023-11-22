@@ -139,10 +139,10 @@ onMounted(() => {
                     일괄 재발송
                 </VBtn>
                 <div>
-                    <VSwitch hide-details false-value='0' true-value='1' v-model="store.params.only_realtime_fail" label="즉시출금 실패건 조회" color="error"
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_realtime_fail" label="즉시출금 실패건 조회" color="error"
                         @update:modelValue="store.updateQueryString({ only_realtime_fail: store.params.only_realtime_fail })" 
                         v-if="corp.pv_options.paid.use_realtime_deposit"/>
-                    <VSwitch hide-details false-value='0' true-value='1' v-model="store.params.only_cancel" label="취소매출 조회" color="error"
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_cancel" label="취소매출 조회" color="error"
                         @update:modelValue="store.updateQueryString({ only_cancel: store.params.only_cancel })" />
                 </div>
             </template>

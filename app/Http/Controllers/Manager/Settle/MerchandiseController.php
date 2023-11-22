@@ -49,9 +49,19 @@ class MerchandiseController extends Controller
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
                 ->where('mcht_name', 'like', "%$search%"); 
 
+        // 실시간 제외
+        if($request->expect_realtime_deposit)
+        {
+            $mcht_ids = $query->pluck('id')->all();
+            $unuse_realtime_ids = PaymentModule::whereIn('mcht_id', $mcht_ids)
+                ->where('use_realtime_deposit', false)
+                ->pluck('mcht_id')->all();
+            $query = $query->whereIn('id', $unuse_realtime_ids);
+        }        
+        // 모아서 출금
         if($request->use_collect_withdraw)
             $query = $query->with(['collectWithdraws']);
-
+        // 취소 입금
         if($request->use_cancel_deposit)
             $with[] = 'transactions.cancelDeposits';
         else

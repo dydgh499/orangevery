@@ -150,7 +150,7 @@ onMounted(() => {
                 <VBtn prepend-icon="tabler-calculator" @click="partSettle()" size="small">
                     부분정산
                 </VBtn>
-                <VSwitch hide-details false-value='0' true-value='1' v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" @update:modelValue="[store.updateQueryString({is_base_trx: store.params.is_base_trx})]"/>
+                <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" @update:modelValue="[store.updateQueryString({is_base_trx: store.params.is_base_trx})]"/>
                 <div style="display: flex;">
                     <table>
                         <tr>

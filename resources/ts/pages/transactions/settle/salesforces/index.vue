@@ -49,7 +49,7 @@ onMounted(() => {
             <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, false)" v-if="getUserLevel() >= 35" size="small">
                 일괄 정산하기
             </VBtn>
-            <VSwitch hide-details false-value='0' true-value='1' v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" @update:modelValue="[store.updateQueryString({is_base_trx: store.params.is_base_trx})]"/>
+            <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.is_base_trx" label="매출일 기준 조회" color="primary" @update:modelValue="[store.updateQueryString({is_base_trx: store.params.is_base_trx})]"/>
         </template>
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"

@@ -15,6 +15,7 @@ import corp from '@corp'
 const { store, head, exporter } = useSearchStore()
 const { getSettleStyle, batchSettle, isSalesCol, movePartSettle } = settlementFunctionCollect(store)
 const { selected, all_selected } = selectFunctionCollect(store)
+
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
@@ -22,7 +23,8 @@ provide('exporter', exporter)
 store.params.level = 10 // taransaction model에서 필수
 store.params.use_cancel_deposit = Number(corp.pv_options.paid.use_cancel_deposit)
 store.params.use_collect_withdraw = Number(corp.pv_options.paid.use_collect_withdraw)
-
+if(corp.pv_options.paid.use_realtime_deposit)
+    store.params.expect_realtime_deposit = 1
 const { settle_types } = useStore()
 const totals = ref(<any[]>([]))
 const snackbar = <any>(inject('snackbar'))
@@ -52,15 +54,21 @@ onMounted(() => {
                         <VCol cols="12" sm="3">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
-                                item-value="id" @update:modelValue="store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})" />
+                                item-value="id"
+                                @update:modelValue="store.updateQueryString({ mcht_settle_type: store.params.mcht_settle_type })" />
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, true)" v-if="getUserLevel() >= 35" size="small">
+                <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, true)" v-if="getUserLevel() >= 35"
+                    size="small">
                     일괄 정산하기
                 </VBtn>
+                <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.expect_realtime_deposit" label="실시간 이체 제외"
+                    color="primary"
+                    @update:modelValue="[store.updateQueryString({ expect_realtime_deposit: store.params.expect_realtime_deposit })]"
+                    v-if="corp.pv_options.paid.use_realtime_deposit"/>
             </template>
             <template #headers>
                 <tr>
@@ -80,11 +88,11 @@ onMounted(() => {
                         </template>
                         <template v-else-if="key == 'id'">
                             <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 35">
-                                <VCheckbox v-model="all_selected" class="check-label"/>
-                                <span>                                    
-                                <BaseQuestionTooltip :location="'top'" :text="'선택/취소'"
-                                    :content="'하단 가맹점 고유번호를 클릭하여 부분정산 페이지로 이동할 수 있습니다.'">
-                                </BaseQuestionTooltip>
+                                <VCheckbox v-model="all_selected" class="check-label" />
+                                <span>
+                                    <BaseQuestionTooltip :location="'top'" :text="'선택/취소'"
+                                        :content="'하단 가맹점 고유번호를 클릭하여 부분정산 페이지로 이동할 수 있습니다.'">
+                                    </BaseQuestionTooltip>
                                 </span>
                             </div>
                             <span v-else>
@@ -108,11 +116,12 @@ onMounted(() => {
                                 class='list-square'>
                                 <span v-if="_key == 'deduction' && (__key as string) == 'input'">
                                 </span>
-                                <span v-else-if="isExtendSettleCols(_key as string ,__key as string)" style="color: red; font-weight: bold;">
-                                    {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0}}
+                                <span v-else-if="isExtendSettleCols(_key as string, __key as string)"
+                                    style="color: red; font-weight: bold;">
+                                    {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0 }}
                                 </span>
                                 <span v-else :style="getSettleStyle(_key as string)">
-                                    {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0}}
+                                    {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0 }}
                                 </span>
                             </td>
                         </template>
@@ -138,11 +147,12 @@ onMounted(() => {
                                     <AddDeductBtn :id="item['id']" :name="item['mcht_name']" :is_mcht="true">
                                     </AddDeductBtn>
                                 </span>
-                                <span v-else-if="isExtendSettleCols(_key as string ,__key as string)" style="color: red; font-weight: bold;">
-                                    {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0}}
+                                <span v-else-if="isExtendSettleCols(_key as string, __key as string)"
+                                    style="color: red; font-weight: bold;">
+                                    {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0 }}
                                 </span>
                                 <span v-else :style="getSettleStyle(_key as string)">
-                                    {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0}}
+                                    {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0 }}
                                 </span>
                             </td>
                         </template>
@@ -150,8 +160,9 @@ onMounted(() => {
                             <td v-show="_header.visible" class='list-square'>
                                 <span v-if="_key === 'id'">
                                     <div class='check-label-container'>
-                                        <VCheckbox v-model="selected" :value="item[_key]" class="check-label"/>
-                                        <span class="edit-link" @click="movePartSettle(item, true)" v-if="getUserLevel() >= 35">#{{ item[_key] }}</span>
+                                        <VCheckbox v-model="selected" :value="item[_key]" class="check-label" />
+                                        <span class="edit-link" @click="movePartSettle(item, true)"
+                                            v-if="getUserLevel() >= 35">#{{ item[_key] }}</span>
                                         <span class="edit-link" v-else>#{{ item[_key] }}</span>
                                     </div>
                                 </span>
@@ -169,8 +180,7 @@ onMounted(() => {
                         </template>
                     </template>
                 </tr>
-                <!-- part -->
-            </template>
-        </BaseIndexView>
-    </div>
-</template>
+            <!-- part -->
+        </template>
+    </BaseIndexView>
+</div></template>

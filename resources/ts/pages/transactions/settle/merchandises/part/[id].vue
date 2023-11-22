@@ -43,6 +43,8 @@ store.params.id = route.params.id
 store.params.s_dt = route.query.s_dt
 store.params.e_dt = route.query.e_dt
 store.params.level = 10
+if(corp.pv_options.paid.use_realtime_deposit)
+    store.params.expect_realtime_deposit = 1
 
 const isSalesCol = (key: string) => {
     const sales_cols = ['amount', 'trx_amount', 'mcht_settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
@@ -147,6 +149,10 @@ watchEffect(() => {
                 <VBtn prepend-icon="tabler-calculator" @click="partSettle()" v-if="getUserLevel() >= 35" size="small">
                     부분정산
                 </VBtn>
+                <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.expect_realtime_deposit" label="실시간 이체 제외"
+                    color="primary"
+                    @update:modelValue="[store.updateQueryString({ expect_realtime_deposit: store.params.expect_realtime_deposit })]"
+                    v-if="corp.pv_options.paid.use_realtime_deposit"/>
                 <div style="display: flex;">
                     <table>
                         <tr>
