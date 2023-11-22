@@ -33,7 +33,6 @@ class MerchandiseController extends Controller
     {
         $this->merchandises = $merchandises;
         $this->settleDeducts = $settleDeducts;
-
     }
 
     private function commonQuery($request)

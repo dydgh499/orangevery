@@ -62,6 +62,7 @@ export const isRetryAble = (item: Transaction) => {
 export const useSearchStore = defineStore('transSearchStore', () => {    
     const store = Searcher('transactions')
     const head  = Header('transactions', '매출 관리')    
+    const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
     const { get } = useRequestStore()
 
     const formatTime = <any>(inject('$formatTime'))
@@ -71,7 +72,16 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         'module_type': '거래 타입',
         'note': '결제모듈 별칭',
     }
-    const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
+    headers['trx_dttm'] = '거래 시간'
+    headers['cxl_dttm'] = '취소 시간'
+    headers['mcht_name'] = '가맹점 상호'
+    headers['appr_num'] = '승인번호'
+    headers['amount'] = '거래 금액'
+    headers['installment'] = '할부'
+    headers['acquirer'] = '매입사'
+    headers['card_num'] = '카드번호'
+    headers['profit'] = '정산금'
+
     if(getUserLevel() >= 35) {
         headers['pg_id'] = 'PG사'
         headers['ps_id'] = '구간'
@@ -102,7 +112,6 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         headers['sales0_fee'] = '수수료'
     }
     headers['user_name'] = '가맹점 ID'
-    headers['mcht_name'] = '가맹점 상호'
 
     if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13)
     {
@@ -119,26 +128,18 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         headers['terminal_id'] = '장비타입'
     }
 
-    headers['amount'] = '거래 금액'
     headers['trx_amount'] = '거래 수수료'
     headers['hold_amount'] = '유보금'
     headers['mcht_settle_fee'] = '입금 수수료'
     headers['total_trx_amount'] = '총 거래 수수료'
-    headers['profit'] = '정산금'
 
-    headers['trx_dttm'] = '거래 시간'
-    headers['cxl_dttm'] = '취소 시간'
-    headers['installment'] = '할부'
     if(getUserLevel() >= 13)
     {
         headers['mid'] = 'MID'
         headers['tid'] = 'TID'    
     }
-    headers['appr_num'] = '승인번호'    
     headers['issuer'] = '발급사'
-    headers['acquirer'] = '매입사'
 
-    headers['card_num'] = '카드번호'
     headers['buyer_name'] = '구매자명'
     headers['buyer_phone'] = '구매자 연락처'
     

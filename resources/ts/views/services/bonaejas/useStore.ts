@@ -43,13 +43,13 @@ export const useSearchStore = defineStore('bonaejaSearchStore', () => {
         },
     ])
 
-    const getCodeTypeString = (code: number) => {
+    const getCodeTypeString = (code: number, res_msg:string) => {
         if(code == 1000)
             return '성공'
         else if(code == 500)
             return '전송중'
         else
-            return '에러'
+            return res_msg
     }
 
     const getCodeTypeColor = (code: number) => {
@@ -78,6 +78,7 @@ export const useSearchStore = defineStore('bonaejaSearchStore', () => {
         let datas = r.data.content;
         for (let i = 0; i < datas.length; i++) {
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
+            datas[i]['code'] = getCodeTypeString(datas[i]['code'], datas[i]['rsg_msg'])
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }
