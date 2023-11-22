@@ -104,3 +104,12 @@ th {
 .v-input--density-compact .v-field--no-label {
   --v-field-padding-bottom: 1px !important;
 }
+
+.custom-select {
+  border: 1px solid rgba(var(--v-border-color));
+  border-radius: 0.5em;
+  min-inline-size: 7em;
+  padding-block: 0.3em;
+  padding-inline: 0.5em;
+  text-align: center;
+}

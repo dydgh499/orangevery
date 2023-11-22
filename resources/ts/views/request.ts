@@ -1,7 +1,7 @@
 import router from '@/router'
-import { getLevelByIndex, useSalesFilterStore } from '@/views/salesforces/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import type { Merchandise } from '@/views/types'
-import { axios } from '@axios'
+import { axios, getLevelByIndex } from '@axios'
 
 export const useRequestStore = defineStore('requestStore', () => {
     const alert = <any>(inject('alert'))
@@ -28,6 +28,18 @@ export const useRequestStore = defineStore('requestStore', () => {
                 else if (back_url == '/merchandises') {
                     mchts.push(params)
                     mchts.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name))
+                }
+                else if (back_url == '/salesforces/under-auto-settings') {
+                    all_sales.forEach(sales => {
+                        sales.forEach(sale => {
+                            if (sale.id === res.data.sales_id) {
+                                if (!sale.under_auto_settings)
+                                    sale.under_auto_settings = []
+                                else
+                                    sale.under_auto_settings.push(params)
+                            }
+                        })
+                    })
                 }
             }
             if (is_redirect) {

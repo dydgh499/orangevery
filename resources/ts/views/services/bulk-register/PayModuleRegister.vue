@@ -4,7 +4,6 @@ import { useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useRegisterStore } from '@/views/services/bulk-register/PayModRegisterStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { module_types, installments, fin_trx_delays, cxl_types } from '@/views/merchandises/pay-modules/useStore'
-import { salesLevels } from '@/views/salesforces/useStore'
 import SettleTypeExplainDialog from '@/views/services/bulk-register/SettleTypeExplainDialog.vue'
 import PGExplainDialog from '@/views/services/bulk-register/PGExplainDialog.vue'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
@@ -13,6 +12,8 @@ import type { PayModule, Options } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import corp from '@corp';
 import { isEmpty } from '@core/utils'
+import { salesLevels } from '@axios'
+
 
 const { store } = useSearchStore()
 const { pgs, pss, settle_types, terminals, finance_vans } = useStore()

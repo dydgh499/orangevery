@@ -6,10 +6,10 @@ import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
 import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { salesLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
+import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import { getUserLevel } from '@axios'
+import { getUserLevel, salesLevels } from '@axios'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()

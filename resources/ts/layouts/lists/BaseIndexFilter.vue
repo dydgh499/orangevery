@@ -2,7 +2,7 @@
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { ko } from 'date-fns/locale'
 import { DateFilters } from '@core/enums'
-import { salesLevels } from '@/views/salesforces/useStore'
+import { salesLevels } from '@axios'
 import { DateSetter } from '@/views/searcher'
 import type { Options } from '@/views/types'
 import corp from '@corp'

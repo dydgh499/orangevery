@@ -4,10 +4,10 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
-import { salesLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
-import { getLevelByIndex } from '@/views/salesforces/useStore'
-import { user_info } from '@axios'
+import { settleCycles, settleDays, settleTaxTypes, getAutoSetting } from '@/views/salesforces/useStore'
+import { user_info, getLevelByIndex, salesLevels } from '@axios'
 import { DateFilters } from '@core/enums'
+import corp from '@corp'
 
 const { store, head, exporter, metas } = useSearchStore()
 const all_sales = salesLevels()
@@ -15,6 +15,9 @@ const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
 const password = ref()
+
+if(corp.pv_options.paid.use_sales_auto_setting)
+ store.params.use_sales_auto_setting = 1
 
 provide('password', password)
 provide('store', store)
@@ -101,6 +104,13 @@ onMounted(() => {
                                         :color="store.getSelectIdColor(all_cycles.find(obj => obj.id === item[_key])?.id)">
                                         {{ all_cycles.find(sales => sales.id === item[_key])?.title }}
                                     </VChip>
+                                </span>                                
+                                <span v-else-if="_key == 'under_auto_settings'">
+                                    <select class="custom-select">
+                                        <option v-for="(setting, key) in getAutoSetting(item['under_auto_settings'])" :key="key">
+                                            {{ setting }}
+                                        </option>
+                                    </select>
                                 </span>
                                 <span v-else-if="_key == 'settle_day'">
                                     {{ all_days.find(sales => sales.id === item[_key])?.title }}

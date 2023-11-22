@@ -7,14 +7,13 @@ import {
     module_types, installments, abnormal_trans_limits, ship_out_stats, under_sales_types, 
     comm_settle_types, fin_trx_delays, cxl_types
  } from '@/views/merchandises/pay-modules/useStore'
-import { salesLevels } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { issuers } from '@/views/complaints/useStore'
 import { VForm } from 'vuetify/components'
 import corp from '@corp'
-import { axios, getUserLevel } from '@axios'
+import { axios, getUserLevel, salesLevels } from '@axios'
 
 interface Props {
     item: PayModule,

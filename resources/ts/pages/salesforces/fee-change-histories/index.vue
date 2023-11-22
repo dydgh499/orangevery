@@ -2,7 +2,7 @@
 import { useSearchStore } from '@/views/salesforces/fee-change-histories/useStore'
 import ExtraMenu from '@/views/merchandises/fee-change-histories/ExtraMenu.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { allLevels } from '@/views/salesforces/useStore'
+import { allLevels } from '@axios'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()

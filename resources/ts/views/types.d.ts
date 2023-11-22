@@ -297,7 +297,7 @@ interface PaidOption {
     use_api_key_batch: boolean,
     use_sub_key_batch: boolean,
     use_pay_verification_mobile: boolean, //휴대폰인증 
-    use_sales_auth_setting: boolean, // 영업점 자동 세팅
+    use_sales_auto_setting: boolean, // 영업점 자동 세팅
     use_regular_card: boolean,
     use_collect_withdraw: boolean,
     use_head_office_withdraw: boolean,

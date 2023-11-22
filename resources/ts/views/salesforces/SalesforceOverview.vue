@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { salesLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
+import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
+import { salesLevels } from '@axios'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import type { Salesforce } from '@/views/types'
@@ -98,7 +99,7 @@ const tax_types = settleTaxTypes()
                 </VCardItem>
             </VCard>
             <br>
-            <VCard v-if="corp.pv_options.paid.use_sales_auth_setting">
+            <VCard v-if="corp.pv_options.paid.use_sales_auto_setting">
                 <VCardItem>
                     <VCol cols="12">
                         <VRow>

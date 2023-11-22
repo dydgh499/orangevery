@@ -1,48 +1,10 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
-import type { Merchandise, Options, Salesforce } from '@/views/types'
-import { axios, getUserLevel } from '@axios'
+import type { Merchandise, Options, Salesforce, UnderAutoSetting } from '@/views/types'
+import { axios, salesLevels } from '@axios'
 import corp from '@corp'
 
 const levels = corp.pv_options.auth.levels
-
-export const getLevelByIndex = (level:number) => {
-    switch(level) {
-        case 13:
-            return 0;
-        case 15:
-            return 1;
-        case 17:
-            return 2;
-        case 20:
-            return 3;
-        case 25:
-            return 4;
-        case 30:
-            return 5;
-        default:
-            return -1;
-    }
-}
-
-export const getIndexByLevel = (idx:number) => {
-    switch(idx) {
-        case 0:
-            return 13;
-        case 1:
-            return 15;
-        case 2:
-            return 17;
-        case 3:
-            return 20;
-        case 4:
-            return 25;
-        case 5:
-            return 30;
-        default:
-            return 0;
-    }
-}
 
 export const settleDays = () => {
     return <Options[]>([
@@ -67,35 +29,8 @@ export const settleTaxTypes = () => {
     ])
 }
 
-export const salesLevels = () => {
-    const sales = <Options[]>([]);
-    if(levels.sales0_use && getUserLevel() >= 13)
-        sales.push({id: 13, title: levels.sales0_name})
-    if(levels.sales1_use && getUserLevel() >= 15)
-        sales.push({id: 15, title: levels.sales1_name})
-    if(levels.sales2_use && getUserLevel() >= 17)
-        sales.push({id: 17, title: levels.sales2_name})
-    if(levels.sales3_use && getUserLevel() >= 20)
-        sales.push({id: 20, title: levels.sales3_name})
-    if(levels.sales4_use && getUserLevel() >= 25)
-        sales.push({id: 25, title: levels.sales4_name})
-    if(levels.sales5_use && getUserLevel() >= 30)
-        sales.push({id: 30, title: levels.sales5_name})
-    return sales
-}
-
-export const allLevels = () => {
-    const sales = salesLevels()
-    if(getUserLevel() >= 10)
-        sales.unshift(<Options>({id: 10, title: '가맹점'}))
-    if(getUserLevel() >= 35) {
-        sales.push(<Options>({id: 35, title: '직원'}))
-        sales.push(<Options>({id: 40, title: '본사'}))
-        sales.push(<Options>({id: 45, title: '협력사'}))
-    }
-    if(levels.dev_use && getUserLevel() >= 35)
-        sales.push(<Options>({id: 50, title: levels.dev_name}))
-    return sales
+export const getAutoSetting = (auto_settings: UnderAutoSetting[]) => {
+    return auto_settings.map(item => `${item.note}: ${item.sales_fee}%`)
 }
 
 export const useSearchStore = defineStore('salesSearchStore', () => {
@@ -111,6 +46,11 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
         'level' : '등급',
         'user_name' : '영업점 ID',
         'sales_name': '영업점 상호',
+    }
+    if(corp.pv_options.paid.use_sales_auto_setting)
+        headers['under_auto_settings'] = '자동세팅'
+
+    Object.assign(headers, {
         'view_type' : '화면타입',
         'settle_cycle' : '정산 주기',
         'settle_day' : '정산 요일',
@@ -129,8 +69,8 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
         'extra_col' : '더보기',
-    }
-    head.main_headers.value = [];
+    })
+    head.main_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
     
@@ -194,8 +134,8 @@ export const feeApplyHistoires = async () => {
 }
 
 export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
-    const all_sales = Array.from({ length: 6 }, () => <any[]>([]))
-    const sales = Array.from({ length: 6 }, () => ref<any[]>([]))
+    const all_sales = Array.from({ length: 6 }, () => <Salesforce[]>([]))
+    const sales = Array.from({ length: 6 }, () => ref<Salesforce[]>([]))
     const mchts = ref(<Merchandise[]>([]))
     
     onMounted(async () => { 

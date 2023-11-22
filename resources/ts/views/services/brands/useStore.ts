@@ -174,7 +174,7 @@ export const defaultItemInfo = () => {
                 use_api_key_batch: false,
                 use_sub_key_batch: false,
                 use_pay_verification_mobile: false,
-                use_sales_auth_setting: false,
+                use_sales_auto_setting: false,
                 use_regular_card: false,
                 use_collect_withdraw: false,
                 use_noti: false,

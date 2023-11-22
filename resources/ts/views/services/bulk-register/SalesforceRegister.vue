@@ -2,7 +2,7 @@
 import { lengthValidatorV2 } from '@validators'
 import { useSearchStore } from '@/views/salesforces/useStore'
 import { useRegisterStore } from '@/views/services/bulk-register/SalesRegisterStore'
-import { salesLevels, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
+import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import type { Salesforce } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BanksExplainDialog from '@/layouts/dialogs/BanksExplainDialog.vue'
@@ -11,6 +11,7 @@ import { Registration } from '@/views/registration'
 import { banks } from '@/views/users/useStore'
 import corp from '@corp'
 import { isEmpty } from '@core/utils'
+import { salesLevels } from '@axios'
 
 const { store } = useSearchStore()
 const { head, headers } = useRegisterStore()

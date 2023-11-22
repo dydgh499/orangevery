@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useSalesFilterStore, getIndexByLevel } from '@/views/salesforces/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import corp from '@corp'
-import { user_info } from '@axios'
+import { user_info, getIndexByLevel } from '@axios'
 
 interface Props {
     show: boolean,

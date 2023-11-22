@@ -4,8 +4,7 @@ import { selectFunctionCollect } from '@/views/selected'
 import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
 import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { salesLevels, getLevelByIndex } from '@/views/salesforces/useStore'
-import { getUserLevel } from '@axios'
+import { getUserLevel, getLevelByIndex, salesLevels } from '@axios'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()

@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/merchandises/terminals/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { allLevels } from '@/views/salesforces/useStore'
 import { module_types, installments, ship_out_stats, under_sales_types } from '@/views/merchandises/pay-modules/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { user_info, getUserLevel } from '@axios'
+import { user_info, getUserLevel, allLevels } from '@axios'
 import { DateFilters } from '@core/enums'
 
 const { pgs, pss, settle_types, terminals } = useStore()

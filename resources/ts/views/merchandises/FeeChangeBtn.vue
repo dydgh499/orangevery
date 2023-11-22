@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { axios } from '@axios'
+import { axios, getLevelByIndex } from '@axios'
 import type { Merchandise } from '@/views/types'
-import { getLevelByIndex } from '@/views/salesforces/useStore'
 
 interface Props {
     level: number,

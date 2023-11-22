@@ -122,13 +122,4 @@ onMounted(() => {
         <PasswordChangeDialog ref="password" />
     </div>
 </template>
-<style scoped lang="scss">
-.custom-select {
-  border: 1px solid rgba(var(--v-border-color));
-  border-radius: 0.5em;
-  min-inline-size: 7em;
-  padding-block: 0.3em;
-  padding-inline: 0.5em;
-  text-align: center;
-}
-</style>
+

@@ -3,11 +3,10 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { getLevelByIndex } from '@/views/salesforces/useStore'
 import { abnormal_trans_limits } from '@/views/merchandises/pay-modules/useStore'
 import { banks } from '@/views/users/useStore'
 import type { Salesforce } from '@/views/types'
-import { axios } from '@axios'
+import { axios, getLevelByIndex } from '@axios'
 import corp from '@corp'
 
 interface Props {

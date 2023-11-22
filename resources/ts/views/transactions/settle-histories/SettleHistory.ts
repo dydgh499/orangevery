@@ -1,8 +1,7 @@
 import { useRequestStore } from '@/views/request'
-import { getLevelByIndex } from '@/views/salesforces/useStore'
 import { useSearchStore } from '@/views/transactions/useStore'
 import { SettlesHistories } from '@/views/types'
-import { axios } from '@axios'
+import { axios, getLevelByIndex } from '@axios'
 import corp from '@corp'
 
 export function settlementHistoryFunctionCollect(store: any) {
