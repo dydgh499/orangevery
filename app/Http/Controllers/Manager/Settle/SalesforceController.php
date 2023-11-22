@@ -180,34 +180,33 @@ class SalesforceController extends Controller
 
     public function partChart(Request $request)
     {
+        $search = $request->input('search', '');
         $request = $request->merge([
             'page' => 1,
             'page_size' => 999999,
         ]);
-        
-        $level  = $request->level;
-        $s_dt   = $request->s_dt;
-        $e_dt   = $request->e_dt;
-        
+
         [$settle_key, $group_key] = $this->getSettleCol($request);
+        $cols  = $this->getTotalCols($settle_key);
         $query = $this->salesforces->where('id', $request->id);
-        $sales = $this->commonSalesQuery($query, $s_dt, $e_dt)->first();
+        $sales = $this->commonSalesQuery($query, $request->s_dt, $request->e_dt)->first();
         if($sales)
         {
             $idx = globalLevelByIndex($request->level);
-            $query = Transaction::query()
-                ->where($group_key, $request->id)
-                ->noSettlement("sales".$idx."_settle_id");
-            $data = $this->getIndexData($request, $query);
-            $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-            $salesforces    = globalGetSalesByIds($sales_ids);
-            $data['content'] = globalMappingSales($salesforces, $data['content']);
-            $chart = getDefaultTransChartFormat($data['content'], $settle_key);
+            $chart = Transaction::where($group_key, $request->id)
+                ->noSettlement("sales".$idx."_settle_id")
+                ->where(function ($query) use ($search) {
+                    return $query->where('transactions.mid', 'like', "%$search%")
+                        ->orWhere('transactions.tid', 'like', "%$search%")
+                        ->orWhere('transactions.trx_id', 'like', "%$search%")
+                        ->orWhere('transactions.appr_num', 'like', "%$search%");
+                })
+                ->first($cols);
+            $chart = $this->setTransChartFormat($chart);
         }
         else
-        {
-            $chart = getDefaultTransChartFormat([], $settle_key);
-        }
+            $chart = $this->setTransChartFormat([]);
+        
         return $this->response(0, $chart);     
     }
 

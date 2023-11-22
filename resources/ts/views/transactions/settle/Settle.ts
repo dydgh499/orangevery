@@ -75,6 +75,8 @@ export function settlementFunctionCollect(store: any) {
             return 'color: rgb(var(--v-theme-primary));'
         else if (parent_key === 'cxl')
             return 'color: red;'
+        else if (parent_key === 'total')
+            return 'font-weight: bold;'
         else if (parent_key === 'settle')
             return 'font-weight: bold;'
         else

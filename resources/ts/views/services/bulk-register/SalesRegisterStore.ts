@@ -18,7 +18,8 @@ export const useRegisterStore = defineStore('salesRegisterStore', () => {
         acct_bank_name: '입금은행명(O)',
         settle_tax_type: '정산세율(O)', 
         settle_cycle: '정산주기(O)', 
-        settle_day: '정산일(O)'
+        settle_day: '정산일(O)',
+        view_type: '화면 타입(O)',
     }
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})

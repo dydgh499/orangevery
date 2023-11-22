@@ -86,6 +86,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         headers['pg_id'] = 'PG사'
         headers['ps_id'] = '구간'
         headers['ps_fee'] = '구간 수수료'
+        headers['mcht_settle_type'] = '가맹점 정산타입'
     }
     if (levels.sales5_use && getUserLevel() >= 30) {
         headers['sales5_name'] = levels.sales5_name
@@ -158,7 +159,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['updated_at'] = '업데이트시간'
     headers['extra_col'] = '더보기'
     
-    head.main_headers.value = [];
+    head.main_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.setFlattenHeaders()
     

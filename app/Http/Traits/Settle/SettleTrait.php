@@ -19,13 +19,7 @@ trait SettleTrait
     {
         foreach($data['content'] as $content) {
             $chart = getDefaultTransChartFormat($content->transactions, $settle_key);
-            $content->amount = $chart['amount'];
-            $content->count = $chart['count'];
-            $content->profit = $chart['profit'];
-            $content->trx_amount = $chart['trx_amount'];
-            $content->hold_amount = $chart['hold_amount'];
-            $content->settle_fee = $chart['settle_fee'];
-            $content->total_trx_amount = $chart['total_trx_amount'];
+            $content->total = $chart['total'];
             $content->appr = $chart['appr'];
             $content->cxl = $chart['cxl'];
             $content->deduction = [
@@ -114,7 +108,7 @@ trait SettleTrait
     {
         foreach($data['content'] as $content) 
         {
-            $settle = $content['profit'] + $content->deduction['amount'];
+            $settle = $content->total['profit'] + $content->deduction['amount'];
             $settle += $content->terminal['amount'];
             $settle += $content->terminal['under_sales_amount'];
 

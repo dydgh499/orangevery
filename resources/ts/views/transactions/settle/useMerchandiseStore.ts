@@ -11,6 +11,15 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         'id': 'NO.',
         'user_name' : '가맹점 ID',
         'mcht_name' : '상호',
+        'total': {
+            'count' :  '매출건수',
+            'amount' :  '금액',
+            'trx_amount' :  '거래 수수료',
+            'hold_amount': '유보금',
+            'settle_fee' :  '입금 수수료',
+            'total_trx_amount': '총 거래 수수료',
+            'profit': '정산액',    
+        },
         'appr' : {
             'count' :  '매출건수',
             'amount' :  '금액',
@@ -29,13 +38,6 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
             'total_trx_amount': '총 거래 수수료',
             'profit': '정산액',
         },
-        'count' :  '매출건수',
-        'amount' :  '금액',
-        'trx_amount' :  '거래 수수료',
-        'hold_amount': '유보금',
-        'settle_fee' :  '입금 수수료',
-        'total_trx_amount': '총 거래 수수료',
-        'profit': '정산액',
     }
     const headers2:DeductionHeader = {'deduction': {}}
     if(getUserLevel() >= 35)
@@ -72,15 +74,16 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
     if(getUserLevel() >= 35) {
         headers3['extra_col'] = '더보기'
     }
-    
+
     head.main_headers.value = [
         '가맹점 정보',
+        '매출',
         '승인',
         '취소',
-        '매출',
         '추가차감',
         '장비',
         '정산금',
+        '계좌정보'
     ];
     const headers = {
         ...headers1,

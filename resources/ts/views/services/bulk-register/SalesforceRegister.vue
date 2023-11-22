@@ -3,7 +3,7 @@ import { lengthValidatorV2 } from '@validators'
 import { useSearchStore } from '@/views/salesforces/useStore'
 import { useRegisterStore } from '@/views/services/bulk-register/SalesRegisterStore'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
-import type { Salesforce } from '@/views/types'
+import type { Salesforce, Options } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BanksExplainDialog from '@/layouts/dialogs/BanksExplainDialog.vue'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
@@ -28,6 +28,10 @@ const is_clear = ref<boolean>(false)
 const banksExplain = ref()
 const levels = corp.pv_options.auth.levels
 
+const view_types: Options[] = [
+    { id: 0, title: '간편보기'},
+    { id: 1, title: '상세보기'},
+]
 
 const validate = () => {
     const user_names = new Set()
@@ -188,6 +192,14 @@ watchEffect(async () => {
                             {{ all_day.title }} = {{ all_day.id != null ? all_day.id : -1 }}
                         </VChip>                        
                     </VCol>
+                    <VCol class="pb-0">
+                        <b>정산일</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(view_type, key) in view_types" :key="key">
+                            {{ view_type.title }} = {{ view_type.id }}
+                        </VChip>                        
+                    </VCol>
+                    
                 </template>
                 <template #input>
                     <VCol class="pb-0">

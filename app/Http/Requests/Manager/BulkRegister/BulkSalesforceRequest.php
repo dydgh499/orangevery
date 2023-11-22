@@ -24,6 +24,7 @@ class BulkSalesforceRequest extends FormRequest
         'settle_tax_type',
         'settle_cycle',
         'settle_day',
+        'view_type',
     ];
 
     public function authorize()
@@ -53,6 +54,7 @@ class BulkSalesforceRequest extends FormRequest
             '*.acct_bank_code' => 'required',
             '*.settle_tax_type' => 'required',
             '*.settle_cycle' => 'required',
+            '*.view_type'   => 'required|integer',
         ];
         return $sub;
     }

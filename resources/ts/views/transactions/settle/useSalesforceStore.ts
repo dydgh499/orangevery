@@ -16,6 +16,12 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
         'settle_day' : '정산 요일',
         'settle_tax_type': '정산 세율',
         'last_settle_dt': '마지막 정산일',
+        'total' : {
+            'count' :  '매출건수',
+            'amount' :  '금액',
+            'total_trx_amount': '총 거래 수수료',
+            'profit': '정산액',    
+        },
         'appr' : {
             'count' :  '매출건수',
             'amount' :  '금액',
@@ -28,15 +34,10 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
             'total_trx_amount': '총 거래 수수료',
             'profit': '정산액',
         },
-        'count' :  '매출건수',
-        'amount' :  '금액',
-        'total_trx_amount': '총 거래 수수료',
-        'profit': '정산액',
     }
     const headers2:DeductionHeader = {'deduction': {}}
-    if(getUserLevel() >= 35) {
+    if(getUserLevel() >= 35)
         headers2['deduction']['input'] = '추가차감입력'
-    }
     headers2['deduction']['amount'] = '차감완료금'
     
     const headers3:Record<string, string | object> = {
@@ -67,13 +68,14 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
     
     head.main_headers.value = [
         '영업점 정보',
+        '매출',
         '승인',
         '취소',
-        '매출',
         '추가차감',
         '장비',
         '정산금',
         '은행정보',
+        '계좌정보'
     ];
     
     const headers = {
