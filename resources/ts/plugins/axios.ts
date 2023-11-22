@@ -24,6 +24,25 @@ export const getLevelByIndex = (level:number) => {
     }
 }
 
+export const getIndexByLevel = (idx:number) => {
+    switch(idx) {
+        case 0:
+            return 13;
+        case 1:
+            return 15;
+        case 2:
+            return 17;
+        case 3:
+            return 20;
+        case 4:
+            return 25;
+        case 5:
+            return 30;
+        default:
+            return 0;
+    }
+}
+
 export const salesLevels = () => {
     const sales = <Options[]>([]);
     if(levels.sales0_use && getUserLevel() >= 13)
@@ -54,26 +73,6 @@ export const allLevels = () => {
         sales.push(<Options>({id: 50, title: levels.dev_name}))
     return sales
 }
-
-export const getIndexByLevel = (idx:number) => {
-    switch(idx) {
-        case 0:
-            return 13;
-        case 1:
-            return 15;
-        case 2:
-            return 17;
-        case 3:
-            return 20;
-        case 4:
-            return 25;
-        case 5:
-            return 30;
-        default:
-            return 0;
-    }
-}
-
 
 export const getUserLevel = () => {
     if(user_info.value) {

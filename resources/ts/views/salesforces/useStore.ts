@@ -30,7 +30,7 @@ export const settleTaxTypes = () => {
 }
 
 export const getAutoSetting = (auto_settings: UnderAutoSetting[]) => {
-    return auto_settings.map(item => `${item.note}: ${item.sales_fee}%`)
+    return auto_settings.map(item => `${item.note} - ${item.sales_fee}%`)
 }
 
 export const useSearchStore = defineStore('salesSearchStore', () => {
@@ -48,7 +48,7 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
         'sales_name': '영업점 상호',
     }
     if(corp.pv_options.paid.use_sales_auto_setting)
-        headers['under_auto_settings'] = '자동세팅'
+        headers['under_auto_settings'] = '수수료율'
 
     Object.assign(headers, {
         'view_type' : '화면타입',

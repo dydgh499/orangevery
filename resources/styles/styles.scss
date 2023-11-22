@@ -106,10 +106,14 @@ th {
 }
 
 .custom-select {
-  border: 1px solid rgba(var(--v-border-color));
+  border: 1px solid rgba(var(--v-border-color), 0.5);
   border-radius: 0.5em;
   min-inline-size: 7em;
   padding-block: 0.3em;
   padding-inline: 0.5em;
   text-align: center;
+}
+
+.custom-select:active {
+  border: 1px solid rgba(var(--v-border-color), 1);
 }
