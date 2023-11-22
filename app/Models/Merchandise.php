@@ -54,6 +54,8 @@ class Merchandise extends Authenticatable
         return $this->hasMany(CollectWithdraw::class, 'mcht_id')
             ->whereNull('mcht_settle_id')
             ->groupBy('mcht_id')
+            ->where('withdraw_date', '>=', request()->s_dt)
+            ->where('withdraw_date', '<=', request()->e_dt)
             ->selectRaw('mcht_id, SUM(withdraw_amount) as total_withdraw_amount');
     }
 

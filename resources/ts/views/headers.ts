@@ -8,7 +8,7 @@ export const Header = (_path: string, file_name: string) => {
     const flat_headers = ref<Filter>({})
     const main_headers = ref<string[]>([])
     const path = _path
-    let header_count = 0;
+    let header_count = 0
 
     const initHeader = (_headers: object, result: Filter): Filter => {
         for (const [key, value] of Object.entries(_headers)) {

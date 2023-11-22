@@ -48,12 +48,21 @@ onMounted(() => {
                             <template v-if="store.is_skeleton">
                                 <tr v-for="(item, index) in 10" :key="index">
                                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                                        <td v-show="_header.visible" class='list-square'>
-                                            <span v-if="_key == `id`">
-                                                # <SkeletonBox :width="'2em'"/>
-                                            </span>
-                                            <SkeletonBox v-else/>
-                                        </td>
+                                        <template v-if="head.getDepth(_header, 0) != 1">
+                                            <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
+                                                class='list-square'>
+                                                <SkeletonBox/>
+                                            </td>
+                                        </template>
+                                        <template v-else>
+                                            <td v-show="_header.visible" class='list-square'>
+                                                <span v-if="_key == `id`">
+                                                    # <SkeletonBox :width="'2em'"/>
+                                                </span>
+                                                <SkeletonBox v-else/>
+                                            </td>
+                                        </template>
+
                                     </template>
                                 </tr>
                             </template>
