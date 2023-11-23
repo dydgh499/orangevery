@@ -9,6 +9,7 @@ Route::middleware('log.route')->group(function() {
         Route::get('pay-modules', [BfController::class, 'payModules']);
         Route::get('transactions', [BfController::class, 'transactionIndex']);
         Route::get('realtime-histories', [BfController::class, 'realtimeHistoryIndex']);
+        Route::get('self-withdraws', [BfController::class, 'selfWithdrawIndex']);        
         Route::get('withdraws/balance', [BfController::class, 'withdrawsBalance']);
         Route::post('withdraws', [BfController::class, 'withdrawsStore']);
         Route::post('pay/hand', [BfController::class, 'handPay']);

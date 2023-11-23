@@ -257,7 +257,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer kDZga8dv4V56ahecEPbf163'
+      - 'Bearer D6V31EfPvh54ade8bac6gkZ'
     controller: null
     method: null
     route: null
@@ -320,7 +320,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: consequuntur
+        example: corrupti
         type: string
         enumValues: []
         custom: []
@@ -329,7 +329,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: consequuntur
+      search: corrupti
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -663,7 +663,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer Z3f5aPbce4E8DdgV1ha6v6k'
+      - 'Bearer bkgPa4hc56e316EZfVv8daD'
     controller: null
     method: null
     route: null
@@ -726,7 +726,7 @@ endpoints:
         name: search
         description: '검색어(승인번호, 계좌번호)'
         required: false
-        example: qui
+        example: aut
         type: string
         enumValues: []
         custom: []
@@ -735,7 +735,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: qui
+      search: aut
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -885,7 +885,88 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer bkvfe615PZc6h3E8D4dgVaa'
+      - 'Bearer Z6Df65ag3ec4vhakV1bdP8E'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/bf/self-withdraws
+    metadata:
+      groupName: 'BF Mobile API'
+      groupDescription: |-
+
+        BF Mobile과 PAYVERY간 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '가맹점 직접출금내역 조회'
+      description: '로그인한 가맹점의 직접출금내역을 조회합니다.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {ACCESS_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: '페이지 번호.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        custom: []
+      page_size:
+        name: page_size
+        description: '페이지 사이즈.'
+        required: true
+        example: 20
+        type: integer
+        enumValues: []
+        custom: []
+      s_dt:
+        name: s_dt
+        description: 시작일.
+        required: false
+        example: '2023-10-14'
+        type: string
+        enumValues: []
+        custom: []
+      e_dt:
+        name: e_dt
+        description: 종료일.
+        required: false
+        example: '2023-10-15'
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      page: 1
+      page_size: 20
+      s_dt: '2023-10-14'
+      e_dt: '2023-10-15'
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 401
+        content: '{"code":950,"message":"로그인 정보가 정확하지 않습니다."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          vary: Origin
+        description: null
+        custom: []
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer aeEdb1PvhkVa4D5g68Z36fc'
     controller: null
     method: null
     route: null
@@ -938,7 +1019,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer Ddka4fV6e153E6vPbZh8gca'
+      - 'Bearer 5fgZPb4a63aDdvVcE6e18kh'
     controller: null
     method: null
     route: null
@@ -1000,7 +1081,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer k6E3fPD8vahbg56aecV1dZ4'
+      - 'Bearer Z8aEcPg5bf4ea6Dh6dV3kv1'
     controller: null
     method: null
     route: null
@@ -1271,7 +1352,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 3vaf8Db4E6Zhkg5dPac61eV'
+      - 'Bearer 8aDea61V5cZfgkh34v6bdPE'
     controller: null
     method: null
     route: null

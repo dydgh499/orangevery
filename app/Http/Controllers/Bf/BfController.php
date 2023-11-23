@@ -299,6 +299,17 @@ class BfController extends Controller
 
         $data = $this->getIndexData($request, $query, 'realtime_send_histories.id', $cols, 'realtime_send_histories.created_at');
         return $this->response(0, $data);
+    }
 
+    /**
+     * 가맹점 직접출금내역 조회
+     *
+     * 로그인한 가맹점의 직접출금내역을 조회합니다.
+     *
+     */
+    public function selfWithdrawIndex(IndexRequest $request)
+    {
+        $inst = new CollectWithdrawController(new CollectWithdraw);
+        return $ist->index($request);
     }
 }

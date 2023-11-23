@@ -90,6 +90,9 @@
                                                                                 <li class="tocify-item level-2" data-unique="bf-mobile-api-GETapi-v1-bf-realtime-histories">
                                 <a href="#bf-mobile-api-GETapi-v1-bf-realtime-histories">실시간 이체내역 조회</a>
                             </li>
+                                                                                <li class="tocify-item level-2" data-unique="bf-mobile-api-GETapi-v1-bf-self-withdraws">
+                                <a href="#bf-mobile-api-GETapi-v1-bf-self-withdraws">가맹점 직접출금내역 조회</a>
+                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="bf-mobile-api-GETapi-v1-bf-withdraws-balance">
                                 <a href="#bf-mobile-api-GETapi-v1-bf-withdraws-balance">출금가능금액 조회</a>
                             </li>
@@ -108,7 +111,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-22 14:41:25</li>
+        <li>마지막 업데이트:  2023-11-23 14:59:11</li>
     </ul>
 </div>
 
@@ -720,7 +723,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "consequuntur",
+    "search": "corrupti",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -752,7 +755,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'consequuntur',
+            'search' =&gt; 'corrupti',
         ],
     ]
 );
@@ -770,7 +773,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'consequuntur',
+  'search': 'corrupti',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -784,7 +787,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=consequuntur" \
+    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=corrupti" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1081,10 +1084,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-transactions"
-               value="consequuntur"
+               value="corrupti"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>consequuntur</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>corrupti</code></p>
             </div>
                 </form>
 
@@ -1274,7 +1277,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "qui",
+    "search": "aut",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1306,7 +1309,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'qui',
+            'search' =&gt; 'aut',
         ],
     ]
 );
@@ -1324,7 +1327,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'qui',
+  'search': 'aut',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1338,7 +1341,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=qui" \
+    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=aut" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1531,10 +1534,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-realtime-histories"
-               value="qui"
+               value="aut"
                data-component="query">
     <br>
-<p>검색어(승인번호, 계좌번호) <br>예시: <code>qui</code></p>
+<p>검색어(승인번호, 계좌번호) <br>예시: <code>aut</code></p>
             </div>
                 </form>
 
@@ -1632,7 +1635,243 @@ response.json()</code></pre></div>
         </div>
                                         </details>
         </div>
-                        <h2 id="bf-mobile-api-GETapi-v1-bf-withdraws-balance">출금가능금액 조회</h2>
+                        <h2 id="bf-mobile-api-GETapi-v1-bf-self-withdraws">가맹점 직접출금내역 조회</h2>
+
+<p>
+<small class="badge badge-darkred">인증 필요</small>
+</p>
+
+<p>로그인한 가맹점의 직접출금내역을 조회합니다.</p>
+
+<span id="example-requests-GETapi-v1-bf-self-withdraws">
+<blockquote>예시 요청:</blockquote>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "https://team.payvery.kr/api/v1/bf/self-withdraws"
+);
+
+const params = {
+    "page": "1",
+    "page_size": "20",
+    "s_dt": "2023-10-14",
+    "e_dt": "2023-10-15",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Authorization": "Bearer {ACCESS_TOKEN}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+
+<div class="php-example">
+    <pre><code class="language-php">$client = new \GuzzleHttp\Client();
+$response = $client-&gt;get(
+    'https://team.payvery.kr/api/v1/bf/self-withdraws',
+    [
+        'headers' =&gt; [
+            'Authorization' =&gt; 'Bearer {ACCESS_TOKEN}',
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'query' =&gt; [
+            'page' =&gt; '1',
+            'page_size' =&gt; '20',
+            's_dt' =&gt; '2023-10-14',
+            'e_dt' =&gt; '2023-10-15',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre></div>
+
+
+<div class="python-example">
+    <pre><code class="language-python">import requests
+import json
+
+url = 'https://team.payvery.kr/api/v1/bf/self-withdraws'
+params = {
+  'page': '1',
+  'page_size': '20',
+  's_dt': '2023-10-14',
+  'e_dt': '2023-10-15',
+}
+headers = {
+  'Authorization': 'Bearer {ACCESS_TOKEN}',
+  'Content-Type': 'application/json',
+  'Accept': 'application/json'
+}
+
+response = requests.request('GET', url, headers=headers, params=params)
+response.json()</code></pre></div>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "https://team.payvery.kr/api/v1/bf/self-withdraws?page=1&amp;page_size=20&amp;s_dt=2023-10-14&amp;e_dt=2023-10-15" \
+    --header "Authorization: Bearer {ACCESS_TOKEN}" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-v1-bf-self-withdraws">
+            <blockquote>
+            <p>예시 응답 (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+vary: Origin
+ </code></pre></details>         <pre>
+
+<code class="language-json">{
+    &quot;code&quot;: 950,
+    &quot;message&quot;: &quot;로그인 정보가 정확하지 않습니다.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-v1-bf-self-withdraws" hidden>
+    <blockquote>받은 응답<span
+                id="execution-response-status-GETapi-v1-bf-self-withdraws"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-v1-bf-self-withdraws"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-v1-bf-self-withdraws" hidden>
+    <blockquote>오류로 인해 요청이 실패했습니다.:</blockquote>
+    <pre><code id="execution-error-message-GETapi-v1-bf-self-withdraws">
+
+팁: 네트워크에 제대로 연결되어 있는지 확인하세요.
+해당 API의 관리자인 경우 API가 실행 중이고 CORS를 활성화했는지 확인하세요.
+디버깅 정보는 개발자 도구 콘솔에서 확인할 수 있습니다.</code></pre>
+</span>
+<form id="form-GETapi-v1-bf-self-withdraws" data-method="GET"
+      data-path="api/v1/bf/self-withdraws"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-v1-bf-self-withdraws', this);">
+    <h3>
+        요청&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="border-color: #2196f3; background-color: #2196f3; color:white;padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-v1-bf-self-withdraws"
+                    onclick="tryItOut('GETapi-v1-bf-self-withdraws');">시도하기 ⚡
+            </button>
+            <button type="button"
+                    style="border-color: #dfa1a5; background-color: #dfa1a5; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-v1-bf-self-withdraws"
+                    onclick="cancelTryOut('GETapi-v1-bf-self-withdraws');" hidden>취소 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="border-color: #81f18e; background-color: #81f18e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-v1-bf-self-withdraws"
+                    data-initial-text="요청 💥"
+                    data-loading-text="⏱ 요청중..."
+                    hidden>요청 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/v1/bf/self-withdraws</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>헤더</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Authorization</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Authorization" class="auth-value"               data-endpoint="GETapi-v1-bf-self-withdraws"
+               value="Bearer {ACCESS_TOKEN}"
+               data-component="header">
+    <br>
+<p><br>예시: <code>Bearer {ACCESS_TOKEN}</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-v1-bf-self-withdraws"
+               value="application/json"
+               data-component="header">
+    <br>
+<p><br>예시: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-v1-bf-self-withdraws"
+               value="application/json"
+               data-component="header">
+    <br>
+<p><br>예시: <code>application/json</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>page</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="page"                data-endpoint="GETapi-v1-bf-self-withdraws"
+               value="1"
+               data-component="query">
+    <br>
+<p>페이지 번호. <br>예시: <code>1</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>page_size</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="page_size"                data-endpoint="GETapi-v1-bf-self-withdraws"
+               value="20"
+               data-component="query">
+    <br>
+<p>페이지 사이즈. <br>예시: <code>20</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>s_dt</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i><b>optional</b></i> &nbsp;
+                <input type="text" style="display: none"
+                              name="s_dt"                data-endpoint="GETapi-v1-bf-self-withdraws"
+               value="2023-10-14"
+               data-component="query">
+    <br>
+<p>시작일. <br>예시: <code>2023-10-14</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>e_dt</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i><b>optional</b></i> &nbsp;
+                <input type="text" style="display: none"
+                              name="e_dt"                data-endpoint="GETapi-v1-bf-self-withdraws"
+               value="2023-10-15"
+               data-component="query">
+    <br>
+<p>종료일. <br>예시: <code>2023-10-15</code></p>
+            </div>
+                </form>
+
+                    <h2 id="bf-mobile-api-GETapi-v1-bf-withdraws-balance">출금가능금액 조회</h2>
 
 <p>
 <small class="badge badge-darkred">인증 필요</small>
