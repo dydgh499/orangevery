@@ -31,6 +31,16 @@ class CollectWithdrawController extends Controller
         $this->base_noti_url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes';
     }
 
+    public function commonSelect(IndexRequest $request)
+    {
+        $search = $request->input('search', '');
+        $query = $this->collect_withdraws->join('merchandises', 'merchandises.id', '=', 'collect_withdraws.mcht_id')
+            ->where('collect_withdraws.brand_id', $request->user()->brand_id)
+            ->where('merchandises.mcht_name', 'like', "%$search%");            
+        $query = globalSalesFilter($query, $request, 'merchandises');
+        return $query;
+    }
+
     /**
      * 목록출력
      *
@@ -40,16 +50,11 @@ class CollectWithdrawController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $search = $request->input('search', '');
         $cols = [
             'collect_withdraws.*',
             'merchandises.mcht_name',
         ];
-        $query = $this->collect_withdraws->join('merchandises', 'merchandises.id', '=', 'collect_withdraws.mcht_id')
-            ->where('collect_withdraws.brand_id', $request->user()->brand_id)
-            ->where('merchandises.mcht_name', 'like', "%$search%");
-            
-        $query = globalSalesFilter($query, $request, 'merchandises');
+        $query = $this->commonSelect($query);
         return $this->getIndexData($request, $query, 'collect_withdraws.id', $cols, 'collect_withdraws.created_at');
     }
 

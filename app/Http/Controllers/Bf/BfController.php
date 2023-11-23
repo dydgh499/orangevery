@@ -294,8 +294,8 @@ class BfController extends Controller
             'realtime_send_histories.*',
         ];
         $inst = new RealtimeSendHistoryController(new RealtimeSendHistory);
-        $query = $inst->commonSelect($request);
-        $query = $query->where('transactions.mcht_id', $request->user()->id);
+        $query = $inst->commonSelect($request)
+            ->where('transactions.mcht_id', $request->user()->id);
 
         $data = $this->getIndexData($request, $query, 'realtime_send_histories.id', $cols, 'realtime_send_histories.created_at');
         return $this->response(0, $data);
@@ -309,7 +309,19 @@ class BfController extends Controller
      */
     public function selfWithdrawIndex(IndexRequest $request)
     {
+        $cols = [
+            'collect_withdraws.withdraw_amount',
+            'collect_withdraws.withdraw_date',
+            'collect_withdraws.acct_num',
+            'collect_withdraws.acct_name',
+            'collect_withdraws.acct_bank_name',
+            'collect_withdraws.acct_bank_code',
+        ];
         $inst = new CollectWithdrawController(new CollectWithdraw);
-        return $inst->index($request);
+        $query = $inst->commonSelect($request)
+            ->where('merchandises.id', $request->user()->id);
+
+        $data = $this->getIndexData($request, $query, 'collect_withdraws.id', $cols, 'collect_withdraws.created_at');
+        return $this->response(0, $data);
     }
 }
