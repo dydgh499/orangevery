@@ -18,14 +18,14 @@ export function settlementFunctionCollect(store: any) {
             acct_num: item.acct_num,
             acct_bank_code: item.acct_bank_code,
             acct_bank_name: item.acct_bank_name,
-            total_amount: item.amount,            // 총 매출액
+            total_amount: item.total.amount,            // 총 매출액
             cxl_amount: item.cxl.amount,          // 총 취소액
             appr_amount: item.appr.amount,        // 총 승인액
             deduct_amount: item.deduction.amount, // 추가차감금
             settle_amount: item.settle.amount,    // 정산액
-            trx_amount: item.total_trx_amount,    // 총 거래 수수료(매출)
+            trx_amount: item.total.total_trx_amount,    // 총 거래 수수료(매출)
             level: is_mcht ? 10 : item.level,
-            settle_fee: is_mcht ? item.settle_fee : 0,
+            settle_fee: is_mcht ? item.total.settle_fee : 0,
             comm_settle_amount: item.terminal.amount,
             under_sales_amount: item.terminal.under_sales_amount,
             cancel_deposit_amount: item.settle.cancel_deposit_amount || 0,

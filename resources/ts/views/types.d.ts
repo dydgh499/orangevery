@@ -518,18 +518,8 @@ export interface FailTransaction {
     resuld_cd: string,
     result_msg: string,
 }
-export interface TotalSettleObject {
-    count: number,
-    amount: number,
-    trx_amount: number,
-    hold_amount: number,
-    settle_fee: number,
-    total_trx_amount: number,
-    profit: number,
-}
+
 export interface TotalSettle {
-    appr: TotalSettle,
-    cxl: TotalSettle,
     count: number,
     amount: number,
     trx_amount: number,
@@ -543,6 +533,9 @@ export interface Settle extends TotalSettle, Bank {
     level: number,
     user_name: string,
     mcht_name: string,
+    appr: TotalSettle,
+    cxl: TotalSettle,
+    total: TotalSettle,
     deduction: {
         amount: number,
     },
