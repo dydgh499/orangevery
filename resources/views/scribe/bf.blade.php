@@ -32,7 +32,6 @@
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
     <script src="/vendor/scribe/js/tryitout-4.25.0.js"></script>
-
     <script src="/vendor/scribe/js/theme-default-4.25.0.js"></script>
 
 </head>
@@ -111,7 +110,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-23 14:59:11</li>
+        <li>마지막 업데이트:  2023-11-23 15:15:16</li>
     </ul>
 </div>
 
@@ -723,7 +722,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "corrupti",
+    "search": "dolorem",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -755,7 +754,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'corrupti',
+            'search' =&gt; 'dolorem',
         ],
     ]
 );
@@ -773,7 +772,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'corrupti',
+  'search': 'dolorem',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -787,7 +786,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=corrupti" \
+    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=dolorem" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1084,10 +1083,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-transactions"
-               value="corrupti"
+               value="dolorem"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>corrupti</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>dolorem</code></p>
             </div>
                 </form>
 
@@ -1277,7 +1276,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "aut",
+    "search": "culpa",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1309,7 +1308,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'aut',
+            'search' =&gt; 'culpa',
         ],
     ]
 );
@@ -1327,7 +1326,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'aut',
+  'search': 'culpa',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1341,7 +1340,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=aut" \
+    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=culpa" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1534,10 +1533,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-realtime-histories"
-               value="aut"
+               value="culpa"
                data-component="query">
     <br>
-<p>검색어(승인번호, 계좌번호) <br>예시: <code>aut</code></p>
+<p>검색어(승인번호, 계좌번호) <br>예시: <code>culpa</code></p>
             </div>
                 </form>
 
@@ -1727,20 +1726,106 @@ response.json()</code></pre></div>
 
 <span id="example-responses-GETapi-v1-bf-self-withdraws">
             <blockquote>
-            <p>예시 응답 (401):</p>
+            <p>예시 응답 (201):</p>
         </blockquote>
-                <details class="annotation">
-            <summary style="cursor: pointer;">
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
-vary: Origin
- </code></pre></details>         <pre>
+                <pre>
 
 <code class="language-json">{
-    &quot;code&quot;: 950,
-    &quot;message&quot;: &quot;로그인 정보가 정확하지 않습니다.&quot;
+    &quot;page&quot;: &quot;1&quot;,
+    &quot;page_size&quot;: &quot;20&quot;,
+    &quot;total&quot;: 6,
+    &quot;content&quot;: [
+        {
+            &quot;id&quot;: 31,
+            &quot;brand_id&quot;: 12,
+            &quot;mcht_id&quot;: 93632,
+            &quot;mcht_settle_id&quot;: 22981,
+            &quot;withdraw_amount&quot;: 1879000,
+            &quot;withdraw_date&quot;: &quot;2023-11-22&quot;,
+            &quot;acct_num&quot;: &quot;110373658934&quot;,
+            &quot;acct_name&quot;: &quot;조현진&quot;,
+            &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
+            &quot;acct_bank_code&quot;: &quot;088&quot;,
+            &quot;created_at&quot;: &quot;2023-11-22 11:41:12&quot;,
+            &quot;updated_at&quot;: &quot;2023-11-23 13:18:53&quot;,
+            &quot;mcht_name&quot;: &quot;하나인테리어&quot;
+        },
+        {
+            &quot;id&quot;: 30,
+            &quot;brand_id&quot;: 12,
+            &quot;mcht_id&quot;: 93632,
+            &quot;mcht_settle_id&quot;: 22981,
+            &quot;withdraw_amount&quot;: 6473600,
+            &quot;withdraw_date&quot;: &quot;2023-11-22&quot;,
+            &quot;acct_num&quot;: &quot;110373658934&quot;,
+            &quot;acct_name&quot;: &quot;조현진&quot;,
+            &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
+            &quot;acct_bank_code&quot;: &quot;088&quot;,
+            &quot;created_at&quot;: &quot;2023-11-22 11:39:32&quot;,
+            &quot;updated_at&quot;: &quot;2023-11-23 13:18:53&quot;,
+            &quot;mcht_name&quot;: &quot;하나인테리어&quot;
+        },
+        {
+            &quot;id&quot;: 29,
+            &quot;brand_id&quot;: 12,
+            &quot;mcht_id&quot;: 93632,
+            &quot;mcht_settle_id&quot;: 22691,
+            &quot;withdraw_amount&quot;: 854400,
+            &quot;withdraw_date&quot;: &quot;2023-11-22&quot;,
+            &quot;acct_num&quot;: &quot;110373658934&quot;,
+            &quot;acct_name&quot;: &quot;조현진&quot;,
+            &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
+            &quot;acct_bank_code&quot;: &quot;088&quot;,
+            &quot;created_at&quot;: &quot;2023-11-22 11:06:29&quot;,
+            &quot;updated_at&quot;: &quot;2023-11-22 11:36:57&quot;,
+            &quot;mcht_name&quot;: &quot;하나인테리어&quot;
+        },
+        {
+            &quot;id&quot;: 26,
+            &quot;brand_id&quot;: 12,
+            &quot;mcht_id&quot;: 93632,
+            &quot;mcht_settle_id&quot;: 22691,
+            &quot;withdraw_amount&quot;: 2809600,
+            &quot;withdraw_date&quot;: &quot;2023-11-22&quot;,
+            &quot;acct_num&quot;: &quot;110373658934&quot;,
+            &quot;acct_name&quot;: &quot;조현진&quot;,
+            &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
+            &quot;acct_bank_code&quot;: &quot;088&quot;,
+            &quot;created_at&quot;: &quot;2023-11-22 09:51:38&quot;,
+            &quot;updated_at&quot;: &quot;2023-11-22 11:36:57&quot;,
+            &quot;mcht_name&quot;: &quot;하나인테리어&quot;
+        },
+        {
+            &quot;id&quot;: 23,
+            &quot;brand_id&quot;: 12,
+            &quot;mcht_id&quot;: 93632,
+            &quot;mcht_settle_id&quot;: 22691,
+            &quot;withdraw_amount&quot;: 2809600,
+            &quot;withdraw_date&quot;: &quot;2023-11-21&quot;,
+            &quot;acct_num&quot;: &quot;110373658934&quot;,
+            &quot;acct_name&quot;: &quot;조현진&quot;,
+            &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
+            &quot;acct_bank_code&quot;: &quot;088&quot;,
+            &quot;created_at&quot;: &quot;2023-11-21 16:37:37&quot;,
+            &quot;updated_at&quot;: &quot;2023-11-22 11:36:57&quot;,
+            &quot;mcht_name&quot;: &quot;하나인테리어&quot;
+        },
+        {
+            &quot;id&quot;: 21,
+            &quot;brand_id&quot;: 12,
+            &quot;mcht_id&quot;: 93632,
+            &quot;mcht_settle_id&quot;: 22691,
+            &quot;withdraw_amount&quot;: 4688600,
+            &quot;withdraw_date&quot;: &quot;2023-11-21&quot;,
+            &quot;acct_num&quot;: &quot;110373658934&quot;,
+            &quot;acct_name&quot;: &quot;조현진&quot;,
+            &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
+            &quot;acct_bank_code&quot;: &quot;088&quot;,
+            &quot;created_at&quot;: &quot;2023-11-21 16:10:22&quot;,
+            &quot;updated_at&quot;: &quot;2023-11-22 11:36:57&quot;,
+            &quot;mcht_name&quot;: &quot;하나인테리어&quot;
+        }
+    ]
 }</code>
  </pre>
     </span>
@@ -1871,7 +1956,73 @@ vary: Origin
             </div>
                 </form>
 
-                    <h2 id="bf-mobile-api-GETapi-v1-bf-withdraws-balance">출금가능금액 조회</h2>
+    <h3>응답</h3>
+    <h4 class="fancy-heading-panel"><b>응답 필드</b></h4>
+    <div style=" padding-left: 28px;  clear: unset;">
+        <details>
+            <summary style="padding-bottom: 10px;">
+                <b style="line-height: 2;"><code>content</code></b>&nbsp;&nbsp;
+<small>object[]</small>&nbsp;
+ &nbsp;
+<br>
+<p>결과</p>
+            </summary>
+                                                <div style=" margin-left: 14px; clear: unset;">
+        <details>
+            <summary style="padding-bottom: 10px;">
+                <b style="line-height: 2;"><code>*</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+<br>
+
+            </summary>
+                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>withdraw_amount</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>출금신청 금액</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>withdraw_date</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>출금신청일</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>acct_num</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>계좌번호</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>acct_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>예금주명</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>acct_bank_name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>은행명</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>acct_bank_code</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>은행코드</p>
+                    </div>
+                                    </details>
+        </div>
+                                        </details>
+        </div>
+                        <h2 id="bf-mobile-api-GETapi-v1-bf-withdraws-balance">출금가능금액 조회</h2>
 
 <p>
 <small class="badge badge-darkred">인증 필요</small>

@@ -305,7 +305,14 @@ class BfController extends Controller
      * 가맹점 직접출금내역 조회
      *
      * 로그인한 가맹점의 직접출금내역을 조회합니다.
-     *
+     * @responseFile 201 storage/bf/selfWithdrawIndex.json
+     * @responseField content object[] 결과
+     * @responseField content.*.withdraw_amount integer 출금신청 금액
+     * @responseField content.*.withdraw_date string 출금신청일
+     * @responseField content.*.acct_num string 계좌번호
+     * @responseField content.*.acct_name string 예금주명
+     * @responseField content.*.acct_bank_name string 은행명
+     * @responseField content.*.acct_bank_code string 은행코드
      */
     public function selfWithdrawIndex(IndexRequest $request)
     {
