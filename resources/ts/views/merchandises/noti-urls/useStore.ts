@@ -22,7 +22,7 @@ export const useSearchStore = defineStore('NotiSearchStore', () => {
     }
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})
-    head.flat_headers.value = head.setFlattenHeaders()
+    head.flat_headers.value = head.flatten(head.headers.value)
 
     const exporter = async (type: number) => {
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})

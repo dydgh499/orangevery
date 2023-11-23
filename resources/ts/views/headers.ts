@@ -76,10 +76,11 @@ export const Header = (_path: string, file_name: string) => {
     };
     const getColspansComputed = computed(() => { return getColspans() })
 
-    const setFlattenHeaders = (): Filter => {
+    const flatten = (object: any): Filter => {
         const result: { [key: string]: any } = {};
-        for (const key of Object.keys(headers.value)) {
-            const val = headers.value[key]
+        console.log(object)
+        for (const key of Object.keys(object)) {
+            const val = object[key]
             if (getDepth(val, 0) !== 1) {
                 for (const sub_key of Object.keys(val)) {
                     result[key + "." + sub_key] = val[sub_key]
@@ -92,17 +93,17 @@ export const Header = (_path: string, file_name: string) => {
     }
     const setHeader = (_headers: Filter): Filter => {
         return _.transform(_headers, (result: Filter, val:any, key:string) => {
-            if (getDepth(val, 0) === 1 && key in headers.value) {
-                val.visible = headers.value[key].visible;
-            } else {
-                result[key] = setHeader(val as Filter);
-            }
+            if (getDepth(val, 0) === 1 && key in headers.value)
+                val.visible = headers.value[key].visible
+            else 
+                result[key] = setHeader(val as Filter)
         }, {});
-    };
+    }
     // ----- excel -----
     const sortAndFilterByHeader = <T>(data: T, keys: string[]): T => {
-        const filteredData = _.pick(data, keys);
-        const orderedData = _.fromPairs(_.sortBy(_.toPairs(filteredData), ([key]:string) => keys.indexOf(key)));
+        const filteredData = _.pick(data, keys)
+        const orderedData = _.fromPairs(_.toPairs(filteredData));
+        console.log(orderedData)
         return orderedData as T;
     }
 
@@ -200,7 +201,7 @@ export const Header = (_path: string, file_name: string) => {
 
     return {
         filter, headers, main_headers, flat_headers, initHeader, sortAndFilterByHeader,
-        setFlattenHeaders, getColspans, getFullColspans, getColspansComputed, getDepth,
+        flatten, getColspans, getFullColspans, getColspansComputed, getDepth,
         exportToExcel, exportToPdf, path,
     }
 }

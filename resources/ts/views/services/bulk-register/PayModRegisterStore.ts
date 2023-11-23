@@ -53,7 +53,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
     }
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})
-    head.flat_headers.value = head.setFlattenHeaders()
+    head.flat_headers.value = head.flatten(head.headers.value)
 
     return {
         head, headers

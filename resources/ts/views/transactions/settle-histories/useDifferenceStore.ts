@@ -235,7 +235,7 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
     
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})
-    head.flat_headers.value = head.setFlattenHeaders()
+    head.flat_headers.value = head.flatten(head.headers.value)
     
     const metas = ref([
         {
@@ -273,7 +273,7 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
         printer(type, r.data.content)
     }
     const printer = (type:number, datas: Transaction[]) => {
-        const keys = Object.keys(headers);
+        const keys = Object.keys(head.flat_headers.value)
         for (let i = 0; i <datas.length; i++) {
             datas[i]['module_type'] = module_types.find(module_type => module_type['id'] === datas[i]['module_type'])?.title as string
             datas[i]['installment'] = installments.find(inst => inst['id'] === datas[i]['installment'])?.title as string

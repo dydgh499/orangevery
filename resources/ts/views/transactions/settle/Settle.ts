@@ -18,9 +18,9 @@ export function settlementFunctionCollect(store: any) {
             acct_num: item.acct_num,
             acct_bank_code: item.acct_bank_code,
             acct_bank_name: item.acct_bank_name,
-            total_amount: item.total.amount,            // 총 매출액
-            cxl_amount: item.cxl.amount,          // 총 취소액
-            appr_amount: item.appr.amount,        // 총 승인액
+            total_amount: item.total.amount,    // 총 매출액
+            cxl_amount: item.cxl.amount,        // 총 취소액
+            appr_amount: item.appr.amount,      // 총 승인액
             deduct_amount: item.deduction.amount, // 추가차감금
             settle_amount: item.settle.amount,    // 정산액
             trx_amount: item.total.total_trx_amount,    // 총 거래 수수료(매출)

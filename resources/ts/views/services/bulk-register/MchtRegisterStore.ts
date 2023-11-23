@@ -54,7 +54,7 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
 
     head.main_headers.value = [];
     head.headers.value = head.initHeader(headers, {})
-    head.flat_headers.value = head.setFlattenHeaders()
+    head.flat_headers.value = head.flatten(head.headers.value)
 
     return {
         head, headers, levels

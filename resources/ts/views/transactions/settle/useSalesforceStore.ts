@@ -1,12 +1,24 @@
 import { Header } from '@/views/headers'
+import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import { Searcher } from '@/views/searcher'
 import type { DeductionHeader } from '@/views/types'
-import { getUserLevel } from '@axios'
+import { getUserLevel, salesLevels } from '@axios'
 
 export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
     const store = Searcher('transactions/settle/salesforces')
     const head  = Header('transactions/settle/salesforces', '영업점 정산관리')
 
+    const all_sales = salesLevels()
+    const all_cycles = settleCycles()
+    const all_days = settleDays()
+    const tax_types = settleTaxTypes()
+
+    const settleObject = {
+        'count' :  '매출건수',
+        'amount' :  '금액',
+        'total_trx_amount': '총 거래 수수료',
+        'profit': '정산액',    
+    }
     const headers1:Record<string, string | object> = {
         'id': 'NO.',
         'user_name' : '영업점 ID',
@@ -16,24 +28,9 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
         'settle_day' : '정산 요일',
         'settle_tax_type': '정산 세율',
         'last_settle_dt': '마지막 정산일',
-        'total' : {
-            'count' :  '매출건수',
-            'amount' :  '금액',
-            'total_trx_amount': '총 거래 수수료',
-            'profit': '정산액',    
-        },
-        'appr' : {
-            'count' :  '매출건수',
-            'amount' :  '금액',
-            'total_trx_amount': '총 거래 수수료',
-            'profit': '정산액',
-        },
-        'cxl' : {
-            'count' :  '매출건수',
-            'amount' :  '금액',
-            'total_trx_amount': '총 거래 수수료',
-            'profit': '정산액',
-        },
+        'total' : settleObject,
+        'appr' : settleObject,
+        'cxl' : settleObject,
     }
     const headers2:DeductionHeader = {'deduction': {}}
     if(getUserLevel() >= 35)
@@ -84,13 +81,47 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
         ...headers3,
     }
     head.headers.value = head.initHeader(headers, {})
-    head.flat_headers.value = head.setFlattenHeaders()
+    head.flat_headers.value = head.flatten(head.headers.value)
     
     const exporter = async (type: number) => {      
-        const keys = Object.keys(headers);
+        const keys = Object.keys(head.flat_headers.value)
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         let datas = r.data.content;
         for (let i = 0; i < datas.length; i++) {
+            datas[i]['level'] = all_sales.find(sales => sales.id === datas[i]['level'])?.title
+            datas[i]['settle_cycle'] = all_cycles.find(sales => sales.id === datas[i]['settle_cycle'])?.title
+            datas[i]['settle_day'] = all_days.find(sales => sales.id === datas[i]['settle_day'])?.title
+            datas[i]['settle_tax_type'] = tax_types.find(sales => sales.id === datas[i]['settle_tax_type'])?.title
+
+            datas[i]['appr.count'] =  datas[i]['appr']['count']
+            datas[i]['appr.amount'] =  datas[i]['appr']['amount']
+            datas[i]['appr.total_trx_amount'] =  datas[i]['appr']['total_trx_amount']
+            datas[i]['appr.profit'] =  datas[i]['appr']['profit']
+
+            datas[i]['cxl.count'] =  datas[i]['cxl']['count']
+            datas[i]['cxl.amount'] =  datas[i]['cxl']['amount']
+            datas[i]['cxl.total_trx_amount'] =  datas[i]['cxl']['total_trx_amount']
+            datas[i]['cxl.profit'] =  datas[i]['cxl']['profit']
+
+            datas[i]['total.count'] =  datas[i]['total']['count']
+            datas[i]['total.amount'] =  datas[i]['total']['amount']
+            datas[i]['total.total_trx_amount'] =  datas[i]['total']['total_trx_amount']
+            datas[i]['total.profit'] =  datas[i]['total']['profit']
+
+            datas[i]['terminal.amount'] = datas[i]['terminal']['amount']
+            datas[i]['terminal.under_sales_amount'] =  datas[i]['terminal']['under_sales_amount']
+        
+            datas[i]['settle.amount'] = datas[i]['settle']['amount']
+            datas[i]['settle.deposit'] = datas[i]['settle']['deposit']
+            datas[i]['settle.transfer'] = datas[i]['settle']['transfer']
+            datas[i]['deduction.amount'] =  datas[i]['deduction']['amount']
+
+            delete datas[i]['appr']
+            delete datas[i]['total']
+            delete datas[i]['cxl']
+            delete datas[i]['terminal']
+            delete datas[i]['settle']
+            delete datas[i]['deduction']
 
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }

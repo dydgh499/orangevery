@@ -18,7 +18,7 @@ export const useSearchStore = defineStore('merchandiseSelfSettleSearchStore', ()
 
     head.main_headers.value = []
     head.headers.value = head.initHeader(headers, {})
-    head.flat_headers.value = head.setFlattenHeaders()
+    head.flat_headers.value = head.flatten(head.headers.value)
     
     const exporter = async (type: number) => {      
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
@@ -26,7 +26,7 @@ export const useSearchStore = defineStore('merchandiseSelfSettleSearchStore', ()
     }
     
     const printer = (type:number, datas: []) => {
-        const keys = Object.keys(headers);
+        const keys = Object.keys(head.flat_headers.value)
         for (let i = 0; i <datas.length; i++) {
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
