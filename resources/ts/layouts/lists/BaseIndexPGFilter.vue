@@ -41,9 +41,9 @@ const filterPgs = computed(() => {
                id="settle_types-filter" eager @update:modelValue="store.updateQueryString({settle_type: store.params.settle_type})" />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.terminal">
-            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.terminal"
+            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.terminal_id"
                 :items="[{ id: null, name: '전체' }].concat(terminals)" label="장비 필터" item-title="name" item-value="id"
-               id="terminal-filter" eager @update:modelValue="store.updateQueryString({terminal: store.params.terminal})"  />
+               id="terminal-filter" eager @update:modelValue="store.updateQueryString({terminal_id: store.params.terminal_id})"  />
         </VCol>
         <VCol cols="12" sm="3" v-if="props.cus_filter && user_info.level > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.custom_id"

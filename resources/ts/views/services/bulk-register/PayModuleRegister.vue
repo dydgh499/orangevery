@@ -181,7 +181,7 @@ watchEffect(async () => {
                         <VChip color="primary" style="margin: 0.5em;" v-for="(terminal, key) in terminals" :key="key">
                             {{ terminal.name }} = {{ terminal.id }}
                         </VChip>
-                        <b v-if="terminals.length == 0" class="important-text">"운영 관리 - PG사 관리 - 구분 정보"에서 커스텀 필터 추가 후 입력 가능합니다.</b>
+                        <b v-if="terminals.length == 0" class="important-text">"운영 관리 - PG사 관리 - 구분 정보"에서 장비 종류 추가 후 입력 가능합니다.</b>
                     </VCol>
                     <template v-if="corp.pv_options.paid.use_realtime_deposit">
                         <VCol class="pb-0" >                        

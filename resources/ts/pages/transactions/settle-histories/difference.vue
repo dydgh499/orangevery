@@ -65,7 +65,7 @@ onMounted(() => {
             </template>
             <template #index_extra_field>
                 
-                <VBtn prepend-icon="ic:outline-help" @click="alert.show(memo)" >
+                <VBtn prepend-icon="ic:outline-help" @click="alert.show(memo)" size="small">
                     차액정산 설명서
                 </VBtn>
             </template>
