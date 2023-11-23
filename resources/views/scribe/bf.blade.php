@@ -110,7 +110,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-23 15:15:16</li>
+        <li>마지막 업데이트:  2023-11-23 15:16:46</li>
     </ul>
 </div>
 
@@ -722,7 +722,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "dolorem",
+    "search": "eius",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -754,7 +754,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'dolorem',
+            'search' =&gt; 'eius',
         ],
     ]
 );
@@ -772,7 +772,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'dolorem',
+  'search': 'eius',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -786,7 +786,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=dolorem" \
+    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=eius" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1083,10 +1083,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-transactions"
-               value="dolorem"
+               value="eius"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>dolorem</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>eius</code></p>
             </div>
                 </form>
 
@@ -1276,7 +1276,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "culpa",
+    "search": "consequatur",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1308,7 +1308,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'culpa',
+            'search' =&gt; 'consequatur',
         ],
     ]
 );
@@ -1326,7 +1326,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'culpa',
+  'search': 'consequatur',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1340,7 +1340,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=culpa" \
+    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=consequatur" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1533,10 +1533,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-realtime-histories"
-               value="culpa"
+               value="consequatur"
                data-component="query">
     <br>
-<p>검색어(승인번호, 계좌번호) <br>예시: <code>culpa</code></p>
+<p>검색어(승인번호, 계좌번호) <br>예시: <code>consequatur</code></p>
             </div>
                 </form>
 
@@ -1736,94 +1736,52 @@ response.json()</code></pre></div>
     &quot;total&quot;: 6,
     &quot;content&quot;: [
         {
-            &quot;id&quot;: 31,
-            &quot;brand_id&quot;: 12,
-            &quot;mcht_id&quot;: 93632,
-            &quot;mcht_settle_id&quot;: 22981,
             &quot;withdraw_amount&quot;: 1879000,
             &quot;withdraw_date&quot;: &quot;2023-11-22&quot;,
             &quot;acct_num&quot;: &quot;110373658934&quot;,
             &quot;acct_name&quot;: &quot;조현진&quot;,
             &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
-            &quot;acct_bank_code&quot;: &quot;088&quot;,
-            &quot;created_at&quot;: &quot;2023-11-22 11:41:12&quot;,
-            &quot;updated_at&quot;: &quot;2023-11-23 13:18:53&quot;,
-            &quot;mcht_name&quot;: &quot;하나인테리어&quot;
+            &quot;acct_bank_code&quot;: &quot;088&quot;
         },
         {
-            &quot;id&quot;: 30,
-            &quot;brand_id&quot;: 12,
-            &quot;mcht_id&quot;: 93632,
-            &quot;mcht_settle_id&quot;: 22981,
             &quot;withdraw_amount&quot;: 6473600,
             &quot;withdraw_date&quot;: &quot;2023-11-22&quot;,
             &quot;acct_num&quot;: &quot;110373658934&quot;,
             &quot;acct_name&quot;: &quot;조현진&quot;,
             &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
-            &quot;acct_bank_code&quot;: &quot;088&quot;,
-            &quot;created_at&quot;: &quot;2023-11-22 11:39:32&quot;,
-            &quot;updated_at&quot;: &quot;2023-11-23 13:18:53&quot;,
-            &quot;mcht_name&quot;: &quot;하나인테리어&quot;
+            &quot;acct_bank_code&quot;: &quot;088&quot;
         },
         {
-            &quot;id&quot;: 29,
-            &quot;brand_id&quot;: 12,
-            &quot;mcht_id&quot;: 93632,
-            &quot;mcht_settle_id&quot;: 22691,
             &quot;withdraw_amount&quot;: 854400,
             &quot;withdraw_date&quot;: &quot;2023-11-22&quot;,
             &quot;acct_num&quot;: &quot;110373658934&quot;,
             &quot;acct_name&quot;: &quot;조현진&quot;,
             &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
-            &quot;acct_bank_code&quot;: &quot;088&quot;,
-            &quot;created_at&quot;: &quot;2023-11-22 11:06:29&quot;,
-            &quot;updated_at&quot;: &quot;2023-11-22 11:36:57&quot;,
-            &quot;mcht_name&quot;: &quot;하나인테리어&quot;
+            &quot;acct_bank_code&quot;: &quot;088&quot;
         },
         {
-            &quot;id&quot;: 26,
-            &quot;brand_id&quot;: 12,
-            &quot;mcht_id&quot;: 93632,
-            &quot;mcht_settle_id&quot;: 22691,
             &quot;withdraw_amount&quot;: 2809600,
             &quot;withdraw_date&quot;: &quot;2023-11-22&quot;,
             &quot;acct_num&quot;: &quot;110373658934&quot;,
             &quot;acct_name&quot;: &quot;조현진&quot;,
             &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
-            &quot;acct_bank_code&quot;: &quot;088&quot;,
-            &quot;created_at&quot;: &quot;2023-11-22 09:51:38&quot;,
-            &quot;updated_at&quot;: &quot;2023-11-22 11:36:57&quot;,
-            &quot;mcht_name&quot;: &quot;하나인테리어&quot;
+            &quot;acct_bank_code&quot;: &quot;088&quot;
         },
         {
-            &quot;id&quot;: 23,
-            &quot;brand_id&quot;: 12,
-            &quot;mcht_id&quot;: 93632,
-            &quot;mcht_settle_id&quot;: 22691,
             &quot;withdraw_amount&quot;: 2809600,
             &quot;withdraw_date&quot;: &quot;2023-11-21&quot;,
             &quot;acct_num&quot;: &quot;110373658934&quot;,
             &quot;acct_name&quot;: &quot;조현진&quot;,
             &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
-            &quot;acct_bank_code&quot;: &quot;088&quot;,
-            &quot;created_at&quot;: &quot;2023-11-21 16:37:37&quot;,
-            &quot;updated_at&quot;: &quot;2023-11-22 11:36:57&quot;,
-            &quot;mcht_name&quot;: &quot;하나인테리어&quot;
+            &quot;acct_bank_code&quot;: &quot;088&quot;
         },
         {
-            &quot;id&quot;: 21,
-            &quot;brand_id&quot;: 12,
-            &quot;mcht_id&quot;: 93632,
-            &quot;mcht_settle_id&quot;: 22691,
             &quot;withdraw_amount&quot;: 4688600,
             &quot;withdraw_date&quot;: &quot;2023-11-21&quot;,
             &quot;acct_num&quot;: &quot;110373658934&quot;,
             &quot;acct_name&quot;: &quot;조현진&quot;,
             &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
-            &quot;acct_bank_code&quot;: &quot;088&quot;,
-            &quot;created_at&quot;: &quot;2023-11-21 16:10:22&quot;,
-            &quot;updated_at&quot;: &quot;2023-11-22 11:36:57&quot;,
-            &quot;mcht_name&quot;: &quot;하나인테리어&quot;
+            &quot;acct_bank_code&quot;: &quot;088&quot;
         }
     ]
 }</code>
