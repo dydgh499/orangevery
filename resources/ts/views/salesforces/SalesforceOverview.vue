@@ -93,7 +93,7 @@ const tax_types = settleTaxTypes()
                         </CreateHalfVCol>
                         <VCol>
                             <VTextarea v-model="props.item.note" counter label="메모사항"
-                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="100" />
+                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="95" />
                         </VCol>
                     </VRow>
                 </VCardItem>

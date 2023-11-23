@@ -54,7 +54,7 @@ class CollectWithdrawController extends Controller
             'collect_withdraws.*',
             'merchandises.mcht_name',
         ];
-        $query = $this->commonSelect($query);
+        $query = $this->commonSelect($request);
         return $this->getIndexData($request, $query, 'collect_withdraws.id', $cols, 'collect_withdraws.created_at');
     }
 
