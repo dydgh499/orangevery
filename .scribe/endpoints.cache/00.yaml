@@ -257,7 +257,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer D6V31EfPvh54ade8bac6gkZ'
+      - 'Bearer E86cZPvaa45ebk63hf1dVDg'
     controller: null
     method: null
     route: null
@@ -320,7 +320,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: corrupti
+        example: debitis
         type: string
         enumValues: []
         custom: []
@@ -329,7 +329,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: corrupti
+      search: debitis
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -663,7 +663,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer bkgPa4hc56e316EZfVv8daD'
+      - 'Bearer eZEV6gk3bPDvf8dha5c1a64'
     controller: null
     method: null
     route: null
@@ -726,7 +726,7 @@ endpoints:
         name: search
         description: '검색어(승인번호, 계좌번호)'
         required: false
-        example: aut
+        example: ut
         type: string
         enumValues: []
         custom: []
@@ -735,7 +735,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: aut
+      search: ut
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -885,7 +885,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer Z6Df65ag3ec4vhakV1bdP8E'
+      - 'Bearer c1aeEbDg5a6dV63vP8Z4fhk'
     controller: null
     method: null
     route: null
@@ -966,7 +966,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer aeEdb1PvhkVa4D5g68Z36fc'
+      - 'Bearer h6e5gd4a6DaE1Zckf3PVv8b'
     controller: null
     method: null
     route: null
@@ -1019,7 +1019,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 5fgZPb4a63aDdvVcE6e18kh'
+      - 'Bearer abk8eDPah4fvgZEVc61653d'
     controller: null
     method: null
     route: null
@@ -1081,7 +1081,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer Z8aEcPg5bf4ea6Dh6dV3kv1'
+      - 'Bearer VZ66aePv1bc5adE8fg3Dhk4'
     controller: null
     method: null
     route: null
@@ -1352,7 +1352,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 8aDea61V5cZfgkh34v6bdPE'
+      - 'Bearer vZVh3Pdc65f16ea4Dkag8bE'
     controller: null
     method: null
     route: null

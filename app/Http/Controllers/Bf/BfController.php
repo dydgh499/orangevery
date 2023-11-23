@@ -310,6 +310,6 @@ class BfController extends Controller
     public function selfWithdrawIndex(IndexRequest $request)
     {
         $inst = new CollectWithdrawController(new CollectWithdraw);
-        return $ist->index($request);
+        return $inst->index($request);
     }
 }
