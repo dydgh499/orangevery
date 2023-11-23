@@ -73,6 +73,8 @@ class BulkPayModuleRequest extends FormRequest
             '*.installment' => 'required',
             '*.begin_dt' => 'date|nullable',
             '*.ship_out_dt' => 'date|nullable',
+            '*.pay_disable_s_tm' => 'nullable|date_format:H:i:s',
+            '*.pay_disable_e_tm' => 'nullable|date_format:H:i:s',
         ];
         return $sub;
     }

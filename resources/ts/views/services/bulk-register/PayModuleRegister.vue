@@ -238,6 +238,11 @@ watchEffect(async () => {
                         <br>
                         <span>- 숫자만 입력(예: 0,2,3,4...11)</span>
                     </VCol>
+                    <VCol v-if="corp.pv_options.paid.use_forb_pay_time">
+                        <b>결제금지시간 입력시 주의사항</b>
+                        <br>
+                        <span>- H:i:s 포멧으로 입력(예: 11:00:00)</span>
+                    </VCol>
                     <VCol>
                         <b class="important-text">한도 입력시 주의사항</b>
                         <br>
