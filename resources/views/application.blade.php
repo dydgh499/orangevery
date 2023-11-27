@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="dns-prefetch" href="{{ $json['dns'] }}">
     <link rel="icon" href="{{ $json['favicon_img'] }}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ $json['name'] }}</title>
@@ -10,12 +11,14 @@
     <meta property="og:title" content="{{ $json['name'] }}">
     <meta property="og:image" content="{{ $json['og_img'] }}" >
     <meta property="og:description" content="{{ $json['og_description'] }}">
+    <meta property="description" content="{{ $json['og_description'] }}">
     <meta name="author" content="purplevery">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="{{ $json['name'] }}">
     <meta name="theme-color" content="{{ $json['color'] }}">
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="manifest" id="my-manifest" data-pwa-version="2.1" href=''>
     <link rel="apple-touch-icon" sizes="180x180" href="{{ $json['favicon_img'] }}">
