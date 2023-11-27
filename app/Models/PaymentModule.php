@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Transaction;
+use App\Models\ClassifiCation;
 use App\Http\Traits\Models\AttributeTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +20,12 @@ class PaymentModule extends Model
     protected   $hidden     = [
         'brand_id',
     ];
-    
+    public function classifications()
+    {
+        return $this->hasOne(Classification::class, 'terminal_id')
+            ->where('is_delete', false)
+            ->select(['id', 'name']);
+    }
     public function payLimitAmount()
     {
         return $this->hasMany(Transaction::class, 'pmod_id')

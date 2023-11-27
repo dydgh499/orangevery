@@ -91,6 +91,7 @@ class BfController extends Controller
         $pay_modules = PaymentModule::where('mcht_id', $request->user()->id)
             ->where('module_type', 1)
             ->with(['payLimitAmount'])
+            ->with(['classifications'])
             ->get([
                 'id',
                 'is_old_auth',
@@ -101,7 +102,9 @@ class BfController extends Controller
                 'pay_month_limit',
                 'pay_day_limit',
                 'pay_single_limit',
+                'terminal_id',
             ]);
+        
         foreach($pay_modules as $pay_module)
         {
             if(count($pay_module->payLimitAmount))
