@@ -136,7 +136,7 @@ class BfController extends Controller
             else
                 $pay_module->pay_able_amount = null;
             // 실시간 단말기인지?
-            $terminal_name = $pay_module->classifications->name;
+            $terminal_name = isset($pay_module->classifications) ? $pay_module->classifications->name : '';
             $pay_module->is_pg_terminal = strpos($terminal_name, 'M100.') !== false ? true : false;
             $pay_module->makeHidden(['classifications']);
         }
