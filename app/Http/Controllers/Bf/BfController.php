@@ -90,8 +90,7 @@ class BfController extends Controller
     {
         $pay_modules = PaymentModule::where('mcht_id', $request->user()->id)
             ->where('module_type', 1)
-            ->with(['payLimitAmount'])
-            ->with(['classifications'])
+            ->with(['payLimitAmount', 'classifications'])
             ->get([
                 'id',
                 'is_old_auth',

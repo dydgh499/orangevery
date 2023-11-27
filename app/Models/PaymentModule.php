@@ -22,10 +22,11 @@ class PaymentModule extends Model
     ];
     public function classifications()
     {
-        return $this->hasOne(Classification::class, 'terminal_id')
+        return $this->belongsTo(Classification::class, 'terminal_id')
             ->where('is_delete', false)
             ->select(['id', 'name']);
     }
+    
     public function payLimitAmount()
     {
         return $this->hasMany(Transaction::class, 'pmod_id')
