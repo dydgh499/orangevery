@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Transaction;
-use App\Models\ClassifiCation;
+use App\Models\Classification;
 use App\Http\Traits\Models\AttributeTrait;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
