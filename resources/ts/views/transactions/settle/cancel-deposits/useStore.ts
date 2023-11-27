@@ -6,6 +6,7 @@ export const useSearchStore = defineStore('cancelDepositSearchStore', () => {
     const head = Header('transactions/settle/merchandises/cancel-deposits', '입금내역 관리')
     const headers: Record<string, string> = {
         'id': 'NO.',
+        'mcht_name': '가맹점 상호',
         'deposit_amount': '입금금액',
         'deposit_history': '입금내역',
         'cxl_dttm': '취소일자',

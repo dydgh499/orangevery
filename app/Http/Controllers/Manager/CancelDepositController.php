@@ -34,10 +34,11 @@ class CancelDepositController extends Controller
      *
      * 가맹점 이상 가능
      *
-     * @queryParam search string 검색어(제목)
+     * @queryParam search string 검색어(가맹점 상호)
      */
     public function index(IndexRequest $request)
     {
+        $search = $request->input('search', '');
         $cols = [
             'cancel_deposits.id',
             'cancel_deposits.deposit_amount',
@@ -47,10 +48,13 @@ class CancelDepositController extends Controller
             'transactions.amount',
             'transactions.mcht_settle_amount as profit',
             'transactions.appr_num',
+            'merchandises.mcht_name',
             DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
             DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
         ];
-        $query = $this->deposits->join('transactions', 'transactions.id', '=', 'cancel_deposits.trans_id');
+        $query = $this->deposits->join('transactions', 'transactions.id', '=', 'cancel_deposits.trans_id')
+                ->join('merchandises', 'merchandises.id', '=', 'transactions.mcht_id')
+                ->where('merchandises.mcht_name', 'like', "%$search%");
         $query = $this->transDateFilter($query, $request->s_dt, $request->e_dt, $request->use_search_date_detail);
         return $this->transPagenation($query, 'transactions', $cols, $request->page, $request->page_size);
     }

@@ -11,7 +11,9 @@
         "pay_year_amount": 3640000,
         "pay_month_amount": 3640000,
         "pay_day_amount": 1640000,
-        "pay_able_amount":-2640000
+        "pay_able_amount":-2640000,
+        "is_pg_terminal": true,
+        "terminal_id": 211
     },
     {
         "id":5,
@@ -25,6 +27,8 @@
         "pay_year_amount": 3640000,
         "pay_month_amount": 3640000,
         "pay_day_amount": 1640000,
-        "pay_able_amount":-2640000
+        "pay_able_amount":-2640000,
+        "is_pg_terminal": true,
+        "terminal_id": 22
     }    
 ]

@@ -17,7 +17,7 @@ provide('exporter', exporter)
 
 </script>
 <template>
-    <BaseIndexView placeholder="검색어" :metas="metas" :add="false" add_name="" :date_filter_type="DateFilters.SETTLE_RANGE">
+    <BaseIndexView placeholder="가맹점 상호 검색" :metas="metas" :add="false" add_name="" :date_filter_type="DateFilters.SETTLE_RANGE">
         <template #index_extra_field>
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
                 :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
