@@ -31,8 +31,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="/vendor/scribe/js/tryitout-4.25.0.js"></script>
-    <script src="/vendor/scribe/js/theme-default-4.25.0.js"></script>
+    <script src="../docs/js/tryitout-4.25.0.js"></script>
+
+    <script src="../docs/js/theme-default-4.25.0.js"></script>
 
 </head>
 
@@ -110,7 +111,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-23 15:16:46</li>
+        <li>마지막 업데이트:  2023-11-27 14:30:41</li>
     </ul>
 </div>
 
@@ -513,7 +514,9 @@ response.json()</code></pre></div>
         &quot;pay_year_amount&quot;: 3640000,
         &quot;pay_month_amount&quot;: 3640000,
         &quot;pay_day_amount&quot;: 1640000,
-        &quot;pay_able_amount&quot;: -2640000
+        &quot;pay_able_amount&quot;: -2640000,
+        &quot;is_pg_terminal&quot;: true,
+        &quot;terminal_id&quot;: 211
     },
     {
         &quot;id&quot;: 5,
@@ -527,7 +530,9 @@ response.json()</code></pre></div>
         &quot;pay_year_amount&quot;: 3640000,
         &quot;pay_month_amount&quot;: 3640000,
         &quot;pay_day_amount&quot;: 1640000,
-        &quot;pay_able_amount&quot;: -2640000
+        &quot;pay_able_amount&quot;: -2640000,
+        &quot;is_pg_terminal&quot;: true,
+        &quot;terminal_id&quot;: 22
     }
 ]</code>
  </pre>
@@ -722,7 +727,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "eius",
+    "search": "eveniet",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -754,7 +759,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'eius',
+            'search' =&gt; 'eveniet',
         ],
     ]
 );
@@ -772,7 +777,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'eius',
+  'search': 'eveniet',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -786,7 +791,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=eius" \
+    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=eveniet" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1083,10 +1088,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-transactions"
-               value="eius"
+               value="eveniet"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>eius</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>eveniet</code></p>
             </div>
                 </form>
 
@@ -1276,7 +1281,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "consequatur",
+    "search": "fugit",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1308,7 +1313,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'consequatur',
+            'search' =&gt; 'fugit',
         ],
     ]
 );
@@ -1326,7 +1331,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'consequatur',
+  'search': 'fugit',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1340,7 +1345,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=consequatur" \
+    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=fugit" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1533,10 +1538,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-realtime-histories"
-               value="consequatur"
+               value="fugit"
                data-component="query">
     <br>
-<p>검색어(승인번호, 계좌번호) <br>예시: <code>consequatur</code></p>
+<p>검색어(승인번호, 계좌번호) <br>예시: <code>fugit</code></p>
             </div>
                 </form>
 
