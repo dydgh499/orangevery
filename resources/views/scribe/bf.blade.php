@@ -31,9 +31,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="../docs/js/tryitout-4.25.0.js"></script>
+    <script src="/vendor/scribe/js/tryitout-4.25.0.js"></script>
 
-    <script src="../docs/js/theme-default-4.25.0.js"></script>
+    <script src="/vendor/scribe/js/theme-default-4.25.0.js"></script>
 
 </head>
 
