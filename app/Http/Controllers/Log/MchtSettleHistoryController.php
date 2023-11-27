@@ -158,13 +158,16 @@ class MchtSettleHistoryController extends Controller
 
     }
 
+    /**
+     * 입금상태 변경
+     */
     public function setDeposit(Request $request, $id)
     {
         return $this->deposit($this->settle_mcht_hist, $id);
     }
 
     /**
-     * 재이체
+     * 재이체(실시간)
      */
     public function settleDeposit(Request $request)
     {
@@ -172,8 +175,9 @@ class MchtSettleHistoryController extends Controller
         $data = $request->all();
         $url = $this->base_noti_url.'/deposit';
         $res = post($url, $data);
-        
-        return $this->extendResponse($res['body']['result_cd'] == '0000' ? 1 : $res['body']['result_cd'], $res['body']['result_msg']);
+
+        $code = $res['body']['result_cd'] == '0000' ? 1 : $res['body']['result_cd'];
+        return $this->extendResponse($code, $res['body']['result_msg']);
     }
 
     /**

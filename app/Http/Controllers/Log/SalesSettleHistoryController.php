@@ -157,7 +157,10 @@ class SalesSettleHistoryController extends Controller
         else
             return $this->response(1000);
     }
-
+    
+    /**
+     * 입금상태 변경
+     */
     public function setDeposit(Request $request, $id)
     {
         return $this->deposit($this->settle_sales_hist, $id);
