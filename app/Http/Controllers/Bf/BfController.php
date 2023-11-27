@@ -106,6 +106,8 @@ class BfController extends Controller
         
         foreach($pay_modules as $pay_module)
         {
+            $terminal_name = $pay_module->classifications->name;
+            $pay_module->makeHidden(['classifications']);
             if(count($pay_module->payLimitAmount))
             {
                 $pay_module->pay_year_amount = (int)$pay_module->payLimitAmount[0]->pay_year_amount;

@@ -26,7 +26,7 @@ class PaymentModule extends Model
             ->where('is_delete', false)
             ->select(['id', 'name']);
     }
-    
+
     public function payLimitAmount()
     {
         return $this->hasMany(Transaction::class, 'pmod_id')
