@@ -311,7 +311,7 @@ class BfController extends Controller
      * @responseFile 201 storage/bf/selfWithdrawIndex.json
      * @responseField content object[] 결과
      * @responseField content.*.withdraw_amount integer 출금신청 금액
-     * @responseField content.*.withdraw_date string 출금신청일
+     * @responseField content.*.created_at string 출금신청시간
      * @responseField content.*.acct_num string 계좌번호
      * @responseField content.*.acct_name string 예금주명
      * @responseField content.*.acct_bank_name string 은행명
@@ -321,7 +321,7 @@ class BfController extends Controller
     {
         $cols = [
             'collect_withdraws.withdraw_amount',
-            'collect_withdraws.created_at as withdraw_date',
+            'collect_withdraws.created_at',
             'collect_withdraws.acct_num',
             'collect_withdraws.acct_name',
             'collect_withdraws.acct_bank_name',

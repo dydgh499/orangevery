@@ -5,7 +5,7 @@
     "content": [
         {
             "withdraw_amount": 1879000,
-            "withdraw_date": "2023-11-22",
+            "created_at": "2023-11-22 03:12:12",
             "acct_num": "110373658934",
             "acct_name": "조현진",
             "acct_bank_name": "신한은행",
@@ -13,7 +13,7 @@
         },
         {
             "withdraw_amount": 6473600,
-            "withdraw_date": "2023-11-22",
+            "created_at": "2023-11-22 03:12:12",
             "acct_num": "110373658934",
             "acct_name": "조현진",
             "acct_bank_name": "신한은행",
@@ -21,7 +21,7 @@
         },
         {
             "withdraw_amount": 854400,
-            "withdraw_date": "2023-11-22",
+            "created_at": "2023-11-22 03:12:12",
             "acct_num": "110373658934",
             "acct_name": "조현진",
             "acct_bank_name": "신한은행",
@@ -29,7 +29,7 @@
         },
         {
             "withdraw_amount": 2809600,
-            "withdraw_date": "2023-11-22",
+            "created_at": "2023-11-22 03:12:12",
             "acct_num": "110373658934",
             "acct_name": "조현진",
             "acct_bank_name": "신한은행",
@@ -37,7 +37,7 @@
         },
         {
             "withdraw_amount": 2809600,
-            "withdraw_date": "2023-11-21",
+            "created_at": "2023-11-21 03:12:12",
             "acct_num": "110373658934",
             "acct_name": "조현진",
             "acct_bank_name": "신한은행",
@@ -45,7 +45,7 @@
         },
         {
             "withdraw_amount": 4688600,
-            "withdraw_date": "2023-11-21",
+            "created_at": "2023-11-21 03:12:12",
             "acct_num": "110373658934",
             "acct_name": "조현진",
             "acct_bank_name": "신한은행",
