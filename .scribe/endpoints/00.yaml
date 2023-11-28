@@ -136,8 +136,7 @@ endpoints:
                   "pay_month_amount": 3640000,
                   "pay_day_amount": 1640000,
                   "pay_able_amount":-2640000,
-                  "is_pg_terminal": true,
-                  "terminal_id": 211
+                  "show_pay_view": 0
               },
               {
                   "id":5,
@@ -152,8 +151,7 @@ endpoints:
                   "pay_month_amount": 3640000,
                   "pay_day_amount": 1640000,
                   "pay_able_amount":-2640000,
-                  "is_pg_terminal": true,
-                  "terminal_id": 22
+                  "show_pay_view": 0
               }    
           ]
         headers: []
@@ -256,10 +254,18 @@ endpoints:
         type: integer
         enumValues: []
         custom: []
+      show_pay_view:
+        name: show_pay_view
+        description: '결제창 노출여부'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
     auth:
       - headers
       - Authorization
-      - 'Bearer Za8465cf6gPD3dveabVh1kE'
+      - 'Bearer 4dbk1afhv86ea3ZPDVg6Ec5'
     controller: null
     method: null
     route: null
@@ -322,7 +328,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: eveniet
+        example: ut
         type: string
         enumValues: []
         custom: []
@@ -331,7 +337,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: eveniet
+      search: ut
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -665,7 +671,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer PkZ4eb3gachdD586afV6v1E'
+      - 'Bearer 1bvca5D6hkVdg6eZafPE384'
     controller: null
     method: null
     route: null
@@ -728,7 +734,7 @@ endpoints:
         name: search
         description: '검색어(승인번호, 계좌번호)'
         required: false
-        example: fugit
+        example: nam
         type: string
         enumValues: []
         custom: []
@@ -737,7 +743,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: fugit
+      search: nam
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -887,7 +893,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 5dech81EDvk6aPbaVZf634g'
+      - 'Bearer Dga4ZPd58ah6kEv36bcfV1e'
     controller: null
     method: null
     route: null
@@ -1076,7 +1082,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6Ded5b8caaVgE1k6ZPfv3h4'
+      - 'Bearer ak3Ed68b6cv45aheV1fZPgD'
     controller: null
     method: null
     route: null
@@ -1129,7 +1135,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer kgV5c636dh4afE8DaP1Zevb'
+      - 'Bearer ZD5fhabc81gvPk3edE6aV64'
     controller: null
     method: null
     route: null
@@ -1191,7 +1197,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer hacPkv31bef6aV684d5EgDZ'
+      - 'Bearer EZDdV8hbvack36465aPg1ef'
     controller: null
     method: null
     route: null
@@ -1462,7 +1468,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6kcva6V5ePfhb3adZ4Dg18E'
+      - 'Bearer 4v316PaEZaDVgk8db6fc5he'
     controller: null
     method: null
     route: null

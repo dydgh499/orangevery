@@ -31,9 +31,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="/vendor/scribe/js/tryitout-4.25.0.js"></script>
+    <script src="{{ asset("/docs/js/tryitout-4.25.0.js") }}"></script>
 
-    <script src="/vendor/scribe/js/theme-default-4.25.0.js"></script>
+    <script src="{{ asset("/docs/js/theme-default-4.25.0.js") }}"></script>
 
 </head>
 
@@ -42,7 +42,7 @@
 <a href="#" id="nav-button">
     <span>
         MENU
-        <img src="../docs/images/navbar.png" alt="navbar-image"/>
+        <img src="{{ asset("/docs/images/navbar.png") }}" alt="navbar-image"/>
     </span>
 </a>
 <div class="tocify-wrapper">
@@ -111,7 +111,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-27 14:30:41</li>
+        <li>마지막 업데이트:  2023-11-28 16:51:38</li>
     </ul>
 </div>
 
@@ -515,8 +515,7 @@ response.json()</code></pre></div>
         &quot;pay_month_amount&quot;: 3640000,
         &quot;pay_day_amount&quot;: 1640000,
         &quot;pay_able_amount&quot;: -2640000,
-        &quot;is_pg_terminal&quot;: true,
-        &quot;terminal_id&quot;: 211
+        &quot;show_pay_view&quot;: 0
     },
     {
         &quot;id&quot;: 5,
@@ -531,8 +530,7 @@ response.json()</code></pre></div>
         &quot;pay_month_amount&quot;: 3640000,
         &quot;pay_day_amount&quot;: 1640000,
         &quot;pay_able_amount&quot;: -2640000,
-        &quot;is_pg_terminal&quot;: true,
-        &quot;terminal_id&quot;: 22
+        &quot;show_pay_view&quot;: 0
     }
 ]</code>
  </pre>
@@ -705,6 +703,13 @@ response.json()</code></pre></div>
 <br>
 <p>결제 가능금액(연,월,일,결제한도가 지정되지 않은 경우 null로 반환합니다.)</p>
         </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>show_pay_view</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>결제창 노출여부</p>
+        </div>
                         <h2 id="bf-mobile-api-GETapi-v1-bf-transactions">결제내역 조회</h2>
 
 <p>
@@ -727,7 +732,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "eveniet",
+    "search": "ut",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -759,7 +764,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'eveniet',
+            'search' =&gt; 'ut',
         ],
     ]
 );
@@ -777,7 +782,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'eveniet',
+  'search': 'ut',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -791,7 +796,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=eveniet" \
+    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=ut" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1088,10 +1093,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-transactions"
-               value="eveniet"
+               value="ut"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>eveniet</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>ut</code></p>
             </div>
                 </form>
 
@@ -1281,7 +1286,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "fugit",
+    "search": "nam",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1313,7 +1318,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'fugit',
+            'search' =&gt; 'nam',
         ],
     ]
 );
@@ -1331,7 +1336,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'fugit',
+  'search': 'nam',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1345,7 +1350,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=fugit" \
+    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=nam" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1538,10 +1543,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-realtime-histories"
-               value="fugit"
+               value="nam"
                data-component="query">
     <br>
-<p>검색어(승인번호, 계좌번호) <br>예시: <code>fugit</code></p>
+<p>검색어(승인번호, 계좌번호) <br>예시: <code>nam</code></p>
             </div>
                 </form>
 

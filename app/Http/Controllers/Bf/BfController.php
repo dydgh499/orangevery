@@ -85,12 +85,13 @@ class BfController extends Controller
      * @responseField pay_month_amount integer 월결제 금액
      * @responseField pay_day_amount integer 일결제 금액
      * @responseField pay_able_amount integer 결제 가능금액(연,월,일,결제한도가 지정되지 않은 경우 null로 반환합니다.)
+     * @responseField show_pay_view integer 결제창 노출여부
      */
     public function payModules(Request $request)
     {
         $pay_modules = PaymentModule::where('mcht_id', $request->user()->id)
             ->where('module_type', 1)
-            ->with(['payLimitAmount', 'classifications'])
+            ->with(['payLimitAmount'])
             ->get([
                 'id',
                 'is_old_auth',
@@ -102,6 +103,7 @@ class BfController extends Controller
                 'pay_day_limit',
                 'pay_single_limit',
                 'terminal_id',
+                'show_pay_view',
             ]);
         
         foreach($pay_modules as $pay_module)
@@ -135,10 +137,6 @@ class BfController extends Controller
                 $pay_module->pay_able_amount = min($pay_able_amounts);
             else
                 $pay_module->pay_able_amount = null;
-            // 실시간 단말기인지?
-            $terminal_name = isset($pay_module->classifications) ? $pay_module->classifications->name : '';
-            $pay_module->is_pg_terminal = strpos($terminal_name, 'M100.') !== false ? true : false;
-            $pay_module->makeHidden(['classifications']);
         }
         return $this->response(0, $pay_modules);
     }
@@ -323,7 +321,7 @@ class BfController extends Controller
     {
         $cols = [
             'collect_withdraws.withdraw_amount',
-            'collect_withdraws.withdraw_date',
+            'collect_withdraws.created_at as withdraw_date',
             'collect_withdraws.acct_num',
             'collect_withdraws.acct_name',
             'collect_withdraws.acct_bank_name',
