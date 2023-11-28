@@ -9,6 +9,7 @@ import { themeConfig } from '@themeConfig'
 import authV2LoginDefault1 from '@images/pages/auth-v2-login-default1.png'
 import authV2LoginDefault2 from '@images/pages/auth-v2-login-default2.png'
 import authV2LoginDefault3 from '@images/pages/auth-v2-login-default3.png'
+import authV2LoginDefault4 from '@images/pages/auth-v2-login-default4.png'
 
 interface Props {
     item: Brand,
@@ -20,6 +21,7 @@ const login_imgs = [
     authV2LoginDefault1,
     authV2LoginDefault2,
     authV2LoginDefault3,
+    authV2LoginDefault4,
 ]
 const color = ref(props.item.theme_css.main_color)
 

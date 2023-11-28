@@ -114,6 +114,7 @@ class DashboardController extends Controller
             ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%Y-%m')"))
             ->orderBy('month')
             ->get();
+        
         $total = 0;
         foreach($monthly as $month)
         {
