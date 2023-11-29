@@ -125,10 +125,13 @@ class MchtSettleHistoryController extends Controller
 
     protected function createMerchandiseCommon($request, $query)
     {
+        $cancel_deposit_amount = $request->cancel_deposit_amount;
+        $collect_withdraw_amount = $request->collect_withdraw_amount;
+        
         $data = $request->data('mcht_id');
         $data['settle_fee'] = $request->settle_fee;
-        $data['cancel_deposit_amount']      = $request->cancel_deposit_amount;
-        $data['collect_withdraw_amount']    = $request->collect_withdraw_amount;
+        $data['cancel_deposit_amount']      = $cancel_deposit_amount ? $cancel_deposit_amount : 0;
+        $data['collect_withdraw_amount']    = $collect_withdraw_amount ? $collect_withdraw_amount : 0;
         
         $c_res = $this->settle_mcht_hist->create($data);
         $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);

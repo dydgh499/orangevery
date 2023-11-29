@@ -109,6 +109,7 @@ class PayModuleRequest extends FormRequest
     {
         $data = array_merge($this->getParmasBaseKeyV2($this->nullable_keys, null), $this->getParmasBaseKeyV2($this->boolean_keys, false));
         $data = array_merge($this->getParmasBaseKey(), $data);
+        $data['note'] = $data['note'] == null ? '' : $data['note'];
         $data['brand_id'] = $this->user()->brand_id;
         $data['under_sales_type'] = $data['under_sales_type'] == null ? 0 : $data['under_sales_type'];
         $data['under_sales_limit'] = $data['under_sales_limit'] == '' ? 0 : $data['under_sales_limit'];
