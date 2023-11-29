@@ -61,7 +61,7 @@ class CollectWithdrawController extends Controller
     /**
      * 추가
      *
-     * 마스터 이상 가능
+     * 가맹점만 가능
      *
      */
     public function store(CollectWithdrawRequest $request)
@@ -75,6 +75,7 @@ class CollectWithdrawController extends Controller
         {
             $params = [
                 'brand_id' => $request->user()->brand_id,
+                'mcht_id' => $request->user()->id,
                 'amount' => $request->withdraw_amount,
                 'fin_id' => $pay_module['fin_id'],
                 'acct_num' => $request->user()->acct_num,
@@ -85,13 +86,7 @@ class CollectWithdrawController extends Controller
             $url = $this->base_noti_url.'/single-deposit';
             $res = post($url, $params);
             if($res['code'] == 201)
-            {
-                $data = $request->data();
-                $data['result_code'] = '0050';
-                $data['message'] = '이체 처리중';
-                $res = $this->collect_withdraws->create($data);
-                return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
-            }
+                return $this->response($res ? 1 : 990);    
             else
                 return $this->extendResponse(2000, $res['body']['result_msg']);
         }
