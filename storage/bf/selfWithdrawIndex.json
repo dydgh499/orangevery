@@ -9,7 +9,9 @@
             "acct_num": "110373658934",
             "acct_name": "조현진",
             "acct_bank_name": "신한은행",
-            "acct_bank_code": "088"
+            "acct_bank_code": "088",
+            "result_code": "0000",
+            "message": "정상 처리"
         },
         {
             "withdraw_amount": 6473600,
@@ -17,7 +19,9 @@
             "acct_num": "110373658934",
             "acct_name": "조현진",
             "acct_bank_name": "신한은행",
-            "acct_bank_code": "088"
+            "acct_bank_code": "088",
+            "result_code": "0000",
+            "message": "정상 처리"
         },
         {
             "withdraw_amount": 854400,
@@ -25,7 +29,9 @@
             "acct_num": "110373658934",
             "acct_name": "조현진",
             "acct_bank_name": "신한은행",
-            "acct_bank_code": "088"
+            "acct_bank_code": "088",
+            "result_code": "0000",
+            "message": "정상 처리"
         },
         {
             "withdraw_amount": 2809600,
@@ -33,7 +39,9 @@
             "acct_num": "110373658934",
             "acct_name": "조현진",
             "acct_bank_name": "신한은행",
-            "acct_bank_code": "088"
+            "acct_bank_code": "088",
+            "result_code": "0000",
+            "message": "정상 처리"
         },
         {
             "withdraw_amount": 2809600,
@@ -41,7 +49,9 @@
             "acct_num": "110373658934",
             "acct_name": "조현진",
             "acct_bank_name": "신한은행",
-            "acct_bank_code": "088"
+            "acct_bank_code": "088",
+            "result_code": "0000",
+            "message": "정상 처리"
         },
         {
             "withdraw_amount": 4688600,
@@ -49,7 +59,9 @@
             "acct_num": "110373658934",
             "acct_name": "조현진",
             "acct_bank_name": "신한은행",
-            "acct_bank_code": "088"
+            "acct_bank_code": "088",
+            "result_code": "0000",
+            "message": "정상 처리"
         }
     ]
 }

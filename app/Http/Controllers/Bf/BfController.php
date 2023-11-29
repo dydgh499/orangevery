@@ -316,6 +316,8 @@ class BfController extends Controller
      * @responseField content.*.acct_name string 예금주명
      * @responseField content.*.acct_bank_name string 은행명
      * @responseField content.*.acct_bank_code string 은행코드
+     * @responseField content.*.result_code string 결과코드
+     * @responseField content.*.message string 결과 메세지
      */
     public function selfWithdrawIndex(IndexRequest $request)
     {
@@ -326,6 +328,8 @@ class BfController extends Controller
             'collect_withdraws.acct_name',
             'collect_withdraws.acct_bank_name',
             'collect_withdraws.acct_bank_code',
+            'collect_withdraws.result_code',
+            'collect_withdraws.message',
         ];
         $inst = new CollectWithdrawController(new CollectWithdraw);
         $query = $inst->commonSelect($request)

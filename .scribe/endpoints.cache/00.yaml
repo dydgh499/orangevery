@@ -267,7 +267,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 56adPhb3EVcaf481gvD6keZ'
+      - 'Bearer 6E6Dd4fa1358bVavhZkPcge'
     controller: null
     method: null
     route: null
@@ -330,7 +330,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: nostrum
+        example: non
         type: string
         enumValues: []
         custom: []
@@ -339,7 +339,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: nostrum
+      search: non
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -673,7 +673,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer hvaZaP53VEDc1g8b6e4fk6d'
+      - 'Bearer Z86D15aefbkhcdaE3gP46vV'
     controller: null
     method: null
     route: null
@@ -736,7 +736,7 @@ endpoints:
         name: search
         description: '검색어(승인번호, 계좌번호)'
         required: false
-        example: odit
+        example: consequatur
         type: string
         enumValues: []
         custom: []
@@ -745,7 +745,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: odit
+      search: consequatur
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -895,7 +895,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6aekh84dZ3g5Vcfva1bD6EP'
+      - 'Bearer 8V6kEZPevh4a5faD1g3bdc6'
     controller: null
     method: null
     route: null
@@ -977,7 +977,9 @@ endpoints:
                       "acct_num": "110373658934",
                       "acct_name": "조현진",
                       "acct_bank_name": "신한은행",
-                      "acct_bank_code": "088"
+                      "acct_bank_code": "088",
+                      "result_code": "0000",
+                      "message": "정상 처리"
                   },
                   {
                       "withdraw_amount": 6473600,
@@ -985,7 +987,9 @@ endpoints:
                       "acct_num": "110373658934",
                       "acct_name": "조현진",
                       "acct_bank_name": "신한은행",
-                      "acct_bank_code": "088"
+                      "acct_bank_code": "088",
+                      "result_code": "0000",
+                      "message": "정상 처리"
                   },
                   {
                       "withdraw_amount": 854400,
@@ -993,7 +997,9 @@ endpoints:
                       "acct_num": "110373658934",
                       "acct_name": "조현진",
                       "acct_bank_name": "신한은행",
-                      "acct_bank_code": "088"
+                      "acct_bank_code": "088",
+                      "result_code": "0000",
+                      "message": "정상 처리"
                   },
                   {
                       "withdraw_amount": 2809600,
@@ -1001,7 +1007,9 @@ endpoints:
                       "acct_num": "110373658934",
                       "acct_name": "조현진",
                       "acct_bank_name": "신한은행",
-                      "acct_bank_code": "088"
+                      "acct_bank_code": "088",
+                      "result_code": "0000",
+                      "message": "정상 처리"
                   },
                   {
                       "withdraw_amount": 2809600,
@@ -1009,7 +1017,9 @@ endpoints:
                       "acct_num": "110373658934",
                       "acct_name": "조현진",
                       "acct_bank_name": "신한은행",
-                      "acct_bank_code": "088"
+                      "acct_bank_code": "088",
+                      "result_code": "0000",
+                      "message": "정상 처리"
                   },
                   {
                       "withdraw_amount": 4688600,
@@ -1017,7 +1027,9 @@ endpoints:
                       "acct_num": "110373658934",
                       "acct_name": "조현진",
                       "acct_bank_name": "신한은행",
-                      "acct_bank_code": "088"
+                      "acct_bank_code": "088",
+                      "result_code": "0000",
+                      "message": "정상 처리"
                   }
               ]
           }
@@ -1081,10 +1093,26 @@ endpoints:
         type: string
         enumValues: []
         custom: []
+      'content.*.result_code':
+        name: 'content.*.result_code'
+        description: 결과코드
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.message':
+        name: 'content.*.message'
+        description: '결과 메세지'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
     auth:
       - headers
       - Authorization
-      - 'Bearer 5EPf6D4ge13h6vVZk8cbaad'
+      - 'Bearer a5bPacEgf46evdZh318kD6V'
     controller: null
     method: null
     route: null
@@ -1137,7 +1165,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer vP5f6E1hd6cDb34eakg8aZV'
+      - 'Bearer D165eE8Z3hagvkdcP4Va6fb'
     controller: null
     method: null
     route: null
@@ -1199,7 +1227,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer a4D8eh6g6Eca3dPfvkbV5Z1'
+      - 'Bearer Evd6P61fhb4kZ8aec5Dg3aV'
     controller: null
     method: null
     route: null
@@ -1470,7 +1498,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer v8Z1fagke5664PbcDVadEh3'
+      - 'Bearer 6D5gaP41fbEVc6evZ8dhk3a'
     controller: null
     method: null
     route: null

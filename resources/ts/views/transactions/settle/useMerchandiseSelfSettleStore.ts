@@ -1,5 +1,23 @@
-import { Header } from '@/views/headers'
-import { Searcher } from '@/views/searcher'
+import { Header } from '@/views/headers';
+import { Searcher } from '@/views/searcher';
+import { StatusColors } from '@core/enums';
+
+export const realtimeResult = (result_code: string) => {
+    if(result_code == '0000')  //성공
+        return StatusColors.Success
+    else if(result_code == '0050')
+        return StatusColors.Processing
+    else
+        return StatusColors.Error
+}
+export const realtimeMessage = (item: any) => {
+    if(item.result_code == '0000')  //성공
+        return '성공'
+    else if(item.result_code == '0050')
+        return '결과 처리중'
+    else
+        return item.message
+}
 
 export const useSearchStore = defineStore('merchandiseSelfSettleSearchStore', () => {
     const store = Searcher('transactions/settle/merchandises/collect-withdraws')
@@ -7,6 +25,7 @@ export const useSearchStore = defineStore('merchandiseSelfSettleSearchStore', ()
     const headers:Record<string, string> = {
         'id': 'NO.',
         'mcht_name': '가맹점 상호',
+        'result_code': '결과',
         'withdraw_amount': '출금금액',
         'withdraw_date': '출금일자',
         'acct_num': '계좌번호',

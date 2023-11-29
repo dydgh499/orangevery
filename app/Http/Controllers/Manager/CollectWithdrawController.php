@@ -87,6 +87,8 @@ class CollectWithdrawController extends Controller
             if($res['code'] == 201)
             {
                 $data = $request->data();
+                $data['result_code'] = '0050';
+                $data['message'] = '이체 처리중';
                 $res = $this->collect_withdraws->create($data);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
             }

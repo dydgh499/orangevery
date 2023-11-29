@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import { useSearchStore } from '@/views/transactions/settle/useMerchandiseSelfSettleStore'
+import { useSearchStore, realtimeResult, realtimeMessage } from '@/views/transactions/settle/useMerchandiseSelfSettleStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { DateFilters } from '@core/enums'
@@ -53,6 +53,11 @@ provide('exporter', exporter)
                             <td v-show="_header.visible" class='list-square'>
                                 <span v-if="_key == 'id' || _key == 'trans_id'">
                                     #{{ item[_key] }}
+                                </span>
+                                <span v-if="_key == 'result_code'">
+                                    <VChip :color="store.getSelectIdColor(realtimeResult(item[_key]))">
+                                        {{ realtimeMessage(item) }}
+                                    </VChip>
                                 </span>
                                 <span v-else-if="_key == 'withdraw_amount'">
                                     {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}

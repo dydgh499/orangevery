@@ -25,6 +25,7 @@ export const StatusColors = {
     Error   : 5,
     Cancel  : 6,
     Timeout : 7,
+    Processing : 8,
 } as const
 
 export const DateFilters = {

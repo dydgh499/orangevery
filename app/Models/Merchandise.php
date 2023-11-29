@@ -53,6 +53,7 @@ class Merchandise extends Authenticatable
     {
         return $this->hasMany(CollectWithdraw::class, 'mcht_id')
             ->whereNull('mcht_settle_id')
+            ->whereIn('result_code',['0000', '0050'])
             ->groupBy('mcht_id')
             ->where('withdraw_date', '>=', request()->s_dt)
             ->where('withdraw_date', '<=', request()->e_dt)

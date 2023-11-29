@@ -179,23 +179,4 @@ class MchtSettleHistoryController extends Controller
         $code = $res['body']['result_cd'] == '0000' ? 1 : $res['body']['result_cd'];
         return $this->extendResponse($code, $res['body']['result_msg']);
     }
-
-    /**
-     * 모아서 출금(정산)
-     */
-    public function settleCollect(CreateSettleHistoryRequest $request)
-    {
-        $pay_module = PaymentModule::where('is_delete', false)
-            ->where('mcht_id', $request->id)
-            ->where('fin_id', '!=', 0)
-            ->first();
-
-        $data = $request->data('mcht_id');
-        $data['settle_fee'] = $request->settle_fee;
-        $data['trx_ids'] = $request->selected;
-        $data['fin_id'] = $pay_module->fin_id;
-        $url = $this->base_noti_url.'/settle-collect';
-        $res = post($url, $data);
-        return $this->response(1, $res['body']);
-    }
 }

@@ -27,12 +27,15 @@ export const realtimeResult = (item: Transaction) => {
         const is_success = item.realtimes?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
         const is_error  = item.realtimes?.find(obj => obj.result_code !== '0000')
         const is_cancel = item.realtimes?.find(obj => obj.request_type === -2)
+        const is_sending = item.realtimes?.find(obj => obj.result_code === '0050' && obj.request_type === 6170)
         if(is_success)  //성공
             return StatusColors.Success
         if(is_error)    // 에러
             return StatusColors.Error
         if(is_cancel)   // 취소
             return StatusColors.Cancel
+        if(is_sending)
+            return StatusColors.Processing
 
         if(item.fin_trx_delay == -1 && item.realtimes?.length == 0)    // 모아서 출금
             return StatusColors.Info
@@ -308,6 +311,8 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         }
         else if(code === StatusColors.Success)
             return '성공'
+        else if(code === StatusColors.Processing)
+            return '결과 처리중'
         else if(code === StatusColors.Info)
             return '모아서 출금예정'
         else if(code === StatusColors.Error)

@@ -173,6 +173,7 @@ class QuickViewController extends Controller
 
         $withdraw = CollectWithdraw::where('mcht_id', $request->user()->id)
             ->whereNull('mcht_settle_id')
+            ->whereIn('result_code', ["0000", "0050"])  //처리완료, 처리중
             ->first([DB::raw('SUM(withdraw_amount) as total_withdraw_amount')]);
 
         $cancel_deposit = $transactions->reduce(function($carry, $transaction) {

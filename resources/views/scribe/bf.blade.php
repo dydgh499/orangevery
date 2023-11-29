@@ -42,7 +42,7 @@
 <a href="#" id="nav-button">
     <span>
         MENU
-        <img src="{{ asset("/docs/images/navbar.png") }}" alt="navbar-image"/>
+        <img src="../docs/images/navbar.png" alt="navbar-image"/>
     </span>
 </a>
 <div class="tocify-wrapper">
@@ -111,7 +111,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-28 16:54:10</li>
+        <li>마지막 업데이트:  2023-11-29 18:30:40</li>
     </ul>
 </div>
 
@@ -732,7 +732,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "nostrum",
+    "search": "non",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -764,7 +764,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'nostrum',
+            'search' =&gt; 'non',
         ],
     ]
 );
@@ -782,7 +782,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'nostrum',
+  'search': 'non',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -796,7 +796,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=nostrum" \
+    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=non" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1093,10 +1093,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-transactions"
-               value="nostrum"
+               value="non"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>nostrum</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>non</code></p>
             </div>
                 </form>
 
@@ -1286,7 +1286,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "odit",
+    "search": "consequatur",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1318,7 +1318,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'odit',
+            'search' =&gt; 'consequatur',
         ],
     ]
 );
@@ -1336,7 +1336,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'odit',
+  'search': 'consequatur',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1350,7 +1350,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=odit" \
+    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=consequatur" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1543,10 +1543,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-realtime-histories"
-               value="odit"
+               value="consequatur"
                data-component="query">
     <br>
-<p>검색어(승인번호, 계좌번호) <br>예시: <code>odit</code></p>
+<p>검색어(승인번호, 계좌번호) <br>예시: <code>consequatur</code></p>
             </div>
                 </form>
 
@@ -1751,7 +1751,9 @@ response.json()</code></pre></div>
             &quot;acct_num&quot;: &quot;110373658934&quot;,
             &quot;acct_name&quot;: &quot;조현진&quot;,
             &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
-            &quot;acct_bank_code&quot;: &quot;088&quot;
+            &quot;acct_bank_code&quot;: &quot;088&quot;,
+            &quot;result_code&quot;: &quot;0000&quot;,
+            &quot;message&quot;: &quot;정상 처리&quot;
         },
         {
             &quot;withdraw_amount&quot;: 6473600,
@@ -1759,7 +1761,9 @@ response.json()</code></pre></div>
             &quot;acct_num&quot;: &quot;110373658934&quot;,
             &quot;acct_name&quot;: &quot;조현진&quot;,
             &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
-            &quot;acct_bank_code&quot;: &quot;088&quot;
+            &quot;acct_bank_code&quot;: &quot;088&quot;,
+            &quot;result_code&quot;: &quot;0000&quot;,
+            &quot;message&quot;: &quot;정상 처리&quot;
         },
         {
             &quot;withdraw_amount&quot;: 854400,
@@ -1767,7 +1771,9 @@ response.json()</code></pre></div>
             &quot;acct_num&quot;: &quot;110373658934&quot;,
             &quot;acct_name&quot;: &quot;조현진&quot;,
             &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
-            &quot;acct_bank_code&quot;: &quot;088&quot;
+            &quot;acct_bank_code&quot;: &quot;088&quot;,
+            &quot;result_code&quot;: &quot;0000&quot;,
+            &quot;message&quot;: &quot;정상 처리&quot;
         },
         {
             &quot;withdraw_amount&quot;: 2809600,
@@ -1775,7 +1781,9 @@ response.json()</code></pre></div>
             &quot;acct_num&quot;: &quot;110373658934&quot;,
             &quot;acct_name&quot;: &quot;조현진&quot;,
             &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
-            &quot;acct_bank_code&quot;: &quot;088&quot;
+            &quot;acct_bank_code&quot;: &quot;088&quot;,
+            &quot;result_code&quot;: &quot;0000&quot;,
+            &quot;message&quot;: &quot;정상 처리&quot;
         },
         {
             &quot;withdraw_amount&quot;: 2809600,
@@ -1783,7 +1791,9 @@ response.json()</code></pre></div>
             &quot;acct_num&quot;: &quot;110373658934&quot;,
             &quot;acct_name&quot;: &quot;조현진&quot;,
             &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
-            &quot;acct_bank_code&quot;: &quot;088&quot;
+            &quot;acct_bank_code&quot;: &quot;088&quot;,
+            &quot;result_code&quot;: &quot;0000&quot;,
+            &quot;message&quot;: &quot;정상 처리&quot;
         },
         {
             &quot;withdraw_amount&quot;: 4688600,
@@ -1791,7 +1801,9 @@ response.json()</code></pre></div>
             &quot;acct_num&quot;: &quot;110373658934&quot;,
             &quot;acct_name&quot;: &quot;조현진&quot;,
             &quot;acct_bank_name&quot;: &quot;신한은행&quot;,
-            &quot;acct_bank_code&quot;: &quot;088&quot;
+            &quot;acct_bank_code&quot;: &quot;088&quot;,
+            &quot;result_code&quot;: &quot;0000&quot;,
+            &quot;message&quot;: &quot;정상 처리&quot;
         }
     ]
 }</code>
@@ -1985,6 +1997,20 @@ response.json()</code></pre></div>
  &nbsp;
 <br>
 <p>은행코드</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>result_code</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>결과코드</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>message</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>결과 메세지</p>
                     </div>
                                     </details>
         </div>
