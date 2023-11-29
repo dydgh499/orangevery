@@ -33,7 +33,7 @@
     </script>
     <script src="/vendor/scribe/js/tryitout-4.25.0.js"></script>
 
-    <script src="/vendor/scribe/js/tryitout-4.25.0.js"></script>
+    <script src="/vendor/scribe/js/theme-default-4.25.0.js"></script>
 
 </head>
 
@@ -111,7 +111,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-29 18:30:40</li>
+        <li>마지막 업데이트:  2023-11-29 19:51:10</li>
     </ul>
 </div>
 
@@ -732,7 +732,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "non",
+    "search": "perferendis",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -764,7 +764,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'non',
+            'search' =&gt; 'perferendis',
         ],
     ]
 );
@@ -782,7 +782,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'non',
+  'search': 'perferendis',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -796,7 +796,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=non" \
+    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=perferendis" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1093,10 +1093,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-transactions"
-               value="non"
+               value="perferendis"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>non</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>perferendis</code></p>
             </div>
                 </form>
 
@@ -1286,7 +1286,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "consequatur",
+    "search": "qui",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1318,7 +1318,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'consequatur',
+            'search' =&gt; 'qui',
         ],
     ]
 );
@@ -1336,7 +1336,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'consequatur',
+  'search': 'qui',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1350,7 +1350,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=consequatur" \
+    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=qui" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1543,10 +1543,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-realtime-histories"
-               value="consequatur"
+               value="qui"
                data-component="query">
     <br>
-<p>검색어(승인번호, 계좌번호) <br>예시: <code>consequatur</code></p>
+<p>검색어(승인번호, 계좌번호) <br>예시: <code>qui</code></p>
             </div>
                 </form>
 
