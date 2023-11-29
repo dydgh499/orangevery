@@ -46,7 +46,7 @@ trait ExtendResponseTrait
         else if($code < 5)
             $http_code = '20'.$code;
         else
-            $http_code = $code;
+            $http_code = 409;
         
         return Response::json(['code'=>$code, 'message'=>$msg, 'data'=>$data], $http_code, [], JSON_UNESCAPED_UNICODE);        
     }

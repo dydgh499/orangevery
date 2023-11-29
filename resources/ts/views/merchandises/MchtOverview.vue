@@ -7,7 +7,6 @@ import { getIndexByLevel } from '@axios'
 import { useSalesFilterStore, feeApplyHistoires } from '@/views/salesforces/useStore'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import UnderAutoSettingDialog from '@/layouts/dialogs/UnderAutoSettingDialog.vue'
 import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
 import corp from '@corp'
@@ -88,6 +87,9 @@ onMounted(async () => {
                                             prepend-inner-icon="ph:share-network" :label="levels['sales'+(6-i)+'_name'] + '선택'"
                                             item-title="sales_name" item-value="id" persistent-hint single-line
                                             :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])" @update:modelValue="setSalesUnderAutoSetting(6-i)"/>
+                                        <VTooltip activator="parent" location="top" v-if="props.item['sales'+(6-i)+'_id']">
+                                            {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
+                                        </VTooltip>
                                     </VCol>
                                     <VCol cols="12" :md="props.item.id ? 2 : 4">
                                         <VTextField v-model="props.item['sales'+(6-i)+'_fee'] " type="number" suffix="%"
@@ -102,9 +104,7 @@ onMounted(async () => {
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="3">
-                                    <BaseQuestionTooltip :location="'top'" :text="'거래/유보금 수수료율'"
-                                        :content="'화면 해상도가 맞지않아 버튼이 보이지 않는다면 Ctrl+Mouse wheel을 통해 해상도를 조절해주세요.'">
-                                    </BaseQuestionTooltip>
+                                    거래/유보금 수수료율
                                 </VCol>
                                 <VCol cols="12" :md="props.item.id ? 3 : 4">
                                     <VTextField v-model="props.item.trx_fee" type="number" suffix="%"

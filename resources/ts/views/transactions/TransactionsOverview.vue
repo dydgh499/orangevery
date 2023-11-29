@@ -143,20 +143,23 @@ onMounted(async () => {
                     <VCardTitle>가맹점 정보</VCardTitle>
                     <VRow class="pt-5">
                         <template v-for="i in 6" :key="i">
-                            <CreateHalfVCol :mdl="4" :mdr="8" v-if="levels['sales' + (6 - i) + '_use']">
-                                <template #name>{{ levels['sales' + (6 - i) + '_name'] }}/수수료율</template>
+                            <CreateHalfVCol :mdl="4" :mdr="8" v-if="levels['sales'+(6 - i)+'_use']">
+                                <template #name>{{ levels['sales'+(6 - i)+'_name'] }}/수수료율</template>
                                 <template #input>
                                     <VRow>
                                         <VCol>
                                             <VAutocomplete :menu-props="{ maxHeight: 400 }"
-                                                v-model="props.item['sales' + (6 - i) + '_id']"
+                                                v-model="props.item['sales'+(6 - i)+'_id']"
                                                 :items="[{ id: 0, sales_name: '선택안함' }].concat(sales[6 - i].value)"
                                                 prepend-inner-icon="ph:share-network"
-                                                :label="levels['sales'+(6-i)+'_name'] + ' 선택'" item-title="sales_name"
+                                                :label="levels['sales'+(6-i)+'_name']+' 선택'" item-title="sales_name"
                                                 item-value="id" persistent-hint single-line :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])"/>
+                                                <VTooltip activator="parent" location="top" v-if="props.item['sales'+(6-i)+'_id']">
+                                                    {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
+                                                </VTooltip>
                                         </VCol>
                                         <VCol>
-                                            <VTextField v-model="props.item['sales' + (6 - i) + '_fee']" type="number" suffix="%"
+                                            <VTextField v-model="props.item['sales'+(6 - i)+'_fee']" type="number" suffix="%"
                                                 :rules="[requiredValidator]" />
                                         </VCol>
                                     </VRow>

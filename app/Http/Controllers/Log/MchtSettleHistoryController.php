@@ -127,7 +127,6 @@ class MchtSettleHistoryController extends Controller
     {
         $cancel_deposit_amount = $request->cancel_deposit_amount;
         $collect_withdraw_amount = $request->collect_withdraw_amount;
-        
         $data = $request->data('mcht_id');
         $data['settle_fee'] = $request->settle_fee;
         $data['cancel_deposit_amount']      = $cancel_deposit_amount ? $cancel_deposit_amount : 0;
