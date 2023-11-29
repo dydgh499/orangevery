@@ -4,7 +4,6 @@ namespace App\Http\Requests\Manager;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
-use Carbon\Carbon;
 
 class CollectWithdrawRequest extends FormRequest
 {
@@ -46,13 +45,6 @@ class CollectWithdrawRequest extends FormRequest
     public function data()
     {
         $data = $this->getParmasBaseKey();
-        $data['brand_id'] = $this->user()->brand_id;
-        $data['mcht_id'] = $this->user()->id;        
-        $data['withdraw_date'] = Carbon::now()->format('Y-m-d');
-        $data['acct_num'] = $this->user()->acct_num;
-        $data['acct_name'] = $this->user()->acct_name;
-        $data['acct_bank_name'] = $this->user()->acct_bank_name;
-        $data['acct_bank_code'] = $this->user()->acct_bank_code;
         return $data;
     }
 }
