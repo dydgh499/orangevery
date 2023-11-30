@@ -111,7 +111,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2023-11-29 19:51:10</li>
+        <li>마지막 업데이트:  2023-12-01 02:19:12</li>
     </ul>
 </div>
 
@@ -732,7 +732,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "perferendis",
+    "search": "est",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -764,7 +764,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'perferendis',
+            'search' =&gt; 'est',
         ],
     ]
 );
@@ -782,7 +782,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'perferendis',
+  'search': 'est',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -796,7 +796,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=perferendis" \
+    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=est" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1093,10 +1093,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-transactions"
-               value="perferendis"
+               value="est"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>perferendis</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>est</code></p>
             </div>
                 </form>
 
@@ -1286,7 +1286,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "qui",
+    "search": "hic",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1318,7 +1318,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'qui',
+            'search' =&gt; 'hic',
         ],
     ]
 );
@@ -1336,7 +1336,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'qui',
+  'search': 'hic',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1350,7 +1350,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=qui" \
+    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=hic" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1543,10 +1543,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-realtime-histories"
-               value="qui"
+               value="hic"
                data-component="query">
     <br>
-<p>검색어(승인번호, 계좌번호) <br>예시: <code>qui</code></p>
+<p>검색어(승인번호, 계좌번호) <br>예시: <code>hic</code></p>
             </div>
                 </form>
 
@@ -1961,7 +1961,14 @@ response.json()</code></pre></div>
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>출금신청 금액</p>
+<p>출금 금액</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>withdraw_fee</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>출금 수수료</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
                         <b style="line-height: 2;"><code>created_at</code></b>&nbsp;&nbsp;
@@ -2092,7 +2099,8 @@ response.json()</code></pre></div>
                 <pre>
 
 <code class="language-json">{
-    &quot;profit&quot;: 412320
+    &quot;profit&quot;: 412320,
+    &quot;withdraw_fee&quot;: 1000
 }</code>
  </pre>
     </span>

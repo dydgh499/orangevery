@@ -265,7 +265,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer e31dcZhavbPa6E48fg5VD6k'
+      - 'Bearer Eeabcga4P5h68D3v61ZdVkf'
     controller: null
     method: null
     route: null
@@ -328,7 +328,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: perferendis
+        example: est
         type: string
         enumValues: []
         custom: []
@@ -337,7 +337,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: perferendis
+      search: est
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -671,7 +671,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 4665begkDPa8vf1ahZcV3Ed'
+      - 'Bearer Vg3Dvaf5aPE6h8ebck6d4Z1'
     controller: null
     method: null
     route: null
@@ -734,7 +734,7 @@ endpoints:
         name: search
         description: '검색어(승인번호, 계좌번호)'
         required: false
-        example: qui
+        example: hic
         type: string
         enumValues: []
         custom: []
@@ -743,7 +743,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: qui
+      search: hic
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -893,7 +893,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer vc46ageZ35bVd8hDE1kfa6P'
+      - 'Bearer hb68aEVPcdva4D1g3fk65eZ'
     controller: null
     method: null
     route: null
@@ -1045,7 +1045,15 @@ endpoints:
         custom: []
       'content.*.withdraw_amount':
         name: 'content.*.withdraw_amount'
-        description: '출금신청 금액'
+        description: '출금 금액'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.withdraw_fee':
+        name: 'content.*.withdraw_fee'
+        description: '출금 수수료'
         required: false
         example: null
         type: integer
@@ -1110,7 +1118,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 13P8EVDa6c6ke5Zbgdav4hf'
+      - 'Bearer 1Vha346ecDgk8PvZE5fdab6'
     controller: null
     method: null
     route: null
@@ -1146,7 +1154,8 @@ endpoints:
         status: 200
         content: |
           {
-              "profit": 412320
+              "profit": 412320,
+              "withdraw_fee": 1000
           }
         headers: []
         description: ''
@@ -1163,7 +1172,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer c6VaveEgDZd354kah6f81bP'
+      - 'Bearer hEg5Dca1bv6afkPe68V4Z3d'
     controller: null
     method: null
     route: null
@@ -1225,7 +1234,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer PdEcbv6Deah18Vfg43Za56k'
+      - 'Bearer 48a6kbPfg3EDaevcV16Zhd5'
     controller: null
     method: null
     route: null
@@ -1496,7 +1505,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer P6Zkv1gb54Ddha6Vfa3ceE8'
+      - 'Bearer 6bDa4Pv8165aZfkVch3eEdg'
     controller: null
     method: null
     route: null
