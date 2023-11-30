@@ -50,8 +50,8 @@ class MchtSettleHistoryController extends Controller
     public function chart(Request $request)
     {
         $query = $this->commonQuery($request)
-                ->where('settle_histories_merchandises.created_at', '>=', $request->s_dt)
-                ->where('settle_histories_merchandises.created_at', '<=', $request->e_dt);
+                ->where('settle_histories_merchandises.created_at', '>=', $request->s_dt." 00:00:00")
+                ->where('settle_histories_merchandises.created_at', '<=', $request->e_dt." 23:59:59");
 
         $total = $query->first([
             DB::raw("SUM(appr_amount) AS appr_amount"),
