@@ -82,12 +82,13 @@ th {
   color: white !important;
 }
 
-// date Picker CSS
+// date Picker SCSS
 .dp__theme_dark,
 .dp__theme_light {
   --dp-border-color-hover: rgb(var(--v-global-theme-primary)) !important;
   --dp-border-color: rgb(var(--v-border-color)) !important;
   --dp-background-color: rgb(var(--v-theme-surface)) !important;
+  --dp-primary-color: rgb(var(--v-global-theme-primary)) !important;
 }
 
 .dp__calendar {
