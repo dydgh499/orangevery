@@ -76,7 +76,7 @@ class CollectWithdrawController extends Controller
         $fin_id = $fin_module ? $fin_module->fin_id : 0;
         $withdraw_fee = $pay_modules->sum('withdraw_fee');
 
-        if($pay_module)
+        if($fin_id)
         {
             $params = [
                 'brand_id' => $request->user()->brand_id,
