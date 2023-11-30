@@ -83,7 +83,7 @@ class CollectWithdrawController extends Controller
                 'mcht_id' => $request->user()->id,
                 'withdraw_amount' => $request->withdraw_amount,
                 'withdraw_fee' => $withdraw_fee,
-                'fin_id' => $pay_module['fin_id'],
+                'fin_id' => $fin_id,
                 'acct_num' => $request->user()->acct_num,
                 'acct_name' => $request->user()->acct_name,
                 'acct_bank_name' => $request->user()->acct_bank_name,
