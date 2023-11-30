@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Manager;
 use App\Models\Merchandise;
 use App\Models\PaymentModule;
 use App\Models\NotiUrl;
+use App\Models\Log\MchtFeeChangeHistory;
 use App\Models\Log\SfFeeChangeHistory;
 use App\Models\Log\SfFeeApplyHistory;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
+use App\Http\Traits\Salesforce\BatchApplyTrait;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -23,7 +25,7 @@ use Illuminate\Support\Facades\DB;
  */
 class SalesforceBatchController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, StoresTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait, BatchApplyTrait;
     protected $merchandises, $pay_modules;
 
     public function __construct(Merchandise $merchandises, PaymentModule $pay_modules)
@@ -31,88 +33,74 @@ class SalesforceBatchController extends Controller
         $this->merchandises = $merchandises;
         $this->pay_modules  = $pay_modules;
     }
-
-    private function payModuleBatch($request)
+    
+    private function SfFeeApplyHistoryStore($brand_id, $sales_id, $sales_fee)
     {
-        $sales_key = $this->getSalesKeys($request);
-        $sales_id = 'merchandises.'.$sales_key['sales_id'];
-        $query = $this->pay_modules
-            ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-            ->where('payment_modules.brand_id', $request->user()->brand_id)
-            ->where($sales_id, $request->id);
-        if($request->pg_id)
-            $query = $query->where('payment_modules.pg_id', $request->pg_id);
-        return $query;
+        $u_apply_res = SfFeeApplyHistory::where('sales_id', $sales_id)
+            ->where(['is_delete' => false])
+            ->update(['is_delete' => true]);
+        $c_apply_res = SfFeeApplyHistory::create([
+            'brand_id' => $brand_id,
+            'sales_id' => $sales_id,
+            'trx_fee'  => $sales_fee,
+        ]);
     }
-
-    private function merchandiseBatch($request)
+    /**
+     * 영업점 수수료율 즉시적용 
+     */
+    public function setSalesFeeDirect(Request $request)
     {
-        $sales_key = $this->getSalesKeys($request);
-        $query = $this->merchandises->where('brand_id', $request->user()->brand_id)
-            ->where($sales_key['sales_id'], $request->id);
-        if($request->custom_filter_id)
-            $query = $query->where('custom_id', $request->custom_filter_id);
-        return $query;
-    }
-
-    private function getSalesKeys($request)
-    {
-        $idx  = globalLevelByIndex($request->level);
-        $sales_key = [
-            'sales_fee' => 'sales'.$idx.'_fee',
-            'sales_id'  => 'sales'.$idx.'_id',
-        ];
-        return $sales_key;
+        $datas = $this->getSalesResource($request, true);
+        $res = DB::transaction(function () use($datas, $request) {
+            // merchandise change
+            $sales_key = $this->getSalesKeys($request);
+            $mchts = $this->merchandiseBatch($request)->update([
+                $sales_key['sales_fee'] => $request->sales_fee/100
+            ]);
+            // sales fee change histories
+            $this->SfFeeApplyHistoryStore($request->user()->brand_id, $request->id, $request->sales_fee/100);
+            return $this->manyInsert(new SfFeeChangeHistory(), $datas);
+        });
+        return $this->response($res ? 1 : 990);
     }
 
     /**
-     * 수수료율 적용 
+     * 영업점 수수료율 예약적용 
      */
-    public function setFee(Request $request)
+    public function setSalesFeeBooking(Request $request)
     {
-        $sales_key = $this->getSalesKeys($request);
-        $aft_trx_fee = $request->sales_fee/100;
-        $aft_sales_id = $request->id;
-
-        $mchts = $this->merchandises->where('brand_id', $request->user()->brand_id)
-                ->where($sales_key['sales_id'], $request->id)
-                ->get();
-
-        $datas = [];
-        foreach($mchts as $mcht)
-        {
-            $js_mcht = json_decode(json_encode($mcht), true);
-            $bf_trx_fee = $js_mcht[$sales_key['sales_fee']];
-            $bf_sales_id = $mcht[$sales_key['sales_id']];            
-            array_push($datas, [
-                'brand_id' => $request->user()->brand_id,
-                'mcht_id'   => $js_mcht['id'],
-                'level'     => $request->level,
-                'bf_trx_fee' => $bf_trx_fee,
-                'aft_trx_fee' => $aft_trx_fee,
-                'bf_sales_id' => $bf_sales_id,
-                'aft_sales_id' => $aft_sales_id,
-                'change_status' => true,
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
-            ]);
-        }
-        $res = DB::transaction(function () use($sales_key, $datas, $request, $aft_sales_id, $aft_trx_fee) {
-            $u_m_res = $this->merchandises->where('brand_id', $request->user()->brand_id)
-                ->where($sales_key['sales_id'], $request->id)
-                ->update([$sales_key['sales_fee'] => $request->sales_fee/100]);
-
-            $i_chg_res = $this->manyInsert(new SfFeeChangeHistory(), $datas);
-
-            $u_apply_res = SfFeeApplyHistory::where('sales_id', $aft_sales_id)
-                ->update(['is_delete' => true]);
-            $c_apply_res = SfFeeApplyHistory::create([
-                'brand_id' => $request->user()->brand_id,
-                'sales_id' => $aft_sales_id,
-                'trx_fee'  => $aft_trx_fee,
-            ]);
-            return $i_chg_res && $c_apply_res;
+        $datas = $this->getSalesResource($request, false);
+        $res = DB::transaction(function () use($datas, $request) {
+            // sales fee change histories
+            $this->SfFeeApplyHistoryStore($request->user()->brand_id, $request->id, $request->sales_fee/100);
+            return $this->manyInsert(new SfFeeChangeHistory(), $datas);
         });
+        return $this->response($res ? 1 : 990);
+    }
+
+    /**
+     * 가맹점 수수료율 즉시적용 
+     */
+    public function setMchtFeeDirect(Request $request)
+    {
+        $datas = $this->getMchtResource($request, true);
+        $res = DB::transaction(function () use($datas, $request) {
+            $mchts = $this->merchandiseBatch($request)->update([
+                'trx_fee' => $request->mcht_fee/100,
+                'hold_fee' => $request->hold_fee/100,
+            ]);
+            return $this->manyInsert(new MchtFeeChangeHistory(), $datas);
+        });
+        return $this->response($res ? 1 : 990);
+    }
+
+    /**
+     * 가맹점 수수료율 예약적용 
+     */
+    public function setMchtFeeBooking(Request $request)
+    {
+        $datas = $this->getMchtResource($request, false);
+        $res = $this->manyInsert(new MchtFeeChangeHistory(), $datas);
         return $this->response($res ? 1 : 990);
     }
 

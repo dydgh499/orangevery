@@ -24,6 +24,8 @@ const merchandise = reactive<any>({
     custom_filter_id: null,
     custom_id: null,
     sales_fee: 0,
+    mcht_fee: 0,
+    hold_fee: 0,
     acct_num: "",
     acct_name: "",
     bank: { code: null, title: '선택안함' },
@@ -74,12 +76,41 @@ const common = computed(() => {
         'custom_filter_id': merchandise.custom_filter_id,
     }
 })
-const setFee = () => {
-    post('set-fee', {
+const setSalesFee = () => {
+    post('sales-fee-direct-apply', {
         ...common.value,
         'sales_fee': parseFloat(merchandise.sales_fee),
     })
 }
+const setSalesFeeBooking = async () => {
+    if (await alert.value.show('정말 예약적용하시겠습니까? <b>명일 00시</b>에 반영됩니다.<br><br><h5>실수로 적용된 예약적용 수수료는 "수수료율 변경이력" 탭에서 삭제시 반영되지 않습니다.</h5>')) {
+        const r = await axios.post('/api/v1/manager/salesforces/batch/sales-fee-book-apply', {
+            ...common.value,
+            'sales_fee': parseFloat(merchandise.sales_fee),
+        })
+        snackbar.value.show('성공하였습니다.', 'success')
+    }
+}
+
+const setMchtFee = () => {
+    post('mcht-fee-direct-apply', {
+        ...common.value,
+        'mcht_fee': parseFloat(merchandise.mcht_fee),
+        'hold_fee': parseFloat(merchandise.hold_fee),
+    })
+}
+
+const setMchtFeeBooking = async () => {
+    if (await alert.value.show('정말 예약적용하시겠습니까? <b>명일 00시</b>에 반영됩니다.<br><br><h5>실수로 적용된 예약적용 수수료는 "수수료율 변경이력" 탭에서 삭제시 반영되지 않습니다.</h5>')) {
+        const r = await axios.post('/api/v1/manager/salesforces/batch/mcht-fee-book-apply', {
+            ...common.value,
+            'mcht_fee': parseFloat(merchandise.mcht_fee),
+        'hold_fee': parseFloat(merchandise.hold_fee),
+        })
+        snackbar.value.show('성공하였습니다.', 'success')
+    }
+}
+
 const setCustomFilter = () => {
     post('set-custom-filter', {
         ...common.value,
@@ -191,13 +222,36 @@ const setNotiUrl = () => {
         </CreateHalfVCol>
         <CreateHalfVCol :mdl="3" :mdr="9">
             <template #name>
-                {{ corp.pv_options.auth.levels['sales' + getLevelByIndex(props.item.level) + '_name'] }}/수수료율</template>
+                {{ corp.pv_options.auth.levels['sales' + getLevelByIndex(props.item.level) + '_name'] }} 수수료율</template>
             <template #input>
                 <div class="batch-container">
                     <VTextField v-model="merchandise.sales_fee" type="number" suffix="%" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setFee()">
+                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setSalesFee()">
                         즉시적용
                         <VIcon end icon="tabler-direction-sign" />
+                    </VBtn>
+                    <VBtn variant="tonal" color="secondary" @click="setSalesFeeBooking()"
+                        style='margin-left: 0.5em;'>
+                        예약적용
+                        <VIcon end icon="tabler-clock-up" />
+                    </VBtn>
+                </div>
+            </template>
+        </CreateHalfVCol>
+        <CreateHalfVCol :mdl="3" :mdr="9">
+            <template #name>가맹점 거래/유보금 수수료율</template>
+            <template #input>
+                <div class="batch-container">
+                    <VTextField v-model="merchandise.mcht_fee" type="number" suffix="%" />
+                    <VTextField v-model="merchandise.hold_fee" type="number" suffix="%"  style='margin-left: 0.5em;'/>                    
+                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setMchtFee()">
+                        즉시적용
+                        <VIcon end icon="tabler-direction-sign" />
+                    </VBtn>
+                    <VBtn variant="tonal" color="secondary" @click="setMchtFeeBooking()"
+                        style='margin-left: 0.5em;'>
+                        예약적용
+                        <VIcon end icon="tabler-clock-up" />
                     </VBtn>
                 </div>
             </template>
