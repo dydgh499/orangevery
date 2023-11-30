@@ -66,17 +66,23 @@ class CollectWithdrawController extends Controller
      */
     public function store(CollectWithdrawRequest $request)
     {
-        $pay_module = PaymentModule::where('mcht_id', $request->user()->id)
-            ->where('use_realtime_deposit', true)
-            ->where('fin_id', '>', 0)
+        $pay_modules = PaymentModule::where('mcht_id', $request->user()->id)
             ->where('is_delete', false)
-            ->first(['fin_id']);
+            ->get(['fin_id', 'withdraw_fee', 'use_realtime_deposit']);
+
+        $fin_module = $pay_modules->first(function ($pay_module) {
+            return $pay_module->fin_id > 0 && $pay_module->use_realtime_deposit;
+        });
+        $fin_id = $fin_module ? $fin_module->fin_id : 0;
+        $withdraw_fee = $pay_modules->sum('withdraw_fee');
+
         if($pay_module)
         {
             $params = [
                 'brand_id' => $request->user()->brand_id,
                 'mcht_id' => $request->user()->id,
-                'amount' => $request->withdraw_amount,
+                'withdraw_amount' => $request->withdraw_amount,
+                'withdraw_fee' => $withdraw_fee,
                 'fin_id' => $pay_module['fin_id'],
                 'acct_num' => $request->user()->acct_num,
                 'acct_name' => $request->user()->acct_name,

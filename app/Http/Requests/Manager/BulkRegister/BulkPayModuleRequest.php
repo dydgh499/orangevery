@@ -33,6 +33,7 @@ class BulkPayModuleRequest extends FormRequest
         'installment',
         'cxl_type',
         'use_realtime_deposit',
+        'under_sales_limit',
     ];
     public $string_keys = [
         'api_key',
@@ -49,6 +50,8 @@ class BulkPayModuleRequest extends FormRequest
         'ship_out_stat',
         'pay_disable_s_tm',
         'pay_disable_e_tm',
+        'comm_settle_type',
+        'under_sales_type',
     ];
 
     public function authorize()

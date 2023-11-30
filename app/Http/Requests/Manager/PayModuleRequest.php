@@ -14,7 +14,6 @@ class PayModuleRequest extends FormRequest
         'ps_id',
         'settle_fee',
         'settle_type',
-        'terminal_id',
         'module_type',
         'api_key',
         'sub_key',
@@ -23,16 +22,11 @@ class PayModuleRequest extends FormRequest
         'cxl_type',
         'serial_num',
         'comm_settle_fee',
-        'comm_settle_day',
         'comm_settle_type',
         'comm_calc_level',
-        'ship_out_stat',
         'abnormal_trans_limit',
         'pay_dupe_limit',
         'pay_dupe_least',
-        'under_sales_type',
-        'under_sales_amt',
-        'under_sales_limit',
         'pay_year_limit',
         'pay_month_limit',
         'pay_day_limit',
@@ -54,6 +48,15 @@ class PayModuleRequest extends FormRequest
         'ship_out_dt',
         'fin_id',
         'fin_trx_delay',
+    ];
+    public $integer_keys = [
+        'under_sales_type',
+        'under_sales_limit',
+        'under_sales_amt',
+        'terminal_id',
+        'ship_out_stat',
+        'comm_settle_day',
+        'withdraw_fee',
     ];
 
     public function authorize()
@@ -107,17 +110,12 @@ class PayModuleRequest extends FormRequest
 
     public function data()
     {
-        $data = array_merge($this->getParmasBaseKeyV2($this->nullable_keys, null), $this->getParmasBaseKeyV2($this->boolean_keys, false));
-        $data = array_merge($this->getParmasBaseKey(), $data);
+        $data_1 = array_merge($this->getParmasBaseKeyV2($this->nullable_keys, null), $this->getParmasBaseKeyV2($this->boolean_keys, false));
+        $data_2 = array_merge($this->getParmasBaseKey(), $this->getParmasBaseKeyV2($this->integer_keys, 0));
+        $data   = array_merge($data_1, $data_2);
         $data['note'] = $data['note'] == null ? '' : $data['note'];
         $data['brand_id'] = $this->user()->brand_id;
-        $data['under_sales_type'] = $data['under_sales_type'] == null ? 0 : $data['under_sales_type'];
-        $data['under_sales_limit'] = $data['under_sales_limit'] == '' ? 0 : $data['under_sales_limit'];
-        $data['under_sales_amt'] = $data['under_sales_amt'] == '' ? 0 : $data['under_sales_amt'];
-        $data['terminal_id'] = $data['terminal_id'] == null ? 0 : $data['terminal_id'];
-        $data['ship_out_stat'] = $data['ship_out_stat'] == null ? 0 : $data['ship_out_stat'];        
         $data['filter_issuers'] = json_encode($this->filter_issuers);
-        $data['comm_settle_day'] = $data['comm_settle_day'] == '' ? 0 : $data['comm_settle_day'];
         return $data;
     }
 }

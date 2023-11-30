@@ -177,6 +177,19 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
+                        <VRow class="pt-3" v-if="corp.pv_options.paid.use_collect_withdraw">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
+                                <template #name>
+                                    <BaseQuestionTooltip :location="'top'" :text="'출금 수수료'"
+                                        :content="'가맹점에서 직접출금시 사용됩니다.'">
+                                    </BaseQuestionTooltip>
+                                </template>
+                                <template #input>
+                                    <VTextField v-model="props.item.withdraw_fee" type="number" suffix="₩"
+                                        :rules="[requiredValidator]" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>                        
                     </VCardItem>
                 </VCol>
                 <VDivider :vertical="$vuetify.display.mdAndUp" />
@@ -352,8 +365,8 @@ onMounted(() => {
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>
-                                    <BaseQuestionTooltip :location="'top'" :text="'통신비 정산 타입'"
-                                        :content="'통신비, 통신비 정산 타입, 개통일, 정산일, 정산주체가 설정되어있어야 적용됩니다.<br>ex)<br>통신비: 30,000<br>통신비 정산 타입: 개통월 M+2부터 적용<br>개통일: 2023-09-25<br>정산일: 1일<br>정산주체: 가맹점<br><br>통신비 차감적용일: 2023-11-01, 2023-12-01, 2024-01-01 ...'">
+                                    <BaseQuestionTooltip :location="'top'" :text="'통신비 정산타입'"
+                                        :content="'통신비, 통신비 정산타입, 개통일, 정산일, 정산주체가 설정되어있어야 적용됩니다.<br>ex)<br>통신비: 30,000<br>통신비 정산타입: 개통월 M+2부터 적용<br>개통일: 2023-09-25<br>정산일: 1일<br>정산주체: 가맹점<br><br>통신비 차감적용일: 2023-11-01, 2023-12-01, 2024-01-01 ...'">
                                     </BaseQuestionTooltip>
                                     </template>
                                 <template #input>

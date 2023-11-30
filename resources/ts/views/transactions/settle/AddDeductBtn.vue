@@ -22,17 +22,22 @@ const addDeduction = async () => {
         'e_dt': store.params.e_dt
     };
     const page = props.is_mcht ? 'merchandises' : 'salesforces'
-    if (await alert.value.show('정말 ' + props.name + '님을(를) 추가차감하시겠습니까?')) {
-        try {
-            const r = await axios.post('/api/v1/manager/transactions/settle/' + page + '/deduct', params)
-            snackbar.value.show('성공하였습니다.', 'success')
-            store.setTable()
-        }
-        catch (e: any) {
-            snackbar.value.show(e.response.data.message, 'error')
-            const r = errorHandler(e)
+    if(deduction.value)
+    {
+        if (await alert.value.show('정말 ' + props.name + '님을(를) 추가차감하시겠습니까?')) {
+            try {
+                const r = await axios.post('/api/v1/manager/transactions/settle/' + page + '/deduct', params)
+                snackbar.value.show('성공하였습니다.', 'success')
+                store.setTable()
+            }
+            catch (e: any) {
+                snackbar.value.show(e.response.data.message, 'error')
+                const r = errorHandler(e)
+            }
         }
     }
+    else
+        snackbar.value.show('추가차감금액을 입력해주세요.', 'warning')
 }
 
 </script>
@@ -40,7 +45,7 @@ const addDeduction = async () => {
     <VRow no-gutters>
         <VCol>
             <div class="d-inline-flex align-center gap-2 justify-content-evenly">
-                <VTextField v-model="deduction" type="text" suffix="₩" :rules="[requiredValidator]" dense />
+                <VTextField v-model="deduction" type="text" suffix="₩" />
                 <VBtn size="small" variant="tonal" @click="addDeduction()">
                     차감
                 </VBtn>
@@ -54,6 +59,15 @@ const addDeduction = async () => {
 }
 
 :deep(.v-field__field) {
-  block-size: 2.2em;
+  block-size: 2em;
+}
+
+:deep(.v-field__input) {
+  line-height: 0.5;
+  min-block-size: 1.8em !important;
+}
+
+:deep(.v-text-field__suffix) {
+  padding-block-start: 0 !important;
 }
 </style>

@@ -101,7 +101,7 @@ const getSettleHistoryTap = () => {
 
 const getRiskTap = () => {
     const risks = []
-    if (user_info.value.level > 10) {
+    if (user_info.value.level > 35) {
         risks.push({
             title: '이상거래 관리',
             icon: { icon: 'jam-triangle-danger' },
@@ -111,15 +111,15 @@ const getRiskTap = () => {
             title: '결제실패 관리',
             icon: { icon: 'carbon:ai-status-failed' },
             to: 'transactions-fails',
-        })
-    }
-    if (corp.pv_options.paid.use_realtime_deposit)
-    {
-        risks.push({
-            title: '실시간이체 관리',
-            icon: { icon: 'tabler:history' },
-            to: 'transactions-realtime-histories',
-        })
+        })        
+        if (corp.pv_options.paid.use_realtime_deposit)
+        {
+            risks.push({
+                title: '실시간이체 관리',
+                icon: { icon: 'tabler:history' },
+                to: 'transactions-realtime-histories',
+            })
+        }
     }
     return risks
 }

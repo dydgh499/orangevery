@@ -59,7 +59,7 @@ provide('exporter', exporter)
                                         {{ realtimeMessage(item) }}
                                     </VChip>
                                 </span>
-                                <span v-else-if="_key == 'withdraw_amount'">
+                                <span v-else-if="_key == 'withdraw_amount' || _key == 'withdraw_fee'">
                                     {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
                                 </span>
                                 <span v-else>

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('ps_id')->nullable()->comment('PG사 구간 id');
             $table->integer('settle_type')->default(0)->comment('정산일(D+1, D+2 ..)');
             $table->mediumInteger('settle_fee')->default(0)->comment('입금 수수료');
+            $table->mediumInteger('withdraw_fee')->default(0)->comment('출금 수수료');            
             $table->tinyInteger('module_type')->default(0)->comment('모듈 타입(0=장비, 1=수기, 2=인증, 3=간편, 4=실시간 이체, 5=비인증 장비)');
             $table->string('api_key', 100)->default('')->comment('API KEY');
             $table->string('sub_key', 100)->default('')->comment('SUB KEY');

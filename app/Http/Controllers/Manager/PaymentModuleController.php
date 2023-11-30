@@ -89,7 +89,6 @@ class PaymentModuleController extends Controller
                 ->orWhere('payment_modules.tid', 'like', "%$search%")
                 ->orWhere('merchandises.mcht_name', 'like', "%$search%");
         });
-
     }
 
     /**

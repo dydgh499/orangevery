@@ -80,7 +80,7 @@ trait BatchApplyTrait
     }
 
     /**
-     * 가맹점 수수료율 적용 포멧 목록
+     * 영업점 수수료율 적용 포멧 목록
      */
     public function getMchtResource($request, $change_status)
     {

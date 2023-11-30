@@ -57,7 +57,7 @@ class Merchandise extends Authenticatable
             ->groupBy('mcht_id')
             ->where('withdraw_date', '>=', request()->s_dt)
             ->where('withdraw_date', '<=', request()->e_dt)
-            ->selectRaw('mcht_id, SUM(withdraw_amount) as total_withdraw_amount');
+            ->selectRaw('mcht_id, SUM(withdraw_amount + withdraw_fee) as total_withdraw_amount');
     }
 
     public function deducts()

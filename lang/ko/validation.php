@@ -243,7 +243,7 @@ return [
         'mid' => 'MID',
         'serial_num' => '시리얼번호',
         'ship_out_stat' => '출고 상태',
-        'under_sales_type' => '통신비 정산 타입',
+        'under_sales_type' => '통신비 정산타입',
         'under_sales_amt' => '매출미달 차감금',
         'under_sales_limit' => '매출미달 상한금',
         'pay_disable_s_tm' => '결제금지 시작시간',

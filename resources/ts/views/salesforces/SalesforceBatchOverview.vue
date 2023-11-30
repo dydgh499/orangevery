@@ -50,6 +50,7 @@ const pay_module = reactive<any>({
 
     show_pay_view: 0,
 })
+
 const noti = reactive<any>({
     noti_url: "",
     noti_note: "",
@@ -291,9 +292,7 @@ const setNotiUrl = () => {
                                 <VIcon end icon="tabler-direction-sign" />
                             </VBtn>
                         </div>
-
                     </VCol>
-
                 </div>
             </template>
         </CreateHalfVCol>
