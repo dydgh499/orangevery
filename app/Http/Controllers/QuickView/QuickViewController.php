@@ -188,7 +188,7 @@ class QuickViewController extends Controller
         }, 0);
 
         return $this->response(0, [
-            'profit' => ($profit + $cancel_deposit - $withdraw->total_withdraw_amount) - (int)$withdraw_fee,
+            'profit' => ($profit + $cancel_deposit - $withdraw->total_withdraw_amount),
             'withdraw_fee' =>  (int)$withdraw_fee,
         ]);
     }

@@ -35,7 +35,7 @@ const toHandPayLink = () => {
 
 const getWithdrawAbleAmount = async() => {
     const r = await get('/api/v1/quick-view/withdraw-able-amount', {})
-    able_balance.value = Number(r.data.profit)
+    able_balance.value = Number(r.data.profit) - r.data.withdraw_fee
 }
 
 const requestWithdraw = async() => {
