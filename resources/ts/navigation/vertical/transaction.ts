@@ -101,7 +101,7 @@ const getSettleHistoryTap = () => {
 
 const getRiskTap = () => {
     const risks = []
-    if (user_info.value.level >= 35) {
+    if (user_info.value.level >= 35 || corp.pv_options.auth.visibles.abnormal_trans_sales) {
         risks.push({
             title: '이상거래 관리',
             icon: { icon: 'jam-triangle-danger' },

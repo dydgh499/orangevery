@@ -371,7 +371,14 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>이상거래, 결제실패, 실시간이체 관리 영업점 노출여부</template>
+                            <template #input>
+                                <VSwitch v-model="props.item.auth.visibles.abnormal_trans_sales" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
                 </VCardItem>
             </VCard>
         </VCol>

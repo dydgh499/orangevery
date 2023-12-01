@@ -86,6 +86,9 @@
             'sales0_use'    => false,
             'sales0_name'   => '하위대리점'
         ];
+        public $visibles = [
+            'abnormal_trans_sales' => true,
+        ];
         
         public function __construct(array $source)
         {

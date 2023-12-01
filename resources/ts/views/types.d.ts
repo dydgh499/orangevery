@@ -323,6 +323,9 @@ interface AuthOption {
         sales0_name:string,
         [key: string]: string|number,
     },
+    visibles: {
+        abnormal_trans_sales: boolean,
+    }
 }
 interface ThemeCSS {
     main_color: string,
