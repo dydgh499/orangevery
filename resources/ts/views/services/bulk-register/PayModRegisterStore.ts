@@ -54,7 +54,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         headers['fin_id'] = '이체 모듈 타입(X)'
         headers['fin_trx_delay'] = '이체 딜레이(X)'
     }
-    head.main_headers.value = [];
+    head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 

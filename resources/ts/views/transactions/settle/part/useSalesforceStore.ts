@@ -92,7 +92,7 @@ export const useSearchStore = defineStore('transSettlesSalesPartSearchStore', ()
     headers['created_at'] = '생성시간'
     headers['updated_at'] = '업데이트시간'
     
-    head.main_headers.value = []
+    head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
     

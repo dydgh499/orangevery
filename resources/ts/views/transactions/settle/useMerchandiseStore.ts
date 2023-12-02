@@ -21,8 +21,6 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         'user_name' : '가맹점 ID',
         'mcht_name' : '상호',
         'total': settleObject,
-        'appr' : settleObject,
-        'cxl' : settleObject,
     }
     const headers2:DeductionHeader = {'deduction': {}}
     if(getUserLevel() >= 35)
@@ -55,21 +53,22 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         'business_num': '사업자등록번호',
         'sector': '업종',
         'addr': '주소',
+        'appr' : settleObject,
+        'cxl' : settleObject,
     };
-    if(getUserLevel() >= 35) {
+    if(getUserLevel() >= 35)
         headers3['extra_col'] = '더보기'
-    }
 
-    head.main_headers.value = [
-        '가맹점 정보',
-        '매출',
-        '승인',
-        '취소',
-        '추가차감',
-        '장비',
-        '정산금',
-        '계좌정보'
-    ];
+    head.sub_headers.value = [
+        head.getSubHeaderFormat('가맹점 정보', 'id', 'mcht_name', 'string', 3),
+        head.getSubHeaderFormat('매출', 'total', 'total', 'object', 7),
+        head.getSubHeaderFormat('추가차감', 'deduction', 'deduction', 'object', Object.keys(headers2['deduction']).length),
+        head.getSubHeaderFormat('장비', 'terminal', 'terminal', 'object', 2),
+        head.getSubHeaderFormat('정산금', 'settle', 'settle', 'object', Object.keys(settles).length),
+        head.getSubHeaderFormat('계좌정보', 'acct_bank_name', 'addr', 'string', 10),
+        head.getSubHeaderFormat('승인', 'appr', 'appr', 'object', 7),
+        head.getSubHeaderFormat('취소', 'cxl', 'cxl', 'object', 7),
+    ]
     const headers = {
         ...headers1,
         ...headers2,
@@ -91,20 +90,20 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
             datas[i]['appr.total_trx_amount'] =  datas[i]['appr']['total_trx_amount']
             datas[i]['appr.profit'] =  datas[i]['appr']['profit']
 
-            datas[i]['cxl.count'] =  datas[i]['cxl']['count']
-            datas[i]['cxl.amount'] =  datas[i]['cxl']['amount']
-            datas[i]['cxl.trx_amount'] =  datas[i]['cxl']['trx_amount']
-            datas[i]['cxl.hold_amount'] =  datas[i]['cxl']['hold_amount']
-            datas[i]['cxl.settle_fee'] =  datas[i]['cxl']['settle_fee']
-            datas[i]['cxl.total_trx_amount'] =  datas[i]['cxl']['total_trx_amount']
+            datas[i]['cxl.count'] = datas[i]['cxl']['count']
+            datas[i]['cxl.amount'] = datas[i]['cxl']['amount']
+            datas[i]['cxl.trx_amount'] = datas[i]['cxl']['trx_amount']
+            datas[i]['cxl.hold_amount'] = datas[i]['cxl']['hold_amount']
+            datas[i]['cxl.settle_fee'] = datas[i]['cxl']['settle_fee']
+            datas[i]['cxl.total_trx_amount'] = datas[i]['cxl']['total_trx_amount']
             datas[i]['cxl.profit'] =  datas[i]['cxl']['profit']
 
-            datas[i]['total.count'] =  datas[i]['total']['count']
-            datas[i]['total.amount'] =  datas[i]['total']['amount']
-            datas[i]['total.trx_amount'] =  datas[i]['total']['trx_amount']
-            datas[i]['total.hold_amount'] =  datas[i]['total']['hold_amount']
-            datas[i]['total.settle_fee'] =  datas[i]['total']['settle_fee']
-            datas[i]['total.total_trx_amount'] =  datas[i]['total']['total_trx_amount']
+            datas[i]['total.count'] = datas[i]['total']['count']
+            datas[i]['total.amount'] = datas[i]['total']['amount']
+            datas[i]['total.trx_amount'] = datas[i]['total']['trx_amount']
+            datas[i]['total.hold_amount'] = datas[i]['total']['hold_amount']
+            datas[i]['total.settle_fee'] = datas[i]['total']['settle_fee']
+            datas[i]['total.total_trx_amount'] = datas[i]['total']['total_trx_amount']
             datas[i]['total.profit'] =  datas[i]['total']['profit']
 
             datas[i]['terminal.amount'] = datas[i]['terminal']['amount']
@@ -119,6 +118,7 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
             datas[i]['settle.deposit'] = datas[i]['settle']['deposit']
             datas[i]['settle.transfer'] = datas[i]['settle']['transfer']
             datas[i]['deduction.amount'] =  datas[i]['deduction']['amount']
+            datas[i]['deduction.input'] =  ''
 
             delete datas[i]['appr']
             delete datas[i]['total']

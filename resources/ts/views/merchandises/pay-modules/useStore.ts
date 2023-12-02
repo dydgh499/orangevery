@@ -117,7 +117,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         ...headers2,
         ...headers3,
     }
-    head.main_headers.value = [];
+    head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
     const { pgs, pss, settle_types } = useStore()

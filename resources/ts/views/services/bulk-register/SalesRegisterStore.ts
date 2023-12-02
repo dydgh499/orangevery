@@ -21,7 +21,7 @@ export const useRegisterStore = defineStore('salesRegisterStore', () => {
         settle_day: '정산일(O)',
         view_type: '화면 타입(O)',
     }
-    head.main_headers.value = [];
+    head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 

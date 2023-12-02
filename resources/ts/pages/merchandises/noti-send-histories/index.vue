@@ -65,14 +65,6 @@ const batchRetry = async () => {
             </template>
             <template #headers>
                 <tr>
-                    <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
-                        class='list-square'>
-                        <span>
-                            {{ head.main_headers[index] }}
-                        </span>
-                    </th>
-                </tr>
-                <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                         <div class='check-label-container' v-if="key == 'id'">
                             <VCheckbox v-model="all_selected" class="check-label" />

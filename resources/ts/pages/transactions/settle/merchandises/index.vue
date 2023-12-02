@@ -72,10 +72,10 @@ onMounted(() => {
             </template>
             <template #headers>
                 <tr>
-                    <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index"
-                        class='list-square' style="border-bottom: 0;">
+                    <th v-for="(sub_header, index) in head.getSubHeaderComputed" :colspan="sub_header.width" :key="index"
+                        class='list-square' style="border-bottom: 0;" v-show="sub_header.width">
                         <span>
-                            {{ head.main_headers[index] }}
+                            {{ sub_header.ko }}
                         </span>
                     </th>
                 </tr>

@@ -52,7 +52,7 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
     if(corp.pv_options.paid.use_regular_card) 
         headers['use_regular_card'] = '단골고객 사용여부(X)'
 
-    head.main_headers.value = [];
+    head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 

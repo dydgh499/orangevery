@@ -29,8 +29,6 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
         'settle_tax_type': '정산 세율',
         'last_settle_dt': '마지막 정산일',
         'total' : settleObject,
-        'appr' : settleObject,
-        'cxl' : settleObject,
     }
     const headers2:DeductionHeader = {'deduction': {}}
     if(getUserLevel() >= 35)
@@ -57,29 +55,29 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
         'business_num': '사업자등록번호',
         'sector': '업종',
         'addr': '주소',
+        'appr' : settleObject,
+        'cxl' : settleObject,
     };
     
     if(getUserLevel() >= 35) {
         headers3['extra_col'] = '더보기'
     }
-    
-    head.main_headers.value = [
-        '영업점 정보',
-        '매출',
-        '승인',
-        '취소',
-        '추가차감',
-        '장비',
-        '정산금',
-        '은행정보',
-        '계좌정보'
-    ];
-    
+    head.sub_headers.value = [
+        head.getSubHeaderFormat('영업점 정보', 'id', 'last_settle_dt', 'string', 8),
+        head.getSubHeaderFormat('매출', 'total', 'total', 'object', 4),
+        head.getSubHeaderFormat('추가차감', 'deduction', 'deduction', 'object', Object.keys(headers2['deduction']).length),
+        head.getSubHeaderFormat('장비', 'terminal', 'terminal', 'object', 2),
+        head.getSubHeaderFormat('정산금', 'settle', 'settle', 'object', 3),
+        head.getSubHeaderFormat('계좌정보', 'acct_bank_name', 'addr', 'string', 10),
+        head.getSubHeaderFormat('승인', 'appr', 'appr', 'object', 4),
+        head.getSubHeaderFormat('취소', 'cxl', 'cxl', 'object', 4),
+    ]    
     const headers = {
         ...headers1,
         ...headers2,
         ...headers3,
     }
+
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
     
@@ -115,6 +113,7 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
             datas[i]['settle.deposit'] = datas[i]['settle']['deposit']
             datas[i]['settle.transfer'] = datas[i]['settle']['transfer']
             datas[i]['deduction.amount'] =  datas[i]['deduction']['amount']
+            datas[i]['deduction.input'] =  ''
 
             delete datas[i]['appr']
             delete datas[i]['total']

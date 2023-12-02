@@ -22,7 +22,7 @@ export const useSearchStore = defineStore('operatorHistorySearchStore', () => {
         'created_at'    : '생성시간',
         'extra_col'     : '더보기',
     }
-    head.main_headers.value = [];
+    head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 

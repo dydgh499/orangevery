@@ -12,7 +12,7 @@ export const useSearchStore = defineStore('bonaejaSearchStore', () => {
         'msg': '메세지 내용',
         'created_at': '발송시간',
     }
-    head.main_headers.value = []
+    head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 

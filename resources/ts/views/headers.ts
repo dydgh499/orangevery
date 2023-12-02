@@ -1,14 +1,72 @@
-import { Filter } from '@/views/types';
+import { Filter, SubFilter } from '@/views/types';
 import _ from 'lodash';
 import * as XLSX from 'xlsx';
 
-export const Header = (_path: string, file_name: string) => {
-    const filter = ref<any>(null)
-    const headers = ref<Filter>(JSON.parse(localStorage.getItem(_path) || "{}"))
-    const flat_headers = ref<Filter>({})
-    const main_headers = ref<string[]>([])
-    const path = _path
+const SubHeader = (path: string) => {
+    const headers = ref<Filter>(JSON.parse(localStorage.getItem(path) || "{}"))
+    const sub_headers = ref<any[]>([])
+
+    const getSubHeaderFormat = (ko: string, s_col: string, e_col: string, type: string, width: number) => {
+        return {
+            'ko': ko,
+            's_col': s_col,
+            'e_col': e_col,
+            'type': type,
+            'width': width,
+        }
+    }
+
+    const getSubHeaders = () => {
+        const _sub_headers = []
+        const getVisiableLength = (header: Filter, keys: string[], s_idx: number, e_idx: number) => {
+            let length = 0  
+            for (let i = s_idx; i <= e_idx; i++) {
+                length += header[keys[i]].visible ? 1 : 0
+            }
+            return length
+        }
+        for (let i = 0; i < sub_headers.value.length; i++) {
+            let length = 0
+            if(sub_headers.value[i].type === 'string') {
+                const keys = Object.keys(headers.value)
+                const s_idx = keys.indexOf(sub_headers.value[i].s_col)
+                const e_idx = keys.indexOf(sub_headers.value[i].e_col)
+                length = getVisiableLength(headers.value, keys, s_idx, e_idx)
+            }
+            else {
+                const _object = <Filter>(headers.value[sub_headers.value[i].s_col])
+                const _keys = Object.keys(_object)
+                length = getVisiableLength(_object, _keys, 0, _keys.length - 1)
+            }
+            _sub_headers.push({
+                ko: sub_headers.value[i].ko,
+                width: length
+            })
+        }
+        return _sub_headers
+    }
+    const getSubHeaderComputed = computed(() => { return getSubHeaders() })
+    
+    watchEffect(() => {
+        localStorage.setItem(path, JSON.stringify(headers.value))
+    })
+
+    return {
+        headers, sub_headers,
+        getSubHeaderFormat, getSubHeaders,
+        getSubHeaderComputed
+    }
+}
+
+export const Header = (path: string, file_name: string) => {
     let header_count = 0
+    const filter = ref<any>(null)
+    const flat_headers = ref<Filter>({})
+    const {
+        headers, sub_headers,
+        getSubHeaderFormat, getSubHeaders,
+        getSubHeaderComputed
+    } = SubHeader(path)
 
     const initHeader = (_headers: object, result: Filter): Filter => {
         for (const [key, value] of Object.entries(_headers)) {
@@ -40,45 +98,8 @@ export const Header = (_path: string, file_name: string) => {
             return _depth;
     };
 
-    const getColspans = (): number[] => {
-        let colspans: number[] = [];
-        let colspan: number = 0;
-        _.forEach(headers.value, (val: any) => {
-            if (getDepth(val, 0) !== 1) {
-                if (colspan !== 0)
-                    colspans.push(colspan)
-                colspan = 0
-                const subColspan: number = _.reduce(val, (sum: number, subVal: any) => {
-                    return sum + (subVal.visible ? 1 : 0)
-                }, 0)
-                colspans.push(subColspan)
-                colspan = 0
-            } 
-            else
-                colspan += val.visible ? 1 : 0
-        })
-        return colspans
-    }
-
-    const getFullColspans = () => {
-        let colspans: number[] = []
-        let colspan = 0
-        _.forEach(headers.value, (val:Filter) => {
-            if (getDepth(val, 0) !== 1) {
-                if (colspan !== 0) colspans.push(colspan)
-                colspans.push(_.keys(val).length)
-                colspan = 0
-            } 
-            else
-                colspan += 1
-        });
-        return colspans
-    };
-    const getColspansComputed = computed(() => { return getColspans() })
-
     const flatten = (object: any): Filter => {
         const result: { [key: string]: any } = {};
-        console.log(object)
         for (const key of Object.keys(object)) {
             const val = object[key]
             if (getDepth(val, 0) !== 1) {
@@ -91,20 +112,12 @@ export const Header = (_path: string, file_name: string) => {
         }
         return result;
     }
-    const setHeader = (_headers: Filter): Filter => {
-        return _.transform(_headers, (result: Filter, val:any, key:string) => {
-            if (getDepth(val, 0) === 1 && key in headers.value)
-                val.visible = headers.value[key].visible
-            else 
-                result[key] = setHeader(val as Filter)
-        }, {});
-    }
+
     // ----- excel -----
     const sortAndFilterByHeader = <T>(data: T, keys: string[]): T => {
         const filteredData = _.pick(data, keys)
-        const orderedData = _.fromPairs(_.toPairs(filteredData));
-        console.log(orderedData)
-        return orderedData as T;
+        const orderedData = _.fromPairs(_.toPairs(filteredData))
+        return orderedData as T
     }
 
     const exportWorkSheet = (datas: { [key: string]: any }[]) => {
@@ -126,20 +139,30 @@ export const Header = (_path: string, file_name: string) => {
             return results.map(obj => Object.values(obj));
         }
         const getHeadersToArray = (): any[][] => {
-            return [_.map(main_headers.value, (value: string| number) => value), _.map(flat_headers.value, (value:Filter) => value.ko)];
-        };
+            if(sub_headers.value.length) {
+                const _sub_headers =  _.map(sub_headers.value, (init_sub_header: SubFilter) => init_sub_header.ko)
+                const keys = Object.keys(flat_headers.value)
+                const least_length = keys.length - _sub_headers.length
+                for (let i = 0; i < least_length; i++) {
+                    _sub_headers.push('')                    
+                }
+                return [_sub_headers, _.map(flat_headers.value, (value:Filter) => value.ko)]
+            }
+            else
+               return [_.map(flat_headers.value, (value:Filter) => value.ko)]
+        }
+
         const getExcelOptions = (): { merge_cols: any[], widths: any[] } => {
             const header_2 = _.map(flat_headers.value, (value: Filter) => value.ko);
-            const colspans = getColspans()
-
+            const _sub_headers = getSubHeaders()
             let index = 0
-            const merge_cols = []
-            for (let i = 0; i < colspans.length; i++) {
-                merge_cols.push({ s: { r: 0, c: index }, e: { r: 0, c: index + colspans[i] - 1 } })                
-                index += colspans[i]
-            }
+            let merge_cols = []
 
-            const widths = _.map(header_2, () => ({ width: 20 }));
+            for (let i = 0; i < _sub_headers.length; i++) {
+                merge_cols.push({ s: { r: 0, c: index }, e: { r: 0, c: index + _sub_headers[i].width - 1 } })
+                index += _sub_headers[i].width
+            }
+            const widths = _.map(header_2, () => ({ width: 20 }))
             return { merge_cols, widths };
         };
 
@@ -152,10 +175,11 @@ export const Header = (_path: string, file_name: string) => {
         ws['!cols'] = widths
 
         if (total_headers.length > 0) {
+            console.log(ws)
             for (let i = 0; i < merge_cols.length; i++) {
                 const cell = XLSX.utils.encode_cell(merge_cols[i].s);
-                if (total_headers[0].length >= i && ws[cell] != undefined)
-                    ws[cell].v = total_headers[0][i]
+                console.log(cell)
+                ws[cell].v = total_headers[0][i]
             }
         }
         return ws
@@ -169,10 +193,9 @@ export const Header = (_path: string, file_name: string) => {
         XLSX.writeFile(wb, file_name + "_" + date + ".xlsx")
     }
 
-
     const exportToPdf = (datas: object[]) => {
         const date = new Date().toISOString().split('T')[0];
-        const rows = main_headers.value.length > 0 ? 2 : 1
+        const rows = sub_headers.value.length > 0 ? 2 : 1
         const ws = exportWorkSheet(datas)
         const json_data = XLSX.utils.sheet_to_json(ws)
 
@@ -195,13 +218,9 @@ export const Header = (_path: string, file_name: string) => {
         //pdfDoc.download(file_name + "_" + date + ".pdf");
     }
 
-    watchEffect(() => {
-        localStorage.setItem(path, JSON.stringify(headers.value))
-    })
-
     return {
-        filter, headers, main_headers, flat_headers, initHeader, sortAndFilterByHeader,
-        flatten, getColspans, getFullColspans, getColspansComputed, getDepth,
+        filter, headers, sub_headers, flat_headers, initHeader, sortAndFilterByHeader,
+        flatten, getDepth, getSubHeaderComputed, getSubHeaderFormat,
         exportToExcel, exportToPdf, path,
     }
 }

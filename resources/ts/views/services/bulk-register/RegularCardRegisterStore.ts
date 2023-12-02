@@ -7,7 +7,7 @@ export const useRegisterStore = defineStore('regularCardRegisterStore', () => {
         note: '별칭(O)',
         card_num: '카드번호(O)',
     }
-    head.main_headers.value = [];
+    head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 

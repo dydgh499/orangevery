@@ -1,46 +1,42 @@
 <script setup lang="ts">
+import { Filter } from '@/views/types';
 
 const head = <any>(inject('head'))
 const visible = ref(false)
 
-let count = 0
 const show = () => {
-    initCount()
-    visible.value = true;
+    visible.value = true
 }
-
-const initCount = () => {
-    count = 0
-}
-
-const getFirstHeader = () => {
-    if(head.main_headers.length && count == 0) {
-        console.log('first', count)
-        count++
-        return head.main_headers[0]
+const getMainHeaders = (header: Filter, keys: string[], s_idx: number, e_idx: number) => {
+    const headers = []
+    for (let i = s_idx; i <= e_idx; i++) {
+        headers.push(header[keys[i]])
     }
-    else
-        return ''
+    return headers
 }
-
-const getLastHeader = () => {
-    if(head.main_headers.length == count+1) {
-        console.log('last', count)
-        return head.main_headers[count]
+const getHeaders = (_sub_header: any) =>  {
+    if(_sub_header.type === 'string') {
+        const keys = Object.keys(head.headers)
+        const s_idx = keys.indexOf(_sub_header.s_col)
+        const e_idx = keys.indexOf(_sub_header.e_col)
+        return getMainHeaders(head.headers, keys, s_idx, e_idx)
     }
-    else
-        return ''
-}
-
-const doubleHeaders = () => {
-    if(head.main_headers.length > count) {
-        const hd = head.main_headers[count]
-        console.log('middle', count)
-        count++
-        return hd
+    else {
+        const _object = <Filter>(head.headers[_sub_header.s_col])
+        const _keys = Object.keys(_object)
+        return getMainHeaders(_object, _keys, 0, _keys.length - 1)
     }
-    return ""
 }
+/*
+const renderCheckboxes = (header: any) => {
+    return (
+        <VCol v-for="(_header, index) in head.headers" :key="index" :cols="($vuetify.display.smAndDown ? 6 : 4)">
+            <VCheckbox v-model="_header.visible" :label="_header.ko"
+                true-icon="tabler-eye-check" false-icon="tabler-circle-x" color="primary" />
+        </VCol>
+    )
+}
+*/
 defineExpose({
     show
 });
@@ -54,30 +50,22 @@ defineExpose({
             <VCardText>
                 <div>
                     <VCol cols="12">
-                        <VRow no-gutters>
-                            <VCol cols="12">
-                                <b class="title-search-header">{{ getFirstHeader() }}</b>
-                            </VCol>
-                            <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                                <template v-if="head.getDepth(_header, 0) != 1">
-                                    <VCol cols="12">
-                                        <b class="title-search-header">{{ doubleHeaders() }}</b>
-                                    </VCol>
-                                    <VCol v-for="(__header, __key, __index) in _header" :key="__index" :cols="($vuetify.display.smAndDown ? 6 : 4)">
-                                        <VCheckbox v-model="__header.visible" :label="__header.ko"
-                                            true-icon="tabler-eye-check" false-icon="tabler-circle-x" color="primary" />
-                                    </VCol>
-                                    <VCol cols="12">
-                                        <b class="title-search-header">{{ getLastHeader() }}</b>
-                                    </VCol>
-                                </template>
-                                <template v-else>
-                                    <VCol :cols="($vuetify.display.smAndDown ? 6 : 4)">
-                                        <VCheckbox v-model="_header.visible" :label="_header.ko"
-                                            true-icon="tabler-eye-check" false-icon="tabler-circle-x" color="primary" />
-                                    </VCol>
-                                </template>
+                        <VRow no-gutters v-if="head.sub_headers.length > 0">
+                            <template v-for="(sub_header, index) in head.sub_headers" :key="index">
+                                <VCol cols="12">
+                                    <b class="title-search-header">{{ sub_header.ko }}</b>
+                                </VCol>
+                                <VCol v-for="(header, _index) in getHeaders(sub_header)" :key="_index" :cols="($vuetify.display.smAndDown ? 6 : 4)">
+                                    <VCheckbox v-model="header.visible" :label="header.ko"
+                                        true-icon="tabler-eye-check" false-icon="tabler-circle-x" color="primary" />
+                                </VCol>
                             </template>
+                        </VRow>
+                        <VRow no-gutters v-else>
+                            <VCol v-for="(_header, index) in head.headers" :key="index" :cols="($vuetify.display.smAndDown ? 6 : 4)">
+                                <VCheckbox v-model="_header.visible" :label="_header.ko"
+                                    true-icon="tabler-eye-check" false-icon="tabler-circle-x" color="primary" />
+                            </VCol>
                         </VRow>
                     </VCol>
                 </div>

@@ -34,6 +34,14 @@ export interface FilterItem {
 export interface Filter {
     [key: string]: Filter | FilterItem;
 }
+export interface SubFilter {
+    ko: string,
+    width: number,
+    s_col: string,
+    e_col: string,
+    type: string,
+}
+
 export interface Tab {
     icon: string,
     title: string,

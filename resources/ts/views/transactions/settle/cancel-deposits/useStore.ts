@@ -18,7 +18,7 @@ export const useSearchStore = defineStore('cancelDepositSearchStore', () => {
         'acquirer': '매입사',
         'installment': '할부',
     }
-    head.main_headers.value = []
+    head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
     const metas = ref([])

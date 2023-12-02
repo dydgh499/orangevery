@@ -24,14 +24,6 @@ provide('exporter', exporter)
         </template>
         <template #headers>
             <tr>
-                <th v-for="(colspan, index) in head.getColspansComputed" :colspan="colspan" :key="index" class='list-square'
-                    style="border-bottom: 0;">
-                    <span>
-                        {{ head.main_headers[index] }}
-                    </span>
-                </th>
-            </tr>
-            <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                     <span>
                         {{ header.ko }}

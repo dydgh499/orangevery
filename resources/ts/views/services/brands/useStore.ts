@@ -22,7 +22,7 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
         'ceo_name': '대표자명',
         'phone_num': '연락처',
     }
-    head.main_headers.value = []
+    head.sub_headers.value = []
     if (user_info.value.level == 50) {
         headers['deposit_day'] = '입금일'
         headers['deposit_amount'] = '입금액'
