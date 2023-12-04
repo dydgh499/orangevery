@@ -88,9 +88,9 @@ onMounted(() => {
                     </template>
                     <template v-else>
                         <td v-show="_header.visible" class='list-square'>
-                            <span v-if="_key == 'id'" class="edit-link" @click="store.edit(item['id'])">
+                            <span v-if="_key == 'id'">
                                 <div class='check-label-container'>
-                                    <VCheckbox v-if="getUserLevel() >= 50" v-model="selected" :value="item[_key]" class="check-label"/>
+                                    <VCheckbox v-if="getUserLevel() >= 35" v-model="selected" :value="item[_key]" class="check-label"/>
                                     <span class="edit-link" @click="store.edit(item['id'])">#{{ item[_key] }}</span>
                                 </div>
                             </span>
