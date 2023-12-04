@@ -64,7 +64,7 @@ onMounted(() => {
                 <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, true)" v-if="getUserLevel() >= 35"
                     size="small">
                     일괄 정산하기
-                </VBtn>
+                </VBtn> 
                 <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.expect_realtime_deposit" label="실시간 이체 제외"
                     color="primary"
                     @update:modelValue="[store.updateQueryString({ expect_realtime_deposit: store.params.expect_realtime_deposit })]"

@@ -131,7 +131,8 @@ class RealtimeSendHistoryController extends Controller
         $data = $request->all();
         $privacy = HeadOfficeAccount::where('id', $request->head_office_acct_id)->first();
         $data = array_merge($data, $privacy->toArray());
-
+        $data['mcht_id'] = -1;
+        
         $url = $this->base_noti_url.'/single-deposit';
         $res = post($url, $data);
         if($res['code'] == 201)

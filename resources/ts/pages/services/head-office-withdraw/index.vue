@@ -49,7 +49,7 @@ const deposit = async () => {
             const params = {
                 fin_id: fin_id.value,
                 head_office_acct_id: head_office_acct_id.value,
-                amount: amount.value
+                withdraw_amount: amount.value
             }
             const r = await post('/api/v1/manager/transactions/realtime-histories/head-office-transfer', params)
         }
