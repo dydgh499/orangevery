@@ -138,7 +138,7 @@ class RealtimeSendHistoryController extends Controller
         ];
         $params = array_merge($params, $privacy->toArray());
         $url = $this->base_noti_url.'/single-deposit';
-        $res = post($url, $data);
+        $res = post($url, $params);
         if($res['code'] == 201)
             return $this->extendResponse(1, $res['body']['result_msg']);
         else
