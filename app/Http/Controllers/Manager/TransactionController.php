@@ -76,7 +76,7 @@ class TransactionController extends Controller
                     ->orWhere('merchandises.mcht_name', 'like', "%$search%")
                     ->orWhere('merchandises.resident_num', 'like', "%$search%")
                     ->orWhere('merchandises.business_num', 'like', "%$search%");
-            });       
+            });
         $query = $this->transDateFilter($query, $request->s_dt, $request->e_dt, $request->use_search_date_detail);
 
         if($request->only_cancel)
@@ -122,9 +122,8 @@ class TransactionController extends Controller
      */
     public function index(IndexRequest $request)
     {
+        $with  = [];
         $query = $this->commonSelect($request);
-
-        $with = [];
         if($request->use_realtime_deposit && $request->level == 10)
             $with[] = 'realtimes';
         if($request->use_cancel_deposit)
