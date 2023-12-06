@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Models\Salesforce;
 use App\Models\Merchandise;
 use App\Models\PaymentModule;
 use App\Models\NotiUrl;
@@ -182,42 +181,41 @@ class MerchandiseController extends Controller
         $validated  = $request->validate(['user_pw'=>'required']);
         if($request->user()->tokenCan(15))
         {
-            $user = $this->merchandises
-                ->where('brand_id', $request->user()->brand_id)
-                ->where('is_delete', false)
-                ->where(function ($query) use ($request) {
-                    return $query->where('user_name', $request->user_name)
-                        ->orWhere('mcht_name', $request->mcht_name);
-                })
-                ->first();
-            if(!$user)
+            $exist_mutual = $this->isExistMutual($this->merchandises, $request->user()->brand_id, 'mcht_name', $request->mcht_name);
+            if(!$exist_mutual)
             {
-                $user = $request->data();
-                // 수수료율 정보는 추가시에만 적용되어야함
-                $user['sales0_id'] = $request->input('sales0_id', null);
-                $user['sales1_id'] = $request->input('sales1_id', null);
-                $user['sales2_id'] = $request->input('sales2_id', null);
-                $user['sales3_id'] = $request->input('sales3_id', null);
-                $user['sales4_id'] = $request->input('sales4_id', null);
-                $user['sales5_id'] = $request->input('sales5_id', null);
-                $user['hold_fee']  = $request->input('hold_fee', 0)/100;
-                $user['trx_fee']    = $request->input('trx_fee', 0)/100;
-                $user['sales0_fee'] = $request->input('sales0_fee', 0)/100;
-                $user['sales1_fee'] = $request->input('sales1_fee', 0)/100;
-                $user['sales2_fee'] = $request->input('sales2_fee', 0)/100;
-                $user['sales3_fee'] = $request->input('sales3_fee', 0)/100;
-                $user['sales4_fee'] = $request->input('sales4_fee', 0)/100;
-                $user['sales5_fee'] = $request->input('sales5_fee', 0)/100;
-
-                $user = $this->saveImages($request, $user, $this->imgs);
-                $user['user_pw'] = Hash::make($request->input('user_pw'));
-                $res = $this->merchandises->create($user);
-                
-                operLogging(HistoryType::CREATE, $this->target, $user, $user['mcht_name']);
-                return $this->response($res ? 1 : 990, ['id'=>$res->id]);
+                $result = $this->isExistUserName($request->user()->brand_id, $request->user_name);
+                if($result === false)
+                {
+                    $user = $request->data();
+                    // 수수료율 정보는 추가시에만 적용되어야함
+                    $user['sales0_id'] = $request->input('sales0_id', null);
+                    $user['sales1_id'] = $request->input('sales1_id', null);
+                    $user['sales2_id'] = $request->input('sales2_id', null);
+                    $user['sales3_id'] = $request->input('sales3_id', null);
+                    $user['sales4_id'] = $request->input('sales4_id', null);
+                    $user['sales5_id'] = $request->input('sales5_id', null);
+                    $user['hold_fee']  = $request->input('hold_fee', 0)/100;
+                    $user['trx_fee']    = $request->input('trx_fee', 0)/100;
+                    $user['sales0_fee'] = $request->input('sales0_fee', 0)/100;
+                    $user['sales1_fee'] = $request->input('sales1_fee', 0)/100;
+                    $user['sales2_fee'] = $request->input('sales2_fee', 0)/100;
+                    $user['sales3_fee'] = $request->input('sales3_fee', 0)/100;
+                    $user['sales4_fee'] = $request->input('sales4_fee', 0)/100;
+                    $user['sales5_fee'] = $request->input('sales5_fee', 0)/100;
+    
+                    $user = $this->saveImages($request, $user, $this->imgs);
+                    $user['user_pw'] = Hash::make($request->input('user_pw'));
+                    $res = $this->merchandises->create($user);
+                    
+                    operLogging(HistoryType::CREATE, $this->target, $user, $user['mcht_name']);
+                    return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
+                }
+                else
+                    return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
             }
             else
-                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디 또는 상호']));
+                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
         }
         else
             return $this->response(951);
@@ -343,20 +341,12 @@ class MerchandiseController extends Controller
         $brand_id = $request->user()->brand_id;
         $datas = $request->data();
 
-        $getExistitems = function($datas, $brand_id, $col) {
-            $items = $datas->pluck($col)->values()->toArray();
-            return $this->merchandises
-                    ->where('brand_id', $brand_id)
-                    ->where('is_delete', false)
-                    ->whereIn($col, $items)
-                    ->pluck($col)->toArray();
-        };
+        $exist_names = $this->isExistBulkUserName($brand_id, $datas->pluck('user_name')->all());
+        $exist_mchts = $this->isExistBulkMutual($this->merchandises, $brand_id, 'mcht_name', $datas->pluck('mcht_name')->all());
 
-        $exist_names = $getExistitems($datas, $brand_id, 'user_name');
-        $exist_mchts = $getExistitems($datas, $brand_id, 'mcht_name');
         if(count($exist_names))
             return $this->extendResponse(1000, join(',', $exist_names).'는 이미 존재하는 아이디 입니다.');
-        else if(count($exist_names))
+        else if(count($exist_mchts))
             return $this->extendResponse(1000, join(',', $exist_mchts).'는 이미 존재하는 상호 입니다.');
         else
         {

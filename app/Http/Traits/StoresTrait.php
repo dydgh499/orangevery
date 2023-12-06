@@ -1,5 +1,8 @@
 <?php
 namespace App\Http\Traits;
+use App\Models\Operator;
+use App\Models\Salesforce;
+use App\Models\Merchandise;
 use Illuminate\Support\Facades\DB;
 
 trait StoresTrait
@@ -29,5 +32,55 @@ trait StoresTrait
             }
             return true;
         }, 3);
+    }
+
+    public function isExistUserName($brand_id, $user_name)
+    {
+        $checkExist = function($orm, $brand_id, $user_name) {
+            return $orm->where('brand_id', $brand_id)
+                ->where('is_delete', false)
+                ->where('user_name', $user_name)
+                ->select('user_name');
+        };
+        $mcht = $checkExist(new Merchandise, $brand_id, $user_name);
+        $sale = $checkExist(new Salesforce, $brand_id, $user_name);
+        $oper = $checkExist(new Operator, $brand_id, $user_name);
+
+        return $mcht->unionAll($sale)->unionAll($oper)->exists();
+    }
+
+    public function isExistBulkUserName($brand_id, $user_names)
+    {
+        $checkExist = function($orm, $brand_id, $user_names) {
+            return $orm->where('brand_id', $brand_id)
+                    ->where('is_delete', false)
+                    ->whereIn('user_name', $user_names)
+                    ->select('user_name');
+        };
+        
+        $mcht = $checkExist(new Merchandise, $brand_id, $user_name);
+        $sale = $checkExist(new Salesforce, $brand_id, $user_name);
+        $oper = $checkExist(new Operator, $brand_id, $user_name);
+
+        return $mcht->unionAll($sale)->unionAll($oper)->get()->toArray();
+    }
+
+    public function isExistMutual($orm, $brand_id, $col, $mutual)
+    {
+        return $orm
+            ->where('brand_id', $brand_id)
+            ->where('is_delete', false)
+            ->where($col, $mutual)
+            ->exists();
+    }
+
+    public function isExistBulkMutual($orm, $brand_id, $col, $mutuals)
+    {
+        return $orm
+            ->where('brand_id', $brand_id)
+            ->where('is_delete', false)
+            ->whereIn($col, $mutuals)
+            ->pluck($col)
+            ->toArray();
     }
 }

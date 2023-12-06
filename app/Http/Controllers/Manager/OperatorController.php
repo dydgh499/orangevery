@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Models\Operator;
+use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\OperatorReqeust;
@@ -19,7 +20,7 @@ use Illuminate\Http\Request;
  */
 class OperatorController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $operators;
 
     public function __construct(Operator $operators)
@@ -62,13 +63,8 @@ class OperatorController extends Controller
     public function store(OperatorReqeust $request)
     {
         $validated = $request->validate(['user_pw'=>'required']);
-
-        $user = $this->operators
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
-            ->where('user_name', $request->user_name)
-            ->first();
-        if(!$user)
+        $result = $this->isExistUserName($request->user()->brand_id, $request->user_name);
+        if($result === false)
         {
             $user = $request->data();
             $user = $this->saveImages($request, $user, $this->imgs);

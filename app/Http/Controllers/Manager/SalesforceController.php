@@ -121,26 +121,25 @@ class SalesforceController extends Controller
         if($request->user()->tokenCan(15))
         {
             $validated  = $request->validate(['user_pw'=>'required']);
-            $user = $this->salesforces
-                ->where('brand_id', $request->user()->brand_id)
-                ->where('is_delete', false)
-                ->where(function ($query) use ($request) {
-                    return $query->where('user_name', $request->user_name)
-                        ->orWhere('sales_name', $request->sales_name);
-                })
-                ->first();
-            if(!$user)
+            $exist_mutual = $this->isExistMutual($this->salesforces, $request->user()->brand_id, 'sales_name', $request->sales_name);
+            if(!$exist_mutual)
             {
-                $user = $request->data();
-                $user = $this->saveImages($request, $user, $this->imgs);
-                $user['user_pw'] = Hash::make($request->input('user_pw'));
-                $res = $this->salesforces->create($user);
-
-                operLogging(HistoryType::CREATE, $this->target, $user, $user['sales_name']);
-                return $this->response($res ? 1 : 990, ['id'=>$res->id]);
+                $result = $this->isExistUserName($request->user()->brand_id, $request->user_name);
+                if($result === false)
+                {
+                    $user = $request->data();
+                    $user = $this->saveImages($request, $user, $this->imgs);
+                    $user['user_pw'] = Hash::make($request->input('user_pw'));
+                    $res = $this->salesforces->create($user);
+    
+                    operLogging(HistoryType::CREATE, $this->target, $user, $user['sales_name']);
+                    return $this->response($res ? 1 : 990, ['id'=>$res->id]);
+                }
+                else    
+                    return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
             }
             else
-                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디 또는 상호']));
+                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
         }
         else
             return $this->response(951);
@@ -253,17 +252,15 @@ class SalesforceController extends Controller
     {
         $current = date('Y-m-d H:i:s');
         $brand_id = $request->user()->brand_id;
-
         $datas = $request->data();
-        $user_names = $datas->pluck('user_name')->values()->toArray();
-        $exist_sales = $this->salesforces
-                ->where('brand_id', $brand_id)
-                ->where('is_delete', false)
-                ->whereIn('user_name', $user_names)
-                ->pluck('user_name')->toArray();
 
-        if(count($exist_sales))
-            return $this->extendResponse(1000, join(',', $exist_sales).'는 이미 존재하는 아이디 입니다.');
+        $exist_names = $this->isExistBulkUserName($brand_id, $datas->pluck('user_name')->all());
+        $exist_sales = $this->isExistBulkMutual($this->salesforces, $brand_id, 'sales_name', $datas->pluck('sales_name')->all());
+        
+        if(count($exist_names))
+            return $this->extendResponse(1000, join(',', $exist_names).'는 이미 존재하는 아이디 입니다.');
+        else if(count($exist_sales))
+            return $this->extendResponse(1000, join(',', $exist_sales).'는 이미 존재하는 상호 입니다.');
         else
         {
             $salesforces = $datas->map(function ($data) use($current, $brand_id) {
