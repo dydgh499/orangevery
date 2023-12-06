@@ -40,9 +40,12 @@ class SalesSettleHistoryController extends Controller
                 ->join('salesforces', 'settle_histories_salesforces.sales_id', 'salesforces.id')
                 ->where('settle_histories_salesforces.brand_id', $request->user()->brand_id)
                 ->where('settle_histories_salesforces.is_delete', false)
-                ->where('salesforces.sales_name', 'like', "%$search%")
-                ->where('settle_histories_salesforces.settle_dt', '>=', $request->s_dt)
-                ->where('settle_histories_salesforces.settle_dt', '<=', $request->e_dt);;
+                ->where('salesforces.sales_name', 'like', "%$search%");
+
+        if($request->has('s_dt'))
+            $query = $query->where('settle_histories_salesforces.settle_dt', '>=', $request->s_dt);
+        if($request->has('e_dt'))
+            $query = $query->where('settle_histories_salesforces.settle_dt', '<=', $request->e_dt);
 
         if(isSalesforce($request))
         {

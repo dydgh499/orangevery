@@ -40,9 +40,12 @@ class MchtSettleHistoryController extends Controller
                 ->join('merchandises', 'settle_histories_merchandises.mcht_id', 'merchandises.id')
                 ->where('settle_histories_merchandises.brand_id', $request->user()->brand_id)
                 ->where('settle_histories_merchandises.is_delete', false)
-                ->where('merchandises.mcht_name', 'like', "%$search%")
-                ->where('settle_histories_merchandises.settle_dt', '>=', $request->s_dt)
-                ->where('settle_histories_merchandises.settle_dt', '<=', $request->e_dt);
+                ->where('merchandises.mcht_name', 'like', "%$search%");
+
+        if($request->has('s_dt'))
+            $query = $query->where('settle_histories_merchandises.settle_dt', '>=', $request->s_dt);
+        if($request->has('e_dt'))
+            $query = $query->where('settle_histories_merchandises.settle_dt', '<=', $request->e_dt);
 
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
