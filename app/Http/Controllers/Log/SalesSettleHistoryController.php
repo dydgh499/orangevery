@@ -50,6 +50,9 @@ class SalesSettleHistoryController extends Controller
         if(isSalesforce($request))
         {
             $sales_ids = $this->underSalesFilter($request);
+            // 연관되어있는 가맹점이 없는 경우 본인 것만 출력
+            if(count($sales_ids) == 0)
+                $sales_ids[] = $request->user()->id;
             // 하위가 1000명이 넘으면 ..?
             $query = $query->whereIn('salesforces.id', $sales_ids);
         }

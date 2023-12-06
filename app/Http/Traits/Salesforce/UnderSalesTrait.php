@@ -20,7 +20,7 @@ trait UnderSalesTrait
         $_levels = [13,15,17,20,25,30];
         for ($i=0; $i<count($_levels); $i++)
         {
-            if($request->user()->level >= $_levels[$i])
+            if($_levels[$i] <= $request->user()->level)
                 array_push($levels, $_levels[$i]);
         }
 
@@ -70,7 +70,7 @@ trait UnderSalesTrait
         }
         else
         {   // 모두
-            $levels  = $this->getUnderSalesLevels($request);
+            $levels = $this->getUnderSalesLevels($request);
             $s_keys = $this->getUnderSalesKeys($levels);
         }
         $sales = $this->getUnderSalesIds($request, $s_keys);
