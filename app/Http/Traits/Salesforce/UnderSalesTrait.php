@@ -83,6 +83,9 @@ trait UnderSalesTrait
             }
             return $keys;
         })->unique()->values();
+        // 연관되어있는 가맹점이 없는 경우 본인 것만 출력
+        if(count($sales_ids) == 0)
+            $sales_ids[] = $request->user()->id;
         return $sales_ids;
     }
 }
