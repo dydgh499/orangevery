@@ -79,7 +79,7 @@ class SalesSettleHistoryController extends Controller
     {
         $cols = ['salesforces.user_name', 'salesforces.sales_name', 'salesforces.level', 'settle_histories_salesforces.*'];
         $query = $this->commonQuery($request);
-        $data = $this->getIndexData($request, $query, 'settle_histories_salesforces.id', $cols, '', false);
+        $data = $this->getIndexData($request, $query, 'settle_histories_salesforces.id', $cols, 'settle_histories_salesforces.settle_dt', false);
         return $this->response(0, $data);
     }
 

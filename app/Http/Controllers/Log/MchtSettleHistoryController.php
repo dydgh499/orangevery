@@ -75,7 +75,7 @@ class MchtSettleHistoryController extends Controller
     {
         $cols = ['merchandises.user_name', 'merchandises.mcht_name', 'settle_histories_merchandises.*'];
         $query = $this->commonQuery($request);
-        $data = $this->getIndexData($request, $query, 'settle_histories_merchandises.id', $cols, '', false);
+        $data = $this->getIndexData($request, $query, 'settle_histories_merchandises.id', $cols, 'settle_histories_merchandises.settle_dt', false);
         return $this->response(0, $data);
     }
 
