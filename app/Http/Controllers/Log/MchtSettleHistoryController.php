@@ -40,7 +40,9 @@ class MchtSettleHistoryController extends Controller
                 ->join('merchandises', 'settle_histories_merchandises.mcht_id', 'merchandises.id')
                 ->where('settle_histories_merchandises.brand_id', $request->user()->brand_id)
                 ->where('settle_histories_merchandises.is_delete', false)
-                ->where('merchandises.mcht_name', 'like', "%$search%");
+                ->where('merchandises.mcht_name', 'like', "%$search%")
+                ->where('settle_histories_merchandises.settle_dt', '>=', $request->s_dt)
+                ->where('settle_histories_merchandises.settle_dt', '<=', $request->e_dt);
 
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
@@ -49,10 +51,7 @@ class MchtSettleHistoryController extends Controller
 
     public function chart(Request $request)
     {
-        $query = $this->commonQuery($request)
-                ->where('settle_histories_merchandises.deposit_dt', '>=', $request->s_dt." 00:00:00")
-                ->where('settle_histories_merchandises.deposit_dt', '<=', $request->e_dt." 23:59:59");
-
+        $query = $this->commonQuery($request);
         $total = $query->first([
             DB::raw("SUM(appr_amount) AS appr_amount"),
             DB::raw("SUM(cxl_amount) AS cxl_amount"),
@@ -73,7 +72,7 @@ class MchtSettleHistoryController extends Controller
     {
         $cols = ['merchandises.user_name', 'merchandises.mcht_name', 'settle_histories_merchandises.*'];
         $query = $this->commonQuery($request);
-        $data = $this->getIndexData($request, $query, 'settle_histories_merchandises.id', $cols, 'settle_histories_merchandises.deposit_dt');
+        $data = $this->getIndexData($request, $query, 'settle_histories_merchandises.id', $cols, '', false);
         return $this->response(0, $data);
     }
 

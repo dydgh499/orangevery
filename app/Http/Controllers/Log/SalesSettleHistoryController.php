@@ -40,7 +40,9 @@ class SalesSettleHistoryController extends Controller
                 ->join('salesforces', 'settle_histories_salesforces.sales_id', 'salesforces.id')
                 ->where('settle_histories_salesforces.brand_id', $request->user()->brand_id)
                 ->where('settle_histories_salesforces.is_delete', false)
-                ->where('salesforces.sales_name', 'like', "%$search%");
+                ->where('salesforces.sales_name', 'like', "%$search%")
+                ->where('settle_histories_salesforces.settle_dt', '>=', $request->s_dt)
+                ->where('settle_histories_salesforces.settle_dt', '<=', $request->e_dt);;
 
         if(isSalesforce($request))
         {
@@ -55,9 +57,7 @@ class SalesSettleHistoryController extends Controller
 
     public function chart(Request $request)
     {
-        $query = $this->commonQuery($request)
-            ->where('settle_histories_salesforces.settle_dt', '>=', $request->s_dt." 00:00:00")
-            ->where('settle_histories_salesforces.settle_dt', '<=', $request->e_dt." 23:59:59");
+        $query = $this->commonQuery($request);
 
         $total = $query->first([
             DB::raw("SUM(appr_amount) AS appr_amount"),
@@ -76,7 +76,7 @@ class SalesSettleHistoryController extends Controller
     {
         $cols = ['salesforces.user_name', 'salesforces.sales_name', 'salesforces.level', 'settle_histories_salesforces.*'];
         $query = $this->commonQuery($request);
-        $data = $this->getIndexData($request, $query, 'settle_histories_salesforces.id', $cols, 'settle_histories_salesforces.settle_dt');
+        $data = $this->getIndexData($request, $query, 'settle_histories_salesforces.id', $cols, '', false);
         return $this->response(0, $data);
     }
 
