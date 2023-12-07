@@ -188,7 +188,7 @@ class QuickViewController extends Controller
         // 정산금
         $profit = $transactions->reduce(function($carry, $transaction) use($pay_modules) {
             $pay_module = $pay_modules->firstWhere('id', $transaction->pmod_id);
-            if($pay_modules)
+            if($pay_module)
             {
                 // 즉시출금의 경우, 정산금에 포함하지 않는다.
                 if($pay_module->use_realtime_deposit && $pay_module->fin_trx_delay > -1)
