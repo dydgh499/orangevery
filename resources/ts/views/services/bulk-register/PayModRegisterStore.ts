@@ -5,12 +5,16 @@ import corp from '@corp';
 
 export const useRegisterStore = defineStore('payModRegisterStore', () => {
     const head  = Header('pay-modules/bulk-register', '결제모듈 대량등록 포멧')
-    const headers: Record<string, string> = {
+    const headers1: Record<string, string> = {
         'mcht_name': '가맹점 상호(O)',
         'pg_id': 'PG사명(O)',
         'ps_id': '구간(O)',
         'settle_type': '가맹점 정산타입(O)',
         'settle_fee': '입금 수수료(O)',
+    }
+    if(corp.pv_options.paid.use_collect_withdraw)
+        headers1['withdraw_fee'] = "출금 수수료(X)"
+    const headers2: Record<string, string> = {
         'terminal_id': '장비 종류(X)',
         'module_type': '결제모듈 타입(O)',
         'api_key': 'API KEY(X)',
@@ -37,22 +41,28 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         'note': '별칭(O)',
     };
     if(corp.pv_options.paid.use_dup_pay_validation) {
-        headers['pay_dupe_limit'] = '중복결제 허용회수(X)'
+        headers2['pay_dupe_limit'] = '중복결제 허용회수(X)'
     }
     if(corp.pv_options.paid.use_pay_limit) {
-        headers['pay_year_limit'] = '결제 연 한도(X)'
-        headers['pay_month_limit'] = '결제 월 한도(X)'
-        headers['pay_day_limit'] = '결제 일 한도(X)'
+        headers2['pay_year_limit'] = '결제 연 한도(X)'
+        headers2['pay_month_limit'] = '결제 월 한도(X)'
+        headers2['pay_day_limit'] = '결제 일 한도(X)'
+        headers2['pay_single_limit'] = '결제 단건 한도(X)'
     }
     if(corp.pv_options.paid.use_forb_pay_time) {
-        headers['pay_disable_s_tm'] = '결제금지 시작시간(X)'
-        headers['pay_disable_e_tm'] = '결제금지 종료시간(X)'
+        headers2['pay_disable_s_tm'] = '결제금지 시작시간(X)'
+        headers2['pay_disable_e_tm'] = '결제금지 종료시간(X)'
     }
     if(corp.pv_options.paid.use_realtime_deposit)
     {
-        headers['use_realtime_deposit'] = '실시간 사용여부(X)'
-        headers['fin_id'] = '이체 모듈 타입(X)'
-        headers['fin_trx_delay'] = '이체 딜레이(X)'
+        headers2['use_realtime_deposit'] = '실시간 사용여부(X)'
+        headers2['fin_id'] = '이체 모듈 타입(X)'
+        headers2['fin_trx_delay'] = '이체 딜레이(X)'
+    }
+    
+    const headers: Record<string, string> = {
+        ...headers1,
+        ...headers2
     }
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
