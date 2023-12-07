@@ -86,7 +86,10 @@ class BfController extends Controller
      * @responseField pay_day_amount integer 일결제 금액
      * @responseField pay_able_amount integer 결제 가능금액(연,월,일,결제한도가 지정되지 않은 경우 null로 반환합니다.)
      * @responseField show_pay_view integer 결제창 노출여부
+     * @responseField use_realtime_deposit integer 실시간 이체 사용여부(미사용=0, 사용=1)
+     * @responseField fin_trx_delay integer 실시간 이체 딜레이(모아서 출금=-1, 즉시입금=0, 15분=15, 30분=30, 45분=45, 60분=60), 모아서 출금 외 모두 즉시입금
      */
+
     public function payModules(Request $request)
     {
         $pay_modules = PaymentModule::where('mcht_id', $request->user()->id)
@@ -104,6 +107,8 @@ class BfController extends Controller
                 'pay_single_limit',
                 'terminal_id',
                 'show_pay_view',
+                'use_realtime_deposit',
+                'fin_trx_delay',
             ]);
         
         foreach($pay_modules as $pay_module)
@@ -144,7 +149,7 @@ class BfController extends Controller
     /**
      * 출금가능금액 조회
      *
-     * 출금가능한금액을 조회합니다.
+     * 출금가능한금액을 조회합니다.<br>즉시 출금 결제모듈의 매출은 포함되지 않습니다.
      * @responseFile 200 storage/bf/withdrawsBalance.json
      * @responseField profit integer 출금가능한도
      */

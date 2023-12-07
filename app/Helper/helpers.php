@@ -354,6 +354,11 @@
         Log::info($msg, $data);
     }
 
+    function error($data, $msg='test')
+    {
+        Log::error($msg, $data);
+    }
+
     function operLogging(HistoryType $history_type, $history_target, $history_detail, $history_title='', $brand_id='', $oper_id='')
     {
         $cond_1 = $history_type == HistoryType::LOGIN;

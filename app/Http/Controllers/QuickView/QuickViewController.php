@@ -170,21 +170,37 @@ class QuickViewController extends Controller
         $transactions = Transaction::where('mcht_id', $request->user()->id)
             ->noSettlement('mcht_settle_id')
             ->with(['cancelDeposits'])
-            ->get(['id', 'mcht_id', 'pmod_id', 'mcht_settle_amount as profit']);
+            ->get(['id', 'mcht_id', 'pmod_id', 'mcht_settle_amount as profit', 'created_at']);
         $withdraw = CollectWithdraw::where('mcht_id', $request->user()->id)
             ->whereNull('mcht_settle_id')
             ->whereIn('result_code', ["0000", "0050"])  //처리완료, 처리중
             ->first([DB::raw('SUM(withdraw_amount + withdraw_fee) as total_withdraw_amount')]);
 
         $pmod_ids = $transactions->pluck('pmod_id')->all();
-        $withdraw_fee = PaymentModule::whereIn('id', $pmod_ids)->sum('withdraw_fee');
+        $pay_modules = PaymentModule::whereIn('id', $pmod_ids)->get(['id', 'withdraw_fee', 'fin_trx_delay', 'use_realtime_deposit']);
+        $withdraw_fee = $pay_modules->sum('withdraw_fee');
 
+        // 취소 후 입금
         $cancel_deposit = $transactions->reduce(function($carry, $transaction) {
             return $carry + $transaction->cancelDeposits->sum('deposit_amount');
         }, 0);
         
-        $profit = $transactions->reduce(function($carry, $transaction) {
-            return $carry + $transaction->profit;
+        // 정산금
+        $profit = $transactions->reduce(function($carry, $transaction) use($pay_modules) {
+            $pay_module = $pay_modules->firstWhere('id', $transaction->pmod_id);
+            if($pay_modules)
+            {
+                // 즉시출금의 경우, 정산금에 포함하지 않는다.
+                if($pay_module->use_realtime_deposit && $pay_module->fin_trx_delay > -1)
+                    return $carry;
+                else
+                    return $carry + $transaction->profit;
+            }
+            else
+            {
+                error([], 'NOT FOUND Paymodules');
+                return $carry;    
+            }
         }, 0);
 
         return $this->response(0, [

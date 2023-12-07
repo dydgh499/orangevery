@@ -12,7 +12,9 @@
         "pay_month_amount": 3640000,
         "pay_day_amount": 1640000,
         "pay_able_amount":-2640000,
-        "show_pay_view": 0
+        "show_pay_view": 0,        
+        "use_realtime_deposit":0,
+        "fin_trx_delay":0
     },
     {
         "id":5,
@@ -27,6 +29,8 @@
         "pay_month_amount": 3640000,
         "pay_day_amount": 1640000,
         "pay_able_amount":-2640000,
-        "show_pay_view": 0
+        "show_pay_view": 0,
+        "use_realtime_deposit":1,
+        "fin_trx_delay":15
     }    
 ]

@@ -136,7 +136,9 @@ endpoints:
                   "pay_month_amount": 3640000,
                   "pay_day_amount": 1640000,
                   "pay_able_amount":-2640000,
-                  "show_pay_view": 0
+                  "show_pay_view": 0,        
+                  "use_realtime_deposit":0,
+                  "fin_trx_delay":0
               },
               {
                   "id":5,
@@ -151,7 +153,9 @@ endpoints:
                   "pay_month_amount": 3640000,
                   "pay_day_amount": 1640000,
                   "pay_able_amount":-2640000,
-                  "show_pay_view": 0
+                  "show_pay_view": 0,
+                  "use_realtime_deposit":1,
+                  "fin_trx_delay":15
               }    
           ]
         headers: []
@@ -262,10 +266,26 @@ endpoints:
         type: integer
         enumValues: []
         custom: []
+      use_realtime_deposit:
+        name: use_realtime_deposit
+        description: '실시간 이체 사용여부(미사용=0, 사용=1)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      fin_trx_delay:
+        name: fin_trx_delay
+        description: '실시간 이체 딜레이(모아서 출금=-1, 즉시입금=0, 15분=15, 30분=30, 45분=45, 60분=60), 모아서 출금 외 모두 즉시입금'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
     auth:
       - headers
       - Authorization
-      - 'Bearer Eeabcga4P5h68D3v61ZdVkf'
+      - 'Bearer 1fbdv66ZEVa3D8hgPka4ce5'
     controller: null
     method: null
     route: null
@@ -328,7 +348,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: est
+        example: velit
         type: string
         enumValues: []
         custom: []
@@ -337,7 +357,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: est
+      search: velit
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -671,7 +691,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer Vg3Dvaf5aPE6h8ebck6d4Z1'
+      - 'Bearer 83Da66Vg1dvZeEfhkcb45aP'
     controller: null
     method: null
     route: null
@@ -734,7 +754,7 @@ endpoints:
         name: search
         description: '검색어(승인번호, 계좌번호)'
         required: false
-        example: hic
+        example: et
         type: string
         enumValues: []
         custom: []
@@ -743,7 +763,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: hic
+      search: et
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -893,7 +913,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer hb68aEVPcdva4D1g3fk65eZ'
+      - 'Bearer PDVEe1Z8d6gbfc5a34hk6va'
     controller: null
     method: null
     route: null
@@ -1118,7 +1138,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 1Vha346ecDgk8PvZE5fdab6'
+      - 'Bearer Ev8aZf5dh61ek6DbcVgaP34'
     controller: null
     method: null
     route: null
@@ -1135,7 +1155,7 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: '출금가능금액 조회'
-      description: '출금가능한금액을 조회합니다.'
+      description: '출금가능한금액을 조회합니다.<br>즉시 출금 결제모듈의 매출은 포함되지 않습니다.'
       authenticated: true
       custom: []
     headers:
@@ -1172,7 +1192,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer hEg5Dca1bv6afkPe68V4Z3d'
+      - 'Bearer 6Efgbhd8ePZvDkc154a6aV3'
     controller: null
     method: null
     route: null
@@ -1234,7 +1254,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 48a6kbPfg3EDaevcV16Zhd5'
+      - 'Bearer ag61ea6hZDE34v8Vb5cfdPk'
     controller: null
     method: null
     route: null
@@ -1505,7 +1525,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6bDa4Pv8165aZfkVch3eEdg'
+      - 'Bearer ab3gDZa1vd4hef5kPV866Ec'
     controller: null
     method: null
     route: null
