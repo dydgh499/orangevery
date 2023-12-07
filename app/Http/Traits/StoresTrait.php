@@ -58,9 +58,9 @@ trait StoresTrait
                     ->select('user_name');
         };
         
-        $mcht = $checkExist(new Merchandise, $brand_id, $user_name);
-        $sale = $checkExist(new Salesforce, $brand_id, $user_name);
-        $oper = $checkExist(new Operator, $brand_id, $user_name);
+        $mcht = $checkExist(new Merchandise, $brand_id, $user_names);
+        $sale = $checkExist(new Salesforce, $brand_id, $user_names);
+        $oper = $checkExist(new Operator, $brand_id, $user_names);
 
         return $mcht->unionAll($sale)->unionAll($oper)->get()->toArray();
     }
