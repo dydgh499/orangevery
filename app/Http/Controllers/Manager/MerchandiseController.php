@@ -107,7 +107,9 @@ class MerchandiseController extends Controller
                 ->orWhere($full_parent.'user_name', 'like', "%$search%")
                 ->orWhere($full_parent.'phone_num', 'like', "%$search%")
                 ->orWhere($full_parent.'business_num', 'like', "%$search%")
-                ->orWhere($full_parent.'nick_name', 'like', "%$search%");
+                ->orWhere($full_parent.'nick_name', 'like', "%$search%")
+                ->orWhere($full_parent.'acct_num', 'like', "%$search%")
+                ->orWhere($full_parent.'acct_name', 'like', "%$search%");
         });
 
         if($is_all == false)

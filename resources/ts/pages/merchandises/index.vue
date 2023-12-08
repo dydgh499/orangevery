@@ -36,7 +36,7 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="아이디, 상호, 연락처, 대표자명, 사업자번호 검색" :metas="metas" :add="user_info.level >= 35" add_name="가맹점"
+        <BaseIndexView placeholder="아이디, 상호, 연락처, 대표자명, 사업자번호, 예금주, 계좌번호 검색" :metas="metas" :add="user_info.level >= 35" add_name="가맹점"
             :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true"
