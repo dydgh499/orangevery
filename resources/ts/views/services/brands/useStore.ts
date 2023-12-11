@@ -4,6 +4,10 @@ import type { AuthOption, Brand, FreeOption, Options, PaidOption, ThemeCSS } fro
 import { getUserLevel, user_info } from '@axios';
 import corp from '@corp';
 
+export const isMaster = () => {
+    return getUserLevel() >= 35 && corp.id == parseInt(process.env.MAIN_BRAND_ID as string)
+}
+
 export const dev_settle_types = <Options[]>([
     {id:0, title:'적용안함'},
     {id:1, title:'본사이익 대비 방식'},
@@ -41,6 +45,34 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
     head.flat_headers.value = head.flatten(head.headers.value)
 
     const metas = ref()
+    if(isMaster()) {
+        metas.value = [
+            {
+                icon: 'ic-outline-payments',
+                color: 'primary',
+                title: '총 입금액 합계',
+                stats: '0',
+            },
+            {
+                icon: 'ic-outline-payments',
+                color: 'default',
+                title: '입금액 합계',
+                stats: '0',
+            },
+            {
+                icon: 'ic-outline-payments',
+                color: 'success',
+                title: '부가입금액 합계',
+                stats: '0',
+            },
+            {
+                icon: 'ic-outline-payments',
+                color: 'info',
+                title: '현재입금액 합계',
+                stats: '0',
+            },
+        ]
+    }
 
     const boolToText = (col: any) => {
         if(typeof col == 'boolean') {
@@ -60,33 +92,7 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
     }
     
     onMounted(async () => {
-        if(getUserLevel() >= 35 && corp.id == parseInt(process.env.MAIN_BRAND_ID as string)) {
-            metas.value = [
-                {
-                    icon: 'ic-outline-payments',
-                    color: 'primary',
-                    title: '총 입금액 합계',
-                    stats: '0',
-                },
-                {
-                    icon: 'ic-outline-payments',
-                    color: 'default',
-                    title: '입금액 합계',
-                    stats: '0',
-                },
-                {
-                    icon: 'ic-outline-payments',
-                    color: 'success',
-                    title: '부가입금액 합계',
-                    stats: '0',
-                },
-                {
-                    icon: 'ic-outline-payments',
-                    color: 'info',
-                    title: '현재입금액 합계',
-                    stats: '0',
-                },
-            ]
+        if(isMaster()) {
             const r = await store.getChartData()
             if(r.status == 200) {
                 metas.value[0]['stats'] = parseInt(r.data.total_deposit_amount).toLocaleString() + ' ₩'
@@ -178,6 +184,8 @@ export const defaultItemInfo = () => {
                 use_regular_card: false,
                 use_collect_withdraw: false,
                 use_noti: false,
+                use_head_office_withdraw: false,
+                use_cancel_deposit: false
             }),
             auth: reactive<AuthOption>({
                 levels: {
@@ -195,6 +203,9 @@ export const defaultItemInfo = () => {
                     sales1_name: '대리점',
                     sales0_use: false,
                     sales0_name: '하위대리점'
+                },
+                visibles: {
+                    abnormal_trans_sales: true,
                 }
             })
         },

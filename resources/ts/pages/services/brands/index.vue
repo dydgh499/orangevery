@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { useSearchStore, dev_settle_types } from '@/views/services/brands/useStore'
+import { useSearchStore, dev_settle_types, isMaster } from '@/views/services/brands/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { DateFilters } from '@core/enums'
-import { getUserLevel } from '@axios'
 
 const { store, head, exporter, boolToText, metas } = useSearchStore()
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
-const is_add = ref(getUserLevel() >= 50 ? true : false)
+const is_add = ref(isMaster() ? true : false)
 
 </script>
 <template>
