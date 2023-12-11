@@ -60,7 +60,7 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
     }
     
     onMounted(async () => {
-        if(getUserLevel() == 50 && corp.id == parseInt(process.env.MAIN_BRAND_ID as string)) {
+        if(getUserLevel() >= 35 && corp.id == parseInt(process.env.MAIN_BRAND_ID as string)) {
             metas.value = [
                 {
                     icon: 'ic-outline-payments',
