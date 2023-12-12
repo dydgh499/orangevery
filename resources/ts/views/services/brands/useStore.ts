@@ -5,7 +5,7 @@ import { getUserLevel, user_info } from '@axios';
 import corp from '@corp';
 
 export const isMaster = () => {
-    return getUserLevel() >= 35 && corp.id == parseInt(process.env.MAIN_BRAND_ID as string)
+    return getUserLevel() >= 50 && corp.id == parseInt(process.env.MAIN_BRAND_ID as string)
 }
 
 export const dev_settle_types = <Options[]>([
@@ -45,6 +45,24 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
     head.flat_headers.value = head.flatten(head.headers.value)
 
     const metas = ref()
+
+    const boolToText = (col: any) => {
+        if(typeof col == 'boolean') {
+            return col ? '사용' : '미사용'
+        }
+        else
+            return col
+    }
+    const exporter = async (type: number) => {
+        const keys = Object.keys(head.flat_headers.value)
+        const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
+        let datas = r.data.content;
+        for (let i = 0; i < datas.length; i++) {
+            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
+        }
+        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
+    }
+    
     if(isMaster()) {
         metas.value = [
             {
@@ -72,23 +90,6 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
                 stats: '0',
             },
         ]
-    }
-
-    const boolToText = (col: any) => {
-        if(typeof col == 'boolean') {
-            return col ? '사용' : '미사용'
-        }
-        else
-            return col
-    }
-    const exporter = async (type: number) => {
-        const keys = Object.keys(head.flat_headers.value)
-        const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
-        let datas = r.data.content;
-        for (let i = 0; i < datas.length; i++) {
-            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
-        }
-        type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }
     
     onMounted(async () => {

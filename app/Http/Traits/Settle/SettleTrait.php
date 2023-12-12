@@ -91,6 +91,9 @@ trait SettleTrait
                     ->orWhere('transactions.trx_id', 'like', "%$search%")
                     ->orWhere('transactions.appr_num', 'like', "%$search%");
             });
+            
+        if($request->only_cancel)
+            $query = $query->where('transactions.is_cancel', true);
         if($request->use_collect_withdraw)
         {
             // 모아서 출금건만 가능

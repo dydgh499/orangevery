@@ -33,8 +33,8 @@ const settle = ref({
     'trx_amount': 0,
     'settle_fee': 0,
     'deduct_amount': 0,
-    'comm_settle_amount':0,
-    'under_sales_amount':0,
+    'comm_settle_amount': 0,
+    'under_sales_amount': 0,
 })
 
 
@@ -43,7 +43,7 @@ store.params.id = route.params.id
 store.params.s_dt = route.query.s_dt
 store.params.e_dt = route.query.e_dt
 store.params.level = 10
-if(corp.pv_options.paid.use_realtime_deposit)
+if (corp.pv_options.paid.use_realtime_deposit)
     store.params.expect_realtime_deposit = 1
 
 const isSalesCol = (key: string) => {
@@ -66,7 +66,7 @@ const getPartSettleFormat = () => {
 
 const partSettle = async () => {
     const count = selected.value.length
-    if(await dialog('정말 '+count+'개의 매출을 부분정산하시겠습니까?')) {
+    if (await dialog('정말 ' + count + '개의 매출을 부분정산하시겠습니까?')) {
         const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/part', getPartSettleFormat(), true)
         store.setChartProcess()
         store.setTable()
@@ -75,7 +75,7 @@ const partSettle = async () => {
 
 const getUser = async () => {
     const path = store.params.level == 10 ? 'merchandises' : 'salesforce'
-    const res = await get('/api/v1/manager/'+path+'/'+store.params.id)
+    const res = await get('/api/v1/manager/' + path + '/' + store.params.id)
     user.value = res.data
 }
 onMounted(() => {
@@ -97,24 +97,24 @@ onMounted(() => {
             metas[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
         }
     })
-    snackbar.value.show('정산일은 검색 종료일('+store.params.e_dt+') 기준으로 진행됩니다.', 'success')
+    snackbar.value.show('정산일은 검색 종료일(' + store.params.e_dt + ') 기준으로 진행됩니다.', 'success')
 })
 watchEffect(() => {
     const _settle = {
-        'appr_amount'   : 0,
-        'cxl_amount'    : 0,
-        'total_amount'  : 0,
-        'settle_amount' : 0,
-        'trx_amount'    : 0,
-        'settle_fee'    : 0,
-        'deduct_amount' : 0,
-        'comm_settle_amount':0,
-        'under_sales_amount':0,
+        'appr_amount': 0,
+        'cxl_amount': 0,
+        'total_amount': 0,
+        'settle_amount': 0,
+        'trx_amount': 0,
+        'settle_fee': 0,
+        'deduct_amount': 0,
+        'comm_settle_amount': 0,
+        'under_sales_amount': 0,
     }
     for (let i = 0; i < selected.value.length; i++) {
-        const trans:any = store.getItems.find(item => item['id'] == selected.value[i])
-        if(trans) {
-            if(trans['is_cancel'])
+        const trans: any = store.getItems.find(item => item['id'] == selected.value[i])
+        if (trans) {
+            if (trans['is_cancel'])
                 _settle.cxl_amount += trans['amount']
             else
                 _settle.appr_amount += trans['amount']
@@ -140,7 +140,8 @@ watchEffect(() => {
                         <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
-                                item-value="id" @update:modelValue="store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})" />
+                                item-value="id"
+                                @update:modelValue="store.updateQueryString({ mcht_settle_type: store.params.mcht_settle_type })" />
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>
@@ -149,10 +150,15 @@ watchEffect(() => {
                 <VBtn prepend-icon="tabler-calculator" @click="partSettle()" v-if="getUserLevel() >= 35" size="small">
                     부분정산
                 </VBtn>
-                <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.expect_realtime_deposit" label="실시간 이체 제외"
-                    color="primary"
-                    @update:modelValue="[store.updateQueryString({ expect_realtime_deposit: store.params.expect_realtime_deposit })]"
-                    v-if="corp.pv_options.paid.use_realtime_deposit"/>
+                <div>
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.expect_realtime_deposit"
+                        label="실시간 이체 제외" color="primary"
+                        @update:modelValue="[store.updateQueryString({ expect_realtime_deposit: store.params.expect_realtime_deposit })]"
+                        v-if="corp.pv_options.paid.use_realtime_deposit"/>
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_cancel" label="취소매출 조회"
+                        color="error"
+                        @update:modelValue="store.updateQueryString({ only_cancel: store.params.only_cancel })" />
+                </div>
                 <div style="display: flex;">
                     <table>
                         <tr>
@@ -162,7 +168,7 @@ watchEffect(() => {
                         <tr>
                             <th>승인액 합계</th>
                             <td><span>{{ settle.appr_amount.toLocaleString() }}</span> &#8361;</td>
-                        </tr>            
+                        </tr>
                         <tr>
                             <th>취소액 합계</th>
                             <td><span>{{ settle.cxl_amount.toLocaleString() }}</span> &#8361;</td>
@@ -204,7 +210,7 @@ watchEffect(() => {
                         </template>
                         <template v-else-if="key == 'id'">
                             <div class='check-label-container'>
-                                <VCheckbox v-model="all_selected" class="check-label"/>
+                                <VCheckbox v-model="all_selected" class="check-label" />
                                 <span>선택/취소</span>
                             </div>
                         </template>
@@ -222,7 +228,7 @@ watchEffect(() => {
                         <td v-show="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
                             <span v-if="_key == 'id'">
                                 <div class='check-label-container'>
-                                    <VCheckbox v-model="selected" :value="item[_key]" class="check-label"/>
+                                    <VCheckbox v-model="selected" :value="item[_key]" class="check-label" />
                                     <span>#{{ item[_key] }}</span>
                                 </div>
                             </span>
@@ -268,5 +274,4 @@ watchEffect(() => {
                 </tr>
             </template>
         </BaseIndexView>
-    </div>
-</template>
+    </div></template>
