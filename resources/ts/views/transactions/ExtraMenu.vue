@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { isRetryAble, realtimeResult } from '@/views/transactions/useStore'
 import { useRequestStore } from '@/views/request'
-import type { SalesSlip, CancelPay } from '@/views/types'
+import type { SalesSlip } from '@/views/types'
 import { getUserLevel } from '@axios'
 import { StatusColors } from '@core/enums'
 import corp from '@corp'
@@ -58,8 +58,10 @@ const retryDeposit = async () => {
 
 const payCanceled = async () => {
     if (await alert.value.show('정말 상위 PG사를 통해 결제를 취소하시겠습니까?')) {
-        const params: CancelPay = {
-            pmod_id: props.item.pmod_id as number,
+        const params = {
+            use_collect_withdraw: Number(corp.pv_options.paid.use_collect_withdraw),
+            pmod_id: props.item.pmod_id,
+            mcht_id: props.item.mcht_id,
             amount: props.item.amount,
             trx_id: props.item.trx_id,
             only: false,

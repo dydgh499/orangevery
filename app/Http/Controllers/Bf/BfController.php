@@ -170,9 +170,8 @@ class BfController extends Controller
     public function withdrawsStore(CollectWithdrawRequest $request)
     {
         $inst = new QuickViewController(new Transaction);
-        $json = $inst->withdrawAbleAmount($request);
-        $body = json_decode($json->getContent(), true);
-        if($body['profit'] >= $request->withdraw_amount)
+        $json = $inst->_withdrawAbleAmount($request);
+        if($json['profit'] >= $request->withdraw_amount)
         {
             $inst = new CollectWithdrawController(new CollectWithdraw);
             return $inst->store($request);    

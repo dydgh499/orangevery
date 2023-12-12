@@ -156,22 +156,17 @@ class QuickViewController extends Controller
         return $this->response(1);
     }
     
-    /**
-     * 출금가능 잔액
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function withdrawAbleAmount(Request $request)
+    public function _withdrawAbleAmount($request, $mcht_id)
     {
         $request->merge([
             's_dt' => '2000-01-01',  
             'e_dt' => Carbon::now()->format('Y-m-d'),
         ]);
-        $transactions = Transaction::where('mcht_id', $request->user()->id)
+        $transactions = Transaction::where('mcht_id', $mcht_id)
             ->noSettlement('mcht_settle_id')
             ->with(['cancelDeposits'])
             ->get(['id', 'mcht_id', 'pmod_id', 'mcht_settle_amount as profit', 'created_at']);
-        $withdraw = CollectWithdraw::where('mcht_id', $request->user()->id)
+        $withdraw = CollectWithdraw::where('mcht_id', $mcht_id)
             ->whereNull('mcht_settle_id')
             ->whereIn('result_code', ["0000", "0050"])  //처리완료, 처리중
             ->first([DB::raw('SUM(withdraw_amount + withdraw_fee) as total_withdraw_amount')]);
@@ -184,7 +179,6 @@ class QuickViewController extends Controller
         $cancel_deposit = $transactions->reduce(function($carry, $transaction) {
             return $carry + $transaction->cancelDeposits->sum('deposit_amount');
         }, 0);
-        
         // 정산금
         $profit = $transactions->reduce(function($carry, $transaction) use($pay_modules) {
             $pay_module = $pay_modules->firstWhere('id', $transaction->pmod_id);
@@ -203,9 +197,20 @@ class QuickViewController extends Controller
             }
         }, 0);
 
-        return $this->response(0, [
+        return [
             'profit' => ($profit + $cancel_deposit - $withdraw->total_withdraw_amount),
             'withdraw_fee' =>  (int)$withdraw_fee,
-        ]);
+        ];
+    }
+
+    /**
+     * 출금가능 잔액
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function withdrawAbleAmount(Request $request)
+    {
+        $data = $this->_withdrawAbleAmount($request, $request->user()->id);
+        return $this->response(0, $data);        
     }
 }

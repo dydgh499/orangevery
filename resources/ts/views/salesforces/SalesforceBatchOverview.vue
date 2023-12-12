@@ -116,7 +116,7 @@ const setMchtFeeBooking = async () => {
 const setEnabled = () => {
     post('set-enabled', {
         ...common.value,
-        'enabled': merchandise.enabled ? 1 : 0,
+        'enabled': Number(merchandise.enabled),
     })
 }
 

@@ -678,13 +678,6 @@ export interface SimplePay extends BasePay {
     route: string,
     return_url: string,
 }
-export interface CancelPay {
-    pmod_id: number,
-    amount: number,
-    trx_id: string,
-    only: boolean,
-    temp?: string,
-}
 //----------------------------
 export interface MchtRecentTransaction {
     appr_amount: number,
