@@ -3,7 +3,7 @@ import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { Merchandise } from '@/views/types'
-import { getUserLevel } from '@axios'
+import { getUserLevel, isAbleModifyMcht } from '@axios'
 import corp from '@corp'
 
 export const useSearchStore = defineStore('mchtSearchStore', () => {
@@ -68,7 +68,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     headers['created_at'] = '생성시간'
     headers['updated_at'] = '업데이트시간'
 
-    if (getUserLevel() >= 35)
+    if (getUserLevel() >= 35 || isAbleModifyMcht())
         headers['extra_col'] = '더보기'
     
 

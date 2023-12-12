@@ -8,6 +8,7 @@ import { requiredValidator, nullValidator } from '@validators'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import SalesforceBatchOverview from '@/views/salesforces/SalesforceBatchOverview.vue'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
+import { getUserLevel } from '@axios'
 import corp from '@corp'
 
 interface Props {
@@ -34,7 +35,7 @@ const tax_types = settleTaxTypes()
                                     placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
                             </template>
                         </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="3" :mdr="9">
+                        <CreateHalfVCol :mdl="3" :mdr="9" v-if="getUserLevel() >= 35">
                             <template #name>정산 세율</template>
                             <template #input>
                                 <VRadioGroup v-model="props.item.settle_tax_type" inline :rules="[nullValidator]">
@@ -81,25 +82,35 @@ const tax_types = settleTaxTypes()
                                     :readonly="props.item.id != 0" />
                             </template>
                         </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>화면 타입</template>
-                            <template #input>
-                                <BooleanRadio :radio="props.item.view_type" @update:radio="props.item.view_type = $event"
-                                    :rules="[nullValidator]">
-                                    <template #true>상세보기</template>
-                                    <template #false>간편보기</template>
-                                </BooleanRadio>
-                            </template>
-                        </CreateHalfVCol>
-                        <VCol>
-                            <VTextarea v-model="props.item.note" counter label="메모사항"
-                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="95" />
-                        </VCol>
+                        <template v-if="getUserLevel() >= 35">
+                            <CreateHalfVCol :mdl="3" :mdr="9">
+                                <template #name>화면 타입</template>
+                                <template #input>
+                                    <BooleanRadio :radio="props.item.view_type" @update:radio="props.item.view_type = $event">
+                                        <template #true>상세보기</template>
+                                        <template #false>간편보기</template>
+                                    </BooleanRadio>
+                                </template>
+                            </CreateHalfVCol>
+                            <CreateHalfVCol :mdl="3" :mdr="9">
+                                <template #name>하위 가맹점 수정권한</template>
+                                <template #input>
+                                    <BooleanRadio :radio="props.item.is_able_modify_mcht" @update:radio="props.item.is_able_modify_mcht = $event">
+                                        <template #true>가능</template>
+                                        <template #false>불가능</template>
+                                    </BooleanRadio>
+                                </template>
+                            </CreateHalfVCol>
+                            <VCol>
+                                <VTextarea v-model="props.item.note" counter label="메모사항"
+                                    prepend-inner-icon="twemoji-spiral-notepad" maxlength="95" />
+                            </VCol>
+                        </template>
                     </VRow>
                 </VCardItem>
             </VCard>
             <br>
-            <VCard v-if="corp.pv_options.paid.use_sales_auto_setting">
+            <VCard v-if="corp.pv_options.paid.use_sales_auto_setting && getUserLevel() >= 35">
                 <VCardItem>
                     <VCol cols="12">
                         <VRow>
@@ -109,7 +120,7 @@ const tax_types = settleTaxTypes()
                 </VCardItem>
             </VCard>
         </VCol>
-        <VCol cols="12" md="6">
+        <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
             <VCard>
                 <VCardItem>
                     <VCol cols="12">

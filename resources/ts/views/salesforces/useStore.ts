@@ -271,6 +271,7 @@ export const defaultItemInfo = () => {
         settle_day: 0,
         sales_name: '',
         view_type: 0,
+        is_able_modify_mcht: 0,
         note: '',
     })
     return {

@@ -140,6 +140,7 @@ export interface Merchandise extends MerchandisePropertie, UserPropertie {
 }
 
 export interface Salesforce extends SalesforcePropertie, UserPropertie {
+    is_able_modify_mcht: number,
     under_auto_settings?: UnderAutoSetting[]
 }
 

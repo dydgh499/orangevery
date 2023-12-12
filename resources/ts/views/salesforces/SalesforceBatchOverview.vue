@@ -107,7 +107,7 @@ const setMchtFeeBooking = async () => {
         const r = await axios.post('/api/v1/manager/salesforces/batch/mcht-fee-book-apply', {
             ...common.value,
             'mcht_fee': parseFloat(merchandise.mcht_fee),
-        'hold_fee': parseFloat(merchandise.hold_fee),
+            'hold_fee': parseFloat(merchandise.hold_fee),
         })
         snackbar.value.show('성공하였습니다.', 'success')
     }
@@ -220,13 +220,15 @@ const setNotiUrl = () => {
     <div v-if="props.item.id != 0" style="width: 100%;">
         <CreateHalfVCol :mdl="3" :mdr="9">
             <template #name>
-                <BaseQuestionTooltip :location="'top'" :text="'커스텀 필터 적용'" :content="'해당 값을 선택한후 즉시적용을 클릭하면<br>해당 값과 가맹점의 커스텀 필터가 똑같은 가맹점만 일괄적용됩니다.'">
+                <BaseQuestionTooltip :location="'top'" :text="'커스텀 필터 적용'"
+                    :content="'해당 값을 선택한후 즉시적용을 클릭하면<br>해당 값과 가맹점의 커스텀 필터가 똑같은 가맹점만 일괄적용됩니다.'">
                 </BaseQuestionTooltip>
             </template>
             <template #input>
                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.custom_filter_id"
-                        :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)"
-                        prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name" item-value="id" single-line />
+                    :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)"
+                    prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name" item-value="id"
+                    single-line />
             </template>
         </CreateHalfVCol>
         <CreateHalfVCol :mdl="3" :mdr="9">
@@ -239,8 +241,7 @@ const setNotiUrl = () => {
                         즉시적용
                         <VIcon end icon="tabler-direction-sign" />
                     </VBtn>
-                    <VBtn variant="tonal" color="secondary" @click="setSalesFeeBooking()"
-                        style='margin-left: 0.5em;'>
+                    <VBtn variant="tonal" color="secondary" @click="setSalesFeeBooking()" style='margin-left: 0.5em;'>
                         예약적용
                         <VIcon end icon="tabler-clock-up" />
                     </VBtn>
@@ -252,13 +253,12 @@ const setNotiUrl = () => {
             <template #input>
                 <div class="batch-container">
                     <VTextField v-model="merchandise.mcht_fee" type="number" suffix="%" />
-                    <VTextField v-model="merchandise.hold_fee" type="number" suffix="%"  style='margin-left: 0.5em;'/>                    
+                    <VTextField v-model="merchandise.hold_fee" type="number" suffix="%" style='margin-left: 0.5em;' />
                     <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setMchtFee()">
                         즉시적용
                         <VIcon end icon="tabler-direction-sign" />
                     </VBtn>
-                    <VBtn variant="tonal" color="secondary" @click="setMchtFeeBooking()"
-                        style='margin-left: 0.5em;'>
+                    <VBtn variant="tonal" color="secondary" @click="setMchtFeeBooking()" style='margin-left: 0.5em;'>
                         예약적용
                         <VIcon end icon="tabler-clock-up" />
                     </VBtn>
@@ -271,7 +271,8 @@ const setNotiUrl = () => {
                 <div class="batch-container">
                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.custom_id"
                         :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)"
-                        prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name" item-value="id" single-line/>
+                        prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name" item-value="id"
+                        single-line />
                     <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setCustomFilter()">
                         즉시적용
                         <VIcon end icon="tabler-direction-sign" />
@@ -283,8 +284,7 @@ const setNotiUrl = () => {
             <template #name>전산 사용상태</template>
             <template #input>
                 <div class="batch-container">
-                    <BooleanRadio :radio="merchandise.enabled"
-                        @update:radio="merchandise.enabled = $event">
+                    <BooleanRadio :radio="merchandise.enabled" @update:radio="merchandise.enabled = $event">
                         <template #true>ON</template>
                         <template #false>OFF</template>
                     </BooleanRadio>
@@ -330,13 +330,15 @@ const setNotiUrl = () => {
         </CreateHalfVCol>
     </div>
     <VCardTitle style="margin: 1em 0;">
-        <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점 - 결제모듈 일괄적용'" :content="'해당 영업점이 포함되어있는 가맹점의 모든 결제모듈에 모두 적용됩니다.'">
+        <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점 - 결제모듈 일괄적용'"
+            :content="'해당 영업점이 포함되어있는 가맹점의 모든 결제모듈에 모두 적용됩니다.'">
         </BaseQuestionTooltip>
     </VCardTitle>
     <div v-if="props.item.id != 0" style="width: 100%;">
         <CreateHalfVCol :mdl="3" :mdr="9">
             <template #name>
-                <BaseQuestionTooltip :location="'top'" :text="'PG사 필터 적용'" :content="'해당 값을 선택한후 즉시적용을 클릭하면<br>해당 값과 결제모듈의 PG사가 똑같은 결제모듈만 일괄적용됩니다.'">
+                <BaseQuestionTooltip :location="'top'" :text="'PG사 필터 적용'"
+                    :content="'해당 값을 선택한후 즉시적용을 클릭하면<br>해당 값과 결제모듈의 PG사가 똑같은 결제모듈만 일괄적용됩니다.'">
                 </BaseQuestionTooltip>
             </template>
             <template #input>
@@ -394,7 +396,6 @@ const setNotiUrl = () => {
                         <VIcon end icon="tabler-direction-sign" />
                     </VBtn>
                 </div>
-
             </template>
         </CreateHalfVCol>
         <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_pay_limit">
@@ -456,8 +457,7 @@ const setNotiUrl = () => {
             <template #name>결제창 노출여부</template>
             <template #input>
                 <div class="batch-container">
-                    <BooleanRadio :radio="pay_module.show_pay_view"
-                        @update:radio="pay_module.show_pay_view = $event">
+                    <BooleanRadio :radio="pay_module.show_pay_view" @update:radio="pay_module.show_pay_view = $event">
                         <template #true>노출</template>
                         <template #false>숨김</template>
                     </BooleanRadio>
@@ -525,46 +525,49 @@ const setNotiUrl = () => {
             </template>
         </CreateHalfVCol>
     </div>
-    <VCardTitle style="margin: 1em 0;">
-        <BaseQuestionTooltip :location="'top'" :text="'노티 URL 일괄적용'"
-            :content="'해당 영업점이 포함되어있는 가맹점의 모든 노티 URL이 추가됩니다.<br>(같은 노티 URL의 중복등록은 불가능합니다.)'">
-        </BaseQuestionTooltip>
-    </VCardTitle>
-    <div v-if="props.item.id != 0" style="width: 100%;">
-        <CreateHalfVCol :mdl="3" :mdr="9">
-            <template #name>노티 URL</template>
-            <template #input>
-                <div class="batch-container">
-                    <VTextField v-model="noti.noti_url" type="text" placeholder="https://www.naver.com" />
-                </div>
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9">
-            <template #name>노티 사용 유무</template>
-            <template #input>
-                <VSwitch v-model="noti.noti_status" color="primary" />
-            </template>
-        </CreateHalfVCol>
-        <VRow>
-            <VCol>
-                <VTextarea v-model="noti.noti_note" counter label="메모사항" prepend-inner-icon="twemoji-spiral-notepad" maxlength="95"/>
-            </VCol>
-        </VRow>
-        <div style="text-align: end;">
-            <VBtn variant="tonal" @click="setNotiUrl()">
-                노티 정보 즉시적용
-                <VIcon end icon="tabler-direction-sign" />
-            </VBtn>
+    <template v-if="corp.pv_options.paid.use_noti">
+        <VCardTitle style="margin: 1em 0;">
+            <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점 - 노티 URL 일괄적용'"
+                :content="'해당 영업점이 포함되어있는 가맹점의 모든 노티 URL이 추가됩니다.<br>(같은 노티 URL의 중복등록은 불가능합니다.)'">
+            </BaseQuestionTooltip>
+        </VCardTitle>
+        <div v-if="props.item.id != 0" style="width: 100%;">
+            <CreateHalfVCol :mdl="3" :mdr="9">
+                <template #name>노티 URL</template>
+                <template #input>
+                    <div class="batch-container">
+                        <VTextField v-model="noti.noti_url" type="text" placeholder="https://www.naver.com" />
+                    </div>
+                </template>
+            </CreateHalfVCol>
+            <CreateHalfVCol :mdl="3" :mdr="9">
+                <template #name>노티 사용 유무</template>
+                <template #input>
+                    <VSwitch v-model="noti.noti_status" color="primary" />
+                </template>
+            </CreateHalfVCol>
+            <VRow>
+                <VCol>
+                    <VTextarea v-model="noti.noti_note" counter label="메모사항" prepend-inner-icon="twemoji-spiral-notepad"
+                        maxlength="95" />
+                </VCol>
+            </VRow>
+            <div style="text-align: end;">
+                <VBtn variant="tonal" @click="setNotiUrl()">
+                    노티 정보 즉시적용
+                    <VIcon end icon="tabler-direction-sign" />
+                </VBtn>
+            </div>
         </div>
-    </div>
-    <div v-else style="width: 100%; text-align: center;">
-        <CreateHalfVCol :mdl="0" :mdr="12">
-            <template #name></template>
-            <template #input>
-                영업점을 추가하신 후 사용 가능합니다.
-            </template>
-        </CreateHalfVCol>
-    </div>
+        <div v-else style="width: 100%; text-align: center;">
+            <CreateHalfVCol :mdl="0" :mdr="12">
+                <template #name></template>
+                <template #input>
+                    영업점을 추가하신 후 사용 가능합니다.
+                </template>
+            </CreateHalfVCol>
+        </div>
+    </template>
 </template>
 <style>
 .batch-container {

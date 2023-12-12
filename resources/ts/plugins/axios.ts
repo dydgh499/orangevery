@@ -76,12 +76,18 @@ export const allLevels = () => {
 
 export const getUserLevel = () => {
     if(user_info.value) {
-        if(user_info.value.mcht_name) {
+        if(user_info.value.mcht_name)
             user_info.value.level = 10
-        }
         return user_info.value.level
     }
     return 0
+}
+
+export const isAbleModifyMcht = () => {
+    if(getUserLevel() > 10 && getUserLevel() < 35)
+        return user_info.value.is_able_modify_mcht ? true : false
+    else
+        return false
 }
 
 export const getViewType = () => {
