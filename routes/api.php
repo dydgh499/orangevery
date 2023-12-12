@@ -180,7 +180,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('sales-fee-book-apply', [SalesforceBatchController::class, 'setSalesFeeBooking']);
                 Route::post('mcht-fee-direct-apply', [SalesforceBatchController::class, 'setMchtFeeDirect']);
                 Route::post('mcht-fee-book-apply', [SalesforceBatchController::class, 'setMchtFeeBooking']);
-
+                
+                Route::post('set-enabled', [SalesforceBatchController::class, 'setEnabled']);
                 Route::post('set-custom-filter', [SalesforceBatchController::class, 'setCustomFilter']);
                 Route::post('set-account-info', [SalesforceBatchController::class, 'setAccountInfo']);
                 Route::post('set-abnormal-trans-limit', [SalesforceBatchController::class, 'setAbnormalTransLimit']);

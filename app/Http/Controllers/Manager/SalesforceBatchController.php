@@ -104,6 +104,12 @@ class SalesforceBatchController extends Controller
         return $this->response($res ? 1 : 990);
     }
 
+    public function setEnabled(Request $request)
+    {
+        $cols = ['enabled' => $request->enabled];
+        $row = $this->merchandiseBatch($request)->update($cols);
+        return $this->response(1);
+    }
     /**
      * 커스텀 필터 적용 
      */

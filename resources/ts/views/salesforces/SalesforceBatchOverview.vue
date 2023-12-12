@@ -29,6 +29,7 @@ const merchandise = reactive<any>({
     acct_num: "",
     acct_name: "",
     bank: { code: null, title: '선택안함' },
+    enabled: true,
 })
 const pay_module = reactive<any>({
     pg_id: null,
@@ -110,6 +111,13 @@ const setMchtFeeBooking = async () => {
         })
         snackbar.value.show('성공하였습니다.', 'success')
     }
+}
+
+const setEnabled = () => {
+    post('set-enabled', {
+        ...common.value,
+        'enabled': merchandise.enabled ? 1 : 0,
+    })
 }
 
 const setCustomFilter = () => {
@@ -206,13 +214,13 @@ const setNotiUrl = () => {
 </script>
 <template>
     <VCardTitle style="margin: 1em 0;">
-        <BaseQuestionTooltip :location="'top'" :text="'가맹점 일괄적용'" :content="'해당 영업점이 포함되어있는 가맹점에 모두 적용됩니다.'">
+        <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점 일괄적용'" :content="'해당 영업점이 포함되어있는 가맹점에 모두 적용됩니다.'">
         </BaseQuestionTooltip>
     </VCardTitle>
     <div v-if="props.item.id != 0" style="width: 100%;">
         <CreateHalfVCol :mdl="3" :mdr="9">
             <template #name>
-                <BaseQuestionTooltip :location="'top'" :text="'커스텀 필터 적용'" :content="'해당 값을 선택하고 즉시적용을 클릭하면<br>해당 값과 가맹점의 커스텀 필터가 똑같은 가맹점만 일괄적용됩니다.'">
+                <BaseQuestionTooltip :location="'top'" :text="'커스텀 필터 적용'" :content="'해당 값을 선택한후 즉시적용을 클릭하면<br>해당 값과 가맹점의 커스텀 필터가 똑같은 가맹점만 일괄적용됩니다.'">
                 </BaseQuestionTooltip>
             </template>
             <template #input>
@@ -240,7 +248,7 @@ const setNotiUrl = () => {
             </template>
         </CreateHalfVCol>
         <CreateHalfVCol :mdl="3" :mdr="9">
-            <template #name>가맹점 거래/유보금 수수료율</template>
+            <template #name>거래/유보금 수수료율</template>
             <template #input>
                 <div class="batch-container">
                     <VTextField v-model="merchandise.mcht_fee" type="number" suffix="%" />
@@ -265,6 +273,22 @@ const setNotiUrl = () => {
                         :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)"
                         prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name" item-value="id" single-line/>
                     <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setCustomFilter()">
+                        즉시적용
+                        <VIcon end icon="tabler-direction-sign" />
+                    </VBtn>
+                </div>
+            </template>
+        </CreateHalfVCol>
+        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.subsidiary_use_control">
+            <template #name>전산 사용상태</template>
+            <template #input>
+                <div class="batch-container">
+                    <BooleanRadio :radio="merchandise.enabled"
+                        @update:radio="merchandise.enabled = $event">
+                        <template #true>ON</template>
+                        <template #false>OFF</template>
+                    </BooleanRadio>
+                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setEnabled()">
                         즉시적용
                         <VIcon end icon="tabler-direction-sign" />
                     </VBtn>
@@ -306,13 +330,13 @@ const setNotiUrl = () => {
         </CreateHalfVCol>
     </div>
     <VCardTitle style="margin: 1em 0;">
-        <BaseQuestionTooltip :location="'top'" :text="'결제모듈 일괄적용'" :content="'해당 영업점이 포함되어있는 가맹점의 모든 결제모듈에 모두 적용됩니다.'">
+        <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점 - 결제모듈 일괄적용'" :content="'해당 영업점이 포함되어있는 가맹점의 모든 결제모듈에 모두 적용됩니다.'">
         </BaseQuestionTooltip>
     </VCardTitle>
     <div v-if="props.item.id != 0" style="width: 100%;">
         <CreateHalfVCol :mdl="3" :mdr="9">
             <template #name>
-                <BaseQuestionTooltip :location="'top'" :text="'PG사 필터 적용'" :content="'해당 값을 선택하고 즉시적용을 클릭하면<br>해당 값과 결제모듈의 PG사가 똑같은 결제모듈만 일괄적용됩니다.'">
+                <BaseQuestionTooltip :location="'top'" :text="'PG사 필터 적용'" :content="'해당 값을 선택한후 즉시적용을 클릭하면<br>해당 값과 결제모듈의 PG사가 똑같은 결제모듈만 일괄적용됩니다.'">
                 </BaseQuestionTooltip>
             </template>
             <template #input>
@@ -412,7 +436,6 @@ const setNotiUrl = () => {
                         <VIcon end icon="tabler-direction-sign" />
                     </VBtn>
                 </div>
-
             </template>
         </CreateHalfVCol>
         <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_forb_pay_time">
