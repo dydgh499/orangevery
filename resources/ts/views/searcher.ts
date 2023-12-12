@@ -87,7 +87,8 @@ export const Searcher = (path: string) => {
     const getChartData = async() => { return _getChartData(getParams())  }
 
     const edit = (id: number = 0) => {
-        const cond_1 = path === 'merchandises' && (getUserLevel() >= 35 || isAbleModifyMcht())
+        const cond_1 = (path === 'merchandises' || path === 'merchandises/pay-modules' || path === 'merchandises/terminals') 
+        && (getUserLevel() >= 35 || isAbleModifyMcht())
         const cond_2 = getUserLevel() >= 35
         if(cond_1 || cond_2) {
             if(id == 0)

@@ -8,6 +8,7 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { requiredValidator, lengthValidatorV2 } from '@validators'
 import type { Transaction, Merchandise, PayModule, PaySection, Options } from '@/views/types'
 import { module_types, installments, payModFilter } from '@/views/merchandises/pay-modules/useStore'
+import { getUserLevel, getIndexByLevel } from '@axios'
 import { dev_settle_types } from '@/views/services/brands/useStore'
 import { ko } from 'date-fns/locale';
 import corp from '@corp'
@@ -143,7 +144,7 @@ onMounted(async () => {
                     <VCardTitle>가맹점 정보</VCardTitle>
                     <VRow class="pt-5">
                         <template v-for="i in 6" :key="i">
-                            <CreateHalfVCol :mdl="4" :mdr="8" v-if="levels['sales'+(6 - i)+'_use']">
+                            <CreateHalfVCol :mdl="4" :mdr="8" v-if="levels['sales'+(6 - i)+'_use'] && getUserLevel() > getIndexByLevel(6-i)">
                                 <template #name>{{ levels['sales'+(6 - i)+'_name'] }}/수수료율</template>
                                 <template #input>
                                     <VRow>

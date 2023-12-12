@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import corp from '@corp'
-import { user_info, getIndexByLevel } from '@axios'
+import { getUserLevel, getIndexByLevel } from '@axios'
 
 interface Props {
     show: boolean,
@@ -22,7 +22,7 @@ for (let i = 0; i < 6; i++) {
     <VRow>
         <template v-for="i in 6" :key="i">
             <VCol :cols="12" :sm="3"
-                v-if="levels['sales' + (6 - i) + '_use'] && props.show && user_info.level >= getIndexByLevel(6 - i)">
+                v-if="levels['sales' + (6 - i) + '_use'] && props.show && getUserLevel() > getIndexByLevel(6 - i)">
                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params['sales' + (6 - i) + '_id']"
                     :items="sales[6 - i].value" :label="levels['sales' + (6 - i) + '_name'] + ' 필터'" item-title="sales_name"
                     item-value="id"

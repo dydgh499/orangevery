@@ -4,7 +4,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import { module_types, installments, ship_out_stats, under_sales_types } from '@/views/merchandises/pay-modules/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { user_info, getUserLevel, allLevels } from '@axios'
+import { getUserLevel, isAbleModifyMcht, allLevels } from '@axios'
 import { DateFilters } from '@core/enums'
 
 const { pgs, pss, settle_types, terminals } = useStore()
@@ -32,7 +32,7 @@ const isMchtUnableCol = (key: string) => {
 }
 </script>
 <template>
-    <BaseIndexView placeholder="MID, TID, 시리얼 번호, 가맹점 상호 검색" :metas="[]" :add="user_info.level >= 35" add_name="장비"
+    <BaseIndexView placeholder="MID, TID, 시리얼 번호, 가맹점 상호 검색" :metas="[]" :add="getUserLevel() >= 35 || isAbleModifyMcht()" add_name="장비"
         :date_filter_type="DateFilters.NOT_USE">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true" :sales="true"

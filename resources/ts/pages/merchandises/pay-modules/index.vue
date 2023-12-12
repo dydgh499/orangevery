@@ -6,9 +6,8 @@ import { selectFunctionCollect } from '@/views/selected'
 import { module_types, installments, fin_trx_delays, cxl_types } from '@/views/merchandises/pay-modules/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { user_info } from '@axios'
 import { DateFilters } from '@core/enums'
-import { getUserLevel } from '@axios'
+import { getUserLevel, isAbleModifyMcht } from '@axios'
 
 const { request } = useRequestStore()
 const { pgs, pss, settle_types, finance_vans } = useStore()
@@ -46,7 +45,7 @@ onMounted(() => {
 })
 </script>
 <template>
-    <BaseIndexView placeholder="MID, TID, 가맹점 상호 검색" :metas="metas" :add="user_info.level >= 35" add_name="결제모듈" :date_filter_type="DateFilters.NOT_USE">
+    <BaseIndexView placeholder="MID, TID, 가맹점 상호 검색" :metas="metas" :add="getUserLevel() >= 35 || isAbleModifyMcht()" add_name="결제모듈" :date_filter_type="DateFilters.NOT_USE">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true" :sales="true">                
                 <template #pg_extra_field>
