@@ -50,7 +50,7 @@ const setSalesUnderAutoSetting = async (my_level: number) => {
         // 일괄적용
         const history = fee_histories.value.find(obj => obj.sales_id === props.item['sales'+my_level+'_id'])
         if(history)
-            props.item['sales'+my_level+'_id'] = history.trx_fee
+            props.item['sales'+my_level+'_fee'] = history.trx_fee
     }
 }
 
