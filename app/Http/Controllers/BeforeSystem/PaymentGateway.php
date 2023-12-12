@@ -36,7 +36,7 @@ class PaymentGateway
             ["id" => 21, "pg_name" => '브라이트픽스(C3)', "rep_name" => '박용은', "company_name" => '(주)브라이트픽스', "business_num" => '235-88-01772', "phone_num" => '02-6336-0999', "addr" => '주소 서울특별시 금천구 가산디지털2로 166, 216~217호(가산동, 에이스K1타워)'],
             ["id" => 22, "pg_name" => '다날페이', "rep_name" => '박지만, 백현숙', "company_name" => 'DANAL', "business_num" => '113-81-44055', "phone_num" => '1566-3355', "addr" => '13591 경기도 성남시 분당구 분당로 55 퍼스트타워 9층'],
             ["id" => 23, "pg_name" => '바움피엔에스', "rep_name" => '윤건, 안용희', "company_name" => '바움피엔에스 주식회사', "business_num" => '836-87-00147', "phone_num" => '1833-6199', "addr" => '인천시 연수구 인천타워대로 323 (송도 센트로드 Office A동 2907-9호)'],
-            ["id" => 24, "pg_name" => '패스고', "rep_name" => '황태현, 정대철', "company_name" => '	주)무신사페이먼츠', "business_num" => '578-81-01933', "phone_num" => '031-211-6990', "addr" => '경기도 수원시 영통구 광교중앙로248번길 7-2(하동, 원희캐슬 광교) B동 302호'],
+            ["id" => 24, "pg_name" => '패스고', "rep_name" => '황태현, 정대철', "company_name" => '주)무신사페이먼츠', "business_num" => '578-81-01933', "phone_num" => '031-211-6990', "addr" => '경기도 수원시 영통구 광교중앙로248번길 7-2(하동, 원희캐슬 광교) B동 302호'],
         ];
         $this->paywell = [];
         $this->payvery = [];
