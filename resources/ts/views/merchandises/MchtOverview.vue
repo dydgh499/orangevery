@@ -46,6 +46,12 @@ const setSalesUnderAutoSetting = async (my_level: number) => {
         else
             setSalesAutoInfo(my_level, salesforce.under_auto_settings[0])
     }
+    else {
+        // 일괄적용
+        const history = fee_histories.value.find(obj => obj.sales_id === props.item['sales'+my_level+'_id'])
+        if(history)
+            props.item['sales'+my_level+'_id'] = history.trx_fee
+    }
 }
 
 onMounted(async () => {
