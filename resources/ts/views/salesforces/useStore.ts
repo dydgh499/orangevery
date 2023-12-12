@@ -139,8 +139,8 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     const mchts = ref(<Merchandise[]>([]))
     
     onMounted(async () => { 
-        await classification() 
-        await getAllMchts()
+        classification() 
+        getAllMchts()
     })
 
     const classification = async () => {

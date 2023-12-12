@@ -15,7 +15,7 @@ interface Props {
     item: Merchandise,
 }
 const props = defineProps<Props>()
-const { sales } = useSalesFilterStore()
+const { sales, initAllSales } = useSalesFilterStore()
 const { cus_filters } = useStore()
 const levels = corp.pv_options.auth.levels
 const fee_histories = ref(<any[]>([]))
@@ -54,6 +54,7 @@ const setSalesUnderAutoSetting = async (my_level: number) => {
     }
 }
 
+initAllSales()
 onMounted(async () => {
     fee_histories.value = await feeApplyHistoires()
 })
@@ -89,7 +90,7 @@ onMounted(async () => {
                                     </VCol>
                                     <VCol cols="12" :md="props.item.id ? 3 : 4">
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item['sales'+(6-i)+'_id']"
-                                            :items="[{ id: null, sales_name: '선택안함' }].concat(sales[6-i].value)"
+                                            :items="sales[6-i].value"
                                             prepend-inner-icon="ph:share-network" :label="levels['sales'+(6-i)+'_name'] + '선택'"
                                             item-title="sales_name" item-value="id" persistent-hint single-line
                                             :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])" @update:modelValue="setSalesUnderAutoSetting(6-i)"/>
