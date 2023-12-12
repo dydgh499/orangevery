@@ -60,6 +60,7 @@ const payCanceled = async () => {
     if (await alert.value.show('정말 상위 PG사를 통해 결제를 취소하시겠습니까?')) {
         const params = {
             use_collect_withdraw: Number(corp.pv_options.paid.use_collect_withdraw),
+            mcht_settle_amount: props.item.mcht_settle_amount,
             pmod_id: props.item.pmod_id,
             mcht_id: props.item.mcht_id,
             amount: props.item.amount,

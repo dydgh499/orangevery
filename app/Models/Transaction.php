@@ -27,7 +27,6 @@ class Transaction extends Model
         'brand_settle_amount',
         'dev_settle_amount',
         'dev_settle_id',
-        'mcht_settle_amount',
         'sales0_settle_amount',
         'sales0_settle_id',
         'sales1_settle_amount',

@@ -451,6 +451,7 @@ export interface Transaction {
     mcht_settle_type: number | null,
     mcht_settle_fee: number, 
     mcht_settle_id: number | null,
+    mcht_settle_amount: number,
     //
     trx_dt: string | null,
     trx_tm: string | null,

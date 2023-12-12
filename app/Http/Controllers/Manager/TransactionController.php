@@ -315,7 +315,7 @@ class TransactionController extends Controller
         {
             $inst = new QuickViewController($this->transactions);
             $json = $inst->_withdrawAbleAmount($request, $request->mcht_id);
-            if($json['profit'] < $request->amount)
+            if($json['profit'] - $request->mcht_settle_amount < 0)
                 return $this->extendResponse(1998, "출금 가능금액보다 취소금액이 더 큽니다.");
         }
         $res = post(env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/cancel', $data);
