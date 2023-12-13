@@ -196,35 +196,37 @@ onMounted(async () => {
                                 </CreateHalfVCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" v-if="corp.pv_options.paid.use_collect_withdraw">
-                            <VRow>
-                                <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>모아서 출금</template>
-                                    <template #input>
-                                        <BooleanRadio :radio="props.item.use_collect_withdraw"
-                                            @update:radio="props.item.use_collect_withdraw = $event">
-                                            <template #true>사용</template>
-                                            <template #false>미사용</template>
-                                        </BooleanRadio>
-                                    </template>
-                                </CreateHalfVCol>
-                            </VRow>
-                        </VCol>
-                        <VCol cols="12" v-if="corp.pv_options.paid.use_collect_withdraw">
-                            <VRow>
-                                <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>
-                                        <BaseQuestionTooltip :location="'top'" :text="'모아서 출금 수수료'"
-                                            :content="'가맹점에서 모아서 출금시 사용됩니다.'">
-                                        </BaseQuestionTooltip>
-                                    </template>
-                                    <template #input>
-                                        <VTextField v-model="props.item.collect_withdraw_fee" type="number" suffix="₩"
-                                            :rules="[requiredValidator]" />
-                                    </template>
-                                </CreateHalfVCol>
-                            </VRow>
-                        </VCol>
+                        <template v-if="corp.pv_options.paid.use_collect_withdraw">
+                            <VCol cols="12">
+                                <VRow>
+                                    <CreateHalfVCol :mdl="5" :mdr="7">
+                                        <template #name>모아서 출금</template>
+                                        <template #input>
+                                            <BooleanRadio :radio="props.item.use_collect_withdraw"
+                                                @update:radio="props.item.use_collect_withdraw = $event">
+                                                <template #true>사용</template>
+                                                <template #false>미사용</template>
+                                            </BooleanRadio>
+                                        </template>
+                                    </CreateHalfVCol>
+                                </VRow>
+                            </VCol>
+                            <VCol cols="12">
+                                <VRow>
+                                    <CreateHalfVCol :mdl="5" :mdr="7">
+                                        <template #name>
+                                            <BaseQuestionTooltip :location="'top'" :text="'모아서 출금 수수료'"
+                                                :content="'가맹점에서 모아서 출금시 사용됩니다.'">
+                                            </BaseQuestionTooltip>
+                                        </template>
+                                        <template #input>
+                                            <VTextField v-model="props.item.collect_withdraw_fee" type="number" suffix="₩"
+                                                :rules="[requiredValidator]" />
+                                        </template>
+                                    </CreateHalfVCol>
+                                </VRow>
+                            </VCol>
+                        </template>
                         <VCol cols="12" v-if="corp.pv_options.paid.use_withdraw_fee">
                             <VRow>
                                 <CreateHalfVCol :mdl="5" :mdr="7">
