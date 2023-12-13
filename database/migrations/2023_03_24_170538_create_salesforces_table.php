@@ -43,6 +43,7 @@ return new class extends Migration
             $table->date('last_settle_dt')->nullable()->comment('마지막 정산일');
             //
             $table->boolean('view_type')->default(false)->comment('뷰 타입(0=간편보기, 1=상세보기)');
+            $table->boolean('is_able_modify_mcht')->default(false)->comment('하위 가맹점 수정가능 여부');
             $table->string('note', 100)->nullable()->comment('메모');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();

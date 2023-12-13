@@ -12,8 +12,6 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         'settle_type': '가맹점 정산타입(O)',
         'settle_fee': '입금 수수료(O)',
     }
-    if(corp.pv_options.paid.use_collect_withdraw)
-        headers1['withdraw_fee'] = "출금 수수료(X)"
     const headers2: Record<string, string> = {
         'terminal_id': '장비 종류(X)',
         'module_type': '결제모듈 타입(O)',

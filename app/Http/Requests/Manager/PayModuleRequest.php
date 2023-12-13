@@ -56,7 +56,6 @@ class PayModuleRequest extends FormRequest
         'terminal_id',
         'ship_out_stat',
         'comm_settle_day',
-        'withdraw_fee',
     ];
 
     public function authorize()

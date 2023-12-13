@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\QuickView;
 
 use App\Models\Transaction;
+
+use App\Models\Merchandise;
 use App\Models\PaymentModule;
 use App\Models\CollectWithdraw;
 use App\Http\Traits\ManagerTrait;
@@ -162,25 +164,19 @@ class QuickViewController extends Controller
             's_dt' => '2000-01-01',  
             'e_dt' => Carbon::now()->format('Y-m-d'),
         ]);
-        $transactions = Transaction::where('mcht_id', $mcht_id)
-            ->noSettlement('mcht_settle_id')
-            ->with(['cancelDeposits'])
-            ->get(['id', 'mcht_id', 'pmod_id', 'mcht_settle_amount as profit', 'created_at']);
-        $withdraw = CollectWithdraw::where('mcht_id', $mcht_id)
-            ->whereNull('mcht_settle_id')
-            ->whereIn('result_code', ["0000", "0050"])  //처리완료, 처리중
-            ->first([DB::raw('SUM(withdraw_amount + withdraw_fee) as total_withdraw_amount')]);
-
-        $pmod_ids = $transactions->pluck('pmod_id')->all();
-        $pay_modules = PaymentModule::whereIn('id', $pmod_ids)->get(['id', 'withdraw_fee', 'fin_trx_delay', 'use_realtime_deposit']);
-        $withdraw_fee = $pay_modules->sum('withdraw_fee');
-
+        $merchandise = Merchandise::where('id', $mcht_id)
+            ->with(['transactions.cancelDeposits', 'collectWithdraws'])
+            ->first(['id', 'mcht_withdraw_fee']);
+        $pay_modules = PaymentModule::whereIn('id', $merchandise->transactions->pluck('pmod_id')->all())
+            ->get(['id', 'fin_trx_delay', 'use_realtime_deposit']);
+        // 출금액
+        $total_withdraw_amount = count($merchandise->collectWithdraws) ? $merchandise->collectWithdraws[0]->total_withdraw_amount : 0;
         // 취소 후 입금
-        $cancel_deposit = $transactions->reduce(function($carry, $transaction) {
+        $cancel_deposit = $merchandise->transactions->reduce(function($carry, $transaction) {
             return $carry + $transaction->cancelDeposits->sum('deposit_amount');
         }, 0);
         // 정산금
-        $profit = $transactions->reduce(function($carry, $transaction) use($pay_modules) {
+        $profit = $merchandise->transactions->reduce(function($carry, $transaction) use($pay_modules) {
             $pay_module = $pay_modules->firstWhere('id', $transaction->pmod_id);
             if($pay_module)
             {
@@ -188,7 +184,7 @@ class QuickViewController extends Controller
                 if($pay_module->use_realtime_deposit && $pay_module->fin_trx_delay > -1)
                     return $carry;
                 else
-                    return $carry + $transaction->profit;
+                    return $carry + $transaction->mcht_settle_amount;
             }
             else
             {
@@ -198,8 +194,8 @@ class QuickViewController extends Controller
         }, 0);
 
         return [
-            'profit' => ($profit + $cancel_deposit - $withdraw->total_withdraw_amount),
-            'withdraw_fee' =>  (int)$withdraw_fee,
+            'profit' => ($profit + $cancel_deposit - $total_withdraw_amount),
+            'withdraw_fee' =>  (int)$merchandise->mcht_withdraw_fee,
         ];
     }
 

@@ -177,19 +177,6 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VRow class="pt-3" v-if="corp.pv_options.paid.use_collect_withdraw">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>
-                                    <BaseQuestionTooltip :location="'top'" :text="'출금 수수료'"
-                                        :content="'가맹점에서 직접출금시 사용됩니다.'">
-                                    </BaseQuestionTooltip>
-                                </template>
-                                <template #input>
-                                    <VTextField v-model="props.item.withdraw_fee" type="number" suffix="₩"
-                                        :rules="[requiredValidator]" />
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>                        
                     </VCardItem>
                 </VCol>
                 <VDivider :vertical="$vuetify.display.mdAndUp" />

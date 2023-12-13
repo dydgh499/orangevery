@@ -26,6 +26,8 @@ class MerchandiseRequest extends FormRequest
         'use_saleslip_sell',
         'use_regular_card',
         'use_collect_withdraw',
+        'mcht_withdraw_fee',
+        'withdraw_fee',
         'is_show_fee',
         'note',
     ];
@@ -58,6 +60,8 @@ class MerchandiseRequest extends FormRequest
             'enabled' => 'required|boolean',
             'use_saleslip_prov' => 'required|boolean',
             'use_saleslip_sell' => 'required|boolean',
+            'mcht_withdraw_fee' => 'nullable|numeric',
+            'withdraw_fee' => 'nullable|numeric',
             'is_show_fee' => 'required|boolean',
             'passbook_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
             'contract_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',

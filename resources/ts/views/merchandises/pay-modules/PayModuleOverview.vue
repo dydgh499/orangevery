@@ -23,7 +23,6 @@ const addNewPaymodule = () => {
         terminal_id: null,
         settle_type: 0,
         settle_fee: 0,
-        withdraw_fee: 0,
         module_type: 0,
         api_key: '',
         sub_key: '',

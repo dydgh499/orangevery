@@ -184,9 +184,10 @@ export const defaultItemInfo = () => {
                 use_sales_auto_setting: false,
                 use_regular_card: false,
                 use_collect_withdraw: false,
+                use_withdraw_fee: false,
                 use_noti: false,
                 use_head_office_withdraw: false,
-                use_cancel_deposit: false
+                use_cancel_deposit: false,
             }),
             auth: reactive<AuthOption>({
                 levels: {

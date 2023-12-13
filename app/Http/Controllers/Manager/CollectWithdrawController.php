@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Models\Merchandise;
 use App\Models\PaymentModule;
 use App\Models\CollectWithdraw;
 use App\Http\Traits\ManagerTrait;
@@ -66,9 +67,10 @@ class CollectWithdrawController extends Controller
      */
     public function store(CollectWithdrawRequest $request)
     {
+        $merchandise = Merchandise::where('id', $request->user()->id)->first(['mcht_withdraw_fee']);
         $pay_modules = PaymentModule::where('mcht_id', $request->user()->id)
             ->where('is_delete', false)
-            ->get(['fin_id', 'withdraw_fee', 'use_realtime_deposit']);
+            ->get(['fin_id', 'use_realtime_deposit']);
 
         $fin_module = $pay_modules->first(function ($pay_module) {
             return $pay_module->fin_id > 0 && $pay_module->use_realtime_deposit;
@@ -80,7 +82,7 @@ class CollectWithdrawController extends Controller
                 'brand_id' => $request->user()->brand_id,
                 'mcht_id' => $request->user()->id,
                 'withdraw_amount' => $request->withdraw_amount,
-                'withdraw_fee' => $pay_modules->sum('withdraw_fee'),
+                'withdraw_fee'    => $merchandise->mcht_withdraw_fee,
                 'fin_id' => $fin_id,
                 'acct_num' => $request->user()->acct_num,
                 'acct_name' => $request->user()->acct_name,

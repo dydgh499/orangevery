@@ -114,6 +114,8 @@ export interface MerchandisePropertie {
     is_show_fee: number,
     use_regular_card: number,
     use_collect_withdraw: number,
+    mcht_withdraw_fee: number,
+    withdraw_fee: number,
     note: string,
 }
 
@@ -164,7 +166,6 @@ export interface PayModule {
     ps_id: number | null,
     settle_type: number | null,
     settle_fee: number,
-    withdraw_fee: number,
     terminal_id: number | null,
     module_type: number,
     api_key: string,
@@ -309,7 +310,8 @@ interface PaidOption {
     use_pay_verification_mobile: boolean, //휴대폰인증 
     use_sales_auto_setting: boolean, // 영업점 자동 세팅
     use_regular_card: boolean,
-    use_collect_withdraw: boolean,
+    use_collect_withdraw: boolean, // 가맹점 모아서 출금
+    use_withdraw_fee: boolean,  // 출금 수수료
     use_head_office_withdraw: boolean,
     use_noti: boolean,
     use_cancel_deposit: boolean, //입금 내역 관리
