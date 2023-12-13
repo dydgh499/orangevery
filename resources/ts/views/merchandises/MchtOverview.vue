@@ -204,7 +204,7 @@ onMounted(async () => {
                                         </BaseQuestionTooltip>
                                     </template>
                                     <template #input>
-                                        <VTextField v-model="props.item.mcht_withdraw_fee" type="number" suffix="₩"
+                                        <VTextField v-model="props.item.collect_withdraw_fee" type="number" suffix="₩"
                                             :rules="[requiredValidator]" />
                                     </template>
                                 </CreateHalfVCol>

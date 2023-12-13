@@ -166,7 +166,7 @@ class QuickViewController extends Controller
         ]);
         $merchandise = Merchandise::where('id', $mcht_id)
             ->with(['transactions.cancelDeposits', 'collectWithdraws'])
-            ->first(['id', 'mcht_withdraw_fee']);
+            ->first(['id', 'collect_withdraw_fee']);
         $pay_modules = PaymentModule::whereIn('id', $merchandise->transactions->pluck('pmod_id')->all())
             ->get(['id', 'fin_trx_delay', 'use_realtime_deposit']);
         // 출금액
@@ -195,7 +195,7 @@ class QuickViewController extends Controller
 
         return [
             'profit' => ($profit + $cancel_deposit - $total_withdraw_amount),
-            'withdraw_fee' =>  (int)$merchandise->mcht_withdraw_fee,
+            'withdraw_fee' =>  (int)$merchandise->collect_withdraw_fee,
         ];
     }
 

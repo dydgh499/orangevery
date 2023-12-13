@@ -114,7 +114,7 @@ export interface MerchandisePropertie {
     is_show_fee: number,
     use_regular_card: number,
     use_collect_withdraw: number,
-    mcht_withdraw_fee: number,
+    collect_withdraw_fee: number,
     withdraw_fee: number,
     note: string,
 }

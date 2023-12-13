@@ -275,6 +275,14 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>출금 수수료</template>
+                            <template #input>
+                                <VSwitch v-model="props.item.paid.use_withdraw_fee" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
                 </VCardItem>
             </VCard>
         </VCol>

@@ -34,7 +34,7 @@ class BulkMerchandiseRequest extends FormRequest
         'sales3_fee',
         'sales4_fee',
         'sales5_fee',        
-        'mcht_withdraw_fee',
+        'collect_withdraw_fee',
         'withdraw_fee',
     ];
     public $nullable_keys = [
@@ -85,7 +85,7 @@ class BulkMerchandiseRequest extends FormRequest
             '*.sales3_fee' => 'nullable|numeric',
             '*.sales4_fee' => 'nullable|numeric',
             '*.sales5_fee' => 'nullable|numeric',
-            '*.mcht_withdraw_fee' => 'nullable|numeric',
+            '*.collect_withdraw_fee' => 'nullable|numeric',
             '*.withdraw_fee' => 'nullable|numeric',
         ];
         return $sub;

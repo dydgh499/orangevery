@@ -122,9 +122,11 @@ trait SettleTrait
             $total_withdraw_amount = request()->use_collect_withdraw ? $content->collectWithdraws->sum('total_withdraw_amount') : 0;
             $settle += $cancel_deposit;
             $settle -= $total_withdraw_amount;
+            $settle -= $content->withdraw_fee;
             $content->settle = [
                 'cancel_deposit_amount'   => $cancel_deposit,
                 'collect_withdraw_amount' => $total_withdraw_amount,
+                'withdraw_fee' => $content->withdraw_fee,
                 'amount'    => $settle,
                 'deposit'   => $settle,
                 'transfer'  => $settle,

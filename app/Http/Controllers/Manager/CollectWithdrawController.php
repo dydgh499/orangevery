@@ -67,7 +67,7 @@ class CollectWithdrawController extends Controller
      */
     public function store(CollectWithdrawRequest $request)
     {
-        $merchandise = Merchandise::where('id', $request->user()->id)->first(['mcht_withdraw_fee']);
+        $merchandise = Merchandise::where('id', $request->user()->id)->first(['collect_withdraw_fee']);
         $pay_modules = PaymentModule::where('mcht_id', $request->user()->id)
             ->where('is_delete', false)
             ->get(['fin_id', 'use_realtime_deposit']);
@@ -82,7 +82,7 @@ class CollectWithdrawController extends Controller
                 'brand_id' => $request->user()->brand_id,
                 'mcht_id' => $request->user()->id,
                 'withdraw_amount' => $request->withdraw_amount,
-                'withdraw_fee'    => $merchandise->mcht_withdraw_fee,
+                'withdraw_fee'    => $merchandise->collect_withdraw_fee,
                 'fin_id' => $fin_id,
                 'acct_num' => $request->user()->acct_num,
                 'acct_name' => $request->user()->acct_name,

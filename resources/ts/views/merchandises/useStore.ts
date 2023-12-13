@@ -188,7 +188,7 @@ export const defaultItemInfo = () => {
         dev_fee: 0,
         use_regular_card: 0,
         use_collect_withdraw: 0,
-        mcht_withdraw_fee: 0,
+        collect_withdraw_fee: 0,
         withdraw_fee: 0
     })
     return {
