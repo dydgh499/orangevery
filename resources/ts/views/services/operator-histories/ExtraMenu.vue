@@ -13,7 +13,6 @@ const operDetail = <any>(inject('operDetail'))
 
 const check = async () => {
     const r = await get(`/api/v1/manager/services/operator-histories/${props.item.id}`)
-    console.log(r.data)
     operDetail.value.show(r.data)
 }
 </script>

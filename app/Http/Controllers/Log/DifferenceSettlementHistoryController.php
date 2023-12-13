@@ -119,7 +119,7 @@ class DifferenceSettlementHistoryController extends Controller
     {
         return Brand::where('is_delete', false)
             ->where('use_different_settlement', true)
-            ->get(['business_num', 'rep_mcht_id', 'id', 'above_pg_type']);
+            ->get(['business_num', 'rep_mid', 'id', 'above_pg_type']);
     }
 
     public function differenceSettleRequest()
@@ -142,7 +142,7 @@ class DifferenceSettlementHistoryController extends Controller
             try
             {
                 $path   = $this->base_path.$pg_name;            
-                $pg     = new $path($brands[$i]->rep_mcht_id);
+                $pg     = new $path($brands[$i]->rep_mid);
                 $pg->request($date, $brands[$i]->business_num, $trans);    
             }
             catch(Exception $e)
@@ -167,7 +167,7 @@ class DifferenceSettlementHistoryController extends Controller
             try
             {
                 $path   = $this->base_path.$pg_name;
-                $pg     = new $path($brands[$i]->rep_mcht_id);
+                $pg     = new $path($brands[$i]->rep_mid);
                 $datas  = $pg->response($date);
                 $res = $this->manyInsert($this->difference_settlement_histories, $datas);
             }

@@ -236,6 +236,7 @@ return [
         'type' => '타입',
         'entry_path' => '유입경로',
         'is_deposit' => '입금상태',
+        'withdraw_fee' => '출금 수수료',
         
         'terminal_id' => '장비',
         'api_key' => 'API KEY',

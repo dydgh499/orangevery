@@ -107,6 +107,10 @@ class OperatorHistoryContoller extends Controller
             unset($conv_history_detail['use_noti']);
         if(isset($conv_history_detail['brand_id']))
             unset($conv_history_detail['brand_id']);
+        if($pv_options->paid->use_collect_withdraw == false)
+            unset($conv_history_detail['withdraw_fee']);
+        
+        unset($conv_history_detail['user_pw']);
         return $conv_history_detail;
     }
 

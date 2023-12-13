@@ -26,12 +26,12 @@ trait requestTrait
         return $record_type.$req_date.$brand_business_num.$pg_type.$filter."\n";
     }
 
-    private function setHeaderRecord($rep_mcht_id)
+    private function setHeaderRecord($rep_mid)
     {
         $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::HEADER->value, 2);
-        $rep_mcht_id            = $this->setAtypeField($rep_mcht_id, 10);
+        $rep_mid            = $this->setAtypeField($rep_mid, 10);
         $filter         = $this->setAtypeField('', 388);
-        return $record_type.$rep_mcht_id.$filter."\n";
+        return $record_type.$rep_mid.$filter."\n";
     }
 
     private function setDataRecord($trans, $brand_business_num)

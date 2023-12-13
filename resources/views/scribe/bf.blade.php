@@ -1702,7 +1702,11 @@ response.json()</code></pre>
           </div>
       </div>
       <div class="dark-box">
-        <div class="lang-selector"><button type="button" class="lang-button" data-language-name="javascript">javascript</button><button type="button" class="lang-button" data-language-name="php">php</button><button type="button" class="lang-button" data-language-name="python">python</button><button type="button" class="lang-button" data-language-name="bash">bash</button></div>
+        <div class="lang-selector">
+          <button type="button" class="lang-button" data-language-name="javascript">javascript</button>
+          <button type="button" class="lang-button" data-language-name="php">php</button>
+          <button type="button" class="lang-button" data-language-name="python">python</button>
+          <button type="button" class="lang-button" data-language-name="bash">bash</button></div>
       </div>
     </div>
   </body>

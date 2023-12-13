@@ -29,7 +29,7 @@ class BrandRequest extends FormRequest
         'dev_settle_type',
         'fax_num',
         'use_different_settlement',
-        'rep_mcht_id',
+        'rep_mid',
         'above_pg_type',
     ];
     public $file_keys = [   

@@ -10,27 +10,27 @@ use Carbon\Carbon;
 class hecto
 {
     use requestTrait, responseTrait;
-    public $rep_mcht_id;
+    public $rep_mid;
     protected $main_sftp_connection, $dr_sftp_connection;
     protected $main_connection_stat, $dr_connection_stat;
 
-    public function __construct($rep_mcht_id)
+    public function __construct($rep_mid)
     {   //ezpg0001
-        $this->rep_mcht_id = $rep_mcht_id;
+        $this->rep_mid = $rep_mid;
         $main_config = [
             'driver' => 'sftp',
             'host' => env('HECTO_DIFFER_SETTLE_MAIN_HOST'),
             'port' => (int)env('HECTO_DIFFER_SETTLE_PORT'),
-            'username' => $this->rep_mcht_id,
-            'password' => $this->rep_mcht_id."!1234",
+            'username' => $this->rep_mid,
+            'password' => $this->rep_mid."!1234",
             'passive' => false,
         ];
         $dr_config = [
             'driver' => 'sftp',
             'host' => env('HECTO_DIFFER_SETTLE_DR_HOST'),
             'port' => (int)env('HECTO_DIFFER_SETTLE_PORT'),
-            'username' => $this->rep_mcht_id,
-            'password' => $this->rep_mcht_id."!1234",
+            'username' => $this->rep_mid,
+            'password' => $this->rep_mid."!1234",
             'passive' => false,            
         ];
         config(['filesystems.disks.different_settlement_main_hecto' => $main_config]);

@@ -380,7 +380,7 @@ export interface Brand extends Contract {
     curr_deposit_amount: number,
     last_dpst_at: datetime,
 
-    rep_mcht_id: string,
+    rep_mid: string,
     use_different_settlement: boolean,
     above_pg_type: number,
     updated_at: datetime,
