@@ -459,7 +459,7 @@ export interface Transaction {
     cxl_tm: string | null,
     trx_dttm?: string,
     cxl_dttm?: string,
-    is_cancel: boolean,
+    is_cancel: number,
     amount: number,
     ord_num: string,
     trx_id: string,
