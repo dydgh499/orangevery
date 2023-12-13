@@ -141,7 +141,7 @@ class PaymentModuleController extends Controller
                 return $res;
             });
 
-            operLogging(HistoryType::CREATE, $this->target, $data, $data['note']);
+            operLogging(HistoryType::CREATE, $this->target, $data, $data['note']."(#".$res->id.")");
             return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);
         }
         else
@@ -192,7 +192,7 @@ class PaymentModuleController extends Controller
             }
             $res = $this->pay_modules->where('id', $id)->update($data);
 
-            operLogging(HistoryType::UPDATE, $this->target, $data, $data['note']);
+            operLogging(HistoryType::UPDATE, $this->target, $data, $data['note']."(#".$id.")");
             return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
         }
         else
