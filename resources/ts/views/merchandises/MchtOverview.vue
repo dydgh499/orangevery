@@ -41,7 +41,7 @@ const setSalesUnderAutoSetting = async (my_level: number) => {
     }
 
     const salesforce = sales[my_level].value.find(obj => obj.id === props.item['sales'+my_level+'_id'])
-    if(salesforce.under_auto_settings.length ) {
+    if(salesforce?.under_auto_settings?.length ) {
         if(salesforce.under_auto_settings.length > 0) {
             const idx = await underAutoSetting.value.show(salesforce.under_auto_settings)
             setSalesAutoInfo(my_level, salesforce.under_auto_settings[idx])

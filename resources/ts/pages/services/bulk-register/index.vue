@@ -6,6 +6,7 @@ import SalesforceRegister from '@/views/services/bulk-register/SalesforceRegiste
 import MerchandiseRegister from '@/views/services/bulk-register/MerchandiseRegister.vue'
 import PayModuleRegister from '@/views/services/bulk-register/PayModuleRegister.vue'
 import RegularCardRegister from '@/views/services/bulk-register/RegularCardRegister.vue'
+import PayModulePGUpdater from '@/views/services/bulk-register/PayModulePGUpdater.vue'
 
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import corp from '@corp'
@@ -15,6 +16,9 @@ const tabs = <Tab[]>([
     { icon: 'tabler-building-store', title: '가맹점 등록' },
     { icon: 'ic-outline-send-to-mobile', title: '결제모듈 등록' },
 ])
+
+if(corp.use_different_settlement)
+    tabs.push({ icon: 'mdi-vector-intersection', title: '가맹점 구간 일괄변경' })
 if(corp.pv_options.paid.use_regular_card)
     tabs.push({ icon: 'emojione:credit-card', title: '단골고객 카드정보 등록' })
 
@@ -37,7 +41,13 @@ if(corp.pv_options.paid.use_regular_card)
                         </PayModuleRegister>
                     </Suspense>
                 </VWindowItem>
-                <VWindowItem>
+                <VWindowItem v-if="corp.use_different_settlement">
+                    <Suspense>
+                        <PayModulePGUpdater>
+                        </PayModulePGUpdater>
+                    </Suspense>
+                </VWindowItem>
+                <VWindowItem v-if="corp.pv_options.paid.use_regular_card">
                     <Suspense>
                         <RegularCardRegister>
                         </RegularCardRegister>

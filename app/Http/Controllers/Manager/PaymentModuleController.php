@@ -9,6 +9,8 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
 use App\Http\Requests\Manager\BulkRegister\BulkPayModuleRequest;
+use App\Http\Requests\Manager\BulkRegister\BulkPayModulePGRequest;
+
 use App\Http\Requests\Manager\PayModuleRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
@@ -268,6 +270,20 @@ class PaymentModuleController extends Controller
         })->toArray();
         $res = $this->manyInsert($this->pay_modules, $pay_modules);
         return $this->response($res ? 1 : 990);        
+    }
+
+    public function bulkRegisterPG(BulkPayModulePGRequest $request)
+    {
+        $datas = $request->data();
+        foreach($datas as $data)
+        {
+            $this->pay_modules->where('mcht_id', $data['mcht_id'])
+                ->update([
+                    'pg_id' => $data['pg_id'],
+                    'ps_id' => $data['ps_id'],
+                ]);
+        }
+        return $this->response(1);        
     }
 
     /**

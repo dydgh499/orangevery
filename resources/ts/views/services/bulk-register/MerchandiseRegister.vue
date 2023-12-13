@@ -3,7 +3,7 @@ import { lengthValidatorV2 } from '@validators'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { tax_category_types } from '@/views/merchandises/useStore'
 
-import { useRegisterStore } from '@/views/services/bulk-register/MchtRegisterStore'
+import { useRegisterStore } from '@/views/services/bulk-register/MerchandiseRegisterStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { banks } from '@/views/users/useStore'
 import type { Merchandise, Options } from '@/views/types'

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { lengthValidatorV2 } from '@validators'
 import { useSearchStore } from '@/views/salesforces/useStore'
-import { useRegisterStore } from '@/views/services/bulk-register/SalesRegisterStore'
+import { useRegisterStore } from '@/views/services/bulk-register/SalesforceRegisterStore'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import type { Salesforce, Options } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'

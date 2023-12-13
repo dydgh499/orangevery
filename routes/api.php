@@ -212,6 +212,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('tid-create', [PaymentModuleController::class, 'tidCreate']);
                 Route::post('pay-key-create', [PaymentModuleController::class, 'payKeyCreate']);
                 Route::post('bulk-register', [PaymentModuleController::class, 'bulkRegister']);
+                Route::post('pg-bulk-updater', [PaymentModuleController::class, 'bulkRegisterPG']);
                 Route::delete('batch-remove', [PaymentModuleController::class, 'batchRemove']);    
             });
             Route::apiResource('pay-modules', PaymentModuleController::class); 
