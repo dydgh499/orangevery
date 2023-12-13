@@ -22,36 +22,35 @@ export const realtimeDetailClass = (history: RealtimeHistory) => {
 export const realtimeResult = (item: Transaction) => {
     if(item.is_cancel)
         return StatusColors.Default
-    else if(item.use_realtime_deposit) {
-        //실시간 수수료 존재시(실시간 사용)    
-        const is_success = item.realtimes?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
-        const is_sending = item.realtimes?.find(obj => obj.result_code === '0050' && obj.request_type === 6170)
-        const is_cancel = item.realtimes?.find(obj => obj.request_type === -2)
-        const is_error  = item.realtimes?.find(obj => obj.result_code !== '0000' && obj.result_code !== '0050')
-        if(is_success)  //성공
-            return StatusColors.Success
-        if(is_sending)  // 처리중
-            return StatusColors.Processing
-        if(is_cancel)   // 취소
-            return StatusColors.Cancel
-        if(is_error)    // 에러
-            return StatusColors.Error
+    //실시간 수수료 존재시(실시간 사용)    
+    const is_success = item.realtimes?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
+    const is_sending = item.realtimes?.find(obj => obj.result_code === '0050' && obj.request_type === 6170)
+    const is_cancel = item.realtimes?.find(obj => obj.request_type === -2)
+    const is_error  = item.realtimes?.find(obj => obj.result_code !== '0000' && obj.result_code !== '0050')
+    if(is_success)  //성공
+        return StatusColors.Success
+    if(is_sending)  // 처리중
+        return StatusColors.Processing
+    if(is_cancel)   // 취소
+        return StatusColors.Cancel
+    if(is_error)    // 에러
+        return StatusColors.Error
 
-        if(item.fin_trx_delay == -1 && item.realtimes?.length == 0)    // 모아서 출금
-            return StatusColors.Info
-        if(item.realtimes?.length == 0) //요청 대기
-        {            
-            const retry_able_time = (new Date(item.trx_dttm as string)).getTime() + (item.fin_trx_delay as number * 60000)
-            const offset_time = new Date(retry_able_time) - new Date() 
-
-            if(offset_time > 0) //요청 대기
-                return StatusColors.Primary
-            else //대기시간 초과
-                return StatusColors.Timeout
-        }
-    }
-    else
+    if(item.fin_trx_delay == -1 && item.realtimes?.length == 0)    // 모아서 출금
+        return StatusColors.Info
+    if(item.use_realtime_deposit == 0)
         return StatusColors.Default
+    if(item.realtimes?.length == 0) //요청 대기
+    {            
+        const retry_able_time = (new Date(item.trx_dttm as string)).getTime() + (item.fin_trx_delay as number * 60000)
+        const offset_time = new Date(retry_able_time) - new Date() 
+
+        if(offset_time > 0) //요청 대기
+            return StatusColors.Primary
+        else //대기시간 초과
+            return StatusColors.Timeout
+    }
+    
 }
 
 export const isRetryAble = (item: Transaction) => {
