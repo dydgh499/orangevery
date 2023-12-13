@@ -33,13 +33,13 @@ export const realtimeResult = (item: Transaction) => {
         return StatusColors.Processing
     if(is_cancel)   // 취소
         return StatusColors.Cancel
+    if(item.use_realtime_deposit == 0) // 사용안함
+        return StatusColors.Default
     if(is_error)    // 에러
         return StatusColors.Error
 
     if(item.fin_trx_delay == -1 && item.realtimes?.length == 0)    // 모아서 출금
         return StatusColors.Info
-    if(item.use_realtime_deposit == 0)
-        return StatusColors.Default
     if(item.realtimes?.length == 0) //요청 대기
     {            
         const retry_able_time = (new Date(item.trx_dttm as string)).getTime() + (item.fin_trx_delay as number * 60000)
