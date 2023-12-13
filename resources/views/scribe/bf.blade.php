@@ -7,7 +7,6 @@
     <title>PV BF Mobile API</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/theme-comagain.style.css" media="screen">
-    <link rel="stylesheet" href="/theme-comagain.style.css" media="print">
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/obsidian.min.css">
     <script src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js"></script>
@@ -38,10 +37,21 @@
     <script src="/vendor/scribe/js/tryitout-4.25.0.js"></script>
     <script src="/vendor/scribe/js/theme-default-4.25.0.js"></script>
   </head>
-  <body data-languages="[&quot;javascript&quot;,&quot;php&quot;,&quot;python&quot;,&quot;bash&quot;]"><a href="#" id="nav-button"><span> MENU <img src="../docs/images/navbar.png" alt="navbar-image" /></span></a>
+  <body data-languages="[&quot;javascript&quot;,&quot;php&quot;,&quot;python&quot;,&quot;bash&quot;]">
+    <a href="#" id="nav-button">
+      <span> MENU <img src="../docs/images/navbar.png" alt="navbar-image" /></span>
+    </a>
     <div class="tocify-wrapper">
-      <div style="display: inline-flex; align-items: center; text-align: center; vertical-align: middle; padding: 1em; justify-content: left;"><img src="/logo.svg" alt="logo" class="logo" width="20%" /><span style='margin-left: 0.5em; font-size: 1.7em;'>PAYVERY</span></div>
-      <div class="lang-selector"><button type="button" class="lang-button" data-language-name="javascript">javascript</button><button type="button" class="lang-button" data-language-name="php">php</button><button type="button" class="lang-button" data-language-name="python">python</button><button type="button" class="lang-button" data-language-name="bash">bash</button></div>
+      <div style="display: inline-flex; align-items: center; text-align: center; vertical-align: middle; padding: 1em; justify-content: left;">
+        <img src="/logo.svg" alt="logo" class="logo" width="20%" />
+        <span style='margin-left: 0.5em; font-size: 1.7em;'>PAYVERY</span>
+      </div>
+      <div class="lang-selector">
+          <button type="button" class="lang-button" data-language-name="javascript">javascript</button>
+          <button type="button" class="lang-button" data-language-name="php">php</button>
+          <button type="button" class="lang-button" data-language-name="python">python</button>
+          <button type="button" class="lang-button" data-language-name="bash">bash</button>
+      </div>
       <div class="search"><input type="text" class="search" id="input-search" placeholder="검색"></div>
       <div id="toc">
         <ul id="tocify-header-" class="tocify-header">
@@ -175,8 +185,9 @@ fetch(url, {
     method: "POST",
     headers,
     body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre>
-            </div>
+}).then(response =&gt; response.json());
+</code></pre>
+</div>
             <div class="php-example">
               <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;post(
