@@ -229,7 +229,7 @@ export const defaultItemInfo = () => {
         curr_deposit_amount: 0,
         rep_mid: '',
         use_different_settlement: false,
-        above_pg_type: 0
+        rep_pg_type: 0
     })
 
 

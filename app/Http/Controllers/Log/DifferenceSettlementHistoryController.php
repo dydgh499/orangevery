@@ -119,7 +119,7 @@ class DifferenceSettlementHistoryController extends Controller
     {
         return Brand::where('is_delete', false)
             ->where('use_different_settlement', true)
-            ->get(['business_num', 'rep_mid', 'id', 'above_pg_type']);
+            ->get(['business_num', 'rep_mid', 'id', 'rep_pg_type']);
     }
 
     public function differenceSettleRequest()
@@ -130,12 +130,12 @@ class DifferenceSettlementHistoryController extends Controller
 
         for ($i=0; $i<count($brands); $i++)
         {
-            $pg_name = getPGType($brands[$i]->above_pg_type);
+            $pg_name = getPGType($brands[$i]->rep_pg_type);
             $trans   = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
                 ->join('payment_gateways', 'transactions.pg_id', '=', 'payment_gateways.id')
                 ->where('transactions.is_delete', false)
                 ->where('merchandises.is_delete', false)
-                ->where('payment_gateways.pg_type', $brands[$i]->above_pg_type)
+                ->where('payment_gateways.pg_type', $brands[$i]->rep_pg_type)
                 ->where('transactions.brand_id', $brands[$i]->id)
                 ->where('transactions.trx_dt', $yesterday)
                 ->get(['transactions.*', 'merchandises.business_num']);
@@ -163,7 +163,7 @@ class DifferenceSettlementHistoryController extends Controller
 
         for ($i=0; $i<count($brands); $i++)
         {
-            $pg_name = getPGType($brands[$i]->above_pg_type);
+            $pg_name = getPGType($brands[$i]->rep_pg_type);
             try
             {
                 $path   = $this->base_path.$pg_name;

@@ -44,7 +44,7 @@ class CreateBrandsTable extends Migration
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');            
             $table->boolean('use_different_settlement')->default(false)->comment('차액정산 사용여부');
             $table->string('rep_mid', 20)->default('')->comment('상위 대표 가맹점 ID');
-            $table->tinyInteger('above_pg_type')->nullable()->comment('상위 PG사 타입(1,2,3,4,5 ...)');            
+            $table->tinyInteger('rep_pg_type')->nullable()->comment('상위 PG사 타입(1,2,3,4,5 ...)');            
             $table->float('dev_fee', 6, 5)->default(0)->comment('개발사 수수료');
             $table->tinyInteger('dev_settle_type')->default(0)->comment('수수료 계산 타입(0=본사 이익 대비 %, 1=거래금액 대비 %)');
             $table->integer('extra_deposit_amount')->default(0)->comment('부가 입금 금액');

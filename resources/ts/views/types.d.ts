@@ -382,7 +382,7 @@ export interface Brand extends Contract {
 
     rep_mid: string,
     use_different_settlement: boolean,
-    above_pg_type: number,
+    rep_pg_type: number,
     updated_at: datetime,
     created_at: datetime,
 }
