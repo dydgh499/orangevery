@@ -17,7 +17,7 @@ import { salesLevels } from '@axios'
 
 const { store } = useSearchStore()
 const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
-const { head, headers } = useRegisterStore()
+const { head, headers, isPrimaryHeader } = useRegisterStore()
 const { mchts } = useSalesFilterStore()
 
 const all_levels = [{ id: 10, title: '가맹점' }, ...salesLevels()]
@@ -237,7 +237,7 @@ watchEffect(async () => {
                 </template>
                 <template #input>
                     <VCol class="pb-0">
-                        <b>가맹점/통신비 정산타입</b>
+                        <b>가맹점 정산타입</b>
                         <br>
                         <VBtn size="small" color="success" variant="tonal" @click="settleTypeExplain.show()"
                             style="margin: 0.5em;">
@@ -300,7 +300,10 @@ watchEffect(async () => {
                             <thead>
                                 <tr>
                                     <th v-for="(header, key) in head.flat_headers" :key="key" class='list-square'>
-                                        <span>
+                                        <span v-if="isPrimaryHeader(key as string)" class="text-primary">
+                                            {{ header.ko }}
+                                        </span>
+                                        <span v-else>
                                             {{ header.ko }}
                                         </span>
                                     </th>

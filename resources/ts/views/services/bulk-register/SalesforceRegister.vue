@@ -14,7 +14,7 @@ import { isEmpty } from '@core/utils'
 import { salesLevels } from '@axios'
 
 const { store } = useSearchStore()
-const { head, headers } = useRegisterStore()
+const { head, headers, isPrimaryHeader } = useRegisterStore()
 const { ExcelReader, openFilePicker, bulkRegister } = Registration()
 const snackbar = <any>(inject('snackbar'))
 const all_sales = salesLevels()
@@ -198,17 +198,12 @@ watchEffect(async () => {
                         <VChip color="primary" style="margin: 0.5em;" v-for="(view_type, key) in view_types" :key="key">
                             {{ view_type.title }} = {{ view_type.id }}
                         </VChip>                        
-                    </VCol>
-                    
+                    </VCol>                    
                 </template>
                 <template #input>
-                    <VCol class="pb-0">
-                        <b>은행명/은행코드 테이블 </b>
-                        <br>
                         <VBtn size="small" color="success" variant="tonal" @click="banksExplain.show()" style="margin: 0.5em;">
-                            상세정보 확인
+                            입력가능한 입금은행명 확인
                         </VBtn>
-                    </VCol>
                     <VCol>
                         <b>사업자등록번호 입력 주의사항</b>
                         <br>
@@ -236,7 +231,10 @@ watchEffect(async () => {
                             <thead>
                                 <tr>
                                     <th v-for="(header, key) in head.flat_headers" :key="key" class='list-square'>
-                                        <span>
+                                        <span v-if="isPrimaryHeader(key as string)" class="text-primary">
+                                            {{ header.ko }}
+                                        </span>
+                                        <span v-else>
                                             {{ header.ko }}
                                         </span>
                                     </th>

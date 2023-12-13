@@ -25,7 +25,12 @@ export const useRegisterStore = defineStore('salesRegisterStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 
+    const isPrimaryHeader = (key: string) => {
+        const keys = ['level', 'settle_tax_type', 'settle_cycle', 'settle_day', 'view_type']
+        return keys.includes(key)
+    }
+
     return {
-        head, headers
+        head, headers, isPrimaryHeader
     }
 })

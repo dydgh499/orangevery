@@ -931,8 +931,8 @@ endpoints:
         BF Mobile과 PAYVERY간 API 입니다.
       subgroup: ''
       subgroupDescription: ''
-      title: '가맹점 직접출금내역 조회'
-      description: '로그인한 가맹점의 직접출금내역을 조회합니다.'
+      title: '가맹점 모아서 출금내역 조회'
+      description: '로그인한 가맹점의 모아서 출금내역을 조회합니다.'
       authenticated: true
       custom: []
     headers:

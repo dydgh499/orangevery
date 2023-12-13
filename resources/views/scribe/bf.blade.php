@@ -67,7 +67,7 @@
             <li class="tocify-item level-2" data-unique="bf-mobile-api-GETapi-v1-bf-pay-modules"><a href="#bf-mobile-api-GETapi-v1-bf-pay-modules">결제모듈정보 조회</a></li>
             <li class="tocify-item level-2" data-unique="bf-mobile-api-GETapi-v1-bf-transactions"><a href="#bf-mobile-api-GETapi-v1-bf-transactions">결제내역 조회</a></li>
             <li class="tocify-item level-2" data-unique="bf-mobile-api-GETapi-v1-bf-realtime-histories"><a href="#bf-mobile-api-GETapi-v1-bf-realtime-histories">실시간 이체내역 조회</a></li>
-            <li class="tocify-item level-2" data-unique="bf-mobile-api-GETapi-v1-bf-self-withdraws"><a href="#bf-mobile-api-GETapi-v1-bf-self-withdraws">가맹점 직접출금내역 조회</a></li>
+            <li class="tocify-item level-2" data-unique="bf-mobile-api-GETapi-v1-bf-self-withdraws"><a href="#bf-mobile-api-GETapi-v1-bf-self-withdraws">가맹점 모아서 출금내역 조회</a></li>
             <li class="tocify-item level-2" data-unique="bf-mobile-api-GETapi-v1-bf-withdraws-balance"><a href="#bf-mobile-api-GETapi-v1-bf-withdraws-balance">출금가능금액 조회</a></li>
             <li class="tocify-item level-2" data-unique="bf-mobile-api-POSTapi-v1-bf-withdraws"><a href="#bf-mobile-api-POSTapi-v1-bf-withdraws">출금요청</a></li>
             <li class="tocify-item level-2" data-unique="bf-mobile-api-POSTapi-v1-bf-pay-hand"><a href="#bf-mobile-api-POSTapi-v1-bf-pay-hand">수기결제</a></li>
@@ -1027,9 +1027,9 @@ response.json()</code></pre>
               </div>
             </details>
           </div>
-          <h2 id="bf-mobile-api-GETapi-v1-bf-self-withdraws">가맹점 직접출금내역 조회</h2>
+          <h2 id="bf-mobile-api-GETapi-v1-bf-self-withdraws">가맹점 모아서 출금내역 조회</h2>
           <p><small class="badge badge-darkred">인증 필요</small></p>
-          <p>로그인한 가맹점의 직접출금내역을 조회합니다.</p><span id="example-requests-GETapi-v1-bf-self-withdraws">
+          <p>로그인한 가맹점의 모아서 출금내역을 조회합니다.</p><span id="example-requests-GETapi-v1-bf-self-withdraws">
             <blockquote>예시 요청:</blockquote>
             <div class="javascript-example">
               <pre><code class="language-javascript">const url = new URL(

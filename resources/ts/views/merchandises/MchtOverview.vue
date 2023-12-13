@@ -10,7 +10,9 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import UnderAutoSettingDialog from '@/layouts/dialogs/UnderAutoSettingDialog.vue'
 import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { tax_category_types } from '@/views/merchandises/useStore'
 import corp from '@corp'
+
 
 interface Props {
     item: Merchandise,
@@ -143,6 +145,19 @@ onMounted(async () => {
                         <VCol cols="12">
                             <VRow>
                                 <CreateHalfVCol :mdl="5" :mdr="7">
+                                    <template #name>사업자 유형</template>
+                                    <template #input>
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.tax_category_type"
+                                            :items="tax_category_types"
+                                            prepend-inner-icon="ic-outline-business-center" label="사업자 종류" item-title="title"
+                                            item-value="id" single-line/>
+                                    </template>
+                                </CreateHalfVCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12">
+                            <VRow>
+                                <CreateHalfVCol :mdl="5" :mdr="7">
                                     <template #name>커스텀 필터</template>
                                     <template #input>
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.custom_id"
@@ -204,7 +219,7 @@ onMounted(async () => {
                                         </BaseQuestionTooltip>
                                     </template>
                                     <template #input>
-                                        <VTextField v-model="props.item.collect_withdraw_fee" type="number" suffix="₩"
+                                        <VTextField v-model="props.item.mcht_withdraw_fee" type="number" suffix="₩"
                                             :rules="[requiredValidator]" />
                                     </template>
                                 </CreateHalfVCol>

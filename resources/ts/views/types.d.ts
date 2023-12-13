@@ -108,6 +108,7 @@ export interface MerchandisePropertie {
     hold_fee: float,
     // option
     enabled: number,
+    tax_category_type: number,
     custom_id: number | null,
     use_saleslip_prov: number,
     use_saleslip_sell: number,

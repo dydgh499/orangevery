@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import { lengthValidatorV2 } from '@validators'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import { tax_category_types } from '@/views/merchandises/useStore'
+
 import { useRegisterStore } from '@/views/services/bulk-register/MchtRegisterStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { banks } from '@/views/users/useStore'
@@ -18,9 +20,8 @@ interface extendMerchandise extends Merchandise {
 
 const { cus_filters } = useStore()
 const { sales } = useSalesFilterStore()
-const { head, headers, levels } = useRegisterStore()
+const { head, headers, levels, isPrimaryHeader } = useRegisterStore()
 const { ExcelReader, openFilePicker, bulkRegister } = Registration()
-console.log(headers)
 
 const snackbar = <any>(inject('snackbar'))
 const excel = ref()
@@ -184,7 +185,15 @@ watchEffect(async () => {
             </VCol>
             <VDivider/>
             <CreateHalfVCol :mdl="8" :mdr="4">
-                <template #name>
+                <template #name>                    
+                    <VCol class="pb-0">
+                        <b>사업자 유형</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in tax_category_types" :key="key">
+                            {{ cus.title }} = {{ cus.id }}
+                        </VChip>
+                    </VCol>
+
                     <VCol class="pb-0">
                         <b>커스텀 필터</b>
                         <br>
@@ -209,13 +218,9 @@ watchEffect(async () => {
                     </VCol>
                 </template>
                 <template #input>
-                    <VCol class="pb-0">
-                        <b>은행명/은행코드 테이블 </b>
-                        <br>
-                        <VBtn size="small" color="success" variant="tonal" @click="banksExplain.show()" style="margin: 0.5em;">
-                            상세정보 확인
-                        </VBtn>
-                    </VCol>
+                    <VBtn size="small" color="success" variant="tonal" @click="banksExplain.show()" style="margin: 0.5em;">
+                        입력가능한 입금은행명 확인
+                    </VBtn>
                     <VCol>
                         <b class="important-text">수수료 입력 주의사항</b>
                         <br>
@@ -248,7 +253,10 @@ watchEffect(async () => {
                             <thead>
                                 <tr>
                                     <th v-for="(header, key) in head.flat_headers" :key="key" class='list-square'>
-                                        <span>
+                                        <span v-if="isPrimaryHeader(key as string)" class="text-primary">
+                                            {{ header.ko }}
+                                        </span>
+                                        <span v-else>
                                             {{ header.ko }}
                                         </span>
                                     </th>

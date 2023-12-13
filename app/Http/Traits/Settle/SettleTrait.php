@@ -125,8 +125,8 @@ trait SettleTrait
             $settle -= $content->withdraw_fee;
             $content->settle = [
                 'cancel_deposit_amount'   => $cancel_deposit,
-                'collect_withdraw_amount' => $total_withdraw_amount,
-                'withdraw_fee' => $content->withdraw_fee,
+                'collect_withdraw_amount' => $total_withdraw_amount * -1,
+                'withdraw_fee' => $content->withdraw_fee * -1,
                 'amount'    => $settle,
                 'deposit'   => $settle,
                 'transfer'  => $settle,

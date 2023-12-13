@@ -309,9 +309,9 @@ class BfController extends Controller
     }
 
     /**
-     * 가맹점 직접출금내역 조회
+     * 가맹점 모아서 출금내역 조회
      *
-     * 로그인한 가맹점의 직접출금내역을 조회합니다.
+     * 로그인한 가맹점의 모아서 출금내역을 조회합니다.
      * @responseFile 201 storage/bf/selfWithdrawIndex.json
      * @responseField content object[] 결과
      * @responseField content.*.withdraw_amount integer 출금 금액

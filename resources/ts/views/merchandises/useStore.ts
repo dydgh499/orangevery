@@ -2,9 +2,14 @@ import { Header } from '@/views/headers'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { Merchandise } from '@/views/types'
+import { Merchandise, Options } from '@/views/types'
 import { getUserLevel, isAbleModifyMcht } from '@axios'
 import corp from '@corp'
+
+export const tax_category_types = <Options[]>([
+    {id:0, title:'과세'}, {id:1, title:'면세'}, 
+    {id:2, title:'복합과세'}
+])
 
 export const useSearchStore = defineStore('mchtSearchStore', () => {
     const store     = Searcher('merchandises')
@@ -179,6 +184,7 @@ export const defaultItemInfo = () => {
         sales1_fee: 0,
         sales0_fee: 0,
         // options
+        tax_category_type: 0,
         custom_id: null,
         enabled: 1,
         use_saleslip_prov: 1,
@@ -189,7 +195,7 @@ export const defaultItemInfo = () => {
         use_regular_card: 0,
         use_collect_withdraw: 0,
         collect_withdraw_fee: 0,
-        withdraw_fee: 0
+        withdraw_fee: 0,
     })
     return {
         path, item

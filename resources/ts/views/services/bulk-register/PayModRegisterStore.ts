@@ -66,7 +66,17 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 
+    const isPrimaryHeader = (key: string) => {
+        const keys = ['pg_id', 'ps_id', 'is_old_auth', 'comm_settle_type', 'cxl_type', 'module_type', 'terminal_id', 'comm_calc_level', 'under_sales_type']
+        if(corp.pv_options.paid.use_realtime_deposit)
+        {
+            keys.push('fin_id')
+            keys.push('fin_trx_delay')
+        }
+        return keys.includes(key)
+    }
+
     return {
-        head, headers
+        head, headers, isPrimaryHeader
     }
 })

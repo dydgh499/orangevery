@@ -45,6 +45,7 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
     headers['acct_num'] = '계좌번호(O)'
     headers['acct_name'] = '예금주(O)'
     headers['acct_bank_name'] = '입금은행명(O)'
+    headers['tax_category_type'] = '사업자 유형(O)'
     headers['custom_id'] = '커스텀 필터(X)'
 
     if(corp.pv_options.paid.use_collect_withdraw) 
@@ -59,7 +60,12 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 
+    const isPrimaryHeader = (key: string) => {
+        const keys = ['tax_category_type', 'custom_id']
+        return keys.includes(key)
+    }
+
     return {
-        head, headers, levels
+        head, headers, levels, isPrimaryHeader
     }
 })

@@ -56,7 +56,7 @@ const getSettleManagement = () => {
             }
             if(corp.pv_options.paid.use_collect_withdraw) {
                 settle_childs.push({
-                    title: '가맹점 직접출금',
+                    title: '모아서 출금 이력',
                     to: 'transactions-settle-merchandises-self-settle'
                 })
             }
