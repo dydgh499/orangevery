@@ -103,6 +103,11 @@ watchEffect(async () => {
                             상세정보 확인
                         </VBtn>
                     </VCol>
+                    <VCol>
+                        <b>구간 변경 주의사항</b>
+                        <br>
+                        <span>- 가맹점 하위의 모든 결제모듈의 PG사, 구간정보가 일괄 변경됩니다.</span>
+                    </VCol>
                 </template>
             </CreateHalfVCol>
         </VRow>
