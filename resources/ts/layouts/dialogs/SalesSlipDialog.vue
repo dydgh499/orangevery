@@ -41,6 +41,9 @@ const copySalesSlip = () => {
 const show = (item: SalesSlip) => {
     trans.value = item
     pg.value = props.pgs.find(pg => pg['id'] === item.pg_id)
+    console.log(props.pgs)
+    console.log(item.pg_id)
+    console.log(pg.value)
     visible.value = true
 }
 const cancelColor = computed(() => {
