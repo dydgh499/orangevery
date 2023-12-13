@@ -8,7 +8,6 @@ import corp from '@corp'
 
 export const tax_category_types = <Options[]>([
     {id:0, title:'과세'}, {id:1, title:'면세'}, 
-    {id:2, title:'복합과세'}
 ])
 
 export const useSearchStore = defineStore('mchtSearchStore', () => {
