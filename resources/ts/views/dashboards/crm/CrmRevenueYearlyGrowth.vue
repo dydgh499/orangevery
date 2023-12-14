@@ -46,6 +46,7 @@ const serieses = ref(<Series[][]>([
 
 const getSeries = (dates: string[], col: string, sec_col?: string) => {
     const amount: number[] = []; // 결과를 저장할 배열
+    console.log(dates)
     for (let i = 0; i < dates.length; i++) {
         const data = monthly_transactions.monthly[dates[i]][col]
         amount.unshift((sec_col ? data[sec_col] : data) / 100000000)
@@ -56,7 +57,7 @@ const getSeries = (dates: string[], col: string, sec_col?: string) => {
 watchEffect(() => {
     const currentTheme = vuetifyTheme.current.value.colors
     if(Object.keys(monthly_transactions).length) {
-        const keys = Object.keys(monthly_transactions.monthly)
+        const keys = Object.keys(monthly_transactions.monthly).reverse()
         if (keys.length > 0) {
             serieses.value[0][0].data = getSeries(keys, 'appr', 'amount')
             serieses.value[1][0].data = getSeries(keys, 'cxl', 'amount')
