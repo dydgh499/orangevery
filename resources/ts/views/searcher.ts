@@ -106,6 +106,8 @@ export const Searcher = (path: string) => {
         const p = cloneDeep(params)
         p.search = getSearch()        
         if(before_search != p.search) {
+            params.page = 1
+            router.push({query: {...router.currentRoute.value.query, ...{page:1}}})
             setChartProcess()
             before_search = p.search
         }
@@ -113,11 +115,13 @@ export const Searcher = (path: string) => {
     }
 
     const updateQueryString = (obj: any) => {
-        console.log(obj)
         router.push({query: {...router.currentRoute.value.query, ...obj}})
         const is_chart_update = Object.keys(obj).some(key => !['page', 'page_size', 'search'].includes(key))
-        if(is_chart_update)
+        if(is_chart_update) {
+            params.page = 1
+            router.push({query: {...router.currentRoute.value.query, ...{page:1}}})
             setChartProcess()
+        }
     }
     
     const setTable = async() => {
