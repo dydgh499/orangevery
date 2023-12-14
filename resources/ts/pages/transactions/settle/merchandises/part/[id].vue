@@ -155,7 +155,7 @@ watchEffect(() => {
                         label="실시간 이체 제외" color="primary"
                         @update:modelValue="[store.updateQueryString({ expect_realtime_deposit: store.params.expect_realtime_deposit })]"
                         v-if="corp.pv_options.paid.use_realtime_deposit"/>
-                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_cancel" label="취소매출 조회"
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_cancel" label="취소 매출 조회"
                         color="error"
                         @update:modelValue="store.updateQueryString({ only_cancel: store.params.only_cancel })" />
                 </div>

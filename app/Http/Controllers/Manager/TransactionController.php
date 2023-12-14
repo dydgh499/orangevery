@@ -59,6 +59,40 @@ class TransactionController extends Controller
         return $this->transPagenation($query, 'transactions', $this->cols, $page, $page_size);
     }
 
+    public function optionFilter($query, $request)
+    {
+        if($request->only_cancel)
+            $query = $query->where('transactions.is_cancel', true);
+        if($request->mcht_settle_id)
+            $query = $query->where('transactions.mcht_settle_id', $request->mcht_settle_id);
+        if($request->only_realtime_fail)
+        {
+            $trx_ids = $query->pluck('transactions.id')->all();
+            $query = $query->failRealtime($trx_ids);            
+        }
+        if($request->no_settlement)
+        {
+            if($request->level == 10)
+                $settle_key = 'mcht_settle_id';
+            else if($request->level <= 30)
+            {
+                $idx = globalLevelByIndex($request->level);
+                $settle_key = 'sales'.$idx.'_settle_id';
+            }
+            else
+                $settle_key = 'dev_settle_id';
+            $query = $query->whereNull("transactions.$settle_key");
+        }
+
+        for ($i=0; $i < 6; $i++) 
+        {
+            $col = 'sales'.$i.'_settle_id';
+            if($request->has($col))
+                $query = $query->where('transactions.'.$col, $request->input($col));
+        }
+        return $query;
+    }
+
     public function commonSelect($request)
     {
         $search = $request->input('search', '');
@@ -79,26 +113,7 @@ class TransactionController extends Controller
                     ->orWhere('merchandises.business_num', 'like', "%$search%");
             });
         $query = $this->transDateFilter($query, $request->s_dt, $request->e_dt, $request->use_search_date_detail);
-
-        if($request->only_cancel)
-            $query = $query->where('transactions.is_cancel', true);
-
-        if($request->mcht_settle_id)
-            $query = $query->where('transactions.mcht_settle_id', $request->mcht_settle_id);
-
-        if($request->only_realtime_fail)
-        {
-            $trx_ids = $query->pluck('transactions.id')->all();
-            $query = $query->failRealtime($trx_ids);            
-        }
-
-        for ($i=0; $i < 6; $i++) 
-        {
-            $col = 'sales'.$i.'_settle_id';
-            if($request->has($col))
-                $query = $query->where('transactions.'.$col, $request->input($col));
-        }
-        return $query;
+        return $this->optionFilter($query ,$request);
     }
 
     /**

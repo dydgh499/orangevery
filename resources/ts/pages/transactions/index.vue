@@ -141,8 +141,10 @@ onMounted(() => {
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_realtime_fail" label="즉시출금 실패건 조회" color="error"
                         @update:modelValue="store.updateQueryString({ only_realtime_fail: store.params.only_realtime_fail })" 
                         v-if="corp.pv_options.paid.use_realtime_deposit"/>
-                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_cancel" label="취소매출 조회" color="error"
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_cancel" label="취소 매출 조회" color="error"
                         @update:modelValue="store.updateQueryString({ only_cancel: store.params.only_cancel })" />
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.no_settlement" label="미정산 매출 조회" color="warning"
+                        @update:modelValue="store.updateQueryString({ no_settlement: store.params.no_settlement })" />
                 </div>
             </template>
             <template #headers>
