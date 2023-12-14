@@ -27,24 +27,27 @@ const series = ref([
     },
 ])
 
-const getPreviousMonths = (dates: string[]) => {
+const getPreviousMonths = () => {
     const _months: string[] = []
-    for (let i = 0; i < dates.length; i++) {
-        const month = new Date(dates[i]).toLocaleString('default', { month: 'long' });
+    const keys = Object.keys(monthly_transactions.monthly)
+    for (let i = 0; i < keys.length; i++) {
+        const month = new Date(keys[i]).toLocaleString('default', { month: 'long' });
         _months.unshift(month)
     }
     months.value = _months
 }
-const getPreviousAmount = (dates: string[]) => {
+const getPreviousAmount = () => {
     const terminal_counts = []
     const hand_counts = []
     const auth_counts = []
     const simple_counts = []
-    for (let i = 0; i < dates.length; i++) {
-        const tmn_cnt = monthly_transactions[dates[i]].modules.terminal_count
-        const hand_cnt = monthly_transactions[dates[i]].modules.hand_count
-        const auth_cnt = monthly_transactions[dates[i]].modules.auth_count
-        const simple_cnt = monthly_transactions[dates[i]].modules.simple_count
+    const keys = Object.keys(monthly_transactions.monthly)
+    
+    for (let i = 0; i < keys.length; i++) {
+        const tmn_cnt = monthly_transactions.monthly[keys[i]].modules.terminal_count
+        const hand_cnt = monthly_transactions.monthly[keys[i]].modules.hand_count
+        const auth_cnt = monthly_transactions.monthly[keys[i]].modules.auth_count
+        const simple_cnt = monthly_transactions.monthly[keys[i]].modules.simple_count
 
         terminal_counts.unshift(tmn_cnt)
         hand_counts.unshift(hand_cnt)
@@ -55,13 +58,13 @@ const getPreviousAmount = (dates: string[]) => {
     series.value[1].data = hand_counts
     series.value[2].data = auth_counts
     series.value[3].data = simple_counts
+    console.log(series.value)
 }
 
-
 watchEffect(() => {
-    if (Object.keys(monthly_transactions).length > 0) {
-        getPreviousMonths(Object.keys(monthly_transactions))
-        getPreviousAmount(Object.keys(monthly_transactions))
+    if(Object.keys(monthly_transactions).length) {
+        getPreviousMonths()
+        getPreviousAmount()
     }
 })
 const chartOptions = computed(() => {

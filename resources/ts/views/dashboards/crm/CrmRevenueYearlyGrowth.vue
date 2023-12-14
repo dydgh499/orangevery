@@ -4,13 +4,11 @@ import { useTheme } from 'vuetify'
 import { hexToRgb } from '@layouts/utils'
 import { useCRMStore } from '@/views/dashboards/crm/crm'
 import type { Series } from '@/views/types'
-import { TitleOptions } from 'chart.js'
 
 const vuetifyTheme = useTheme()
 const { monthly_transactions, getColors, getMonths } = useCRMStore()
 const currentTab = ref<number>(0)
 const refVueApexChart = ref()
-
 
 const months = ref<string[]>([])
 const appr_colors = ref(<string[]>([]))
@@ -49,7 +47,7 @@ const serieses = ref(<Series[][]>([
 const getSeries = (dates: string[], col: string, sec_col?: string) => {
     const amount: number[] = []; // 결과를 저장할 배열
     for (let i = 0; i < dates.length; i++) {
-        const data = monthly_transactions[dates[i]][col]
+        const data = monthly_transactions.monthly[dates[i]][col]
         amount.unshift((sec_col ? data[sec_col] : data) / 100000000)
     }
     return amount
@@ -57,19 +55,22 @@ const getSeries = (dates: string[], col: string, sec_col?: string) => {
 
 watchEffect(() => {
     const currentTheme = vuetifyTheme.current.value.colors
-    const keys = Object.keys(monthly_transactions)
-    if (keys.length > 0) {
-        serieses.value[0][0].data = getSeries(keys, 'appr', 'amount')
-        serieses.value[1][0].data = getSeries(keys, 'cxl', 'amount')
-        serieses.value[2][0].data = getSeries(keys, 'amount')
-        serieses.value[3][0].data = getSeries(keys, 'profit')
+    if(Object.keys(monthly_transactions).length) {
+        const keys = Object.keys(monthly_transactions.monthly)
+        if (keys.length > 0) {
+            serieses.value[0][0].data = getSeries(keys, 'appr', 'amount')
+            serieses.value[1][0].data = getSeries(keys, 'cxl', 'amount')
+            serieses.value[2][0].data = getSeries(keys, 'amount')
+            serieses.value[3][0].data = getSeries(keys, 'profit')
 
-        months.value = getMonths(keys)
-        appr_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.primary)},0.16)`, `rgba(${hexToRgb(currentTheme.primary)},1)`)
-        cxl_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.error)},0.16)`, `rgba(${hexToRgb(currentTheme.error)},1)`)
-        amount_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.success)},0.16)`, `rgba(${hexToRgb(currentTheme.success)},1)`)
-        profit_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.warning)},0.16)`, `rgba(${hexToRgb(currentTheme.warning)},1)`)
+            months.value = getMonths(keys)
+            appr_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.primary)},0.16)`, `rgba(${hexToRgb(currentTheme.primary)},1)`)
+            cxl_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.error)},0.16)`, `rgba(${hexToRgb(currentTheme.error)},1)`)
+            amount_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.success)},0.16)`, `rgba(${hexToRgb(currentTheme.success)},1)`)
+            profit_colors.value = getColors(keys, `rgba(${hexToRgb(currentTheme.warning)},0.16)`, `rgba(${hexToRgb(currentTheme.warning)},1)`)
+        }
     }
+
 })
 const getChartData = (title: string, icon:string, color:string[], datas:Series[]) => {
     const currentTheme = vuetifyTheme.current.value.colors

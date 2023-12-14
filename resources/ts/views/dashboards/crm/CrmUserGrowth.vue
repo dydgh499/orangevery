@@ -25,18 +25,13 @@ const series = ref(<Series[]>([
 const rate = ref(0)
 const getChartData = (col: string): number[] => {
     const datas = []
-    const keys = Object.keys(props.datas)
+    const keys = Object.keys(props.datas.graph)
     for (let i = 0; i < keys.length; i++) 
     {
-        if(keys[i] === 'total')
-            continue
-        else
-        {
-            let data = props.datas[keys[i]][col]
-            if (col == 'del_rate')
-                data *= 1
-            datas.push(data)
-        }
+        let data = props.datas.graph[keys[i]][col]
+        if (col == 'del_rate')
+            data *= 1
+        datas.push(data)        
     }
     return datas
 }
@@ -44,8 +39,7 @@ watchEffect(() => {
     if (Object.keys(props.datas).length > 0) {
         series.value[0].data = getChartData('del_count')
         series.value[1].data = getChartData('add_count')
-        const curernt_month = new Date().toISOString().slice(0, 7)
-        rate.value = props.datas[curernt_month] && props.datas[curernt_month]['increase_rate'] ? props.datas[curernt_month]['increase_rate'] : 0;
+        rate.value = props.datas['cur_increase_rate'] as number
     }    
 })
 const chartOptions = computed(() => {

@@ -63,6 +63,8 @@ const pay = async () => {
 const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
 })
+
+
 watchEffect(() => {
     console.log(is_show_pay_button.value)
     hand_pay_info.pmod_id = props.pay_module.id
@@ -88,8 +90,8 @@ watchEffect(() => {
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                     <template #name>상품금액</template>
                     <template #input>
-                        <VTextField v-model="hand_pay_info.amount" type="number" suffix="₩" placeholder="거래금액을 입력해주세요"
-                            prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidator]" />
+                        <VTextField v-model="hand_pay_info.amount" suffix="₩" placeholder="거래금액을 입력해주세요"
+                            prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidator]" v-mask="format" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 12px 0;">
@@ -111,7 +113,7 @@ watchEffect(() => {
                     <template #name>카드번호</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.card_num" type="text" persistent-placeholder counter
-                            prepend-inner-icon="emojione:credit-card" placeholder="카드번호를 입력해주세요"
+                            prepend-inner-icon="emojione:credit-card" placeholder="카드번호를 입력해주세요" v-mask="'####-####-####-####-##'"
                             :rules="[requiredValidator]" maxlength="18" autocomplete="cc-number" />
                     </template>
                 </CreateHalfVCol>

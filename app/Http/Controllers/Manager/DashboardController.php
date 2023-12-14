@@ -25,12 +25,40 @@ class DashboardController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
 
+
+    public function transactionIncrease($key, $id, $settle_key)
+    {
+        $cur_e_dt = Carbon::now()->format('Y-m-d');
+        $cur_s_dt = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $last_e_dt = Carbon::now()->subMonths(1)->format('Y-m-d');
+        $last_s_dt = Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m-d');
+
+        $info = Transaction::selectRaw("
+            SUM(CASE WHEN date(trx_dt) BETWEEN '$cur_s_dt' AND '$cur_e_dt' THEN $settle_key ELSE 0 END) AS cur_profit,
+            SUM(CASE WHEN date(trx_dt) BETWEEN '$cur_s_dt' AND '$cur_e_dt' THEN amount ELSE 0 END) AS cur_amount,
+            SUM(CASE WHEN date(trx_dt) BETWEEN '$last_s_dt' AND '$last_e_dt' THEN $settle_key ELSE 0 END) AS last_profit,
+            SUM(CASE WHEN date(trx_dt) BETWEEN '$last_s_dt' AND '$last_e_dt' THEN amount ELSE 0 END) AS last_amount")
+            ->where($key, $id)
+            ->whereRaw("(date(trx_dt) BETWEEN '$last_s_dt' AND '$last_e_dt' OR date(trx_dt) BETWEEN '$cur_s_dt' AND '$cur_e_dt')")
+            ->first();
+
+        $cur_profit_rate = Round(is_null($info->last_profit) ? 0 : ($info->cur_profit - $info->last_profit) / $info->last_profit * 100, 3);
+        $cur_amount_rate = Round(is_null($info->last_amount) ? 0 : ($info->cur_amount - $info->last_amount) / $info->last_amount * 100, 3);
+        return [$cur_profit_rate, $cur_amount_rate, (int)$info->cur_profit, (int)$info->cur_amount];
+    }
     /*
      * 월별 거래 분석(10개월)
      */
     public function monthlyTranAnalysis(Request $request)
     {
-        $datas = [];
+        $datas = [
+            'monthly' => [],
+            'weekly' => [],
+            'cur_profit_rate' => 0,
+            'cur_amount_rate' => 0,
+            'cur_profit' => 0,
+            'cur_amount' => 0,
+        ];
         if(isOperator($request))
         {
             $key = 'brand_id';
@@ -44,11 +72,14 @@ class DashboardController extends Controller
             $id =  $request->user()->id;
             $settle_key = 'sales'.$idx.'_settle_amount';
         }
+
         $monthly = DB::select('CALL getMonthlyAmount(?, ?, ?)', [$key, $id, $settle_key]);
         $daily = DB::select('CALL getDailyAmount(?, ?)', [$key, $id]);
+        [$datas['cur_profit_rate'], $datas['cur_amount_rate'], $datas['cur_profit'], $datas['cur_amount']] = $this->transactionIncrease($key, $id, $settle_key);
+
         foreach($monthly as $month)
         {
-            $datas[$month->month] = [
+            $datas['monthly'][$month->month] = [
                 'modules' => [
                     "terminal_count" => (int)$month->terminal_count,
                     "hand_count"    => (int)$month->hand_count,
@@ -69,24 +100,10 @@ class DashboardController extends Controller
             ];
             if($month->month == Carbon::now()->format('Y-m'))
             {
-                $datas[$month->month]['week'] = [];
-                $before_date = Carbon::now()->subMonths(1)->format('Y-m');
-                if(isset($datas[$before_date]))
-                {
-                    $getIncreaseRate = function($col, $current, $before) {
-                        return $before[$col] == 0 ? 0 : (($current[$col] - $before[$col])/$before[$col]) * 100;
-                    };
-                    $datas[$month->month]['amount_rate'] = $getIncreaseRate('amount', $datas[$month->month], $datas[$before_date]);
-                    $datas[$month->month]['profit_rate'] = $getIncreaseRate('profit', $datas[$month->month], $datas[$before_date]);    
-                }
-                else
-                {
-                    $datas[$month->month]['amount_rate'] = 0;
-                    $datas[$month->month]['profit_rate'] = 0;
-                }
+                $datas['weekly'] = [];
                 foreach($daily as $day)
                 {
-                    $datas[$month->month]['week'][$day->day] = [
+                    $datas['weekly'][$day->day] = [
                         'appr' => [
                             'amount' => (int)$day->appr_amount,
                         ],
@@ -100,10 +117,34 @@ class DashboardController extends Controller
         }
         return $this->response(0, $datas);
     }
-
-    public function getUpSideChartFormat($query)
+    
+    public function increase($query, $table, $brand_id, $select, $cols)
     {
-        $datas = [];  
+       return $query->selectRaw($select)
+        ->fromSub(function ($query) use($table, $brand_id, $cols) {
+            $cur_e_dt = Carbon::now()->format('Y-m-d');
+            $cur_s_dt = Carbon::now()->startOfMonth()->format('Y-m-d');
+            $last_e_dt = Carbon::now()->subMonths(1)->format('Y-m-d');
+            $last_s_dt = Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m-d');
+            $format = "(SELECT $cols FROM $table WHERE brand_id=$brand_id AND date(updated_at) BETWEEN ? AND ?)";
+
+            $query->from($table)
+                ->selectRaw("$format as cur_mon_count, $format as last_month_count")
+                ->setBindings([$cur_s_dt, $cur_e_dt, $last_s_dt, $last_e_dt]);
+        }, 'counts')
+        ->first();
+    }
+
+    public function getUpSideChartFormat($query, $orm, $table, $brand_id)
+    {
+        $select = '(counts.cur_mon_count - counts.last_month_count) / NULLIF(counts.last_month_count, 1) * 100 AS cur_increase_rate';
+        $increase = $this->increase($orm, $table, $brand_id, $select, 'COUNT(*)');        
+
+        $datas = [
+            'cur_increase_rate' => (float)$increase['cur_increase_rate'],
+            'total' => $query->count(),
+            'graph' => [],
+        ];
         $monthly = $query
             ->select(
                 DB::raw("DATE_FORMAT(updated_at, '%Y-%m') as month"),
@@ -114,31 +155,17 @@ class DashboardController extends Controller
             ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%Y-%m')"))
             ->orderBy('month')
             ->get();
-        
-        $total = 0;
         foreach($monthly as $month)
         {
-            $total += $month->add_count;
+            //$total += $month->add_count;
             $month_total = $month->add_count + $month->del_count;
-            $datas[$month->month] = [
+            $datas['graph'][$month->month] = [
                 'add_rate' => $month->add_count/$month_total,
                 'del_rate' => $month->del_count/$month_total,
                 'add_count' => (int)$month->add_count,
                 'del_count' => (int)$month->del_count,
             ];
-            if($month->month == Carbon::now()->format('Y-m'))
-            {
-                $getIncreaseRate = function($col, $current, $before) {
-                    return $before[$col] == 0 ? 0 : (($current[$col] - $before[$col])/$before[$col]) * 100;
-                };                
-                $before_date = Carbon::now()->subMonths(1)->format('Y-m');
-                if(isset($datas[$before_date]))
-                {
-                    $datas[$month->month]['increase_rate'] = $getIncreaseRate('add_count', $datas[$month->month], $datas[$before_date]);
-                }
-            }
         }
-        $datas['total'] = $total;
         return $datas;
     }
 
@@ -149,7 +176,8 @@ class DashboardController extends Controller
     {
         $query = Merchandise::where('brand_id', $request->user()->brand_id);
         $query = globalAuthFilter($query, $request);
-        $chart = $this->getUpSideChartFormat($query);
+        $chart = $this->getUpSideChartFormat($query, new Merchandise, 'merchandises', $request->user()->brand_id);   
+
         return $this->response(0, $chart);
     }
 
@@ -160,8 +188,8 @@ class DashboardController extends Controller
     {
         $query = Salesforce::where('brand_id', $request->user()->brand_id);
         if(isSalesforce($request))
-            $query = $query->where('id', $request->user()->id);
-        $chart = $this->getUpSideChartFormat($query);
+            $query = $query->where('id', $request->user()->id);        
+        $chart = $this->getUpSideChartFormat($query, new Salesforce, 'salesforces', $request->user()->brand_id);
         return $this->response(0, $chart);
     }
 

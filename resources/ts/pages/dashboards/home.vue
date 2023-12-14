@@ -36,14 +36,10 @@ onMounted(async() => {
     is_skeleton.value = false
     watchEffect(() => {
         if(Object.keys(monthly_transactions).length > 0) {
-            const curernt_month = new Date().toISOString().slice(0, 7);
-            const current = monthly_transactions[curernt_month]
-            if(current) {
-                simpleStatisticsDemoCards.value[0]['stat'] = current.profit.toLocaleString()+' ￦'
-                simpleStatisticsDemoCards.value[1]['stat'] = current.amount.toLocaleString()+' ￦'
-                simpleStatisticsDemoCards.value[0]['change'] = current.profit_rate?.toLocaleString() +'%'
-                simpleStatisticsDemoCards.value[1]['change'] = current.amount_rate?.toLocaleString() +'%'
-            }
+            simpleStatisticsDemoCards.value[0]['stat'] = monthly_transactions.cur_profit.toLocaleString()+' ￦'
+            simpleStatisticsDemoCards.value[1]['stat'] = monthly_transactions.cur_amount.toLocaleString()+' ￦'
+            simpleStatisticsDemoCards.value[0]['change'] = monthly_transactions.cur_profit_rate?.toLocaleString() +'%'
+            simpleStatisticsDemoCards.value[1]['change'] = monthly_transactions.cur_amount_rate?.toLocaleString() +'%'
         }
     })
 })

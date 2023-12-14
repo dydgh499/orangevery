@@ -39,9 +39,9 @@ watchEffect(() => {
     const currentTheme = vuetifyTheme.current.value.colors
     if (Object.keys(monthly_transactions).length > 0) {
         const curernt_month = new Date().toISOString().slice(0, 7)
-        current.value = monthly_transactions[curernt_month]
+        current.value = monthly_transactions.monthly[curernt_month]
         if (current) {
-            const week = current.value['week']
+            const week = monthly_transactions.weekly
             if (week) {
                 const idays = Object.keys(week)
                 getSeries(idays, week)

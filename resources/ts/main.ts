@@ -9,13 +9,12 @@ import router from '@/router'
 import { pay_token, user_info } from '@axios'
 import { abilitiesPlugin } from '@casl/vue'
 import '@core-scss/template/index.scss'
-import VueMask from '@devindex/vue-mask'
 import '@styles/styles.scss'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { createPinia } from 'pinia'
+import { VueMaskDirective } from "v-mask"
 import { createApp } from 'vue'
-
 
 loadFonts()
 
@@ -68,8 +67,8 @@ app.use(i18n)
 app.use(abilitiesPlugin, ability, {
   useGlobalProperties: true,
 })
+app.directive('mask', VueMaskDirective)
 app.component('VueDatePicker', VueDatePicker)
-app.use(VueMask)
 
 // Mount vue app
 app.mount('#app')

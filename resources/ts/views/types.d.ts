@@ -740,11 +740,13 @@ export interface MonthlyTransChart {
 export interface UpSideChartData {
     add_rate: number,
     del_rate: number,
-    increase_rate:? number,
 }
 export interface UpSideChart {
     total: number,
-    [key: string]: UpSideChartData
+    cur_increase_rate: number,
+    graph:{
+        [key: string]: UpSideChartData
+    }
 }
 
 export interface NotiUrl {
