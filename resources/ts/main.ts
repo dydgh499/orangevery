@@ -13,7 +13,6 @@ import '@styles/styles.scss'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { createPinia } from 'pinia'
-import { VueMaskDirective } from "v-mask"
 import { createApp } from 'vue'
 
 loadFonts()

@@ -16,7 +16,6 @@
     "@floating-ui/dom": "1.2.7",
     "@mdi/font": "5.9.55",
     "@tabler/icons": "2.17.0",
-    "@titou10/v-mask": "^1.1.0",
     "@vuepic/vue-datepicker": "^6.1.0",
     "@vueup/vue-quill": "^1.2.0",
     "@vueuse/core": "10.1.0",

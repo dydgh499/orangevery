@@ -91,7 +91,7 @@ watchEffect(() => {
                     <template #name>상품금액</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.amount" suffix="₩" placeholder="거래금액을 입력해주세요"
-                            prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidator]" v-mask="format" />
+                            prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidator]" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 12px 0;">
@@ -113,15 +113,15 @@ watchEffect(() => {
                     <template #name>카드번호</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.card_num" type="text" persistent-placeholder counter
-                            prepend-inner-icon="emojione:credit-card" placeholder="카드번호를 입력해주세요" v-mask="'####-####-####-####-##'"
+                            prepend-inner-icon="emojione:credit-card" placeholder="카드번호를 입력해주세요"
                             :rules="[requiredValidator]" maxlength="18" autocomplete="cc-number" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                     <template #name>유효기간</template>
                     <template #input>
-                        <VTextField v-model="hand_pay_info.yymm" type="number" prepend-inner-icon="ic-baseline-calendar-today"
-                            placeholder="(MM/YY:0324)"
+                        <VTextField v-model="hand_pay_info.yymm" type="number"
+                            prepend-inner-icon="ic-baseline-calendar-today" placeholder="(MM/YY:0324)"
                             :rules="[requiredValidator, lengthValidatorV2(hand_pay_info.yymm, 4)]" maxlength="4" />
                     </template>
                 </CreateHalfVCol>
