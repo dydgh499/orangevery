@@ -41,9 +41,10 @@ class DashboardController extends Controller
             ->where($key, $id)
             ->whereRaw("(date(trx_dt) BETWEEN '$last_s_dt' AND '$last_e_dt' OR date(trx_dt) BETWEEN '$cur_s_dt' AND '$cur_e_dt')")
             ->first();
-
-        $cur_profit_rate = Round(is_null($info->last_profit) ? 0 : ($info->cur_profit - $info->last_profit) / $info->last_profit * 100, 3);
-        $cur_amount_rate = Round(is_null($info->last_amount) ? 0 : ($info->cur_amount - $info->last_amount) / $info->last_amount * 100, 3);
+        
+        
+        $cur_profit_rate = $info->last_profit ? Round(($info->cur_profit - $info->last_profit) / $info->last_profit * 100, 3) : 0;
+        $cur_amount_rate = $info->last_amount ? Round(($info->cur_amount - $info->last_amount) / $info->last_amount * 100, 3) : 0;
         return [$cur_profit_rate, $cur_amount_rate, (int)$info->cur_profit, (int)$info->cur_amount];
     }
     /*
