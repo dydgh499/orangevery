@@ -169,29 +169,23 @@ class QuickViewController extends Controller
             ->first(['id', 'collect_withdraw_fee']);
         $pay_modules = PaymentModule::whereIn('id', $merchandise->transactions->pluck('pmod_id')->all())
             ->get(['id', 'fin_trx_delay', 'use_realtime_deposit']);
-        // 출금액
-        $total_withdraw_amount = count($merchandise->collectWithdraws) ? $merchandise->collectWithdraws[0]->total_withdraw_amount : 0;
-        // 취소 후 입금
+
+        $total_withdraw_amount  = $merchandise->collectWithdraws->sum('total_withdraw_amount'); // 출금액        
         $cancel_deposit = $merchandise->transactions->reduce(function($carry, $transaction) {
             return $carry + $transaction->cancelDeposits->sum('deposit_amount');
-        }, 0);
-        // 정산금
+        }, 0);  // 취소 후 입금
         $profit = $merchandise->transactions->reduce(function($carry, $transaction) use($pay_modules) {
             $pay_module = $pay_modules->firstWhere('id', $transaction->pmod_id);
             if($pay_module)
-            {
-                // 즉시출금의 경우, 정산금에 포함하지 않는다.
+            {   // 즉시출금의 경우, 정산금에 포함하지 않는다.
                 if($pay_module->use_realtime_deposit && $pay_module->fin_trx_delay > -1)
                     return $carry;
                 else
                     return $carry + $transaction->mcht_settle_amount;
             }
             else
-            {
-                error([], 'NOT FOUND Paymodules');
-                return $carry;    
-            }
-        }, 0);
+                return $carry;
+        }, 0);  // 정산금
 
         return [
             'profit' => ($profit + $cancel_deposit - $total_withdraw_amount),
