@@ -107,7 +107,6 @@ export const Searcher = (path: string) => {
         p.search = getSearch()        
         if(before_search != p.search) {
             params.page = 1
-            router.push({query: {...router.currentRoute.value.query, ...{page:1}}})
             setChartProcess()
             before_search = p.search
         }
@@ -115,11 +114,14 @@ export const Searcher = (path: string) => {
     }
 
     const updateQueryString = (obj: any) => {
-        router.push({query: {...router.currentRoute.value.query, ...obj}})
         const is_chart_update = Object.keys(obj).some(key => !['page', 'page_size', 'search'].includes(key))
+        const query = {...router.currentRoute.value.query, ...obj}
         if(is_chart_update) {
             params.page = 1
-            router.push({query: {...router.currentRoute.value.query, ...{page:1}}})
+            query.page = 1
+        }
+        router.push({query: query})
+        if(is_chart_update) {
             setChartProcess()
         }
     }
