@@ -22,7 +22,7 @@ const formatTime = <any>(inject('$formatTime'))
 
 const props = defineProps<Props>()
 const { pgs, pss, settle_types, terminals, cus_filters, psFilter, finance_vans } = useStore()
-const { sales, mchts } = useSalesFilterStore()
+const { sales, mchts, initAllSales } = useSalesFilterStore()
 const { theme } = useThemeConfig()
 
 const levels = corp.pv_options.auth.levels
@@ -108,6 +108,7 @@ const hintSalesApplyFee = (sales_id: number | null): string => {
         return ''
 }
 
+initAllSales()
 onMounted(async () => {
     props.item.dev_fee = (props.item.dev_fee * 100).toFixed(3)
     props.item.dev_realtime_fee = (props.item.dev_realtime_fee * 100).toFixed(3)
@@ -149,12 +150,11 @@ onMounted(async () => {
                                 <template #input>
                                     <VRow>
                                         <VCol>
-                                            <VAutocomplete :menu-props="{ maxHeight: 400 }"
-                                                v-model="props.item['sales'+(6 - i)+'_id']"
-                                                :items="[{ id: 0, sales_name: '선택안함' }].concat(sales[6 - i].value)"
-                                                prepend-inner-icon="ph:share-network"
-                                                :label="levels['sales'+(6-i)+'_name']+' 선택'" item-title="sales_name"
-                                                item-value="id" persistent-hint single-line :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])"/>
+                                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item['sales'+(6 - i)+'_id']"
+                                                :items="sales[6-i].value"
+                                                prepend-inner-icon="ph:share-network" :label="levels['sales'+(6-i)+'_name']+' 선택'" 
+                                                item-title="sales_nasme" item-value="id" persistent-hint single-line 
+                                                :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])"/>
                                                 <VTooltip activator="parent" location="top" v-if="props.item['sales'+(6-i)+'_id']">
                                                     {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
                                                 </VTooltip>
