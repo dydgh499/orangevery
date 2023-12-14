@@ -66,7 +66,6 @@ app.use(i18n)
 app.use(abilitiesPlugin, ability, {
   useGlobalProperties: true,
 })
-app.directive('mask', VueMaskDirective)
 app.component('VueDatePicker', VueDatePicker)
 
 // Mount vue app
