@@ -127,13 +127,13 @@ queryToStoreParams()
                             </template>
                             <template v-if="head.path === 'transactions' || head.path === 'transactions/settle-histories/merchandises' || head.path === 'transactions/settle-histories/salesforces'">
                                 <VSelect v-model="date_selecter" :items="[{ id: null, title: '기간 조회' }].concat(dates)"
-                                    density="compact" variant="outlined" item-title="title" item-value="id"
+                                    density="compact" variant="outlined" item-title="title" item-value="id" label="기간 조회" single-line
                                     style="min-width: 10em;" @update:modelValue="[setDateRange(), dateChanged(store)]"
                                      />
                             </template>
                             <template
                                 v-else-if="head.path === 'salesforces' || head.path === 'transactions/settle/salesforces' || head.path === 'transactions/settle-histories/salesforces'">
-                                <VSelect v-model="store.params.level" :items="getSalesforceItems" density="compact"
+                                <VSelect v-model="store.params.level" :items="getSalesforceItems" density="compact"  label="전체" single-line
                                     variant="outlined" item-title="title" item-value="id" style="min-width: 10em;"
                                     @update:modelValue="store.updateQueryString({level:store.params.level})" />
                             </template>
