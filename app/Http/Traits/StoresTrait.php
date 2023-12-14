@@ -62,7 +62,7 @@ trait StoresTrait
         $sale = $checkExist(new Salesforce, $brand_id, $user_names);
         $oper = $checkExist(new Operator, $brand_id, $user_names);
 
-        return $mcht->unionAll($sale)->unionAll($oper)->get()->toArray();
+        return $mcht->unionAll($sale)->unionAll($oper)->pluck('user_name')->toArray();
     }
 
     public function isExistMutual($orm, $brand_id, $col, $mutual)
