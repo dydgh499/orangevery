@@ -1,24 +1,42 @@
 <script lang="ts" setup>
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
-import { salesLevels } from '@axios'
+import { salesLevels, getUserLevel } from '@axios'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import type { Salesforce } from '@/views/types'
 import { requiredValidator, nullValidator } from '@validators'
+import type { Options } from '@/views/types';
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import SalesforceBatchOverview from '@/views/salesforces/SalesforceBatchOverview.vue'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
-import { getUserLevel } from '@axios'
 import corp from '@corp'
 
 interface Props {
     item: Salesforce,
 }
 const props = defineProps<Props>()
-const all_sales = salesLevels()
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
+
+const levels = corp.pv_options.auth.levels
+const addAbleSalesLevels = () => {
+    const sales = <Options[]>([]);
+    if(levels.sales0_use && getUserLevel() > 13)
+        sales.push({id: 13, title: levels.sales0_name})
+    if(levels.sales1_use && getUserLevel() > 15)
+        sales.push({id: 15, title: levels.sales1_name})
+    if(levels.sales2_use && getUserLevel() > 17)
+        sales.push({id: 17, title: levels.sales2_name})
+    if(levels.sales3_use && getUserLevel() > 20)
+        sales.push({id: 20, title: levels.sales3_name})
+    if(levels.sales4_use && getUserLevel() > 25)
+        sales.push({id: 25, title: levels.sales4_name})
+    if(levels.sales5_use && getUserLevel() > 30)
+        sales.push({id: 30, title: levels.sales5_name})
+    return sales
+}
+
 </script>
 <template>
     <VRow>
@@ -76,7 +94,7 @@ const tax_types = settleTaxTypes()
                                 </BaseQuestionTooltip>
                             </template>
                             <template #input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level" :items="all_sales"
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level" :items="addAbleSalesLevels()"
                                     prepend-inner-icon="ph:share-network" label="영업자 등급 선택" item-title="title"
                                     item-value="id" persistent-hint single-line :rules="[nullValidator]"
                                     :readonly="props.item.id != 0" />
