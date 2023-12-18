@@ -66,22 +66,9 @@ class ComplaintRequest extends FormRequest
         return $params;
     }
 
-    protected function prepareForValidation()
-    {
-        if ($this->has('is_deposit')) 
-        {
-            $is_deposit = $this->input('is_deposit');    
-            $is_deposit = $this->convertToBoolean($is_deposit);
-            $this->merge(['is_deposit' => $is_deposit]);
-        }
-    }
-
     public function data()
     {
         $data = $this->getParmasBaseKey();
-        if(strpos($data['appr_dt'], 'T') !== false)
-            $data['appr_dt'] = explode('T', $data['appr_dt'])[0];
-
         $data['brand_id'] = $this->user()->brand_id;
         return $data;
     }

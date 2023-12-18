@@ -24,7 +24,7 @@ export const issuers = [
 
 export const useSearchStore = defineStore('complaintSearchStore', () => {
     const store = Searcher('complaints')
-    const head  = Header('services/brands', '서비스 관리')
+    const head  = Header('complaints', '민원 관리')
     const headers: Record<string, string|object> = {
         'id' : 'NO.',
         'mcht_name' : '가맹점 상호',

@@ -237,6 +237,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('noti-urls', NotiUrlController::class); 
         });
 
+
+        Route::apiResource('complaints', ComplaintController::class);
         Route::apiResource('salesforces', SalesforceController::class);
         Route::apiResource('transactions', TransactionController::class);
         Route::apiResource('merchandises', MerchandiseController::class);

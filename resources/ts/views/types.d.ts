@@ -609,7 +609,7 @@ export interface Complaint {
     mcht_name: string | null,
     tid: string,
     cust_name: string,
-    appr_dt: Date | null,
+    appr_dt: string | null,
     appr_num: string,
     phone_num: string,
     hand_cust_name: string,
