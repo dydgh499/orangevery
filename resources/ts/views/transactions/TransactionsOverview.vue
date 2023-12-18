@@ -153,7 +153,7 @@ onMounted(async () => {
                                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item['sales'+(6 - i)+'_id']"
                                                 :items="sales[6-i].value"
                                                 prepend-inner-icon="ph:share-network" :label="levels['sales'+(6-i)+'_name']+' 선택'" 
-                                                item-title="sales_name" item-value="id" persistent-hint single-line 
+                                                item-title="sales_name" item-value="id" persistent-hint single-line
                                                 :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])"/>
                                                 <VTooltip activator="parent" location="top" v-if="props.item['sales'+(6-i)+'_id']">
                                                     {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}

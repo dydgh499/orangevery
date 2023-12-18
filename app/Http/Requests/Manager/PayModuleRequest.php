@@ -85,6 +85,7 @@ class PayModuleRequest extends FormRequest
             'use_realtime_deposit' => 'required',
             'show_pay_view' => 'required',
             'comm_settle_fee' => 'required|numeric',
+            'under_sales_amt' => 'nullable|numeric',
         ];
         return $this->getRules($this->keys, $sub);
     }
