@@ -40,7 +40,6 @@ const getAbilitiesMenu = computed(() => {
             icon: { icon: 'tabler-smart-home' },
             to: 'quick-view',
         },
-        { heading: 'User information' },
         ...getUserTap(),
         { heading: 'Transaction' },
         ...payments,
