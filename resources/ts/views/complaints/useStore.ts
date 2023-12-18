@@ -48,7 +48,7 @@ export const useSearchStore = defineStore('complaintSearchStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 
-    const exporter = async (type: number) => {      
+    const exporter = async (type: number) => {
         const keys = Object.keys(head.flat_headers.value)
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         const datas = r.data.content;

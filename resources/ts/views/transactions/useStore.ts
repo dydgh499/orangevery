@@ -38,7 +38,7 @@ export const realtimeResult = (item: Transaction) => {
     if(is_error)    // 에러
         return StatusColors.Error
 
-    if(item.fin_trx_delay == -1 && item.realtimes?.length == 0)    // 모아서 출금
+    if(item.fin_trx_delay as number < 0 && item.realtimes?.length == 0)    // 모아서 출금
         return StatusColors.Info
     if(item.realtimes?.length == 0) //요청 대기
     {            

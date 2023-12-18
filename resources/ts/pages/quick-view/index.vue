@@ -9,6 +9,7 @@ import Recent30DaysRankOverview from '@/views/quick-view/Recent30DaysRankOvervie
 import Recent30DaysContentOverview from '@/views/quick-view/Recent30DaysContentOverview.vue'
 import type { MchtRecentTransactions } from '@/views/types'
 import router from '@/router'
+import corp from '@corp'
 
 const transactions = ref(<MchtRecentTransactions>({}))
 const is_skeleton = ref(true)
@@ -36,6 +37,10 @@ const toHandPayLink = () => {
 const getWithdrawAbleAmount = async() => {
     const r = await get('/api/v1/quick-view/withdraw-able-amount', {})
     able_balance.value = Number(r.data.profit) - r.data.withdraw_fee
+}
+const isBrightFix = () => {
+    // temp function
+    return (corp.id == 14 || corp.id == 12) ? true : false
 }
 
 const requestWithdraw = async() => {
@@ -93,7 +98,7 @@ watchEffect(() => {
                     </VCol>
                 </template>
             </CardLayout>
-            <CardLayout :padding="true" v-if="getUserLevel() == 10 && user_info.use_collect_withdraw">
+            <CardLayout :padding="true" v-if="getUserLevel() == 10 && user_info.use_collect_withdraw && isBrightFix()">
                 <template #content>
                     <VCol class="d-flex justify-space-between small-font">
                         <div>

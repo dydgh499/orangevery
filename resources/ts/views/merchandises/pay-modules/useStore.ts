@@ -17,7 +17,6 @@ export const abnormal_trans_limits = <Options[]>([
 export const module_types = <Options[]>([
     { id: 0, title: "장비" }, { id: 1, title: "수기결제" },
     { id: 2, title: "인증결제" }, { id: 3, title: "간편결제" },
-    /*{ id: 4, title: "실시간 이체" },*/
 ])
 export const installments = <Options[]>([
     { id: 0, title: "일시불" }, { id: 2, title: "2개월" },
@@ -40,17 +39,20 @@ export const under_sales_types = <Options[]>([
 ])
 export const comm_settle_types = <Options[]>([
     {id: 0, title:'개통월부터 적용'},
-    {id: 1, title:'개통월 M+1부터 적용'}, 
+    {id: 1, title:'개통월 M+1부터 적용'},
     {id: 2, title:'개통월 M+2부터 적용'},
 ])
 export const fin_trx_delays = <Options[]>([
-    {id: -1, title:'모아서 출금(정산)'},
     {id: 0, title:'즉시입금'},
     {id: 15, title:'15분'},
     {id: 30, title:'30분'}, 
     {id: 45, title:'45분'},
     {id: 60, title:'60분'},
 ])
+if(corp.pv_options.paid.use_collect_withdraw)
+    fin_trx_delays.unshift(<Options>{id: -1, title:'모아서 출금(직접 정산)'})
+if(corp.pv_options.paid.use_collect_withdraw_scheduler)
+    fin_trx_delays.unshift(<Options>{id: -2, title: '모아서 출금(1시간 스케줄링)'})
 
 export const cxl_types = <Options[]>([
     {id: 0, title:'취소금지'},
