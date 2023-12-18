@@ -54,7 +54,7 @@ class RealtimeSendHistoryController extends Controller
                     return [
                         'brand_id' => $merchandise->brand_id,
                         'mcht_id' => $merchandise->id,
-                        'withdraw_amount' => $withdraw_amount,
+                        'withdraw_amount' => $withdraw_amount - $withdraw_fee,
                         'withdraw_fee'    => $withdraw_fee,
                         'fin_id' => $pay_module['fin_id'],
                         'acct_num' => $merchandise->acct_num,
