@@ -31,34 +31,9 @@ class RealtimeSendHistoryController extends Controller
         $this->base_noti_url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes';
     }
     
-    /**
-     * 1시간 간격으로 실시간 정산금 자동 스케줄링
-     */
-    public function __invoke()
+    public function getAutoWithdrawParams($merchandises, $pay_modules)
     {
-        $merchandises = Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
-            ->where('merchandises.use_collect_withdraw', true)
-            ->where('merchandises.is_delete', false)
-            ->where('payment_modules.use_realtime_deposit', true)
-            ->where('payment_modules.is_delete', false)
-            ->where('payment_modules.fin_id', '>', 0)
-            ->where('payment_modules.fin_trx_delay', -2)
-            ->with(['noSettles.cancelDeposits', 'collectWithdraws'])
-            ->get([
-                'merchandises.brand_id', 'merchandises.id', 'merchandises.collect_withdraw_fee', 
-                'merchandises.acct_num', 'merchandises.acct_name', 'merchandises.acct_bank_name', 
-                'merchandises.acct_bank_code', 'payment_modules.id as pmod_id', 'payment_modules.fin_id'
-            ]);
-        $pay_modules = [];
-        foreach($merchandises as $merchandise)
-        {
-            $pay_modules[] = [
-                'id'        => $merchandise->pmod_id,
-                'mcht_id'   => $merchandise->id,
-                'fin_id'    => $merchandise->fin_id,
-            ];
-        }
-        $merchandises = $merchandises->unique('id');
+        $params = [];
         foreach($merchandises as $merchandise)
         {
             $idx = array_search($merchandise->id, array_column($pay_modules, 'mcht_id'));
@@ -78,7 +53,7 @@ class RealtimeSendHistoryController extends Controller
                 $withdraw_fee = $merchandise->collect_withdraw_fee;                
                 if($withdraw_amount - $withdraw_fee > 0)
                 {
-                    $params = [
+                    $params[] = [
                         'brand_id' => $merchandise->brand_id,
                         'mcht_id' => $merchandise->id,
                         'withdraw_amount' => $withdraw_amount,
@@ -89,12 +64,46 @@ class RealtimeSendHistoryController extends Controller
                         'acct_bank_name' => $merchandise->acct_bank_name,
                         'acct_bank_code' => $merchandise->acct_bank_code,
                     ];
-                    $url = $this->base_noti_url.'/single-deposit';
-                    $res = post($url, $params);
-                    if($res['code'] == 201)
-                        return $this->response($res ? 1 : 990);
                 }
             }
+        }
+        return $params;
+    }
+
+    /**
+     * 1시간 간격으로 실시간 정산금 자동 스케줄링
+     */
+    public function __invoke()
+    {
+        $merchandises = Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
+            ->where('merchandises.use_collect_withdraw', true)
+            ->where('merchandises.is_delete', false)
+            ->where('payment_modules.use_realtime_deposit', true)
+            ->where('payment_modules.is_delete', false)
+            ->where('payment_modules.fin_id', '>', 0)
+            ->where('payment_modules.fin_trx_delay', -2)
+            ->with(['noSettles.cancelDeposits', 'collectWithdraws'])
+            ->get([
+                'merchandises.brand_id', 'merchandises.id', 'merchandises.collect_withdraw_fee', 
+                'merchandises.acct_num', 'merchandises.acct_name', 'merchandises.acct_bank_name', 
+                'merchandises.acct_bank_code', 'payment_modules.id as pmod_id', 'payment_modules.fin_id'
+            ]);
+        $pay_modules = $merchandises->map(function ($merchandise) {
+            return [
+                'id'      => $merchandise->pmod_id,
+                'mcht_id' => $merchandise->id,
+                'fin_id'  => $merchandise->fin_id,
+            ];
+        })->all();
+        $merchandises = $merchandises->unique('id');        
+        $params = $this->getAutoWithdrawParams($merchandises, $pay_modules);
+
+        logging(['params'=>$params], 'realtime-auto-withdraws');
+        foreach($params as $param)
+        {
+            $res = post($this->base_noti_url.'/single-deposit', $param);
+            if($res['code'] == 201)
+                return $this->response($res ? 1 : 990);
         }
     }
 
