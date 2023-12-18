@@ -118,31 +118,29 @@ class SalesforceController extends Controller
      */
     public function store(SalesforceRequest $request)
     {
-        if($request->user()->tokenCan(15))
+        if(isSalesforce($request) &&  $request->level >= $request->user()->level)
+            return $this->extendResponse(951, "추가할 수 없는 등급입니다.");
+
+        $validated    = $request->validate(['user_pw'=>'required']);
+        $exist_mutual = $this->isExistMutual($this->salesforces, $request->user()->brand_id, 'sales_name', $request->sales_name);
+        if(!$exist_mutual)
         {
-            $validated  = $request->validate(['user_pw'=>'required']);
-            $exist_mutual = $this->isExistMutual($this->salesforces, $request->user()->brand_id, 'sales_name', $request->sales_name);
-            if(!$exist_mutual)
+            $result = $this->isExistUserName($request->user()->brand_id, $request->user_name);
+            if($result === false)
             {
-                $result = $this->isExistUserName($request->user()->brand_id, $request->user_name);
-                if($result === false)
-                {
-                    $user = $request->data();
-                    $user = $this->saveImages($request, $user, $this->imgs);
-                    $user['user_pw'] = Hash::make($request->input('user_pw'));
-                    $res = $this->salesforces->create($user);
-    
-                    operLogging(HistoryType::CREATE, $this->target, $user, $user['sales_name']);
-                    return $this->response($res ? 1 : 990, ['id'=>$res->id]);
-                }
-                else    
-                    return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+                $user = $request->data();
+                $user = $this->saveImages($request, $user, $this->imgs);
+                $user['user_pw'] = Hash::make($request->input('user_pw'));
+                $res = $this->salesforces->create($user);
+
+                operLogging(HistoryType::CREATE, $this->target, $user, $user['sales_name']);
+                return $this->response($res ? 1 : 990, ['id'=>$res->id]);
             }
-            else
-                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
+            else    
+                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
         }
         else
-            return $this->response(951);
+            return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
     }
 
     /**
