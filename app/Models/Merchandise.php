@@ -36,13 +36,17 @@ class Merchandise extends Authenticatable
         return $this->hasMany(RegularCreditCard::class, 'mcht_id');
     }
 
+    public function noSettles()
+    {
+        $cols = ['id', 'mcht_id', 'pmod_id', 'amount', 'mcht_settle_amount', 'mcht_settle_fee', 'hold_fee', 'is_cancel', 'created_at'];
+        return $this->hasMany(Transaction::class, 'mcht_id')
+            ->whereNull('mcht_settle_id')
+            ->select($cols);
+    }
+
     public function transactions()
     {
-        $cols = [
-            'id', 'mcht_id', 'pmod_id',
-            'amount', 'mcht_settle_amount', 'mcht_settle_fee',
-            'hold_fee', 'is_cancel', 'created_at',
-        ];
+        $cols = ['id', 'mcht_id', 'pmod_id', 'amount', 'mcht_settle_amount', 'mcht_settle_fee', 'hold_fee', 'is_cancel', 'created_at'];
         return $this->hasMany(Transaction::class, 'mcht_id')
             ->noSettlement('mcht_settle_id')
             ->select($cols);

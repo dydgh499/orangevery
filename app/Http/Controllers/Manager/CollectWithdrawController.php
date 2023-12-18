@@ -60,7 +60,7 @@ class CollectWithdrawController extends Controller
     }
 
     /**
-     * 추가
+     * 출금 요청
      *
      * 가맹점만 가능
      *

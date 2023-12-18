@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Log;
 
+use App\Models\Merchandise;
+use App\Models\Transaciton;
 use App\Models\HeadOfficeAccount;
 use App\Models\Log\RealtimeSendHistory;
 
@@ -9,6 +11,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
 
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -28,6 +31,73 @@ class RealtimeSendHistoryController extends Controller
         $this->base_noti_url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes';
     }
     
+    /**
+     * 1시간 간격으로 실시간 정산금 자동 스케줄링
+     */
+    public function __invoke()
+    {
+        $merchandises = Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
+            ->where('merchandises.use_collect_withdraw', true)
+            ->where('merchandises.is_delete', false)
+            ->where('payment_modules.use_realtime_deposit', true)
+            ->where('payment_modules.is_delete', false)
+            ->where('payment_modules.fin_id', '>', 0)
+            ->where('payment_modules.fin_trx_delay', -2)
+            ->with(['noSettles.cancelDeposits', 'collectWithdraws'])
+            ->get([
+                'merchandises.brand_id', 'merchandises.id', 'merchandises.collect_withdraw_fee', 
+                'merchandises.acct_num', 'merchandises.acct_name', 'merchandises.acct_bank_name', 
+                'merchandises.acct_bank_code', 'payment_modules.id as pmod_id', 'payment_modules.fin_id'
+            ]);
+        $pay_modules = [];
+        foreach($merchandises as $merchandise)
+        {
+            $pay_modules[] = [
+                'id'        => $merchandise->pmod_id,
+                'mcht_id'   => $merchandise->id,
+                'fin_id'    => $merchandise->fin_id,
+            ];
+        }
+        $merchandises = $merchandises->unique('id');
+        foreach($merchandises as $merchandise)
+        {
+            $idx = array_search($merchandise->id, array_column($pay_modules, 'mcht_id'));
+            if($idx !== false)
+            {
+                $pay_module = $pay_modules[$idx];
+                // 정산금
+                $profit = $merchandise->noSettles->sum('mcht_settle_amount');
+                // 출금 완료금
+                $total_withdraw_amount  = $merchandise->collectWithdraws->sum('total_withdraw_amount');       
+                // 취소 후 입금
+                $cancel_deposit = $merchandise->noSettles->reduce(function($carry, $transaction) {
+                    return $carry + $transaction->cancelDeposits->sum('deposit_amount');
+                }, 0);
+                //정산금 + 취소후 입금 - 출금 완료금
+                $withdraw_amount = ($profit + $cancel_deposit - $total_withdraw_amount);
+                $withdraw_fee = $merchandise->collect_withdraw_fee;                
+                if($withdraw_amount - $withdraw_fee > 0)
+                {
+                    $params = [
+                        'brand_id' => $merchandise->brand_id,
+                        'mcht_id' => $merchandise->id,
+                        'withdraw_amount' => $withdraw_amount,
+                        'withdraw_fee'    => $withdraw_fee,
+                        'fin_id' => $pay_module['fin_id'],
+                        'acct_num' => $merchandise->acct_num,
+                        'acct_name' => $merchandise->acct_name,
+                        'acct_bank_name' => $merchandise->acct_bank_name,
+                        'acct_bank_code' => $merchandise->acct_bank_code,
+                    ];
+                    $url = $this->base_noti_url.'/single-deposit';
+                    $res = post($url, $params);
+                    if($res['code'] == 201)
+                        return $this->response($res ? 1 : 990);
+                }
+            }
+        }
+    }
+
     public function commonSelect($request)
     {
         $search = $request->input('search', '');
@@ -71,18 +141,6 @@ class RealtimeSendHistoryController extends Controller
     }
 
     /**
-     * 추가
-     *
-     * 운영자 이상 가능
-     *
-     * @bodyParam user_pw string 유저 패스워드
-     */
-    public function store(Request $request)
-    {
-
-    }
-
-    /**
      * 단일조회(상세조회)
      *
      * 운영자 이상 가능
@@ -93,22 +151,6 @@ class RealtimeSendHistoryController extends Controller
     {
         $data = $this->realtime_send_histories->where('id', $id)->first();
         return $this->response($data ? 0 : 1000, $data);
-    }
-
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * 단일삭제
-     *
-     * @urlParam id integer required 이상거래 PK
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     /**
