@@ -97,7 +97,7 @@ class ComplaintController extends Controller
      * @urlParam id integer required 공지사항 PK
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Post $notice)
+    public function destroy($id)
     {
         $res = $this->delete($this->complaints->where('id', $id));
         return $this->response($res ? 1 : 990, ['id'=>$id]);
