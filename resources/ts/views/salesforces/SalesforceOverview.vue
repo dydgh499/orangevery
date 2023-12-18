@@ -35,7 +35,7 @@ const addAbleSalesLevels = () => {
         sales.push({id: 25, title: levels.sales4_name})
     if(levels.sales5_use && getUserLevel() > 30)
         sales.push({id: 30, title: levels.sales5_name})
-    return props.item.id != 0 ? salesLevels() : sales
+    return props.item.id == 0 ? salesLevels() : sales
 }
 
 </script>
