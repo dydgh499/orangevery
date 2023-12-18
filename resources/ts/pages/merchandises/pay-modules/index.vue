@@ -9,6 +9,7 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { DateFilters } from '@core/enums'
 import { getUserLevel, isAbleModifyMcht } from '@axios'
 
+const add_able = getUserLevel() >= 35 || isAbleModifyMcht()
 const { request } = useRequestStore()
 const { pgs, pss, settle_types, finance_vans } = useStore()
 const { store, head, exporter, metas } = useSearchStore()
@@ -45,7 +46,7 @@ onMounted(() => {
 })
 </script>
 <template>
-    <BaseIndexView placeholder="MID, TID, 가맹점 상호 검색" :metas="metas" :add="getUserLevel() >= 35 || isAbleModifyMcht()" add_name="결제모듈" :date_filter_type="DateFilters.NOT_USE">
+    <BaseIndexView placeholder="MID, TID, 가맹점 상호 검색" :metas="metas" :add="add_able" add_name="결제모듈" :date_filter_type="DateFilters.NOT_USE">
         <template #filter>
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true" :sales="true">                
                 <template #pg_extra_field>

@@ -6,9 +6,10 @@ import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
-import { getUserLevel } from '@axios'
+import { getUserLevel, isAbleModifyMcht } from '@axios'
 import { DateFilters } from '@core/enums'
 
+const add_able = getUserLevel() >= 35 || isAbleModifyMcht()
 const { store, head, exporter, metas } = useSearchStore()
 const { pgs }   = useStore()
 const password = ref()
@@ -36,7 +37,7 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="아이디, 상호, 연락처, 대표자명, 사업자번호, 예금주, 계좌번호 검색" :metas="metas" :add="getUserLevel() >= 35" add_name="가맹점"
+        <BaseIndexView placeholder="아이디, 상호, 연락처, 대표자명, 사업자번호, 예금주, 계좌번호 검색" :metas="metas" :add="add_able" add_name="가맹점"
             :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true"
