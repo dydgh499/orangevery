@@ -216,7 +216,7 @@ onMounted(async () => {
                                     <CreateHalfVCol :mdl="5" :mdr="7">
                                         <template #name>
                                             <BaseQuestionTooltip :location="'top'" :text="'모아서 출금 수수료'"
-                                                :content="'가맹점에서 모아서 출금시 사용됩니다.'">
+                                                :content="'모아서 출금 사용시마다 적용되는 수수료 입니다.'">
                                             </BaseQuestionTooltip>
                                         </template>
                                         <template #input>

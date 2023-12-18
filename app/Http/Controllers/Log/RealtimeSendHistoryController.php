@@ -51,7 +51,7 @@ class RealtimeSendHistoryController extends Controller
                 $withdraw_fee = $merchandise->collect_withdraw_fee;                
                 if($withdraw_amount - $withdraw_fee > 0)
                 {
-                    $params[] = [
+                    return [
                         'brand_id' => $merchandise->brand_id,
                         'mcht_id' => $merchandise->id,
                         'withdraw_amount' => $withdraw_amount,
@@ -64,7 +64,10 @@ class RealtimeSendHistoryController extends Controller
                     ];
                 }
             }
+            return [];
         })->all();
+
+        logging(['params'=>$params], 'realtime-auto-withdraws');
         return $params;
     }
 
@@ -100,7 +103,6 @@ class RealtimeSendHistoryController extends Controller
         $merchandises = $merchandises->unique('id');        
         $params = $this->getAutoWithdrawParams($merchandises, $pay_modules);
 
-        logging(['params'=>$params], 'realtime-auto-withdraws');
         foreach($params as $param)
         {
             $res = post($this->base_noti_url.'/single-deposit', $param);
