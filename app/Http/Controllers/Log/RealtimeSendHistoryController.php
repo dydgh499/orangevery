@@ -33,9 +33,7 @@ class RealtimeSendHistoryController extends Controller
     
     public function getAutoWithdrawParams($merchandises, $pay_modules)
     {
-        $params = [];
-        foreach($merchandises as $merchandise)
-        {
+        $params = $merchandises->map(function ($merchandise) use ($pay_modules) {
             $idx = array_search($merchandise->id, array_column($pay_modules, 'mcht_id'));
             if($idx !== false)
             {
@@ -43,7 +41,7 @@ class RealtimeSendHistoryController extends Controller
                 // 정산금
                 $profit = $merchandise->noSettles->sum('mcht_settle_amount');
                 // 출금 완료금
-                $total_withdraw_amount  = $merchandise->collectWithdraws->sum('total_withdraw_amount');       
+                $total_withdraw_amount = $merchandise->collectWithdraws->sum('total_withdraw_amount');       
                 // 취소 후 입금
                 $cancel_deposit = $merchandise->noSettles->reduce(function($carry, $transaction) {
                     return $carry + $transaction->cancelDeposits->sum('deposit_amount');
@@ -66,7 +64,7 @@ class RealtimeSendHistoryController extends Controller
                     ];
                 }
             }
-        }
+        })->all();
         return $params;
     }
 
@@ -75,6 +73,10 @@ class RealtimeSendHistoryController extends Controller
      */
     public function __invoke()
     {
+        request()->merge([
+            's_dt' => '2000-01-01',  
+            'e_dt' => Carbon::now()->format('Y-m-d'),
+        ]);
         $merchandises = Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
             ->where('merchandises.use_collect_withdraw', true)
             ->where('merchandises.is_delete', false)
