@@ -49,10 +49,12 @@ const validate = () => {
         const module_type = module_types.find(item => item.id === items.value[i].module_type)
         const installment = installments.find(item => item.id === items.value[i].installment)
         const mcht = mchts.find(item => item.mcht_name == items.value[i].mcht_name)
-
-        const finance_van = corp.pv_options.paid.use_realtime_deposit ? finance_vans.find(item => item.id === items.value[i].fin_id) : true
+        let finance_van = corp.pv_options.paid.use_realtime_deposit ? finance_vans.find(item => item.id === items.value[i].fin_id) : true
         const fin_trx_delay = corp.pv_options.paid.use_realtime_deposit ? fin_trx_delays.find(item => item.id === items.value[i].fin_trx_delay) : true
         const cxl_type = corp.pv_options.paid.use_realtime_deposit ? cxl_types.find(item => item.id === items.value[i].cxl_type) : true
+
+        if(items.value[i].fin_id == null)
+            finance_van = true
 
         if (mcht == null) {
             snackbar.value.show((i + 1) + '번째 결제모듈의 가맹점 상호가 이상합니다.', 'error')
@@ -121,6 +123,7 @@ const payModRegister = async () => {
 watchEffect(async () => {
     if (excel.value) {
         items.value = await ExcelReader(headers, excel.value[0]) as PayModule[]
+        console.log(items.value)
         validate()
     }
 })

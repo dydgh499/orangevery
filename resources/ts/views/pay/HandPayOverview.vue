@@ -39,8 +39,7 @@ hand_pay_info.amount = Number(urlParams.get('amount') || '')
 const pay = async () => {
     if (hand_pay_info.pmod_id) {
         const is_valid = await vForm.value?.validate()
-        if (is_valid?.valid && await alert.value.show('정말 결제하시겠습니까?')) {
-            //5389038218744126
+        if (is_valid?.valid && await alert.value.show(hand_pay_info.amount.toLocaleString()+'원을 결제하시겠습니까?')) {
             try {
                 const params = cloneDeep(hand_pay_info)
                 const r = await axios.post('/api/v1/transactions/hand-pay', params)
