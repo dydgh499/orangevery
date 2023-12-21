@@ -48,8 +48,7 @@ class TerminalController extends Controller
         $query = globalPGFilter($query, $request, 'payment_modules');
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
-
-        $query  = $query
+        $query = $query
                 ->where('payment_modules.brand_id', $request->user()->brand_id)
                 ->where('payment_modules.module_type', 0);
         if($request->ship_out_stat != null)
@@ -66,7 +65,8 @@ class TerminalController extends Controller
         }
         
         $query = $query->where(function ($query) use ($search) {
-            return $query->where('payment_modules.mid', 'like', "%$search%")
+            return $query
+                ->where('payment_modules.mid', 'like', "%$search%")
                 ->orWhere('payment_modules.tid', 'like', "%$search%")
                 ->orWhere('payment_modules.serial_num', 'like', "%$search%")
                 ->orWhere('merchandises.mcht_name', 'like', "%$search%");
