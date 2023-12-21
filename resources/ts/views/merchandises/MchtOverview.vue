@@ -86,7 +86,7 @@ onMounted(async () => {
                         </CreateHalfVCol>
                         <!-- 👉 상위 영업점 수수료율 -->
                         <template v-for="i in 6" :key="i">
-                            <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() > getIndexByLevel(6-i)">
+                            <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i)">
                                 <VRow>
                                     <VCol cols="12" md="3">
                                         <label>{{ levels['sales'+(6-i)+'_name'] }}/수수료율</label>
