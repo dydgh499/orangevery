@@ -67,7 +67,7 @@ const validate = () => {
         items.value[i].sales5_name = items.value[i].sales5_name?.trim()
 
         if(user_names.has(items.value[i].user_name)) {
-            snackbar.value.show((i + 1) + '번째 아이디가 중복됩니다.', 'error')
+            snackbar.value.show((i + 1) + '번째 아이디가 중복됩니다.('+items.value[i].user_name+")", 'error')
             is_clear.value = false
             return
         }
@@ -75,7 +75,7 @@ const validate = () => {
             user_names.add(items.value[i].user_name)
 
         if(mcht_names.has(items.value[i].mcht_name)) {
-            snackbar.value.show((i + 1) + '번째 상호가 중복됩니다.', 'error')
+            snackbar.value.show((i + 1) + '번째 상호가 중복됩니다.('+items.value[i].mcht_name+")", 'error')
             is_clear.value = false
             return
         }

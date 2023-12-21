@@ -174,6 +174,7 @@ class QuickViewController extends Controller
         $cancel_deposit = $merchandise->transactions->reduce(function($carry, $transaction) {
             return $carry + $transaction->cancelDeposits->sum('deposit_amount');
         }, 0);  // 취소 후 입금
+
         $profit = $merchandise->transactions->reduce(function($carry, $transaction) use($pay_modules) {
             $pay_module = $pay_modules->firstWhere('id', $transaction->pmod_id);
             if($pay_module)

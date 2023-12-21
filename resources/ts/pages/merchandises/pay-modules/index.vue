@@ -130,6 +130,29 @@ onMounted(() => {
                             <span v-else-if="_key == 'fin_trx_delay'">
                                 {{ fin_trx_delays.find(settle_type => settle_type['id'] === item[_key])?.title }}
                             </span>
+                            <span v-else-if="_key.includes('_limit') || _key === 'pay_dupe_least'">
+                                <teamplate v-if="item.module_type != 0 || _key == 'abnormal_trans_limit' || _key == 'pay_dupe_least'">
+                                    {{ item[_key] }}만원
+                                </teamplate>
+                                <template v-else>
+                                    -
+                                </template>
+                            </span>
+                            <span v-else-if="_key === 'pay_disable_tm'">
+                                <teamplate v-if="item.module_type != 0">
+                                    {{ item.pay_disable_s_tm }} ~ {{ item.pay_disable_e_tm }}
+                                </teamplate>
+                            </span>
+                            <span v-else-if="_key === 'show_pay_view'">
+                                <teamplate v-if="item.module_type != 0">
+                                    <VChip :color="store.booleanTypeColor(!item[_key])">
+                                        {{ item[_key] ? '노출' : '숨김' }}
+                                    </VChip>
+                                </teamplate>
+                                <template v-else>
+                                    -
+                                </template>
+                            </span>
                             <span v-else>
                                 {{ item[_key] }}
                             </span>

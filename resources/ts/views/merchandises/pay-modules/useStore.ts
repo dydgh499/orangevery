@@ -98,15 +98,29 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
     }
-    if(getUserLevel() >= 35)
-    {
+    if(getUserLevel() >= 35) {
         headers1['pg_id'] = 'PG사명'
         headers1['ps_id'] = '구간'
         headers1['settle_fee'] = '입금수수료'
         headers1['cxl_type'] = '취소타입'
     }
-    if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit)
-    {
+    headers2['abnormal_trans_limit'] = '이상거래 한도'
+    headers2['pay_dupe_least'] = '중복거래 하한금'
+    
+    if(corp.pv_options.paid.use_dup_pay_validation)
+        headers2['pay_dupe_limit'] = '중복결제 허용회수'
+    if(corp.pv_options.paid.use_pay_limit) {
+        headers2['pay_year_limit'] = '연 결제 한도'
+        headers2['pay_month_limit'] = '월 결제 한도'
+        headers2['pay_day_limit'] = '일 결제 한도'
+        headers2['pay_single_limit'] = '단건 결제 한도'
+    }
+    if(corp.pv_options.paid.use_forb_pay_time)
+        headers2['pay_disable_tm'] = '결제금지 시간'
+    if(getUserLevel() >= 35)
+        headers2['show_pay_view'] = '결제창 노출여부'
+    
+    if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit) {
         headers2['use_realtime_deposit'] = '실시간 사용여부'
         headers2['fin_id'] = '이체 모듈 타입'
         headers2['fin_trx_delay'] = '이체 딜레이'

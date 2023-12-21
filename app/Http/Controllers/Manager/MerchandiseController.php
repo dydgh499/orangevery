@@ -138,7 +138,7 @@ class MerchandiseController extends Controller
     private function commonSelect($request, $is_all=false)
     {
         $cond_1 = $request->pg_id || $request->ps_id || $request->terminal_id;
-        $cond_2 = zeroCheck($request, 'settle_type') || zeroCheck($request, 'mcht_settle_type') || zeroCheck($request, 'module_type');
+        $cond_2 = $request->has('settle_type') || $request->has('mcht_settle_type') || $request->has('module_type');
         if($cond_1 || $cond_2)
             $data = $this->byPayModules($request, $is_all);
         else 

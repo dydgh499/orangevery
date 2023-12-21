@@ -114,6 +114,12 @@ onMounted(() => {
                                         {{ tax_types.find(sales => sales.id === item[_key])?.title }}
                                     </VChip>
                                 </span>
+                                <span v-else-if="_key == 'is_able_modify_mcht'">
+                                    <VChip
+                                        :color="store.booleanTypeColor(!item[_key])">
+                                        {{ item[_key] ? '가능' : '불가능' }}
+                                    </VChip>
+                                </span>
                                 <span v-else-if="_key == 'view_type'">
                                     <VChip
                                         :color="store.booleanTypeColor(!item[_key])">

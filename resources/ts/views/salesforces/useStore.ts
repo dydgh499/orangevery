@@ -1,7 +1,7 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { Merchandise, Options, Salesforce, UnderAutoSetting } from '@/views/types'
-import { axios, salesLevels } from '@axios'
+import { axios, getUserLevel, salesLevels } from '@axios'
 import corp from '@corp'
 
 const levels = corp.pv_options.auth.levels
@@ -49,6 +49,8 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
     }
     if(corp.pv_options.paid.use_sales_auto_setting)
         headers['under_auto_settings'] = '수수료율'
+    if(getUserLevel() >= 35)
+        headers['is_able_modify_mcht'] = '가맹점 수정권한'
 
     Object.assign(headers, {
         'view_type' : '화면타입',

@@ -45,7 +45,7 @@ const validate = () => {
         const acct_bank_name = banks.find(sales => sales.title === saleses.value[i].acct_bank_name)
 
         if(user_names.has(saleses.value[i].user_name)) {
-            snackbar.value.show((i + 1) + '번째 아이디가 중복됩니다.', 'error')
+            snackbar.value.show((i + 1) + '번째 아이디가 중복됩니다.('+saleses.value[i].user_name+")", 'error')
             is_clear.value = false
             return
         }
