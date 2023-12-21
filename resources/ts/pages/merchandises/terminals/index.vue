@@ -46,9 +46,7 @@ const isMchtUnableCol = (key: string) => {
             </BaseIndexFilterCard>
         </template>
         <template #index_extra_field>
-            <div style="position: relative; top: 0.6em;">
-                <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.un_use" label="최근 1달 미결제 단말기 조회" color="warning" @update:modelValue="store.updateQueryString({un_use: store.params.un_use})"/>
-            </div>
+            <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.un_use" label="최근 1달 미결제 단말기 조회" color="warning" @update:modelValue="store.updateQueryString({un_use: store.params.un_use})"/>
         </template>
         <template #headers>
             <tr>
