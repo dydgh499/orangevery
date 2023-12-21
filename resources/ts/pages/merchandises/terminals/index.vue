@@ -11,8 +11,6 @@ const add_able = getUserLevel() >= 35 || isAbleModifyMcht()
 const { pgs, pss, settle_types, terminals } = useStore()
 const { store, head, exporter } = useSearchStore()
 
-store.params.un_use = false
-
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
