@@ -10,7 +10,6 @@ class TransactionRequest extends FormRequest
     use FormRequestTrait;
     public $keys = [
         'mcht_id',
-        'dev_fee', 'dev_realtime_fee',
         'sales5_id', 'sales5_fee',
         'sales4_id', 'sales4_fee',
         'sales3_id', 'sales3_fee',
@@ -95,8 +94,6 @@ class TransactionRequest extends FormRequest
         $data['sales5_id'] = $this->input('sales5_id', null);
         $data['custom_id'] = $this->input('custom_id', null);
         
-        $data['dev_fee']  = $this->input('dev_fee', 0)/100;
-        $data['dev_realtime_fee'] = $this->input('dev_realtime_fee', 0)/100;
         $data['ps_fee']  = $this->input('ps_fee', 0)/100;
         $data['hold_fee']  = $this->input('hold_fee', 0)/100;
         $data['mcht_fee']    = $this->input('mcht_fee', 0)/100;
