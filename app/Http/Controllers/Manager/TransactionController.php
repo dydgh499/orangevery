@@ -167,6 +167,9 @@ class TransactionController extends Controller
         try
         {
             $data = $request->data();
+            $data['dev_fee'] = $request->input('dev_fee', 0)/100;
+            $data['dev_realtime_fee'] = $request->input('dev_realtime_fee', 0)/100;
+            
             [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
             $res = $this->transactions->create($data);
             operLogging(HistoryType::CREATE, $this->target, $data, "#".$res->id);
