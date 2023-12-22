@@ -12,6 +12,7 @@ use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\QuickView\QuickViewController;
 
 use Carbon\Carbon;
+use App\Enums\DevSettleType;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -368,13 +369,13 @@ class TransactionController extends Controller
 
     public function _test()
     {
-        $dev_settle_type = 0;
-        /*
+        $dev_settle_type = DevSettleType::HEAD_OFFICE_PROFIT->value;
         $db_trans = $this->transactions
-            ->where('brand_id', 2)
+            ->where('brand_id', 7)
+            ->where('created_at', '>=', '2023-12-01')
             ->orderBy('id', 'desc')
             ->get();
-        */
+
         $trans = json_decode(json_encode($db_trans), true);
         $trans = $this->setSettleAmount($trans, $dev_settle_type);
         $i=0;
