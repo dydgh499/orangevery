@@ -16,6 +16,7 @@ class TransactionRequest extends FormRequest
         'sales2_id', 'sales2_fee',
         'sales1_id', 'sales1_fee',
         'sales0_id', 'sales0_fee',
+        'dev_realtime_fee',
         'custom_id', 'mcht_fee', 'hold_fee',
         'mid','tid',
         'module_type',
@@ -103,6 +104,8 @@ class TransactionRequest extends FormRequest
         $data['sales3_fee'] = $this->input('sales3_fee', 0)/100;
         $data['sales4_fee'] = $this->input('sales4_fee', 0)/100;
         $data['sales5_fee'] = $this->input('sales5_fee', 0)/100;
+        $data['dev_realtime_fee'] = $this->input('dev_realtime_fee', 0)/100;
+        
         $data['brand_id'] = $this->user()->brand_id;
         $data['cxl_dt'] = $data['cxl_dt'] == '' ? null : $data['cxl_dt'];
         $data['cxl_tm'] = $data['cxl_tm'] == '' ? null : $data['cxl_tm'];
