@@ -80,7 +80,7 @@ class MessageController extends Controller
                 'total_deposit' => $total_deposit,
                 'min_balance_limit' => $bonaeja['min_balance_limit'] * 10000,
             ], 'bonaeja-deposit');
-            if($total_deposit < ($bonaeja['min_balance_limit'] * 10000))
+            if($total_deposit < ((int)$bonaeja['min_balance_limit'] * 10000))
             {
                 $sms = [
                     'user_id'   => $bonaeja['user_id'],
