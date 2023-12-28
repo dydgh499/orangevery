@@ -45,7 +45,7 @@ provide('exporter', exporter)
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key == 'code'">
                                 <VChip :color="getCodeTypeColor(item[_key])">
-                                    {{ getCodeTypeString(item[_key], item['rsg_msg']) }}
+                                    {{ getCodeTypeString(item[_key], item['res_msg']) }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'type'">

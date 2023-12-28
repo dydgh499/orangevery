@@ -32,6 +32,7 @@ class MessageController extends Controller
                 'page_size' => $request->page_size,
                 's_dt'      => $request->s_dt,
                 'e_dt'      => $request->e_dt,
+                'search'    => $request->search,
             ];
             $res = post("https://api.bonaeja.com/api/msg/v1/list", $params);
             if($res['code'] == 500)
