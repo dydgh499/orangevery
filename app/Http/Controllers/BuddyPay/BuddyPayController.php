@@ -41,11 +41,11 @@ class BuddyPayController extends Controller
      * @responseField access_token string Bearer 토큰 값
      * @responseField user object 유저정보
      */
-    public function login(LoginRequest $request)
+    public function login(Request $request)
     {
         $validated = $request->validate(['user_name'=>'required|string', 'user_pw'=>'required|string']);
         $request = $request->merge(['brand_id' => 19]);
-        
+
         $inst = new AuthController();
         $result = $inst->__signIn(new Merchandise(), $request);  // check Merchandise
         if($result['result'] == 1)
