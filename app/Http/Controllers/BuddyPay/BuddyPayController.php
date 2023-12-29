@@ -41,9 +41,7 @@ class BuddyPayController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        $request->merge([
-            'brand_id' => 19
-        ]);
+        $request = $request->merge(['brand_id' => 19]);
         $inst = new AuthController();
         $result = $inst->__signIn(new Merchandise(), $request);  // check Merchandise
         if($result['result'] == 1)
