@@ -49,7 +49,14 @@ class OperatorController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $query = $this->operators->where('brand_id', $request->user()->brand_id);
+        $search = $request->search;
+        $query = $this->operators
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
+            ->where(function ($query) use ($search) {
+                return $query->where('user_name', 'like', "%$search%")
+                    ->orWhere('nick_name', 'like', "%$search%");
+            });
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }

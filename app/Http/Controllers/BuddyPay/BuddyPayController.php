@@ -35,13 +35,17 @@ class BuddyPayController extends Controller
      * 
      * @unauthenticated
      * 
+     * @bodyParam user_name string 가맹점 아이디
+     * @bodyParam user_pw string 가맹점 패스워드
      * @responseFile 200 storage/buddyPay/login.json
      * @responseField access_token string Bearer 토큰 값
      * @responseField user object 유저정보
      */
     public function login(LoginRequest $request)
     {
+        $validated = $request->validate(['user_name'=>'required|string', 'user_pw'=>'required|string']);
         $request = $request->merge(['brand_id' => 19]);
+        
         $inst = new AuthController();
         $result = $inst->__signIn(new Merchandise(), $request);  // check Merchandise
         if($result['result'] == 1)
