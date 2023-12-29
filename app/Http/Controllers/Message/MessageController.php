@@ -76,10 +76,6 @@ class MessageController extends Controller
         if($res['body']['code'] == 100)
         {
             $total_deposit = $res['body']['data']['TOTAL_DEPOSIT'];
-            logging([
-                'total_deposit' => $total_deposit,
-                'min_balance_limit' => $bonaeja['min_balance_limit'] * 10000,
-            ], 'bonaeja-deposit');
             if($total_deposit < ((int)$bonaeja['min_balance_limit'] * 10000))
             {
                 $sms = [
