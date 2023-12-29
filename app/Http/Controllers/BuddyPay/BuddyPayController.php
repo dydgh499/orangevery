@@ -41,25 +41,23 @@ class BuddyPayController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        if($request->brand_id == 19)
+        $request->merge([
+            'brand_id' => 19
+        ]);
+        $inst = new AuthController();
+        $result = $inst->__signIn(new Merchandise(), $request);  // check Merchandise
+        if($result['result'] == 1)
         {
-            $inst = new AuthController();
-            $result = $inst->__signIn(new Merchandise(), $request);  // check Merchandise
-            if($result['result'] == 1)
-            {
-                $data = $result['user']->loginInfo(10);
-                $data['user'] = [
-                    'id' => $data['user']->id,
-                    'user_name' => $data['user']->user_name,
-                    'level' => 10,
-                ];
-                return $inst->response(0, $data);
-            }
-            else
-                return $this->extendResponse(1000, __('auth.not_found_obj'));
+            $data = $result['user']->loginInfo(10);
+            $data['user'] = [
+                'id' => $data['user']->id,
+                'user_name' => $data['user']->user_name,
+                'level' => 10,
+            ];
+            return $inst->response(0, $data);
         }
         else
-            return $this->response(951);
+            return $this->extendResponse(1000, __('auth.not_found_obj'));
     }
 
     
