@@ -178,7 +178,6 @@ const headers = {
 };
 
 let body = {
-    "brand_id": 12,
     "user_name": "test0001",
     "user_pw": "test0001"
 };
@@ -199,7 +198,6 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'brand_id' =&gt; 12.0,
             'user_name' =&gt; 'test0001',
             'user_pw' =&gt; 'test0001',
         ],
@@ -214,7 +212,6 @@ import json
 
 url = 'https://pg.buddypay.co.kr/api/v1/buddy-pay/sign-in'
 payload = {
-    "brand_id": 12,
     "user_name": "test0001",
     "user_pw": "test0001"
 }
@@ -232,7 +229,6 @@ response.json()</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"brand_id\": 12,
     \"user_name\": \"test0001\",
     \"user_pw\": \"test0001\"
 }"
@@ -273,9 +269,6 @@ response.json()</code></pre>
               <p><br>예시: <code>application/json</code></p>
             </div>
             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-            <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>brand_id</code></b>&nbsp;&nbsp; <small>number</small>&nbsp; &nbsp; <input type="number" style="display: none" step="any" name="brand_id" data-endpoint="POSTapi-v1-buddy-pay-sign-in" value="12" data-component="body"><br>
-              <p>법인코드를 의미하며 TYINT: 12, MNWORKS: 14가 요구됩니다. <br>예시: <code>12</code></p>
-            </div>
             <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>user_name</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <input type="text" style="display: none" name="user_name" data-endpoint="POSTapi-v1-buddy-pay-sign-in" value="test0001" data-component="body"><br>
               <p>유저 ID. <br>예시: <code>test0001</code></p>
             </div>
