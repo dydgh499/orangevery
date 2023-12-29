@@ -1,0 +1,32 @@
+[
+    {
+        "id":1,
+        "is_old_auth":1,
+        "module_type":1,
+        "installment":12,
+        "pay_year_limit":100,
+        "pay_month_limit":200,
+        "pay_day_limit":0,
+        "pay_single_limit":300,
+        "pay_year_amount": 3640000,
+        "pay_month_amount": 3640000,
+        "pay_day_amount": 1640000,
+        "pay_able_amount":-2640000,
+        "show_pay_view": 0      
+    },
+    {
+        "id":5,
+        "is_old_auth":0,
+        "module_type":1,
+        "installment":12,
+        "pay_year_limit":100,
+        "pay_month_limit":200,
+        "pay_day_limit":0,
+        "pay_single_limit":300,
+        "pay_year_amount": 3640000,
+        "pay_month_amount": 3640000,
+        "pay_day_amount": 1640000,
+        "pay_able_amount":-2640000,
+        "show_pay_view": 0
+    }    
+]

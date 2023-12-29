@@ -33,7 +33,10 @@ class RouteServiceProvider extends ServiceProvider
             ->prefix('api/v1/bf')
             ->namespace($this->namespace)
                 ->group(base_path('routes/bf.php'));
-
+            Route::middleware('api')
+                ->prefix('api/v1/buddy-pay')
+                ->namespace($this->namespace)
+                    ->group(base_path('routes/buddy-pay.php'));
             Route::middleware('api')
                 ->prefix('api')
                 ->namespace($this->namespace)

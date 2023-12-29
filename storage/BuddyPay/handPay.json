@@ -1,0 +1,18 @@
+{
+    "mid": "wel000707m",
+    "tid": "90387",
+    "amount": 100,
+    "ord_num": "1704385517624H102402",
+    "appr_num": "57480451",
+    "item_name": "메가커피 아메리카노 L",
+    "pg_id": 112,
+    "trx_id": "202311200495962",
+    "acquirer": "IBK",
+    "issuer": "IBK",
+    "card_num": "414003******3964",
+    "installment": "00",
+    "buyer_name": "홍길동",
+    "trx_dttm": "2023-11-20 00:09:39",
+    "method": "수기",
+    "is_cancel": 0
+}
