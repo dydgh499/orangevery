@@ -32,7 +32,7 @@ class QuickViewController extends Controller
 
     private function get3MonthlyTransactions($request)
     {
-        $one_month_ago = Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m-d');
+        $one_month_ago = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
         [$settle_key, $group_key] = $this->getSettleCol($request);
         $cols = $this->getTotalCols($settle_key);
         array_push($cols, DB::raw("DATE_FORMAT(trx_dt, '%Y-%m-%d') as day"));
@@ -47,7 +47,7 @@ class QuickViewController extends Controller
 
     private function getMchtRankTransactions($request)
     {
-        $one_month_ago = Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m-d');
+        $one_month_ago = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
         [$settle_key, $group_key] = $this->getSettleCol($request);
         $cols = $this->getTotalCols($settle_key, 'merchandises.id');
         array_push($cols, 'merchandises.mcht_name');

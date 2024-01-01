@@ -50,8 +50,8 @@ trait SettleTerminalTrait
         $pmod_ids1 = collect($under_sales1)->pluck('id')->all();
         if(count($pmod_ids1))
         {
-            $mon_ago_1_s = $c_settle_e_dt->copy()->subMonths(1)->startOfMonth()->format('Y-m-d');
-            $mon_ago_1_e = $c_settle_e_dt->copy()->subMonths(1)->endOfMonth()->format('Y-m-d');
+            $mon_ago_1_s = $c_settle_e_dt->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
+            $mon_ago_1_e = $c_settle_e_dt->copy()->subMonthNoOverflow(1)->endOfMonth()->format('Y-m-d');
             $group1 = $getUnderSalesGroup($pmod_ids1, $mon_ago_1_s, $mon_ago_1_e);
         }
         else

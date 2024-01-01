@@ -30,8 +30,8 @@ class DashboardController extends Controller
     {
         $cur_e_dt = Carbon::now()->format('Y-m-d');
         $cur_s_dt = Carbon::now()->startOfMonth()->format('Y-m-d');
-        $last_e_dt = Carbon::now()->subMonths(1)->format('Y-m-d');
-        $last_s_dt = Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m-d');
+        $last_e_dt = Carbon::now()->subMonthNoOverflow(1)->format('Y-m-d');
+        $last_s_dt = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
 
         $info = Transaction::selectRaw("
             SUM(CASE WHEN date(trx_dt) BETWEEN '$cur_s_dt' AND '$cur_e_dt' THEN $settle_key ELSE 0 END) AS cur_profit,
@@ -125,8 +125,8 @@ class DashboardController extends Controller
         ->fromSub(function ($query) use($table, $brand_id, $cols) {
             $cur_e_dt = Carbon::now()->format('Y-m-d');
             $cur_s_dt = Carbon::now()->startOfMonth()->format('Y-m-d');
-            $last_e_dt = Carbon::now()->subMonths(1)->format('Y-m-d');
-            $last_s_dt = Carbon::now()->subMonths(1)->startOfMonth()->format('Y-m-d');
+            $last_e_dt = Carbon::now()->subMonthNoOverflow(1)->format('Y-m-d');
+            $last_s_dt = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
             $format = "(SELECT $cols FROM $table WHERE brand_id=$brand_id AND date(updated_at) BETWEEN ? AND ?)";
 
             $query->from($table)
@@ -152,7 +152,7 @@ class DashboardController extends Controller
                 DB::raw("SUM(is_delete = 0) as add_count"),
                 DB::raw("SUM(is_delete = 1) as del_count"),
             )
-            ->where('updated_at', '>=', now()->subMonths(4))
+            ->where('updated_at', '>=', now()->subMonthNoOverflow(4))
             ->groupBy(DB::raw("DATE_FORMAT(updated_at, '%Y-%m')"))
             ->orderBy('month')
             ->get();

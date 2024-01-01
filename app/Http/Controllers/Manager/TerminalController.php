@@ -56,7 +56,7 @@ class TerminalController extends Controller
 
         if($request->un_use)
         {
-            $before_month = Carbon::now()->subMonths(1)->format('Y-m-d');
+            $before_month = Carbon::now()->subMonthNoOverflow(1)->format('Y-m-d');
             $trans_pmod_ids = Transaction::where('brand_id', $request->user()->brand_id)
                 ->where('trx_dt', '>=', $before_month)
                 ->where('is_cancel', false)
