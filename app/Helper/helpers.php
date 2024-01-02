@@ -16,8 +16,8 @@
             'paytus', 'koneps', 'aynil', 'welcome', 'hecto', 'lumen',
             'payletter', 'wholebic', 'korpay', 'kppay', 'thepayone', 'ezpg',
             'cmpay', 'kiwoom', 'wizzpay', 'nestpay', 'e2u','addone',
-            'saminching','wgp', 'brightfixC3', 'buddypay', 'withpay', 'fixpay', 
-            ''
+            'saminching','wgp', 'brightfixC3', 'danal', 'baumpns', 
+            'passgo', 'buddypay', 'withpay', 'fixpay', 'galaxiamoneytree',
         ];
         return $pgs[$pg_type-1];
     }

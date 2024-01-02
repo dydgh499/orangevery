@@ -39,6 +39,11 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:22, name:'다날페이', rep_name:'박지만, 백현숙', company_name:'DANAL', business_num:'113-81-44055', phone_num:'1566-3355', addr:'13591 경기도 성남시 분당구 분당로 55 퍼스트타워 9층'},
         {id:23, name:'바움피엔에스', rep_name:'윤건, 안용희', company_name:'바움피엔에스 주식회사', business_num:'836-87-00147', phone_num:'1833-6199', addr:'인천시 연수구 인천타워대로 323 (송도 센트로드 Office A동 2907-9호)'},
         {id:24, name:'워너페이먼츠', rep_name:'황창우', company_name:'(주)워너페이먼츠', business_num:'864-88-01755', phone_num:'031-898-1775', addr:'경기 수원시 영통구 대학로 28, 3층'},
+
+        {id:25, pg_name:'버디페이', rep_name:'장호은', company_name:'(주)주식회사 버디페이', business_num:'686-81-02591', phone_num:'031-898-1775', addr:'서울특별시 강남구 역삼동 644-35 리엘타워 5층 버디페이'},
+        {id:26, pg_name:'위드페이', rep_name:'오섭규', company_name:'(주)위드페이먼츠', business_num:'858-86-00683', phone_num:'1511-7055', addr:'서울특별시 금천구 벚꽃로 298, 1511, 1512호(가산동, 대륭포스트타워 6차)'},
+        {id:27, pg_name:'픽스페이', rep_name:'박용은', company_name:'(주)브라이트픽스', business_num:'235-88-01772', phone_num:'02-6336-0999', addr:'주소 서울특별시 금천구 가산디지털2로 166, 216~217호(가산동, 에이스K1타워)'},
+        {id:28, pg_name:'갤럭시아머니트리', rep_name:'신동훈', company_name:'갤럭시아머니트리(주)', business_num:'120–81–60844', phone_num:'1566–0123', addr:'서울특별시 강남구 광평로 281 수서오피스빌딩 15층(수서동)'},
     ]
 
     const finance_companies = <Options[]>([
