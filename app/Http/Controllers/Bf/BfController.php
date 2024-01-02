@@ -56,6 +56,7 @@ class BfController extends Controller
                 $data['user'] = [
                     'id' => $data['user']->id,
                     'user_name' => $data['user']->user_name,
+                    'mcht_name' => $data['user']->mcht_name,
                     'level' => 10,
                 ];
                 return $inst->response(0, $data);
