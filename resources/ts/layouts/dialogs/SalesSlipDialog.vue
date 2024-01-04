@@ -18,9 +18,11 @@ const trans = ref<SalesSlip>()
 const pg = ref<PayGateway>()
 const card = ref(null)
 const thickness = ref(3);
-const total_amount = ref(0)
+
+const supply_amount = ref(0)
 const vat = ref(0)
 const tax_free = ref(0)
+const total_amount = ref(0)
 
 
 const updateThickness = () => {
@@ -46,10 +48,18 @@ const copySalesSlip = () => {
 const show = (item: SalesSlip) => {
     trans.value = item
     pg.value = props.pgs.find(pg => pg['id'] === item.pg_id)
-    
-    vat.value = trans.value.amount as number - getVat()
-    tax_free.value = trans.value.tax_category_type == 1 ? (vat.value * -1) : 0
-    total_amount.value = trans.value.amount + tax_free.value
+    if(trans.value.tax_category_type == 1) {
+        supply_amount.value = 0
+        vat.value = 0
+        tax_free.value = trans.value.amount
+        total_amount.value = 0
+    }
+    else {
+        supply_amount.value = getVat()
+        vat.value = trans.value.amount as number - getVat()
+        tax_free.value = 0
+        total_amount.value = trans.value.amount
+    }
     
     visible.value = true
 }
@@ -133,7 +143,7 @@ defineExpose({
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>과세금액</template>
-                        <template #input>{{ getVat().toLocaleString() }} 원</template>
+                        <template #input>{{ supply_amount.toLocaleString() }} 원</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>부가세액</template>
