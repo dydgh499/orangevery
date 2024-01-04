@@ -100,8 +100,10 @@ class TransactionController extends Controller
         $query  = $this->transactions
             ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')            
-            ->globalFilter()
-            ->where(function ($query) use ($search) {
+            ->globalFilter();
+        if($search !== "")
+        {
+            $query = $query->where(function ($query) use ($search) {
                 return $query->where('transactions.mid', 'like', "%$search%")
                     ->orWhere('transactions.tid', 'like', "%$search%")
                     ->orWhere('transactions.trx_id', 'like', "%$search%")
@@ -113,6 +115,7 @@ class TransactionController extends Controller
                     ->orWhere('merchandises.resident_num', 'like', "%$search%")
                     ->orWhere('merchandises.business_num', 'like', "%$search%");
             });
+        }
         $query = $this->transDateFilter($query, $request->s_dt, $request->e_dt, $request->use_search_date_detail);
         return $this->optionFilter($query ,$request);
     }
