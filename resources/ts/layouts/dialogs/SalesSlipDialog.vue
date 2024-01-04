@@ -141,7 +141,7 @@ defineExpose({
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell" v-if="trans?.tax_category_type === 1">
                         <template #name>면세</template>
-                        <template #input> - {{ tax_free.toLocaleString() }} 원</template>
+                        <template #input> {{ tax_free.toLocaleString() }} 원</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell font-weight-bold">
                         <template #name>총결제금액</template>
