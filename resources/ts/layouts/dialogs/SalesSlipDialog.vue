@@ -136,11 +136,11 @@ defineExpose({
                         <template #input>{{ getVat().toLocaleString() }} 원</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
-                        <template #name>부가세</template>
+                        <template #name>부가세액</template>
                         <template #input>{{ vat.toLocaleString() }} 원</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell" v-if="trans?.tax_category_type === 1">
-                        <template #name>면세</template>
+                        <template #name>면세액</template>
                         <template #input> {{ tax_free.toLocaleString() }} 원</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell font-weight-bold">
