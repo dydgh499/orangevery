@@ -158,6 +158,17 @@ class BuddyPayController extends Controller
      */
     public function handPay(HandPayRequest $request)
     {        
+        $getYYMM = function($mmyy) {
+            if(mb_strlen($mmyy, 'utf-8') == 4)
+            {
+                $first 	= substr($mmyy, 0, 2);
+                $sec 	= substr($mmyy, 2, 2);
+                return $sec.$first;
+            }
+            else
+                return '';
+        };
+        $request->merge(['yymm'=>$getYYMM($data['yymm'])]); // 실수 ..
         $inst = new TransactionController(new Transaction);
         return $inst->handPay($request);
     }
