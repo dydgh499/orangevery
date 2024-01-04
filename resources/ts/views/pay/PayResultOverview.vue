@@ -44,7 +44,7 @@ const salesslip = ref()
                                             </tr>
                                             <tr>
                                                 <th class="padding">에러 메세지</th>
-                                                <td class="padding">{{ props.result_msg }}</td>
+                                                <td class="padding"><span v-html="props.result_msg"></span></td>
                                             </tr>
                                         </VTable>
                                         <VTable v-else style="margin: 3em 0; text-align: center;">

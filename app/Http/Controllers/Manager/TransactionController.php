@@ -307,7 +307,7 @@ class TransactionController extends Controller
         };
 
         $data = $request->all();
-        $data['yymm'] = $getYYMM($data['yymm']);
+        $data['yymm'] = $getYYMM($data['yymm']); // mmyy to yymm
         $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/hand';
         $res = post($url, $data);
         if($res['body']['result_cd'] === "0000")
