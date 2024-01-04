@@ -52,7 +52,7 @@ const show = (item: SalesSlip) => {
         supply_amount.value = 0
         vat.value = 0
         tax_free.value = trans.value.amount
-        total_amount.value = 0
+        total_amount.value = trans.value.amount
     }
     else {
         supply_amount.value = getVat()
