@@ -495,10 +495,11 @@ export interface Transaction {
     trx_amount?: number,    
 }
 
-export interface SalesSlip extends Transaction{
+export interface SalesSlip extends Transaction {
     is_show_fee: number, 
     use_saleslip_prov: number, 
     use_saleslip_sell: number, 
+    tax_category_type: number,
 }
 
 export interface Danger {

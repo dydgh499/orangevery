@@ -86,6 +86,7 @@ class SalesforceController extends Controller
                     ->where('payment_modules.last_settle_month', '<', $settle_month)
                     ->where('payment_modules.comm_calc_level', $level)
                     ->where('payment_modules.begin_dt', '<', $request->s_dt)
+                    ->where('payment_modules.is_delete', false)
                     ->get(["payment_modules.*", "merchandises.".$target_id])
             );
             $data = $this->setTerminalCost($data, $pay_modules, $request->s_dt, $request->s_dt, $target_id);

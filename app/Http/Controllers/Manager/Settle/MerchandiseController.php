@@ -82,6 +82,7 @@ class MerchandiseController extends Controller
                 ->where('last_settle_month', '<', $settle_month)
                 ->where('begin_dt', '<', $request->s_dt)
                 ->where('comm_calc_level', 10)
+                ->where('is_delete', false)
                 ->get()
             );
             $data = $this->setTerminalCost($data, $pay_modules, $request->s_dt, $request->s_dt, 'mcht_id');

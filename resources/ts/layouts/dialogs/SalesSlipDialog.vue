@@ -18,6 +18,10 @@ const trans = ref<SalesSlip>()
 const pg = ref<PayGateway>()
 const card = ref(null)
 const thickness = ref(3);
+const total_amount = ref(0)
+const vat = ref(0)
+const tax_free = ref(0)
+
 
 const updateThickness = () => {
     if (window.innerWidth <= 500)
@@ -29,6 +33,7 @@ const updateThickness = () => {
 const getVat = () => {
     return Math.round(trans.value?.amount as number / 1.1)
 }
+
 const copySalesSlip = () => {
     snackbar.value.show('영수증을 복사하고있습니다..', 'success')
     if (card.value) {
@@ -41,6 +46,11 @@ const copySalesSlip = () => {
 const show = (item: SalesSlip) => {
     trans.value = item
     pg.value = props.pgs.find(pg => pg['id'] === item.pg_id)
+    
+    vat.value = trans.value.amount as number - getVat()
+    tax_free.value = trans.value.tax_category_type == 1 ? (vat.value * -1) : 0
+    total_amount.value = trans.value.amount + tax_free.value
+    
     visible.value = true
 }
 const cancelColor = computed(() => {
@@ -127,13 +137,17 @@ defineExpose({
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>부가세</template>
-                        <template #input>{{ (trans?.amount as number - getVat()).toLocaleString() }} 원</template>
+                        <template #input>{{ vat.toLocaleString() }} 원</template>
+                    </DialogHalfVCol>
+                    <DialogHalfVCol class="cell" v-if="trans?.tax_category_type === 1">
+                        <template #name>면세</template>
+                        <template #input> - {{ tax_free.toLocaleString() }} 원</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell font-weight-bold">
                         <template #name>총결제금액</template>
                         <template #input>
                             <span class="text-primary big-font" :style="cancelColor">
-                                {{ trans?.amount.toLocaleString() }} 원
+                                {{ total_amount.toLocaleString() }} 원
                             </span>
                         </template>
                     </DialogHalfVCol>
