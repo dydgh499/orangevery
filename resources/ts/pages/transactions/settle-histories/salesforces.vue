@@ -15,6 +15,8 @@ const { batchDeposit, batchCancel } = settlementHistoryFunctionCollect(store)
 const all_sales = salesLevels()
 const financeDialog = ref()
 
+store.params.use_finance_van_deposit = Number(corp.pv_options.paid.use_finance_van_deposit)
+
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
