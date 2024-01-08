@@ -21,6 +21,7 @@ return new class extends Migration
                 ->onDelete('SET NULL');
 
             $table->string('trans_seq_num', 20)->nullable()->index()->comment('요청 ID');
+            $table->integer('request_type')->nullable()->comment('요청 타입');
             $table->string('result_code', 5)->nullable()->comment('응답코드');
             $table->string('message', 50)->nullable()->comment('내용');    
             $table->timestamps();

@@ -46,7 +46,7 @@ defineExpose({
                                 <td scope="col" style="text-align: center;">{{ under_auto_setting.sales_fee }}</td>
                                 <td scope="col" style="text-align: center;">
                                     <VBtn @click="selected(key)">
-                                        <span style="font-weight: bold;" @click=" ">선택하기</span>
+                                        <span style="font-weight: bold;">선택하기</span>
                                     </VBtn>
                                 </td>
                             </tr>

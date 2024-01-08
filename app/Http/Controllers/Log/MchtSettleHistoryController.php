@@ -167,24 +167,40 @@ class MchtSettleHistoryController extends Controller
      */
     public function setDeposit(Request $request, $id)
     {
-        if($request->use_finance_van_deposit)
+        if($request->user()->tokenCan(35))
         {
-            
+            $code = 1;
+            if($request->use_finance_van_deposit && $request->current_status == 0)
+            {   // 정산금 이체(실시간)
+                $res = post($this->base_noti_url."/mcht-settle-deposit/$id", ['brand_id'=> $request->brand_id, 'fin_id'=> $request->fin_id]);
+                $code = $res['body']['result_cd'] == '0000' ? 1 : $res['body']['result_cd'];
+            }
+
+            if($code != 1)
+                return $this->deposit($this->settle_mcht_hist, $id);
+            else
+                return $this->extendResponse($code, $res['body']['result_msg']);
         }
-        return $this->deposit($this->settle_mcht_hist, $id);
+        else
+            return $this->response(951);
     }
 
     /**
-     * 재이체(실시간)
+     * 즉시출금 단건 재이체(실시간)
      */
     public function singleDeposit(Request $request)
     {
-        $validated = $request->validate(['trx_id'=>'required', 'mid'=>'required', 'tid'=>'nullable']);
-        $data = $request->all();
-        $url = $this->base_noti_url.'/single-deposit';
-        $res = post($url, $data);
+        if($request->user()->tokenCan(35))
+        {
+            $validated = $request->validate(['trx_id'=>'required', 'mid'=>'required', 'tid'=>'nullable']);
+            $data = $request->all();
+            $url = $this->base_noti_url.'/single-deposit';
+            $res = post($url, $data);
 
-        $code = $res['body']['result_cd'] == '0000' ? 1 : $res['body']['result_cd'];
-        return $this->extendResponse($code, $res['body']['result_msg']);
+            $code = $res['body']['result_cd'] == '0000' ? 1 : $res['body']['result_cd'];
+            return $this->extendResponse($code, $res['body']['result_msg']);
+        }
+        else
+            return $this->response(951);
     }
 }

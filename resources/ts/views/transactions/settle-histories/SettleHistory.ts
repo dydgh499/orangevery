@@ -10,12 +10,17 @@ export function settlementHistoryFunctionCollect(store: any) {
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
     
-    const deposit = async (item: SettlesHistories, is_mcht: boolean) => {
+    const rootUrlBuilder = (is_mcht: boolean, id: number) => {
+        const type  = is_mcht ? 'merchandises' : 'salesforces'
+        return '/api/v1/manager/transactions/settle-histories/' + type + '/' + id.toString()
+    }
+
+    const deposit = async (item: SettlesHistories, is_mcht: boolean, params: any) => {
         const deposit_after_text = item.status ? '입금취소처리' : '입금처리'
-        if (await alert.value.show('정말 ' + deposit_after_text + ' 하시겠습니까?')) {
-            const type = is_mcht ? 'merchandises' : 'salesforces'
-            const url = '/api/v1/manager/transactions/settle-histories/' + type + '/' + item.id.toString() + '/deposit'
-            const res = await post(url, {use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit)})
+        if (await alert.value.show('정말 ' + deposit_after_text + ' 하시겠습니까?')) {         
+            params['current_status'] = item.status
+            
+            const res = await post(rootUrlBuilder(is_mcht, item.id) + '/deposit', params)
             if(res.status === 201) {
                 snackbar.value.show('성공하였습니다.', 'success')
                 store.setTable()
@@ -25,16 +30,14 @@ export function settlementHistoryFunctionCollect(store: any) {
         }
     }
 
-    const batchDeposit = async(selected:number[], is_mcht: boolean) => {
-        const type = is_mcht ? 'merchandises' : 'salesforces'
+    const batchDeposit = async(selected:number[], is_mcht: boolean, params:any) => {
         if (await alert.value.show('정말 일괄 입금/입금취소처리 하시겠습니까?')) {
             const promises = []
             for (let i = 0; i < selected.length; i++) {
                 const item:SettlesHistories = store.items.find(obj => obj['id'] === selected[i])
-                if(item) {
-                    const url = '/api/v1/manager/transactions/settle-histories/' + type + '/' + item.id.toString() + '/deposit'
-                    promises.push(post(url, {use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit)}))
-                }
+                params['current_status'] = item.status
+                if(item)
+                    promises.push(post(rootUrlBuilder(is_mcht, item.id) + '/deposit', params))
             }
             const results = await Promise.all(promises)
             snackbar.value.show('성공하였습니다.', 'success')
@@ -44,10 +47,8 @@ export function settlementHistoryFunctionCollect(store: any) {
 
     const cancel = async (item: SettlesHistories, is_mcht: boolean) => {
         if (await alert.value.show('정말 정산취소 하시겠습니까?')) {
-            const type = is_mcht ? 'merchandises' : 'salesforces'
-            const url = '/api/v1/manager/transactions/settle-histories/' + type + '/' + +item.id.toString()
             const res = await axios({
-                url: url,
+                url: rootUrlBuilder(is_mcht, item.id),
                 method: 'delete',
                 params: {level: is_mcht ? 10 : item.level},
             })
@@ -67,9 +68,8 @@ export function settlementHistoryFunctionCollect(store: any) {
             for (let i = 0; i < selected.length; i++) {
                 const item:SettlesHistories = store.items.find(obj => obj['id'] === selected[i])
                 if(item) {
-                    const url = '/api/v1/manager/transactions/settle-histories/' + type + '/' + item.id.toString()
                     promises.push(axios({
-                        url: url,
+                        url: rootUrlBuilder(is_mcht, item.id),
                         method: 'delete',
                         params: {level: is_mcht ? 10 : item.level},
                     }))

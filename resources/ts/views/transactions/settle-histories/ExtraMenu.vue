@@ -2,6 +2,7 @@
 import { SettlesHistories } from '@/views/types'
 import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import corp from '@corp'
 
 interface Props {
     name: string,
@@ -12,13 +13,28 @@ interface Props {
 const props = defineProps<Props>()
 const store = <any>(inject('store'))
 const { deposit, cancel, download } = settlementHistoryFunctionCollect(store)
+const financeDialog = <any>(inject('financeDialog'))
+
+const getDepositParams = async () => {
+    const params:any = {
+        brand_id: corp.id,
+        use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
+    }
+    if(params['use_finance_van_deposit']) {
+        params['fin_id'] = await financeDialog.value.show()
+        // 선택안함
+        if(params['fin_id'] == 0)
+            return 0
+    }
+    deposit(props.item, props.is_mcht, params)
+}
 </script>
 <template>
     <VBtn icon size="x-small" color="default" variant="text">
         <VIcon size="22" icon="tabler-dots-vertical" />
         <VMenu activator="parent" width="230">
             <VList>
-                <VListItem value="deposit" @click="deposit(props.item, props.is_mcht)">
+                <VListItem value="deposit" @click="getDepositParams()">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:report-money" />
                     </template>

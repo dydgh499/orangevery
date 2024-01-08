@@ -4,23 +4,43 @@ import { selectFunctionCollect } from '@/views/selected'
 import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
 import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import FinanceVanDialog from '@/layouts/dialogs/FinanceVanDialog.vue'
 import { getUserLevel, getLevelByIndex, salesLevels } from '@axios'
 import { DateFilters } from '@core/enums'
+import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { batchDeposit, batchCancel } = settlementHistoryFunctionCollect(store)
 const all_sales = salesLevels()
+const financeDialog = ref()
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+provide('financeDialog', financeDialog)
 
 const totals = ref(<any[]>([]))
 
 const isNumberFormatCol = (_key: string) => {
     return _key.includes('amount') || _key.includes('_fee') || _key.includes('_deposit')
 }
+const getBatchDepositParams = async () => {
+    if(selected.value) {
+        const params:any = {
+            brand_id: corp.id,
+            use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
+        }
+        if(params['use_finance_van_deposit']) {
+            params['fin_id'] = await financeDialog.value.show()
+            // 선택안함
+            if(params['fin_id'] == 0)
+                return 0
+        }
+        batchDeposit(selected.value, false, params)
+    }
+}
+
 onMounted(() => {
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
@@ -37,7 +57,7 @@ onMounted(() => {
         <template #index_extra_field>            
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
                 :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager @update:modelValue="[store.updateQueryString({page_size: store.params.page_size})]"/>
-            <VBtn prepend-icon="tabler:report-money" @click="batchDeposit(selected, false)" v-if="getUserLevel() >= 35"  size="small">
+            <VBtn prepend-icon="tabler:report-money" @click="getBatchDepositParams()" v-if="getUserLevel() >= 35"  size="small">
                 일괄 입금/미입금처리
             </VBtn>
             <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchCancel(selected, false)" v-if="getUserLevel() >= 35" color="error"  size="small">
@@ -105,4 +125,5 @@ onMounted(() => {
             </tr>
         </template>
     </BaseIndexView>
+    <FinanceVanDialog ref="financeDialog"/>
 </template>

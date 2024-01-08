@@ -166,6 +166,21 @@ class SalesSettleHistoryController extends Controller
      */
     public function setDeposit(Request $request, $id)
     {
-        return $this->deposit($this->settle_sales_hist, $id);
+        if($request->user()->tokenCan(35))
+        {
+            $code = 1;
+            if($request->use_finance_van_deposit && $request->current_status == 0)
+            {   // 정산금 이체(실시간)
+                $res = post($this->base_noti_url."/sales-settle-deposit/$id", ['brand_id'=> $request->brand_id, 'fin_id'=> $request->fin_id]);
+                $code = $res['body']['result_cd'] == '0000' ? 1 : $res['body']['result_cd'];
+            }
+            
+            if($code != 1)
+                return $this->deposit($this->settle_sales_hist, $id);
+            else
+                return $this->extendResponse($code, $res['body']['result_msg']);
+        }
+        else
+            return $this->response(951);
     }
 }
