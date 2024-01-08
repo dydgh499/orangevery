@@ -18,7 +18,7 @@ export function settlementHistoryFunctionCollect(store: any) {
     const deposit = async (item: SettlesHistories, is_mcht: boolean, params: any) => {
         const deposit_after_text = item.status ? '입금취소처리' : '입금처리'
         if (await alert.value.show('정말 ' + deposit_after_text + ' 하시겠습니까?')) {         
-            params['current_status'] = item.status
+            params.current_status = Number(item.status)
             
             const res = await post(rootUrlBuilder(is_mcht, item.id) + '/deposit', params)
             if(res.status === 201) {
@@ -35,7 +35,7 @@ export function settlementHistoryFunctionCollect(store: any) {
             const promises = []
             for (let i = 0; i < selected.length; i++) {
                 const item:SettlesHistories = store.items.find(obj => obj['id'] === selected[i])
-                params['current_status'] = item.status
+                params.current_status = Number(item.status)
                 if(item)
                     promises.push(post(rootUrlBuilder(is_mcht, item.id) + '/deposit', params))
             }
