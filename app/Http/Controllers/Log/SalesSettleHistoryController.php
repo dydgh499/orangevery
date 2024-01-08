@@ -174,8 +174,7 @@ class SalesSettleHistoryController extends Controller
                 $res = post($this->base_noti_url."/sales-settle-deposit/$id", ['brand_id'=> $request->brand_id, 'fin_id'=> $request->fin_id]);
                 $code = $res['body']['result_cd'] == '0000' ? 1 : $res['body']['result_cd'];
             }
-            
-            if($code != 1)
+            if($code == 1)
                 return $this->deposit($this->settle_sales_hist, $id);
             else
                 return $this->extendResponse($code, $res['body']['result_msg']);
