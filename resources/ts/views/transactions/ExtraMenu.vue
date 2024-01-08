@@ -48,7 +48,7 @@ const retryDeposit = async () => {
             'mid': props.item.mid,
             'tid': props.item.tid,
         }
-        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/single-settle-deposit', params, true)
+        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit', params, true)
         if(r.status == 201) {
             store.setChartProcess()
             store.setTable()
