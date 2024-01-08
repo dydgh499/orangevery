@@ -593,7 +593,7 @@ export interface SettlesHistories extends Bank{
     total_amount: number,
     settle_dt: Date,
     deposit_dt: Date,
-    status: Boolean,
+    deposit_status: Boolean,
 }
 export interface Post {
     id: number,
