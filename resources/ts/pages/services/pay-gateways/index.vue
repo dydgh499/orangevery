@@ -26,7 +26,7 @@ const path = 'services/pay-gateways'
                 <VWindowItem>
                     <ClassificationOverview />
                 </VWindowItem>
-                <VWindowItem v-if="corp.pv_options.paid.use_realtime_deposit && getUserLevel() >= 35">
+                <VWindowItem v-if="(corp.pv_options.paid.use_realtime_deposit || corp.pv_options.paid.use_finance_van_deposit) && getUserLevel() >= 35">
                     <FinanceVanOverview />
                 </VWindowItem>
 
