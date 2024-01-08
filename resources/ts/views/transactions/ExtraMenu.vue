@@ -47,6 +47,7 @@ const retryDeposit = async () => {
             'trx_id': props.item.id,
             'mid': props.item.mid,
             'tid': props.item.tid,
+            'pmod_id': props.item.pmod_id,
         }
         const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit', params, true)
         if(r.status == 201) {
