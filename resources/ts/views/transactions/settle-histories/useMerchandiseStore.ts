@@ -18,11 +18,16 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
         'comm_settle_amount': '통신비',
         'under_sales_amount': '매출미달 차감금',
         'deduct_amount': '추가차감액',
-
     };
-    const headers_2:Record<string, string | object> = {}
+    if(corp.pv_options.paid.use_cancel_deposit)
+        headers_1['cancel_deposit_amount'] = '취소입금합계'
+    if(corp.pv_options.paid.use_collect_withdraw)
+        headers_1['collect_withdraw_amount'] = '모아서 출금합계'
+
+    const headers_2:Record<string, string | object> = {
+        'settle_amount': '정산액'
+    }
     const headers_3:Record<string, string | object> = {
-        'settle_amount': '정산액',
         'settle_dt': '정산일',
         'deposit_dt': '입금일',
         'deposit_status': '입금상태',
@@ -32,10 +37,9 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
         'acct_num': '계좌번호',
         'created_at': '생성시간',
     }
-    if(corp.pv_options.paid.use_cancel_deposit)
-        headers_2['cancel_deposit_amount'] = '취소입금합계'
-    if(corp.pv_options.paid.use_collect_withdraw)
-        headers_2['collect_withdraw_amount'] = '모아서 출금합계'
+    if(corp.pv_options.paid.use_finance_van_deposit)
+        headers_2['deposit_amount'] = '이체금액'
+
     if(getUserLevel() >= 35)
         headers_3['extra_col'] = '더보기'
     

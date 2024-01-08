@@ -10,16 +10,12 @@ export const complaint_statuses = <Options[]>[
     { id: 0, title: '처리전' }, { id: 1, title: '처리중' },
     { id: 2, title: '처리완료' },
 ]
+
 export const issuers = [
-    '비씨', '국민', '하나', '삼성',
-    '신한', '현대', '롯데', '시티',
+    'BC', '국민', '하나', '삼성',
+    '신한', '현대', '롯데', '씨티',
     '농협', '수협', '우리', '광주',
-    '전북', '제주', '해외비자', '해외마스터',
-    '해외다이너스', '해외AMAX', '해외JCB', '해외',
-    '우체국', 'MG새마을체크', '중국은행체크', '은련',
-    '신협', '저축은행', 'KDB산업', '카카오뱅크',
-    '케이뱅크', '카카오머니', '강원', 'UNIONPAY',
-    '(구)미래에셋증권', '한국투자증권',  '카카오페이증권'
+    '전북', '제주',
 ]
 
 export const useSearchStore = defineStore('complaintSearchStore', () => {

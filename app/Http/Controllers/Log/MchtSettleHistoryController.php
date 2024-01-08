@@ -167,17 +167,21 @@ class MchtSettleHistoryController extends Controller
      */
     public function setDeposit(Request $request, $id)
     {
+        if($request->use_finance_van_deposit)
+        {
+            
+        }
         return $this->deposit($this->settle_mcht_hist, $id);
     }
 
     /**
      * 재이체(실시간)
      */
-    public function settleDeposit(Request $request)
+    public function singleDeposit(Request $request)
     {
         $validated = $request->validate(['trx_id'=>'required', 'mid'=>'required', 'tid'=>'nullable']);
         $data = $request->all();
-        $url = $this->base_noti_url.'/deposit';
+        $url = $this->base_noti_url.'/single-deposit';
         $res = post($url, $data);
 
         $code = $res['body']['result_cd'] == '0000' ? 1 : $res['body']['result_cd'];

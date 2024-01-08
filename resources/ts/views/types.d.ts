@@ -317,6 +317,7 @@ interface PaidOption {
     use_head_office_withdraw: boolean,
     use_noti: boolean,
     use_cancel_deposit: boolean, //입금 내역 관리
+    use_finance_van_deposit: boolean, //금융 VAN 송금
 }
 interface AuthOption {
     levels: {

@@ -63,7 +63,7 @@ onMounted(() => {
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key === 'id'">합계</span>
                             <span v-else-if="isNumberFormatCol(_key.toString())" style="font-weight: bold;">
-                                {{ item[_key] ? parseInt(item[_key]).toLocaleString() : 0}}
+                                {{ item[_key] ? parseInt(item[_key])?.toLocaleString() : 0}}
                             </span>
                         </td>
                 </template>
@@ -80,7 +80,7 @@ onMounted(() => {
                             <span v-else> #{{ item[_key] }}</span>
                         </span>
                         <span v-else-if="isNumberFormatCol(_key.toString())" style="font-weight: bold;">
-                            {{ (item[_key] as number).toLocaleString() }}
+                            {{ (item[_key] as number)?.toLocaleString() }}
                         </span>
                         <span v-else-if="_key === 'deposit_status'">
                             <VChip :color="store.booleanTypeColor(!item[_key])">

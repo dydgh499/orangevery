@@ -394,6 +394,19 @@ const md = user_info.value.level == 50 ? 4 : 12
                                 <VSwitch v-model="props.item.auth.visibles.abnormal_trans_sales" color="primary" />
                             </template>
                         </CreateHalfVCol>
+                    </VRow>                    
+                    <VCardTitle class="pt-10">
+                        <BaseQuestionTooltip location="top" text="정산 옵션(유료)"
+                            :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
+                        </BaseQuestionTooltip> 
+                    </VCardTitle>
+                    <VRow class="pt-5">
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>금융VAN 송금 사용여부</template>
+                            <template #input>
+                                <VSwitch v-model="props.item.paid.use_finance_van_deposit" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
                     </VRow>
                 </VCardItem>
             </VCard>

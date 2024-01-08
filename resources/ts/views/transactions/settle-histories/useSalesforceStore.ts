@@ -1,11 +1,13 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import { getUserLevel } from '@axios'
+import corp from '@corp'
 
 export const useSearchStore = defineStore('transSettlesHistorySalesSearchStore', () => {    
     const store = Searcher('transactions/settle-histories/salesforces')
     const head  = Header('transactions/settle-histories/salesforces', '영업점 정산이력')
-    const headers:Record<string, string | object> = {
+    
+    const headers_1:Record<string, string | object> = {
         'id': 'NO.',
         'user_name' : '영업점 ID',
         'sales_name': '상호',
@@ -18,6 +20,11 @@ export const useSearchStore = defineStore('transSettlesHistorySalesSearchStore',
         'under_sales_amount': '매출미달 차감금',
         'deduct_amount': '추가차감액',
         'settle_amount': '정산액',
+    }    
+    if(corp.pv_options.paid.use_finance_van_deposit)
+        headers_1['deposit_amount'] = '이체금액'
+
+    const headers_2:Record<string, string | object> = {
         'settle_dt': '정산일',
         'deposit_dt': '입금일',
         'deposit_status': '입금상태',
@@ -26,7 +33,14 @@ export const useSearchStore = defineStore('transSettlesHistorySalesSearchStore',
         'acct_name': '예금주',
         'acct_num': '계좌번호',
         'created_at': '생성시간',
+    }
+   
+
+    const headers:Record<string, string | object> = {
+        ...headers_1,
+        ...headers_2,
     };
+
     if(getUserLevel() >= 35) {
         headers['extra_col'] = '더보기'
     }

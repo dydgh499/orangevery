@@ -89,7 +89,7 @@ class CollectWithdrawController extends Controller
                 'acct_bank_name' => $request->user()->acct_bank_name,
                 'acct_bank_code' => $request->user()->acct_bank_code,
             ];
-            $url = $this->base_noti_url.'/single-deposit';
+            $url = $this->base_noti_url.'/collect-deposit';
             $res = post($url, $params);
             if($res['code'] == 201)
                 return $this->response($res ? 1 : 990);    

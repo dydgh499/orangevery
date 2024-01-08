@@ -69,6 +69,9 @@ class CreateMerchandisesTable extends Migration
             $table->boolean('use_regular_card')->default(false)->comment('정기 카드 사용여부(단골고객)');
             $table->boolean('use_collect_withdraw')->default(false)->comment('모아서 출금여부');
             $table->boolean('is_show_fee')->default(false)->comment('수수료율 노출여부');
+            $table->mediumInteger('collect_withdraw_fee')->default(0)->comment('모아서 출금 수수료(가맹점)');
+            $table->mediumInteger('withdraw_fee')->default(0)->comment('출금 수수료');
+            $table->tinyInteger('tax_category_type')->default(0)->comment('면세사업자 파라미터(0=면세, 1=과세, 2=복합)');
             $table->string('note', 100)->nullable()->comment('메모');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();

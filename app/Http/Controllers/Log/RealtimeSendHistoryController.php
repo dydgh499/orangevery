@@ -105,7 +105,7 @@ class RealtimeSendHistoryController extends Controller
 
         foreach($params as $param)
         {
-            $res = post($this->base_noti_url.'/single-deposit', $param);
+            $res = post($this->base_noti_url.'/collect-deposit', $param);
             if($res['code'] == 201)
                 return $this->response($res ? 1 : 990);
         }
@@ -192,7 +192,7 @@ class RealtimeSendHistoryController extends Controller
             'withdraw_fee' => 0,
         ];
         $params = array_merge($params, $privacy->toArray());
-        $res = post($this->base_noti_url.'/single-deposit', $params);
+        $res = post($this->base_noti_url.'/collect-deposit', $params);
         if($res['code'] == 201)
             return $this->extendResponse(1, $res['body']['result_msg']);
         else

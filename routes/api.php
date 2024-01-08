@@ -148,7 +148,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('merchandises/part', [MchtSettleHistoryController::class, 'storePart']);
                 Route::post('merchandises/batch', [MchtSettleHistoryController::class, 'batch']);
                 Route::post('merchandises/{id}/deposit', [MchtSettleHistoryController::class, 'setDeposit']);
-                Route::post('merchandises/settle-deposit', [MchtSettleHistoryController::class, 'settleDeposit']);
+                Route::post('merchandises/single-deposit', [MchtSettleHistoryController::class, 'singleDeposit']);
                 Route::apiResource('merchandises', MchtSettleHistoryController::class);
                 
                 Route::get('salesforces/chart', [SalesSettleHistoryController::class, 'chart']);
