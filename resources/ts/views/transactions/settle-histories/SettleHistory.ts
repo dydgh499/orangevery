@@ -47,26 +47,28 @@ export function settlementHistoryFunctionCollect(store: any) {
 
     const cancel = async (item: SettlesHistories, is_mcht: boolean) => {
         if (await alert.value.show('정말 정산취소 하시겠습니까?')) {
-            const res = await axios({
-                url: rootUrlBuilder(is_mcht, item.id),
-                method: 'delete',
-                params: {
-                    level: is_mcht ? 10 : item.level,
-                    current_status: Number(item.deposit_status),
-                    use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
-                },
-            })
-            if(res.status === 201) {
-                snackbar.value.show('성공하였습니다.', 'success')
-                store.setTable()
+            try {
+                const res = await axios({
+                    url: rootUrlBuilder(is_mcht, item.id),
+                    method: 'delete',
+                    params: {
+                        level: is_mcht ? 10 : item.level,
+                        current_status: Number(item.deposit_status),
+                        use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
+                    },
+                })
+                if(res.status === 201) {
+                    snackbar.value.show('성공하였습니다.', 'success')
+                    store.setTable()
+                }    
             }
-            else
-                snackbar.value.show(res.data.message, 'error')
+            catch (e: any) {
+                snackbar.value.show(e.response.data.message, 'error')
+            }
         }
     }
     
     const batchCancel = async(selected:number[], is_mcht: boolean) => {
-        const type = is_mcht ? 'merchandises' : 'salesforces'
         if (await alert.value.show('정말 일괄 정산취소처리 하시겠습니까?')) {
             const promises = []
             for (let i = 0; i < selected.length; i++) {
