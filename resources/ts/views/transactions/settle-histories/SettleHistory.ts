@@ -50,7 +50,11 @@ export function settlementHistoryFunctionCollect(store: any) {
             const res = await axios({
                 url: rootUrlBuilder(is_mcht, item.id),
                 method: 'delete',
-                params: {level: is_mcht ? 10 : item.level},
+                params: {
+                    level: is_mcht ? 10 : item.level,
+                    current_status: Number(item.deposit_status),
+                    use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
+                },
             })
             if(res.status === 201) {
                 snackbar.value.show('성공하였습니다.', 'success')
@@ -71,7 +75,11 @@ export function settlementHistoryFunctionCollect(store: any) {
                     promises.push(axios({
                         url: rootUrlBuilder(is_mcht, item.id),
                         method: 'delete',
-                        params: {level: is_mcht ? 10 : item.level},
+                        params: {
+                            level: is_mcht ? 10 : item.level,
+                            current_status: Number(item.deposit_status),
+                            use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
+                        },
                     }))
                 }
             }

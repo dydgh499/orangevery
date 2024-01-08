@@ -118,10 +118,15 @@ class MchtSettleHistoryController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        return DB::transaction(function () use($request, $id) {
-            $res = $this->deleteMchtforceCommon( $request, $id, 'mcht_id', 'mcht_settle_id', 'mcht_id');
-            return $this->response($res ? 1 : 990, ['id'=>$id]);
-        });
+        if($request->use_finance_van_deposit && $request->current_status)
+            return $this->extendResponse(2000, "입금완료된 정산건은 정산취소 할수 없습니다.");
+        else
+        {
+            return DB::transaction(function () use($request, $id) {
+                $res = $this->deleteMchtforceCommon( $request, $id, 'mcht_id', 'mcht_settle_id', 'mcht_id');
+                return $this->response($res ? 1 : 990, ['id'=>$id]);
+            });    
+        }
     }
 
 
