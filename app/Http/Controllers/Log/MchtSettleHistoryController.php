@@ -170,10 +170,15 @@ class MchtSettleHistoryController extends Controller
         if($request->user()->tokenCan(35))
         {
             $code = 1;
-            if($request->use_finance_van_deposit && $request->current_status == 0)
+            if($request->use_finance_van_deposit)
             {   // 정산금 이체(실시간)
-                $res = post($this->base_noti_url."/mcht-settle-deposit/$id", ['brand_id'=> $request->brand_id, 'fin_id'=> $request->fin_id]);
-                $code = $res['body']['result_cd'] == '0000' ? 1 : $res['body']['result_cd'];
+                if($request->current_status == 0)
+                {
+                    $res = post($this->base_noti_url."/mcht-settle-deposit/$id", ['brand_id'=> $request->brand_id, 'fin_id'=> $request->fin_id]);
+                    $code = $res['body']['result_cd'] == '0000' ? 1 : $res['body']['result_cd'];    
+                }
+                else
+                    return $this->extendResponse('9999', "입금완료된 정산건은 다시 입금할 수 없습니다.");
             }
             if($code == 1)
                 return $this->deposit($this->settle_mcht_hist, $id);
