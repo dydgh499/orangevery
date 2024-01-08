@@ -178,12 +178,12 @@ class MchtSettleHistoryController extends Controller
                     $code = $res['body']['result_cd'] == '0000' ? 1 : $res['body']['result_cd'];    
                 }
                 else
-                    return $this->extendResponse('9999', "입금완료된 정산건은 다시 입금할 수 없습니다.");
+                    return $this->extendResponse(2000, "입금완료된 정산건은 다시 입금할 수 없습니다.");
             }
             if($code == 1)
                 return $this->deposit($this->settle_mcht_hist, $id);
             else
-                return $this->extendResponse($code, $res['body']['result_msg']);
+                return $this->extendResponse(2000, $res['body']['result_msg']);
         }
         else
             return $this->response(951);

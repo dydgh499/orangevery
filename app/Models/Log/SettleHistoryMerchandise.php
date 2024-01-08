@@ -5,6 +5,7 @@ namespace App\Models\Log;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Http\Traits\Models\AttributeTrait;
+use App\Models\Log\SettleHistoryMerchandiseDeposit;
 
 class SettleHistoryMerchandise extends Model
 {
@@ -12,4 +13,11 @@ class SettleHistoryMerchandise extends Model
     protected   $table      = 'settle_histories_merchandises';
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
+
+    public function deposits()
+    {
+        return $this->hasMany(SettleHistoryMerchandiseDeposit::class, 'settle_hist_mcht_id')
+            ->orderby('id', 'desc')
+            ->select();
+    }
 }
