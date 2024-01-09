@@ -7,6 +7,7 @@ import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
 import { banks, avatars } from '@/views/users/useStore'
 import corp from '@corp'
 import { axios } from '@axios'
+import { masker } from 'vue-the-mask'
 
 interface Props {
     item: UserPropertie,
@@ -39,6 +40,8 @@ const onwerCheck = async () => {
         }
     }
 }
+
+
 </script>
 <template>
     <VRow class="match-height">
