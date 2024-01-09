@@ -19,6 +19,7 @@ const previewStyle = `
     margin-block-start: 0.5em;
     margin-inline-start: auto;
     max-inline-size: 10em;
+    width: 15em;
 `;
 
 const emits = defineEmits(['update:file']);

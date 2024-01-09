@@ -47,7 +47,7 @@ const requestWithdraw = async() => {
     if(able_balance.value >= amount.value) {
         if(amount.value) {
             if(await alert.value.show('정말 '+amount.value+'원을 출금하시겠습니까?')) {
-                const r = await post('/api/v1/manager/transactions/settle/merchandises/collect-withdraws', {
+                const r = await post('/api/v1/bf/withdraws', {
                     withdraw_amount: amount.value,
                 })
                 if(r.status == 201)

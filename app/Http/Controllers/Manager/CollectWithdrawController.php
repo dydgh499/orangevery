@@ -59,13 +59,63 @@ class CollectWithdrawController extends Controller
         return $this->getIndexData($request, $query, 'collect_withdraws.id', $cols, 'collect_withdraws.created_at');
     }
 
+    public function store(CollectWithdrawRequest $request)
+    {
+        $data = $request->data();
+        $res  = $this->collect_withdraws->create($data);
+        return $this->response($res ? 1 : 990, ['id'=>$res->id]);
+    }
+
     /**
-     * 출금 요청
+     * 단일조회
+     *
+     * 가맹점 이상 가능
+     *
+     * @urlParam id integer required 정기등록카드 PK
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        $data = $this->collect_withdraws->first();
+        return $this->response($data ? 0 : 1000, $data);
+    }
+
+    /**
+     * 업데이트
+     *
+     * 마스터 이상 가능
+     *
+     * @urlParam id integer required 모아서출금 PK
+     * @return \Illuminate\Http\Response
+     */
+    public function update(CollectWithdrawRequest $request, $id)
+    {
+        $data = $request->data();
+        $res  = $this->collect_withdraws->where('id', $id)->update($data);
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
+    }
+
+    /**
+     * 단일삭제
+     *
+     * 마스터 이상 가능
+     *
+     * @urlParam id integer required 모아서출금 PK
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $res = $this->collect_withdraws->where('id', $id)->delete();
+        return $this->response($res ? 1 : 990, ['id'=>$id]);
+    }
+    
+    /**
+     * 모아서 출금 요청
      *
      * 가맹점만 가능
      *
      */
-    public function store(CollectWithdrawRequest $request)
+    public function collectDeposit(CollectWithdrawRequest $request)
     {
         $merchandise = Merchandise::where('id', $request->user()->id)->first(['collect_withdraw_fee']);
         $pay_modules = PaymentModule::where('mcht_id', $request->user()->id)
@@ -98,48 +148,5 @@ class CollectWithdrawController extends Controller
         }
         else
             return $this->extendResponse(1000, "활성화된 실시간 모듈을 찾을 수 없습니다.");
-    }
-
-    /**
-     * 단일조회
-     *
-     * 가맹점 이상 가능
-     *
-     * @urlParam id integer required 정기등록카드 PK
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $data = $this->collect_withdraws->first();
-        return $this->response($data ? 0 : 1000, $data);
-    }
-
-    /**
-     * 업데이트
-     *
-     * 마스터 이상 가능
-     *
-     * @urlParam id integer required 정기등록카드 PK
-     * @return \Illuminate\Http\Response
-     */
-    public function update(CollectWithdrawRequest $request, $id)
-    {
-        $data = $request->data();
-        $res  = $this->collect_withdraws->where('id', $id)->update($data);
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
-    }
-
-    /**
-     * 단일삭제
-     *
-     * 마스터 이상 가능
-     *
-     * @urlParam id integer required 정기등록카드 PK
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $res = $this->collect_withdraws->where('id', $id)->delete();
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 }

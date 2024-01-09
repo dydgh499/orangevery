@@ -175,7 +175,7 @@ class BfController extends Controller
         if($json['profit'] >= $request->withdraw_amount)
         {
             $inst = new CollectWithdrawController(new CollectWithdraw);
-            return $inst->store($request);    
+            return $inst->collectDeposit($request);    
         }
         else
             return $this->response(1002);
