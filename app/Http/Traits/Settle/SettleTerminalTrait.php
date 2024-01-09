@@ -19,7 +19,7 @@ trait SettleTerminalTrait
                 //개통일에 M + comm_settle_type을 적용. 0=개통월부터 적용, 1=M+1, 2=M+2
                 $comm_settle_able_dt = Carbon::parse($pay_module->begin_dt)->addMonthNoOverflow($pay_module->comm_settle_type);
                 $terminal = $content->terminal;
-                if($c_settle_s_dt->lt($comm_settle_able_dt) && $c_settle_e_dt->gte($comm_settle_able_dt))
+                if($c_settle_s_dt->gte($comm_settle_able_dt) && $c_settle_e_dt->gte($comm_settle_able_dt))
                 {
                     $terminal['amount'] -= $pay_module->comm_settle_fee;
                 }
