@@ -7,23 +7,35 @@ use Illuminate\Support\Facades\DB;
 
 trait SettleTerminalTrait
 {
+    protected function getCarbonToYm($date)
+    {
+        return (int)($date->year.$date->month);
+    }
+
     // 통신비 세팅
     protected function setSettleTerminals($data, $settle_s_dt, $settle_e_dt)
     {
         $c_settle_s_dt = Carbon::parse($settle_s_dt)->copy();   //정산 시작일
         $c_settle_e_dt = Carbon::parse($settle_e_dt)->copy();   //정산 종료일
+
+        $c_settle_s_ym = $this->getCarbonToYm($c_settle_s_dt);
+        $c_settle_e_ym = $this->getCarbonToYm($c_settle_e_dt);
+
         foreach($data['content'] as $content) 
         {
             foreach($content->pay_modules as $pay_module)
             {
                 //개통일에 M + comm_settle_type을 적용. 0=개통월부터 적용, 1=M+1, 2=M+2
-                $comm_settle_dt = Carbon::parse($pay_module->begin_dt)->addMonthNoOverflow($pay_module->comm_settle_type); //정산일
+                $comm_settle_dt = Carbon::parse($pay_module->begin_dt)->addMonthNoOverflow($pay_module->comm_settle_type);
+                $comm_settle_ym = $this->getCarbonToYm($comm_settle_dt);
                 $terminal = $content->terminal;
-                /*
-                    0. 가정 = 통신비 정산이 이번달까지 되지 않는 것들 중
-                    1. 통신비 정산일이 정산일 보다 같거나 작을 때                    
-                */
-                if($c_settle_e_dt->gte($comm_settle_dt))
+                // 가정 = 통신비 정산이 이번달까지되지 않는 것들 중
+
+                // 통신비 정산월이 정산 시작월, 종료월 보다 작고
+                $cond_1 = $comm_settle_ym < $c_settle_s_ym && $comm_settle_ym < $c_settle_e_ym;
+                // 통신비 정산일이 정산 시작일 ~ 정산 종료일 사이 일 때
+                $cond_2 = $pay_module->comm_settle_day >= $c_settle_s_dt->day && $pay_module->comm_settle_day <= $c_settle_e_dt->day;
+                if($cond_1 && $cond_2)
                 {
                     $terminal['amount'] -= $pay_module->comm_settle_fee;
                 }
