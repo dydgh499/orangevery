@@ -17,9 +17,13 @@ trait SettleTerminalTrait
             foreach($content->pay_modules as $pay_module)
             {
                 //개통일에 M + comm_settle_type을 적용. 0=개통월부터 적용, 1=M+1, 2=M+2
-                $comm_settle_able_dt = Carbon::parse($pay_module->begin_dt)->addMonthNoOverflow($pay_module->comm_settle_type);
+                $comm_settle_dt = Carbon::parse($pay_module->begin_dt)->addMonthNoOverflow($pay_module->comm_settle_type); //정산일
                 $terminal = $content->terminal;
-                if($c_settle_s_dt->gte($comm_settle_able_dt) && $c_settle_e_dt->gte($comm_settle_able_dt))
+                /*
+                    0. 가정 = 통신비 정산이 이번달까지 되지 않는 것들 중
+                    1. 통신비 정산일이 정산일 보다 같거나 작을 때                    
+                */
+                if($c_settle_e_dt->gte($comm_settle_dt))
                 {
                     $terminal['amount'] -= $pay_module->comm_settle_fee;
                 }
