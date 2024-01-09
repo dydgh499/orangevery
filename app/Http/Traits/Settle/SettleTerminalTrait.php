@@ -30,9 +30,8 @@ trait SettleTerminalTrait
                 $comm_settle_ym = $this->getCarbonToYm($comm_settle_dt);
                 $terminal = $content->terminal;
                 // 가정 = 통신비 정산이 이번달까지되지 않는 것들 중
-
-                // 통신비 정산월이 정산 시작월, 종료월 보다 작고
-                $cond_1 = $comm_settle_ym < $c_settle_s_ym && $comm_settle_ym < $c_settle_e_ym;
+                // 통신비 정산월이 정산 시작월, 종료월 보다 같거나 작고
+                $cond_1 = $comm_settle_ym <= $c_settle_s_ym && $comm_settle_ym <= $c_settle_e_ym;
                 // 통신비 정산일이 정산 시작일 ~ 정산 종료일 사이 일 때
                 $cond_2 = $pay_module->comm_settle_day >= $c_settle_s_dt->day && $pay_module->comm_settle_day <= $c_settle_e_dt->day;
                 if($cond_1 && $cond_2)
