@@ -168,7 +168,7 @@ class BuddyPayController extends Controller
             else
                 return '';
         };
-        $request->merge(['yymm'=>$getYYMM($data['yymm'])]); // 실수 ..
+        $request->merge(['yymm'=>$getYYMM($request->yymm)]); // 실수 .. mmyy
         $inst = new TransactionController(new Transaction);
         return $inst->handPay($request);
     }
