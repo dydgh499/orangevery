@@ -378,8 +378,7 @@ class TransactionController extends Controller
         $dev_settle_type = DevSettleType::NOT_APPLY->value;
         $db_trans = $this->transactions
             ->where('brand_id', 4)
-            ->where('mcht_id', 30804)
-            ->where('created_at', '>=', '2023-12-22')
+            ->where('mcht_id', 30807)
             ->orderBy('id', 'desc')
             ->get();
 

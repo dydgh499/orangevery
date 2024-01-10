@@ -176,6 +176,7 @@ export const defaultItemInfo = () => {
                 subsidiary_use_control: false,
                 use_online_pay: false,
                 use_tid_create: false,
+                use_mid_create: false,
                 use_mid_batch: false,
                 use_tid_batch: false,
                 use_api_key_batch: false,
@@ -188,6 +189,8 @@ export const defaultItemInfo = () => {
                 use_noti: false,
                 use_head_office_withdraw: false,
                 use_cancel_deposit: false,
+                use_collect_withdraw_scheduler: false,
+                use_finance_van_deposit: false
             }),
             auth: reactive<AuthOption>({
                 levels: {

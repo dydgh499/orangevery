@@ -315,8 +315,6 @@ class PaymentModuleController extends Controller
 
     /**
      * TID 발급
-     *
-     * @urlParam id integer required 유저 PK
      */
     public function tidCreate(Request $request)
     {
@@ -347,6 +345,25 @@ class PaymentModuleController extends Controller
 
         $tid = sprintf($pg_type.$date.'%04d', $idx);
         return $this->response(0, ['tid'=>$tid]);    
+    }
+    /**
+     * MID 발급
+     */
+    public function midCreate(Request $request)
+    {
+        //0523070000 pg(2) + ym(2) + idx(4)
+        $getNewMid = function() {
+            $sign = "BUDM";
+            $codes = ['DO', 'DR', 'OP'];
+            $code = $codes[array_rand($codes)];
+            $num = sprintf("%06d", rand(0, 999999));
+            return $sign."_".$code.$num;    
+        };
+        $new_mid = $getNewMid();
+        if($this->pay_modules->where('mid', $new_mid)->exists())
+            return $this->extendResponse(2000, '발급한 MID가 이미 존재하는 MID 입니다.<br<다시 발급버튼을 눌러주세요.',['mid'=>$new_mid]); 
+        else
+            return $this->response(0, ['mid'=>$new_mid]);    
     }
 
     public function getNewPayKey($id)

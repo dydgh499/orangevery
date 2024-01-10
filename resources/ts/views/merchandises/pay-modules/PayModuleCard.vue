@@ -33,7 +33,7 @@ const mcht = ref(null)
 const md = ref<number>(3)
 
 const tidCreate = async() => {
-    if(await alert.value.show('정말 TID를 새로 가져오시겠습니까?')) {
+    if(await alert.value.show('정말 TID를 신규 발급하시겠습니까?')) {
         try {
             const pg_type = pgs.find(obj => obj.id === props.item.pg_id)?.pg_type
             const r = await axios.post('/api/v1/manager/merchandises/pay-modules/tid-create', { pg_type : pg_type })
@@ -46,6 +46,16 @@ const tidCreate = async() => {
         }
     }
 }
+const midCreate = async() => {
+    if(await alert.value.show('정말 MID를 신규 발급하시겠습니까?')) {
+        const r = await axios.post('/api/v1/manager/merchandises/pay-modules/mid-create', {id: props.item.id})
+        if(r.status == 200)
+            props.item.mid = r.data.mid
+        else
+            snackbar.value.error(r.data.message, 'error')
+    }
+}
+
 const payKeyCreate = async() => {
     if(await alert.value.show('정말 결제 KEY를 신규 발급하시겠습니까?<br><br><b>이전 결제키는 더이상 사용할 수 없으니 주의하시기바랍니다.</b>')) {
         try {
@@ -205,13 +215,31 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
+                        
+                        <!-- 👉 SUB KEY-->
+                        <VRow class="pt-3" v-show="props.item.module_type != 0 && corp.pv_options.paid.use_mid_create">
+                            <CreateHalfVCol :mdl="5" :mdr="7">
+                                <template #name>상위 MID</template>
+                                <template #input>
+                                    <VTextField type="text" v-model="props.item.sub_key" prepend-inner-icon="ic-sharp-key"
+                                        placeholder="상위 MID 입력" persistent-placeholder />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
                         <!-- 👉 MID -->
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>MID</template>
                                 <template #input>
-                                    <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
-                                        placeholder="MID 입력" persistent-placeholder />
+                                    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                        <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
+                                            placeholder="MID 입력" persistent-placeholder />
+                                        <VBtn type="button" variant="tonal" v-if="getUserLevel() >= 35 && props.item.id == 0 && corp.pv_options.paid.use_mid_create"
+                                            @click="midCreate()">
+                                            {{ "생성" }}
+                                            <VIcon end icon="material-symbols:add-to-home-screen" />
+                                        </VBtn>
+                                    </div>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -227,7 +255,7 @@ onMounted(() => {
                                             @click="tidCreate()">
                                             {{ "생성" }}
                                             <VIcon end icon="material-symbols:add-to-home-screen" />
-                                        </VBtn>                                        
+                                        </VBtn>
                                     </div>
                                 </template>
                             </CreateHalfVCol>

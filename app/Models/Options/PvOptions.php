@@ -48,6 +48,7 @@
         public $use_pay_limit = false;          // 결제한도 지정 사용 여부
         public $use_online_pay = false;         // 온라인 결제 사용 여부
         public $use_tid_create = false;         // tid 생성버튼 사용여부
+        public $use_mid_create = false;         // mid 생성버튼 사용여부
         public $use_mid_batch = false;          // mid 일괄적용
         public $use_tid_batch = false;          // tid 일괄적용
         public $use_api_key_batch = false;      // api_key 일괄적용
