@@ -44,8 +44,9 @@ trait SettleTerminalTrait
                         $last_settle_month = Carbon::createFromDate($year, $month, 1);
                         $m_offset = $c_settle_e_dt->diffInMonths($pay_module->last_settle_month);
                     }
+                    logging(['m_offset'=>$m_offset]);
                     // 같은달이면 m_offset은 1
-                    $terminal['amount'] -= ($pay_module->comm_settle_fee * $m_offset);
+                    $terminal['amount'] -= ($pay_module->comm_settle_fee);
                 }
 
                 $content->terminal = $terminal;
