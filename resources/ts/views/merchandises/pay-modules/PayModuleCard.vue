@@ -25,12 +25,13 @@ const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
-
 const { update, remove } = useRequestStore()
 const { pgs, pss, settle_types, terminals, finance_vans, psFilter, setFee } = useStore()
 
 const mcht = ref(null)
 const md = ref<number>(3)
+
+const midCreateDlg = <any>(inject('midCreateDlg'))
 
 const tidCreate = async() => {
     if(await alert.value.show('정말 TID를 신규 발급하시겠습니까?')) {
@@ -47,15 +48,15 @@ const tidCreate = async() => {
     }
 }
 const midCreate = async() => {
-    if(await alert.value.show('정말 MID를 신규 발급하시겠습니까?')) {
-        const r = await axios.post('/api/v1/manager/merchandises/pay-modules/mid-create', {id: props.item.id})
+    const mid_code = await midCreateDlg.value.show()
+    if(mid_code) {
+        const r = await axios.post('/api/v1/manager/merchandises/pay-modules/mid-create', {mid_code: mid_code})    
         if(r.status == 200)
             props.item.mid = r.data.mid
         else
             snackbar.value.error(r.data.message, 'error')
     }
 }
-
 const payKeyCreate = async() => {
     if(await alert.value.show('정말 결제 KEY를 신규 발급하시겠습니까?<br><br><b>이전 결제키는 더이상 사용할 수 없으니 주의하시기바랍니다.</b>')) {
         try {
@@ -217,11 +218,11 @@ onMounted(() => {
                         </VRow>
                         
                         <!-- 👉 SUB KEY-->
-                        <VRow class="pt-3" v-show="props.item.module_type != 0 && corp.pv_options.paid.use_mid_create">
+                        <VRow class="pt-3" v-show="corp.pv_options.paid.use_mid_create">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>상위 MID</template>
                                 <template #input>
-                                    <VTextField type="text" v-model="props.item.sub_key" prepend-inner-icon="ic-sharp-key"
+                                    <VTextField type="text" v-model="props.item.p_mid" prepend-inner-icon="tabler-user"
                                         placeholder="상위 MID 입력" persistent-placeholder />
                                 </template>
                             </CreateHalfVCol>

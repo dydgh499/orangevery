@@ -18,6 +18,7 @@ class PayModuleRequest extends FormRequest
         'api_key',
         'sub_key',
         'mid',
+        'p_mid',
         'tid',
         'cxl_type',
         'serial_num',

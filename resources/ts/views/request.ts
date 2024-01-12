@@ -2,6 +2,7 @@ import router from '@/router'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import type { Merchandise } from '@/views/types'
 import { axios, getLevelByIndex } from '@axios'
+import corp from '@corp'
 
 export const useRequestStore = defineStore('requestStore', () => {
     const alert = <any>(inject('alert'))
@@ -117,6 +118,9 @@ export const useRequestStore = defineStore('requestStore', () => {
     }
 
     const update = async (base_url: string, params: any, vForm: any, is_redirect: boolean = true) => {
+        if('merchandises/pay-modules')
+            params.use_tid_duplicate = corp.pv_options.free.use_tid_duplicate;
+        //payment moduels use_tid_duplicate
         const is_valid = await vForm.validate()
         const { url, reqType } = getBaseSendInfo(base_url, params.id)
         if (is_valid.valid && await alert.value.show('정말 ' + reqType + '하시겠습니까?')) {

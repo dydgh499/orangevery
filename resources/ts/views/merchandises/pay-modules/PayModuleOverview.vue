@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import type { PayModule, Merchandise } from '@/views/types'
 import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue'
+import MidCreateDialog from '@/layouts/dialogs/MidCreateDialog.vue'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
@@ -9,6 +10,7 @@ import { useRequestStore } from '@/views/request'
 interface Props {
     item: Merchandise,
 }
+const midCreateDlg = ref(null)
 const props = defineProps<Props>()
 const { setNullRemove } = useRequestStore()
 const pay_modules = reactive<PayModule[]>([])
@@ -55,8 +57,12 @@ const addNewPaymodule = () => {
         fin_trx_delay: 15,
         cxl_type: 2,
         use_realtime_deposit: 0,
+        p_mid: '',
     })
 }
+
+provide('midCreateDlg', midCreateDlg)
+
 if(props.item.id)
     Object.assign(pay_modules, await getAllPayModules(props.item.id))
 
@@ -65,14 +71,17 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <PayModuleCard v-for="(item, index) in pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="mchts"/>
-    <!-- 👉 submit -->
-    <VCard style="margin-top: 1em;">
-        <VCol class="d-flex gap-4">
-            <VBtn type="button" style="margin-left: auto;" @click="addNewPaymodule">
-                결제모듈 신규추가
-                <VIcon end icon="tabler-plus" />
-            </VBtn>
-        </VCol>
-    </VCard>
+    <div>
+        <PayModuleCard v-for="(item, index) in pay_modules" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="mchts"/>
+        <!-- 👉 submit -->
+        <VCard style="margin-top: 1em;">
+            <VCol class="d-flex gap-4">
+                <VBtn type="button" style="margin-left: auto;" @click="addNewPaymodule">
+                    결제모듈 신규추가
+                    <VIcon end icon="tabler-plus" />
+                </VBtn>
+            </VCol>
+        </VCard>
+        <MidCreateDialog ref="midCreateDlg"/>
+    </div>
 </template>

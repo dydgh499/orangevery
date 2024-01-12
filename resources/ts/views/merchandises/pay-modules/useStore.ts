@@ -240,7 +240,8 @@ export const defaultItemInfo =  () => {
         fin_trx_delay: 15,
         cxl_type: 2,
         use_realtime_deposit: 0,
-        pay_dupe_least: 0
+        pay_dupe_least: 0,
+        p_mid: ''
     })
     //카드사 필터 및 다른 필터옵션들
     return {

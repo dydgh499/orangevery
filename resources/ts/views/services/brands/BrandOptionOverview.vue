@@ -55,6 +55,14 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>TID 중복검사 사용여부</template>
+                            <template #input>
+                                <VSwitch v-model="props.item.free.use_tid_duplicate" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
                     <VCardTitle class="pt-10">
                         <BaseQuestionTooltip location="top" text="매출전표 가맹점표기 정보"
                             :content="`가맹점 옵션중 매출전표 공급자 표기정보(PG/본사)를 본사로 설정할 시<br>매출전표에서 하단 정보들이 보여집니다.`">

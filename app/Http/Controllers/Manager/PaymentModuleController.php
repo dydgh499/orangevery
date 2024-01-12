@@ -120,9 +120,19 @@ class PaymentModuleController extends Controller
      */
     public function store(PayModuleRequest $request)
     {
+        // 같은 브랜드에서 똑같은 값이 존재할 떄
+        $isDuplicateId = function($bid, $key, $value) {
+            return $this->pay_modules
+                ->where('brand_id', $bid)
+                ->where($key, $value)
+                ->exists();
+        };
+        
         if($request->user()->tokenCan(10))
         {
             $data = $request->data();
+            if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'tid', $data['tid']))
+                return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid'=>$data['tid']]);
             if($data['module_type'] == 0 && $data['serial_num'] != '')
             {
                 $res = $this->pay_modules
@@ -171,6 +181,8 @@ class PaymentModuleController extends Controller
             return $this->response(951);
     }
 
+
+
     /**
      * 업데이트
      *
@@ -180,9 +192,20 @@ class PaymentModuleController extends Controller
      */
     public function update(PayModuleRequest $request, $id)
     {
+        // 같은 브랜드에서 똑같은 값이 존재할 떄
+        $isDuplicateId = function($bid, $pid, $key, $value) {
+            return $this->pay_modules
+                ->where('brand_id', $bid)
+                ->where('id', '!=', $pid)
+                ->where($key, $value)
+                ->exists();
+        };  // tid 중복해서 사용하는 브랜드들은 ..?
+
         if($this->authCheck($request->user(), $id, 15))
         {
             $data = $request->data();
+            if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
+                return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid'=>$data['tid']]);
             if($data['module_type'] == 0 && $data['serial_num'] != '')
             {
                 $res = $this->pay_modules
@@ -351,19 +374,13 @@ class PaymentModuleController extends Controller
      */
     public function midCreate(Request $request)
     {
-        //0523070000 pg(2) + ym(2) + idx(4)
-        $getNewMid = function() {
-            $sign = "BUDM";
-            $codes = ['DO', 'DR', 'OP'];
-            $code = $codes[array_rand($codes)];
+        $mid_code = $request->mid_code;
+        do {
             $num = sprintf("%06d", rand(0, 999999));
-            return $sign."_".$code.$num;    
-        };
-        $new_mid = $getNewMid();
-        if($this->pay_modules->where('mid', $new_mid)->exists())
-            return $this->extendResponse(2000, '발급한 MID가 이미 존재하는 MID 입니다.<br<다시 발급버튼을 눌러주세요.',['mid'=>$new_mid]); 
-        else
-            return $this->response(0, ['mid'=>$new_mid]);    
+            $mid = $mid_code.$num;
+        }
+        while($this->pay_modules->where('mid', $mid)->exists());
+        return $this->response(0, ['mid'=>$mid]);    
     }
 
     public function getNewPayKey($id)

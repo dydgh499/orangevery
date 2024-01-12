@@ -171,6 +171,7 @@ export interface PayModule {
     module_type: number,
     api_key: string,
     sub_key: string,
+    p_mid: string,
     mid: string,
     tid: string,
     serial_num: string,
@@ -275,6 +276,7 @@ interface FreeOption {
     use_auth_pay: boolean,
     use_simple_pay: boolean,
     use_search_date_detail: boolean,
+    use_tid_duplicate: boolean,
     sales_slip: {
         merchandise: {
             comepany_name: string,
