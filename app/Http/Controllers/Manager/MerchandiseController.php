@@ -76,9 +76,14 @@ class MerchandiseController extends Controller
 
     private function byPayModules($request, $is_all)
     {
+        $search = $request->input('search', '');
         $query = $this->merchandises
             ->join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
             ->where('payment_modules.is_delete', false)
+            ->where(function ($query) use ($search) {
+                return $query->where('payment_modules.mid', 'like', "%$search%")
+                ->orWhere('payment_modules.tid', 'like', "%$search%");
+            })
             ->distinct('payment_modules.mcht_id');
 
         $query = globalPGFilter($query, $request, 'payment_modules');

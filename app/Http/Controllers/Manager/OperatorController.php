@@ -37,7 +37,7 @@ class OperatorController extends Controller
                 'profile',
             ],
             'sizes'     => [
-               360
+               500
             ],
         ];
     }
