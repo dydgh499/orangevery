@@ -119,8 +119,8 @@ export const useRequestStore = defineStore('requestStore', () => {
 
     const update = async (base_url: string, params: any, vForm: any, is_redirect: boolean = true) => {
         if(base_url == 'merchandises/pay-modules') {
-            params.use_mid_duplicate = corp.pv_options.free.use_mid_duplicate;
-            params.use_tid_duplicate = corp.pv_options.free.use_tid_duplicate;
+            params.use_mid_duplicate = Number(corp.pv_options.free.use_mid_duplicate);
+            params.use_tid_duplicate = Number(corp.pv_options.free.use_tid_duplicate);
         }
 
         //payment moduels use_tid_duplicate

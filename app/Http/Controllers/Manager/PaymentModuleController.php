@@ -132,7 +132,9 @@ class PaymentModuleController extends Controller
         {
             $data = $request->data();
             if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'tid', $data['tid']))
-                return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid'=>$data['tid']]);
+                return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['tid'=>$data['tid']]);
+            if($request->use_mid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
+                return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid'=>$data['mid']]);
             if($data['module_type'] == 0 && $data['serial_num'] != '')
             {
                 $res = $this->pay_modules
@@ -206,6 +208,9 @@ class PaymentModuleController extends Controller
             $data = $request->data();
             if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
                 return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid'=>$data['tid']]);
+            if($request->use_mid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
+                return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid'=>$data['mid']]);            
+
             if($data['module_type'] == 0 && $data['serial_num'] != '')
             {
                 $res = $this->pay_modules
