@@ -118,8 +118,11 @@ export const useRequestStore = defineStore('requestStore', () => {
     }
 
     const update = async (base_url: string, params: any, vForm: any, is_redirect: boolean = true) => {
-        if('merchandises/pay-modules')
+        if(base_url == 'merchandises/pay-modules') {
+            params.use_mid_duplicate = corp.pv_options.free.use_mid_duplicate;
             params.use_tid_duplicate = corp.pv_options.free.use_tid_duplicate;
+        }
+
         //payment moduels use_tid_duplicate
         const is_valid = await vForm.validate()
         const { url, reqType } = getBaseSendInfo(base_url, params.id)

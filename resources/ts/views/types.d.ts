@@ -277,6 +277,7 @@ interface FreeOption {
     use_simple_pay: boolean,
     use_search_date_detail: boolean,
     use_tid_duplicate: boolean,
+    use_mid_duplicate: boolean,
     sales_slip: {
         merchandise: {
             comepany_name: string,
