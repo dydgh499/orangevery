@@ -8,6 +8,7 @@
         public $use_simple_pay = false;
         public $use_search_date_detail = true;
         public $use_tid_duplicate = true;
+        public $use_mid_duplicate = false;
         public $sales_slip = [
             'merchandise' => [
                 'comepany_name' => '',
