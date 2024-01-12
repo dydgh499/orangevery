@@ -307,6 +307,7 @@ interface PaidOption {
     use_online_pay: boolean,    // 통합 API KEY
     use_tid_create: boolean,    // TID 생성버튼
     use_mid_create: boolean,    // MID 생성버튼
+    use_pmid: boolean,
     use_mid_batch: boolean,    // MID 일괄 적용
     use_tid_batch: boolean,    // TID 일괄 적용
     use_api_key_batch: boolean,

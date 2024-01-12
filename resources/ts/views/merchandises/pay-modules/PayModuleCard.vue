@@ -216,14 +216,12 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        
-                        <!-- 👉 SUB KEY-->
-                        <VRow class="pt-3" v-show="corp.pv_options.paid.use_mid_create">
+                        <VRow class="pt-3" v-show="corp.pv_options.paid.use_pmid">
                             <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>상위 MID</template>
+                                <template #name>PMID</template>
                                 <template #input>
                                     <VTextField type="text" v-model="props.item.p_mid" prepend-inner-icon="tabler-user"
-                                        placeholder="상위 MID 입력" persistent-placeholder />
+                                        placeholder="PMID 입력" persistent-placeholder />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
