@@ -60,7 +60,7 @@
         </ul>
       </div>
       <ul class="toc-footer" id="toc-footer">
-        <li><a>Documentation powered by Payvery ✍</a></li>
+        <li><a>Documentation powered by EZPG ✍</a></li>
       </ul>
       <ul class="toc-footer" id="last-updated">
         <li>마지막 업데이트: 2024-01-15 21:37:35</li>
