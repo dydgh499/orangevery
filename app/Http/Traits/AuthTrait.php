@@ -39,4 +39,28 @@ trait AuthTrait
             array_push($authoritys, 50);    // developer
         return $authoritys;
     }
+    
+    public function getResidentNumFrontAttribute()
+    {
+        $resident_num_front = '';
+        if ($this->resident_num) {
+            $resident_num = str_replace('-', '', $this->resident_num);            
+            if (strlen($resident_num) >= 6)
+                $resident_num_front = substr($resident_num, 0, 6);
+            else
+                $resident_num_front = $resident_num;
+        }
+        return $resident_num_front;
+    }
+
+    public function getResidentNumBackAttribute()
+    {
+        $resident_num_back = '';
+        if ($this->resident_num) {
+            $resident_num = str_replace('-', '', $this->resident_num);
+            if (strlen($resident_num) > 6)
+                $resident_num_back = substr($resident_num, 6);
+        }
+        return $resident_num_back;
+    }
 }

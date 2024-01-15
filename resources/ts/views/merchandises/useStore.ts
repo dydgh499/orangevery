@@ -128,6 +128,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
                 datas[i]['mids'] = datas[i]['mids'].join(',')
                 datas[i]['tids'] = datas[i]['tids'].join(',')
             }
+            datas[i]['resident_num'] = datas[i]['resident_num_front'] + " - *******"
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
@@ -195,6 +196,8 @@ export const defaultItemInfo = () => {
         use_collect_withdraw: 0,
         collect_withdraw_fee: 0,
         withdraw_fee: 0,
+        resident_num_front: '',
+        resident_num_back: ''
     })
     return {
         path, item

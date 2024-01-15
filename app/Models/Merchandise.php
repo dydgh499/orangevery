@@ -26,8 +26,8 @@ class Merchandise extends Authenticatable
 
     protected   $table      = 'merchandises';
     protected   $primaryKey = 'id';
-    protected   $appends    = [];
-    protected   $hidden     = ['user_pw'];
+    protected   $appends    = ['resident_num_front', 'resident_num_back'];
+    protected   $hidden     = ['user_pw', 'resident_num'];
     protected   $guarded    = [];    
     protected   $feeFormatting = false;
 

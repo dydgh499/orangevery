@@ -24,6 +24,7 @@ return new class extends Migration
             $table->tinyInteger('module_type')->default(0)->comment('모듈 타입(0=장비, 1=수기, 2=인증, 3=간편, 4=실시간 이체, 5=비인증 장비)');
             $table->string('api_key', 100)->default('')->comment('API KEY');
             $table->string('sub_key', 100)->default('')->comment('SUB KEY');
+            $table->string('p_mid', 50)->default('')->comment('상위 mid');
             $table->string('mid', 50)->default('')->comment('mid');
             $table->string('tid', 50)->default('')->comment('tid');
             $table->string('serial_num', 50)->default('')->comment('serial num');

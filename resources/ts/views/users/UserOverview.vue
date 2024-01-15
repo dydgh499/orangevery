@@ -7,7 +7,6 @@ import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
 import { banks, avatars } from '@/views/users/useStore'
 import corp from '@corp'
 import { axios } from '@axios'
-import { masker } from 'vue-the-mask'
 
 interface Props {
     item: UserPropertie,
@@ -18,6 +17,7 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 const is_show = ref(false)
+const is_resident_num_back_show = ref(false)
 
 const setAcctBankName = () => {
     const bank = banks.find(obj => obj.code == props.item.acct_bank_code)
@@ -40,7 +40,10 @@ const onwerCheck = async () => {
         }
     }
 }
-
+watchEffect(() => {
+    props.item.resident_num = props.item.resident_num_front + props.item.resident_num_back
+    console.log(props.item.resident_num)
+})
 
 </script>
 <template>
@@ -114,9 +117,19 @@ const onwerCheck = async () => {
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>주민등록번호</template>
                             <template #input>
-                                <VTextField id="residentFirstHorizontalIcons" v-model="props.item.resident_num" type="text"
-                                    counter prepend-inner-icon="carbon-identification" placeholder="800101-7654321"
-                                    persistent-placeholder maxlength="14" />
+                                <VRow style="align-items: center;">
+                                    <VCol :cols="5">
+                                        <VTextField v-model="props.item.resident_num_front" type="text"
+                                            prepend-inner-icon="carbon-identification" placeholder="800101" maxlength="6" />
+                                    </VCol>
+                                    <span> - </span>
+                                    <VCol :cols="5">
+                                        <VTextField v-model="props.item.resident_num_back" placeholder="*******" maxlength="7"
+                                            :append-inner-icon="is_resident_num_back_show ? 'tabler-eye' : 'tabler-eye-off'"
+                                            :type="is_resident_num_back_show ? 'text' : 'password'" 
+                                            @click:append-inner="is_resident_num_back_show = !is_resident_num_back_show" />
+                                    </VCol>
+                                </VRow>
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -144,7 +157,7 @@ const onwerCheck = async () => {
                                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.acct_bank_code"
                                     :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
                                     label="은행 선택" item-title="title" item-value="code" persistent-hint single-line
-                                    :hint="`${props.item.acct_bank_name}, 은행 코드: ${props.item.acct_bank_code ? props.item.acct_bank_code : '000'} `"                                    
+                                    :hint="`${props.item.acct_bank_name}, 은행 코드: ${props.item.acct_bank_code ? props.item.acct_bank_code : '000'} `"
                                     :rules="[nullValidator]" @update:modelValue="setAcctBankName()" />
                             </template>
                         </CreateHalfVCol>
@@ -192,7 +205,8 @@ const onwerCheck = async () => {
                         </VCol>
                         <VCol cols="12">
                             <VRow no-gutters>
-                                <FileInput :label="`계약서 업로드`" :preview="props.item.contract_img ?? '/utils/icons/img-preview.svg'"
+                                <FileInput :label="`계약서 업로드`"
+                                    :preview="props.item.contract_img ?? '/utils/icons/img-preview.svg'"
                                     @update:file="props.item.contract_file = $event" />
                             </VRow>
                         </VCol>

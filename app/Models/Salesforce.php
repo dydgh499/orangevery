@@ -24,9 +24,8 @@ class Salesforce extends Authenticatable
     protected   $table      = 'salesforces';
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
-    protected   $hidden     = [
-        'user_pw',
-    ];
+    protected   $appends    = ['resident_num_front', 'resident_num_back'];
+    protected   $hidden     = ['user_pw', 'resident_num'];
 
     public function transactions()
     {

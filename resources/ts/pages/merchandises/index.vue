@@ -104,6 +104,11 @@ onMounted(() => {
                                     </option>
                                 </select>
                             </span>
+                            <span v-else-if="_key == 'resident_num'">
+                                <span>{{ item['resident_num_front'] }}</span>
+                                <span style="margin: 0 0.25em;"> - </span>
+                                <span>*******</span>
+                            </span>
                             <span v-else-if="_key == 'enabled'">
                                 <VChip :color="store.booleanTypeColor(!item[_key])">
                                     {{ item[_key] ? 'ON' : 'OFF' }}

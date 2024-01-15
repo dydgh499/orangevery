@@ -32,6 +32,7 @@ return new class extends Migration
             $table->integer('cancel_deposit_amount')->default(0)->comment('취소입금액');
             $table->integer('collect_withdraw_amount')->default(0)->comment('모아서 출금액');
             $table->integer('settle_amount')->default(0)->comment('정산액');
+            $table->integer('deposit_amount')->default(0)->comment('입금액');
             $table->date('settle_dt')->comment('정산일');
             $table->date('deposit_dt')->nullable()->comment('입금일');
             $table->boolean('deposit_status')->default(false)->comment('입금 상태(0=미입금, 1=입금완료)');

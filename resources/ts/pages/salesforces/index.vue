@@ -108,6 +108,11 @@ onMounted(() => {
                                 <span v-else-if="_key == 'settle_day'">
                                     {{ all_days.find(sales => sales.id === item[_key])?.title }}
                                 </span>
+                                <span v-else-if="_key == 'resident_num'">
+                                    <span>{{ item['resident_num_front'] }}</span>
+                                    <span style="margin: 0 0.25em;"> - </span>
+                                    <span>*******</span>
+                                </span>
                                 <span v-else-if="_key == 'settle_tax_type'">
                                     <VChip
                                         :color="store.getSelectIdColor(tax_types.find(obj => obj.id === item[_key])?.id)">

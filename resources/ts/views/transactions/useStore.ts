@@ -116,8 +116,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     }
     headers['user_name'] = '가맹점 ID'
 
-    if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13)
-    {
+    if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
         headers['mcht_fee'] = '수수료'
         headers['hold_fee'] = '유보금 수수료'
     }

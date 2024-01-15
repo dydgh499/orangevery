@@ -30,6 +30,7 @@ return new class extends Migration
             $table->integer('comm_settle_amount')->default(0)->comment('통신비 정산금');
             $table->integer('under_sales_amount')->default(0)->comment('매출미달 차감금');
             $table->integer('settle_amount')->default(0)->comment('정산액');
+            $table->integer('deposit_amount')->default(0)->comment('입금액');
             $table->date('settle_dt')->comment('정산일');
             $table->date('deposit_dt')->nullable()->comment('입금일');
             $table->boolean('deposit_status')->default(false)->comment('입금 상태(0=미입금, 1=입금완료)');
