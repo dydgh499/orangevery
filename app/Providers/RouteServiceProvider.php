@@ -27,16 +27,16 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $apis = ['bf', '/buddy-pay', 'ezpg'];
         $this->configureRateLimiting();
-        $this->routes(function () {
-            Route::middleware('api')
-            ->prefix('api/v1/bf')
-            ->namespace($this->namespace)
-                ->group(base_path('routes/bf.php'));
-            Route::middleware('api')
-                ->prefix('api/v1/buddy-pay')
-                ->namespace($this->namespace)
-                    ->group(base_path('routes/buddy-pay.php'));
+        $this->routes(function () use($apis) {
+            foreach($apis as $api)
+            {
+                Route::middleware('api')
+                    ->prefix("api/v1/$api")
+                    ->namespace($this->namespace)
+                        ->group(base_path("routes/$api.php"));
+            }
             Route::middleware('api')
                 ->prefix('api')
                 ->namespace($this->namespace)

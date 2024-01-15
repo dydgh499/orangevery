@@ -1,6 +1,9 @@
 @php
     $uri = request()->input('uri', '');
 @endphp
+<head>
+    <link rel="icon" href="test.ico">
+</head>
 <script> alert('패스워드가 올바르지 않습니다.'); </script>
 <form name="form" method="post" action="{{ $uri }}">
     @csrf 

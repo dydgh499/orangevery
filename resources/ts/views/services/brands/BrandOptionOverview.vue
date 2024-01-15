@@ -413,7 +413,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>입금내역 관리</template>
+                            <template #name>취소 후 입금</template>
                             <template #input>
                                 <VSwitch v-model="props.item.paid.use_cancel_deposit" color="primary" />
                             </template>
