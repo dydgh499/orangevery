@@ -21,7 +21,7 @@ const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
 const { head, headers, isPrimaryHeader } = useRegisterStore()
 const { mchts } = useSalesFilterStore()
 
-const use_mid_create = ref(corp.pv_options.paid.use_mid_create)
+const use_mid_create = ref(Number(corp.pv_options.paid.use_mid_create))
 const all_levels = [{ id: 10, title: '가맹점' }, ...salesLevels()]
 const auth_types: Options[] = [
     { id: 0, title: '비인증', },
