@@ -80,10 +80,6 @@ class MerchandiseController extends Controller
         $query = $this->merchandises
             ->join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
             ->where('payment_modules.is_delete', false)
-            ->where(function ($query) use ($search) {
-                return $query->where('payment_modules.mid', 'like', "%$search%")
-                ->orWhere('payment_modules.tid', 'like', "%$search%");
-            })
             ->distinct('payment_modules.mcht_id');
 
         $query = globalPGFilter($query, $request, 'payment_modules');
@@ -107,15 +103,21 @@ class MerchandiseController extends Controller
         $query = globalAuthFilter($query, $request, $parent);
         $query = $query
                 ->where($full_parent.'brand_id', $request->user()->brand_id)
-                ->where(function ($query) use ($search, $full_parent) {
-            return $query->where('mcht_name', 'like', "%$search%")
-                ->orWhere($full_parent.'user_name', 'like', "%$search%")
-                ->orWhere($full_parent.'phone_num', 'like', "%$search%")
-                ->orWhere($full_parent.'business_num', 'like', "%$search%")
-                ->orWhere($full_parent.'nick_name', 'like', "%$search%")
-                ->orWhere($full_parent.'acct_num', 'like', "%$search%")
-                ->orWhere($full_parent.'acct_name', 'like', "%$search%");
-        });
+                ->where(function ($query) use ($search, $full_parent) {                  
+                    return $query->where('mcht_name', 'like', "%$search%")
+                        ->orWhere($full_parent.'user_name', 'like', "%$search%")
+                        ->orWhere($full_parent.'phone_num', 'like', "%$search%")
+                        ->orWhere($full_parent.'business_num', 'like', "%$search%")
+                        ->orWhere($full_parent.'nick_name', 'like', "%$search%")
+                        ->orWhere($full_parent.'acct_num', 'like', "%$search%")
+                        ->orWhere($full_parent.'acct_name', 'like', "%$search%");
+                    /*
+                        ->orWhere(function ($query) use ($search) {
+                                return $query->where('payment_modules.mid', 'like', "%$search%")
+                            ->orWhere('payment_modules.tid', 'like', "%$search%");
+                        });
+                    */
+                });
 
         if($is_all == false)
             $query = $query->where($full_parent.'is_delete', false);

@@ -110,6 +110,7 @@ class TransactionController extends Controller
                     ->orWhere('transactions.appr_num', 'like', "%$search%")
                     ->orWhere('transactions.issuer', 'like', "%$search%")
                     ->orWhere('transactions.acquirer', 'like', "%$search%")
+                    ->orWhere('transactions.buyer_phone', 'like', "%$search%")
                     ->orWhere('payment_modules.note', 'like', "%$search%")
                     ->orWhere('merchandises.mcht_name', 'like', "%$search%")
                     ->orWhere('merchandises.resident_num', 'like', "%$search%")
