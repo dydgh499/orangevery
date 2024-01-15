@@ -35,8 +35,8 @@ class BuddyPayController extends Controller
      * 
      * @unauthenticated
      * 
-     * @bodyParam user_name string 가맹점 아이디
-     * @bodyParam user_pw string 가맹점 패스워드
+     * @bodyParam user_name string required 가맹점 아이디
+     * @bodyParam user_pw string required 가맹점 패스워드
      * @responseFile 200 storage/buddyPay/login.json
      * @responseField access_token string Bearer 토큰 값
      * @responseField user object 유저정보

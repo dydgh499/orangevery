@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Ezpg API</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/vendor/scribe/css/ezpg/theme.style.css" media="screen">
-    <link rel="stylesheet" href="/vendor/scribe/css/ezpg/theme.style.css" media="print">
+    <link rel="stylesheet" href="/utils/docs/theme-ezpg.style.css" media="screen">
+    <link rel="stylesheet" href="/utils/docs/theme-ezpg.style.css" media="print">
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/obsidian.min.css">
     <script src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js"></script>
@@ -60,10 +60,10 @@
         </ul>
       </div>
       <ul class="toc-footer" id="toc-footer">
-        <li><a>Documentation powered by EZPG ✍</a></li>
+        <li><a>Documentation powered by Payvery ✍</a></li>
       </ul>
       <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트: 2024-01-15 18:44:24</li>
+        <li>마지막 업데이트: 2024-01-15 21:37:35</li>
       </ul>
     </div>
     <div class="page-wrapper">
@@ -161,7 +161,7 @@ const headers = {
 };
 
 let body = {
-    "user_name": "sit",
+    "user_name": "nisi",
     "user_pw": "voluptatem"
 };
 
@@ -181,7 +181,7 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'user_name' =&gt; 'sit',
+            'user_name' =&gt; 'nisi',
             'user_pw' =&gt; 'voluptatem',
         ],
     ]
@@ -195,7 +195,7 @@ import json
 
 url = 'https://w.ez-pg.kr/api/v1/ezpg/sign-in'
 payload = {
-    "user_name": "sit",
+    "user_name": "nisi",
     "user_pw": "voluptatem"
 }
 headers = {
@@ -212,7 +212,7 @@ response.json()</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"user_name\": \"sit\",
+    \"user_name\": \"nisi\",
     \"user_pw\": \"voluptatem\"
 }"
 </code></pre>
@@ -252,10 +252,10 @@ response.json()</code></pre>
               <p><br>예시: <code>application/json</code></p>
             </div>
             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-            <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>user_name</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; <i><b>optional</b></i> &nbsp; <input type="text" style="display: none" name="user_name" data-endpoint="POSTapi-v1-ezpg-sign-in" value="sit" data-component="body"><br>
-              <p>가맹점 아이디 <br>예시: <code>sit</code></p>
+            <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>user_name</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <input type="text" style="display: none" name="user_name" data-endpoint="POSTapi-v1-ezpg-sign-in" value="nisi" data-component="body"><br>
+              <p>가맹점 아이디 <br>예시: <code>nisi</code></p>
             </div>
-            <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>user_pw</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; <i><b>optional</b></i> &nbsp; <input type="text" style="display: none" name="user_pw" data-endpoint="POSTapi-v1-ezpg-sign-in" value="voluptatem" data-component="body"><br>
+            <div style=" padding-left: 28px;  clear: unset;"><b style="line-height: 2;"><code>user_pw</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; &nbsp; <input type="text" style="display: none" name="user_pw" data-endpoint="POSTapi-v1-ezpg-sign-in" value="voluptatem" data-component="body"><br>
               <p>가맹점 패스워드 <br>예시: <code>voluptatem</code></p>
             </div>
           </form>
@@ -281,7 +281,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "omnis",
+    "search": "dolorem",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -312,7 +312,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'omnis',
+            'search' =&gt; 'dolorem',
         ],
     ]
 );
@@ -329,7 +329,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'omnis',
+  'search': 'dolorem',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -342,7 +342,7 @@ response.json()</code></pre>
             </div>
             <div class="bash-example">
               <pre><code class="language-bash">curl --request GET \
-    --get "https://w.ez-pg.kr/api/v1/ezpg/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=omnis" \
+    --get "https://w.ez-pg.kr/api/v1/ezpg/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=dolorem" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>
@@ -537,8 +537,8 @@ response.json()</code></pre>
             <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>e_dt</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; <i><b>optional</b></i> &nbsp; <input type="text" style="display: none" name="e_dt" data-endpoint="GETapi-v1-ezpg-transactions" value="2023-11-30" data-component="query"><br>
               <p>검색 종료일 <br>예시: <code>2023-11-30</code></p>
             </div>
-            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; <i><b>optional</b></i> &nbsp; <input type="text" style="display: none" name="search" data-endpoint="GETapi-v1-ezpg-transactions" value="omnis" data-component="query"><br>
-              <p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>omnis</code></p>
+            <div style="padding-left: 28px; clear: unset;"><b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp; <small>string</small>&nbsp; <i><b>optional</b></i> &nbsp; <input type="text" style="display: none" name="search" data-endpoint="GETapi-v1-ezpg-transactions" value="dolorem" data-component="query"><br>
+              <p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>dolorem</code></p>
             </div>
           </form>
           <h3>응답</h3>
