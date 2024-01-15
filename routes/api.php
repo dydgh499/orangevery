@@ -211,6 +211,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::get('{id}/sales-slip', [PaymentModuleController::class, 'salesSlip']);
                 Route::post('tid-create', [PaymentModuleController::class, 'tidCreate']);
                 Route::post('mid-create', [PaymentModuleController::class, 'midCreate']);
+                Route::post('mid-bulk-create', [PaymentModuleController::class, 'midBulkCreate']);
                 Route::post('pay-key-create', [PaymentModuleController::class, 'payKeyCreate']);
                 Route::post('bulk-register', [PaymentModuleController::class, 'bulkRegister']);
                 Route::post('pg-bulk-updater', [PaymentModuleController::class, 'bulkRegisterPG']);

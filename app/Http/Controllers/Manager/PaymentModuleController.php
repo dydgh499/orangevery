@@ -388,6 +388,31 @@ class PaymentModuleController extends Controller
         return $this->response(0, ['mid'=>$mid]);    
     }
 
+    /**
+     * MID 대량발급
+     */
+    public function midBulkCreate(Request $request)
+    {
+        $mid_code = $request->mid_code;
+        $pay_mod_count = $request->pay_mod_count;
+        $new_mids = [];
+        $existing_mids = $this->pay_modules
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
+            ->pluck('mid')
+            ->toArray();
+
+        while (count($new_mids) < $pay_mod_count) 
+        {
+            $num = sprintf("%06d", rand(0, 999999));
+            $candidate_mid = $mid_code.$num;        
+            // 발급한 mid 목록과, 기존 mid 목록에 없는 것만 추가
+            if (!in_array($candidate_mid, $new_mids) && !in_array($candidate_mid, $existing_mids)) 
+                $new_mids[] = $candidate_mid;
+        }
+        return $this->response(0, ['new_mids'=>$new_mids]);    
+    }
+
     public function getNewPayKey($id)
     {
         return $id.Str::random(64 - strlen((string)$id));

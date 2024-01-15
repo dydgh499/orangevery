@@ -17,6 +17,11 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         'module_type': '결제모듈 타입(O)',
         'api_key': 'API KEY(X)',
         'sub_key': 'SUB KEY(X)',
+    }
+    if(corp.pv_options.paid.use_pmid) {
+        headers2['p_mid'] = 'PMID(O)'
+    }
+    Object.assign(headers2, {
         'mid': 'MID(X)',
         'tid': 'TID(X)',
         'serial_num': '시리얼 번호(X)',
@@ -37,7 +42,8 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         'cxl_type': '취소 타입(X)',
         'pay_dupe_least': '중복거래 하한금(X)',
         'note': '별칭(O)',
-    };
+    })
+    
     if(corp.pv_options.paid.use_dup_pay_validation) {
         headers2['pay_dupe_limit'] = '중복결제 허용회수(X)'
     }

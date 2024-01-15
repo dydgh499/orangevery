@@ -104,9 +104,9 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         headers1['settle_fee'] = '입금수수료'
         headers1['cxl_type'] = '취소타입'
     }
+
     headers2['abnormal_trans_limit'] = '이상거래 한도'
-    headers2['pay_dupe_least'] = '중복거래 하한금'
-    
+    headers2['pay_dupe_least'] = '중복거래 하한금'    
     if(corp.pv_options.paid.use_dup_pay_validation)
         headers2['pay_dupe_limit'] = '중복결제 허용회수'
     if(corp.pv_options.paid.use_pay_limit) {

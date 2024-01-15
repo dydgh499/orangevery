@@ -6,13 +6,14 @@ import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { module_types, installments, fin_trx_delays, cxl_types, comm_settle_types, under_sales_types } from '@/views/merchandises/pay-modules/useStore'
 import SettleTypeExplainDialog from '@/views/services/bulk-register/SettleTypeExplainDialog.vue'
 import PGExplainDialog from '@/views/services/bulk-register/PGExplainDialog.vue'
+import MidCreateDialog from '@/layouts/dialogs/MidCreateDialog.vue'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { Registration } from '@/views/registration'
 import type { PayModule, Options } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import corp from '@corp';
 import { isEmpty } from '@core/utils'
-import { salesLevels } from '@axios'
+import { axios, salesLevels } from '@axios'
 
 
 const { store } = useSearchStore()
@@ -20,6 +21,7 @@ const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
 const { head, headers, isPrimaryHeader } = useRegisterStore()
 const { mchts } = useSalesFilterStore()
 
+const use_mid_create = ref(corp.pv_options.paid.use_mid_create)
 const all_levels = [{ id: 10, title: '가맹점' }, ...salesLevels()]
 const auth_types: Options[] = [
     { id: 0, title: '비인증', },
@@ -37,6 +39,7 @@ const excel = ref()
 const items = ref<PayModule[]>([])
 const is_clear = ref<boolean>(false)
 
+const midCreateDlg = ref()
 const settleTypeExplain = ref()
 const pgExplain = ref()
 
@@ -60,9 +63,13 @@ const validate = () => {
             fin_trx_delay = true
         if(items.value[i].cxl_type == null)
             cxl_type = true
-
+        
         if (mcht == null) {
             snackbar.value.show((i + 1) + '번째 결제모듈의 가맹점 상호가 이상합니다.('+items.value[i].mcht_name+")", 'error')
+            is_clear.value = false
+        }
+        else if (corp.pv_options.paid.use_pmid && items.value[i].p_mid == null) {
+            snackbar.value.show((i + 1) + '번째 PMID가 입력되지 않았습니다.', 'error')
             is_clear.value = false
         }
         else if (pg_id == null) {
@@ -120,6 +127,25 @@ const validate = () => {
     }
     snackbar.value.show('입력값 1차 검증에 성공하였습니다.', 'success')
     is_clear.value = true
+
+    if(corp.pv_options.paid.use_mid_create && use_mid_create.value)
+        midCreater()
+}
+const midCreater = async () => {
+    const mid_code = await midCreateDlg.value.show()
+    if(mid_code) {
+        snackbar.value.show('MID들을 자동 발급 중입니다.', 'primary')
+        const params = {
+            mid_code : mid_code,
+            pay_mod_count : items.value.length
+        }
+        const r = await axios.post('/api/v1/manager/merchandises/pay-modules/mid-bulk-create', params)
+        const new_mids = r.data.new_mids
+        for (let i = 0; i < items.value.length; i++) {
+            items.value[i].mid = new_mids[i]
+        }
+        snackbar.value.show('MID들이 발급 되었습니다.', 'success')
+    }
 }
 const payModRegister = async () => {
     if (await bulkRegister('결제모듈', 'merchandises/pay-modules', items.value))
@@ -136,19 +162,20 @@ watchEffect(async () => {
 <template>
     <VCard style='margin-top: 1em;'>
         <VRow style="padding: 1em;">
-            <VCol style="padding-bottom: 0;">
-                <VCol>
+            <CreateHalfVCol :mdl="5" :mdr="7">
+                <template #name>            
                     <UsageTooltip />
-                </VCol>
-                <VCol>
+                    <br><br> 
                     하단 컬럼들은 숫자로 매칭되는 값들입니다.
                     <br>
                     엑셀 작성시 <b class="important-text">입력하실 내용에 매칭되는 숫자를 작성</b>해주세요.
-                </VCol>
-                <VCol>
+                    <br><br>                
                     컬럼 우측의 <b>O표시는 필수 입력값, X표시는 옵션 입력값</b>을 의미합니다.
-                </VCol>
-            </VCol>
+                </template>
+                <template #input>
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="use_mid_create" label="MID 자동발급 여부" color="primary" v-if="corp.pv_options.paid.use_mid_create"/>
+                </template>
+            </CreateHalfVCol>
             <VDivider />
             <CreateHalfVCol :mdl="8" :mdr="4">
                 <template #name>
@@ -385,6 +412,7 @@ watchEffect(async () => {
     </VCard>
     <SettleTypeExplainDialog ref="settleTypeExplain" />
     <PGExplainDialog ref="pgExplain" />
+    <MidCreateDialog ref="midCreateDlg"/>
 </template>
 <style scoped>
 .important-text {

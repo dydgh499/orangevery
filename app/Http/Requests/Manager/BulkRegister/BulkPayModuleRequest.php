@@ -115,22 +115,8 @@ class BulkPayModuleRequest extends FormRequest
         $_datas = $this->all();
         for ($i=0; $i < count($_datas) ; $i++)
         { 
-            $data = [];
-            for ($j=0; $j < count($this->integer_keys) ; $j++) 
-            {
-                $key = $this->integer_keys[$j];
-                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : 0;
-            }
-            for ($j=0; $j < count($this->string_keys) ; $j++) 
-            {
-                $key = $this->string_keys[$j];
-                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : '';
-            }
-            for ($j=0; $j < count($this->nullable_keys) ; $j++) 
-            {
-                $key = $this->nullable_keys[$j];
-                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : null;
-            }
+            $data = array_merge($this->getParmasBaseKeyV3($_datas[$i], $this->integer_keys, 0), $this->getParmasBaseKeyV3($_datas[$i], $this->string_keys, ''));
+            $data = array_merge($data, $this->getParmasBaseKeyV3($_datas[$i], $this->nullable_keys, null));
             array_push($datas, $data);
         }
         return collect($datas);

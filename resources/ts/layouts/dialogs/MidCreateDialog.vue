@@ -52,12 +52,14 @@ defineExpose({
                         <template #name></template>
                         <template #input>
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="mid_code" :items="mid_codes"
-                                label="출금 이체모듈 선택" single-line/>
+                                label="발급할 MID코드 선택" single-line/>
                         </template>
                     </CreateHalfVCol>
-                    <VBtn @click="selected()">
-                        <span style="font-weight: bold;">선택하기</span>
-                    </VBtn>
+                    <VCol class="d-flex gap-4">
+                        <VBtn @click="selected()" style="margin-left: auto;">
+                            <span style="font-weight: bold;">선택하기</span>
+                        </VBtn>
+                    </VCol>
                 </VRow>
             </VCardText>
         </VCard>

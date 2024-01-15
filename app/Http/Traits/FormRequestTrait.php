@@ -73,4 +73,18 @@ trait FormRequestTrait
         }
         return $data;
     }
+
+    protected function getParmasBaseKeyV3($parent, $keys, $base='')
+    {
+        $data = [];
+        for ($i=0; $i < count($keys) ; $i++)
+        {
+            $key = $keys[$i];
+            if(isset($parent[$key]))
+                $data[$key] = $parent[$key] ? $parent[$key] : $base;
+            else
+                $data[$key] = $base;
+        }
+        return $data;
+    }
 }
