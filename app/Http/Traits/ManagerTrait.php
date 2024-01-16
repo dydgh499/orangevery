@@ -2,8 +2,9 @@
 namespace App\Http\Traits;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 use Carbon\Carbon;
+use Intervention\Image\Facades\Image;
+
 
 trait ManagerTrait
 {
@@ -44,35 +45,57 @@ trait ManagerTrait
         }
         return $res;
     }
-
-    public function imgMaxResize($src_img, $max_width)
+    
+    public function getEncodedImage($img, $max_width, $ext)
     {
-        $width = $src_img->width();
-        $height= $src_img->height();
-
-        if($max_width < $width)
+        if(in_array(strtoupper($ext), ['JPG', 'JPEG', 'PNG', 'BMP', 'WEBP']))
         {
-            $max_height = ($max_width * $height)/$width;
-            $per_width  = (int)($width / ($width/$max_width));
-            $per_height = (int)($height / ($height/$max_height));
-            $src_img = $src_img->resize($per_width, $per_height);
+            $imgMaxResize = function($img, $max_width) {
+                // only JPG, PNG, GIF, BMP or WebP
+                $intervention_img = Image::make($img);
+                $width = $intervention_img->width();
+                $height= $intervention_img->height();
+        
+                if($max_width < $width)
+                {
+                    $max_height = ($max_width * $height)/$width;
+                    $per_width  = (int)($width / ($width/$max_width));
+                    $per_height = (int)($height / ($height/$max_height));
+                    $img = $img->resize($per_width, $per_height);
+                }
+                return $img;
+            };
+            $img = $imgMaxResize($img, $max_width);     
         }
-        return $src_img;
-    }
-    public function saveImage($img, $parent_folder, $img_folder, $max_width)
-    {
-        $img_name = $img->store("$img_folder", 'main');
-        return env('APP_URL')."/storage/images/".$img_name;
+        
+        $name = time().md5(pathinfo($img, PATHINFO_FILENAME)).".$ext";
+        return [$img, $name];
     }
 
-    public function saveWebp($img, $parent_folder, $img_folder, $max_width)
+    // S3
+    public function ToS3($folder, $img, $name)
     {
-        $name    = time().md5(pathinfo($img, PATHINFO_FILENAME)).".webp";
-        $src_img = Image::make($img);
-        $src_img = $src_img->encode('webp', 90);
-        $src_img = $this->imgMaxResize($src_img, $max_width);
-        $src_img = $src_img->save("$parent_folder/$name");
-        return env('APP_URL').'/storage/images/'.$img_folder.'/'.$name;
+        $path = $img->storePubliclyAs($folder, $name, 's3'); //storeAs -> private
+        return env('AWS_URL')."/".$path;
+    }
+    // Cloudinary
+    public function ToCloudinary($folder, $img, $name)
+    {
+        $result = $img->storeOnCloudinaryAs($folder, $name);
+        return $result->getSecurePath();
+    }
+
+    // local
+    public function ToLocal($folder, $img, $name)
+    {
+        $parent_folder = public_path('storage/images/'.$folder);
+        if(Storage::disk('public')->exists($img))
+            Storage::disk('public')->delete($img);
+        if(!file_exists($parent_folder))
+            mkdir($parent_folder, '0755', true);
+
+        $name = $img->store($folder, 'main');
+        return env('APP_URL')."/storage/images/".$name;
     }
 
     public function saveImages($request, $data, $imgs)
@@ -87,17 +110,14 @@ trait ManagerTrait
             {
                 $img        = $request->file($params[$i]);
                 $ext        = $img->extension();
-                //JPG, jpeg, PNG, GIF, BMP or WebP
-                $is_webp    = in_array(strtoupper($ext), ['JPG', 'JPEG', 'PNG', 'BMP']);
-                $folder     = public_path('storage/images/'.$folders[$i]);
 
-                if(Storage::disk('public')->exists($img))
-                    Storage::disk('public')->delete($img);
-
-                if(!file_exists($folder))
-                    mkdir($folder, '0755', true);
-
-                $data[$cols[$i]] = $is_webp ? $this->saveWebp($img, $folder, $folders[$i], $sizes[$i]) : $this->saveImage($img, $folder, $folders[$i], $sizes[$i]);
+                [$img, $name] = $this->getEncodedImage($img, $sizes[$i], $ext);
+                if(env('DISK_CONNECTION') == 's3')
+                    $data[$cols[$i]] = $this->ToS3($folders[$i], $img, $name);
+                else if(env('DISK_CONNECTION') == 'cloudinary')
+                    $data[$cols[$i]] = $this->ToCloudinary($folders[$i], $img, $name);
+                else
+                    $data[$cols[$i]] = $this->ToLocal($folders[$i], $img, $img, $name);
             }
         }
         return $data;

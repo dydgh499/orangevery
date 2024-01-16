@@ -23,6 +23,7 @@ const setAcctBankName = () => {
     const bank = banks.find(obj => obj.code == props.item.acct_bank_code)
     props.item.acct_bank_name = bank ? bank.title : '선택안함'
 }
+
 const onwerCheck = async () => {
     if (await alert.value.show('정말 예금주 검증을 하시겠습니까?')) {
         try {
@@ -40,9 +41,9 @@ const onwerCheck = async () => {
         }
     }
 }
+
 watchEffect(() => {
     props.item.resident_num = props.item.resident_num_front + props.item.resident_num_back
-    console.log(props.item.resident_num)
 })
 
 </script>

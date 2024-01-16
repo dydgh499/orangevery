@@ -260,15 +260,20 @@ class MerchandiseController extends Controller
      */
     public function update(MerchandiseRequest $request, $id)
     {
+        $data = $request->data();
         if($this->authCheck($request->user(), $id, 15))
         {
-            $query = $this->merchandises->where('id', $id);
-            $data = $request->data();
-            $data = $this->saveImages($request, $data, $this->imgs);
-            $res = $query->update($data);
-                        
-            operLogging(HistoryType::UPDATE, $this->target, $data, $data['mcht_name']);
-            return $this->response($res ? 1 : 990, ['id'=>$id]);
+            if($this->isExistMutual($this->merchandises->where('id', '!=', $id), $request->user()->brand_id, 'mcht_name', $data['mcht_name']) == false)
+            {
+                $query = $this->merchandises->where('id', $id);
+                $data = $this->saveImages($request, $data, $this->imgs);
+                $res = $query->update($data);
+
+                operLogging(HistoryType::UPDATE, $this->target, $data, $data['mcht_name']);
+                return $this->response($res ? 1 : 990, ['id'=>$id]);
+            }
+            else
+                return $this->extendResponse(1001, '이미 존재하는 상호 입니다.');
         }
         else
             return $this->response(951);
