@@ -39,6 +39,7 @@ class BulkPayModuleRequest extends FormRequest
     public $string_keys = [
         'api_key',
         'sub_key',
+        'p_mid',
         'mid',
         'tid',
         'serial_num',
