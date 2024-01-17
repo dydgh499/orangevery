@@ -61,7 +61,7 @@ trait ManagerTrait
                     $max_height = ($max_width * $height)/$width;
                     $per_width  = (int)($width / ($width/$max_width));
                     $per_height = (int)($height / ($height/$max_height));
-                    $img = $img->resize($per_width, $per_height);
+                    $img = $intervention_img->resize($per_width, $per_height);
                 }
                 return $img;
             };
