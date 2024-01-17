@@ -159,7 +159,7 @@ class TransactionController extends Controller
         
         foreach($data['content'] as $content)
         {
-            $content->setAppends(['resident_num_front', 'resident_num_back']);
+            $content->append(['resident_num_front', 'resident_num_back']);
             $content->setHidden(['resident_num']);
         }
 

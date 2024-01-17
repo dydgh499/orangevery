@@ -30,8 +30,7 @@ class RouteServiceProvider extends ServiceProvider
         $apis = ['bf', 'buddy-pay', 'ezpg'];
         $this->configureRateLimiting();
         $this->routes(function () use($apis) {
-            foreach($apis as $api)
-            {
+            foreach($apis as $api) {
                 Route::middleware('api')
                     ->prefix("api/v1/$api")
                     ->namespace($this->namespace)
