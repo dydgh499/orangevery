@@ -156,6 +156,13 @@ class TransactionController extends Controller
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
+        
+        foreach($data['content'] as $content)
+        {
+            $content->setAppends(['resident_num_front', 'resident_num_back']);
+            $content->setHidden(['resident_num']);
+        }
+
         return $this->response(0, $data);
     }
 

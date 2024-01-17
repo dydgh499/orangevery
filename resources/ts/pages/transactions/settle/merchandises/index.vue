@@ -166,6 +166,11 @@ onMounted(() => {
                                         <span class="edit-link" v-else>#{{ item[_key] }}</span>
                                     </div>
                                 </span>
+                                <span v-else-if="_key == 'resident_num'">
+                                    <span>{{ item['resident_num_front'] }}</span>
+                                    <span style="margin: 0 0.25em;"> - </span>
+                                    <span>*******</span>
+                                </span>
                                 <span v-else-if="isSalesCol(_key as string)" style="font-weight: bold;">
                                     {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
                                 </span>

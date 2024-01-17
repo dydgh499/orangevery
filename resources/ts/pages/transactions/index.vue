@@ -219,6 +219,11 @@ onMounted(() => {
                             <span v-else-if="_key == 'pay_cond_price'">
                                 {{ item['settle_fee'] }}
                             </span>
+                            <span v-else-if="_key == 'resident_num'">
+                                <span>{{ item['resident_num_front'] }}</span>
+                                <span style="margin: 0 0.25em;"> - </span>
+                                <span>*******</span>
+                            </span>
                             <span v-else-if="_key == 'custom_id'">
                                 {{ cus_filters.find(cus => cus.id === item[_key])?.name }}
                             </span>
