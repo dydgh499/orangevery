@@ -235,11 +235,10 @@ class TransactionController extends Controller
         try
         {
             $tran = $this->transactions->where('id', $id)->first();
-        
             $data = $request->data();
             $data['dev_fee'] = $tran->dev_fee;
             $data['dev_realtime_fee'] = $tran->dev_realtime_fee;
-            
+
             [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
             $res = $this->transactions->where('id', $id)->update($data);
             operLogging(HistoryType::UPDATE, $this->target, $data, "#".$id);
