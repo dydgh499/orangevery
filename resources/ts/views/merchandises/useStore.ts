@@ -3,7 +3,7 @@ import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { Merchandise, Options } from '@/views/types'
-import { getUserLevel, isAbleModifyMcht } from '@axios'
+import { getUserLevel, isAbleModifyMcht, user_info } from '@axios'
 import corp from '@corp'
 
 export const tax_category_types = <Options[]>([
@@ -45,8 +45,11 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
         headers['sales0_fee'] = '수수료'
     }
     headers['user_name'] = '가맹점 ID'
-    headers['trx_fee'] = '수수료'
-    headers['hold_fee'] = '유보금 수수료'
+    
+    if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
+        headers['trx_fee'] = '수수료'
+        headers['hold_fee'] = '유보금 수수료'    
+    }
     headers['mcht_name'] = '상호'
     if(getUserLevel() >= 35) {
         headers['mids'] = 'MID'
