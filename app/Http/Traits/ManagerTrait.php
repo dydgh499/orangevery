@@ -94,8 +94,16 @@ trait ManagerTrait
         if(!file_exists($parent_folder))
             mkdir($parent_folder, '0755', true);
 
-        $name = $img->store($folder, 'main');
-        return env('APP_URL')."/storage/images/".$name;
+        if(in_array(strtoupper(pathinfo($name)['extension']), ['JPG', 'JPEG', 'PNG', 'BMP', 'WEBP']))
+        {
+            $img = $img->save("$parent_folder/$name");
+            return env('APP_URL')."/storage/images/$folder/$name";
+        }
+        else
+        {
+            $name = $img->store($folder, 'main');
+            return env('APP_URL')."/storage/images/$name";
+        }
     }
 
     public function saveImages($request, $data, $imgs)
@@ -117,7 +125,7 @@ trait ManagerTrait
                 else if(env('DISK_CONNECTION') == 'cloudinary')
                     $data[$cols[$i]] = $this->ToCloudinary($folders[$i], $img, $name);
                 else
-                    $data[$cols[$i]] = $this->ToLocal($folders[$i], $img, $img, $name);
+                    $data[$cols[$i]] = $this->ToLocal($folders[$i], $img, $name);
             }
         }
         return $data;
