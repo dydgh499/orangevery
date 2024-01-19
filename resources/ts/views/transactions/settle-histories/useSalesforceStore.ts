@@ -3,6 +3,12 @@ import { Searcher } from '@/views/searcher'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
 
+export const deposit_statuses = [
+    { id: null, title: '전체' },
+    { id: 0, title: '미입금' },
+    { id: 1, title: '입금' },
+]
+
 export const useSearchStore = defineStore('transSettlesHistorySalesSearchStore', () => {    
     const store = Searcher('transactions/settle-histories/salesforces')
     const head  = Header('transactions/settle-histories/salesforces', '영업점 정산이력')

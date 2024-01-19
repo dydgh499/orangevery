@@ -46,6 +46,8 @@ class SalesSettleHistoryController extends Controller
             $query = $query->where('settle_histories_salesforces.settle_dt', '>=', $request->s_dt);
         if($request->has('e_dt'))
             $query = $query->where('settle_histories_salesforces.settle_dt', '<=', $request->e_dt);
+        if($request->has('deposit_status'))
+            $query = $query->where('settle_histories_salesforces.deposit_status', $request->deposit_status);
 
         if(isSalesforce($request))
         {

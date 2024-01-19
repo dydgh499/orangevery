@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/transactions/settle-histories/useSalesforceStore'
+import { useSearchStore, deposit_statuses } from '@/views/transactions/settle-histories/useSalesforceStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
 import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue'
@@ -28,15 +28,15 @@ const isNumberFormatCol = (_key: string) => {
     return _key.includes('amount') || _key.includes('_fee') || _key.includes('_deposit')
 }
 const getBatchDepositParams = async () => {
-    if(selected.value) {
-        const params:any = {
+    if (selected.value) {
+        const params: any = {
             brand_id: corp.id,
             use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
         }
-        if(params['use_finance_van_deposit']) {
+        if (params['use_finance_van_deposit']) {
             params['fin_id'] = await financeDialog.value.show()
             // 선택안함
-            if(params['fin_id'] == 0)
+            if (params['fin_id'] == 0)
                 return 0
         }
         batchDeposit(selected.value, false, params)
@@ -54,51 +54,58 @@ onMounted(() => {
 </script>
 <template>
     <div>
-    <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.SETTLE_RANGE">
-        <template #filter>
-        </template>
-        <template #index_extra_field>            
-            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager @update:modelValue="[store.updateQueryString({page_size: store.params.page_size})]"/>
-            <VBtn prepend-icon="tabler:report-money" @click="getBatchDepositParams()" v-if="getUserLevel() >= 35"  size="small">
-                일괄 입금/미입금처리
-            </VBtn>
-            <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchCancel(selected, false)" v-if="getUserLevel() >= 35" color="error"  size="small">
-                일괄 정산취소
-            </VBtn>
-        </template>
-        <template #headers>
-            <tr>
-                <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                    <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 35">
-                        <VCheckbox v-model="all_selected" class="check-label"/>
-                        <span>선택/취소</span>
-                    </div>
-                    <span v-else>
-                        {{ header.ko }}
-                    </span>
-                </th>
-            </tr>
-        </template>
-        <template #body>
-            <!-- chart -->
-            <tr v-for="(item, key) in totals" :key="key">
-                <template v-for="(_header, _key, _index) in head.headers" :key="_index">
+        <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산"
+            :date_filter_type="DateFilters.SETTLE_RANGE">
+            <template #filter>
+            </template>
+            <template #index_extra_field>
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact"
+                    variant="outlined" :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager
+                    @update:modelValue="[store.updateQueryString({ page_size: store.params.page_size })]" />
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.deposit_status" :items="deposit_statuses"
+                    label="입금 타입" item-title="title" item-value="id"
+                    @update:modelValue="[store.updateQueryString({ deposit_status: store.params.deposit_status })]" />
+                <VBtn prepend-icon="tabler:report-money" @click="getBatchDepositParams()" v-if="getUserLevel() >= 35"
+                    size="small">
+                    일괄 입금/미입금처리
+                </VBtn>
+                <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchCancel(selected, false)"
+                    v-if="getUserLevel() >= 35" color="error" size="small">
+                    일괄 정산취소
+                </VBtn>
+            </template>
+            <template #headers>
+                <tr>
+                    <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
+                        <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 35">
+                            <VCheckbox v-model="all_selected" class="check-label" />
+                            <span>선택/취소</span>
+                        </div>
+                        <span v-else>
+                            {{ header.ko }}
+                        </span>
+                    </th>
+                </tr>
+            </template>
+            <template #body>
+                <!-- chart -->
+                <tr v-for="(item, key) in totals" :key="key">
+                    <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key === 'id'">합계</span>
                             <span v-else-if="isNumberFormatCol(_key.toString())" style="font-weight: bold;">
-                                {{ item[_key] ? parseInt(item[_key]).toLocaleString() : 0}}
+                                {{ item[_key] ? parseInt(item[_key]).toLocaleString() : 0 }}
                             </span>
                         </td>
-                </template>
-            </tr>            
-            <!-- normal -->
-            <tr v-for="(item, index) in store.getItems" :key="index">
-                <template v-for="(_header, _key, _index) in head.headers" :key="_index">
+                    </template>
+                </tr>
+                <!-- normal -->
+                <tr v-for="(item, index) in store.getItems" :key="index">
+                    <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" class='list-square'>
                             <span v-if="_key === 'id'">
                                 <div class='check-label-container' v-if="getUserLevel() >= 35">
-                                    <VCheckbox v-model="selected" :value="item[_key]" class="check-label"/>
+                                    <VCheckbox v-model="selected" :value="item[_key]" class="check-label" />
                                     <span>#{{ item[_key] }}</span>
                                 </div>
                                 <span v-else> #{{ item[_key] }}</span>
@@ -124,10 +131,10 @@ onMounted(() => {
                                 {{ item[_key] }}
                             </span>
                         </td>
-                </template>
-            </tr>
-        </template>
-    </BaseIndexView>
-    <FinanceVanDialog ref="financeDialog"/>
+                    </template>
+                </tr>
+            </template>
+        </BaseIndexView>
+        <FinanceVanDialog ref="financeDialog" />
     </div>
 </template>

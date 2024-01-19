@@ -4,18 +4,8 @@ namespace App\Http\Traits\Log\DifferenceSettlement\Hecto;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Carbon\Carbon;
 
-trait responseTrait
-{    
-    private function getNtypeField($data, $s_idx, $length)
-    {
-        return (int)substr($data, $s_idx, $length);
-    }
-
-    private function getAtypeField($data, $s_idx, $length)
-    {
-        return ltrim(substr($data, $s_idx, $length));
-    }
-
+trait ResponseTrait
+{
     private function getSettleMessage($code)
     {
         $settle_codes = [

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Log\DifferenceSettlement;
 
-use App\Http\Traits\Log\DifferenceSettlement\Hecto\requestTrait;
-use App\Http\Traits\Log\DifferenceSettlement\Hecto\responseTrait;
+use App\Http\Traits\Log\DifferenceSettlement\FileRWTrait;
+use App\Http\Traits\Log\DifferenceSettlement\Hecto\RequestTrait;
+use App\Http\Traits\Log\DifferenceSettlement\Hecto\ResponseTrait;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class hecto
 {
-    use requestTrait, responseTrait;
+    use FileRWTrait, RequestTrait, ResponseTrait;
     public $rep_mid;
     protected $main_sftp_connection, $dr_sftp_connection;
     protected $main_connection_stat, $dr_connection_stat;

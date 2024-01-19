@@ -2,19 +2,9 @@
 
 namespace App\Http\Traits\Log\DifferenceSettlement\Hecto;
 use App\Enums\DifferenceSettleHectoRecordType;
-trait requestTrait
+
+trait RequestTrait
 {
-
-    private function setNtypeField($string, $length)
-    {
-        return sprintf("%0".$length."s", $string);
-    }
-
-    private function setAtypeField($string, $length)
-    {    
-        return sprintf("%-".$length."s", $string);
-    }
-
     private function setStartRecord($req_date, $brand_business_num)
     {
         $brand_business_num = str_replace('-', '', $brand_business_num);

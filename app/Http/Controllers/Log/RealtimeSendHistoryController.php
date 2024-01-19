@@ -72,7 +72,7 @@ class RealtimeSendHistoryController extends Controller
     }
 
     /**
-     * 1시간 간격으로 실시간 정산금 자동 스케줄링
+     * 1시간 간격으로 실시간 정산금 자동 스케줄링 (모아서 출금)
      */
     public function __invoke()
     {
