@@ -686,6 +686,7 @@ export interface HandPay extends BasePay{
 }
 
 export interface AuthPay extends BasePay{
+    user_agent: string,
     return_url: string,
 }
 

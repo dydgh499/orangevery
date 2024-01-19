@@ -30,8 +30,13 @@ const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
 })
 
+const isMobile = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+}
+
 watchEffect(() => {
     console.log(is_show_pay_button.value)
+    auth_pay_info.user_agent = isMobile() ? "WM" : "WP"
     auth_pay_info.pmod_id = props.pay_module.id
     auth_pay_info.return_url = props.return_url
     auth_pay_info.ord_num = props.pay_module.id + "A" + Date.now().toString().substr(0, 10)
