@@ -2,7 +2,7 @@
 import { isRetryAble, realtimeResult } from '@/views/transactions/useStore'
 import { useRequestStore } from '@/views/request'
 import type { SalesSlip } from '@/views/types'
-import { getUserLevel } from '@axios'
+import { getUserLevel, pay_token } from '@axios'
 import { StatusColors } from '@core/enums'
 import corp from '@corp'
 import router from '@/router'
@@ -66,6 +66,8 @@ const payCanceled = async () => {
             trx_id: props.item.trx_id,
             only: false,
         }
+        if(getUserLevel() >= 35)
+            params['operater_access_token'] = pay_token.value
         try {
             const r = await post('/api/v1/manager/transactions/pay-cancel', params)
             if(r.status === 201)
