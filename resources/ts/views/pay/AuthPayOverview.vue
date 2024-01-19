@@ -53,6 +53,7 @@ watchEffect(() => {
                 <VTextField v-model="auth_pay_info.pmod_id" type="visible" name="pmod_id" style="display: none;" />
                 <VTextField v-model="auth_pay_info.return_url" type="visible" name="return_url" style="display: none;" />
                 <VTextField v-model="auth_pay_info.ord_num" type="visible" name="ord_num" style="display: none;" />
+                <VTextField v-model="auth_pay_info.user_agent" type="visible" name="user_agent" style="display: none;" />
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; margin-top: 24px;">
                     <template #name>상품명</template>
                     <template #input>
