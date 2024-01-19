@@ -68,8 +68,8 @@ const timer = () => {
         countdown_time.value--
 }
 const requestCodeIssuance = async () => {
-    const r = await axios.post('/api/v1/bonaejas/mobile-code-issuance', { phone_num: props.phone_num, brand_id: corp.id })
-    if (r.status == 200) {
+    try {
+        const r = await axios.post('/api/v1/bonaejas/mobile-code-issuance', { phone_num: props.phone_num, brand_id: corp.id })
         snackbar.value.show('입력하신 휴대폰번호로 인증번호를 보냈습니다!<br>6자리 인증번호를 입력해주세요.', 'success')
         button_status.value = 1
 
@@ -79,8 +79,9 @@ const requestCodeIssuance = async () => {
         countdown_time.value = 180
         countdown_timer = setInterval(timer, 1000);
     }
-    else
-        snackbar.value.show(r.data.message, 'warning')
+    catch (e: any) {
+        snackbar.value.show(e.response.data.message, 'error')
+    }
 }
 const verification = async () => {
     if (button_status.value === 0) {
