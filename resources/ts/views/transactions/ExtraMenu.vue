@@ -59,13 +59,13 @@ const retryDeposit = async () => {
 
 const payCanceled = async () => {
     if (await alert.value.show('정말 상위 PG사를 통해 결제를 취소하시겠습니까?')) {
-        const params = {
+        const params = <any>({
             pmod_id: props.item.pmod_id,
             mcht_id: props.item.mcht_id,
             amount: props.item.amount,
             trx_id: props.item.trx_id,
             only: false,
-        }
+        })
         if(getUserLevel() >= 35)
             params['operater_access_token'] = pay_token.value
         try {
@@ -130,11 +130,11 @@ const isUseCancelDeposit = () => {
                     <VListItemTitle>취소매출생성</VListItemTitle>
                 </VListItem>
                 <VListItem value="cancel" class="pg-cancel" @click="payCanceled()"
-                    v-if="(isCancelSafeDate() || getUserLevel() >= 35) && props.item.is_cancel == false && realtimeResult(props.item) != StatusColors.Success">
+                    v-if="(isCancelSafeDate() || getUserLevel() >= 35) && props.item.is_cancel == 0 && realtimeResult(props.item) != StatusColors.Success">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:world-cancel" />
                     </template>
-                    <VListItemTitle>결제취소하기</VListItemTitle>
+                    <VListItemTitle>{{ getUserLevel() >= 35 ? '결제취소(운영자 권한)': '결제취소하기'}}</VListItemTitle>
                 </VListItem>
                 <VListItem value="cancel-deposit" @click="cancelDeposit.show(props.item)"
                     v-if="isUseCancelDeposit()">
