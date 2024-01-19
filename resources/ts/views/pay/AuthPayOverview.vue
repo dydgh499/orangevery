@@ -31,6 +31,7 @@ const filterInstallment = computed(() => {
 })
 
 watchEffect(() => {
+    console.log(is_show_pay_button.value)
     auth_pay_info.pmod_id = props.pay_module.id
     auth_pay_info.return_url = props.return_url
     auth_pay_info.ord_num = props.pay_module.id + "A" + Date.now().toString().substr(0, 10)
@@ -89,7 +90,7 @@ watchEffect(() => {
 
                 <MobileVerification v-if="corp.pv_options.paid.use_pay_verification_mobile"
                     @update:pay_button="is_show_pay_button = $event" :phone_num="auth_pay_info.buyer_phone" />
-                <VCol cols="12" style="padding: 0;">
+                <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">
                     <VBtn block type="submit">
                         결제하기
                     </VBtn>
