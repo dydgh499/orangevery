@@ -80,7 +80,7 @@ const requestCodeIssuance = async () => {
         countdown_timer = setInterval(timer, 1000);
     }
     else
-        snackbar.value.show(r.data.message, 'error')
+        snackbar.value.show(r.data.message, 'warning')
 }
 const verification = async () => {
     if (button_status.value === 0) {
