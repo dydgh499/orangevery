@@ -43,13 +43,13 @@ class hecto extends DifferenceSettlement implements DifferenceSettlementInterfac
     {
         $req_date = $date->format('Ymd');
         $save_path = "/edi_req/ST_PRFT_REQ_".$req_date;
-        return $this->request($save_path, $req_date, $trans);
+        return $this->_request($save_path, $req_date, $trans);
     }
 
     public function response(Carbon $date)
     {
         $req_date = $date->copy()->format('Ymd');
         $res_path = "/edi_rsp/ST_PRFT_RSP_".$req_date;
-        return $this->response($res_path, $req_date);
+        return $this->_response($res_path, $req_date);
     }
 }
