@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Log\DifferenceSettlement;
 
 use App\Http\Traits\Log\DifferenceSettlement\FileRWTrait;
+use App\Enums\DifferenceSettleHectoRecordType;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
