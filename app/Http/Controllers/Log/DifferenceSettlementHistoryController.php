@@ -163,7 +163,7 @@ class DifferenceSettlementHistoryController extends Controller
             $pg = $this->getPGClass($brands[$i]);
             if($pg)
             {
-                $res    = $pg->request($date, $brands[$i]->business_num, $trans);
+                $res    = $pg->request($date, $trans);
             }
         }
     }
