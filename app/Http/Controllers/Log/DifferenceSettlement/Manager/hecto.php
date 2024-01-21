@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Log\DifferenceSettlement\Manager;
 
-use App\Http\Traits\Log\DifferenceSettlement\DifferenceSettlementInterface;
+use App\Http\Controllers\Log\DifferenceSettlement\Manager\DifferenceSettlementInterface;
 use App\Http\Traits\Log\DifferenceSettlement\FileRWTrait;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Carbon\Carbon;

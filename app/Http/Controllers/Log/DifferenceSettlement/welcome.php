@@ -36,7 +36,7 @@ class welcome extends DifferenceSettlement implements DifferenceSettlementInterf
         $req_date = $date->format('Ymd');
         $brand_business_num = str_replace('-', '', $this->brand['business_num']);  // ?
         $save_path = "/upload/dfsttm/send/daff_welcome_".$brand_business_num."_".$req_date."_req";        
-        return parent::request($save_path, $req_date, $trans);
+        return $this->_request($save_path, $req_date, $trans);
     }
 
     public function response(Carbon $date)
@@ -45,6 +45,6 @@ class welcome extends DifferenceSettlement implements DifferenceSettlementInterf
         // DANALto업체명_differ.YYYYMM
         $brand_business_num = str_replace('-', '', $this->brand['business_num']);  // ?
         $res_path = "/upload/dfsttm/send/daff_welcome_".$brand_business_num."_".$req_date."sply";
-        return parent::response($res_path, $req_date);
+        return $this->_response($res_path, $req_date);
     }
 }

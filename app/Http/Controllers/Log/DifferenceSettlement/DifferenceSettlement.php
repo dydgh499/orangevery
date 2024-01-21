@@ -11,6 +11,7 @@ class DifferenceSettlement
     use FileRWTrait;
     protected $brand   = null;
     protected $service = null;
+    protected $service_name = null;
 
     protected $main_sftp_connection, $dr_sftp_connection;
     protected $main_connection_stat, $dr_connection_stat;
