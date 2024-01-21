@@ -50,7 +50,7 @@ class DifferenceSettlement
         return [$connection, $connection_stat];
     }
 
-    public function request($save_path, $req_date, $trans)
+    protected function request($save_path, $req_date, $trans)
     {
         $result = false;
 
@@ -83,7 +83,7 @@ class DifferenceSettlement
         return $result;
     }
 
-    public function response($res_path, $req_date)
+    protected function response($res_path, $req_date)
     {
         if($this->main_connection_stat && $this->main_sftp_connection->exists($res_path))
             $contents = $this->main_sftp_connection->get($res_path);
