@@ -170,7 +170,7 @@ class DifferenceSettlementHistoryController extends Controller
     public function differenceSettleResponse()
     {
         $brands = $this->getUseDifferentSettlementBrands();
-        $date   = Carbon::now()->subDay(1);
+        $date   = Carbon::now();
 
         for ($i=0; $i<count($brands); $i++)
         {
