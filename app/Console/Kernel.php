@@ -37,8 +37,7 @@ class Kernel extends ConsoleKernel
         })->daily();
         $schedule->call(function () {
             (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleResponse();
-        })->dailyAt("04:30");
-
+        })->dailyAt("07:30"); // 헥토 04:30, 다날 07:30
     }
 
     /**

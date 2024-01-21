@@ -61,9 +61,9 @@ trait ManagerTrait
                     $max_height = ($max_width * $height)/$width;
                     $per_width  = (int)($width / ($width/$max_width));
                     $per_height = (int)($height / ($height/$max_height));
-                    $img = $intervention_img->resize($per_width, $per_height);
+                    $intervention_img = $intervention_img->resize($per_width, $per_height);
                 }
-                return $img;
+                return $intervention_img;
             };
             $img = $imgMaxResize($img, $max_width);     
         }
@@ -116,8 +116,8 @@ trait ManagerTrait
         {
             if($request->hasFile($params[$i]))
             {
-                $img        = $request->file($params[$i]);
-                $ext        = $img->extension();
+                $img    = $request->file($params[$i]);
+                $ext    = $img->extension();
 
                 [$img, $name] = $this->getEncodedImage($img, $sizes[$i], $ext);
                 if(env('DISK_CONNECTION') == 's3')

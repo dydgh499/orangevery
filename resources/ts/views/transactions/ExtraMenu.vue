@@ -123,7 +123,7 @@ const isUseCancelDeposit = () => {
                     <VListItemTitle>실시간 상세이력</VListItemTitle>
                 </VListItem>
                 <VListItem value="cancelTrans" @click="cancelTran.show(props.item)"
-                    v-if="getUserLevel() >= 35 && props.item.is_cancel == false">
+                    v-if="getUserLevel() >= 35 && props.item.is_cancel == 0">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:device-tablet-cancel" />
                     </template>

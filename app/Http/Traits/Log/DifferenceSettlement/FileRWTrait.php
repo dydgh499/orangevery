@@ -1,5 +1,5 @@
 <?php
-
+namespace App\Http\Traits\Log\DifferenceSettlement;
 
 trait FileRWTrait
 {    

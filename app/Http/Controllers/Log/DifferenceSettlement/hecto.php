@@ -2,113 +2,54 @@
 
 namespace App\Http\Controllers\Log\DifferenceSettlement;
 
-use App\Http\Traits\Log\DifferenceSettlement\FileRWTrait;
-use App\Http\Traits\Log\DifferenceSettlement\Hecto\RequestTrait;
-use App\Http\Traits\Log\DifferenceSettlement\Hecto\ResponseTrait;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlementInterface;
+use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlement;
 use Carbon\Carbon;
 
-class hecto
+class hecto extends DifferenceSettlement implements DifferenceSettlementInterface
 {
-    use FileRWTrait, RequestTrait, ResponseTrait;
-    public $rep_mid;
-    protected $main_sftp_connection, $dr_sftp_connection;
-    protected $main_connection_stat, $dr_connection_stat;
+    public function __construct($brand)
+    {
+        parent::__construct($brand);
+        $this->RQ_PG_NAME = "SETTLEBANK";
+        $this->RQ_START_FILTER_SIZE  = 370;
+        $this->RQ_HEADER_FILTER_SIZE = 388;
+        $this->RQ_TOTAL_FILTER_SIZE  = 373;
+        $this->RQ_END_FILTER_SIZE    = 391;
 
-    public function __construct($rep_mid)
-    {   //ezpg0001
-        $this->rep_mid = $rep_mid;
-        $main_config = [
+        $main_config_name   = 'different_settlement_main_'.$this->service_name;
+        $dr_config_name     = 'different_settlement_dr'.$this->service_name;
+        config(['filesystems.disks.'.$main_config_name => [
             'driver' => 'sftp',
-            'host' => env('HECTO_DIFFER_SETTLE_MAIN_HOST'),
-            'port' => (int)env('HECTO_DIFFER_SETTLE_PORT'),
-            'username' => $this->rep_mid,
-            'password' => $this->rep_mid."!1234",
+            'host' => "61.252.169.33",
+            'port' => 5210,
+            'username' => $brand['rep_mid'],
+            'password' => $brand['rep_mid']."!1234",
             'passive' => false,
-        ];
-        $dr_config = [
+        ]]);
+        config(['filesystems.disks.'.$dr_config_name => [
             'driver' => 'sftp',
-            'host' => env('HECTO_DIFFER_SETTLE_DR_HOST'),
-            'port' => (int)env('HECTO_DIFFER_SETTLE_PORT'),
-            'username' => $this->rep_mid,
-            'password' => $this->rep_mid."!1234",
+            'host' => "14.34.14.26",
+            'port' => 5210,
+            'username' => $brand['rep_mid'],
+            'password' => $brand['rep_mid']."!1234",
             'passive' => false,            
-        ];
-        config(['filesystems.disks.different_settlement_main_hecto' => $main_config]);
-        config(['filesystems.disks.different_settlement_dr_hecto' => $dr_config]);
-        try
-        {
-            $this->main_sftp_connection = Storage::disk('different_settlement_main_hecto');
-            $this->main_connection_stat = true;
-        }
-        catch(Exception $e)
-        {
-            $this->main_connection_stat = false;
-            logging(['type'=>'main', 'message' => $e->getMessage()]);
-        }
-        try
-        {
-            $this->dr_sftp_connection = Storage::disk('different_settlement_dr_hecto');
-            $this->dr_connection_stat = false;
-        }
-        catch(Exception $e)
-        {
-            logging(['type'=>'dr', 'message' => $e->getMessage()]);
-            $this->dr_connection_stat = false;
-        }
+        ]]);
+        [$this->main_sftp_connection, $this->main_connection_stat] = $this->connectSFTPServer($main_config_name, 'main');
+        [$this->dr_sftp_connection, $this->dr_connection_stat] = $this->connectSFTPServer($dr_config_name, 'dr');        
     }
-
-    public function request(Carbon $date, $brand_business_num, $trans)
+    
+    public function request(Carbon $date, $trans)
     {
         $req_date = $date->format('Ymd');
         $save_path = "/edi_req/ST_PRFT_REQ_".$req_date;
-
-        $mids = $trans->pluck('mid')->unique()->all();
-
-        $total_count = 0;
-        $full_record = $this->setStartRecord($req_date, $brand_business_num);
-
-        foreach($mids as $mid)
-        {
-            $mcht_trans = $trans->filter(function ($tran) use ($mid) {
-                return $tran->mid == $mid;
-            })->values();
-            if(count($mcht_trans) > 0)
-            {
-                $header = $this->setHeaderRecord($mid);
-                [$data_records, $count, $amount] = $this->setDataRecord($mcht_trans, $brand_business_num);
-                $total  = $this->setTotalRecord($count, $amount);
-    
-                $full_record .= $header.$data_records.$total;
-                $total_count += $count;    
-            }
-        }
-        $full_record .= $this->setEndRecord($total_count);
-
-        $result = false;
-        if($this->main_connection_stat)
-            $result = $this->main_sftp_connection->put($save_path, $full_record);
-        if($this->dr_connection_stat)
-            $result = $this->dr_sftp_connection->put($save_path, $full_record);
-
-        
-        logging(['result'=>$result, 'save_path'=>$save_path], 'hecto-difference-settlement-request');
+        return parent::request($save_path, $req_date, $trans);
     }
 
     public function response(Carbon $date)
     {
         $req_date = $date->copy()->format('Ymd');
         $res_path = "/edi_rsp/ST_PRFT_RSP_".$req_date;
-
-        if($this->main_connection_stat && $this->main_sftp_connection->exists($res_path))
-            $contents = $this->main_sftp_connection->get($res_path);
-        else if($this->dr_connection_stat && $this->dr_sftp_connection->exists($res_path))
-            $contents = $this->dr_sftp_connection->get($res_path);
-        else
-            $contents = null;
-
-        $datas = $contents ? $this->getDataRecord($contents) : [];
-        logging(['date'=>$req_date, 'datas'=>$datas], 'hecto-difference-settlement-response');
-        return $datas;
+        return parent::response($res_path, $req_date);
     }
 }

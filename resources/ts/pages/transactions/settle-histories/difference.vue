@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
-import { useSearchStore, memo } from '@/views/transactions/settle-histories/useDifferenceStore'
+import { useSearchStore, getDifferenceSettleMenual } from '@/views/transactions/settle-histories/useDifferenceStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
@@ -65,8 +65,8 @@ onMounted(() => {
             </template>
             <template #index_extra_field>
                 
-                <VBtn prepend-icon="ic:outline-help" @click="alert.show(memo)" size="small">
-                    차액정산 설명서
+                <VBtn prepend-icon="ic:outline-help" @click="alert.show(getDifferenceSettleMenual(), 'v-dialog-lg')" size="small">
+                    차액정산 메뉴얼
                 </VBtn>
             </template>
             <template #headers>

@@ -122,6 +122,27 @@ class DifferenceSettlementHistoryController extends Controller
             ->get(['business_num', 'rep_mid', 'id', 'rep_pg_type']);
     }
 
+    public function getPGClass($brand)
+    {
+        try
+        {
+            $pg_name = getPGType($brand->rep_pg_type);
+            $path   = $this->base_path.$pg_name;            
+            $pg     = new $path(json_decode(json_encode($brand), true));
+        }
+        catch(Exception $e)
+        {   // pg사 발견못함
+            $pg     = null;
+            logging([
+                    'message' => $e->getMessage(),
+                    'brand' => json_decode(json_encode($brands[$i]), true),
+                ],
+                'PG사가 없습니다.'
+            );
+        }
+        return $pg;
+    }
+
     public function differenceSettleRequest()
     {
         $brands = $this->getUseDifferentSettlementBrands();
@@ -139,20 +160,10 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('transactions.brand_id', $brands[$i]->id)
                 ->where('transactions.trx_dt', $yesterday)
                 ->get(['transactions.*', 'merchandises.business_num']);
-            try
+            $pg = $this->getPGClass($brands[$i]);
+            if($pg)
             {
-                $path   = $this->base_path.$pg_name;            
-                $pg     = new $path($brands[$i]->rep_mid);
-                $pg->request($date, $brands[$i]->business_num, $trans);    
-            }
-            catch(Exception $e)
-            {   // pg사 발견못함
-                logging([
-                        'message' => $e->getMessage(),
-                        'brand' => json_decode(json_encode($brands[$i]), true),
-                    ],
-                    'PG사가 없습니다.'
-                );
+                $res    = $pg->request($date, $brands[$i]->business_num, $trans);
             }
         }
     }
@@ -163,22 +174,11 @@ class DifferenceSettlementHistoryController extends Controller
 
         for ($i=0; $i<count($brands); $i++)
         {
-            $pg_name = getPGType($brands[$i]->rep_pg_type);
-            try
+            $pg = $this->getPGClass($brand);
+            if($pg)
             {
-                $path   = $this->base_path.$pg_name;
-                $pg     = new $path($brands[$i]->rep_mid);
                 $datas  = $pg->response($date);
-                $res = $this->manyInsert($this->difference_settlement_histories, $datas);
-            }
-            catch(Exception $e)
-            {   // pg사 발견못함
-                logging([
-                        'message' => $e->getMessage(),
-                        'brand' => json_decode(json_encode($brands[$i]), true),
-                    ],
-                    'PG사가 없습니다.'
-                );
+                $res    = $this->manyInsert($this->difference_settlement_histories, $datas);
             }
         }
     }
