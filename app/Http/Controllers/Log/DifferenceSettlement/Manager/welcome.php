@@ -69,17 +69,17 @@ class welcome implements DifferenceSettlementInterface
             return substr($line, 0, 2) === DifferenceSettleHectoRecordType::DATA->value;
         }));
         for ($i=0; $i < count($datas); $i++) 
-        { 
+        {
             $data = $datas[$i];
-            $is_cancel  = $this->getNtypeField($data, 2, 1);    //원래는 A타입으로 읽어야함 내부 로직상 변경
+            $is_cancel  = $this->getNtypeField($data, 2, 1);
             $req_dt     = $this->getNtypeField($data, 3, 8);
-            $add_field  = $this->getAtypeField($data, 255, 40);
-            $mcht_section_code = $this->getAtypeField($data, 424, 1);
-            $supply_amount  = $this->getNtypeField($data, 427, 15);
-            $vat_amount     = $this->getNtypeField($data, 442, 15);
-            $settle_amount  = $this->getNtypeField($data, 457, 15);
-            $settle_dt = $this->getNtypeField($data, 472, 8);
-            $settle_result_code = $this->getAtypeField($data, 480, 2);
+            $add_field  = $this->getAtypeField($data, 213, 40);
+            $mcht_section_code = $this->getAtypeField($data, 253, 1);
+            $supply_amount  = $this->getNtypeField($data, 256, 15);
+            $vat_amount     = $this->getNtypeField($data, 271, 15);
+            $settle_amount  = $supply_amount + $vat_amount;
+            $settle_dt = $this->getNtypeField($data, 286, 8);
+            $settle_result_code = $this->getAtypeField($data, 294, 2);
             // 정산금이 존재할 때만
             if($settle_amount > 0)
             {
