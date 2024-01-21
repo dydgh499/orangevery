@@ -5,6 +5,6 @@ use Carbon\Carbon;
 
 interface DifferenceSettlementInterface
 {
-    public function request(Carbon $date, $brand_business_num, $trans);
+    public function request(Carbon $date, $trans);
     public function response(Carbon $date);
 }
