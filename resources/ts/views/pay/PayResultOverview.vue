@@ -85,6 +85,7 @@ onMounted( async () => {
                                     </tr>
                                 </VTable>
                             </div>
+                            <VDivider />
                         </VCardText>
                     </VCard>
                 </div>
