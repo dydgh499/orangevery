@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { payResult } from '@/views/pay/pay'
 
 const { sale_slip, pgs, result_cd, result_msg, getData } = payResult()
@@ -9,7 +8,7 @@ const salesslip = ref()
 
 onMounted( async () => {
     await getData()
-    salesslip.value.show(sale_slip)
+    salesslip.value.show(sale_slip.value)
 })
 </script>
 <template>
@@ -33,51 +32,58 @@ onMounted( async () => {
                         <VCardText>
                             <VDivider />
                             <div>
-                                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; margin-top: 24px;">
-                                    <template #name>결과코드</template>
-                                    <template #input>{{ result_cd }}</template>
-                                </CreateHalfVCol>
-                                <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
-                                    <template #name>
-                                            <span v-if="result_cd != '0000'">에러 메세지</span>   
-                                            <span v-else>응답 메세지</span> 
-                                    </template>
-                                    <template #input>{{ result_msg }}</template>
-                                </CreateHalfVCol>
-                                <template v-if="result_cd == '0000'">
-                                    <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
-                                        <template #name>상품명</template>
-                                        <template #input>{{ sale_slip.item_name  }}</template>
-                                    </CreateHalfVCol>
-                                    <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
-                                        <template #name>금액</template>
-                                        <template #input>{{ sale_slip.amount  }}</template>
-                                    </CreateHalfVCol>
-                                    <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
-                                        <template #name>구매자명</template>
-                                        <template #input>{{ sale_slip.buyer_name  }}</template>
-                                    </CreateHalfVCol>
-                                    <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
-                                        <template #name>카드번호</template>
-                                        <template #input>{{ sale_slip.card_num  }}</template>
-                                    </CreateHalfVCol>
-                                    <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
-                                        <template #name>승인번호</template>
-                                        <template #input>{{ sale_slip.appr_num  }}</template>
-                                    </CreateHalfVCol>
-                                    <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
-                                        <template #name>매입사</template>
-                                        <template #input>{{ sale_slip.acquirer  }}</template>
-                                    </CreateHalfVCol>
-                                    <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
-                                        <template #name>발급사</template>
-                                        <template #input>{{ sale_slip.issuer  }}</template>
-                                    </CreateHalfVCol>
-                                    <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
-                                        <template #name>할부기간</template>
-                                        <template #input>{{ installments.find(obj => obj.id == sale_slip.installment)?.title  }}</template>
-                                    </CreateHalfVCol>
-                                </template>
+                                <VTable v-if="result_cd != '0000'" style="margin: 3em 0; text-align: center;">
+                                    <tr>
+                                        <th class="padding">결과코드</th>
+                                        <td class="padding">{{ result_cd }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="padding">에러 메세지</th>
+                                        <td class="padding"><span v-html="result_msg"></span></td>
+                                    </tr>
+                                </VTable>
+                                <VTable v-else style="margin: 3em 0; text-align: center;">
+                                    <tr>
+                                        <th class="padding">결과코드</th>
+                                        <td class="padding">{{ result_cd }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="padding">응답 메세지</th>
+                                        <td class="padding">{{ result_msg }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="padding">상품명</th>
+                                        <td class="padding">{{ sale_slip.item_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="padding">금액</th>
+                                        <td class="padding">{{ sale_slip.amount }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="padding">구매자명</th>
+                                        <td class="padding">{{ sale_slip.buyer_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="padding">카드번호</th>
+                                        <td class="padding">{{ sale_slip.card_num }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="padding">승인번호</th>
+                                        <td class="padding">{{ sale_slip.appr_num }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="padding">매입사</th>
+                                        <td class="padding">{{ sale_slip.acquirer }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="padding">발급사</th>
+                                        <td class="padding">{{ sale_slip.issuer }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="padding">할부기간</th>
+                                        <td class="padding">{{ installments.find(obj => obj.id == sale_slip.installment)?.title }}</td>
+                                    </tr>
+                                </VTable>
                             </div>
                         </VCardText>
                     </VCard>
