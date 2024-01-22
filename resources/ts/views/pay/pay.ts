@@ -56,7 +56,7 @@ export const payResult = () => {
     const getData = async () => {
         try {
             const [response1, response2] = await Promise.all([
-                axios.get('/api/v1/pay-modules/' + pmod_id + '/sales-slip'),
+                axios.get('/api/v1/pay-modules/' + pmod_id + '/sale-slip'),
                 axios.get('/api/v1/pay-gateways/' + pg_id + '/sale-slip')
             ]);
             sale_slip.value = {
@@ -82,7 +82,7 @@ export const payResult = () => {
         }
     };
     return {
-        sale_slip, pgs, result_cd, result_msg, getData,
+        sale_slip, pgs, result_cd, result_msg, getData, pmod_id
     }
 }
 

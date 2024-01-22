@@ -207,8 +207,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
 
             Route::prefix('pay-modules')->group(function() {
                 Route::get('chart', [PaymentModuleController::class, 'chart']);
-                Route::get('all', [PaymentModuleController::class, 'all']);            
-                Route::get('{id}/sales-slip', [PaymentModuleController::class, 'salesSlip']);
+                Route::get('all', [PaymentModuleController::class, 'all']);
                 Route::post('tid-create', [PaymentModuleController::class, 'tidCreate']);
                 Route::post('mid-create', [PaymentModuleController::class, 'midCreate']);
                 Route::post('mid-bulk-create', [PaymentModuleController::class, 'midBulkCreate']);

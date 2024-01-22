@@ -1,7 +1,7 @@
-import { useQuickVuewStore } from '@/views/quick-view/useStore'
+import { useQuickViewStore } from '@/views/quick-view/useStore'
 import { getUserLevel, isAbleModifyMcht } from '@axios'
 
-const { getPaymentMenu } = useQuickVuewStore()
+const { getPaymentMenu } = useQuickViewStore()
 
 const getUserTap = () => {
     const users = []

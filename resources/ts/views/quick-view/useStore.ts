@@ -7,7 +7,7 @@ import { filter, map } from 'lodash'
 import { ref } from 'vue'
 
 const payment_modules = getUserLevel() == 10 ? await getAllPayModules() : []
-export const useQuickVuewStore = defineStore('useQuickVuewStore', () => {
+export const useQuickViewStore = defineStore('useQuickViewStore', () => {
     const hands = ref(<PayModule[]>(filter(payment_modules, { module_type: 1 })))
     const auths = ref(<PayModule[]>(filter(payment_modules, { module_type: 2 })))
     const simples = ref(<PayModule[]>(filter(payment_modules, { module_type: 3 })))

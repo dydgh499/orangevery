@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { user_info, getUserLevel } from '@axios'
 import { useRequestStore } from '@/views/request'
-import { useQuickVuewStore } from '@/views/quick-view/useStore'
+import { useQuickViewStore } from '@/views/quick-view/useStore'
 import CardLayout from '@/views/quick-view/CardLayout.vue'
 import SettleContentOverview from '@/views/quick-view/SettleContentOverview.vue'
 import SettleContentSkeleton from '@/views/quick-view/SettleContentSkeleton.vue'
@@ -14,7 +14,7 @@ import corp from '@corp'
 const transactions = ref(<MchtRecentTransactions>({}))
 const is_skeleton = ref(true)
 const { get, post } = useRequestStore()
-const { hands, getEncryptParams } = useQuickVuewStore()
+const { hands, getEncryptParams } = useQuickViewStore()
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))

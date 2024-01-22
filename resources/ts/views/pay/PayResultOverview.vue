@@ -1,14 +1,31 @@
 <script setup lang="ts">
+import { useQuickViewStore } from '@/views/quick-view/useStore'
 import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
 import { payResult } from '@/views/pay/pay'
 
-const { sale_slip, pgs, result_cd, result_msg, getData } = payResult()
+const { getEncryptParams, auths, simples } = useQuickViewStore()
+const { sale_slip, pgs, result_cd, result_msg, getData, pmod_id } = payResult()
 const salesslip = ref()
+const pay_url = ref()
 
+const home = () => {
+    location.href = pay_url.value
+}
 onMounted( async () => {
     await getData()
     salesslip.value.show(sale_slip.value)
+
+    let pay_module = auths.find(obj => obj.id == Number(pmod_id))
+    let type = 'auth'
+    if(pay_module == undefined) {
+        pay_module = simples.find(obj => obj.id == Number(pmod_id))
+        type = 'simple'
+    }
+    if(pay_module) {
+        const params = getEncryptParams(pay_module)
+        pay_url.value = '/pay/' + type + "?e=" + params
+    }
 })
 </script>
 <template>
@@ -87,6 +104,17 @@ onMounted( async () => {
                             </div>
                             <VDivider />
                         </VCardText>
+
+                        <VCol cols="6" style="padding: 0;" v-if="pay_url">
+                            <VBtn block @click="home()">
+                                결제화면으로
+                            </VBtn>
+                        </VCol>
+                        <VCol cols="6" style="padding: 0;">
+                            <VBtn block @click="salesslip.show(sale_slip)">
+                                영수증 보기
+                            </VBtn>
+                        </VCol>
                     </VCard>
                 </div>
             </VCardText>
