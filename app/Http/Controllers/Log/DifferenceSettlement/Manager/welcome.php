@@ -137,7 +137,7 @@ class welcome implements DifferenceSettlementInterface
             '15' => '매출이 전체 취소된 이후, +차액정산 접수시 반송(반송조건 추가 사유 : -차액정산(취소) 접수가 지연 되는 케이스 막고자 함)',
             '98' => '롯데카드 기타 오류 중 기 승인/취소 완료된 거래',
             '99' => '기타',
-        ];        
+        ];
         return isset($card_compnay_codes[$code]) ? $card_compnay_codes[$code] : '알수없는 코드';
     }
 

@@ -36,8 +36,12 @@ export function settlementHistoryFunctionCollect(store: any) {
             for (let i = 0; i < selected.length; i++) {
                 const item:SettlesHistories = store.items.find(obj => obj['id'] === selected[i])
                 params.current_status = Number(item.deposit_status)
-                if(item)
+                if(item) {
                     promises.push(post(rootUrlBuilder(is_mcht, item.id) + '/deposit', params))
+                    // 실시간 정산 이체 사용시 동시처리건수 타임아웃 예외처리
+                    if(params.use_finance_van_deposit)
+                        await setTimeout(() => console.log("Exceptions to the number of concurrent processing cases ..(0.1 sec)"), 100);
+                }
             }
             const results = await Promise.all(promises)
             snackbar.value.show('성공하였습니다.', 'success')
