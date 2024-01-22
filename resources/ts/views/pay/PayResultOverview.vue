@@ -12,9 +12,7 @@ const pay_url = ref()
 const home = () => {
     location.href = pay_url.value
 }
-onMounted( async () => {
-    await getData()
-
+const setPayUrl = () => {
     let pay_module = auths.find(obj => obj.id == Number(pmod_id))
     let type = 'auth'
     if(pay_module == undefined) {
@@ -25,6 +23,12 @@ onMounted( async () => {
         const params = getEncryptParams(pay_module)
         pay_url.value = '/pay/' + type + "?e=" + params
     }
+}
+
+onMounted( async () => {
+    setPayUrl()
+    await getData()
+    salesslip.value.show(sale_slip.value)
 })
 </script>
 <template>
