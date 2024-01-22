@@ -14,7 +14,6 @@ const home = () => {
 }
 onMounted( async () => {
     await getData()
-    salesslip.value.show(sale_slip.value)
 
     let pay_module = auths.find(obj => obj.id == Number(pmod_id))
     let type = 'auth'
@@ -29,7 +28,7 @@ onMounted( async () => {
 })
 </script>
 <template>
-    <section>
+    <section class="result-wrapper">
         <VCard rounded>
             <VCardText>
                 <div id="pay-container">
@@ -104,17 +103,18 @@ onMounted( async () => {
                             </div>
                             <VDivider />
                         </VCardText>
-
-                        <VCol cols="6" style="padding: 0;" v-if="pay_url">
-                            <VBtn block @click="home()">
-                                결제화면으로
-                            </VBtn>
-                        </VCol>
-                        <VCol cols="6" style="padding: 0;">
-                            <VBtn block @click="salesslip.show(sale_slip)">
-                                영수증 보기
-                            </VBtn>
-                        </VCol>
+                        <VRow no-gutters>
+                            <VCol cols="5" style="padding: 0;" v-if="pay_url">
+                                <VBtn block @click="home()">
+                                    결제화면으로
+                                </VBtn>
+                            </VCol>
+                            <VCol cols="5" style="padding: 0;">
+                                <VBtn block @click="salesslip.show(sale_slip)">
+                                    영수증 보기
+                                </VBtn>
+                            </VCol>
+                        </VRow>
                     </VCard>
                 </div>
             </VCardText>
@@ -125,5 +125,15 @@ onMounted( async () => {
 <style scoped>
 .padding {
   padding: 0.5em;
+}
+
+.result-wrapper {
+  inline-size: 600px;
+}
+
+@media (max-width: 700px) {
+  .result-wrapper {
+    inline-size: 100%;
+  }
 }
 </style>

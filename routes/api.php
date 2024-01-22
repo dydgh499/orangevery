@@ -60,7 +60,8 @@ use App\Http\Controllers\Manager\Settle\SalesforceController as SalesSettleContr
 Route::prefix('v1')->middleware('log.route')->group(function() {    
     Route::get('merchandises/{id}/sale-slip', [MerchandiseController::class, 'saleSlip']);
     Route::get('pay-gateways/{id}/sale-slip', [PaymentGatewayController::class, 'saleSlip']);
-    
+    Route::get('pay-modules/{id}/sale-slip', [PaymentModuleController::class, 'salesSlip']);
+
     Route::post('transactions/hand-pay', [TransactionController::class, 'handPay']);
     Route::post('computational-transfer/login', [BeforeSystemController::class, 'login']);
     Route::post('computational-transfer/register', [BeforeSystemController::class, 'register']);
@@ -207,7 +208,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
 
             Route::prefix('pay-modules')->group(function() {
                 Route::get('chart', [PaymentModuleController::class, 'chart']);
-                Route::get('all', [PaymentModuleController::class, 'all']);
+                Route::get('all', [PaymentModuleController::class, 'all']);            
                 Route::post('tid-create', [PaymentModuleController::class, 'tidCreate']);
                 Route::post('mid-create', [PaymentModuleController::class, 'midCreate']);
                 Route::post('mid-bulk-create', [PaymentModuleController::class, 'midBulkCreate']);
