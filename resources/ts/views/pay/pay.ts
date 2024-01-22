@@ -89,7 +89,7 @@ export const payResult = () => {
     sale_slip.value.appr_num = (route.query.appr_num ?? '') as string
     sale_slip.value.installment = (route.query.installment ?? 0) as number
     sale_slip.value.trx_dttm = (route.query.trx_dttm ?? new Date()) as string
-    sale_slip.value.is_cancel = Boolean(route.query.is_cancel ?? false)
+    sale_slip.value.is_cancel = Number(route.query.is_cancel ?? false)
 
     return {
         sale_slip, pgs, result_cd, result_msg
