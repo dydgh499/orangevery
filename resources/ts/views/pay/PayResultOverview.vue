@@ -103,7 +103,7 @@ onMounted( async () => {
                             </div>
                             <VDivider />
                         </VCardText>
-                        <VRow no-gutters>
+                        <VRow no-gutters style="display: flex; flex-direction: row; justify-content: space-evenly;">
                             <VCol cols="5" style="padding: 0;" v-if="pay_url">
                                 <VBtn block @click="home()">
                                     결제화면으로

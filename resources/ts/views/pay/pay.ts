@@ -60,7 +60,7 @@ export const payResult = () => {
                 axios.get('/api/v1/pay-gateways/' + pg_id + '/sale-slip')
             ]);
             sale_slip.value = {
-                ...response1.data[0],
+                ...response1.data,
                 ...route.query,
             }
             sale_slip.value.is_cancel = Number(route.query.is_cancel ?? false)
