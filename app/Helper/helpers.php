@@ -63,7 +63,10 @@
                 $res = Http::withHeaders($headers)->timeout(60)->get($url, $params);
 
             $code = $res->status();
-            $body = $code < 500 ? $res->json() : "";
+            $body = $code < 500 ? $res->json() : $res->body();
+            // 200일때 json parse 안될경우
+            if($body == null)
+                $body = $res->body();
         }
         catch(ConnectionException $ex)
         {

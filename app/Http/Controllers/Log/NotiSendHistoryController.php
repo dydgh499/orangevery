@@ -57,9 +57,10 @@ class NotiSendHistoryController extends Controller
     
     private function save($res, $noti)
     {
+        $body = json_encode($res['body']);
         $log = [
             'http_code' => $res['code'],
-            'message'   => json_encode($res['body']),
+            'message'   => $body ? $body : $res['body'],
             'send_url'  => $noti->send_url,
             'trans_id'  => $noti->id,
             'brand_id'  => $noti->brand_id,
