@@ -65,16 +65,6 @@ export const payResult = () => {
             }
             sale_slip.value.is_cancel = Number(route.query.is_cancel ?? false)
             sale_slip.value.trx_dttm = (route.query.trx_dttm ?? new Date()) as string
-            /*
-                sale_slip.value.addr = response1.data.addr
-                sale_slip.value.business_num = response1.data.business_num
-                sale_slip.value.resident_num = response1.data.resident_num
-                sale_slip.value.mcht_name = response1.data.mcht_name
-                sale_slip.value.nick_name = response1.data.nick_name
-                sale_slip.value.is_show_fee = response1.data.is_show_fee
-                sale_slip.value.use_saleslip_prov = response1.data.use_saleslip_prov
-                sale_slip.value.use_saleslip_sell = response1.data.use_saleslip_sell            
-            */
             pgs.value = response2.data
         } catch (error) {
             console.log(error)

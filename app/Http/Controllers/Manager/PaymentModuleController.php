@@ -322,7 +322,7 @@ class PaymentModuleController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function salesSlip(Request $request, $id)
+    public function saleSlip(Request $request, $id)
     {
         $cols = [
             'merchandises.addr',
