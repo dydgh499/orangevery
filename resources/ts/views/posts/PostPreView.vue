@@ -35,7 +35,7 @@ watchEffect(() => {
                 <VCardItem>
                     <VCardTitle>{{ types.find(obj => obj.id === ori_post?.type)?.title }} 원글</VCardTitle>
                     <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="2" :mdr="10">
+                        <CreateHalfVCol :mdl="1" :mdr="11">
                             <template #name>제목</template>
                             <template #input>
                                 <VTextField :value="ori_post?.title"
@@ -44,11 +44,11 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="2" :mdr="10" style='margin-bottom: 4em;'>
+                    <VRow>
+                        <CreateHalfVCol :mdl="1" :mdr="11" style='margin-bottom: 1em;'>
                             <template #name>내용</template>
                             <template #input>
-                                <div v-html="ori_post?.content" class="ql-editor" style="border: 1px solid #d1d5db;">
+                                <div v-html="ori_post?.content" class="ql-editor" style=" min-height: 15em;border: 1px solid #d1d5db;">
                                 </div>
                             </template>
                         </CreateHalfVCol>
@@ -58,7 +58,7 @@ watchEffect(() => {
                 <VCardItem>
                     <VCardTitle>답변 작성</VCardTitle>
                     <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="2" :mdr="10">
+                        <CreateHalfVCol :mdl="1" :mdr="11">
                             <template #name>제목</template>
                             <template #input>
                                 <VTextField id="nameHorizontalIcons" v-model="props.item.title"
@@ -67,8 +67,8 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5 pb-5">
-                        <CreateHalfVCol :mdl="2" :mdr="10" style='margin-bottom: 4em;'>
+                    <VRow>
+                        <CreateHalfVCol :mdl="1" :mdr="11" style='margin-bottom: 1em;'>
                             <template #name>내용</template>
                             <template #input>
                                 <Editor :content="props.item.content" @update:content="props.item.content = $event">

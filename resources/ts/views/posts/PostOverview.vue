@@ -25,8 +25,18 @@ const getPostTypes = computed(() => {
             <VCard>
                 <VCardItem>
                     <VCardTitle>게시글 작성</VCardTitle>
-                    <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="2" :mdr="10">
+                    <VRow  class="pt-5">                        
+                        <VCol md="1">
+                            작성타입
+                        </VCol>
+                        <VCol md="2">
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.type"
+                                    :items="getPostTypes" prepend-inner-icon="fxemoji-notepage" label="게시글 타입 선택" 
+                                    item-title="title" item-value="id" />
+                        </VCol>
+                    </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="1" :mdr="11">
                             <template #name>제목</template>
                             <template #input>
                                 <VTextField id="nameHorizontalIcons" v-model="props.item.title"
@@ -35,22 +45,13 @@ const getPostTypes = computed(() => {
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="2" :mdr="10" style='margin-bottom: 4em;'>
+                    <VRow>
+                        <CreateHalfVCol :mdl="1" :mdr="11">
                             <template #name>내용</template>
                             <template #input>
                                 <Editor :content="props.item.content" @update:content="props.item.content = $event"></Editor>
                             </template>
                         </CreateHalfVCol>
-                    </VRow>
-                    <VRow class="pt-5">
-                        <VCol md="8">
-                        </VCol>
-                        <VCol md="4">
-                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.type"
-                                    :items="getPostTypes" prepend-inner-icon="fxemoji-notepage" label="게시글 타입 선택" 
-                                    item-title="title" item-value="id" />
-                        </VCol>
                     </VRow>
                 </VCardItem>
             </VCard>

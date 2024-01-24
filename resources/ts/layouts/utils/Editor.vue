@@ -52,5 +52,18 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <QuillEditor v-model:content="content" contentType="html" :modules="modules" theme="snow" toolbar="full" placeholder="게시글 내용을 작성하세요."/>
+    <div style="display: block;">
+        <QuillEditor v-model:content="content" contentType="html" :modules="modules" theme="snow" toolbar="full" placeholder="게시글 내용을 작성하세요."/>
+    </div>
 </template>
+
+<style scoped>
+:deep(.ql-container) {
+  border: 1px solid rgba(var(--v-border-color), 0.5);
+  min-block-size: 20em;
+}
+
+:deep(.ql-toolbar) {
+  border: 1px solid rgba(var(--v-border-color), 0.5);
+}
+</style>
