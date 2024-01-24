@@ -73,7 +73,7 @@ class PostController extends Controller
         $data = $request->data();
 
         $data['writer'] = $request->user()->user_name;
-        $data['level'] = $request->user()->level;
+        $data['level'] = isMerchandise($request) ? 10 : $request->user()->level;
         $i_res = $this->posts->create($data);
 
         if($data['parent_id'] != null)
