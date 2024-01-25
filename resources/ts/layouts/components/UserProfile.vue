@@ -67,7 +67,7 @@ user_info.value.profile_img = user_info.value.profile_img ? user_info.value.prof
                         <template #prepend>
                             <VListItemAction start>
                                 <VBadge dot location="bottom right" offset-x="3" offset-y="3" color="success">
-                                    <VAvatar color="primary" variant="tonal" @click="showAvatar(user_info.profile_img)">
+                                    <VAvatar color="primary" variant="tonal" @click="showAvatar(user_info.profile_img)" class="preview">
                                         <VImg :src="user_info.profile_img" />
                                     </VAvatar>
                                 </VBadge>
