@@ -50,7 +50,7 @@ const showAvatar = (preview: string) => {
                                     #{{ item[_key] }}
                                 </span>                                
                                 <span v-else-if="_key == 'profile_img'">
-                                    <VAvatar :image="item[_key]" class="me-3" @click="showAvatar(item['profile_img'])"/>
+                                    <VAvatar :image="item[_key]" class="me-3 preview" @click="showAvatar(item['profile_img'])"/>
                                 </span>
                                 <span v-else-if="_key == `history_type`">
                                     <VChip

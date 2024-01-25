@@ -55,7 +55,7 @@ const showAvatar = (preview: string) => {
                                     </VChip>
                                 </span>
                                 <span v-else-if="_key == 'profile_img'">
-                                    <VAvatar :image="item[_key]" class="me-3" @click="showAvatar(item['profile_img'])"/>
+                                    <VAvatar :image="item[_key]" class="me-3 preview" @click="showAvatar(item['profile_img'])"/>
                                 </span>
                                 <span v-else-if="_key == 'extra_col'">
                                     <UserExtraMenu :id="item['id']" :type="2"></UserExtraMenu>
