@@ -95,8 +95,6 @@ class MessageController extends Controller
         if($brand)
         {
             $bonaeja = $brand->pv_options->free->bonaeja;
-            $rand   = random_int(100000, 999999);
-
             $sms = [
                 'user_id'   => $bonaeja['user_id'],
                 'sender'    => $bonaeja['sender_phone'],
