@@ -57,9 +57,8 @@ user_info.value.profile_img = user_info.value.profile_img ? user_info.value.prof
 
 <template>
     <VBadge dot location="bottom right" offset-x="3" offset-y="3" bordered color="success">
-        <VAvatar class="cursor-pointer" color="primary preview" variant="tonal" @click="showAvatar(user_info.profile_img)">
+        <VAvatar class="cursor-pointer" color="primary preview" variant="tonal">
             <VImg :src="user_info.profile_img" />
-
             <!-- SECTION Menu -->
             <VMenu activator="parent" width="230" location="bottom end" offset="14px">
                 <VList>
@@ -68,7 +67,7 @@ user_info.value.profile_img = user_info.value.profile_img ? user_info.value.prof
                         <template #prepend>
                             <VListItemAction start>
                                 <VBadge dot location="bottom right" offset-x="3" offset-y="3" color="success">
-                                    <VAvatar color="primary" variant="tonal">
+                                    <VAvatar color="primary" variant="tonal" @click="showAvatar(user_info.profile_img)">
                                         <VImg :src="user_info.profile_img" />
                                     </VAvatar>
                                 </VBadge>
