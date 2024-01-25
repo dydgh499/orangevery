@@ -3,16 +3,22 @@ import { useSearchStore, history_types } from '@/views/services/operator-histori
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import OperDetailDialog from '@/layouts/dialogs/OperDetailDialog.vue'
 import ExtraMenu from '@/views/services/operator-histories/ExtraMenu.vue'
+import ImageDialog from '@/layouts/dialogs/ImageDialog.vue'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 
 const operDetail = ref()
+const imageDialog = ref()
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 provide('operDetail', operDetail)
+
+const showAvatar = (preview: string) => {
+    imageDialog.value.show(preview)
+}
 
 </script>
 <template>
@@ -44,7 +50,7 @@ provide('operDetail', operDetail)
                                     #{{ item[_key] }}
                                 </span>                                
                                 <span v-else-if="_key == 'profile_img'">
-                                    <VAvatar :image="item[_key]" class="me-3" />
+                                    <VAvatar :image="item[_key]" class="me-3" @click="showAvatar(item['profile_img'])"/>
                                 </span>
                                 <span v-else-if="_key == `history_type`">
                                     <VChip
@@ -65,5 +71,6 @@ provide('operDetail', operDetail)
             </template>
         </BaseIndexView>
         <OperDetailDialog ref="operDetail" />
+        <ImageDialog ref="imageDialog" :style="`inline-size:20em !important;`"/>
     </div>
 </template>

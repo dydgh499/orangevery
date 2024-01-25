@@ -1,42 +1,19 @@
 <script setup lang="ts">
+import ImageDialog from '@/layouts/dialogs/ImageDialog.vue'
 
 interface Props {
     previewStyle: string,
     preview: string,
     style: string,
 }
-const props = defineProps<Props>()
 
-const visable = ref(false);
-const zoomIn = () => {
-    if (props.preview != '/utils/icons/img-preview.svg')
-        visable.value = !visable.value
-}
+const props = defineProps<Props>()
+const imageDialog = ref()
+
 </script>
 <template>
     <section>
-        <VImg rounded :src="props.preview" class="preview" @click="zoomIn()" :style="props.previewStyle" />
-        <VDialog v-model="visable" persistent class="v-dialog-sm" :style='props.style'>
-            <!-- Dialog close btn -->
-            <DialogCloseBtn @click="visable = !visable" />
-            <!-- Dialog Content -->
-            <VCard>
-                <VImg rounded :src="props.preview"></VImg>
-            </VCard>
-        </VDialog>
+        <VImg rounded :src="props.preview" class="preview" @click="imageDialog.show(props.preview)" :style="props.previewStyle" />
+        <ImageDialog ref="imageDialog" :style="props.style"/>
     </section>
 </template>
-
-<style lang="scss" scope>
-.preview:hover {
-  border: 2px solid rgb(200, 200, 200);
-  cursor: pointer;
-}
-
-@media only screen and (max-device-width: 960px) {
-  .preview {
-    margin-block: 0.5em !important;
-    margin-inline: 0 !important;
-  }
-}
-</style>

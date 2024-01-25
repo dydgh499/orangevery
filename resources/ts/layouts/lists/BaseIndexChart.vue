@@ -34,7 +34,6 @@ onMounted (() => {
                 </div>
                 <span>{{ meta.subtitle }}</span>
             </div>
-
             <VAvatar rounded variant="tonal" :color="meta.color" :icon="meta.icon" />
         </VCardText>
     </VCard>

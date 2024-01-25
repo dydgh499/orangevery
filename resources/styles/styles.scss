@@ -117,3 +117,15 @@ th {
 .custom-select:active {
   border: 1px solid rgba(var(--v-border-color), 1);
 }
+
+.preview:hover {
+  border: 2px solid rgb(200, 200, 200);
+  cursor: pointer;
+}
+
+@media only screen and (max-device-width: 960px) {
+  .preview {
+    margin-block: 0.5em !important;
+    margin-inline: 0 !important;
+  }
+}

@@ -24,7 +24,10 @@ trait SettleHistoryTrait
     */
     protected function SetNullTransSettle($request, $target_settle_id)
     {
-        // 정산 후, 가맹점, 영업점 변경한 경우 mcht_id -> user_id를 찾을 수 없음, target_settle_id(mcht_settle_id, sales5_settle_id ..) -> id 로만 찾아야함
+        /*  2024-01-25 JYH
+            정산 후, 가맹점, 영업점 변경한 경우 mcht_id -> user_id를 찾을 수 없음, 
+            target_settle_id(mcht_settle_id, sales5_settle_id ..) -> id 로만 찾아야함
+        */
         return Transaction::where('brand_id', request()->user()->brand_id)
             ->where($target_settle_id, $request->id)
             ->update([$target_settle_id => null]);

@@ -195,7 +195,7 @@ onMounted(() => {
                     <VCardItem>
                         <VCardTitle style="margin-bottom: 1em;">결제정보</VCardTitle>
                         <!-- 👉 API KEY-->
-                        <VRow class="pt-3" v-show="props.item.module_type != 0">
+                        <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>API KEY(license)</template>
                                 <template #input>
@@ -207,7 +207,7 @@ onMounted(() => {
                         </VRow>
 
                         <!-- 👉 SUB KEY-->
-                        <VRow class="pt-3" v-show="props.item.module_type != 0">
+                        <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>SUB KEY(iv)</template>
                                 <template #input>
@@ -277,7 +277,7 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VRow class="pt-3" v-show="props.item.module_type != 0" v-if="getUserLevel() >= 35 && props.item.id != 0 && corp.pv_options.paid.use_online_pay">
+                        <VRow class="pt-3" v-if="getUserLevel() >= 35 && props.item.id != 0 && corp.pv_options.paid.use_online_pay">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>
                                     <BaseQuestionTooltip :location="'top'" :text="'결제 KEY'"

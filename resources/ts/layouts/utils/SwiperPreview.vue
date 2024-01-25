@@ -84,7 +84,7 @@ watchEffect(() => {
         </div>
     </VCol>
     <VCol cols="12" :md="props.rmd">
-        <Preview :preview="preview" :style="``" :preview-style="previewStyle" class="preview" />
+        <Preview :preview="preview" :style="`inline-size:20em !important;`" :preview-style="previewStyle" class="preview" />
     </VCol>
 </template>
 <style lang="scss" scoped>
