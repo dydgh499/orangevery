@@ -131,7 +131,7 @@ class SalesSettleHistoryController extends Controller
         {
             return DB::transaction(function () use($request, $id) {
                 [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
-                $res = $this->deleteSalesforceCommon($request, $id, $target_id, $target_settle_id, 'sales_id');
+                $res = $this->deleteSalesforceCommon($request, $id, $target_settle_id, 'sales_id');
                 return $this->response($res ? 1 : 990, ['id'=>$id]);
             });    
         }
@@ -150,7 +150,7 @@ class SalesSettleHistoryController extends Controller
         return $this->response($c_res ? 1 : 990, ['id'=>$c_res->id]);
     }
     
-    protected function deleteSalesforceCommon($request, $id, $target_id, $target_settle_id, $user_id)
+    protected function deleteSalesforceCommon($request, $id, $target_settle_id, $user_id)
     {
         $query = $this->settle_sales_hist->where('id', $id);
         $hist  = $query->first()->toArray();
@@ -159,7 +159,7 @@ class SalesSettleHistoryController extends Controller
             $request = $request->merge(['id' => $id]);
             // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
             $p_res = $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
-            $u_res = $this->SetNullTransSettle($request, $target_id, $target_settle_id, $hist[$user_id]);
+            $u_res = $this->SetNullTransSettle($request, $target_settle_id);
             $d_res = $query->update(['is_delete' => true]);
             $s_res = Salesforce::where('id', $hist[$user_id])->update(['last_settle_dt' => null]);
             return $this->response(1);

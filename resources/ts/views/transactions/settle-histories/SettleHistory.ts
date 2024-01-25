@@ -20,13 +20,9 @@ export function settlementHistoryFunctionCollect(store: any) {
         if (await alert.value.show('정말 ' + deposit_after_text + ' 하시겠습니까?')) {         
             params.current_status = Number(item.deposit_status)
             
-            const res = await post(rootUrlBuilder(is_mcht, item.id) + '/deposit', params)
-            if(res.status === 201) {
-                snackbar.value.show('성공하였습니다.', 'success')
+            const res = await post(rootUrlBuilder(is_mcht, item.id) + '/deposit', params, true)
+            if(res.status === 201)
                 store.setTable()
-            }
-            else
-                snackbar.value.show(res.data.message, 'error')
         }
     }
 

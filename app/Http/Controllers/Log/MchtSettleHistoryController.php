@@ -54,6 +54,9 @@ class MchtSettleHistoryController extends Controller
         return $query;
     }
 
+    /*
+    * 정산이력 - 차트
+    */
     public function chart(Request $request)
     {
         $query = $this->commonQuery($request);
@@ -73,6 +76,9 @@ class MchtSettleHistoryController extends Controller
         return $this->response(0, $total);
     }
 
+    /*
+    * 정산이력 - 가맹점
+    */
     public function index(IndexRequest $request)
     {
         $cols = ['merchandises.user_name', 'merchandises.mcht_name', 'settle_histories_merchandises.*'];
@@ -81,6 +87,9 @@ class MchtSettleHistoryController extends Controller
         return $this->response(0, $data);
     }
 
+    /*
+    * 정산이력추가 - 가맹점
+    */
     public function store(CreateSettleHistoryRequest $request)
     {
         return DB::transaction(function () use($request) {
@@ -89,6 +98,9 @@ class MchtSettleHistoryController extends Controller
         });
     }
 
+    /*
+    * 부분정산이력추가 - 가맹점
+    */
     public function storePart(CreateSettleHistoryRequest $request)
     {
         return DB::transaction(function () use($request) {
@@ -97,6 +109,9 @@ class MchtSettleHistoryController extends Controller
         });
     }
 
+    /*
+    * 정산이력 - 일괄정산 - 가맹점
+    */
     public function batch(BatchSettleHistoryRequest $request)
     {
         return DB::transaction(function () use($request) {
@@ -118,6 +133,9 @@ class MchtSettleHistoryController extends Controller
         });
     }
 
+    /*
+    * 정산이력 - 정산취소
+    */
     public function destroy(Request $request, $id)
     {
         if($request->use_finance_van_deposit && $request->current_status)
@@ -125,7 +143,7 @@ class MchtSettleHistoryController extends Controller
         else
         {
             return DB::transaction(function () use($request, $id) {
-                $res = $this->deleteMchtforceCommon( $request, $id, 'mcht_id', 'mcht_settle_id', 'mcht_id');
+                $res = $this->deleteMchtforceCommon($request, $id, 'mcht_settle_id');
                 return $this->response($res ? 1 : 990, ['id'=>$id]);
             });    
         }
@@ -150,7 +168,7 @@ class MchtSettleHistoryController extends Controller
     }
 
 
-    protected function deleteMchtforceCommon($request, $id, $target_id, $target_settle_id, $user_id)
+    protected function deleteMchtforceCommon($request, $id, $target_settle_id)
     {
         $query = $this->settle_mcht_hist->where('id', $id);
         $hist  = $query->first()->toArray();
@@ -159,7 +177,7 @@ class MchtSettleHistoryController extends Controller
             $request = $request->merge(['id' => $id]);
             // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
             $p_res = $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
-            $u_res = $this->SetNullTransSettle($request, $target_id, $target_settle_id, $hist[$user_id]);
+            $u_res = $this->SetNullTransSettle($request, $target_settle_id);
             $cw_res= $this->SetNullCollectWithdraw($hist);
             $d_res = $query->update(['is_delete' => true]);
             return $this->response($d_res ? 1 : 990);    
