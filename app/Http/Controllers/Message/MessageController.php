@@ -142,7 +142,7 @@ class MessageController extends Controller
         $validated = $request->validate(['phone_num'=>'required']);
         $brand  = Brand::where('id', $request->user()->brand_id)->first();
         if($brand)
-            return $this->send($brand, $request->phone_num, $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n".$request->url);
+            return $this->send($brand, $request->phone_num, $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n".$request->url);
         else
             return $this->response(1000, '존재하지 않는 전산입니다.');
     }
