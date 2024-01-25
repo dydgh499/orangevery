@@ -143,20 +143,6 @@ class QuickViewController extends Controller
         ];
         return $this->response(0, $group);
     }
-
-    public function smslinkSend(Request $request)
-    {
-        $sms = [];
-        $sms['user_id'] = "onmir1234";               // SMS 아이디
-        $sms['key'] = "u73u7mt294xt2r9av2fevgg7yb154xtt"; //인증키
-        $sms['msg'] = $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n".$request->url;
-        $sms['receiver'] = $request->phone_num;     // 수신번호
-        $sms['sender']  ="07043232060";             // 발신번호
-        $sms['subject'] = "[안녕하세요. ".$request->user()->mcht_name." 입니다.]";
-
-        $res = asPost("https://apis.aligo.in/send/", $sms);
-        return $this->response(1);
-    }
     
     public function _withdrawAbleAmount($request, $mcht_id)
     {

@@ -69,6 +69,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
     Route::prefix('bonaejas')->group(function() {
         Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
         Route::post('mobile-code-auth', [MessageController::class, 'mobileCodeAuth']);
+        Route::post('sms-link-send', [MessageController::class, 'smslinkSend']);
     });
     Route::prefix('auth')->group(function() {
         Route::post('sign-in', [AuthController::class, 'signin']);
@@ -249,6 +250,5 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
     Route::prefix('quick-view')->middleware('auth:sanctum')->group(function() {
         Route::get('', [QuickViewController::class, 'index']);
         Route::get('withdraw-able-amount', [QuickViewController::class, 'withdrawAbleAmount']);        
-        Route::post('sms-link-send', [QuickViewController::class, 'smslinkSend']);
     });
 });

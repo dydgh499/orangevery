@@ -70,7 +70,7 @@ const submit = async () => {
                     'url': url,
                     ...p,
                 }
-                const r = await axios.post('/api/v1/quick-view/sms-link-send', params)
+                const r = await axios.post('/api/v1/bonaejas/sms-link-send', params)
                 snackbar.value.show(phone_num.value+'으로 결제링크를 전송하였습니다.', 'success')
             }
             catch (e: any) {

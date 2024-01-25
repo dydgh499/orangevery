@@ -90,6 +90,31 @@ class MessageController extends Controller
         }
     }
 
+    public function send($brand, $phone_num, $message)
+    {
+        if($brand)
+        {
+            $bonaeja = $brand->pv_options->free->bonaeja;
+            $rand   = random_int(100000, 999999);
+
+            $sms = [
+                'user_id'   => $bonaeja['user_id'],
+                'sender'    => $bonaeja['sender_phone'],
+                'api_key'   => $bonaeja['api_key'],
+                'receiver'  => $phone_num,
+                'msg'       =>  $message,
+            ];
+            $res = post("https://api.bonaeja.com/api/msg/v1/send", $sms);
+            if($res['code'] == 500)
+                return $this->extendResponse(1000, '통신 과정에서 에러가 발생했습니다.');
+            else
+            {
+                $this->bonaejaDepositValidate($bonaeja, $brand->name);
+                return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1000, $res['body']['message']);
+            }
+        }
+    }
+
     /*
      * 모바일 코드 발급
      */
@@ -99,28 +124,29 @@ class MessageController extends Controller
         $brand  = Brand::where('id', $request->brand_id)->first();
         if($brand)
         {
-            $bonaeja = $brand->pv_options->free->bonaeja;
             $rand   = random_int(100000, 999999);
             $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
             if($res)
-            {
-                $sms = [
-                    'user_id'   => $bonaeja['user_id'],
-                    'sender'    => $bonaeja['sender_phone'],
-                    'api_key'   => $bonaeja['api_key'],
-                    'receiver'  => $request->phone_num,
-                    'msg'       => "[".$brand->name."] 인증번호 [$rand]을(를) 입력해주세요",
-                ];
-                $res = post("https://api.bonaeja.com/api/msg/v1/send", $sms);
-                if($res['code'] == 500)
-                    return $this->extendResponse(1000, '통신 과정에서 에러가 발생했습니다.');
-                else
-                {
-                    $this->bonaejaDepositValidate($bonaeja, $brand->name);
-                    return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1000, $res['body']['message']);
-                }
-            }    
+                return $this->send($brand, $request->phone_num, "[".$brand->name."] 인증번호 [$rand]을(를) 입력해주세요");
+            else
+                return $this->response(1000, '모바일 코드 발급에 실패하였습니다.');
         }
+        return $this->response(1000, '존재하지 않는 전산입니다.');
+
+    }
+
+    
+    /*
+    * SMS 문자발송
+    */
+    public function smslinkSend(Request $request)
+    {
+        $validated = $request->validate(['phone_num'=>'required']);
+        $brand  = Brand::where('id', $request->user()->brand_id)->first();
+        if($brand)
+            return $this->send($brand, $request->phone_num, $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n".$request->url);
+        else
+            return $this->response(1000, '존재하지 않는 전산입니다.');
     }
 
     /**
