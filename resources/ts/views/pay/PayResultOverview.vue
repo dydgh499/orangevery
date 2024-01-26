@@ -28,7 +28,8 @@ const setPayUrl = () => {
 onMounted( async () => {
     setPayUrl()
     await getData()
-    salesslip.value.show(sale_slip.value)
+    if(result_cd == "0000")
+        salesslip.value.show(sale_slip.value)
 })
 </script>
 <template>
