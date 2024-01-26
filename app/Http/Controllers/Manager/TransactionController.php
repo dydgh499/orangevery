@@ -393,7 +393,7 @@ class TransactionController extends Controller
     {
         $transaction = $this->transactions
             ->join('merchandises', 'merchandises.id', '=', 'transactions.mcht_id')
-            ->join('pay_gateways', 'pay_gateways.id', '=', 'transactions.pg_id')
+            ->join('payment_gateways', 'payment_gateways.id', '=', 'transactions.pg_id')
             ->where('transactions.trx_id', $trx_id)
             ->where('transactions.is_delete', false)
             ->first([
@@ -401,9 +401,9 @@ class TransactionController extends Controller
                 'merchandises.addr as m_addr', 'merchandises.business_num as m_business_num', 'merchandises.resident_num as m_resident_num',
                 'merchandises.mcht_name as m_mcht_name', 'merchandises.nick_name as m_nick_name', 'merchandises.is_show_fee as m_is_show_fee',
                 'merchandises.use_saleslip_prov as m_use_saleslip_prov', 'merchandises.use_saleslip_sell as m_use_saleslip_sell',
-                'pay_gateways.id as pg_id', 'pay_gateways.pg_type as pg_type' ,
-                'pay_gateways.company_name as pg_company_name', 'pay_gateways.business_num as pg_business_num', 
-                'pay_gateways.rep_name as pg_rep_name',  'pay_gateways.addr as pg_addr'
+                'payment_gateways.id as pg_id', 'payment_gateways.pg_type as pg_type' ,
+                'payment_gateways.company_name as pg_company_name', 'payment_gateways.business_num as pg_business_num', 
+                'payment_gateways.rep_name as pg_rep_name',  'payment_gateways.addr as pg_addr'
             ]);
         $sales_slip = [
             'transaction' => [
