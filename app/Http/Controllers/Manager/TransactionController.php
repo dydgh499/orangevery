@@ -397,6 +397,7 @@ class TransactionController extends Controller
             ->where('transactions.trx_id', $trx_id)
             ->where('transactions.is_delete', false)
             ->first([
+                'transactions.pmod_id',
                 'merchandises.addr as m_addr', 'merchandises.business_num as m_business_num', 'merchandises.resident_num as m_resident_num',
                 'merchandises.mcht_name as m_mcht_name', 'merchandises.nick_name as m_nick_name', 'merchandises.is_show_fee as m_is_show_fee',
                 'merchandises.use_saleslip_prov as m_use_saleslip_prov', 'merchandises.use_saleslip_sell as m_use_saleslip_sell',
@@ -405,6 +406,9 @@ class TransactionController extends Controller
                 'pay_gateways.rep_name as pg_rep_name',  'pay_gateways.addr as pg_addr'
             ]);
         $sales_slip = [
+            'transaction' => [
+                'pmod_id' => $transaction->pmod_id,
+            ],
             'merchandise' =>  [
                 'addr' => $transaction->m_addr,
                 'business_num' => $transaction->m_business_num,
