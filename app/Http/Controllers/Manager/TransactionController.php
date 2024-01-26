@@ -426,6 +426,7 @@ class TransactionController extends Controller
                 'company_name' => $transaction->pg_company_name,
                 'business_num' => $transaction->business_num,
                 'rep_name' => $transaction->pg_rep_name,
+                'addr' => $transaction->pg_addr,
             ]
         ];
         return $this->response(0, $sales_slip);   
