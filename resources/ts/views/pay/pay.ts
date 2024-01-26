@@ -61,8 +61,11 @@ export const payResult = () => {
             }
             sale_slip.value.is_cancel = Number(route.query.is_cancel ?? false)
             sale_slip.value.trx_dttm = (route.query.trx_dttm ?? new Date()) as string
-            pgs.value = response.data.payment_gateway
+            pgs.value = [response.data.payment_gateway]
             pmod_id = response.data.transaction.pmod_id
+            console.log(sale_slip.value)
+            console.log(pmod_id)
+            console.log(pgs.value)
         } catch (error) {
             console.log(error)
             throw error;
