@@ -58,9 +58,9 @@ use App\Http\Controllers\Manager\Settle\SalesforceController as SalesSettleContr
 */
 
 Route::prefix('v1')->middleware('log.route')->group(function() {    
-    Route::get('transactions/sale-slip/{trx_id}', [TransactionController::class, 'saleSlip']);
     Route::get('merchandises/{id}/sale-slip', [MerchandiseController::class, 'saleSlip']);
     Route::get('pay-gateways/{id}/sale-slip', [PaymentGatewayController::class, 'saleSlip']);
+    Route::get('pay-modules/{id}/sale-slip', [PaymentModuleController::class, 'saleSlip']);
 
     Route::post('transactions/hand-pay', [TransactionController::class, 'handPay']);
     Route::post('computational-transfer/login', [BeforeSystemController::class, 'login']);
