@@ -384,53 +384,7 @@ class TransactionController extends Controller
             ->get($cols);
         return $grouped;
     }
-    /**
-     * 영수증 정보조회
-     *
-     * @urlParam id integer required 유저 PK
-     */
-    public function saleSlip(Request $request, $trx_id)
-    {
-        $transaction = $this->transactions
-            ->join('merchandises', 'merchandises.id', '=', 'transactions.mcht_id')
-            ->join('payment_gateways', 'payment_gateways.id', '=', 'transactions.pg_id')
-            ->where('transactions.trx_id', $trx_id)
-            ->where('transactions.is_delete', false)
-            ->first([
-                'transactions.pmod_id',
-                'merchandises.addr as m_addr', 'merchandises.business_num as m_business_num', 'merchandises.resident_num as m_resident_num',
-                'merchandises.mcht_name as m_mcht_name', 'merchandises.nick_name as m_nick_name', 'merchandises.is_show_fee as m_is_show_fee',
-                'merchandises.use_saleslip_prov as m_use_saleslip_prov', 'merchandises.use_saleslip_sell as m_use_saleslip_sell',
-                'payment_gateways.id as pg_id', 'payment_gateways.pg_type as pg_type' ,
-                'payment_gateways.company_name as pg_company_name', 'payment_gateways.business_num as pg_business_num', 
-                'payment_gateways.rep_name as pg_rep_name', 'payment_gateways.addr as pg_addr'
-            ]);
-        $sales_slip = [
-            'transaction' => [
-                'pmod_id' => $transaction->pmod_id,
-            ],
-            'merchandise' =>  [
-                'addr' => $transaction->m_addr,
-                'business_num' => $transaction->m_business_num,
-                'resident_num' => $transaction->m_resident_num,
-                'mcht_name' => $transaction->m_mcht_name,
-                'nick_name' => $transaction->m_nick_name,
-                'is_show_fee' => $transaction->m_is_show_fee,
-                'use_saleslip_prov' => $transaction->m_use_saleslip_prov,
-                'use_saleslip_sell' => $transaction->m_use_saleslip_sell,                
-            ],
-            'payment_gateway' => [
-                'id' => $transaction->pg_id,
-                'pg_type' => $transaction->pg_type,
-                'nick_name' => $transaction->m_nick_name,
-                'company_name' => $transaction->pg_company_name,
-                'business_num' => $transaction->business_num,
-                'rep_name' => $transaction->pg_rep_name,
-                'addr' => $transaction->pg_addr,
-            ]
-        ];
-        return $this->response(0, $sales_slip);   
-    }
+    
     public function _test()
     {
         $dev_settle_type = DevSettleType::NOT_APPLY->value;
