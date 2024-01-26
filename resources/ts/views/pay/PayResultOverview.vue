@@ -114,7 +114,7 @@ onMounted( async () => {
                                     결제화면으로
                                 </VBtn>
                             </VCol>
-                            <VCol cols="5" style="padding: 0;">
+                            <VCol cols="5" style="padding: 0;" v-if="result_cd == '0000'">
                                 <VBtn block @click="salesslip.show(sale_slip)">
                                     영수증 보기
                                 </VBtn>
