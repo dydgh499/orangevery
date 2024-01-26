@@ -54,7 +54,7 @@ export const payResult = () => {
 
     const getData = async () => {
         try {
-            const response = await axios.get('/api/v1/transactions/'+route.query.trx_id+'/sale-slip')
+            const response = await axios.get('/api/v1/transactions/sale-slip/'+route.query.trx_id)
             sale_slip.value = {
                 ...response.data.merchandise,
                 ...route.query,
