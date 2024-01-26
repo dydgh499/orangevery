@@ -48,24 +48,24 @@ export const payResult = () => {
     const route = useRoute()
     const result_cd = route.query.result_cd as string
     const result_msg = route.query.result_msg as string
+    const pmod_id = route.query.pmod_id
+    const pg_id = route.query.pg_id
     const sale_slip = ref(<SalesSlip>({}))
     const pgs = ref(<PayGateway[]>([]))
-    let pmod_id = ref(0)
 
     const getData = async () => {
         try {
-            const response = await axios.get('/api/v1/transactions/sale-slip/'+route.query.trx_id)
+            const [response1, response2] = await Promise.all([
+                axios.get('/api/v1/pay-modules/' + pmod_id + '/sale-slip'),
+                axios.get('/api/v1/pay-gateways/' + pg_id + '/sale-slip')
+            ]);
             sale_slip.value = {
-                ...response.data.merchandise,
+                ...response1.data,
                 ...route.query,
             }
-            sale_slip.value.amount = Number(sale_slip.value.amount)
-            sale_slip.value.pg_id = Number(sale_slip.value.pg_id)
             sale_slip.value.is_cancel = Number(route.query.is_cancel ?? false)
             sale_slip.value.trx_dttm = (route.query.trx_dttm ?? new Date()) as string
-            pgs.value = [response.data.payment_gateway]
-            pmod_id.value = response.data.transaction.pmod_id
-
+            pgs.value = response2.data
         } catch (error) {
             console.log(error)
             throw error;

@@ -13,10 +13,10 @@ const home = () => {
     location.href = pay_url.value
 }
 const setPayUrl = () => {
-    let pay_module = auths.find(obj => obj.id == Number(pmod_id.value))
+    let pay_module = auths.find(obj => obj.id == Number(pmod_id))
     let type = 'auth'
     if(pay_module == undefined) {
-        pay_module = simples.find(obj => obj.id == Number(pmod_id.value))
+        pay_module = simples.find(obj => obj.id == Number(pmod_id))
         type = 'simple'
     }
     if(pay_module) {

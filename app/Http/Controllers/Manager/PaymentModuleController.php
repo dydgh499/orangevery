@@ -318,6 +318,30 @@ class PaymentModuleController extends Controller
     }
 
     /**
+     * 영수증 정보조회
+     *
+     * @urlParam id integer required 유저 PK
+     */
+    public function saleSlip(Request $request, $id)
+    {
+        $cols = [
+            'merchandises.addr',
+            'merchandises.business_num',
+            'merchandises.resident_num',
+            'merchandises.mcht_name',
+            'merchandises.nick_name',
+            'merchandises.is_show_fee',
+            'merchandises.use_saleslip_prov',
+            'merchandises.use_saleslip_sell',
+        ];
+        $mcht = $this->pay_modules
+            ->join('merchandises', 'merchandises.id', '=', 'payment_modules.mcht_id')
+            ->where('payment_modules.id', $id)
+            ->first($cols);
+        return $this->response(0, $mcht);        
+    }
+
+    /**
      * TID 발급
      */
     public function tidCreate(Request $request)

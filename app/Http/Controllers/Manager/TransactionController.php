@@ -403,7 +403,7 @@ class TransactionController extends Controller
                 'merchandises.use_saleslip_prov as m_use_saleslip_prov', 'merchandises.use_saleslip_sell as m_use_saleslip_sell',
                 'payment_gateways.id as pg_id', 'payment_gateways.pg_type as pg_type' ,
                 'payment_gateways.company_name as pg_company_name', 'payment_gateways.business_num as pg_business_num', 
-                'payment_gateways.rep_name as pg_rep_name',  'payment_gateways.addr as pg_addr'
+                'payment_gateways.rep_name as pg_rep_name', 'payment_gateways.addr as pg_addr'
             ]);
         $sales_slip = [
             'transaction' => [
