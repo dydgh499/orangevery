@@ -17,7 +17,7 @@ const visible = ref(false)
 const trans = ref<SalesSlip>()
 const pg = ref<PayGateway>()
 const card = ref(null)
-const thickness = ref(3);
+const thickness = ref(3)
 
 const supply_amount = ref(0)
 const vat = ref(0)
