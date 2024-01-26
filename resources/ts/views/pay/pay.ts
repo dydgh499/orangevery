@@ -51,7 +51,7 @@ export const payResult = () => {
     const pmod_id   = Number(route.query.pmod_id)
     const pg_id     = Number(route.query.pg_id)
     const sale_slip = ref(<SalesSlip>({}))
-    const pgs = ref(<PayGateway[]>([]))
+    const pgs       = ref(<PayGateway[]>([]))
 
     const getData = async () => {
         try {
@@ -63,6 +63,7 @@ export const payResult = () => {
                 ...response1.data,
                 ...route.query,
             }
+            sale_slip.value.pg_id      = pg_id
             sale_slip.value.amount      = Number(sale_slip.value.amount)
             sale_slip.value.is_cancel   = Number(route.query.is_cancel ?? false)
             sale_slip.value.trx_dttm    = (route.query.trx_dttm ?? new Date()) as string
