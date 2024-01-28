@@ -281,6 +281,8 @@ interface FreeOption {
     use_search_date_detail: boolean,
     use_tid_duplicate: boolean,
     use_mid_duplicate: boolean,
+    use_fix_table_view: boolean,
+    fix_table_size: number,
     sales_slip: {
         merchandise: {
             comepany_name: string,
@@ -764,6 +766,7 @@ export interface UpSideChart {
 export interface NotiUrl {
     id: number,
     mcht_id: number | null,
+    mcht_name?: string,
     send_url: string,
     noti_status: number,
     note: string,

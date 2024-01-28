@@ -158,7 +158,6 @@ class MchtSettleHistoryController extends Controller
         $data['settle_fee'] = $request->settle_fee;
         $data['cancel_deposit_amount']      = $cancel_deposit_amount ? $cancel_deposit_amount : 0;
         $data['collect_withdraw_amount']    = $collect_withdraw_amount ? $collect_withdraw_amount : 0;
-        
         $c_res = $this->settle_mcht_hist->create($data);
         $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);
         $p_res = $this->SetPayModuleLastSettleMonth($data, 'mcht_settle_id', $c_res->id);

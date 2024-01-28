@@ -22,6 +22,7 @@ const { head, headers, isPrimaryHeader } = useRegisterStore()
 const { mchts } = useSalesFilterStore()
 
 const use_mid_create = ref(Number(corp.pv_options.paid.use_mid_create))
+const use_online_pay = ref(0)
 const all_levels = [{ id: 10, title: '가맹점' }, ...salesLevels()]
 const auth_types: Options[] = [
     { id: 0, title: '비인증', },
@@ -130,7 +131,10 @@ const validate = () => {
 
     if(corp.pv_options.paid.use_mid_create && use_mid_create.value)
         midCreater()
+    if(corp.pv_options.paid.use_online_pay && use_online_pay.value)
+       payKeyCreater()
 }
+
 const midCreater = async () => {
     const mid_code = await midCreateDlg.value.show()
     if(mid_code) {
@@ -147,6 +151,24 @@ const midCreater = async () => {
         snackbar.value.show('MID들이 발급 되었습니다.', 'success')
     }
 }
+
+const payKeyCreater = () => {
+    const getRandomNumber = (min: number, max: number) => {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    const generateRandomString = (id: number) => {
+        var rand = Math.random().toString(36).substring(2, 66)
+        return id + rand
+    }
+    
+    snackbar.value.show('PAY KEY들을 자동 발급 중입니다.', 'primary')
+    for (let i = 0; i < items.value.length; i++) {
+        items.value[i].pay_key = generateRandomString(getRandomNumber(1, 99999))        
+    }
+    snackbar.value.show('PAY KEY들이 발급 되었습니다.', 'success')
+}
+
 const payModRegister = async () => {
     if (await bulkRegister('결제모듈', 'merchandises/pay-modules', items.value))
         location.reload()
@@ -174,6 +196,7 @@ watchEffect(async () => {
                 </template>
                 <template #input>
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="use_mid_create" label="MID 자동발급 여부" color="primary" v-if="corp.pv_options.paid.use_mid_create"/>
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="use_online_pay" label="PAY KEY 자동발급 여부" color="primary" v-if="corp.pv_options.paid.use_online_pay"/>
                 </template>
             </CreateHalfVCol>
             <VDivider />

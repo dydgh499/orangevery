@@ -6,6 +6,7 @@ import SalesforceRegister from '@/views/services/bulk-register/SalesforceRegiste
 import MerchandiseRegister from '@/views/services/bulk-register/MerchandiseRegister.vue'
 import PayModuleRegister from '@/views/services/bulk-register/PayModuleRegister.vue'
 import RegularCardRegister from '@/views/services/bulk-register/RegularCardRegister.vue'
+import NotiUrlRegister from '@/views/services/bulk-register/NotiUrlRegister.vue'
 import PayModulePGUpdater from '@/views/services/bulk-register/PayModulePGUpdater.vue'
 
 import CreateForm from '@/layouts/utils/CreateForm.vue'
@@ -21,7 +22,8 @@ if(corp.use_different_settlement)
     tabs.push({ icon: 'mdi-vector-intersection', title: '가맹점 구간 일괄변경' })
 if(corp.pv_options.paid.use_regular_card)
     tabs.push({ icon: 'emojione:credit-card', title: '단골고객 카드정보 등록' })
-
+if(corp.pv_options.paid.use_noti)
+    tabs.push({ icon: 'emojione:envelope', title: '노티주소 등록' })
 </script>
 <template>
     <section>
@@ -51,6 +53,12 @@ if(corp.pv_options.paid.use_regular_card)
                     <Suspense>
                         <RegularCardRegister>
                         </RegularCardRegister>
+                    </Suspense>
+                </VWindowItem>
+                <VWindowItem v-if="corp.pv_options.paid.use_noti">
+                    <Suspense>
+                        <NotiUrlRegister>
+                        </NotiUrlRegister>
                     </Suspense>
                 </VWindowItem>
             </template>

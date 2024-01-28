@@ -9,6 +9,8 @@
         public $use_search_date_detail = true;
         public $use_tid_duplicate = true;
         public $use_mid_duplicate = false;
+        public $use_fix_table_view = true;
+        public $fix_table_size = 800;        
         public $sales_slip = [
             'merchandise' => [
                 'comepany_name' => '',

@@ -6,9 +6,11 @@ use App\Models\NotiUrl;
 use App\Models\Merchandise;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\StoresTrait;
 
 use App\Http\Requests\Manager\NotiRequest;
 use App\Http\Requests\Manager\IndexRequest;
+use App\Http\Requests\Manager\BulkRegister\BulkNotiUrlRequest;
 use App\Enums\HistoryType;
 
 use App\Http\Controllers\Controller;
@@ -21,7 +23,7 @@ use Illuminate\Http\Request;
  */
 class NotiUrlController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $noti_urls, $merchandises;
 
     public function __construct(NotiUrl $noti_urls, Merchandise $merchandises)
@@ -129,5 +131,24 @@ class NotiUrlController extends Controller
             operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $noti->note);
         }
         return $this->response($res, $data);
+    }
+
+    /**
+     * 대량등록
+     *
+     * 운영자 이상 가능
+     */
+    public function bulkRegister(BulkNotiUrlRequest $request)
+    {
+        $current = date('Y-m-d H:i:s');
+        $datas = $request->data();
+
+        $noti_urls = $datas->map(function ($data) use($current) {
+            $data['created_at'] = $current;
+            $data['updated_at'] = $current;
+            return $data;
+        })->toArray();
+        $res = $this->manyInsert($this->noti_urls, $noti_urls);
+        return $this->response($res ? 1 : 990);
     }
 }

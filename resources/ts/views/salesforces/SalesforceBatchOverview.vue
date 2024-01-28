@@ -543,7 +543,7 @@ const setNotiUrl = () => {
             <CreateHalfVCol :mdl="3" :mdr="9">
                 <template #name>노티 사용 유무</template>
                 <template #input>
-                    <VSwitch v-model="noti.noti_status" color="primary" />
+                    <VSwitch hide-details v-model="noti.noti_status" color="primary" />
                 </template>
             </CreateHalfVCol>
             <VRow>

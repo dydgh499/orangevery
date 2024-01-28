@@ -283,7 +283,7 @@ class PaymentModuleController extends Controller
     }
     
     /**
-     * 대량등록
+     * 결제모듈 대량등록
      *
      * 운영자 이상 가능
      */
@@ -299,10 +299,16 @@ class PaymentModuleController extends Controller
             $data['updated_at'] = $current;
             return $data;
         })->toArray();
+
         $res = $this->manyInsert($this->pay_modules, $pay_modules);
-        return $this->response($res ? 1 : 990);        
+        return $this->response($res ? 1 : 990);
     }
 
+    /**
+     * 구간 일괄변경
+     *
+     * 운영자 이상 가능
+     */
     public function bulkRegisterPG(BulkPayModulePGRequest $request)
     {
         $datas = $request->data();
@@ -374,6 +380,7 @@ class PaymentModuleController extends Controller
         $tid = sprintf($pg_type.$date.'%04d', $idx);
         return $this->response(0, ['tid'=>$tid]);    
     }
+    
     /**
      * MID 발급
      */

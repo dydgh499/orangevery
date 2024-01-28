@@ -37,6 +37,17 @@
     .hidden {
       display: none;
     }
+  @if($json['pv_options']['free']['use_fix_table_view'])
+    .v-table__wrapper {
+      height: {{ $json['pv_options']['free']['fix_table_size'] }}px;
+    }
+    .v-table__wrapper > table > thead {
+      background: rgb(var(--v-theme-background));
+      z-index: 9999;
+      position: sticky;
+      top: 0;
+    }
+  @endif
   </style>
   <body>
     <div id="app">

@@ -15,6 +15,7 @@ const { global } = useTheme()
 
 syncInitialLoaderTheme()
 syncConfigThemeWithVuetifyTheme()
+
 </script>
 <template>
     <VLocaleProvider :rtl="isAppRtl">
