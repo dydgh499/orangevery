@@ -52,6 +52,15 @@ const showAvatar = (preview: string) => {
                                         {{ operator_levels.find(obj => obj.id === item[_key])?.title }}
                                     </VChip>
                                 </span>
+                                <span v-else-if="_key == 'open_range'">
+                                    <VChip>
+                                        {{ item['open_s_dt'] }}
+                                    </VChip>
+                                    <span style="margin: 0 0.5em;">~</span>
+                                    <VChip>
+                                        {{ item['open_e_dt'] }}
+                                    </VChip>
+                                </span>
                                 <span v-else-if="_key == 'profile_img'">
                                     <VAvatar :image="item[_key]" class="me-3 preview"
                                         @click="showAvatar(item['profile_img'])" />

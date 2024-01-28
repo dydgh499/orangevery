@@ -5,7 +5,7 @@ import { defaultItemInfo } from '@/views/popups/useStore'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import type { Tab } from '@/views/types'
 
-const {path, item } = defaultItemInfo()
+const { path, item } = defaultItemInfo()
 const tabs = <Tab[]>([
     { icon: 'tabler-user-check', title: '팝업정보' },
 ])

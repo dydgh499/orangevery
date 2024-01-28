@@ -30,7 +30,6 @@ class CreateBrandsTable extends Migration
             $table->string('og_description')->nullable()->comment('오픈 그래프 내용');
             $table->string('note')->nullable()->comment('내용');
             $table->string('company_name')->nullable()->comment('회사명');
-            $table->string('pvcy_rep_name')->nullable()->comment('개인정보 보호 담당자명');
             $table->string('ceo_name')->nullable()->comment('대표자명');
             $table->string('addr')->nullable()->comment('주소');
             $table->string('business_num')->nullable()->comment('사업자등록번호');

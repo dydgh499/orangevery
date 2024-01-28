@@ -27,16 +27,7 @@ const getHeaders = (_sub_header: any) =>  {
         return getMainHeaders(_object, _keys, 0, _keys.length - 1)
     }
 }
-/*
-const renderCheckboxes = (header: any) => {
-    return (
-        <VCol v-for="(_header, index) in head.headers" :key="index" :cols="($vuetify.display.smAndDown ? 6 : 4)">
-            <VCheckbox v-model="_header.visible" :label="_header.ko"
-                true-icon="tabler-eye-check" false-icon="tabler-circle-x" color="primary" />
-        </VCol>
-    )
-}
-*/
+
 defineExpose({
     show
 });

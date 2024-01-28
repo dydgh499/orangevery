@@ -56,14 +56,15 @@ class PopupController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $cols = ['id', 'popup_title', 'open_s_dt', 'open_e_dt', 'created_at', 'updated_at'];
+        $cols = ['operators.user_name', 'operators.profile_img', 'popups.id', 'popups.popup_title', 'popups.open_s_dt', 'popups.open_e_dt', 'popups.created_at', 'popups.updated_at'];
         $search = $request->input('search', '');
         $query  = $this->popups
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
-            ->where('popup_title', 'like', "%$search%");
+            ->join('operators', 'popups.oper_id', '=', 'operators.id')
+            ->where('popups.brand_id', $request->user()->brand_id)
+            ->where('popups.is_delete', false)
+            ->where('popups.popup_title', 'like', "%$search%");
 
-        $data   = $this->getIndexData($request, $query, 'id', $cols, 'updated_at');
+        $data   = $this->getIndexData($request, $query, 'popups.id', $cols, 'popups.updated_at');
         return $this->response(0, $data);
     }
 
@@ -78,6 +79,7 @@ class PopupController extends Controller
     public function store(PopupRequest $request)
     {
         $data = $request->data();
+        $data['oper_id'] = $request->user()->id;
         $data = $this->saveImages($request, $data, $this->imgs);
         $result = $this->popups->create($data);
         return $this->response($result ? 1 : 990, ['id'=>$result->id]);

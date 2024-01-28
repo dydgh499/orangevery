@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Options\PvOptions;
 use App\Models\Options\ThemeCSS;
+use App\Models\BeforeBrandInfo;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Http\Traits\Models\AttributeTrait;
 
@@ -42,4 +43,11 @@ class Brand extends Model
             get: fn ($value) => (boolean)$value,
         );
     }
+
+    public function beforeBrandInfos()
+    {
+        return $this->hasMany(BeforeBrandInfo::class, 'brand_id');
+    }
+
+    
 }

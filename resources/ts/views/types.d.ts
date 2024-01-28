@@ -274,6 +274,14 @@ export interface RealtimeHistory {
     created_at: string,
     updated_at: string,
 }
+interface BrandBaseInfo {
+    company_name: string,
+    rep_name: string,
+    phone_num: string,
+    business_num: string,
+    addr: string,
+}
+
 interface FreeOption {
     use_hand_pay: boolean,
     use_auth_pay: boolean,
@@ -284,13 +292,7 @@ interface FreeOption {
     use_fix_table_view: boolean,
     fix_table_size: number,
     sales_slip: {
-        merchandise: {
-            comepany_name: string,
-            rep_name: string,
-            phone_num: string,
-            business_num: string,
-            addr: string,
-        }
+        merchandise: BrandBaseInfo
     },
     bonaeja: {
         user_id: string,
@@ -328,6 +330,8 @@ interface PaidOption {
     use_noti: boolean,
     use_cancel_deposit: boolean, //입금 내역 관리
     use_finance_van_deposit: boolean, //금융 VAN 송금
+    use_before_brand_info: boolean, // 이전 서비스 정보 사용
+    use_multiple_hand_pay: boolean, // 다중 수기결제
 }
 interface AuthOption {
     levels: {
@@ -374,7 +378,6 @@ export interface Brand extends Contract {
     og_description: string,
     note: string,
     company_name: string,
-    pvcy_rep_name: string,
     ceo_name: string,
     //
     addr: string,
@@ -398,8 +401,15 @@ export interface Brand extends Contract {
     rep_mid: string,
     use_different_settlement: boolean,
     rep_pg_type: number,
+    before_brand_infos: BeforeBrandInfo[],
     updated_at: datetime,
     created_at: datetime,
+}
+
+export interface BeforeBrandInfo extends BrandBaseInfo {
+    id: number,
+    apply_s_dt: string,
+    apply_e_dt: string,
 }
 
 export interface DeductionHeader {

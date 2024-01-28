@@ -10,7 +10,7 @@ const tabs = <Tab[]>([
 ])
 const id = ref<number>(0)
 const route = useRoute()
-    watchEffect(() => {
+watchEffect(() => {
     id.value = Number(route.params.id) || 0
 })
 </script>

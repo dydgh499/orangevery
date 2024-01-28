@@ -280,7 +280,7 @@ return [
         'return_url' => 'Return URL',
         'card_num'  => '카드번호',
         'yymm'      => '유효기간',
-        'auth_num'   => '인증정보',  //opt
+        'auth_num'   => '인증정보',     //opt
         'card_pw'   => '카드 비밀번호', //opt
         'temp'      => '임시 값',
         'item_name' => '상품명',
@@ -288,5 +288,13 @@ return [
         'buyer_phone' => '휴대폰 번호',
         // cancel
         'trx_id'    => '거래번호',
+        // popup
+        'open_s_dt' => '오픈 시작일',
+        'open_e_dt' => '오픈 종료일',        
+        'popup_title' => '팝업 제목',
+        'popup_content' => '팝업 내용',
+        // before brand info
+        'apply_s_dt' => '적용 시작일',
+        'apply_e_dt' => '적용 종료일',
     ],
 ];

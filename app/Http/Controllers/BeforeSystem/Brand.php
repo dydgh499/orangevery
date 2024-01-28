@@ -37,7 +37,7 @@ class Brand
             $pv_options->free->use_hand_pay = (boolean)$brand->USE_HAND_PAY;
             $pv_options->free->use_auth_pay = (boolean)$brand->USE_AUTH_PAY;
             $pv_options->free->use_simple_pay = (boolean)$brand->USE_SIMPLE_PAY;
-            $pv_options->free->sales_slip['merchandise']['comepany_name'] = $brand->SEL_NICK_NM;
+            $pv_options->free->sales_slip['merchandise']['company_name'] = $brand->SEL_NICK_NM;
             $pv_options->free->sales_slip['merchandise']['rep_name'] = $brand->SEL_REP_NM;
             $pv_options->free->sales_slip['merchandise']['phone_num'] = $brand->SEL_PHONE;
             $pv_options->free->sales_slip['merchandise']['business_num'] = $brand->SEL_BUSINESS_NUM;
@@ -94,7 +94,6 @@ class Brand
                 'note' => $brand->MEMO,
                 
                 'company_name' => $brand->COMPANY_NM,
-                'pvcy_rep_name' => $brand->REP_NM,
                 'ceo_name' => $brand->REP_NM,
                 'addr' => $brand->SEL_ADDR,
                 'phone_num' => $brand->PHONE,

@@ -20,7 +20,6 @@ class BrandRequest extends FormRequest
         'phone_num',
         'fax_num',
         'company_name',
-        'pvcy_rep_name',
         'business_num',
         'deposit_day',
         'deposit_amount',

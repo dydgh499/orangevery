@@ -124,7 +124,9 @@ class BrandController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $data = $this->brands->where('id', $id)->first();
+        $data = $this->brands->where('id', $id)
+            ->with(['beforeBrandInfos'])
+            ->first();
         return $this->response($data ? 0 : 1000, $data);
     }
 

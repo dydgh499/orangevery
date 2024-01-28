@@ -20,6 +20,7 @@ import PayLinkDialog from '@/layouts/dialogs/PayLinkDialog.vue'
 import PWASnackbar from '@/layouts/snackbars/PWASnackbar.vue'
 import PopupDialog from '@/layouts/dialogs/PopupDialog.vue'
 
+import { axios } from '@axios'
 import { user_info } from '@axios'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { config } from '@layouts/config'
@@ -41,10 +42,9 @@ provide('payLink', payLink)
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
-const { get } = useRequestStore()
 
 onMounted(() => {
-    get('/api/v1/manager/popups/currently', {
+    axios.get('/api/v1/manager/popups/currently', {
         params: {
             page_size : 10,
             page : 1,

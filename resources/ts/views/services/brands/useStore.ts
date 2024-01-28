@@ -130,7 +130,6 @@ export const defaultItemInfo = () => {
         og_description: '',
         note: '',
         company_name: '',
-        pvcy_rep_name: '',
         ceo_name: '',
         addr: '',
         business_num: '',
@@ -149,7 +148,7 @@ export const defaultItemInfo = () => {
                 use_search_date_detail: true,
                 sales_slip: {
                     merchandise: {
-                        comepany_name: '',
+                        company_name: '',
                         rep_name: '',
                         phone_num: '',
                         business_num: '',
@@ -162,7 +161,11 @@ export const defaultItemInfo = () => {
                     sender_phone: '',
                     receive_phone: '',
                     min_balance_limit: 0
-                }
+                },
+                use_tid_duplicate: false,
+                use_mid_duplicate: false,
+                use_fix_table_view: true,
+                fix_table_size: 800,
             }),
             paid: reactive<PaidOption>({
                 use_acct_verification: false,
@@ -190,7 +193,10 @@ export const defaultItemInfo = () => {
                 use_head_office_withdraw: false,
                 use_cancel_deposit: false,
                 use_collect_withdraw_scheduler: false,
-                use_finance_van_deposit: false
+                use_finance_van_deposit: false,
+                use_pmid: false,
+                use_before_brand_info: false,
+                use_multiple_hand_pay: false,
             }),
             auth: reactive<AuthOption>({
                 levels: {

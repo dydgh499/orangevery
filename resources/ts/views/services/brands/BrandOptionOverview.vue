@@ -100,7 +100,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                             <template #name>회사명</template>
                             <template #input>
                                 <VTextField prepend-inner-icon="ph-buildings"
-                                    v-model="props.item.free.sales_slip.merchandise.comepany_name"
+                                    v-model="props.item.free.sales_slip.merchandise.company_name"
                                     placeholder="회사명을 입력해주세요." type="text" />
                             </template>
                         </CreateHalfVCol>
@@ -324,6 +324,18 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>
+                                <BaseQuestionTooltip location="top" text="다중 수기결제"
+                                :content="`사용 가맹점당 3개의 결제모듈이 존재해야 활성화 됩니다.`">
+                            </BaseQuestionTooltip>
+                            </template>
+                            <template #input>
+                                <VSwitch hide-details v-model="props.item.paid.use_multiple_hand_pay" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
                 </VCardItem>
             </VCard>
         </VCol>
@@ -444,6 +456,19 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>
+                                <BaseQuestionTooltip location="top" text="기간별 사업자정보 사용"
+                                :content="`기간별로 사업자정보가 매출전표에 표기됩니다.(공급자 정보: 본사정보로 체크되어야합니다.)`">
+                            </BaseQuestionTooltip>
+                            </template>
+                            <template #input>
+                                <VSwitch hide-details v-model="props.item.paid.use_before_brand_info" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    
                     <VCardTitle class="pt-10">
                         <BaseQuestionTooltip location="top" text="정산 옵션(유료)"
                             :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">

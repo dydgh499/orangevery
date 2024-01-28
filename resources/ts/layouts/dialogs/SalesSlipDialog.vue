@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import DialogHalfVCol from '@/layouts/utils/DialogHalfVCol.vue'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
-import type { SalesSlip, PayGateway } from '@/views/types'
+import type { SalesSlip, PayGateway, BeforeBrandInfo } from '@/views/types'
 import html2canvas from "html2canvas"
 import cancel from '@images/salesslip/cancel.png'
 import background from '@images/salesslip/background.jpg'
@@ -14,6 +14,7 @@ const props = defineProps<Props>()
 
 const snackbar = <any>(inject('snackbar'))
 const visible = ref(false)
+const provider_info = ref<BeforeBrandInfo>()
 const trans = ref<SalesSlip>()
 const pg = ref<PayGateway>()
 const card = ref(null)
@@ -45,6 +46,38 @@ const copySalesSlip = () => {
         })
     }
 }
+
+const getProviderInfo = ():BeforeBrandInfo => {
+    if(Number(trans.value?.use_saleslip_prov)) {
+        return <BeforeBrandInfo>({
+            company_name: pg.value?.company_name,
+            business_num: pg.value?.business_num,
+            rep_name: pg.value?.rep_name,
+            addr: pg.value?.addr,
+        })
+    }
+    else {
+        if(corp.pv_options.paid.use_before_brand_info) {
+            const trx_dt = new Date(trans.value?.trx_dt as string)
+            const before_brand_info = corp.before_brand_infos.find(obj => new Date(obj.apply_e_dt) >= trx_dt && new Date(obj.apply_s_dt) <= trx_dt)
+            return <BeforeBrandInfo>({
+                company_name: before_brand_info?.company_name,
+                business_num: before_brand_info?.business_num,
+                rep_name: before_brand_info?.rep_name,
+                addr: before_brand_info?.addr,
+                })
+        }
+        else {
+            return <BeforeBrandInfo>({
+                company_name: corp.company_name,
+                business_num: corp.business_num,
+                rep_name: corp.ceo_name,
+                addr: corp.addr,
+            })
+        }
+    }
+}
+
 const show = (item: SalesSlip) => {
     trans.value = item
     pg.value = props.pgs.find(pg => pg['id'] === item.pg_id)
@@ -60,7 +93,7 @@ const show = (item: SalesSlip) => {
         tax_free.value = 0
         total_amount.value = trans.value.amount
     }
-    
+    provider_info.value = getProviderInfo()
     visible.value = true
 }
 const cancelColor = computed(() => {
@@ -167,7 +200,7 @@ defineExpose({
                     <VDivider :thickness="thickness" class="mb-2" />
                     <DialogHalfVCol class="cell">
                         <template #name>상호</template>
-                        <template #input>{{ trans?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.comepany_name : trans?.mcht_name }}</template>
+                        <template #input>{{ trans?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.company_name : trans?.mcht_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>사업자등록번호</template>
@@ -187,19 +220,19 @@ defineExpose({
                     <VDivider :thickness="thickness" class="mb-2" />
                     <DialogHalfVCol class="cell">
                         <template #name>상호</template>
-                        <template #input>{{ trans?.use_saleslip_prov ? pg?.company_name : corp.company_name }}</template>
+                        <template #input>{{ provider_info?.company_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>사업자등록번호</template>
-                        <template #input>{{ trans?.use_saleslip_prov ? pg?.business_num : corp.business_num }}</template>
+                        <template #input>{{ provider_info?.business_num }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>대표자명</template>
-                        <template #input>{{ trans?.use_saleslip_prov ? pg?.rep_name : corp.ceo_name }}</template>
+                        <template #input>{{ provider_info?.rep_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell mb-2">
                         <template #name>주소</template>
-                        <template #input>{{ trans?.use_saleslip_prov ? pg?.addr : corp.addr }}</template>
+                        <template #input>{{ provider_info?.addr }}</template>
                     </DialogHalfVCol>
                     <VDivider :thickness="1" />
                     <VCol style="font-size: 0.9em;">

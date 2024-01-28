@@ -9,6 +9,7 @@ import { getUserLevel } from '@/plugins/axios';
 import { dev_settle_types } from '@/views/services/brands/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import BeforeBrandInfoCard from '@/views/services/brands/before-brand-infos/BeforeBrandInfoCard.vue'
 import { nullValidator } from '@validators'
 
 interface Props {
@@ -26,7 +27,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VRow class="match-height">
+    <VRow>
         <!-- 👉 운영정보 -->
         <VCol cols="12" md="6">
             <VCard>
@@ -230,6 +231,16 @@ watchEffect(() => {
                             </VRow>
                         </VCol>
                     </VRow>
+                </VCardItem>
+            </VCard>
+            <br>
+            <VCard v-if="props.item.pv_options.paid.use_before_brand_info">
+                <VCardItem>
+                    <VCol cols="12">
+                        <VRow>
+                            <BeforeBrandInfoCard :item="props.item" />
+                        </VRow>
+                    </VCol>
                 </VCardItem>
             </VCard>
         </VCol>

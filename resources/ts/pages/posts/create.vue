@@ -4,6 +4,7 @@ import CreateForm from '@/layouts/utils/CreateForm.vue'
 import PostOverView from '@/views/posts/PostOverView.vue'
 import { defaultItemInfo } from '@/views/posts/useStore'
 import type { Tab } from '@/views/types'
+
 const {path, item } = defaultItemInfo()
 const tabs = <Tab[]>([
     { icon: 'fxemoji-notepage', title: '게시글 정보' },

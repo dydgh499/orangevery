@@ -13,7 +13,7 @@
         public $fix_table_size = 800;        
         public $sales_slip = [
             'merchandise' => [
-                'comepany_name' => '',
+                'company_name' => '',
                 'rep_name' => '',
                 'phone_num' => '',
                 'business_num' => '',
@@ -66,6 +66,8 @@
         public $use_noti = false;               // 노티 사용여부
         public $use_cancel_deposit = false;     // 취소입금건 관리 사용여부
         public $use_finance_van_deposit = false; // 금융 VAN 송금 사용여부
+        public $use_before_brand_info = false;  // 이전 서비스 정보 사용
+        public $use_multiple_hand_pay = false;  // 다중 수기결제
 
         public function __construct(array $source)
         {
