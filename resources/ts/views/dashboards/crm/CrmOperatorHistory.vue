@@ -31,7 +31,7 @@ const showAvatar = (preview: string) => {
 <template>
     <div>
         <VCard title="운영자 활동이력">
-            <VCardText>
+            <VCardText style="height: 531px !important;">
                 <VTimeline side="end" align="start" truncate-line="both" density="compact" class="v-timeline-density-compact">
                     <template v-if="is_skeleton">
                         <VTimelineItem v-for="(operator_history, _index) in 5" :key="_index" size="x-small" >

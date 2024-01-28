@@ -22,6 +22,8 @@ use App\Http\Controllers\Manager\NotiUrlController;
 use App\Http\Controllers\Manager\HeadOfficeAccountController;
 use App\Http\Controllers\Manager\ClassificationController;
 use App\Http\Controllers\Manager\PostController;
+use App\Http\Controllers\Manager\PopupController;
+
 use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Manager\TransactionController;
 use App\Http\Controllers\Manager\CancelDepositController;
@@ -233,15 +235,13 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('{trans_id}/retry', [NotiSendHistoryController::class, 'retry']);
                 Route::post('batch-retry', [NotiSendHistoryController::class, 'batchRetry']);    
             });
-                        
+
+            Route::post('regular-credit-cards/bulk-register', [RegularCreditCardController::class, 'bulkRegister']);
             Route::apiResource('regular-credit-cards', RegularCreditCardController::class); 
-            Route::prefix('regular-credit-cards')->group(function() {
-                Route::post('bulk-register', [RegularCreditCardController::class, 'bulkRegister']);
-            });
+
+            Route::post('noti-urls/bulk-register', [NotiUrlController::class, 'bulkRegister']);
             Route::apiResource('noti-urls', NotiUrlController::class); 
-            Route::prefix('noti-urls')->group(function() {
-                Route::post('bulk-register', [NotiUrlController::class, 'bulkRegister']);
-            });
+
         });
 
         Route::apiResource('complaints', ComplaintController::class);
@@ -249,6 +249,10 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         Route::apiResource('transactions', TransactionController::class);
         Route::apiResource('merchandises', MerchandiseController::class);
         Route::apiResource('posts', PostController::class);
+
+        Route::get('popups/currently', [PopupController::class, 'currently']);
+        Route::apiResource('popups', PopupController::class);
+        
     });
 
     Route::prefix('quick-view')->middleware('auth:sanctum')->group(function() {

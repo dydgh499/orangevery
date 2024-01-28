@@ -818,3 +818,15 @@ export interface CancelDeposit {
     created_at: string,
     updated_at: string,
 }
+
+export interface Popup {
+    id: number,
+    user_name: string,
+    profile_img: string,
+    popup_title: string,
+    popup_content: string,
+    open_s_dt: string,
+    open_e_dt: string,
+    open_range?: string,
+    visible?: boolean,
+}

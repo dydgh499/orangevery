@@ -4,6 +4,7 @@ import { getUserLevel } from '@axios'
 const getAbilitiesMenu = computed(() => {
     const operations:any[] = []
     const complaints = []
+    const popups = []
     if (getUserLevel() >= 35) {
         operations.push({
             title: '운영 관리',
@@ -58,6 +59,11 @@ const getAbilitiesMenu = computed(() => {
                 params: '',
             })
         }        
+        popups.push({
+            title: '팝업 관리',
+            icon: { icon: 'carbon:popup' },
+            to: 'popups',
+        })
         complaints.push({
             title: '민원 관리',
             icon: { icon: 'ic-round-sentiment-dissatisfied' },
@@ -72,6 +78,7 @@ const getAbilitiesMenu = computed(() => {
             icon: { icon: 'fe-notice-active' },
             to: 'posts',
         },
+        ...popups,
         ...complaints,
     ]
 })

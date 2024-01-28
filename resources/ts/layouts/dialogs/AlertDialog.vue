@@ -38,7 +38,6 @@ defineExpose({
             <VCardText>
                 <span v-html="msg"></span>
             </VCardText>
-
             <VCardText class="d-flex justify-end gap-3 flex-wrap">
                 <VBtn color="secondary" variant="tonal" @click="onCancel">
                     취소

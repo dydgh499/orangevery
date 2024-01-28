@@ -8,6 +8,7 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\PopupRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -30,6 +31,22 @@ class PopupController extends Controller
             'folders'   => [],
             'sizes'     => [],
         ];
+    }
+
+    /**
+     * 오픈기간에 포함된 팝업목록 조회
+     */
+    public function currently(IndexRequest $request)
+    {
+        $now = Carbon::now()->format('Y-m-d');
+        $query  = $this->popups
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
+            ->where('open_s_dt', '<=', $now)
+            ->where('open_e_dt', '>=', $now);
+            
+        $data   = $this->getIndexData($request, $query);
+        return $this->response(0, $data);
     }
 
     /**
@@ -63,7 +80,7 @@ class PopupController extends Controller
         $data = $request->data();
         $data = $this->saveImages($request, $data, $this->imgs);
         $result = $this->popups->create($data);
-        return $this->response($result ? 1 : 990, ['id'=>$res->id]);
+        return $this->response($result ? 1 : 990, ['id'=>$result->id]);
     }
 
     /**
@@ -92,7 +109,7 @@ class PopupController extends Controller
     {
         $data = $request->data();
         $result = $this->popups->where('id', $id)->update($data);
-        return $this->response($result ? 1 : 990);
+        return $this->response($result ? 1 : 990, ['id'=>$id]);
     }
 
     /**

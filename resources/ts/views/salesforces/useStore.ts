@@ -276,6 +276,8 @@ export const defaultItemInfo = () => {
         view_type: 0,
         is_able_modify_mcht: 0,
         note: '',
+        resident_num_front: '',
+        resident_num_back: ''
     })
     return {
         path, item

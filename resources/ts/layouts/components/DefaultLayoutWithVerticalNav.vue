@@ -8,6 +8,7 @@ import NavbarNotifications from '@/layouts/components/NavbarNotifications.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import NavbarZoomSwitcher from '@/layouts/components/NavbarZoomSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
+import { useRequestStore } from '@/views/request'
 import router from '@/router'
 // @layouts plugin
 import { VerticalNavLayout } from '@layouts'
@@ -17,11 +18,13 @@ import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import LoadingDialog from '@/layouts/dialogs/LoadingDialog.vue'
 import PayLinkDialog from '@/layouts/dialogs/PayLinkDialog.vue'
 import PWASnackbar from '@/layouts/snackbars/PWASnackbar.vue'
+import PopupDialog from '@/layouts/dialogs/PopupDialog.vue'
 
 import { user_info } from '@axios'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { config } from '@layouts/config'
 
+const popup = ref()
 const alert = ref(null)
 const snackbar = ref(null)
 const loading = ref(null)
@@ -30,6 +33,7 @@ const pwaSnackbar = ref(null)
 
 const is_pay_link = ref(router.currentRoute.value.path.includes('/pay/'))
 
+provide('popup', popup)
 provide('alert', alert)
 provide('snackbar', snackbar)
 provide('loading', loading)
@@ -37,6 +41,23 @@ provide('payLink', payLink)
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
+const { get } = useRequestStore()
+
+onMounted(() => {
+    get('/api/v1/manager/popups/currently', {
+        params: {
+            page_size : 10,
+            page : 1,
+        }
+    })
+    .then(r => { 
+        if(r.data.content.length)
+            popup.value.show(r.data.content)
+    })
+    .catch(e => { 
+        console.log(e) 
+    })
+})
 </script>
 
 <template>
@@ -73,6 +94,7 @@ const { width: windowWidth } = useWindowSize()
             <AlertDialog ref="alert" />
             <LoadingDialog ref="loading" />
             <PayLinkDialog ref="payLink" />
+            <PopupDialog ref="popup"/>
         </RouterView>
 
         <!-- 👉 Footer -->
