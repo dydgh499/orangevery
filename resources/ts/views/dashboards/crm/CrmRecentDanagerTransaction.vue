@@ -30,7 +30,7 @@ const getSelectIdColor = (id: number | undefined) => {
 <template>
     <VCard title="최근 이상거래">
         <VDivider />
-        <VTable class="text-no-wrap">
+        <VTable class="text-no-wrap" style="height: 100% !important;">
             <thead>
                 <tr>
                     <th class="font-weight-semibold list-square">
