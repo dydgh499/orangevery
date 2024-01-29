@@ -200,7 +200,9 @@ export const defaultItemInfo = () => {
         collect_withdraw_fee: 0,
         withdraw_fee: 0,
         resident_num_front: '',
-        resident_num_back: ''
+        resident_num_back: '',
+        use_pay_verification_mobile: 0,
+        use_multiple_hand_pay: 0
     })
     return {
         path, item
