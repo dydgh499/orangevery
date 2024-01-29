@@ -300,11 +300,13 @@ div {
   padding: 12px;
 }
 
-@media (max-width: 500px) {
+@media (max-height: 900px) {
   .sales-slip-rect {
-    font-size: 0.5em;
+    font-size: 0.7em;
   }
+}
 
+@media (max-width: 500px) {
   .v-col-custom {
     padding: 8px;
   }
