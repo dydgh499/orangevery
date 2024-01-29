@@ -344,5 +344,9 @@ onMounted(() => {
   .common-field {
     margin-inline-end: 1em !important;
   }
+
+  :deep(.common-field) {
+    margin-inline-end: 1em !important;
+  }
 }
 </style>
