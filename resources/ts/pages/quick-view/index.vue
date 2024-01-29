@@ -156,8 +156,12 @@ watchEffect(() => {
         </VRow>
     </section>
 </template>
-<style>
-  .shortcut-button {
-    margin: 0.5em;
-  }
+<style scoped>
+.shortcut-button {
+  margin: 0.5em;
+}
+
+:deep(.v-table__wrapper) {
+  block-size: auto !important;
+}
 </style>

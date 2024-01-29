@@ -30,18 +30,18 @@ const init = () => {
         yymm: '',
         card_num: '',
         installment: 0,
-        item_name: urlParams.get('item_name') || 'test',
-        buyer_name: urlParams.get('buyer_name') || 'test',
-        buyer_phone: urlParams.get('phone_num') || '01040065700',
+        item_name: urlParams.get('item_name') || '',
+        buyer_name: urlParams.get('buyer_name') || '',
+        buyer_phone: urlParams.get('phone_num') || '',
     }))
     props.pay_modules.forEach(pay_module => {
         hand_pay_infos.value.push(<MultipleHandPay>({
-            auth_num: '990409',
-            card_pw: '69',
-            yymm: String('0925'),
-            card_num: String('9420032336283110-'),
+            auth_num: '',
+            card_pw: '',
+            yymm: String(''),
+            card_num: String(''),
             installment: Number(0),
-            amount: Number(urlParams.get('amount') || '100'),
+            amount: Number(urlParams.get('amount') || ''),
             pmod_id: pay_module.id,
             is_old_auth: pay_module.is_old_auth,
             ord_num: pay_module.id + "H" + Date.now().toString().substr(0, 10),
@@ -55,7 +55,11 @@ const pay = (index: number) => {
             ...hand_pay_info.value,
             ...hand_pay_infos.value[index]
         }).then(r => {
-            resolve(r.data)
+            resolve({
+                ...r.data,
+                result_cd: "0000",
+                result_msg: "결제 성공",
+            })
         }).catch(e => {
             resolve({
                 result_cd: e.response.data.code,
@@ -67,7 +71,7 @@ const pay = (index: number) => {
 
 const cancel = (index: number) => {
     return new Promise((resolve, reject) => {
-        axios.post('/api/v1/transactions/pay-cancel', {
+        axios.post('/api/v1/manager/transactions/pay-cancel', {
             pmod_id: hand_pay_infos.value[index].pmod_id,
             amount: hand_pay_infos.value[index].amount,
             trx_id: full_processes.value[index].trx_result.trx_id,
@@ -143,9 +147,10 @@ const cxlResult = async () => {
     for (let i = 0; i < results.length; i++) {
         if (results[i] != null) {
             full_processes.value[i].cxl_result = {
-                ...results[i].data,
+                ...results[i],
                 ...props.merchandise
             }
+            console.log(full_processes.value[i].cxl_result)
         }
     }
 }
@@ -172,14 +177,15 @@ const pays = async () => {
 }
 
 watchEffect(async () => {
+    if (props.merchandise.use_pay_verification_mobile == 0)
+        is_show_pay_button.value = true
+
     if (hand_pay_info.value.buyer_name && hand_pay_info.value.buyer_phone) {
         // watchEffect가 잡히지 않는 이유?
     }
     let is_valid = await vForm.value?.validate()
     hand_pay_info.value.status_icon = is_valid?.valid ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'
     hand_pay_info.value.status_color = is_valid?.valid ? 'success' : 'error'
-    if(props.merchandise.use_pay_verification_mobile == 0)
-        is_show_pay_button.value = true
 })
 onMounted(() => {
     init()
@@ -190,7 +196,7 @@ onMounted(() => {
     <VDivider />
     <CreateHalfVCol :mdl="6" :mdr="6">
         <template #name>
-            <AppCardActions :actionCollapsed="true" id="common-field" style="margin-bottom: 1em;">
+            <AppCardActions :actionCollapsed="true" class="common-field" style="margin-bottom: 1em;">
                 <template #title>
                     <div>
                         <span>공통 결제정보</span>
@@ -241,19 +247,25 @@ onMounted(() => {
         <thead>
             <tr>
                 <th scope="col" class='list-square' style="width: 150px;"><b>결제모듈</b></th>
-                <th scope="col" class='list-square' style="width: 50px;"><VIcon size="24" icon="tabler:arrow-big-right-filled" color="primary" /></th>
+                <th scope="col" class='list-square' style="width: 50px;">
+                    <VIcon size="24" icon="tabler:arrow-big-right-filled" color="primary" />
+                </th>
                 <th scope="col" class='list-square' style="width: 300px;"><b>승인</b></th>
-                <th scope="col" class='list-square' style="width: 50px;"><VIcon size="24" icon="tabler:arrow-big-right-filled" color="error" /></th>
+                <th scope="col" class='list-square' style="width: 50px;">
+                    <VIcon size="24" icon="tabler:arrow-big-right-filled" color="error" />
+                </th>
                 <th scope="col" class='list-square' style="width: 300px;"><b>취소</b></th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="(_item, _index) in full_processes " :key="_index">
                 <td class='list-square'><b>{{ props.pay_modules[_index].note }}</b></td>
-                <td class='list-square'><VIcon size="24" icon="tabler:arrow-big-right-filled" color="primary" /></td>
+                <td class='list-square'>
+                    <VIcon size="24" icon="tabler:arrow-big-right-filled" color="primary" />
+                </td>
                 <td class='list-square'>
                     <template v-if="Object.keys(_item.trx_result).length == 0">
-                        <VIcon size="24" icon="svg-spinners:bars-fade" class="process-icon"/>
+                        <VIcon size="24" icon="svg-spinners:bars-fade" class="process-icon" />
                         <br>
                         <span>결제중 입니다...</span>
                     </template>
@@ -289,7 +301,7 @@ onMounted(() => {
                             <span v-html="_item.cxl_result.result_msg"></span>
                             <br>
                             <template v-if="_item.cxl_result.result_cd == '0000'">
-                                <VBtn @click="salesslip.show(_item.cxl_result)">취소 영수증 확인</VBtn>
+                                <VBtn @click="salesslip.show(_item.cxl_result)" color="error">취소 영수증 확인</VBtn>
                             </template>
                         </template>
                     </span>
@@ -311,23 +323,13 @@ onMounted(() => {
     </VCard>
 </template>
 <style scoped>
-.process-module-note {
-  margin-block: auto;
-}
-
 .process-icon {
   margin-block: 0.5em;
   margin-inline: 0;
 }
 
-#common-field {
+.common-field {
   margin-inline-end: 0;
-}
-
-@media (min-width: 900px) {
-  #common-field {
-    margin-inline-end: 1em;
-  }
 }
 
 :deep(.v-card-item) {
@@ -336,5 +338,11 @@ onMounted(() => {
 
 :deep(.v-table__wrapper) {
   block-size: auto !important;
+}
+
+@media (min-width: 900px) {
+  .common-field {
+    margin-inline-end: 1em !important;
+  }
 }
 </style>

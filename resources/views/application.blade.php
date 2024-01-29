@@ -43,7 +43,7 @@
     }
     .v-table__wrapper > table > thead {
       background: rgb(var(--v-theme-background));
-      z-index: 9999;
+      z-index: 999;
       position: sticky;
       top: 0;
     }
