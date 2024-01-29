@@ -337,24 +337,24 @@ interface PaidOption {
 }
 interface AuthOption {
     levels: {
-        dev_use:boolean,
+        dev_use:number,
         dev_name:string,
-        sales5_use:boolean,
+        sales5_use:number,
         sales5_name:string,
-        sales4_use:boolean,
+        sales4_use:number,
         sales4_name:string,
-        sales3_use:boolean,
+        sales3_use:number,
         sales3_name:string,
-        sales2_use:boolean,
+        sales2_use:number,
         sales2_name:string,
-        sales1_use:boolean,
+        sales1_use:number,
         sales1_name:string,
-        sales0_use:boolean,
+        sales0_use:number,
         sales0_name:string,
         [key: string]: string|number,
     },
     visibles: {
-        abnormal_trans_sales: boolean,
+        abnormal_trans_sales: number,
     }
 }
 interface ThemeCSS {
@@ -401,7 +401,7 @@ export interface Brand extends Contract {
     last_dpst_at: datetime,
 
     rep_mid: string,
-    use_different_settlement: boolean,
+    use_different_settlement: number,
     rep_pg_type: number,
     before_brand_infos: BeforeBrandInfo[],
     updated_at: datetime,

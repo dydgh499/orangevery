@@ -21,7 +21,7 @@ defineExpose({
         <!-- Dialog Content -->
         <VCard :title=popup.popup_title>
             <VDivider style="margin-top: 1em;"/>
-            <div v-html="popup.popup_content" style="padding-top: 1em; padding-left: 1em;"></div>
+            <div v-html="popup.popup_content"></div>
         </VCard>
     </VDialog>
 </template>
