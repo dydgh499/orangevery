@@ -47,8 +47,20 @@ const copySalesSlip = () => {
     }
 }
 
-const getProviderInfo = ():BeforeBrandInfo => {
-    if(Number(trans.value?.use_saleslip_prov)) {
+const getProviderInfo = (): BeforeBrandInfo => {
+    if (corp.pv_options.paid.use_before_brand_info) {
+        const trx_dt = new Date(trans.value?.trx_dt as string)
+        const before_brand_info = corp.before_brand_infos.find(obj => new Date(obj.apply_e_dt) >= trx_dt && new Date(obj.apply_s_dt) <= trx_dt)
+        if(before_brand_info) {
+            return <BeforeBrandInfo>({
+                company_name: before_brand_info?.company_name,
+                business_num: before_brand_info?.business_num,
+                rep_name: before_brand_info?.rep_name,
+                addr: before_brand_info?.addr,
+            })
+        }
+    }
+    if (Number(trans.value?.use_saleslip_prov)) {
         return <BeforeBrandInfo>({
             company_name: pg.value?.company_name,
             business_num: pg.value?.business_num,
@@ -57,31 +69,19 @@ const getProviderInfo = ():BeforeBrandInfo => {
         })
     }
     else {
-        if(corp.pv_options.paid.use_before_brand_info) {
-            const trx_dt = new Date(trans.value?.trx_dt as string)
-            const before_brand_info = corp.before_brand_infos.find(obj => new Date(obj.apply_e_dt) >= trx_dt && new Date(obj.apply_s_dt) <= trx_dt)
-            return <BeforeBrandInfo>({
-                company_name: before_brand_info?.company_name,
-                business_num: before_brand_info?.business_num,
-                rep_name: before_brand_info?.rep_name,
-                addr: before_brand_info?.addr,
-                })
-        }
-        else {
-            return <BeforeBrandInfo>({
-                company_name: corp.company_name,
-                business_num: corp.business_num,
-                rep_name: corp.ceo_name,
-                addr: corp.addr,
-            })
-        }
+        return <BeforeBrandInfo>({
+            company_name: corp.company_name,
+            business_num: corp.business_num,
+            rep_name: corp.ceo_name,
+            addr: corp.addr,
+        })
     }
 }
 
 const show = (item: SalesSlip) => {
     trans.value = item
     pg.value = props.pgs.find(pg => pg['id'] === item.pg_id)
-    if(trans.value.tax_category_type == 1) {
+    if (trans.value.tax_category_type == 1) {
         supply_amount.value = 0
         vat.value = 0
         tax_free.value = trans.value.amount
@@ -159,7 +159,8 @@ defineExpose({
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>할부개월</template>
-                        <template #input>{{ installments.find(inst => inst['id'] === parseInt(trans?.installment as string))?.title
+                        <template #input>{{ installments.find(inst => inst['id'] === parseInt(trans?.installment as
+                            string))?.title
                         }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
@@ -200,19 +201,23 @@ defineExpose({
                     <VDivider :thickness="thickness" class="mb-2" />
                     <DialogHalfVCol class="cell">
                         <template #name>상호</template>
-                        <template #input>{{ trans?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.company_name : trans?.mcht_name }}</template>
+                        <template #input>{{ trans?.use_saleslip_sell ?
+                            corp.pv_options.free.sales_slip.merchandise.company_name : trans?.mcht_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>사업자등록번호</template>
-                        <template #input>{{ trans?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.business_num : trans?.business_num }}</template>
+                        <template #input>{{ trans?.use_saleslip_sell ?
+                            corp.pv_options.free.sales_slip.merchandise.business_num : trans?.business_num }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>대표자명</template>
-                        <template #input>{{ trans?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.rep_name : trans?.nick_name }}</template>
+                        <template #input>{{ trans?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.rep_name
+                            : trans?.nick_name }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>주소</template>
-                        <template #input>{{ trans?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.addr : trans?.addr }}</template>
+                        <template #input>{{ trans?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.addr :
+                            trans?.addr }}</template>
                     </DialogHalfVCol>
                     <VCol class="text-primary font-weight-bold v-col-custom">
                         공급자(결제대행사) 정보
