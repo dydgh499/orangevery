@@ -172,15 +172,18 @@ watchEffect(() => {
             </template>
         </CreateHalfVCol>
     </VForm>
-    <br>
-    <MobileVerification
-        v-if="corp.pv_options.paid.use_pay_verification_mobile && props.merchandise.use_pay_verification_mobile"
-        @update:pay_button="is_show_pay_button = $event" :phone_num="hand_pay_info.buyer_phone" />
-    <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">
-        <VBtn block type="submit">
-            결제하기
-        </VBtn>
-    </VCol>
+    <VCard>
+        <VCardText>
+        <MobileVerification
+            v-if="corp.pv_options.paid.use_pay_verification_mobile && props.merchandise.use_pay_verification_mobile"
+            @update:pay_button="is_show_pay_button = $event" :phone_num="hand_pay_info.buyer_phone" />
+        <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">
+            <VBtn block type="submit">
+                결제하기
+            </VBtn>
+        </VCol>
+        </VCardText>
+    </VCard>
 </template>
 <style>
 @media screen and (min-width: 960px) {
