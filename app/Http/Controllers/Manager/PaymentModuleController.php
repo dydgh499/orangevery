@@ -264,7 +264,7 @@ class PaymentModuleController extends Controller
             'page' => 1,
             'page_size' => 99999999,
         ]);
-        if($request->user()->tokenCan(13))
+        if(isSalesforce($request) || isOperator($request))
         {
             $cols = ['payment_modules.*'];
         }

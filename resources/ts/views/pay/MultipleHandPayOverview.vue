@@ -1,14 +1,16 @@
 <script setup lang="ts">
+import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { requiredValidator } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import MultipleHandPayForm from '@/views/pay/multiple-hand-pay/MultipleHandPayForm.vue'
 import { VForm } from 'vuetify/components'
 import type { Merchandise, PayModule, SalesSlip, MultipleHandPay } from '@/views/types'
+import { filter, map } from 'lodash'
 import { axios } from '@axios'
 import corp from '@corp'
 
 interface Props {
-    pay_modules: PayModule[],
+    main_pay_modules: PayModule,
     merchandise: Merchandise,
 }
 const props = defineProps<Props>()
@@ -25,6 +27,9 @@ const vForm = ref<VForm>()
 const urlParams = new URLSearchParams(window.location.search)
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
 
+const pay_modules = await getAllPayModules(props.main_pay_modules.mcht_id)
+const hands = ref(<PayModule[]>(filter(pay_modules, { module_type: 1 })))
+
 const init = () => {
     hand_pay_info.value = (<MultipleHandPay>({
         yymm: '',
@@ -34,7 +39,7 @@ const init = () => {
         buyer_name: urlParams.get('buyer_name') || '',
         buyer_phone: urlParams.get('phone_num') || '',
     }))
-    props.pay_modules.forEach(pay_module => {
+    hands.value.forEach(pay_module => {
         hand_pay_infos.value.push(<MultipleHandPay>({
             auth_num: '',
             card_pw: '',
@@ -162,7 +167,7 @@ const pays = async () => {
 
     for (let i = 0; i < hand_pay_infos.value.length; i++) {
         if (hand_pay_infos.value[i].status_color != 'success') {
-            snackbar.value.show(props.pay_modules[i].note + ' 결제모듈을 확인해주세요.', 'error')
+            snackbar.value.show(hands.value[i].note + ' 결제모듈을 확인해주세요.', 'error')
             return
         }
         console.log(hand_pay_infos.value[i].status_color)
@@ -189,7 +194,6 @@ watchEffect(async () => {
 })
 onMounted(() => {
     init()
-
 })
 </script>
 <template>
@@ -240,7 +244,7 @@ onMounted(() => {
         </template>
         <template #input>
             <MultipleHandPayForm v-for="(item, index) in hand_pay_infos" :key="index" :hand_pay_info="hand_pay_infos[index]"
-                :pay_module="props.pay_modules[index]" style="margin-bottom: 1em;" />
+                :pay_module="hands[index]" style="margin-bottom: 1em;" />
         </template>
     </CreateHalfVCol>
     <VTable class="text-no-wrap" style="margin-bottom: 1em;" v-if="full_processes.length > 0">
@@ -259,7 +263,7 @@ onMounted(() => {
         </thead>
         <tbody>
             <tr v-for="(_item, _index) in full_processes " :key="_index">
-                <td class='list-square'><b>{{ props.pay_modules[_index].note }}</b></td>
+                <td class='list-square'><b>{{ hands[_index].note }}</b></td>
                 <td class='list-square'>
                     <VIcon size="24" icon="tabler:arrow-big-right-filled" color="primary" />
                 </td>
@@ -337,7 +341,7 @@ onMounted(() => {
 }
 
 @media (min-width: 900px) {
-  :deep(#common-field) {
+  .common-field {
     margin-inline-end: 1em !important;
   }
 }

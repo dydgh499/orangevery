@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import MultipleHandPayOverview from '@/views/pay/MultipleHandPayOverview.vue'
 import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
-import { useQuickViewStore } from '@/views/quick-view/useStore'
 import Footer from '@/layouts/components/Footer.vue'
 import { pay } from '@/views/pay/pay'
 import corp from '@corp'
 import { axios } from '@axios';
 
-const { hands } = useQuickViewStore()
 const { pay_module, merchandise, updatePayModule } = pay(1)
 const salesslip = ref()
 const pgs = ref([])
@@ -22,7 +20,6 @@ onMounted(async () => {
 </script>
 <template>
     <section>
-
         <div id="pay-container">
             <div style="text-align: center;">
                 <img :src="corp.logo_img || ''" width="100" height="100">
@@ -31,8 +28,10 @@ onMounted(async () => {
                 <br>
                 결제하실 정보를 입력해주세요.
             </div>
-            <MultipleHandPayOverview :pay_modules="hands" :merchandise="merchandise">
-            </MultipleHandPayOverview>
+            <Suspense>
+                <MultipleHandPayOverview :main_pay_modules="pay_module" :merchandise="merchandise">
+                </MultipleHandPayOverview>
+            </Suspense>
         </div>
         <br>
         <VCard rounded>
@@ -46,6 +45,7 @@ onMounted(async () => {
             </VCardText>
         </VCard>
         <SalesSlipDialog ref="salesslip" :pgs="pgs" />
+
     </section>
 </template>
 <style>
