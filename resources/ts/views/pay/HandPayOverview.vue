@@ -29,8 +29,7 @@ const hand_pay_info = reactive(<HandPay>({
 const is_show = ref(false)
 const vForm = ref<VForm>()
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
-if(props.merchandise.use_pay_verification_mobile == 0)
-    is_show_pay_button.value = true
+// 미사용
 
 const urlParams = new URLSearchParams(window.location.search)
 hand_pay_info.item_name = urlParams.get('item_name') || ''
@@ -65,12 +64,12 @@ const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
 })
 
-
 watchEffect(() => {
-    console.log(is_show_pay_button.value)
     hand_pay_info.pmod_id = props.pay_module.id
     hand_pay_info.is_old_auth = props.pay_module.is_old_auth
     hand_pay_info.ord_num = props.pay_module.id + "H" + Date.now().toString().substr(0, 10)
+    if(props.merchandise.use_pay_verification_mobile == 0)
+        is_show_pay_button.value = true
 })
 </script>
 <template>

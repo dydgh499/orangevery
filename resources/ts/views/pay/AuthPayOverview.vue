@@ -16,9 +16,6 @@ interface Props {
 const props = defineProps<Props>()
 
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
-if(props.merchandise.use_pay_verification_mobile == 0)
-    is_show_pay_button.value = true
-
 const auth_pay_info = reactive(<AuthPay>({}))
 const vForm = ref<VForm>()
 
@@ -43,6 +40,8 @@ watchEffect(() => {
     auth_pay_info.pmod_id = props.pay_module.id
     auth_pay_info.return_url = props.return_url
     auth_pay_info.ord_num = props.pay_module.id + "A" + Date.now().toString().substr(0, 10)
+    if(props.merchandise.use_pay_verification_mobile == 0)
+        is_show_pay_button.value = true
 })
 </script>
 <template>
