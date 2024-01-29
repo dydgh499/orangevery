@@ -95,7 +95,7 @@ watchEffect(async () => {
         </VForm>
     </AppCardActions>
 </template>
-<style>
+<style scoped>
 :deep(.v-card-item) {
   padding: 18px !important;
 }
