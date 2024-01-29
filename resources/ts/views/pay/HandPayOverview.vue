@@ -29,6 +29,8 @@ const hand_pay_info = reactive(<HandPay>({
 const is_show = ref(false)
 const vForm = ref<VForm>()
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
+if(props.merchandise.use_pay_verification_mobile == 0)
+    is_show_pay_button.value = true
 
 const urlParams = new URLSearchParams(window.location.search)
 hand_pay_info.item_name = urlParams.get('item_name') || ''
