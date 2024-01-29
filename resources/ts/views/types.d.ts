@@ -142,7 +142,9 @@ export interface RegularCreditCard {
 }
 
 export interface Merchandise extends MerchandisePropertie, UserPropertie {    
-    regular_credit_cards?: RegularCreditCard[]
+    regular_credit_cards?: RegularCreditCard[],
+    use_pay_verification_mobile: number,
+    use_multiple_hand_pay: number,
 }
 
 export interface Salesforce extends SalesforcePropertie, UserPropertie {

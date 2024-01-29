@@ -24,6 +24,8 @@ class MerchandiseRequest extends FormRequest
         'enabled',
         'use_saleslip_prov',
         'use_saleslip_sell',
+        'use_pay_verification_mobile',
+        'use_multiple_hand_pay',
         'use_regular_card',
         'use_collect_withdraw',
         'tax_category_type',
@@ -88,6 +90,8 @@ class MerchandiseRequest extends FormRequest
         $this->merge(['is_show_fee' => $this->convertToBoolean($this->input('is_show_fee'))]);
         $this->merge(['use_regular_card' => $this->convertToBoolean($this->input('use_regular_card'))]);
         $this->merge(['use_collect_withdraw' => $this->convertToBoolean($this->input('use_collect_withdraw'))]);
+        $this->merge(['use_pay_verification_mobile' => $this->convertToBoolean($this->input('use_pay_verification_mobile'))]);
+        $this->merge(['use_multiple_hand_pay' => $this->convertToBoolean($this->input('use_multiple_hand_pay'))]);
     }
 
     public function bodyParameters()

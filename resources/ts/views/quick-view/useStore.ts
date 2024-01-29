@@ -29,37 +29,41 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
                 , '^^_masking_^^').toString())
     }
 
-    const getPayLinkFormats = (pays: PayModule[], type: string) => {
-        return map(pays, (pay) => {
-            const pays: any = []
-            const params = getEncryptParams(pay)
+    const getPayMenuFormats = (pay: PayModule, type: string) => {
+        const pays: any = []
+        const params = getEncryptParams(pay)
+        pays.push({
+            title: '이동하기',
+            href: '/pay/' + type + "?e=" + params,
+        })
+        pays.push({
+            title: '링크복사',
+            class: 'copy()',
+            params: url.origin + '/pay/' + type + "?e=" + params,
+        })
+        if(corp.pv_options.paid.use_hand_pay_drct) {
             pays.push({
-                title: '이동하기',
-                href: '/pay/' + type + "?e=" + params,
-            })
-            pays.push({
-                title: '링크복사',
-                class: 'copy()',
+                title: '링크생성',
+                class: 'direct()',
                 params: url.origin + '/pay/' + type + "?e=" + params,
             })
-            if(corp.pv_options.paid.use_hand_pay_drct) {
-                pays.push({
-                    title: '링크생성',
-                    class: 'direct()',
-                    params: url.origin + '/pay/' + type + "?e=" + params,
-                })
-            }
-            if(corp.pv_options.paid.use_hand_pay_sms) {
-                pays.push({
-                    title: 'SMS 결제 전송',
-                    class: 'sms()',
-                    params: url.origin + '/pay/' + type + "?e=" + params,
-                })
-            }
-            return {
-                title: pay.note,
-                children: pays            
-            };
+        }
+        if(corp.pv_options.paid.use_hand_pay_sms) {
+            pays.push({
+                title: 'SMS 결제 전송',
+                class: 'sms()',
+                params: url.origin + '/pay/' + type + "?e=" + params,
+            })
+        }
+        return {
+            title: pay.note,
+            children: pays            
+        };
+    }
+
+    const getPayLinkFormats = (pays: PayModule[], type: string) => {
+        return map(pays, (pay) => {
+            return getPayMenuFormats(pay, type)
         });
     };
     
@@ -68,11 +72,20 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
         const payment_menus = []
         if (getUserLevel() == 10) {
             if (corp.pv_options.free.use_hand_pay) {
+                let children = getPayLinkFormats(hands.value, 'hand')             
+                if (corp.pv_options.paid.use_multiple_hand_pay && hands.value.length > 2) {
+                    const multiple = hands.value[0]
+                    multiple.note = '다중 수기결제'
+                    children = [
+                        ...children,
+                        getPayMenuFormats(multiple, 'multiple-hand'),
+                    ]
+                }
                 payment_menus.push({
                     title: '수기결제',
                     icon: { icon: 'fluent-payment-32-regular' },
-                    children: getPayLinkFormats(hands.value, 'hand'),
-                });
+                    children: children,
+                });   
             }
             if (corp.pv_options.free.use_auth_pay) {
                 payment_menus.push({

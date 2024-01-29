@@ -68,6 +68,8 @@ class CreateMerchandisesTable extends Migration
             $table->boolean('use_noti')->default(false)->comment('노티 사용여부');
             $table->boolean('use_regular_card')->default(false)->comment('정기 카드 사용여부(단골고객)');
             $table->boolean('use_collect_withdraw')->default(false)->comment('모아서 출금여부');
+            $table->boolean('use_multiple_hand_pay')->default(false)->comment('다중결제기능 사용여부');
+            $table->boolean('use_pay_verification_mobile')->default(false)->comment('결제전 휴대폰 인증 사용여부');
             $table->boolean('is_show_fee')->default(false)->comment('수수료율 노출여부');
             $table->mediumInteger('collect_withdraw_fee')->default(0)->comment('모아서 출금 수수료(가맹점)');
             $table->mediumInteger('withdraw_fee')->default(0)->comment('출금 수수료');

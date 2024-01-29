@@ -94,7 +94,7 @@ watchEffect(() => {
                     </template>
                 </CreateHalfVCol>
 
-                <MobileVerification v-if="corp.pv_options.paid.use_pay_verification_mobile"
+                <MobileVerification v-if="corp.pv_options.paid.use_pay_verification_mobile && props.merchandise.use_pay_verification_mobile"
                     @update:pay_button="is_show_pay_button = $event" :phone_num="auth_pay_info.buyer_phone" />
                 <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">
                     <VBtn block type="submit">

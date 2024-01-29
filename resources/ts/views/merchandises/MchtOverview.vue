@@ -287,6 +287,38 @@ onMounted(async () => {
                                 </CreateHalfVCol>
                             </VRow>
                         </VCol>
+                        <VCol cols="12" v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_pay_verification_mobile">
+                            <VRow>
+                                <CreateHalfVCol :mdl="5" :mdr="7">
+                                    <template #name>결제전 휴대폰 인증</template>
+                                    <template #input>
+                                        <BooleanRadio :radio="props.item.use_pay_verification_mobile"
+                                            @update:radio="props.item.use_pay_verification_mobile = $event">
+                                            <template #true>활성</template>
+                                            <template #false>비활성</template>
+                                        </BooleanRadio>
+                                    </template>
+                                </CreateHalfVCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12" v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_multiple_hand_pay">
+                            <VRow>
+                                <CreateHalfVCol :mdl="5" :mdr="7">
+                                    <template #name>
+                                        <BaseQuestionTooltip :location="'top'" :text="'다중 수기결제 사용 여부'"
+                                            :content="'수기결제 결제모듈이 3개 이상이어야 간편보기 화면에서 확인 가능합니다.'">
+                                        </BaseQuestionTooltip>
+                                    </template>
+                                    <template #input>
+                                        <BooleanRadio :radio="props.item.use_multiple_hand_pay"
+                                            @update:radio="props.item.use_multiple_hand_pay = $event">
+                                            <template #true>활성</template>
+                                            <template #false>비활성</template>
+                                        </BooleanRadio>
+                                    </template>
+                                </CreateHalfVCol>
+                            </VRow>
+                        </VCol>
                         
                     </VRow>
                 </VCardItem>

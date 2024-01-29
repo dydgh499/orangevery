@@ -386,7 +386,7 @@ class MerchandiseController extends Controller
         $cols = [
             'id', 'addr', 'business_num', 'resident_num', 'mcht_name', 'user_name',
             'nick_name', 'is_show_fee', 'use_saleslip_prov', 'use_saleslip_sell', 'use_regular_card',
-            'tax_category_type',
+            'tax_category_type', 'use_pay_verification_mobile',
         ];
         $data = $this->merchandises
             ->where('id', $id)
