@@ -29,7 +29,6 @@ const hand_pay_info = reactive(<HandPay>({
 const is_show = ref(false)
 const vForm = ref<VForm>()
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
-// 미사용
 
 const urlParams = new URLSearchParams(window.location.search)
 hand_pay_info.item_name = urlParams.get('item_name') || ''
