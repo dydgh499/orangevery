@@ -235,34 +235,27 @@ onMounted(() => {
                 :pay_module="props.pay_modules[index]" style="margin-bottom: 1em;" />
         </template>
     </CreateHalfVCol>
-    <VCard>
-        <template style="margin-bottom: 1em;" v-if="full_processes.length > 0">
-            <VRow no-gutters style="text-align: center;">
-                <VCol md="2"><b>결제모듈</b></VCol>
-                <VCol md="1" class="process-module-note">
-                    <VIcon size="24" icon="tabler:arrow-big-right-filled" color="primary" />
-                </VCol>
-                <VCol md="4"><b>승인</b></VCol>
-                <VCol md="1" class="process-module-note">
-                    <VIcon size="24" icon="tabler:arrow-big-right-filled" color="error" />
-                </VCol>
-                <VCol md="4"><b>취소</b></VCol>
-            </VRow>
-            <VDivider />
-            <VCard v-for="(_item, _index) in full_processes " :key="_index">
-                <VRow no-gutters style="text-align: center;">
-                    <VCol md="2" class="process-module-note">
-                        <b>{{ props.pay_modules[_index].note }}</b>
-                    </VCol>
-                    <VCol md="1" class="process-module-note">
-                        <VIcon size="24" icon="tabler:arrow-big-right-filled" color="primary" />
-                    </VCol>
-                    <VCol md="4" v-if="Object.keys(_item.trx_result).length == 0">
+    <VTable class="text-no-wrap" style="margin-bottom: 1em;" v-if="full_processes.length > 0">
+        <thead>
+            <tr>
+                <th scope="col" class='list-square' style="width: 150px;"><b>결제모듈</b></th>
+                <th scope="col" class='list-square' style="width: 50px;"><VIcon size="24" icon="tabler:arrow-big-right-filled" color="primary" /></th>
+                <th scope="col" class='list-square' style="width: 300px;"><b>승인</b></th>
+                <th scope="col" class='list-square' style="width: 50px;"><VIcon size="24" icon="tabler:arrow-big-right-filled" color="error" /></th>
+                <th scope="col" class='list-square' style="width: 300px;"><b>취소</b></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(_item, _index) in full_processes " :key="_index">
+                <td class='list-square'><b>{{ props.pay_modules[_index].note }}</b></td>
+                <td class='list-square'><VIcon size="24" icon="tabler:arrow-big-right-filled" color="primary" /></td>
+                <td class='list-square'>
+                    <template v-if="Object.keys(_item.trx_result).length == 0">
                         <VIcon size="24" icon="svg-spinners:bars-fade" class="process-icon"/>
                         <br>
                         <span>결제중 입니다...</span>
-                    </VCol>
-                    <VCol md="4" v-else>
+                    </template>
+                    <template v-else>
                         <VIcon size="24"
                             :icon="_item.trx_result.result_cd == '0000' ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'"
                             :color="_item.trx_result.result_cd == '0000' ? 'success' : 'error'" class="process-icon" />
@@ -272,17 +265,21 @@ onMounted(() => {
                         <template v-if="_item.trx_result.result_cd == '0000'">
                             <VBtn @click="salesslip.show(_item.trx_result)">승인 영수증 확인</VBtn>
                         </template>
-                    </VCol>
-                    <template v-if="_item.cxl_process != null">
-                        <VCol md="1">
-                            <VIcon size="24" icon="tabler:arrow-big-right-filled" color="error" class="process-icon" />
-                        </VCol>
-                        <VCol md="4" v-if="Object.keys(_item.cxl_result).length == 0">
+                    </template>
+                </td>
+                <td class='list-square'>
+                    <span v-if="_item.cxl_process != null">
+                        <VIcon size="24" icon="tabler:arrow-big-right-filled" color="error" class="process-icon" />
+                    </span>
+                </td>
+                <td class='list-square'>
+                    <span v-if="_item.cxl_process != null">
+                        <template v-if="Object.keys(_item.cxl_result).length == 0">
                             <VIcon size="24" icon="svg-spinners:bars-fade" class="process-icon" />
                             <br>
                             <span>취소중 입니다...</span>
-                        </VCol>
-                        <VCol md="4" v-else>
+                        </template>
+                        <template v-else>
                             <VIcon size="24"
                                 :icon="_item.cxl_result.result_cd == '0000' ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'"
                                 :color="_item.cxl_result.result_cd == '0000' ? 'success' : 'error'" class="process-icon" />
@@ -292,13 +289,12 @@ onMounted(() => {
                             <template v-if="_item.cxl_result.result_cd == '0000'">
                                 <VBtn @click="salesslip.show(_item.cxl_result)">취소 영수증 확인</VBtn>
                             </template>
-                        </VCol>
-                    </template>
-                </VRow>
-                <VDivider />
-            </VCard>
-        </template>
-    </VCard>
+                        </template>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </VTable>
     <VCard>
         <VCardText>
             <MobileVerification
@@ -312,7 +308,7 @@ onMounted(() => {
         </VCardText>
     </VCard>
 </template>
-<style>
+<style scoped>
 .process-module-note {
   margin-block: auto;
 }
@@ -322,7 +318,7 @@ onMounted(() => {
   margin-inline: 0;
 }
 
-@media screen and (min-width: 960px) {
+@media (min-width: 900px) {
   #common-field {
     margin-inline-end: 1em;
   }
@@ -330,5 +326,9 @@ onMounted(() => {
 
 :deep(.v-card-item) {
   padding: 18px !important;
+}
+
+:deep(.v-table__wrapper) {
+  block-size: auto !important;
 }
 </style>
