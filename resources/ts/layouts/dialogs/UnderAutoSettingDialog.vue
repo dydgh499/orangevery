@@ -58,3 +58,9 @@ defineExpose({
         </VCard>
     </VDialog>
 </template>
+<style scoped>
+:deep(.v-table__wrapper) {
+  block-size: auto !important;
+}
+</style>
+
