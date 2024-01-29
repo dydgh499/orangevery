@@ -56,7 +56,7 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
             })
         }
         return {
-            title: pay.note,
+            title: type == 'multiple-hand' ? '다중 수기결제' : pay.note,
             children: pays            
         };
     }
@@ -75,7 +75,6 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
                 let children = getPayLinkFormats(hands.value, 'hand')             
                 if (corp.pv_options.paid.use_multiple_hand_pay && hands.value.length > 1) {
                     const multiple = hands.value[0]
-                    multiple.note = '다중 수기결제'
                     children = [
                         ...children,
                         getPayMenuFormats(multiple, 'multiple-hand'),
