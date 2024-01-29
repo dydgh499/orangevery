@@ -90,8 +90,8 @@ class MerchandiseRequest extends FormRequest
         $this->merge(['is_show_fee' => $this->convertToBoolean($this->input('is_show_fee'))]);
         $this->merge(['use_regular_card' => $this->convertToBoolean($this->input('use_regular_card'))]);
         $this->merge(['use_collect_withdraw' => $this->convertToBoolean($this->input('use_collect_withdraw'))]);
-        $this->merge(['use_pay_verification_mobile' => $this->convertToBoolean($this->input('use_pay_verification_mobile'))]);
-        $this->merge(['use_multiple_hand_pay' => $this->convertToBoolean($this->input('use_multiple_hand_pay'))]);
+        $this->merge(['use_pay_verification_mobile' => $this->convertToBoolean($this->input('use_pay_verification_mobile', 0))]);
+        $this->merge(['use_multiple_hand_pay' => $this->convertToBoolean($this->input('use_multiple_hand_pay', 0))]);
     }
 
     public function bodyParameters()
