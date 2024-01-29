@@ -519,6 +519,8 @@ export interface Transaction {
 }
 
 export interface SalesSlip extends Transaction {
+    result_cd?: string,
+    result_msg?: string,
     is_show_fee: number, 
     use_saleslip_prov: number, 
     use_saleslip_sell: number, 
@@ -707,6 +709,11 @@ export interface AuthPay extends BasePay{
 export interface SimplePay extends BasePay {
     route: string,
     return_url: string,
+}
+
+export interface MultipleHandPay extends HandPay {
+    status_color?: string,
+    status_icon?: string,
 }
 //----------------------------
 export interface MchtRecentTransaction {

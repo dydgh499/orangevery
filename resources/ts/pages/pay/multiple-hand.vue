@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import MultipleHandPayOverview from '@/views/pay/MultipleHandPayOverview.vue'
 import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
-import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { useQuickViewStore } from '@/views/quick-view/useStore'
 import Footer from '@/layouts/components/Footer.vue'
 import { pay } from '@/views/pay/pay'

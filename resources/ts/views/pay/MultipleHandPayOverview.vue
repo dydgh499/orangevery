@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { installments } from '@/views/merchandises/pay-modules/useStore'
-import { requiredValidator, lengthValidatorV2 } from '@validators'
+import { requiredValidator } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { reactive, watchEffect } from 'vue';
+import MultipleHandPayForm from '@/views/pay/multiple-hand-pay/MultipleHandPayForm.vue'
 import { VForm } from 'vuetify/components'
-import type { Merchandise, PayModule, SalesSlip, Options, HandPay } from '@/views/types'
-import { cloneDeep } from 'lodash'
+import type { Merchandise, PayModule, SalesSlip, MultipleHandPay } from '@/views/types'
 import { axios } from '@axios'
 import corp from '@corp'
 
@@ -16,20 +14,20 @@ interface Props {
 const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
-const errorHandler = <any>(inject('$errorHandler'))
 const salesslip = <any>(inject('salesslip'))
 
-const sale_slip = ref(<SalesSlip>({}))
-const hand_pay_info = ref(<HandPay>({}))
-const hand_pay_infos = ref(<HandPay[]>([]))
-const is_show = ref(false)
+const sale_slips = ref(<SalesSlip[]>([]))
+const hand_pay_info = ref(<MultipleHandPay>({}))
+const hand_pay_infos = ref(<MultipleHandPay[]>([]))
 const vForm = ref<VForm>()
+
+const full_processes = ref<any[]>([])
 
 const urlParams = new URLSearchParams(window.location.search)
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
 
 const init = () => {
-    hand_pay_info.value = (<HandPay>({
+    hand_pay_info.value = (<MultipleHandPay>({
         yymm: '',
         card_num: '',
         installment: 0,
@@ -38,7 +36,10 @@ const init = () => {
         buyer_phone: urlParams.get('phone_num') || '',
     }))
     props.pay_modules.forEach(pay_module => {
-        hand_pay_infos.value.push(<HandPay>({
+        hand_pay_infos.value.push(<MultipleHandPay>({
+            yymm: String(''),
+            card_num: String(''),
+            installment: Number(0),
             amount: Number(urlParams.get('amount') || ''),
             pmod_id: pay_module.id,
             is_old_auth: pay_module.is_old_auth,
@@ -47,153 +48,237 @@ const init = () => {
     });
 }
 
-const pay = async () => {
-    const is_valid = await vForm.value?.validate()
-    const total_amount = hand_pay_infos.value.reduce((sum, obj) => sum + obj.amount, 0)
+const pay = (index: number) => {
+    return axios.post('/api/v1/transactions/hand-pay', {
+        ...hand_pay_info,
+        ...hand_pay_infos.value[index]
+    })
+}
 
-    if (is_valid?.valid && await alert.value.show(total_amount.toLocaleString() + '원을 결제하시겠습니까?')) {
-        try {
-            const params = cloneDeep(hand_pay_info)
-            const r = await axios.post('/api/v1/transactions/hand-pay', params)
-            sale_slip.value = {
-                ...r.data,
-                ...props.merchandise
-            }
-            salesslip.value.show(sale_slip.value)
-            snackbar.value.show('성공하였습니다.', 'success')
-        }
-        catch (e: any) {
-            snackbar.value.show(e.response.data.message, 'error')
-            const r = errorHandler(e)
+const cancel = (index: number) => {
+    return axios.post('/api/v1/transactions/pay-cancel', {
+        pmod_id: hand_pay_infos.value[index].pmod_id,
+        amount: hand_pay_infos.value[index].amount,
+        trx_id: full_processes.value[index].trx_result.trx_id,
+        only: false,
+    })
+}
+
+// level 0 다중결제 파라미터 구성
+const getProcessObject = () => {
+    return {
+        'trx_process': <Promise<any>>({}),
+        'trx_result': <SalesSlip>({}),
+        'cxl_process': null,
+        'cxl_result': <SalesSlip>({}),
+    }
+}
+
+// level 1 결제
+const trxProcess = () => {
+    full_processes.value = []
+    for (let i = 0; i < hand_pay_infos.value.length; i++) {
+        full_processes.value.push(getProcessObject())
+        full_processes.value[i].trx_process = pay(i)
+    }
+}
+
+// level 2 결제 결과 처리
+const trxResult = async () => {
+    const results = await Promise.all(full_processes.value.map(item => item.trx_process))
+    for (let i = 0; i < results.length; i++) {
+        full_processes.value[i].trx_result = {
+            ...results[i].data,
+            ...props.merchandise
         }
     }
-    else
-        snackbar.value.show('결제모듈을 선택해주세요.', 'error')
-
 }
 
-const filterInstallment = (pay_module: PayModule) => {
-    return installments.filter((obj: Options) => { return obj.id <= (pay_module.installment || 0) })
+// level 3 성공건 취소 처리 (실패 존재할 경우만)
+const cxlProcess = async () => {
+    let fail_find = false
+    for (let i = 0; i < full_processes.value.length; i++) {
+        if (full_processes.value[i].trx_result.result_cd != "0000") {
+            fail_find = true
+            break
+        }
+    }
+    if (fail_find) {
+        snackbar.value.show('결제실패건을 발견하였으므로 성공건들을 모두 취소합니다.', 'error')
+        for (let i = 0; i < full_processes.value.length; i++) {
+            if (full_processes.value[i].trx_result.result_cd == "0000")
+                full_processes.value[i].cxl_process = cancel(i)
+            else
+                full_processes.value[i].cxl_process = null
+        }
+        await cxlResult()
+    }
 }
 
-init()
-watchEffect(() => {
-    console.log(is_show_pay_button.value)
+// level 4 성공건 취소 결과 처리
+const cxlResult = async () => {
+    const results = await Promise.all(full_processes.value.map(item => item.cxl_process))
+    for (let i = 0; i < results.length; i++) {
+        if (results[i] != null) {
+            full_processes.value[i].cxl_result = {
+                ...results[i].data,
+                ...props.merchandise
+            }
+        }
+    }
+}
+
+// 다중 결제 시작
+const pays = async () => {
+    const common_valid = await vForm.value?.validate()
+    const total_amount = hand_pay_infos.value.reduce((sum, obj) => sum + Number(obj.amount), 0)
+
+    for (let i = 0; i < hand_pay_infos.value.length; i++) {
+        if (hand_pay_infos.value[i].status_color != 'success') {
+            snackbar.value.show(props.pay_modules[i].note + ' 결제모듈을 확인해주세요.', 'error')
+            return
+        }
+    }
+
+    if (common_valid?.valid && await alert.value.show("총 " + total_amount.toLocaleString() + '원을 결제하시겠습니까?')) {
+        snackbar.value.show('다중결제를 시작합니다...', 'primary')
+        trxProcess()
+        await trxResult()
+        await cxlProcess()
+    }
+}
+
+watchEffect(async () => {
+    if (hand_pay_info.value.buyer_name && hand_pay_info.value.buyer_phone) {
+        // watchEffect가 잡히지 않는 이유?
+    }
+    let is_valid = await vForm.value?.validate()
+    hand_pay_info.value.status_icon = is_valid?.valid ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'
+    hand_pay_info.value.status_color = is_valid?.valid ? 'success' : 'error'
+})
+onMounted(() => {
+    init()
+
 })
 </script>
 <template>
     <VDivider />
-    <VForm ref="vForm" @submit.prevent="pay">
-        <CreateHalfVCol :mdl="6" :mdr="6">
-            <template #name>
-                <VCard id="common-field">
-                    <VCardTitle style=" padding: 1em;">공통 결제정보</VCardTitle>
-                    <VDivider />
-                        <CreateHalfVCol :mdl="4" :mdr="8">
-                            <template #name>상품명</template>
-                            <template #input>
-                                <VTextField v-model="hand_pay_info.item_name" type="text"
-                                    prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
-                                    maxlength="100" :rules="[requiredValidator]" placeholder="상품명을 입력해주세요" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="4" :mdr="8">
-                            <template #name>구매자명</template>
-                            <template #input>
-                                <VTextField v-model="hand_pay_info.buyer_name" type="text" placeholder="구매자명을 입력해주세요"
-                                    :rules="[requiredValidator]" prepend-inner-icon="tabler-user" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="4" :mdr="8">
-                            <template #name>휴대폰번호</template>
-                            <template #input>
-                                <VTextField v-model="hand_pay_info.buyer_phone" type="number"
-                                    prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호를 입력해주세요"
-                                    :rules="[requiredValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                </VCard>
-                <br>
-            </template>
-            <template #input>
-                <AppCardActions :actionCollapsed="true" :title="props.pay_modules[index].note"
-                    v-for="(hand_pay_info, index) in hand_pay_infos" :key="index" style="margin-bottom: 1em;">
-                    <VDivider />
+    <CreateHalfVCol :mdl="6" :mdr="6">
+        <template #name>
+            <AppCardActions :actionCollapsed="true" id="common-field">
+                <template #title>
+                    <div>
+                        <span>공통 결제정보</span>
+                        <VIcon size="24" :icon=hand_pay_info.status_icon :color=hand_pay_info.status_color
+                            style="float: inline-end;" />
+                    </div>
+                </template>
+                <VDivider />
+                <VForm ref="vForm">
                     <CreateHalfVCol :mdl="4" :mdr="8">
-                        <template #name>상품금액</template>
+                        <template #name>상품명</template>
                         <template #input>
-                            <VTextField v-model="hand_pay_info.amount" suffix="₩" placeholder="거래금액을 입력해주세요"
-                                prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidator]" />
+                            <VTextField v-model="hand_pay_info.item_name" type="text"
+                                prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
+                                maxlength="100" :rules="[requiredValidator]" placeholder="상품명을 입력해주세요" />
                         </template>
                     </CreateHalfVCol>
                     <CreateHalfVCol :mdl="4" :mdr="8">
-                        <template #name>카드번호</template>
+                        <template #name>구매자명</template>
                         <template #input>
-                            <VTextField v-model="hand_pay_info.card_num" type="text" persistent-placeholder
-                                prepend-inner-icon="emojione:credit-card" placeholder="카드번호를 입력해주세요"
-                                :rules="[requiredValidator]" maxlength="18" autocomplete="cc-number" />
+                            <VTextField v-model="hand_pay_info.buyer_name" type="text" placeholder="구매자명을 입력해주세요"
+                                :rules="[requiredValidator]" prepend-inner-icon="tabler-user" />
                         </template>
                     </CreateHalfVCol>
                     <CreateHalfVCol :mdl="4" :mdr="8">
-                        <template #name>유효기간</template>
+                        <template #name>휴대폰번호</template>
                         <template #input>
-                            <VTextField v-model="hand_pay_info.yymm" type="number"
-                                prepend-inner-icon="ic-baseline-calendar-today" placeholder="(MM/YY:0324)"
-                                :rules="[requiredValidator, lengthValidatorV2(hand_pay_info.yymm, 4)]"
-                                maxlength="4" />
+                            <VTextField v-model="hand_pay_info.buyer_phone" type="number"
+                                prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호를 입력해주세요"
+                                :rules="[requiredValidator]" />
                         </template>
                     </CreateHalfVCol>
                     <CreateHalfVCol :mdl="4" :mdr="8">
-                        <template #name>할부기간</template>
+                        <template #name>총 결제금액</template>
                         <template #input>
-                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="hand_pay_info.installment"
-                                :items="filterInstallment(props.pay_modules[index])"
-                                prepend-inneer-icon="fluent-credit-card-clock-20-regular" item-title="title"
-                                item-value="id" single-line :rules="[requiredValidator]" />
+                            <b>{{ hand_pay_infos.reduce((sum, obj) => sum + Number(obj.amount), 0).toLocaleString() }}</b>원
                         </template>
                     </CreateHalfVCol>
-                    <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 6px 0;" v-if="hand_pay_info.is_old_auth">
-                        <template #name>생년월일(사업자등록번호)</template>
-                        <template #input>
-                            <VTextField v-model="hand_pay_info.auth_num" type="number" maxlength="10"
-                                prepend-inner-icon="carbon:two-factor-authentication" />
+                </VForm>
+            </AppCardActions>
+        </template>
+        <template #input>
+            <MultipleHandPayForm v-for="(item, index) in hand_pay_infos" :key="index" :hand_pay_info="hand_pay_infos[index]"
+                :pay_module="props.pay_modules[index]" style="margin-bottom: 1em;" />
+        </template>
+    </CreateHalfVCol>
+    <VCard style="margin-bottom: 1em;" v-if="sale_slips.length > 0">
+        <VCardText>
+            <VRow no-gutters style="text-align: center;" v-for="(_item, _index) in  full_processes " :key="_index">
+                <VCol md="6" v-if="_item.trx_process.state === 'pending'">
+                    <VIcon size="24" icon="svg-spinners:bars-fade" />
+                    <br>
+                    <br>
+                    <span>결제중 입니다...</span>
+                </VCol>
+                <VCol md="6" v-else>
+                    <VIcon size="24"
+                        :icon="_item.trx_result.result_cd == '0000' ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'"
+                        :color="_item.trx_result.result_cd == '0000' ? 'success' : 'error'" />
+                    <br>
+                    <br>
+                    <span>{{ _item.trx_result.result_msg }}</span>
+                    <br>
+                    <br>
+                    <template v-if="_item.trx_result.result_cd == '0000'">
+                        <VBtn @click="salesslip.show(_item.trx_result)">승인 영수증 확인</VBtn>
+                    </template>
+                </VCol>
+                <template v-if="_item.cxl_process != null">
+                    <VCol md="6" v-if="_item.cxl_process.state === 'pending'">
+                        <VIcon size="24" icon="svg-spinners:bars-fade" />
+                        <br>
+                        <br>
+                        <span>취소중 입니다...</span>
+                    </VCol>
+                    <VCol md="6" v-else>
+                        <VIcon size="24"
+                            :icon="_item.cxl_result.result_cd == '0000' ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'"
+                            :color="_item.cxl_result.result_cd == '0000' ? 'success' : 'error'" />
+                        <br>
+                        <br>
+                        <span>{{ _item.cxl_result.result_msg }}</span>
+                        <br>
+                        <br>
+                        <template v-if="_item.cxl_result.result_cd == '0000'">
+                            <VBtn @click="salesslip.show(_item.cxl_result)">취소 영수증 확인</VBtn>
                         </template>
-                    </CreateHalfVCol>
-                    <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 6px 0;" v-if="hand_pay_info.is_old_auth">
-                        <template #name>카드비밀번호 앞 2자리</template>
-                        <template #input>
-                            <VTextField v-model="hand_pay_info.card_pw" counter prepend-inner-icon="tabler-lock"
-                                :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
-                                :type="is_show ? 'number' : 'password'" persistent-placeholder
-                                @click:append-inner="is_show = !is_show" autocomplete maxlength="2" />
-                        </template>
-                    </CreateHalfVCol>
-                </AppCardActions>
-            </template>
-        </CreateHalfVCol>
-    </VForm>
+                    </VCol>
+                </template>
+            </VRow>
+        </VCardText>
+    </VCard>
     <VCard>
         <VCardText>
-        <MobileVerification
-            v-if="corp.pv_options.paid.use_pay_verification_mobile && props.merchandise.use_pay_verification_mobile"
-            @update:pay_button="is_show_pay_button = $event" :phone_num="hand_pay_info.buyer_phone" />
-        <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">
-            <VBtn block type="submit">
-                결제하기
-            </VBtn>
-        </VCol>
+            <MobileVerification
+                v-if="corp.pv_options.paid.use_pay_verification_mobile && props.merchandise.use_pay_verification_mobile"
+                @update:pay_button="is_show_pay_button = $event" :phone_num="hand_pay_info.buyer_phone" />
+            <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">
+                <VBtn block @click="pays()">
+                    결제하기
+                </VBtn>
+            </VCol>
         </VCardText>
     </VCard>
 </template>
 <style>
 @media screen and (min-width: 960px) {
   #common-field {
-    block-size: 95%;
     margin-inline-end: 1em;
   }
 }
 
 :deep(.v-card-item) {
-  padding: 18px;
+  padding: 18px !important;
 }
 </style>

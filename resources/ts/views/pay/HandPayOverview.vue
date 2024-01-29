@@ -119,7 +119,7 @@ watchEffect(() => {
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                     <template #name>유효기간</template>
                     <template #input>
-                        <VTextField v-model="hand_pay_info.yymm" type="number"
+                        <VTextField v-model="hand_pay_info.yymm" type="text"
                             prepend-inner-icon="ic-baseline-calendar-today" placeholder="(MM/YY:0324)"
                             :rules="[requiredValidator, lengthValidatorV2(hand_pay_info.yymm, 4)]" maxlength="4" />
                     </template>
@@ -148,7 +148,6 @@ watchEffect(() => {
                             @click:append-inner="is_show = !is_show" autocomplete maxlength="2" />
                     </template>
                 </CreateHalfVCol>
-
                 <MobileVerification v-if="corp.pv_options.paid.use_pay_verification_mobile && props.merchandise.use_pay_verification_mobile"
                     @update:pay_button="is_show_pay_button = $event" :phone_num="hand_pay_info.buyer_phone" />
 

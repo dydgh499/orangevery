@@ -68,5 +68,6 @@ app.use(abilitiesPlugin, ability, {
 })
 app.component('VueDatePicker', VueDatePicker)
 
+
 // Mount vue app
 app.mount('#app')

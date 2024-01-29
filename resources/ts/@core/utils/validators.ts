@@ -108,7 +108,7 @@ export const lengthValidator = (value: unknown, length: number) => {
     if (isEmpty(value))
         return true
 
-    return String(value).length === length || `최소 문자 필드는 ${length}자 이상이어야 합니다.`
+    return String(value).length >= length || `최소 ${length}자 이상이어야 합니다.`
 }
 // 👉 Length Validator
 export const lengthValidatorV2 = (value: unknown, length: number) => {

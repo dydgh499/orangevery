@@ -22,6 +22,10 @@ export default {
       density: 'compact',
     },
   },
+  VExpansionPanel: {
+  },
+  VExpansionPanelTitle: {
+  },
   VPagination: {
     activeColor: 'primary',
     density: 'comfortable',
