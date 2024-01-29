@@ -16,6 +16,9 @@ interface Props {
 const props = defineProps<Props>()
 
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
+if(props.merchandise.use_pay_verification_mobile == 0)
+    is_show_pay_button.value = true
+
 const auth_pay_info = reactive(<AuthPay>({}))
 const vForm = ref<VForm>()
 
