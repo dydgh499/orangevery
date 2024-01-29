@@ -73,7 +73,7 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
         if (getUserLevel() == 10) {
             if (corp.pv_options.free.use_hand_pay) {
                 let children = getPayLinkFormats(hands.value, 'hand')             
-                if (corp.pv_options.paid.use_multiple_hand_pay && hands.value.length > 2) {
+                if (corp.pv_options.paid.use_multiple_hand_pay && hands.value.length > 1) {
                     const multiple = hands.value[0]
                     multiple.note = '다중 수기결제'
                     children = [

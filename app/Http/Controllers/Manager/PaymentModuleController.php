@@ -271,6 +271,7 @@ class PaymentModuleController extends Controller
         else
         {
             $cols = [
+                'payment_modules.show_pay_view',
                 'payment_modules.id', 'payment_modules.mcht_id', 'payment_modules.installment',
                 'payment_modules.mid', 'payment_modules.tid', 'payment_modules.pg_id', 'payment_modules.ps_id',
                 'payment_modules.module_type', 'payment_modules.settle_fee', 'payment_modules.settle_type',

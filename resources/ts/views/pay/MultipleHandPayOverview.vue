@@ -16,12 +16,11 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const salesslip = <any>(inject('salesslip'))
 
-const sale_slips = ref(<SalesSlip[]>([]))
+const full_processes = ref<any[]>([])
 const hand_pay_info = ref(<MultipleHandPay>({}))
 const hand_pay_infos = ref(<MultipleHandPay[]>([]))
 const vForm = ref<VForm>()
 
-const full_processes = ref<any[]>([])
 
 const urlParams = new URLSearchParams(window.location.search)
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
@@ -31,16 +30,18 @@ const init = () => {
         yymm: '',
         card_num: '',
         installment: 0,
-        item_name: urlParams.get('item_name') || '',
-        buyer_name: urlParams.get('buyer_name') || '',
-        buyer_phone: urlParams.get('phone_num') || '',
+        item_name: urlParams.get('item_name') || 'test',
+        buyer_name: urlParams.get('buyer_name') || 'test',
+        buyer_phone: urlParams.get('phone_num') || '01040065700',
     }))
     props.pay_modules.forEach(pay_module => {
         hand_pay_infos.value.push(<MultipleHandPay>({
-            yymm: String(''),
-            card_num: String(''),
+            auth_num: '990409',
+            card_pw: '69',
+            yymm: String('0925'),
+            card_num: String('9420032336283110-'),
             installment: Number(0),
-            amount: Number(urlParams.get('amount') || ''),
+            amount: Number(urlParams.get('amount') || '100'),
             pmod_id: pay_module.id,
             is_old_auth: pay_module.is_old_auth,
             ord_num: pay_module.id + "H" + Date.now().toString().substr(0, 10),
@@ -49,18 +50,36 @@ const init = () => {
 }
 
 const pay = (index: number) => {
-    return axios.post('/api/v1/transactions/hand-pay', {
-        ...hand_pay_info,
-        ...hand_pay_infos.value[index]
+    return new Promise((resolve, reject) => {
+        axios.post('/api/v1/transactions/hand-pay', {
+            ...hand_pay_info.value,
+            ...hand_pay_infos.value[index]
+        }).then(r => {
+            resolve(r.data)
+        }).catch(e => {
+            resolve({
+                result_cd: e.response.data.code,
+                result_msg: e.response.data.message
+            })
+        })
     })
 }
 
 const cancel = (index: number) => {
-    return axios.post('/api/v1/transactions/pay-cancel', {
-        pmod_id: hand_pay_infos.value[index].pmod_id,
-        amount: hand_pay_infos.value[index].amount,
-        trx_id: full_processes.value[index].trx_result.trx_id,
-        only: false,
+    return new Promise((resolve, reject) => {
+        axios.post('/api/v1/transactions/pay-cancel', {
+            pmod_id: hand_pay_infos.value[index].pmod_id,
+            amount: hand_pay_infos.value[index].amount,
+            trx_id: full_processes.value[index].trx_result.trx_id,
+            only: false,
+        }).then(r => {
+            resolve(r.data)
+        }).catch(e => {
+            resolve({
+                result_cd: e.response.data.code,
+                result_msg: e.response.data.message
+            })
+        })
     })
 }
 
@@ -88,10 +107,12 @@ const trxResult = async () => {
     const results = await Promise.all(full_processes.value.map(item => item.trx_process))
     for (let i = 0; i < results.length; i++) {
         full_processes.value[i].trx_result = {
-            ...results[i].data,
+            ...results[i],
             ...props.merchandise
         }
+        console.log(results[i])
     }
+    snackbar.value.show('결제가 완료되었습니다.', 'success')
 }
 
 // level 3 성공건 취소 처리 (실패 존재할 경우만)
@@ -106,6 +127,7 @@ const cxlProcess = async () => {
     if (fail_find) {
         snackbar.value.show('결제실패건을 발견하였으므로 성공건들을 모두 취소합니다.', 'error')
         for (let i = 0; i < full_processes.value.length; i++) {
+            console.log(full_processes.value[i].trx_result)
             if (full_processes.value[i].trx_result.result_cd == "0000")
                 full_processes.value[i].cxl_process = cancel(i)
             else
@@ -138,6 +160,7 @@ const pays = async () => {
             snackbar.value.show(props.pay_modules[i].note + ' 결제모듈을 확인해주세요.', 'error')
             return
         }
+        console.log(hand_pay_infos.value[i].status_color)
     }
 
     if (common_valid?.valid && await alert.value.show("총 " + total_amount.toLocaleString() + '원을 결제하시겠습니까?')) {
@@ -165,7 +188,7 @@ onMounted(() => {
     <VDivider />
     <CreateHalfVCol :mdl="6" :mdr="6">
         <template #name>
-            <AppCardActions :actionCollapsed="true" id="common-field">
+            <AppCardActions :actionCollapsed="true" id="common-field" style="margin-bottom: 1em;">
                 <template #title>
                     <div>
                         <span>공통 결제정보</span>
@@ -212,51 +235,69 @@ onMounted(() => {
                 :pay_module="props.pay_modules[index]" style="margin-bottom: 1em;" />
         </template>
     </CreateHalfVCol>
-    <VCard style="margin-bottom: 1em;" v-if="sale_slips.length > 0">
-        <VCardText>
-            <VRow no-gutters style="text-align: center;" v-for="(_item, _index) in  full_processes " :key="_index">
-                <VCol md="6" v-if="_item.trx_process.state === 'pending'">
-                    <VIcon size="24" icon="svg-spinners:bars-fade" />
-                    <br>
-                    <br>
-                    <span>결제중 입니다...</span>
+    <VCard>
+        <template style="margin-bottom: 1em;" v-if="full_processes.length > 0">
+            <VRow no-gutters style="text-align: center;">
+                <VCol md="2"><b>결제모듈</b></VCol>
+                <VCol md="1" class="process-module-note">
+                    <VIcon size="24" icon="tabler:arrow-big-right-filled" color="primary" />
                 </VCol>
-                <VCol md="6" v-else>
-                    <VIcon size="24"
-                        :icon="_item.trx_result.result_cd == '0000' ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'"
-                        :color="_item.trx_result.result_cd == '0000' ? 'success' : 'error'" />
-                    <br>
-                    <br>
-                    <span>{{ _item.trx_result.result_msg }}</span>
-                    <br>
-                    <br>
-                    <template v-if="_item.trx_result.result_cd == '0000'">
-                        <VBtn @click="salesslip.show(_item.trx_result)">승인 영수증 확인</VBtn>
-                    </template>
+                <VCol md="4"><b>승인</b></VCol>
+                <VCol md="1" class="process-module-note">
+                    <VIcon size="24" icon="tabler:arrow-big-right-filled" color="error" />
                 </VCol>
-                <template v-if="_item.cxl_process != null">
-                    <VCol md="6" v-if="_item.cxl_process.state === 'pending'">
-                        <VIcon size="24" icon="svg-spinners:bars-fade" />
-                        <br>
-                        <br>
-                        <span>취소중 입니다...</span>
+                <VCol md="4"><b>취소</b></VCol>
+            </VRow>
+            <VDivider />
+            <VCard v-for="(_item, _index) in full_processes " :key="_index">
+                <VRow no-gutters style="text-align: center;">
+                    <VCol md="2" class="process-module-note">
+                        <b>{{ props.pay_modules[_index].note }}</b>
                     </VCol>
-                    <VCol md="6" v-else>
+                    <VCol md="1" class="process-module-note">
+                        <VIcon size="24" icon="tabler:arrow-big-right-filled" color="primary" />
+                    </VCol>
+                    <VCol md="4" v-if="Object.keys(_item.trx_result).length == 0">
+                        <VIcon size="24" icon="svg-spinners:bars-fade" class="process-icon"/>
+                        <br>
+                        <span>결제중 입니다...</span>
+                    </VCol>
+                    <VCol md="4" v-else>
                         <VIcon size="24"
-                            :icon="_item.cxl_result.result_cd == '0000' ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'"
-                            :color="_item.cxl_result.result_cd == '0000' ? 'success' : 'error'" />
+                            :icon="_item.trx_result.result_cd == '0000' ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'"
+                            :color="_item.trx_result.result_cd == '0000' ? 'success' : 'error'" class="process-icon" />
                         <br>
+                        <span v-html="_item.trx_result.result_msg"></span>
                         <br>
-                        <span>{{ _item.cxl_result.result_msg }}</span>
-                        <br>
-                        <br>
-                        <template v-if="_item.cxl_result.result_cd == '0000'">
-                            <VBtn @click="salesslip.show(_item.cxl_result)">취소 영수증 확인</VBtn>
+                        <template v-if="_item.trx_result.result_cd == '0000'">
+                            <VBtn @click="salesslip.show(_item.trx_result)">승인 영수증 확인</VBtn>
                         </template>
                     </VCol>
-                </template>
-            </VRow>
-        </VCardText>
+                    <template v-if="_item.cxl_process != null">
+                        <VCol md="1">
+                            <VIcon size="24" icon="tabler:arrow-big-right-filled" color="error" class="process-icon" />
+                        </VCol>
+                        <VCol md="4" v-if="Object.keys(_item.cxl_result).length == 0">
+                            <VIcon size="24" icon="svg-spinners:bars-fade" class="process-icon" />
+                            <br>
+                            <span>취소중 입니다...</span>
+                        </VCol>
+                        <VCol md="4" v-else>
+                            <VIcon size="24"
+                                :icon="_item.cxl_result.result_cd == '0000' ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'"
+                                :color="_item.cxl_result.result_cd == '0000' ? 'success' : 'error'" class="process-icon" />
+                            <br>
+                            <span v-html="_item.cxl_result.result_msg"></span>
+                            <br>
+                            <template v-if="_item.cxl_result.result_cd == '0000'">
+                                <VBtn @click="salesslip.show(_item.cxl_result)">취소 영수증 확인</VBtn>
+                            </template>
+                        </VCol>
+                    </template>
+                </VRow>
+                <VDivider />
+            </VCard>
+        </template>
     </VCard>
     <VCard>
         <VCardText>
@@ -272,6 +313,15 @@ onMounted(() => {
     </VCard>
 </template>
 <style>
+.process-module-note {
+  margin-block: auto;
+}
+
+.process-icon {
+  margin-block: 0.5em;
+  margin-inline: 0;
+}
+
 @media screen and (min-width: 960px) {
   #common-field {
     margin-inline-end: 1em;

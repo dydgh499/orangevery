@@ -31,9 +31,10 @@ watchEffect(async () => {
     props.hand_pay_info.status_icon = valid ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'
     props.hand_pay_info.status_color = valid ? 'success' : 'error'
 })
+
 </script>
 <template>
-    <AppCardActions actionCollapsed>
+    <AppCardActions :actionCollapsed="true">
         <template #title>
             <div>
                 <span>{{ props.pay_module.note }}</span>
@@ -75,14 +76,14 @@ watchEffect(async () => {
                         single-line :rules="[requiredValidator]"/>
                 </template>
             </CreateHalfVCol>
-            <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 6px 0;" v-if="props.hand_pay_info.is_old_auth">
+            <CreateHalfVCol :mdl="6" :mdr="6" v-if="props.hand_pay_info.is_old_auth">
                 <template #name>생년월일(사업자등록번호)</template>
                 <template #input>
                     <VTextField v-model="props.hand_pay_info.auth_num" type="number" maxlength="10"
                         prepend-inner-icon="carbon:two-factor-authentication" />
                 </template>
             </CreateHalfVCol>
-            <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 6px 0;" v-if="props.hand_pay_info.is_old_auth">
+            <CreateHalfVCol :mdl="6" :mdr="6" v-if="props.hand_pay_info.is_old_auth">
                 <template #name>카드비밀번호 앞 2자리</template>
                 <template #input>
                     <VTextField v-model="props.hand_pay_info.card_pw" counter prepend-inner-icon="tabler-lock"

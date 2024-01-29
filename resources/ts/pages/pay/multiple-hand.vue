@@ -8,9 +8,11 @@ import corp from '@corp'
 import { axios } from '@axios';
 
 const { hands } = useQuickViewStore()
-const { pay_module, merchandise } = pay(1)
+const { pay_module, merchandise, updatePayModule } = pay(1)
 const salesslip = ref()
 const pgs = ref([])
+
+updatePayModule()
 provide('salesslip', salesslip)
 
 onMounted(async () => {

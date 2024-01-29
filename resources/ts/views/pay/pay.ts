@@ -15,17 +15,21 @@ export const pay = (module_type: number) => {
     else if (module_type == 3)
         pay_url.value = process.env.NOTI_URL + '/v2/online/pay/simple'
 
-    const updatePayModule = () => {
+    const decryptQuery = () => {
         const encrypt = decodeURIComponent(route.query.e as string)
         const enc = CryptoJS.AES.decrypt(encrypt, '^^_masking_^^').toString(CryptoJS.enc.Utf8)
         const params = JSON.parse(enc)
-
         if (params.m && params.p) {
             pay_module.value.id = params.p
             pay_module.value.mcht_id = params.m
             pay_module.value.is_old_auth = params.o
             pay_module.value.installment = params.i
             pay_module.value.pg_id = params.g
+        }
+    }
+    const updatePayModule = () => {
+        decryptQuery()
+        if (pay_module.value.mcht_id && pay_module.value.id) {
             updateMerchandise(pay_module.value.mcht_id as number)
         }
         else
