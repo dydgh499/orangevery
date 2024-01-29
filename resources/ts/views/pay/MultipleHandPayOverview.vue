@@ -328,10 +328,6 @@ onMounted(() => {
   margin-inline: 0;
 }
 
-.common-field {
-  margin-inline-end: 0;
-}
-
 :deep(.v-card-item) {
   padding: 18px !important;
 }
@@ -341,7 +337,7 @@ onMounted(() => {
 }
 
 @media (min-width: 900px) {
-  .common-field {
+  :deep(#common-field) {
     margin-inline-end: 1em !important;
   }
 }
