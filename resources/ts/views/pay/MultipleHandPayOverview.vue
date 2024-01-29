@@ -178,6 +178,8 @@ watchEffect(async () => {
     let is_valid = await vForm.value?.validate()
     hand_pay_info.value.status_icon = is_valid?.valid ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'
     hand_pay_info.value.status_color = is_valid?.valid ? 'success' : 'error'
+    if(props.merchandise.use_pay_verification_mobile == 0)
+        is_show_pay_button.value = true
 })
 onMounted(() => {
     init()
