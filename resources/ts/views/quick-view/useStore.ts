@@ -83,7 +83,6 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
         if (getUserLevel() == 10) {
             if (corp.pv_options.free.use_hand_pay) {
                 let children = getPayLinkFormats(hands.value, 'hand')
-                console.log(children)
                 if(children.length > 0) {
                     payment_menus.push({
                         title: '수기결제',
