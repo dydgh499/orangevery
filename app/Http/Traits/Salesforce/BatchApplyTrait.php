@@ -20,6 +20,7 @@ trait BatchApplyTrait
             $query = $query->where('payment_modules.pg_id', $request->pg_id);
         if(strlen(trim($request->input('pmod_note', ''))))
             $query = $query->where('payment_modules.note', $request->pmod_note);
+        
         return $query;
     }
 

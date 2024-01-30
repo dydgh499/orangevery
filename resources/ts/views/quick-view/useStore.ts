@@ -3,7 +3,7 @@ import type { PayModule } from '@/views/types'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
 import * as CryptoJS from 'crypto-js'
-import { filter, map } from 'lodash'
+import { filter } from 'lodash'
 import { ref } from 'vue'
 
 const payment_modules = getUserLevel() == 10 ? await getAllPayModules() : []
@@ -69,10 +69,12 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
     }
 
     const getPayLinkFormats = (pays: PayModule[], type: string) => {
-        return map(pays, (pay) => {
-            if(pay.show_pay_view)
-                return getPayMenuFormats(pay, type)
-        });
+        const children = []
+        for (let i = 0; i < pays.length; i++) {
+            if(pays[i].show_pay_view)
+                children.push(getPayMenuFormats(pays[i], type))
+        }
+        return children
     };
     
 
@@ -80,25 +82,34 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
         const payment_menus = []
         if (getUserLevel() == 10) {
             if (corp.pv_options.free.use_hand_pay) {
-                payment_menus.push({
-                    title: '수기결제',
-                    icon: { icon: 'fluent-payment-32-regular' },
-                    children: getPayLinkFormats(hands.value, 'hand'),
-                });   
+                let children = getPayLinkFormats(hands.value, 'hand')
+                if(children.length > 0) {
+                    payment_menus.push({
+                        title: '수기결제',
+                        icon: { icon: 'fluent-payment-32-regular' },
+                        children: children,
+                    });    
+                }
             }
             if (corp.pv_options.free.use_auth_pay) {
-                payment_menus.push({
-                    title: '인증결제',
-                    icon: { icon: 'fluent-payment-32-regular' },
-                    children: getPayLinkFormats(auths.value, 'auth'),
-                });
+                let children = getPayLinkFormats(auths.value, 'auth')
+                if(children.length > 0) {
+                    payment_menus.push({
+                        title: '인증결제',
+                        icon: { icon: 'fluent-payment-32-regular' },
+                        children: children,
+                    });    
+                }
             }
             if (corp.pv_options.free.use_simple_pay) {
-                payment_menus.push({
-                    title: '간편결제',
-                    icon: { icon: 'fluent-payment-32-regular' },
-                    children: getPayLinkFormats(simples.value, 'simple'),
-                });
+                let children = getPayLinkFormats(simples.value, 'simple')
+                if(children.length > 0) {
+                    payment_menus.push({
+                        title: '간편결제',
+                        icon: { icon: 'fluent-payment-32-regular' },
+                        children: children,
+                    });    
+                }
             }
         }
 
