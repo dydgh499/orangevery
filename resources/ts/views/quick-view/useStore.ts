@@ -55,15 +55,23 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
                 params: url.origin + '/pay/' + type + "?e=" + params,
             })
         }
+        if(type === 'hand' && corp.pv_options.paid.use_multiple_hand_pay) {
+            pays.push({
+                title: 'SMS 결제 전송',
+                href: 'sms()',
+                params: url.origin + '/pay/multiple-hand?e=' + params,
+            })
+        }
         return {
-            title: type == 'multiple-hand' ? '다중 수기결제' : pay.note,
+            title: pay.note,
             children: pays            
         };
     }
 
     const getPayLinkFormats = (pays: PayModule[], type: string) => {
         return map(pays, (pay) => {
-            return getPayMenuFormats(pay, type)
+            if(pay.show_pay_view)
+                return getPayMenuFormats(pay, type)
         });
     };
     
@@ -72,18 +80,10 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
         const payment_menus = []
         if (getUserLevel() == 10) {
             if (corp.pv_options.free.use_hand_pay) {
-                let children = getPayLinkFormats(hands.value, 'hand')             
-                if (corp.pv_options.paid.use_multiple_hand_pay && hands.value.length > 1) {
-                    const multiple = hands.value[0]
-                    children = [
-                        ...children,
-                        getPayMenuFormats(multiple, 'multiple-hand'),
-                    ]
-                }
                 payment_menus.push({
                     title: '수기결제',
                     icon: { icon: 'fluent-payment-32-regular' },
-                    children: children,
+                    children: getPayLinkFormats(hands.value, 'hand'),
                 });   
             }
             if (corp.pv_options.free.use_auth_pay) {

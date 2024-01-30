@@ -356,7 +356,7 @@ class TransactionController extends Controller
      */
     public function batchRetry(Request $request)
     {
-        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/noti/custom';
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/noti/payvery';
         $trans = $this->transactions->whereIn('id', $request->selected)->get();
         foreach($trans as $tran)
         {

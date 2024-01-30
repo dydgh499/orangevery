@@ -33,6 +33,7 @@ const merchandise = reactive<any>({
 })
 const pay_module = reactive<any>({
     pg_id: null,
+    pmod_note: '',
     abnormal_trans_limit: 0,
     pay_dupe_limit: 0,
     pay_dupe_least: 0,
@@ -70,14 +71,17 @@ const post = async (page: string, params: any) => {
         const r = errorHandler(e)
     }
 }
+
 const common = computed(() => {
     return {
         'id': props.item.id,
         'level': props.item.level,
         'pg_id': pay_module.pg_id,
+        'pmod_note': pay_module.pmod_note,
         'custom_filter_id': merchandise.custom_filter_id,
     }
 })
+
 const setSalesFee = () => {
     post('sales-fee-direct-apply', {
         ...common.value,
@@ -231,6 +235,7 @@ const setNotiUrl = () => {
                     single-line />
             </template>
         </CreateHalfVCol>
+        <VDivider/>
         <CreateHalfVCol :mdl="3" :mdr="9">
             <template #name>
                 {{ corp.pv_options.auth.levels['sales' + getLevelByIndex(props.item.level) + '_name'] }} 수수료율</template>
@@ -338,7 +343,7 @@ const setNotiUrl = () => {
         <CreateHalfVCol :mdl="3" :mdr="9">
             <template #name>
                 <BaseQuestionTooltip :location="'top'" :text="'PG사 필터 적용'"
-                    :content="'해당 값을 선택한후 즉시적용을 클릭하면<br>해당 값과 결제모듈의 PG사가 똑같은 결제모듈만 일괄적용됩니다.'">
+                    :content="'해당 값과 결제모듈의 PG사가 똑같은 결제모듈만 일괄적용됩니다.'">
                 </BaseQuestionTooltip>
             </template>
             <template #input>
@@ -347,6 +352,19 @@ const setNotiUrl = () => {
                     item-title="pg_name" item-value="id" single-line />
             </template>
         </CreateHalfVCol>
+        <CreateHalfVCol :mdl="3" :mdr="9">
+            <template #name>
+                <BaseQuestionTooltip :location="'top'" :text="'별칭 필터 적용'"
+                    :content="'해당 값과 결제모듈의 별칭이 똑같은 결제모듈만 일괄적용됩니다.<br>(좌우 공백은 제거된 후 필터링됩니다.)'">
+                </BaseQuestionTooltip>
+            </template>
+            <template #input>
+                
+                <VTextField v-model="pay_module.pmod_note" placeholder='결제모듈 명칭을 적어주세요.😀'
+                        prepend-inner-icon="twemoji-spiral-notepad" />
+            </template>
+        </CreateHalfVCol>
+        <VDivider/>
         <CreateHalfVCol :mdl="3" :mdr="9">
             <template #name>이상거래 한도</template>
             <template #input>
