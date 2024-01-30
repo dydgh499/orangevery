@@ -57,9 +57,8 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
         }
         if(type === 'hand' && corp.pv_options.paid.use_multiple_hand_pay) {
             pays.push({
-                title: 'SMS 결제 전송',
-                href: 'sms()',
-                params: url.origin + '/pay/multiple-hand?e=' + params,
+                title: '다중결제',
+                href: url.origin + '/pay/multiple-hand?e=' + params,
             })
         }
         return {
