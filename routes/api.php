@@ -199,6 +199,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('set-tid', [SalesforceBatchController::class, 'setTid']);
                 Route::post('set-api-key', [SalesforceBatchController::class, 'setApiKey']);
                 Route::post('set-sub-key', [SalesforceBatchController::class, 'setSubKey']);
+                Route::post('set-pmod-note', [SalesforceBatchController::class, 'setPmodNote']);
                 Route::post('set-pay-limit', [SalesforceBatchController::class, 'setPayLimit']);
                 Route::post('set-pay-disable-time', [SalesforceBatchController::class, 'setForbiddenPayTime']);
                 Route::post('set-show-pay-view', [SalesforceBatchController::class, 'setShowPayView']);

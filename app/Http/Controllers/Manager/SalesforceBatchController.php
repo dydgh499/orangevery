@@ -319,4 +319,16 @@ class SalesforceBatchController extends Controller
         $row = $this->payModuleBatch($request)->update($cols);
         return $this->response(1);
     }
+
+    /**
+     * 결제모듈 별칭 일괄적용
+     *
+     * 가맹점 이상 가능
+     */
+    public function setPmodNote(Request $request)
+    {
+        $cols = ['payment_modules.note' => $request->note];
+        $row = $this->payModuleBatch($request)->update($cols);
+        return $this->response(1);
+    }
 }

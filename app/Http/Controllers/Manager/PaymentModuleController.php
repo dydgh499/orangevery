@@ -92,6 +92,7 @@ class PaymentModuleController extends Controller
         return $query->where(function ($query) use ($search) {
             return $query->where('payment_modules.mid', 'like', "%$search%")
                 ->orWhere('payment_modules.tid', 'like', "%$search%")
+                ->orWhere('payment_modules.note', 'like', "%$search%")
                 ->orWhere('merchandises.mcht_name', 'like', "%$search%");
         });
     }

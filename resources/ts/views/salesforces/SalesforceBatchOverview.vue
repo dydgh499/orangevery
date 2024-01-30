@@ -51,6 +51,7 @@ const pay_module = reactive<any>({
     pay_year_limit: 0,
 
     show_pay_view: 0,
+    note: '',
 })
 
 const noti = reactive<any>({
@@ -207,6 +208,12 @@ const setSubKey = () => {
         'sub_key': pay_module.sub_key,
     })
 }
+const setPmodNote = () => {
+    post('set-pmod-note', {
+        ...common.value,
+        'note': pay_module.note,
+    })
+}
 const setNotiUrl = () => {
     post('set-noti-url', {
         ...common.value,
@@ -359,7 +366,6 @@ const setNotiUrl = () => {
                 </BaseQuestionTooltip>
             </template>
             <template #input>
-                
                 <VTextField v-model="pay_module.pmod_note" placeholder='결제모듈 명칭을 적어주세요.😀'
                         prepend-inner-icon="twemoji-spiral-notepad" />
             </template>
@@ -534,6 +540,20 @@ const setNotiUrl = () => {
                 </div>
             </template>
         </CreateHalfVCol>
+        <CreateHalfVCol :mdl="3" :mdr="9">
+            <template #name>결제모듈 별칭</template>
+            <template #input>
+                <div class="batch-container">                
+                    <VTextField v-model="pay_module.note" placeholder='결제모듈 명칭을 적어주세요.😀'
+                        prepend-inner-icon="twemoji-spiral-notepad" />
+                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPmodNote()">
+                        즉시적용
+                        <VIcon end icon="tabler-direction-sign" />
+                    </VBtn>
+                </div>
+            </template>
+        </CreateHalfVCol>
+        
     </div>
     <div v-else style="width: 100%; text-align: center;">
         <CreateHalfVCol :mdl="0" :mdr="12">
