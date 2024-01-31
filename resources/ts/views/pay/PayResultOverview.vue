@@ -134,11 +134,16 @@ onMounted( async () => {
 
 .result-wrapper {
   inline-size: 600px;
+  margin-inline: auto;
 }
 
 @media (max-width: 700px) {
   .result-wrapper {
     inline-size: 100%;
   }
+}
+
+:deep(.v-table__wrapper) {
+  block-size: auto !important;
 }
 </style>
