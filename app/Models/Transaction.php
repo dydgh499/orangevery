@@ -104,14 +104,20 @@ class Transaction extends Model
                 });
             });
         // fail trans ids
-        $trans_ids = RealtimeSendHistory::where('brand_id', request()->user()->brand_id)
-            ->where('request_type', '!=', 6170)
-            ->where('result_code', '!=', '0000')
-            ->whereIn('trans_id', $trx_ids)
-            ->whereNotIn('trans_id', $sub_query)
-            ->groupBy('trans_id')
-            ->pluck('trans_id')
-            ->all();
+        $trans_ids = [];
+        $chunk_size = 10000;
+        foreach (array_chunk($trx_ids, $chunk_size) as $chunk) {
+            $trans_ids  = array_merge($trans_ids, RealtimeSendHistory::where('brand_id', request()->user()->brand_id)
+                ->where('request_type', '!=', 6170)
+                ->where('result_code', '!=', '0000')
+                ->whereIn('trans_id', $chunk)
+                ->whereNotIn('trans_id', $sub_query)
+                ->groupBy('trans_id')
+                ->pluck('trans_id')
+                ->all()
+            );
+        }
+
         return $query->whereIn('transactions.id', $trans_ids);
     }
     

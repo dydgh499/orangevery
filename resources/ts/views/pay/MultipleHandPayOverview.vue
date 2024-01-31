@@ -212,7 +212,7 @@ watchEffect(() => {
                             style="float: inline-end;" />
                     </div>
                 </template>
-                <VDivider />
+                <VDivider/>
                 <VForm ref="vForm">
                     <CreateHalfVCol :mdl="4" :mdr="8">
                         <template #name>상품명</template>
