@@ -82,6 +82,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['installment'] = '할부'
     headers['acquirer'] = '매입사'
     headers['card_num'] = '카드번호'
+
     if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13)
         headers['profit'] = '정산금'
 
@@ -120,7 +121,12 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
         headers['mcht_fee'] = '수수료'
         headers['hold_fee'] = '유보금 수수료'
+        headers['trx_amount'] = '거래 수수료'
+        headers['hold_amount'] = '유보금'
+        headers['mcht_settle_fee'] = '입금 수수료'
+        headers['total_trx_amount'] = '총 거래 수수료'
     }
+    
     headers['resident_num'] = '주민등록번호'
     headers['business_num'] = '사업자등록번호'
     headers['nick_name'] = '대표자명'
@@ -131,10 +137,6 @@ export const useSearchStore = defineStore('transSearchStore', () => {
         headers['terminal_id'] = '장비타입'
     }
 
-    headers['trx_amount'] = '거래 수수료'
-    headers['hold_amount'] = '유보금'
-    headers['mcht_settle_fee'] = '입금 수수료'
-    headers['total_trx_amount'] = '총 거래 수수료'
 
     if(getUserLevel() >= 13)
     {
@@ -165,40 +167,43 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
     
-    const metas = ref([
-        {
-            icon: 'ic-outline-payments',
-            color: 'primary',
-            title: '승인액 합계',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        },
-        {
-            icon: 'ic-outline-payments',
-            color: 'error',
-            title: '취소액 합계',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        },
-        {
-            icon: 'ic-outline-payments',
-            color: 'success',
-            title: '매출액 합계',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        },
-        {
-            icon: 'ic-outline-payments',
-            color: 'warning',
-            title: '정산액 합계',
-            stats: '0',
-            percentage: 0,
-            subtitle: '0건',
-        },
-    ])
+    const metas = ref()
+    if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
+        metas.value = [
+            {
+                icon: 'ic-outline-payments',
+                color: 'primary',
+                title: '승인액 합계',
+                stats: '0',
+                percentage: 0,
+                subtitle: '0건',
+            },
+            {
+                icon: 'ic-outline-payments',
+                color: 'error',
+                title: '취소액 합계',
+                stats: '0',
+                percentage: 0,
+                subtitle: '0건',
+            },
+            {
+                icon: 'ic-outline-payments',
+                color: 'success',
+                title: '매출액 합계',
+                stats: '0',
+                percentage: 0,
+                subtitle: '0건',
+            },
+            {
+                icon: 'ic-outline-payments',
+                color: 'warning',
+                title: '정산액 합계',
+                stats: '0',
+                percentage: 0,
+                subtitle: '0건',
+            },
+        ]
+    }
 
     const exporter = async (type: number) => {      
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})

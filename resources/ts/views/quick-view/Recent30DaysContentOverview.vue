@@ -32,7 +32,10 @@ watchEffect(() => {
                 <template v-if="is_skeleton">
                 </template>
                 <template v-else>
-                    <b>{{ props.transactions.length }}</b>일간 정산 금액
+                    <b>{{ props.transactions.length }}</b>일간 
+                    <span v-if="((getUserLevel() == 10 && user_info.is_show_fee) || getUserLevel() >= 13)">정산</span>
+                    <span v-else>승인/취소</span>
+                    금액
                 </template>                
             </span>
             <br>

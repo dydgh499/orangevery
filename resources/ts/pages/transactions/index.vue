@@ -89,19 +89,21 @@ const batchRetry = async () => {
 onMounted(() => {
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
-            const r = await store.getChartData()
-            metas[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
-            metas[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
-            metas[2]['stats'] = r.data.amount.toLocaleString() + ' ￦'
-            metas[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
-            metas[0]['subtitle'] = r.data.appr.count.toLocaleString() + '건'
-            metas[1]['subtitle'] = r.data.cxl.count.toLocaleString() + '건'
-            metas[2]['subtitle'] = r.data.count.toLocaleString() + '건'
-            metas[3]['subtitle'] = r.data.count.toLocaleString() + '건'
-            metas[0]['percentage'] = r.data.appr.amount ? 100 : 0
-            metas[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
-            metas[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
-            metas[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)
+            if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
+                const r = await store.getChartData()
+                metas[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
+                metas[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
+                metas[2]['stats'] = r.data.amount.toLocaleString() + ' ￦'
+                metas[3]['stats'] = r.data.profit.toLocaleString() + ' ￦'
+                metas[0]['subtitle'] = r.data.appr.count.toLocaleString() + '건'
+                metas[1]['subtitle'] = r.data.cxl.count.toLocaleString() + '건'
+                metas[2]['subtitle'] = r.data.count.toLocaleString() + '건'
+                metas[3]['subtitle'] = r.data.count.toLocaleString() + '건'
+                metas[0]['percentage'] = r.data.appr.amount ? 100 : 0
+                metas[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
+                metas[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
+                metas[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)                
+            }
         }
     })
 })
@@ -140,7 +142,7 @@ onMounted(() => {
                 <div>
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_realtime_fail" label="즉시출금 실패건 조회" color="error"
                         @update:modelValue="store.updateQueryString({ only_realtime_fail: store.params.only_realtime_fail })" 
-                        v-if="corp.pv_options.paid.use_realtime_deposit"/>
+                        v-if="corp.pv_options.paid.use_realtime_deposit && getUserLevel() >= 35"/>
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_cancel" label="취소 매출 조회" color="error"
                         @update:modelValue="store.updateQueryString({ only_cancel: store.params.only_cancel })" />
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.no_settlement" label="미정산 매출 조회" color="warning"
