@@ -29,7 +29,7 @@ onMounted(async () => {
                 결제하실 정보를 입력해주세요.
             </div>
             <Suspense>
-                <MultipleHandPayOverview :main_pay_modules="pay_module" :merchandise="merchandise">
+                <MultipleHandPayOverview :pay_module="pay_module" :merchandise="merchandise">
                 </MultipleHandPayOverview>
             </Suspense>
         </div>

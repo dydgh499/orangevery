@@ -9,6 +9,7 @@ import { computed } from 'vue'
 interface Props {
     hand_pay_info: MultipleHandPay,
     pay_module: PayModule,
+    index: number,
 }
 const props = defineProps<Props>()
 const multiVForm = ref<VForm>()
@@ -37,7 +38,7 @@ watchEffect(async () => {
     <AppCardActions :actionCollapsed="true">
         <template #title>
             <div>
-                <span>{{ props.pay_module.note }}</span>
+                <span>결제정보 {{ index+1 }}</span>
                 <VIcon size="24" :icon="props.hand_pay_info.status_icon"
                     :color="props.hand_pay_info.status_color" style="float: inline-end;"/>
             </div>

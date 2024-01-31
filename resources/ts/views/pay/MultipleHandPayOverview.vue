@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { requiredValidator } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import MultipleHandPayForm from '@/views/pay/multiple-hand-pay/MultipleHandPayForm.vue'
 import { VForm } from 'vuetify/components'
 import type { Merchandise, PayModule, SalesSlip, MultipleHandPay } from '@/views/types'
-import { filter, map } from 'lodash'
 import { axios } from '@axios'
 import corp from '@corp'
 
 interface Props {
-    main_pay_modules: PayModule,
+    pay_module: PayModule,
     merchandise: Merchandise,
 }
 const props = defineProps<Props>()
@@ -23,12 +21,8 @@ const hand_pay_info = ref(<MultipleHandPay>({}))
 const hand_pay_infos = ref(<MultipleHandPay[]>([]))
 const vForm = ref<VForm>()
 
-
 const urlParams = new URLSearchParams(window.location.search)
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
-
-const pay_modules = await getAllPayModules(props.main_pay_modules.mcht_id)
-const hands = ref(<PayModule[]>(filter(pay_modules, { module_type: 1 })))
 
 const init = () => {
     hand_pay_info.value = (<MultipleHandPay>({
@@ -39,19 +33,20 @@ const init = () => {
         buyer_name: urlParams.get('buyer_name') || '',
         buyer_phone: urlParams.get('phone_num') || '',
     }))
-    hands.value.forEach(pay_module => {
-        hand_pay_infos.value.push(<MultipleHandPay>({
-            auth_num: '',
-            card_pw: '',
-            yymm: String(''),
-            card_num: String(''),
-            installment: Number(0),
-            amount: Number(urlParams.get('amount') || ''),
-            pmod_id: pay_module.id,
-            is_old_auth: pay_module.is_old_auth,
-            ord_num: pay_module.id + "H" + Date.now().toString().substr(0, 10),
-        }))
-    });
+}
+
+const addNewHandPay = () => {
+    hand_pay_infos.value.push(<MultipleHandPay>({
+        auth_num: '',
+        card_pw: '',
+        yymm: String(''),
+        card_num: String(''),
+        installment: Number(0),
+        amount: Number(urlParams.get('amount') || ''),
+        pmod_id: props.pay_module.id,
+        is_old_auth: props.pay_module.is_old_auth,
+        ord_num: props.pay_module.id + "H" + Date.now().toString().substr(0, 10),
+    }))
 }
 
 const pay = (index: number) => {
@@ -167,7 +162,7 @@ const pays = async () => {
 
     for (let i = 0; i < hand_pay_infos.value.length; i++) {
         if (hand_pay_infos.value[i].status_color != 'success') {
-            snackbar.value.show(hands.value[i].note + ' 결제모듈을 확인해주세요.', 'error')
+            snackbar.value.show((i+1) + '번째 결제정보를 확인해주세요.', 'error')
             return
         }
         console.log(hand_pay_infos.value[i].status_color)
@@ -233,10 +228,13 @@ onMounted(() => {
                                 :rules="[requiredValidator]" />
                         </template>
                     </CreateHalfVCol>
-                    <CreateHalfVCol :mdl="4" :mdr="8">
-                        <template #name>총 결제금액</template>
-                        <template #input>
+                    <CreateHalfVCol :mdl="8" :mdr="4">
+                        <template #name>
+                            총 결제금액
                             <b>{{ hand_pay_infos.reduce((sum, obj) => sum + Number(obj.amount), 0).toLocaleString() }}</b>원
+                        </template>
+                        <template #input>
+                                <VBtn @click="addNewHandPay()" color="primary">결제정보 추가</VBtn>
                         </template>
                     </CreateHalfVCol>
                 </VForm>
@@ -244,7 +242,7 @@ onMounted(() => {
         </template>
         <template #input>
             <MultipleHandPayForm v-for="(item, index) in hand_pay_infos" :key="index" :hand_pay_info="hand_pay_infos[index]"
-                :pay_module="hands[index]" style="margin-bottom: 1em;" />
+                :pay_module="props.pay_module" :index="index" style="margin-bottom: 1em;" />
         </template>
     </CreateHalfVCol>
     <VTable class="text-no-wrap" style="margin-bottom: 1em;" v-if="full_processes.length > 0">
@@ -263,7 +261,7 @@ onMounted(() => {
         </thead>
         <tbody>
             <tr v-for="(_item, _index) in full_processes " :key="_index">
-                <td class='list-square'><b>{{ hands[_index].note }}</b></td>
+                <td class='list-square'><b>결제정보 {{ (_index+1) }}</b></td>
                 <td class='list-square'>
                     <VIcon size="24" icon="tabler:arrow-big-right-filled" color="primary" />
                 </td>
