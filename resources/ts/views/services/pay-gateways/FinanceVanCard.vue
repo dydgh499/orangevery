@@ -21,6 +21,11 @@ const { update, remove } = useRequestStore()
 
 const bank = ref(<any>({ code: null, title: '선택안함' }))
 
+const getAcctBankName = () => {
+    const bank = banks.find(obj => obj.code == props.item.bank_code)
+    return bank ? `${bank.title}, 은행 코드: ${bank.code}` : '선택안함'
+}
+
 onMounted(async () => {
     watchEffect(() => {
         if (props.item.bank_code !== null && props.item.bank_code != "000") {
@@ -155,12 +160,11 @@ onMounted(async () => {
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>은행</template>
                                 <template #input>
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="bank"
-                                        :items="[{ code: null, title: '선택안함' }].concat(banks)"
-                                        prepend-inner-icon="ph-buildings" label="은행 선택"
-                                        :hint="`${bank.title}, 은행 코드: ${bank.code ? bank.code : '000'} `" item-title="title"
-                                        item-value="code" persistent-hint return-object single-line :rules="[nullValidator]"
-                                        />
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.bank_code"
+                                    :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
+                                    label="은행 선택" item-title="title" item-value="code" persistent-hint single-line
+                                    :hint="getAcctBankName()"
+                                    :rules="[nullValidator]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

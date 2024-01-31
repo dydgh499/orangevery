@@ -242,11 +242,15 @@ class PaymentModuleController extends Controller
     {
         if($this->authCheck($request->user(), $id, 15))
         {
-            $res = $this->delete($this->pay_modules->where('id', $id));
             $data = $this->pay_modules->where('id', $id)->first(['mcht_id', 'note']);
-            
-            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->note);
-            return $this->response($res, ['id'=>$id, 'mcht_id'=>$data->mcht_id]);
+            if($data)
+            {
+                $res = $this->delete($this->pay_modules->where('id', $id));            
+                operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->note);
+                return $this->response($res, ['id'=>$id, 'mcht_id'=>$data->mcht_id]);    
+            }
+            else
+                return $this->response(1000);
         }
         else
             return $this->response(951);

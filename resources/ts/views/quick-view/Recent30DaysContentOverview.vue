@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { MchtRecentTransaction } from '@/views/types'
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
+import { getUserLevel, user_info } from '@axios';
 
 interface Props {
     transactions: MchtRecentTransaction[],
@@ -54,7 +55,7 @@ watchEffect(() => {
                 <th class="list-square">
                     <span>일자</span>
                 </th>
-                <th class="list-square">
+                <th class="list-square" v-if="((getUserLevel() == 10 && user_info.is_show_fee) || getUserLevel() >= 13)">
                     <span>정산액</span>
                 </th>
                 <th class="list-square">
@@ -83,7 +84,7 @@ watchEffect(() => {
                     <td class="list-square">
                         <span>
                             <VChip size="small" color="primary" label>
-                                {{ transaction.day + "(" + weekdays[new Date(transaction.day).getDay()] + ")" }}
+                                {{ transaction.day + "(" + weekdays[new Date(transaction.day as string).getDay()] + ")" }}
                             </VChip>
                         </span>
                     </td>

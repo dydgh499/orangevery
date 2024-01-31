@@ -165,7 +165,7 @@ export const defaultItemInfo = () => {
                 use_tid_duplicate: false,
                 use_mid_duplicate: false,
                 use_fix_table_view: true,
-                fix_table_size: 800,
+                fix_table_size: 749,
             }),
             paid: reactive<PaidOption>({
                 use_acct_verification: false,

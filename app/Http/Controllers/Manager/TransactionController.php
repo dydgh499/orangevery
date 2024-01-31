@@ -180,11 +180,15 @@ class TransactionController extends Controller
             $data = $request->data();
             $data['dev_fee'] = $request->input('dev_fee', 0)/100;
             $data['dev_realtime_fee'] = $request->input('dev_realtime_fee', 0)/100;
-            
-            [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
-            $res = $this->transactions->create($data);
-            operLogging(HistoryType::CREATE, $this->target, $data, "#".$res->id);
-            return $this->response($res ? 1 : 990, ['id'=>$res->id]);
+            if($data['dev_fee'] >= 1)
+                return $this->extendResponse(991, '개발사 수수료가 이상합니다.<br>관리자에게 문의하세요.');
+            else
+            {
+                [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
+                $res = $this->transactions->create($data);
+                operLogging(HistoryType::CREATE, $this->target, $data, "#".$res->id);
+                return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
+            }
         }
         catch(QueryException $ex)
         {

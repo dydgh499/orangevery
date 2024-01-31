@@ -82,7 +82,8 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['installment'] = '할부'
     headers['acquirer'] = '매입사'
     headers['card_num'] = '카드번호'
-    headers['profit'] = '정산금'
+    if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13)
+        headers['profit'] = '정산금'
 
     if(getUserLevel() >= 35) {
         headers['pg_id'] = 'PG사'

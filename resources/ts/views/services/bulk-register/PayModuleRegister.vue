@@ -45,6 +45,8 @@ const settleTypeExplain = ref()
 const pgExplain = ref()
 
 const validate = () => {
+    var date_regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
+    
     for (let i = 0; i < items.value.length; i++) {
         items.value[i].mcht_name = items.value[i].mcht_name?.trim()
         const pg_id = pgs.find(item => item.id === items.value[i].pg_id)
@@ -117,13 +119,29 @@ const validate = () => {
             snackbar.value.show((i + 1) + '번째 취소 타입을 찾을 수 없습니다.', 'error')
             is_clear.value = false
         }
+        else if(items.value[i].contract_s_dt && date_regex.test(items.value[i].contract_s_dt) == false)
+        {            
+            snackbar.value.show((i + 1) + '번째 계약 시작일 포멧이 이상합니다.', 'error')
+            is_clear.value = false
+        }
+        else if(items.value[i].contract_e_dt && date_regex.test(items.value[i].contract_e_dt) == false)
+        {            
+            snackbar.value.show((i + 1) + '번째 계약 종료일 포멧이 이상합니다.', 'error')
+            is_clear.value = false
+        }
+        else if(items.value[i].begin_dt && date_regex.test(items.value[i].begin_dt) == false)
+        {            
+            snackbar.value.show((i + 1) + '번째 장비 개통일 포멧이 이상합니다.', 'error')
+            is_clear.value = false
+        }
+        else if(items.value[i].ship_out_dt && date_regex.test(items.value[i].ship_out_dt) == false)
+        {            
+            snackbar.value.show((i + 1) + '번째 장비 출고일 포멧이 이상합니다.', 'error')
+            is_clear.value = false
+        }
         else
             is_clear.value = true
 
-        items.value[i].contract_s_dt = items.value[i].contract_s_dt == 0 ? null : items.value[i].contract_s_dt
-        items.value[i].contract_e_dt = items.value[i].contract_e_dt == 0 ? null : items.value[i].contract_e_dt
-        items.value[i].begin_dt = items.value[i].begin_dt == 0 ? null : items.value[i].begin_dt
-        items.value[i].ship_out_dt = items.value[i].ship_out_dt == 0 ? null : items.value[i].ship_out_dt
         items.value[i].mcht_id = mcht?.id || null
         if (is_clear.value == false)
             return
