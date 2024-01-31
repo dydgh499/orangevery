@@ -106,15 +106,15 @@ class TransactionController extends Controller
             $query = $query->where(function ($query) use ($search) {
                 return $query->where('transactions.mid', 'like', "%$search%")
                     ->orWhere('transactions.tid', 'like', "%$search%")
-                    ->orWhere('transactions.trx_id', 'like', "%$search%")
                     ->orWhere('transactions.appr_num', 'like', "%$search%")
                     ->orWhere('transactions.issuer', 'like', "%$search%")
                     ->orWhere('transactions.acquirer', 'like', "%$search%")
                     ->orWhere('transactions.buyer_phone', 'like', "%$search%")
-                    ->orWhere('payment_modules.note', 'like', "%$search%")
                     ->orWhere('merchandises.mcht_name', 'like', "%$search%")
                     ->orWhere('merchandises.resident_num', 'like', "%$search%")
-                    ->orWhere('merchandises.business_num', 'like', "%$search%");
+                    ->orWhere('merchandises.business_num', 'like', "%$search%")
+                    ->orWhere('transactions.trx_id', $search)
+                    ->orWhere('payment_modules.note', $search);
             });
         }
         $query = $this->transDateFilter($query, $request->s_dt, $request->e_dt, $request->use_search_date_detail);
