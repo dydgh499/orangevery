@@ -24,6 +24,8 @@ class BulkMerchandiseRequest extends FormRequest
         'acct_bank_code',
     ];
     public $integer_keys = [
+        'use_pay_verification_mobile',
+        'use_multiple_hand_pay',
         'use_collect_withdraw',
         'use_regular_card',
         'hold_fee',
@@ -76,6 +78,8 @@ class BulkMerchandiseRequest extends FormRequest
             '*.acct_name' => 'required',
             '*.acct_bank_name' => 'required',
             '*.acct_bank_code' => 'required',
+            '*.use_pay_verification_mobile' => 'nullable|numeric',
+            '*.use_multiple_hand_pay' => 'nullable|numeric',
             '*.use_collect_withdraw' => 'nullable|numeric',
             '*.use_regular_card' => 'nullable|numeric',
             '*.hold_fee' => 'nullable|numeric',

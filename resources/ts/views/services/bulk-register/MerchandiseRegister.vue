@@ -215,6 +215,20 @@ watchEffect(async () => {
                             {{ cus.title }} = {{ cus.id }}
                         </VChip>
                     </VCol>
+                    <VCol class="pb-0" v-if="corp.pv_options.paid.use_pay_verification_mobile">
+                        <b>결제전 휴대폰인증 사용여부</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
+                            {{ cus.title }} = {{ cus.id }}
+                        </VChip>
+                    </VCol>
+                    <VCol class="pb-0" v-if="corp.pv_options.paid.use_multiple_hand_pay">
+                        <b>다중결제 사용여부</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in use_types" :key="key">
+                            {{ cus.title }} = {{ cus.id }}
+                        </VChip>
+                    </VCol>
                 </template>
                 <template #input>
                     <VBtn size="small" color="success" variant="tonal" @click="banksExplain.show()" style="margin: 0.5em;">

@@ -56,6 +56,11 @@ export const useRegisterStore = defineStore('mchtRegisterStore', () => {
         headers['collect_withdraw_fee'] = "모아서 출금 수수료(X)"
     if(corp.pv_options.paid.use_withdraw_fee)
         headers['withdraw_fee'] = "출금 수수료(X)"
+    if(corp.pv_options.paid.use_pay_verification_mobile)
+        headers['use_pay_verification_mobile'] = "결제전 휴대폰 인증(X)"
+    if(corp.pv_options.paid.use_multiple_hand_pay)
+        headers['use_multiple_hand_pay'] = "다중결제 사용(X)"
+
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)

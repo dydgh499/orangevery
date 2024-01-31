@@ -11,6 +11,8 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
         'ps_id': '구간(O)',
         'settle_type': '가맹점 정산타입(O)',
         'settle_fee': '입금 수수료(O)',
+        'contract_s_dt': '계약 시작일(X)',
+        'contract_e_dt': '계약 종료일(X)',
     }
     const headers2: Record<string, string> = {
         'terminal_id': '장비 종류(X)',

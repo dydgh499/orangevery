@@ -201,7 +201,7 @@ export const defaultItemInfo = () => {
         withdraw_fee: 0,
         resident_num_front: '',
         resident_num_back: '',
-        use_pay_verification_mobile: 0,
+        use_pay_verification_mobile: Number(corp.pv_options.paid.use_pay_verification_mobile),
         use_multiple_hand_pay: 0
     })
     return {

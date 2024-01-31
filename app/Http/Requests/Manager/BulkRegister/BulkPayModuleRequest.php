@@ -50,6 +50,8 @@ class BulkPayModuleRequest extends FormRequest
         'fin_id',
         'begin_dt',
         'ship_out_dt',
+        'contract_s_dt',
+        'contract_e_dt',
         'ship_out_stat',
         'pay_disable_s_tm',
         'pay_disable_e_tm',

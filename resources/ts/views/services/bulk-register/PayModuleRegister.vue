@@ -120,6 +120,8 @@ const validate = () => {
         else
             is_clear.value = true
 
+        items.value[i].contract_s_dt = items.value[i].contract_s_dt == 0 ? null : items.value[i].contract_s_dt
+        items.value[i].contract_e_dt = items.value[i].contract_e_dt == 0 ? null : items.value[i].contract_e_dt
         items.value[i].begin_dt = items.value[i].begin_dt == 0 ? null : items.value[i].begin_dt
         items.value[i].ship_out_dt = items.value[i].ship_out_dt == 0 ? null : items.value[i].ship_out_dt
         items.value[i].mcht_id = mcht?.id || null
@@ -308,6 +310,11 @@ watchEffect(async () => {
                         <VBtn size="small" color="success" variant="tonal" @click="pgExplain.show()" style="margin: 0.5em;">
                             상세정보 확인
                         </VBtn>
+                    </VCol>
+                    <VCol>
+                        <b>날짜타입 입력시 주의사항</b>
+                        <br>
+                        <span>0000-00-00 포멧으로 입력(예: 2024-01-01)</span>
                     </VCol>
                     <VCol>
                         <b>할부 한도 입력시 주의사항</b>
