@@ -165,10 +165,12 @@ const pays = async () => {
             snackbar.value.show((i+1) + '번째 결제정보를 확인해주세요.', 'error')
             return
         }
-        console.log(hand_pay_infos.value[i].status_color)
     }
-
-    if (common_valid?.valid && await alert.value.show("총 " + total_amount.toLocaleString() + '원을 결제하시겠습니까?')) {
+    if(common_valid?.valid == false) {
+        snackbar.value.show('공통 결제정보를 확인해주세요.', 'error')
+        return
+    }
+    if (await alert.value.show("총 " + total_amount.toLocaleString() + '원을 결제하시겠습니까?')) {
         snackbar.value.show('다중결제를 시작합니다...', 'primary')
         trxProcess()
         await trxResult()
@@ -189,6 +191,13 @@ watchEffect(async () => {
 })
 onMounted(() => {
     init()
+})
+watchEffect(() => {
+    if(window.innerWidth < 780) {
+        const table = document.getElementById('process-table')
+        if(table)
+            table.style['width'] = window.innerWidth + 'px'
+    }
 })
 </script>
 <template>
@@ -228,15 +237,17 @@ onMounted(() => {
                                 :rules="[requiredValidator]" />
                         </template>
                     </CreateHalfVCol>
-                    <CreateHalfVCol :mdl="8" :mdr="4">
-                        <template #name>
-                            총 결제금액
-                            <b>{{ hand_pay_infos.reduce((sum, obj) => sum + Number(obj.amount), 0).toLocaleString() }}</b>원
-                        </template>
-                        <template #input>
-                                <VBtn @click="addNewHandPay()" color="primary">결제정보 추가</VBtn>
-                        </template>
-                    </CreateHalfVCol>
+                    <VCol cols="12">
+                        <VRow>
+                            <VCol cols="6">
+                                <span>총 결제금액</span>
+                                <b style="margin-left: 0.5em;">{{ hand_pay_infos.reduce((sum, obj) => sum + Number(obj.amount), 0).toLocaleString() }}</b>원
+                            </VCol>
+                            <VCol cols="6">
+                                <VBtn @click="addNewHandPay()" color="primary" style="width: 100%;float: inline-end;">결제정보 추가</VBtn>
+                            </VCol>
+                        </VRow>
+                    </VCol>
                 </VForm>
             </AppCardActions>
         </template>
@@ -245,7 +256,7 @@ onMounted(() => {
                 :pay_module="props.pay_module" :index="index" style="margin-bottom: 1em;" />
         </template>
     </CreateHalfVCol>
-    <VTable class="text-no-wrap" style="margin-bottom: 1em;" v-if="full_processes.length > 0">
+    <VTable class="text-no-wrap" style="margin-bottom: 1em;" v-if="full_processes.length > 0" id="process-table">
         <thead>
             <tr>
                 <th scope="col" class='list-square' style="width: 150px;"><b>결제모듈</b></th>
@@ -328,6 +339,10 @@ onMounted(() => {
 .process-icon {
   margin-block: 0.5em;
   margin-inline: 0;
+}
+
+#process-table {
+  margin-inline: auto;
 }
 
 :deep(.v-card-item) {
