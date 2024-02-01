@@ -55,11 +55,11 @@ class DifferenceSettlement
     protected function _request($save_path, $req_date, $trans)
     {
         $result = false;
-
+        
         $mids = $trans->pluck('mid')->unique()->all();
         $total_count = 0;
+        
         $full_record = $this->setStartRecord($req_date);
-
         foreach($mids as $mid)
         {
             $mcht_trans = $trans->filter(function ($tran) use ($mid) {
@@ -74,7 +74,7 @@ class DifferenceSettlement
                 $full_record .= $header.$data_records.$total;
                 $total_count += $count;    
             }
-        }
+        }        
         $full_record .= $this->setEndRecord($total_count);
 
         if($this->main_connection_stat)
@@ -101,37 +101,67 @@ class DifferenceSettlement
 
     private function setStartRecord($req_date)
     {
-        $brand_business_num = str_replace('-', '', $this->brand['business_num']);
-        $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::START->value, 2);
-        $req_date       = $this->setNtypeField($req_date, 8);
-        $brand_business_num = $this->setAtypeField($brand_business_num, 10);
-        $pg_type        = $this->setAtypeField($this->RQ_PG_NAME, 10);
-        $filter         = $this->setAtypeField('', $this->RQ_START_FILTER_SIZE);
-        return $record_type.$req_date.$brand_business_num.$pg_type.$filter."\n";
+        if($this->service_name != 'galaxiamoneytree')
+            return '';
+        else
+        {
+            $brand_business_num = str_replace('-', '', $this->brand['business_num']);
+            $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::START->value, 2);
+            $req_date       = $this->setNtypeField($req_date, 8);
+            $brand_business_num = $this->setAtypeField($brand_business_num, 10);
+            $pg_type        = $this->setAtypeField($this->RQ_PG_NAME, 10);
+            $filter         = $this->setAtypeField('', $this->RQ_START_FILTER_SIZE);
+            return $record_type.$req_date.$brand_business_num.$pg_type.$filter."\n";                
+        }
     }
 
     private function setHeaderRecord($rep_mid)
     {
-        $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::HEADER->value, 2);
-        $rep_mid        = $this->setAtypeField($rep_mid, 10);
-        $filter         = $this->setAtypeField('', $this->RQ_HEADER_FILTER_SIZE);
-        return $record_type.$rep_mid.$filter."\n";
+        if($this->service_name == 'galaxiamoneytree')
+            return $this->service->setHeaderRecord($rep_mid, $this->RQ_HEADER_FILTER_SIZE);
+        else
+        {
+            $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::HEADER->value, 2);
+            $rep_mid        = $this->setAtypeField($rep_mid, 10);
+            $filter         = $this->setAtypeField('', $this->RQ_HEADER_FILTER_SIZE);
+            return $record_type.$rep_mid.$filter."\n";    
+        }
     }
 
     private function setTotalRecord($total_count, $total_amount)
     {
-        $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::TOTAL->value, 2);
-        $total_count    = $this->setNtypeField($total_count, 7);
-        $total_amount   = $this->setAtypeField($total_amount, 18);
-        $filter         = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
-        return $record_type.$total_count.$total_amount.$filter."\n";
+        if($this->service_name == 'galaxiamoneytree')
+        return $this->service->setTotalRecord($this->RQ_TOTAL_FILTER_SIZE);
+        else
+        {
+            $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::TOTAL->value, 2);
+            $total_count    = $this->setNtypeField($total_count, 7);
+            $total_amount   = $this->setAtypeField($total_amount, 18);
+            $filter         = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
+            return $record_type.$total_count.$total_amount.$filter."\n";    
+        }
     }
 
     private function setEndRecord($total_count)
     {
-        $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::END->value, 2);
-        $total_count    = $this->setNtypeField($total_count, 7);
-        $filter         = $this->setAtypeField('', $this->RQ_END_FILTER_SIZE);
-        return $record_type.$total_count.$filter."\n";
+        if($this->service_name != 'galaxiamoneytree')
+            return '';
+        else
+        {
+            $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::END->value, 2);
+            $total_count    = $this->setNtypeField($total_count, 7);
+            $filter         = $this->setAtypeField('', $this->RQ_END_FILTER_SIZE);
+            return $record_type.$total_count.$filter."\n";    
+        }
+    }
+
+    public function registerRequest()
+    {
+
+    }
+
+    public function registerResponse()
+    {
+        
     }
 }

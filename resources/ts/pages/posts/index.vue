@@ -5,11 +5,14 @@ import PostReplyView from '@/views/posts/PostReplyView.vue'
 import ExtraMenu from '@/views/posts/ExtraMenu.vue'
 import router from '@/router'
 import { DateFilters } from '@core/enums'
+import { getUserLevel, isAbleModifyMcht, user_info } from '@axios'
 
 const { store, head, exporter } = useSearchStore()
+
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+
 
 </script>
 <template>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Log;
 use Carbon\Carbon;
 use App\Models\Brand;
 use App\Models\Transaction;
+use App\Models\Merchandise;
 use App\Models\Log\DifferenceSettlementHistory;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -167,6 +168,7 @@ class DifferenceSettlementHistoryController extends Controller
             }
         }
     }
+
     public function differenceSettleResponse()
     {
         $brands = $this->getUseDifferentSettlementBrands();
@@ -179,6 +181,54 @@ class DifferenceSettlementHistoryController extends Controller
             {
                 $datas  = $pg->response($date);
                 $res    = $this->manyInsert($this->difference_settlement_histories, $datas);
+            }
+        }
+    }
+
+
+    /*
+    * 차액정산 가맹점 정보 등록
+    */
+    public function differenceSettleRegisterRequest()
+    {
+        $brands = $this->getUseDifferentSettlementBrands();
+        $date       = Carbon::now();
+        $yesterday  = $date->copy()->subDay(1)->format('Y-m-d');
+
+        for ($i=0; $i<count($brands); $i++)
+        {
+            $pg_name = getPGType($brands[$i]->rep_pg_type);
+            $trans   = Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
+                ->join('payment_gateways', 'payment_modules.pg_id', '=', 'payment_gateways.id')
+                ->where('merchandises.is_delete', false)
+                ->where('payment_modules.is_delete', false)
+                ->where('payment_gateways.pg_type', $brands[$i]->rep_pg_type)
+                ->where('merchandises.brand_id', $brands[$i]->id)
+                ->where('merchandises.created_at', $yesterday)
+                ->get(['merchandises.business_num']);
+            $pg = $this->getPGClass($brands[$i]);
+            if($pg)
+            {
+                $res = $pg->registerRequest($date, $trans);
+            }
+        }
+    }
+
+    /*
+    * 차액정산 가맹점 정보 등록 결과
+    */
+    public function differenceSettleResisterResponse()
+    {
+        $brands = $this->getUseDifferentSettlementBrands();
+        $date   = Carbon::now();
+
+        for ($i=0; $i<count($brands); $i++)
+        {
+            $pg = $this->getPGClass($brands[$i]);
+            if($pg)
+            {
+                $datas  = $pg->registerResponse($date);
+                //$res  = $this->manyInsert($this->difference_settlement_histories, $datas);
             }
         }
     }
