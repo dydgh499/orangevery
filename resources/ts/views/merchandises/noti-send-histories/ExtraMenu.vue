@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { NotiSendHistory } from '@/views/types'
 import { useRequestStore } from '@/views/request'
+import { getUserLevel } from '@axios'
 
 interface Props {
     item: NotiSendHistory,
@@ -51,7 +52,7 @@ const detail = async () => {
                     </template>
                     <VListItemTitle>상세이력</VListItemTitle>
                 </VListItem>
-                <VListItem value="history" @click="remove('/merchandises/noti-send-histories', props.item, false)">
+                <VListItem value="history" @click="remove('/merchandises/noti-send-histories', props.item, false)" v-if="getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:receipt" />
                     </template>

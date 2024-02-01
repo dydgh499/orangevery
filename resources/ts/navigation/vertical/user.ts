@@ -11,18 +11,18 @@ const getAbilitiesMenu = computed(() => {
             title: '수수료율 변경이력',
             to: 'merchandises-fee-change-histories',
         })
-        if(corp.pv_options.paid.use_noti) {
-            logs.push({
-                title: '노티 발송이력',
-                to: 'merchandises-noti-send-histories',
-            },
-            {
-                title: '노티 목록',
-                to: 'merchandises-noti-urls',
-            })
-        }
+        
     }
-    
+    if(corp.pv_options.paid.use_noti && (getUserLevel() >= 35 || getUserLevel() == 10)) {
+        logs.push({
+            title: '노티 발송이력',
+            to: 'merchandises-noti-send-histories',
+        })
+        logs.push({
+            title: '노티 목록',
+            to: 'merchandises-noti-urls',
+        })
+    }
     if(getUserLevel() >= 35) {
         sales_child.push({
             title: '수수료율 변경이력',
