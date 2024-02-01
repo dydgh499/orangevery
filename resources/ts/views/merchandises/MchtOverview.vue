@@ -274,11 +274,7 @@ onMounted(async () => {
                             <VCol cols="12" v-if="corp.pv_options.paid.use_noti">
                                 <VRow>
                                     <CreateHalfVCol :mdl="5" :mdr="7">
-                                        <template #name>
-                                            <BaseQuestionTooltip :location="'top'" :text="'노티 발송 여부'"
-                                                :content="'가맹점/유보금 수수료율을 확인할 수 없습니다.<br>(본 기능은 운영자 등급만 확인 가능합니다.)'">
-                                            </BaseQuestionTooltip>
-                                        </template>
+                                        <template #name>노티 발송 여부</template>
                                         <template #input>
                                             <BooleanRadio :radio="props.item.use_noti"
                                                 @update:radio="props.item.use_noti = $event">
@@ -293,11 +289,7 @@ onMounted(async () => {
                             <VCol cols="12">
                             <VRow>
                                 <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>
-                                        <BaseQuestionTooltip :location="'top'" :text="'가맹점 수수료율 노출'"
-                                            :content="'가맹점/유보금 수수료율을 확인할 수 없습니다.<br>(본 기능은 운영자 등급만 확인 가능합니다.)'">
-                                        </BaseQuestionTooltip>
-                                    </template>
+                                    <template #name>가맹점 수수료율 노출</template>
                                     <template #input>
                                         <BooleanRadio :radio="props.item.is_show_fee"
                                             @update:radio="props.item.is_show_fee = $event">
