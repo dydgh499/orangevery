@@ -3,7 +3,7 @@ import { useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useRequestStore } from '@/views/request'
 import { selectFunctionCollect } from '@/views/selected'
-import { module_types, installments, fin_trx_delays, cxl_types } from '@/views/merchandises/pay-modules/useStore'
+import { module_types, installments, fin_trx_delays, cxl_types, comm_settle_types } from '@/views/merchandises/pay-modules/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { DateFilters } from '@core/enums'
@@ -11,7 +11,7 @@ import { getUserLevel, isAbleModifyMcht } from '@axios'
 
 const add_able = getUserLevel() >= 35 || isAbleModifyMcht()
 const { request } = useRequestStore()
-const { pgs, pss, settle_types, finance_vans } = useStore()
+const { pgs, pss, settle_types, finance_vans, terminals } = useStore()
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected, dialog } = selectFunctionCollect(store)
 
@@ -113,6 +113,22 @@ onMounted(() => {
                             </span>
                             <span v-else-if="_key == 'settle_type'">
                                 {{ settle_types.find(settle_type => settle_type['id'] === item[_key])?.name }}
+                            </span>
+                            <span v-else-if="_key == 'comm_settle_fee'">
+                                {{ Number(item[_key]).toLocaleString() }}
+                            </span>
+                            <span v-else-if="_key == 'comm_settle_type'">
+                                <template v-if="item[_key] !== null">
+                                    <VChip :color="store.getSelectIdColor(comm_settle_types.find(obj => obj.id === item[_key])?.id)">
+                                        {{ comm_settle_types.find(obj => obj.id === item[_key])?.title }}
+                                    </VChip>
+                                </template>
+                                <template v-else>
+                                    -
+                                </template>
+                            </span>
+                            <span v-else-if="_key == 'terminal_id'">
+                                    {{ terminals.find(obj => obj.id === item[_key])?.name }}
                             </span>
                             <span v-else-if="_key == 'cxl_type'">
                                 <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">

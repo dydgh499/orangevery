@@ -38,9 +38,9 @@ export const under_sales_types = <Options[]>([
     {id: 2, title:'D-30 ~ 정산일'}, 
 ])
 export const comm_settle_types = <Options[]>([
-    {id: 0, title:'개통월부터 적용'},
-    {id: 1, title:'개통월 M+1부터 적용'},
-    {id: 2, title:'개통월 M+2부터 적용'},
+    {id: 0, title:'개통월 기준'},
+    {id: 1, title:'개통월 M+1'},
+    {id: 2, title:'개통월 M+2'},
 ])
 export const fin_trx_delays = <Options[]>([
     {id: 0, title:'즉시입금'},
@@ -105,6 +105,11 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         headers1['cxl_type'] = '취소타입'
     }
 
+    headers2['terminal_id'] = '장비타입'
+    headers2['serial_num'] = '시리얼번호'
+    headers2['comm_settle_fee'] = '통신비'
+    headers2['comm_settle_type'] = '통신비 정산타입'
+
     headers2['abnormal_trans_limit'] = '이상거래 한도'
     headers2['pay_dupe_least'] = '중복거래 하한금'    
     if(corp.pv_options.paid.use_dup_pay_validation)
@@ -136,7 +141,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
-    const { pgs, pss, settle_types } = useStore()
+    const { pgs, pss, settle_types, terminals } = useStore()
 
     const metas = ref([
         {
@@ -179,7 +184,8 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
             datas[i]['pg_id'] = pgs.find(pg => pg['id'] === datas[i]['pg_id'])?.pg_name as string
             datas[i]['ps_id'] =  pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
             datas[i]['settle_type'] = settle_types.find(settle_type => settle_type['id'] === datas[i]['settle_type'])?.name as string
-
+            datas[i]['comm_settle_type'] = comm_settle_types.find(obj => obj.id === datas[i]['comm_settle_type'])?.title
+            datas[i]['terminal_id'] = terminals.find(obj => obj.id === datas[i]['terminal_id'])?.title
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
