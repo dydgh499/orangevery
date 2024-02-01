@@ -1,4 +1,4 @@
-import { getUserLevel } from '@axios'
+import { getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 
 const getAbilitiesMenu = computed(() => {
@@ -13,7 +13,7 @@ const getAbilitiesMenu = computed(() => {
         })
         
     }
-    if(corp.pv_options.paid.use_noti && (getUserLevel() >= 35 || getUserLevel() == 10)) {
+    if(corp.pv_options.paid.use_noti && (getUserLevel() >= 35 || (getUserLevel() == 10 && user_info.value.use_noti))) {
         logs.push({
             title: '노티 발송이력',
             to: 'merchandises-noti-send-histories',

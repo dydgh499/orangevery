@@ -91,7 +91,7 @@ watchEffect(() => {
                             </VChip>
                         </span>
                     </td>
-                    <td class="list-square">
+                    <td class="list-square" v-if="((getUserLevel() == 10 && user_info.is_show_fee) || getUserLevel() >= 13)">
                         <span>
                             {{ transaction.profit.toLocaleString() }}원
                         </span>
