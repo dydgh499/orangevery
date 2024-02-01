@@ -3,6 +3,7 @@
 namespace App\Http\Traits\Settle;
 use Illuminate\Support\Facades\DB;
 use App\Enums\DevSettleType;
+use App\Models\Log\NotiSendHistory;
 
 trait TransactionTrait
 {
@@ -230,6 +231,20 @@ trait TransactionTrait
             $params['ori_trx_id'] = $tran->ori_trx_id;
         }
         return post($url, $params, $headers);
+    }
+
+    public function save($res, $noti)
+    {
+        $body = json_encode($res['body']);
+        $log = [
+            'http_code' => $res['code'],
+            'message'   => $body ? $body : $res['body'],
+            'send_url'  => $noti->send_url,
+            'trans_id'  => $noti->id,
+            'brand_id'  => $noti->brand_id,
+            'retry_count' => $noti->retry_count+1,
+        ];
+        return NotiSendHistory::create($log);        
     }
 
     public function transPagenation($query, $parent, $cols, $page, $page_size)

@@ -54,20 +54,6 @@ class NotiSendHistoryController extends Controller
         $data = $this->getIndexData($request, $query, 'noti_send_histories.id', $cols, 'noti_send_histories.created_at');
         return $this->response(0, $data);
     }
-    
-    private function save($res, $noti)
-    {
-        $body = json_encode($res['body']);
-        $log = [
-            'http_code' => $res['code'],
-            'message'   => $body ? $body : $res['body'],
-            'send_url'  => $noti->send_url,
-            'trans_id'  => $noti->id,
-            'brand_id'  => $noti->brand_id,
-            'retry_count' => $noti->retry_count+1,
-        ];
-        return $this->noti_send_histories->create($log);        
-    }
 
     /*
      * 노티 재전송

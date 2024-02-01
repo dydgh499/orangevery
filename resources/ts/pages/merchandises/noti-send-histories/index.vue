@@ -8,6 +8,7 @@ import ExtraMenu from '@/views/merchandises/noti-send-histories/ExtraMenu.vue'
 import NotiDetailDialog from '@/layouts/dialogs/NotiDetailDialog.vue'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { DateFilters } from '@core/enums'
+import { getUserLevel } from '@axios'
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
@@ -20,6 +21,7 @@ provide('exporter', exporter)
 provide('notiDetail', notiDetail)
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
+const search_placeholder = getUserLevel() >= 35 ? "MID, TID, 승인번호, 가맹점명 검색" : "승인번호 검색"
 
 const httpCodeColor = (http_code: number) => {
     if (http_code < 300)
@@ -44,7 +46,7 @@ const batchRetry = async () => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="MID, TID, 승인번호 검색" :metas="[]" :add="false" add_name="가맹점"
+        <BaseIndexView placeholder={{ search_placeholder }} :metas="[]" :add="false" add_name="가맹점"
             :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
@@ -59,7 +61,7 @@ const batchRetry = async () => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="tabler-calculator" @click="batchRetry()">
+                <VBtn prepend-icon="tabler-calculator" @click="batchRetry()" size="small" v-if="getUserLevel() >= 35">
                     일괄 재발송
                 </VBtn>
             </template>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import corp from '@corp';
-import { getUserLevel } from '@axios'
-import { axios } from '@axios';
+import { getUserLevel, axios } from '@axios'
 
 interface Props {
     totalInput?: number,
