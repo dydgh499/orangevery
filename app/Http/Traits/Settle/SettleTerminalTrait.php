@@ -36,18 +36,19 @@ trait SettleTerminalTrait
                 {
                     $m_offset = 1;
                     // 정산을 하지 않았을때 : 통신비 정산 시작월 부터 오프셋 계산
-                    if($pay_module->last_settle_month == 0)
+                    if($pay_module->last_settle_month == 0) {
                         $m_offset += $c_settle_e_dt->diffInMonths($comm_settle_dt);
+                    }
                     else
                     {   // 정산을 했었을때: 마지막 정산월 부터 오프셋 계산
                         $year  = substr($pay_module->last_settle_month, 0, 4);
                         $month = substr($pay_module->last_settle_month, 4, 2);
-                        $last_settle_month = Carbon::createFromDate($year, $month, 1);
-                        $m_offset += $c_settle_e_dt->diffInMonths($pay_module->last_settle_month);
+                        $m_offset += $c_settle_e_dt->diffInMonths("$year-$month-01");
                     }
                     $terminal['amount'] -= ($pay_module->comm_settle_fee * $m_offset);
                 }
                 $content->terminal = $terminal;
+                
             }
         }
         return $data;

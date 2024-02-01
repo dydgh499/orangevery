@@ -17,6 +17,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->foreignId('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
+            $table->integer('pmod_id')->default(0)->comment('pay module ID (장비 ID)');
             
             $table->integer('brand_settle_amount')->default(0)->comment('본사 정산금');
             $table->float('dev_realtime_fee', 6, 5)->default(0)->comment('개발사 실시간 수수료');
@@ -59,7 +60,6 @@ class CreateTransactionsTable extends Migration
             $table->integer('ps_id')->default(0)->comment('PG사 구간 id');
             $table->float('ps_fee', 6, 5)->default(0)->comment('PG사 구간 수수료');
             $table->boolean('pg_settle_type')->default(0)->comment('PG사 정산타입(0=주말포함, 1=주말제외)');
-            $table->integer('pmod_id')->default(0)->comment('pay module ID (장비 ID)');
             $table->integer('custom_id')->nullable()->default(0)->comment('커스텀 필터 ID');
             $table->integer('terminal_id')->nullable()->default(0)->comment('장비 타입 ID');
             //            

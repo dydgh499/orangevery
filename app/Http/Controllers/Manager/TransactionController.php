@@ -99,7 +99,7 @@ class TransactionController extends Controller
         $search = $request->input('search', '');
         $query  = $this->transactions
             ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
-            ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')            
+            ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
             ->globalFilter();
         if($search !== "")
         {

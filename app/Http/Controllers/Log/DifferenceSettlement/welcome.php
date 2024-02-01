@@ -25,6 +25,8 @@ class welcome extends DifferenceSettlement implements DifferenceSettlementInterf
             'port' => 5555,
             'username' => '', // brightfix
             'password' => "", // test123$
+            'privateKey' => env('SFTP_PRIVATE_KEY'),
+            'passphrase' => env('SFTP_PASSPHRASE'),
             'passive' => false,
         ]]);
         [$this->main_sftp_connection, $this->main_connection_stat] = $this->connectSFTPServer($main_config_name, 'main');
