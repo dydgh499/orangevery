@@ -46,7 +46,7 @@ const batchRetry = async () => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder={{ search_placeholder }} :metas="[]" :add="false" add_name="가맹점"
+        <BaseIndexView :placeholder="search_placeholder" :metas="[]" :add="false" add_name="가맹점"
             :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"

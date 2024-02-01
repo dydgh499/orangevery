@@ -1,4 +1,5 @@
 import { getUserLevel } from '@axios'
+import corp from '@corp'
 
 const getAbilitiesMenu = computed(() => {
     const logs = []
@@ -12,7 +13,6 @@ const getAbilitiesMenu = computed(() => {
         })
         
     }
-    /*
     if(corp.pv_options.paid.use_noti && (getUserLevel() >= 35 || getUserLevel() == 10)) {
         logs.push({
             title: '노티 발송이력',
@@ -23,7 +23,6 @@ const getAbilitiesMenu = computed(() => {
             to: 'merchandises-noti-urls',
         })
     }
-    */
     if(getUserLevel() >= 35) {
         sales_child.push({
             title: '수수료율 변경이력',
