@@ -43,7 +43,7 @@ trait SettleTerminalTrait
                     {   // 정산을 했었을때: 마지막 정산월 부터 오프셋 계산
                         $year  = substr($pay_module->last_settle_month, 0, 4);
                         $month = substr($pay_module->last_settle_month, 4, 2);
-                        $m_offset += $c_settle_e_dt->diffInMonths("$year-$month-01");
+                        $m_offset += ($c_settle_e_dt->diffInMonths("$year-$month-01") -1);
                     }
                     $terminal['amount'] -= ($pay_module->comm_settle_fee * $m_offset);
                 }
