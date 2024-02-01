@@ -24,6 +24,7 @@ class MerchandiseRequest extends FormRequest
         'enabled',
         'use_saleslip_prov',
         'use_saleslip_sell',
+        'use_noti',
         'use_pay_verification_mobile',
         'use_multiple_hand_pay',
         'use_regular_card',
@@ -61,6 +62,7 @@ class MerchandiseRequest extends FormRequest
             'addr'      => 'required',
             'acct_bank_name' => 'required',
             'enabled' => 'required|boolean',
+            'use_noti'  => 'required|boolean',
             'use_saleslip_prov' => 'required|boolean',
             'use_saleslip_sell' => 'required|boolean',
             'collect_withdraw_fee' => 'nullable|numeric',
@@ -85,6 +87,7 @@ class MerchandiseRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge(['enabled' => $this->convertToBoolean($this->input('enabled'))]);
+        $this->merge(['use_noti' => $this->convertToBoolean($this->input('use_noti'))]);
         $this->merge(['use_saleslip_prov' => $this->convertToBoolean($this->input('use_saleslip_prov'))]);
         $this->merge(['use_saleslip_sell' => $this->convertToBoolean($this->input('use_saleslip_sell'))]);
         $this->merge(['is_show_fee' => $this->convertToBoolean($this->input('is_show_fee'))]);

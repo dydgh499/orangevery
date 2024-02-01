@@ -175,7 +175,6 @@ class MerchandiseController extends Controller
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
         return $this->response(0, $data);
-
     }
 
     /**
