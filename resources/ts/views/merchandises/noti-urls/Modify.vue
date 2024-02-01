@@ -9,7 +9,7 @@ import type { Tab } from '@/views/types'
 const {path, item } = defaultItemInfo()
 const { mchts } = useSalesFilterStore()
 const tabs = <Tab[]>([
-    { icon: 'streamline:interface-time-alarm-notification-alert-bell-wake-clock-alarm', title: '노티정보' },
+    { icon: 'emojione:envelope', title: '노티정보' },
 ])
 const route = useRoute()
 const id = Number(route.params.id) || 0

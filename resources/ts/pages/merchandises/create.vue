@@ -17,7 +17,7 @@ const tabs = <Tab[]>([
     { icon: 'ic-outline-send-to-mobile', title: '결제모듈정보(가맹점 추가 후 가능)' },
 ])
 if(corp.pv_options.paid.use_noti) {
-    tabs.push({ icon: 'streamline:interface-time-alarm-notification-alert-bell-wake-clock-alarm', title: '노티정보(가맹점 추가 후 가능)' })
+    tabs.push({ icon: 'emojione:envelope', title: '노티정보(가맹점 추가 후 가능)' })
 }
 const id = ref<number>(0)
 

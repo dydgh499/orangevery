@@ -90,6 +90,19 @@ const isRealtimeTransaction = () => {
 const isUseCancelDeposit = () => {
     return getUserLevel() >= 35 && corp.pv_options.paid.use_cancel_deposit && props.item.is_cancel && !props.item.mcht_settle_id
 }
+
+const sendNoti = async() => {
+    try {
+        const r = await post('/api/v1/manager/transactions/noti/'+props.item.id, {})
+        if(r.status === 201)
+            snackbar.value.show('성공하였습니다.<br>이력확인/재발송은 가맹점 관리 - 노티발송이력에서 사용할 수 있습니다.', 'success')
+    }
+    catch (e: any) {
+        snackbar.value.show(e.response.data.message, 'error')
+        const r = errorHandler(e)
+    }
+}
+
 </script>
 <template>
     <VBtn icon size="x-small" color="default" variant="text">
@@ -101,6 +114,12 @@ const isUseCancelDeposit = () => {
                         <VIcon size="24" class="me-3" icon="tabler:receipt" />
                     </template>
                     <VListItemTitle>매출전표</VListItemTitle>
+                </VListItem>                
+                <VListItem value="sendNoti" @click="sendNoti()" v-if="corp.pv_options.paid.use_noti">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="emojione:envelope" />
+                    </template>
+                    <VListItemTitle>노티 재발송</VListItemTitle>
                 </VListItem>
                 <VListItem value="complaint" @click="complaint()" v-if="getUserLevel() >= 35">
                     <template #prepend>

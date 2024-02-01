@@ -389,6 +389,19 @@ class TransactionController extends Controller
         return $grouped;
     }
     
+    public function notiSend(Request $request, $id)
+    {
+        $trans = $this->transactions
+            ->join('noti_urls', 'transactions.mcht_id', 'noti_urls.mcht_id')
+            ->where('transactions.id', $id)
+            ->get(['noti_urls.*']);
+        foreach($trans as $tran)
+        {
+            $res = $this->notiSender($tran->url, $tran, '');
+        }
+        return $this->response(1);
+    }
+
     public function _test()
     {
         $dev_settle_type = DevSettleType::NOT_APPLY->value;

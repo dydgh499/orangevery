@@ -118,11 +118,13 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::post('batch-retry', [TransactionController::class, 'batchRetry']);
             Route::post('cancel', [TransactionController::class, 'cancel']);
             Route::post('pay-cancel', [TransactionController::class, 'payCancel']);
+            Route::post('noti/{id}', [TransactionController::class, 'notiSend']);
             Route::get('chart', [TransactionController::class, 'chart']);
+            Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);
             
             Route::get('fails', [FailTransController::class, 'index']);
-            Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);
 
+            
             
             Route::get('dangers', [DangerTransController::class, 'index']);
             Route::delete('dangers/{id}', [DangerTransController::class, 'destroy']);

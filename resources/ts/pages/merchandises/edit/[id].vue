@@ -15,7 +15,7 @@ const tabs = [
     { icon: 'ic-outline-send-to-mobile', title: '결제모듈정보' },
 ]
 if(corp.pv_options.paid.use_noti) {
-    tabs.push({ icon: 'streamline:interface-time-alarm-notification-alert-bell-wake-clock-alarm', title: '노티정보' })
+    tabs.push({ icon: 'emojione:envelope', title: '노티정보' })
 }
 const id    = ref<number>(0)
 const route = useRoute()

@@ -287,18 +287,18 @@ onMounted(async () => {
                             </VCol>
                             <!-- 👉 가맹점 수수료율 노출 여부 -->
                             <VCol cols="12">
-                            <VRow>
-                                <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>가맹점 수수료율 노출</template>
-                                    <template #input>
-                                        <BooleanRadio :radio="props.item.is_show_fee"
-                                            @update:radio="props.item.is_show_fee = $event">
-                                            <template #true>노출</template>
-                                            <template #false>숨김</template>
-                                        </BooleanRadio>
-                                    </template>
-                                </CreateHalfVCol>
-                            </VRow>
+                                <VRow>
+                                    <CreateHalfVCol :mdl="5" :mdr="7">
+                                        <template #name>가맹점 수수료율 노출</template>
+                                        <template #input>
+                                            <BooleanRadio :radio="props.item.is_show_fee"
+                                                @update:radio="props.item.is_show_fee = $event">
+                                                <template #true>노출</template>
+                                                <template #false>숨김</template>
+                                            </BooleanRadio>
+                                        </template>
+                                    </CreateHalfVCol>
+                                </VRow>
                             </VCol>
                             <VCol cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile">
                                 <VRow>
