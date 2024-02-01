@@ -13,10 +13,10 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { tax_category_types } from '@/views/merchandises/useStore'
 import corp from '@corp'
 
-
 interface Props {
     item: Merchandise,
 }
+
 const props = defineProps<Props>()
 const { sales, initAllSales } = useSalesFilterStore()
 const { cus_filters } = useStore()
@@ -239,37 +239,58 @@ onMounted(async () => {
                                 </CreateHalfVCol>
                             </VRow>
                         </VCol>
-                        <!-- 👉 매출전표 공급자 사용 여부 -->
-                        <VCol cols="12">
-                            <VRow>
-                                <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>매출전표 공급자 정보</template>
-                                    <template #input>
-                                        <BooleanRadio :radio="props.item.use_saleslip_prov"
-                                            @update:radio="props.item.use_saleslip_prov = $event">
-                                            <template #true>PG사</template>
-                                            <template #false>본사</template>
-                                        </BooleanRadio>
-                                    </template>
-                                </CreateHalfVCol>
-                            </VRow>
-                        </VCol>
-                        <!-- 👉 매출전표 판매자 사용 여부 -->
-                        <VCol cols="12">
-                            <VRow>
-                                <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>매출전표 판매자 정보</template>
-                                    <template #input>
-                                        <BooleanRadio :radio="props.item.use_saleslip_sell"
-                                            @update:radio="props.item.use_saleslip_sell = $event">
-                                            <template #true>본사</template>
-                                            <template #false>가맹점</template>
-                                        </BooleanRadio>
-                                    </template>
-                                </CreateHalfVCol>
-                            </VRow>
-                        </VCol>
-                        <VCol cols="12" v-if="getUserLevel() >= 35">
+                        <template v-if="getUserLevel() >= 35">
+                            <!-- 👉 매출전표 공급자 사용 여부 -->
+                            <VCol cols="12">
+                                <VRow>
+                                    <CreateHalfVCol :mdl="5" :mdr="7">
+                                        <template #name>매출전표 공급자 정보</template>
+                                        <template #input>
+                                            <BooleanRadio :radio="props.item.use_saleslip_prov"
+                                                @update:radio="props.item.use_saleslip_prov = $event">
+                                                <template #true>PG사</template>
+                                                <template #false>본사</template>
+                                            </BooleanRadio>
+                                        </template>
+                                    </CreateHalfVCol>
+                                </VRow>
+                            </VCol>
+                            <!-- 👉 매출전표 판매자 사용 여부 -->
+                            <VCol cols="12">
+                                <VRow>
+                                    <CreateHalfVCol :mdl="5" :mdr="7">
+                                        <template #name>매출전표 판매자 정보</template>
+                                        <template #input>
+                                            <BooleanRadio :radio="props.item.use_saleslip_sell"
+                                                @update:radio="props.item.use_saleslip_sell = $event">
+                                                <template #true>본사</template>
+                                                <template #false>가맹점</template>
+                                            </BooleanRadio>
+                                        </template>
+                                    </CreateHalfVCol>
+                                </VRow>
+                            </VCol>
+                            <!-- 👉 노티 발송 여부 -->
+                            <VCol cols="12" v-if="corp.pv_options.paid.use_noti">
+                                <VRow>
+                                    <CreateHalfVCol :mdl="5" :mdr="7">
+                                        <template #name>
+                                            <BaseQuestionTooltip :location="'top'" :text="'노티 발송 여부'"
+                                                :content="'가맹점/유보금 수수료율을 확인할 수 없습니다.<br>(본 기능은 운영자 등급만 확인 가능합니다.)'">
+                                            </BaseQuestionTooltip>
+                                        </template>
+                                        <template #input>
+                                            <BooleanRadio :radio="props.item.use_noti"
+                                                @update:radio="props.item.use_noti = $event">
+                                                <template #true>활성</template>
+                                                <template #false>비활성</template>
+                                            </BooleanRadio>
+                                        </template>
+                                    </CreateHalfVCol>
+                                </VRow>
+                            </VCol>
+                            <!-- 👉 가맹점 수수료율 노출 여부 -->
+                            <VCol cols="12">
                             <VRow>
                                 <CreateHalfVCol :mdl="5" :mdr="7">
                                     <template #name>
@@ -286,22 +307,22 @@ onMounted(async () => {
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
-                        </VCol>
-                        <VCol cols="12" v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_pay_verification_mobile">
-                            <VRow>
-                                <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>결제전 휴대폰 인증</template>
-                                    <template #input>
-                                        <BooleanRadio :radio="props.item.use_pay_verification_mobile"
-                                            @update:radio="props.item.use_pay_verification_mobile = $event">
-                                            <template #true>활성</template>
-                                            <template #false>비활성</template>
-                                        </BooleanRadio>
-                                    </template>
-                                </CreateHalfVCol>
-                            </VRow>
-                        </VCol>
-                        <VCol cols="12" v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_multiple_hand_pay">
+                            </VCol>
+                            <VCol cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile">
+                                <VRow>
+                                    <CreateHalfVCol :mdl="5" :mdr="7">
+                                        <template #name>결제전 휴대폰 인증</template>
+                                        <template #input>
+                                            <BooleanRadio :radio="props.item.use_pay_verification_mobile"
+                                                @update:radio="props.item.use_pay_verification_mobile = $event">
+                                                <template #true>활성</template>
+                                                <template #false>비활성</template>
+                                            </BooleanRadio>
+                                        </template>
+                                    </CreateHalfVCol>
+                                </VRow>
+                            </VCol>
+                            <VCol cols="12" v-if="corp.pv_options.paid.use_multiple_hand_pay">
                             <VRow>
                                 <CreateHalfVCol :mdl="5" :mdr="7">
                                     <template #name>
@@ -318,8 +339,8 @@ onMounted(async () => {
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
-                        </VCol>
-                        
+                            </VCol>
+                        </template>
                     </VRow>
                 </VCardItem>
             </VCard>

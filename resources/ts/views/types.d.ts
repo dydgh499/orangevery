@@ -115,6 +115,7 @@ export interface MerchandisePropertie {
     custom_id: number | null,
     use_saleslip_prov: number,
     use_saleslip_sell: number,
+    use_noti: number,
     is_show_fee: number,
     use_regular_card: number,
     use_collect_withdraw: number,
