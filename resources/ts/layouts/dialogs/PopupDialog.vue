@@ -31,7 +31,7 @@ defineExpose({
   min-inline-size: 400px !important;
 }
 
-img {
+:deep(img) {
   block-size: 100%;
   inline-size: 100%;
   object-fit: cover;
