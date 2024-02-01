@@ -94,7 +94,7 @@ const isUseCancelDeposit = () => {
 const sendNoti = async() => {
     if (await alert.value.show('정말 노티 재발송을 하시겠습니까?')) {
         try {
-            const r = await post('/api/v1/manager/transactions/noti/'+props.item.id, {})
+            const r = await post('/api/v1/manager/transactions/'+props.item.id+'/noti-send', {})
             if(r.status === 201)
                 snackbar.value.show('성공하였습니다.<br>이력확인/재발송은 가맹점 관리 - 노티발송이력에서 사용할 수 있습니다.', 'success')
         }

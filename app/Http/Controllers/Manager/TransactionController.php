@@ -389,6 +389,9 @@ class TransactionController extends Controller
         return $grouped;
     }
     
+    /*
+     * 노티발송
+     */
     public function notiSend(Request $request, $id)
     {
         $trans = $this->transactions
