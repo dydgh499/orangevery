@@ -394,13 +394,13 @@ class TransactionController extends Controller
         $trans = $this->transactions
             ->join('noti_urls', 'transactions.mcht_id', 'noti_urls.mcht_id')
             ->where('transactions.id', $id)
-            ->get(['noti_urls.url', 'transactions.*']);
+            ->get(['noti_urls.send_url', 'transactions.*']);
         if(count($trans))
         {
             foreach($trans as $tran)
             {
                 $tran->retry_count = 1;
-                $res = $this->notiSender($tran->url, $tran, '');
+                $res = $this->notiSender($tran->send_url, $tran, '');
                 $res = $this->save($res, $tran);
             }
             return $this->response(1);    
