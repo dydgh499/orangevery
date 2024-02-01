@@ -395,13 +395,18 @@ class TransactionController extends Controller
             ->join('noti_urls', 'transactions.mcht_id', 'noti_urls.mcht_id')
             ->where('transactions.id', $id)
             ->get(['noti_urls.url', 'transactions.*']);
-        foreach($trans as $tran)
+        if(count($trans))
         {
-            $tran->retry_count = 1;
-            $res = $this->notiSender($tran->url, $tran, '');
-            $res = $this->save($res, $tran);
+            foreach($trans as $tran)
+            {
+                $tran->retry_count = 1;
+                $res = $this->notiSender($tran->url, $tran, '');
+                $res = $this->save($res, $tran);
+            }
+            return $this->response(1);    
         }
-        return $this->response(1);
+        else
+            return $this->extendResponse(1000, '등록된 노티 URL이 존재하지 않습니다.');
     }
 
     public function _test()

@@ -115,7 +115,7 @@ const sendNoti = async() => {
                     </template>
                     <VListItemTitle>매출전표</VListItemTitle>
                 </VListItem>                
-                <VListItem value="sendNoti" @click="sendNoti()" v-if="corp.pv_options.paid.use_noti">
+                <VListItem value="sendNoti" @click="sendNoti()" v-if="corp.pv_options.paid.use_noti && getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="emojione:envelope" />
                     </template>
