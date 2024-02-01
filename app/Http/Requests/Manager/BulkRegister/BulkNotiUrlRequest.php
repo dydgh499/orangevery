@@ -50,6 +50,7 @@ class BulkNotiUrlRequest extends FormRequest
         for ($i=0; $i < count($_datas) ; $i++)
         {
             $data = [];
+            $data['brand_id'] = $this->user()->brand_id;
             for ($j=0; $j < count($this->keys) ; $j++) 
             {
                 $key = $this->keys[$j];
