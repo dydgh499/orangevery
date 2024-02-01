@@ -49,7 +49,7 @@ const batchRetry = async () => {
         <BaseIndexView :placeholder="search_placeholder" :metas="[]" :add="false" add_name="가맹점"
             :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
-                <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
+                <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="false" :cus_filter="true"
                     :sales="true">
                     <template #pg_extra_field>
                         <VCol cols="12" sm="3">

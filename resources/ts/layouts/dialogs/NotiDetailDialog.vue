@@ -45,7 +45,7 @@ defineExpose({
                             <td class='list-square'>{{ noti.tid }}</td>
                         </tr>
                         <tr>
-                            <td class='list-square'>상위 PG사 거래번호</td>
+                            <td class='list-square'>PG사 거래번호</td>
                             <td class='list-square'>trx_id</td>
                             <td class='list-square'>{{ noti.trx_id }}</td>
                         </tr>

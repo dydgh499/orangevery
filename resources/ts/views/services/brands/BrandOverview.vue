@@ -107,10 +107,10 @@ watchEffect(() => {
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>상위 PG사 선택</template>
+                            <template #name>PG사 선택</template>
                             <template #input>                                
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.rep_pg_type" :items="[{ id: 0, name: '선택안함' }].concat(pg_companies)"
-                                    prepend-inner-icon="ph-buildings" label="상위 PG사 선택" item-title="name" item-value="id"
+                                    prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="name" item-value="id"
                                     single-line />
                             </template>
                         </CreateHalfVCol>

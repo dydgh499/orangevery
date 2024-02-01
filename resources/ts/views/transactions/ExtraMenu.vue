@@ -58,7 +58,7 @@ const retryDeposit = async () => {
 }
 
 const payCanceled = async () => {
-    if (await alert.value.show('정말 상위 PG사를 통해 결제를 취소하시겠습니까?')) {
+    if (await alert.value.show('정말 PG사를 통해 결제를 취소하시겠습니까?')) {
         const params = <any>({
             pmod_id: props.item.pmod_id,
             mcht_id: props.item.mcht_id,
