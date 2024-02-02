@@ -43,6 +43,16 @@ const batchRetry = async () => {
         store.setTable()
     }
 }
+
+const getResponseBody = (body: string) => {
+    try {
+        return JSON.stringify(JSON.parse(body))
+    }
+    catch(e) {
+        return body
+    }
+}
+
 </script>
 <template>
     <div>
@@ -100,6 +110,9 @@ const batchRetry = async () => {
                                 </span>
                                 <span v-else-if="_key == `trans_id`">
                                     #{{ item[_key] }}
+                                </span>
+                                <span v-else-if="_key == 'message'">
+                                    {{ getResponseBody(item[_key]) }}
                                 </span>
                                 <span v-else-if="_key == 'module_type'">
                                     <VChip
