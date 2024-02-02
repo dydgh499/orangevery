@@ -42,7 +42,7 @@ class PaymentGateway
             ["id" => 26, "pg_name" => '위드페이', "rep_name" => '오섭규', "company_name" => '(주)위드페이먼츠', "business_num" => '858-86-00683', "phone_num" => '1511-7055', "addr" => '서울특별시 금천구 벚꽃로 298, 1511, 1512호(가산동, 대륭포스트타워 6차)'],
             ["id" => 27, "pg_name" => '픽스페이', "rep_name" => '박용은', "company_name" => '(주)브라이트픽스', "business_num" => '235-88-01772', "phone_num" => '02-6336-0999', "addr" => '주소 서울특별시 금천구 가산디지털2로 166, 216~217호(가산동, 에이스K1타워)'],
             ["id" => 28, "pg_name" => '갤럭시아머니트리', "rep_name" => '신동훈', "company_name" => '갤럭시아머니트리(주)', "business_num" => '120–81–60844', "phone_num" => '1566–0123', "addr" => '서울특별시 강남구 광평로 281 수서오피스빌딩 15층(수서동)'],
-
+            // 더이상 안해도됨
         ];
         $this->paywell = [];
         $this->payvery = [];
