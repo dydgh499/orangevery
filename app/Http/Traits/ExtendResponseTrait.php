@@ -30,8 +30,7 @@ trait ExtendResponseTrait
 
     public function apiResponse($code, $msg, $data=[])
     {
-        $http_code = $code === '0000' ? 201 : 409;
-        return Response::json(['code'=>$code, 'message'=>$msg, 'data'=>$data], $http_code, [], JSON_UNESCAPED_UNICODE);        
+        return Response::json(['code'=>$code, 'message'=>$msg, 'data'=>$data], $code === '0000' ? 201 : 409, [], JSON_UNESCAPED_UNICODE);        
     }
 
     public function extendResponse($code, $msg, $data=[])
