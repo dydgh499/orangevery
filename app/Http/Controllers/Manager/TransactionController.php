@@ -331,7 +331,7 @@ class TransactionController extends Controller
         $res = post($url, $data);
         
         if($res['body']['result_cd'] == '0000')
-            return $this->response(1, $data);
+            return $this->response(1, $res['body']);
         else
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);
     }
