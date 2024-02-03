@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Models\Transaction;
+use App\Models\Log\RealtimeSendHistory;
 use App\Models\Salesforce;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -67,10 +68,8 @@ class TransactionController extends Controller
         if($request->mcht_settle_id)
             $query = $query->where('transactions.mcht_settle_id', $request->mcht_settle_id);
         if($request->only_realtime_fail)
-        {
-            $trx_ids = $query->pluck('transactions.id')->all();
-            $query = $query->failRealtime($trx_ids);            
-        }
+            $query->whereIn('transactions.id', RealtimeSendHistory::onlyFailRealtime());
+        
         if($request->no_settlement)
         {
             if($request->level == 10)

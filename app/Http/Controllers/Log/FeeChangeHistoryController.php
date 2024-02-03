@@ -42,10 +42,10 @@ class FeeChangeHistoryController extends Controller
             'sf_histories'  => json_decode(json_encode($sf_histories), true),
         ], 'fee-book-apply-scheduler');
 
-        $res = DB::transaction(function () use($sf_histories, $mcht_histories) {
-            $date = date('Y-m-d H:i:s');
-            foreach($sf_histories as $sf_history)
-            {
+        $date = date('Y-m-d H:i:s');
+        foreach($sf_histories as $sf_history)
+        {
+            DB::transaction(function () use($sf_history, $date) {
                 $idx = globalLevelByIndex($sf_history->level);
                 Merchandise::where('id', $sf_history->mcht_id)
                     ->update([
@@ -55,9 +55,12 @@ class FeeChangeHistoryController extends Controller
                 $sf_history->change_status = true;
                 $sf_history->updated_at = $date;
                 $sf_history->save();
-            }
-            foreach($mcht_histories as $mcht_history)
-            {
+            });
+        }
+        
+        foreach($mcht_histories as $mcht_history)
+        {
+            DB::transaction(function () use($mcht_history, $date) {
                 Merchandise::where('id', $mcht_history->mcht_id)
                     ->update([
                         'hold_fee'  => $mcht_history->aft_hold_fee/100,
@@ -66,9 +69,10 @@ class FeeChangeHistoryController extends Controller
                 $mcht_history->change_status = true;
                 $mcht_history->updated_at = $date;
                 $mcht_history->save();
-            }
-            return true;
-        });
+            });
+
+        }
+        return true;
         logging(['result' => true], 'fee-book-apply-scheduler');
     }
 

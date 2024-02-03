@@ -86,40 +86,6 @@ class Transaction extends Model
             ->globalFilter()
             ->settleDateTypeTransaction();
     }
-
-    // 실시간 실패 거래건 조회
-    public function scopeFailRealtime($query, $trx_ids)
-    {
-        // success histories
-        $sub_query = RealtimeSendHistory::select('trans_id')
-            ->where('brand_id', request()->user()->brand_id)
-            ->where(function ($query) {
-                return $query->where(function ($query) {
-                    return $query->where('request_type', 6170)
-                    ->where('result_code', '0000'); // 성공건
-                })
-                ->orWhere(function ($query) {
-                    return $query->where('request_type', -2)
-                    ->where('result_code', '-2'); //취소건
-                });
-            });
-        // fail trans ids
-        $trans_ids = [];
-        $chunk_size = 10000;
-        foreach (array_chunk($trx_ids, $chunk_size) as $chunk) {
-            $trans_ids  = array_merge($trans_ids, RealtimeSendHistory::where('brand_id', request()->user()->brand_id)
-                ->where('request_type', '!=', 6170)
-                ->where('result_code', '!=', '0000')
-                ->whereIn('trans_id', $chunk)
-                ->whereNotIn('trans_id', $sub_query)
-                ->groupBy('trans_id')
-                ->pluck('trans_id')
-                ->all()
-            );
-        }
-
-        return $query->whereIn('transactions.id', $trans_ids);
-    }
     
     private function getProfitCol($level)
     {

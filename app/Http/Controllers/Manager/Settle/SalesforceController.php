@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager\Settle;
 use App\Models\Merchandise;
 use App\Models\Salesforce;
 use App\Models\Transaction;
+use App\Models\PaymentModule;
 use App\Models\Log\SettleDeductSalesforce;
 
 use App\Http\Controllers\Controller;
@@ -62,8 +63,10 @@ class SalesforceController extends Controller
         $sales_ids = $this->getExistTransUserIds($target_id, $target_settle_id);
         $query = $this->getDefaultQuery($this->salesforces, $request, $sales_ids)
             ->where('sales_name', 'like', "%$search%")
-            ->where('level', $level);
-
+            ->where('level', $level)
+            ->orWhere(function ($query) use($level, $target_id) {    
+                $query->whereIn('id', PaymentModule::terminalSettle($level)->byTargetIds($target_id));
+            });
         if($request->settle_cycle)
             $query = $query->where('settle_cycle', $request->settle_cycle);
 
@@ -79,14 +82,7 @@ class SalesforceController extends Controller
             $settle_e_day   = date('d', strtotime($request->e_dt));
             $settle_month   = date('Ym', strtotime($request->e_dt)); //202310
             $pay_modules = collect(
-                Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
-                    ->whereIn("merchandises.".$target_id, $sales_ids)
-                    ->where('payment_modules.comm_settle_day', '>=', $settle_s_day)
-                    ->where('payment_modules.comm_settle_day', '<=', $settle_e_day)
-                    ->where('payment_modules.last_settle_month', '<', $settle_month)
-                    ->where('payment_modules.comm_calc_level', $level)
-                    ->where('payment_modules.begin_dt', '<', $request->s_dt)
-                    ->where('payment_modules.is_delete', false)
+                PaymentModule::terminalSettle($level)
                     ->get(["payment_modules.*", "merchandises.".$target_id])
             );
             $data = $this->setTerminalCost($data, $pay_modules, $request->s_dt, $request->s_dt, $target_id);

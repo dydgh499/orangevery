@@ -105,12 +105,13 @@ class SalesSettleHistoryController extends Controller
 
     public function batch(BatchSettleHistoryRequest $request)
     {
-        return DB::transaction(function () use($request) {
-            $c_res = true;
-            for ($i=0; $i < count($request->datas); $i++) 
-            {
+        $c_res = true;
+        for ($i=0; $i < count($request->datas); $i++) 
+        {
+            $data = $request->datas[$i];
+            return DB::transaction(function () use($request, $data) {
                 [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
-                $data = $request->data('sales_id', $request->datas[$i]);
+                $data = $request->data('sales_id', $data);
                 $data['level'] = $request->level;
 
                 $query = Transaction::where($target_id, $data['sales_id']);
@@ -118,9 +119,9 @@ class SalesSettleHistoryController extends Controller
                 $u_res = $this->SetTransSettle($query, $target_settle_id, $c_res->id);
                 $s_res = Salesforce::where('id', $request->id)->update(['last_settle_dt' => $data['settle_dt']]);
                 $p_res = $this->SetPayModuleLastSettleMonth($data, $target_settle_id, $c_res->id);
-            }
-            return $this->response($c_res ? 1 : 990);
-        });
+            });
+        }
+        return $this->response($c_res ? 1 : 990);
     }
 
     public function destroy(Request $request, $id)

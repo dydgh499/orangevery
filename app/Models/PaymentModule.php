@@ -40,6 +40,32 @@ class PaymentModule extends Model
             ->groupBy('pmod_id'); 
     }
 
+    // 단말기, 매출미달차감금 정산일인 것만
+    public function scopeTerminalSettle($query, $level)
+    {
+        $settle_s_day   = (int)date('d', strtotime(request()->s_dt));
+        $settle_e_day   = (int)date('d', strtotime(request()->e_dt));
+        $settle_month   = date('Ym', strtotime(request()->e_dt)); //202310
+
+        // 단말기 정산일이 정산일에 포함되는 것들 모두 조회
+        return $query->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
+            ->where('merchandises.brand_id', request()->user()->brand_id)
+            ->where('payment_modules.comm_settle_day', '>=', $settle_s_day)
+            ->where('payment_modules.comm_settle_day', '<=', $settle_e_day)
+            ->where('payment_modules.last_settle_month', '<', $settle_month)
+            ->where('payment_modules.comm_calc_level', $level)
+            ->where('payment_modules.begin_dt', '<', request()->s_dt)
+            ->where('payment_modules.is_delete', false);
+    }
+
+    public function scopeByTargetIds($query, $target_id)
+    {
+        return $query->distinct()
+        ->groupby("merchandises.$target_id")
+        ->pluck("merchandises.$target_id")
+        ->all();
+    }
+
     protected function beginDt(): Attribute
     {
         return $this->dateAttribute();

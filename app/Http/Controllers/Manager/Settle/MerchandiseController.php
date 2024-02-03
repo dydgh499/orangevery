@@ -43,20 +43,21 @@ class MerchandiseController extends Controller
 
         $cols = array_merge($this->getDefaultCols(), ['mcht_name', 'use_collect_withdraw', 'withdraw_fee']);
         $search = $request->input('search', '');
-
+        // ----- 가맹점 목록 조회 ---------
         $mcht_ids = $this->getExistTransUserIds('mcht_id', 'mcht_settle_id');
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
-                ->where('mcht_name', 'like', "%$search%"); 
-
-        // 실시간 제외
-        if($request->expect_realtime_deposit)
-        {
+                ->where('mcht_name', 'like', "%$search%")
+                ->orWhere(function ($query) {    
+                    $query->whereIn('id', PaymentModule::terminalSettle(10)->byTargetIds('id'));
+                });
+        if($request->use_realtime_deposit == 0)
+        {   // 즉시출금 제외
             $mcht_ids = $query->pluck('id')->all();
             $unuse_realtime_ids = PaymentModule::whereIn('mcht_id', $mcht_ids)
                 ->where('use_realtime_deposit', false)
                 ->pluck('mcht_id')->all();
             $query = $query->whereIn('id', $unuse_realtime_ids);
-        }        
+        }
         // 모아서 출금
         if($request->use_collect_withdraw)
             $query = $query->with(['collectWithdraws']);
@@ -77,13 +78,8 @@ class MerchandiseController extends Controller
             $settle_month   = date('Ym', strtotime($request->e_dt)); //202310
             $pay_modules    = collect(
                 PaymentModule::whereIn('mcht_id', $mcht_ids)
-                ->where('comm_settle_day', '>=', $settle_s_day)
-                ->where('comm_settle_day', '<=', $settle_e_day)
-                ->where('last_settle_month', '<', $settle_month)
-                ->where('begin_dt', '<', $request->s_dt)
-                ->where('comm_calc_level', 10)
-                ->where('is_delete', false)
-                ->get()
+                ->terminalSettle(10, 'id')
+                ->get(['payment_modules.*'])
             );
             $data = $this->setTerminalCost($data, $pay_modules, $request->s_dt, $request->s_dt, 'mcht_id');
         }

@@ -43,7 +43,7 @@ trait SettleTrait
     }
 
     private function getExistTransUserIds($col, $target)
-    {   //#date
+    {   //#date groupby하면 속도에서 느려짐
         return Transaction::noSettlement($target)
             ->distinct()
             ->pluck($col)

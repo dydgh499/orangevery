@@ -114,23 +114,24 @@ class MchtSettleHistoryController extends Controller
     */
     public function batch(BatchSettleHistoryRequest $request)
     {
-        return DB::transaction(function () use($request) {
-            $c_res = true;
-            for ($i=0; $i < count($request->datas); $i++) 
-            { 
-                $data = $request->data('mcht_id', $request->datas[$i]);
-                $data['settle_fee'] = $request->datas[$i]['settle_fee'];
-                $data['cancel_deposit_amount'] = $request->datas[$i]['cancel_deposit_amount'];
-                $data['collect_withdraw_amount'] = $request->datas[$i]['collect_withdraw_amount'];
+        for ($i=0; $i < count($request->datas); $i++) 
+        { 
+            $data = $request->datas[$i];
+            DB::transaction(function () use($request, $data) {
+                $data = $request->data('mcht_id', $data);
+                $data['settle_fee'] = $data['settle_fee'];
+                $data['cancel_deposit_amount'] = $data['cancel_deposit_amount'];
+                $data['collect_withdraw_amount'] = $data['collect_withdraw_amount'];
 
                 $query = Transaction::where('mcht_id', $data['mcht_id']);
                 $c_res = $this->settle_mcht_hist->create($data);
                 $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);    
                 $p_res = $this->SetPayModuleLastSettleMonth($data, 'mcht_settle_id', $c_res->id);
                 $cw_res= $this->SetCollectWithdraw($data, $c_res->id);
-            }
-            return $this->response($c_res ? 1 : 990);    
-        });
+                return true;
+            });
+        }
+        return $this->response(1);    
     }
 
     /*

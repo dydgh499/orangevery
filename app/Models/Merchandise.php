@@ -9,13 +9,13 @@ use Illuminate\Notifications\Notifiable;
 use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 
-use App\Models\Salesforce;
 use App\Models\Transaction;
 use App\Models\CollectWithdraw;
 use App\Models\RegularCreditCard;
 
 use App\Models\Log\SettleDeductMerchandise;
-use App\Models\Log\SettleHistoryMerchandise;
+use App\Models\Log\RealtimeSendHistory;
+
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Http\Traits\Models\AttributeTrait;
@@ -47,9 +47,13 @@ class Merchandise extends Authenticatable
     public function transactions()
     {
         $cols = ['id', 'mcht_id', 'pmod_id', 'amount', 'mcht_settle_amount', 'mcht_settle_fee', 'hold_fee', 'is_cancel', 'created_at'];
-        return $this->hasMany(Transaction::class, 'mcht_id')
-            ->noSettlement('mcht_settle_id')
-            ->select($cols);
+        $query = $this->hasMany(Transaction::class, 'mcht_id')->noSettlement('mcht_settle_id');
+
+        // 실패건은 제외하고 조회
+        if(request()->use_realtime_deposit == 1)
+            $query = $query->whereNotIn('id', RealtimeSendHistory::onlyFailRealtime());
+
+        return $query->select($cols);
     }
 
     public function collectWithdraws()

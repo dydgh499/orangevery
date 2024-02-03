@@ -61,7 +61,7 @@ class BeforeSystemRegisterJob implements ShouldQueue
      * @return void
      */
     public function handle()
-    {        
+    {
         logging([], 'before-system-register-job-start');
         $this->paywell = DB::connection('paywell');
         $this->payvery = DB::connection('mysql');
@@ -106,7 +106,6 @@ class BeforeSystemRegisterJob implements ShouldQueue
             $pmod->connectMchtInfo($mcht->payvery, $mcht->paywell_to_payvery);
             $pmod->getPaywell($this->paywell, $this->payvery, $this->brand_id, $this->before_brand_id);
             $pg->payvery_pgs = $pmod->payvery;  // 수기, 인증, 간편 관련 PG사 추가됨
-
 
             logging(['paymod'=>'ok'], 'before-system-register-job');
             // 실시간일시 개발사 수수료 0.1 고정
