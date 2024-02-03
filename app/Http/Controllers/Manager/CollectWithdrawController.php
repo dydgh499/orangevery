@@ -140,10 +140,7 @@ class CollectWithdrawController extends Controller
                 'acct_bank_code' => $request->user()->acct_bank_code,
             ];
             $res = post($this->base_noti_url.'/collect-deposit', $params);
-            if($res['code'] == 201)
-                return $this->response($res ? 1 : 990);    
-            else
-                return $this->extendResponse(2000, $res['body']['result_msg']);
+            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
         }
         else
             return $this->extendResponse(1000, "활성화된 실시간 모듈을 찾을 수 없습니다.");

@@ -27,7 +27,13 @@ trait ExtendResponseTrait
         }
         return Response::json(['code'=>1004, 'message'=>$msg, 'data'=>$data], 409, [], JSON_UNESCAPED_UNICODE);
     }
-    
+
+    public function apiResponse($code, $msg, $data=[])
+    {
+        $http_code = $code == '0000' ? 201 : $code;
+        return Response::json(['code'=>$code, 'message'=>$msg, 'data'=>$data], $http_code, [], JSON_UNESCAPED_UNICODE);        
+    }
+
     public function extendResponse($code, $msg, $data=[])
     {
         $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all()];

@@ -329,16 +329,7 @@ class TransactionController extends Controller
         $data['yymm'] = $getYYMM($data['yymm']); // mmyy to yymm
         $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/hand';
         $res = post($url, $data);
-        if($res['body']['result_cd'] === "0000")
-        {
-            $data = $res['body'];
-            unset($data['result_cd']);
-            unset($data['result_msg']);
-            unset($data['temp']);
-            return $this->response(1, $data);
-        }
-        else
-            return $this->extendResponse(1999, $res['body']['result_msg']);
+        return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);
     }
 
     /**
@@ -349,10 +340,7 @@ class TransactionController extends Controller
     {
         $data = $request->all();
         $res = post(env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/cancel', $data);
-        if($res['body']['result_cd'] === "0000")
-            return $this->response(1, $res['body']);
-        else
-            return $this->extendResponse(1999, $res['body']['result_msg']);
+        return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg'], $res['body']);
     }
 
     /*

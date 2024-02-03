@@ -192,10 +192,7 @@ class RealtimeSendHistoryController extends Controller
             'withdraw_fee' => 0,
         ];
         $params = array_merge($params, $privacy->toArray());
-        $res = post($this->base_noti_url.'/collect-deposit', $params);
-        if($res['code'] == 201)
-            return $this->extendResponse(1, $res['body']['result_msg']);
-        else
-            return $this->extendResponse(2000, $res['body']['result_msg']);
+        $res    = post($this->base_noti_url.'/collect-deposit', $params);
+        return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
     }
 }

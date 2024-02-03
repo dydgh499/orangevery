@@ -175,21 +175,17 @@ class SalesSettleHistoryController extends Controller
     {
         if($request->user()->tokenCan(35))
         {
-            $code = 1;
             if($request->use_finance_van_deposit)
             {   // 정산금 이체(실시간)
                 if($request->current_status == 0)
-                {
                     $res = post($this->base_noti_url."/sales-settle-deposit/$id", ['brand_id'=> $request->brand_id, 'fin_id'=> $request->fin_id]);
-                    $code = $res['body']['result_cd'] == '0000' ? 1 : $res['body']['result_cd'];
-                }
                 else
                     return $this->extendResponse(2000, "입금완료된 정산건은 다시 입금할 수 없습니다.");
             }
-            if($code == 1)
+            if($res['body']['result_cd'] == '0000')
                 return $this->deposit($this->settle_sales_hist, $id);
             else
-                return $this->extendResponse(2000, $res['body']['result_msg']);
+                return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
         }
         else
             return $this->response(951);
