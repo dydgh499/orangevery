@@ -132,6 +132,11 @@ class DangerTransController extends Controller
         return $this->response(1);
     }
 
+    public function batchChecked(Request $request)
+    {
+        
+    }
+
     /**
      * 단일삭제
      *
