@@ -15,6 +15,7 @@ const props = defineProps<Props>()
 
 const { pss, pg_companies } = useStore()
 const { update, remove, setNullRemove } = useRequestStore()
+const is_show = ref(false)
 
 const addNewSection = () => {
     pss.push({
@@ -183,7 +184,7 @@ watchEffect(() => {
                                             </VCol>
                                             <VCol md="7">
                                                 <VTextField v-model="props.item.rep_mid" placeholder="대표 가맹점 MID 입력"
-                                                    persistent-placeholder maxlength="200" :rules="[requiredValidator]" />
+                                                    persistent-placeholder maxlength="200" />
                                             </VCol>
                                         </VRow>
                                     </VCol>
@@ -196,7 +197,7 @@ watchEffect(() => {
                                             </VCol>
                                             <VCol md="7">
                                                 <VTextField v-model="props.item.sftp_id" placeholder="접속 ID 입력"
-                                                    persistent-placeholder maxlength="200" :rules="[requiredValidator]" />
+                                                    persistent-placeholder maxlength="200" />
                                             </VCol>
                                         </VRow>
                                     </VCol>
@@ -205,9 +206,11 @@ watchEffect(() => {
                                             <VCol>
                                                 <label>SFTP 접속 PW</label>
                                             </VCol>
-                                            <VCol md="7">
-                                                <VTextField v-model="props.item.sftp_password" placeholder="접속 PW 입력"
-                                                    persistent-placeholder maxlength="200" :rules="[requiredValidator]" />
+                                            <VCol md="7">                                                
+                                                <VTextField v-model="props.item.sftp_password" 
+                                                    :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
+                                                    :type="is_show ? 'text' : 'password'" persistent-placeholder
+                                                    @click:append-inner="is_show = !is_show" autocomplete="new-password" />
                                             </VCol>
                                         </VRow>
                                     </VCol>
