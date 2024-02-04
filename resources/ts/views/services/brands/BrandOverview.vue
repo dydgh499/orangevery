@@ -106,24 +106,6 @@ watchEffect(() => {
                                 <VSwitch hide-details v-model="props.item.use_different_settlement" color="primary" />
                             </template>
                         </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>PG사 선택</template>
-                            <template #input>                                
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.rep_pg_type" :items="[{ id: 0, name: '선택안함' }].concat(pg_companies)"
-                                    prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="name" item-value="id"
-                                    single-line />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>
-                                <BaseQuestionTooltip location="top" text="상위 대표 가맹점 ID"
-                                    :content="'차액정산에 사용되는 정보입니다.'"></BaseQuestionTooltip>
-                            </template>
-                            <template #input>
-                                <VTextField prepend-inner-icon="clarity:group-line" v-model="item.rep_mid"
-                                    type="text" />
-                            </template>
-                        </CreateHalfVCol>
                     </VRow>
                 </VCardItem>
                 <VCardItem v-if="getUserLevel() == 50">

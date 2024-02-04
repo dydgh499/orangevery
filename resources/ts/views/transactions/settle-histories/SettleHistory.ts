@@ -20,27 +20,22 @@ export function settlementHistoryFunctionCollect(store: any) {
         if (await alert.value.show('정말 ' + deposit_after_text + ' 하시겠습니까?')) {         
             params.current_status = Number(item.deposit_status)
             
-            const res = await post(rootUrlBuilder(is_mcht, item.id) + '/deposit', params, true)
-            if(res.status === 201)
-                store.setTable()
+            await post(rootUrlBuilder(is_mcht, item.id) + '/deposit', params, true)
+            store.setTable()
         }
     }
 
     const batchDeposit = async(selected:number[], is_mcht: boolean, params:any) => {
         if (await alert.value.show('정말 일괄 입금/입금취소처리 하시겠습니까?')) {
-            const promises = []
+            params.data = []
             for (let i = 0; i < selected.length; i++) {
                 const item:SettlesHistories = store.items.find(obj => obj['id'] === selected[i])
-                params.current_status = Number(item.deposit_status)
-                if(item) {
-                    promises.push(post(rootUrlBuilder(is_mcht, item.id) + '/deposit', params))
-                    // 실시간 정산 이체 사용시 동시처리건수 타임아웃 예외처리
-                    if(params.use_finance_van_deposit)
-                        await setTimeout(() => console.log("Exceptions to the number of concurrent processing cases ..(0.1 sec)"), 100);
-                }
-            }
-            const results = await Promise.all(promises)
-            snackbar.value.show('성공하였습니다.', 'success')
+                params.data.push({
+                    id: item.id,
+                    current_status : Number(item.deposit_status),
+                })
+            }            
+            await post('/api/v1/manager/transactions/settle-histories/' + (is_mcht ? 'merchandises' : 'salesforces') + '/batch-deposit', params, true)
             store.setTable()
         }
     }

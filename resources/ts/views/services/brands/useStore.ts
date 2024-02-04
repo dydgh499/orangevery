@@ -200,23 +200,23 @@ export const defaultItemInfo = () => {
             }),
             auth: reactive<AuthOption>({
                 levels: {
-                    dev_use: false,
+                    dev_use: 0,
                     dev_name: '개발사',
-                    sales5_use: false,
+                    sales5_use: 0,
                     sales5_name: '지사',
-                    sales4_use: true,
+                    sales4_use: 1,
                     sales4_name: '영업점',
-                    sales3_use: true,
+                    sales3_use: 1,
                     sales3_name: '지사',
-                    sales2_use: true,
+                    sales2_use: 1,
                     sales2_name: '총판',
-                    sales1_use: true,
+                    sales1_use: 1,
                     sales1_name: '대리점',
-                    sales0_use: false,
+                    sales0_use: 0,
                     sales0_name: '하위대리점'
                 },
                 visibles: {
-                    abnormal_trans_sales: true,
+                    abnormal_trans_sales: 1,
                 }
             })
         },
@@ -237,9 +237,8 @@ export const defaultItemInfo = () => {
         dev_settle_type: 0,
         extra_deposit_amount: 0,
         curr_deposit_amount: 0,
-        rep_mid: '',
-        use_different_settlement: false,
-        rep_pg_type: 0
+        use_different_settlement: 0,
+        before_brand_infos: []
     })
 
 

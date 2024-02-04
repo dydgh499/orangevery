@@ -17,6 +17,10 @@ class PayGatewayRequest extends FormRequest
         'phone_num',
         'addr',
         'settle_type',
+        'rep_mid',
+        'sftp_id',
+        'sftp_password',
+        'use_different_settlement',
     ];
 
     public function authorize()
@@ -34,6 +38,7 @@ class PayGatewayRequest extends FormRequest
             'business_num' => 'nullable',
             'phone_num' => 'nullable',
             'addr' => 'nullable',
+            'use_different_settlement' => 'numeric',
         ];
         return $this->getRules($this->keys, $sub);
     }

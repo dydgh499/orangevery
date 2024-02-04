@@ -23,8 +23,8 @@ class welcome extends DifferenceSettlement implements DifferenceSettlementInterf
             'driver' => 'sftp',
             'host' => "118.130.130.27",
             'port' => 5555,
-            'username' => '', // brightfix
-            'password' => "", // test123$
+            'username' => $brand['sftp_id'],
+            'password' => $brand['sftp_password'],
             'privateKey' => env('SFTP_PRIVATE_KEY'),
             'passphrase' => env('SFTP_PASSPHRASE'),
             'passive' => false,

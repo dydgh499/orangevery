@@ -28,8 +28,6 @@ class BrandRequest extends FormRequest
         'dev_settle_type',
         'fax_num',
         'use_different_settlement',
-        'rep_mid',
-        'rep_pg_type',
     ];
     public $file_keys = [   
         'logo_file',         
@@ -115,7 +113,6 @@ class BrandRequest extends FormRequest
         $data['pv_options'] = json_encode($this->pv_options); 
         $data['theme_css']  = json_encode($this->theme_css);
         $data['dev_fee']    = $this->dev_fee/100;
-        $data['rep_pg_type'] = $data['rep_pg_type'] === '' ? 0 : $data['rep_pg_type'];
         if($this->has('login_img'))
             $data['login_img'] = $this->login_img;
 

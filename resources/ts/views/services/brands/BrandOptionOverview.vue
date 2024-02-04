@@ -4,7 +4,7 @@ import type { FreeOption, PaidOption, AuthOption } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { user_info } from '@/plugins/axios';
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import corp from '@corp';
+import corp from '@corp'
 
 interface Props {
     item: {

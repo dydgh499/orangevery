@@ -82,15 +82,14 @@ const showAvatar = (preview: string) => {
                                 </div>
                             </div>
                         </VTimelineItem>
+                        <VTimelineItem v-show="!Boolean(operator_histories.length) && is_skeleton" size="x-small">
+                            <div class="d-flex justify-space-between">
+                                <span class="text-sm">
+                                    최근 운영자 활동이력이 존재하지 않습니다.
+                                </span>
+                            </div>
+                        </VTimelineItem>
                     </template>
-
-                    <VTimelineItem v-show="!Boolean(operator_histories.length) && is_skeleton" size="x-small">
-                        <div class="d-flex justify-space-between">
-                            <span class="text-sm">
-                                최근 운영자 활동이력이 존재하지 않습니다.
-                            </span>
-                        </div>
-                    </VTimelineItem>
                 </VTimeline>
             </VCardText>
         </VCard>

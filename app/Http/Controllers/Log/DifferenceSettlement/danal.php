@@ -19,20 +19,21 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
 
         $main_config_name   = 'different_settlement_main_'.$this->service_name;
         $dr_config_name     = 'different_settlement_dr'.$this->service_name;
+
         config(['filesystems.disks.'.$main_config_name => [
             'driver' => 'sftp',
             'host' => "",
             'port' => 5210,
-            'username' => $brand['rep_mid'],
-            'password' => $brand['rep_mid']."!1234",
+            'username' => $brand['sftp_id'],
+            'password' => $brand['sftp_password'],
             'passive' => false,
         ]]);
         config(['filesystems.disks.'.$dr_config_name => [
             'driver' => 'sftp',
             'host' => "",
             'port' => 5210,
-            'username' => $brand['rep_mid'],
-            'password' => $brand['rep_mid']."!1234",
+            'username' => $brand['sftp_id'],
+            'password' => $brand['sftp_password'],
             'passive' => false,            
         ]]);
         [$this->main_sftp_connection, $this->main_connection_stat] = $this->connectSFTPServer($main_config_name, 'main');

@@ -24,15 +24,14 @@ const snackbar = <any>(inject('snackbar'))
 
 const batchCheck = async () => {
     if (await alert.value.show('정말 일괄 확인/확인취소 처리 하시겠습니까?')) {
-        const promises = []
+        const params = {data:<any>([])}        
         for (let i = 0; i < selected.value.length; i++) {
             const item: any = store.items.find(obj => obj['id'] === selected.value[i])
-            if (item) {
-                const url = `/api/v1/manager/transactions/dangers/${item.id}/checked`
-                promises.push(post(url, { checked: !item.is_checked }))
-            }
+            if (item)
+                params.data.push({id: item.id, checked: !item.is_checked})
         }
-        const results = await Promise.all(promises)
+
+        const res = await post(`/api/v1/manager/transactions/dangers/batch-checked`, params)
         snackbar.value.show('성공하였습니다.', 'success')
         store.setTable()
     }

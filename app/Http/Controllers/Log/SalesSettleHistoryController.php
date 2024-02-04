@@ -176,17 +176,42 @@ class SalesSettleHistoryController extends Controller
     {
         if($request->user()->tokenCan(35))
         {
-            if($request->use_finance_van_deposit)
-            {   // 정산금 이체(실시간)
-                if($request->current_status == 0)
-                    $res = post($this->base_noti_url."/sales-settle-deposit/$id", ['brand_id'=> $request->brand_id, 'fin_id'=> $request->fin_id]);
-                else
-                    return $this->extendResponse(2000, "입금완료된 정산건은 다시 입금할 수 없습니다.");
+            $data = ['id'=>$id, 'current_status'=>$request->current_status];
+            $result = $this->depositContainer($request, 'sales', $data, $this->settle_sales_hist);
+            if($result !== '')
+            {
+                $message = json_encode($result, JSON_UNESCAPED_UNICODE);
+                return $this->extendResponse(2000, $message);
             }
-            if($res['body']['result_cd'] == '0000')
-                return $this->deposit($this->settle_sales_hist, $id);
             else
-                return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
+                return $this->response(1);
+        }
+        else
+            return $this->response(951);
+    }
+
+    /**
+    * 입금상태 변경
+    */
+    public function setBatchDeposit(Request $request)
+    {
+        $fail_res = [];
+        if($request->user()->tokenCan(35))
+        {
+            for ($i=0; $i < count($request->data); $i++) 
+            {
+                $data = $request->data[$i];
+                $result = $this->depositContainer($request, 'sales', $data, $this->settle_sales_hist);
+                if($result !== '')
+                array_merge($fail_res, $result);
+            }
+            if(count($fail_res))
+            {
+                $message = "일괄작업에 실패한 이체건들이 존재합니다.\n\n".json_encode($fail_res, JSON_UNESCAPED_UNICODE);
+                return $this->extendResponse(2000, $message);
+            }
+            else
+                return $this->response(1);
         }
         else
             return $this->response(951);

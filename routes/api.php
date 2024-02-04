@@ -128,6 +128,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::get('dangers', [DangerTransController::class, 'index']);
             Route::delete('dangers/{id}', [DangerTransController::class, 'destroy']);
             Route::post('dangers/{id}/checked', [DangerTransController::class, 'checked']);
+            Route::post('dangers/batch-checked', [DangerTransController::class, 'batchChecked']);
             
             Route::prefix('settle')->group(function() {
                 Route::prefix('merchandises')->group(function() {
@@ -157,6 +158,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('merchandises/part', [MchtSettleHistoryController::class, 'storePart']);
                 Route::post('merchandises/batch', [MchtSettleHistoryController::class, 'batch']);
                 Route::post('merchandises/{id}/deposit', [MchtSettleHistoryController::class, 'setDeposit']);
+                Route::post('merchandises/batch-deposit', [MchtSettleHistoryController::class, 'setBatchDeposit']);
+                
                 Route::post('merchandises/single-deposit', [MchtSettleHistoryController::class, 'singleDeposit']);
                 Route::apiResource('merchandises', MchtSettleHistoryController::class);
                 
@@ -164,6 +167,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('salesforces/part', [SalesSettleHistoryController::class, 'storePart']);
                 Route::post('salesforces/batch', [SalesSettleHistoryController::class, 'batch']);
                 Route::post('salesforces/{id}/deposit', [SalesSettleHistoryController::class, 'setDeposit']);
+                Route::post('salesforces/batch-deposit', [SalesSettleHistoryController::class, 'setBatchDeposit']);
                 Route::apiResource('salesforces', SalesSettleHistoryController::class);
             });
             Route::prefix('realtime-histories')->group(function() {

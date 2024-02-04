@@ -134,7 +134,12 @@ class DangerTransController extends Controller
 
     public function batchChecked(Request $request)
     {
-        
+        for ($i=0; $i < count($request->data); $i++)
+        {
+            $data = $request->data[$i];
+            $res = $this->danger_transactions->where('id', $data['id'])->update(['is_checked' => $data['checked']]);
+        }
+        return $this->response(1);
     }
 
     /**

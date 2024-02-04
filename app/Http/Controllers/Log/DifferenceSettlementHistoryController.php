@@ -118,16 +118,19 @@ class DifferenceSettlementHistoryController extends Controller
 
     private function getUseDifferentSettlementBrands()
     {
-        return Brand::where('is_delete', false)
-            ->where('use_different_settlement', true)
-            ->get(['business_num', 'rep_mid', 'id', 'rep_pg_type']);
+        return Brand::join('payment_gateways', 'brands.id', '=', 'payment_gateways.brand_id')
+            ->where('payment_gateways.is_delete', false)
+            ->where('brands.is_delete', false)
+            ->where('payment_gateways.use_different_settlement', true)
+            ->where('brands.use_different_settlement', true)
+            ->get(['brands.business_num', 'brands.id', 'payment_gateways.rep_mid', 'payment_gateways.sftp_id', 'payment_gateways.sftp_password', 'payment_gateways.pg_type']);
     }
 
     public function getPGClass($brand)
     {
         try
         {
-            $pg_name = getPGType($brand->rep_pg_type);
+            $pg_name = getPGType($brand->pg_type);
             $path   = $this->base_path.$pg_name;            
             $pg     = new $path(json_decode(json_encode($brand), true));
         }
@@ -152,12 +155,11 @@ class DifferenceSettlementHistoryController extends Controller
 
         for ($i=0; $i<count($brands); $i++)
         {
-            $pg_name = getPGType($brands[$i]->rep_pg_type);
             $trans   = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
                 ->join('payment_gateways', 'transactions.pg_id', '=', 'payment_gateways.id')
                 ->where('transactions.is_delete', false)
                 ->where('merchandises.is_delete', false)
-                ->where('payment_gateways.pg_type', $brands[$i]->rep_pg_type)
+                ->where('payment_gateways.pg_type', $brands[$i]->pg_type)
                 ->where('transactions.brand_id', $brands[$i]->id)
                 ->where('transactions.trx_dt', $yesterday)
                 ->get(['transactions.*', 'merchandises.business_num']);
@@ -197,12 +199,11 @@ class DifferenceSettlementHistoryController extends Controller
 
         for ($i=0; $i<count($brands); $i++)
         {
-            $pg_name = getPGType($brands[$i]->rep_pg_type);
             $trans   = Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
                 ->join('payment_gateways', 'payment_modules.pg_id', '=', 'payment_gateways.id')
                 ->where('merchandises.is_delete', false)
                 ->where('payment_modules.is_delete', false)
-                ->where('payment_gateways.pg_type', $brands[$i]->rep_pg_type)
+                ->where('payment_gateways.pg_type', $brands[$i]->pg_type)
                 ->where('merchandises.brand_id', $brands[$i]->id)
                 ->where('merchandises.created_at', $yesterday)
                 ->get(['merchandises.business_num']);

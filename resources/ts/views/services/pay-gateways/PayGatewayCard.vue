@@ -5,6 +5,7 @@ import { VForm } from 'vuetify/components'
 import { useStore, pg_settle_types } from '@/views/services/pay-gateways/useStore'
 import PaySectionTr from '@/views/services/pay-gateways/PaySectionTr.vue'
 import { useRequestStore } from '@/views/request'
+import corp from '@corp';
 
 interface Props {
     item: PayGateway,
@@ -12,7 +13,7 @@ interface Props {
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
 
-const { pss, pg_companies }  = useStore()
+const { pss, pg_companies } = useStore()
 const { update, remove, setNullRemove } = useRequestStore()
 
 const addNewSection = () => {
@@ -60,92 +61,168 @@ watchEffect(() => {
                     <VForm ref="vForm">
                         <VCardTitle style="margin-bottom: 1em;">PG사 정보</VCardTitle>
                         <VRow class="pt-3">
-                            <VCol>
-                                <label>PG사 선택</label>
+                            <VCol :md="6" :cols="12">
+                                <VRow no-gutters>
+                                    <VCol>
+                                        <label>PG사 선택</label>
+                                    </VCol>
+                                    <VCol md="7">
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_type"
+                                            :items="pg_companies" prepend-inner-icon="ph-buildings" label="PG사 선택"
+                                            item-title="name" item-value="id" single-line :rules="[requiredValidator]" />
+                                    </VCol>
+                                </VRow>
                             </VCol>
-                            <VCol>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_type" :items="pg_companies"
-                                    prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="name" item-value="id"
-                                    single-line :rules="[requiredValidator]" />
-                            </VCol>
-                        </VRow>
-                        <VRow class="pt-3">
-                            <VCol>
-                                <label>별칭</label>
-                            </VCol>
-                            <VCol>
-                                <VTextField type="text" v-model="props.item.pg_name" prepend-inner-icon="tabler-table-alias"
-                                    placeholder="별칭 입력" persistent-placeholder :rules="[requiredValidator]" />
-                            </VCol>
-                        </VRow>
-                        <VRow class="pt-3">
-                            <VCol>
-                                <label>대표자명</label>
-                            </VCol>
-                            <VCol>
-                                <VTextField type="text" v-model="props.item.rep_name" prepend-inner-icon="tabler-user"
-                                    placeholder="대표자명 입력" persistent-placeholder :rules="[requiredValidator]" />
-                            </VCol>
-                        </VRow>
-                        <VRow class="pt-3">
-                            <VCol>
-                                <label>상호명</label>
-                            </VCol>
-                            <VCol>
-                                <VTextField type="text" v-model="props.item.company_name"
-                                    prepend-inner-icon="tabler-building-store" placeholder="상호명 입력"
-                                    persistent-placeholder :rules="[requiredValidator]"/>
-                            </VCol>
-                        </VRow>
-                        <VRow class="pt-3">
-                            <VCol>
-                                <label>사업자등록번호</label>
-                            </VCol>
-                            <VCol>
-                                <VTextField v-model="props.item.business_num" type="text"
-                                    prepend-inner-icon="ic-outline-business-center" placeholder="사업자등록번호 입력"
-                                    persistent-placeholder
-                                    :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
-
-                            </VCol>
-                        </VRow>
-                        <VRow class="pt-3">
-                            <VCol>
-                                <label>휴대폰번호</label>
-                            </VCol>
-                            <VCol>
-                                <VTextField v-model="props.item.phone_num" type="text"
-                                    prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호 입력"
-                                    persistent-placeholder :rules="[requiredValidator]" />
-
-                            </VCol>
-                        </VRow>
-                        <VRow class="pt-3">
-                            <VCol>
-                                <label>주소</label>
-                            </VCol>
-                            <VCol>
-                                <VTextField v-model="props.item.addr" prepend-inner-icon="tabler-map-pin"
-                                    placeholder="주소 입력" persistent-placeholder maxlength="200" :rules="[requiredValidator]" />
-                            </VCol>
-                        </VRow>
-                        <VRow class="pt-3">
-                            <VCol>
-                                <label>정산타입</label>
-                            </VCol>
-                            <VCol>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type" :items="pg_settle_types"
-                                    prepend-inner-icon="tabler-calculator" label="정산타입 선택" item-title="title" item-value="id"
-                                    single-line :rules="[requiredValidator]" />
+                            <VCol :md=6>
+                                <VRow no-gutters>
+                                    <VCol>
+                                        <label>별칭</label>
+                                    </VCol>
+                                    <VCol md="7">
+                                        <VTextField type="text" v-model="props.item.pg_name"
+                                            prepend-inner-icon="tabler-table-alias" placeholder="별칭 입력"
+                                            persistent-placeholder :rules="[requiredValidator]" />
+                                    </VCol>
+                                </VRow>
                             </VCol>
                         </VRow>
                         <VRow>
+                            <VCol :md="6" :cols="12">
+                                <VRow no-gutters>
+                                    <VCol>
+                                        <label>대표자명</label>
+                                    </VCol>
+                                    <VCol md="7">
+                                        <VTextField type="text" v-model="props.item.rep_name"
+                                            prepend-inner-icon="tabler-user" placeholder="대표자명 입력" persistent-placeholder
+                                            :rules="[requiredValidator]" />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol>
+                                <VRow no-gutters>
+                                    <VCol>
+                                        <label>상호명</label>
+                                    </VCol>
+                                    <VCol md="7">
+                                        <VTextField type="text" v-model="props.item.company_name"
+                                            prepend-inner-icon="tabler-building-store" placeholder="상호명 입력"
+                                            persistent-placeholder :rules="[requiredValidator]" />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                        <VRow>
+                            <VCol :md="6" :cols="12">
+                                <VRow no-gutters>
+                                    <VCol>
+                                        <label>사업자등록번호</label>
+                                    </VCol>
+                                    <VCol md="7">
+                                        <VTextField v-model="props.item.business_num" type="text"
+                                            prepend-inner-icon="ic-outline-business-center" placeholder="사업자등록번호 입력"
+                                            persistent-placeholder
+                                            :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol>
+                                <VRow no-gutters>
+                                    <VCol>
+                                        <label>휴대폰번호</label>
+                                    </VCol>
+                                    <VCol md="7">
+                                        <VTextField v-model="props.item.phone_num" type="text"
+                                            prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호 입력"
+                                            persistent-placeholder :rules="[requiredValidator]" />
+                                    </VCol>
+                                </VRow>
+
+                            </VCol>
+                        </VRow>
+                        <VRow>
+                            <VCol :md="6" :cols="12">
+                                <VRow no-gutters>
+                                    <VCol>
+                                        <label>주소</label>
+                                    </VCol>
+                                    <VCol md="7">
+                                        <VTextField v-model="props.item.addr" prepend-inner-icon="tabler-map-pin"
+                                            placeholder="주소 입력" persistent-placeholder maxlength="200"
+                                            :rules="[requiredValidator]" />
+                                    </VCol>
+                                </VRow>
+
+                            </VCol>
+                            <VCol>
+                                <VRow no-gutters>
+                                    <VCol>
+                                        <label>정산타입</label>
+                                    </VCol>
+                                    <VCol md="7">
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type"
+                                            :items="pg_settle_types" prepend-inner-icon="tabler-calculator" label="정산타입 선택"
+                                            item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                        <template v-if="corp.use_different_settlement">
+                            <div class="pt-6">
+                                <VDivider />
+                                <VRow class="pt-3">
+                                    <VCol style="display: inline-flex; align-items: center;" :md="6" :cols="12">
+                                        <VSwitch hide-details :false-value=0 :true-value=1
+                                            v-model="props.item.use_different_settlement" label="차액정산 사용여부"
+                                            color="primary" />
+                                    </VCol>
+                                    <VCol v-if="props.item.use_different_settlement" style="display: inline-flex;">
+                                        <VRow no-gutters>
+                                            <VCol>
+                                                <label>대표 가맹점 MID</label>
+                                            </VCol>
+                                            <VCol md="7">
+                                                <VTextField v-model="props.item.rep_mid" placeholder="대표 가맹점 MID 입력"
+                                                    persistent-placeholder maxlength="200" :rules="[requiredValidator]" />
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                                <VRow v-if="props.item.use_different_settlement">
+                                    <VCol :md="6" :cols="12">
+                                        <VRow no-gutters>
+                                            <VCol>
+                                                <label>SFTP 접속 ID</label>
+                                            </VCol>
+                                            <VCol md="7">
+                                                <VTextField v-model="props.item.sftp_id" placeholder="접속 ID 입력"
+                                                    persistent-placeholder maxlength="200" :rules="[requiredValidator]" />
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                    <VCol>
+                                        <VRow no-gutters>
+                                            <VCol>
+                                                <label>SFTP 접속 PW</label>
+                                            </VCol>
+                                            <VCol md="7">
+                                                <VTextField v-model="props.item.sftp_password" placeholder="접속 PW 입력"
+                                                    persistent-placeholder maxlength="200" :rules="[requiredValidator]" />
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                            </div>
+                        </template>
+                        <VRow>
                             <VCol class="d-flex gap-4 pt-10">
-                                <VBtn type="button" style="margin-left: auto;" @click="update('/services/pay-gateways', props.item, vForm, false)">
+                                <VBtn type="button" style="margin-left: auto;"
+                                    @click="update('/services/pay-gateways', props.item, vForm, false)">
                                     {{ props.item.id == 0 ? "추가" : "수정" }}
                                     <VIcon end icon="tabler-pencil" />
                                 </VBtn>
-                                <VBtn type="button" color="error" v-if="props.item.id" @click="remove('/services/pay-gateways', props.item, false)">
+                                <VBtn type="button" color="error" v-if="props.item.id"
+                                    @click="remove('/services/pay-gateways', props.item, false)">
                                     삭제
                                     <VIcon end icon="tabler-trash" />
                                 </VBtn>
@@ -192,3 +269,8 @@ watchEffect(() => {
         </div>
     </AppCardActions>
 </template>
+<style scoped>
+:deep(.v-table__wrapper) {
+  block-size: auto !important;
+}
+</style>
