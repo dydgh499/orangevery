@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import corp from '@corp'
 import { getUserLevel, getIndexByLevel } from '@axios'
+import corp from '@corp'
 
 interface Props {
     show: boolean,
@@ -11,10 +11,13 @@ const props = defineProps<Props>();
 const store = <any>(inject('store'))
 const { sales, setUnderSalesFilter } = useSalesFilterStore()
 const levels = corp.pv_options.auth.levels
+
 for (let i = 0; i < 6; i++) {
     const idx = (5 - i)
     if (route.query['sales' + idx + '_id'])
-        store.params['sales' + idx + '_id'] = parseInt(route.query['sales' + idx + '_id'] as string)            
+        store.params['sales' + idx + '_id'] = parseInt(route.query['sales' + idx + '_id'] as string)
+    else if(corp.pv_options.free.init_search_filter)
+        store.params['sales' + idx + '_id'] = undefined
 }
 
 </script>

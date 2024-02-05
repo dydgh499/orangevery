@@ -60,6 +60,9 @@ const queryToStoreParams = () => {
         store.params.search = route.query.search
         search.value = store.params.search
     }
+    else if(corp.pv_options.free.init_search_filter) {
+        store.params.search = undefined
+    }
     store.updateQueryString(store.params)
 }
 

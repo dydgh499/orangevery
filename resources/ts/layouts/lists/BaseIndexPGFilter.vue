@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { user_info } from '@axios'
+import corp from '@corp'
 
 interface Props {
     pg: boolean,
@@ -9,9 +10,7 @@ interface Props {
     terminal: boolean,
     cus_filter: boolean,
 }
-const route = useRoute()
 const props = defineProps<Props>()
-
 const { pgs, pss, settle_types, terminals, cus_filters, psFilter } = useStore()
 const store = <any>(inject('store'))
 
@@ -22,6 +21,14 @@ const filterPgs = computed(() => {
     store.params.ps_id = psFilter(filter, store.params.ps_id)
     return filter
 })
+
+if(corp.pv_options.free.init_search_filter) {
+    store.params.pg_id = undefined
+    store.params.ps_id = undefined
+    store.params.settle_type = undefined
+    store.params.terminal_id = undefined
+    store.params.custom_id = undefined
+}
 
 </script>
 <template>

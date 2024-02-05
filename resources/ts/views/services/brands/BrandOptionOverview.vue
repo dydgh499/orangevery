@@ -73,6 +73,18 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>                                
+                                <BaseQuestionTooltip location="top" text="검색옵션 자동 초기화"
+                                    :content="`목록 페이지에서 선택한 검색옵션들이 메뉴 이동시 자동으로 초기화됩니다.`">
+                                </BaseQuestionTooltip>
+                                </template>
+                            <template #input>
+                                <VSwitch hide-details v-model="props.item.free.init_search_filter" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>
                                 <BaseQuestionTooltip location="top" text="고정 테이블 사용여부"
                                     :content="`리스트 화면에서 테이블 헤더가 고정됩니다.`">
