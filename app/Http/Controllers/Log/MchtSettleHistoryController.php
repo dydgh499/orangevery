@@ -116,12 +116,12 @@ class MchtSettleHistoryController extends Controller
     {
         for ($i=0; $i < count($request->datas); $i++) 
         { 
-            $data = $request->datas[$i];
-            DB::transaction(function () use($request, $data) {
-                $data = $request->data('mcht_id', $data);
-                $data['settle_fee'] = $data['settle_fee'];
-                $data['cancel_deposit_amount'] = $data['cancel_deposit_amount'];
-                $data['collect_withdraw_amount'] = $data['collect_withdraw_amount'];
+            $_data = $request->datas[$i];
+            DB::transaction(function () use($request, $_data) {
+                $data = $request->data('mcht_id', $_data);
+                $data['settle_fee'] = $_data['settle_fee'];
+                $data['cancel_deposit_amount'] = $_data['cancel_deposit_amount'];
+                $data['collect_withdraw_amount'] = $_data['collect_withdraw_amount'];
 
                 $query = Transaction::where('mcht_id', $data['mcht_id']);
                 $c_res = $this->settle_mcht_hist->create($data);
