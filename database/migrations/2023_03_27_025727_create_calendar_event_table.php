@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('calendar_events', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->increments('id');
+            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->integer('user_id')->comment('유저 ID');
             $table->tinyInteger('user_type')->default(0)->comment('유저 타입(0=일반유저, 1=가맹점, 2=영업자)');
             $table->string('title', 100)->comment('제목');

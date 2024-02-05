@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('settle_deduct_salesforces', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-            $table->foreignId('sales_id')->nullable()->comment('영업자 FK')->constrained('salesforces')->onDelete('SET NULL');
+            $table->increments('id');
+            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedInteger('sales_id')->nullable()->comment('영업자 FK')->constrained('salesforces')->onDelete('SET NULL');
             $table->integer('amount')->default(0)->comment('차감금액');
             $table->date('deduct_dt')->nullable()->comment('적용일');
             $table->timestamps();

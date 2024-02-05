@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('finance_vans', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->increments('id');
+            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->tinyInteger('fin_type')->nullable()->comment('실시간 타입');
             $table->tinyInteger('finance_company_num')->nullable()->comment('금융 VAN사 ID');
             $table->tinyInteger('balance_status')->default(5)->comment('잔고 상태(0=잔고없음, 5=충분함)');

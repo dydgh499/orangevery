@@ -12,10 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('settle_histories_salesforces_deposits', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-
-            $table->foreignId('settle_hist_sales_id')->nullable()->comment('영업점 정산 이력 ID');
+            $table->increments('id');
+            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedInteger('settle_hist_sales_id')->nullable()->comment('영업점 정산 이력 ID');
             $table->foreign('settle_hist_sales_id', 'shsd_shsales_id_fk')
                 ->references('id')
                 ->on('settle_histories_salesforces')

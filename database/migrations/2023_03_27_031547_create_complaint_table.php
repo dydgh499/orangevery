@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('complaints', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-            $table->foreignId('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
+            $table->increments('id');
+            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedInteger('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
             $table->tinyInteger('complaint_status')->default(0)->comment('민원상태(0=처리전, 1=처리중, 2=처리완료)');
             $table->string('tid', 50)->default('')->comment('tid');
             $table->string('cust_name', 50)->default('')->comment('고객명');

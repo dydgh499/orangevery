@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('difference_settlement_histories', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('trans_id')->nullable()->comment('거래 ID')->constrained('transactions')->onDelete('SET NULL');
+            $table->increments('id');
+            $table->unsignedInteger('trans_id')->nullable()->comment('거래 ID')->constrained('transactions')->onDelete('SET NULL');
             $table->string('settle_result_code', 4)->index()->nullable()->comment('정산 결과코드');
             $table->string('card_company_result_code', 3)->nullable()->comment('카드사 결과코드');
             $table->string('settle_result_msg', 50)->nullable()->comment('카드사 결과 메세지');

@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('salesforces_under_auto_settings', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-            $table->foreignId('sales_id')->nullable()->comment('영업점 FK')->constrained('salesforces')->onDelete('SET NULL');
+            $table->increments('id');
+            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedInteger('sales_id')->nullable()->comment('영업점 FK')->constrained('salesforces')->onDelete('SET NULL');
             $table->float('sales_fee', 6, 5)->default(0)->comment('영업점 수수료');
             $table->string('note', 100)->nullable()->comment('메모');
             $table->timestamps();

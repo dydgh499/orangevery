@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('operator_histories', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-            $table->foreignId('oper_id')->nullable()->comment('운영자 FK')->constrained('operators')->onDelete('SET NULL');
+            $table->increments('id');
+            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedInteger('oper_id')->nullable()->comment('운영자 FK')->constrained('operators')->onDelete('SET NULL');
             $table->tinyInteger('history_type')->default(0)->comment('이력 타입(0=추가, 1=수정, 2=삭제, 3=조회)');
             $table->string('history_target', 50)->nullable()->comment('활동종류');
             $table->string('history_title', 50)->nullable()->comment('활동대상');            

@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('payment_gateways', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->increments('id');
+            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->tinyInteger('pg_type')->comment('PG사명(1,2,3,4,5 ...)');
             $table->boolean('settle_type')->default(0)->comment('정산타입(0=주말포함, 1=주말제외)');
             $table->string('pg_name')->comment('PG사명');
@@ -24,6 +24,10 @@ return new class extends Migration
             $table->string('business_num', 20)->nullable()->comment('사업자등록번호');
             $table->string('phone_num', 20)->default('')->comment('휴대폰 번호');
             $table->string('addr', 200)->nullable()->comment('사업지 주소');
+            $table->string('rep_mid', 30)->nullable()->comment('대표 가맹점 MID');
+            $table->string('sftp_id', 30)->nullable()->comment('SFTP 접속 id');
+            $table->string('sftp_password', 30)->nullable()->comment('SFTP 접속 pw');
+            $table->boolean('use_different_settlement')->default(false)->comment('차액정산 사용여부');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });

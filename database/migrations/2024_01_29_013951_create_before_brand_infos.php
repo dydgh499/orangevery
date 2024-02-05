@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('before_brand_infos', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->increments('id');
+            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->string('company_name')->nullable()->comment('회사명');
             $table->string('rep_name')->nullable()->comment('대표자명');
             $table->string('addr')->nullable()->comment('주소');

@@ -159,8 +159,8 @@ class SalesSettleHistoryController extends Controller
                 $request = $request->merge(['id' => $id]);
                 // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
                 $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
-                $query->update(['is_delete' => true]);
                 Salesforce::where('id', $hist[$user_id])->update(['last_settle_dt' => null]);
+                $query->delete();
                 return true;
             }
             else

@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('collect_withdraws', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-            $table->foreignId('mcht_id')->nullable()->comment('사용 가맹점 ID')->constrained('merchandises')->onDelete('SET NULL');
+            $table->increments('id');
+            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedInteger('mcht_id')->nullable()->comment('사용 가맹점 ID')->constrained('merchandises')->onDelete('SET NULL');
             $table->integer('mcht_settle_id')->nullable()->comment('정산 ID');
             $table->string('trans_seq_num', 20)->nullable()->index()->comment('요청 ID');
             $table->string('result_code', 5)->nullable()->comment('응답코드');
