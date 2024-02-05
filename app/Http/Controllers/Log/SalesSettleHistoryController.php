@@ -130,11 +130,8 @@ class SalesSettleHistoryController extends Controller
             return $this->extendResponse(2000, "입금완료된 정산건은 정산취소 할수 없습니다.");
         else
         {
-            return DB::transaction(function () use($request, $id) {
-                [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
-                $res = $this->deleteSalesforceCommon($request, $id, $target_settle_id, 'sales_id');
-                return $this->response($res ? 1 : 990, ['id'=>$id]);
-            });    
+            $code = $this->deleteSalesforceCommon($request, $id, 'sales_id');
+            return $this->response($code, ['id'=>$id]);
         }
     }
     
@@ -151,22 +148,33 @@ class SalesSettleHistoryController extends Controller
         return $this->response($c_res ? 1 : 990, ['id'=>$c_res->id]);
     }
     
-    protected function deleteSalesforceCommon($request, $id, $target_settle_id, $user_id)
+    protected function deleteSalesforceCommon($request, $id, $user_id)
     {
-        $query = $this->settle_sales_hist->where('id', $id);
-        $hist  = $query->first()->toArray();
-        if($hist)
+        [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
+        $result = DB::transaction(function () use($request, $id, $target_settle_id, $user_id) {
+            $query = $this->settle_sales_hist->where('id', $id);
+            $hist  = $query->first()->toArray();
+            if($hist)
+            {
+                $request = $request->merge(['id' => $id]);
+                // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
+                $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
+                $query->update(['is_delete' => true]);
+                Salesforce::where('id', $hist[$user_id])->update(['last_settle_dt' => null]);
+                return true;
+            }
+            else
+                return false;
+        });
+        if($result)
         {
-            $request = $request->merge(['id' => $id]);
-            // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
-            $p_res = $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
-            $u_res = $this->SetNullTransSettle($request, $target_settle_id);
-            $d_res = $query->update(['is_delete' => true]);
-            $s_res = Salesforce::where('id', $hist[$user_id])->update(['last_settle_dt' => null]);
-            return $this->response(1);
+            logging(['start'=>date('Y-m-d H:i:s')]);
+            //  Lock wait timeout exceeded; try restarting transaction
+            $this->SetNullTransSettle($request, $target_settle_id);
+            logging(['end'=>date('Y-m-d H:i:s')]);    
         }
-        else
-            return $this->response(1000);
+        return $result;
+
     }
     
     /**

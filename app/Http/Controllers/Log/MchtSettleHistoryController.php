@@ -168,8 +168,7 @@ class MchtSettleHistoryController extends Controller
 
     protected function deleteMchtforceCommon($request, $id, $target_settle_id)
     {
-        $code = 1;
-        $result = DB::transaction(function () use(&$code, $request, $id, $target_settle_id) {
+        $result = DB::transaction(function () use($request, $id, $target_settle_id) {
             $query = $this->settle_mcht_hist->where('id', $id);
             $hist  = $query->first()->toArray();
             if($hist)
@@ -179,14 +178,10 @@ class MchtSettleHistoryController extends Controller
                 $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
                 $this->SetNullCollectWithdraw($hist);
                 $query->update(['is_delete' => true]);
-                $code = 1;
                 return true;
             }
             else
-            {
-                $code = 1000;
                 return false;
-            }
         });
         if($result)
         {
@@ -195,7 +190,7 @@ class MchtSettleHistoryController extends Controller
             $u_res = $this->SetNullTransSettle($request, $target_settle_id);
             logging(['end'=>date('Y-m-d H:i:s')]);    
         }
-        return $code;
+        return $result;
     }
 
     /**
