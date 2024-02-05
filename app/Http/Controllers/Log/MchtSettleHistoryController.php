@@ -221,7 +221,7 @@ class MchtSettleHistoryController extends Controller
                 $data = $request->data[$i];
                 $result = $this->depositContainer($request, 'mcht', $data, $this->settle_mcht_hist);
                 if($result !== '')
-                    array_merge($fail_res, $result);
+                    array_push($fail_res, $result);
             }
             if(count($fail_res))
             {

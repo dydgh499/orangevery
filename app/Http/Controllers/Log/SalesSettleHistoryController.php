@@ -203,7 +203,7 @@ class SalesSettleHistoryController extends Controller
                 $data = $request->data[$i];
                 $result = $this->depositContainer($request, 'sales', $data, $this->settle_sales_hist);
                 if($result !== '')
-                array_merge($fail_res, $result);
+                    array_push($fail_res, $result);
             }
             if(count($fail_res))
             {
