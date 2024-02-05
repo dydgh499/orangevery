@@ -168,7 +168,7 @@ class MchtSettleHistoryController extends Controller
 
     protected function deleteMchtforceCommon($request, $id, $target_settle_id)
     {
-        return DB::transaction(function () use($request, $id) {
+        return DB::transaction(function () use($request, $id, $target_settle_id) {
             $query = $this->settle_mcht_hist->where('id', $id);
             $hist  = $query->first()->toArray();
             if($hist)
