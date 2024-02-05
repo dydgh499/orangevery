@@ -480,7 +480,14 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>가맹점 블랙리스트</template>
+                            <template #input>
+                                <VSwitch hide-details v-model="props.item.paid.use_mcht_blacklist" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
                     <VCardTitle class="pt-10">
                         <BaseQuestionTooltip location="top" text="정산 옵션(유료)"
                             :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">

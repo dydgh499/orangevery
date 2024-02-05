@@ -20,6 +20,7 @@ use App\Http\Controllers\Manager\PaymentGatewayController;
 use App\Http\Controllers\Manager\PaymentSectionController;
 use App\Http\Controllers\Manager\NotiUrlController;
 
+use App\Http\Controllers\Manager\MchtBlacklistController;
 use App\Http\Controllers\Manager\HeadOfficeAccountController;
 use App\Http\Controllers\Manager\ClassificationController;
 use App\Http\Controllers\Manager\PostController;
@@ -113,6 +114,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('finance-vans', FinanceVanController::class);
             Route::apiResource('classifications', ClassificationController::class);
             Route::apiResource('head-office-accounts', HeadOfficeAccountController::class);            
+            Route::apiResource('mcht-blacklists', MchtBlacklistController::class);            
+            
         });
         Route::prefix('transactions')->group(function() {
             Route::post('batch-retry', [TransactionController::class, 'batchRetry']);

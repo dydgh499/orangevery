@@ -43,22 +43,16 @@ const getAbilitiesMenu = computed(() => {
                 to: 'services-head-office-withdraw',
             })
         }
+        if(corp.pv_options.paid.use_mcht_blacklist) {
+            operations[0].children.push({
+                title: '가맹점 블랙리스트',
+                to: 'services-mcht-blacklists',
+            })
+        }
         operations[0].children.push({
             title: '이전 전산 연동',
             to: 'services-computational-transfer',
         })
-        if (getUserLevel() >= 50) {
-            operations[0].children.push({
-                title: '전산 서버 로그',
-                class: 'log(1)',
-                params: '',
-            })
-            operations[0].children.push({
-                title: '노티/결제 서버 로그',
-                class: 'log(2)',
-                params: '',
-            })
-        }        
         popups.push({
             title: '팝업 관리',
             icon: { icon: 'carbon:popup' },
@@ -69,6 +63,21 @@ const getAbilitiesMenu = computed(() => {
             icon: { icon: 'ic-round-sentiment-dissatisfied' },
             to: 'complaints',
         })
+        if (getUserLevel() >= 50) {
+            complaints.push({
+                title: '운영 서버 로그',
+                icon: {icon: 'logos:vuetifyjs'},
+                class: 'log(1)',
+                params: '',
+            })
+            complaints.push({
+                title: '노티 서버 로그',
+                icon: {icon: 'logos:laravel'},
+                class: 'log(2)',
+                params: '',
+            })
+            // logos:vuetifyjs
+        }
     }
     return [
         { heading: 'Service' },

@@ -340,6 +340,7 @@ interface PaidOption {
     use_finance_van_deposit: boolean, //금융 VAN 송금
     use_before_brand_info: boolean, // 이전 서비스 정보 사용
     use_multiple_hand_pay: boolean, // 다중 수기결제
+    use_mcht_blacklist: boolean, // 가맹점 블랙리스트
 }
 interface AuthOption {
     levels: {
@@ -852,4 +853,11 @@ export interface Popup {
     open_e_dt: string,
     open_range?: string,
     visible?: boolean,
+}
+
+export interface MchtBlacklist {
+    id: number,
+    block_type: number,
+    block_content: string,
+    block_reason: string,
 }
