@@ -177,7 +177,9 @@ class MchtSettleHistoryController extends Controller
                 // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
                 $p_res = $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
                 //  Lock wait timeout exceeded; try restarting transaction
+                logging(['start'=>date('Y-m-d H:i:s')]);
                 $u_res = $this->SetNullTransSettle($request, $target_settle_id);
+                logging(['end'=>date('Y-m-d H:i:s')]);
                 $cw_res= $this->SetNullCollectWithdraw($hist);
                 $d_res = $query->update(['is_delete' => true]);
                 return $d_res;
