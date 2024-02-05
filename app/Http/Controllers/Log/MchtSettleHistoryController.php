@@ -143,10 +143,8 @@ class MchtSettleHistoryController extends Controller
             return $this->extendResponse(2000, "입금완료된 정산건은 정산취소 할수 없습니다.");
         else
         {
-            return DB::transaction(function () use($request, $id) {
-                $res = $this->deleteMchtforceCommon($request, $id, 'mcht_settle_id');
-                return $this->response($res ? 1 : 990, ['id'=>$id]);
-            });    
+            $code = $this->deleteMchtforceCommon($request, $id, 'mcht_settle_id');
+            return $this->response($code, ['id'=>$id]);
         }
     }
 
@@ -170,21 +168,23 @@ class MchtSettleHistoryController extends Controller
 
     protected function deleteMchtforceCommon($request, $id, $target_settle_id)
     {
-        $query = $this->settle_mcht_hist->where('id', $id);
-        $hist  = $query->first()->toArray();
-        if($hist)
-        {
-            $request = $request->merge(['id' => $id]);
-            // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
-            $p_res = $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
-            $u_res = $this->SetNullTransSettle($request, $target_settle_id);
-            $cw_res= $this->SetNullCollectWithdraw($hist);
-            $d_res = $query->update(['is_delete' => true]);
-            return $this->response($d_res ? 1 : 990);    
-        }
-        else
-            return $this->response(1000);
-
+        return DB::transaction(function () use($request, $id) {
+            $query = $this->settle_mcht_hist->where('id', $id);
+            $hist  = $query->first()->toArray();
+            if($hist)
+            {
+                $request = $request->merge(['id' => $id]);
+                // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
+                $p_res = $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
+                //  Lock wait timeout exceeded; try restarting transaction
+                $u_res = $this->SetNullTransSettle($request, $target_settle_id);
+                $cw_res= $this->SetNullCollectWithdraw($hist);
+                $d_res = $query->update(['is_delete' => true]);
+                return $d_res;
+            }
+            else
+                return 1000;
+        });
     }
 
     /**

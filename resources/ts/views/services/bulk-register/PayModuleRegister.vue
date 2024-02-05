@@ -178,8 +178,14 @@ const payKeyCreater = () => {
     }
 
     const generateRandomString = (id: number) => {
-        var rand = Math.random().toString(36).substring(2, 66)
-        return id + rand
+        const remaining_length = 64 - id.toString().length
+        const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let result = '';
+        for (let i = 0; i < remaining_length; i++) {
+            const rand_idx = Math.floor(Math.random() * characters.length);
+            result += characters.charAt(rand_idx);
+        }
+        return id + result;
     }
     
     snackbar.value.show('PAY KEY들을 자동 발급 중입니다.', 'primary')
