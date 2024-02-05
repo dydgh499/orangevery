@@ -168,25 +168,34 @@ class MchtSettleHistoryController extends Controller
 
     protected function deleteMchtforceCommon($request, $id, $target_settle_id)
     {
-        return DB::transaction(function () use($request, $id, $target_settle_id) {
+        $code = 1;
+        $result = DB::transaction(function () use(&$code, $request, $id, $target_settle_id) {
             $query = $this->settle_mcht_hist->where('id', $id);
             $hist  = $query->first()->toArray();
             if($hist)
             {
                 $request = $request->merge(['id' => $id]);
                 // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
-                $p_res = $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
-                //  Lock wait timeout exceeded; try restarting transaction
-                logging(['start'=>date('Y-m-d H:i:s')]);
-                $u_res = $this->SetNullTransSettle($request, $target_settle_id);
-                logging(['end'=>date('Y-m-d H:i:s')]);
-                $cw_res= $this->SetNullCollectWithdraw($hist);
-                $d_res = $query->update(['is_delete' => true]);
-                return $d_res;
+                $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
+                $this->SetNullCollectWithdraw($hist);
+                $query->update(['is_delete' => true]);
+                $code = 1;
+                return true;
             }
             else
-                return 1000;
+            {
+                $code = 1000;
+                return false;
+            }
         });
+        if($result)
+        {
+            logging(['start'=>date('Y-m-d H:i:s')]);
+            //  Lock wait timeout exceeded; try restarting transaction
+            $u_res = $this->SetNullTransSettle($request, $target_settle_id);
+            logging(['end'=>date('Y-m-d H:i:s')]);    
+        }
+        return $code;
     }
 
     /**
