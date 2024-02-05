@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('operators', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->string('user_name', 30)->index()->comment('ID');
             $table->string('user_pw', 100)->comment('PW');
             $table->string('nick_name', 30)->nullable()->comment('유저 닉네임');

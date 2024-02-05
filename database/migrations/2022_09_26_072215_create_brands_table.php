@@ -15,7 +15,7 @@ class CreateBrandsTable extends Migration
     {
         //app_order_flag, app_gift_flag, coupon_flag
         Schema::create('brands', function (Blueprint $table) {
-            $table->increments('id');
+            $table->unsignedSmallInteger('id', true);
             $table->string('dns')->unique();
             $table->string('name');
             $table->string('theme_css')->nullable();    // json으로 저장

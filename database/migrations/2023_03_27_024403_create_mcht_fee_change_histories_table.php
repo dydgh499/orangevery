@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('mcht_fee_change_histories', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-            $table->unsignedInteger('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
+            $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedMediumInteger('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
             $table->float('bf_trx_fee',6, 5)->nullable()->comment('이전 거래 수수료');
             $table->float('bf_hold_fee',6, 5)->nullable()->comment('이전 보유금액 수수료');
             $table->float('aft_trx_fee',6, 5)->nullable()->comment('이후 거래 수수료');

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('fail_transactions', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->integer('pmod_id')->default(0)->comment('pay module ID (장비 ID)');
             $table->integer('pg_id')->default(0)->comment('PG사 id');
             $table->integer('ps_id')->default(0)->comment('구간 id');

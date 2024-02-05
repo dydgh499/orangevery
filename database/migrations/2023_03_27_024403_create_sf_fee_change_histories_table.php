@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('sf_fee_change_histories', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-            $table->unsignedInteger('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
+            $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedMediumInteger('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
             $table->integer('bf_sales_id')->nullable()->comment('이전 영업자 FK');
             $table->integer('aft_sales_id')->nullable()->comment('이후 영업자 FK');
             $table->tinyInteger('level')->comment('영업자 등급');

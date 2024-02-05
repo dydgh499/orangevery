@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('salesforces', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->tinyInteger('level')->unsigned()->default(0)->comment('(13,15,17,20,25,30)등급');
             $table->string('user_name', 30)->index()->comment('ID');
             $table->string('user_pw', 100)->comment('PW');

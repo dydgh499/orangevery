@@ -123,8 +123,8 @@ class MchtSettleHistoryController extends Controller
                 $data['cancel_deposit_amount'] = $_data['cancel_deposit_amount'];
                 $data['collect_withdraw_amount'] = $_data['collect_withdraw_amount'];
 
-                $query = Transaction::where('mcht_id', $data['mcht_id']);
                 $c_res = $this->settle_mcht_hist->create($data);
+                $query = Transaction::where('mcht_id', $data['mcht_id']);
                 $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);    
                 $p_res = $this->SetPayModuleLastSettleMonth($data, 'mcht_settle_id', $c_res->id);
                 $cw_res= $this->SetCollectWithdraw($data, $c_res->id);

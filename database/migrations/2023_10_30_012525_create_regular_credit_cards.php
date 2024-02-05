@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('regular_credit_cards', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
+            $table->unsignedMediumInteger('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
             $table->string('card_num', 100)->nullable()->comment('card_num');
             $table->string('note', 100)->nullable()->comment('note');
             $table->timestamps();

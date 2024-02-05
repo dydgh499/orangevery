@@ -14,25 +14,25 @@ class CreateMerchandisesTable extends Migration
     public function up()
     {
         Schema::create('merchandises', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedMediumInteger('id', true);
+            $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             //
-            $table->integer('sales5_id')->nullable()->comment('지사');
+            $table->unsignedMediumInteger('sales5_id')->nullable()->comment('지사');
             $table->float('sales5_fee', 6, 5)->default(0)->comment('지사 수수료');
             //
-            $table->integer('sales4_id')->nullable()->comment('하위 지사');
+            $table->unsignedMediumInteger('sales4_id')->nullable()->comment('하위 지사');
             $table->float('sales4_fee', 6, 5)->default(0)->comment('하위 지사 수수료');
             //
-            $table->integer('sales3_id')->nullable()->comment('총판');
+            $table->unsignedMediumInteger('sales3_id')->nullable()->comment('총판');
             $table->float('sales3_fee', 6, 5)->default(0)->comment('총판 수수료');
             //
-            $table->integer('sales2_id')->nullable()->comment('하위 총판');
+            $table->unsignedMediumInteger('sales2_id')->nullable()->comment('하위 총판');
             $table->float('sales2_fee', 6, 5)->default(0)->comment('하위 총판 수수료');
             //
-            $table->integer('sales1_id')->nullable()->comment('대리점');
+            $table->unsignedMediumInteger('sales1_id')->nullable()->comment('대리점');
             $table->float('sales1_fee', 6, 5)->default(0)->comment('대리점 수수료');
             //
-            $table->integer('sales0_id')->nullable()->comment('하위 대리점');
+            $table->unsignedMediumInteger('sales0_id')->nullable()->comment('하위 대리점');
             $table->float('sales0_fee', 6, 5)->default(0)->comment('하위 대리점 거래 수수료');
             //
 

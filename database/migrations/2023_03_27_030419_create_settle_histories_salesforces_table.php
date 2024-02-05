@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('settle_histories_salesforces', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->unsignedInteger('sales_id')->nullable()->comment('영업자 FK')->constrained('salesforces')->onDelete('SET NULL');
             $table->string('acct_name', 30)->nullable()->comment('예금주명');
             $table->string('acct_num', 20)->nullable()->comment('예금계좌번호');

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('head_office_accounts', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->string('acct_num', 20)->nullable()->comment('계좌번호');
             $table->string('acct_name', 50)->nullable()->comment('예금주명');
             $table->string('acct_bank_name', 30)->nullable()->comment('입금은행명');

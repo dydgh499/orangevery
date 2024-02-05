@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('noti_send_histories', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 ID')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 ID')->constrained('brands')->onDelete('SET NULL');
             $table->unsignedInteger('trans_id')->nullable()->comment('거래 ID')->constrained('transactions')->onDelete('SET NULL');
             $table->integer('http_code')->comment('응답 HTTP CODE');
             $table->string('send_url')->comment('발송 url');

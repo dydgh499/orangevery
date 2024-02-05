@@ -45,13 +45,16 @@ class MerchandiseController extends Controller
         $search = $request->input('search', '');
         // ----- 가맹점 목록 조회 ---------
         $mcht_ids = $this->getExistTransUserIds('mcht_id', 'mcht_settle_id');
-        $terminal_settle_ids = PaymentModule::terminalSettle(10)->byTargetIds('id');
 
+        $p_query = PaymentModule::terminalSettle(10)->where('merchandises.mcht_name', 'like', "%$search%");
+        $terminal_settle_ids = globalAuthFilter($p_query, $request, 'merchandises')->byTargetIds('id');
+        
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
                 ->where('mcht_name', 'like', "%$search%")
                 ->orWhere(function ($query) use($terminal_settle_ids) {    
                     $query->whereIn('id',$terminal_settle_ids);
                 });
+
         if($request->use_realtime_deposit == 0)
         {   // 즉시출금 제외
             $mcht_ids = $query->pluck('id')->all();

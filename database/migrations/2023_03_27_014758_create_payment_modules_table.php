@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('payment_modules', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-            $table->unsignedInteger('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
+            $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedMediumInteger('mcht_id')->nullable()->comment('가맹점 FK')->constrained('merchandises')->onDelete('SET NULL');
             $table->integer('pg_id')->nullable()->comment('PG사 id');
             $table->integer('ps_id')->nullable()->comment('PG사 구간 id');
             $table->integer('settle_type')->default(0)->comment('정산일(D+1, D+2 ..)');

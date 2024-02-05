@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('popups', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->unsignedInteger('oper_id')->nullable()->comment('운영자 FK')->constrained('operators')->onDelete('SET NULL');
             $table->string('popup_title', 100)->nullable()->comment('팝업 제목');
             $table->text('popup_content')->nullable()->comment('팝업 내용');

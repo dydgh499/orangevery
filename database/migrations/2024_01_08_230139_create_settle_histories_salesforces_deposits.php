@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('settle_histories_salesforces_deposits', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->unsignedInteger('settle_hist_sales_id')->nullable()->comment('영업점 정산 이력 ID');
             $table->foreign('settle_hist_sales_id', 'shsd_shsales_id_fk')
                 ->references('id')

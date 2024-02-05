@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('payment_gateways', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
+            $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->tinyInteger('pg_type')->comment('PG사명(1,2,3,4,5 ...)');
             $table->boolean('settle_type')->default(0)->comment('정산타입(0=주말포함, 1=주말제외)');
             $table->string('pg_name')->comment('PG사명');
