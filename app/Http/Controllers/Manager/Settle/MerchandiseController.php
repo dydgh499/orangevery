@@ -35,6 +35,14 @@ class MerchandiseController extends Controller
         $this->settleDeducts = $settleDeducts;
     }
 
+
+    protected function getTerminalSettleIds($request, $level, $target_id)
+    {
+        $query = PaymentModule::terminalSettle($level)
+            ->where('merchandises.mcht_name', 'like', "%".$request->search."%");
+        return globalAuthFilter($query, $request, 'merchandises')->byTargetIds($target_id);
+    }
+
     private function commonQuery($request)
     {
         $with = ['deducts'];
@@ -45,10 +53,8 @@ class MerchandiseController extends Controller
         $search = $request->input('search', '');
         // ----- 가맹점 목록 조회 ---------
         $mcht_ids = $this->getExistTransUserIds('mcht_id', 'mcht_settle_id');
+        $terminal_settle_ids = $this->getTerminalSettleIds($request, 10, 'id');
 
-        $p_query = PaymentModule::terminalSettle(10)->where('merchandises.mcht_name', 'like', "%$search%");
-        $terminal_settle_ids = globalAuthFilter($p_query, $request, 'merchandises')->byTargetIds('id');
-        
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
                 ->where('mcht_name', 'like', "%$search%")
                 ->orWhere(function ($query) use($terminal_settle_ids) {    

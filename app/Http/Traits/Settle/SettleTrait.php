@@ -14,7 +14,6 @@ trait SettleTrait
             "acct_num", "acct_name", "acct_bank_name", "acct_bank_code",
         ];
     }
-
     public function getSettleInformation($data, $settle_key)
     {
         foreach($data['content'] as $content) {
@@ -65,8 +64,8 @@ trait SettleTrait
     protected function getTargetInfo($level)
     {   //SettleHistoryTrait와 같은 함수 존재
         $idx = globalLevelByIndex($level);
-        $target_id =  'sales'.$idx.'_id';
-        $target_settle_id =  'sales'.$idx.'_settle_id';
+        $target_id = 'sales'.$idx.'_id';
+        $target_settle_id = 'sales'.$idx.'_settle_id';
         return [$target_id, $target_settle_id];
     }
 

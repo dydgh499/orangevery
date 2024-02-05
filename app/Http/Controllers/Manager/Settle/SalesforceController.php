@@ -36,7 +36,15 @@ class SalesforceController extends Controller
         $this->settleDeducts = $settleDeducts;
     }
 
-    private function commonSalesQuery($query, $s_dt, $e_dt)
+    protected function getTerminalSettleIds($request, $level, $target_id)
+    {
+        $query = PaymentModule::terminalSettle($level)
+            ->join('salesforces', "merchandises.$target_id", '=', 'salesforces.id')
+            ->where('salesforces.sales_name', 'like', "%".$request->search."%");
+        return globalAuthFilter($query, $request, 'merchandises')->byTargetIds($target_id);
+    }
+
+    protected function commonSalesQuery($query, $s_dt, $e_dt)
     {
         // 말일이 아니라면 settle_cycle 28인 영업자는 제외
         if(Carbon::parse($e_dt)->isLastOfMonth() == false)
@@ -60,9 +68,9 @@ class SalesforceController extends Controller
         $e_dt   = $request->e_dt;
 
         [$target_id, $target_settle_id] =  $this->getTargetInfo($level);
-        $sales_ids = $this->getExistTransUserIds($target_id, $target_settle_id);
-        $terminal_settle_ids = PaymentModule::terminalSettle($level)->byTargetIds($target_id);
-
+        // ----- 영업점 목록 조회 ---------
+        $sales_ids = $this->getExistTransUserIds($target_id, $target_settle_id);                
+        $terminal_settle_ids = $this->getTerminalSettleIds($request, $level, $target_id);
         $query = $this->getDefaultQuery($this->salesforces, $request, $sales_ids)
             ->where('sales_name', 'like', "%$search%")
             ->where('level', $level)
