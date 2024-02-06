@@ -347,7 +347,7 @@ class TransactionController extends Controller
     }
 
     /*
-     * 노티 대량 재전송
+     * 노티 자체 대량 재전송
      */
     public function batchRetry(Request $request)
     {
@@ -358,6 +358,26 @@ class TransactionController extends Controller
             $res = $this->notiSender($url, $tran, '');
         }
         return $this->response(1);
+    }
+
+    /*
+    * 노티 전송 -> 가맹점
+    */
+    public function noti(Request $request, $id)
+    {
+        $tran = $this->transactions
+            ->join('noti_urls', 'transactions.mcht_id', '=', 'noti_urls.mcht_id')
+            ->where('transactions.id', $id)
+            ->first(['transactions.*', 'noti_urls.send_url']);
+        if($tran)
+        {
+            $tran->retry_count = 0;
+            $res = $this->notiSender($tran->send_url, $tran, '');
+            $this->save($res, $tran);    
+            return $this->response(1);    
+        }
+        else
+            return $this->response(1000);
     }
 
     /*

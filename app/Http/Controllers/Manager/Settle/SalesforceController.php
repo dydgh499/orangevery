@@ -41,14 +41,16 @@ class SalesforceController extends Controller
         $query = PaymentModule::terminalSettle($level)
             ->join('salesforces', "merchandises.$target_id", '=', 'salesforces.id')
             ->where('salesforces.sales_name', 'like', "%".$request->search."%");
-        return globalAuthFilter($query, $request, 'merchandises')->byTargetIds($target_id);
+        $query = globalAuthFilter($query, $request, 'merchandises');
+        $query = $this->commonSalesQuery($query, $request->s_dt, $request->e_dt);
+        return $query->byTargetIds($target_id);
     }
 
     protected function commonSalesQuery($query, $s_dt, $e_dt)
     {
         // 말일이 아니라면 settle_cycle 28인 영업자는 제외
         if(Carbon::parse($e_dt)->isLastOfMonth() == false)
-            $query = $query->where('settle_cycle', '!=', 28);
+            $query = $query->where('salesforces.settle_cycle', '!=', 28);
 
         return $query->where(function ($query) use ($e_dt) {
             $query->where('settle_day', Carbon::parse($e_dt)->dayOfWeek)
@@ -69,8 +71,9 @@ class SalesforceController extends Controller
 
         [$target_id, $target_settle_id] =  $this->getTargetInfo($level);
         // ----- 영업점 목록 조회 ---------
-        $sales_ids = $this->getExistTransUserIds($target_id, $target_settle_id);                
+        $sales_ids = $this->getExistTransUserIds($target_id, $target_settle_id);   
         $terminal_settle_ids = $this->getTerminalSettleIds($request, $level, $target_id);
+
         $query = $this->getDefaultQuery($this->salesforces, $request, $sales_ids)
             ->where('sales_name', 'like', "%$search%")
             ->where('level', $level)
@@ -80,7 +83,7 @@ class SalesforceController extends Controller
 
         if($request->settle_cycle)
             $query = $query->where('settle_cycle', $request->settle_cycle);
-
+           
         $query = $this->commonSalesQuery($query, $s_dt, $e_dt);
         $query = $query->with(['transactions', 'deducts']);
         $data = $this->getIndexData($request, $query, 'id', $cols, "created_at", false);

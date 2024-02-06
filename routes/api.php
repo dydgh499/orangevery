@@ -117,16 +117,14 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('mcht-blacklists', MchtBlacklistController::class);            
             
         });
-        Route::prefix('transactions')->group(function() {
+        Route::prefix('transactions')->group(function() {            
+            Route::post('noti/{id}', [TransactionController::class, 'noti']);
             Route::post('batch-retry', [TransactionController::class, 'batchRetry']);
             Route::post('cancel', [TransactionController::class, 'cancel']);
             Route::post('pay-cancel', [TransactionController::class, 'payCancel']);
             Route::get('chart', [TransactionController::class, 'chart']);
-            Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);
-            
+            Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);            
             Route::get('fails', [FailTransController::class, 'index']);
-
-            
             
             Route::get('dangers', [DangerTransController::class, 'index']);
             Route::delete('dangers/{id}', [DangerTransController::class, 'destroy']);

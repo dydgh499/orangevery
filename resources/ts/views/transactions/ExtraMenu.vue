@@ -81,6 +81,21 @@ const payCanceled = async () => {
         }
     }
 }
+
+const noti = async () => {
+    if (await alert.value.show('정말 노티 재발송을 하시겠습니까?')) {
+        try {
+            const r = await post('/api/v1/manager/transactions/noti/'+props.item.id, {}, true)
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            const r = errorHandler(e)
+        }
+
+    }
+
+}
+
 const isCancelSafeDate = () => {
     return getUserLevel() == 10 && props.item.trx_dt == formatDate(new Date())
 }
@@ -115,6 +130,13 @@ const isUseCancelDeposit = () => {
                         <VIcon size="24" class="me-3" icon="fa6-solid:money-bill-transfer" />
                     </template>
                     <VListItemTitle>재이체</VListItemTitle>
+                </VListItem>
+                <VListItem value="noti" class="noti" @click="noti()"
+                    v-if="corp.pv_options.paid.use_noti && getUserLevel() >= 50">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="emojione:envelope" />
+                    </template>
+                    <VListItemTitle>노티전송</VListItemTitle>
                 </VListItem>
                 <VListItem value="realtime-histories" @click="realtimeHistories.show(props.item)"
                     v-if="isRealtimeTransaction()">

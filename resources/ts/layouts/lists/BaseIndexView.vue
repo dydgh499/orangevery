@@ -46,7 +46,7 @@ onMounted(() => {
                         <thead>
                             <slot name="headers"></slot>
                             <template v-if="store.is_skeleton">
-                                <tr v-for="(item, index) in 10" :key="index">
+                                <tr v-for="(item, index) in 15" :key="index">
                                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                                         <template v-if="head.getDepth(_header, 0) != 1">
                                             <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
