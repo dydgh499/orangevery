@@ -190,7 +190,7 @@ class Transaction
                                 'acquirer' => $transaction->BANK_NM,
                                 'appr_num' => $transaction->APPR_NUM,
     
-                                'installment' => $transaction->INSTALLMENT,
+                                'installment' => $transaction->INSTALLMENT ? $transaction->INSTALLMENT : 0,
                                 'buyer_name' => $transaction->BUYER_NM,
                                 'buyer_phone' => $transaction->BUYER_PHONE,
                                 'item_name' => $transaction->ITEM_NM,
