@@ -53,14 +53,15 @@ class MerchandiseController extends Controller
         $search = $request->input('search', '');
         // ----- 가맹점 목록 조회 ---------
         $mcht_ids = $this->getExistTransUserIds('mcht_id', 'mcht_settle_id');
-        $terminal_settle_ids = $this->getTerminalSettleIds($request, 10, 'id');
+        //$terminal_settle_ids = $this->getTerminalSettleIds($request, 10, 'id');
 
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
-                ->where('mcht_name', 'like', "%$search%")
+            ->where('mcht_name', 'like', "%$search%");
+        /*
                 ->orWhere(function ($query) use($terminal_settle_ids) {    
                     $query->whereIn('id',$terminal_settle_ids);
                 });
-
+        */
         if($request->use_realtime_deposit == 0)
         {   // 즉시출금 제외
             $mcht_ids = $query->pluck('id')->all();
@@ -82,7 +83,7 @@ class MerchandiseController extends Controller
         $data = $this->getSettleInformation($data, $settle_key);
         // set terminals
         $mcht_ids = collect($data['content'])->pluck('id')->all();
-        if(count($mcht_ids) && $terminal_settle_ids)
+        if(count($mcht_ids)) #&& $terminal_settle_ids)
         {
             $settle_s_day   = date('d', strtotime($request->s_dt));
             $settle_e_day   = date('d', strtotime($request->e_dt));

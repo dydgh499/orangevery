@@ -72,15 +72,16 @@ class SalesforceController extends Controller
         [$target_id, $target_settle_id] =  $this->getTargetInfo($level);
         // ----- 영업점 목록 조회 ---------
         $sales_ids = $this->getExistTransUserIds($target_id, $target_settle_id);   
-        $terminal_settle_ids = $this->getTerminalSettleIds($request, $level, $target_id);
+        #$terminal_settle_ids = $this->getTerminalSettleIds($request, $level, $target_id);
 
         $query = $this->getDefaultQuery($this->salesforces, $request, $sales_ids)
             ->where('sales_name', 'like', "%$search%")
-            ->where('level', $level)
+            ->where('level', $level);
+            /*
             ->orWhere(function ($query) use($terminal_settle_ids) {    
                 $query->whereIn('id', $terminal_settle_ids);
             });
-
+            */
         if($request->settle_cycle)
             $query = $query->where('settle_cycle', $request->settle_cycle);
            
@@ -90,7 +91,7 @@ class SalesforceController extends Controller
 
         $data = $this->getSettleInformation($data, $settle_key);
         // set terminals
-        if(count($sales_ids) && $terminal_settle_ids)
+        if(count($sales_ids)) #&& $terminal_settle_ids)
         {
             $settle_s_day   = date('d', strtotime($request->s_dt));
             $settle_e_day   = date('d', strtotime($request->e_dt));
