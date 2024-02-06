@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
+import { useSearchStore, masking } from '@/views/transactions/settle/useMerchandiseStore'
 import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import { selectFunctionCollect } from '@/views/selected'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
@@ -66,7 +66,10 @@ onMounted(() => {
                 <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, true)" v-if="getUserLevel() >= 35"
                     size="small">
                     일괄 정산하기
-                </VBtn> 
+                </VBtn>
+                
+                <VSwitch hide-details :false-value=0 :true-value=1 v-model="masking" label="주민등록번호 마스킹"
+                    color="primary"/>
                 <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.use_realtime_deposit" label="즉시출금 포함"
                     color="primary"
                     @update:modelValue="[store.updateQueryString({ use_realtime_deposit: store.params.use_realtime_deposit })]"
@@ -169,9 +172,12 @@ onMounted(() => {
                                     </div>
                                 </span>
                                 <span v-else-if="_key == 'resident_num'">
-                                    <span>{{ item['resident_num_front'] }}</span>
-                                    <span style="margin: 0 0.25em;"> - </span>
-                                    <span>*******</span>
+                                    <span>
+                                        <span>{{ item['resident_num_front'] }}</span>
+                                        <span style="margin: 0 0.25em;"> - </span>
+                                        <span v-if="masking">*******</span>
+                                        <span v-else>{{ item['resident_num_back'] }}</span>
+                                    </span>
                                 </span>
                                 <span v-else-if="isSalesCol(_key as string)" style="font-weight: bold;">
                                     {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
