@@ -224,7 +224,8 @@ onMounted(() => {
                             <span v-else-if="_key == 'resident_num'">
                                 <span>{{ item['resident_num_front'] }}</span>
                                 <span style="margin: 0 0.25em;"> - </span>
-                                <span>*******</span>
+                                <span v-if="corp.pv_options.free.resident_num_masking">*******</span>
+                                <span v-else>{{ item['resident_num_back'] }}</span>
                             </span>
                             <span v-else-if="_key == 'custom_id'">
                                 {{ cus_filters.find(cus => cus.id === item[_key])?.name }}

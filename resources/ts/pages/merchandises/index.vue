@@ -8,6 +8,7 @@ import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { getUserLevel, isAbleModifyMcht } from '@axios'
 import { DateFilters } from '@core/enums'
+import corp from '@corp'
 
 const add_able = getUserLevel() >= 35 || isAbleModifyMcht()
 const { store, head, exporter, metas } = useSearchStore()
@@ -107,7 +108,8 @@ onMounted(() => {
                             <span v-else-if="_key == 'resident_num'">
                                 <span>{{ item['resident_num_front'] }}</span>
                                 <span style="margin: 0 0.25em;"> - </span>
-                                <span>*******</span>
+                                <span v-if="corp.pv_options.free.resident_num_masking">*******</span>
+                                <span v-else>{{ item['resident_num_back'] }}</span>
                             </span>
                             <span v-else-if="_key == 'enabled'">
                                 <VChip :color="store.booleanTypeColor(!item[_key])">

@@ -73,11 +73,11 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>                                
+                            <template #name>
                                 <BaseQuestionTooltip location="top" text="검색옵션 자동 초기화"
                                     :content="`목록 페이지에서 선택한 검색옵션들이 메뉴 이동시 자동으로 초기화됩니다.`">
                                 </BaseQuestionTooltip>
-                                </template>
+                            </template>
                             <template #input>
                                 <VSwitch hide-details v-model="props.item.free.init_search_filter" color="primary" />
                             </template>
@@ -86,19 +86,28 @@ const md = user_info.value.level == 50 ? 4 : 12
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>
-                                <BaseQuestionTooltip location="top" text="고정 테이블 사용여부"
-                                    :content="`리스트 화면에서 테이블 헤더가 고정됩니다.`">
+                                <BaseQuestionTooltip location="top" text="고정 테이블 사용여부" :content="`리스트 화면에서 테이블 헤더가 고정됩니다.`">
                                 </BaseQuestionTooltip>
                             </template>
                             <template #input>
                                 <VRow no-gutters>
                                     <VCol md="4">
-                                        <VSwitch hide-details v-model="props.item.free.use_fix_table_view" color="primary" />
+                                        <VSwitch hide-details v-model="props.item.free.use_fix_table_view"
+                                            color="primary" />
                                     </VCol>
                                     <VCol md="8">
-                                        <VTextField v-model="props.item.free.fix_table_size" placeholder="사이즈 입력" type="number" suffix="px" v-if="props.item.free.use_fix_table_view"/>
+                                        <VTextField v-model="props.item.free.fix_table_size" placeholder="사이즈 입력"
+                                            type="number" suffix="px" v-if="props.item.free.use_fix_table_view" />
                                     </VCol>
                                 </VRow>
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>주민등록번호 뒷자리 숨김</template>
+                            <template #input>
+                                <VSwitch hide-details v-model="props.item.free.resident_num_masking" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -112,8 +121,8 @@ const md = user_info.value.level == 50 ? 4 : 12
                             <template #name>회사명</template>
                             <template #input>
                                 <VTextField prepend-inner-icon="ph-buildings"
-                                    v-model="props.item.free.sales_slip.merchandise.company_name"
-                                    placeholder="회사명을 입력해주세요." type="text" />
+                                    v-model="props.item.free.sales_slip.merchandise.company_name" placeholder="회사명을 입력해주세요."
+                                    type="text" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -292,7 +301,8 @@ const md = user_info.value.level == 50 ? 4 : 12
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>결제전 휴대폰 인증</template>
                             <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_pay_verification_mobile" color="primary" />
+                                <VSwitch hide-details v-model="props.item.paid.use_pay_verification_mobile"
+                                    color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -324,7 +334,8 @@ const md = user_info.value.level == 50 ? 4 : 12
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>모아서 출금 스케줄링</template>
                             <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_collect_withdraw_scheduler" color="primary" />
+                                <VSwitch hide-details v-model="props.item.paid.use_collect_withdraw_scheduler"
+                                    color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -340,8 +351,8 @@ const md = user_info.value.level == 50 ? 4 : 12
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>
                                 <BaseQuestionTooltip location="top" text="다중 수기결제"
-                                :content="`사용 가맹점당 3개의 결제모듈이 존재해야 활성화 됩니다.`">
-                            </BaseQuestionTooltip>
+                                    :content="`사용 가맹점당 3개의 결제모듈이 존재해야 활성화 됩니다.`">
+                                </BaseQuestionTooltip>
                             </template>
                             <template #input>
                                 <VSwitch hide-details v-model="props.item.paid.use_multiple_hand_pay" color="primary" />
@@ -464,7 +475,8 @@ const md = user_info.value.level == 50 ? 4 : 12
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>이상거래, 결제실패, 실시간이체 관리 영업점 노출여부</template>
                             <template #input>
-                                <VSwitch hide-details v-model="props.item.auth.visibles.abnormal_trans_sales" color="primary" />
+                                <VSwitch hide-details v-model="props.item.auth.visibles.abnormal_trans_sales"
+                                    color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -472,8 +484,8 @@ const md = user_info.value.level == 50 ? 4 : 12
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>
                                 <BaseQuestionTooltip location="top" text="기간별 사업자정보 사용"
-                                :content="`기간별로 사업자정보가 매출전표에 표기됩니다.(공급자 정보: 본사정보로 체크되어야합니다.)`">
-                            </BaseQuestionTooltip>
+                                    :content="`기간별로 사업자정보가 매출전표에 표기됩니다.(공급자 정보: 본사정보로 체크되어야합니다.)`">
+                                </BaseQuestionTooltip>
                             </template>
                             <template #input>
                                 <VSwitch hide-details v-model="props.item.paid.use_before_brand_info" color="primary" />
@@ -497,12 +509,11 @@ const md = user_info.value.level == 50 ? 4 : 12
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>금융VAN 송금 사용여부</template>
                             <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_finance_van_deposit" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                </VCardItem>
-            </VCard>
-        </VCol>
-    </VRow>
-</template>
+                            <VSwitch hide-details v-model="props.item.paid.use_finance_van_deposit" color="primary" />
+                        </template>
+                    </CreateHalfVCol>
+                </VRow>
+            </VCardItem>
+        </VCard>
+    </VCol>
+</VRow></template>

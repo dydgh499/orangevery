@@ -4,7 +4,6 @@ import type { DeductionHeader } from '@/views/types'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
 
-export const masking = ref(1)
 export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
     const store = Searcher('transactions/settle/merchandises')
     const head  = Header('transactions/settle/merchandises', '가맹점 정산관리')
@@ -124,7 +123,7 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
             datas[i]['settle.transfer'] = datas[i]['settle']['transfer']
             datas[i]['deduction.amount'] =  datas[i]['deduction']['amount']
             datas[i]['deduction.input'] =  ''
-            datas[i]['resident_num'] = datas[i]['resident_num_front'] + " - " + (masking.value ? "*******" : datas[i]['resident_num_back'])
+            datas[i]['resident_num'] = datas[i]['resident_num_front'] + " - " + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
             
             delete datas[i]['appr']
             delete datas[i]['total']
@@ -142,6 +141,5 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         store,
         head,
         exporter,
-        masking,
     }
 })

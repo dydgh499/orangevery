@@ -299,6 +299,7 @@ interface FreeOption {
     use_fix_table_view: boolean,
     fix_table_size: number,
     init_search_filter: number,
+    resident_num_masking: number,
     sales_slip: {
         merchandise: BrandBaseInfo
     },

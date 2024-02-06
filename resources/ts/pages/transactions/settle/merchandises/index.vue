@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSearchStore, masking } from '@/views/transactions/settle/useMerchandiseStore'
+import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
 import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import { selectFunctionCollect } from '@/views/selected'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
@@ -67,9 +67,6 @@ onMounted(() => {
                     size="small">
                     일괄 정산하기
                 </VBtn>
-                
-                <VSwitch hide-details :false-value=0 :true-value=1 v-model="masking" label="주민등록번호 마스킹"
-                    color="primary"/>
                 <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.use_realtime_deposit" label="즉시출금 포함"
                     color="primary"
                     @update:modelValue="[store.updateQueryString({ use_realtime_deposit: store.params.use_realtime_deposit })]"
@@ -175,7 +172,7 @@ onMounted(() => {
                                     <span>
                                         <span>{{ item['resident_num_front'] }}</span>
                                         <span style="margin: 0 0.25em;"> - </span>
-                                        <span v-if="masking">*******</span>
+                                        <span v-if="corp.pv_options.free.resident_num_masking">*******</span>
                                         <span v-else>{{ item['resident_num_back'] }}</span>
                                     </span>
                                 </span>

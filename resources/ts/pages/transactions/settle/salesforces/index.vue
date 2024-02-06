@@ -11,6 +11,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { getUserLevel, salesLevels } from '@axios'
 import { DateFilters } from '@core/enums'
+import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
@@ -162,7 +163,8 @@ onMounted(() => {
                             <span v-else-if="_key == 'resident_num'">
                                 <span>{{ item['resident_num_front'] }}</span>
                                 <span style="margin: 0 0.25em;"> - </span>
-                                <span>*******</span>
+                                <span v-if="corp.pv_options.free.resident_num_masking">*******</span>
+                                <span v-else>{{ item['resident_num_back'] }}</span>
                             </span>
                             <span v-else-if="_key == 'settle_day'">
                                 {{ all_days.find(sales => sales.id === item[_key])?.title }}

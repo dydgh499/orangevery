@@ -12,6 +12,7 @@
         public $use_fix_table_view = true;
         public $fix_table_size = 749;
         public $init_search_filter = true;
+        public $resident_num_masking = true;
         public $sales_slip = [
             'merchandise' => [
                 'company_name' => '',

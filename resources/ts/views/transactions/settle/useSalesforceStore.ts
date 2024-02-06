@@ -3,6 +3,7 @@ import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/us
 import { Searcher } from '@/views/searcher'
 import type { DeductionHeader } from '@/views/types'
 import { getUserLevel, salesLevels } from '@axios'
+import corp from '@corp'
 
 export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
     const store = Searcher('transactions/settle/salesforces')
@@ -114,7 +115,7 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
             datas[i]['settle.transfer'] = datas[i]['settle']['transfer']
             datas[i]['deduction.amount'] =  datas[i]['deduction']['amount']
             datas[i]['deduction.input'] =  ''
-            datas[i]['resident_num'] = datas[i]['resident_num_front'] + " - *******"
+            datas[i]['resident_num'] = datas[i]['resident_num_front'] + " - " + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
 
             delete datas[i]['appr']
             delete datas[i]['total']
