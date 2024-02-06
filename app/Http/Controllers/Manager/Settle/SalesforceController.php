@@ -87,7 +87,6 @@ class SalesforceController extends Controller
 
         $data = $this->getSettleInformation($data, $settle_key);
         // set terminals
-        logging($terminal_settle_ids);
         if(count($sales_ids) && $terminal_settle_ids)
         {
             $settle_s_day   = date('d', strtotime($request->s_dt));
