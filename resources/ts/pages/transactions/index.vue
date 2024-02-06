@@ -8,6 +8,7 @@ import ExtraMenu from '@/views/transactions/ExtraMenu.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
 import CancelTransDialog from '@/layouts/dialogs/CancelTransDialog.vue'
+import CancelPartDialog from '@/layouts/dialogs/CancelPartDialog.vue'
 import CancelDepositDialog from '@/layouts/dialogs/CancelDepositDialog.vue'
 import RealtimeHistoriesDialog from '@/layouts/dialogs/RealtimeHistoriesDialog.vue'
 
@@ -25,6 +26,7 @@ const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
 const salesslip = ref()
 const cancelTran = ref()
+const cancelPart = ref()
 const cancelDeposit = ref()
 const realtimeHistories = ref()
 const levels = corp.pv_options.auth.levels
@@ -35,6 +37,7 @@ provide('exporter', exporter)
 
 provide('salesslip', salesslip)
 provide('cancelTran', cancelTran)
+provide('cancelPart', cancelPart)
 provide('cancelDeposit', cancelDeposit)
 provide('realtimeHistories', realtimeHistories)
 
@@ -248,6 +251,7 @@ onMounted(() => {
         </BaseIndexView>
         <SalesSlipDialog ref="salesslip" :pgs="pgs" />
         <CancelTransDialog ref="cancelTran" />
+        <CancelPartDialog ref="cancelPart" />
         <CancelDepositDialog ref="cancelDeposit" />
         <RealtimeHistoriesDialog ref="realtimeHistories" />
 </div></template>

@@ -23,6 +23,7 @@ const formatDate = <any>(inject('$formatDate'))
 const salesslip = <any>(inject('salesslip'))
 const cancelTran = <any>(inject('cancelTran'))
 const cancelDeposit = <any>(inject('cancelDeposit'))
+const cancelPart = <any>(inject('cancelPart'))
 const realtimeHistories = <any>(inject('realtimeHistories'))
 
 const complaint = () => {
@@ -58,6 +59,14 @@ const retryDeposit = async () => {
 }
 
 const payCanceled = async () => {
+    if(corp.pv_options.paid.use_part_cancel) {
+        const amount = await cancelPart.value.show(props.item.amount)
+        if(amount == 0)
+            return
+        else
+            props.item.amount = amount
+    }
+
     if (await alert.value.show('정말 PG사를 통해 결제를 취소하시겠습니까?')) {
         const params = <any>({
             pmod_id: props.item.pmod_id,
