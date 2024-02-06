@@ -342,6 +342,7 @@ interface PaidOption {
     use_before_brand_info: boolean, // 이전 서비스 정보 사용
     use_multiple_hand_pay: boolean, // 다중 수기결제
     use_mcht_blacklist: boolean, // 가맹점 블랙리스트
+    use_part_cancel: boolean, // 부분취소 사용여부
 }
 interface AuthOption {
     levels: {

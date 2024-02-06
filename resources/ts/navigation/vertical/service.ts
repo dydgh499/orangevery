@@ -65,18 +65,11 @@ const getAbilitiesMenu = computed(() => {
         })
         if (getUserLevel() >= 50) {
             complaints.push({
-                title: '운영 서버 로그',
-                icon: {icon: 'logos:vuetifyjs'},
-                class: 'log(1)',
+                title: '서버 로그',
+                icon: {icon: 'logos:grafana'},
+                class: 'log()',
                 params: '',
             })
-            complaints.push({
-                title: '노티 서버 로그',
-                icon: {icon: 'logos:laravel'},
-                class: 'log(2)',
-                params: '',
-            })
-            // logos:vuetifyjs
         }
     }
     return [

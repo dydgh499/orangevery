@@ -168,7 +168,7 @@ class Transaction
                                 'pg_settle_type' => 0,      //주말포함
                                 'mcht_settle_type' => $settle_type,    //D+1 통일
                                 'mcht_settle_fee' => $dpst_fee,
-                                'mcht_settle_id' => -1,
+                                'mcht_settle_id' => null,
                                 'mcht_settle_amount' => 0,
                                 
                                 'trx_dt' => $transaction->TRADE_DT,
