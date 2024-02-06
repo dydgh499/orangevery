@@ -35,7 +35,6 @@ class MerchandiseController extends Controller
         $this->settleDeducts = $settleDeducts;
     }
 
-
     protected function getTerminalSettleIds($request, $level, $target_id)
     {
         $query = PaymentModule::terminalSettle($level)
