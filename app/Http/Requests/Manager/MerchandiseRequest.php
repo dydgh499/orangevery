@@ -62,7 +62,6 @@ class MerchandiseRequest extends FormRequest
             'addr'      => 'required',
             'acct_bank_name' => 'required',
             'enabled' => 'required|boolean',
-            'use_noti'  => 'required|boolean',
             'use_saleslip_prov' => 'required|boolean',
             'use_saleslip_sell' => 'required|boolean',
             'collect_withdraw_fee' => 'nullable|numeric',
