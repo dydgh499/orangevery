@@ -116,7 +116,7 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
             datas[i]['settle_cycle'] = all_cycles.find(obj => obj['id'] === datas[i]['settle_cycle'])?.title as string
             datas[i]['settle_day'] = all_days.find(obj => obj['id'] === datas[i]['settle_day'])?.title as string
             datas[i]['settle_tax_type'] = tax_types.find(obj => obj['id'] === datas[i]['settle_tax_type'])?.title as string
-            datas[i]['resident_num'] = datas[i]['resident_num_front'] + " - " + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
+            datas[i]['resident_num'] = datas[i]['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
 
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }

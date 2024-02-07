@@ -220,7 +220,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
             datas[i]['terminal_id'] = terminals.find(terminal => terminal['id'] === datas[i]['terminal_id'])?.name as string
             datas[i]['custom_id'] = cus_filters.find(cus => cus.id === datas[i]['custom_id'])?.name as string
             datas[i]['mcht_settle_type'] = settle_types.find(settle_type => settle_type.id === datas[i]['mcht_settle_type'])?.name as string
-            datas[i]['resident_num'] = datas[i]['resident_num_front'] + " - " + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
+            datas[i]['resident_num'] = datas[i]['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
             
             if(levels.sales5_use)
                 datas[i]['sales5_fee'] = (datas[i]['sales5_fee'] * 100).toFixed(3)

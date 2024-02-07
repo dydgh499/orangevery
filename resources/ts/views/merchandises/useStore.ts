@@ -131,7 +131,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
                 datas[i]['mids'] = datas[i]['mids'].join(',')
                 datas[i]['tids'] = datas[i]['tids'].join(',')
             }
-            datas[i]['resident_num'] = datas[i]['resident_num_front'] + " - " + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
+            datas[i]['resident_num'] = datas[i]['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)

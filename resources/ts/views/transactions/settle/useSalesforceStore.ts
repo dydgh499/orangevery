@@ -115,7 +115,7 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
             datas[i]['settle.transfer'] = datas[i]['settle']['transfer']
             datas[i]['deduction.amount'] =  datas[i]['deduction']['amount']
             datas[i]['deduction.input'] =  ''
-            datas[i]['resident_num'] = datas[i]['resident_num_front'] + " - " + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
+            datas[i]['resident_num'] = datas[i]['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
 
             delete datas[i]['appr']
             delete datas[i]['total']
