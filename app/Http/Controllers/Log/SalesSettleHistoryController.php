@@ -62,8 +62,11 @@ class SalesSettleHistoryController extends Controller
 
     public function chart(Request $request)
     {
+        $request = $request->merge([
+            'page' => 1,
+            'paze_size' => 999999,
+        ]);
         $query = $this->commonQuery($request);
-
         $total = $query->first([
             DB::raw("SUM(appr_amount) AS appr_amount"),
             DB::raw("SUM(cxl_amount) AS cxl_amount"),
