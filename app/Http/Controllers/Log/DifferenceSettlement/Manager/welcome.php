@@ -29,7 +29,7 @@ class welcome implements DifferenceSettlementInterface
                 $ori_trx_dt = $trans[$i]->trx_dt;
                 $ori_trx_dt = date('Ymd', strtotime($ori_trx_dt));
                 // 부분취소 차수 (승인:0, N회차: N)
-                $part_cxl_type = $trans[$i]->is_cancel ? '1' : '0';
+                $part_cxl_type = $trans[$i]->is_cancel ? $trans[$i]->cxl_seq : '0';
                 // amount
                 $total_amount += $trans[$i]->amount;
                 $amount = abs($trans[$i]->amount);
