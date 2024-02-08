@@ -109,7 +109,8 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
             datas[i]['total.profit'] =  datas[i]['total']['profit']
 
             datas[i]['terminal.amount'] = datas[i]['terminal']['amount']
-            datas[i]['terminal.under_sales_amount'] =  datas[i]['terminal']['under_sales_amount']
+            datas[i]['terminal.under_sales_amount'] = datas[i]['terminal']['under_sales_amount']
+            datas[i]['terminal.settle_pay_module_idxs'] = datas[i]['terminal']['settle_pay_module_idxs'].length
         
             datas[i]['settle.amount'] = datas[i]['settle']['amount']
             datas[i]['settle.deposit'] = datas[i]['settle']['deposit']

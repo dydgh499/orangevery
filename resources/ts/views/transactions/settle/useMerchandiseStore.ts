@@ -109,9 +109,11 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
             datas[i]['total.total_trx_amount'] = datas[i]['total']['total_trx_amount']
             datas[i]['total.profit'] =  datas[i]['total']['profit']
 
+            datas[i]['terminal.settle_pay_module_idxs'] = datas[i]['terminal']['settle_pay_module_idxs'].length
             datas[i]['terminal.amount'] = datas[i]['terminal']['amount']
-            datas[i]['terminal.under_sales_amount'] =  datas[i]['terminal']['under_sales_amount']
+            datas[i]['terminal.under_sales_amount'] = datas[i]['terminal']['under_sales_amount']
 
+            
             if(corp.pv_options.paid.use_cancel_deposit)
                 datas[i]['settle.cancel_deposit_amount'] = datas[i]['settle']['cancel_deposit_amount']
             if(corp.pv_options.paid.use_collect_withdraw)
