@@ -56,10 +56,6 @@ class SalesforceController extends Controller
      */
     public function chart(Request $request)
     {
-        $request->merge([
-            'page' => 1,
-            'page_size' => 99999999,
-        ]);
         $query = $this->commonSelect($request, true);
         $data = $this->getIndexData($request, $query);
         $chart = getDefaultUsageChartFormat($data);

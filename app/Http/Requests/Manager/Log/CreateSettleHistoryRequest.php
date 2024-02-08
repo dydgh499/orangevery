@@ -84,9 +84,9 @@ class CreateSettleHistoryRequest extends FormRequest
             'deduct_amount' => $this->deduct_amount,
             'settle_amount' => $this->settle_amount,
             'trx_amount'=> $this->trx_amount,
-            'settle_dt' => $this->e_dt,
             'comm_settle_amount' => $this->comm_settle_amount,
             'under_sales_amount' => $this->under_sales_amount,
+            'settle_dt' => $this->e_dt,
         ];
     }
 }

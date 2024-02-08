@@ -10,6 +10,8 @@ use Illuminate\Notifications\Notifiable;
 use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 
+use App\Models\Merchandise;
+use App\Models\PaymentModule;
 use App\Models\Transaction;
 use App\Models\UnderAutoSetting;
 use App\Models\Log\SettleDeductSalesforce;
@@ -54,5 +56,15 @@ class Salesforce extends Authenticatable
     public function underAutoSettings()
     {
         return $this->hasMany(UnderAutoSetting::class, 'sales_id');
+    }
+
+    public function merchandises()
+    {
+        $level  = request()->level;
+        $idx = globalLevelByIndex($level);
+        $target_id = 'sales'.$idx.'_id';
+        
+        return $this->hasMany(Merchandise::class,  $target_id)
+            ->select(['id', $target_id]); 
     }
 }

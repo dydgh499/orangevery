@@ -47,10 +47,6 @@ class PaymentModuleController extends Controller
      */
     public function chart(Request $request)
     {
-        $request->merge([
-            'page' => 1,
-            'page_size' => 99999999,
-        ]);
         $cols = ['payment_modules.*'];
         $query = $this->commonSelect($request, true);
         $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');

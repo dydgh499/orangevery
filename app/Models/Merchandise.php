@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 
+use App\Models\PaymentModule;
 use App\Models\Transaction;
 use App\Models\CollectWithdraw;
 use App\Models\RegularCreditCard;
@@ -65,6 +66,27 @@ class Merchandise extends Authenticatable
             ->where('withdraw_date', '>=', request()->s_dt)
             ->where('withdraw_date', '<=', request()->e_dt)
             ->selectRaw('mcht_id, SUM(withdraw_amount + withdraw_fee) as total_withdraw_amount');
+    }
+
+    /*
+    * 가맹점 정산관리
+    */
+    public function settlePayModules()
+    {
+        $level  = request()->input('level', 10);
+        $cols = [
+            'payment_modules.begin_dt',
+            'payment_modules.comm_settle_type',
+            'payment_modules.comm_settle_day',
+            'payment_modules.last_settle_month',
+            'payment_modules.comm_settle_fee',
+            'payment_modules.under_sales_type',
+            'payment_modules.id',
+            "payment_modules.mcht_id",
+        ];
+        return $this->hasMany(PaymentModule::class, 'mcht_id')
+            ->terminalSettle($level)
+            ->select($cols);
     }
 
     public function deducts()

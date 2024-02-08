@@ -97,27 +97,12 @@ trait SettleHistoryTrait
         return [$target_id, $target_settle_id];
     }
 
-    protected function GetSettlePayModuleIds($data, $target_settle_id, $settle_id)
-    {
-        return Transaction::where('brand_id', $data['brand_id'])
-            ->where($target_settle_id, $settle_id)
-            ->distinct()
-            ->pluck('pmod_id')
-            ->all();
-    }
-
     /*
     * 정산 - 통신비
     */
-    protected function SetPayModuleLastSettleMonth($data, $target_settle_id, $settle_id)
+    protected function SetPayModuleLastSettleMonth($settle_pay_module_idxs, $settle_month)
     {
-        if($settle_id && ($data['comm_settle_amount'] || $data['under_sales_amount']))
-        {   //통신비나, 매출미달 차감금이 존재하면 해당 거래건에 포함된 결제모듈들 날짜 업데이트
-            $settle_month = date('Ym', strtotime($data['settle_dt']));
-            $pmod_ids = $this->GetSettlePayModuleIds($data, $target_settle_id, $settle_id);
-            return PaymentModule::whereIn('id', $pmod_ids)->update(['last_settle_month' => $settle_month]);
-        }
-        return true;
+        PaymentModule::whereIn('id', $settle_pay_module_idxs)->update(['last_settle_month' => $settle_month]);
     }
 
     /*
@@ -148,6 +133,16 @@ trait SettleHistoryTrait
         return true;
     }
 
+    
+
+    protected function GetSettlePayModuleIds($data, $target_settle_id, $settle_id)
+    {
+        return Transaction::where('brand_id', $data['brand_id'])
+            ->where($target_settle_id, $settle_id)
+            ->distinct()
+            ->pluck('pmod_id')
+            ->all();
+    }
     /*
     * 정산 취소 - 통신비
     */
@@ -162,5 +157,27 @@ trait SettleHistoryTrait
             return PaymentModule::whereIn('id', $pmod_ids)->update(['last_settle_month' => $settle_month]);
         }
         return true;
+    }
+    public function getSettleHistoryData($request, $query, $parent, $cols=[])
+    {
+        $page      = $request->input('page');
+        $page_size = $request->input('page_size');
+        $sp = ($page - 1) * $page_size;
+        $min    = $query->min("$parent.id");
+        $res    = ['page'=>$page, 'page_size'=>$page_size];
+        if($min)
+        {
+            $con_query = $query->where("$parent.id", '>=', $min);
+            $res['total']   = $query->count();
+
+            $con_query = $con_query->orderBy("$parent.created_at", 'desc')->offset($sp)->limit($page_size);
+            $res['content'] = $con_query->get($cols);
+        }
+        else
+        {
+            $res['total'] = 0;
+            $res['content'] = [];
+        }
+        return $res;
     }
 }

@@ -83,8 +83,29 @@ class MchtSettleHistoryController extends Controller
     {
         $cols = ['merchandises.user_name', 'merchandises.mcht_name', 'settle_histories_merchandises.*'];
         $query = $this->commonQuery($request);
-        $data = $this->getIndexData($request, $query, 'settle_histories_merchandises.id', $cols, 'settle_histories_merchandises.settle_dt', false);
+        $data = $this->getSettleHistoryData($request, $query, 'settle_histories_merchandises', $cols);
         return $this->response(0, $data);
+    }
+
+    protected function createMerchandiseCommon($item, $data, $query)
+    {
+        $data['settle_fee']                 = $item['settle_fee'];
+        $data['cancel_deposit_amount']      = $item['cancel_deposit_amount'] ? $item['cancel_deposit_amount'] : 0;
+        $data['collect_withdraw_amount']    = $item['collect_withdraw_amount'] ? $item['collect_withdraw_amount'] : 0;
+        $seltte_month = date('Ym', strtotime($data['settle_dt']));
+
+        $c_res = $this->settle_mcht_hist->create($data);
+        if($c_res)
+        {
+            $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);
+            $this->SetPayModuleLastSettleMonth($item['settle_pay_module_idxs'], $seltte_month);   
+            $this->SetCollectWithdraw($data, $c_res->id);    
+            return $c_res->id;
+        }
+        else
+            return false;
+
+        return $this->response($c_res ? 1 : 990, ['id'=>$c_res->id]);
     }
 
     /*
@@ -92,46 +113,45 @@ class MchtSettleHistoryController extends Controller
     */
     public function store(CreateSettleHistoryRequest $request)
     {
-        return DB::transaction(function () use($request) {
-            $query = Transaction::where('mcht_id', $request->id);
-            return $this->createMerchandiseCommon($request, $query);
-        });
-    }
+        $item = $request->all();
+        $data = $request->data('mcht_id');
 
-    /*
-    * 부분정산이력추가 - 가맹점
-    */
-    public function storePart(CreateSettleHistoryRequest $request)
-    {
-        return DB::transaction(function () use($request) {
-            $query = Transaction::whereIn('id', $request->selected);
-            return $this->createMerchandiseCommon($request, $query);
+        $c_id = DB::transaction(function () use($item, $data) {
+            $query = Transaction::whereIn('id', $item['settle_transaction_idxs']);
+            return $this->createMerchandiseCommon($item, $data, $query);
         });
+        return $this->response($c_id ? 1 : 990, ['id'=>$c_id]);
     }
-
+    
     /*
-    * 정산이력 - 일괄정산 - 가맹점
+    * 정산이력 - 일괄정산
     */
     public function batch(BatchSettleHistoryRequest $request)
     {
+        $fail_res    = [];
+        $success_res = ['ids'=>[]];
+
         for ($i=0; $i < count($request->datas); $i++) 
         { 
-            $_data = $request->datas[$i];
-            DB::transaction(function () use($request, $_data) {
-                $data = $request->data('mcht_id', $_data);
-                $data['settle_fee'] = $_data['settle_fee'];
-                $data['cancel_deposit_amount'] = $_data['cancel_deposit_amount'];
-                $data['collect_withdraw_amount'] = $_data['collect_withdraw_amount'];
+            $item = $request->datas[$i];
+            $data = $request->data('mcht_id', $item);
 
-                $c_res = $this->settle_mcht_hist->create($data);
-                $query = Transaction::where('mcht_id', $data['mcht_id']);
-                $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);    
-                $p_res = $this->SetPayModuleLastSettleMonth($data, 'mcht_settle_id', $c_res->id);
-                $cw_res= $this->SetCollectWithdraw($data, $c_res->id);
-                return true;
+            $c_id = DB::transaction(function () use($item, $data) {
+                $query = Transaction::whereIn('id', $item['settle_transaction_idxs']);
+                return $this->createMerchandiseCommon($item, $data, $query);
             });
+            if($c_id === false)
+                $fail_res[] = '#'.$item['id'].' 영업점이 정산에 실패했습니다.';
+            else
+                $success_res['ids'][] = $c_id;
         }
-        return $this->response(1);    
+        if(count($fail_res))
+        {
+            $message = "일괄작업에 실패한 정산건들이 존재합니다.\n\n".json_encode($fail_res, JSON_UNESCAPED_UNICODE);
+            return $this->extendResponse(2000, $message);
+        }
+        else
+            return $this->response(1, $success_res);
     }
 
     /*
@@ -146,23 +166,6 @@ class MchtSettleHistoryController extends Controller
             $code = $this->deleteMchtforceCommon($request, $id, 'mcht_settle_id');
             return $this->response($code, ['id'=>$id]);
         }
-    }
-
-
-    protected function createMerchandiseCommon($request, $query)
-    {
-        $cancel_deposit_amount = $request->cancel_deposit_amount;
-        $collect_withdraw_amount = $request->collect_withdraw_amount;
-        $data = $request->data('mcht_id');
-        $data['settle_fee'] = $request->settle_fee;
-        $data['cancel_deposit_amount']      = $cancel_deposit_amount ? $cancel_deposit_amount : 0;
-        $data['collect_withdraw_amount']    = $collect_withdraw_amount ? $collect_withdraw_amount : 0;
-        $c_res = $this->settle_mcht_hist->create($data);
-        $u_res = $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);
-        $p_res = $this->SetPayModuleLastSettleMonth($data, 'mcht_settle_id', $c_res->id);
-        $cw_res= $this->SetCollectWithdraw($data, $c_res->id);
-
-        return $this->response($c_res ? 1 : 990, ['id'=>$c_res->id]);
     }
 
 

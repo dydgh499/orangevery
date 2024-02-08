@@ -32,11 +32,7 @@ const settle = ref({
     'settle_amount': 0,
     'trx_amount': 0,
     'settle_fee': 0,
-    'deduct_amount': 0,
-    'comm_settle_amount': 0,
-    'under_sales_amount': 0,
 })
-
 
 store.params.dev_use = corp.pv_options.auth.levels.dev_use
 store.params.id = route.params.id
@@ -58,18 +54,25 @@ const isSalesCol = (key: string) => {
 }
 const getPartSettleFormat = () => {
     const params = Object.assign(cloneDeep(store.params), settle.value)
-    params.selected = selected.value
     params.acct_name = user.value.acct_name
     params.acct_num = user.value.acct_num
     params.acct_bank_name = user.value.acct_bank_name
     params.acct_bank_code = user.value.acct_bank_code
+
+    params.settle_transaction_idxs = selected.value
+    params.deduct_amount = 0
+    params.comm_settle_amount = 0
+    params.under_sales_amount = 0
+    params.cancel_deposit_amount = 0
+    params.collect_withdraw_amount = 0
+    params.settle_pay_module_idxs = []
     return params
 }
 
 const partSettle = async () => {
     const count = selected.value.length
     if (await dialog('정말 ' + count + '개의 매출을 부분정산하시겠습니까?')) {
-        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/part', getPartSettleFormat(), true)
+        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises', getPartSettleFormat(), true)
         store.setChartProcess()
         store.setTable()
     }
@@ -109,9 +112,6 @@ watchEffect(() => {
         'settle_amount': 0,
         'trx_amount': 0,
         'settle_fee': 0,
-        'deduct_amount': 0,
-        'comm_settle_amount': 0,
-        'under_sales_amount': 0,
     }
     for (let i = 0; i < selected.value.length; i++) {
         const trans: any = store.getItems.find(item => item['id'] == selected.value[i])

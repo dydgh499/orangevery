@@ -44,7 +44,7 @@ class MerchandiseController extends Controller
 
     private function commonQuery($request)
     {
-        $with = ['deducts'];
+        $with = ['deducts', 'settlePayModules'];
         $validated = $request->validate(['s_dt'=>'required|date', 'e_dt'=>'required|date']);
         [$settle_key, $group_key] = $this->getSettleCol($request);
 
@@ -52,15 +52,14 @@ class MerchandiseController extends Controller
         $search = $request->input('search', '');
         // ----- 가맹점 목록 조회 ---------
         $mcht_ids = $this->getExistTransUserIds('mcht_id', 'mcht_settle_id');
-        //$terminal_settle_ids = $this->getTerminalSettleIds($request, 10, 'id');
+        $terminal_settle_ids = $this->getTerminalSettleIds($request, 10, 'id');
 
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
-            ->where('mcht_name', 'like', "%$search%");
-        /*
-                ->orWhere(function ($query) use($terminal_settle_ids) {    
-                    $query->whereIn('id',$terminal_settle_ids);
-                });
-        */
+            ->where('mcht_name', 'like', "%$search%")
+            ->orWhere(function ($query) use($terminal_settle_ids) {    
+                $query->whereIn('id',$terminal_settle_ids);
+            });
+            
         if($request->use_realtime_deposit == 0)
         {   // 즉시출금 제외
             $mcht_ids = $query->pluck('id')->all();
@@ -80,25 +79,12 @@ class MerchandiseController extends Controller
 
         $data = $this->getIndexData($request, $query->with($with), 'id', $cols, "created_at", false);
         $data = $this->getSettleInformation($data, $settle_key);
-        // set terminals
-        $mcht_ids = collect($data['content'])->pluck('id')->all();
-        if(count($mcht_ids)) #&& $terminal_settle_ids)
-        {
-            $settle_s_day   = date('d', strtotime($request->s_dt));
-            $settle_e_day   = date('d', strtotime($request->e_dt));
-            $settle_month   = date('Ym', strtotime($request->e_dt)); //202310
-            $pay_modules    = collect(
-                PaymentModule::whereIn('mcht_id', $mcht_ids)
-                ->terminalSettle(10, 'id')
-                ->get(['payment_modules.*'])
-            );
-            $data = $this->setTerminalCost($data, $pay_modules, $request->s_dt, $request->s_dt, 'mcht_id');
-        }
+        $data = $this->setTerminalCost($data, $request->s_dt, $request->s_dt, 'mcht_id');
         // set total settle
         $data = $this->setSettleFinalAmount($data);
         return $data;
     }
-    
+
     /**
      * 차트 데이터 출력
      *
@@ -106,10 +92,6 @@ class MerchandiseController extends Controller
      */
     public function chart(Request $request)
     {
-        $request = $request->merge([
-            'page' => 1,
-            'page_size' => 999999,
-        ]);
         $total = [
             'id' => '합계',
             'deduction' => [
@@ -119,6 +101,7 @@ class MerchandiseController extends Controller
             'terminal' => [
                 'amount' => 0,
                 'under_sales_amount' => 0,
+                'settle_pay_module_idxs' => 0,
             ],
             'settle' => [
                 'cancel_deposit_amount' => 0,
@@ -132,18 +115,19 @@ class MerchandiseController extends Controller
 
         $transactions = collect();
         $data = $this->commonQuery($request);
-        foreach($data['content'] as $data)
+        foreach($data['content'] as $item)
         {
-            $transactions = $transactions->merge($data->transactions);
-            $total['deduction']['amount'] += $data->deduction['amount'];
-            $total['terminal']['amount'] += $data->terminal['amount'];
-            $total['terminal']['under_sales_amount'] += $data->terminal['under_sales_amount'];
+            $transactions = $transactions->merge($item->transactions);
+            $total['deduction']['amount'] += $item->deduction['amount'];
+            $total['terminal']['amount'] += $item->terminal['amount'];
+            $total['terminal']['under_sales_amount'] += $item->terminal['under_sales_amount'];
+            $total['terminal']['settle_pay_module_idxs'] += count($item->terminal['settle_pay_module_idxs']);
 
-            $total['settle']['cancel_deposit_amount'] += $data->settle['cancel_deposit_amount'];
-            $total['settle']['collect_withdraw_amount'] += $data->settle['collect_withdraw_amount'];
-            $total['settle']['amount'] += $data->settle['amount'];
-            $total['settle']['deposit'] += $data->settle['deposit'];
-            $total['settle']['transfer'] += $data->settle['transfer'];
+            $total['settle']['cancel_deposit_amount'] += $item->settle['cancel_deposit_amount'];
+            $total['settle']['collect_withdraw_amount'] += $item->settle['collect_withdraw_amount'];
+            $total['settle']['amount'] += $item->settle['amount'];
+            $total['settle']['deposit'] += $item->settle['deposit'];
+            $total['settle']['transfer'] += $item->settle['transfer'];
         }
         $chart = getDefaultTransChartFormat($transactions, $settle_key);
         $total = array_merge($total, $chart);
@@ -170,10 +154,6 @@ class MerchandiseController extends Controller
     public function partChart(Request $request)
     {
         $search = $request->input('search', '');
-        $request = $request->merge([
-            'page' => 1,
-            'page_size' => 999999,
-        ]);
         [$settle_key, $group_key] = $this->getSettleCol($request);
         $cols  = $this->getTotalCols($settle_key);
         $chart = Transaction::where('mcht_id', $request->id)
@@ -185,7 +165,26 @@ class MerchandiseController extends Controller
                     ->orWhere('transactions.appr_num', 'like', "%$search%");
             })
             ->first($cols);
-        $chart = $this->setTransChartFormat($chart);
-        return $this->response(0, $chart);
+        if($chart)
+        {
+            $chart = $this->setTransChartFormat($chart);
+            return $this->response(0, $chart);        
+        }
+        else
+        {
+            return $this->response(0, [
+                'appr'  => [
+                    'amount'=> 0,
+                    'count' => 0,
+                ],
+                'cxl'   => [
+                    'amount'=> 0,
+                    'count' => 0,
+                ],
+                'amount'    => 0,
+                'count'     => 0,
+                'profit'    => 0,
+            ]);
+        }
     }
 }

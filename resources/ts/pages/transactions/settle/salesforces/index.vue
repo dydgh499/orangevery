@@ -42,7 +42,6 @@ onMounted(() => {
     })
     snackbar.value.show('정산일은 검색 종료일('+store.params.e_dt+') 기준으로 진행됩니다.', 'success')
 })
-
 </script>
 <template>
     <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산" :date_filter_type="DateFilters.SETTLE_RANGE">
@@ -69,14 +68,15 @@ onMounted(() => {
                 </template>
             </BaseIndexFilterCard>
         </template>
+        
         <template #headers>
             <tr>
-                <th v-for="(sub_header, index) in head.getSubHeaderComputed" :colspan="sub_header.width" :key="index"
-                    class='list-square' style="border-bottom: 0;" v-show="sub_header.width">
-                    <span>
-                        {{ sub_header.ko }}
-                    </span>
-                </th>
+                <template v-for="(sub_header, index) in head.getSubHeaderComputed" :key="index">
+                    <th :colspan="head.getSubHeaderComputed.length - 1 == index ? sub_header.width + 1 : sub_header.width"
+                        class='list-square sub-headers' v-show="sub_header.width">
+                        <span>{{ sub_header.ko }}</span>
+                    </th>
+                </template>
             </tr>
             <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
@@ -109,7 +109,10 @@ onMounted(() => {
                         <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
                             class='list-square'>
                             <span v-if="_key == 'deduction' && (__key as string) == 'input'">
-                            </span>
+                            </span>                            
+                            <span v-else-if="_key === 'terminal' && (__key as string) === 'settle_pay_module_idxs'">
+                                    {{ item[_key][__key] ? (item[_key][__key]).toLocaleString() : 0 }}
+                                </span>
                             <span v-else :style="getSettleStyle(_key as string)">
                                 {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0 }}
                             </span>
@@ -136,6 +139,9 @@ onMounted(() => {
                             <span v-if="_key == 'deduction' && (__key as string) == 'input'">
                                 <AddDeductBtn :id="item['id']" :name="item['user_name']" :is_mcht="false">
                                 </AddDeductBtn>
+                            </span>
+                            <span v-else-if="_key === 'terminal' && (__key as string) === 'settle_pay_module_idxs'">
+                                {{ item[_key][__key] ? (item[_key][__key].length).toLocaleString() : 0 }}
                             </span>
                             <span v-else :style="getSettleStyle(_key as string)">
                                 {{ item[_key][__key] ? (item[_key][__key] as number).toLocaleString() : 0 }}
@@ -191,3 +197,8 @@ onMounted(() => {
         </template>
     </BaseIndexView>
 </template>
+<style scoped>
+  :deep(.sub-headers) {
+    border-inline-end: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+  }
+</style>

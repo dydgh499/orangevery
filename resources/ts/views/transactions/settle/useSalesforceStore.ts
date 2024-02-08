@@ -38,6 +38,7 @@ export const useSearchStore = defineStore('transSettleSalesSearchStore', () => {
     
     const headers3:Record<string, string | object> = {
         'terminal': {
+            'settle_pay_module_idxs': '건수',
             'amount': '통신비',
             'under_sales_amount': '매출미달차감금',
         },

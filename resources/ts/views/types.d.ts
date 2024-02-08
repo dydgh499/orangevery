@@ -600,6 +600,7 @@ export interface Settle extends TotalSettle, Bank {
     terminal: {
         amount: number,
         under_sales_amount: number,
+        settle_pay_module_idxs: number[],
     },
     sector: string,
     rep_name: string,
@@ -607,7 +608,8 @@ export interface Settle extends TotalSettle, Bank {
     resident_num: string,
     business_num: string,
     addr: string,
-    use_collect_withdraw: number,
+    use_collect_withdraw: number,    
+    settle_transaction_idxs: number[],
 }
 
 export interface SettlesHistories extends Bank{

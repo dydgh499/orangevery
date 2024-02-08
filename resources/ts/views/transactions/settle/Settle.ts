@@ -12,6 +12,7 @@ export function settlementFunctionCollect(store: any) {
     const errorHandler = <any>(inject('$errorHandler'))
 
     const getSettleFormat = (item:Settle, is_mcht:boolean) => {
+        console.log(item)
         return {            
             id: item.id,
             acct_name: item.acct_name,
@@ -30,6 +31,8 @@ export function settlementFunctionCollect(store: any) {
             under_sales_amount: item.terminal.under_sales_amount,
             cancel_deposit_amount: item.settle.cancel_deposit_amount || 0,
             collect_withdraw_amount: item.settle.collect_withdraw_amount || 0,
+            settle_transaction_idxs: item.settle_transaction_idxs,
+            settle_pay_module_idxs: item.terminal.settle_pay_module_idxs,
         }
     }
     

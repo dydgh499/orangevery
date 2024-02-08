@@ -22,12 +22,13 @@ trait SettleTerminalTrait
 
         foreach($data['content'] as $content) 
         {
-            foreach($content->pay_modules as $pay_module)
+            $terminal = $content->terminal;
+            $terminal['settle_pay_module_idxs'] = $content->settlePayModules->pluck('id');
+            foreach($content->settlePayModules as $pay_module)
             {
                 //개통일에 M + comm_settle_type을 적용. 0=개통월부터 적용, 1=M+1, 2=M+2
                 $comm_settle_dt = Carbon::parse($pay_module->begin_dt)->addMonthNoOverflow($pay_module->comm_settle_type);
                 $comm_settle_ym = $getCarbonToYm($comm_settle_dt);
-                $terminal = $content->terminal;
                 // 통신비 정산월이 정산 시작월, 종료월 보다 같거나 작고
                 $cond_1 = $comm_settle_ym <= $c_settle_s_ym && $comm_settle_ym <= $c_settle_e_ym;
                 // 통신비 정산일이 정산 시작일 ~ 정산 종료일 사이 일 때
@@ -47,9 +48,9 @@ trait SettleTerminalTrait
                     }
                     $terminal['amount'] -= ($pay_module->comm_settle_fee * $m_offset);
                 }
-                $content->terminal = $terminal;
-                
             }
+            // 정산할 결제모듈 건수
+            $content->terminal = $terminal;
         }
         return $data;
     }
@@ -101,7 +102,7 @@ trait SettleTerminalTrait
             $groups  = json_decode(json_encode($groups), true);
             foreach($data['content'] as $content) 
             {
-                foreach($content->pay_modules as $pay_module)
+                foreach($content->settlePayModules as $pay_module)
                 {   //결제모듈 ID <-> 실 매출합계 검색
                     $idx = array_search($pay_module->id, array_column($groups, 'pmod_id'));
                     if($idx !== false)
@@ -122,7 +123,7 @@ trait SettleTerminalTrait
         $pay_modules = [];
         foreach($data['content'] as $content) 
         {
-            foreach($content->pay_modules as $pay_module)
+            foreach($content->settlePayModules as $pay_module)
             {
                 $pay_modules[] = $pay_module;
             }
@@ -133,21 +134,11 @@ trait SettleTerminalTrait
         return $data;
     }
     
-    protected function setTerminalCost($data, $pay_modules, $settle_s_dt, $settle_e_dt, $target_id)
+    protected function setTerminalCost($data, $settle_s_dt, $settle_e_dt, $target_id)
     {
-        foreach($data['content'] as $content)
-        {
-            $id = $content->id;
-            $content->pay_modules = $pay_modules->filter(function ($pay_module) use($id, $target_id) {
-                return $pay_module[$target_id] == $id;
-            })->values();
-        }
         $data = $this->setSettleTerminals($data, $settle_s_dt, $settle_e_dt);
         $data = $this->setSettleUnderAmount($data, $settle_s_dt, $settle_e_dt);
-        foreach($data['content'] as $content)
-        {
-            $content->makeHidden(['pay_modules']);
-        }
+
         return $data;
     }
 }

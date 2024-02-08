@@ -35,6 +35,11 @@ const isExtendSettleCols = (parent_key: string, key: string) => {
     return parent_key === 'settle' && (key === 'cancel_deposit_amount' || key === 'collect_withdraw_amount' || key === 'collect_withdraw_fee')
 }
 
+const test = (item: any) => {
+    console.log(item)
+    return 1
+}
+
 onMounted(() => {
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
@@ -67,19 +72,19 @@ onMounted(() => {
                     size="small">
                     일괄 정산하기
                 </VBtn>
-                <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.use_realtime_deposit" label="즉시출금 포함"
-                    color="primary"
+                <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.use_realtime_deposit"
+                    label="즉시출금 포함" color="primary"
                     @update:modelValue="[store.updateQueryString({ use_realtime_deposit: store.params.use_realtime_deposit })]"
-                    v-if="corp.pv_options.paid.use_realtime_deposit"/>
+                    v-if="corp.pv_options.paid.use_realtime_deposit" />
             </template>
             <template #headers>
                 <tr>
-                    <th v-for="(sub_header, index) in head.getSubHeaderComputed" :colspan="sub_header.width" :key="index"
-                        class='list-square' style="border-bottom: 0;" v-show="sub_header.width">
-                        <span>
-                            {{ sub_header.ko }}
-                        </span>
-                    </th>
+                    <template v-for="(sub_header, index) in head.getSubHeaderComputed" :key="index">
+                        <th :colspan="head.getSubHeaderComputed.length - 1 == index ? sub_header.width + 1 : sub_header.width"
+                            class='list-square sub-headers' v-show="sub_header.width">
+                            <span>{{ sub_header.ko }}</span>
+                        </th>
+                    </template>
                 </tr>
                 <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
@@ -116,7 +121,10 @@ onMounted(() => {
                         <template v-if="head.getDepth(_header, 0) != 1">
                             <td v-for="(__header, __key, __index) in _header" :key="__index" v-show="__header.visible"
                                 class='list-square'>
-                                <span v-if="_key == 'deduction' && (__key as string) == 'input'">
+                                <span v-if="_key === 'deduction' && (__key as string) === 'input'">
+                                </span>
+                                <span v-else-if="_key === 'terminal' && (__key as string) === 'settle_pay_module_idxs'">
+                                    {{ item[_key][__key] ? (item[_key][__key]).toLocaleString() : 0 }}
                                 </span>
                                 <span v-else-if="isExtendSettleCols(_key as string, __key as string)"
                                     style="color: red; font-weight: bold;">
@@ -148,6 +156,9 @@ onMounted(() => {
                                 <span v-if="_key == 'deduction' && (__key as string) == 'input'">
                                     <AddDeductBtn :id="item['id']" :name="item['mcht_name']" :is_mcht="true">
                                     </AddDeductBtn>
+                                </span>
+                                <span v-else-if="_key === 'terminal' && (__key as string) === 'settle_pay_module_idxs'">
+                                    {{ item[_key][__key] ? (item[_key][__key].length).toLocaleString() : 0 }}
                                 </span>
                                 <span v-else-if="isExtendSettleCols(_key as string, __key as string)"
                                     style="color: red; font-weight: bold;">
@@ -190,7 +201,13 @@ onMounted(() => {
                         </template>
                     </template>
                 </tr>
-            <!-- part -->
-        </template>
-    </BaseIndexView>
-</div></template>
+                <!-- part -->
+            </template>
+        </BaseIndexView>
+    </div>
+</template>
+<style scoped>
+  :deep(.sub-headers) {
+    border-inline-end: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+  }
+</style>

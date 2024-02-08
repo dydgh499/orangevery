@@ -62,10 +62,6 @@ class SalesSettleHistoryController extends Controller
 
     public function chart(Request $request)
     {
-        $request = $request->merge([
-            'page' => 1,
-            'paze_size' => 999999,
-        ]);
         $query = $this->commonQuery($request);
         $total = $query->first([
             DB::raw("SUM(appr_amount) AS appr_amount"),
@@ -80,51 +76,84 @@ class SalesSettleHistoryController extends Controller
         return $this->response(0, $total);
     }
 
+    /*
+    * 정산이력
+    */
     public function index(IndexRequest $request)
     {
         $cols = ['salesforces.user_name', 'salesforces.sales_name', 'salesforces.level', 'settle_histories_salesforces.*'];
         $query = $this->commonQuery($request);
-        $data = $this->getIndexData($request, $query, 'settle_histories_salesforces.id', $cols, 'settle_histories_salesforces.settle_dt', false);
+        $data = $this->getSettleHistoryData($request, $query, 'settle_histories_salesforces', $cols);
         return $this->response(0, $data);
     }
 
+    protected function createSalesforceCommon($item, $data, $query)
+    {
+        $data['level']  = $item['level'];
+        $seltte_month   = date('Ym', strtotime($data['settle_dt']));
+        [$target_id, $target_settle_id] = $this->getTargetInfo($item['level']);
+
+        $c_res = $this->settle_sales_hist->create($data);
+        if($c_res)
+        {
+            $this->SetTransSettle($query, $target_settle_id, $c_res->id);
+            $this->SetPayModuleLastSettleMonth($item['settle_pay_module_idxs'], $seltte_month);    
+            Salesforce::where('id', $item['id'])->update(['last_settle_dt' => $data['settle_dt']]);
+            return $c_res->id;
+        }
+        else
+            return false;
+    }
+
+    /*
+    * 정산이력추가
+    */
     public function store(CreateSettleHistoryRequest $request)
     {
-        return DB::transaction(function () use($request) {
-            [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
-            $query = Transaction::where($target_id, $request->id);
-            return $this->createSalesforceCommon($request, $query, $target_settle_id);
+        $item = $request->all();
+        $data = $request->data('sales_id');
+
+        $c_id = DB::transaction(function () use($item, $data) {
+            $query = Transaction::whereIn('id', $item['settle_transaction_idxs']);
+            return $this->createSalesforceCommon($item, $data, $query);
         });
+        return $this->response($c_id ? 1 : 990, ['id'=>$c_id]);
     }
 
-    public function storePart(CreateSettleHistoryRequest $request)
-    {
-        return DB::transaction(function () use($request) {
-            [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
-            $query = Transaction::whereIn('id', $request->selected);
-            return $this->createSalesforceCommon($request, $query, $target_settle_id);
-        });
-    }
-
+    /*
+    * 정산이력 - 일괄정산 
+    */
     public function batch(BatchSettleHistoryRequest $request)
     {
+        $fail_res    = [];
+        $success_res = ['ids'];
         for ($i=0; $i < count($request->datas); $i++) 
         {
-            $_data = $request->datas[$i];
-            DB::transaction(function () use($request, $_data) {
-                [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
-                $data = $request->data('sales_id', $_data);
-                $data['level'] = $request->level;
-                $c_res = $this->settle_sales_hist->create($data);
-                $query = Transaction::where($target_id, $data['sales_id']);
-                $u_res = $this->SetTransSettle($query, $target_settle_id, $c_res->id);
-                $s_res = Salesforce::where('id', $request->id)->update(['last_settle_dt' => $data['settle_dt']]);
-                $p_res = $this->SetPayModuleLastSettleMonth($data, $target_settle_id, $c_res->id);
-            });
-        }
-        return $this->response(1);
-    }
+            $item = $request->datas[$i];
+            $data = $request->data('sales_id', $item);
 
+            $c_id = DB::transaction(function () use($item, $data) {
+                $query = Transaction::whereIn('id', $item['settle_transaction_idxs']);
+                return $this->createSalesforceCommon($item, $data, $query);             
+            });
+            if($c_id === false)
+                $fail_res[] = '#'.$item['id'].' 영업점이 정산에 실패했습니다.';
+            else
+                $success_res['ids'][] = $c_id;
+        }
+
+        if(count($fail_res))
+        {
+            $message = "일괄작업에 실패한 정산건들이 존재합니다.\n\n".json_encode($fail_res, JSON_UNESCAPED_UNICODE);
+            return $this->extendResponse(2000, $message);
+        }
+        else
+            return $this->response(1, $success_res);
+    }
+    
+    /*
+    * 정산이력 - 정산취소
+    */
     public function destroy(Request $request, $id)
     {        
         if($request->use_finance_van_deposit && $request->current_status)
@@ -134,19 +163,6 @@ class SalesSettleHistoryController extends Controller
             $code = $this->deleteSalesforceCommon($request, $id, 'sales_id');
             return $this->response($code, ['id'=>$id]);
         }
-    }
-    
-    protected function createSalesforceCommon($request, $query, $target_settle_id)
-    {
-        $data = $request->data('sales_id');
-        $data['level'] = $request->level;
-
-        $c_res = $this->settle_sales_hist->create($data);
-        $u_res = $this->SetTransSettle($query, $target_settle_id, $c_res->id);
-        $s_res = Salesforce::where('id', $request->id)->update(['last_settle_dt' => $request->dt]);
-        $p_res = $this->SetPayModuleLastSettleMonth($data, $target_settle_id, $c_res->id);
-
-        return $this->response($c_res ? 1 : 990, ['id'=>$c_res->id]);
     }
     
     protected function deleteSalesforceCommon($request, $id, $user_id)

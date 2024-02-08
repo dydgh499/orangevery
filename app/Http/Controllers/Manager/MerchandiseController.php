@@ -65,10 +65,6 @@ class MerchandiseController extends Controller
      */
     public function chart(Request $request)
     {
-        $request->merge([
-            'page' => 1,
-            'page_size' => 99999999,
-        ]);
         $data = $this->commonSelect($request, true);
         $chart = getDefaultUsageChartFormat($data);
         return $this->response(0, $chart);

@@ -156,7 +156,6 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::get('difference/chart', [DifferenceSettlementHistoryController::class, 'chart']);
                 
                 Route::get('merchandises/chart', [MchtSettleHistoryController::class, 'chart']);
-                Route::post('merchandises/part', [MchtSettleHistoryController::class, 'storePart']);
                 Route::post('merchandises/batch', [MchtSettleHistoryController::class, 'batch']);
                 Route::post('merchandises/{id}/deposit', [MchtSettleHistoryController::class, 'setDeposit']);
                 Route::post('merchandises/batch-deposit', [MchtSettleHistoryController::class, 'setBatchDeposit']);
@@ -165,7 +164,6 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::apiResource('merchandises', MchtSettleHistoryController::class);
                 
                 Route::get('salesforces/chart', [SalesSettleHistoryController::class, 'chart']);
-                Route::post('salesforces/part', [SalesSettleHistoryController::class, 'storePart']);
                 Route::post('salesforces/batch', [SalesSettleHistoryController::class, 'batch']);
                 Route::post('salesforces/{id}/deposit', [SalesSettleHistoryController::class, 'setDeposit']);
                 Route::post('salesforces/batch-deposit', [SalesSettleHistoryController::class, 'setBatchDeposit']);

@@ -41,6 +41,7 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
 
     const headers3:Record<string, string | object> = {
         'terminal': {
+            'settle_pay_module_idxs': '건수',
             'amount': '통신비',
             'under_sales_amount': '매출미달차감금',
         },
@@ -65,7 +66,7 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         head.getSubHeaderFormat('가맹점 정보', 'id', 'mcht_name', 'string', 3),
         head.getSubHeaderFormat('매출', 'total', 'total', 'object', 7),
         head.getSubHeaderFormat('추가차감', 'deduction', 'deduction', 'object', Object.keys(headers2['deduction']).length),
-        head.getSubHeaderFormat('장비', 'terminal', 'terminal', 'object', 2),
+        head.getSubHeaderFormat('장비', 'terminal', 'terminal', 'object', 3),
         head.getSubHeaderFormat('정산금', 'settle', 'settle', 'object', Object.keys(settles).length),
         head.getSubHeaderFormat('계좌정보', 'acct_bank_name', 'addr', 'string', 10),
         head.getSubHeaderFormat('승인', 'appr', 'appr', 'object', 7),

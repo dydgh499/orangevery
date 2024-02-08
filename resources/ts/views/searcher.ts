@@ -46,6 +46,8 @@ const chartSetter = (base_url: string) => {
     }
 
     const _getChartData = async(params: any) => {
+        params.page = 1
+        params.page_size = 999999
         const r = await get(base_url+'/chart', { params: params })
         chart_process.value = true
         return r
