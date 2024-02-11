@@ -96,12 +96,17 @@ const pay = (index: number) => {
 const cancel = (index: number) => {
     return new Promise((resolve, reject) => {
         axios.post('/api/v1/manager/transactions/pay-cancel', {
+            temp: hand_pay_info.value.temp,
             pmod_id: hand_pay_infos.value[index].pmod_id,
             amount: hand_pay_infos.value[index].amount,
             trx_id: full_processes.value[index].trx_result.trx_id,
-            only: false,
+            only: true,
         }).then(r => {
-            resolve(r.data)
+            resolve({
+                ...r.data,
+                result_cd: "0000",
+                result_msg: "취소 성공",
+            })
         }).catch(e => {
             resolve({
                 result_cd: e.response.data.code,
@@ -138,7 +143,7 @@ const trxResult = async () => {
             ...results[i],
             ...props.merchandise
         }
-        console.log(results[i])
+        full_processes.value[i].trx_result.module_type = 1 // 수기결제
     }
     snackbar.value.show('결제가 완료되었습니다.', 'success')
 }
@@ -147,7 +152,7 @@ const trxResult = async () => {
 const cxlProcess = async () => {
     let fail_find = false
     for (let i = 0; i < full_processes.value.length; i++) {
-        if (full_processes.value[i].trx_result.result_cd != "0000") {
+        if (full_processes.value[i].trx_result.result_cd !== "0000") {
             fail_find = true
             break
         }
@@ -156,7 +161,7 @@ const cxlProcess = async () => {
         snackbar.value.show('결제실패건을 발견하였으므로 성공건들을 모두 취소합니다.', 'error')
         for (let i = 0; i < full_processes.value.length; i++) {
             console.log(full_processes.value[i].trx_result)
-            if (full_processes.value[i].trx_result.result_cd == "0000")
+            if (full_processes.value[i].trx_result.result_cd === "0000")
                 full_processes.value[i].cxl_process = cancel(i)
             else
                 full_processes.value[i].cxl_process = null
@@ -170,10 +175,9 @@ const cxlResult = async () => {
     const results = await Promise.all(full_processes.value.map(item => item.cxl_process))
     for (let i = 0; i < results.length; i++) {
         if (results[i] != null) {
-            full_processes.value[i].cxl_result = {
-                ...results[i],
-                ...props.merchandise
-            }
+            full_processes.value[i].cxl_result = full_processes.value[i].trx_result
+            Object.assign(full_processes.value[i].cxl_result, results[i])
+            console.log(full_processes.value[i].cxl_result)
         }
     }
 }

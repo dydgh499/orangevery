@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import DialogHalfVCol from '@/layouts/utils/DialogHalfVCol.vue'
-import { installments } from '@/views/merchandises/pay-modules/useStore'
+import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
 import type { SalesSlip, PayGateway, BeforeBrandInfo } from '@/views/types'
 import html2canvas from "html2canvas"
 import cancel from '@images/salesslip/cancel.png'
@@ -135,7 +135,7 @@ defineExpose({
                     <VDivider :thickness="thickness" class="mb-2" />
                     <DialogHalfVCol class="cell">
                         <template #name>결제수단</template>
-                        <template #input>{{ trans?.acquirer }}</template>
+                        <template #input>{{ module_types.find(obj => obj.id === trans?.module_type)?.title  }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>거래상태</template>

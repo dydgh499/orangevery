@@ -82,10 +82,10 @@ const payCanceled = async () => {
             if(r.status === 201)
                 snackbar.value.show('성공하였습니다.', 'success')
             else
-                snackbar.value.show(r.data.message, 'error')
+                snackbar.value.show(r.data.result_msg, 'error')
         }
         catch (e: any) {
-            snackbar.value.show(e.response.data.message, 'error')
+            snackbar.value.show(e.response.data.result_msg, 'error')
             const r = errorHandler(e)
         }
     }
