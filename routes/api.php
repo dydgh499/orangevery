@@ -68,6 +68,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
     Route::get('pay-modules/{id}/sale-slip', [PaymentModuleController::class, 'saleSlip']);
 
     Route::post('transactions/hand-pay', [TransactionController::class, 'handPay']);
+    Route::post('transactions/pay-cancel', [TransactionController::class, 'payCancel']);
     Route::post('computational-transfer/login', [BeforeSystemController::class, 'login']);
     Route::post('computational-transfer/register', [BeforeSystemController::class, 'register']);
 
@@ -124,7 +125,6 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::post('noti/{id}', [TransactionController::class, 'noti']);
             Route::post('batch-retry', [TransactionController::class, 'batchRetry']);
             Route::post('cancel', [TransactionController::class, 'cancel']);
-            Route::post('pay-cancel', [TransactionController::class, 'payCancel']);
             Route::get('chart', [TransactionController::class, 'chart']);
             Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);            
             Route::get('fails', [FailTransController::class, 'index']);

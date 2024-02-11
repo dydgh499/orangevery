@@ -78,7 +78,7 @@ const payCanceled = async () => {
         if(getUserLevel() >= 35)
             params['operater_access_token'] = pay_token.value
         try {
-            const r = await post('/api/v1/manager/transactions/pay-cancel', params)
+            const r = await post('/api/v1/transactions/pay-cancel', params)
             if(r.status === 201)
                 snackbar.value.show('성공하였습니다.', 'success')
             else

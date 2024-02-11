@@ -95,7 +95,7 @@ const pay = (index: number) => {
 
 const cancel = (index: number) => {
     return new Promise((resolve, reject) => {
-        axios.post('/api/v1/manager/transactions/pay-cancel', {
+        axios.post('/api/v1/transactions/pay-cancel', {
             temp: hand_pay_info.value.temp,
             pmod_id: hand_pay_infos.value[index].pmod_id,
             amount: hand_pay_infos.value[index].amount,
@@ -234,6 +234,9 @@ watchEffect(async () => {
     hand_pay_info.value.status_color = is_valid?.valid ? 'success' : 'error'
 })
 
+watchEffect(() => {
+    setProcessTableWidth()
+})
 onMounted(() => {
     init()
 })
