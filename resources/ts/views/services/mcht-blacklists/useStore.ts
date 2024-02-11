@@ -1,6 +1,8 @@
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
-import type { Options } from '@/views/types';
+import type { MchtBlacklist, Merchandise, Options } from '@/views/types';
+import { axios } from '@axios';
+import corp from '@corp';
 
 export const block_types = <Options[]>([
     {id:0, title:'상호'},
@@ -48,4 +50,61 @@ export const useSearchStore = defineStore('mchtBlacklistSearchStore', () => {
         exporter,
         metas,
     }
+})
+
+
+export const useMchtBlacklistStore = defineStore('useMchtBlacklistStore', () => {
+    const alert = <any>(inject('alert'))
+    const mcht_blacklists = ref(<MchtBlacklist[]>([]))    
+
+    onMounted(async () => { 
+        getAllMchtBlacklist()
+    })
+
+    const getAllMchtBlacklist = async() => {
+        if(Number(corp.pv_options.paid.use_mcht_blacklist)) {
+            const r = await axios.get('/api/v1/services/mcht-blacklists/all?brand_id='+corp.id)
+            mcht_blacklists.value = r.data
+        }
+    }
+
+    const isMchtBlackList = (mcht: Merchandise) => {
+        let blacklist = mcht_blacklists.value.find(obj => obj.block_type === 0 && obj.block_content === mcht.mcht_name)
+        if(blacklist)
+            return [true, blacklist]
+
+        blacklist = mcht_blacklists.value.find(obj => obj.block_type === 1 && obj.block_content === mcht.nick_name)
+        if(blacklist)
+            return [true, blacklist]
+
+        blacklist = mcht_blacklists.value.find(obj => obj.block_type === 2 && obj.block_content === mcht.business_num)
+        if(blacklist)
+            return [true, blacklist]
+        
+        blacklist = mcht_blacklists.value.find(obj => obj.block_type === 3 && obj.block_content === mcht.phone_num)
+        if(blacklist)
+            return [true, blacklist]
+
+        blacklist = mcht_blacklists.value.find(obj => obj.block_type === 4 && obj.block_content === mcht.resident_num)
+        if(blacklist)
+            return [true, blacklist]
+
+        blacklist = mcht_blacklists.value.find(obj => obj.block_type === 5 && obj.block_content === mcht.addr)
+        if(blacklist)
+            return [true, blacklist]
+        return [false, null]
+    }
+
+    const customValidFormRequest = async(mcht: Merchandise) => {
+        if (Number(corp.pv_options.paid.use_mcht_blacklist)) {
+            let [result, blacklist] = isMchtBlackList(mcht)
+            if(result)
+                return await alert.value.show('해당 가맹점은 아래이유로 인해 블랙리스트로 등록된 가맹점입니다. 그래도 진행하시겠습니까?<br><br><b style="color:red">'+blacklist?.block_reason+'</b>')
+            else
+                return true
+        }
+        return true
+    }
+    
+    return { isMchtBlackList, customValidFormRequest }
 })

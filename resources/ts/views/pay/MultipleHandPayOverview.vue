@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
 import { requiredValidator } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import MultipleHandPayForm from '@/views/pay/multiple-hand-pay/MultipleHandPayForm.vue'
@@ -18,6 +19,7 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const salesslip = <any>(inject('salesslip'))
 
+const { customValidFormRequest } =  useMchtBlacklistStore()
 const full_processes = ref<any[]>([])
 const hand_pay_info = ref(<MultipleHandPay>({}))
 const hand_pay_infos = ref(<MultipleHandPay[]>([]))
@@ -237,6 +239,9 @@ watchEffect(async () => {
 
 watchEffect(() => {
     setProcessTableWidth()
+})
+watchEffect(async() => {
+    await customValidFormRequest(props.merchandise)
 })
 onMounted(() => {
     init()

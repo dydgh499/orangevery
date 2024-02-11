@@ -41,7 +41,6 @@ class MchtBlacklistController extends Controller
             ->where('block_reason', 'like', "%$search%");
         $data  = $this->getIndexData($request, $query);
         return $this->response(0, $data);
-
     }
 
     /**
@@ -98,5 +97,16 @@ class MchtBlacklistController extends Controller
     {
         $res = $this->mcht_blacklists->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);
+    }
+
+    public function all(Request $request)
+    {
+        $data = $this->mcht_blacklists->where('brand_id', $request->brand_id)->get([
+            'block_content',
+            'block_reason',
+            'block_type',
+            'id',    
+        ]);
+        return $this->response(0, $data);
     }
 }

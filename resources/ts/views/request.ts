@@ -1,5 +1,6 @@
 import router from '@/router'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
 import type { Merchandise } from '@/views/types'
 import { axios, getLevelByIndex } from '@axios'
 import corp from '@corp'
@@ -9,6 +10,7 @@ export const useRequestStore = defineStore('requestStore', () => {
     const snackbar = <any>(inject('snackbar'))
     const errorHandler = <any>(inject('$errorHandler'))
     const { all_sales, mchts } = useSalesFilterStore()
+    const { isMchtBlackList } =  useMchtBlacklistStore()
 
     const deleteTreatment = (back_url: string, is_redirect: boolean, params: any, res: any) => {
         if (res.status === 201) {
@@ -99,10 +101,21 @@ export const useRequestStore = defineStore('requestStore', () => {
         return { url, reqType }
     }
 
+    const customValidFormRequest = async(base_url: string, params: any) => {
+        if (Number(corp.pv_options.paid.use_mcht_blacklist) && base_url === '/merchandises') {
+            let [result, blacklist] = isMchtBlackList(params)
+            if(result)
+                return await alert.value.show('해당 가맹점은 아래이유로 인해 블랙리스트로 등록된 가맹점입니다. 그래도 진행하시겠습니까?<br><br><b style="color:red">'+blacklist?.block_reason+'</b>')
+            else
+                return true
+        }
+        return true
+    }
+
     const formRequest = async (base_url: string, params: any, vForm: any, is_redirect: boolean = true) => {
         const is_valid = await vForm.validate()
         const { url, reqType } = getBaseSendInfo(base_url, params.id)
-        if (is_valid.valid && await alert.value.show('정말 ' + reqType + '하시겠습니까?')) {
+        if (is_valid.valid && await customValidFormRequest(base_url, params) && await alert.value.show('정말 ' + reqType + '하시겠습니까?')) {
             const form_data = new FormData()
             getFormParams(form_data, params)
             const res = await request({

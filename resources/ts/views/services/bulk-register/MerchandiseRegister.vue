@@ -2,7 +2,7 @@
 import { lengthValidatorV2 } from '@validators'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { tax_category_types } from '@/views/merchandises/useStore'
-
+import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
 import { useRegisterStore } from '@/views/services/bulk-register/MerchandiseRegisterStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { banks } from '@/views/users/useStore'
@@ -23,6 +23,7 @@ const { sales } = useSalesFilterStore()
 const { head, headers, levels, isPrimaryHeader } = useRegisterStore()
 const { ExcelReader, openFilePicker, bulkRegister } = Registration()
 
+const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const excel = ref()
 const items = ref<extendMerchandise[]>([])
@@ -32,6 +33,8 @@ const use_types: Options[] = [
     { id: 0, title: '미사용',},
     { id: 1, title: '사용',},
 ]
+const { isMchtBlackList } =  useMchtBlacklistStore()
+
 
 const isNotExistSalesforce = (is_use: boolean, sales_idx: number, item_idx: number) => {
     const sales_id = 'sales' + sales_idx + '_id';
@@ -54,7 +57,7 @@ const isNotExistCustomFilter = (custom_id: number | null) => {
     else
         return false
 }
-const validate = () => {
+const validate = async() => {
     const user_names = new Set()
     const mcht_names = new Set()
     for (let i = 0; i < items.value.length; i++) {
@@ -147,13 +150,18 @@ const validate = () => {
             is_clear.value = true
         }
 
+        if (Number(corp.pv_options.paid.use_mcht_blacklist)) {
+            let [result, blacklist] = isMchtBlackList(items.value[i])
+            if(result) {
+                is_clear.value = await alert.value.show((i + 1) + '번째 가맹점은 아래이유로 인해 블랙리스트로 등록된 가맹점입니다. 그래도 진행하시겠습니까?<br><br><b style="color:red">'+blacklist?.block_reason+'</b>')
+            }
+        }
         if (is_clear.value == false)
             return
     }
     snackbar.value.show('입력값 1차 검증에 성공하였습니다.', 'success')
     is_clear.value = true
 }
-
 const mchtRegister = async () => {
     if(await bulkRegister('가맹점', 'merchandises', items.value))
         location.reload()
@@ -163,7 +171,7 @@ watchEffect(async () => {
     if (excel.value) {
         items.value = await ExcelReader(headers, excel.value[0]) as extendMerchandise[]
         console.log(items.value)
-        validate()
+        await validate()
     }
 })
 </script>

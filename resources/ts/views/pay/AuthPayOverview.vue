@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
 import { requiredValidator } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
@@ -15,6 +16,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 
+const { customValidFormRequest } =  useMchtBlacklistStore()
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
 const auth_pay_info = reactive(<AuthPay>({}))
 const vForm = ref<VForm>()
@@ -30,6 +32,7 @@ const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
 })
 
+
 const isMobile = () => {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 }
@@ -42,6 +45,10 @@ watchEffect(() => {
     auth_pay_info.ord_num = props.pay_module.id + "A" + Date.now().toString().substr(0, 10)
     if(props.merchandise.use_pay_verification_mobile == 0)
         is_show_pay_button.value = true
+})
+
+watchEffect(async() => {
+    await customValidFormRequest(props.merchandise)
 })
 </script>
 <template>
