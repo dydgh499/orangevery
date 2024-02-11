@@ -142,4 +142,8 @@ onMounted(() => {
 .important-text {
   color: red !important;
 }
+
+:deep(.v-table__wrapper) {
+  block-size: auto !important;
+}
 </style>

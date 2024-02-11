@@ -368,7 +368,79 @@ const danal = () => {
 }
 
 const galaxiamoneytree = () => {
-
+    return `<div>
+    <h2>갤럭시아머니트리</h2>
+    <h3>1.1 차액 정산 송/수신 주기</h3>
+     차액 정산 요청 파일 
+    <br>
+    - 거래 일자(D) 기준, D+1일 09시 전까지 업로드 (365일 전송) <br><br>
+     차액 정산 결과 파일 <br>
+    - 차액 정산 요청 일자 기준 영업일 D+5일 07시 업로드 <br><br>
+    Ex) 거래일자(D) : 2023년 01월 07일(토) <br>
+    차액 정산 요청 파일 ( 가맹점 -> 갤럭시아머니트리 ) : 2023년 01월 08일(일) <br>
+    차액 정산 결과 파일 ( 갤럭시아머니트리 -> 가맹점 ) : 2023년 01월 13일(금) <br>
+    <br>
+    <h3>1.2 차액정산 결과 코드(갤럭시아머니트리 결과 코드)</h3>
+    오류코드 오류메시지<br>
+    <div class="v-table v-theme--light v-table--density-default text-no-wrap">
+        <div class="v-table__wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th class='list-square'>코드</th>
+                        <th class='list-square'>응답 메세지</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class='list-square'>00</td>
+                        <td class='list-square'>정상</td>
+                    </tr>
+                    <tr>
+                        <td class='list-square'>01</td>
+                        <td class='list-square'>승인취소 거래건</td>
+                    </tr>
+                    <tr>
+                        <td class='list-square'>02</td>
+                        <td class='list-square'>매출금액 오류</td>
+                    </tr>
+                    <tr>
+                        <td class='list-square'>03</td>
+                        <td class='list-square'>중복 접수</td>
+                    </tr>
+                    <tr>
+                        <td class='list-square'>04</td>
+                        <td class='list-square'>원거래 매입 거절건</td>
+                    </tr>
+                    <tr>
+                        <td class='list-square'>05</td>
+                        <td class='list-square'>매입취소구분 오류</td>
+                    </tr>
+                    <tr>
+                        <td class='list-square'>06</td>
+                        <td class='list-square'>일반사업자</td>
+                    </tr>
+                    <tr>
+                        <td class='list-square'>07</td>
+                        <td class='list-square'>차액정산 지연접수자</td>
+                    </tr>
+                    <tr>
+                        <td class='list-square'>08</td>
+                        <td class='list-square'>원거래 없음</td>
+                    </tr>
+                    <tr>
+                        <td class='list-square'>09</td>
+                        <td class='list-square'>차액정산 대상아님</td>
+                    </tr>
+                    <tr>
+                        <td class='list-square'>99</td>
+                        <td class='list-square'>기타 오류</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>`
 }
 
 export const getDifferenceSettleMenual = () => {

@@ -138,7 +138,6 @@ trait SettleTerminalTrait
     {
         $data = $this->setSettleTerminals($data, $settle_s_dt, $settle_e_dt);
         $data = $this->setSettleUnderAmount($data, $settle_s_dt, $settle_e_dt);
-
         return $data;
     }
 }

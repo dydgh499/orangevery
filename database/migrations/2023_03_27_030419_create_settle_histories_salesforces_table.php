@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('acct_bank_code', 3)->nullable()->comment('은행코드');
             $table->tinyInteger('level')->comment('영업자 레벨');
             $table->integer('total_amount')->default(0)->comment('매출액');
-            $table->integer('trx_amount')->default(0)->comment('거래 수수료');            
+            $table->integer('trx_amount')->default(0)->comment('거래 수수료');
             $table->integer('cxl_amount')->default(0)->comment('취소액');
             $table->integer('appr_amount')->default(0)->comment('승인액');
             $table->integer('deduct_amount')->default(0)->comment('추가차감액');

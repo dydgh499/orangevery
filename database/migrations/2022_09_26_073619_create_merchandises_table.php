@@ -66,11 +66,13 @@ class CreateMerchandisesTable extends Migration
             $table->boolean('use_saleslip_prov')->default(true)->comment('매출전표 공급자 사용 여부(0=사용, 1=본사)');
             $table->boolean('use_saleslip_sell')->default(false)->comment('매출전표 판매자 사용 여부(0=사용, 1=본사)');
             $table->boolean('use_noti')->default(false)->comment('노티 사용여부');
+            $table->boolean('is_show_fee')->default(false)->comment('수수료율 노출여부');
+
             $table->boolean('use_regular_card')->default(false)->comment('정기 카드 사용여부(단골고객)');
             $table->boolean('use_collect_withdraw')->default(false)->comment('모아서 출금여부');
             $table->boolean('use_multiple_hand_pay')->default(false)->comment('다중결제기능 사용여부');
             $table->boolean('use_pay_verification_mobile')->default(false)->comment('결제전 휴대폰 인증 사용여부');            
-            $table->boolean('is_show_fee')->default(false)->comment('수수료율 노출여부');
+            
             $table->mediumInteger('collect_withdraw_fee')->default(0)->comment('모아서 출금 수수료(가맹점)');
             $table->mediumInteger('withdraw_fee')->default(0)->comment('출금 수수료');
             $table->tinyInteger('tax_category_type')->default(0)->comment('면세사업자 파라미터(0=면세, 1=과세, 2=복합)');

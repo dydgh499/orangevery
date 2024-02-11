@@ -17,7 +17,6 @@ class HandPayRequest extends FormRequest
         'buyer_phone',
         'installment',
         'amount',
-        
         'ord_num',
         'item_name',
         'auth_num',

@@ -55,11 +55,11 @@ class DifferenceSettlement
     protected function _request($save_path, $req_date, $trans)
     {
         $result = false;
-        
+
         $mids = $trans->pluck('mid')->unique()->all();
         $total_count = 0;
-        
         $full_record = $this->setStartRecord($req_date);
+
         foreach($mids as $mid)
         {
             $mcht_trans = $trans->filter(function ($tran) use ($mid) {
@@ -74,7 +74,7 @@ class DifferenceSettlement
                 $full_record .= $header.$data_records.$total;
                 $total_count += $count;    
             }
-        }        
+        }
         $full_record .= $this->setEndRecord($total_count);
 
         if($this->main_connection_stat)

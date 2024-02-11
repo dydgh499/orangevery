@@ -37,9 +37,13 @@ const tidCreate = async() => {
     if(await alert.value.show('정말 TID를 신규 발급하시겠습니까?')) {
         try {
             const pg_type = pgs.find(obj => obj.id === props.item.pg_id)?.pg_type
-            const r = await axios.post('/api/v1/manager/merchandises/pay-modules/tid-create', { pg_type : pg_type })
-            props.item.tid = r.data.tid
-            snackbar.value.show('성공하였습니다.<br>저장하시려면 추가버튼을 눌러주세요.', 'success')
+            if(pg_type) {
+                const r = await axios.post('/api/v1/manager/merchandises/pay-modules/tid-create', { pg_type : pg_type })
+                props.item.tid = r.data.tid
+                snackbar.value.show('성공하였습니다.<br>저장하시려면 추가버튼을 눌러주세요.', 'success')
+            }
+            else
+                snackbar.value.show('PG사를 먼저 선택해주세요.', 'warning')
         }
         catch (e: any) {
             snackbar.value.show(e.response.data.message, 'error')

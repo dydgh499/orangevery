@@ -5,36 +5,33 @@ namespace App\Http\Requests\Manager;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
 
-class PayGatewayRequest extends FormRequest
+class DifferentSettlementInfoRequest extends FormRequest
 {
     use FormRequestTrait;
     public $keys = [
+        'rep_mid',
+        'sftp_id',
+        'sftp_password',
         'pg_type',
-        'pg_name',
-        'rep_name',
-        'company_name',
-        'business_num',
-        'phone_num',
-        'addr',
-        'settle_type',
     ];
 
-    public function authorize()
+    public function authorize(): bool
     {
         return $this->user()->tokenCan(10) ? true : false;
     }
 
-    public function rules()
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     */
+    public function rules(): array
     {
         $sub = [
+            'rep_mid' => 'required',
+            'sftp_id' => 'required',
+            'sftp_password' => 'required',
             'pg_type' => 'required',
-            'pg_name' => 'required',
-            'rep_name' => 'nullable',
-            'company_name' => 'nullable',
-            'business_num' => 'nullable',
-            'phone_num' => 'nullable',
-            'addr' => 'nullable',
-            'use_different_settlement' => 'numeric',
         ];
         return $this->getRules($this->keys, $sub);
     }
@@ -49,7 +46,6 @@ class PayGatewayRequest extends FormRequest
         $params = $this->getDocsParameters($this->keys);
         return $params;
     }
-
     public function data()
     {
         $data = $this->getParmasBaseKey();

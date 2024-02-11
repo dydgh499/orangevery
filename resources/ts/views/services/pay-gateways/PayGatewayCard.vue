@@ -5,7 +5,6 @@ import { VForm } from 'vuetify/components'
 import { useStore, pg_settle_types } from '@/views/services/pay-gateways/useStore'
 import PaySectionTr from '@/views/services/pay-gateways/PaySectionTr.vue'
 import { useRequestStore } from '@/views/request'
-import corp from '@corp';
 
 interface Props {
     item: PayGateway,
@@ -15,7 +14,6 @@ const props = defineProps<Props>()
 
 const { pss, pg_companies } = useStore()
 const { update, remove, setNullRemove } = useRequestStore()
-const is_show = ref(false)
 
 const addNewSection = () => {
     pss.push({
@@ -168,55 +166,6 @@ watchEffect(() => {
                                 </VRow>
                             </VCol>
                         </VRow>
-                        <template v-if="corp.use_different_settlement">
-                            <div class="pt-6">
-                                <VDivider />
-                                <VRow class="pt-3">
-                                    <VCol style="display: inline-flex; align-items: center;" :md="6" :cols="12">
-                                        <VSwitch hide-details :false-value=0 :true-value=1
-                                            v-model="props.item.use_different_settlement" label="차액정산 사용여부"
-                                            color="primary" />
-                                    </VCol>
-                                    <VCol v-if="props.item.use_different_settlement" style="display: inline-flex;">
-                                        <VRow no-gutters>
-                                            <VCol>
-                                                <label>대표 가맹점 MID</label>
-                                            </VCol>
-                                            <VCol md="7">
-                                                <VTextField v-model="props.item.rep_mid" placeholder="대표 가맹점 MID 입력"
-                                                    persistent-placeholder maxlength="200" />
-                                            </VCol>
-                                        </VRow>
-                                    </VCol>
-                                </VRow>
-                                <VRow v-if="props.item.use_different_settlement">
-                                    <VCol :md="6" :cols="12">
-                                        <VRow no-gutters>
-                                            <VCol>
-                                                <label>SFTP 접속 ID</label>
-                                            </VCol>
-                                            <VCol md="7">
-                                                <VTextField v-model="props.item.sftp_id" placeholder="접속 ID 입력"
-                                                    persistent-placeholder maxlength="200" />
-                                            </VCol>
-                                        </VRow>
-                                    </VCol>
-                                    <VCol>
-                                        <VRow no-gutters>
-                                            <VCol>
-                                                <label>SFTP 접속 PW</label>
-                                            </VCol>
-                                            <VCol md="7">                                                
-                                                <VTextField v-model="props.item.sftp_password" 
-                                                    :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
-                                                    :type="is_show ? 'text' : 'password'" persistent-placeholder
-                                                    @click:append-inner="is_show = !is_show" autocomplete="new-password" />
-                                            </VCol>
-                                        </VRow>
-                                    </VCol>
-                                </VRow>
-                            </div>
-                        </template>
                         <VRow>
                             <VCol class="d-flex gap-4 pt-10">
                                 <VBtn type="button" style="margin-left: auto;"

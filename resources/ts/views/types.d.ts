@@ -224,10 +224,6 @@ export interface PayGateway {
     phone_num: string,
     addr:string,
     settle_type:number,
-    rep_mid: string,
-    sftp_id: string,
-    sftp_password: string,
-    use_different_settlement: number,
 }
 
 export interface PaySection {
@@ -408,9 +404,9 @@ export interface Brand extends Contract {
     extra_deposit_amount: number,
     curr_deposit_amount: number,
     last_dpst_at: datetime,
-
     use_different_settlement: number,
     before_brand_infos: BeforeBrandInfo[],
+    different_settlement_infos: DifferentSettlementInfo[],
     updated_at: datetime,
     created_at: datetime,
 }
@@ -419,6 +415,14 @@ export interface BeforeBrandInfo extends BrandBaseInfo {
     id: number,
     apply_s_dt: string,
     apply_e_dt: string,
+}
+
+export interface DifferentSettlementInfo {
+    id: number,
+    pg_type: number,
+    rep_mid: string,
+    sftp_id: string,
+    sftp_password: string,
 }
 
 export interface DeductionHeader {

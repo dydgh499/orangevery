@@ -8,6 +8,7 @@ use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Manager\DashboardController;
 use App\Http\Controllers\Manager\BrandController;
 use App\Http\Controllers\Manager\BeforeBrandInfoController;
+use App\Http\Controllers\Manager\DifferentSettlementInfoController;
 use App\Http\Controllers\Manager\OperatorController;
 
 use App\Http\Controllers\Manager\MerchandiseController;
@@ -106,6 +107,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             
             Route::apiResource('brands', BrandController::class);
             Route::apiResource('brands/before-brand-infos', BeforeBrandInfoController::class);
+            Route::apiResource('brands/different-settlement-infos', DifferentSettlementInfoController::class);
+            
             
             Route::apiResource('operators', OperatorController::class);
             Route::apiResource('operator-histories', OperatorHistoryContoller::class);

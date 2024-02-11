@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Options\PvOptions;
 use App\Models\Options\ThemeCSS;
 use App\Models\BeforeBrandInfo;
+use App\Models\DifferentSettlementInfo;
+
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Http\Traits\Models\AttributeTrait;
 
@@ -49,5 +51,8 @@ class Brand extends Model
         return $this->hasMany(BeforeBrandInfo::class, 'brand_id');
     }
 
-    
+    public function differentSettlementInfos()
+    {
+        return $this->hasMany(DifferentSettlementInfo::class, 'brand_id');
+    }    
 }

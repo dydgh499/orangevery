@@ -24,10 +24,6 @@ return new class extends Migration
             $table->string('business_num', 20)->nullable()->comment('사업자등록번호');
             $table->string('phone_num', 20)->default('')->comment('휴대폰 번호');
             $table->string('addr', 200)->nullable()->comment('사업지 주소');
-            $table->string('rep_mid', 30)->nullable()->comment('대표 가맹점 MID');
-            $table->string('sftp_id', 30)->nullable()->comment('SFTP 접속 id');
-            $table->string('sftp_password', 30)->nullable()->comment('SFTP 접속 pw');
-            $table->boolean('use_different_settlement')->default(false)->comment('차액정산 사용여부');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });

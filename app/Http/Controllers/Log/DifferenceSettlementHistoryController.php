@@ -118,12 +118,11 @@ class DifferenceSettlementHistoryController extends Controller
 
     private function getUseDifferentSettlementBrands()
     {
-        return Brand::join('payment_gateways', 'brands.id', '=', 'payment_gateways.brand_id')
-            ->where('payment_gateways.is_delete', false)
+        return Brand::join('different_settlement_infos', 'brands.id', '=', 'different_settlement_infos.brand_id')
             ->where('brands.is_delete', false)
-            ->where('payment_gateways.use_different_settlement', true)
+            ->where('different_settlement_infos.is_delete', false)
             ->where('brands.use_different_settlement', true)
-            ->get(['brands.business_num', 'brands.id', 'payment_gateways.rep_mid', 'payment_gateways.sftp_id', 'payment_gateways.sftp_password', 'payment_gateways.pg_type']);
+            ->get(['brands.business_num', 'brands.id', 'different_settlement_infos.*']);
     }
 
     public function getPGClass($brand)

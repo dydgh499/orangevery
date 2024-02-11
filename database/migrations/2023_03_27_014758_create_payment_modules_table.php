@@ -32,7 +32,7 @@ return new class extends Migration
             $table->integer('terminal_id')->nullable()->comment('장비 종류');
             $table->tinyInteger('comm_settle_day')->default(0)->comment('통신비 정산일');
             $table->smallInteger('comm_settle_fee')->default(0)->comment('통신비 입금 수수료');
-            $table->tinyInteger('comm_settle_day')->default(0)->comment('통신비 정산 타입(개통월 부터=0, 개통월 익월=1, 개통월 익익월=2)');
+            $table->tinyInteger('comm_settle_type')->default(0)->comment('통신비 정산 타입(개통월 부터=0, 개통월 익월=1, 개통월 익익월=2)');
             $table->tinyInteger('comm_calc_level')->default(0)->comment('정산주체(sales id), -1=본인, 125=개발사, 128=본사');            
             $table->tinyInteger('under_sales_type')->default(0)->comment('매출미달 적용타입');
             $table->integer('under_sales_limit')->default(0)->comment('매출미달 하한금액');
