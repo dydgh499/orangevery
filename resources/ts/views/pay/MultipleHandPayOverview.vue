@@ -11,6 +11,7 @@ interface Props {
     pay_module: PayModule,
     merchandise: Merchandise,
 }
+const route = useRoute()
 const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
@@ -20,11 +21,33 @@ const full_processes = ref<any[]>([])
 const hand_pay_info = ref(<MultipleHandPay>({}))
 const hand_pay_infos = ref(<MultipleHandPay[]>([]))
 const vForm = ref<VForm>()
+const noti_temp = ref('')
+const valid_total_amount = ref(0)
 
 const urlParams = new URLSearchParams(window.location.search)
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
 
 const init = () => {
+    if(route.query.temp) {
+        try {
+            const temp = decodeURIComponent(route.query.temp as string)
+            const base64 = atob(temp)
+            const plain = JSON.parse(base64)
+            if(plain.order_num !== undefined && plain.total_amount !== undefined) {
+                noti_temp.value = plain.order_num as string
+                valid_total_amount.value = plain.total_amount as number
+            }
+            else {
+                snackbar.value.show('order_num 또는 total_amount가 존재하지 않습니다.', 'error')
+            }
+        }
+        catch(e) {
+            snackbar.value.show('base64 decode 또는 json parse에 실패하였습니다.', 'error')
+        }
+    }
+    else
+        snackbar.value.show('temp 파라미터가 존재하지 않습니다.', 'error')
+
     hand_pay_info.value = (<MultipleHandPay>({
         yymm: '',
         card_num: '',
@@ -32,6 +55,7 @@ const init = () => {
         item_name: urlParams.get('item_name') || '',
         buyer_name: urlParams.get('buyer_name') || '',
         buyer_phone: urlParams.get('phone_num') || '',
+        temp: noti_temp.value
     }))
 }
 
@@ -150,7 +174,6 @@ const cxlResult = async () => {
                 ...results[i],
                 ...props.merchandise
             }
-            console.log(full_processes.value[i].cxl_result)
         }
     }
 }
@@ -159,6 +182,11 @@ const cxlResult = async () => {
 const pays = async () => {
     const common_valid = await vForm.value?.validate()
     const total_amount = hand_pay_infos.value.reduce((sum, obj) => sum + Number(obj.amount), 0)
+
+    if(valid_total_amount.value !== total_amount) {
+        snackbar.value.show('결제금액은 총 ' + valid_total_amount.value.toLocaleString() + '원 이어야합니다.', 'error')
+        return
+    }
 
     for (let i = 0; i < hand_pay_infos.value.length; i++) {
         if (hand_pay_infos.value[i].status_color != 'success') {
@@ -189,6 +217,7 @@ watchEffect(async () => {
     hand_pay_info.value.status_icon = is_valid?.valid ? 'line-md:check-all' : 'line-md:emoji-frown-twotone'
     hand_pay_info.value.status_color = is_valid?.valid ? 'success' : 'error'
 })
+
 onMounted(() => {
     init()
 })
@@ -240,8 +269,11 @@ watchEffect(() => {
                     <VCol cols="12">
                         <VRow>
                             <VCol cols="6">
-                                <span>총 결제금액</span>
+                                <span>총 입력금액</span>
                                 <b style="margin-left: 0.5em;">{{ hand_pay_infos.reduce((sum, obj) => sum + Number(obj.amount), 0).toLocaleString() }}</b>원
+                                <br>
+                                <span>총 결제금액</span>
+                                <b style="margin-left: 0.5em;">{{ valid_total_amount.toLocaleString() }}</b>원
                             </VCol>
                             <VCol cols="6">
                                 <VBtn @click="addNewHandPay()" color="primary" style="width: 100%;float: inline-end;">결제정보 추가</VBtn>

@@ -48,7 +48,7 @@ watchEffect(async () => {
             <CreateHalfVCol :mdl="4" :mdr="8">
                 <template #name>상품금액</template>
                 <template #input>
-                    <VTextField v-model="props.hand_pay_info.amount" suffix="₩" placeholder="거래금액을 입력해주세요"
+                    <VTextField v-model="props.hand_pay_info.amount" type="number" suffix="₩" placeholder="거래금액을 입력해주세요"
                         prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidator]" />
                 </template>
             </CreateHalfVCol>

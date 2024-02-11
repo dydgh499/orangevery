@@ -51,6 +51,20 @@ watchEffect(() => {
                             </VRow>
                         </VCol>
                     </VRow>
+                    <VRow class="pt-3" >
+                        <VCol :md="12" :cols="12">
+                            <VRow no-gutters>
+                                <VCol>
+                                    <label>주소</label>
+                                </VCol>
+                                <VCol md="10">
+                                    <VTextField id="addressHorizontalIcons" v-model="props.item.addr"
+                                        prepend-inner-icon="tabler-map-pin" placeholder="주소 입력" persistent-placeholder
+                                        maxlength="200" :rules="[requiredValidator]" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
                     <VRow class="pt-3">
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters>
@@ -123,20 +137,6 @@ watchEffect(() => {
                                 <VCol md="8">
                                     <VTextField v-model="props.item.fax_num"
                                         prepend-inner-icon="streamline-emojis:fax-machine" placeholder="팩스번호 입력" persistent-placeholder
-                                        maxlength="200" :rules="[requiredValidator]" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                    <VRow class="pt-3">
-                        <VCol :md="12" :cols="12">
-                            <VRow no-gutters>
-                                <VCol>
-                                    <label>주소</label>
-                                </VCol>
-                                <VCol md="10">
-                                    <VTextField id="addressHorizontalIcons" v-model="props.item.addr"
-                                        prepend-inner-icon="tabler-map-pin" placeholder="주소 입력" persistent-placeholder
                                         maxlength="200" :rules="[requiredValidator]" />
                                 </VCol>
                             </VRow>
