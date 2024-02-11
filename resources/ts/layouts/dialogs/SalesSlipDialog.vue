@@ -318,5 +318,9 @@ div {
   .cancel-img {
     inset-block-start: 67%;
   }
+
+  :deep(.v-overlay-container) {
+    overflow-y: scroll;
+  }
 }
 </style>
