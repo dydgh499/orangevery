@@ -12,16 +12,17 @@ const vForm = ref<VForm>()
 const props = defineProps<Props>()
 const { update, remove } = useRequestStore()
 const { pg_companies } = useStore()
+const is_show = ref(false)
 
 </script>
 <template>
     <tr>
         <td class='list-square'>{{ index + 1 }}</td>
-        <td class='list-square' >
+        <td class='list-square'>
             <VForm ref="vForm">
-                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_type"
-                    :items="pg_companies" prepend-inner-icon="ph-buildings" label="PG사 선택"
-                    item-title="name" item-value="id" single-line style="width: 250px;"/>
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_type" :items="pg_companies"
+                    prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="name" item-value="id" single-line
+                    style="width: 250px;" />
             </VForm>
         </td>
         <td class='list-square'>
@@ -31,7 +32,9 @@ const { pg_companies } = useStore()
             <VTextField v-model="props.item.sftp_id" type="text" placeholder="SFTP ID" style="width: 150px;" />
         </td>
         <td class='list-square'>
-            <VTextField v-model="props.item.sftp_password" type="text" placeholder="SFTP PW" style="width: 150px;" />
+            <VTextField v-model="props.item.sftp_password" placeholder="SFTP PW" style="width: 150px;"
+                :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'" :type="is_show ? 'text' : 'password'"
+                persistent-placeholder @click:append-inner="is_show = !is_show" />
         </td>
         <td class='list-square'>
             <VCol class="d-flex gap-4" style="text-align: center;">
