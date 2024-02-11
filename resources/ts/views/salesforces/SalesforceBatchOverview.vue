@@ -50,6 +50,7 @@ const pay_module = reactive<any>({
     pay_month_limit: 0,
     pay_year_limit: 0,
 
+    use_realtime_deposit: 0,
     show_pay_view: 0,
     note: '',
 })
@@ -183,6 +184,12 @@ const setShowPayView = () => {
         'show_pay_view': pay_module.show_pay_view,
     })
 }
+const setUseRealtimeDeposit = () => {
+    post('set-use-realtime-deposit', {
+        ...common.value,
+        'use_realtime_deposit': pay_module.use_realtime_deposit,
+    })
+}
 //
 const setMid = () => {
     post('set-mid', {
@@ -242,7 +249,7 @@ const setNotiUrl = () => {
                     single-line />
             </template>
         </CreateHalfVCol>
-        <VDivider/>
+        <VDivider />
         <CreateHalfVCol :mdl="3" :mdr="9">
             <template #name>
                 {{ corp.pv_options.auth.levels['sales' + getLevelByIndex(props.item.level) + '_name'] }} 수수료율</template>
@@ -347,213 +354,283 @@ const setNotiUrl = () => {
         </BaseQuestionTooltip>
     </VCardTitle>
     <div v-if="props.item.id != 0" style="width: 100%;">
-        <CreateHalfVCol :mdl="3" :mdr="9">
-            <template #name>
-                <BaseQuestionTooltip :location="'top'" :text="'PG사 필터 적용'"
-                    :content="'해당 값과 결제모듈의 PG사가 똑같은 결제모듈만 일괄적용됩니다.'">
-                </BaseQuestionTooltip>
-            </template>
-            <template #input>
-                <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.pg_id"
-                    :items="[{ id: null, pg_name: '전체' }].concat(pgs)" prepend-inner-icon="ph-buildings" label="PG사 선택"
-                    item-title="pg_name" item-value="id" single-line />
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9">
-            <template #name>
-                <BaseQuestionTooltip :location="'top'" :text="'별칭 필터 적용'"
-                    :content="'해당 값과 결제모듈의 별칭이 똑같은 결제모듈만 일괄적용됩니다.<br>(좌우 공백은 제거된 후 필터링됩니다.)'">
-                </BaseQuestionTooltip>
-            </template>
-            <template #input>
-                <VTextField v-model="pay_module.pmod_note" placeholder='결제모듈 명칭을 적어주세요.😀'
-                        prepend-inner-icon="twemoji-spiral-notepad" />
-            </template>
-        </CreateHalfVCol>
-        <VDivider/>
-        <CreateHalfVCol :mdl="3" :mdr="9">
-            <template #name>이상거래 한도</template>
-            <template #input>
-                <div class="batch-container">
-                    <VSelect v-model="pay_module.abnormal_trans_limit" :items="abnormal_trans_limits"
-                        prepend-inner-icon="jam-triangle-danger" label="이상거래 한도설정" item-title="title" item-value="id" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setAbnormalTransLimit()">
-                        즉시적용
-                        <VIcon end icon="tabler-direction-sign" />
-                    </VBtn>
-                </div>
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9">
-            <template #name>중복거래 하한금</template>
-            <template #input>
-                <div class="batch-container">
-                    <VTextField type="number" v-model="pay_module.pay_dupe_least" prepend-inner-icon="tabler-currency-won"
-                        suffix="만원" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setDupPayLeastValidation()">
-                        즉시적용
-                        <VIcon end icon="tabler-direction-sign" />
-                    </VBtn>
-                </div>
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_dup_pay_validation">
-            <template #name>중복결제 허용회수</template>
-            <template #input>
-                <div class="batch-container">
-                    <VTextField v-model="pay_module.pay_dupe_limit" label="중복결제 허용회수" type="number" suffix="회 허용" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setDupPayCountValidation()">
-                        즉시적용
-                        <VIcon end icon="tabler-direction-sign" />
-                    </VBtn>
-                </div>
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_pay_limit">
-            <template #name>단건 결제 한도</template>
-            <template #input>
-                <div class="batch-container">
-                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_single_limit" type="number"
-                        suffix="만원" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPayLimit('single')">
-                        즉시적용
-                        <VIcon end icon="tabler-direction-sign" />
-                    </VBtn>
-                </div>
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_pay_limit">
-            <template #name>일 결제 한도</template>
-            <template #input>
-                <div class="batch-container">
-                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_day_limit" type="number"
-                        suffix="만원" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPayLimit('day')">
-                        즉시적용
-                        <VIcon end icon="tabler-direction-sign" />
-                    </VBtn>
-                </div>
+        <VRow class="pt-3 pb-3">
+            <VCol :md="6" :cols="12">
+                <VRow no-gutters>
+                    <VCol>
+                        <BaseQuestionTooltip :location="'top'" :text="'PG사 필터 적용'"
+                            :content="'해당 값과 결제모듈의 PG사가 똑같은 결제모듈만 일괄적용됩니다.'">
+                        </BaseQuestionTooltip>
+                    </VCol>
+                    <VCol md="8">
+                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.pg_id"
+                            :items="[{ id: null, pg_name: '전체' }].concat(pgs)" prepend-inner-icon="ph-buildings"
+                            label="PG사 선택" item-title="pg_name" item-value="id" single-line />
+                    </VCol>
+                </VRow>
+            </VCol>
+            <VCol :md=6>
+                <VRow no-gutters>
+                    <VCol>
+                        <BaseQuestionTooltip :location="'top'" :text="'별칭 필터 적용'"
+                            :content="'해당 값과 결제모듈의 별칭이 똑같은 결제모듈만 일괄적용됩니다.<br>(좌우 공백은 제거된 후 필터링됩니다.)'">
+                        </BaseQuestionTooltip>
+                    </VCol>
+                    <VCol md="8">
+                        <VTextField v-model="pay_module.pmod_note" placeholder='결제모듈 명칭을 적어주세요.😀'
+                            prepend-inner-icon="twemoji-spiral-notepad" />
+                    </VCol>
+                </VRow>
+            </VCol>
+        </VRow>
+        <VDivider />
+        <VRow class="pt-3">
+            <VCol :md="6" :cols="12">
+                <VRow no-gutters>
+                    <VCol>이상거래 한도</VCol>
+                    <VCol md="8">
+                        <div class="batch-container">
+                            <VSelect v-model="pay_module.abnormal_trans_limit" :items="abnormal_trans_limits"
+                                prepend-inner-icon="jam-triangle-danger" label="이상거래 한도설정" item-title="title"
+                                item-value="id" />
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setAbnormalTransLimit()">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+            <VCol :md=6>
+                <VRow no-gutters>
+                    <VCol>중복거래 하한금</VCol>
+                    <VCol md="8">
+                        <div class="batch-container">
+                            <VTextField type="number" v-model="pay_module.pay_dupe_least"
+                                prepend-inner-icon="tabler-currency-won" suffix="만원" />
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setDupPayLeastValidation()">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+        </VRow>
+        <VRow>
+            <VCol :md="6" :cols="12">
+                <VRow no-gutters>
+                    <VCol>중복결제 허용회수</VCol>
+                    <VCol md="8">
+                        <div class="batch-container">
+                            <VTextField v-model="pay_module.pay_dupe_limit" label="중복결제 허용회수" type="number" suffix="회 허용" />
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setDupPayCountValidation()">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+            <VCol :md=6>
+                <VRow no-gutters>
+                    <VCol>결제창 노출여부</VCol>
+                    <VCol md="8">
+                        <div class="batch-container">
+                            <BooleanRadio :radio="pay_module.show_pay_view"
+                                @update:radio="pay_module.show_pay_view = $event">
+                                <template #true>노출</template>
+                                <template #false>숨김</template>
+                            </BooleanRadio>
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setShowPayView()">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+        </VRow>
+        <VRow>
+            <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_pay_limit">
+                <VRow no-gutters>
+                    <VCol>단건 결제 한도</VCol>
+                    <VCol md="8">
+                        <div class="batch-container">
+                            <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_single_limit"
+                                type="number" suffix="만원" />
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPayLimit('single')">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+            <VCol :md=6>
+                <VRow no-gutters>
+                    <VCol>일 결제 한도</VCol>
+                    <VCol md="8">
+                        <div class="batch-container">
+                            <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_day_limit"
+                                type="number" suffix="만원" />
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPayLimit('day')">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+        </VRow>
+        <VRow>
+            <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_pay_limit">
+                <VRow no-gutters>
+                    <VCol>월 결제 한도</VCol>
+                    <VCol md="8">
+                        <div class="batch-container">
+                            <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_month_limit"
+                                type="number" suffix="만원" />
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPayLimit('month')">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+            <VCol :md=6>
+                <VRow no-gutters>
+                    <VCol>연 결제 한도</VCol>
+                    <VCol md="8">
+                        <div class="batch-container">
+                            <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_year_limit"
+                                type="number" suffix="만원" />
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPayLimit('year')">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+        </VRow>
+        <VRow>
+            <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_mid_batch">
+                <VRow no-gutters>
+                    <VCol>MID</VCol>
+                    <VCol md="8">
+                        <div class="batch-container">
+                            <VTextField v-model="pay_module.pay_mid" label="MID" type="text" />
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setMid()">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+            <VCol :md=6 v-if="corp.pv_options.paid.use_tid_batch">
+                <VRow no-gutters>
+                    <VCol>TID</VCol>
+                    <VCol md="8">
+                        <div class="batch-container">
+                            <VTextField v-model="pay_module.pay_tid" label="TID" type="text" />
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setTid()">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+        </VRow>
+        <VRow>
+            <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_api_key_batch">
+                <VRow no-gutters>
+                    <VCol>API KEY(license)</VCol>
+                    <VCol md="8">
+                        <div class="batch-container">
+                            <VTextField v-model="pay_module.api_key" label="API KEY" type="text" />
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setApiKey()">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+            <VCol :md=6 v-if="corp.pv_options.paid.use_sub_key_batch">
+                <VRow no-gutters>
+                    <VCol>SUB KEY(iv)</VCol>
+                    <VCol md="8">
+                        <div class="batch-container">
+                            <VTextField v-model="pay_module.sub_key" label="SUB KEY" type="text" />
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setSubKey()">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+        </VRow>
+        <VRow>
+            <VCol :md="12" :cols="12">
+                <VRow no-gutters>
+                    <VCol md="2">결제모듈 별칭</VCol>
+                    <VCol md="10">
+                        <div class="batch-container">
+                            <VTextField v-model="pay_module.note" placeholder='결제모듈 명칭을 적어주세요.😀'
+                                prepend-inner-icon="twemoji-spiral-notepad" />
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPmodNote()">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+        </VRow>
+        <VRow>
+            <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_realtime_deposit">
+                <VRow no-gutters>
+                    <VCol>실시간 사용여부</VCol>
+                    <VCol md="8">
+                        <div class="batch-container">
+                            <BooleanRadio :radio="pay_module.use_realtime_deposit"
+                                @update:radio="pay_module.use_realtime_deposit = $event">
+                                <template #true>사용</template>
+                                <template #false>미사용</template>
+                            </BooleanRadio>
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setUseRealtimeDeposit()">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+        </VRow>
+        <VRow>
+            <VCol :md="12" :cols="12" v-if="corp.pv_options.paid.use_forb_pay_time">
+                <VRow no-gutters>
+                    <VCol md="2">결제금지 시간</VCol>
+                    <VCol md="6">
+                        <div class="batch-container">
+                            <VTextField v-model="pay_module.pay_disable_s_tm" type="time" />
+                            <span class="text-center mx-auto">~</span>
+                            <VTextField v-model="pay_module.pay_disable_e_tm" type="time" />
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setForbiddenPayTime()">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
+                    </VCol>
+                </VRow>
+            </VCol>
+        </VRow>
 
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_pay_limit">
-            <template #name>월 결제 한도</template>
-            <template #input>
-                <div class="batch-container">
-                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_month_limit" type="number"
-                        suffix="만원" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPayLimit('month')">
-                        즉시적용
-                        <VIcon end icon="tabler-direction-sign" />
-                    </VBtn>
-                </div>
-
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_pay_limit">
-            <template #name>연 결제 한도</template>
-            <template #input>
-                <div class="batch-container">
-                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_year_limit" type="number"
-                        suffix="만원" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPayLimit('year')">
-                        즉시적용
-                        <VIcon end icon="tabler-direction-sign" />
-                    </VBtn>
-                </div>
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_forb_pay_time">
-            <template #name>결제금지 시간</template>
-            <template #input>
-                <div class="batch-container">
-                    <VTextField v-model="pay_module.pay_disable_s_tm" type="time" />
-                    <span class="text-center mx-auto">~</span>
-                    <VTextField v-model="pay_module.pay_disable_e_tm" type="time" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setForbiddenPayTime()">
-                        즉시적용
-                        <VIcon end icon="tabler-direction-sign" />
-                    </VBtn>
-                </div>
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9">
-            <template #name>결제창 노출여부</template>
-            <template #input>
-                <div class="batch-container">
-                    <BooleanRadio :radio="pay_module.show_pay_view" @update:radio="pay_module.show_pay_view = $event">
-                        <template #true>노출</template>
-                        <template #false>숨김</template>
-                    </BooleanRadio>
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setShowPayView()">
-                        즉시적용
-                        <VIcon end icon="tabler-direction-sign" />
-                    </VBtn>
-                </div>
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_mid_batch">
-            <template #name>MID</template>
-            <template #input>
-                <div class="batch-container">
-                    <VTextField v-model="pay_module.pay_mid" label="MID" type="text" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setMid()">
-                        즉시적용
-                        <VIcon end icon="tabler-direction-sign" />
-                    </VBtn>
-                </div>
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_tid_batch">
-            <template #name>TID</template>
-            <template #input>
-                <div class="batch-container">
-                    <VTextField v-model="pay_module.pay_tid" label="TID" type="text" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setTid()">
-                        즉시적용
-                        <VIcon end icon="tabler-direction-sign" />
-                    </VBtn>
-                </div>
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_api_key_batch">
-            <template #name>API KEY(license)</template>
-            <template #input>
-                <div class="batch-container">
-                    <VTextField v-model="pay_module.api_key" label="API KEY" type="text" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setApiKey()">
-                        즉시적용
-                        <VIcon end icon="tabler-direction-sign" />
-                    </VBtn>
-                </div>
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9" v-if="corp.pv_options.paid.use_sub_key_batch">
-            <template #name>SUB KEY(iv)</template>
-            <template #input>
-                <div class="batch-container">
-                    <VTextField v-model="pay_module.sub_key" label="SUB KEY" type="text" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setSubKey()">
-                        즉시적용
-                        <VIcon end icon="tabler-direction-sign" />
-                    </VBtn>
-                </div>
-            </template>
-        </CreateHalfVCol>
-        <CreateHalfVCol :mdl="3" :mdr="9">
-            <template #name>결제모듈 별칭</template>
-            <template #input>
-                <div class="batch-container">                
-                    <VTextField v-model="pay_module.note" placeholder='결제모듈 명칭을 적어주세요.😀'
-                        prepend-inner-icon="twemoji-spiral-notepad" />
-                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPmodNote()">
-                        즉시적용
-                        <VIcon end icon="tabler-direction-sign" />
-                    </VBtn>
-                </div>
-            </template>
-        </CreateHalfVCol>
-        
     </div>
     <div v-else style="width: 100%; text-align: center;">
         <CreateHalfVCol :mdl="0" :mdr="12">
@@ -564,26 +641,34 @@ const setNotiUrl = () => {
         </CreateHalfVCol>
     </div>
     <template v-if="corp.pv_options.paid.use_noti">
-        <VCardTitle style="margin: 1em 0;">
+        <VCardTitle style="margin: 1em 0;" class="pt-3 pb-3">
             <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점 - 노티 URL 일괄적용'"
                 :content="'해당 영업점이 포함되어있는 가맹점의 모든 노티 URL이 추가됩니다.<br>(같은 노티 URL의 중복등록은 불가능합니다.)'">
             </BaseQuestionTooltip>
         </VCardTitle>
         <div v-if="props.item.id != 0" style="width: 100%;">
-            <CreateHalfVCol :mdl="3" :mdr="9">
-                <template #name>노티 URL</template>
-                <template #input>
-                    <div class="batch-container">
+            <VRow>
+                <VCol :md="6" :cols="12">
+                    <VRow no-gutters>
+                        <VCol>노티 사용 유무</VCol>
+                        <VCol md="8">
+                            <div class="batch-container">
+                                <VSwitch hide-details v-model="noti.noti_status" color="primary" />
+                            </div>
+                        </VCol>
+                    </VRow>
+                </VCol>
+                <VCol :md="6" >
+                    <VRow no-gutters>
+                        <VCol>노티 URL</VCol>
+                        <VCol md="8">
+                            <div class="batch-container">
                         <VTextField v-model="noti.noti_url" type="text" placeholder="https://www.naver.com" />
-                    </div>
-                </template>
-            </CreateHalfVCol>
-            <CreateHalfVCol :mdl="3" :mdr="9">
-                <template #name>노티 사용 유무</template>
-                <template #input>
-                    <VSwitch hide-details v-model="noti.noti_status" color="primary" />
-                </template>
-            </CreateHalfVCol>
+                            </div>
+                        </VCol>
+                    </VRow>
+                </VCol>
+            </VRow>
             <VRow>
                 <VCol>
                     <VTextarea v-model="noti.noti_note" counter label="메모사항" prepend-inner-icon="twemoji-spiral-notepad"

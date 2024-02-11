@@ -331,4 +331,17 @@ class SalesforceBatchController extends Controller
         $row = $this->payModuleBatch($request)->update($cols);
         return $this->response(1);
     }
+
+    /**
+     * 결제모듈 실시간 사용여부 일괄적용
+     *
+     * 가맹점 이상 가능
+     */
+    public function setUseRealtimeDeposit(Request $request)
+    {
+        $cols = ['payment_modules.use_realtime_deposit' => $request->use_realtime_deposit];
+        $row = $this->payModuleBatch($request)->update($cols);
+        return $this->response(1);
+    }
+    
 }
