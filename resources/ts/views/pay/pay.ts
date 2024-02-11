@@ -67,7 +67,8 @@ export const payResult = () => {
                 ...response1.data,
                 ...route.query,
             }
-            sale_slip.value.pg_id      = pg_id
+            sale_slip.value.module_type = 2 // 인증결제
+            sale_slip.value.pg_id       = pg_id
             sale_slip.value.amount      = Number(sale_slip.value.amount)
             sale_slip.value.is_cancel   = Number(route.query.is_cancel ?? false)
             sale_slip.value.trx_dttm    = (route.query.trx_dttm ?? new Date()) as string

@@ -47,6 +47,7 @@ const pay = async () => {
                     ...r.data,
                     ...props.merchandise
                 }
+                sale_slip.value.module_type = 1 // 수기결제
                 salesslip.value.show(sale_slip.value)
                 snackbar.value.show('성공하였습니다.', 'success')
             }
