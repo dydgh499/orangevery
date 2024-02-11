@@ -17,6 +17,7 @@ class SettleHistoryMerchandise extends Model
     public function deposits()
     {
         return $this->hasMany(SettleHistoryMerchandiseDeposit::class, 'settle_hist_mcht_id')
+            ->where('is_delete', false)
             ->orderby('id', 'desc')
             ->select();
     }

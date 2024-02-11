@@ -48,11 +48,15 @@ class Brand extends Model
 
     public function beforeBrandInfos()
     {
-        return $this->hasMany(BeforeBrandInfo::class, 'brand_id');
+        return $this->hasMany(BeforeBrandInfo::class, 'brand_id')
+            ->where('is_delete', false)
+            ->select();
     }
 
     public function differentSettlementInfos()
     {
-        return $this->hasMany(DifferentSettlementInfo::class, 'brand_id');
+        return $this->hasMany(DifferentSettlementInfo::class, 'brand_id')
+            ->where('is_delete', false)
+            ->select();
     }    
 }

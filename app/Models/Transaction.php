@@ -138,7 +138,7 @@ class Transaction extends Model
     }
 
     public function cancelDeposits()
-    {
+    {   // is delete 없음
         return $this->hasMany(CancelDeposit::class, 'trans_id')
             ->orderby('id', 'desc')
             ->select();
