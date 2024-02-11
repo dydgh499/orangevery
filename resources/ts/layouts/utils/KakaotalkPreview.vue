@@ -44,7 +44,7 @@ watchEffect(() => {
             </template>
         </VFileInput>
         <VRow no-gutters class="pt-5">
-            <VTextarea v-model="props.og_description.value" counter label="내용"/>
+            <VTextarea v-model="props.og_description.value" counter label="내용" auto-grow/>
         </VRow>
     </VCol>
     <VCol md="6" style="padding: 0.5em;">

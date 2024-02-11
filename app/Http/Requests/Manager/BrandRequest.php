@@ -26,7 +26,7 @@ class BrandRequest extends FormRequest
         'extra_deposit_amount',
         'dev_fee',
         'dev_settle_type',
-        'fax_num',
+        'note',
         'use_different_settlement',
     ];
     public $file_keys = [   
@@ -84,13 +84,8 @@ class BrandRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        if ($this->has('pv_options')) 
-        {
-            $pvOptions = $this->input('pv_options');    
-            $pvOptions = $this->convertToBoolean($pvOptions);
-            $this->merge(['pv_options' => $pvOptions]);
-            $this->merge(['use_different_settlement' => $this->convertToBoolean($this->input('use_different_settlement'), false)]);
-        }
+        $this->merge(['pv_options' => $this->convertToBoolean($this->input('pv_options'))]);
+        $this->merge(['use_different_settlement' => $this->convertToBoolean($this->input('use_different_settlement'), false)]);
     }
 
     public function bodyParameters()

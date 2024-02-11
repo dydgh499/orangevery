@@ -122,7 +122,7 @@ const addAbleSalesLevels = () => {
                             </CreateHalfVCol>
                             <VCol>
                                 <VTextarea v-model="props.item.note" counter label="메모사항"
-                                    prepend-inner-icon="twemoji-spiral-notepad" maxlength="95" />
+                                    prepend-inner-icon="twemoji-spiral-notepad" maxlength="95" auto-grow />
                             </VCol>
                         </template>
                     </VRow>

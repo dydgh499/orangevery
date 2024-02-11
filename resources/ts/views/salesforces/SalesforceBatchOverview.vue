@@ -587,7 +587,7 @@ const setNotiUrl = () => {
             <VRow>
                 <VCol>
                     <VTextarea v-model="noti.noti_note" counter label="메모사항" prepend-inner-icon="twemoji-spiral-notepad"
-                        maxlength="95" />
+                        maxlength="95" auto-grow />
                 </VCol>
             </VRow>
             <div style="text-align: end;">

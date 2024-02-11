@@ -166,6 +166,8 @@ export const defaultItemInfo = () => {
                 use_mid_duplicate: false,
                 use_fix_table_view: true,
                 fix_table_size: 749,
+                init_search_filter: 0,
+                resident_num_masking: 0
             }),
             paid: reactive<PaidOption>({
                 use_acct_verification: false,
@@ -197,6 +199,8 @@ export const defaultItemInfo = () => {
                 use_pmid: false,
                 use_before_brand_info: false,
                 use_multiple_hand_pay: false,
+                use_mcht_blacklist: false,
+                use_part_cancel: false
             }),
             auth: reactive<AuthOption>({
                 levels: {
@@ -238,7 +242,8 @@ export const defaultItemInfo = () => {
         extra_deposit_amount: 0,
         curr_deposit_amount: 0,
         use_different_settlement: 0,
-        before_brand_infos: []
+        before_brand_infos: [],
+        different_settlement_infos: []
     })
 
 

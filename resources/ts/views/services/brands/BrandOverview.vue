@@ -2,7 +2,6 @@
 import { businessNumValidator, requiredValidator } from '@validators'
 import type { Brand } from '@/views/types'
 import FileInput from '@/layouts/utils/FileInput.vue'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { themeConfig } from '@themeConfig'
 import { config } from '@layouts/config'
 import { getUserLevel } from '@/plugins/axios';
@@ -21,9 +20,6 @@ watchEffect(() => {
     config.app.title = props.item.name
     themeConfig.app.title = props.item.name
 })
-watchEffect(() => {
-    console.log(props.item)
-})
 </script>
 <template>
     <VRow>
@@ -31,83 +27,121 @@ watchEffect(() => {
         <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>운영정보</VCardTitle>
-                    <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>도메인</template>
-                            <template #input>
-                                <VTextField v-model="props.item.dns" prepend-inner-icon="tabler-world-www"
-                                    placeholder="도메인을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>운영사명</template>
-                            <template #input>
-                                <VTextField v-model="props.item.name" prepend-inner-icon="twemoji-desktop-computer"
-                                    placeholder="운영사명을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>회사명</template>
-                            <template #input>
-                                <VTextField v-model="props.item.company_name" prepend-inner-icon="ph-buildings"
-                                    placeholder="회사명을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                        <!-- 👉 대표자명 -->
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>대표자명</template>
-                            <template #input>
-                                <VTextField id="nickNameHorizontalIcons" v-model="props.item.ceo_name"
-                                    prepend-inner-icon="tabler-user" placeholder="대표자명을 입력해주세요." persistent-placeholder
-                                    :rules="[requiredValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                        <!-- 👉 Address -->
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>주소</template>
-                            <template #input>
-                                <VTextField id="addressHorizontalIcons" v-model="props.item.addr"
-                                    prepend-inner-icon="tabler-map-pin" placeholder="주소 입력" persistent-placeholder
-                                    maxlength="200" :rules="[requiredValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                        <!-- 👉 Mobile -->
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>휴대폰번호</template>
-                            <template #input>
-                                <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="number"
-                                    prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호 입력" persistent-placeholder
-                                    :rules="[requiredValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                        <!-- 👉 사업자등록번호 -->
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>사업자등록번호</template>
-                            <template #input>
-                                <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
-                                    prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
-                                    persistent-placeholder
-                                    :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="3" :mdr="9" v-if="getUserLevel() == 50">
-                            <template #name>차액정산 사용여부</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.use_different_settlement" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
+                    <VCardTitle>운영정보</VCardTitle>            
+                    <VRow class="pt-3">
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters>
+                                <VCol>
+                                    <label>도메인</label>
+                                </VCol>
+                                <VCol md="8">
+                            <VTextField v-model="props.item.dns" prepend-inner-icon="tabler-world-www"
+                                placeholder="도메인을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md=6 v-if="getUserLevel() == 50">
+                            <VRow no-gutters>
+                                <VCol>
+                                    <label>차액정산 사용여부</label>
+                                </VCol>
+                                <VCol md="8">
+                                    <VSwitch hide-details v-model="props.item.use_different_settlement" color="primary" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
                     </VRow>
-                </VCardItem>
-            </VCard>
-            <br>
-            <VCard v-if="props.item.use_different_settlement">
-                <VCardItem>
-                    <VCol cols="12">
-                        <VRow>
-                            <DifferentSettlementInfoCard :item="props.item" />
-                        </VRow>
-                    </VCol>
+                    <VRow class="pt-3">
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters>
+                                <VCol>
+                                    <label>운영사명</label>
+                                </VCol>
+                                <VCol md="8">
+                                    <VTextField v-model="props.item.name" prepend-inner-icon="twemoji-desktop-computer"
+                                        placeholder="운영사명을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md=6>
+                            <VRow no-gutters>
+                                <VCol>
+                                    <label>회사명</label>
+                                </VCol>
+                                <VCol md="8">
+                                    <VTextField v-model="props.item.company_name" prepend-inner-icon="ph-buildings"
+                                        placeholder="회사명을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                    <VRow class="pt-3">
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters>
+                                <VCol>
+                                    <label>대표자명</label>
+                                </VCol>
+                                <VCol md="8">
+                                    <VTextField v-model="props.item.ceo_name"
+                                        prepend-inner-icon="tabler-user" placeholder="대표자명을 입력해주세요." persistent-placeholder
+                                        :rules="[requiredValidator]" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md=6>
+                            <VRow no-gutters>
+                                <VCol>
+                                    <label>사업자등록번호</label>
+                                </VCol>
+                                <VCol md="8">
+                                    <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
+                                        prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
+                                        persistent-placeholder
+                                        :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                    <VRow class="pt-3">
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters>
+                                <VCol>
+                                    <label>휴대폰번호</label>
+                                </VCol>
+                                <VCol md="8">
+                                    <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="number"
+                                        prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호 입력" persistent-placeholder
+                                        :rules="[requiredValidator]" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md=6>
+                            <VRow no-gutters>
+                                <VCol>
+                                    <label>팩스번호</label>
+                                </VCol>
+                                <VCol md="8">
+                                    <VTextField v-model="props.item.fax_num"
+                                        prepend-inner-icon="streamline-emojis:fax-machine" placeholder="팩스번호 입력" persistent-placeholder
+                                        maxlength="200" :rules="[requiredValidator]" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                    <VRow class="pt-3">
+                        <VCol :md="12" :cols="12">
+                            <VRow no-gutters>
+                                <VCol>
+                                    <label>주소</label>
+                                </VCol>
+                                <VCol md="10">
+                                    <VTextField id="addressHorizontalIcons" v-model="props.item.addr"
+                                        prepend-inner-icon="tabler-map-pin" placeholder="주소 입력" persistent-placeholder
+                                        maxlength="200" :rules="[requiredValidator]" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
                 </VCardItem>
             </VCard>
             <br>
@@ -208,15 +242,25 @@ watchEffect(() => {
                         <VCol :md=6>
                             <VRow no-gutters>
                                 <VCol>
-                                    <label>지불정보</label>
+                                    <label>메모사항</label>
                                 </VCol>
                                 <VCol md="8">
                                     <VTextarea v-model="props.item.note" counter label="메모사항"
-                                        prepend-inner-icon="twemoji-spiral-notepad" maxlength="250" />
+                                        prepend-inner-icon="twemoji-spiral-notepad" maxlength="250" auto-grow/>
                                 </VCol>
                             </VRow>
                         </VCol>
                     </VRow>
+                </VCardItem>
+            </VCard>
+            <br>
+            <VCard v-if="props.item.use_different_settlement">
+                <VCardItem>
+                    <VCol cols="12">
+                        <VRow>
+                            <DifferentSettlementInfoCard :item="props.item" />
+                        </VRow>
+                    </VCol>
                 </VCardItem>
             </VCard>
         </VCol>
@@ -268,4 +312,5 @@ watchEffect(() => {
             </VCard>
         </VCol>
         <!-- 👉 submit -->
-</VRow></template>
+    </VRow>
+</template>
