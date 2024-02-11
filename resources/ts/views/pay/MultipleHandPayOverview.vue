@@ -4,6 +4,7 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import MultipleHandPayForm from '@/views/pay/multiple-hand-pay/MultipleHandPayForm.vue'
 import { VForm } from 'vuetify/components'
 import type { Merchandise, PayModule, SalesSlip, MultipleHandPay } from '@/views/types'
+import { cloneDeep } from 'lodash'
 import { axios } from '@axios'
 import corp from '@corp'
 
@@ -175,7 +176,7 @@ const cxlResult = async () => {
     const results = await Promise.all(full_processes.value.map(item => item.cxl_process))
     for (let i = 0; i < results.length; i++) {
         if (results[i] != null) {
-            full_processes.value[i].cxl_result = full_processes.value[i].trx_result
+            full_processes.value[i].cxl_result = cloneDeep(full_processes.value[i].trx_result)
             Object.assign(full_processes.value[i].cxl_result, results[i])
             console.log(full_processes.value[i].cxl_result)
         }
