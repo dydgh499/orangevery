@@ -294,8 +294,8 @@ interface FreeOption {
     use_mid_duplicate: boolean,
     use_fix_table_view: boolean,
     fix_table_size: number,
-    init_search_filter: number,
-    resident_num_masking: number,
+    init_search_filter: boolean,
+    resident_num_masking: boolean,
     sales_slip: {
         merchandise: BrandBaseInfo
     },
@@ -342,24 +342,24 @@ interface PaidOption {
 }
 interface AuthOption {
     levels: {
-        dev_use:number,
+        dev_use:boolean,
         dev_name:string,
-        sales5_use:number,
+        sales5_use:boolean,
         sales5_name:string,
-        sales4_use:number,
+        sales4_use:boolean,
         sales4_name:string,
-        sales3_use:number,
+        sales3_use:boolean,
         sales3_name:string,
-        sales2_use:number,
+        sales2_use:boolean,
         sales2_name:string,
-        sales1_use:number,
+        sales1_use:boolean,
         sales1_name:string,
-        sales0_use:number,
+        sales0_use:boolean,
         sales0_name:string,
-        [key: string]: string|number,
+        [key: string]: string|boolean,
     },
     visibles: {
-        abnormal_trans_sales: number,
+        abnormal_trans_sales: boolean,
     }
 }
 interface ThemeCSS {

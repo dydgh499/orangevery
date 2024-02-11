@@ -46,7 +46,7 @@ watchEffect(() => {
                                     <label>차액정산 사용여부</label>
                                 </VCol>
                                 <VCol md="8">
-                                    <VSwitch hide-details v-model="props.item.use_different_settlement" color="primary" />
+                                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="props.item.use_different_settlement" color="primary" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -158,7 +158,7 @@ watchEffect(() => {
                                     <label>{{ props.item.pv_options.auth.levels.dev_name }} 사용여부</label>
                                 </VCol>
                                 <VCol md="8">
-                                    <VSwitch hide-details v-model="props.item.pv_options.auth.levels.dev_use"
+                                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="props.item.pv_options.auth.levels.dev_use"
                                         color="primary" />
                                 </VCol>
                             </VRow>
