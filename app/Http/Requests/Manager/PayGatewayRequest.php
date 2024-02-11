@@ -34,7 +34,6 @@ class PayGatewayRequest extends FormRequest
             'business_num' => 'nullable',
             'phone_num' => 'nullable',
             'addr' => 'nullable',
-            'use_different_settlement' => 'numeric',
         ];
         return $this->getRules($this->keys, $sub);
     }
