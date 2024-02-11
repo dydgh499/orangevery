@@ -122,7 +122,7 @@ class DifferenceSettlementHistoryController extends Controller
             ->where('brands.is_delete', false)
             ->where('different_settlement_infos.is_delete', false)
             ->where('brands.use_different_settlement', true)
-            ->get(['brands.business_num', 'brands.id', 'different_settlement_infos.*']);
+            ->get(['brands.business_num', 'different_settlement_infos.*']);
     }
 
     public function getPGClass($brand)
@@ -159,7 +159,7 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('transactions.is_delete', false)
                 ->where('merchandises.is_delete', false)
                 ->where('payment_gateways.pg_type', $brands[$i]->pg_type)
-                ->where('transactions.brand_id', $brands[$i]->id)
+                ->where('transactions.brand_id', $brands[$i]->brand_id)
                 ->where('transactions.trx_dt', $yesterday)
                 ->get(['transactions.*', 'merchandises.business_num']);
             $pg = $this->getPGClass($brands[$i]);
@@ -203,7 +203,7 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('merchandises.is_delete', false)
                 ->where('payment_modules.is_delete', false)
                 ->where('payment_gateways.pg_type', $brands[$i]->pg_type)
-                ->where('merchandises.brand_id', $brands[$i]->id)
+                ->where('merchandises.brand_id', $brands[$i]->brand_id)
                 ->where('merchandises.created_at', $yesterday)
                 ->get(['merchandises.business_num']);
             $pg = $this->getPGClass($brands[$i]);
