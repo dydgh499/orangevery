@@ -205,8 +205,20 @@ const pays = async () => {
     if (await alert.value.show("총 " + total_amount.toLocaleString() + '원을 결제하시겠습니까?')) {
         snackbar.value.show('다중결제를 시작합니다...', 'primary')
         trxProcess()
+        setProcessTableWidth()
         await trxResult()
+        setProcessTableWidth()
         await cxlProcess()
+        setProcessTableWidth()
+    }
+}
+
+const setProcessTableWidth = () => {
+    console.log(window.innerWidth)
+    if(window.innerWidth < 780) {
+        const table = document.getElementById('process-table')
+        if(table)
+            table.style['width'] = window.innerWidth + 'px'
     }
 }
 
@@ -224,13 +236,6 @@ watchEffect(async () => {
 
 onMounted(() => {
     init()
-})
-watchEffect(() => {
-    if(window.innerWidth < 780) {
-        const table = document.getElementById('process-table')
-        if(table)
-            table.style['width'] = window.innerWidth + 'px'
-    }
 })
 </script>
 <template>
