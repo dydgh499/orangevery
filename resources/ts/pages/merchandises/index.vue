@@ -17,7 +17,7 @@ import { template } from 'lodash'
 
 const add_able  = getUserLevel() >= 35 || isAbleModifyMcht()
 const { store, head, exporter, metas } = useSearchStore()
-const { selected, all_selected, dialog } = selectFunctionCollect(store)
+const { selected, all_selected } = selectFunctionCollect(store)
 const { pgs }   = useStore()
 const password  = ref()
 const mchtBatchDialog = ref()
@@ -61,10 +61,10 @@ onMounted(() => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-            <VBtn prepend-icon="carbon:batch-job" @click="mchtBatchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
-                일괄 작업
-            </VBtn>
-        </template>
+                <VBtn prepend-icon="carbon:batch-job" @click="mchtBatchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
+                    일괄 작업
+                </VBtn>
+            </template>
             <template #headers>
                 <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>

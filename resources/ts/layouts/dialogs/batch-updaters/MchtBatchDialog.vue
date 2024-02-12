@@ -173,7 +173,7 @@ initAllSales()
                                                 style="width: 240px;" />
                                             <VTextField v-model="merchandise['sales' + (6 - i) + '_fee']" type="number"
                                                 suffix="%" style='margin-left: 0.5em;' />
-                                            <VBtn variant="tonal" @click="setSalesFee(i)" style='margin-left: 0.5em;'>
+                                            <VBtn variant="tonal" @click="setSalesFee(6-i)" style='margin-left: 0.5em;'>
                                                 즉시적용
                                                 <VIcon end icon="tabler-direction-sign" />
                                             </VBtn>
