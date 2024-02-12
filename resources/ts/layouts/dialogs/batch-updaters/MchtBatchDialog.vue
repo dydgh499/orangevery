@@ -50,7 +50,7 @@ const post = async (page: string, params: any) => {
             }
         }
         else
-            snackbar.value.show('결제모듈은 1개이상 선택해주세요.', 'error')
+            snackbar.value.show('가맹점은 1개이상 선택해주세요.', 'error')
     }
     catch (e: any) {
         snackbar.value.show(e.response.data.message, 'error')
