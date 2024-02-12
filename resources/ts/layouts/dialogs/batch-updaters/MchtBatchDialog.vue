@@ -1,0 +1,341 @@
+<script lang="ts" setup>
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import { banks } from '@/views/users/useStore'
+import { axios, getIndexByLevel, getUserLevel } from '@axios'
+import corp from '@corp'
+
+interface Props {
+    selected_idxs: number[],
+}
+const props = defineProps<Props>()
+
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+const errorHandler = <any>(inject('$errorHandler'))
+
+const { cus_filters } = useStore()
+const { sales, initAllSales } = useSalesFilterStore()
+
+const visible = ref(false)
+const levels = corp.pv_options.auth.levels
+let resolveCallback: (isAgreed: boolean) => void;
+
+const merchandise = reactive<any>({
+    custom_id: null,
+    sales_fee: 0,
+    mcht_fee: 0,
+    hold_fee: 0,
+    acct_num: "",
+    acct_name: "",
+    bank: { code: null, title: '선택안함' },
+    enabled: true,
+})
+const noti = reactive<any>({
+    noti_url: "",
+    noti_note: "",
+    noti_status: true,
+})
+
+
+const post = async (page: string, params: any) => {
+    try {
+        if (props.selected_idxs.length) {
+            if (await alert.value.show('정말 일괄적용하시겠습니까?')) {
+                Object.assign(params, { 'selected_idxs': props.selected_idxs })
+                const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/' + page, params)
+                snackbar.value.show('성공하였습니다.', 'success')
+            }
+        }
+        else
+            snackbar.value.show('결제모듈은 1개이상 선택해주세요.', 'error')
+    }
+    catch (e: any) {
+        snackbar.value.show(e.response.data.message, 'error')
+        const r = errorHandler(e)
+    }
+}
+
+const setSalesFee = (sales_idx: number) => {
+    if (merchandise['sales' + sales_idx + "_fee"] && merchandise['sales' + sales_idx + "_id"]) {
+        post('sales-fee-direct-apply', {
+            'selected_idxs': props.selected_idxs,
+            'sales_fee': parseFloat(merchandise['sales' + sales_idx + "_fee"]),
+            'sales_id': merchandise['sales' + sales_idx + "_id"],
+            'level': getIndexByLevel(sales_idx),
+        })
+    }
+    else
+        snackbar.value.show('수수료율 또는 ' + levels['sales' + sales_idx + '_name'] + '을 입력해주세요.', 'warning')
+}
+
+const setSalesFeeBooking = async (sales_idx: number) => {
+    console.log(merchandise['sales' + sales_idx + "_fee"])
+    if (merchandise['sales' + sales_idx + "_fee"] && merchandise['sales' + sales_idx + "_id"]) {
+        if (await alert.value.show('정말 예약적용하시겠습니까? <b>명일 00시</b>에 반영됩니다.<br><br><h5>잘못 적용된 예약적용 수수료는 "수수료율 변경이력" 탭에서 삭제시 반영취소할 수 있습니다.</h5>')) {
+            const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/sales-fee-book-apply', {
+                'selected_idxs': props.selected_idxs,
+                'sales_fee': parseFloat(merchandise['sales' + sales_idx + "_fee"]),
+                'sales_id': merchandise['sales' + sales_idx + "_id"],
+                'level': getIndexByLevel(sales_idx),
+            })
+            snackbar.value.show('성공하였습니다.', 'success')
+        }
+    }
+    else
+        snackbar.value.show('수수료율 또는 ' + levels['sales' + sales_idx + '_name'] + '을 입력해주세요.', 'warning')
+}
+
+const setMchtFee = () => {
+    post('mcht-fee-direct-apply', {
+        'mcht_fee': parseFloat(merchandise.mcht_fee),
+        'hold_fee': parseFloat(merchandise.hold_fee),
+    })
+}
+
+const setMchtFeeBooking = async () => {
+    if (await alert.value.show('정말 예약적용하시겠습니까? <b>명일 00시</b>에 반영됩니다.<br><br><h5>잘못 적용된 예약적용 수수료는 "수수료율 변경이력" 탭에서 삭제시 반영취소할 수 있습니다.</h5>')) {
+        const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/mcht-fee-book-apply', {
+            'selected_idxs': props.selected_idxs,
+            'mcht_fee': parseFloat(merchandise.mcht_fee),
+            'hold_fee': parseFloat(merchandise.hold_fee),
+        })
+        snackbar.value.show('성공하였습니다.', 'success')
+    }
+}
+
+const setEnabled = () => {
+    post('set-enabled', {
+        'enabled': Number(merchandise.enabled),
+    })
+}
+
+const setCustomFilter = () => {
+    post('set-custom-filter', {
+        'custom_id': merchandise.custom_id,
+    })
+}
+
+const setAccountInfo = () => {
+    post('set-account-info', {
+        'acct_num': merchandise.acct_num,
+        'acct_name': merchandise.acct_name,
+        'acct_bank_code': merchandise.bank.code,
+        'acct_bank_name': merchandise.bank.title,
+    })
+}
+// -------------- noti ----------------
+const setNotiUrl = () => {
+    post('set-noti-url', {
+        'noti_status': noti.noti_status,
+        'send_url': noti.noti_url,
+        'note': noti.noti_note,
+    })
+}
+const show = (): Promise<boolean> => {
+    visible.value = true
+
+    return new Promise<boolean>((resolve) => {
+        resolveCallback = resolve;
+    });
+}
+
+defineExpose({
+    show
+});
+
+initAllSales()
+</script>
+<template>
+    <VDialog v-model="visible" persistent style="max-width: 1000px;">
+        <!-- Dialog close btn -->
+        <DialogCloseBtn @click="visible = !visible" />
+        <!-- Dialog Content -->
+        <VCard title="가맹점 일괄 작업">
+            <VCardText>
+                <b>선택된 가맹점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
+                <VDivider style="margin: 1em 0;" />
+                <div style="width: 100%;">
+                    <template v-for="i in 6" :key="i">
+                        <VRow>
+                            <VCol :cols="12"
+                                v-if="levels['sales' + (6 - i) + '_use'] && getUserLevel() >= getIndexByLevel(6 - i)">
+                                <VRow no-gutters style="align-items: center;">
+                                    <VCol>{{ levels['sales' + (6 - i) + '_name'] }}/수수료율</VCol>
+                                    <VCol md="8">
+                                        <div class="batch-container">
+                                            <VAutocomplete :menu-props="{ maxHeight: 400 }"
+                                                v-model="merchandise['sales' + (6 - i) + '_id']" :items="sales[6 - i].value"
+                                                :label="levels['sales' + (6 - i) + '_name'] + '선택'" item-title="sales_name"
+                                                item-value="id" single-line prepend-inner-icon="ph:share-network"
+                                                style="width: 240px;" />
+                                            <VTextField v-model="merchandise['sales' + (6 - i) + '_fee']" type="number"
+                                                suffix="%" style='margin-left: 0.5em;' />
+                                            <VBtn variant="tonal" @click="setSalesFee(i)" style='margin-left: 0.5em;'>
+                                                즉시적용
+                                                <VIcon end icon="tabler-direction-sign" />
+                                            </VBtn>
+                                            <VBtn variant="tonal" color="secondary" @click="setSalesFeeBooking(6-i)"
+                                                style='margin-left: 0.5em;'>
+                                                예약적용
+                                                <VIcon end icon="tabler-clock-up" />
+                                            </VBtn>
+                                        </div>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                    </template>
+                    <VDivider style="margin: 1em 0;" />
+                    <VRow>
+                        <VCol :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol>거래/유보금 수수료율</VCol>
+                                <VCol md="8">
+                                    <div class="batch-container">
+                                        <VTextField v-model="merchandise.mcht_fee" type="number" suffix="%" />
+                                        <VTextField v-model="merchandise.hold_fee" type="number" suffix="%"
+                                            style="margin-left: 0.5em;" />
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setMchtFee()">
+                                            즉시적용
+                                            <VIcon end icon="tabler-direction-sign" />
+                                        </VBtn>
+                                        <VBtn variant="tonal" color="secondary" @click="setMchtFeeBooking()"
+                                            style='margin-left: 0.5em;'>
+                                            예약적용
+                                            <VIcon end icon="tabler-clock-up" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                    <VDivider style="margin: 1em 0;" />
+                    <VRow>
+                        <VCol :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol>계좌 정보</VCol>
+                                <VCol md="8">
+                                    <div class="batch-container">
+                                        <VTextField v-model="merchandise.acct_num" prepend-inner-icon="ri-bank-card-fill"
+                                            placeholder="계좌번호 입력" persistent-placeholder />
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                    <VRow>
+                        <VCol :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol></VCol>
+                                <VCol md="8">
+                                    <div class="batch-container" style="align-items: baseline;">
+                                        <VTextField v-model="merchandise.acct_name" prepend-inner-icon="tabler-user"
+                                            placeholder="예금주 입력" persistent-placeholder />
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.bank"
+                                            :items="[{ code: null, title: '선택안함' }].concat(banks)"
+                                            prepend-inner-icon="ph-buildings" label="은행 선택"
+                                            :hint="`${merchandise.bank.title}, 은행 코드: ${merchandise.bank.code ? merchandise.bank.code : '000'} `"
+                                            item-title="title" item-value="code" persistent-hint return-object single-line
+                                            create />
+                                        <VBtn variant="tonal" @click="setAccountInfo()"
+                                            style="margin-bottom: auto; margin-left: 0.5em;">
+                                            즉시적용
+                                            <VIcon end icon="tabler-direction-sign" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                    <VDivider style="margin: 1em 0;" />
+                    <VRow>
+                        <VCol :md="corp.pv_options.paid.subsidiary_use_control ? 6 : 12" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol>커스텀 필터</VCol>
+                                <VCol md="8">
+                                    <div class="batch-container">
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.custom_id"
+                                            :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)"
+                                            prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name"
+                                            item-value="id" single-line />
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setCustomFilter()">
+                                            즉시적용
+                                            <VIcon end icon="tabler-direction-sign" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md="6" v-if="corp.pv_options.paid.subsidiary_use_control">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol>전산 사용상태</VCol>
+                                <VCol md="8">
+                                    <div class="batch-container">
+                                        <BooleanRadio :radio="merchandise.enabled"
+                                            @update:radio="merchandise.enabled = $event">
+                                            <template #true>ON</template>
+                                            <template #false>OFF</template>
+                                        </BooleanRadio>
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setEnabled()">
+                                            즉시적용
+                                            <VIcon end icon="tabler-direction-sign" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+
+                    <template v-if="corp.pv_options.paid.use_noti">
+                        <VDivider style="margin: 1em 0;" />
+                        <VRow>
+                            <VCol :cols="12">
+                                <VRow no-gutters style="align-items: center;">
+                                    <VCol>
+                                        <BaseQuestionTooltip :location="'top'" :text="'노티 URL 등록'"
+                                            :content="'선택한 가맹점의 모든 노티 URL이 추가됩니다.<br>(같은 노티 URL의 중복등록은 불가능합니다.)'">
+                                        </BaseQuestionTooltip>
+                                    </VCol>
+                                    <VCol md="8">
+                                        <div class="batch-container">
+                                            <VTextField v-model="noti.noti_url" type="text"
+                                                placeholder="https://www.naver.com" />
+                                        </div>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                        <VRow>
+                            <VCol :cols="12">
+                                <VRow no-gutters style="align-items: center;">
+                                    <VCol>
+                                    </VCol>
+                                    <VCol md="8">
+                                        <div class="batch-container">
+                                            <VTextField v-model="noti.noti_note" counter label="메모사항"
+                                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="95" />
+                                            <VBtn variant="tonal" @click="setNotiUrl()" style="margin-bottom: auto; margin-left: 0.5em;">
+                                                즉시적용
+                                                <VIcon end icon="tabler-direction-sign" />
+                                            </VBtn>
+                                        </div>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                    </template>
+                </div>
+            </VCardText>
+        </VCard>
+    </VDialog>
+</template>
+<style scoped>
+.batch-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>

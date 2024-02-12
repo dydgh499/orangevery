@@ -7,7 +7,6 @@ import type { Salesforce } from '@/views/types'
 import { requiredValidator, nullValidator } from '@validators'
 import type { Options } from '@/views/types'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
-import SalesforceBatchOverview from '@/views/salesforces/SalesforceBatchOverview.vue'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
 import corp from '@corp'
 
@@ -23,18 +22,18 @@ const tax_types = settleTaxTypes()
 const addAbleSalesLevels = () => {
     const levels = corp.pv_options.auth.levels
     const sales = <Options[]>([]);
-    if(levels.sales0_use && getUserLevel() > 13)
-        sales.push({id: 13, title: levels.sales0_name})
-    if(levels.sales1_use && getUserLevel() > 15)
-        sales.push({id: 15, title: levels.sales1_name})
-    if(levels.sales2_use && getUserLevel() > 17)
-        sales.push({id: 17, title: levels.sales2_name})
-    if(levels.sales3_use && getUserLevel() > 20)
-        sales.push({id: 20, title: levels.sales3_name})
-    if(levels.sales4_use && getUserLevel() > 25)
-        sales.push({id: 25, title: levels.sales4_name})
-    if(levels.sales5_use && getUserLevel() > 30)
-        sales.push({id: 30, title: levels.sales5_name})
+    if (levels.sales0_use && getUserLevel() > 13)
+        sales.push({ id: 13, title: levels.sales0_name })
+    if (levels.sales1_use && getUserLevel() > 15)
+        sales.push({ id: 15, title: levels.sales1_name })
+    if (levels.sales2_use && getUserLevel() > 17)
+        sales.push({ id: 17, title: levels.sales2_name })
+    if (levels.sales3_use && getUserLevel() > 20)
+        sales.push({ id: 20, title: levels.sales3_name })
+    if (levels.sales4_use && getUserLevel() > 25)
+        sales.push({ id: 25, title: levels.sales4_name })
+    if (levels.sales5_use && getUserLevel() > 30)
+        sales.push({ id: 30, title: levels.sales5_name })
     return props.item.id == 0 ? salesLevels() : sales
 }
 
@@ -95,9 +94,9 @@ const addAbleSalesLevels = () => {
                                 </BaseQuestionTooltip>
                             </template>
                             <template #input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level" :items="addAbleSalesLevels()"
-                                    prepend-inner-icon="ph:share-network" label="영업자 등급 선택" item-title="title"
-                                    item-value="id" persistent-hint single-line :rules="[nullValidator]"
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
+                                    :items="addAbleSalesLevels()" prepend-inner-icon="ph:share-network" label="영업자 등급 선택"
+                                    item-title="title" item-value="id" persistent-hint single-line :rules="[nullValidator]"
                                     :readonly="props.item.id != 0" />
                             </template>
                         </CreateHalfVCol>
@@ -105,7 +104,8 @@ const addAbleSalesLevels = () => {
                             <CreateHalfVCol :mdl="3" :mdr="9">
                                 <template #name>화면 타입</template>
                                 <template #input>
-                                    <BooleanRadio :radio="props.item.view_type" @update:radio="props.item.view_type = $event">
+                                    <BooleanRadio :radio="props.item.view_type"
+                                        @update:radio="props.item.view_type = $event">
                                         <template #true>상세보기</template>
                                         <template #false>간편보기</template>
                                     </BooleanRadio>
@@ -114,7 +114,8 @@ const addAbleSalesLevels = () => {
                             <CreateHalfVCol :mdl="3" :mdr="9">
                                 <template #name>하위 가맹점 수정권한</template>
                                 <template #input>
-                                    <BooleanRadio :radio="props.item.is_able_modify_mcht" @update:radio="props.item.is_able_modify_mcht = $event">
+                                    <BooleanRadio :radio="props.item.is_able_modify_mcht"
+                                        @update:radio="props.item.is_able_modify_mcht = $event">
                                         <template #true>가능</template>
                                         <template #false>불가능</template>
                                     </BooleanRadio>
@@ -128,7 +129,8 @@ const addAbleSalesLevels = () => {
                     </VRow>
                 </VCardItem>
             </VCard>
-            <br>
+        </VCol>
+        <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
             <VCard v-if="corp.pv_options.paid.use_sales_auto_setting && getUserLevel() >= 35">
                 <VCardItem>
                     <VCol cols="12">
@@ -139,17 +141,5 @@ const addAbleSalesLevels = () => {
                 </VCardItem>
             </VCard>
         </VCol>
-        <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
-            <VCard>
-                <VCardItem>
-                    <VCol cols="12">
-                        <VRow>
-                            <SalesforceBatchOverview :item="props.item" />
-                        </VRow>
-                    </VCol>
-                </VCardItem>
-            </VCard>
-        </VCol>
-        <!-- 👉 submit -->
     </VRow>
 </template>

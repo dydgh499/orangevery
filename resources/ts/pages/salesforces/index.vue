@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/salesforces/useStore'
+import { selectFunctionCollect } from '@/views/selected'
+
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
+import SalesBatchDialog from '@/layouts/dialogs/batch-updaters/SalesBatchDialog.vue'
+
 import { settleCycles, settleDays, settleTaxTypes, getAutoSetting } from '@/views/salesforces/useStore'
 import { getUserLevel, getLevelByIndex, salesLevels, isAbleModifyMcht } from '@axios'
 import { DateFilters } from '@core/enums'
@@ -11,11 +15,14 @@ import corp from '@corp'
 
 const add_able = getUserLevel() >= 35 || isAbleModifyMcht()
 const { store, head, exporter, metas } = useSearchStore()
+const { selected, all_selected } = selectFunctionCollect(store)
+
 const all_sales = salesLevels()
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
 const password = ref()
+const salesBatchDialog = ref()
 
 if(corp.pv_options.paid.use_sales_auto_setting)
  store.params.use_sales_auto_setting = 1
@@ -26,7 +33,6 @@ provide('head', head)
 provide('exporter', exporter)
 
 store.params.level = null
-
 
 onMounted(() => {
     watchEffect(async() => {
@@ -59,10 +65,20 @@ onMounted(() => {
                     </template>
                 </BaseIndexFilterCard>
             </template>
+            <template #index_extra_field>
+                <VBtn prepend-icon="carbon:batch-job" @click="salesBatchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
+                    일괄 작업
+                </VBtn>
+            </template>
             <template #headers>
                 <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                        <span>
+                        <div class='check-label-container' v-if="key == 'id'">
+                            <VCheckbox v-if="getUserLevel() >= 35" v-model="all_selected" class="check-label"/>
+                            <span v-if="getUserLevel() >= 35">선택/취소</span>
+                            <span v-else>{{ header.ko }}</span>
+                        </div>
+                        <span v-else>
                             {{ header.ko }}
                         </span>
                     </th>
@@ -81,8 +97,11 @@ onMounted(() => {
                         </template>
                         <template v-else>
                             <td v-show="_header.visible" class='list-square'>
-                                <span v-if="_key == 'id'" class="edit-link" @click="store.edit(item['id'])">
-                                    #{{ item[_key] }}
+                                <span v-if="_key == 'id'">
+                                    <div class='check-label-container'>
+                                        <VCheckbox v-if="getUserLevel() >= 35" v-model="selected" :value="item[_key]" class="check-label"/>
+                                        <span class="edit-link" @click="store.edit(item['id'])">#{{ item[_key] }}</span>
+                                    </div>
                                 </span>
                                 <span v-else-if="_key == 'user_name'" class="edit-link" @click="store.edit(item['id'])">
                                     {{ item[_key] }}
@@ -144,6 +163,7 @@ onMounted(() => {
                 </tr>
             </template>
         </BaseIndexView>
+        <SalesBatchDialog ref="salesBatchDialog" :selected_idxs="selected"/>
         <PasswordChangeDialog ref="password" />
     </div>
 </template>

@@ -4,16 +4,23 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import { selectFunctionCollect } from '@/views/selected'
+
 import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
+import MchtBatchDialog from '@/layouts/dialogs/batch-updaters/MchtBatchDialog.vue'
+
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { getUserLevel, isAbleModifyMcht } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
+import { template } from 'lodash'
 
-const add_able = getUserLevel() >= 35 || isAbleModifyMcht()
+const add_able  = getUserLevel() >= 35 || isAbleModifyMcht()
 const { store, head, exporter, metas } = useSearchStore()
+const { selected, all_selected, dialog } = selectFunctionCollect(store)
 const { pgs }   = useStore()
-const password = ref()
+const password  = ref()
+const mchtBatchDialog = ref()
 
 provide('password', password)
 provide('store', store)
@@ -53,10 +60,20 @@ onMounted(() => {
                     </template>
                 </BaseIndexFilterCard>
             </template>
+            <template #index_extra_field>
+            <VBtn prepend-icon="carbon:batch-job" @click="mchtBatchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
+                일괄 작업
+            </VBtn>
+        </template>
             <template #headers>
                 <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                        <span>
+                        <div class='check-label-container' v-if="key == 'id'">
+                            <VCheckbox v-if="getUserLevel() >= 35" v-model="all_selected" class="check-label"/>
+                            <span v-if="getUserLevel() >= 35">선택/취소</span>
+                            <span v-else>{{ header.ko }}</span>
+                        </div>
+                        <span v-else>
                             {{ header.ko }}
                         </span>
                     </th>
@@ -66,8 +83,11 @@ onMounted(() => {
                 <tr v-for="(item, index) in store.getItems" :key="index">
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" class='list-square'>
-                            <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
-                                #{{ item[_key] }}
+                            <span v-if="_key == 'id'">
+                                <div class='check-label-container'>
+                                    <VCheckbox v-if="getUserLevel() >= 35" v-model="selected" :value="item[_key]" class="check-label"/>
+                                    <span class="edit-link" @click="store.edit(item['id'])">#{{ item[_key] }}</span>
+                                </div>
                             </span>
                             <span v-else-if="_key == `user_name`" class="edit-link" @click="store.edit(item['id'])">
                                 {{ item[_key] }}
@@ -127,6 +147,7 @@ onMounted(() => {
                 </tr>
             </template>
         </BaseIndexView>
+        <MchtBatchDialog ref="mchtBatchDialog" :selected_idxs="selected"/>
         <PasswordChangeDialog ref="password" />
     </div>
 </template>
