@@ -92,8 +92,7 @@ const batchRetry = async () => {
 onMounted(() => {
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
-            if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
-                const r = await store.getChartData()
+            const r = await store.getChartData()
                 metas[0]['stats'] = r.data.appr.amount.toLocaleString() + ' ￦'
                 metas[1]['stats'] = r.data.cxl.amount.toLocaleString() + ' ￦'
                 metas[2]['stats'] = r.data.amount.toLocaleString() + ' ￦'
@@ -103,6 +102,8 @@ onMounted(() => {
                 metas[2]['subtitle'] = r.data.count.toLocaleString() + '건'
                 metas[3]['subtitle'] = r.data.count.toLocaleString() + '건'
                 metas[0]['percentage'] = r.data.appr.amount ? 100 : 0
+
+            if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
                 metas[1]['percentage'] = store.getPercentage(r.data.cxl.amount, r.data.appr.amount)
                 metas[2]['percentage'] = store.getPercentage(r.data.amount, r.data.appr.amount)
                 metas[3]['percentage'] = store.getPercentage(r.data.profit, r.data.appr.amount)                

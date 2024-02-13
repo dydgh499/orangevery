@@ -1,20 +1,28 @@
 <script setup lang="ts">
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
+import { getUserLevel, user_info } from '@axios';
+
 interface Props {
     metas: any[],
 }
 const props = defineProps<Props>()
 const store = <any>(inject('store'))
 
+const lgSize = computed(() => {
+    console.log(store.base_url)
+    return (store.base_url === '/api/v1/manager/transactions' && (getUserLevel() == 10 && !user_info.value.is_show_fee)) ? 4 : 3;
+})
+
 onMounted (() => {
     watchEffect(async () => {        
         if(store.getChartProcess())
             store.is_skeleton = false
-    })
+    }) 
+
 })
 </script>
 <template>
-    <VCol v-for="meta in props.metas" :key="meta.title" cols="12" sm="6" lg="3">
+    <VCol v-for="meta in props.metas" :key="meta.title" cols="12" sm="6" :lg="lgSize">
     <VCard>
         <VCardText class="d-flex justify-space-between">
             <div v-if="store.is_skeleton">

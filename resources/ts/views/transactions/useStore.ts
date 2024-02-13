@@ -167,42 +167,41 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
     
-    const metas = ref()
+    const metas = ref([
+        {
+            icon: 'ic-outline-payments',
+            color: 'primary',
+            title: '승인액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        },
+        {
+            icon: 'ic-outline-payments',
+            color: 'error',
+            title: '취소액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        },
+        {
+            icon: 'ic-outline-payments',
+            color: 'success',
+            title: '매출액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        },
+    ])
     if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
-        metas.value = [
-            {
-                icon: 'ic-outline-payments',
-                color: 'primary',
-                title: '승인액 합계',
-                stats: '0',
-                percentage: 0,
-                subtitle: '0건',
-            },
-            {
-                icon: 'ic-outline-payments',
-                color: 'error',
-                title: '취소액 합계',
-                stats: '0',
-                percentage: 0,
-                subtitle: '0건',
-            },
-            {
-                icon: 'ic-outline-payments',
-                color: 'success',
-                title: '매출액 합계',
-                stats: '0',
-                percentage: 0,
-                subtitle: '0건',
-            },
-            {
-                icon: 'ic-outline-payments',
-                color: 'warning',
-                title: '정산액 합계',
-                stats: '0',
-                percentage: 0,
-                subtitle: '0건',
-            },
-        ]
+        metas.value.push({
+            icon: 'ic-outline-payments',
+            color: 'warning',
+            title: '정산액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        })
     }
 
     const exporter = async (type: number) => {      
