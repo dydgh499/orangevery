@@ -12,7 +12,6 @@ export function settlementFunctionCollect(store: any) {
     const errorHandler = <any>(inject('$errorHandler'))
 
     const getSettleFormat = (item:Settle, is_mcht:boolean) => {
-        console.log(item)
         return {            
             id: item.id,
             acct_name: item.acct_name,
@@ -35,6 +34,19 @@ export function settlementFunctionCollect(store: any) {
             settle_pay_module_idxs: item.terminal.settle_pay_module_idxs,
         }
     }
+
+    const isSettleHoldMcht = (item: Settle) => {
+        if(corp.pv_options.paid.use_settle_hold && item.settle_hold_s_dt != '') {
+            const settle_hold_s_dt = new Date(item.settle_hold_s_dt as string)
+            const s_dt = new Date(store.params.s_dt as string)
+            // 지급보류 시작일이 조회 시작일보다 같거나 클 때
+            if(settle_hold_s_dt >= s_dt) {                
+                snackbar.value.show('지급보류건이 선택되어 있어 진행할 수 없습니다.', 'error')
+                return true
+            }
+        }
+        return false
+    }
     
     const batchSettle = async(selected:number[], is_mcht: boolean) => {
         if (await alert.value.show('정말 일괄 정산을 하시겠습니까?')) {
@@ -42,8 +54,12 @@ export function settlementFunctionCollect(store: any) {
             const datas = [];
             for (let i = 0; i < selected.length; i++) {
                 const item:Settle = store.items.find(obj => obj['id'] === selected[i])
-                if(item)
-                    datas.push(getSettleFormat(item, is_mcht))
+                if(item) {
+                    if(isSettleHoldMcht(item))
+                        return
+                    else
+                        datas.push(getSettleFormat(item, is_mcht))
+                }
             }
             try {
                 const page = is_mcht ? 'merchandises' : 'salesforces'
@@ -61,6 +77,8 @@ export function settlementFunctionCollect(store: any) {
     }
     
     const settle = async (name:string, item:Settle, is_mcht: boolean) => {
+        if(isSettleHoldMcht(item))
+            return
         if (await alert.value.show('정말 ' + name + '님을(를) 정산 하시겠습니까?')) {
             const params = cloneDeep(store.params)
             const p = getSettleFormat(item, is_mcht)

@@ -16,12 +16,16 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         'total_trx_amount': '총 거래 수수료',
         'profit': '정산액',    
     }
-    const headers1 = {
-        'id': 'NO.',
-        'user_name' : '가맹점 ID',
-        'mcht_name' : '상호',
-        'total': settleObject,
+    const headers1:any = {}
+    headers1['id'] = 'NO.'
+    if(corp.pv_options.paid.use_settle_hold) {
+        headers1['settle_hold_s_dt'] = '지급보류 시작일'
+        headers1['settle_hold_reason'] = '지급보유 사유'
     }
+    headers1['user_name'] = '가맹점 ID'
+    headers1['mcht_name'] = '상호'
+    headers1['total'] = settleObject
+
     const headers2:DeductionHeader = {'deduction': {}}
     if(getUserLevel() >= 35)
         headers2['deduction']['input'] = '추가차감입력'
@@ -63,7 +67,7 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         headers3['extra_col'] = '더보기'
 
     head.sub_headers.value = [
-        head.getSubHeaderFormat('가맹점 정보', 'id', 'mcht_name', 'string', 3),
+        head.getSubHeaderFormat('가맹점 정보', 'id', 'mcht_name', 'string', corp.pv_options.paid.use_settle_hold ? 5 : 3),
         head.getSubHeaderFormat('매출', 'total', 'total', 'object', 7),
         head.getSubHeaderFormat('추가차감', 'deduction', 'deduction', 'object', Object.keys(headers2['deduction']).length),
         head.getSubHeaderFormat('장비', 'terminal', 'terminal', 'object', 3),

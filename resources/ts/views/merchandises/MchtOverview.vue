@@ -3,10 +3,12 @@ import { requiredValidator } from '@validators'
 import type { Merchandise, UnderAutoSetting } from '@/views/types'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import PasswordCheckDialog from '@/layouts/dialogs/PasswordCheckDialog.vue'
+
 import { getUserLevel, getIndexByLevel } from '@axios'
+import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore, feeApplyHistoires } from '@/views/salesforces/useStore'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
-import SalesSelectOverview from '@/views/merchandises/SalesSelectOverview.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import UnderAutoSettingDialog from '@/layouts/dialogs/UnderAutoSettingDialog.vue'
 import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
@@ -19,11 +21,18 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const { post } = useRequestStore()
 const { sales, initAllSales } = useSalesFilterStore()
 const { cus_filters } = useStore()
+
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+const errorHandler = <any>(inject('$errorHandler'))
+
 const levels = corp.pv_options.auth.levels
 const fee_histories = ref(<any[]>([]))
 const underAutoSetting = ref()
+const passwordCheckDialog = ref()
 
 const hintSalesApplyFee = (sales_id: number): string => {
     if (sales_id) {
@@ -55,6 +64,26 @@ const setSalesUnderAutoSetting = async (my_level: number) => {
         const history = fee_histories.value.find(obj => obj.sales_id === props.item['sales'+my_level+'_id'])
         if(history)
             props.item['sales'+my_level+'_fee'] = (history.trx_fee * 100).toFixed(3)
+    }
+}
+
+const setSettleHoldClear = async () => {
+    if(await alert.value.show('정말 지급보류 하시겠습니까?')) {
+        await post('/api/v1/manager/merchandises/'+props.item.id+'/set-settle-hold', {
+            settle_hold_s_dt: props.item.settle_hold_s_dt,
+            settle_hold_reason: props.item.settle_hold_reason,
+        }, true)
+    }
+}
+
+const clearSettleHoldClear = async () => {
+    const user_pw = await passwordCheckDialog.value.show()
+    if(user_pw !== '' && await alert.value.show('정말 지급보류를 해제하시겠습니까?')) {
+        await post('/api/v1/manager/merchandises/'+props.item.id+'/clear-settle-hold', {
+            user_pw: user_pw,
+        }, true)
+        props.item.settle_hold_s_dt = ''
+        props.item.settle_hold_reason = ''
     }
 }
 
@@ -146,66 +175,126 @@ onMounted(async () => {
                     <VRow class="pt-5">
                         <VCol cols="12">
                             <VRow>
-                                <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>사업자 유형</template>
-                                    <template #input>
+                                <VCol :md="6" :cols="12">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>사업자 유형</VCol>
+                                        <VCol md="6">
+                                            <div class="batch-container">
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.tax_category_type"
                                             :items="tax_category_types"
                                             prepend-inner-icon="ic-outline-business-center" label="사업자 종류" item-title="title"
                                             item-value="id" single-line/>
-                                    </template>
-                                </CreateHalfVCol>
-                            </VRow>
-                        </VCol>
-                        <VCol cols="12">
-                            <VRow>
-                                <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>커스텀 필터</template>
-                                    <template #input>
+                                            </div>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol>
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>커스텀 필터</VCol>
+                                        <VCol md="6">
+                                            <div class="batch-container">     
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.custom_id"
                                             :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)"
                                             prepend-inner-icon="tabler:folder-question" label="커스텀 필터" item-title="name"
                                             item-value="id" single-line/>
-                                    </template>
-                                </CreateHalfVCol>
-                            </VRow>
-                        </VCol>
-                        <VCol cols="12" v-if="corp.pv_options.paid.subsidiary_use_control">
-                            <VRow>
-                                <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>전산 사용상태</template>
-                                    <template #input>
-                                        <BooleanRadio :radio="props.item.enabled"
-                                            @update:radio="props.item.enabled = $event">
-                                            <template #true>ON</template>
-                                            <template #false>OFF</template>
-                                        </BooleanRadio>
-                                    </template>
-                                </CreateHalfVCol>
-                            </VRow>
-                        </VCol>
-                        <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card">
-                            <VRow>
-                                <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>단골고객 사용여부</template>
-                                    <template #input>
-                                        <BooleanRadio :radio="props.item.use_regular_card"
-                                            @update:radio="props.item.use_regular_card = $event">
-                                            <template #true>사용</template>
-                                            <template #false>미사용</template>
-                                        </BooleanRadio>
-                                    </template>
-                                </CreateHalfVCol>
+                                            </div>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
                             </VRow>
                         </VCol>
                         <template v-if="corp.pv_options.paid.use_collect_withdraw">
                             <VCol cols="12">
+                                <VDivider style="margin-bottom: 1em;"/>
                                 <VRow>
-                                    <CreateHalfVCol :mdl="5" :mdr="7">
-                                        <template #name>모아서 출금</template>
-                                        <template #input>
+                                    <VCol :md="6" :cols="12">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>모아서 출금</VCol>
+                                            <VCol md="6">
+                                                <div class="batch-container">
                                             <BooleanRadio :radio="props.item.use_collect_withdraw"
                                                 @update:radio="props.item.use_collect_withdraw = $event">
+                                                <template #true>사용</template>
+                                                <template #false>미사용</template>
+                                            </BooleanRadio>
+                                                </div>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                    <VCol>
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>
+                                            <BaseQuestionTooltip :location="'top'" :text="'모아서 출금 수수료'"
+                                                :content="'모아서 출금 사용시마다 적용되는 수수료 입니다.'">
+                                            </BaseQuestionTooltip>
+                                        </VCol>
+                                            <VCol md="6">
+                                                <div class="batch-container">     
+                                            <VTextField v-model="props.item.collect_withdraw_fee" type="number" suffix="₩"
+                                                :rules="[requiredValidator]" />
+                                                </div>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </template>
+                        <template v-if="getUserLevel() >= 35">
+                            <VCol cols="12">
+                                <VDivider style="margin-bottom: 1em;"/>
+                                <VRow>
+                                    <VCol :md="6" :cols="12">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>매출전표 공급자 정보</VCol>
+                                            <VCol md="6">
+                                                <div class="batch-container">
+                                            <BooleanRadio :radio="props.item.use_saleslip_prov"
+                                                @update:radio="props.item.use_saleslip_prov = $event">
+                                                <template #true>PG사</template>
+                                                <template #false>본사</template>
+                                            </BooleanRadio>
+                                                </div>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                    <VCol>
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>매출전표 판매자 정보</VCol>
+                                            <VCol md="6">
+                                                <div class="batch-container">     
+                                                    <BooleanRadio :radio="props.item.use_saleslip_sell"
+                                                    @update:radio="props.item.use_saleslip_sell = $event">
+                                                    <template #true>본사</template>
+                                                    <template #false>가맹점</template>
+                                                </BooleanRadio>
+                                                </div>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                                <VDivider style="margin: 1em 0;"/>
+                            </VCol>
+                            <VCol cols="12" v-if="corp.pv_options.paid.subsidiary_use_control">
+                                <VRow>
+                                    <CreateHalfVCol :mdl="5" :mdr="7">
+                                        <template #name>전산 사용상태</template>
+                                        <template #input>
+                                            <BooleanRadio :radio="props.item.enabled"
+                                                @update:radio="props.item.enabled = $event">
+                                                <template #true>ON</template>
+                                                <template #false>OFF</template>
+                                            </BooleanRadio>
+                                        </template>
+                                    </CreateHalfVCol>
+                                </VRow>
+                            </VCol>
+                            <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card">
+                                <VRow>
+                                    <CreateHalfVCol :mdl="5" :mdr="7">
+                                        <template #name>단골고객 사용여부</template>
+                                        <template #input>
+                                            <BooleanRadio :radio="props.item.use_regular_card"
+                                                @update:radio="props.item.use_regular_card = $event">
                                                 <template #true>사용</template>
                                                 <template #false>미사용</template>
                                             </BooleanRadio>
@@ -213,60 +302,13 @@ onMounted(async () => {
                                     </CreateHalfVCol>
                                 </VRow>
                             </VCol>
-                            <VCol cols="12">
+                            <VCol cols="12" v-if="corp.pv_options.paid.use_withdraw_fee">
                                 <VRow>
                                     <CreateHalfVCol :mdl="5" :mdr="7">
-                                        <template #name>
-                                            <BaseQuestionTooltip :location="'top'" :text="'모아서 출금 수수료'"
-                                                :content="'모아서 출금 사용시마다 적용되는 수수료 입니다.'">
-                                            </BaseQuestionTooltip>
-                                        </template>
+                                        <template #name>출금 수수료</template>
                                         <template #input>
-                                            <VTextField v-model="props.item.collect_withdraw_fee" type="number" suffix="₩"
+                                            <VTextField v-model="props.item.withdraw_fee" type="number" suffix="₩"
                                                 :rules="[requiredValidator]" />
-                                        </template>
-                                    </CreateHalfVCol>
-                                </VRow>
-                            </VCol>
-                        </template>
-                        <VCol cols="12" v-if="corp.pv_options.paid.use_withdraw_fee">
-                            <VRow>
-                                <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>출금 수수료</template>
-                                    <template #input>
-                                        <VTextField v-model="props.item.withdraw_fee" type="number" suffix="₩"
-                                            :rules="[requiredValidator]" />
-                                    </template>
-                                </CreateHalfVCol>
-                            </VRow>
-                        </VCol>
-                        <template v-if="getUserLevel() >= 35">
-                            <!-- 👉 매출전표 공급자 사용 여부 -->
-                            <VCol cols="12">
-                                <VRow>
-                                    <CreateHalfVCol :mdl="5" :mdr="7">
-                                        <template #name>매출전표 공급자 정보</template>
-                                        <template #input>
-                                            <BooleanRadio :radio="props.item.use_saleslip_prov"
-                                                @update:radio="props.item.use_saleslip_prov = $event">
-                                                <template #true>PG사</template>
-                                                <template #false>본사</template>
-                                            </BooleanRadio>
-                                        </template>
-                                    </CreateHalfVCol>
-                                </VRow>
-                            </VCol>
-                            <!-- 👉 매출전표 판매자 사용 여부 -->
-                            <VCol cols="12">
-                                <VRow>
-                                    <CreateHalfVCol :mdl="5" :mdr="7">
-                                        <template #name>매출전표 판매자 정보</template>
-                                        <template #input>
-                                            <BooleanRadio :radio="props.item.use_saleslip_sell"
-                                                @update:radio="props.item.use_saleslip_sell = $event">
-                                                <template #true>본사</template>
-                                                <template #false>가맹점</template>
-                                            </BooleanRadio>
                                         </template>
                                     </CreateHalfVCol>
                                 </VRow>
@@ -316,22 +358,55 @@ onMounted(async () => {
                                 </VRow>
                             </VCol>
                             <VCol cols="12" v-if="corp.pv_options.paid.use_multiple_hand_pay">
-                            <VRow>
-                                <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>
-                                        <BaseQuestionTooltip :location="'top'" :text="'다중 수기결제 사용 여부'"
-                                            :content="'수기결제 결제모듈이 3개 이상이어야 간편보기 화면에서 확인 가능합니다.'">
-                                        </BaseQuestionTooltip>
-                                    </template>
-                                    <template #input>
-                                        <BooleanRadio :radio="props.item.use_multiple_hand_pay"
-                                            @update:radio="props.item.use_multiple_hand_pay = $event">
-                                            <template #true>활성</template>
-                                            <template #false>비활성</template>
-                                        </BooleanRadio>
-                                    </template>
-                                </CreateHalfVCol>
-                            </VRow>
+                                <VRow>
+                                    <CreateHalfVCol :mdl="5" :mdr="7">
+                                        <template #name>다중 수기결제 사용 여부</template>
+                                        <template #input>
+                                            <BooleanRadio :radio="props.item.use_multiple_hand_pay"
+                                                @update:radio="props.item.use_multiple_hand_pay = $event">
+                                                <template #true>활성</template>
+                                                <template #false>비활성</template>
+                                            </BooleanRadio>
+                                        </template>
+                                    </CreateHalfVCol>
+                                </VRow>
+                            </VCol>
+                            <VCol cols="12" v-if="corp.pv_options.paid.use_settle_hold">
+                                <VDivider style="margin-bottom: 1em;"/>
+                                <VRow>
+                                    <VCol :md="6" :cols="12">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>지급보류 시작일</VCol>
+                                            <VCol md="6">
+                                                <div class="batch-container">                                                    
+                                                    <VTextField type="date" v-model="props.item.settle_hold_s_dt"
+                                                        prepend-inner-icon="ic-baseline-calendar-today" label="시작일 입력" single-line />
+                                                </div>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                    <VCol>
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol md="12">
+                                                <div class="batch-container">     
+                                                    <VTextarea v-model="props.item.settle_hold_reason" counter label="지급보류 사유"
+                                                        prepend-inner-icon="twemoji-spiral-notepad" maxlength="200" auto-grow />
+                                                </div>
+                                                <div style="float: inline-end;">
+                                                    <VBtn color="error" @click="setSettleHoldClear()" style='margin-bottom: 1em;'>
+                                                        지급보류
+                                                        <VIcon end icon="icon-park-solid:clear-format" />
+                                                    </VBtn>
+                                                    <VBtn color="error" variant="tonal" @click="clearSettleHoldClear()" style=" margin-bottom: 1em;margin-left: 1em;">
+                                                        지급보류해제
+                                                        <VIcon end icon="icon-park-solid:clear-format" />
+                                                    </VBtn>
+                                                </div>
+                                            </VCol>                                            
+                                        </VRow>
+                                    </VCol>
+                                </VRow>
+                                <VDivider style="margin-bottom: 1em;"/>
                             </VCol>
                         </template>
                     </VRow>
@@ -349,5 +424,6 @@ onMounted(async () => {
             </VCard>
         </VCol>
         <UnderAutoSettingDialog ref="underAutoSetting"/>
+        <PasswordCheckDialog ref="passwordCheckDialog"/>        
     </VRow>
 </template>

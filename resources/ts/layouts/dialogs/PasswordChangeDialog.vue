@@ -38,7 +38,7 @@ const submit = async () => {
         else if (user_type.value == 2)
             page = 'services/operators'
         try {
-            const r = await axios.post('/api/v1/manager/' + page + '/password-change', { id: user_id.value, user_pw: password.value })
+            const r = await axios.post('/api/v1/manager/' + page + '/'+user_id.value+'/password-change', { user_pw: password.value })
             snackbar.value.show('성공하였습니다.', 'success')
         }
         catch (e: any) {

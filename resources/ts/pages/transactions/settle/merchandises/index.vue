@@ -23,21 +23,20 @@ provide('exporter', exporter)
 store.params.level = 10 // taransaction model에서 필수
 store.params.use_cancel_deposit = Number(corp.pv_options.paid.use_cancel_deposit)
 store.params.use_collect_withdraw = Number(corp.pv_options.paid.use_collect_withdraw)
+
+if(corp.pv_options.paid.use_settle_hold)
+    store.params.use_settle_hold = 1
 if (corp.pv_options.paid.use_realtime_deposit)
     store.params.use_realtime_deposit = 0
 else
     store.params.use_realtime_deposit = -1
+
 const { settle_types } = useStore()
 const totals = ref(<any[]>([]))
 const snackbar = <any>(inject('snackbar'))
 
 const isExtendSettleCols = (parent_key: string, key: string) => {
     return parent_key === 'settle' && (key === 'cancel_deposit_amount' || key === 'collect_withdraw_amount' || key === 'collect_withdraw_fee')
-}
-
-const test = (item: any) => {
-    console.log(item)
-    return 1
 }
 
 onMounted(() => {
@@ -178,6 +177,12 @@ onMounted(() => {
                                             v-if="getUserLevel() >= 35">#{{ item[_key] }}</span>
                                         <span class="edit-link" v-else>#{{ item[_key] }}</span>
                                     </div>
+                                </span>
+                                <span v-else-if="_key == 'settle_hold_s_dt'">
+                                    <VChip color="error" v-if="item[_key]">
+                                        {{ item[_key]  }}
+                                    </VChip>
+                                    <span v-else>-</span>
                                 </span>
                                 <span v-else-if="_key == 'resident_num'">
                                     <span>

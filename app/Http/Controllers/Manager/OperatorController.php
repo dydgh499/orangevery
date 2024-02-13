@@ -122,11 +122,11 @@ class OperatorController extends Controller
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
-    public function passwordChange(Request $request)
+    public function passwordChange(Request $request, $id)
     {
-        $validated = $request->validate(['id'=>'required|integer', 'user_pw'=>'required']);
+        $validated = $request->validate(['user_pw'=>'required']);
         $res = $this->operators
-            ->where('id', $request->id)
+            ->where('id', $id)
             ->update(['user_pw' => Hash::make($request->user_pw)]);
         return $this->response($res ? 1 : 990);
     }

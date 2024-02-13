@@ -14,8 +14,12 @@ return new class extends Migration
         Schema::create('mcht_blacklists', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
-            $table->unsignedSmallInteger('block_type')->comment('필터타입(0=상호, 1=대표자명, 2=사업자번호, 3=휴대폰번호, 4=주민번호, 5=주소)');
-            $table->string('block_content', 50)->default('')->comment('차단내용');
+            $table->string('mcht_name', 100)->default('')->comment('상호');
+            $table->string('nick_name', 20)->default('')->comment('대표자명');
+            $table->string('phone_num', 20)->default('')->comment('휴대폰번호');
+            $table->string('business_num', 20)->default('')->comment('사업자번호');
+            $table->string('resident_num', 20)->default('')->comment('주민번호');
+            $table->string('addr', 200)->default('')->comment('주소');
             $table->string('block_reason')->default('')->comment('차단사유');
             $table->timestamps();
         });

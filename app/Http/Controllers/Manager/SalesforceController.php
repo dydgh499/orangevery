@@ -233,11 +233,11 @@ class SalesforceController extends Controller
         return $this->response(0, $histories);
     }
 
-    public function passwordChange(Request $request)
+    public function passwordChange(Request $request, $id)
     {
-        $validated = $request->validate(['id'=>'required|integer', 'user_pw'=>'required']);
+        $validated = $request->validate(['user_pw'=>'required']);
         $res = $this->salesforces
-            ->where('id', $request->id)
+            ->where('id', $id)
             ->update(['user_pw' => Hash::make($request->user_pw)]);
         return $this->response($res ? 1 : 990);        
     }

@@ -20,6 +20,10 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     const headers: Record<string, string> = {
         'id': 'NO.',
     }
+    if (corp.pv_options.paid.use_settle_hold) {
+        headers['settle_hold_s_dt'] = '지급보류 시작일'
+        headers['settle_hold_reason'] = '지급보류 사유'
+    }
     if (levels.sales5_use && getUserLevel() >= 30) {
         headers['sales5_name'] = levels.sales5_name
         headers['sales5_fee'] = '수수료'
@@ -203,7 +207,9 @@ export const defaultItemInfo = () => {
         resident_num_back: '',
         use_pay_verification_mobile: Number(corp.pv_options.paid.use_pay_verification_mobile),
         use_multiple_hand_pay: 0,
-        use_noti: 0
+        use_noti: 0,
+        settle_hold_s_dt: '',
+        settle_hold_reason: ''
     })
     return {
         path, item

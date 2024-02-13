@@ -107,14 +107,9 @@ class MerchandiseController extends Controller
                         ->orWhere($full_parent.'nick_name', 'like', "%$search%")
                         ->orWhere($full_parent.'acct_num', 'like', "%$search%")
                         ->orWhere($full_parent.'acct_name', 'like', "%$search%");
-                    /*
-                        ->orWhere(function ($query) use ($search) {
-                                return $query->where('payment_modules.mid', 'like', "%$search%")
-                            ->orWhere('payment_modules.tid', 'like', "%$search%");
-                        });
-                    */
                 });
-
+        if($request->input('settle_hold', 0))
+            $query = $query->whereNotNull($full_parent.'settle_hold_s_dt');
         if($is_all == false)
             $query = $query->where($full_parent.'is_delete', false);
         return $query;
@@ -330,11 +325,11 @@ class MerchandiseController extends Controller
      *
      * 가맹점 이상 가능
      */
-    public function passwordChange(Request $request)
+    public function passwordChange(Request $request, $id)
     {
-        $validated = $request->validate(['id'=>'required|integer', 'user_pw'=>'required']);
+        $validated = $request->validate(['user_pw'=>'required']);
         $res = $this->merchandises
-            ->where('id', $request->id)
+            ->where('id', $id)
             ->update(['user_pw' => Hash::make($request->user_pw)]);
         return $this->response($res ? 1 : 990);        
     }
@@ -387,5 +382,40 @@ class MerchandiseController extends Controller
             ->where('id', $id)
             ->first($cols);
         return $this->response(0, $data);
+    }
+
+    /**
+     * 지급보류
+     */
+    public function setSettleHold(Request $requset, $id)
+    {
+        $this->merchandises->where('id', $id)->update([
+            'settle_hold_s_dt' => $requset->settle_hold_s_dt,
+            'settle_hold_reason' => $requset->settle_hold_reason,
+        ]);
+        return $this->response(1);
+    }
+
+    /**
+     * 지급보류해제
+     */
+    public function clearSettleHold(Request $requset, $id)
+    {
+        $data = $this->merchandises->where('id', $id)->first(['user_pw']);
+        if($data)
+        {
+            if(Hash::check($requset->user_pw, $data->user_pw))
+            {
+                $this->merchandises->where('id', $id)->update([
+                    'settle_hold_s_dt' => null,
+                    'settle_hold_reason' => '',
+                ]);
+                return $this->response(0);
+            }
+            else
+                return $this->extendResponse(2000, '패스워드가 다릅니다.');
+        }
+        else
+            return $this->response(990);
     }
 }

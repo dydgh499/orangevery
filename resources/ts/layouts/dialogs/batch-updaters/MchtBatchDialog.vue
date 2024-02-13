@@ -134,6 +134,7 @@ const setNotiUrl = () => {
         'note': noti.noti_note,
     })
 }
+
 const show = (): Promise<boolean> => {
     visible.value = true
 
@@ -166,11 +167,17 @@ initAllSales()
                                     <VCol>{{ levels['sales' + (6 - i) + '_name'] }}/수수료율</VCol>
                                     <VCol md="8">
                                         <div class="batch-container">
-                                            <VAutocomplete :menu-props="{ maxHeight: 400 }"
+                                            <div>
+                                                <VAutocomplete :menu-props="{ maxHeight: 400 }"
                                                 v-model="merchandise['sales' + (6 - i) + '_id']" :items="sales[6 - i].value"
                                                 :label="levels['sales' + (6 - i) + '_name'] + '선택'" item-title="sales_name"
                                                 item-value="id" single-line prepend-inner-icon="ph:share-network"
                                                 style="width: 240px;" />
+                                                
+                                                <VTooltip activator="parent" location="top" v-if="merchandise['sales'+(6-i)+'_id']">
+                                                    {{ sales[6-i].value.find(obj => obj.id === merchandise['sales'+(6-i)+'_id'])?.sales_name }}
+                                                </VTooltip>
+                                            </div>
                                             <VTextField v-model="merchandise['sales' + (6 - i) + '_fee']" type="number"
                                                 suffix="%" style='margin-left: 0.5em;' />
                                             <VBtn variant="tonal" @click="setSalesFee(6-i)" style='margin-left: 0.5em;'>
@@ -288,7 +295,6 @@ initAllSales()
                             </VRow>
                         </VCol>
                     </VRow>
-
                     <template v-if="corp.pv_options.paid.use_noti">
                         <VDivider style="margin: 1em 0;" />
                         <VRow>

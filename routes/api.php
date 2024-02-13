@@ -107,14 +107,13 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::get('bonaejas', [MessageController::class, 'index']);
             Route::get('bonaejas/chart', [MessageController::class, 'chart']);
             Route::get('pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
-            Route::post('operators/password-change', [OperatorController::class, 'passwordChange']);
+            Route::post('operators/{id}/password-change', [OperatorController::class, 'passwordChange']);
             Route::get('brands/chart', [BrandController::class, 'chart']);
             
             Route::apiResource('brands', BrandController::class);
             Route::apiResource('brands/before-brand-infos', BeforeBrandInfoController::class);
             Route::apiResource('brands/different-settlement-infos', DifferentSettlementInfoController::class);
-            
-            
+                        
             Route::apiResource('operators', OperatorController::class);
             Route::apiResource('operator-histories', OperatorHistoryContoller::class);
             Route::apiResource('pay-gateways', PaymentGatewayController::class);
@@ -203,11 +202,12 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
             });
             Route::get('classification', [SalesforceController::class, 'classification']);
-            Route::post('password-change', [SalesforceController::class, 'passwordChange']);
+            Route::post('{id}/password-change', [SalesforceController::class, 'passwordChange']);
             Route::post('bulk-register', [SalesforceController::class, 'bulkRegister']);
             Route::apiResource('under-auto-settings', UnderAutoSettingController::class);
         });
         Route::prefix('merchandises')->group(function() {
+
             Route::prefix('batch-updaters')->group(function() {
                 Route::post('sales-fee-direct-apply', [BatchUpdateMchtController::class, 'setSalesFeeDirect']);
                 Route::post('sales-fee-book-apply', [BatchUpdateMchtController::class, 'setSalesFeeBooking']);
@@ -218,12 +218,16 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('set-custom-filter', [BatchUpdateMchtController::class, 'setCustomFilter']);
                 Route::post('set-account-info', [BatchUpdateMchtController::class, 'setAccountInfo']);
             });
+            Route::post('{id}/password-change', [MerchandiseController::class, 'passwordChange']);
+            Route::post('{id}/set-settle-hold', [MerchandiseController::class, 'setSettleHold']);
+            Route::post('{id}/clear-settle-hold', [MerchandiseController::class, 'clearSettleHold']);
 
             Route::get('chart', [MerchandiseController::class, 'chart']);
             Route::get('all', [MerchandiseController::class, 'all']);   
             Route::get('terminals', [TerminalController::class, 'index']);   
-            Route::post('password-change', [MerchandiseController::class, 'passwordChange']);
             Route::post('bulk-register', [MerchandiseController::class, 'bulkRegister']);
+
+            
             Route::prefix('pay-modules')->group(function() {
                 Route::prefix('batch-updaters')->group(function() {
                     Route::post('set-abnormal-trans-limit', [BatchUpdatePayModuleController::class, 'setAbnormalTransLimit']);

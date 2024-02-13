@@ -71,7 +71,8 @@
         public $use_before_brand_info = false;  // 이전 서비스 정보 사용
         public $use_multiple_hand_pay = false;  // 다중 수기결제
         public $use_mcht_blacklist = false;     // 가맹점 블랙리스트
-        public $use_part_cancel = false;        //부분취소
+        public $use_part_cancel = false;        // 부분취소
+        public $use_settle_hold = false;        // 지급보류
         public function __construct(array $source)
         {
             foreach ($source as $property => $value) 

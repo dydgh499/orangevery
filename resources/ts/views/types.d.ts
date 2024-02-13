@@ -121,6 +121,8 @@ export interface MerchandisePropertie {
     use_collect_withdraw: number,
     collect_withdraw_fee: number,
     withdraw_fee: number,
+    settle_hold_s_dt: string,
+    settle_hold_reason: string,
     note: string,
 }
 
@@ -339,6 +341,7 @@ interface PaidOption {
     use_multiple_hand_pay: boolean, // 다중 수기결제
     use_mcht_blacklist: boolean, // 가맹점 블랙리스트
     use_part_cancel: boolean, // 부분취소 사용여부
+    use_settle_hold: boolean, // 지급보류
 }
 interface AuthOption {
     levels: {
@@ -614,6 +617,8 @@ export interface Settle extends TotalSettle, Bank {
     addr: string,
     use_collect_withdraw: number,    
     settle_transaction_idxs: number[],
+    settle_hold_s_dt?: string,
+    settle_hold_reason?: string,
 }
 
 export interface SettlesHistories extends Bank{

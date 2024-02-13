@@ -63,7 +63,9 @@ onMounted(() => {
             <template #index_extra_field>
                 <VBtn prepend-icon="carbon:batch-job" @click="mchtBatchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
                     일괄 작업
-                </VBtn>
+                </VBtn>                
+                <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.settle_hold" label="지급보류건 조회"
+                    color="error" @update:modelValue="store.updateQueryString({ settle_hold: store.params.settle_hold })" v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_settle_hold"/>
             </template>
             <template #headers>
                 <tr>
@@ -130,6 +132,12 @@ onMounted(() => {
                                 <span style="margin: 0 0.25em;">-</span>
                                 <span v-if="corp.pv_options.free.resident_num_masking">*******</span>
                                 <span v-else>{{ item['resident_num_back'] }}</span>
+                            </span>
+                            <span v-else-if="_key == 'settle_hold_s_dt'">
+                                <VChip color="error" v-if="item[_key]">
+                                    {{ item[_key]  }}
+                                </VChip>
+                                <span v-else>-</span>
                             </span>
                             <span v-else-if="_key == 'enabled'">
                                 <VChip :color="store.booleanTypeColor(!item[_key])">

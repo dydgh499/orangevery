@@ -44,18 +44,19 @@ class MerchandiseController extends Controller
 
     private function commonQuery($request)
     {
-        $with = ['deducts', 'settlePayModules'];
         $validated = $request->validate(['s_dt'=>'required|date', 'e_dt'=>'required|date']);
         [$settle_key, $group_key] = $this->getSettleCol($request);
 
         $cols = array_merge($this->getDefaultCols(), ['mcht_name', 'use_collect_withdraw', 'withdraw_fee']);
-        $search = $request->input('search', '');
+        if($request->input('use_settle_hold', 0))
+            $cols = array_merge($cols, ['settle_hold_s_dt', 'settle_hold_reason']);
+
         // ----- 가맹점 목록 조회 ---------
         $mcht_ids = $this->getExistTransUserIds('mcht_id', 'mcht_settle_id');
         $terminal_settle_ids = $this->getTerminalSettleIds($request, 10, 'id');
 
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
-            ->where('mcht_name', 'like', "%$search%")
+            ->where('mcht_name', 'like', "%".$request->search."%")
             ->orWhere(function ($query) use($terminal_settle_ids) {    
                 $query->whereIn('id',$terminal_settle_ids);
             });
@@ -71,6 +72,8 @@ class MerchandiseController extends Controller
         // 모아서 출금
         if($request->use_collect_withdraw)
             $query = $query->with(['collectWithdraws']);
+
+        $with = ['deducts', 'settlePayModules'];
         // 취소 입금
         if($request->use_cancel_deposit)
             $with[] = 'transactions.cancelDeposits';
