@@ -1,12 +1,13 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { DeductionHeader } from '@/views/types'
-import { getUserLevel } from '@axios'
+import { getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 
 export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
     const store = Searcher('transactions/settle/merchandises')
     const head  = Header('transactions/settle/merchandises', '가맹점 정산관리')
+    const is_show_acct = ((getUserLevel() == 10 && !user_info.value.is_hide_account) || getUserLevel() >= 13) ? true : false
     const settleObject = {
         'count' :  '건수',
         'amount' :  '금액',
@@ -43,6 +44,12 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
     settles['deposit'] = '입금금액'
     settles['transfer'] = '이체금액'
 
+    const bank_header = is_show_acct ? {
+        'acct_bank_name': '은행',
+        'acct_bank_code': '은행코드',
+        'acct_name': '예금주',
+        'acct_num': '계좌번호',    
+    } : {}
     const headers3:Record<string, string | object> = {
         'terminal': {
             'settle_pay_module_idxs': '건수',
@@ -50,19 +57,19 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
             'under_sales_amount': '매출미달차감금',
         },
         'settle': settles,
-        'acct_bank_name': '은행',
-        'acct_bank_code': '은행코드',
-        'acct_name': '예금주',
-        'acct_num': '계좌번호',
-        'nick_name': '대표자명',
-        'phone_num': '연락처',
-        'resident_num': '주민등록번호',
-        'business_num': '사업자등록번호',
-        'sector': '업종',
-        'addr': '주소',
-        'appr' : settleObject,
-        'cxl' : settleObject,
-    };
+        bank_header,
+        'nick_name' :  '대표자명',
+        'phone_num' :  '연락처',
+        'resident_num' :  '주민등록번호',
+        'business_num' :  '사업자등록번호',
+        'sector' :  '업종',
+        'addr' :  '주소',
+        'appr' :  settleObject,
+        'cxl' :  settleObject,
+    }
+
+
+
     if(getUserLevel() >= 35)
         headers3['extra_col'] = '더보기'
 
@@ -72,7 +79,7 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         head.getSubHeaderFormat('추가차감', 'deduction', 'deduction', 'object', Object.keys(headers2['deduction']).length),
         head.getSubHeaderFormat('장비', 'terminal', 'terminal', 'object', 3),
         head.getSubHeaderFormat('정산금', 'settle', 'settle', 'object', Object.keys(settles).length),
-        head.getSubHeaderFormat('계좌정보', 'acct_bank_name', 'addr', 'string', 10),
+        head.getSubHeaderFormat(is_show_acct ? '계좌정보' : '개인정보', is_show_acct ? 'acct_bank_name' : 'nick_name', 'addr', 'string', is_show_acct ? 10 : 6),
         head.getSubHeaderFormat('승인', 'appr', 'appr', 'object', 7),
         head.getSubHeaderFormat('취소', 'cxl', 'cxl', 'object', 7),
     ]

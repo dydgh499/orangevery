@@ -146,7 +146,7 @@ onMounted(() => {
                             </span>
                             <span v-else-if="_key == 'extra_col'">
                                 <UserExtraMenu :id="item['id']" :type="0"></UserExtraMenu>
-                            </span>
+                            </span>                            
                             <span v-else>
                                 {{ item[_key] }}
                             </span>

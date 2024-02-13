@@ -1,6 +1,6 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
-import { getUserLevel } from '@axios'
+import { getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 
 export const deposit_statuses = [
@@ -12,6 +12,7 @@ export const deposit_statuses = [
 export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', () => {    
     const store = Searcher('transactions/settle-histories/merchandises')
     const head  = Header('transactions/settle-histories/merchandises', '가맹점 정산이력')
+    const is_show_acct = ((getUserLevel() == 10 && !user_info.value.is_hide_account) || getUserLevel() >= 13) ? true : false
     const headers_1:Record<string, string | object> = {
         'id': 'NO.',
         'user_name' : '가맹점 ID',
@@ -33,16 +34,22 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
     const headers_2:Record<string, string | object> = {
         'settle_amount': '정산액'
     }
+    const bank_header = is_show_acct ? {
+        'acct_bank_name': '은행',
+        'acct_bank_code': '은행코드',
+        'acct_name': '예금주',
+        'acct_num': '계좌번호',    
+    } : {}
+
     const headers_3:Record<string, string | object> = {
         'settle_dt': '정산일',
         'deposit_dt': '입금일',
         'deposit_status': '입금상태',
-        'acct_bank_name': '은행',
-        'acct_bank_code': '은행코드',
-        'acct_name': '예금주',
-        'acct_num': '계좌번호',
+        bank_header,
         'created_at': '생성시간',
     }
+    
+
     if(corp.pv_options.paid.use_finance_van_deposit)
         headers_2['deposit_amount'] = '이체금액'
 

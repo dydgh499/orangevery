@@ -313,6 +313,20 @@ onMounted(async () => {
                                     </CreateHalfVCol>
                                 </VRow>
                             </VCol>
+                            <VCol cols="12" v-if="corp.pv_options.paid.use_hide_account">
+                                <VRow>
+                                    <CreateHalfVCol :mdl="5" :mdr="7">
+                                        <template #name>정산계좌 숨김</template>
+                                        <template #input>
+                                            <BooleanRadio :radio="props.item.is_hide_account"
+                                                @update:radio="props.item.is_hide_account = $event">
+                                                <template #true>숨김</template>
+                                                <template #false>노출</template>
+                                            </BooleanRadio>
+                                        </template>
+                                    </CreateHalfVCol>
+                                </VRow>
+                            </VCol>
                             <!-- 👉 노티 발송 여부 -->
                             <VCol cols="12" v-if="corp.pv_options.paid.use_noti">
                                 <VRow>

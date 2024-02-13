@@ -24,6 +24,7 @@ class MerchandiseRequest extends FormRequest
         'enabled',
         'use_saleslip_prov',
         'use_saleslip_sell',
+        'is_hide_account',
         'use_noti',
         'use_pay_verification_mobile',
         'use_multiple_hand_pay',
@@ -64,6 +65,7 @@ class MerchandiseRequest extends FormRequest
             'enabled' => 'required|boolean',
             'use_saleslip_prov' => 'required|boolean',
             'use_saleslip_sell' => 'required|boolean',
+            'is_hide_account'   => 'required|boolean',
             'collect_withdraw_fee' => 'nullable|numeric',
             'tax_category_type' => 'nullable|numeric',
             'withdraw_fee' => 'nullable|numeric',
@@ -89,7 +91,8 @@ class MerchandiseRequest extends FormRequest
         $this->merge(['use_noti' => $this->convertToBoolean($this->input('use_noti'))]);
         $this->merge(['use_saleslip_prov' => $this->convertToBoolean($this->input('use_saleslip_prov'))]);
         $this->merge(['use_saleslip_sell' => $this->convertToBoolean($this->input('use_saleslip_sell'))]);
-        $this->merge(['is_show_fee' => $this->convertToBoolean($this->input('is_show_fee'))]);
+        $this->merge(['is_hide_account' => $this->convertToBoolean($this->input('is_hide_account', 0))]);       
+        $this->merge(['is_show_fee'     => $this->convertToBoolean($this->input('is_show_fee'))]);
         $this->merge(['use_regular_card' => $this->convertToBoolean($this->input('use_regular_card'))]);
         $this->merge(['use_collect_withdraw' => $this->convertToBoolean($this->input('use_collect_withdraw'))]);
         $this->merge(['use_pay_verification_mobile' => $this->convertToBoolean($this->input('use_pay_verification_mobile', 0))]);

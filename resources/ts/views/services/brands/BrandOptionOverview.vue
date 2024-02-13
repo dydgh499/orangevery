@@ -349,6 +349,14 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>정산계좌 숨김사용</template>
+                            <template #input>
+                                <VSwitch hide-details v-model="props.item.paid.use_hide_account" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>
                                 <BaseQuestionTooltip location="top" text="다중 수기결제"
                                     :content="`사용 가맹점당 3개의 결제모듈이 존재해야 활성화 됩니다.`">

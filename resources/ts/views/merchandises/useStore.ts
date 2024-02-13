@@ -16,6 +16,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     const levels    = corp.pv_options.auth.levels
     const paid      = corp.pv_options.paid
     const { pgs }   = useStore()
+    const is_show_acct = ((getUserLevel() == 10 && !user_info.value.is_hide_account) || getUserLevel() >= 13) ? true : false
 
     const headers: Record<string, string> = {
         'id': 'NO.',
@@ -68,10 +69,13 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
 
     headers['sector'] = '업종'
     headers['addr'] = '주소'
-    headers['acct_bank_name'] = '은행'
-    headers['acct_bank_code'] = '은행코드'
-    headers['acct_name'] = '예금주'
-    headers['acct_num'] = '계좌번호'
+
+    if(is_show_acct) {
+        headers['acct_bank_name'] = '은행'
+        headers['acct_bank_code'] = '은행코드'
+        headers['acct_name'] = '예금주'
+        headers['acct_num'] = '계좌번호'    
+    }
     
     if (paid.subsidiary_use_control)
         headers['enabled'] = '전산사용여부'

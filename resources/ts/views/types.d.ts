@@ -123,6 +123,7 @@ export interface MerchandisePropertie {
     withdraw_fee: number,
     settle_hold_s_dt: string,
     settle_hold_reason: string,
+    is_hide_account: number,
     note: string,
 }
 
@@ -342,6 +343,7 @@ interface PaidOption {
     use_mcht_blacklist: boolean, // 가맹점 블랙리스트
     use_part_cancel: boolean, // 부분취소 사용여부
     use_settle_hold: boolean, // 지급보류
+    use_hide_account: boolean, // 계좌 숨김
 }
 interface AuthOption {
     levels: {
