@@ -34,20 +34,18 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
     const headers_2:Record<string, string | object> = {
         'settle_amount': '정산액'
     }
-    const bank_header = is_show_acct ? {
-        'acct_bank_name': '은행',
-        'acct_bank_code': '은행코드',
-        'acct_name': '예금주',
-        'acct_num': '계좌번호',    
-    } : {}
-
     const headers_3:Record<string, string | object> = {
         'settle_dt': '정산일',
         'deposit_dt': '입금일',
         'deposit_status': '입금상태',
-        bank_header,
-        'created_at': '생성시간',
     }
+    if(is_show_acct) {
+        headers_3['acct_bank_name'] = '은행'
+        headers_3['acct_bank_code'] = '은행코드'
+        headers_3['acct_name'] = '예금주'
+        headers_3['acct_num'] = '계좌번호'    
+    }
+    headers_3['created_at'] = '생성시간'
     
 
     if(corp.pv_options.paid.use_finance_van_deposit)

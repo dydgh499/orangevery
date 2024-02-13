@@ -44,12 +44,6 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
     settles['deposit'] = '입금금액'
     settles['transfer'] = '이체금액'
 
-    const bank_header = is_show_acct ? {
-        'acct_bank_name': '은행',
-        'acct_bank_code': '은행코드',
-        'acct_name': '예금주',
-        'acct_num': '계좌번호',    
-    } : {}
     const headers3:Record<string, string | object> = {
         'terminal': {
             'settle_pay_module_idxs': '건수',
@@ -57,18 +51,22 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
             'under_sales_amount': '매출미달차감금',
         },
         'settle': settles,
-        bank_header,
-        'nick_name' :  '대표자명',
-        'phone_num' :  '연락처',
-        'resident_num' :  '주민등록번호',
-        'business_num' :  '사업자등록번호',
-        'sector' :  '업종',
-        'addr' :  '주소',
-        'appr' :  settleObject,
-        'cxl' :  settleObject,
+    };
+    if(is_show_acct) {
+        headers3['acct_bank_name'] = '은행'
+        headers3['acct_bank_code'] = '은행코드'
+        headers3['acct_name'] = '예금주'
+        headers3['acct_num'] = '계좌번호'    
     }
 
-
+    headers3['nick_name'] = '대표자명'
+    headers3['phone_num'] = '연락처'
+    headers3['resident_num'] = '주민등록번호'
+    headers3['business_num'] = '사업자등록번호'
+    headers3['sector'] = '업종'
+    headers3['addr'] = '주소'
+    headers3['appr'] = settleObject
+    headers3['cxl'] = settleObject
 
     if(getUserLevel() >= 35)
         headers3['extra_col'] = '더보기'
