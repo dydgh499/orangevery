@@ -21,16 +21,17 @@ class galaxiamoneytree extends DifferenceSettlement implements DifferenceSettlem
         $dr_config_name     = 'different_settlement_dr'.$this->service_name;
         config(['filesystems.disks.'.$main_config_name => [
             'driver' => 'sftp',
-            'host' => "",
-            'port' => 5210,
+            'host' => "119.207.70.214",
+            'port' => 22,
             'username' => $brand['sftp_id'],
             'password' => $brand['sftp_password'],
             'passive' => false,
         ]]);
+
         config(['filesystems.disks.'.$dr_config_name => [
             'driver' => 'sftp',
-            'host' => "",
-            'port' => 5210,
+            'host' => "119.207.70.214",
+            'port' => 22,
             'username' => $brand['sftp_id'],
             'password' => $brand['sftp_password'],
             'passive' => false,            

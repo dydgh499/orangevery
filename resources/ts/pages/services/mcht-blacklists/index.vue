@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSearchStore, block_types } from '@/views/services/mcht-blacklists/useStore'
+import { useSearchStore } from '@/views/services/mcht-blacklists/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import MchtBlacklistCreateDialog from '@/layouts/dialogs/MchtBlacklistCreateDialog.vue'
 import ExtraMenu from '@/views/services/mcht-blacklists/ExtraMenu.vue'
@@ -53,12 +53,7 @@ provide('mchtBlackListDlg', mchtBlackListDlg)
                         </template>
                         <template v-else>
                             <td v-show="_header.visible" class='list-square'>
-                                <span v-if="_key == 'block_type'">
-                                    <VChip :color="store.getSelectIdColor(item[_key])">
-                                        {{ block_types.find(obj => obj.id === item[_key])?.title }}
-                                    </VChip>
-                                </span>
-                                <span v-else-if="_key == 'extra_col'">
+                                <span v-if="_key == 'extra_col'">
                                     <ExtraMenu :item="item"/>
                                 </span>
                                 <span v-else>
@@ -73,11 +68,3 @@ provide('mchtBlackListDlg', mchtBlackListDlg)
         <MchtBlacklistCreateDialog ref="mchtBlackListDlg" />
     </div>
 </template>
-<style scoped>
-:deep(.reason) {
-  inline-size: 80em;
-  max-inline-size: 100em;
-  padding-block: 2em;
-  padding-inline: 0;
-}
-</style>

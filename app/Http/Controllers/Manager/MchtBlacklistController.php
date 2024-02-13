@@ -101,12 +101,7 @@ class MchtBlacklistController extends Controller
 
     public function all(Request $request)
     {
-        $data = $this->mcht_blacklists->where('brand_id', $request->brand_id)->get([
-            'block_content',
-            'block_reason',
-            'block_type',
-            'id',    
-        ]);
+        $data = $this->mcht_blacklists->where('brand_id', $request->brand_id)->get();
         return $this->response(0, $data);
     }
 }

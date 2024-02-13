@@ -6,6 +6,7 @@ import SalesforceRegister from '@/views/services/bulk-register/SalesforceRegiste
 import MerchandiseRegister from '@/views/services/bulk-register/MerchandiseRegister.vue'
 import PayModuleRegister from '@/views/services/bulk-register/PayModuleRegister.vue'
 import RegularCardRegister from '@/views/services/bulk-register/RegularCardRegister.vue'
+import MchtBlacklistRegister from '@/views/services/bulk-register/MchtBlacklistRegister.vue'
 import NotiUrlRegister from '@/views/services/bulk-register/NotiUrlRegister.vue'
 import PayModulePGUpdater from '@/views/services/bulk-register/PayModulePGUpdater.vue'
 
@@ -22,6 +23,8 @@ if(corp.use_different_settlement)
     tabs.push({ icon: 'mdi-vector-intersection', title: '가맹점 구간 일괄변경' })
 if(corp.pv_options.paid.use_regular_card)
     tabs.push({ icon: 'emojione:credit-card', title: '단골고객 카드정보 등록' })
+if(corp.pv_options.paid.use_mcht_blacklist)
+    tabs.push({ icon: 'arcticons:blacklistblocker', title: '가맹점 블랙리스트 등록' })
 if(corp.pv_options.paid.use_noti)
     tabs.push({ icon: 'emojione:envelope', title: '노티주소 등록' })
 </script>
@@ -53,6 +56,12 @@ if(corp.pv_options.paid.use_noti)
                     <Suspense>
                         <RegularCardRegister>
                         </RegularCardRegister>
+                    </Suspense>
+                </VWindowItem>
+                <VWindowItem v-if="corp.pv_options.paid.use_mcht_blacklist">
+                    <Suspense>
+                        <MchtBlacklistRegister>                            
+                        </MchtBlacklistRegister>
                     </Suspense>
                 </VWindowItem>
                 <VWindowItem v-if="corp.pv_options.paid.use_noti">

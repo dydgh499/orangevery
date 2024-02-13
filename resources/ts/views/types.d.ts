@@ -864,8 +864,12 @@ export interface Popup {
 }
 
 export interface MchtBlacklist {
-    id: number,
-    block_type: number,
-    block_content: string,
+    id: number,    
+    mcht_name: string,
+    nick_name: string,
+    phone_num: string,
+    business_num: string,
+    resident_num: string,
+    addr: string,
     block_reason: string,
 }

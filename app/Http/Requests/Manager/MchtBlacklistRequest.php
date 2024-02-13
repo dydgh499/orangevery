@@ -9,8 +9,12 @@ class MchtBlacklistRequest extends FormRequest
 {
     use FormRequestTrait;
     public $keys = [
-        'block_type',
-        'block_content',
+        'mcht_name',
+        'nick_name',
+        'phone_num',
+        'business_num',
+        'resident_num',
+        'addr',
         'block_reason',
     ];
 
@@ -26,11 +30,7 @@ class MchtBlacklistRequest extends FormRequest
      */
     public function rules(): array
     {
-        $sub = [
-            'block_type' => 'required',
-            'block_content' => 'required',
-            'block_reason' => 'required',
-        ];
+        $sub = ['block_reason' => 'required',];
         return $this->getRules($this->keys, $sub);
     }
 
