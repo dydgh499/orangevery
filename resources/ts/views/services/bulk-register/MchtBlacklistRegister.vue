@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { lengthValidatorV2 } from '@validators'
 import { useRegisterStore } from '@/views/services/bulk-register/MchtBlacklistRegister'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { Registration } from '@/views/registration'
@@ -17,9 +18,13 @@ const is_clear = ref<boolean>(false)
 
 const validate = () => {
     for (let i = 0; i < items.value.length; i++) {
-        items.value[i].mcht_name = items.value[i].mcht_name?.trim()        
        if(isEmpty(items.value[i].block_reason)) {
             snackbar.value.show((i + 1) + '번째 블랙리스트의 차단사유를 찾을 수 없습니다.', 'error')
+            is_clear.value = false
+        }
+        
+        else if (typeof lengthValidatorV2(items.value[i].resident_num, 14) != 'boolean') {
+            snackbar.value.show((i + 1) + '번째 가맹점의 주민등록번호 포멧이 정확하지 않습니다.', 'error')
             is_clear.value = false
         }
         else
@@ -58,6 +63,16 @@ watchEffect(async () => {
                 <template #name>
                 </template>
                 <template #input>
+                    <VCol>
+                        <b>사업자등록번호 입력 주의사항</b>
+                        <br>
+                        <span>- 정확한 사업자등록번호 입력(예:123-13-12345)</span>
+                    </VCol>
+                    <VCol>
+                        <b>주민등록번호 입력 주의사항</b>
+                        <br>
+                        <span>- 14자리 입력(예:800101-7654321)</span>
+                    </VCol>
                 </template>
             </CreateHalfVCol>
         </VRow>

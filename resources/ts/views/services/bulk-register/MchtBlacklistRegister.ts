@@ -3,7 +3,7 @@ export const useRegisterStore = defineStore('MchtBlacklistRegisterStore', () => 
     const head = Header('mcht-blacklists/bulk-register', '가맹점 블랙리스트 대량등록 포멧')
 
     const headers: Record<string, string> = {
-        mcht_name: '가맹점 상호',
+        mcht_name: '가맹점 상호(X)',
         nick_name: '대표자명(X)',
         phone_num: '전화번호(X)',
         business_num: '사업자번호(X)',

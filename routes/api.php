@@ -121,7 +121,8 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('pay-sections', PaymentSectionController::class);
             Route::apiResource('finance-vans', FinanceVanController::class);
             Route::apiResource('classifications', ClassificationController::class);
-            Route::apiResource('head-office-accounts', HeadOfficeAccountController::class);            
+            Route::apiResource('head-office-accounts', HeadOfficeAccountController::class);
+            Route::post('mcht-blacklists/bulk-register', [MchtBlacklistController::class, 'bulkRegister']);            
             Route::apiResource('mcht-blacklists', MchtBlacklistController::class);            
             
         });
