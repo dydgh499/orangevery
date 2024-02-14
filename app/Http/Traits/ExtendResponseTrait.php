@@ -68,8 +68,9 @@ trait ExtendResponseTrait
             //---------------- auth error ----------------- (950 ~ 959)
             case 950:   $msg = __("auth.failed"); break;
             case 951:   $msg = __("auth.auth"); break;
-            case 952:   $msg = __("auth.device"); break;
+            case 952:   $msg = __("auth.password"); break;
             case 953:   $msg = "CSRF token mismatch"; break;
+            
             //-------------- server error ----------------- (990 ~ 999)
             case 990:   $msg = "시스템 에러입니다."; break;
             //---------- business logic error ------------- (1000 ~ 1999)

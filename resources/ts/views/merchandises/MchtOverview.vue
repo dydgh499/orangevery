@@ -203,6 +203,31 @@ onMounted(async () => {
                                 </VCol>
                             </VRow>
                         </VCol>
+                        <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card">
+                            <VRow>
+                                <CreateHalfVCol :mdl="5" :mdr="7">
+                                    <template #name>단골고객 사용여부</template>
+                                    <template #input>
+                                        <BooleanRadio :radio="props.item.use_regular_card"
+                                            @update:radio="props.item.use_regular_card = $event">
+                                            <template #true>사용</template>
+                                            <template #false>미사용</template>
+                                        </BooleanRadio>
+                                    </template>
+                                </CreateHalfVCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12" v-if="corp.pv_options.paid.use_withdraw_fee">
+                            <VRow>
+                                <CreateHalfVCol :mdl="5" :mdr="7">
+                                    <template #name>출금 수수료</template>
+                                    <template #input>
+                                        <VTextField v-model="props.item.withdraw_fee" type="number" suffix="₩"
+                                            :rules="[requiredValidator]" />
+                                    </template>
+                                </CreateHalfVCol>
+                            </VRow>
+                        </VCol>
                         <template v-if="corp.pv_options.paid.use_collect_withdraw">
                             <VCol cols="12">
                                 <VDivider style="margin-bottom: 1em;"/>
@@ -284,31 +309,6 @@ onMounted(async () => {
                                                 <template #true>ON</template>
                                                 <template #false>OFF</template>
                                             </BooleanRadio>
-                                        </template>
-                                    </CreateHalfVCol>
-                                </VRow>
-                            </VCol>
-                            <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card">
-                                <VRow>
-                                    <CreateHalfVCol :mdl="5" :mdr="7">
-                                        <template #name>단골고객 사용여부</template>
-                                        <template #input>
-                                            <BooleanRadio :radio="props.item.use_regular_card"
-                                                @update:radio="props.item.use_regular_card = $event">
-                                                <template #true>사용</template>
-                                                <template #false>미사용</template>
-                                            </BooleanRadio>
-                                        </template>
-                                    </CreateHalfVCol>
-                                </VRow>
-                            </VCol>
-                            <VCol cols="12" v-if="corp.pv_options.paid.use_withdraw_fee">
-                                <VRow>
-                                    <CreateHalfVCol :mdl="5" :mdr="7">
-                                        <template #name>출금 수수료</template>
-                                        <template #input>
-                                            <VTextField v-model="props.item.withdraw_fee" type="number" suffix="₩"
-                                                :rules="[requiredValidator]" />
                                         </template>
                                     </CreateHalfVCol>
                                 </VRow>

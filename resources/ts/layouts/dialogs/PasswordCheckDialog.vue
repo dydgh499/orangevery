@@ -3,8 +3,8 @@ import { requiredValidator } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 
 
-const visible = ref(false)
 const password = ref()
+const visible = ref(false)
 const is_show = ref(false)
 
 let resolveCallback: (password: string) => void;
