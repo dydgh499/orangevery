@@ -23,7 +23,7 @@ class RealtimeSendHistory extends Model
             ->where('created_at', '<=', request()->e_dt)
             ->where('request_type', '!=', -2)
             ->groupBy('trans_id')
-            ->havingRaw('SUM(CASE WHEN request_type = 6170 OR result_code = "0000" THEN 1 ELSE 0 END) = 0')
+            ->havingRaw('SUM(CASE WHEN request_type = 6170 AND result_code = "0000" THEN 1 ELSE 0 END) = 0')
             ->pluck('trans_id')
             ->all();
     }
