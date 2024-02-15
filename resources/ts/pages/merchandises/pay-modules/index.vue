@@ -7,9 +7,9 @@ import { module_types, installments, fin_trx_delays, cxl_types, comm_settle_type
 
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import PayModuleBatchDialog from '@/layouts/dialogs/batch-updaters/PayModuleBatchDialog.vue'
+import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 
-import { DateFilters } from '@core/enums'
+import { DateFilters, ItemTypes } from '@core/enums'
 import { getUserLevel, isAbleModifyMcht } from '@axios'
 
 const add_able = getUserLevel() >= 35 || isAbleModifyMcht()
@@ -17,7 +17,7 @@ const { request } = useRequestStore()
 const { pgs, pss, settle_types, finance_vans, terminals } = useStore()
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected, dialog } = selectFunctionCollect(store)
-const payModuleBatchDialog = ref()
+const batchDialog = ref()
 
 provide('store', store)
 provide('head', head)
@@ -67,7 +67,7 @@ onMounted(() => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="carbon:batch-job" @click="payModuleBatchDialog.show()" v-if="getUserLevel() >= 35"
+                <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35"
                     color="primary" size="small">
                     일괄 작업
                 </VBtn>
@@ -199,6 +199,6 @@ onMounted(() => {
                 </tr>
             </template>
         </BaseIndexView>
-        <PayModuleBatchDialog ref="payModuleBatchDialog" :selected_idxs="selected" />
+        <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.PaymentModule"/>
     </div>
 </template>

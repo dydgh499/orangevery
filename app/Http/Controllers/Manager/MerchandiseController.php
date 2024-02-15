@@ -180,11 +180,13 @@ class MerchandiseController extends Controller
         $validated  = $request->validate(['user_pw'=>'required']);
         if($request->user()->tokenCan(15))
         {
-            $exist_mutual = $this->isExistMutual($this->merchandises, $request->user()->brand_id, 'mcht_name', $request->mcht_name);
-            if(!$exist_mutual)
+            if($this->isExistMutual($this->merchandises, $request->user()->brand_id, 'mcht_name', $request->mcht_name))
+                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
+            else
             {
-                $result = $this->isExistUserName($request->user()->brand_id, $request->user_name);
-                if($result === false)
+                if($this->isExistUserName($request->user()->brand_id, $request->user_name))
+                    return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+                else
                 {
                     $user = $request->data();
                     // 수수료율 정보는 추가시에만 적용되어야함
@@ -210,11 +212,7 @@ class MerchandiseController extends Controller
                     operLogging(HistoryType::CREATE, $this->target, $user, $user['mcht_name']);
                     return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
                 }
-                else
-                    return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
             }
-            else
-                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
         }
         else
             return $this->response(951);
@@ -253,17 +251,24 @@ class MerchandiseController extends Controller
         $data = $request->data();
         if($this->authCheck($request->user(), $id, 15))
         {
-            if($this->isExistMutual($this->merchandises->where('id', '!=', $id), $request->user()->brand_id, 'mcht_name', $data['mcht_name']) == false)
+            if($this->isExistMutual($this->merchandises->where('id', '!=', $id), $request->user()->brand_id, 'mcht_name', $data['mcht_name']))
+                return $this->extendResponse(1001, '이미 존재하는 상호 입니다.');
+            else
             {
                 $query = $this->merchandises->where('id', $id);
-                $data = $this->saveImages($request, $data, $this->imgs);
-                $res = $query->update($data);
-
-                operLogging(HistoryType::UPDATE, $this->target, $data, $data['mcht_name']);
-                return $this->response($res ? 1 : 990, ['id'=>$id]);
+                $user = $query->first(['user_name']);
+                // 변경된 아이디가 이미 존재할 떄
+                if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $request->user_name))
+                    return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+                else
+                {
+                    $data = $this->saveImages($request, $data, $this->imgs);
+                    $res = $query->update($data);
+                    operLogging(HistoryType::UPDATE, $this->target, $data, $data['mcht_name']);
+                    return $this->response($res ? 1 : 990, ['id'=>$id]);    
+                }
+                
             }
-            else
-                return $this->extendResponse(1001, '이미 존재하는 상호 입니다.');
         }
         else
             return $this->response(951);
@@ -297,26 +302,32 @@ class MerchandiseController extends Controller
     {
         $request->merge([
             'page' => 1,
-            'page_size' => 99999999,
+            'page_size' => 9999999,
         ]);
-        $cols = ['merchandises.id', 'merchandises.mcht_name', 'merchandises.created_at'];
-        if($request->has('module_type'))
-        {
-            $query = $this->pay_modules
-                ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
-                ->where('payment_modules.is_delete', false)
-                ->where('merchandises.is_delete', false)
-                ->where('payment_modules.brand_id', $request->user()->brand_id)
-                ->where('payment_modules.module_type', $request->module_type)
-                ->distinct('payment_modules.mcht_id');
+        $cols = ['merchandises.id', 'merchandises.mcht_name'];
+        if(isSalesforce($request))
+        {   // 영업자
+            if($request->user()->level > 10)
+                $cols[] = 'sales0_id';
+            if($request->user()->level > 13)
+                $cols[] = 'sales1_id';
+            if($request->user()->level > 15)
+                $cols[] = 'sales2_id';
+            if($request->user()->level > 17)
+                $cols[] = 'sales3_id';
+            if($request->user()->level > 20)
+                $cols[] = 'sales4_id';
+            if($request->user()->level > 25)
+                $cols[] = 'sales5_id';
         }
-        else
-        {
-            $query = $this->merchandises
-                ->where('merchandises.is_delete', false)
-                ->where('merchandises.brand_id', $request->user()->brand_id);
-        }
-        $data = $this->getIndexData($request, $query, 'merchandises.id', $cols, 'merchandises.created_at');
+        else if(isOperator($request))
+            $cols = array_merge($cols, ['sales5_id', 'sales4_id', 'sales3_id', 'sales2_id', 'sales1_id', 'sales0_id']);
+
+        $query = $this->merchandises
+            ->where('is_delete', false)
+            ->where('brand_id', $request->user()->brand_id);
+
+        $data = $this->getIndexData($request, $query, 'id', $cols, 'created_at');
         return $this->response(0, $data);
     }
 

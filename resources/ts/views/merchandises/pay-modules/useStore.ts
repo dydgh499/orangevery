@@ -260,8 +260,18 @@ export const defaultItemInfo =  () => {
     }
 }
 
-export const getAllPayModules = async(mcht_id:number|null=null) => {
-    const url = '/api/v1/manager/merchandises/pay-modules/all' + (mcht_id != null ? '?mcht_id='+mcht_id : '')
+export const getAllPayModules = async(mcht_id:number|null=null, pay_module:number|null=null) => {    
+    let url = '/api/v1/manager/merchandises/pay-modules/all'
+    const params = <any>({})
+    if(mcht_id || pay_module) {
+        if(mcht_id)
+            params['mcht_id'] = mcht_id
+        if(pay_module)
+            params['pay_module'] = pay_module
+        const query = new URLSearchParams(params)
+        url += "?" + query
+    }
+
     try {
         const r = await axios.get(url)
         return r.data.content.sort((a:PayModule, b:PayModule) => a.note.localeCompare(b.note))

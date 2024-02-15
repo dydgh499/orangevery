@@ -1,13 +1,17 @@
-<script setup lang="ts">
-import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
-import { axios } from '@axios'
-import { banks } from '@/views/users/useStore'
-import type { Salesforce } from '@/views/types'
+
+
+<script lang="ts" setup>
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import { banks } from '@/views/users/useStore'
+import { axios } from '@axios'
+import corp from '@corp'
 
 interface Props {
     selected_idxs: number[],
 }
+
 const props = defineProps<Props>()
 const all_cycles = settleCycles()
 const all_days = settleDays()
@@ -16,7 +20,6 @@ const tax_types = settleTaxTypes()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
-const visible = ref(false)
 
 const post = async (page: string, params: any) => {
     try {
@@ -94,20 +97,8 @@ const setNote = () => {
         'note': salesforces.note,
     })
 }
-
-const show = () => {
-    visible.value = true
-}
-
-defineExpose({
-    show
-});
 </script>
 <template>
-    <VDialog v-model="visible" persistent style="max-width: 1000px;">
-        <!-- Dialog close btn -->
-        <DialogCloseBtn @click="visible = !visible" />
-        <!-- Dialog Content -->
         <VCard title="영업점 일괄 작업">
             <VCardText>
                 <b>선택된 영업점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
@@ -275,7 +266,6 @@ defineExpose({
                 </div>
             </VCardText>
         </VCard>
-    </VDialog>
 </template>
 <style scoped>
 .batch-container {

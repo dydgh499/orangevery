@@ -9,7 +9,6 @@ const props = defineProps<Props>()
 const store = <any>(inject('store'))
 
 const lgSize = computed(() => {
-    console.log(store.base_url)
     return (store.base_url === '/api/v1/manager/transactions' && (getUserLevel() == 10 && !user_info.value.is_show_fee)) ? 4 : 3;
 })
 

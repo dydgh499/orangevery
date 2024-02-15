@@ -30,7 +30,7 @@ watchEffect(() => {
         mid_codes.value = [
             'BUDM_DO',
             'BUDM_DR',
-            'BUDM_DP',
+            'BUDM_OP',
         ]
     }
     else

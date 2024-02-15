@@ -118,11 +118,14 @@ class SalesforceController extends Controller
             return $this->extendResponse(951, "추가할 수 없는 등급입니다.");
 
         $validated    = $request->validate(['user_pw'=>'required']);
-        $exist_mutual = $this->isExistMutual($this->salesforces, $request->user()->brand_id, 'sales_name', $request->sales_name);
-        if(!$exist_mutual)
+
+        if($this->isExistMutual($this->salesforces, $request->user()->brand_id, 'sales_name', $request->sales_name))
+            return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
+        else
         {
-            $result = $this->isExistUserName($request->user()->brand_id, $request->user_name);
-            if($result === false)
+            if($this->isExistUserName($request->user()->brand_id, $request->user_name))
+                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+            else
             {
                 $user = $request->data();
                 $user = $this->saveImages($request, $user, $this->imgs);
@@ -132,11 +135,7 @@ class SalesforceController extends Controller
                 operLogging(HistoryType::CREATE, $this->target, $user, $user['sales_name']);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);
             }
-            else    
-                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
         }
-        else
-            return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
     }
 
     /**
@@ -172,10 +171,23 @@ class SalesforceController extends Controller
         {
             $data = $request->data();
             $data = $this->saveImages($request, $data, $this->imgs);
-            $res = $this->salesforces->where('id', $id)->update($data);
-
-            operLogging(HistoryType::UPDATE, $this->target, $data, $data['sales_name']);
-            return $this->response($res ? 1 : 990, ['id'=>$id]);
+            // 상호 검사
+            if($this->isExistMutual($this->salesforces->where('id', '!=', $id), $request->user()->brand_id, 'sales_name', $data['sales_name']))
+                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
+            else
+            {
+                $query = $this->salesforces->where('id', $id);
+                $user = $query->first(['user_name']);
+                // 아이디 중복 검사
+                if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $data['user_name']))
+                    return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+                else
+                {
+                    $res = $query->update($data);
+                    operLogging(HistoryType::UPDATE, $this->target, $data, $data['sales_name']);
+                    return $this->response($res ? 1 : 990, ['id'=>$id]);    
+                }
+            }
         }
         else
             return $this->response(951);

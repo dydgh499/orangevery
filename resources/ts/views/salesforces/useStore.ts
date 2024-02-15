@@ -3,8 +3,11 @@ import { Searcher } from '@/views/searcher'
 import type { Merchandise, Options, Salesforce, UnderAutoSetting } from '@/views/types'
 import { axios, getUserLevel, salesLevels } from '@axios'
 import corp from '@corp'
+import _ from 'lodash'
 
 const levels = corp.pv_options.auth.levels
+
+export const SALES_LEVEL_SIZE = 6
 
 export const settleDays = () => {
     return <Options[]>([
@@ -137,8 +140,8 @@ export const feeApplyHistoires = async () => {
 }
 
 export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
-    const all_sales = Array.from({ length: 6 }, () => <Salesforce[]>([]))
-    const sales = Array.from({ length: 6 }, () => ref<Salesforce[]>([]))
+    const all_sales = Array.from({ length: SALES_LEVEL_SIZE }, () => <Salesforce[]>([]))
+    const sales = Array.from({ length: SALES_LEVEL_SIZE }, () => ref<Salesforce[]>([]))
     const mchts = ref(<Merchandise[]>([]))
     
     onMounted(async () => { 
@@ -161,30 +164,44 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
         mchts.value = r.data.content.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name))
     }
     
-    const getAboveSalesFilter = (my_level: number, params: any) => {        
-        let _mcht = []
-        for (let i = my_level; i <= 5; i++) {
-            const sales_key = 'sales' + i
+    // 상위 영업점들
+    const getAboveSalesFilter = (select_idx:number, params:any) => {
+        let _mcht = [];
+        for (let i = select_idx; i < SALES_LEVEL_SIZE; i++) {
+            const sales_key = `sales${i}`
             // sales_id가 포함된 가맹점 리스트 목록
             if(params[sales_key + '_id']) {
-                _mcht = mchts.value.filter(obj => obj[sales_key + '_id'] === params[sales_key + '_id'])
-                if(_mcht.length === 0) {
-                    _mcht = all_sales[i]
+                _mcht = _.filter(mchts.value, obj => obj[sales_key + '_id'] === params[sales_key + '_id'])    
+                if(_.isEmpty(_mcht)) {
+                    _mcht = _.chain(all_sales[i])
                         .filter(obj => obj.id === params[sales_key + '_id'])
                         .map(obj => ({
-                            [sales_key + '_id'] : obj.id, 
-                            [sales_key + '_name'] :obj.sales_name
+                            [sales_key + '_id']: obj.id,
+                            [sales_key + '_name']: obj.sales_name
                         }))
+                        .value()
+                }
+                else {
+                    _mcht = _.map(_mcht, obj => ({
+                        ...obj,
+                        ..._.range(0, SALES_LEVEL_SIZE).reduce((acc, idx) => {
+                            const sales = _.find(all_sales[idx], sales => sales.id === obj[`sales${idx}_id`])
+                            if (sales) {
+                                acc[`sales${idx}_name`] = sales.sales_name
+                            }
+                            return acc
+                        }, {})
+                    }))
                 }
                 return _mcht
             }
         }
         // 모든 가맹점 리스트 목록(아무것도 선택된게 없을 때, 전체리턴)
-        return mchts.value
-    }
+        return mchts.value;
+    };
 
     const initAllSales = () => {
-        for (let i = 0; i < all_sales.length-1; i++) {
+        for (let i = 0; i < SALES_LEVEL_SIZE; i++) {
             sales[i].value = [
                 { id: null, sales_name: '전체' },
                 ...all_sales[i].sort((a, b) => a.sales_name.localeCompare(b.sales_name))
@@ -194,19 +211,19 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     
     // 상위에 클릭된게 있는지 체크
     const isAboveCheck = (curr_idx: number, params: any) => {
-        for (let i = curr_idx; i < all_sales.length; i++) {
-            const sales_key = 'sales' + i    
+        for (let i = curr_idx; i < SALES_LEVEL_SIZE; i++) {
+            const sales_key = `sales${i}`
             if(params[sales_key+'_id'])
                 return true
         }
         return false
     }
 
-    const setUnderSalesFilter = (my_level: number, params: any) => {
-        for (let i = all_sales.length - 1; i >= 0; i--) {    
-            const sales_key = 'sales' + i    
+    const setUnderSalesFilter = (select_idx: number, params: any) => {
+        for (let i = SALES_LEVEL_SIZE - 1; i >= 0; i--) {    
+            const sales_key = `sales${i}`
             // 전산에서 사용하고 있는 영업점레벨이 전체를 선택했을때
-            if(levels[sales_key+'_use'] && my_level == i && !params[sales_key+'_id']) {
+            if(levels[sales_key+'_use'] && select_idx == i && !params[sales_key+'_id']) {
                 // 상위가 아무것도 클릭된게 없을 때
                 if(isAboveCheck(i, params) == false) {
                     initAllSales()
@@ -215,14 +232,17 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
             }
         }
         
-        const _mchts = getAboveSalesFilter(my_level, params)
-        for (let i = all_sales.length - 1; i >= 0; i--) {
-            const sales_key = 'sales' + i
+        const _mchts = getAboveSalesFilter(select_idx, params)
+        for (let i = SALES_LEVEL_SIZE - 1; i >= 0; i--) {
+            const sales_key = `sales${i}`
             // 가맹점목록에서 특정 level의 id와 name 목록을 가져옴
-            const map_sales = _mchts.map(obj => ({ id: obj[sales_key + '_id'], sales_name: obj[sales_key + '_name'] }))
-                        .filter(obj => obj.id !== undefined && obj.id !== 0 && obj.sales_name != '')
-                        .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i)
-            
+            const map_sales = _mchts.map(obj => ({
+                 id: obj[sales_key + '_id'], 
+                 sales_name: obj[sales_key + '_name'] 
+                }
+            ))
+            .filter(obj => obj.id && obj.sales_name != '')  //
+            .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i)
             sales[i].value = [
                 { id: null, sales_name: '전체' },
                 ...map_sales.sort((a, b) => a.sales_name.localeCompare(b.sales_name))

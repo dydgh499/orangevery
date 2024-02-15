@@ -34,3 +34,10 @@ export const DateFilters = {
     DATE_RANGE : 1,
     SETTLE_RANGE : 2,
 } as const
+
+
+export const ItemTypes = {
+    Merchandise : 0,
+    Salesforce : 1,
+    PaymentModule : 2,
+} as const

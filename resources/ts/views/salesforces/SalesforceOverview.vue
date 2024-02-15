@@ -7,6 +7,8 @@ import type { Salesforce } from '@/views/types'
 import { requiredValidator, nullValidator } from '@validators'
 import type { Options } from '@/views/types'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import MchtBatchOverview from '@/layouts/components/batch-updaters/MchtBatchOverview.vue'
+import PayModuleBatchOverview from '@/layouts/components/batch-updaters/PayModuleBatchOverview.vue'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
 import corp from '@corp'
 
@@ -18,6 +20,8 @@ const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
 
+const mchtBatchOverview = ref()
+const payModuleBatchOverview = ref()
 
 const addAbleSalesLevels = () => {
     const levels = corp.pv_options.auth.levels
@@ -129,8 +133,6 @@ const addAbleSalesLevels = () => {
                     </VRow>
                 </VCardItem>
             </VCard>
-        </VCol>
-        <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
             <VCard v-if="corp.pv_options.paid.use_sales_auto_setting && getUserLevel() >= 35">
                 <VCardItem>
                     <VCol cols="12">
@@ -140,6 +142,11 @@ const addAbleSalesLevels = () => {
                     </VCol>
                 </VCardItem>
             </VCard>
+        </VCol>
+        <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
+            <MchtBatchOverview ref="mchtBatchOverview" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"/>
+            <br>
+            <PayModuleBatchOverview ref="payModuleBatchOverview" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"/>
         </VCol>
     </VRow>
 </template>

@@ -6,11 +6,11 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
-import SalesBatchDialog from '@/layouts/dialogs/batch-updaters/SalesBatchDialog.vue'
+import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 
 import { settleCycles, settleDays, settleTaxTypes, getAutoSetting } from '@/views/salesforces/useStore'
 import { getUserLevel, getLevelByIndex, salesLevels, isAbleModifyMcht } from '@axios'
-import { DateFilters } from '@core/enums'
+import { DateFilters, ItemTypes } from '@core/enums'
 import corp from '@corp'
 
 const add_able = getUserLevel() >= 35 || isAbleModifyMcht()
@@ -22,7 +22,7 @@ const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
 const password = ref()
-const salesBatchDialog = ref()
+const batchDialog = ref()
 
 if(corp.pv_options.paid.use_sales_auto_setting)
  store.params.use_sales_auto_setting = 1
@@ -66,7 +66,7 @@ onMounted(() => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="carbon:batch-job" @click="salesBatchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
+                <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
                     일괄 작업
                 </VBtn>
             </template>
@@ -163,7 +163,7 @@ onMounted(() => {
                 </tr>
             </template>
         </BaseIndexView>
-        <SalesBatchDialog ref="salesBatchDialog" :selected_idxs="selected"/>
+        <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.Salesforce"/>
         <PasswordChangeDialog ref="password" />
     </div>
 </template>

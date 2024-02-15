@@ -64,27 +64,27 @@ export const useMchtBlacklistStore = defineStore('useMchtBlacklistStore', () => 
     }
 
     const isMchtBlackList = (mcht: Merchandise) => {
-        let blacklist = mcht_blacklists.value.find(obj => obj.mcht_name === mcht.mcht_name)
+        let blacklist = mcht_blacklists.value.find(obj => obj.mcht_name === mcht.mcht_name && mcht.mcht_name !== '')
         if(blacklist)
             return [true, blacklist]
 
-        blacklist = mcht_blacklists.value.find(obj => obj.nick_name === mcht.nick_name)
+        blacklist = mcht_blacklists.value.find(obj => obj.nick_name === mcht.nick_name && mcht.nick_name !== '')
         if(blacklist)
             return [true, blacklist]
 
-        blacklist = mcht_blacklists.value.find(obj => obj.business_num === mcht.business_num)
+        blacklist = mcht_blacklists.value.find(obj => obj.business_num === mcht.business_num && mcht.business_num !== '')
         if(blacklist)
             return [true, blacklist]
         
-        blacklist = mcht_blacklists.value.find(obj => obj.phone_num === mcht.phone_num)
+        blacklist = mcht_blacklists.value.find(obj => obj.phone_num === mcht.phone_num && mcht.phone_num !== '')
         if(blacklist)
             return [true, blacklist]
 
-        blacklist = mcht_blacklists.value.find(obj => obj.resident_num === mcht.resident_num)
+        blacklist = mcht_blacklists.value.find(obj => obj.resident_num === mcht.resident_num && mcht.resident_num !== '')
         if(blacklist)
             return [true, blacklist]
 
-        blacklist = mcht_blacklists.value.find(obj => obj.addr === mcht.addr)
+        blacklist = mcht_blacklists.value.find(obj => obj.addr === mcht.addr && mcht.addr !== '')
         if(blacklist)
             return [true, blacklist]
         return [false, null]

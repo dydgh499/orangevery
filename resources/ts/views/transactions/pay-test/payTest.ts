@@ -1,26 +1,25 @@
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { pay } from '@/views/pay/pay'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import type { Merchandise, PayModule } from '@/views/types'
-import { axios } from '@axios'
+import type { PayModule } from '@/views/types'
 
 export const payTest = (module_type:number) => {
     const mcht_id = ref()
     const pmod_id = ref()
     const { pgs } = useStore()
     const pay_modules = ref<PayModule[]>([])
-    const merchandises = ref<Merchandise[]>([])
+    const { mchts } = useSalesFilterStore()
+    const merchandises = mchts
+    
     const { merchandise, pay_module, pay_url, updateMerchandise } = pay(module_type)
     const return_url = new URL(window.location.href).origin + '/transactions/pay-test/result'
 
-    axios.get('/api/v1/manager/merchandises/all?module_type=' + module_type).then((r) => {
-        merchandises.value = r.data.content.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name))
-    })
     watchEffect(async () => { 
         //가맹점 선택시 호출
         if(mcht_id.value) {
             pmod_id.value = null
-            Object.assign(pay_modules.value, await getAllPayModules(mcht_id.value))
+            Object.assign(pay_modules.value, await getAllPayModules(mcht_id.value, module_type))
             updateMerchandise(mcht_id.value)    
         }
     })

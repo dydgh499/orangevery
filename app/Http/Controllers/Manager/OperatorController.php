@@ -70,8 +70,9 @@ class OperatorController extends Controller
     public function store(OperatorReqeust $request)
     {
         $validated = $request->validate(['user_pw'=>'required']);
-        $result = $this->isExistUserName($request->user()->brand_id, $request->user_name);
-        if($result === false)
+        if($this->isExistUserName($request->user()->brand_id, $request->user_name))
+            return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+        else
         {
             $user = $request->data();
             $user = $this->saveImages($request, $user, $this->imgs);
@@ -79,8 +80,6 @@ class OperatorController extends Controller
             $res = $this->operators->create($user);
             return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
         }
-        else
-            return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
     }
 
     /**
@@ -105,10 +104,18 @@ class OperatorController extends Controller
      */
     public function update(OperatorReqeust $request, $id)
     {
-        $user = $request->data();
-        $user = $this->saveImages($request, $user, $this->imgs);
-        $res = $this->operators->where('id', $id)->update($user);
-        return $this->response($res ? 1 : 990);
+        $data = $request->data();
+        $data = $this->saveImages($request, $data, $this->imgs);
+        $query = $this->operators->where('id', $id);
+
+        $user = $query->first(['user_name']);
+        if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $request->user_name))
+            return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+        else
+        {
+            $res = $query->update($user);
+            return $this->response($res ? 1 : 990);    
+        }
     }
 
     /**

@@ -266,9 +266,7 @@ class PaymentModuleController extends Controller
             'page_size' => 99999999,
         ]);
         if(isSalesforce($request) || isOperator($request))
-        {
             $cols = ['payment_modules.*'];
-        }
         else
         {
             $cols = [

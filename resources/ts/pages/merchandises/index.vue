@@ -7,11 +7,11 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 
 import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
-import MchtBatchDialog from '@/layouts/dialogs/batch-updaters/MchtBatchDialog.vue'
+import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { getUserLevel, isAbleModifyMcht } from '@axios'
-import { DateFilters } from '@core/enums'
+import { DateFilters, ItemTypes } from '@core/enums'
 import corp from '@corp'
 import { template } from 'lodash'
 
@@ -20,7 +20,7 @@ const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { pgs }   = useStore()
 const password  = ref()
-const mchtBatchDialog = ref()
+const batchDialog = ref()
 
 provide('password', password)
 provide('store', store)
@@ -61,7 +61,7 @@ onMounted(() => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="carbon:batch-job" @click="mchtBatchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
+                <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
                     일괄 작업
                 </VBtn>                
                 <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.settle_hold" label="지급보류건 조회"
@@ -155,7 +155,7 @@ onMounted(() => {
                 </tr>
             </template>
         </BaseIndexView>
-        <MchtBatchDialog ref="mchtBatchDialog" :selected_idxs="selected"/>
+         <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.Merchandise"/>
         <PasswordChangeDialog ref="password" />
     </div>
 </template>

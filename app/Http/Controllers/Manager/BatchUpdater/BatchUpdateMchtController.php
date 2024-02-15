@@ -37,8 +37,23 @@ class BatchUpdateMchtController extends Controller
      */
     private function merchandiseBatch($request)
     {
-        return $this->merchandises->where('brand_id', $request->user()->brand_id)
-            ->whereIn('id', $request->selected_idxs);
+        if(count($request->selected_idxs) == 0 && ($request->selected_sales_id == 0 && $request->selected_level == 0))
+        {
+            logging([], '잘못된 접근');
+            return null;
+        }
+        else
+        {
+            $query = $this->merchandises->where('brand_id', $request->user()->brand_id);
+            if(count($request->selected_idxs))
+                $query = $query->whereIn('id', $request->selected_idxs);
+            if($request->selected_sales_id && $request->selected_level)
+            {
+                $idx    = globalLevelByIndex($request->selected_level);
+                $query  = $query->where('sales'.$idx.'_id', $request->selected_sales_id);
+            }
+            return $query;    
+        }
     }
 
     /**
