@@ -30,7 +30,7 @@ if (corp.pv_options.free.init_search_filter)
                 v-if="levels[`sales${(6 - i)}_use`] && props.show && getUserLevel() > getIndexByLevel(6 - i)">
                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params[`sales${(6 - i)}_id`]"
                     :items="sales[6 - i].value" :label="levels[`sales${(6 - i)}_name`] + ' 필터'" item-title="sales_name"
-                    item-value="id"
+                    item-value="id" hide-details style="height: 40px !important;"
                     @update:modelValue="[store.updateQueryString({ [`sales${(6 - i)}_id`]: store.params[`sales${(6 - i)}_id`] }), setUnderSalesFilter(6 - i, store.params)]" />
             </VCol>
         </template>

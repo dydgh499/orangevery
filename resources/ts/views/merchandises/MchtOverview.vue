@@ -203,29 +203,34 @@ onMounted(async () => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card">
+                        <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card && corp.pv_options.paid.use_withdraw_fee">
                             <VRow>
-                                <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>단골고객 사용여부</template>
-                                    <template #input>
-                                        <BooleanRadio :radio="props.item.use_regular_card"
-                                            @update:radio="props.item.use_regular_card = $event">
-                                            <template #true>사용</template>
-                                            <template #false>미사용</template>
-                                        </BooleanRadio>
-                                    </template>
-                                </CreateHalfVCol>
-                            </VRow>
-                        </VCol>
-                        <VCol cols="12" v-if="corp.pv_options.paid.use_withdraw_fee">
-                            <VRow>
-                                <CreateHalfVCol :mdl="5" :mdr="7">
-                                    <template #name>출금 수수료</template>
-                                    <template #input>
+                                <!-- 👉 단골고객 사용여부 -->
+                                <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_regular_card">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>단골고객 사용여부</VCol>
+                                        <VCol md="6">
+                                            <div class="batch-container">
+                                                <BooleanRadio :radio="props.item.use_regular_card"
+                                                    @update:radio="props.item.use_regular_card = $event">
+                                                    <template #true>사용</template>
+                                                    <template #false>미사용</template>
+                                                </BooleanRadio>
+                                            </div>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol :md="6" v-if="corp.pv_options.paid.use_withdraw_fee">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>출금 수수료</VCol>
+                                        <VCol md="6">
+                                            <div class="batch-container">
                                         <VTextField v-model="props.item.withdraw_fee" type="number" suffix="₩"
                                             :rules="[requiredValidator]" />
-                                    </template>
-                                </CreateHalfVCol>
+                                            </div>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
                             </VRow>
                         </VCol>
                         <template v-if="corp.pv_options.paid.use_collect_withdraw">
@@ -299,90 +304,101 @@ onMounted(async () => {
                                 </VRow>
                                 <VDivider style="margin: 1em 0;"/>
                             </VCol>
-                            <VCol cols="12" v-if="corp.pv_options.paid.subsidiary_use_control">
+                            <VCol cols="12" v-if="corp.pv_options.paid.subsidiary_use_control || corp.pv_options.paid.use_hide_account">
                                 <VRow>
-                                    <CreateHalfVCol :mdl="5" :mdr="7">
-                                        <template #name>전산 사용상태</template>
-                                        <template #input>
-                                            <BooleanRadio :radio="props.item.enabled"
-                                                @update:radio="props.item.enabled = $event">
-                                                <template #true>ON</template>
-                                                <template #false>OFF</template>
-                                            </BooleanRadio>
-                                        </template>
-                                    </CreateHalfVCol>
+                                    <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.subsidiary_use_control">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>전산 사용상태</VCol>
+                                            <VCol md="6">
+                                                <div class="batch-container">
+                                                    <BooleanRadio :radio="props.item.enabled"
+                                                        @update:radio="props.item.enabled = $event">
+                                                        <template #true>ON</template>
+                                                        <template #false>OFF</template>
+                                                    </BooleanRadio>
+                                                </div>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                    <VCol v-if="corp.pv_options.paid.use_hide_account">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>정산계좌 숨김</VCol>
+                                            <VCol md="6">
+                                                <div class="batch-container">     
+                                                    <BooleanRadio :radio="props.item.is_hide_account"
+                                                        @update:radio="props.item.is_hide_account = $event">
+                                                        <template #true>숨김</template>
+                                                        <template #false>노출</template>
+                                                    </BooleanRadio>
+                                                </div>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol cols="12" v-if="corp.pv_options.paid.use_hide_account">
-                                <VRow>
-                                    <CreateHalfVCol :mdl="5" :mdr="7">
-                                        <template #name>정산계좌 숨김</template>
-                                        <template #input>
-                                            <BooleanRadio :radio="props.item.is_hide_account"
-                                                @update:radio="props.item.is_hide_account = $event">
-                                                <template #true>숨김</template>
-                                                <template #false>노출</template>
-                                            </BooleanRadio>
-                                        </template>
-                                    </CreateHalfVCol>
-                                </VRow>
-                            </VCol>
-                            <!-- 👉 노티 발송 여부 -->
-                            <VCol cols="12" v-if="corp.pv_options.paid.use_noti">
-                                <VRow>
-                                    <CreateHalfVCol :mdl="5" :mdr="7">
-                                        <template #name>노티 발송 여부</template>
-                                        <template #input>
-                                            <BooleanRadio :radio="props.item.use_noti"
-                                                @update:radio="props.item.use_noti = $event">
-                                                <template #true>활성</template>
-                                                <template #false>비활성</template>
-                                            </BooleanRadio>
-                                        </template>
-                                    </CreateHalfVCol>
-                                </VRow>
-                            </VCol>
-                            <!-- 👉 가맹점 수수료율 노출 여부 -->
                             <VCol cols="12">
                                 <VRow>
-                                    <CreateHalfVCol :mdl="5" :mdr="7">
-                                        <template #name>가맹점 수수료율 노출</template>
-                                        <template #input>
+                                    <!-- 👉 노티 발송 여부 -->
+                                    <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_noti">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>노티 발송 여부</VCol>
+                                            <VCol md="6">
+                                                <div class="batch-container">
+                                                    <BooleanRadio :radio="props.item.use_noti"
+                                                        @update:radio="props.item.use_noti = $event">
+                                                        <template #true>활성</template>
+                                                        <template #false>비활성</template>
+                                                    </BooleanRadio>
+                                                </div>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                    <VCol :md="6">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>가맹점 수수료율 노출</VCol>
+                                            <VCol md="6">
+                                                <div class="batch-container">
                                             <BooleanRadio :radio="props.item.is_show_fee"
                                                 @update:radio="props.item.is_show_fee = $event">
                                                 <template #true>노출</template>
                                                 <template #false>숨김</template>
                                             </BooleanRadio>
-                                        </template>
-                                    </CreateHalfVCol>
+                                                </div>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile">
+                            <VCol cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile || corp.pv_options.paid.use_multiple_hand_pay">
                                 <VRow>
-                                    <CreateHalfVCol :mdl="5" :mdr="7">
-                                        <template #name>결제전 휴대폰 인증</template>
-                                        <template #input>
-                                            <BooleanRadio :radio="props.item.use_pay_verification_mobile"
-                                                @update:radio="props.item.use_pay_verification_mobile = $event">
-                                                <template #true>활성</template>
-                                                <template #false>비활성</template>
-                                            </BooleanRadio>
-                                        </template>
-                                    </CreateHalfVCol>
-                                </VRow>
-                            </VCol>
-                            <VCol cols="12" v-if="corp.pv_options.paid.use_multiple_hand_pay">
-                                <VRow>
-                                    <CreateHalfVCol :mdl="5" :mdr="7">
-                                        <template #name>다중 수기결제 사용 여부</template>
-                                        <template #input>
+                                    <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>결제전 휴대폰 인증</VCol>
+                                            <VCol md="6">
+                                                <div class="batch-container">
+                                                    <BooleanRadio :radio="props.item.use_pay_verification_mobile"
+                                                        @update:radio="props.item.use_pay_verification_mobile = $event">
+                                                        <template #true>활성</template>
+                                                        <template #false>비활성</template>
+                                                    </BooleanRadio>
+                                                </div>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                    <VCol v-if="corp.pv_options.paid.use_multiple_hand_pay">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol>다중 수기결제 사용 여부</VCol>
+                                            <VCol md="6">
+                                                <div class="batch-container">
                                             <BooleanRadio :radio="props.item.use_multiple_hand_pay"
                                                 @update:radio="props.item.use_multiple_hand_pay = $event">
                                                 <template #true>활성</template>
                                                 <template #false>비활성</template>
                                             </BooleanRadio>
-                                        </template>
-                                    </CreateHalfVCol>
+                                                </div>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
                                 </VRow>
                             </VCol>
                             <VCol cols="12" v-if="corp.pv_options.paid.use_settle_hold">
