@@ -45,8 +45,8 @@ const post = async (page: string, params: any) => {
             if (await alert.value.show('정말 일괄적용하시겠습니까?')) {
                 Object.assign(params, { 
                     selected_idxs: props.selected_idxs,
-                    selected_sales_id: number,
-                    selected_level: number, 
+                    selected_sales_id: props.selected_sales_id,
+                    selected_level: props.selected_level, 
                 })
                 const r = await axios.post('/api/v1/manager/merchandises/pay-modules/batch-updaters/' + page, params)
                 snackbar.value.show('성공하였습니다.', 'success')
