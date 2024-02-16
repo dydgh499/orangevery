@@ -5,44 +5,44 @@ use App\Models\Merchandise;
 
 trait UnderSalesTrait
 {
-    public function getUnderSalesIds($request, $sales_keys)
+    public function getUnderSalesIds($request, $s_keys)
     {
         $idx = globalLevelByIndex($request->user()->level);
         return Merchandise::where('brand_id', $request->user()->brand_id)
             ->where('sales'.$idx.'_id', $request->user()->id)
             ->where('is_delete', false)
-            ->get($sales_keys);
+            ->get($s_keys);
     }
 
-    public function getUnderSalesLevels($request)
+    public function getViewableSalesInfos($request)
     {
-        $levels  = [];
-        $_levels = [13,15,17,20,25,30];
-        for ($i=0; $i<count($_levels); $i++)
+        $levels = [];
+        $s_keys = [];
+        foreach([13,15,17,20,25,30] as $level)
         {
-            if($_levels[$i] <= $request->user()->level)
-                array_push($levels, $_levels[$i]);
+            if($request->user()->tokenCan($level))
+                $levels[] = $level;
         }
-
-        return $levels;
-    }
-    public function getUnderSalesKeys($levels)
-    {
-        $sales_keys = [];
-        for($i=0; $i <count($levels); $i++) 
+        foreach($levels as $level)
         {
-            $idx = globalLevelByIndex($levels[$i]);
-            array_push($sales_keys, 'sales'.$idx.'_id');
+            $idx = globalLevelByIndex($level);
+            $s_keys[] = 'sales'.$idx.'_id';
         }
-        return $sales_keys;
+        return [$levels, $s_keys];
     }
     
     private function salesClassFilter($request, $grouped, $levels)
     {
-        $my_level = $request->user()->level;
-        $my_id = $request->user()->id;
+        $sales_keys = [];
+        $my_level   = $request->user()->level;
+        $my_id      = $request->user()->id;
 
-        $sales_keys = $this->getUnderSalesKeys($levels);
+        foreach($levels as $level)
+        {
+            $idx = globalLevelByIndex($level);
+            $sales_keys[] = 'sales'.$idx.'_id';
+        }
+
         $mchts = $this->getUnderSalesIds($request, $sales_keys);
         for($i=0; $i <count($sales_keys)-1; $i++) 
         {
@@ -63,29 +63,37 @@ trait UnderSalesTrait
 
     public function underSalesFilter($request)
     {
-        if($request->input('level', false))
-        {   //레벨이 선택되었다면
-            $rq_idx = globalLevelByIndex($request->level);
-            $s_keys = ['sales'.$rq_idx.'_id'];
+        $sales_ids = [];
+        $selected_sales_infos = [];
+        [$levels, $s_keys] = $this->getViewableSalesInfos($request);
+        foreach($s_keys as $s_key)
+        {
+            $sales_id = $request->input($s_key, 0);
+            if($sales_id)
+            {
+                $selected_sales_infos[] = [
+                    'id' => $s_key,
+                    'value' => $sales_id,
+                ];
+            }
+        }
+
+        if(isSalesforce($request))
+        {
+            $selected_sales_infos[] = [
+                'id' => 'sales'.globalLevelByIndex($request->user()->level).'_id',
+                'value' => $request->user()->id,
+            ];
+        }
+
+        if(count($selected_sales_infos))
+        {
+            $sales_ids = array_merge($sales_ids, Merchandise::flatSalesIdByFilter($selected_sales_infos, $s_keys));
+            if(isSalesforce($request) && count($sales_ids) == 0)
+                $sales_ids[] = $request->user()->id;
+            return $sales_ids;
         }
         else
-        {   // 모두
-            $levels = $this->getUnderSalesLevels($request);
-            $s_keys = $this->getUnderSalesKeys($levels);
-        }
-        $sales = $this->getUnderSalesIds($request, $s_keys);
-        $sales_ids = $sales->flatMap(function ($sale) use($s_keys) {
-            $keys = [];
-            foreach($s_keys as $s_key)
-            {
-                if($sale[$s_key] != 0)
-                    $keys[] = $sale[$s_key];
-            }
-            return $keys;
-        })->unique()->values();
-        // 연관되어있는 가맹점이 없는 경우 본인 것만 출력
-        if(count($sales_ids) == 0)
-            $sales_ids[] = $request->user()->id;
-        return $sales_ids;
+            return [];
     }
 }

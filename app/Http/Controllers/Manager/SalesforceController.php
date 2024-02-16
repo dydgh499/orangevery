@@ -75,17 +75,12 @@ class SalesforceController extends Controller
         if($is_all == false)
             $query = $query->where('is_delete', false);
 
-        if(isSalesforce($request))
-        {
-            $sales_ids = $this->underSalesFilter($request);
-            // 하위가 1000명이 넘으면 ..?
+        $sales_ids = $this->underSalesFilter($request);
+        if(count($sales_ids))
             $query = $query->whereIn('salesforces.id', $sales_ids);
-        }
-        else
-        {
-            if($request->input('level', false))
-                $query = $query->where('level', $request->level);
-        }
+        if($request->level)
+            $query = $query->where('salesforces.level', $request->level);
+
         return $query;
     }
     /**
@@ -217,7 +212,7 @@ class SalesforceController extends Controller
         $data = [];
         if(isMerchandise($request) == false)
         {
-            $levels  = $this->getUnderSalesLevels($request);
+            [$levels, $sales_keys] = $this->getViewableSalesInfos($request);
             $grouped = $this->salesforces
                 ->where('brand_id', $request->user()->brand_id)
                 ->where('is_delete', false)

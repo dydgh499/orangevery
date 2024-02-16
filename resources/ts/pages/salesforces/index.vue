@@ -11,6 +11,7 @@ import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 import { settleCycles, settleDays, settleTaxTypes, getAutoSetting } from '@/views/salesforces/useStore'
 import { getUserLevel, getLevelByIndex, salesLevels, isAbleModifyMcht } from '@axios'
 import { DateFilters, ItemTypes } from '@core/enums'
+import type { Options } from '@/views/types'
 import corp from '@corp'
 
 const add_able = getUserLevel() >= 35 || isAbleModifyMcht()
@@ -55,11 +56,16 @@ onMounted(() => {
         <BaseIndexView placeholder="아이디, 영업점 상호 검색" :metas="metas" :add="add_able" add_name="영업점" :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
-                    :sales="false">
+                    :sales="true">
                     <template #sales_extra_field>
                         <VCol cols="12" sm="3">
+                            <VSelect v-model="store.params.level" :items="[<Options>({ id: null, title: '전체' })].concat(salesLevels())" density="compact" label="조회 등급"
+                                item-title="title" item-value="id"
+                                @update:modelValue="store.updateQueryString({ level: store.params.level })" />
+                        </VCol>
+                        <VCol cols="12" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
-                                :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`정산주기 선택`"
+                                :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`영업점 정산주기 선택`"
                                 item-title="title" item-value="id" @update:modelValue="store.updateQueryString({settle_cycle: store.params.settle_cycle})"/>
                         </VCol>
                     </template>

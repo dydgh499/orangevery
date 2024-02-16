@@ -2,9 +2,7 @@
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { ko } from 'date-fns/locale'
 import { DateFilters } from '@core/enums'
-import { salesLevels } from '@axios'
 import { DateSetter } from '@/views/searcher'
-import type { Options } from '@/views/types'
 import corp from '@corp'
 
 interface Props {
@@ -73,11 +71,11 @@ const handleEnterKey = (event: KeyboardEvent) => {
     }
 }
 
-const getSalesforceItems = computed(() => {
-    if (head.path === 'salesforces' || head.path === 'transactions/settle-histories/salesforces')
-        return [<Options>({ id: null, title: '전체' })].concat(salesLevels())
-    else
-        return salesLevels()
+const useDateSelecter = computed(() => {
+    return (
+        head.path === 'transactions' || head.path === 'transactions/settle/merchandises' || head.path === 'transactions/settle/salesforces' || 
+        head.path === 'transactions/settle-histories/merchandises' || head.path === 'transactions/settle-histories/salesforces'
+    )
 })
 
 if (props.date_filter_type == DateFilters.DATE_RANGE) {
@@ -128,17 +126,11 @@ queryToStoreParams()
                                     :format-locale="ko" :dark="theme === 'dark'" autocomplete="on" utc :format="formatDate"
                                     :teleport="true" @update:modelValue="[dateChanged(store)]" />
                             </template>
-                            <template v-if="head.path === 'transactions' || head.path === 'transactions/settle-histories/merchandises' || head.path === 'transactions/settle-histories/salesforces'">
+                            <template v-if="useDateSelecter">
                                 <VSelect v-model="date_selecter" :items="[{ id: null, title: '기간 조회' }].concat(dates)"
                                     density="compact" variant="outlined" item-title="title" item-value="id" label="기간 조회" single-line
                                     style="min-width: 10em;" @update:modelValue="[setDateRange(), dateChanged(store)]"
                                      />
-                            </template>
-                            <template
-                                v-else-if="head.path === 'salesforces' || head.path === 'transactions/settle/salesforces' || head.path === 'transactions/settle-histories/salesforces'">
-                                <VSelect v-model="store.params.level" :items="getSalesforceItems" density="compact"  label="전체" single-line
-                                    variant="outlined" item-title="title" item-value="id" style="min-width: 10em;"
-                                    @update:modelValue="store.updateQueryString({level:store.params.level})" />
                             </template>
                         </div>
                         <div class="d-inline-flex align-center flex-wrap gap-4 float-right justify-center">

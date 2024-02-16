@@ -2,10 +2,12 @@
 import { useSearchStore, deposit_statuses } from '@/views/transactions/settle-histories/useSalesforceStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import FinanceVanDialog from '@/layouts/dialogs/FinanceVanDialog.vue'
 import { getUserLevel, getLevelByIndex, salesLevels } from '@axios'
+import type { Options } from '@/views/types'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
@@ -57,14 +59,25 @@ onMounted(() => {
         <BaseIndexView placeholder="영업점 상호 검색" :metas="[]" :add="false" add_name="정산"
             :date_filter_type="DateFilters.SETTLE_RANGE">
             <template #filter>
+                <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
+                    :sales="true">
+                    <template #sales_extra_field>
+                        <VCol cols="12" sm="3">
+                            <VSelect v-model="store.params.level" :items="[<Options>({ id: null, title: '전체' })].concat(salesLevels())" density="compact" label="조회 등급"
+                                item-title="title" item-value="id"
+                                @update:modelValue="store.updateQueryString({ level: store.params.level })" />
+                        </VCol>
+                    </template>
+                    <template #pg_extra_field>
+                        <VCol cols="12" sm="3">
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.deposit_status"
+                                :items="deposit_statuses" label="입금 타입" item-title="title" item-value="id"
+                                @update:modelValue="[store.updateQueryString({ deposit_status: store.params.deposit_status })]" />
+                        </VCol>
+                    </template>
+                </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact"
-                    variant="outlined" :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager
-                    @update:modelValue="[store.updateQueryString({ page_size: store.params.page_size })]" />
-                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.deposit_status" :items="deposit_statuses"
-                    label="입금 타입" item-title="title" item-value="id"
-                    @update:modelValue="[store.updateQueryString({ deposit_status: store.params.deposit_status })]" />
                 <VBtn prepend-icon="tabler:report-money" @click="getBatchDepositParams()" v-if="getUserLevel() >= 35"
                     size="small">
                     일괄 입금/미입금처리

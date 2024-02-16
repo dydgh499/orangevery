@@ -49,14 +49,11 @@ class SalesSettleHistoryController extends Controller
         if($request->has('deposit_status'))
             $query = $query->where('settle_histories_salesforces.deposit_status', $request->deposit_status);
 
-        if(isSalesforce($request))
-        {
-            $sales_ids = $this->underSalesFilter($request);
-            // 하위가 1000명이 넘으면 ..?
+        $sales_ids = $this->underSalesFilter($request);
+        if(count($sales_ids))
             $query = $query->whereIn('salesforces.id', $sales_ids);
-        }
-        if($request->has('level'))
-            $query = $query->where('settle_histories_salesforces.level', $request->level);
+        if($request->level)
+            $query = $query->where('salesforces.level', $request->level);
         return $query;
     }
 

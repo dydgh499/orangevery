@@ -58,12 +58,17 @@ onMounted(() => {
             :date_filter_type="DateFilters.SETTLE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="true"
-                    :sales="true" />
+                    :sales="true">
+                    <template #pg_extra_field>
+                        <VCol cols="12" sm="3">
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.deposit_status" :items="deposit_statuses"
+                                label="입금 타입" item-title="title" item-value="id"
+                                @update:modelValue="[store.updateQueryString({ deposit_status: store.params.deposit_status })]" />
+                        </VCol>
+                    </template>
+                </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.deposit_status" :items="deposit_statuses"
-                    label="입금 타입" item-title="title" item-value="id"
-                    @update:modelValue="[store.updateQueryString({ deposit_status: store.params.deposit_status })]" />
                 <VBtn prepend-icon="tabler:report-money" @click="getBatchDepositParams()" v-if="getUserLevel() >= 35"
                     size="small">
                     일괄 입금/미입금처리
