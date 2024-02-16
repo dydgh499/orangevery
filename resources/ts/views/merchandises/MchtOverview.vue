@@ -203,7 +203,7 @@ onMounted(async () => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card && corp.pv_options.paid.use_withdraw_fee">
+                        <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card || corp.pv_options.paid.use_withdraw_fee">
                             <VRow>
                                 <!-- 👉 단골고객 사용여부 -->
                                 <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_regular_card">
