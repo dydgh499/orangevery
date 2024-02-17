@@ -19,12 +19,11 @@ defineExpose({
         <!-- Dialog Content -->
         <VCard title="노티 발송이력">
             <VCardText>
-                <VRow no-gutters>
-                    <VCol>
-                        <VCol md="3">전송 URL</VCol>
-                        <VCol md="9" style="font-weight: bold;">{{ noti.send_url }}</VCol>
-                    </VCol>
+                <VRow>
+                    <VCol md="2" style="text-align: center;">전송 URL</VCol>
+                    <VCol md="10" style="font-weight: bold;">{{ noti.send_url }}</VCol>
                 </VRow>
+                <br>
                 <VTable class="text-no-wrap" style="width: 100%;">
                     <thead>
                         <tr>

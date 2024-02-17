@@ -123,7 +123,7 @@ defineExpose({
             <DialogCloseBtn @click="visible = !visible" />
         </div>
         <!-- Dialog Content -->
-        <div ref="card">
+        <div ref="card" style="overflow-y: auto;">
             <VCard class="sales-slip-rect-container">
                 <VCardText class="sales-slip-rect" :style="`background-image: url(${background});`">
                     <VCol class="font-weight-bold v-col-custom big-font text-center" style="padding-top: 24px;">
@@ -302,7 +302,7 @@ div {
 
 @media (max-height: 900px) {
   .sales-slip-rect {
-    font-size: 0.7em;
+    font-size: 0.8em;
   }
 }
 

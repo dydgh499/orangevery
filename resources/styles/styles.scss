@@ -113,10 +113,15 @@ th {
 .custom-select {
   border: 1px solid rgba(var(--v-border-color), 0.5);
   border-radius: 0.5em;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
   min-inline-size: 7em;
   padding-block: 0.3em;
   padding-inline: 0.5em;
   text-align: center;
+}
+
+.custom-select > option {
+  background-color: rgb(var(--v-theme-background));
 }
 
 .custom-select:active {
