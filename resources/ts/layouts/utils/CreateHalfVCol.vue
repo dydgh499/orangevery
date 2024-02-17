@@ -8,7 +8,7 @@ const props = defineProps<Props>()
 </script>
 <template>
     <VCol cols="12">
-        <VRow no-gutters>
+        <VRow no-gutters style="align-items: center;">
             <VCol cols="12" :md="props.mdl">
                 <label>
                     <slot name="name"></slot> 

@@ -173,7 +173,6 @@ initAllSales()
                                                 :label="levels['sales' + (6 - i) + '_name'] + '선택'" item-title="sales_name"
                                                 item-value="id" single-line 
                                                 style="width: 200px;" />
-
                                             <VTooltip activator="parent" location="top"
                                                 v-if="merchandise['sales' + (6 - i) + '_id']">
                                                 {{ sales[6 - i].value.find(obj => obj.id ===

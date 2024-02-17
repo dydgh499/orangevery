@@ -37,21 +37,38 @@ const getVat = () => {
     return Math.round(trans.value?.amount as number / 1.1)
 }
 
-const copySalesSlip = () => {
+const copySalesSlip = async () => {
     snackbar.value.show('영수증을 복사하고있습니다..', 'success')
     if (card.value) {
-        html2canvas(document.getElementsByClassName('sales-slip-rect')[0], { useCORS: true, removeContainer: true }).then(canvas => {
-            canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({ "image/png": blob as Blob })]))
-            snackbar.value.show('영수증이 클립보드에 복사되었습니다.', 'success')
-        })
+        const canvas = await html2canvas(document.getElementsByClassName('sales-slip-rect')[0], { useCORS: true, removeContainer: true })
+        canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({ "image/png": blob as Blob })]))
+        snackbar.value.show('영수증이 클립보드에 복사되었습니다.', 'success')
     }
+}
+
+const downloadSalesSlip = async () => {
+    const downloadURI = (uri: string, file_name: string) => {
+        const link = document.createElement("a")
+        link.download = file_name
+        link.href = uri
+        document.body.appendChild(link)
+        link.click()
+    }
+
+    snackbar.value.show('영수증을 다운로드하고있습니다..', 'success')
+    if (card.value) {
+        const canvas = await html2canvas(document.getElementsByClassName('sales-slip-rect')[0], { useCORS: true, removeContainer: true })
+        downloadURI(canvas.toDataURL(), trans.value?.trx_dttm+"_"+trans.value?.appr_num+".png")
+        snackbar.value.show('영수증이 다운로드 되었습니다.', 'success')
+    }
+
 }
 
 const getProviderInfo = (): BeforeBrandInfo => {
     if (corp.pv_options.paid.use_before_brand_info) {
         const trx_dt = new Date(trans.value?.trx_dt as string)
         const before_brand_info = corp.before_brand_infos.find(obj => new Date(obj.apply_e_dt) >= trx_dt && new Date(obj.apply_s_dt) <= trx_dt)
-        if(before_brand_info) {
+        if (before_brand_info) {
             return <BeforeBrandInfo>({
                 company_name: before_brand_info?.company_name,
                 business_num: before_brand_info?.business_num,
@@ -116,8 +133,12 @@ defineExpose({
     <VDialog v-model="visible" class="v-dialog-sm" style="box-shadow: 0 !important;">
         <div class="button-container">
             <VBtn size="small" @click="copySalesSlip()" class="copy-btn">
-                영수증 복사
+                복사하기
                 <VIcon end icon="tabler:copy" />
+            </VBtn>
+            <VBtn size="small" @click="downloadSalesSlip()" class="download-btn" color="secondary">
+                다운로드
+                <VIcon end icon="material-symbols:download" />
             </VBtn>
             <!-- Dialog close btn -->
             <DialogCloseBtn @click="visible = !visible" />
@@ -135,7 +156,7 @@ defineExpose({
                     <VDivider :thickness="thickness" class="mb-2" />
                     <DialogHalfVCol class="cell">
                         <template #name>결제수단</template>
-                        <template #input>{{ module_types.find(obj => obj.id === trans?.module_type)?.title  }}</template>
+                        <template #input>{{ module_types.find(obj => obj.id === trans?.module_type)?.title }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>거래상태</template>
@@ -251,44 +272,44 @@ defineExpose({
     </VDialog>
 </template>
 <style scoped>
-div {
+:deep(div) {
   color: rgba(51, 48, 60, 68%) !important;
 }
 
-.sales-slip-rect-container {
+:deep(.sales-slip-rect-container) {
   padding: 0.3em;
   background: rgb(255, 255, 255, 0%) !important;
   box-shadow: 0 0 0 0;
 }
 
-.sales-slip-rect {
+:deep(.sales-slip-rect) {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   min-block-size: 67em;
 }
 
-.cancel-img {
+:deep(.cancel-img) {
   position: absolute;
   inline-size: 55%;
   inset-block-start: 56%;
   inset-inline-start: 23%;
 }
 
-.big-font {
+:deep(.big-font) {
   font-size: 1.3em;
 }
 
-.cell {
+:deep(.cell) {
   padding-block: 3px;
 }
 
-.button-container {
+:deep(.button-container) {
   display: flex;
   justify-content: flex-end;
 }
 
-.copy-btn {
+:deep(.copy-btn) {
   position: absolute;
   z-index: 9999;
   block-size: calc(var(--v-btn-height) + 3px);
@@ -296,31 +317,35 @@ div {
   inset-inline-end: 3em;
 }
 
+:deep(.download-btn) {
+  position: absolute;
+  z-index: 9999;
+  block-size: calc(var(--v-btn-height) + 3px);
+  inset-block-start: -0.75em;
+  inset-inline-end: 13em;
+}
+
 .v-col-custom {
   padding: 12px;
 }
 
 @media (max-height: 900px) {
-  .sales-slip-rect {
+  :deep(.sales-slip-rect) {
     font-size: 0.8em;
   }
 }
 
 @media (max-width: 500px) {
-  .v-col-custom {
+  :deep(.v-col-custom) {
     padding: 8px;
   }
 
-  .big-font {
+  :deep(.big-font) {
     font-size: 1.5em;
   }
 
-  .cancel-img {
+  :deep(.cancel-img) {
     inset-block-start: 67%;
-  }
-
-  :deep(.v-overlay-container) {
-    overflow-y: scroll;
   }
 }
 </style>

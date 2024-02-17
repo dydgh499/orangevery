@@ -2,10 +2,10 @@
 </script>
 <template>
     <div class="d-flex content">
-        <div style="width: 33%;">
+        <div style="width: 33%; align-items: center;">
             <slot name="name"></slot>
         </div>
-        <div style="width: 66%;">
+        <div style="width: 66%; align-items: center;">
             <slot name="input"></slot>
         </div>
     </div>
