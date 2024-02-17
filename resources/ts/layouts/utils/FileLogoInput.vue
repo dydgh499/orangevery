@@ -7,10 +7,16 @@ interface Props {
     label: string,
     validates: string[],
 }
-const props = defineProps<Props>()
 
+const getFileExtension = (file_name: string) => {
+    const dot = file_name.lastIndexOf('.') + 1
+    return file_name.substring(dot, file_name.length).toLowerCase()
+}
+
+const props = defineProps<Props>()
 const files = ref(<File[]>([]))
 const preview = ref<string>('/utils/icons/img-preview.svg')
+const ext = ref<string>(getFileExtension(props.preview))
 const previewStyle = `
     border: 2px solid rgb(130, 130, 130);
     border-radius: 0.5em;
@@ -24,8 +30,10 @@ const previewStyle = `
 
 const emits = defineEmits(['update:file']);
 watchEffect(() => {
-    if(files.value != undefined)
-    {
+    if(files.value != undefined) {
+        if(files.value.length) 
+            ext.value = getFileExtension(files.value[0].name)
+
         preview.value = files.value.length ? URL.createObjectURL(files.value[0]) : '/utils/icons/img-preview.svg'
         emits('update:file', files.value ? files.value[0] : files.value)
     }
@@ -50,6 +58,6 @@ const extentionRule = computed(() => {
                 </template>
             </template>
         </VFileInput>
-        <Preview :preview="preview" :style="``" :preview-style="previewStyle" class="preview"/>
+        <Preview :preview="preview" :style="``" :preview-style="previewStyle" class="preview" :ext="ext"/>
     </VCol>
 </template>

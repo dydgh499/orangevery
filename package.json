@@ -48,6 +48,7 @@
     "vue-virtual-scroller": "^2.0.0-beta.8",
     "vue-virtual-table": "^0.2.22",
     "vue3-apexcharts": "1.4.1",
+    "vue3-pdf-app": "^1.0.3",
     "vue3-perfect-scrollbar": "1.6.1",
     "vuetify": "npm:@vuetify/nightly@latest",
     "webfontloader": "1.6.28",

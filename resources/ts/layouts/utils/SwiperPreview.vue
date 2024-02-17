@@ -15,10 +15,21 @@ interface Props {
     lmd: number,
     rmd: number,
 }
+
+const getFileExtension = (file_name: string) => {
+    const dot = file_name.lastIndexOf('.') + 1
+    return file_name.substring(dot, file_name.length).toLowerCase()
+}
+const setDefaultImage = () => {
+    preview.value = props.items[swiper.value.activeIndex]
+    emits('update:default', preview.value)
+}
+
 const props = defineProps<Props>()
 
 const files = ref(<File[]>([]))
 const preview = ref(<string>(props.default_img))
+const ext = ref<string>(getFileExtension(props.default_img))
 const swiper = ref()
 const modules = [Pagination, EffectCoverflow, Navigation]
 const previewStyle = `
@@ -33,14 +44,14 @@ const getRef = (swiperInstance:any) => {
     swiper.value = swiperInstance
 }
 emits('update:default', preview.value)
-const setDefaultImage = () => {
-    preview.value = props.items[swiper.value.activeIndex]
-    emits('update:default', preview.value)
-}
+
 
 watchEffect(() => {
-    if (files.value != undefined && files.value.length) {
-        preview.value = URL.createObjectURL(files.value[0])
+    if (files.value != undefined) {
+        if(files.value.length) 
+            ext.value = getFileExtension(files.value[0].name)
+
+        preview.value = files.value.length ? URL.createObjectURL(files.value[0]) : '/utils/icons/img-preview.svg'
         emits('update:file', files.value ? files.value[0] : files.value)
     }
 })
@@ -84,7 +95,7 @@ watchEffect(() => {
         </div>
     </VCol>
     <VCol cols="12" :md="props.rmd">
-        <Preview :preview="preview" :style="`inline-size:20em !important;`" :preview-style="previewStyle" class="preview" />
+        <Preview :preview="preview" :style="`inline-size:20em !important;`" :preview-style="previewStyle" class="preview" :ext="ext" />
     </VCol>
 </template>
 <style lang="scss" scoped>
