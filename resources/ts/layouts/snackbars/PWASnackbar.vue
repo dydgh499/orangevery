@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import corp from '@corp'
 import { createCookie, readCookie } from '@/layouts/snackbars/pwa'
+import { template } from 'lodash'
 
 const shortcut = corp.dns + '-shortcut'
 const visible = ref(false)
@@ -40,9 +41,9 @@ onMounted(() => {
     const loadManifest = () => {
         const extension = (corp.logo_img as string).split('.').pop();
         let type = '';
-        if(extension === 'svg') 
+        if (extension === 'svg')
             type = 'image/svg+xml'
-        else if(extension === 'webp')
+        else if (extension === 'webp')
             type = 'image/webp'
         else
             type = 'image/png'
@@ -56,8 +57,8 @@ onMounted(() => {
             "display": "fullscreen",
             "start_url": "https://" + corp.dns,
             "short_name": corp.name,
-            "description" : "",
-            "orientation" : "portrait",
+            "description": "",
+            "orientation": "portrait",
             "background_color": 'white',
             "theme_color": 'white',
             "generated": "true",
@@ -105,7 +106,7 @@ onMounted(() => {
                 console.log("Service worker registration succeeded:", registration);
                 service_worker.value = true
             });
-        } 
+        }
         else
             console.log("Service workers are not supported.");
     }
@@ -124,8 +125,8 @@ onMounted(() => {
     deleteWorkboxRuntimeCashes()
 
     watchEffect(() => {
-        if(before_install_prompt.value && service_worker.value) {
-            if (!readCookie(shortcut) ) {
+        if ((before_install_prompt.value && service_worker.value) || isMobile.iOS()) {
+            if (!readCookie(shortcut)) {
                 setTimeout(function () {
                     visible.value = true
                 }, 5000)
@@ -137,23 +138,83 @@ onMounted(() => {
 </script>
 <template>
     <VSnackbar v-model="visible" vertical transaction="scroll-y-reverse-transition" :timeout="60000" variant="flat">
-        <div class="pwa-container">
-            <img :src="corp.logo_img || ''" width="100" height="100">
-            <span style="margin: 1em 0;font-weight: bold;">바로가기를 생성할까요?</span>
-            <br>
-            <span>전산에 빠르게 접근할 수 있는 바로가기가 홈스크린에 생성됩니다.</span>
-        </div>
-        <template #actions>
-            <VBtn color="success" @click="createShortcut()">
-                생성하기
-            </VBtn>
-            <VBtn color="error" @click="close()">
-                30일간 안보기
-            </VBtn>
+        <template v-if="isMobile.iOS()">
+            <div class="pwa-container">
+                <img :src="corp.logo_img || ''" width="80" height="100">
+                <span style="margin: 1em 0;font-weight: bold;">앱 설치 없이 홈 화면에서 바로 이용해 보세요!</span>
+            </div>
+            <div style="text-align: center;">
+                <VChip label>
+                    <b>하단</b>
+                    <VIcon icon="material-symbols:ios-share" style=" margin: 0.1em;color: #1b72db;" size="24"/>
+                    <b>버튼</b>
+                </VChip>
+                <VIcon icon="material-symbols:arrow-forward-ios" style="margin: 0.5em;" />
+                <VChip label>
+                    <b style=" margin-top: 0.1em;float: inline-start;">홈 화면에 추가</b>
+                    <span style="margin: 1em;"></span>
+                    <VIcon style="float: inline-end;" icon="material-symbols:add-box-outline" />
+                </VChip>
+            </div>
         </template>
+        <template v-else>
+            <div class="pwa-container">
+                <img :src="corp.logo_img || ''" width="100" height="100">
+                <span style="margin: 1em 0;font-weight: bold;">바로가기를 생성할까요?</span>
+                <span>앱 설치 없이 홈 화면에서 바로 이용할 수 있습니다. 지금 추가해 보세요!</span>
+            </div>
+        </template>
+        <template #actions>
+            <template v-if="isMobile.iOS()">
+                <VBtn color="error" @click="close()">
+                    30일간 안보기
+                </VBtn>
+            </template>
+            <template v-else>
+                <VBtn color="success" @click="createShortcut()">
+                    생성하기
+                </VBtn>
+                <VBtn color="error" @click="close()">
+                    30일간 안보기
+                </VBtn>
+            </template>
+        </template>
+        <div class="ios-share-arrow" v-if="isMobile.iOS()">
+            <VIcon icon="ic:baseline-keyboard-double-arrow-down" size="45" />
+        </div>
     </VSnackbar>
 </template>
 <style scoped>
+.ios-share-arrow {
+  position: absolute;
+  inline-size: 90%;
+  inset-block-end: 0;
+  text-align: center;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-10px);
+  }
+
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+/* .ios-share-arrow 클래스에 애니메이션 적용 */
+.ios-share-arrow {
+  animation: bounce 2s infinite;
+}
+
 .pwa-container {
   display: flex;
   flex-direction: column;
