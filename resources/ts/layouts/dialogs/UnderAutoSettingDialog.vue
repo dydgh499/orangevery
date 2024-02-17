@@ -29,7 +29,7 @@ defineExpose({
         <!-- Dialog Content -->
         <VCard title="적용할 영업점 자동세팅 포멧을 선택해주세요.">
             <VCardText>
-                <template v-for="(under_auto_setting, key) in under_auto_settings" :key="key">
+                <template >
                     <VTable style="width: 100%;margin-bottom: 1em;text-align: center;">
                         <thead>
                             <tr>
@@ -40,7 +40,7 @@ defineExpose({
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr v-for="(under_auto_setting, key) in under_auto_settings" :key="key">
                                 <td scope="col" style="text-align: center;">{{ key+1 }}</td>
                                 <td scope="col" style="text-align: center;">{{ under_auto_setting.note }}</td>
                                 <td scope="col" style="text-align: center;">{{ under_auto_setting.sales_fee }}</td>

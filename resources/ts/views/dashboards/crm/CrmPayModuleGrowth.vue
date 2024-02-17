@@ -165,3 +165,8 @@ const chartOptions = computed(() => {
         </VCardText>
     </VCard>
 </template>
+<style scoped>
+:deep(.apexcharts-text) {
+  fill: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity)) !important;
+}
+</style>
