@@ -272,44 +272,44 @@ defineExpose({
     </VDialog>
 </template>
 <style scoped>
-:deep(div) {
+div {
   color: rgba(51, 48, 60, 68%) !important;
 }
 
-:deep(.sales-slip-rect-container) {
+.sales-slip-rect-container {
   padding: 0.3em;
   background: rgb(255, 255, 255, 0%) !important;
   box-shadow: 0 0 0 0;
 }
 
-:deep(.sales-slip-rect) {
+.sales-slip-rect {
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   min-block-size: 67em;
 }
 
-:deep(.cancel-img) {
+.cancel-img {
   position: absolute;
   inline-size: 55%;
   inset-block-start: 56%;
   inset-inline-start: 23%;
 }
 
-:deep(.big-font) {
+.big-font {
   font-size: 1.3em;
 }
 
-:deep(.cell) {
+.cell {
   padding-block: 3px;
 }
 
-:deep(.button-container) {
+.button-container {
   display: flex;
   justify-content: flex-end;
 }
 
-:deep(.copy-btn) {
+.copy-btn {
   position: absolute;
   z-index: 9999;
   block-size: calc(var(--v-btn-height) + 3px);
@@ -317,7 +317,7 @@ defineExpose({
   inset-inline-end: 3em;
 }
 
-:deep(.download-btn) {
+.download-btn {
   position: absolute;
   z-index: 9999;
   block-size: calc(var(--v-btn-height) + 3px);
@@ -330,21 +330,21 @@ defineExpose({
 }
 
 @media (max-height: 900px) {
-  :deep(.sales-slip-rect) {
+  .sales-slip-rect {
     font-size: 0.8em;
   }
 }
 
 @media (max-width: 500px) {
-  :deep(.v-col-custom) {
+  .v-col-custom {
     padding: 8px;
   }
 
-  :deep(.big-font) {
+  .big-font {
     font-size: 1.5em;
   }
 
-  :deep(.cancel-img) {
+  .cancel-img {
     inset-block-start: 67%;
   }
 }
