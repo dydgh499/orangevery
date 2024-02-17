@@ -54,7 +54,8 @@ const setSalesUnderAutoSetting = async (my_level: number) => {
     if(salesforce?.under_auto_settings?.length ) {
         if(salesforce.under_auto_settings.length > 0) {
             const idx = await underAutoSetting.value.show(salesforce.under_auto_settings)
-            setSalesAutoInfo(my_level, salesforce.under_auto_settings[idx])
+            if(idx)
+                setSalesAutoInfo(my_level, salesforce.under_auto_settings[idx])
         }
         else
             setSalesAutoInfo(my_level, salesforce.under_auto_settings[0])

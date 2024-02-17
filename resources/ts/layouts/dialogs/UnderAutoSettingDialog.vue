@@ -26,11 +26,11 @@ defineExpose({
 </script>
 <template>
     <VDialog v-model="visible" persistent class="v-dialog-sm">
+        <DialogCloseBtn @click="selected(0)" />
         <!-- Dialog Content -->
         <VCard title="적용할 영업점 자동세팅 포멧을 선택해주세요.">
             <VCardText>
-                <template >
-                    <VTable style="width: 100%;margin-bottom: 1em;text-align: center;">
+                    <VTable style="width: 100%; margin-bottom: 1em;text-align: center;">
                         <thead>
                             <tr>
                                 <th scope="col" style="text-align: center;">No.</th>
@@ -40,7 +40,8 @@ defineExpose({
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(under_auto_setting, key) in under_auto_settings" :key="key">
+                            <template v-for="(under_auto_setting, key) in under_auto_settings" :key="key">
+                            <tr>
                                 <td scope="col" style="text-align: center;">{{ key+1 }}</td>
                                 <td scope="col" style="text-align: center;">{{ under_auto_setting.note }}</td>
                                 <td scope="col" style="text-align: center;">{{ under_auto_setting.sales_fee }}</td>
@@ -50,10 +51,9 @@ defineExpose({
                                     </VBtn>
                                 </td>
                             </tr>
+                            </template>
                         </tbody>
                     </VTable>
-                    <br>
-                </template>
             </VCardText>
         </VCard>
     </VDialog>
