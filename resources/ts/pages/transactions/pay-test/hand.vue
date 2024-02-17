@@ -45,9 +45,12 @@ provide('salesslip', salesslip)
                                             <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                                                 <template #name>결제모듈 선택</template>
                                                 <template #input>
-                                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pmod_id"
-                                                        :items="pay_modules" prepend-inner-icon="ic-outline-send-to-mobile"
-                                                        item-title="note" item-value="id" single-line eager />
+                                                    <div>
+                                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="pmod_id"
+                                                            :items="pay_modules" prepend-inner-icon="ic-outline-send-to-mobile"
+                                                            item-title="note" item-value="id" single-line eager>                                                        
+                                                        </VSelect>
+                                                    </div>
                                                 </template>
                                             </CreateHalfVCol>
                                         </VRow>
