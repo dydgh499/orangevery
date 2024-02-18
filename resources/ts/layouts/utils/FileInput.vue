@@ -14,7 +14,7 @@ const getFileExtension = (file_name: string) => {
 const props = defineProps<Props>()
 const files = ref(<File[]>([]))
 const preview = ref<string>(props.preview)
-const ext = ref<string>(getFileExtension(props.preview))
+const ext = ref<string>('')
 const previewStyle = `
     border: 2px solid rgb(130, 130, 130);
     border-radius: 0.5em;
@@ -35,6 +35,9 @@ watchEffect(() => {
 })
 watchEffect(() => {
     preview.value = props.preview
+    ext.value = getFileExtension(props.preview)
+    console.log(props.preview)
+    console.log(ext.value)
 })
 </script>
 <template>
