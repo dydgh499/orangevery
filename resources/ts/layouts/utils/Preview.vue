@@ -19,7 +19,7 @@ const config = ref({
     viewAttachments: false,
   },
   secondaryToolbar: {
-    secondaryPresentationMode: false,
+    secondaryPresentationMode: true,
     secondaryOpenFile: false,
     secondaryPrint: false,
     secondaryDownload: false,
@@ -58,14 +58,22 @@ const config = ref({
       scaleSelectContainer: false,
     },
   },
-  errorWrapper: false,
+  errorWrapper: true,
 })
+
+const openFile = () => {
+    if (props.preview != '/utils/icons/img-preview.svg') {
+        window.location.href = props.preview;
+        window.location.replace(props.preview)
+        window.open(props.preview);     
+    }
+}
 </script>
 <template>
     <section>
         <template v-if="props.ext === 'pdf'">
-            <vue-pdf-app :pdf="props.preview" class="preview pdf-viewer" :style="props.style" page-scale="page-height"
-                :config="config" />
+            <vue-pdf-app :pdf="props.preview" class="preview pdf-viewer" :style="props.previewStyle" page-scale="page-height"
+                :config="config" @click="openFile()"/>
         </template>
         <template v-else>
             <VImg rounded :src="props.preview" class="preview" @click="imageDialog.show(props.preview)"
@@ -81,26 +89,16 @@ const config = ref({
 }
 
 /* stylelint-disable-next-line selector-id-pattern */
-:deep(#toolbarViewerLeft) {
-  display: none;
-}
-
-/* stylelint-disable-next-line selector-type-no-unknown */
-:deep(.verticalToolbarSeparator hiddensmallview) {
-  display: none;
-}
-
-/* stylelint-disable-next-line selector-id-pattern */
 :deep(.pdf-app #viewerContainer) {
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 /* stylelint-disable-next-line selector-id-pattern */
-:deep(#secondaryToolbarToggle) {
-  display: none;
+:deep(.pdf-app #toolbarViewer) {
+  display: none !important;
 }
 
 :deep(.page) {
-  border-width: 3px;
+  border-width: 3px !important;
 }
 </style>
