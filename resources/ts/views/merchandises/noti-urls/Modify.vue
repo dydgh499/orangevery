@@ -19,7 +19,7 @@ const id = Number(route.params.id) || 0
         <CreateForm :id="id" :path="path" :tabs="tabs" :item="item">
             <template #view>
                 <VWindowItem>
-                    <NotiCard :item="item" :able_mcht_chanage="false" :merchandises="mchts"/>
+                    <NotiCard :item="item" :able_mcht_chanage="true" :merchandises="mchts"/>
                 </VWindowItem>
             </template>
         </CreateForm>

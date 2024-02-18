@@ -22,7 +22,7 @@ const selected = () => {
     if(mid_code.value)
         resolveCallback(mid_code.value)
     else
-        snackbar.value.show('금융 VAN을 선택해주세요.', 'warning')
+        snackbar.value.show('발급될 MID 코드를 선택해주세요.', 'warning')
 }
 
 watchEffect(() => {
