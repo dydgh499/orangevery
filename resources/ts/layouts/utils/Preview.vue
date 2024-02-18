@@ -64,7 +64,7 @@ const config = ref({
 <template>
     <section>
         <template v-if="props.ext === 'pdf'">
-            <vue-pdf-app :pdf="props.preview" class="preview" :style="'height: 20em'" page-scale="page-height"
+            <vue-pdf-app :pdf="props.preview" class="preview pdf-viewer" :style="props.style" page-scale="page-height"
                 :config="config" />
         </template>
         <template v-else>
@@ -74,3 +74,29 @@ const config = ref({
         </template>
     </section>
 </template>
+<style scoped>
+:deep(.pdf-viewer) {
+  block-size: 20em;
+}
+
+:deep(#toolbarViewerLeft) {
+  display: none;
+}
+
+:deep(.verticalToolbarSeparator hiddensmallview) {
+  display: none;
+}
+
+:deep(.pdf-app #viewerContainer) {
+  overflow: hidden;
+}
+
+:deep(#secondaryToolbarToggle) {
+  display: none;
+}
+
+:deep(.page) {
+  border: 1px;
+  margin: 0;
+}
+</style>
