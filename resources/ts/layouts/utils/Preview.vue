@@ -58,7 +58,7 @@ const config = ref({
       scaleSelectContainer: false,
     },
   },
-  errorWrapper: true,
+  errorWrapper: false,
 })
 
 const openFile = () => {
