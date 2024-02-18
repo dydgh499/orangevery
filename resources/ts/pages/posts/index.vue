@@ -68,8 +68,8 @@ provide('exporter', exporter)
         </template>
     </BaseIndexView>
 </template>
-<style>
-.title {
+<style scoped>
+:deep(.title) {
   inline-size: 80em;
   max-inline-size: 100em;
   padding-block: 2em;
