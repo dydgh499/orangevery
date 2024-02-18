@@ -75,28 +75,32 @@ const config = ref({
     </section>
 </template>
 <style scoped>
+/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 :deep(.pdf-viewer) {
   block-size: 20em;
 }
 
+/* stylelint-disable-next-line selector-id-pattern */
 :deep(#toolbarViewerLeft) {
   display: none;
 }
 
+/* stylelint-disable-next-line selector-type-no-unknown */
 :deep(.verticalToolbarSeparator hiddensmallview) {
   display: none;
 }
 
+/* stylelint-disable-next-line selector-id-pattern */
 :deep(.pdf-app #viewerContainer) {
   overflow: hidden;
 }
 
+/* stylelint-disable-next-line selector-id-pattern */
 :deep(#secondaryToolbarToggle) {
   display: none;
 }
 
 :deep(.page) {
-  border: 1px;
-  margin: 0;
+  border-width: 3px;
 }
 </style>
