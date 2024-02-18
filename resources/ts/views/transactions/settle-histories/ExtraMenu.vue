@@ -38,7 +38,7 @@ const getDepositParams = async () => {
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler:report-money" />
                     </template>
-                    <VListItemTitle>{{ props.item.status ? '입금취소처리' : '입금처리' }}</VListItemTitle>
+                    <VListItemTitle>{{ props.item.deposit_status ? '입금취소처리' : '입금처리' }}</VListItemTitle>
                 </VListItem>
                 <VListItem value="cancel" @click="cancel(props.item, props.is_mcht)">
                     <template #prepend>
