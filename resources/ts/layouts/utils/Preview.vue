@@ -63,8 +63,6 @@ const config = ref({
 
 const openFile = () => {
     if (props.preview != '/utils/icons/img-preview.svg') {
-        window.location.href = props.preview;
-        window.location.replace(props.preview)
         window.open(props.preview);     
     }
 }
@@ -85,17 +83,22 @@ const openFile = () => {
 <style scoped>
 /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 :deep(.pdf-viewer) {
-  block-size: 20em;
+  block-size: 18em;
 }
 
 /* stylelint-disable-next-line selector-id-pattern */
 :deep(.pdf-app #viewerContainer) {
   overflow: hidden !important;
+  inset-block-start: 0 !important;
 }
 
 /* stylelint-disable-next-line selector-id-pattern */
 :deep(.pdf-app #toolbarViewer) {
   display: none !important;
+}
+
+:deep(#toolbarContainer) {
+  block-size: 0 !important;
 }
 
 :deep(.page) {
