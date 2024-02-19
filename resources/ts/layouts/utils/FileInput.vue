@@ -36,7 +36,6 @@ watchEffect(() => {
 watchEffect(() => {
     preview.value = props.preview
     ext.value = getFileExtension(props.preview)
-    console.log(ext.value)
 })
 </script>
 <template>

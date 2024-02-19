@@ -2,6 +2,7 @@
 import { useRequestStore } from '@/views/request'
 import { requiredValidator, nullValidator } from '@validators'
 import type { NotiUrl, Merchandise } from '@/views/types'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { VForm } from 'vuetify/components'
@@ -9,19 +10,12 @@ import { VForm } from 'vuetify/components'
 interface Props {
     item: NotiUrl,
     able_mcht_chanage: boolean,
-    merchandises: Merchandise[]
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
 
+const { mchts } = useSalesFilterStore()
 const { update, remove } = useRequestStore()
-
-const mcht = ref(null)
-
-watchEffect(() => {
-    if(props.able_mcht_chanage)
-        props.item.mcht_id = mcht.value
-})
 
 </script>
 <template>
@@ -35,8 +29,8 @@ watchEffect(() => {
                             <CreateHalfVCol :mdl="6" :mdr="6">
                                 <template #name>소유 가맹점</template>
                                 <template #input>
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht"
-                                        :items="props.merchandises" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id"
+                                        :items="mchts" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
                                         item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] />
                                 </template>
                             </CreateHalfVCol>

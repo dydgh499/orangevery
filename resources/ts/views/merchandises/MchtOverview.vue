@@ -7,7 +7,7 @@ import PasswordCheckDialog from '@/layouts/dialogs/PasswordCheckDialog.vue'
 
 import { getUserLevel, getIndexByLevel } from '@axios'
 import { useRequestStore } from '@/views/request'
-import { useSalesFilterStore, feeApplyHistoires } from '@/views/salesforces/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import UnderAutoSettingDialog from '@/layouts/dialogs/UnderAutoSettingDialog.vue'
@@ -22,26 +22,15 @@ interface Props {
 
 const props = defineProps<Props>()
 const { post } = useRequestStore()
-const { sales, initAllSales } = useSalesFilterStore()
+const { sales, initAllSales, sales_apply_histories, hintSalesApplyFee } = useSalesFilterStore()
 const { cus_filters } = useStore()
 
 const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
-const errorHandler = <any>(inject('$errorHandler'))
-
 const levels = corp.pv_options.auth.levels
-const fee_histories = ref(<any[]>([]))
 const underAutoSetting = ref()
 const passwordCheckDialog = ref()
 
-const hintSalesApplyFee = (sales_id: number): string => {
-    if (sales_id) {
-        const history = fee_histories.value.find(obj => obj.sales_id === sales_id)
-        return history ? '마지막 일괄적용: ' + (history.trx_fee * 100).toFixed(3) + '%' : '';
-    }
-    else
-        return ''
-}
+
 
 const setSalesUnderAutoSetting = async (my_level: number) => {
     const setSalesAutoInfo = (my_level: number, under_auto_setting: UnderAutoSetting) => {
@@ -52,17 +41,13 @@ const setSalesUnderAutoSetting = async (my_level: number) => {
 
     const salesforce = sales[my_level].value.find(obj => obj.id === props.item['sales'+my_level+'_id'])
     if(salesforce?.under_auto_settings?.length ) {
-        if(salesforce.under_auto_settings.length > 0) {
-            const idx = await underAutoSetting.value.show(salesforce.under_auto_settings)
-            if(idx)
-                setSalesAutoInfo(my_level, salesforce.under_auto_settings[idx])
-        }
-        else
-            setSalesAutoInfo(my_level, salesforce.under_auto_settings[0])
+        const idx = await underAutoSetting.value.show(salesforce.under_auto_settings)
+        if(idx !== -1)
+            setSalesAutoInfo(my_level, salesforce.under_auto_settings[idx])        
     }
     else {
         // 일괄적용
-        const history = fee_histories.value.find(obj => obj.sales_id === props.item['sales'+my_level+'_id'])
+        const history = sales_apply_histories.find(obj => obj.sales_id === props.item['sales'+my_level+'_id'])
         if(history)
             props.item['sales'+my_level+'_fee'] = (history.trx_fee * 100).toFixed(3)
     }
@@ -89,9 +74,6 @@ const clearSettleHoldClear = async () => {
 }
 
 initAllSales()
-onMounted(async () => {
-    fee_histories.value = await feeApplyHistoires()
-})
 </script>
 <template>
     <VRow>

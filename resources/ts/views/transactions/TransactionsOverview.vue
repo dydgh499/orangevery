@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { useSalesFilterStore, feeApplyHistoires } from '@/views/salesforces/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
@@ -22,12 +22,11 @@ const formatTime = <any>(inject('$formatTime'))
 
 const props = defineProps<Props>()
 const { pgs, pss, settle_types, terminals, cus_filters, psFilter, finance_vans } = useStore()
-const { sales, mchts, initAllSales } = useSalesFilterStore()
+const { sales, mchts, initAllSales, hintSalesApplyFee } = useSalesFilterStore()
 const { theme } = useThemeConfig()
 
 const levels = corp.pv_options.auth.levels
 const pay_modules = ref<PayModule[]>([])
-const fee_histories = ref<any[]>([])
 const trx_dttm = ref(<string>(''))
 const cxl_dttm = ref(<string>(''))
 
@@ -58,7 +57,7 @@ const changePaymodEvent = () => {
 }
 const changeMchtEvent = () => {
     if (props.item.mcht_id != null) {
-        const mcht = mchts.value.find((obj: Merchandise) => obj.id == props.item.mcht_id)
+        const mcht = mchts.find((obj: Merchandise) => obj.id == props.item.mcht_id)
         if (mcht) {
             props.item.sales5_fee = mcht.sales5_fee
             props.item.sales4_fee = mcht.sales4_fee
@@ -99,27 +98,16 @@ const filterInsts = computed(() => {
     else
         return []
 })
-const hintSalesApplyFee = (sales_id: number | null): string => {
-    if (sales_id) {
-        const history = fee_histories.value.find(obj => obj.sales_id === sales_id)
-        return history ? '마지막 일괄적용: ' + (history.trx_fee * 100).toFixed(3) + '%' : '';
-    }
-    else
-        return ''
-}
 
 initAllSales()
 onMounted(async () => {
     props.item.dev_fee = (props.item.dev_fee * 100).toFixed(3)
     props.item.dev_realtime_fee = (props.item.dev_realtime_fee * 100).toFixed(3)
-    const [feeHistoriesResult, payModulesResult] = await Promise.all([
-        feeApplyHistoires(),
+    const [payModulesResult] = await Promise.all([
         getAllPayModules(),
     ])
 
-    fee_histories.value = feeHistoriesResult
     pay_modules.value = payModulesResult
-
     trx_dttm.value = props.item.trx_dt + " " + props.item.trx_tm
     cxl_dttm.value = props.item.is_cancel ? props.item.cxl_dt + " " + props.item.cxl_tm : ''
 

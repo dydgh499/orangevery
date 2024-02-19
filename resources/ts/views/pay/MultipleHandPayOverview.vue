@@ -249,7 +249,7 @@ onMounted(() => {
 </script>
 <template>
     <VDivider />
-    <CreateHalfVCol :mdl="6" :mdr="6">
+    <CreateHalfVCol :mdl="6" :mdr="6" style="align-items: baseline !important;">
         <template #name>
             <AppCardActions :actionCollapsed="true" class="common-field" style="margin-bottom: 1em;">
                 <template #title>

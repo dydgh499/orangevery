@@ -134,19 +134,16 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
     }
 })
 
-export const feeApplyHistoires = async () => {
-    const r = await axios.get('/api/v1/manager/salesforces/fee-apply-histories')
-    return r.data
-}
-
 export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     const all_sales = Array.from({ length: SALES_LEVEL_SIZE }, () => <Salesforce[]>([]))
     const sales = Array.from({ length: SALES_LEVEL_SIZE }, () => ref<Salesforce[]>([]))
+    const sales_apply_histories = ref(<any[]>([]))
     const mchts = ref(<Merchandise[]>([]))
     
     onMounted(async () => { 
-        classification() 
-        getAllMchts()
+        await classification() 
+        await getAllMchts()
+        await feeApplyHistoires()
     })
 
     const classification = async () => {
@@ -163,7 +160,21 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
         const r = await axios.get(url)
         mchts.value = r.data.content.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name))
     }
+
+    const feeApplyHistoires = async () => {
+        const r = await axios.get('/api/v1/manager/salesforces/fee-apply-histories')
+        sales_apply_histories.value = r.data
+    }
     
+    const hintSalesApplyFee = (sales_id: number): string => {
+        if (sales_id) {
+            const history = sales_apply_histories.value.find(obj => obj.sales_id === sales_id)
+            console.log(history)
+            return history ? '마지막 일괄적용: ' + (history.trx_fee * 100).toFixed(3) + '%' : '';
+        }
+        else
+            return ''
+    }
     // 상위 영업점들
     const getAboveSalesFilter = (select_idx:number, params:any) => {
         let _mcht = [];
@@ -256,10 +267,12 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     return {
         all_sales,
         sales,
+        sales_apply_histories,
         mchts,
         initAllSales,
         classification,
         setUnderSalesFilter,
+        hintSalesApplyFee,
     }
 })
 

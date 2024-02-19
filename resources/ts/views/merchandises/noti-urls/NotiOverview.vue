@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { NotiUrl, Merchandise } from '@/views/types'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { getAllNotiUrls } from '@/views/merchandises/noti-urls/useStore'
 import NotiCard from '@/views/merchandises/noti-urls/NotiCard.vue'
 import { useRequestStore } from '@/views/request'
@@ -12,7 +11,6 @@ const props = defineProps<Props>()
 const { setNullRemove } = useRequestStore()
 const noti_urls = reactive<NotiUrl[]>([])
 
-const { mchts } = useSalesFilterStore()
 const addNewNotiUrl = () => {
     noti_urls.push(<NotiUrl>{
         id: 0,
@@ -30,7 +28,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <NotiCard v-for="(item, index) in noti_urls" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :merchandises="mchts"/>
+    <NotiCard v-for="(item, index) in noti_urls" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false"/>
     <!-- 👉 submit -->
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">

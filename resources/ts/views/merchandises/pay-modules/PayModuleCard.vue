@@ -2,11 +2,12 @@
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useRequestStore } from '@/views/request'
 import { requiredValidator, nullValidator } from '@validators'
-import type { PayModule, Merchandise } from '@/views/types'
+import type { PayModule } from '@/views/types'
 import { 
     module_types, installments, abnormal_trans_limits, ship_out_stats, under_sales_types, 
     comm_settle_types, fin_trx_delays, cxl_types
  } from '@/views/merchandises/pay-modules/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
@@ -15,22 +16,22 @@ import { VForm } from 'vuetify/components'
 import corp from '@corp'
 import { axios, getUserLevel, salesLevels } from '@axios'
 
+
 interface Props {
     item: PayModule,
     able_mcht_chanage: boolean,
-    merchandises: Merchandise[]
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
+
 const { update, remove } = useRequestStore()
+const { mchts } = useSalesFilterStore()
 const { pgs, pss, settle_types, terminals, finance_vans, psFilter, setFee } = useStore()
 
-const mcht = ref(null)
 const md = ref<number>(3)
-
 const midCreateDlg = <any>(inject('midCreateDlg'))
 
 const tidCreate = async() => {
@@ -89,10 +90,6 @@ onMounted(() => {
     watchEffect(() => {
         md.value = (props.item.module_type == 0 || props.item.module_type == 1)  ? 3 : 4
     })
-    watchEffect(() => {
-        if(props.able_mcht_chanage)
-            props.item.mcht_id = mcht.value
-    })
 })
 </script>
 <template>
@@ -108,8 +105,8 @@ onMounted(() => {
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>소유 가맹점</template>
                                 <template #input>
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht"
-                                        :items="props.merchandises" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id"
+                                        :items="mchts" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
                                         item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] :eager="true"/>
                                 </template>
                             </CreateHalfVCol>
