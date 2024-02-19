@@ -44,6 +44,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:27, name:'픽스페이', rep_name:'박용은', company_name:'(주)브라이트픽스', business_num:'235-88-01772', phone_num:'02-6336-0999', addr:'주소 서울특별시 금천구 가산디지털2로 166, 216~217호(가산동, 에이스K1타워)'},
         {id:28, name:'갤럭시아머니트리', rep_name:'신동훈', company_name:'갤럭시아머니트리(주)', business_num:'120–81–60844', phone_num:'1566–0123', addr:'서울특별시 강남구 광평로 281 수서오피스빌딩 15층(수서동)'},
         {id:29, name:'부국위너스', rep_name:'신동훈', company_name:'부국위너스 주식회사', business_num:'675-86-00152', phone_num:'1644-1109', addr:'부산 해운대구 센텀중앙로 97 센텀스카이비즈 A동 2510호'},
+        {id:30, name:'웰컴페이먼츠(1차)', rep_name:'김기현', company_name:'웰컴페이먼츠(주)', business_num:'526-87-00842', phone_num:'02-838-2001', addr:'서울특별시 용산구 한강대로 148 웰컴금융타워 16층'},
     ]
 
     const finance_companies = <Options[]>([

@@ -43,7 +43,7 @@ provide('exporter', exporter)
                         </template>
                         <template v-else>
                             <td v-show="_header.visible" class='list-square'>
-                                <span v-if="_key == 'id' || _key == 'trans_id'">
+                                <span v-if="_key == 'id'">
                                     #{{ item[_key] }}
                                 </span>
                                 <span v-if="_key == 'result_code'">
