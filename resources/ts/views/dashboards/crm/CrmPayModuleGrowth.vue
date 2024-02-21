@@ -58,7 +58,6 @@ const getPreviousAmount = () => {
     series.value[1].data = hand_counts
     series.value[2].data = auth_counts
     series.value[3].data = simple_counts
-    console.log(series.value)
 }
 
 watchEffect(() => {

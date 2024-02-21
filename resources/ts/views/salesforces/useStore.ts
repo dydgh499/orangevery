@@ -140,10 +140,10 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     const sales_apply_histories = ref(<any[]>([]))
     const mchts = ref(<Merchandise[]>([]))
     
-    onMounted(async () => { 
-        await classification() 
-        await getAllMchts()
-        await feeApplyHistoires()
+    onMounted(() => { 
+        classification() 
+        getAllMchts()
+        feeApplyHistoires()
     })
 
     const classification = async () => {
@@ -158,7 +158,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     const getAllMchts = async() => {
         const url = '/api/v1/manager/merchandises/all'
         const r = await axios.get(url)
-        mchts.value = r.data.content.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name))
+        Object.assign(mchts.value, r.data.content.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name)))
     }
 
     const feeApplyHistoires = async () => {
@@ -169,7 +169,6 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     const hintSalesApplyFee = (sales_id: number): string => {
         if (sales_id) {
             const history = sales_apply_histories.value.find(obj => obj.sales_id === sales_id)
-            console.log(history)
             return history ? '마지막 일괄적용: ' + (history.trx_fee * 100).toFixed(3) + '%' : '';
         }
         else

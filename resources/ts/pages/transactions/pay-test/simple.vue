@@ -1,12 +1,14 @@
 
 <script setup lang="ts">
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import SimplePayOverview from '@/views/pay/SimplePayOverview.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { payTest } from '@/views/transactions/pay-test/payTest'
 
+const { mchts } = useSalesFilterStore()
 const { 
     mcht_id, pmod_id, pay_module, merchandise,
-    pay_url, return_url, merchandises, pay_modules
+    pay_url, return_url, pay_modules
 } = payTest(3)
 
 </script>
@@ -32,7 +34,7 @@ const {
                                                 <template #name>가맹점 선택</template>
                                                 <template #input>
                                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_id"
-                                                        :items="merchandises" prepend-inner-icon="tabler-building-store"
+                                                        :items="mchts" prepend-inner-icon="tabler-building-store"
                                                         label="가맹점 선택" item-title="mcht_name" item-value="id" single-line
                                                         eager />
                                                 </template>

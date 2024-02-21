@@ -170,7 +170,6 @@ const mchtRegister = async () => {
 watchEffect(async () => {
     if (excel.value) {
         items.value = await ExcelReader(headers, excel.value[0]) as extendMerchandise[]
-        console.log(items.value)
         await validate()
     }
 })

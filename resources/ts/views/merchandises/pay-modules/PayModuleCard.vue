@@ -83,6 +83,7 @@ const filterPgs = computed(() => {
     props.item.ps_id = psFilter(filter, props.item.ps_id)
     return filter
 })
+
 onMounted(() => {
     props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
     props.item.ps_id = props.item.ps_id == 0 ? null : props.item.ps_id

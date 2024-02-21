@@ -1,6 +1,5 @@
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { pay } from '@/views/pay/pay'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { PayModule } from '@/views/types'
 
@@ -9,8 +8,6 @@ export const payTest = (module_type:number) => {
     const pmod_id = ref()
     const { pgs } = useStore()
     const pay_modules = ref<PayModule[]>([])
-    const { mchts } = useSalesFilterStore()
-    const merchandises = mchts
     
     const { merchandise, pay_module, pay_url, updateMerchandise } = pay(module_type)
     const return_url = new URL(window.location.href).origin + '/transactions/pay-test/result'
@@ -27,7 +24,7 @@ export const payTest = (module_type:number) => {
     watchEffect(() => { 
         //결제모듈 선택 시 호출
         if(pmod_id.value) {
-            const pmod = pay_modules.value.find(obj => obj.id == pmod_id.value)
+            const pmod = pay_modules.value.find(obj => obj.id == pmod_id.value && obj.module_type)
             if (pmod)
                 pay_module.value = pmod
         }
@@ -35,6 +32,6 @@ export const payTest = (module_type:number) => {
     })
     return {
         mcht_id, pmod_id, return_url, pay_url,
-        merchandise, merchandises, pay_modules, pay_module, pgs
+        merchandise, pay_modules, pay_module, pgs
     }
 }

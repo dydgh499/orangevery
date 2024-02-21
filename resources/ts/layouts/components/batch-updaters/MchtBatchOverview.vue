@@ -87,7 +87,6 @@ const setSalesFee = (sales_idx: number) => {
 }
 
 const setSalesFeeBooking = async (sales_idx: number) => {
-    console.log(merchandise['sales' + sales_idx + "_fee"])
     if (merchandise['sales' + sales_idx + "_fee"] && merchandise['sales' + sales_idx + "_id"]) {
         if (await alert.value.show('정말 예약적용하시겠습니까? <b>명일 00시</b>에 반영됩니다.<br><br><h5>잘못 적용된 예약적용 수수료는 "수수료율 변경이력" 탭에서 삭제시 반영취소할 수 있습니다.</h5>')) {
             const params = {

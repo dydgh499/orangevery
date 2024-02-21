@@ -163,7 +163,6 @@ const cxlProcess = async () => {
     if (fail_find) {
         snackbar.value.show('결제실패건을 발견하였으므로 성공건들을 모두 취소합니다.', 'error')
         for (let i = 0; i < full_processes.value.length; i++) {
-            console.log(full_processes.value[i].trx_result)
             if (full_processes.value[i].trx_result.result_cd === "0000")
                 full_processes.value[i].cxl_process = cancel(i)
             else
@@ -180,7 +179,6 @@ const cxlResult = async () => {
         if (results[i] != null) {
             full_processes.value[i].cxl_result = cloneDeep(full_processes.value[i].trx_result)
             Object.assign(full_processes.value[i].cxl_result, results[i])
-            console.log(full_processes.value[i].cxl_result)
         }
     }
 }
@@ -217,7 +215,6 @@ const pays = async () => {
 }
 
 const setProcessTableWidth = () => {
-    console.log(window.innerWidth)
     if(window.innerWidth < 780) {
         const table = document.getElementById('process-table')
         if(table)

@@ -202,7 +202,6 @@ const payModRegister = async () => {
 watchEffect(async () => {
     if (excel.value) {
         items.value = await ExcelReader(headers, excel.value[0]) as PayModule[]
-        console.log(items.value)
         validate()
     }
 })

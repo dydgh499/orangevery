@@ -103,11 +103,8 @@ initAllSales()
 onMounted(async () => {
     props.item.dev_fee = (props.item.dev_fee * 100).toFixed(3)
     props.item.dev_realtime_fee = (props.item.dev_realtime_fee * 100).toFixed(3)
-    const [payModulesResult] = await Promise.all([
-        getAllPayModules(),
-    ])
+    pay_modules.value  = await getAllPayModules()
 
-    pay_modules.value = payModulesResult
     trx_dttm.value = props.item.trx_dt + " " + props.item.trx_tm
     cxl_dttm.value = props.item.is_cancel ? props.item.cxl_dt + " " + props.item.cxl_tm : ''
 

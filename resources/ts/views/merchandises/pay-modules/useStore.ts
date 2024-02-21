@@ -260,16 +260,15 @@ export const defaultItemInfo =  () => {
     }
 }
 
-export const getAllPayModules = async(mcht_id:number|null=null, pay_module:number|null=null) => {    
+export const getAllPayModules = async(mcht_id:number|null=null, module_type:number|null=null) => {    
     let url = '/api/v1/manager/merchandises/pay-modules/all'
     const params = <any>({})
-    if(mcht_id || pay_module) {
+    if(mcht_id || module_type) {
         if(mcht_id)
             params['mcht_id'] = mcht_id
-        if(pay_module)
-            params['pay_module'] = pay_module
-        const query = new URLSearchParams(params)
-        url += "?" + query
+        if(module_type)
+            params['module_type'] = module_type
+        url += "?" + new URLSearchParams(params)
     }
 
     try {

@@ -381,7 +381,7 @@ export const defaultItemInfo = () => {
         trx_tm: null,
         cxl_dt: null,
         cxl_tm: null,
-        is_cancel: false,
+        is_cancel: 0,
         amount: 0,
         ord_num: '',
         trx_id: '',
@@ -396,7 +396,8 @@ export const defaultItemInfo = () => {
         item_name: '',
         dev_settle_type: corp.dev_settle_type,
         dev_realtime_fee: 0,
-        dev_fee: (corp.dev_fee * 100).toFixed(3)
+        dev_fee: (corp.dev_fee * 100).toFixed(3),
+        mcht_settle_amount: 0
     })  
     return {
         path, item

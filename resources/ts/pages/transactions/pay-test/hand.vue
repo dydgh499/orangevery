@@ -1,12 +1,15 @@
 
 <script setup lang="ts">
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import HandPayOverview from '@/views/pay/HandPayOverview.vue'
 import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { payTest } from '@/views/transactions/pay-test/payTest'
 
+
+const { mchts } = useSalesFilterStore()
 const {
-    mcht_id, pmod_id, pgs, merchandise, merchandises, pay_modules, pay_module
+    mcht_id, pmod_id, pgs, merchandise, pay_modules, pay_module
 } = payTest(1)
 
 const salesslip = ref()
@@ -34,7 +37,7 @@ provide('salesslip', salesslip)
                                                 <template #name>가맹점 선택</template>
                                                 <template #input>
                                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="mcht_id"
-                                                        :items="merchandises" prepend-inner-icon="tabler-building-store"
+                                                        :items="mchts" prepend-inner-icon="tabler-building-store"
                                                         item-title="mcht_name" item-value="id" single-line eager />
                                                 </template>
                                             </CreateHalfVCol>
