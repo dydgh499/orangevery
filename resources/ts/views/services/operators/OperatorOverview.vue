@@ -80,10 +80,11 @@ const is_show = ref(false)
                     <VRow class="pt-5">
                         <VCol cols="12">
                             <VRow no-gutters>
-                                <SwiperPreview :items="avatars" :default_img="props.item.profile_img ?? avatars[Math.floor(Math.random() * avatars.length)]" :item_name="'프로필'"
-                                :lmd="10" :rmd="2" @update:file="props.item.profile_file = $event"
-                                @update:default="props.item.profile_img = $event">
-                            </SwiperPreview>
+                                <SwiperPreview :items="avatars"
+                                    :preview="props.item.profile_img ?? avatars[Math.floor(Math.random() * avatars.length)]"
+                                    :label="'프로필'" :lmd="10" :rmd="2" @update:file="props.item.profile_file = $event"
+                                    @update:path="props.item.profile_img = $event">
+                                </SwiperPreview>
                             </VRow>
                         </VCol>
                     </VRow>

@@ -123,10 +123,10 @@ watchEffect(() => {
                     <VRow class="pt-5">
                         <VCol cols="12">
                             <VRow no-gutters>
-                                <SwiperPreview :items="login_imgs" :default_img="props.item.login_img ?? login_imgs[Math.floor(Math.random() * login_imgs.length)]"
-                                    :item_name="'배경'" :lmd="6" :rmd="6"
+                                <SwiperPreview :items="login_imgs" :preview="props.item.login_img ?? login_imgs[Math.floor(Math.random() * login_imgs.length)]"
+                                    :label="'배경'" :lmd="6" :rmd="6"
                                     @update:file="props.item.login_file = $event"
-                                    @update:default="props.item.login_img = $event">
+                                    @update:path="props.item.login_img = $event">
                                 </SwiperPreview>
                             </VRow>
                         </VCol>

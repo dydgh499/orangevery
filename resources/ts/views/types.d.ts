@@ -55,10 +55,10 @@ export interface Bank {
 }
 
 export interface Contract {
-    id_img: string | null,
-    passbook_img: string | null,
-    contract_img: string | null,
-    bsin_lic_img: string | null,
+    id_img: string,
+    passbook_img: string,
+    contract_img: string,
+    bsin_lic_img: string,
     id_file: File | undefined,
     passbook_file: File | undefined,
     contract_file: File | undefined,

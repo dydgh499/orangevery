@@ -68,7 +68,7 @@ const openFile = () => {
 }
 </script>
 <template>
-    <section>
+    <section>        
         <template v-if="props.ext === 'pdf'">
             <vue-pdf-app :pdf="props.preview.replace('https://team.payvery.kr', '')" class="preview pdf-viewer" :style="props.previewStyle" page-scale="page-height"
                 :config="config" @click="openFile()"/>
