@@ -6,7 +6,7 @@ use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlementInterface;
 use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlement;
 use Carbon\Carbon;
 
-class welcome extends DifferenceSettlement implements DifferenceSettlementInterface
+class welcome1 extends DifferenceSettlement implements DifferenceSettlementInterface
 {
     public function __construct($brand)
     {

@@ -71,19 +71,12 @@ trait ManagerTrait
         $parent_folder = public_path('storage/images/'.$folder);
         if(Storage::disk('public')->exists($img))
             Storage::disk('public')->delete($img);
+
         if(!file_exists($parent_folder))
             mkdir($parent_folder, '0755', true);
 
-        if(in_array(strtoupper(pathinfo($name)['extension']), ['JPG', 'JPEG', 'PNG', 'BMP', 'WEBP']))
-        {
-            $img = $img->save("$parent_folder/$name");
-            return env('APP_URL')."/storage/images/$folder/$name";
-        }
-        else
-        {
-            $name = $img->store($folder, 'main');
-            return env('APP_URL')."/storage/images/$name";
-        }
+        $name = $img->store($folder, 'main');
+        return env('APP_URL')."/storage/images/$name";
     }
 
     public function saveImages($request, $data, $imgs)
@@ -97,9 +90,9 @@ trait ManagerTrait
             if($request->hasFile($params[$i]))
             {
                 $img    = $request->file($params[$i]);
-                $ext    = $img->extension();
-
-                [$img, $name] = $this->getEncodedImage($img, $sizes[$i], $ext);
+                $ext    = $img->extension();        
+                $name   = time().md5(pathinfo($img, PATHINFO_FILENAME)).".$ext";
+        
                 if(env('DISK_CONNECTION') == 's3')
                     $data[$cols[$i]] = $this->ToS3($folders[$i], $img, $name);
                 else if(env('DISK_CONNECTION') == 'cloudinary')

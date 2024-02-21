@@ -131,7 +131,7 @@ class DifferenceSettlement
     private function setTotalRecord($total_count, $total_amount)
     {
         if($this->service_name == 'galaxiamoneytree')
-            return $this->service->setTotalRecord($this->RQ_TOTAL_FILTER_SIZE);
+            return $this->service->setTotalRecord($this->RQ_TOTAL_FILTER_SIZE, $total_count, $total_amount);
         else
         {
             $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::TOTAL->value, 2);

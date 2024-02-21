@@ -7,7 +7,7 @@ use App\Http\Traits\Log\DifferenceSettlement\FileRWTrait;
 use App\Enums\DifferenceSettleHectoRecordType;
 use Carbon\Carbon;
 
-class welcome implements DifferenceSettlementInterface
+class welcome1 implements DifferenceSettlementInterface
 {
     use FileRWTrait;
 

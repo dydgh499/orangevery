@@ -20,7 +20,7 @@ class galaxiamoneytree implements DifferenceSettlementInterface
         return $record_type.$create_dt.$rep_mid.$filter."\n";    
     }
 
-    public function setTotalRecord($space)
+    public function setTotalRecord($space, $total_count, $total_amount)
     {
         $record_type    = $this->setAtypeField('TR', 2);
         $total_count    = $this->setNtypeField($total_count, 7);
