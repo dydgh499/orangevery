@@ -72,7 +72,7 @@ const register = async() => {
             <CreateHalfVCol :mdl="6" :mdr="6">
                 <template #name>
                     <VCol class="d-flex justify-center align-center">
-                        <VCard flat class="d-flex flex-column align-items-center mt-12 mt-sm-0 pa-4">
+                        <VCard flat class="d-flex flex-column align-items-center mt-sm-0 pa-4">
                             <VCol style=" max-width: 500px; line-height: 2.5em; text-align: center;">
                                 <b>
                                 업그레이드 이전 전산의 도메인과 본사 계정정보를 입력후 로그인 버튼을 클릭해주세요.
@@ -134,7 +134,7 @@ const register = async() => {
                 </template>
                 <template #input>
                     <VCol class="d-flex justify-center align-center">
-                        <VCard flat class="d-flex flex-column align-items-center mt-12 mt-sm-0 pa-4">
+                        <VCard flat class="d-flex flex-column align-items-center mt-sm-0 pa-4">
                             <h3>주의사항</h3>
                             <VCol style="line-height: 2.5em;">
                                 <h4>하단 정보들은 이전전산에서 구현되었지 않았거나, 연동이 불가한 정보들이므로 연동시 기본값으로 세팅됩니다.</h4>

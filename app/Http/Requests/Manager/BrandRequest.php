@@ -54,8 +54,8 @@ class BrandRequest extends FormRequest
         $sub = [
             'name'  => 'string|required',
             'dns'   => 'string|required',
-            'logo_file'    => 'file|mimes:svg',
-            'favicon_file' => 'file|mimes:ico,svg,jpg,bmp,png,jpeg,webp',
+            'logo_file'    => 'file|mimes:svg,jpg,png,jpeg,webp',
+            'favicon_file' => 'file|mimes:ico,svg,jpg,png,jpeg,webp',
             'passbook_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
             'contract_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
             'bsin_lic_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
