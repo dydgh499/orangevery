@@ -69,10 +69,7 @@ class SalesforceRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        if ($this->has('view_type')) 
-        {
-            $this->merge(['view_type' => $this->convertToBoolean($this->input('view_type'))]);
-        }
+        $this->merge(['view_type' => $this->convertToBoolean($this->input('view_type', 0))]);
     }
 
     public function bodyParameters()
