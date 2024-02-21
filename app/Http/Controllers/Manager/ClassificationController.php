@@ -96,9 +96,9 @@ class ClassificationController extends Controller
     public function destroy(Request $request, $id)
     {
         $res = $this->classifications->where('id', $id)->update(['is_delete'=>true]);
-
         $data = $this->classifications->where('id', $id)->first(['name']);
-        operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->name);
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
+        if($data)
+            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->name);
+        return $this->response($res ? 1 : 990, ['id'=>$id]);    
     }
 }

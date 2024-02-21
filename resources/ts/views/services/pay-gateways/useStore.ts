@@ -18,7 +18,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:1, name:'페이투스', rep_name:'서동균', company_name:'(주)페이투스', business_num:'810-81-00347', phone_num:'02-465-8800', addr:'서울특별시 금천구 가산디지털1로 168, C동 7층 701B호(가산동, 우림라이온스밸리)'},
         {id:2, name:'케이원피에스', rep_name:'강승구', company_name:'(주)케이원피에스', business_num:'419-88-00046', phone_num:'1855-1838', addr:'서울특별시 구로구 디지털로33길 27, 5층 513호, 514호(구로동, 삼성IT밸리)'},
         {id:3, name:'에이닐', rep_name:'이승철', company_name:'(주)에이닐에프앤피', business_num:'788-87-00950', phone_num:'1544-6872', addr:'서울 송파구 법원로11길 7 (문정동) 문정현대지식산업센터C동 1404~1406호'}, 
-        {id:4, name:'웰컴페이먼츠', rep_name:'김기현', company_name:'웰컴페이먼츠(주)', business_num:'526-87-00842', phone_num:'02-838-2001', addr:'서울특별시 용산구 한강대로 148 웰컴금융타워 16층'},
+        {id:4, name:'웰컴페이먼츠(2차)', rep_name:'김기현', company_name:'웰컴페이먼츠(주)', business_num:'526-87-00842', phone_num:'02-838-2001', addr:'서울특별시 용산구 한강대로 148 웰컴금융타워 16층'},
         {id:5, name:'헥토파이넨셜', rep_name:'최종원', company_name:'(주)헥토파이낸셜', business_num:'101-81-63383', phone_num:'1600-5220', addr:'서울특별시 강남구 테헤란로34길 6, 9~10층(역삼동, 태광타워)'}, 
         {id:6, name:'루멘페이먼츠', rep_name:'김인환', company_name:'(주)루멘페이먼츠', business_num:'707-81-01787', phone_num:'02-1599-1873', addr:'서울특별시 동작구 상도로 13 4층 (프라임빌딩)'},
         {id:7, name:'페이레터', rep_name:'이성우', company_name:'페이레터(주)', business_num:'114-86-05588', phone_num:'1599-7591', addr:'서울시 강남구 역삼로 223 (역삼동 733-23, 대사빌딩) 페이레터(주)'}, 
@@ -45,6 +45,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:28, name:'갤럭시아머니트리', rep_name:'신동훈', company_name:'갤럭시아머니트리(주)', business_num:'120–81–60844', phone_num:'1566–0123', addr:'서울특별시 강남구 광평로 281 수서오피스빌딩 15층(수서동)'},
         {id:29, name:'부국위너스', rep_name:'신동훈', company_name:'부국위너스 주식회사', business_num:'675-86-00152', phone_num:'1644-1109', addr:'부산 해운대구 센텀중앙로 97 센텀스카이비즈 A동 2510호'},
         {id:30, name:'웰컴페이먼츠(1차)', rep_name:'김기현', company_name:'웰컴페이먼츠(주)', business_num:'526-87-00842', phone_num:'02-838-2001', addr:'서울특별시 용산구 한강대로 148 웰컴금융타워 16층'},
+        {id:31, name:'토스페이먼츠', rep_name:'김민표', company_name:'토스페이먼츠 주식회사', business_num:' 411-86-01799', phone_num:'1544-7772', addr:'서울특별시 강남구 테헤란로 131, 14층 (역삼동,한국지식재산센터)'},
     ]
 
     const finance_companies = <Options[]>([

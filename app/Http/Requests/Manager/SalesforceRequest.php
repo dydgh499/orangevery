@@ -50,10 +50,10 @@ class SalesforceRequest extends FormRequest
             'acct_bank_name' => 'required',
             'settle_tax_type' => 'required',
             'settle_cycle' => 'required',
-            'passbook_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
-            'contract_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
-            'bsin_lic_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
-            'id_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp',
+            'passbook_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
+            'contract_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
+            'bsin_lic_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
+            'id_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
             'profile_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
         ];
         return $this->getRules($this->keys, $sub);

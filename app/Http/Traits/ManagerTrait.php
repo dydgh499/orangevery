@@ -48,26 +48,6 @@ trait ManagerTrait
     
     public function getEncodedImage($img, $max_width, $ext)
     {
-        if(in_array(strtoupper($ext), ['JPG', 'JPEG', 'PNG', 'BMP', 'WEBP']))
-        {
-            $imgMaxResize = function($img, $max_width) {
-                // only JPG, PNG, GIF, BMP or WebP
-                $intervention_img = Image::make($img);
-                $width = $intervention_img->width();
-                $height= $intervention_img->height();
-        
-                if($max_width < $width)
-                {
-                    $max_height = ($max_width * $height)/$width;
-                    $per_width  = (int)($width / ($width/$max_width));
-                    $per_height = (int)($height / ($height/$max_height));
-                    $intervention_img = $intervention_img->resize($per_width, $per_height);
-                }
-                return $intervention_img;
-            };
-            $img = $imgMaxResize($img, $max_width);     
-        }
-        
         $name = time().md5(pathinfo($img, PATHINFO_FILENAME)).".$ext";
         return [$img, $name];
     }

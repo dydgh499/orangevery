@@ -40,7 +40,7 @@ export const banks = [
     { code: "071", title: "우체국" }, { code: "076", title: "신용보증기금" }, { code: "077", title: "기술신용보증기금" },
     { code: "081", title: "하나은행" }, { code: "088", title: "신한은행" }, { code: "089", title: "케이뱅크" },
     { code: "090", title: "카카오뱅크" }, { code: "092", title: "토스뱅크" },  { code: "094", title: "서울보증보험" }, 
-    { code: "101", title: " 한국신용정보원"},
+    { code: "101", title: " 한국신용정보원"}, { code: "103", title: "SBI저축은행"}, { code: "105", title: "웰컴저축은행"},
     { code:"209", title: "유안타증권" }, { code:"218", title: "KB증권" }, { code:"221", title: "상상인증권" }, { code:"222", title: "한양증권" },
     { code:"223", title: "리딩투자증권" },{ code:"224", title: "BNK투자증권" },{ code:"225", title: "IBK투자증권" }, { code:"227", title: "다올투자증권" },
     { code:"238", title: "미래에셋증권" },{ code:"240", title: "삼성증권" }, { code:"243", title: "한국투자증권" }, { code:"247", title: "NH투자증권" },

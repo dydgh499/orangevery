@@ -193,7 +193,7 @@ watchEffect(async () => {
                         </VChip>                        
                     </VCol>
                     <VCol class="pb-0">
-                        <b>정산일</b>
+                        <b>화면타입</b>
                         <br>
                         <VChip color="primary" style="margin: 0.5em;" v-for="(view_type, key) in view_types" :key="key">
                             {{ view_type.title }} = {{ view_type.id }}

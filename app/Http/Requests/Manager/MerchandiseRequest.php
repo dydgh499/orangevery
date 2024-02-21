@@ -70,10 +70,10 @@ class MerchandiseRequest extends FormRequest
             'tax_category_type' => 'nullable|numeric',
             'withdraw_fee' => 'nullable|numeric',
             'is_show_fee' => 'required|boolean',
-            'passbook_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
-            'contract_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
-            'bsin_lic_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
-            'id_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp',
+            'passbook_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
+            'contract_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
+            'bsin_lic_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
+            'id_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
             'profile_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
 
         ];

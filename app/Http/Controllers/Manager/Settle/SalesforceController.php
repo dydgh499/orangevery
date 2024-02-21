@@ -79,7 +79,7 @@ class SalesforceController extends Controller
         $query = $this->getDefaultQuery($this->salesforces, $request, $sales_ids)
             ->where('sales_name', 'like', "%$search%")
             ->where('level', $level)
-            ->orWhere(function ($query) use($terminal_settle_ids) {    
+            ->orWhere(function ($query) use($terminal_settle_ids) {
                 $query->whereIn('id', $terminal_settle_ids);
             });
         if($request->settle_cycle)

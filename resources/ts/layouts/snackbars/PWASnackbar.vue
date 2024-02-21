@@ -70,13 +70,13 @@ onMounted(() => {
                     "purpose": "any maskable"
                 },
                 {
-                    "src": 'https://team.payvery.kr/utils/pwa/1.png',
+                    "src": corp.logo_img,
                     "sizes": "512x512",
                     "type": "image/png",
                     "purpose": "any maskable"
                 },
                 {
-                    "src": 'https://team.payvery.kr/utils/pwa/2.png',
+                    "src": corp.logo_img,
                     "sizes": "512x512",
                     "type": "image/png",
                     "purpose": "any maskable"

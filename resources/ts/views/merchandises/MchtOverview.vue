@@ -369,7 +369,7 @@ initAllSales()
                                         </VRow>
                                     </VCol>
                                     <VCol v-if="corp.pv_options.paid.use_multiple_hand_pay">
-                                        <VRow no-gutters style="align-items: center;">
+                                        <VRow no-gutters :md="6" style="align-items: center;">
                                             <VCol>다중 수기결제 사용 여부</VCol>
                                             <VCol md="6">
                                                 <div class="batch-container">
