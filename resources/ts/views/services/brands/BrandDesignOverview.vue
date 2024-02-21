@@ -62,27 +62,8 @@ watchEffect(() => {
                                         :validates="['svg','png','jpg','ico']" />
                                 </VRow>
                             </VCol>
-                            <VCol>
-                                <div class="d-inline-flex align-center flex-wrap gap-4 justify-content-evenly float-right">
-                                    <VBtn variant="tonal" @click="moveNewTap('https://convertio.co/kr/png-svg/')">
-                                        SVG 추출하러 가기
-                                        <VTooltip activator="parent" location="top">
-                                            홈페이지의 이미지 품질을 위해 로고 이미지는 *.SVG 파일을 권장합니다.
-                                        </VTooltip>
-                                    </VBtn>
-                                    <VBtn variant="tonal" color="secondary"
-                                        @click="moveNewTap('https://convertio.co/kr/png-ico/')">
-                                        ICO 추출하러 가기
-                                        <VTooltip activator="parent" location="top">
-                                            웹 표준과 브라우저 호환성을 위해 파비콘 이미지는 *.ico 파일을 권장합니다.
-                                        </VTooltip>
-                                    </VBtn>
-                                </div>
-                                <br>
-                                <br>
-                                <VCol style="text-align: center;">
-                                    <b>좌우상하 공백을 제거한 후 이미지들 등록해주세요.</b>
-                                </VCol>
+                            <VCol style="text-align: center;">
+                                <b>좌우상하 공백을 제거한 후 이미지들 등록해주세요.</b>
                             </VCol>
                         </VCol>
                         <VCol md="6">
