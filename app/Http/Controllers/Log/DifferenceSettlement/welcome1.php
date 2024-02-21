@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Log\DifferenceSettlement;
 
 use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlementInterface;
 use App\Http\Controllers\Log\DifferenceSettlement\DifferenceSettlement;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class welcome1 extends DifferenceSettlement implements DifferenceSettlementInterface
@@ -24,9 +25,8 @@ class welcome1 extends DifferenceSettlement implements DifferenceSettlementInter
             'host' => "118.130.130.27",
             'port' => 5555,
             'username' => $brand['sftp_id'],
-            'password' => $brand['sftp_password'],
-            'privateKey' => env('SFTP_PRIVATE_KEY'),
-            'passphrase' => env('SFTP_PASSPHRASE'),
+            'privateKey' => Storage::disk('local')->get('id_rsa'),
+            'passphrase' => $brand['sftp_password'],
             'passive' => false,
         ]]);
         [$this->main_sftp_connection, $this->main_connection_stat] = $this->connectSFTPServer($main_config_name, 'main');
