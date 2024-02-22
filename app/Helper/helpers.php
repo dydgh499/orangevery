@@ -10,7 +10,6 @@
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Facades\Redis;
     use App\Models\Options\PvOptions;
-    use App\Models\Options\ThemeCSS;
 
     function getPGType($pg_type)
     {
@@ -121,11 +120,7 @@
         }
         else
         {
-            $default = json_decode(json_encode($brand), true);
-
-            $brand = new PvOptions($brand);
-            $brand = json_decode(json_encode($brand), true);
-            return array_merge($default, $brand);
+            return json_decode($brand, true);
         }
     }
     
