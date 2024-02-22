@@ -105,7 +105,8 @@
 
     function getBrandByDNS($request)
     {
-        $brand = Brand::with(['beforeBrandInfos'])->first();
+
+        $brand = Brand::where('dns', $request->dns)->with(['beforeBrandInfos'])->first();
         return json_decode($brand, true);
     }
     
