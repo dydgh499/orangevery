@@ -22,7 +22,7 @@ class welcome1 extends DifferenceSettlement implements DifferenceSettlementInter
         $dr_config_name     = 'different_settlement_dr'.$this->service_name;
         config(['filesystems.disks.'.$main_config_name => [
             'driver' => 'sftp',
-            'host' => "118.130.130.27",
+            'host' => "118.129.171.153",
             'port' => 5555,
             'username' => $brand['sftp_id'],
             'privateKey' => Storage::disk('local')->get('id_rsa'),

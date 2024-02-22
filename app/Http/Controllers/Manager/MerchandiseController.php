@@ -355,25 +355,29 @@ class MerchandiseController extends Controller
         $current = date('Y-m-d H:i:s');
         $brand_id = $request->user()->brand_id;
         $datas = $request->data();
-
-        $exist_names = $this->isExistBulkUserName($brand_id, $datas->pluck('user_name')->all());
-        $exist_mchts = $this->isExistBulkMutual($this->merchandises, $brand_id, 'mcht_name', $datas->pluck('mcht_name')->all());
-
-        if(count($exist_names))
-            return $this->extendResponse(1000, join(',', $exist_names).'는 이미 존재하는 아이디 입니다.');
-        else if(count($exist_mchts))
-            return $this->extendResponse(1000, join(',', $exist_mchts).'는 이미 존재하는 상호 입니다.');
+        if(count($datas) > 1000)
+            return $this->extendResponse(1000, '가맹점은 한번에 최대 1000개까지 등록할 수 있습니다.');
         else
         {
-            $merchandises = $datas->map(function ($data) use($current, $brand_id) {
-                $data['user_pw'] = Hash::make($data['user_pw']);
-                $data['brand_id'] = $brand_id;
-                $data['created_at'] = $current;
-                $data['updated_at'] = $current;
-                return $data;
-            })->toArray();
-            $res = $this->manyInsert($this->merchandises, $merchandises);
-            return $this->response($res ? 1 : 990);
+            $exist_names = $this->isExistBulkUserName($brand_id, $datas->pluck('user_name')->all());
+            $exist_mchts = $this->isExistBulkMutual($this->merchandises, $brand_id, 'mcht_name', $datas->pluck('mcht_name')->all());
+    
+            if(count($exist_names))
+                return $this->extendResponse(1000, join(',', $exist_names).'는 이미 존재하는 아이디 입니다.');
+            else if(count($exist_mchts))
+                return $this->extendResponse(1000, join(',', $exist_mchts).'는 이미 존재하는 상호 입니다.');
+            else
+            {
+                $merchandises = $datas->map(function ($data) use($current, $brand_id) {
+                    $data['user_pw'] = Hash::make($data['user_pw']);
+                    $data['brand_id'] = $brand_id;
+                    $data['created_at'] = $current;
+                    $data['updated_at'] = $current;
+                    return $data;
+                })->toArray();
+                $res = $this->manyInsert($this->merchandises, $merchandises);
+                return $this->response($res ? 1 : 990);
+            }    
         }
     }
 
