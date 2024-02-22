@@ -74,6 +74,7 @@
         public $use_part_cancel = false;        // 부분취소
         public $use_settle_hold = false;        // 지급보류
         public $use_hide_account = false;       // 계좌숨김
+
         public function __construct(array $source)
         {
             foreach ($source as $property => $value) 

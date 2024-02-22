@@ -9,6 +9,7 @@
     use App\Enums\HistoryType;
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Facades\Redis;
+    use App\Models\Options\PvOptions;
 
     function getPGType($pg_type)
     {
@@ -118,7 +119,10 @@
                 return [];
         }
         else
-            return json_decode($brand, true);
+        {
+            $brand = new PvOptions($brand);
+            return json_decode(json_encode($brand), true);
+        }
     }
     
     function globalAuthFilter($query, $request, $parent_table='')
