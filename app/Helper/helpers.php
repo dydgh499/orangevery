@@ -105,15 +105,7 @@
 
     function getBrandByDNS($request)
     {
-        $brand = Redis::get($request->dns);
-        if($brand == null)
-        {
-            $brand = Brand::with(['beforeBrandInfos'])->first();
-            if($brand)
-                Redis::set($request->dns, json_encode($brand));
-            else
-                $brand = '[]';
-        }
+        $brand = Brand::with(['beforeBrandInfos'])->first();
         return json_decode($brand, true);
     }
     
