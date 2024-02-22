@@ -16,7 +16,6 @@ import { VForm } from 'vuetify/components'
 import corp from '@corp'
 import { axios, getUserLevel, salesLevels } from '@axios'
 
-
 interface Props {
     item: PayModule,
     able_mcht_chanage: boolean,
@@ -26,13 +25,13 @@ const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
+const midCreateDlg = <any>(inject('midCreateDlg'))
+const md = ref<number>(3)
+
 
 const { update, remove } = useRequestStore()
 const { mchts } = useSalesFilterStore()
 const { pgs, pss, settle_types, terminals, finance_vans, psFilter, setFee } = useStore()
-
-const md = ref<number>(3)
-const midCreateDlg = <any>(inject('midCreateDlg'))
 
 const tidCreate = async() => {
     if(await alert.value.show('정말 TID를 신규 발급하시겠습니까?')) {
@@ -377,7 +376,6 @@ onMounted(() => {
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <!-- 👉 정산일 -->
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>

@@ -10,6 +10,7 @@ import { VForm } from 'vuetify/components'
 interface Props {
     item: NotiUrl,
     able_mcht_chanage: boolean,
+    pay_modules: PayModule[]
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()

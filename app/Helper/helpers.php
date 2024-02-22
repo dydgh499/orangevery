@@ -8,10 +8,10 @@
     use App\Http\Controllers\Log\OperatorHistoryContoller;
     use App\Enums\HistoryType;
     use Illuminate\Support\Facades\DB;
+    use Illuminate\Support\Facades\Redis;
 
     function getPGType($pg_type)
     {
-        // lumen + payletter
         $pgs = [
             'paytus', 'koneps', 'aynil', 'welcome', 'hecto', 'lumen',
             'payletter', 'wholebic', 'korpay', 'kppay', 'thepayone', 'ezpg',
@@ -105,10 +105,16 @@
 
     function getBrandByDNS($request)
     {
-        $brand = Brand::where('dns', $request->dns)
-            ->with(['beforeBrandInfos'])
-            ->first();
-        return json_decode(json_encode($brand), true);
+        $brand = Redis::get($request->dns);
+        if($brand == null)
+        {
+            $brand = Brand::with(['beforeBrandInfos'])->first();
+            if($brand)
+                Redis::set($request->dns, json_encode($brand));
+            else
+                $brand = '[]';
+        }
+        return json_decode($brand, true);
     }
     
     function globalAuthFilter($query, $request, $parent_table='')
@@ -210,53 +216,51 @@
     }
 
     function globalGetSalesByIds($sales_ids, $is_all=true)
-    {        
+    {
+        $globalGetIndexingByCollection = function($salesforces) {
+            $sales_index_by_ids = [];
+            foreach ($salesforces as $salesforce) {
+                $sales_index_by_ids[$salesforce->id] = $salesforce;
+            }
+            return $sales_index_by_ids;
+        };
+
         $query = Salesforce::whereIn('id', $sales_ids);
         if($is_all == false)
             $query = $query->where('is_delete', false);
         $salesforces = $query->get(['id', 'sales_name', 'settle_tax_type']);
-        return globalGetIndexingByCollection($salesforces);
-    }
-
-    function globalGetIndexingByCollection($salesforces)
-    {        
-        $sales_index_by_ids = [];
-        foreach ($salesforces as $salesforce) {
-            $sales_index_by_ids[$salesforce->id] = $salesforce;
-        }
-        return $sales_index_by_ids;
-    }
-
-    function mappingSalesInfo($content, $sales_index_by_ids, $sales_id, $idx)
-    {
-        $sales = 'sales'.$idx;
-        if(isset($sales_index_by_ids[$sales_id]))
-        {
-            if(isset($sales_index_by_ids[$sales_id]))
-            {
-                $content[$sales] = $sales_index_by_ids[$sales_id];
-                $content[$sales."_name"] = $sales_index_by_ids[$sales_id]->sales_name;    
-            }
-            else
-                $content[$sales."_name"] = '삭제된 영업자';
-        }
-        else
-        {
-            $content[$sales] = null;
-            $content[$sales."_name"] = '';
-        }
-        return $content;
+        return $globalGetIndexingByCollection($salesforces);
     }
 
     function globalMappingSales($sales_index_by_ids, $contents)
     {
+        $mappingSalesInfo = function($content, $sales_index_by_ids, $sales_id, $idx) {
+            $sales = 'sales'.$idx;
+            if(isset($sales_index_by_ids[$sales_id]))
+            {
+                if(isset($sales_index_by_ids[$sales_id]))
+                {
+                    $content[$sales] = $sales_index_by_ids[$sales_id];
+                    $content[$sales."_name"] = $sales_index_by_ids[$sales_id]->sales_name;    
+                }
+                else
+                    $content[$sales."_name"] = '삭제된 영업자';
+            }
+            else
+            {
+                $content[$sales] = null;
+                $content[$sales."_name"] = '';
+            }
+            return $content;
+        };
+
         foreach ($contents as $content) {
-            $content = mappingSalesInfo($content, $sales_index_by_ids, $content->sales0_id, 0);
-            $content = mappingSalesInfo($content, $sales_index_by_ids, $content->sales1_id, 1);
-            $content = mappingSalesInfo($content, $sales_index_by_ids, $content->sales2_id, 2);
-            $content = mappingSalesInfo($content, $sales_index_by_ids, $content->sales3_id, 3);
-            $content = mappingSalesInfo($content, $sales_index_by_ids, $content->sales4_id, 4);
-            $content = mappingSalesInfo($content, $sales_index_by_ids, $content->sales5_id, 5);
+            $content = $mappingSalesInfo($content, $sales_index_by_ids, $content->sales0_id, 0);
+            $content = $mappingSalesInfo($content, $sales_index_by_ids, $content->sales1_id, 1);
+            $content = $mappingSalesInfo($content, $sales_index_by_ids, $content->sales2_id, 2);
+            $content = $mappingSalesInfo($content, $sales_index_by_ids, $content->sales3_id, 3);
+            $content = $mappingSalesInfo($content, $sales_index_by_ids, $content->sales4_id, 4);
+            $content = $mappingSalesInfo($content, $sales_index_by_ids, $content->sales5_id, 5);
         }
         return $contents;
     }
@@ -337,7 +341,7 @@
                 'total_trx_amount' => 0    
             ]
         ];
-    
+
         // 트랜잭션 유형별로 데이터를 분류하며, 동시에 필요한 합계를 계산합니다.
         foreach ($data as $transaction) {
             $type = $transaction->is_cancel ? 'cxl' : 'appr';

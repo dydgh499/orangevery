@@ -86,4 +86,4 @@ watchEffect(() => {
 :deep(.v-table__wrapper) {
   block-size: auto !important;
 }
-  </style>
+</style>

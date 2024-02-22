@@ -50,7 +50,7 @@ class CreateMerchandisesTable extends Migration
             $table->string('phone_num',20)->nullable()->comment('휴대폰 번호');
             $table->string('resident_num', 20)->nullable()->comment('주민등록번호');
             $table->string('business_num', 20)->nullable()->comment('사업자등록번호');
-            $table->string('sector', 20)->nullable()->comment('업종');
+            $table->string('sector', 50)->nullable()->comment('업종');
             //
             $table->string('passbook_img', 150)->nullable()->comment('통장 사본');
             $table->string('id_img', 150)->nullable()->comment('신분증 사본');

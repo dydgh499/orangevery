@@ -28,8 +28,10 @@ const setPayUrl = () => {
 onMounted( async () => {
     setPayUrl()
     await getData()
-    if(result_cd == "0000")
+    if(result_cd == "0000") {
+        sale_slip.value.module_type = 2 // 인증결제
         salesslip.value.show(sale_slip.value)
+    }
 })
 </script>
 <template>

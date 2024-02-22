@@ -31,7 +31,7 @@ trait StoresTrait
                     return false;
             }
             return true;
-        }, 3);
+        });
     }
 
     public function isExistUserName($brand_id, $user_name)

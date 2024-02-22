@@ -45,12 +45,6 @@ trait ManagerTrait
         }
         return $res;
     }
-    
-    public function getEncodedImage($img, $max_width, $ext)
-    {
-        $name = time().md5(pathinfo($img, PATHINFO_FILENAME)).".$ext";
-        return [$img, $name];
-    }
 
     // S3
     public function ToS3($folder, $img, $name)
@@ -90,8 +84,8 @@ trait ManagerTrait
             if($request->hasFile($params[$i]))
             {
                 $img    = $request->file($params[$i]);
-                $ext    = $img->extension();        
-                $name   = time().md5(pathinfo($img, PATHINFO_FILENAME)).".$ext";
+                $ext    = $img->extension();                
+		        $name = time().md5(pathinfo($img, PATHINFO_FILENAME)).".$ext";
         
                 if(env('DISK_CONNECTION') == 's3')
                     $data[$cols[$i]] = $this->ToS3($folders[$i], $img, $name);

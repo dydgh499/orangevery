@@ -154,7 +154,7 @@ class DifferenceSettlementHistoryController extends Controller
 
         for ($i=0; $i<count($brands); $i++)
         {
-            $trans   = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
+            $trans = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
                 ->join('payment_gateways', 'transactions.pg_id', '=', 'payment_gateways.id')
                 ->where('transactions.is_delete', false)
                 ->where('merchandises.is_delete', false)

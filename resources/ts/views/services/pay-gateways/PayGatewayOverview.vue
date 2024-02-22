@@ -16,11 +16,7 @@ const addNewPG = () => {
         business_num: '',
         phone_num: '',
         addr:'',
-        settle_type:0,        
-        rep_mid: '',
-        sftp_id: '',
-        sftp_password: '',
-        use_different_settlement: 0,
+        settle_type:0,
     }))
 }
 

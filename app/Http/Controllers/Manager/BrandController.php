@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redis;
 
 /**
  * @group Brand API
@@ -144,6 +145,8 @@ class BrandController extends Controller
         
         $query  = $this->brands->where('id', $id);
         $res = $query->update($data);
+
+        Redis::set($data['dns'], json_encode($query->with(['beforeBrandInfos'])->first()));
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 

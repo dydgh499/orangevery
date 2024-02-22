@@ -23,8 +23,6 @@ onMounted(() => {
         store.setTable()
     })
 });
-
-
 </script>
 <template>
     <section>
