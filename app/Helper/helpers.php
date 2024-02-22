@@ -120,8 +120,7 @@
         }
         else
         {
-            $brand = new PvOptions($brand);
-            return json_decode(json_encode($brand), true);
+            return json_decode($brand, true);
         }
     }
     
