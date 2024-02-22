@@ -121,11 +121,11 @@
         }
         else
         {
+            $default = json_decode(json_encode($brand), true);
+
             $brand = new PvOptions($brand);
             $brand = json_decode(json_encode($brand), true);
-            $thema = new ThemeCSS($brand['theme_css']);
-            $thema = json_decode(json_encode($thema), true);
-            return array_merge($brand, $thema);
+            return array_merge($default, $brand);
         }
     }
     
