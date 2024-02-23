@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <link rel="dns-prefetch" href="{{ $json['dns'] }}">
     <link rel="icon" href="{{ $json['favicon_img'] }}"/>
+    <meta name="google" content="notranslate" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ $json['name'] }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
