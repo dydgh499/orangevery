@@ -9,7 +9,6 @@ trait ExtendResponseTrait
 {
     public function storesResponse($exceptions)
     {
-        $data = [];
         $msg = "";
         foreach($exceptions as $key => $value)
         {
@@ -20,10 +19,9 @@ trait ExtendResponseTrait
                 if($msg == "")
                     $msg = preg_replace("/[0-9]\.[a-z_-]+/", __("validation.attributes.".$str), $exceptions[$key][0]);
 
-                array_push($data[$str], $num);
             }
         }
-        return Response::json(['code'=>1004, 'message'=>$msg, 'data'=>$data], 409, [], JSON_UNESCAPED_UNICODE);
+        return Response::json(['code'=>1004, 'message'=>$msg], 409, [], JSON_UNESCAPED_UNICODE);
     }
 
     public function apiResponse($code, $msg, $data=[])
