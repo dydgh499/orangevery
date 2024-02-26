@@ -46,6 +46,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:29, name:'부국위너스', rep_name:'신동훈', company_name:'부국위너스 주식회사', business_num:'675-86-00152', phone_num:'1644-1109', addr:'부산 해운대구 센텀중앙로 97 센텀스카이비즈 A동 2510호'},
         {id:30, name:'웰컴페이먼츠(1차)', rep_name:'김기현', company_name:'웰컴페이먼츠(주)', business_num:'526-87-00842', phone_num:'02-838-2001', addr:'서울특별시 용산구 한강대로 148 웰컴금융타워 16층'},
         {id:31, name:'토스페이먼츠', rep_name:'김민표', company_name:'토스페이먼츠 주식회사', business_num:' 411-86-01799', phone_num:'1544-7772', addr:'서울특별시 강남구 테헤란로 131, 14층 (역삼동,한국지식재산센터)'},
+        {id:32, name:'페이업', rep_name:'문병래', company_name:'페이업(주)', business_num:'674-88-00508', phone_num:'02-1644-1017', addr:'서울시 강남구 테헤란로 83길 18, 9층(삼성동, 매직킹덤빌딩)'},
     ]
 
     const finance_companies = <Options[]>([
