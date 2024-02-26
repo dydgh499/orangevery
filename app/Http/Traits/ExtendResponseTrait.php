@@ -11,6 +11,7 @@ trait ExtendResponseTrait
     {
         $data = [];
         $msg = "";
+        logging($exceptions);
         foreach($exceptions as $key => $value)
         {
             if(preg_match('/[0-9]\.[a-z_-]+$/', $key, $keys))
