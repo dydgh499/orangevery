@@ -11,7 +11,6 @@ trait ExtendResponseTrait
     {
         $data = [];
         $msg = "";
-        logging($exceptions);
         foreach($exceptions as $key => $value)
         {
             if(preg_match('/[0-9]\.[a-z_-]+$/', $key, $keys))
@@ -21,14 +20,6 @@ trait ExtendResponseTrait
                 if($msg == "")
                     $msg = preg_replace("/[0-9]\.[a-z_-]+/", __("validation.attributes.".$str), $exceptions[$key][0]);
 
-                if(isset($data[$str]) == false)
-                {
-                    $items = explode('.' ,$key);
-                    $message = str_replace($items[1], '', $value);
-                    $data[$str] = $items[0]."번째 ".__("validation.attributes.".$items[1])."는 $message.\n";
-                    if($msg == "")
-                        $msg = $data[$str];
-                }
                 array_push($data[$str], $num);
             }
         }
