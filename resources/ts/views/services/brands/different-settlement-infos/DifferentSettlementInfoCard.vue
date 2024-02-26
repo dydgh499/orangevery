@@ -8,16 +8,17 @@ interface Props {
     item: Brand,
 }
 const props = defineProps<Props>()
+
 const { setNullRemove } = useRequestStore()
-const different_settlement_infos = reactive<DifferentSettlementInfo[]>(props.item.different_settlement_infos || [])
 
 const addNewDifferentSettlementInfoCard = () => {
-    different_settlement_infos.push(<DifferentSettlementInfo>({
+    props.item.different_settlement_infos.push(<DifferentSettlementInfo>({
         id: 0,
     }))
 }
 watchEffect(() => {
-    setNullRemove(different_settlement_infos)
+    if(props.item.different_settlement_infos !== undefined)
+        setNullRemove(props.item.different_settlement_infos)
 })
 </script>
 <template>
@@ -37,7 +38,7 @@ watchEffect(() => {
             </tr>
         </thead>
         <tbody>
-            <DifferentSettlementInfoCardTr v-for="(item, index) in different_settlement_infos"
+            <DifferentSettlementInfoCardTr v-for="(item, index) in props.item.different_settlement_infos"
                 :key="item.id" style="margin-top: 1em;" :item="item" :index="index" />
         </tbody>
         <tfoot v-show="Boolean(props.item.id == 0)">

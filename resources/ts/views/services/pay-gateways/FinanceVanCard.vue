@@ -125,18 +125,6 @@ onMounted(async () => {
                         <VCardTitle style="margin-bottom: 1em;">
                             연동 정보
                         </VCardTitle>
-                        <VRow class="pt-3" v-if="getUserLevel() == 50">
-                            <CreateHalfVCol :mdl="5" :mdr="7">
-                                <template #name>
-                                    <BaseQuestionTooltip :location="'top'" :text="corp.pv_options.auth.levels.dev_name+' 수수료'" :content="'해당 정보는 보안상 '+corp.pv_options.auth.levels.dev_name+'만 보여집니다.'"/>
-                                </template>
-                                <template #input>
-                                    <VTextField type="text" v-model="props.item.dev_fee"
-                                        prepend-inner-icon="ph:share-network" placeholder="0.1" suffix="%"
-                                        persistent-placeholder :rules="[nullValidator]" />
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
                         <VRow class="pt-3">
                             <CreateHalfVCol :mdl="5" :mdr="7">
                                 <template #name>기관명</template>

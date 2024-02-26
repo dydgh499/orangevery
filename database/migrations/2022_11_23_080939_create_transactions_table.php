@@ -75,7 +75,7 @@ class CreateTransactionsTable extends Migration
             $table->date('cxl_dt')->nullable()->comment('취소 날짜');
             $table->time('cxl_tm')->nullable()->comment('취소 시간');
             $table->boolean('is_cancel')->default(false)->comment('취소 여부');
-            $table->tinyInteger('cxl_seq', false, true)->nullable()->default(null)->comment('취소 회차');
+            $table->tinyInteger('cxl_seq', false, true)->default(0)->comment('취소 회차');
             $table->integer('amount')->comment('거래 금액');
             $table->tinyInteger('module_type')->comment('모듈 타입(0=장비, 1=수기, 2=인증, 3=간편)');
             $table->string('ord_num', 100)->default('')->comment('주문번호');

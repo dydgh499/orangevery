@@ -204,9 +204,4 @@ class SalesforceController extends Controller
         }
         
     }
-
-    public function partSettle(Request $request)
-    {
-        echo $request->selected;
-    }
 }

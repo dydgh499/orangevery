@@ -46,7 +46,7 @@ provide('exporter', exporter)
                                 <span v-if="_key == 'id'">
                                     #{{ item[_key] }}
                                 </span>
-                                <span v-if="_key == 'result_code'">
+                                <span v-else-if="_key == 'result_code'">
                                     <VChip :color="store.getSelectIdColor(realtimeResult(item[_key]))">
                                         {{ realtimeMessage(item) }}
                                     </VChip>

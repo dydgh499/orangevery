@@ -222,9 +222,6 @@ onMounted(() => {
                                     {{ (item[_key] * 100).toFixed(3) }} %
                                 </VChip>
                             </span>
-                            <span v-else-if="_key == 'pay_cond_price'">
-                                {{ item['settle_fee'] }}
-                            </span>
                             <span v-else-if="_key == 'resident_num'">
                                 <span>{{ item['resident_num_front'] }}</span>
                                 <span style="margin: 0 0.25em;">-</span>

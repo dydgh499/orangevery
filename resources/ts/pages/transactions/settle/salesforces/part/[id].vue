@@ -256,9 +256,6 @@ onMounted(() => {
                                     {{ (item[_key] * 100).toFixed(3) }} %
                                 </VChip>
                             </span>
-                            <span v-else-if="_key == 'pay_cond_price'">
-                                {{ item['settle_fee'] }}
-                            </span>
                             <span v-else-if="_key == 'custom_id'">
                                 {{ cus_filters.find(cus => cus.id === item[_key])?.name }}
                             </span>

@@ -143,6 +143,7 @@ trait SettleHistoryTrait
             ->pluck('pmod_id')
             ->all();
     }
+
     /*
     * 정산 취소 - 통신비
     */
@@ -158,6 +159,7 @@ trait SettleHistoryTrait
         }
         return true;
     }
+
     public function getSettleHistoryData($request, $query, $parent, $cols=[])
     {
         $page      = $request->input('page');

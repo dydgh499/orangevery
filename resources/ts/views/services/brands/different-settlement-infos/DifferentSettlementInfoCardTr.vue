@@ -18,11 +18,11 @@ const is_show = ref(false)
 <template>
     <tr>
         <td class='list-square'>{{ index + 1 }}</td>
-        <td class='list-square'>
+        <td class='list-square' >
             <VForm ref="vForm">
-                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_type" :items="pg_companies"
-                    prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="name" item-value="id" single-line
-                    style="width: 250px;" />
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_type"
+                    :items="pg_companies" prepend-inner-icon="ph-buildings" label="PG사 선택"
+                    item-title="name" item-value="id" single-line style="width: 250px;"/>
             </VForm>
         </td>
         <td class='list-square'>

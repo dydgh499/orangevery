@@ -185,6 +185,7 @@ return [
         'sector' => '업종',
         'enabled' => '전산 활성화 여부',
         'custom_id' => '커스텀 필터',
+        'tax_category_type' => '사업자 유형',
         //
         'tags' => '태그',
         'files' => '파일',
