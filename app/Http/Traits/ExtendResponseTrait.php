@@ -17,7 +17,7 @@ trait ExtendResponseTrait
                 $num = preg_replace("/[^0-9]*/s", "", $key);
                 $str = preg_replace("/[0-9]\./","", $key);
                 if($msg == "")
-                    $msg = $num."번쨰".__("validation.attributes.".$str);
+                    $msg = $num."번쨰 $key 를 확인하세요.";
 
             }
         }
