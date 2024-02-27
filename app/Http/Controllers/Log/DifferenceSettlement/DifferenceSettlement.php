@@ -55,7 +55,7 @@ class DifferenceSettlement
     protected function _request($save_path, $req_date, $trans)
     {
         $result = false;
-        $mids = $trans->pluck($this->service_name == 'hecto' ? 'mid' : 'p_mid')->unique()->all();
+        $mids = $trans->pluck('mid')->unique()->all();
         $total_count = 0;
         $full_record = $this->setStartRecord($req_date);
 
@@ -66,7 +66,8 @@ class DifferenceSettlement
             })->values();
             if(count($mcht_trans) > 0)
             {
-                $header = $this->setHeaderRecord($mid);
+                $_mid = $this->service_name == 'hecto' ? $mid :  $mcht_trans[0]->p_mid;
+                $header = $this->setHeaderRecord($_mid);
                 [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num']);
                 $total  = $this->setTotalRecord($count, $amount);
     
