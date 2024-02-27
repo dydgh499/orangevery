@@ -7,6 +7,22 @@ use Illuminate\Support\Facades\Log;
 
 trait ExtendResponseTrait 
 {
+    public function getMessages($values)
+    {
+        $data = [];
+        for ($i=0; $i <count($values); $i++) 
+        { 
+            $value = $values[$i];
+            $items = explode(' ', $value[0], 2);
+            if(count($items) === 2)
+            {
+                $keys = explode('.', $items[0], 2);
+                if(count($keys) === 2)
+                    $data[] = $keys[0]."번째 ".__("validation.attributes.".$keys[1])."은 ".$items[1];
+            }        
+        }
+        return join('\n<br>', $data);
+    }
     public function storesResponse($exceptions)
     {
         $msg = "";
@@ -14,18 +30,9 @@ trait ExtendResponseTrait
         foreach($exceptions as $key => $value)
         {
             if(preg_match('/[0-9]\.[a-z]+[0-9]*_[a-z_-]+$/', $key, $keys))
-            {
-                if(count($value))
-                {
-                    $items = explode(' ', $value[0], 2);
-                    if(count($items) === 2)
-                    {
-                        $keys = explode('.', $items[0], 2);
-                        if(count($keys) === 2)
-                            $msg = $keys[0]."번째 ".__("validation.attributes.".$keys[1])."은 ".$items[1];
-                    }    
-                }
-            }
+                $msg .= $this->getMessages($value);
+            else
+                $msg .= $value;
         }
         return Response::json(['code'=>1004, 'message'=>$msg], 409, [], JSON_UNESCAPED_UNICODE);
     }
