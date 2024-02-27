@@ -234,9 +234,14 @@ class SalesforceController extends Controller
 
     public function feeApplyHistories(Request $request)
     {
-        $histories = SfFeeApplyHistory::where('brand_id', $request->user()->brand_id)
-                ->where('is_delete', false)
-                ->get();
+        if(isOperator($request))
+        {
+            $histories = SfFeeApplyHistory::where('brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
+            ->get();
+        }
+        else
+            $histories = [];
         return $this->response(0, $histories);
     }
 
