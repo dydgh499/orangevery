@@ -15,17 +15,20 @@ trait ExtendResponseTrait
         {
             if(preg_match('/[0-9]\.[a-z]+[0-9]*_[a-z_-]+$/', $key, $keys))
             {
-                Log::error('test1', $exceptions);
-                $items = explode(' ', $value, 2);
-                if(count($items) === 2)
+                if(count($value))
                 {
-                    Log::error('test2', $exceptions);
-                    $keys = explode('.', $items[0], 2);
-                    if(count($keys) === 2)
+                    Log::error('test1', $exceptions);
+                    $items = explode(' ', $value[0], 2);
+                    if(count($items) === 2)
                     {
-                        Log::error('test3', $exceptions);
-                        $msg = $keys[0]."번째 ".__("validation.attributes.".$keys[0])."은 ".$items[1];
-                    }
+                        Log::error('test2', $exceptions);
+                        $keys = explode('.', $items[0], 2);
+                        if(count($keys) === 2)
+                        {
+                            Log::error('test3', $exceptions);
+                            $msg = $keys[0]."번째 ".__("validation.attributes.".$keys[0])."은 ".$items[1];
+                        }
+                    }    
                 }
             }
         }
