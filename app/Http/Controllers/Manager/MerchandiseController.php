@@ -305,7 +305,10 @@ class MerchandiseController extends Controller
             'page_size' => 9999999,
         ]);
         $cols = ['merchandises.id', 'merchandises.mcht_name'];
-        if(isSalesforce($request))
+        if(isMerchandise($request))
+        {
+        }
+        else if(isSalesforce($request))
         {   // 영업자
             if($request->user()->level > 10)
                 $cols[] = 'sales0_id';
