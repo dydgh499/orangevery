@@ -122,6 +122,7 @@ class DifferenceSettlementHistoryController extends Controller
             ->where('brands.is_delete', false)
             ->where('different_settlement_infos.is_delete', false)
             ->where('brands.use_different_settlement', true)
+            ->where('different_settlement_infos.id', 2)
             ->get(['brands.business_num', 'different_settlement_infos.*']);
     }
 
@@ -160,7 +161,7 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('merchandises.is_delete', false)
                 ->where('payment_gateways.pg_type', $brands[$i]->pg_type)
                 ->where('transactions.brand_id', $brands[$i]->brand_id)
-                ->where('transactions.trx_dt', $yesterday)
+                //->where('transactions.trx_dt', $yesterday)
                 ->get(['transactions.*', 'merchandises.business_num']);
             $pg = $this->getPGClass($brands[$i]);
             if($pg)
