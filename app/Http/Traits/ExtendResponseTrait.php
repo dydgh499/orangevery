@@ -9,17 +9,22 @@ trait ExtendResponseTrait
 {
     public function storesResponse($exceptions)
     {
-        $msg = "대량등록에 실패하였습니다.";
+        $msg = "";
         Log::error($msg, $exceptions);
         foreach($exceptions as $key => $value)
         {
+            
             if(preg_match('/[0-9]\.[a-z_-]+$/', $key, $keys))
             {
-                $num = preg_replace("/[^0-9]*/s", "", $key);
-                $str = preg_replace("/[0-9]\./","", $key);
-                if($msg == "")
-                    $msg = $num."번쨰 $key 를 확인하세요.";
-
+                $items = explode(' ', $value, 2);
+                if(count($items) === 2)
+                {
+                    $keys = explode('.', $items[0], 2);
+                    if(count($keys) === 2)
+                    {
+                        $msg = $keys[0]."번째 ".__("validation.attributes.".$keys[0])."은 ".$items[1];
+                    }
+                }
             }
         }
         return Response::json(['code'=>1004, 'message'=>$msg], 409, [], JSON_UNESCAPED_UNICODE);
