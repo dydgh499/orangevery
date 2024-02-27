@@ -10,20 +10,19 @@ trait ExtendResponseTrait
     public function getMessages($values)
     {
         $data = [];
-        Log::warning('test', $values);
         for ($i=0; $i <count($values); $i++) 
-        { 
-            // "482.sales2_fee 값이 숫자가 아닙니다."]
+        {
             $items = explode(' ', $values[$i], 2);
             if(count($items) === 2)
             {
                 $keys = explode('.', $items[0], 2);
                 if(count($keys) === 2)
-                    $data[] = $keys[0]."번째 ".__("validation.attributes.".$keys[1])."은 ".$items[1];
+                    $data[] = $keys[0]."번째 ".__("validation.attributes.".$keys[1])." ".$items[1];
             }        
         }
         return join("\n<br>", $data);
     }
+
     public function storesResponse($exceptions)
     {
         $msg = "";
