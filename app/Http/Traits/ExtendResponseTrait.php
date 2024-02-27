@@ -21,7 +21,7 @@ trait ExtendResponseTrait
                     $data[] = $keys[0]."번째 ".__("validation.attributes.".$keys[1])."은 ".$items[1];
             }        
         }
-        logging($test);
+        Log::warning('test', $data);
         return join("\n<br>", $data);
     }
     public function storesResponse($exceptions)
