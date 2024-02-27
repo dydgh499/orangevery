@@ -55,8 +55,7 @@ class DifferenceSettlement
     protected function _request($save_path, $req_date, $trans)
     {
         $result = false;
-
-        $mids = $trans->pluck('mid')->unique()->all();
+        $mids = $trans->pluck($this->service_name == 'hecto' ? 'mid' : 'p_mid')->unique()->all();
         $total_count = 0;
         $full_record = $this->setStartRecord($req_date);
 
