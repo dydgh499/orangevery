@@ -97,7 +97,7 @@ watchEffect(() => {
                 </td>
                 <td class="list-square">
                     <span>
-                        {{ transaction.appr_amount.toLocaleString() }}원
+                        {{ (transaction.appr_amount + transaction.cxl_amount).toLocaleString() }}원
                     </span>
                 </td>
                 <td class="list-square">
