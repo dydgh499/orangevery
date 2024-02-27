@@ -22,16 +22,16 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
 
         config(['filesystems.disks.'.$main_config_name => [
             'driver' => 'sftp',
-            'host' => "",
-            'port' => 5210,
+            'host' => "150.242.135.206",
+            'port' => 34567,
             'username' => $brand['sftp_id'],
             'password' => $brand['sftp_password'],
             'passive' => false,
         ]]);
         config(['filesystems.disks.'.$dr_config_name => [
             'driver' => 'sftp',
-            'host' => "",
-            'port' => 5210,
+            'host' => "150.242.135.206",
+            'port' => 34567,
             'username' => $brand['sftp_id'],
             'password' => $brand['sftp_password'],
             'passive' => false,            
