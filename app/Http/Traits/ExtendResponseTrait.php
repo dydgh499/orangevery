@@ -10,6 +10,7 @@ trait ExtendResponseTrait
     public function getMessages($values)
     {
         $data = [];
+        Log::warning('test', $values);
         for ($i=0; $i <count($values); $i++) 
         { 
             $value = $values[$i];
@@ -21,7 +22,6 @@ trait ExtendResponseTrait
                     $data[] = $keys[0]."번째 ".__("validation.attributes.".$keys[1])."은 ".$items[1];
             }        
         }
-        Log::warning('test', $data);
         return join("\n<br>", $data);
     }
     public function storesResponse($exceptions)
