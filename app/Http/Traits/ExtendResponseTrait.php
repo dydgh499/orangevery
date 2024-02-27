@@ -13,7 +13,7 @@ trait ExtendResponseTrait
         Log::error($msg, $exceptions);
         foreach($exceptions as $key => $value)
         {
-            if(preg_match('/[0-9]\.[a-z_-]+$/', $key, $keys))
+            if(preg_match('/[0-9]\.[a-z]+[0-9]*_[a-z_-]+$/', $key, $keys))
             {
                 Log::error('test1', $exceptions);
                 $items = explode(' ', $value, 2);
