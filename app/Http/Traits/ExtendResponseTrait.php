@@ -13,8 +13,8 @@ trait ExtendResponseTrait
         Log::warning('test', $values);
         for ($i=0; $i <count($values); $i++) 
         { 
-            $value = $values[$i];
-            $items = explode(' ', $value[0], 2);
+            // "482.sales2_fee 값이 숫자가 아닙니다."]
+            $items = explode(' ', $values[$i], 2);
             if(count($items) === 2)
             {
                 $keys = explode('.', $items[0], 2);
