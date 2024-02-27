@@ -161,7 +161,6 @@ return [
         'settle_cycle' => '정산 주기',
         'settle_day' => '정산일',
         'send_url'  => '전송 URL',
-        //device
         'mcht_id'   => '가맹점',
         //index form
         'page'      => '페이지 번호',
@@ -194,6 +193,12 @@ return [
         'email' => '이메일',
         'password' => '비밀번호',
         'password_confirmation' => '비밀번호 확인',
+        'sales0_fee' => "수수료",
+        'sales1_fee' => "수수료",
+        'sales2_fee' => "수수료",
+        'sales3_fee' => "수수료",
+        'sales4_fee' => "수수료",
+        'sales5_fee' => "수수료",
         'code'=> '제품 ID',
         'context'=> '상세설명',
         //payment_modules
