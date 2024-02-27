@@ -9,7 +9,8 @@ trait ExtendResponseTrait
 {
     public function storesResponse($exceptions)
     {
-        $msg = "";
+        $msg = "대량등록에 실패하였습니다.";
+        Log::error($msg, $exceptions);
         foreach($exceptions as $key => $value)
         {
             if(preg_match('/[0-9]\.[a-z_-]+$/', $key, $keys))

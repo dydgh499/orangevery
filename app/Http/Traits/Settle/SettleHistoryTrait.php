@@ -33,21 +33,22 @@ trait SettleHistoryTrait
             ->update([$target_settle_id => null]);
     }
 
+    protected function getRequestResponseMessage($data, $messge)
+    {
+        return "(#".$data['id'].") ".$messge."\n";        
+    }
+
     protected function depositContainer($request, $target, $data, $orm)
     {
-        $getRequestResponseMessage = function($data, $messge) {
-            return "(#".$data['id'].") ".$messge."\n";
-        };
-        
         $getDBResponseMessage = function($code) {
             if($code === 1)
                 return '';
             else if($code === 990)
-                return $getRequestResponseMessage($data, "DB처리 실패");
+                return $this->getRequestResponseMessage($data, "DB처리 실패");
             else if($code === 1000)
-                return $getRequestResponseMessage($data, "이력을 찾을 수 없음");
+                return $this->getRequestResponseMessage($data, "이력을 찾을 수 없음");
             else
-                return $getRequestResponseMessage($data, "알수 없는 응답");
+                return $this->getRequestResponseMessage($data, "알수 없는 응답");
         };
 
         if($request->use_finance_van_deposit)
@@ -62,10 +63,10 @@ trait SettleHistoryTrait
                 if($res['body']['result_cd'] == '0000')
                     return $getDBResponseMessage($this->deposit($orm, $data['id']));
                 else
-                    return $getRequestResponseMessage($data ,$res['body']['result_msg']);
+                    return $this->getRequestResponseMessage($data ,$res['body']['result_msg']);
              }
              else
-                 return $getRequestResponseMessage($data ,"입금완료된 정산건은 다시 입금할 수 없습니다.");
+                 return $this->getRequestResponseMessage($data ,"입금완료된 정산건은 다시 입금할 수 없습니다.");
         }
         else
             return $getDBResponseMessage($this->deposit($orm, $data['id']));
