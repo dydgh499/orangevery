@@ -157,12 +157,13 @@ class DifferenceSettlementHistoryController extends Controller
         {
             $trans = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
                 ->join('payment_gateways', 'transactions.pg_id', '=', 'payment_gateways.id')
+                ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
                 ->where('transactions.is_delete', false)
                 ->where('merchandises.is_delete', false)
                 ->where('payment_gateways.pg_type', $brands[$i]->pg_type)
                 ->where('transactions.brand_id', $brands[$i]->brand_id)
                 //->where('transactions.trx_dt', $yesterday)
-                ->get(['transactions.*', 'merchandises.business_num', 'payment_gateways.p_mid']);
+                ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
             $pg = $this->getPGClass($brands[$i]);
             if($pg)
             {
