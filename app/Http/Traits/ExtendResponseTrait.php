@@ -21,12 +21,12 @@ trait ExtendResponseTrait
                     $data[] = $keys[0]."번째 ".__("validation.attributes.".$keys[1])."은 ".$items[1];
             }        
         }
-        return join('\n<br>', $data);
+        logging($test);
+        return join("\n<br>", $data);
     }
     public function storesResponse($exceptions)
     {
         $msg = "";
-        Log::error($msg, $exceptions);
         foreach($exceptions as $key => $value)
         {
             if(preg_match('/[0-9]\.[a-z]+[0-9]*_[a-z_-]+$/', $key, $keys))
