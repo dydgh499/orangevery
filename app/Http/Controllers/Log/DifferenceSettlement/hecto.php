@@ -11,6 +11,7 @@ class hecto extends DifferenceSettlement implements DifferenceSettlementInterfac
     public function __construct($brand)
     {
         parent::__construct($brand);
+        $this->PMID_MODE  = false;
         $this->RQ_PG_NAME = "SETTLEBANK";
         $this->RQ_START_FILTER_SIZE  = 370;
         $this->RQ_HEADER_FILTER_SIZE = 388;

@@ -11,6 +11,7 @@ class galaxiamoneytree extends DifferenceSettlement implements DifferenceSettlem
     public function __construct($brand)
     {
         parent::__construct($brand);
+        $this->PMID_MODE  = true;
         $this->RQ_PG_NAME = "DANAL";
         $this->RQ_START_FILTER_SIZE  = 0;
         $this->RQ_HEADER_FILTER_SIZE = 147;

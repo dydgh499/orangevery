@@ -11,6 +11,7 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
     public function __construct($brand)
     {
         parent::__construct($brand);
+        $this->PMID_MODE  = true;
         $this->RQ_PG_NAME = "DANAL";
         $this->RQ_START_FILTER_SIZE  = 470;
         $this->RQ_HEADER_FILTER_SIZE = 488;
@@ -42,17 +43,19 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
 
     public function request(Carbon $date, $trans)
     {
-        $req_date = $date->format('Ymd');
+        $file_name = $date->copy()->format('ymd');
+        $req_date = $date->copy()->format('Ymd');
         // 업체명toDANAL_differ.YYYYMM
-        $save_path = "/diff/".$this->brand['rep_mid']."toDANAL_differ.".$req_date;
+        $save_path = "/diff/".$this->brand['rep_mid']."toDANAL_differ.".$file_name;
         return $this->_request($save_path, $req_date, $trans);
     }
 
     public function response(Carbon $date)
     {
+        $file_name = $date->copy()->format('ymd');
         $req_date = $date->copy()->format('Ymd');
         // DANALto업체명_differ.YYYYMM
-        $res_path = "/diff/DANALto".$this->brand['rep_mid']."_differ.".$req_date;
+        $res_path = "/diff/DANALto".$this->brand['rep_mid']."_differ.".$file_name;
         return $this->_response($res_path, $req_date);
     }
 }

@@ -12,6 +12,7 @@ class welcome1 extends DifferenceSettlement implements DifferenceSettlementInter
     public function __construct($brand)
     {
         parent::__construct($brand);
+        $this->PMID_MODE  = true;
         $this->RQ_PG_NAME = "WELCOMEPAY";
         $this->RQ_START_FILTER_SIZE  = 320;
         $this->RQ_HEADER_FILTER_SIZE = 338;
