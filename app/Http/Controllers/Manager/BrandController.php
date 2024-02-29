@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Manager;
 
+use Carbon\Carbon;
 use App\Models\Brand;
+use App\Models\Transaction;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\BrandRequest;
@@ -64,9 +66,33 @@ class BrandController extends Controller
             DB::raw("SUM(extra_deposit_amount) AS extra_deposit_amount"),
             DB::raw("SUM(curr_deposit_amount) AS curr_deposit_amount"),
         ]);
+        $chart->deposit_amount += $this->getTotalDevFee($request);
         return $this->response(0, $chart);
     }
 
+    public function getTotalDevFee($request)
+    {
+        if(isMainBrand($request->user()->brand_id) && $request->user()->tokenCan(50))
+        {
+            $s_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
+            $e_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->endOfMonth()->format('Y-m-d');
+
+            Transaction::join('brands', 'transactions.brand_id', '=', 'brands.id')
+                ->where(function($query) use($s_dt, $e_dt) {
+                    $query->where(function($query) use($s_dt, $e_dt) {
+                        $query->where('transactions.is_cancel', false)
+                            ->whereRaw("concat(trx_dt, ' ', trx_tm) >= ?", [$s_dt])
+                            ->whereRaw("concat(trx_dt, ' ', trx_tm) <= ?", [$e_dt]);
+                    })->orWhere(function($query) use($s_dt, $e_dt) {
+                        $query->where('transactions.is_cancel', true)
+                            ->whereRaw("concat(cxl_dt, ' ', cxl_tm) >= ?", [$s_dt])
+                            ->whereRaw("concat(cxl_dt, ' ', cxl_tm) <= ?", [$e_dt]);
+                    });
+                })
+                ->first(DB::raw('SUM(dev_realtime_settle_amount + dev_settle_amount) as dev_realtime_settle_amount'));
+        }
+
+    }
     /**
      * 목록출력
      *
@@ -86,12 +112,17 @@ class BrandController extends Controller
 
         $query  = $query
             ->where('is_delete', false)
-            ->where('name', 'like', "%$search%");
+            ->where('name', 'like', "%$search%")
+            ->with(['devAmount']);
+
         $data   = $this->getIndexData($request, $query);
         foreach ($data['content'] as $content) {
             $content->free = $content->pv_options->free;
             $content->paid = $content->pv_options->paid;
             $content->auth = $content->pv_options->auth;
+            if(count($content->devAmount))
+                $content->deposit_amount += (int)$content->devAmount->dev_percent_amount;
+
             $content->makeHidden(['pv_options']);
         }
         return $this->response(0, $data);
