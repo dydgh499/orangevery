@@ -124,7 +124,7 @@ onMounted(() => {
                                 <span v-else> #{{ item[_key] }}</span>
                             </span>
                             <span v-else-if="isNumberFormatCol(_key.toString())" style="font-weight: bold;">
-                                {{ parseInt(item[_key]).toLocaleString() }}
+                                {{ item[_key] ? (item[_key] as number).toLocaleString() : ''}}
                             </span>
                             <span v-else-if="_key == 'level'">
                                 <VChip :color="store.getSelectIdColor(getLevelByIndex(item[_key]))">
