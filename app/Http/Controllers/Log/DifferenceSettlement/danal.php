@@ -42,7 +42,7 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
 
     public function request(Carbon $date, $trans)
     {
-        $req_date = $date->format('ymd');
+        $req_date = $date->format('Ymd');
         // 업체명toDANAL_differ.YYYYMM
         $save_path = "/diff/".$this->brand['rep_mid']."toDANAL_differ.".$req_date;
         return $this->_request($save_path, $req_date, $trans);
@@ -50,7 +50,7 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
 
     public function response(Carbon $date)
     {
-        $req_date = $date->copy()->format('ymd');
+        $req_date = $date->copy()->format('Ymd');
         // DANALto업체명_differ.YYYYMM
         $res_path = "/diff/DANALto".$this->brand['rep_mid']."_differ.".$req_date;
         return $this->_response($res_path, $req_date);

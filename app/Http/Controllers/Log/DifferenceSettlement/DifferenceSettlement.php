@@ -54,19 +54,25 @@ class DifferenceSettlement
 
     protected function _request($save_path, $req_date, $trans)
     {
-        $result = false;
-        $mids = $trans->pluck('mid')->unique()->all();
+        $result     = false;
+        $pmid_mode  = $this->service_name === 'danal' ? 'p_mid' : 'mid';
+
+        $mids = $trans->pluck($pmid_mode ? 'p_mid' : 'mid')->unique()->all();
         $total_count = 0;
         $full_record = $this->setStartRecord($req_date);
 
         foreach($mids as $mid)
         {
-            $mcht_trans = $trans->filter(function ($tran) use ($mid) {
-                return $tran->mid == $mid;
+            $mcht_trans = $trans->filter(function ($tran) use ($mid, $pmid_mode) {
+                if($pmid_mode)
+                    return $tran->p_mid === $mid;
+                else
+                    return $tran->mid === $mid;
             })->values();
+
             if(count($mcht_trans) > 0)
             {
-                $_mid = $this->service_name == 'hecto' ? $mid :  $mcht_trans[0]->p_mid;
+                $_mid = $pmid_mode ? $mcht_trans[0]->p_mid : $mid;
                 $header = $this->setHeaderRecord($_mid);
                 [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num']);
                 $total  = $this->setTotalRecord($count, $amount);
@@ -135,8 +141,16 @@ class DifferenceSettlement
         else
         {
             $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::TOTAL->value, 2);
-            $total_count    = $this->setNtypeField($total_count, 7);
-            $total_amount   = $this->setAtypeField($total_amount, 18);
+            if($this->service_name == 'welcome')
+                $total_count    = $this->setAtypeField($total_count, 7);
+            else
+                $total_count    = $this->setNtypeField($total_count, 7);
+
+            if($this->service_name == 'hecto' || $this->service_name == 'welcome')
+                $total_amount   = $this->setAtypeField($total_amount, 18);
+            else// danal
+                $total_amount    = $this->setNtypeField($total_amount, 18);
+
             $filter         = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
             return $record_type.$total_count.$total_amount.$filter."\n";    
         }
