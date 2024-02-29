@@ -80,7 +80,7 @@ class BrandController extends Controller
             $s_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
             $e_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->endOfMonth()->format('Y-m-d');
 
-            Transaction::join('brands', 'transactions.brand_id', '=', 'brands.id')
+            $sum = Transaction::join('brands', 'transactions.brand_id', '=', 'brands.id')
                 ->where(function($query) use($s_dt, $e_dt) {
                     $query->where(function($query) use($s_dt, $e_dt) {
                         $query->where('transactions.is_cancel', false)
@@ -92,8 +92,11 @@ class BrandController extends Controller
                             ->whereRaw("concat(cxl_dt, ' ', cxl_tm) <= ?", [$e_dt]);
                     });
                 })
-                ->first(DB::raw('SUM(dev_realtime_settle_amount + dev_settle_amount) as dev_realtime_settle_amount'));
+                ->first([DB::raw('SUM(dev_realtime_settle_amount + dev_settle_amount) as dev_realtime_settle_amount')]);
+            return $sum->dev_realtime_settle_amount;
         }
+        else
+            return 0;
 
     }
     /**
