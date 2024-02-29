@@ -61,6 +61,8 @@ class MchtSettleHistoryController extends Controller
     {
         $query = $this->commonQuery($request);
         $total = $query->first([
+            DB::raw("SUM(appr_count) AS appr_count"),
+            DB::raw("SUM(cxl_count) AS cxl_count"),
             DB::raw("SUM(appr_amount) AS appr_amount"),
             DB::raw("SUM(cxl_amount) AS cxl_amount"),
             DB::raw("SUM(total_amount) AS total_amount"),
