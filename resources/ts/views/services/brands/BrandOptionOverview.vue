@@ -534,6 +534,12 @@ const md = user_info.value.level == 50 ? 4 : 12
                                 <VSwitch hide-details v-model="props.item.paid.use_settle_hold" color="primary" />
                             </template>
                         </CreateHalfVCol>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>정산시 승인/취소 수 사용</template>
+                                <template #input>
+                                <VSwitch hide-details v-model="props.item.paid.use_settle_count" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
                         
                     </VRow>
             </VCardItem>

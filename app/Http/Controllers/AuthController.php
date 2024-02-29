@@ -42,13 +42,11 @@ class AuthController extends Controller
         if($brand)
         {
             $brand['color'] = $brand['theme_css']['main_color'];
-            /*
             $brand['pv_options']['free']['bonaeja'] = [];
             $brand['pv_options']['free']['bonaeja']['min_balance_limit'] = 0;
             $brand['pv_options']['free']['bonaeja'] = [
                 'min_balance_limit' => $brand['pv_options']['free']['bonaeja']['min_balance_limit']
             ];
-            */
             return response(view('application', ['json' => $brand]))
                 ->withCookie('XSRF-TOKEN', csrf_token());
         }

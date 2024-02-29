@@ -17,15 +17,22 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
         'id': 'NO.',
         'user_name' : '가맹점 ID',
         'mcht_name' : '상호',
-        'appr_amount': '승인액',
-        'cxl_amount': '취소액',
-        'total_amount': '매출액',
-        'trx_amount': '거래 수수료',
-        'settle_fee': '입금 수수료',
-        'comm_settle_amount': '통신비',
-        'under_sales_amount': '매출미달 차감금',
-        'deduct_amount': '추가차감액',
-    };
+    }
+    headers_1['appr_amount'] = '승인액'
+    if(corp.pv_options.paid.use_settle_count)
+        headers_1['appr_count'] = '승인건수'
+    headers_1['cxl_amount'] = '취소액'
+    if(corp.pv_options.paid.use_settle_count)
+        headers_1['cxl_count'] = '취소건수'
+
+    headers_1['total_amount'] = '매출액'
+    headers_1['trx_amount'] = '거래 수수료'
+    headers_1['settle_fee'] = '입금 수수료'
+    headers_1['comm_settle_amount'] = '통신비'
+    headers_1['under_sales_amount'] = '매출미달 차감금'
+    headers_1['deduct_amount'] = '추가차감액'
+
+    // use_settle_count
     if(corp.pv_options.paid.use_cancel_deposit)
         headers_1['cancel_deposit_amount'] = '취소입금합계'
     if(corp.pv_options.paid.use_collect_withdraw)

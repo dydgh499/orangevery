@@ -27,7 +27,7 @@ provide('financeDialog', financeDialog)
 const totals = ref(<any[]>([]))
 
 const isNumberFormatCol = (_key: string) => {
-    return _key.includes('amount') || _key.includes('_fee') || _key.includes('_deposit')
+    return _key.includes('amount') || _key.includes('_fee') || _key.includes('_deposit') || _key.includes('_count')
 }
 const getBatchDepositParams = async () => {
     if (selected.value) {
@@ -124,7 +124,7 @@ onMounted(() => {
                                 <span v-else> #{{ item[_key] }}</span>
                             </span>
                             <span v-else-if="isNumberFormatCol(_key.toString())" style="font-weight: bold;">
-                                {{ (item[_key] as number).toLocaleString() }}
+                                {{ parseInt(item[_key]).toLocaleString() }}
                             </span>
                             <span v-else-if="_key == 'level'">
                                 <VChip :color="store.getSelectIdColor(getLevelByIndex(item[_key]))">

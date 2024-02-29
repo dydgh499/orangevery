@@ -22,7 +22,9 @@ const user = ref(<any>({}))
 const settle = ref({
     'total_amount': 0,
     'cxl_amount': 0,
+    'cxl_count': 0,
     'appr_amount': 0,
+    'appr_count': 0,
     'settle_amount': 0,
     'trx_amount': 0,
     'settle_fee': 0,
@@ -105,7 +107,9 @@ onMounted(() => {
     watchEffect(() => {
         const _settle = {
             'appr_amount'   : 0,
+            'appr_count': 0,
             'cxl_amount'    : 0,
+            'cxl_count': 0,
             'total_amount'  : 0,
             'settle_amount' : 0,
             'trx_amount'    : 0,
@@ -114,10 +118,14 @@ onMounted(() => {
         for (let i = 0; i < selected.value.length; i++) {
             const trans:any = store.getItems.find(item => item['id'] == selected.value[i])
             if(trans) {
-                if(trans['is_cancel'])
+                if(trans['is_cancel']) {
                     _settle.cxl_amount += trans['amount']
-                else
+                    _settle.cxl_count++
+                }
+                else {
                     _settle.appr_amount += trans['amount']
+                    _settle.appr_count++
+                }
 
                 _settle.total_amount += trans['amount']
                 _settle.settle_amount += trans['profit']

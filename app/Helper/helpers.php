@@ -107,7 +107,7 @@
     function getBrandByDNS($request)
     {
         $brand = Redis::get($request->dns);
-        if($brand == null)
+        if($brand == null || env('APP_ENV', 'local') === 'local')
         {
             $brand = Brand::where('dns', $request->dns)->with(['beforeBrandInfos'])->first();
             if($brand)

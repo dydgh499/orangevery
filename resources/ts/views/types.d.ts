@@ -344,6 +344,7 @@ interface PaidOption {
     use_part_cancel: boolean, // 부분취소 사용여부
     use_settle_hold: boolean, // 지급보류
     use_hide_account: boolean, // 계좌 숨김
+    use_settle_count: boolean, // 정산시 개수 노출
 }
 interface AuthOption {
     levels: {
