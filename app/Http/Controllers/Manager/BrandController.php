@@ -66,7 +66,9 @@ class BrandController extends Controller
             DB::raw("SUM(extra_deposit_amount) AS extra_deposit_amount"),
             DB::raw("SUM(curr_deposit_amount) AS curr_deposit_amount"),
         ]);
-        $chart->deposit_amount += $this->getTotalDevFee($request);
+        $total_dev_amount = $this->getTotalDevFee($request);
+        $chart->extra_deposit_amount += $total_dev_amount;
+        $chart->total_deposit_amount += $total_dev_amount;
         return $this->response(0, $chart);
     }
 
@@ -121,7 +123,7 @@ class BrandController extends Controller
             $content->paid = $content->pv_options->paid;
             $content->auth = $content->pv_options->auth;
             if(count($content->devAmount))
-                $content->deposit_amount += (int)$content->devAmount->dev_percent_amount;
+                $content->extra_deposit_amount += (int)$content->devAmount[0]->dev_percent_amount;
 
             $content->makeHidden(['pv_options']);
         }
