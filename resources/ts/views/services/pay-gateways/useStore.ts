@@ -2,7 +2,7 @@ import { useRequestStore } from '@/views/request'
 import type { Classification, FinanceVan, Options, PayGateway, PaySection } from '@/views/types'
 
 export const pg_settle_types = <Options[]>([
-    {id:0, title:'주말 포함하여 정산'},
+    {id:0, title:'매일정산'},
     {id:1, title:'주말, 공휴일 건너뛰고 정산'},
 ])
 

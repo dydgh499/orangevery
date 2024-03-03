@@ -224,43 +224,6 @@ const md = user_info.value.level == 50 ? 4 : 12
             <VCard>
                 <VCardItem>
                     <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="영업점 일괄적용(유료)"
-                            :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
-                        </BaseQuestionTooltip>
-                    </VCardTitle>
-                    <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>MID 일괄적용 사용여부</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_mid_batch" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>TID 일괄적용 사용여부</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_tid_batch" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>API KEY 일괄적용 사용여부</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_api_key_batch" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>SUB KEY 일괄적용 사용여부</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_sub_key_batch" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VCardTitle class="pt-10">
                         <BaseQuestionTooltip location="top" text="가맹점 옵션(유료)"
                             :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
                         </BaseQuestionTooltip>
@@ -283,7 +246,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>수기결제 직접입력(가맹점)</template>
+                            <template #name>결제 링크생성(가맹점)</template>
                             <template #input>
                                 <VSwitch hide-details v-model="props.item.paid.use_hand_pay_drct" color="primary" />
                             </template>

@@ -41,29 +41,25 @@
 
     class PaidOption 
     {
-        public $use_dup_pay_validation = false; // 중복결제 검증 사용 여부
+        public $use_dup_pay_validation = true; // 중복결제 검증 사용 여부
         public $subsidiary_use_control = false; // 하위 영업점 전산 사용 ON/OFF
         public $use_acct_verification = false;  // 예금주 검증
         public $use_realtime_deposit = false;   // 실시간 결제모듈
-        public $use_hand_pay_drct = false;      // 수기결제 직접입력(가맹점)
+        public $use_hand_pay_drct = true;      // 결제 링크생성(가맹점)
         public $use_issuer_filter = false;      // 카드사 필터링
         public $use_forb_pay_time = false;      // 결제금지시간 지정 사용 여부
         public $use_hand_pay_sms = false;       // 수기결제 SMS
         public $use_pay_verification_mobile = false; // 결제전 휴대폰 인증
-        public $use_sales_auto_setting = false; // 영업점 자동 세팅
+        public $use_sales_auto_setting = true; // 영업점 자동 세팅
         public $use_pay_limit = false;          // 결제한도 지정 사용 여부
         public $use_online_pay = false;         // 온라인 결제 사용 여부
         public $use_tid_create = false;         // tid 생성버튼 사용여부
         public $use_mid_create = false;         // mid 생성버튼 사용여부
         public $use_pmid = false;               // PMID 사용여부
-        public $use_mid_batch = false;          // mid 일괄적용
-        public $use_tid_batch = false;          // tid 일괄적용
-        public $use_api_key_batch = false;      // api_key 일괄적용
-        public $use_sub_key_batch = false;      // sub_key 일괄적용
         public $use_regular_card = false;       // 단골고객 카드등록
         public $use_collect_withdraw = false;   // 모아서 출금
         public $use_collect_withdraw_scheduler = false; // 모아서 출금 스케줄링
-        public $use_withdraw_fee = false;       // 출금 수수료
+        public $use_withdraw_fee = true;       // 출금 수수료
         public $use_head_office_withdraw = false; // 가상계좌 출금
         public $use_noti = false;               // 노티 사용여부
         public $use_cancel_deposit = false;     // 취소입금건 관리 사용여부

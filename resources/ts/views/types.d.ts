@@ -313,7 +313,7 @@ interface FreeOption {
 interface PaidOption {
     use_acct_verification: boolean, // 예금주 검증
     subsidiary_use_control: boolean, // 하위 영업점 전산 사용 ON/OFF
-    use_hand_pay_drct: boolean, // 수기결제 직접입력(가맹점)
+    use_hand_pay_drct: boolean, // 결제 링크생성(가맹점)
     use_hand_pay_sms: boolean, // 수기결제 SMS
     use_realtime_deposit: boolean,  // 실시간 결제모듈
     use_issuer_filter: boolean, // 카드사 필터링
@@ -324,10 +324,6 @@ interface PaidOption {
     use_tid_create: boolean,    // TID 생성버튼
     use_mid_create: boolean,    // MID 생성버튼
     use_pmid: boolean,
-    use_mid_batch: boolean,    // MID 일괄 적용
-    use_tid_batch: boolean,    // TID 일괄 적용
-    use_api_key_batch: boolean,
-    use_sub_key_batch: boolean,
     use_pay_verification_mobile: boolean, //휴대폰인증 
     use_sales_auto_setting: boolean, // 영업점 자동 세팅
     use_regular_card: boolean,

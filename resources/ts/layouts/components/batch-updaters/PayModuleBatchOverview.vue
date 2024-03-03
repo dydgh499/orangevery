@@ -270,7 +270,7 @@ const setNote = () => {
                     </VCol>
                 </VRow>
                 <VRow>
-                    <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_mid_batch">
+                    <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
                             <VCol>MID</VCol>
                             <VCol md="8">
@@ -284,7 +284,7 @@ const setNote = () => {
                             </VCol>
                         </VRow>
                     </VCol>
-                    <VCol :md=6 v-if="corp.pv_options.paid.use_tid_batch">
+                    <VCol :md=6>
                         <VRow no-gutters style="align-items: center;">
                             <VCol>TID</VCol>
                             <VCol md="8">
@@ -300,7 +300,7 @@ const setNote = () => {
                     </VCol>
                 </VRow>
                 <VRow>
-                    <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_api_key_batch">
+                    <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
                             <VCol>API KEY(license)</VCol>
                             <VCol md="8">
@@ -314,7 +314,7 @@ const setNote = () => {
                             </VCol>
                         </VRow>
                     </VCol>
-                    <VCol :md=6 v-if="corp.pv_options.paid.use_sub_key_batch">
+                    <VCol :md=6>
                         <VRow no-gutters style="align-items: center;">
                             <VCol>SUB KEY(iv)</VCol>
                             <VCol md="8">
