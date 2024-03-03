@@ -16,10 +16,14 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
+const snackbar = <any>(inject('snackbar'))
 const holidayDlg = ref(null)
 
 provide('holidayDlg', holidayDlg)
 
+onMounted(() => {
+    snackbar.value.show('업데이트 시기: 매년 12월 30일 다음연도 공휴일 일괄 추가<br><br>추가/수정된 공휴일은 작업 후 최대 5분 이후에 정산내용에 반영됩니다.', 'success')
+})
 </script>
 <template>
     <BaseIndexView placeholder="공휴일 명칭" :metas="metas" :add="false" add_name="" :date_filter_type="DateFilters.NOT_USE">

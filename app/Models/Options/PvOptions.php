@@ -1,7 +1,7 @@
 <?php
     namespace App\Models\Options;
 
-    class FreeOption 
+    class FreeOption
     {
         public $use_hand_pay = false;
         public $use_auth_pay = false;
