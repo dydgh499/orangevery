@@ -85,7 +85,7 @@ class HolidayController extends Controller
     {
         $datas      = [];
         $cur_time   = date('Y-m-d H:i:s');
-        $next_year  = (int)Carbon::now()->format('Y'); // + 1;
+        $next_year  = (int)Carbon::now()->format('Y') + 1;
         $holidays   = $this->getOneYearHolidays($next_year);
         $brand_ids  = Brand::where('is_delete', false)->pluck('id')->all();
         foreach($holidays as $holiday)
