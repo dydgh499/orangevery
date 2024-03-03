@@ -881,3 +881,10 @@ export interface MchtBlacklist {
     addr: string,
     block_reason: string,
 }
+
+export interface Holiday {
+    id: number,
+    rest_name: string,
+    rest_dt: string,
+    rest_type: number,
+}

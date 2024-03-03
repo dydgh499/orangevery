@@ -34,6 +34,8 @@ use App\Http\Controllers\Manager\CollectWithdrawController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateMchtController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateSalesController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdatePayModuleController;
+use App\Http\Controllers\Manager\Service\HolidayController;
+
 use App\Http\Controllers\Manager\UnderAutoSettingController;
 use App\Http\Controllers\Manager\RegularCreditCardController;
 
@@ -123,7 +125,9 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('head-office-accounts', HeadOfficeAccountController::class);
             Route::post('mcht-blacklists/bulk-register', [MchtBlacklistController::class, 'bulkRegister']);            
             Route::apiResource('mcht-blacklists', MchtBlacklistController::class);            
-            
+
+            Route::apiResource('holidays', HolidayController::class);
+            Route::post('holidays/bulk-register', [HolidayController::class, 'updateHolidays']);            
         });
         Route::prefix('transactions')->group(function() {            
             Route::post('noti/{id}', [TransactionController::class, 'noti']);
@@ -207,7 +211,6 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('under-auto-settings', UnderAutoSettingController::class);
         });
         Route::prefix('merchandises')->group(function() {
-
             Route::prefix('batch-updaters')->group(function() {
                 Route::post('sales-fee-direct-apply', [BatchUpdateMchtController::class, 'setSalesFeeDirect']);
                 Route::post('sales-fee-book-apply', [BatchUpdateMchtController::class, 'setSalesFeeBooking']);
@@ -276,7 +279,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('noti-urls', NotiUrlController::class); 
 
         });
-
+        
         Route::apiResource('complaints', ComplaintController::class);
         Route::apiResource('salesforces', SalesforceController::class);
         Route::apiResource('transactions', TransactionController::class);

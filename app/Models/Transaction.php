@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Service\Holiday;
 use App\Models\Salesforce;
 use App\Models\Merchandise;
 use App\Models\CancelDeposit;
 use App\Models\CollectWithdraw;
 use App\Models\Log\RealtimeSendHistory;
 
+use Illuminate\Support\Facades\Redis;
 use App\Http\Traits\Models\AttributeTrait;
 use Carbon\Carbon;
 
@@ -54,6 +56,36 @@ class Transaction extends Model
         return $query;
     }
 
+    public function getHolidays()
+    {
+        //조회일로부터 M-1, M+1 공휴일 조회
+        $s_dt = Carbon::createFromFormat('Y-m-d', request()->s_dt)->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
+        $e_dt = Carbon::createFromFormat('Y-m-d', request()->e_dt)->copy()->addMonthNoOverflow(1)->endOfMonth()->format('Y-m-d');
+        $brand_id = request()->user()->brand_id;
+        $key_name = "holidays-".$brand_id."-$s_dt-$e_dt";
+
+        $holidays = Redis::get($key_name);
+        if($holidays == null) 
+        {
+            $rest_dts = Holiday::where('brand_id', $brand_id)
+                ->where("rest_dt", ">=", $s_dt)
+                ->where("rest_dt", "<=", $e_dt)
+                ->pluck('rest_dt')->all();
+            if($rest_dts)
+            {
+                Redis::set($key_name, json_encode($rest_dts), 'EX', 300);
+                $holidays = json_encode($rest_dts);
+            }
+            else
+                $holidays = "";
+        }
+
+        $holidays = str_replace("[", "", $holidays);
+        $holidays = str_replace("]", "", $holidays);
+        $holidays = str_replace('"', "", $holidays);
+        return $holidays;
+    }
+
     public function scopeSettleDateTypeTransaction($query)
     {
         $s_dt = request()->s_dt;
@@ -65,8 +97,9 @@ class Transaction extends Model
         }
         else
         {
-            $trx_dt = "AddBaseWorkingDays(transactions.trx_dt, transactions.mcht_settle_type+1, transactions.pg_settle_type)";
-            $cxl_dt = "AddBaseWorkingDays(transactions.cxl_dt, transactions.mcht_settle_type+1, transactions.pg_settle_type)";
+            $holidays = $this->getHolidays();
+            $trx_dt = "AddBaseWorkingDays(transactions.trx_dt, transactions.mcht_settle_type+1, transactions.pg_settle_type, '$holidays')";
+            $cxl_dt = "AddBaseWorkingDays(transactions.cxl_dt, transactions.mcht_settle_type+1, transactions.pg_settle_type, '$holidays')";
         }
         return $query->where(function ($query) use ($s_dt, $e_dt, $trx_dt) {     
                 $query->whereRaw("$trx_dt >= '$s_dt'")

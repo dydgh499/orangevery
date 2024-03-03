@@ -3,7 +3,7 @@ import type { Classification, FinanceVan, Options, PayGateway, PaySection } from
 
 export const pg_settle_types = <Options[]>([
     {id:0, title:'주말 포함하여 정산'},
-    {id:1, title:'주말 건너뛰고 정산'},
+    {id:1, title:'주말, 공휴일 건너뛰고 정산'},
 ])
 
 export const useStore = defineStore('payGatewayStore', () => {

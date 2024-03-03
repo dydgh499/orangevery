@@ -5,16 +5,19 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+use App\Http\Controllers\Manager\Service\HolidayController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Http\Controllers\Log\DangerTransController;
 use App\Http\Controllers\Log\RealtimeSendHistoryController;
 use App\Http\Controllers\Log\DifferenceSettlementHistoryController;
+
 
 use App\Models\Log\DifferenceSettlementHistory;
 use App\Models\Log\MchtFeeChangeHistory;
 use App\Models\Log\RealtimeSendHistory;
 use App\Models\Log\SfFeeChangeHistory;
 use App\Models\Log\DangerTransaction;
+use App\Models\Service\Holiday;
 
 
 class Kernel extends ConsoleKernel
@@ -28,16 +31,22 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('sanctum:prune-expired --hours=35')->daily();
+
         $schedule->call(new FeeChangeHistoryController(new MchtFeeChangeHistory, new SfFeeChangeHistory))->daily();
         $schedule->call(new RealtimeSendHistoryController(new RealtimeSendHistory))->hourly();
         $schedule->call(new DangerTransController(new DangerTransaction))->everySixHours();
-        
+
+        // 차액정산
         $schedule->call(function () {
             (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleRequest();
         })->daily();
         $schedule->call(function () {
             (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleResponse();
         })->dailyAt("07:30"); // 헥토 04:30, 다날 07:30
+        // 공휴일 업데이트
+        $schedule->call(function () {
+            (new HolidayController(new Holiday))->updateNextHolidaysAllBrands();
+        })->yearlyOn(12, 30, '00:00');
     }
 
     /**
