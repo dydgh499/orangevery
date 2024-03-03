@@ -67,7 +67,6 @@ class BrandController extends Controller
             DB::raw("SUM(curr_deposit_amount) AS curr_deposit_amount"),
         ]);
         $total_dev_amount = (int)$this->getTotalDevFee($request);
-        logging(['total_dev_amount'=>$total_dev_amount]);
         $chart->extra_deposit_amount += $total_dev_amount;
         $chart->total_deposit_amount += $total_dev_amount;
         return $this->response(0, $chart);

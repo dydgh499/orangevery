@@ -31,7 +31,8 @@ export const useSearchStore = defineStore('transSettlesHistorySalesSearchStore',
     headers_1['comm_settle_amount'] = '통신비'
     headers_1['under_sales_amount'] = '매출미달 차감금'
     headers_1['deduct_amount'] = '추가차감액'
-
+    headers_1['settle_amount'] = '정산액'
+    
     if(corp.pv_options.paid.use_finance_van_deposit)
         headers_1['deposit_amount'] = '이체금액'
 

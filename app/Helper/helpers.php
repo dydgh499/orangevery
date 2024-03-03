@@ -286,7 +286,7 @@
             'this_month_add' => 0,
             'this_month_del' => 0,
             'total' => $data['total'],
-        ];   
+        ];
         $first_dy_week = Carbon::now()->startOfWeek();
         $first_dy_month = Carbon::now()->startOfMonth();
 
