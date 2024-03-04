@@ -51,8 +51,12 @@ class welcome1 extends DifferenceSettlement implements DifferenceSettlementInter
         return $this->_response($res_path, $req_date);
     }
 
-    public function registerRequest(Carbon $date, $trans)
+    public function registerRequest(Carbon $date, $mchts)
     {
-
+        $req_date = $date->copy()->format('Ymd');
+        // DANALto업체명_differ.YYYYMM
+        $brand_business_num = str_replace('-', '', $this->brand['business_num']);  // ?
+        $save_path = "/upload/dfsttm/send/merc_welcome_".$brand_business_num."_".$req_date."req";
+        return $this->_registerRequest($save_path, $req_date, $mchts);
     }
 }

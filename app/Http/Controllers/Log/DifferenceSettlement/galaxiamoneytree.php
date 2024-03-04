@@ -44,8 +44,6 @@ class galaxiamoneytree extends DifferenceSettlement implements DifferenceSettlem
     public function request(Carbon $date, $trans)
     {
         $req_date = $date->format('Ymd');
-        // 업체명toDANAL_differ.YYYYMM
-        
         $save_path = "/".$this->brand['rep_mid']."_REQUEST.".$req_date;
         return $this->_request($save_path, $req_date, $trans);
     }
@@ -53,8 +51,14 @@ class galaxiamoneytree extends DifferenceSettlement implements DifferenceSettlem
     public function response(Carbon $date)
     {
         $req_date = $date->copy()->format('Ymd');
-        // DANALto업체명_differ.YYYYMM
         $res_path = "/".$this->brand['rep_mid']."_RECEIVE.".$req_date;
         return $this->_response($res_path, $req_date);
+    }
+
+    public function registerRequest(Carbon $date, $mchts)
+    {
+        $req_date = $date->format('Ymd');
+        $save_path = "/".$this->brand['rep_mid']."_REQUEST_INFO.".$req_date;
+        return $this->_registerRequest($save_path, $req_date, $mchts);
     }
 }
