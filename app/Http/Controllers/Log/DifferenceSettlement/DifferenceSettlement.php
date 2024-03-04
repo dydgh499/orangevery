@@ -17,6 +17,7 @@ class DifferenceSettlement
     protected $main_sftp_connection, $dr_sftp_connection;
     protected $main_connection_stat, $dr_connection_stat;
 
+    protected $PMID_MODE;
     protected $RQ_START_FILTER_SIZE, $RQ_HEADER_FILTER_SIZE, $RQ_TOTAL_FILTER_SIZE, $RQ_END_FILTER_SIZE;
     protected $RQ_PG_NAME;
 
