@@ -181,6 +181,7 @@ class hecto implements DifferenceSettlementInterface
         };
         $getDatas = function($brand, $mchts) {
             $records = '';
+            $yesterday = Carbon::now()->subDay(1)->format('Ymd');
             for ($i=0; $i < count($mchts); $i++) 
             { 
                 $records .= $this->setAtypeField("DD", 2);
@@ -196,7 +197,7 @@ class hecto implements DifferenceSettlementInterface
                 $records .= $this->setNtypeField($mchts[$i]->phone_num, 11);
                 $records .= $this->setAtypeField('', 40);   //이메일 필드
                 $records .= $this->setAtypeField('', 80);   //웹사이트 URL 필드
-                $records .= $this->setNtypeField(date('Ymd'), 8);
+                $records .= $this->setNtypeField($yesterday, 8);
                 $records .= $this->setAtypeField('', 22);                
             }
         };

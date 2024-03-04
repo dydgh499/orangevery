@@ -195,6 +195,7 @@ class DifferenceSettlementHistoryController extends Controller
     public function differenceSettleRegisterRequest()
     {
         $cols = [
+            'merchandises.id',
             'merchandises.business_num','merchandises.sector',
             'merchandises.mcht_name','merchandises.addr',
             'merchandises.nick_name','merchandises.phone_num',

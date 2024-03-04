@@ -172,13 +172,14 @@ class danal implements DifferenceSettlementInterface
         };
         $getDatas = function($brand, $mchts) {
             $records = '';
+            $yesterday = Carbon::now()->subDay(1)->format('Ymd');
             for ($i=0; $i < count($mchts); $i++) 
             { 
                 $records .= $this->setAtypeField("DD", 2);
-                $records .= $this->setNtypeField($i+1, 12);
+                $records .= $this->setNtypeField($mchts[$i]->id, 12);
                 $records .= $this->setNtypeField(0, 2);
                 $records .= $this->setNtypeField($brand['rep_mid'], 10);
-                //$records .= $this->setNtypeField($this->getMchtCardCode('카드사 코드???'), 3);
+                $records .= $this->setNtypeField('000', 3); // $this->getMchtCardCode('카드사 코드???')
                 $records .= $this->setNtypeField(str_replace('-', '', $mchts[$i]->business_num), 10);
                 $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->sector), 20);
                 $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->mcht_name), 40);
@@ -187,7 +188,7 @@ class danal implements DifferenceSettlementInterface
                 $records .= $this->setNtypeField($mchts[$i]->phone_num, 11);
                 $records .= $this->setAtypeField('', 40);   //이메일 필드
                 $records .= $this->setAtypeField('', 80);   //웹사이트 URL 필드
-                $records .= $this->setNtypeField(date('Ymd'), 8);
+                $records .= $this->setNtypeField($yesterday, 8);
                 $records .= $this->setAtypeField('', 22);                
             }
         };
