@@ -133,6 +133,7 @@ const addAbleSalesLevels = () => {
                     </VRow>
                 </VCardItem>
             </VCard>
+            <br>
             <VCard v-if="corp.pv_options.paid.use_sales_auto_setting && getUserLevel() >= 35">
                 <VCardItem>
                     <VCol cols="12">
