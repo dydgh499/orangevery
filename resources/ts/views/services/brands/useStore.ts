@@ -19,28 +19,31 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
     const head = Header('services/brands', '서비스 관리')
     const headers: Record<string, string | object> = {
         'id': 'NO.',
-        'dns': 'DNS',
-        'logo_img': 'LOGO',
-        'main_color': '테마색상',
-        'company_name': '회사명',
-        'ceo_name': '대표자명',
-        'phone_num': '연락처',
     }
-    head.sub_headers.value = []
     if (user_info.value.level == 50) {
+        headers['note'] = '비고'
+        headers['last_dpst_at'] = '마지막 입금일'
         headers['deposit_day'] = '입금일'
         headers['deposit_amount'] = '입금액'
         headers['extra_deposit_amount'] = '부가입금액'
         headers['curr_deposit_amount'] = '현재입금액(월)'
+    }
+    headers['dns'] = 'DNS'
+    headers['logo_img'] = 'LOGO'
+    headers['main_color'] = '테마색상'
+    headers['company_name'] = '회사명'
+    headers['ceo_name'] = '대표자명'
+    headers['phone_num'] = '연락처'
+
+    if (user_info.value.level == 50) {
         headers['dev_fee'] = corp.pv_options.auth.levels.dev_name+' 수수료'
         headers['dev_settle_type'] = corp.pv_options.auth.levels.dev_name+' 수수료 정산타입'
-        headers['last_dpst_at'] = '마지막 입금일'
-        headers['note'] = '비고'
         headers['created_at'] = '생성시간'
         headers['updated_at'] = '업데이트시간'
         headers['extra_col'] = '더보기'
     }
 
+    head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 
