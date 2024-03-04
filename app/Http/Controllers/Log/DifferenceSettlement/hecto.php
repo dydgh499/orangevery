@@ -56,6 +56,9 @@ class hecto extends DifferenceSettlement implements DifferenceSettlementInterfac
 
     public function registerRequest(Carbon $date, $trans)
     {
+        $req_date = $date->format('Ymd');
+        $save_path = "/edi_req/ST_PRFT_REQ_".$req_date;
+        //return $this->_registerRequest($save_path, $req_date, $mchts);
         return true;
     }
 }
