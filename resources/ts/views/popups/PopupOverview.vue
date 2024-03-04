@@ -22,15 +22,12 @@ const props = defineProps<Props>()
                         </VCol>
                         <VCol md="5">
                             <VRow no-gutters>
-                                <VCol md="5">
-                                    <VTextField type="date" v-model="props.item.open_s_dt"
-                                        prepend-inner-icon="ic-baseline-calendar-today" label="시작일 입력" single-line />
-
+                                <VCol md="4">
+                                    <VTextField type="date" v-model="props.item.open_s_dt" label="시작일 입력"  />
                                 </VCol>
                                 <span style="margin: 0 1em; line-height: 2.5em;">~</span>
-                                <VCol md="5">
-                                    <VTextField type="date" v-model="props.item.open_e_dt"
-                                    prepend-inner-icon="ic-baseline-calendar-today" label="종료일 입력" single-line/>
+                                <VCol md="4">
+                                    <VTextField type="date" v-model="props.item.open_e_dt" label="종료일 입력"/>
                                     
                                 </VCol>
                             </VRow>
@@ -50,7 +47,7 @@ const props = defineProps<Props>()
                         <CreateHalfVCol :mdl="1" :mdr="11">
                             <template #name>내용</template>
                             <template #input>
-                                <Editor :content="props.item.popup_content" @update:content="props.item.popup_content = $event"></Editor>
+                                <Editor :content="props.item.popup_content" @update:content="props.item.popup_content = $event"/>
                             </template>
                         </CreateHalfVCol>
                     </VRow>

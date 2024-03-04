@@ -6,7 +6,7 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { axios } from '@axios'
 
 interface Props {
-    content: String
+    content: string
 }
 const props = defineProps<Props>();
 const snackbar = <any>(inject('snackbar'))
@@ -44,11 +44,13 @@ const modules = [
     }
 ]
 
-const content = ref(props.content)
+const content = ref(<string>(""))
 const emits = defineEmits(['update:content']);
 watchEffect(() => {
     if(content.value != null)
         emits('update:content', content.value)
+    if(content.value === "" && props.content !== "")
+        content.value = props.content
 })
 </script>
 <template>

@@ -49,7 +49,7 @@ const getPostTypes = computed(() => {
                         <CreateHalfVCol :mdl="1" :mdr="11">
                             <template #name>내용</template>
                             <template #input>
-                                <Editor :content="props.item.content" @update:content="props.item.content = $event"></Editor>
+                                <Editor :content="props.item.content" @update:content="props.item.content = $event"/>
                             </template>
                         </CreateHalfVCol>
                     </VRow>

@@ -12,7 +12,7 @@ class galaxiamoneytree extends DifferenceSettlement implements DifferenceSettlem
     {
         parent::__construct($brand);
         $this->PMID_MODE  = true;
-        $this->RQ_PG_NAME = "DANAL";
+        $this->RQ_PG_NAME = "X";
         $this->RQ_START_FILTER_SIZE  = 0;
         $this->RQ_HEADER_FILTER_SIZE = 147;
         $this->RQ_TOTAL_FILTER_SIZE  = 150;
