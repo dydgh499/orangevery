@@ -8,15 +8,15 @@ use Carbon\Carbon;
 
 class danal extends DifferenceSettlement implements DifferenceSettlementInterface
 {
+    public $PMID_MODE  = true;
+    public $RQ_PG_NAME = "DANAL";
+    public $RQ_START_FILTER_SIZE  = 470;
+    public $RQ_HEADER_FILTER_SIZE = 488;
+    public $RQ_TOTAL_FILTER_SIZE  = 473;
+    public $RQ_END_FILTER_SIZE    = 491;
     public function __construct($brand)
     {
         parent::__construct($brand);
-        $this->PMID_MODE  = true;
-        $this->RQ_PG_NAME = "DANAL";
-        $this->RQ_START_FILTER_SIZE  = 470;
-        $this->RQ_HEADER_FILTER_SIZE = 488;
-        $this->RQ_TOTAL_FILTER_SIZE  = 473;
-        $this->RQ_END_FILTER_SIZE    = 491;
 
         $main_config_name   = 'different_settlement_main_'.$this->service_name;
         $dr_config_name     = 'different_settlement_dr'.$this->service_name;
