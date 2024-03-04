@@ -194,24 +194,29 @@ class DifferenceSettlementHistoryController extends Controller
     */
     public function differenceSettleRegisterRequest()
     {
-        $brands = $this->getUseDifferentSettlementBrands();
+        $cols = [
+            'merchandises.business_num','merchandises.sector',
+            'merchandises.mcht_name','merchandises.addr',
+            'merchandises.nick_name','merchandises.phone_num',
+        ];
+        $brands     = $this->getUseDifferentSettlementBrands();
         $date       = Carbon::now();
         $yesterday  = $date->copy()->subDay(1)->format('Y-m-d');
 
         for ($i=0; $i<count($brands); $i++)
         {
-            $trans   = Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
+            $mchts = Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
                 ->join('payment_gateways', 'payment_modules.pg_id', '=', 'payment_gateways.id')
                 ->where('merchandises.is_delete', false)
                 ->where('payment_modules.is_delete', false)
                 ->where('payment_gateways.pg_type', $brands[$i]->pg_type)
                 ->where('merchandises.brand_id', $brands[$i]->brand_id)
                 ->where('merchandises.created_at', $yesterday)
-                ->get(['merchandises.business_num']);
+                ->get($cols);
             $pg = $this->getPGClass($brands[$i]);
             if($pg)
             {
-                $res = $pg->registerRequest($date, $trans);
+                $res = $pg->registerRequest($date, $mchts);
             }
         }
     }

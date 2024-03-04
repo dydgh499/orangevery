@@ -50,4 +50,9 @@ class welcome1 extends DifferenceSettlement implements DifferenceSettlementInter
         $res_path = "/upload/dfsttm/send/daff_welcome_".$brand_business_num."_".$req_date."sply";
         return $this->_response($res_path, $req_date);
     }
+
+    public function registerRequest(Carbon $date, $trans)
+    {
+
+    }
 }

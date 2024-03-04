@@ -127,7 +127,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::apiResource('mcht-blacklists', MchtBlacklistController::class);            
 
             Route::apiResource('holidays', HolidayController::class);
-            Route::post('holidays/bulk-register', [HolidayController::class, 'updateHolidays']);            
+            Route::post('holidays/bulk-register', [HolidayController::class, 'updateHolidays']);
         });
         Route::prefix('transactions')->group(function() {            
             Route::post('noti/{id}', [TransactionController::class, 'noti']);

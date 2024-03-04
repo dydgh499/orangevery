@@ -169,12 +169,18 @@ class DifferenceSettlement
         }
     }
 
-    public function registerRequest()
+    public function _registerRequest($save_path, $req_date, $mchts)
     {
-
+        $full_record = $this->service->registerRequest($this->brand, $req_date, $mchts);
+        if($this->main_connection_stat)
+            $result = $this->main_sftp_connection->put($save_path, $full_record);
+        if($this->dr_connection_stat)
+            $result = $this->dr_sftp_connection->put($save_path, $full_record);
+        logging(['result'=>$result, 'save_path'=>$save_path], $this->service_name.'-difference-settlement-request');
+        return $result;
     }
 
-    public function registerResponse()
+    public function _registerResponse($res_path, $req_date)
     {
         
     }

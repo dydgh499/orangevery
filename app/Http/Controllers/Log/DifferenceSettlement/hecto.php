@@ -53,4 +53,9 @@ class hecto extends DifferenceSettlement implements DifferenceSettlementInterfac
         $res_path = "/edi_rsp/ST_PRFT_RSP_".$req_date;
         return $this->_response($res_path, $req_date);
     }
+
+    public function registerRequest(Carbon $date, $trans)
+    {
+        return true;
+    }
 }

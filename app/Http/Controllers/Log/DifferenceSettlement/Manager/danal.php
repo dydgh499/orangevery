@@ -144,4 +144,66 @@ class danal implements DifferenceSettlementInterface
         ];
         return isset($mcht_sections[$code]) ? $mcht_sections[$code] : '알수없는 코드';        
     }
+
+    public function getMchtCardCode($code)
+    {
+        $mcht_cards = [
+            '006' => '하나',
+            '016' => '국민',
+            '018' => '농협',
+            '026' => '비씨',
+            '027' => '현대',
+            '029' => '신한',
+            '031' => '삼성',
+            '047' => '롯데',
+        ];
+        return isset($mcht_cards[$code]) ? $mcht_cards[$code] : '알수없는 코드';   
+    }
+
+    public function registerRequest($brand, $req_date, $mchts)
+    {
+        $getHeader = function($brand, $req_date) {
+            return 
+                $this->setAtypeField("HD", 2).
+                $this->setAtypeField(str_replace('-', '', $brand['business_num']), 10).
+                $this->setAtypeField("DANAL", 10).
+                $this->setNtypeField($req_date, 8).
+                $this->setAtypeField('', 370);
+        };
+        $getDatas = function($brand, $mchts) {
+            $records = '';
+            for ($i=0; $i < count($mchts); $i++) 
+            { 
+                $records .= $this->setAtypeField("DD", 2);
+                $records .= $this->setNtypeField($i+1, 12);
+                $records .= $this->setNtypeField(0, 2);
+                $records .= $this->setNtypeField($brand['rep_mid'], 10);
+                //$records .= $this->setNtypeField($this->getMchtCardCode('카드사 코드???'), 3);
+                $records .= $this->setNtypeField(str_replace('-', '', $mchts[$i]->business_num), 10);
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->sector), 20);
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->mcht_name), 40);
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->addr), 100);
+                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->nick_name), 40);
+                $records .= $this->setNtypeField($mchts[$i]->phone_num, 11);
+                $records .= $this->setAtypeField('', 40);   //이메일 필드
+                $records .= $this->setAtypeField('', 80);   //웹사이트 URL 필드
+                $records .= $this->setNtypeField(date('Ymd'), 8);
+                $records .= $this->setAtypeField('', 22);                
+            }
+        };
+        $getTrailer = function($mchts) {
+            return 
+                $this->setAtypeField("TR", 2).
+                $this->setNtypeField(count($mchts), 10).
+                $this->setNtypeField(count($mchts), 10).
+                $this->setNtypeField(0, 10).
+                $this->setNtypeField(0, 10).
+                $this->setAtypeField('', 358);
+        };
+        $records = '';
+        $records .= $getHeader($brand, $req_date)."\n";
+        $records .= $getDatas($brand, $mchts)."\n";
+        $records .= $getTrailer($mchts)."\n";
+        return $records;
+    }
 }
