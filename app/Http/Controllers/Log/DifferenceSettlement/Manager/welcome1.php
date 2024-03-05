@@ -208,9 +208,9 @@ class welcome1 implements DifferenceSettlementInterface
                 $this->setNtypeField(count($mchts), 10).
                 $this->setAtypeField('', 488);
         };
-        $records  = $getHeader($brand, $req_date)."\n";
-        $records .= $getDatas($brand, $mchts)."\n";
-        $records .= $getTrailer($mchts)."\n";
+        $records  = $getHeader($brand, $req_date)."\r\n";
+        $records .= $getDatas($brand, $mchts)."\r\n";
+        $records .= $getTrailer($mchts)."\r\n";
         return $records;
     }
 }

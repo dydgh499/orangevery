@@ -203,9 +203,9 @@ class danal implements DifferenceSettlementInterface
                 $this->setAtypeField('', 358);
         };
         $records = '';
-        $records .= $getHeader($brand, $req_date)."\n";
-        $records .= $getDatas($brand, $mchts)."\n";
-        $records .= $getTrailer($mchts)."\n";
+        $records .= $getHeader($brand, $req_date)."\r\n";
+        $records .= $getDatas($brand, $mchts)."\r\n";
+        $records .= $getTrailer($mchts)."\r\n";
         return $records;
     }
 }
