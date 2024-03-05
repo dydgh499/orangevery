@@ -142,12 +142,12 @@ class DifferenceSettlement
         else
         {
             $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::TOTAL->value, 2);
-            if($this->service_name == 'welcome')
+            if($this->service_name == 'welcome1')
                 $total_count    = $this->setAtypeField($total_count, 7);
             else
                 $total_count    = $this->setNtypeField($total_count, 7);
 
-            if($this->service_name == 'hecto' || $this->service_name == 'welcome')
+            if($this->service_name == 'hecto' || $this->service_name == 'welcome1')
                 $total_amount   = $this->setAtypeField($total_amount, 18);
             else// danal
                 $total_amount    = $this->setNtypeField($total_amount, 18);

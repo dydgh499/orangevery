@@ -31,6 +31,7 @@ watchEffect(() => {
             'BUDM_DO',
             'BUDM_DR',
             'BUDM_OP',
+            'BUDM_OR',
         ]
     }
     else
