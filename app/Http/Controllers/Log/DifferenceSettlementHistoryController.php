@@ -212,7 +212,7 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('payment_modules.is_delete', false)
                 ->where('payment_gateways.pg_type', $brands[$i]->pg_type)
                 ->where('merchandises.brand_id', $brands[$i]->brand_id)
-                ->where('merchandises.created_at', $yesterday)
+                //->where('merchandises.created_at', $yesterday)
                 ->get($cols);
             $pg = $this->getPGClass($brands[$i]);
             if($pg)
