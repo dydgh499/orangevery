@@ -113,7 +113,7 @@ class OperatorController extends Controller
             return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
         else
         {
-            $res = $query->update($user);
+            $res = $query->update($data);
             return $this->response($res ? 1 : 990);    
         }
     }

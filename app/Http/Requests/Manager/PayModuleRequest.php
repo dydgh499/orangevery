@@ -117,6 +117,8 @@ class PayModuleRequest extends FormRequest
         $data['note'] = $data['note'] == null ? '' : $data['note'];
         $data['brand_id'] = $this->user()->brand_id;
         $data['filter_issuers'] = json_encode($this->filter_issuers);
+        if($this->fin_trx_delay !== null)
+            $data['fin_trx_delay'] = $this->fin_trx_delay;
         return $data;
     }
 }
