@@ -55,7 +55,7 @@ class danal implements DifferenceSettlementInterface
                     $trx_id.$ori_trx_id.$ord_num.$amount.$ori_amount.$ori_trx_dt.
                     $add_field.$filter;
 
-                $data_records .= $data_record."\n";
+                $data_records .= $data_record."\r\n";
                 $total_count += 1;
             }
         }

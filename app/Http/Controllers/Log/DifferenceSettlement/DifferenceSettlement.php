@@ -118,7 +118,7 @@ class DifferenceSettlement
             $brand_business_num = $this->setAtypeField($brand_business_num, 10);
             $pg_type        = $this->setAtypeField($this->RQ_PG_NAME, 10);
             $filter         = $this->setAtypeField('', $this->RQ_START_FILTER_SIZE);
-            return $record_type.$req_date.$brand_business_num.$pg_type.$filter."\n";                
+            return $record_type.$req_date.$brand_business_num.$pg_type.$filter."\r\n";                
         }
     }
 
@@ -131,7 +131,7 @@ class DifferenceSettlement
             $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::HEADER->value, 2);
             $rep_mid        = $this->setAtypeField($rep_mid, 10);
             $filter         = $this->setAtypeField('', $this->RQ_HEADER_FILTER_SIZE);
-            return $record_type.$rep_mid.$filter."\n";    
+            return $record_type.$rep_mid.$filter."\r\n";    
         }
     }
 
@@ -153,7 +153,7 @@ class DifferenceSettlement
                 $total_amount    = $this->setNtypeField($total_amount, 18);
 
             $filter         = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
-            return $record_type.$total_count.$total_amount.$filter."\n";    
+            return $record_type.$total_count.$total_amount.$filter."\r\n";    
         }
     }
 
@@ -166,7 +166,7 @@ class DifferenceSettlement
             $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::END->value, 2);
             $total_count    = $this->setNtypeField($total_count, 7);
             $filter         = $this->setAtypeField('', $this->RQ_END_FILTER_SIZE);
-            return $record_type.$total_count.$filter."\n";    
+            return $record_type.$total_count.$filter."\r\n";    
         }
     }
 

@@ -225,9 +225,9 @@ class galaxiamoneytree implements DifferenceSettlementInterface
                 $this->setNtypeField(0, 10).
                 $this->setAtypeField('', 458);
         };
-        $records  = $getHeader($brand, $req_date)."\n";
-        $records .= $getDatas($brand, $mchts)."\n";
-        $records .= $getTrailer($mchts)."\n";
+        $records  = $getHeader($brand, $req_date)."\r\n";
+        $records .= $getDatas($brand, $mchts)."\r\n";
+        $records .= $getTrailer($mchts)."\r\n";
         return $records;
     }
 }
