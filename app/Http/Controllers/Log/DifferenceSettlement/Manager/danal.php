@@ -191,6 +191,7 @@ class danal implements DifferenceSettlementInterface
                 $records .= $this->setNtypeField($yesterday, 8);
                 $records .= $this->setAtypeField('', 22);                
             }
+            return $records;
         };
         $getTrailer = function($mchts) {
             return 

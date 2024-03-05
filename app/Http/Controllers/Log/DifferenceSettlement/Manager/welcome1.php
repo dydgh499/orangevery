@@ -200,6 +200,7 @@ class welcome1 implements DifferenceSettlementInterface
                 $records .= $this->setAtypeField($mchts[$i]->id, 20);
                 $records .= $this->setAtypeField('', 109);
             }
+            return $records;
         };
         $getTrailer = function($mchts) {
             return 

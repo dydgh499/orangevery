@@ -214,6 +214,7 @@ class galaxiamoneytree implements DifferenceSettlementInterface
                 $records .= $this->setAtypeField($mchts[$i]->id, 12);
                 $records .= $this->setAtypeField('', 116);
             }
+            return $records;
         };
         $getTrailer = function($mchts) {
             return 
