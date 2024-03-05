@@ -194,7 +194,7 @@ class hecto implements DifferenceSettlementInterface
                 $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->mcht_name), 40);
                 $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->addr), 100);
                 $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->nick_name), 40);
-                $records .= $this->setNtypeField($mchts[$i]->phone_num, 11);
+                $records .= $this->setNtypeField(str_replace('-', '', $mchts[$i]->phone_num), 11);
                 $records .= $this->setAtypeField('', 40);   //이메일 필드
                 $records .= $this->setAtypeField('', 80);   //웹사이트 URL 필드
                 $records .= $this->setNtypeField($yesterday, 8);

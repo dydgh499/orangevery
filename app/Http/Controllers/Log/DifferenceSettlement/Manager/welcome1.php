@@ -194,7 +194,7 @@ class welcome1 implements DifferenceSettlementInterface
                 $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->addr), 100);
                 $records .= $this->setNtypeField('', 6);   //우편번호
                 $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->nick_name), 40);
-                $records .= $this->setNtypeField($mchts[$i]->phone_num, 11);
+                $records .= $this->setNtypeField(str_replace('-', '', $mchts[$i]->phone_num), 11);
                 $records .= $this->setAtypeField('', 40);   //이메일 필드
                 $records .= $this->setNtypeField($yesterday, 8);
                 $records .= $this->setAtypeField($mchts[$i]->id, 20);
