@@ -79,7 +79,9 @@ class DifferenceSettlement
                 $total  = $this->setTotalRecord($count, $amount);
     
                 $full_record .= $header.$data_records.$total;
-                $total_count += $count;    
+                $total_count += $count;
+                if($this->service_name === 'danal')
+                    $total_count += 2;
             }
         }
         $full_record .= $this->setEndRecord($total_count);
@@ -149,8 +151,8 @@ class DifferenceSettlement
 
             if($this->service_name == 'hecto' || $this->service_name == 'welcome1')
                 $total_amount   = $this->setAtypeField($total_amount, 18);
-            else// danal
-                $total_amount    = $this->setNtypeField($total_amount, 18);
+            else // danal
+                $total_amount   = $this->setNtypeField($total_amount, 18);
 
             $filter         = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
             return $record_type.$total_count.$total_amount.$filter."\r\n";    
