@@ -80,10 +80,10 @@ class DifferenceSettlement
     
                 $full_record .= $header.$data_records.$total;
                 $total_count += $count;
-                if($this->service_name === 'danal')
-                    $total_count += 2;
             }
         }
+        if($this->service_name === 'danal')
+            $total_count += 2;  // start, end records
         $full_record .= $this->setEndRecord($total_count);
 
         if($this->main_connection_stat)
