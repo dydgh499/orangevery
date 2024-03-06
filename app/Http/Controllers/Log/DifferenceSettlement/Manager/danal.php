@@ -17,7 +17,7 @@ class danal implements DifferenceSettlementInterface
         $data_records = '';
         $total_amount = 0;
         $total_count = 0;
-        for ($i=0; $i < count($trans); $i++) 
+        for ($i=0; $i < count($trans); $i++)
         { 
             $business_num = str_replace('-', '', $trans[$i]->business_num);
             if($business_num)
