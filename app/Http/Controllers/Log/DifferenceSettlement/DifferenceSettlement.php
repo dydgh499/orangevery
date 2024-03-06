@@ -76,7 +76,7 @@ class DifferenceSettlement
                 $_mid = $pmid_mode ? $mcht_trans[0]->p_mid : $mid;
                 $business_num = str_replace('-', '', $mcht_trans[0]->business_num);
 
-                if($business_num && $_mid !== "")
+                if($business_num !== "" && $_mid !== "")
                 {
                     $header = $this->setHeaderRecord($_mid);
                     [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num']);
