@@ -161,7 +161,10 @@ class SalesSettleHistoryController extends Controller
         else
         {
             $code = $this->deleteSalesforceCommon($request, $id, 'sales_id');
-            return $this->response($code, ['id'=>$id]);
+            if($code)
+                return $this->response($code, ['id'=>$id]);
+            else
+                return $this->extendResponse(1000, "정산 이력을 찾을 수 없습니다.");
         }
     }
     
