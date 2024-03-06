@@ -175,9 +175,10 @@ class MchtSettleHistoryController extends Controller
     {
         $result = DB::transaction(function () use($request, $id, $target_settle_id) {
             $query = $this->settle_mcht_hist->where('id', $id);
-            $hist  = $query->first()->toArray();
+            $hist  = $query->first();
             if($hist)
             {
+                $hist = $hist->toArray();
                 $request = $request->merge(['id' => $id]);
                 // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
                 $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);

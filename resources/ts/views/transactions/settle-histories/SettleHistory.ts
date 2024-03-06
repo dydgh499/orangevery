@@ -62,7 +62,7 @@ export function settlementHistoryFunctionCollect(store: any) {
             }
         }
     }
-    
+
     const batchCancel = async(selected:number[], is_mcht: boolean) => {
         if (await alert.value.show('정말 일괄 정산취소처리 하시겠습니까?')) {
             const promises = []

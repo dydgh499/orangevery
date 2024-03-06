@@ -168,14 +168,6 @@ class SalesSettleHistoryController extends Controller
         }
     }
     
-    /*
-    * 정산이력 - 일괄정산취소
-    */
-    public function batchDestroy(Request $request)
-    {
-
-    }
-    
     protected function deleteSalesforceCommon($request, $id, $user_id)
     {
         [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
@@ -184,6 +176,7 @@ class SalesSettleHistoryController extends Controller
             $hist  = $query->first();
             if($hist)
             {
+                $hist = $hist->toArray();
                 $request = $request->merge(['id' => $id]);
                 // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
                 $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
