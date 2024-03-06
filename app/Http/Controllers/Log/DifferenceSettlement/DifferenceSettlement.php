@@ -59,6 +59,7 @@ class DifferenceSettlement
         $pmid_mode  = $this->service_name === 'danal' ? 'p_mid' : 'mid';
 
         $mids = $trans->pluck($pmid_mode ? 'p_mid' : 'mid')->unique()->all();
+        $sub_count = 0;
         $total_count = 0;
         $full_record = $this->setStartRecord($req_date);
 
@@ -82,13 +83,15 @@ class DifferenceSettlement
                 $total  = $this->setTotalRecord($count, $amount);
 
                 $full_record .= $header.$data_records.$total;
-                $total_count += $count;    
-                
+                $total_count += $count;                    
+
+                if($this->service_name === 'danal')
+                    $sub_count += 2;  //header, total records
             }
         }
         if($this->service_name === 'danal')
-            $total_count += 2;  // start, end records
-        $full_record .= $this->setEndRecord($total_count);
+            $sub_count += 2;  // start, end records
+        $full_record .= $this->setEndRecord($total_count + $sub_count);
 
         if($this->main_connection_stat)
             $result = $this->main_sftp_connection->put($save_path, $full_record);

@@ -59,7 +59,6 @@ class danal implements DifferenceSettlementInterface
                 $total_count += 1;
             }
         }
-        $total_count += 2;  //header, total records
         return [$data_records, $total_count, $total_amount];
     }
     /*
