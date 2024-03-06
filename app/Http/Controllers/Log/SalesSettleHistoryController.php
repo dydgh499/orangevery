@@ -170,7 +170,7 @@ class SalesSettleHistoryController extends Controller
         [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
         $result = DB::transaction(function () use($request, $id, $target_settle_id, $user_id) {
             $query = $this->settle_sales_hist->where('id', $id);
-            $hist  = $query->first()->toArray();
+            $hist  = $query->first();
             if($hist)
             {
                 $request = $request->merge(['id' => $id]);
