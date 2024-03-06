@@ -168,6 +168,14 @@ class SalesSettleHistoryController extends Controller
         }
     }
     
+    /*
+    * 정산이력 - 일괄정산취소
+    */
+    public function batchDestroy(Request $request)
+    {
+
+    }
+    
     protected function deleteSalesforceCommon($request, $id, $user_id)
     {
         [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
@@ -196,7 +204,7 @@ class SalesSettleHistoryController extends Controller
         return $result;
 
     }
-    
+
     /**
      * 입금상태 변경
      */

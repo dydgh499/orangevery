@@ -34,7 +34,7 @@ export function settlementHistoryFunctionCollect(store: any) {
                     id: item.id,
                     current_status : Number(item.deposit_status),
                 })
-            }            
+            }
             await post('/api/v1/manager/transactions/settle-histories/' + (is_mcht ? 'merchandises' : 'salesforces') + '/batch-deposit', params, true)
             store.setTable()
         }

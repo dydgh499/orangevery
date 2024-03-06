@@ -73,13 +73,18 @@ class DifferenceSettlement
 
             if(count($mcht_trans) > 0)
             {
-                $_mid = $pmid_mode ? $mcht_trans[0]->p_mid : $mid;
-                $header = $this->setHeaderRecord($_mid);
-                [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num']);
-                $total  = $this->setTotalRecord($count, $amount);
-    
-                $full_record .= $header.$data_records.$total;
-                $total_count += $count;
+                $_mid = $pmid_mode ? $mcht_trans[0]->p_mid : $mid;                
+                $business_num = str_replace('-', '', $mcht_trans[0]->business_num);
+                
+                if($business_num && $_mid !== "")
+                {
+                    $header = $this->setHeaderRecord($_mid);
+                    [$data_records, $count, $amount] = $this->service->setDataRecord($mcht_trans, $this->brand['business_num']);
+                    $total  = $this->setTotalRecord($count, $amount);
+        
+                    $full_record .= $header.$data_records.$total;
+                    $total_count += $count;    
+                }
             }
         }
         if($this->service_name === 'danal')
