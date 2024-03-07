@@ -122,7 +122,7 @@ class DifferenceSettlementHistoryController extends Controller
             ->where('brands.is_delete', false)
             ->where('different_settlement_infos.is_delete', false)
             ->where('brands.use_different_settlement', true)
-            ->where('id', 2)
+            ->where('different_settlement_infos.id', 2)
             ->get(['brands.business_num', 'different_settlement_infos.*']);
     }
 
