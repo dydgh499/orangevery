@@ -39,6 +39,8 @@ class MerchandiseRequest extends FormRequest
         'contract_img',
         'bsin_lic_img',
         'id_img',
+        'website_url',
+        'email',
     ];
     public $file_keys = [
         'passbook_file',

@@ -112,9 +112,9 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::post('operators/{id}/password-change', [OperatorController::class, 'passwordChange']);
             Route::get('brands/chart', [BrandController::class, 'chart']);
             
-            Route::apiResource('brands', BrandController::class);
             Route::apiResource('brands/before-brand-infos', BeforeBrandInfoController::class);
             Route::apiResource('brands/different-settlement-infos', DifferentSettlementInfoController::class);
+            Route::apiResource('brands', BrandController::class);
                         
             Route::apiResource('operators', OperatorController::class);
             Route::apiResource('operator-histories', OperatorHistoryContoller::class);

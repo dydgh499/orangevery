@@ -83,27 +83,63 @@ initAllSales()
                 <VCardItem>
                     <VCardTitle>가맹점정보</VCardTitle>
                     <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="3" :mdr="5">
-                            <template #name>가맹점 상호</template>
-                            <template #input>
-                                <VTextField v-model="props.item.mcht_name" prepend-inner-icon="tabler-building-store"
-                                    placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="3" :mdr="5">
-                            <template #name>업종</template>
-                            <template #input>
-                                <VTextField v-model="props.item.sector" prepend-inner-icon="tabler-building-store"
-                                    placeholder="업종을 입력해주세요" persistent-placeholder />
-                            </template>
-                        </CreateHalfVCol>
+                        <VCol cols="12">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>가맹점 상호</VCol>
+                                        <VCol md="8">
+                                            <VTextField v-model="props.item.mcht_name" prepend-inner-icon="tabler-building-store"
+                                            placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>업종</VCol>
+                                        <VCol md="8">
+                                            <VTextField v-model="props.item.sector" prepend-inner-icon="tabler-building-store"
+                                                placeholder="업종을 입력해주세요" persistent-placeholder />
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12" v-if="corp.use_different_settlement">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>이메일</VCol>
+                                        <VCol md="8"> 
+                                            <VTextField v-model="props.item.email" prepend-inner-icon="material-symbols:mail"
+                                                placeholder="이메일을 입력해주세요" persistent-placeholder>
+                                                <VTooltip activator="parent" location="top" maxlength="50">
+                                                    하위몰이 대표 이메일주소
+                                                </VTooltip>
+                                            </VTextField>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>웹사이트 URL</VCol>
+                                        <VCol md="8">
+                                            <VTextField v-model="props.item.website_url" prepend-inner-icon="streamline:browser-website-1-solid"
+                                                placeholder="웹사이트 URL 입력해주세요" persistent-placeholder maxlength="250">
+                                                <VTooltip activator="parent" location="top">
+                                                    하위몰이 없는경우 2차PG사 URL을 입력해주세요.
+                                                </VTooltip>
+                                            </VTextField>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
                         <!-- 👉 상위 영업점 수수료율 -->
                         <template v-for="i in 6" :key="i">
                             <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i)">
                                 <VRow>
-                                    <VCol cols="12" md="3">
-                                        <label>{{ levels['sales'+(6-i)+'_name'] }}/수수료율</label>
-                                    </VCol>
+                                    <VCol cols="12" md="3">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
                                     <VCol cols="12" :md="props.item.id ? 3 : 4">
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item['sales'+(6-i)+'_id']"
                                             :items="sales[6-i].value"

@@ -125,6 +125,9 @@ export interface MerchandisePropertie {
     settle_hold_reason: string,
     is_hide_account: number,
     note: string,
+
+    website_url: string,
+    email: string,
 }
 
 export interface SalesforcePropertie {

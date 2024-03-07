@@ -4,7 +4,8 @@ import { useSearchStore, getDifferenceSettleMenual } from '@/views/transactions/
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
-import { getUserLevel } from '@axios'
+import type { DifferentSettlementInfo } from '@/views/types';
+import { getUserLevel, axios } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
@@ -12,7 +13,7 @@ const { store, head, exporter, metas } = useSearchStore()
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
 const alert = <any>(inject('alert'))
-
+const different_settle_infos = ref(<DifferentSettlementInfo[]>([]))
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
@@ -31,7 +32,7 @@ const isSalesCol = (key: string) => {
     return false
 }
     
-onMounted(() => {
+onMounted(async() => {
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
             const r = await store.getChartData()
@@ -45,6 +46,8 @@ onMounted(() => {
             metas[3]['percentage'] = store.getPercentage(r.data.settle_amount, r.data.amount)
         }
     })
+    const r = await axios.get('/api/v1/manager/services/brands/different-settlement-infos')
+    different_settle_infos.value = r.data
 })
 </script>
 <template>
@@ -65,7 +68,7 @@ onMounted(() => {
             </template>
             <template #index_extra_field>
                 
-                <VBtn prepend-icon="ic:outline-help" @click="alert.show(getDifferenceSettleMenual(), 'v-dialog-lg')" size="small">
+                <VBtn prepend-icon="ic:outline-help" @click="alert.show(getDifferenceSettleMenual(different_settle_infos), 'v-dialog-lg')" size="small">
                     차액정산 메뉴얼
                 </VBtn>
             </template>
@@ -126,3 +129,9 @@ onMounted(() => {
         </BaseIndexView>
     </div>
 </template>
+<style>
+.different-settle-menual {
+  block-size: auto !important;
+}
+  </style>
+  

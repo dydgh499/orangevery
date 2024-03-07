@@ -20,11 +20,11 @@ use Illuminate\Http\Request;
 class DifferentSettlementInfoController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, StoresTrait;
-    protected $different_settlement_Infos;
+    protected $different_settlement_infos;
 
-    public function __construct(DifferentSettlementInfo $different_settlement_Infos)
+    public function __construct(DifferentSettlementInfo $different_settlement_infos)
     {
-        $this->different_settlement_Infos = $different_settlement_Infos;
+        $this->different_settlement_infos = $different_settlement_infos;
     }
 
     /**
@@ -34,8 +34,10 @@ class DifferentSettlementInfoController extends Controller
      *
      * @queryParam search string 검색어(제목)
      */
-    public function index(IndexRequest $request)
+    public function index(Request $request)
     {
+        $data = $this->different_settlement_infos->where('brand_id', $request->user()->brand_id)->get(['pg_type', 'id']);
+        return $this->response(0, $data);
 
     }
 
@@ -48,7 +50,7 @@ class DifferentSettlementInfoController extends Controller
     public function store(DifferentSettlementInfoRequest $request)
     {
         $data = $request->data();
-        $res = $this->different_settlement_Infos->create($data);
+        $res = $this->different_settlement_infos->create($data);
         return $this->response($res ? 1 : 990, ['id'=>$res->id, 'brand_id'=>$data['brand_id']]);
     }
 
@@ -62,7 +64,7 @@ class DifferentSettlementInfoController extends Controller
      */
     public function show($id)
     {
-        $data = $this->different_settlement_Infos->where('id', $id)->first();
+        $data = $this->different_settlement_infos->where('id', $id)->first();
         return $this->response($data ? 0 : 1000, $data);
     }
 
@@ -77,7 +79,7 @@ class DifferentSettlementInfoController extends Controller
     public function update(DifferentSettlementInfoRequest $request, $id)
     {
         $data = $request->data();
-        $res  = $this->different_settlement_Infos->where('id', $id)->update($data);
+        $res  = $this->different_settlement_infos->where('id', $id)->update($data);
         return $this->response($res ? 1 : 990, ['id'=>$id, 'brand_id'=>$data['brand_id']]);
     }
 
@@ -91,7 +93,7 @@ class DifferentSettlementInfoController extends Controller
      */
     public function destroy($id)
     {
-        $res = $this->different_settlement_Infos->where('id', $id)->delete();
+        $res = $this->different_settlement_infos->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 }

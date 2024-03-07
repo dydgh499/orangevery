@@ -213,7 +213,10 @@ export const defaultItemInfo = () => {
         use_multiple_hand_pay: 0,
         use_noti: 0,
         settle_hold_s_dt: '',
-        settle_hold_reason: ''
+        settle_hold_reason: '',
+        is_hide_account: 0,
+        website_url: '',
+        email: ''
     })
     return {
         path, item

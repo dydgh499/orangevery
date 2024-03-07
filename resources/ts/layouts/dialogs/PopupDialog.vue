@@ -15,7 +15,7 @@ defineExpose({
 });
 </script>
 <template>
-    <VDialog v-model="popup.visible" persistent v-for="(popup, index) in popups" :key="index">
+    <VDialog v-model="popup.visible" persistent v-for="(popup, index) in popups" :key="index" max-width="900">
         <!-- Dialog close btn -->
         <DialogCloseBtn @click="popup.visible = !popup.visible" />
         <!-- Dialog Content -->
