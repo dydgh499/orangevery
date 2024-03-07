@@ -39,8 +39,8 @@ class danal implements DifferenceSettlementInterface
                 $trx_dt         = $this->setNtypeField($trx_dt, 8);
                 $brand_business_num = $this->setAtypeField($brand_business_num, 10);
                 $business_num   = $this->setAtypeField($business_num, 10);
+                $ori_trx_id     = $this->setAtypeField($trans[$i]->trx_id, 30); //
                 $trx_id         = $this->setAtypeField($trx_id, 30);
-                $ori_trx_id     = $this->setAtypeField($trans[$i]->trx_id, 30);
                 $ord_num        = $this->setAtypeField($trans[$i]->ord_num, 255);
                 $amount         = $this->setNtypeField($amount, 15);
                 $ori_amount     = $this->setNtypeField($amount, 15);
