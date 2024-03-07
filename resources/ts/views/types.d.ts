@@ -887,3 +887,11 @@ export interface Holiday {
     rest_dt: string,
     rest_type: number,
 }
+
+export interface SubBusinessRegistration {
+    id: number,
+    mcht_id: number,
+    pg_type: number,
+    registration_msg: number,
+    card_company_name: number,
+}

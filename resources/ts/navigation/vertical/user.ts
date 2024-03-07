@@ -21,6 +21,13 @@ const getAbilitiesMenu = computed(() => {
                 to: 'merchandises-noti-urls',
             })
         }
+        if(corp.use_different_settlement) {
+            logs.push({
+                title: '하위사업자등록 결과',
+                to: 'merchandises-sub-business-registrations',
+                
+            })
+        }
     }
     
     if(getUserLevel() >= 35) {

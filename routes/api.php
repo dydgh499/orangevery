@@ -39,6 +39,9 @@ use App\Http\Controllers\Manager\Service\HolidayController;
 use App\Http\Controllers\Manager\UnderAutoSettingController;
 use App\Http\Controllers\Manager\RegularCreditCardController;
 
+
+
+use App\Http\Controllers\Log\SubBusinessRegistration\SubBusinessRegistrationController;
 use App\Http\Controllers\Log\DifferenceSettlementHistoryController;
 use App\Http\Controllers\Log\RealtimeSendHistoryController;
 use App\Http\Controllers\Log\FeeChangeHistoryController;
@@ -279,7 +282,9 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
 
             Route::post('noti-urls/bulk-register', [NotiUrlController::class, 'bulkRegister']);
             Route::apiResource('noti-urls', NotiUrlController::class); 
+            Route::apiResource('sub-business-registrations', SubBusinessRegistrationController::class); 
 
+            
         });
         
         Route::apiResource('complaints', ComplaintController::class);
