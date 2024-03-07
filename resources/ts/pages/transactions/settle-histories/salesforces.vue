@@ -29,6 +29,7 @@ const totals = ref(<any[]>([]))
 const isNumberFormatCol = (_key: string) => {
     return _key.includes('amount') || _key.includes('_fee') || _key.includes('_deposit') || _key.includes('_count')
 }
+
 const getBatchDepositParams = async () => {
     if (selected.value) {
         const params: any = {

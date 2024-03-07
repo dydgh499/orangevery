@@ -218,6 +218,16 @@ class BatchUpdateMchtController extends Controller
     }
 
     /**
+     * 사업자등록번호 적용
+     */
+    public function setBusinessNum(Request $request)
+    {
+        $cols = ['business_num' => $request->business_num];
+        $row = $this->merchandiseBatch($request)->update($cols);
+        return $this->response(1);
+    }
+    
+    /**
      * 계좌정보 적용 
     */
     public function setAccountInfo(Request $request)

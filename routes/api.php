@@ -219,6 +219,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                 Route::post('set-noti-url', [BatchUpdateMchtController::class, 'setNotiUrl']);                                
                 Route::post('set-enabled', [BatchUpdateMchtController::class, 'setEnabled']);
                 Route::post('set-custom-filter', [BatchUpdateMchtController::class, 'setCustomFilter']);
+                Route::post('set-business-num', [BatchUpdateMchtController::class, 'setBusinessNum']);
                 Route::post('set-account-info', [BatchUpdateMchtController::class, 'setAccountInfo']);
             });
             Route::post('{id}/password-change', [MerchandiseController::class, 'passwordChange']);
@@ -233,6 +234,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             
             Route::prefix('pay-modules')->group(function() {
                 Route::prefix('batch-updaters')->group(function() {
+                    Route::post('set-payment-gateway', [BatchUpdatePayModuleController::class, 'setPaymentGateway']);
                     Route::post('set-abnormal-trans-limit', [BatchUpdatePayModuleController::class, 'setAbnormalTransLimit']);
                     Route::post('set-dupe-pay-count-validation', [BatchUpdatePayModuleController::class, 'setDupPayCountValidation']);
                     Route::post('set-dupe-pay-least-validation', [BatchUpdatePayModuleController::class, 'setDupPayLeastValidation']);

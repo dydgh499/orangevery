@@ -40,6 +40,7 @@ const merchandise = reactive<any>({
     acct_num: "",
     acct_name: "",
     bank: { code: null, title: '선택안함' },
+    business_num: "",
     enabled: 1,
 })
 const noti = reactive<any>({
@@ -131,6 +132,11 @@ const setCustomFilter = () => {
         'custom_id': merchandise.custom_id,
     })
 }
+const setBusinessNum = () => {
+    post('set-business-num', {
+        'business_num': merchandise.business_num,
+    })
+}
 
 const setAccountInfo = () => {
     post('set-account-info', {
@@ -148,6 +154,8 @@ const setNotiUrl = () => {
         'note': noti.noti_note,
     })
 }
+
+
 initAllSales()
 </script>
 <template>
@@ -170,8 +178,7 @@ initAllSales()
                                             <VAutocomplete :menu-props="{ maxHeight: 400 }"
                                                 v-model="merchandise['sales' + (6 - i) + '_id']" :items="sales[6 - i].value"
                                                 :label="levels['sales' + (6 - i) + '_name'] + '선택'" item-title="sales_name"
-                                                item-value="id" single-line 
-                                                style="width: 200px;" />
+                                                item-value="id" single-line style="width: 200px;" />
                                             <VTooltip activator="parent" location="top"
                                                 v-if="merchandise['sales' + (6 - i) + '_id']">
                                                 {{ sales[6 - i].value.find(obj => obj.id ===
@@ -259,15 +266,14 @@ initAllSales()
                 </VRow>
                 <VDivider style="margin: 1em 0;" />
                 <VRow>
-                    <VCol :md="corp.pv_options.paid.subsidiary_use_control ? 6 : 12" :cols="12">
+                    <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
                             <VCol>커스텀 필터</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.custom_id"
-                                        :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)"
-                                        label="커스텀 필터" item-title="name"
-                                        item-value="id" single-line />
+                                        :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)" label="커스텀 필터"
+                                        item-title="name" item-value="id" single-line />
                                     <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setCustomFilter()">
                                         즉시적용
                                         <VIcon end icon="tabler-direction-sign" />
@@ -276,6 +282,23 @@ initAllSales()
                             </VCol>
                         </VRow>
                     </VCol>
+                    <VCol :md="6" :cols="12">
+                        <VRow no-gutters style="align-items: center;">
+                            <VCol>사업자 번호</VCol>
+                            <VCol md="8">
+                                <div class="batch-container">
+                                    <VTextField v-model="merchandise.business_num" type="text" placeholder="사업자등록번호 입력"
+                                        persistent-placeholder />
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setBusinessNum()">
+                                        즉시적용
+                                        <VIcon end icon="tabler-direction-sign" />
+                                    </VBtn>
+                                </div>
+                            </VCol>
+                        </VRow>
+                    </VCol>
+                </VRow>
+                <VRow v-if="corp.pv_options.paid.subsidiary_use_control" md="12" :cols=12>
                     <VCol :md="6" v-if="corp.pv_options.paid.subsidiary_use_control">
                         <VRow no-gutters style="align-items: center;">
                             <VCol>전산 사용상태</VCol>

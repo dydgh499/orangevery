@@ -3,6 +3,7 @@
 <script lang="ts" setup>
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { abnormal_trans_limits } from '@/views/merchandises/pay-modules/useStore'
+import { useStore } from '@/views/services/pay-gateways/useStore'
 import { axios } from '@axios'
 import corp from '@corp'
 
@@ -17,6 +18,7 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 
+const { pgs, pss, settle_types, terminals, finance_vans, psFilter, setFee } = useStore()
 const pay_module = reactive<any>({
     abnormal_trans_limit: 0,
     pay_dupe_limit: 0,
@@ -37,6 +39,9 @@ const pay_module = reactive<any>({
     use_realtime_deposit: 0,
     show_pay_view: 0,
     note: '',
+
+    pg_id: null,
+    ps_id: null,
 })
 
 const post = async (page: string, params: any) => {
@@ -60,6 +65,17 @@ const post = async (page: string, params: any) => {
         snackbar.value.show(e.response.data.message, 'error')
         const r = errorHandler(e)
     }
+}
+
+const setPaymentGateway = () => {
+    if(pay_module.pg_id && pay_module.ps_id) {
+        post('set-payment-gateway', {
+            'pg_id': pay_module.pg_id,
+            'ps_id': pay_module.ps_id,
+        })
+    }
+    else
+        snackbar.value.show('PG사 또는 구간을 선택해주세요.', 'warning')
 }
 
 const setAbnormalTransLimit = () => {
@@ -128,6 +144,12 @@ const setNote = () => {
         'note': pay_module.note,
     })
 }
+const filterPgs = computed(() => {
+    const filter = pss.filter(item => { return item.pg_id == pay_module.pg_id })
+    pay_module.ps_id = psFilter(filter, pay_module.ps_id)
+    return filter
+})
+
 </script>
 <template>
     <VCard title="결제모듈 일괄 작업">
@@ -138,6 +160,42 @@ const setNote = () => {
             </template>
             <div style="width: 100%;">
                 <VRow class="pt-3">
+                    <VCol :md="5" :cols="12">
+                        <VRow no-gutters style="align-items: center;">
+                            <VCol>PG사</VCol>
+                            <VCol md="8">
+                                <div class="batch-container">                                    
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.pg_id" :items="pgs"
+                                        prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_name" item-value="id"
+                                        single-line />
+                                </div>
+                            </VCol>
+                        </VRow>                        
+                    </VCol>
+                    <VCol :md="5" :cols="12">
+                        <VRow no-gutters style="align-items: center;">
+                            <VCol>구간</VCol>
+                            <VCol md="8">
+                                <div class="batch-container">
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.ps_id" :items="filterPgs"
+                                        prepend-inner-icon="mdi-vector-intersection" label="구간 선택" item-title="name"
+                                        item-value="id" :hint="`${setFee(pss, pay_module.ps_id)}`" persistent-hint
+                                        single-line />
+                                </div>
+                            </VCol>
+                        </VRow>
+                    </VCol>
+                    <VCol :md="2" :cols="12">
+                        <VRow no-gutters style="align-items: center;">
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPaymentGateway()">
+                                즉시적용
+                                <VIcon end icon="tabler-direction-sign" />
+                            </VBtn>
+                        </VRow>
+                    </VCol>
+                </VRow>
+                <VDivider style="margin: 1em 0;" />
+                <VRow>
                     <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
                             <VCol>이상거래 한도</VCol>

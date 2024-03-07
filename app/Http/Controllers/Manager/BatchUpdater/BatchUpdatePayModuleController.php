@@ -29,6 +29,7 @@ class BatchUpdatePayModuleController extends Controller
         $this->pay_modules = $pay_modules;
     }
 
+    
     /**
      * 결제모듈 가져오기
      */
@@ -55,6 +56,16 @@ class BatchUpdatePayModuleController extends Controller
         }
     }
     
+    /**
+     * PG사 및 구간 적용
+     */
+    public function setPaymentGateway(Request $request)
+    {
+        $cols = ['pg_id' => $request->pg_id, 'ps_id' => $request->ps_id];
+        $row = $this->payModuleBatch($request)->update($cols);
+        return $this->response(1);
+    }
+
     /**
      * 이상거래 한도 적용 
      */
@@ -200,5 +211,4 @@ class BatchUpdatePayModuleController extends Controller
         $row = $this->payModuleBatch($request)->update($cols);
         return $this->response(1);
     }
-
 }
