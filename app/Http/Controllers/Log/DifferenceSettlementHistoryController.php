@@ -210,15 +210,13 @@ class DifferenceSettlementHistoryController extends Controller
                     ->get();
 
                 $mchts = Merchandise::where('brand_id', $brands[$i]->brand_id)
-                    ->where('merchandises.is_delete', false)
-                    ->where('payment_modules.is_delete', false)
+                    ->where('is_delete', false)
                     ->whereIn('business_num', $sub_business_regi_infos->pluck('business_num')->all())
                     ->get([
-                        'merchandises.id',
-                        'merchandises.sector',
-                        'merchandises.mcht_name','merchandises.addr',
-                        'merchandises.nick_name','merchandises.phone_num',
-                        'merchandises.email','merchandises.website_url',
+                        'id', 'sector',
+                        'mcht_name','addr',
+                        'nick_name','phone_num',
+                        'email','website_url',
                     ]);
                     
                 $res = $pg->registerRequest($date, $mchts, $sub_business_regi_infos);
