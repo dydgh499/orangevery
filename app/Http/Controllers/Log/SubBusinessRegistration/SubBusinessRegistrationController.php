@@ -69,6 +69,7 @@ class SubBusinessRegistrationController extends Controller
         $mchts = Merchandise::where('brand_id', $brand_id)
             ->where("business_num", '!=', '')
             ->groupBy('business_num')
+            ->havingRaw('LENGTH(business_num) >= 10')
             ->get(['business_num']);
 
         foreach($mchts as $mcht)
