@@ -186,7 +186,7 @@ class DifferenceSettlement
             $result = $this->main_sftp_connection->put($save_path, $full_record);
         if($this->dr_connection_stat)
             $result = $this->dr_sftp_connection->put($save_path, $full_record);
-        logging(['result'=>$result, 'save_path'=>$save_path], $this->service_name.'-difference-settlement-request');
+        logging(['result'=>$result, 'save_path'=>$save_path], $this->service_name.'-sub-business-registration-request');
         return $result;
     }
 
