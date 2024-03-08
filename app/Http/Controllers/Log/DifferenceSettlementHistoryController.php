@@ -220,6 +220,7 @@ class DifferenceSettlementHistoryController extends Controller
                     ]);
 
                 $res = $pg->registerRequest($date, $mchts, $sub_business_regi_infos);
+                SubBusinessRegistration::whereIn('id', $sub_business_regi_infos->pluck('id')->all())->update(['registration_result'=>-5]);                
             }
         }
     }
