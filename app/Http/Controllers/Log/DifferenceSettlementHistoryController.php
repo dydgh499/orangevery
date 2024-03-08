@@ -213,12 +213,12 @@ class DifferenceSettlementHistoryController extends Controller
                     ->where('is_delete', false)
                     ->whereIn('business_num', $sub_business_regi_infos->pluck('business_num')->all())
                     ->get([
-                        'id', 'sector',
+                        'id', 'sector', 'business_num',
                         'mcht_name','addr',
                         'nick_name','phone_num',
                         'email','website_url',
                     ]);
-                    
+
                 $res = $pg->registerRequest($date, $mchts, $sub_business_regi_infos);
             }
         }

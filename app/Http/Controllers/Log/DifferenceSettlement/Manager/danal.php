@@ -196,7 +196,9 @@ class danal implements DifferenceSettlementInterface
                     $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->website_url), 80);   //웹사이트 URL 필드
                     $records .= $this->setNtypeField($yesterday, 8);
                     $records .= $this->setAtypeField('', 22);    
-                }            
+                }
+                else
+                    logging([], 'not-found-mcht');
             }
             return $records;
         };
