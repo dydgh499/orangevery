@@ -168,7 +168,8 @@ class danal implements DifferenceSettlementInterface
                 $this->setAtypeField(str_replace('-', '', $brand['business_num']), 10).
                 $this->setAtypeField("DANAL", 10).
                 $this->setNtypeField($req_date, 8).
-                $this->setAtypeField('', 370);
+                $this->setAtypeField('', 370)
+                ."\r\n";
         };
         $getDatas = function($brand, $mchts, $sub_business_regi_infos) {
             $records = '';
@@ -196,6 +197,7 @@ class danal implements DifferenceSettlementInterface
                     $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->website_url), 80);   //웹사이트 URL 필드
                     $records .= $this->setNtypeField($yesterday, 8);
                     $records .= $this->setAtypeField('', 22);    
+                    $records .= "\r\n";
                 }
                 else
                     logging([], 'not-found-mcht');
@@ -209,12 +211,13 @@ class danal implements DifferenceSettlementInterface
                 $this->setNtypeField(count($mchts), 10).
                 $this->setNtypeField(0, 10).
                 $this->setNtypeField(0, 10).
-                $this->setAtypeField('', 358);
+                $this->setAtypeField('', 358)
+                ."\r\n";
         };
         $records = '';
-        $records .= $getHeader($brand, $req_date)."\r\n";
-        $records .= $getDatas($brand, $mchts, $sub_business_regi_infos)."\r\n";
-        $records .= $getTrailer($mchts)."\r\n";
+        $records .= $getHeader($brand, $req_date);
+        $records .= $getDatas($brand, $mchts, $sub_business_regi_infos);
+        $records .= $getTrailer($mchts);
         return $records;
     }
 }
