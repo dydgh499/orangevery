@@ -64,7 +64,7 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
         $file_name = $date->copy()->format('ymd');
         $req_date = $date->copy()->format('Ymd');
         // 업체명toDANAL_differ.YYYYMM
-        $save_path = "/Sellerinfo/".$this->brand['rep_mid']."toDANAL_differ.".$file_name;
+        $save_path = "/Sellerinfo/".$this->brand['rep_mid']."toDANAL.".$file_name;
         return $this->_registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos);
     }
 }
