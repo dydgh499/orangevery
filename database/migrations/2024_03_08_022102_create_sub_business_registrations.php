@@ -13,7 +13,8 @@ return new class extends Migration
     {   //하위사업자 등록정보
         Schema::create('sub_business_registrations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('mcht_id')->nullable()->comment('가맹점 ID')->constrained('merchandises')->onDelete('SET NULL');
+            $table->unsignedInteger('brand_id')->nullable()->comment('브랜드 ID')->constrained('brands')->onDelete('SET NULL');
+            $table->string('business_num', 20)->index()->comment('사업자 번호');
             $table->tinyInteger('pg_type')->comment('PG사 타입');
             $table->tinyInteger('registration_type')->default(0)->comment('(0=신규, 1=해지, 2=변경)');
             $table->tinyInteger('registration_result')->default(-1)->comment('등록완료=0, ~에러코드)');

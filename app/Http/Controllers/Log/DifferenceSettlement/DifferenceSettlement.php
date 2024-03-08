@@ -179,9 +179,9 @@ class DifferenceSettlement
         }
     }
 
-    public function _registerRequest($save_path, $req_date, $mchts)
+    public function _registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos)
     {
-        $full_record = $this->service->registerRequest($this->brand, $req_date, $mchts);
+        $full_record = $this->service->registerRequest($this->brand, $req_date, $mchts, $sub_business_regi_infos);
         if($this->main_connection_stat)
             $result = $this->main_sftp_connection->put($save_path, $full_record);
         if($this->dr_connection_stat)

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Brand;
 use App\Models\Transaction;
 use App\Models\Merchandise;
+use App\Models\Log\SubBusinessRegistration;
 use App\Models\Log\DifferenceSettlementHistory;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -194,30 +195,33 @@ class DifferenceSettlementHistoryController extends Controller
     */
     public function differenceSettleRegisterRequest()
     {
-        $cols = [
-            'merchandises.id',
-            'merchandises.business_num','merchandises.sector',
-            'merchandises.mcht_name','merchandises.addr',
-            'merchandises.nick_name','merchandises.phone_num',
-        ];
         $brands     = $this->getUseDifferentSettlementBrands();
         $date       = Carbon::now();
-        $yesterday  = $date->copy()->subDay(1)->format('Y-m-d');
 
         for ($i=0; $i<count($brands); $i++)
         {
-            $mchts = Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
-                ->join('payment_gateways', 'payment_modules.pg_id', '=', 'payment_gateways.id')
-                ->where('merchandises.is_delete', false)
-                ->where('payment_modules.is_delete', false)
-                ->where('payment_gateways.pg_type', $brands[$i]->pg_type)
-                ->where('merchandises.brand_id', $brands[$i]->brand_id)
-                //->where('merchandises.created_at', $yesterday)
-                ->get($cols);
             $pg = $this->getPGClass($brands[$i]);
             if($pg)
             {
-                $res = $pg->registerRequest($date, $mchts);
+                $sub_business_regi_infos = SubBusinessRegistration::where('registration_result', -1)
+                    ->where('brand_id', $brands[$i]->brand_id)
+                    ->where('pg_type', $brands[$i]->pg_type)
+                    ->orderby('business_num')
+                    ->get();
+
+                $mchts = Merchandise::where('brand_id', $brands[$i]->brand_id)
+                    ->where('merchandises.is_delete', false)
+                    ->where('payment_modules.is_delete', false)
+                    ->whereIn('business_num', $sub_business_regi_infos->pluck('business_num')->all())
+                    ->get([
+                        'merchandises.id',
+                        'merchandises.sector',
+                        'merchandises.mcht_name','merchandises.addr',
+                        'merchandises.nick_name','merchandises.phone_num',
+                        'merchandises.email','merchandises.website_url',
+                    ]);
+                    
+                $res = $pg->registerRequest($date, $mchts, $sub_business_regi_infos);
             }
         }
     }
