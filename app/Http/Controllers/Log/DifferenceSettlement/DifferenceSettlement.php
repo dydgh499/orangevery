@@ -103,16 +103,24 @@ class DifferenceSettlement
 
     protected function _response($res_path, $req_date)
     {
-        if($this->main_connection_stat && $this->main_sftp_connection->exists($res_path))
-            $contents = $this->main_sftp_connection->get($res_path);
-        else if($this->dr_connection_stat && $this->dr_sftp_connection->exists($res_path))
-            $contents = $this->dr_sftp_connection->get($res_path);
-        else
-            $contents = null;
+        try
+        {
+            if($this->main_connection_stat && $this->main_sftp_connection->exists($res_path))
+                $contents = $this->main_sftp_connection->get($res_path);
+            else if($this->dr_connection_stat && $this->dr_sftp_connection->exists($res_path))
+                $contents = $this->dr_sftp_connection->get($res_path);
+            else
+                $contents = null;
 
-        $datas = $contents ? $this->service->getDataRecord($contents) : [];
-        logging(['date'=>$req_date, 'datas'=>$datas], $this->service_name.'-difference-settlement-response');
-        return $datas;
+            $datas = $contents ? $this->service->getDataRecord($contents) : [];
+            logging(['date'=>$req_date, 'datas'=>$datas], $this->service_name.'-difference-settlement-response');
+            return $datas;
+        }        
+        catch(Exception $e)
+        {
+            logging(['date'=>$req_date, 'datas'=>[]], $this->service_name.'-difference-settlement-response('. $e->getMessage().")");
+            return null;
+        }
     }
 
     private function setStartRecord($req_date)

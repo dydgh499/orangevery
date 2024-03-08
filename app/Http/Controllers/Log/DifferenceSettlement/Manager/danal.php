@@ -32,8 +32,7 @@ class danal implements DifferenceSettlementInterface
             if($business_num)
             {
                 $appr_type  = $trans[$i]->is_cancel ? "1" : "0";
-                // 부분취소 차수 (승인:0, N회차: N)
-                $part_cxl_type = $trans[$i]->is_cancel ? $trans[$i]->cxl_seq : '0';
+                $part_cxl_type = $trans[$i]->is_cancel ? $trans[$i]->cxl_seq : '0'; // 부분취소 차수 (승인:0, N회차: N)
                 // amount
                 $total_amount += $trans[$i]->amount;
                 $amount = abs($trans[$i]->amount);
