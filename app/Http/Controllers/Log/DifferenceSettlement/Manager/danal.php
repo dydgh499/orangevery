@@ -35,8 +35,7 @@ class danal implements DifferenceSettlementInterface
                 $trx_dt     = $trans[$i]->is_cancel ? $trans[$i]->cxl_dt : $trans[$i]->trx_dt;
                 $trx_id     = $trans[$i]->is_cancel ? $trans[$i]->ori_trx_id : $trans[$i]->trx_id;
                 $trx_dt     = date('Ymd', strtotime($trx_dt));
-                $ori_trx_dt = $trans[$i]->trx_dt;
-                $ori_trx_dt = date('Ymd', strtotime($ori_trx_dt));
+                $ori_trx_dt = date('Ymd', strtotime($trans[$i]->trx_dt));
                 // 부분취소 차수 (승인:0, N회차: N)
                 $part_cxl_type = $trans[$i]->is_cancel ? $trans[$i]->cxl_seq : '0';
                 // amount
@@ -48,8 +47,8 @@ class danal implements DifferenceSettlementInterface
                 $trx_dt         = $this->setNtypeField($trx_dt, 8);
                 $brand_business_num = $this->setAtypeField($brand_business_num, 10);
                 $business_num   = $this->setAtypeField($business_num, 10);
+                $ori_trx_id     = $this->setAtypeField($trx_id, 30);    //이게 먼저와야함.
                 $trx_id         = $this->setAtypeField($trans[$i]->trx_id, 30);
-                $ori_trx_id     = $this->setAtypeField($trx_id, 30);
                 $ord_num        = $this->setAtypeField($trans[$i]->ord_num, 255);
                 $amount         = $this->setNtypeField($amount, 15);
                 $ori_amount     = $this->setNtypeField($amount, 15);
@@ -184,9 +183,9 @@ class danal implements DifferenceSettlementInterface
                 {
                     $records .= $this->setAtypeField("DD", 2);
                     $records .= $this->setNtypeField($mcht->id, 12);
-                    $records .= $this->setNtypeField(0, 2);
+                    $records .= $this->setNtypeField($sub_business_regi_info->registration_type, 2);
                     $records .= $this->setNtypeField($brand['rep_mid'], 10);
-                    $records .= $this->setNtypeField('000', 3); // $this->getMchtCardCode('카드사 코드???')
+                    $records .= $this->setNtypeField($sub_business_regi_info->card_company_code, 3);
                     $records .= $this->setNtypeField(str_replace('-', '', $sub_business_regi_info->business_num), 10);
                     $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->sector), 20);
                     $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->mcht_name), 40);
