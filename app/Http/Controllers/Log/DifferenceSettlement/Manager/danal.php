@@ -32,10 +32,6 @@ class danal implements DifferenceSettlementInterface
             if($business_num)
             {
                 $appr_type  = $trans[$i]->is_cancel ? "1" : "0";
-                $trx_dt     = $trans[$i]->is_cancel ? $trans[$i]->cxl_dt : $trans[$i]->trx_dt;
-                $trx_id     = $trans[$i]->is_cancel ? $trans[$i]->ori_trx_id : $trans[$i]->trx_id;
-                $trx_dt     = date('Ymd', strtotime($trx_dt));
-                $ori_trx_dt = date('Ymd', strtotime($trans[$i]->trx_dt));
                 // 부분취소 차수 (승인:0, N회차: N)
                 $part_cxl_type = $trans[$i]->is_cancel ? $trans[$i]->cxl_seq : '0';
                 // amount
@@ -44,15 +40,15 @@ class danal implements DifferenceSettlementInterface
     
                 $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::DATA->value, 2);
                 $appr_type      = $this->setAtypeField($appr_type, 1);
-                $trx_dt         = $this->setNtypeField($trx_dt, 8);
+                $trx_dt         = $this->setNtypeField(date('Ymd', strtotime($trans[$i]->is_cancel ? $trans[$i]->cxl_dt : $trans[$i]->trx_dt)), 8);
                 $brand_business_num = $this->setAtypeField($brand_business_num, 10);
                 $business_num   = $this->setAtypeField($business_num, 10);
-                $ori_trx_id     = $this->setAtypeField($trx_id, 30);    //이게 먼저와야함.
                 $trx_id         = $this->setAtypeField($trans[$i]->trx_id, 30);
+                $ori_trx_id     = $this->setAtypeField($trans[$i]->is_cancel ? $trans[$i]->ori_trx_id : $trans[$i]->trx_id, 30);
                 $ord_num        = $this->setAtypeField($trans[$i]->ord_num, 255);
                 $amount         = $this->setNtypeField($amount, 15);
                 $ori_amount     = $this->setNtypeField($amount, 15);
-                $ori_trx_dt     = $this->setNtypeField($ori_trx_dt, 8);
+                $ori_trx_dt     = $this->setNtypeField(date('Ymd', strtotime($trans[$i]->trx_dt)), 8);
 
                 $installment    = $this->setNtypeField($part_cxl_type, 2);
                 $add_field      = $this->setAtypeField($trans[$i]->id, 40);
