@@ -64,25 +64,24 @@ export function settlementHistoryFunctionCollect(store: any) {
     }
 
     const batchCancel = async(selected:number[], is_mcht: boolean) => {
-        if (await alert.value.show('정말 일괄 정산취소처리 하시겠습니까?')) {
-            const promises = []
-            for (let i = 0; i < selected.length; i++) {
-                const item:SettlesHistories = store.items.find(obj => obj['id'] === selected[i])
-                if(item) {
-                    promises.push(axios({
-                        url: rootUrlBuilder(is_mcht, item.id),
-                        method: 'delete',
-                        params: {
+        if(selected.length > 20)
+            snackbar.value.show('일괄정산취소는 한번에 최대 20개씩 처리 가능합니다.', 'warning')
+        else {
+            if (await alert.value.show('정말 일괄 정산취소처리 하시겠습니까?')) {
+                for (let i = 0; i < selected.length; i++) {
+                    const item:SettlesHistories = store.items.find(obj => obj['id'] === selected[i])
+                    if(item) {
+                        let params = {
                             level: is_mcht ? 10 : item.level,
                             current_status: Number(item.deposit_status),
                             use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
-                        },
-                    }))
+                        }
+                        await axios.delete(rootUrlBuilder(is_mcht, item.id), {params: params})
+                    }
                 }
+                snackbar.value.show('성공하였습니다.', 'success')
+                store.setTable()
             }
-            const results = await Promise.all(promises)
-            snackbar.value.show('성공하였습니다.', 'success')
-            store.setTable()
         }
     }
     

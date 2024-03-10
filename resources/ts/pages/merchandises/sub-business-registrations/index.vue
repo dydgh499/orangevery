@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/merchandises/sub-business-registrations/useStore'
+import { useSearchStore, registration_types, registrationResults, registrationResultColor } from '@/views/merchandises/sub-business-registrations/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { useStore } from '@/views/services/pay-gateways/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
@@ -9,6 +10,7 @@ import { template } from 'lodash'
 
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
+const { pgs } = useStore()
 
 provide('store', store)
 provide('head', head)
@@ -52,7 +54,20 @@ onMounted(() => {})
                                     <VCheckbox v-if="getUserLevel() >= 35" v-model="selected" :value="item[_key]" class="check-label"/>
                                     <span class="edit-link" @click="">#{{ item[_key] }}</span>
                                 </div>
-                            </span>        
+                            </span>
+                            <span v-else-if="_key == 'pg_type'">
+                                {{ pgs.find(pg => pg['pg_type'] === item[_key])?.pg_name }}
+                            </span>
+                            <span v-else-if="_key === 'registration_type'">
+                                <VChip :color="store.getSelectIdColor(item[_key] + 2)">
+                                    {{ registration_types.find(obj => obj.id === item[_key]).title }}
+                                </VChip>
+                            </span>
+                            <span v-else-if="_key === 'registration_result'">
+                                <VChip :color="registrationResultColor(item[_key])">
+                                    {{ registrationResults(item[_key]) }}
+                                </VChip>
+                            </span>
                             <span v-else>
                                 {{ item[_key] }}
                             </span>
