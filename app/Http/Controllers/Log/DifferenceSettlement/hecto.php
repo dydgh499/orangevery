@@ -54,7 +54,7 @@ class hecto extends DifferenceSettlement implements DifferenceSettlementInterfac
         return $this->_response($res_path, $req_date);
     }
 
-    public function registerRequest(Carbon $date, $trans)
+    public function registerRequest(Carbon $date, $mchts, $sub_business_regi_infos)
     {
         $req_date = $date->format('Ymd');
         $save_path = "/edi_req/ST_BIZREG_REQ_".$req_date;
@@ -65,6 +65,6 @@ class hecto extends DifferenceSettlement implements DifferenceSettlementInterfac
     {
         $req_date = $date->format('Ymd');
         $save_path = "/edi_req/ST_BIZREG_RSP_".$req_date;
-        return $this->_registerResponse($save_path, $req_date);
+        return $this->_registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos);
     }
 }

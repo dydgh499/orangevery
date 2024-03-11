@@ -196,8 +196,6 @@ class danal implements DifferenceSettlementInterface
                         $upload['modify_count']++;
                     $upload['total_count']++;
                 }
-                else
-                    logging([], 'not-found-mcht');
             }
             return [$full_records, $upload];
         };
