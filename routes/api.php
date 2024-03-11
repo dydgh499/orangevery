@@ -283,8 +283,6 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
             Route::post('noti-urls/bulk-register', [NotiUrlController::class, 'bulkRegister']);
             Route::apiResource('noti-urls', NotiUrlController::class); 
             Route::apiResource('sub-business-registrations', SubBusinessRegistrationController::class); 
-
-            
         });
         
         Route::apiResource('complaints', ComplaintController::class);

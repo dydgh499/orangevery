@@ -890,8 +890,10 @@ export interface Holiday {
 
 export interface SubBusinessRegistration {
     id: number,
-    mcht_id: number,
+    business_num: string,
     pg_type: number,
     registration_msg: number,
+    registration_type: number,
+    registration_result: number,
     card_company_name: number,
 }

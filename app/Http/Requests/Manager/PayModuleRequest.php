@@ -61,7 +61,12 @@ class PayModuleRequest extends FormRequest
 
     public function authorize()
     {
-        return $this->user()->tokenCan(10) ? true : false;
+        if(isOperator($this))
+            return true;
+        else if(isSalesforce($this))
+            return $this->user()->is_able_modify_mcht;        
+        else
+            return false;
     }
 
     public function rules()

@@ -178,6 +178,7 @@ class MerchandiseController extends Controller
     public function store(MerchandiseRequest $request)
     {
         $validated  = $request->validate(['user_pw'=>'required']);
+        
         if($request->user()->tokenCan(15))
         {
             if($this->isExistMutual($this->merchandises, $request->user()->brand_id, 'mcht_name', $request->mcht_name))
