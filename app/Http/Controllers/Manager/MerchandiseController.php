@@ -228,7 +228,7 @@ class MerchandiseController extends Controller
      */
     public function show(Request $request, $id)
     {
-        if($this->authCheck($request->user(), $id, 15))
+        if(isOperator($request) || (isSalesforce($request) && $request->user()->is_able_modify_mcht))
         {
             $data = $this->merchandises->where('id', $id)
                 ->with(['regularCreditCards'])

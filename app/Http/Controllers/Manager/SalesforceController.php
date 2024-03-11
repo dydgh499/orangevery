@@ -112,7 +112,7 @@ class SalesforceController extends Controller
         if(isSalesforce($request) &&  $request->level >= $request->user()->level)
             return $this->extendResponse(951, "추가할 수 없는 등급입니다.");
 
-        $validated    = $request->validate(['user_pw'=>'required']);
+        $validated = $request->validate(['user_pw'=>'required']);
 
         if($this->isExistMutual($this->salesforces, $request->user()->brand_id, 'sales_name', $request->sales_name))
             return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
