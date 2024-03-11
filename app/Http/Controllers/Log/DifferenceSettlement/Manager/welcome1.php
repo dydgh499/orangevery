@@ -152,18 +152,6 @@ class welcome1 implements DifferenceSettlementInterface
         return isset($card_compnay_codes[$code]) ? $card_compnay_codes[$code] : '알수없는 코드';
     }
 
-    private function getMchtSectionName($code)
-    {
-        $mcht_sections = [
-            '0' => '영세',
-            '1' => '중소1',
-            '2' => '중소2',
-            '3' => '중소3',
-            '4' => '일반',
-        ];
-        return isset($mcht_sections[$code]) ? $mcht_sections[$code] : '알수없는 코드';        
-    }
-
     public function registerRequest($brand, $req_date, $mchts, $sub_business_regi_infos)
     {
         $getHeader = function($brand, $req_date) {

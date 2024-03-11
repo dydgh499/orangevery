@@ -155,6 +155,12 @@ class danal implements DifferenceSettlementInterface
         };
         $getDatas = function($brand, $mchts, $sub_business_regi_infos) {
             $records = '';
+            $upload = [
+                'new_count' => 0, 
+                'remove_count' => 0, 
+                'modify_count' => 0,
+                'total_count' => 0,
+            ];
             $yesterday = Carbon::now()->subDay(1)->format('Ymd');
             for ($i=0; $i < count($sub_business_regi_infos); $i++) 
             { 
@@ -180,25 +186,35 @@ class danal implements DifferenceSettlementInterface
                     $records .= $this->setNtypeField($yesterday, 8);
                     $records .= $this->setAtypeField('', 22);    
                     $records .= "\r\n";
+
+                    if($sub_business_regi_info->registration_type === 0)
+                        $upload['new_count']++;
+                    else if($sub_business_regi_info->registration_type === 1)
+                        $upload['remove_count']++;
+                    else if($sub_business_regi_info->registration_type === 2)
+                        $upload['modify_count']++;
+                    $upload['total_count']++;
                 }
                 else
                     logging([], 'not-found-mcht');
             }
             return $records;
         };
-        $getTrailer = function($mchts) {
+        $getTrailer = function($upload) {
             return 
                 $this->setAtypeField("TR", 2).
-                $this->setNtypeField(count($mchts), 10).
-                $this->setNtypeField(count($mchts), 10).
-                $this->setNtypeField(0, 10).
-                $this->setNtypeField(0, 10).
+                $this->setNtypeField($upload['total_count'], 10).
+                $this->setNtypeField($upload['new_count'], 10).
+                $this->setNtypeField($upload['remove_count'], 10).
+                $this->setNtypeField($upload['modify_count'], 10).
                 $this->setAtypeField('', 358)
                 ."\r\n";
         };
         $records = '';
+        [$datas, $upload] = $getDatas($brand, $mchts, $sub_business_regi_infos);
+
         $records .= $getHeader($brand, $req_date);
-        $records .= $getDatas($brand, $mchts, $sub_business_regi_infos);
+        $records .= $datas;
         $records .= $getTrailer($mchts);
         return $records;
     }

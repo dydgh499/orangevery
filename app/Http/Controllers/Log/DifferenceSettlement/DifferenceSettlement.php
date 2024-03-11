@@ -31,7 +31,7 @@ class DifferenceSettlement
         {
             $this->service = new $path();
         }
-        catch(Exception $e)
+        catch(\Throwable $e)
         {   // pg사 발견못함
             logging(['message' => $e->getMessage()], 'DifferenceSettlement - PG사가 없습니다.('.$this->service_name.")");
         }
@@ -42,13 +42,14 @@ class DifferenceSettlement
         try
         {
             $connection = Storage::disk($service_name);
+            $connection->directories(); //connection check
             $connection_stat = true;
         }
-        catch(Exception $e)
+        catch(\Throwable $e)
         {
             $connection = null;
             $connection_stat = false;
-            logging(['type'=>$type, 'message' => $e->getMessage()]);
+            logging(['type'=>$type], 'connection fail');
         }
         return [$connection, $connection_stat];
     }
@@ -115,8 +116,8 @@ class DifferenceSettlement
             $datas = $contents ? $this->service->getDataRecord($contents) : [];
             logging(['date'=>$req_date, 'datas'=>$datas], $this->service_name.'-difference-settlement-response');
             return $datas;
-        }        
-        catch(Exception $e)
+        }
+        catch(\Throwable $e)
         {
             logging(['date'=>$req_date, 'datas'=>[]], $this->service_name.'-difference-settlement-response('. $e->getMessage().")");
             return null;

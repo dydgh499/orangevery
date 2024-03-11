@@ -22,24 +22,6 @@ class galaxiamoneytree implements DifferenceSettlementInterface
         '055' => '롯데',
     ];
 
-    public function setHeaderRecord($rep_mid, $space)
-    {
-        $record_type    = $this->setAtypeField('HD', 2);
-        $create_dt      = $this->setAtypeField(date('Ymd'), 8);
-        $rep_mid        = $this->setAtypeField($rep_mid, 20);
-        $filter         = $this->setAtypeField('', $space);
-        return $record_type.$create_dt.$rep_mid.$filter."\n";    
-    }
-
-    public function setTotalRecord($space, $total_count, $total_amount)
-    {
-        $record_type    = $this->setAtypeField('TR', 2);
-        $total_count    = $this->setNtypeField($total_count, 7);
-        $total_amount   = $this->setAtypeField($total_amount, 18);
-        $filter         = $this->setAtypeField('', $space);
-        return $record_type.$total_count.$total_amount.$filter."\n";
-    }
-
     public function setDataRecord($trans, $brand_business_num)
     {
         $brand_business_num = str_replace('-', '', $brand_business_num);
@@ -47,20 +29,17 @@ class galaxiamoneytree implements DifferenceSettlementInterface
         $total_amount = 0;
         $total_count = 0;
         for ($i=0; $i < count($trans); $i++) 
-        { 
+        {
             $business_num = str_replace('-', '', $trans[$i]->business_num);
             if($business_num)
             {
                 $appr_type  = $trans[$i]->is_cancel ? "1" : "0";
                 $trx_dt     = $trans[$i]->is_cancel ? $trans[$i]->cxl_dt : $trans[$i]->trx_dt;
-                $trx_id     = $trans[$i]->is_cancel ? $trans[$i]->ori_trx_id : $trans[$i]->trx_id;
                 $trx_dt     = date('Ymd', strtotime($trx_dt));
                 $ori_trx_dt = $trans[$i]->trx_dt;
                 $ori_trx_dt = date('Ymd', strtotime($ori_trx_dt));
-                // 부분취소 차수 (승인:0, N회차: N)
-                $part_cxl_type = $trans[$i]->is_cancel ? $trans[$i]->cxl_seq : '0';
                 // amount
-                $total_amount += $trans[$i]->amount;
+                $total_amount += abs($trans[$i]->amount);   //갤럭시아는 취소도 -로 계산안함
                 $amount = abs($trans[$i]->amount);
     
                 $record_type    = $this->setAtypeField('DT', 2);
@@ -68,13 +47,13 @@ class galaxiamoneytree implements DifferenceSettlementInterface
                 $trx_dt         = $this->setNtypeField($trx_dt, 8);
                 $brand_business_num = $this->setAtypeField($brand_business_num, 10);
                 $business_num   = $this->setAtypeField($business_num, 10);
-                $trx_id         = $this->setAtypeField($trx_id, 20);
-                $part_cxl_type  = $this->setNtypeField($part_cxl_type, 2);  //trx seq
+                $trx_id         = $this->setAtypeField($trans[$i]->trx_id, 20);
+                $part_cxl_type  = $this->setNtypeField($trans[$i]->is_cancel ? ($trans[$i]->cxl_seq + 1) : 1, 2);  //trx seq
                 $ord_num        = $this->setAtypeField($trans[$i]->ord_num, 64);
                 $amount         = $this->setNtypeField($amount, 15);
                 $ori_amount     = $this->setNtypeField($amount, 15);
                 $add_field      = $this->setAtypeField($trans[$i]->id, 30);
-    
+
                 $data_record = 
                     $record_type.$appr_type.$trx_dt.$brand_business_num.$business_num.
                     $trx_id.$part_cxl_type.$ord_num.$amount.$ori_amount.$add_field;
@@ -225,5 +204,4 @@ class galaxiamoneytree implements DifferenceSettlementInterface
         $records .= $getTrailer($mchts);
         return $records;
     }
-}
 }
