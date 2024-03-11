@@ -154,7 +154,7 @@ class danal implements DifferenceSettlementInterface
                 ."\r\n";
         };
         $getDatas = function($brand, $mchts, $sub_business_regi_infos) {
-            $records = '';
+            $full_records = '';
             $upload = [
                 'new_count' => 0, 
                 'remove_count' => 0, 
@@ -170,7 +170,7 @@ class danal implements DifferenceSettlementInterface
                 });
                 if($mcht)
                 {
-                    $records .= $this->setAtypeField("DD", 2);
+                    $records = $this->setAtypeField("DD", 2);
                     $records .= $this->setNtypeField($mcht->id, 12);
                     $records .= $this->setNtypeField($sub_business_regi_info->registration_type, 2);
                     $records .= $this->setNtypeField($brand['rep_mid'], 10);
@@ -186,6 +186,7 @@ class danal implements DifferenceSettlementInterface
                     $records .= $this->setNtypeField($yesterday, 8);
                     $records .= $this->setAtypeField('', 22);    
                     $records .= "\r\n";
+                    $full_records .= $records;
 
                     if($sub_business_regi_info->registration_type === 0)
                         $upload['new_count']++;
@@ -198,7 +199,7 @@ class danal implements DifferenceSettlementInterface
                 else
                     logging([], 'not-found-mcht');
             }
-            return $records;
+            return [$full_records, $upload];
         };
         $getTrailer = function($upload) {
             return 
