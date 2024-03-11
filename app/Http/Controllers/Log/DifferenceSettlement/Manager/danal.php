@@ -137,18 +137,6 @@ class danal implements DifferenceSettlementInterface
         return isset($card_compnay_codes[$code]) ? $card_compnay_codes[$code] : '알수없는 코드';
     }
 
-    private function getMchtSectionName($code)
-    {
-        $mcht_sections = [
-            '0' => '영세',
-            '1' => '중소1',
-            '2' => '중소2',
-            '3' => '중소3',
-            '4' => '일반',
-        ];
-        return isset($mcht_sections[$code]) ? $mcht_sections[$code] : '알수없는 코드';        
-    }
-
     public function getMchtCardCode($code)
     {
         return isset($this->mcht_cards[$code]) ? $this->mcht_cards[$code] : '알수없는 코드';   

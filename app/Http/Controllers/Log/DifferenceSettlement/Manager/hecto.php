@@ -10,6 +10,17 @@ use Carbon\Carbon;
 class hecto implements DifferenceSettlementInterface
 {
     use FileRWTrait;
+    public $mcht_cards = [
+        '1001' => '비씨카드',
+        '1002' => '국민카드',
+        '1003' => '하나(외환)카드',
+        '1004' => '삼성카드',
+        '1005' => '신한카드',
+        '1007' => '우리카드',
+        '1008' => '현대카드',
+        '1009' => '롯데카드',
+        '1015' => 'NH카드',
+    ];
 
     public function setDataRecord($trans, $brand_business_num)
     {
@@ -157,48 +168,42 @@ class hecto implements DifferenceSettlementInterface
         return isset($card_compnay_codes[$code]) ? $card_compnay_codes[$code] : '알수없는 코드';
     }
 
-    private function getMchtSectionName($code)
-    {
-        $mcht_sections = [
-            '0' => '영세',
-            '1' => '중소1',
-            '2' => '중소2',
-            '3' => '중소3',
-            '4' => '일반',
-        ];
-        return isset($mcht_sections[$code]) ? $mcht_sections[$code] : '알수없는 코드';        
-    }
-
-    public function registerRequest($brand, $req_date, $mchts)
+    public function registerRequest($brand, $req_date, $mchts, $sub_business_regi_infos)
     {
         $getHeader = function($brand, $req_date) {
             return 
                 $this->setAtypeField("HD", 2).
-                $this->setAtypeField(str_replace('-', '', $brand['business_num']), 10).
-                $this->setAtypeField("DANAL", 10).
                 $this->setNtypeField($req_date, 8).
-                $this->setAtypeField('', 370);
+                $this->setAtypeField('', 490).
+                $records .= "\r\n";
         };
-        $getDatas = function($brand, $mchts) {
+        $getDatas = function($brand, $mchts, $sub_business_regi_infos) {
             $records = '';
             $yesterday = Carbon::now()->subDay(1)->format('Ymd');
-            for ($i=0; $i < count($mchts); $i++) 
+            for ($i=0; $i < count($sub_business_regi_infos); $i++) 
             { 
-                $records .= $this->setAtypeField("DD", 2);
-                $records .= $this->setNtypeField($i+1, 12);
-                $records .= $this->setNtypeField(0, 2);
-                $records .= $this->setNtypeField($brand['rep_mid'], 10);
-                $records .= $this->setNtypeField('000', 3); // $this->getMchtCardCode('카드사 코드???')
-                $records .= $this->setNtypeField(str_replace('-', '', $mchts[$i]->business_num), 10);
-                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->sector), 20);
-                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->mcht_name), 40);
-                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->addr), 100);
-                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->nick_name), 40);
-                $records .= $this->setNtypeField(str_replace('-', '', $mchts[$i]->phone_num), 11);
-                $records .= $this->setAtypeField('', 40);   //이메일 필드
-                $records .= $this->setAtypeField('', 80);   //웹사이트 URL 필드
-                $records .= $this->setNtypeField($yesterday, 8);
-                $records .= $this->setAtypeField('', 22);                
+                $sub_business_regi_info = $sub_business_regi_infos[$i];
+                $mcht = $mchts->first(function ($mcht) use ($sub_business_regi_info) {
+                    return $mcht->business_num === $sub_business_regi_info->business_num;
+                });
+                if($mcht)
+                {
+                    $records .= $this->setAtypeField("RD", 2);
+                    $records .= $this->setAtypeField($sub_business_regi_info->registration_type, 2);
+                    $records .= $this->setAtypeField($brand['rep_mid'], 10);
+                    $records .= $this->setAtypeField($sub_business_regi_info->card_company_code, 3);
+                    $records .= $this->setAtypeField(str_replace('-', '', $mcht->business_num), 10);
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->sector), 20);
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->mcht_name), 40);
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->addr), 100);
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->nick_name), 40);
+                    $records .= $this->setAtypeField(str_replace('-', '', $mcht->phone_num), 11);
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->email), 40);   //이메일 필드
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->website_url), 80);   //웹사이트 URL 필드
+                    $records .= $this->setNtypeField($yesterday, 8);
+                    $records .= $this->setAtypeField('', 128);
+                    $records .= "\r\n";           
+                }
             }
             return $records;
         };
@@ -209,9 +214,12 @@ class hecto implements DifferenceSettlementInterface
                 $this->setNtypeField(count($mchts), 10).
                 $this->setNtypeField(0, 10).
                 $this->setNtypeField(0, 10).
-                $this->setAtypeField('', 358);
+                $this->setAtypeField('', 458).
+                $records .= "\r\n";
         };
-        $records = '';
+        $records  = $getHeader($brand, $req_date);
+        $records .= $getDatas($brand, $mchts);
+        $records .= $getTrailer($mchts);
         return $records;
     }
 }

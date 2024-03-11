@@ -10,6 +10,17 @@ use Carbon\Carbon;
 class galaxiamoneytree implements DifferenceSettlementInterface
 {
     use FileRWTrait;
+    public $mcht_cards = [
+        '099' => '전체카드',
+        '050' => '국민',
+        '078' => '농협',
+        '052' => '비씨',
+        '073' => '현대',
+        '053' => '신한',
+        '051' => '하나',
+        '054' => '삼성',
+        '055' => '롯데',
+    ];
 
     public function setHeaderRecord($rep_mid, $space)
     {
@@ -152,67 +163,50 @@ class galaxiamoneytree implements DifferenceSettlementInterface
         return isset($card_compnay_codes[$code]) ? $card_compnay_codes[$code] : '알수없는 코드';
     }
 
-    private function getMchtSectionName($code)
-    {
-        $mcht_sections = [
-            '0' => '영세',
-            '1' => '중소1',
-            '2' => '중소2',
-            '3' => '중소3',
-            '4' => '일반',
-        ];
-        return isset($mcht_sections[$code]) ? $mcht_sections[$code] : '알수없는 코드';        
-    }
-
-    public function getMchtCardCode($code)
-    {
-        $mcht_cards = [
-            '099' => '전체카드',
-            '050' => '국민',
-            '078' => '농협',
-            '052' => '비씨',
-            '073' => '현대',
-            '053' => '신한',
-            '051' => '하나',
-            '054' => '삼성',
-            '055' => '롯데',
-        ];
-        return isset($mcht_cards[$code]) ? $mcht_cards[$code] : '알수없는 코드';   
-    }
-
-    public function registerRequest($brand, $req_date, $mchts)
+    public function registerRequest($brand, $req_date, $mchts, $sub_business_regi_infos)
     {
         $getHeader = function($brand, $req_date) {
             return 
                 $this->setAtypeField("HD", 2).
                 $this->setNtypeField($req_date, 8).
-                $this->setAtypeField('', 490);
+                $this->setAtypeField('', 490)
+                ."\r\n";
         };
-        $getDatas = function($brand, $mchts) {
-            $yesterday = Carbon::now()->subDay(1)->format('Ymd');
+        $getDatas = function($brand, $mchts, $sub_business_regi_infos) {
             $records = '';
-            for ($i=0; $i < count($mchts); $i++) 
+            $yesterday = Carbon::now()->subDay(1)->format('Ymd');
+            for ($i=0; $i < count($sub_business_regi_infos); $i++) 
             { 
-                $records .= $this->setAtypeField("RD", 2);
-                $records .= $this->setNtypeField(0, 2);
-                $records .= $this->setNtypeField(str_replace('-', '', $brand['business_num']), 10).
-                $records .= $this->setNtypeField('000', 3); // $this->getMchtCardCode('카드사 코드???')
-                $records .= $this->setNtypeField(str_replace('-', '', $mchts[$i]->business_num), 10);
+                $sub_business_regi_info = $sub_business_regi_infos[$i];
+                $mcht = $mchts->first(function ($mcht) use ($sub_business_regi_info) {
+                    return $mcht->business_num === $sub_business_regi_info->business_num;
+                });
+                if($mcht)
+                {
+                    $records .= $this->setAtypeField("RD", 2);
+                    $records .= $this->setNtypeField($sub_business_regi_info->registration_type, 2);
+                    $records .= $this->setNtypeField(str_replace('-', '', $brand['business_num']), 10).
+                    $records .= $this->setNtypeField($sub_business_regi_info->card_company_code, 3);
+                    $records .= $this->setNtypeField(str_replace('-', '', $mcht->business_num), 10);
 
-                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->sector), 20);
-                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->mcht_name), 40);
-                $records .= $this->setNtypeField('', 6);   //우편번호
-                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->addr), 100);
-                $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->nick_name), 40);
-                $records .= $this->setNtypeField(str_replace('-', '', $mchts[$i]->phone_num), 11);
-                $records .= $this->setNtypeField('', 3);   //지역번호 필드
-                $records .= $this->setNtypeField('', 4);   //국번번호 필드
-                $records .= $this->setNtypeField('', 4);   //개별번호 필드
-                $records .= $this->setAtypeField('', 40);   //이메일 필드
-                $records .= $this->setAtypeField('', 80);   //웹사이트 URL 필드
-                $records .= $this->setNtypeField($yesterday, 8);
-                $records .= $this->setAtypeField($mchts[$i]->id, 12);
-                $records .= $this->setAtypeField('', 116);
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->sector), 20);
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->mcht_name), 40);
+                    $records .= $this->setNtypeField('', 6);   //우편번호
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->addr), 100);
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->nick_name), 40);
+                    $records .= $this->setNtypeField(str_replace('-', '', $mcht->phone_num), 11);
+                    $records .= $this->setNtypeField('', 3);   //지역번호 필드
+                    $records .= $this->setNtypeField('', 4);   //국번번호 필드
+                    $records .= $this->setNtypeField('', 4);   //개별번호 필드
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->email), 40);   //이메일 필드
+                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->website_url), 80);   //웹사이트 URL 필드
+                    $records .= $this->setNtypeField($yesterday, 8);
+                    $records .= $this->setAtypeField($mcht->id, 12);
+                    $records .= $this->setAtypeField('', 116);
+                    $records .= "\r\n";
+                }
+                else
+                    logging([], 'not-found-mcht');
             }
             return $records;
         };
@@ -223,11 +217,13 @@ class galaxiamoneytree implements DifferenceSettlementInterface
                 $this->setNtypeField(count($mchts), 10).
                 $this->setNtypeField(0, 10).
                 $this->setNtypeField(0, 10).
-                $this->setAtypeField('', 458);
+                $this->setAtypeField('', 458)
+                ."\r\n";
         };
-        $records  = $getHeader($brand, $req_date)."\r\n";
-        $records .= $getDatas($brand, $mchts)."\r\n";
-        $records .= $getTrailer($mchts)."\r\n";
+        $records  = $getHeader($brand, $req_date);
+        $records .= $getDatas($brand, $mchts);
+        $records .= $getTrailer($mchts);
         return $records;
     }
+}
 }
