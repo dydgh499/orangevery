@@ -215,7 +215,7 @@ class danal implements DifferenceSettlementInterface
 
         $records .= $getHeader($brand, $req_date);
         $records .= $datas;
-        $records .= $getTrailer($mchts);
+        $records .= $getTrailer($upload);
         return $records;
     }
 }
