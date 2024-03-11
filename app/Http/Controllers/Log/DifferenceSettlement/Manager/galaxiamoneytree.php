@@ -152,7 +152,13 @@ class galaxiamoneytree implements DifferenceSettlementInterface
                 ."\r\n";
         };
         $getDatas = function($brand, $mchts, $sub_business_regi_infos) {
-            $records = '';
+            $full_records = '';
+            $upload = [
+                'new_count' => 0, 
+                'remove_count' => 0, 
+                'modify_count' => 0,
+                'total_count' => 0,
+            ];
             $yesterday = Carbon::now()->subDay(1)->format('Ymd');
             for ($i=0; $i < count($sub_business_regi_infos); $i++) 
             { 
@@ -162,7 +168,7 @@ class galaxiamoneytree implements DifferenceSettlementInterface
                 });
                 if($mcht)
                 {
-                    $records .= $this->setAtypeField("RD", 2);
+                    $records = $this->setAtypeField("RD", 2);
                     $records .= $this->setNtypeField($sub_business_regi_info->registration_type, 2);
                     $records .= $this->setNtypeField(str_replace('-', '', $brand['business_num']), 10).
                     $records .= $this->setNtypeField($sub_business_regi_info->card_company_code, 3);
@@ -183,25 +189,34 @@ class galaxiamoneytree implements DifferenceSettlementInterface
                     $records .= $this->setAtypeField($mcht->id, 12);
                     $records .= $this->setAtypeField('', 116);
                     $records .= "\r\n";
+                    $full_records .= $records;
+                    
+                    if($sub_business_regi_info->registration_type === 0)
+                        $upload['new_count']++;
+                    else if($sub_business_regi_info->registration_type === 1)
+                        $upload['remove_count']++;
+                    else if($sub_business_regi_info->registration_type === 2)
+                        $upload['modify_count']++;
+                    $upload['total_count']++;
                 }
-                else
-                    logging([], 'not-found-mcht');
             }
-            return $records;
+            return [$full_records, $upload];
         };
-        $getTrailer = function($mchts) {
+        $getTrailer = function($upload) {
             return 
                 $this->setAtypeField("TR", 2).
-                $this->setNtypeField(count($mchts), 10).
-                $this->setNtypeField(count($mchts), 10).
-                $this->setNtypeField(0, 10).
-                $this->setNtypeField(0, 10).
-                $this->setAtypeField('', 458)
-                ."\r\n";
+                $this->setNtypeField($upload['total_count'], 10).
+                $this->setNtypeField($upload['new_count'], 10).
+                $this->setNtypeField($upload['remove_count'], 10).
+                $this->setNtypeField($upload['modify_count'], 10).
+                $this->setAtypeField('', 458).
+                "\r\n";
         };
+        [$datas, $upload] = $getDatas($brand, $mchts, $sub_business_regi_infos);
+
         $records  = $getHeader($brand, $req_date);
-        $records .= $getDatas($brand, $mchts);
-        $records .= $getTrailer($mchts);
+        $records .= $datas;
+        $records .= $getTrailer($upload);
         return $records;
     }
 }

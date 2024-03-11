@@ -175,10 +175,16 @@ class hecto implements DifferenceSettlementInterface
                 $this->setAtypeField("HD", 2).
                 $this->setNtypeField($req_date, 8).
                 $this->setAtypeField('', 490).
-                $records .= "\r\n";
+                "\r\n";
         };
         $getDatas = function($brand, $mchts, $sub_business_regi_infos) {
-            $records = '';
+            $full_records = '';
+            $upload = [
+                'new_count' => 0, 
+                'remove_count' => 0, 
+                'modify_count' => 0,
+                'total_count' => 0,
+            ];
             $yesterday = Carbon::now()->subDay(1)->format('Ymd');
             for ($i=0; $i < count($sub_business_regi_infos); $i++) 
             { 
@@ -188,7 +194,7 @@ class hecto implements DifferenceSettlementInterface
                 });
                 if($mcht)
                 {
-                    $records .= $this->setAtypeField("RD", 2);
+                    $records = $this->setAtypeField("RD", 2);
                     $records .= $this->setAtypeField($sub_business_regi_info->registration_type, 2);
                     $records .= $this->setAtypeField($brand['rep_mid'], 10);
                     $records .= $this->setAtypeField($sub_business_regi_info->card_company_code, 3);
@@ -202,24 +208,35 @@ class hecto implements DifferenceSettlementInterface
                     $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->website_url), 80);   //웹사이트 URL 필드
                     $records .= $this->setNtypeField($yesterday, 8);
                     $records .= $this->setAtypeField('', 128);
-                    $records .= "\r\n";           
+                    $records .= "\r\n";      
+                    $full_records .= $records;
+                    
+                    if($sub_business_regi_info->registration_type === 0)
+                        $upload['new_count']++;
+                    else if($sub_business_regi_info->registration_type === 1)
+                        $upload['remove_count']++;
+                    else if($sub_business_regi_info->registration_type === 2)
+                        $upload['modify_count']++;
+                    $upload['total_count']++;
                 }
             }
-            return $records;
+            return [$full_records, $upload];
         };
-        $getTrailer = function($mchts) {
+        $getTrailer = function($upload) {
             return 
                 $this->setAtypeField("TR", 2).
-                $this->setNtypeField(count($mchts), 10).
-                $this->setNtypeField(count($mchts), 10).
-                $this->setNtypeField(0, 10).
-                $this->setNtypeField(0, 10).
+                $this->setNtypeField($upload['total_count'], 10).
+                $this->setNtypeField($upload['new_count'], 10).
+                $this->setNtypeField($upload['remove_count'], 10).
+                $this->setNtypeField($upload['modify_count'], 10).
                 $this->setAtypeField('', 458).
-                $records .= "\r\n";
+                "\r\n";
         };
+        [$datas, $upload] = $getDatas($brand, $mchts, $sub_business_regi_infos);
+
         $records  = $getHeader($brand, $req_date);
-        $records .= $getDatas($brand, $mchts);
-        $records .= $getTrailer($mchts);
+        $records .= $datas;
+        $records .= $getTrailer($upload);
         return $records;
     }
 }
