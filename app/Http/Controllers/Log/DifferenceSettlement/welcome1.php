@@ -59,4 +59,9 @@ class welcome1 extends DifferenceSettlement implements DifferenceSettlementInter
         $save_path = "/upload/dfsttm/send/merc_welcome_".$brand_business_num."_".$req_date."req";
         return $this->_registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos);
     }
+
+    public function registerResponse($res_path, $req_date)
+    {
+        
+    }
 }

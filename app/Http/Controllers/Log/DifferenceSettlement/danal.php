@@ -67,4 +67,9 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
         $save_path = "/Sellerinfo/".$this->brand['rep_mid']."toDANAL.".$file_name;
         return $this->_registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos);
     }
+
+    public function registerResponse($res_path, $req_date)
+    {
+        
+    }
 }

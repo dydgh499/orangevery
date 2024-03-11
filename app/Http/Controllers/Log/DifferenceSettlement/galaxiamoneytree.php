@@ -61,4 +61,9 @@ class galaxiamoneytree extends DifferenceSettlement implements DifferenceSettlem
         $save_path = "/".$this->brand['rep_mid']."_REQUEST_INFO.".$req_date;
         return $this->_registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos);
     }
+    
+    public function registerResponse($res_path, $req_date)
+    {
+        
+    }
 }
