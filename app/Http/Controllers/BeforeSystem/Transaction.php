@@ -175,6 +175,7 @@ class Transaction
                                 'trx_tm' => $transaction->TRADE_TM,
                                 'cxl_dt' => $transaction->CXL_DT,
                                 'cxl_tm' => $transaction->CXL_TM,
+                                'cxl_seq' => $transaction->IS_CANCEL ? 1 : 0,
                                 'is_cancel' => $transaction->IS_CANCEL,
                                 'amount' => $amount,
                                 'module_type' => $module_type,
@@ -183,7 +184,7 @@ class Transaction
                                 'mid' => $transaction->MID,
                                 'tid' => $transaction->CAT_ID,
                                 'trx_id' => $transaction->TID_NM,
-                                'ori_trx_id' => null,
+                                'ori_trx_id' => $transaction->IS_CANCEL ? $transaction->TID_NM : null,
     
                                 'card_num' => $transaction->CARD_NUM,
                                 'issuer' => $transaction->CARD_NM,
