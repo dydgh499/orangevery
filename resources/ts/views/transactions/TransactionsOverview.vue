@@ -1,17 +1,16 @@
 <script lang="ts" setup>
-import { useThemeConfig } from '@core/composable/useThemeConfig'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import { requiredValidator, lengthValidatorV2 } from '@validators'
-import type { Transaction, Merchandise, PayModule, PaySection, Options } from '@/views/types'
-import { module_types, installments, payModFilter } from '@/views/merchandises/pay-modules/useStore'
-import { getUserLevel, getIndexByLevel } from '@axios'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { getAllPayModules, installments, module_types, payModFilter } from '@/views/merchandises/pay-modules/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { dev_settle_types } from '@/views/services/brands/useStore'
-import { ko } from 'date-fns/locale';
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import type { Merchandise, Options, PayModule, PaySection, Transaction } from '@/views/types'
+import { getIndexByLevel, getUserLevel } from '@axios'
+import { useThemeConfig } from '@core/composable/useThemeConfig'
 import corp from '@corp'
+import { requiredValidator } from '@validators'
+import { ko } from 'date-fns/locale'
 
 interface Props {
     item: Transaction,
@@ -507,7 +506,7 @@ onMounted(async () => {
                                     <template #name>매입사</template>
                                     <template #input>
                                         <VTextField v-model="props.item.acquirer" type="text" placeholder="매입사를 입력해주세요"
-                                            prepend-inner-icon="ph-buildings" :rules="[requiredValidator]" maxlength="20" />
+                                            prepend-inner-icon="ph-buildings" maxlength="20" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -519,7 +518,7 @@ onMounted(async () => {
                                     <template #input>
                                         <VTextField v-model="props.item.appr_num" type="text" placeholder="승인번호를 입력해주세요"
                                             prepend-inner-icon="icon-park-solid:transaction-order" persistent-placeholder
-                                            counter :rules="[requiredValidator, lengthValidatorV2(props.item.appr_num, 8)]"
+                                            counter :rules="[requiredValidator]"
                                             maxlength="8" />
                                     </template>
                                 </CreateHalfVCol>

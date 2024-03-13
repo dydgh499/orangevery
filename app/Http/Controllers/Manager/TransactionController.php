@@ -282,8 +282,8 @@ class TransactionController extends Controller
         $data = $request->data();
         // TransactionRequest 에서 100을 먼저 나눠서 가져오기 떄문에 다시가져옴
         $data['ps_fee']  = $request->input('ps_fee', 0);
-        $data['hold_fee']  = $request->input('hold_fee', 0);
-        $data['mcht_fee']    = $request->input('mcht_fee', 0);
+        $data['hold_fee'] = $request->input('hold_fee', 0);
+        $data['mcht_fee'] = $request->input('mcht_fee', 0);
         $data['sales0_fee'] = $request->input('sales0_fee', 0);
         $data['sales1_fee'] = $request->input('sales1_fee', 0);
         $data['sales2_fee'] = $request->input('sales2_fee', 0);
