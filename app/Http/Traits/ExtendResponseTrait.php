@@ -91,7 +91,7 @@ trait ExtendResponseTrait
         }
         
         if($code == 0)
-            return Response::json($data, 200, [], JSON_UNESCAPED_UNICODE);
+            return Response::json($data, 200, []);
         else if($code == 1)
             return Response::json($data, 201, [], JSON_UNESCAPED_UNICODE);
         else if($code == 4)
