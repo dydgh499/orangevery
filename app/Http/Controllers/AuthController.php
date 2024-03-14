@@ -174,7 +174,7 @@ class AuthController extends Controller
         if($res['body']['result'] === 100)
             return $this->response(1, ['message'=> $res['body']['message']]);
         else
-            return $this->extendResponse(1999, $res['body']['message']);
+            return $this->response(1999, ['message'=> $res['body']['message']]);
     }
 }
 
