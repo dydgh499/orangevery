@@ -89,9 +89,9 @@ trait ExtendResponseTrait
             case 2000:  $msg = "알려지지 않은 에러입니다."; break;
             default:    $msg = "알려지지 않은 코드입니다.";
         }
-        
+        logging($data);
         if($code == 0)
-            return Response::json($data, 200, []);
+            return Response::json($data, 200, [], JSON_UNESCAPED_UNICODE);
         else if($code == 1)
             return Response::json($data, 201, [], JSON_UNESCAPED_UNICODE);
         else if($code == 4)
