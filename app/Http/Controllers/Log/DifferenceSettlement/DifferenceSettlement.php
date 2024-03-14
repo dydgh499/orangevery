@@ -67,7 +67,7 @@ class DifferenceSettlement
         foreach($mids as $mid)
         {
             $mcht_trans = $trans->filter(function ($tran) use ($mid, $pmid_mode) {
-                if($pmid_mode)
+                if($pmid_mode === 'p_mid')
                     return $tran->p_mid === $mid;
                 else
                     return $tran->mid === $mid;
@@ -75,7 +75,7 @@ class DifferenceSettlement
 
             if(count($mcht_trans) > 0)
             {
-                $_mid = $pmid_mode ? $mcht_trans[0]->p_mid : $mid;
+                $_mid = $pmid_mode === 'p_mid' ? $mcht_trans[0]->p_mid : $mid;
                 if($_mid === "")
                     continue;
 
