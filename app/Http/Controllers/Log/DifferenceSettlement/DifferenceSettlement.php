@@ -57,17 +57,15 @@ class DifferenceSettlement
     protected function _request($save_path, $req_date, $trans)
     {
         $result     = false;
-        $pmid_mode  = $this->service_name === 'danal' ? 'p_mid' : 'mid';
-
-        $mids = $trans->pluck($pmid_mode ? 'p_mid' : 'mid')->unique()->all();
+        $mids = $trans->pluck($this->PMID_MODE ? 'p_mid' : 'mid')->unique()->all();
         $sub_count = 0;
         $total_count = 0;
         $full_record = $this->setStartRecord($req_date);
 
         foreach($mids as $mid)
         {
-            $mcht_trans = $trans->filter(function ($tran) use ($mid, $pmid_mode) {
-                if($pmid_mode === 'p_mid')
+            $mcht_trans = $trans->filter(function ($tran) {
+                if($this->PMID_MODE)
                     return $tran->p_mid === $mid;
                 else
                     return $tran->mid === $mid;
@@ -75,7 +73,7 @@ class DifferenceSettlement
 
             if(count($mcht_trans) > 0)
             {
-                $_mid = $pmid_mode === 'p_mid' ? $mcht_trans[0]->p_mid : $mid;
+                $_mid = $this->PMID_MODE ? $mcht_trans[0]->p_mid : $mid;
                 if($_mid === "")
                     continue;
 

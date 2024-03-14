@@ -34,7 +34,7 @@ class hecto extends DifferenceSettlement implements DifferenceSettlementInterfac
             'port' => 5210,
             'username' => $brand['sftp_id'],
             'password' => $brand['sftp_password'],
-            'passive' => false,            
+            'passive' => false,
         ]]);
         [$this->main_sftp_connection, $this->main_connection_stat] = $this->connectSFTPServer($main_config_name, 'main');
         [$this->dr_sftp_connection, $this->dr_connection_stat] = $this->connectSFTPServer($dr_config_name, 'dr');        
