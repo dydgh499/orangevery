@@ -56,15 +56,15 @@ class DifferenceSettlement
 
     protected function _request($save_path, $req_date, $trans)
     {
-        $result     = false;
-        $mids = $trans->pluck($this->PMID_MODE ? 'p_mid' : 'mid')->unique()->all();
-        $sub_count = 0;
+        $result      = false;
+        $sub_count   = 0;
         $total_count = 0;
         $full_record = $this->setStartRecord($req_date);
 
+        $mids = $trans->pluck($this->PMID_MODE ? 'p_mid' : 'mid')->unique()->all();
         foreach($mids as $mid)
         {
-            $mcht_trans = $trans->filter(function ($tran) {
+            $mcht_trans = $trans->filter(function ($tran)use ($mid) {
                 if($this->PMID_MODE)
                     return $tran->p_mid === $mid;
                 else
