@@ -280,7 +280,7 @@ class DifferenceSettlementHistoryController extends Controller
     static public function differenceSettleResponseTest()
     {
         $ds_id      = 1;
-        $date       = Carbon::now()->subDay(14);
+        $date       = Carbon::now()->subDay(15);
 
         $brand = Brand::join('different_settlement_infos', 'brands.id', '=', 'different_settlement_infos.brand_id')
             ->where('brands.is_delete', false)
