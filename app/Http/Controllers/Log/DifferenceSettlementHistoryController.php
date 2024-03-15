@@ -164,11 +164,13 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('payment_gateways.pg_type', $brands[$i]->pg_type)
                 ->where('transactions.brand_id', $brands[$i]->brand_id)
                 ->where(function ($query) use ($yesterday) {
-                    $query->where('transactions.trx_dt', $yesterday)
-                        ->where('transactions.is_cancel', false);
-                })->orWhere(function ($query) use ($yesterday) {
-                    $query->where('transactions.cxl_dt', $yesterday)
-                    ->where('transactions.is_cancel', true);
+                    $query->where(function ($query) use ($yesterday) {                        
+                        $query->where('transactions.trx_dt', $yesterday)
+                            ->where('transactions.is_cancel', false);
+                    })->orWhere(function ($query) use ($yesterday) {
+                        $query->where('transactions.cxl_dt', $yesterday)
+                        ->where('transactions.is_cancel', true);
+                    });
                 })
                 ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
             $pg = $this->getPGClass($brands[$i]);
