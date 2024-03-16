@@ -94,7 +94,7 @@ class AuthController extends Controller
         $result = $this->__signIn(new Operator(), $request);     // check operator
         if($result['result'] == 1)
         {
-            operLogging(HistoryType::LOGIN, '', [], '', $result['user']->brand_id, $result['user']->id);
+            operLogging(HistoryType::LOGIN, '', [], [], '', $result['user']->brand_id, $result['user']->id);
             return $this->response(0, $result['user']->loginInfo($result['user']->level));
         }
 

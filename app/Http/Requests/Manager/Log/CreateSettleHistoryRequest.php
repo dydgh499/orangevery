@@ -64,11 +64,6 @@ class CreateSettleHistoryRequest extends FormRequest
         return $params;
     }
 
-    protected function prepareForValidation()
-    {
-
-    }
-
     public function data($target_id)
     {
         return [

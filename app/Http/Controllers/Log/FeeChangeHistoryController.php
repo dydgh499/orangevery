@@ -118,7 +118,7 @@ class FeeChangeHistoryController extends Controller
         $history_type = $history['change_status'] ? HistoryType::HISTORY_DELETE : HistoryType::BOOK_DELETE;
 
         $res  = $query->update(['is_delete' => true]);
-        operLogging($history_type, $target, $history, "#".$id);
+        operLogging($history_type, $target, $history, $history, "#".$id);
         return $this->response($res ? 4 : 990);
     }
 
@@ -136,9 +136,9 @@ class FeeChangeHistoryController extends Controller
     {
         $udpt_data = [];
         $bf_trx_fee = $mcht->trx_fee;
-        $aft_trx_fee = $request->trx_fee/100;
+        $aft_trx_fee = round($request->trx_fee/100, 7);
         $bf_hold_fee = $mcht->hold_fee;
-        $aft_hold_fee = $request->hold_fee/100;
+        $aft_hold_fee = round($request->hold_fee/100, 7);
 
         $data['bf_trx_fee']  = $bf_trx_fee;
         $data['aft_trx_fee'] = $aft_trx_fee;
@@ -150,7 +150,11 @@ class FeeChangeHistoryController extends Controller
 
         return [
             'history' => $data,
-            'update'  => $udpt_data
+            'update'  => $udpt_data,
+            'before'  => [
+                'trx_fee' => $bf_trx_fee,
+                'hold_fee' => $bf_hold_fee,
+            ]
         ];
     }
 
@@ -166,7 +170,7 @@ class FeeChangeHistoryController extends Controller
         ];
         
         $bf_trx_fee = $mcht[$sales_key['sales_fee']];
-        $aft_trx_fee = $request->sales_fee/100;
+        $aft_trx_fee = round($request->sales_fee/100, 7);
         $bf_sales_id = $mcht[$sales_key['sales_id']];
         $aft_sales_id = $request->sales_id;
 
@@ -180,7 +184,11 @@ class FeeChangeHistoryController extends Controller
         
         return [
             'history' => $data,
-            'update'  => $udpt_data
+            'update'  => $udpt_data,
+            'before'  => [
+                $sales_key['sales_id']=> $bf_sales_id,
+                $sales_key['sales_fee'] => $bf_trx_fee,
+            ]
         ];
     }
 
@@ -213,12 +221,11 @@ class FeeChangeHistoryController extends Controller
                 $res = $orm->create($resource['history']);
                 if($resource['history']['change_status'] == true)
                 {
-                    $res = $mchts->where('id', $resource['history']['mcht_id'])
-                        ->update($resource['update']);
-                    operLogging(HistoryType::UPDATE, $target, $resource['update'], $mcht->mcht_name);
+                    $res = $mchts->where('id', $resource['history']['mcht_id'])->update($resource['update']);
+                    operLogging(HistoryType::UPDATE, $target, $resource['before'], $resource['update'], $mcht->mcht_name);
                 }
                 else
-                    operLogging(HistoryType::BOOK, $target, $resource['update'], $mcht->mcht_name);
+                    operLogging(HistoryType::BOOK, $target, $resource['before'], $resource['update'], $mcht->mcht_name);
 
                 return true;
             }, 3);

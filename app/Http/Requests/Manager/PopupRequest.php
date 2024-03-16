@@ -42,11 +42,6 @@ class PopupRequest extends FormRequest
         return $params;
     }
 
-    protected function prepareForValidation()
-    {
-
-    }
-
     public function data()
     {
         $data = $this->getParmasBaseKey();

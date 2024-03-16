@@ -52,11 +52,6 @@ class BatchSettleHistoryRequest extends FormRequest
         return $params;
     }
 
-    protected function prepareForValidation()
-    {
-
-    }
-
     public function data($target_id, $data)
     {
         return [

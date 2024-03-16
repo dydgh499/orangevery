@@ -58,7 +58,7 @@ class FinanceVanController extends Controller
         $data = $request->data();
         $res = $this->finance_vans->create($data);
         
-        operLogging(HistoryType::CREATE, $this->target, ['id' => $res->id], $data['nick_name']);
+        operLogging(HistoryType::CREATE, $this->target, [], $data, $data['nick_name']);
         return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
 
@@ -85,8 +85,9 @@ class FinanceVanController extends Controller
     public function update(FinanceRequest $request, $id)
     {
         $data = $request->data();
+        $before = $this->finance_vans->where('id', $id)->first();
         $res = $this->finance_vans->where('id', $id)->update($data);
-        operLogging(HistoryType::UPDATE, $this->target, ['id' => $id], $data['nick_name']);
+        operLogging(HistoryType::UPDATE, $this->target, $before, $data, $data['nick_name']);
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
@@ -95,11 +96,11 @@ class FinanceVanController extends Controller
      *
      * @urlParam id integer required 금융VAN PK
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
+        $data = $this->finance_vans->where('id', $id)->first();
         $res = $this->delete($this->finance_vans->where('id', $id));
-        $data = $this->finance_vans->where('id', $id)->first(['nick_name']);
-        operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->nick_name);
+        operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->nick_name);
         return $this->response($res, ['id'=>$id]);
     }
 }

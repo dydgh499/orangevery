@@ -101,14 +101,6 @@ class PayModuleRequest extends FormRequest
         return $this->getAttributes($this->keys);
     }
 
-    protected function prepareForValidation()
-    {
-        for ($i=0; $i <count($this->boolean_keys) ; $i++) 
-        { 
-            $this->merge([$this->boolean_keys[$i] => $this->convertToBoolean($this->input($this->boolean_keys[$i]))]);
-        }
-    }
-
     public function bodyParameters()
     {
         return array_merge($this->getDocsParameters($this->keys), $this->getDocsParameters($this->boolean_keys), $this->getDocsParameters($this->nullable_keys));
@@ -116,7 +108,7 @@ class PayModuleRequest extends FormRequest
 
     public function data()
     {
-        $data_1 = array_merge($this->getParmasBaseKeyV2($this->nullable_keys, null), $this->getParmasBaseKeyV2($this->boolean_keys, false));
+        $data_1 = array_merge($this->getParmasBaseKeyV2($this->nullable_keys, null), $this->getParmasBaseKeyV2($this->boolean_keys, 0));
         $data_2 = array_merge($this->getParmasBaseKey(), $this->getParmasBaseKeyV2($this->integer_keys, 0));
         $data   = array_merge($data_1, $data_2);
         $data['note'] = $data['note'] == null ? '' : $data['note'];

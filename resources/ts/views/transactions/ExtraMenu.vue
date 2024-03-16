@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { isRetryAble, realtimeResult } from '@/views/transactions/useStore'
+import router from '@/router'
 import { useRequestStore } from '@/views/request'
+import { isRetryAble, realtimeResult } from '@/views/transactions/useStore'
 import type { SalesSlip } from '@/views/types'
 import { getUserLevel, pay_token } from '@axios'
 import { StatusColors } from '@core/enums'
 import corp from '@corp'
-import router from '@/router'
 
 interface Props {
     item: SalesSlip,
@@ -102,7 +102,6 @@ const noti = async () => {
         }
 
     }
-
 }
 
 const isCancelSafeDate = () => {

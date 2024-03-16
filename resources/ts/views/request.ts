@@ -9,7 +9,7 @@ export const useRequestStore = defineStore('requestStore', () => {
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
     const errorHandler = <any>(inject('$errorHandler'))
-    const { all_sales, mchts } = useSalesFilterStore()
+    const { all_sales, mchts, sales } = useSalesFilterStore()
     const { isMchtBlackList } =  useMchtBlacklistStore()
 
     const deleteTreatment = (back_url: string, is_redirect: boolean, params: any, res: any) => {
@@ -24,11 +24,11 @@ export const useRequestStore = defineStore('requestStore', () => {
         if (res.status === 201) {
             if(params.id == 0) {
                 params.id = res.data.id
-                if (back_url == 'salesforces') {
+                if (back_url === '/salesforces') {
                     const idx = getLevelByIndex(params.level)
                     all_sales[idx].push(params)
                 }
-                else if (back_url == '/merchandises') {
+                else if (back_url === '/merchandises') {
                     mchts.push(params)
                     mchts.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name))
                 }
@@ -46,15 +46,17 @@ export const useRequestStore = defineStore('requestStore', () => {
                 }
             }
             if (is_redirect) {
-                if (back_url == '/merchandises/pay-modules')
+                if (back_url === '/merchandises/pay-modules')
                     setTimeout(function () { router.push('/merchandises/edit/' + res.data.mcht_id) }, 500)
-                else if (back_url == '/merchandises/noti-urls')
+                else if (back_url === '/merchandises/noti-urls')
                     setTimeout(function () { router.push('/merchandises/edit/' + res.data.mcht_id) }, 500)
-                else if (back_url == '/merchandises/regular-credit-cards')
+                else if (back_url === '/merchandises/regular-credit-cards')
                     setTimeout(function () { router.push('/merchandises/edit/' + res.data.mcht_id) }, 500)            
-                else if (back_url == '/salesforces/under-auto-settings')
+                else if (back_url === '/salesforces/under-auto-settings')
                     setTimeout(function () { router.push('/salesforces/edit/' + res.data.sales_id) }, 500)        
-                else if (back_url == '/merchandises')
+                else if (back_url === '/salesforces')
+                    setTimeout(function () { router.push('/salesforces/edit/' + res.data.id) }, 500)
+                else if (back_url === '/merchandises')
                     setTimeout(function () { router.push('/merchandises/edit/' + res.data.id) }, 500)
                 else
                     setTimeout(function () { router.back() }, 1000)

@@ -67,11 +67,6 @@ class SalesforceRequest extends FormRequest
         return $this->getAttributes($this->keys);
     }
 
-    protected function prepareForValidation()
-    {
-        $this->merge(['view_type' => $this->convertToBoolean($this->input('view_type', 0))]);
-    }
-
     public function bodyParameters()
     {
         $params = $this->getDocsParameters($this->keys);

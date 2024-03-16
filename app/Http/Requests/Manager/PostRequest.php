@@ -49,14 +49,6 @@ class PostRequest extends FormRequest
         return $params;
     }
 
-    protected function prepareForValidation()
-    {
-        if ($this->has('is_reply')) 
-        {
-            $this->merge(['is_reply' => $this->convertToBoolean($this->input('is_reply'))]);
-        }
-    }
-
     public function data()
     {
         $data = $this->getParmasBaseKey();

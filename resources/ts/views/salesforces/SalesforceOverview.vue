@@ -1,16 +1,15 @@
 <script lang="ts" setup>
-import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
-import { getUserLevel, salesLevels } from '@axios'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import type { Salesforce } from '@/views/types'
-import { requiredValidator, nullValidator } from '@validators'
-import type { Options } from '@/views/types'
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import MchtBatchOverview from '@/layouts/components/batch-updaters/MchtBatchOverview.vue'
 import PayModuleBatchOverview from '@/layouts/components/batch-updaters/PayModuleBatchOverview.vue'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
+import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
+import type { Options, Salesforce } from '@/views/types'
+import { getUserLevel, salesLevels } from '@axios'
 import corp from '@corp'
+import { nullValidator, requiredValidator } from '@validators'
 
 interface Props {
     item: Salesforce,
@@ -144,7 +143,7 @@ const addAbleSalesLevels = () => {
                 </VCardItem>
             </VCard>
         </VCol>
-        <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
+        <VCol cols="12" md="6" v-if="getUserLevel() >= 35 && props.item.id">
             <MchtBatchOverview ref="mchtBatchOverview" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"/>
             <br>
             <PayModuleBatchOverview ref="payModuleBatchOverview" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"/>

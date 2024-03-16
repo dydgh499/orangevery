@@ -75,7 +75,7 @@ class NotiUrlController extends Controller
         if($res)
         {
             $this->merchandises->where('id', $data['mcht_id'])->update(['use_noti'=>true]);
-            operLogging(HistoryType::CREATE, $this->target, $data, $data['note']);
+            operLogging(HistoryType::CREATE, $this->target, [], $data, $data['note']);
         }
         return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);
     }
@@ -103,10 +103,11 @@ class NotiUrlController extends Controller
     public function update(NotiRequest $request, $id)
     {
         $data = $request->data();
+        $before = $this->noti_urls->where('id', $id)->first();
         $res = $this->noti_urls->where('id', $id)->update($data);
         if($res)
         {
-            operLogging(HistoryType::UPDATE, $this->target, $data, $data['note']);
+            operLogging(HistoryType::UPDATE, $this->target, $before, $data, $data['note']);
         }
         return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
     }
@@ -116,19 +117,19 @@ class NotiUrlController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         $res = $this->delete($this->noti_urls->where('id', $id));    
         $data = ['id'=> $id];
         if($res)
         {
-            $noti   = $this->noti_urls->where('id', $id)->first(['mcht_id', 'note']);
+            $noti   = $this->noti_urls->where('id', $id)->first();
             $count  = $this->noti_urls->where('mcht_id', $noti->mcht_id)->where('is_delete', false)->count();
             if($count == 0)
                 $this->merchandises->where('id', $noti->mcht_id)->update(['use_noti'=>false]);
 
             $data['mcht_id'] = $noti->mcht_id;
-            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $noti->note);
+            operLogging(HistoryType::DELETE, $this->target, $noti, ['id' => $id], $noti->note);
         }
         return $this->response($res, $data);
     }

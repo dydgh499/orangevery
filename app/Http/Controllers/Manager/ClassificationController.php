@@ -55,7 +55,7 @@ class ClassificationController extends Controller
         $data = $request->data();
         $res = $this->classifications->create($data);
 
-        operLogging(HistoryType::CREATE, $this->target, $data, $data['name']);
+        operLogging(HistoryType::CREATE, $this->target, [], $data, $data['name']);
         return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
 
@@ -82,9 +82,10 @@ class ClassificationController extends Controller
     public function update(ClassificationReqeust $request, $id)
     {
         $data = $request->data();
+        $before = $this->classifications->where('id', $id)->first()->toArray();
         $res = $this->classifications->where('id', $id)->update($data);
 
-        operLogging(HistoryType::UPDATE, $this->target, $data, $data['name']);
+        operLogging(HistoryType::UPDATE, $this->target, $before, $data, $data['name']);
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
@@ -93,12 +94,12 @@ class ClassificationController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         $res = $this->classifications->where('id', $id)->update(['is_delete'=>true]);
-        $data = $this->classifications->where('id', $id)->first(['name']);
+        $data = $this->classifications->where('id', $id)->first();
         if($data)
-            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->name);
+            operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->name);
         return $this->response($res ? 1 : 990, ['id'=>$id]);    
     }
 }

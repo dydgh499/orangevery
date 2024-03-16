@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { requiredValidator, nullValidator, businessNumValidator } from '@validators'
-import type { UserPropertie } from '@/views/types'
-import FileInput from '@/layouts/utils/FileInput.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import FileInput from '@/layouts/utils/FileInput.vue'
 import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
-import { banks, avatars } from '@/views/users/useStore'
-import corp from '@corp'
+import type { UserPropertie } from '@/views/types'
+import { avatars, banks } from '@/views/users/useStore'
 import { axios } from '@axios'
+import corp from '@corp'
+import { nullValidator, requiredValidator } from '@validators'
 
 interface Props {
     item: UserPropertie,
@@ -80,7 +80,7 @@ watchEffect(() => {
                             <template #name>대표자명</template>
                             <template #input>
                                 <VTextField id="nickNameHorizontalIcons" v-model="props.item.nick_name"
-                                    prepend-inner-icon="tabler-user" placeholder="대표자명 입력" persistent-placeholder />
+                                    prepend-inner-icon="tabler-user" placeholder="대표자명 입력" persistent-placeholder maxlength="25"/>
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Address -->
@@ -107,7 +107,7 @@ watchEffect(() => {
                             <template #input>
                                 <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
                                     prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
-                                    persistent-placeholder :rules="[businessNumValidator]">
+                                    persistent-placeholder>
                                     <VTooltip activator="parent" location="top" v-if="corp.use_different_settlement">
                                         {{ "사업자번호를 입력하지 않거나, 정확하게 입력하지 않으면 차액정산대상에서 제외됩니다." }}
                                     </VTooltip>
@@ -120,14 +120,14 @@ watchEffect(() => {
                             <template #input>
                                 <VRow style="align-items: center;">
                                     <VCol :cols="5">
-                                        <VTextField v-model="props.item.resident_num_front" type="text"
+                                        <VTextField v-model="props.item.resident_num_front" type="number"
                                             prepend-inner-icon="carbon-identification" placeholder="800101" maxlength="6" />
                                     </VCol>
                                     <span> - </span>
                                     <VCol :cols="5">
                                         <VTextField v-model="props.item.resident_num_back" placeholder="*******" maxlength="7"
                                             :append-inner-icon="is_resident_num_back_show ? 'tabler-eye' : 'tabler-eye-off'"
-                                            :type="is_resident_num_back_show ? 'text' : 'password'" 
+                                            :type="is_resident_num_back_show ? 'number' : 'password'" 
                                             @click:append-inner="is_resident_num_back_show = !is_resident_num_back_show" />
                                     </VCol>
                                 </VRow>
@@ -141,15 +141,15 @@ watchEffect(() => {
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>계좌번호</template>
                             <template #input>
-                                <VTextField id="acctNumHorizontalIcons" v-model="props.item.acct_num"
-                                    prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력" persistent-placeholder />
+                                <VTextField type="text" v-model="props.item.acct_num"
+                                    prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력" maxlength="20" />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="3" :mdr="9">
                             <template #name>예금주</template>
                             <template #input>
-                                <VTextField id="acctNmHorizontalIcons" v-model="props.item.acct_name"
-                                    prepend-inner-icon="tabler-user" placeholder="예금주 입력" persistent-placeholder />
+                                <VTextField v-model="props.item.acct_name"
+                                    prepend-inner-icon="tabler-user" placeholder="예금주 입력" persistent-placeholder maxlength="40"/>
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="3" :mdr="9">

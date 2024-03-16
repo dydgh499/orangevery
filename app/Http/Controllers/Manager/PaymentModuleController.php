@@ -155,7 +155,7 @@ class PaymentModuleController extends Controller
                 return $res;
             });
 
-            operLogging(HistoryType::CREATE, $this->target, $data, $data['note']."(#".$res->id.")");
+            operLogging(HistoryType::CREATE, $this->target, [], $data, $data['note']."(#".$res->id.")");
             return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);
         }
         else
@@ -218,9 +218,10 @@ class PaymentModuleController extends Controller
                 if($res)
                     return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
             }
+            $before = $this->pay_modules->where('id', $id)->first();
             $res = $this->pay_modules->where('id', $id)->update($data);
 
-            operLogging(HistoryType::UPDATE, $this->target, $data, $data['note']."(#".$id.")");
+            operLogging(HistoryType::UPDATE, $this->target, $before, $data, $data['note']."(#".$id.")");
             return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
         }
         else
@@ -232,15 +233,15 @@ class PaymentModuleController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         if($this->authCheck($request->user(), $id, 15))
         {
-            $data = $this->pay_modules->where('id', $id)->first(['mcht_id', 'note']);
+            $data = $this->pay_modules->where('id', $id)->first();
             if($data)
             {
                 $res = $this->delete($this->pay_modules->where('id', $id));            
-                operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->note);
+                operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->note);
                 return $this->response($res, ['id'=>$id, 'mcht_id'=>$data->mcht_id]);    
             }
             else

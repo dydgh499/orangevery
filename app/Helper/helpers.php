@@ -379,7 +379,7 @@
         Log::error($msg, $data);
     }
 
-    function operLogging(HistoryType $history_type, $history_target, $history_detail, $history_title='', $brand_id='', $oper_id='')
+    function operLogging(HistoryType $history_type, $history_target, $before_history_detail, $after_history_detail, $history_title='', $brand_id='', $oper_id='')
     {
         $cond_1 = $history_type == HistoryType::LOGIN;
         $cond_2 = $history_type != HistoryType::LOGIN && isOperator(request());
@@ -389,7 +389,8 @@
                 'history_type' => $history_type->value,
                 'history_target' => $history_target,
                 'history_title'  => $history_title,
-                'history_detail' => json_encode($history_detail, JSON_UNESCAPED_UNICODE),
+                'before_history_detail' => json_encode($before_history_detail, JSON_UNESCAPED_UNICODE),
+                'after_history_detail' => json_encode($after_history_detail, JSON_UNESCAPED_UNICODE),
                 'brand_id' => $brand_id,
                 'oper_id' => $oper_id,
             ]);

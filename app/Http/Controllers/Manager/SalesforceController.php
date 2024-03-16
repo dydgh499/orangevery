@@ -127,7 +127,7 @@ class SalesforceController extends Controller
                 $user['user_pw'] = Hash::make($request->input('user_pw'));
                 $res = $this->salesforces->create($user);
 
-                operLogging(HistoryType::CREATE, $this->target, $user, $user['sales_name']);
+                operLogging(HistoryType::CREATE, $this->target, [], $user, $user['sales_name']);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);
             }
         }
@@ -172,14 +172,14 @@ class SalesforceController extends Controller
             else
             {
                 $query = $this->salesforces->where('id', $id);
-                $user = $query->first(['user_name']);
+                $user = $query->first();
                 // 아이디 중복 검사
                 if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $data['user_name']))
                     return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
                 else
                 {
                     $res = $query->update($data);
-                    operLogging(HistoryType::UPDATE, $this->target, $data, $data['sales_name']);
+                    operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['sales_name']);
                     return $this->response($res ? 1 : 990, ['id'=>$id]);    
                 }
             }
@@ -193,14 +193,14 @@ class SalesforceController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         if($this->authCheck($request->user(), $id, 15))
         {
             $res = $this->delete($this->salesforces->where('id', $id));
-            $data = $this->salesforces->where('id', $id)->first(['sales_name']);
+            $data = $this->salesforces->where('id', $id)->first();
 
-            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->sales_name);
+            operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->sales_name);
             return $this->response($res ? 1 : 990, ['id'=>$id]);
         }
         else

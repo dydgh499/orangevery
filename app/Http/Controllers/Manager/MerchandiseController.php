@@ -210,7 +210,7 @@ class MerchandiseController extends Controller
                     $user['user_pw'] = Hash::make($request->input('user_pw'));
                     $res = $this->merchandises->create($user);
                     
-                    operLogging(HistoryType::CREATE, $this->target, $user, $user['mcht_name']);
+                    operLogging(HistoryType::CREATE, $this->target, [], $user, $user['mcht_name']);
                     return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
                 }
             }
@@ -257,7 +257,7 @@ class MerchandiseController extends Controller
             else
             {
                 $query = $this->merchandises->where('id', $id);
-                $user = $query->first(['user_name']);
+                $user = $query->first();
                 // 변경된 아이디가 이미 존재할 떄
                 if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $request->user_name))
                     return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
@@ -265,7 +265,7 @@ class MerchandiseController extends Controller
                 {
                     $data = $this->saveImages($request, $data, $this->imgs);
                     $res = $query->update($data);
-                    operLogging(HistoryType::UPDATE, $this->target, $data, $data['mcht_name']);
+                    operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['mcht_name']);
                     return $this->response($res ? 1 : 990, ['id'=>$id]);    
                 }
                 
@@ -280,15 +280,14 @@ class MerchandiseController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
+        $data = $this->merchandises->where('id', $id)->first();
         $res = $this->delete($this->merchandises->where('id', $id));
         $res = $this->delete($this->pay_modules->where('mcht_id', $id));
         $res = $this->delete(NotiUrl::where('mcht_id', $id));
 
-        $data = $this->merchandises->where('id', $id)->first(['mcht_name']);
-
-        operLogging(HistoryType::DELETE, $this->target, ['id' => $id], $data->mcht_name);
+        operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->mcht_name);
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 

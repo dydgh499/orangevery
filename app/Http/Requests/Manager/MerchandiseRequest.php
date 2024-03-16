@@ -73,6 +73,7 @@ class MerchandiseRequest extends FormRequest
             'mcht_name' => 'required',
             'addr'      => 'required',
             'acct_bank_name' => 'required',
+            'acct_num'  => 'nullable|max:30',
             'enabled' => 'required|boolean',
             'use_saleslip_prov' => 'required|boolean',
             'use_saleslip_sell' => 'required|boolean',
@@ -94,20 +95,6 @@ class MerchandiseRequest extends FormRequest
     public function attributes()
     {
         return $this->getAttributes($this->keys);
-    }
-
-    protected function prepareForValidation()
-    {
-        $this->merge(['enabled' => $this->convertToBoolean($this->input('enabled'))]);
-        $this->merge(['use_noti' => $this->convertToBoolean($this->input('use_noti'))]);
-        $this->merge(['use_saleslip_prov' => $this->convertToBoolean($this->input('use_saleslip_prov'))]);
-        $this->merge(['use_saleslip_sell' => $this->convertToBoolean($this->input('use_saleslip_sell'))]);
-        $this->merge(['is_hide_account' => $this->convertToBoolean($this->input('is_hide_account', 0))]);       
-        $this->merge(['is_show_fee'     => $this->convertToBoolean($this->input('is_show_fee'))]);
-        $this->merge(['use_regular_card' => $this->convertToBoolean($this->input('use_regular_card'))]);
-        $this->merge(['use_collect_withdraw' => $this->convertToBoolean($this->input('use_collect_withdraw'))]);
-        $this->merge(['use_pay_verification_mobile' => $this->convertToBoolean($this->input('use_pay_verification_mobile', 0))]);
-        $this->merge(['use_multiple_hand_pay' => $this->convertToBoolean($this->input('use_multiple_hand_pay', 0))]);
     }
 
     public function bodyParameters()

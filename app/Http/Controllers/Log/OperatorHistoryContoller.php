@@ -47,7 +47,7 @@ class OperatorHistoryContoller extends Controller
             $query = $query->where(function ($query) use ($search) {
                 return $query->where('operators.nick_name', 'like', "%$search%")
                     ->orWhere('operator_histories.history_title', 'like', "%$search%")
-                    ->orWhere('operator_histories.history_detail', 'like', "%$search%");
+                    ->orWhere('operator_histories.after_history_detail', 'like', "%$search%");
             });
         }
 
@@ -75,43 +75,80 @@ class OperatorHistoryContoller extends Controller
             'history_type' => $request->history_type,
             'history_title' => $request->history_title,
             'history_target' => $request->history_target,
-            'history_detail' => $request->history_detail,
+            'before_history_detail' => $request->before_history_detail,
+            'after_history_detail' => $request->after_history_detail,
         ];
         return $this->operator_histories->create($data);
     }
 
-    private function paidOptionFilter($data)
+    private function paidOptionFilter($data, $history_detail)
     {
-        $conv_history_detail = json_decode($data->history_detail, true);
-        $pv_options = new PvOptions($data->pv_options);
-        
-        if($pv_options->paid->use_issuer_filter === false)
-            unset($conv_history_detail['filter_issuers']);
-        if($pv_options->paid->use_forb_pay_time === false)
+        if(strlen($history_detail))
         {
-            unset($conv_history_detail['pay_disable_s_tm']);   
-            unset($conv_history_detail['pay_disable_e_tm']);            
+            $conv_history_detail = json_decode($history_detail, true);
+            $pv_options = new PvOptions($data->pv_options);
+            
+            if($pv_options->paid->use_issuer_filter === false)
+                unset($conv_history_detail['filter_issuers']);
+            if($pv_options->paid->use_forb_pay_time === false)
+            {
+                unset($conv_history_detail['pay_disable_s_tm']);   
+                unset($conv_history_detail['pay_disable_e_tm']);            
+            }
+            if($pv_options->paid->use_pay_limit === false)
+            {
+                unset($conv_history_detail['pay_year_limit']);   
+                unset($conv_history_detail['pay_month_limit']);   
+                unset($conv_history_detail['pay_day_limit']);
+                unset($conv_history_detail['pay_single_limit']);            
+            }
+            if($pv_options->paid->use_regular_card === false)
+                unset($conv_history_detail['use_regular_card']);
+            if($pv_options->paid->use_collect_withdraw === false)
+                unset($conv_history_detail['use_collect_withdraw']);  
+            if($pv_options->paid->use_noti === false)
+                unset($conv_history_detail['use_noti']);
+            if(isset($conv_history_detail['brand_id']))
+                unset($conv_history_detail['brand_id']);
+            if($pv_options->paid->use_collect_withdraw === false)
+                unset($conv_history_detail['collect_withdraw_fee']);
+            
+            if($pv_options->paid->use_hide_account === false)
+                unset($conv_history_detail['is_hide_account']);
+    
+            if($pv_options->paid->use_multiple_hand_pay === false)
+                unset($conv_history_detail['use_multiple_hand_pay']);    
+            if($pv_options->paid->use_pay_verification_mobile === false)
+                unset($conv_history_detail['use_pay_verification_mobile']);
+    
+            if($pv_options->paid->use_settle_hold === false)
+            {
+                unset($conv_history_detail['settle_hold_s_dt']);
+                unset($conv_history_detail['settle_hold_reason']);
+            }
+            if($pv_options->paid->use_noti === false)
+                unset($conv_history_detail['use_noti']);
+            
+            if($data->use_different_settlement === false)
+            {
+                unset($conv_history_detail['website_url']);
+                unset($conv_history_detail['email']);
+            }
+            if($pv_options->paid->use_pmid === false)
+                unset($conv_history_detail['p_mid']);
+    
+            unset($conv_history_detail['user_pw']);
+    
+            $history_detail = [];
+            foreach($conv_history_detail as $key => $value)
+            {
+                $history_detail[__('validation.attributes.'.$key)] = $conv_history_detail[$key];
+            }
+            return $history_detail;
         }
-        if($pv_options->paid->use_pay_limit === false)
-        {
-            unset($conv_history_detail['pay_year_limit']);   
-            unset($conv_history_detail['pay_month_limit']);   
-            unset($conv_history_detail['pay_day_limit']);
-            unset($conv_history_detail['pay_single_limit']);            
-        }
-        if($pv_options->paid->use_regular_card === false)
-            unset($conv_history_detail['use_regular_card']);
-        if($pv_options->paid->use_collect_withdraw === false)
-            unset($conv_history_detail['use_collect_withdraw']);  
-        if($pv_options->paid->use_noti === false)
-            unset($conv_history_detail['use_noti']);
-        if(isset($conv_history_detail['brand_id']))
-            unset($conv_history_detail['brand_id']);
-        if($pv_options->paid->use_collect_withdraw == false)
-            unset($conv_history_detail['collect_withdraw_fee']);
-        
-        unset($conv_history_detail['user_pw']);
-        return $conv_history_detail;
+        else
+            return [];
+
     }
 
     /**
@@ -127,15 +164,10 @@ class OperatorHistoryContoller extends Controller
             ->join('operators', 'operator_histories.oper_id', '=', 'operators.id')
             ->join('brands', 'operator_histories.brand_id', '=', 'brands.id')
             ->where('operator_histories.id', $id)
-            ->first(['operator_histories.*', 'operators.nick_name', 'brands.pv_options']);
+            ->first(['operator_histories.*', 'operators.nick_name', 'brands.pv_options', 'brands.use_different_settlement']);
 
-        $history_detail = $this->paidOptionFilter($data);
-        $conv_history_detail = [];
-        foreach($history_detail as $key => $value)
-        {
-            $conv_history_detail[__('validation.attributes.'.$key)] = $history_detail[$key];
-        }
-        $data->history_detail = $conv_history_detail;
+        $data->before_history_detail = $this->paidOptionFilter($data, $data->before_history_detail);
+        $data->after_history_detail  = $this->paidOptionFilter($data, $data->after_history_detail);
         return $this->response($data ? 0 : 1000, $data);
     }
 

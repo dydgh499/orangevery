@@ -185,7 +185,7 @@ class TransactionController extends Controller
             {
                 [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
                 $res = $this->transactions->create($data);
-                operLogging(HistoryType::CREATE, $this->target, $data, "#".$res->id);
+                operLogging(HistoryType::CREATE, $this->target, [], $data, "#".$res->id);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
             }
         }
@@ -244,7 +244,7 @@ class TransactionController extends Controller
 
             [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
             $res = $this->transactions->where('id', $id)->update($data);
-            operLogging(HistoryType::UPDATE, $this->target, $data, "#".$id);
+            operLogging(HistoryType::UPDATE, $this->target, $tran, $data, "#".$id);
             return $this->response($res ? 1 : 990, ['id'=>$id]);
         }
         catch(QueryException $ex)
@@ -261,12 +261,12 @@ class TransactionController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         if($this->authCheck($request->user(), $id, 35))
         {
             $res = $this->transactions->where('id', $id)->delete();
-            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], "#".$id);
+            operLogging(HistoryType::DELETE, $this->target, ['id' => $id], ['id' => $id], "#".$id);
             return $this->response($res ? 1 : 990, ['id'=>$id]);
         }
         else
@@ -294,7 +294,7 @@ class TransactionController extends Controller
         {
             [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
             $res = $this->transactions->create($data);
-            operLogging(HistoryType::CREATE, $this->target, $data, "#".$res->id);
+            operLogging(HistoryType::CREATE, $this->target, [], $data, "#".$res->id);
             return $this->response(1);
         }
         catch(QueryException $ex)

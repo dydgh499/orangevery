@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { OperatorHistory } from '@/views/types'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import { history_types } from '@/views/services/operator-histories/useStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { history_types } from '@/views/services/operator-histories/useStore'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import { OperatorHistory } from '@/views/types'
 import corp from '@corp'
 
 const visible = ref(false)
@@ -12,32 +12,33 @@ const store = <any>(inject('store'))
 const { mchts, all_sales } = useSalesFilterStore()
 const { pgs, pss, settle_types, terminals, finance_vans } = useStore()
 
-const changeKeyName = () => {
+const changeKeyName = (history_detail: any) => {
     const keys = [
         'sales0_id','sales1_id','sales2_id','sales3_id','sales4_id','sales5_id',    
         'sales0_fee','sales1_fee','sales2_fee','sales3_fee','sales4_fee','sales5_fee',
     ]
     keys.forEach((key) => {
-        if("validation.attributes." + key in history.value.history_detail) {
+        if("validation.attributes." + key in history_detail) {
             const level = key.slice(0, 6)
             let key_name = corp.pv_options.auth.levels[level+'_name']
             if(key.includes('fee')) {
                 key_name += ' 수수료';
-                history.value.history_detail['validation.attributes.'+key] *= 100
+                history_detail['validation.attributes.'+key] *= 100
             }
-            history.value.history_detail[key_name] =  history.value.history_detail['validation.attributes.'+key]
-            delete history.value.history_detail['validation.attributes.'+key]
+            history_detail[key_name] =  history_detail['validation.attributes.'+key]
+            delete history_detail['validation.attributes.'+key]
         }
     })
-    replaceIdtoName()
+    replaceIdtoName(history_detail)
+    return history_detail
 }
 
-const replaceIdtoName = () => {
+const replaceIdtoName = (history_detail: any) => {
     const levels = corp.pv_options.auth.levels
     const _replaceToName = (lists: any[], key: string, name: string) => {
-        if(key in history.value.history_detail) {
-            const value = lists.find(obj => obj.id == history.value.history_detail[key])
-            history.value.history_detail[key] = value ? value[name] : history.value.history_detail[key]
+        if(key in history_detail) {
+            const value = lists.find(obj => obj.id == history_detail[key])
+            history_detail[key] = value ? value[name] : history_detail[key]
         }
     }
     _replaceToName(pgs, "PG사", 'pg_name')
@@ -58,7 +59,22 @@ const replaceIdtoName = () => {
 const show = (_history: any) => {
     visible.value = true
     history.value = _history
-    changeKeyName()
+    history.value.before_history_detail = changeKeyName(history.value.before_history_detail)
+    history.value.after_history_detail = changeKeyName(history.value.after_history_detail)
+    if(history.value.history_target === '구분 정보') {
+        if(history.value.before_history_detail['타입'] === 0) {
+            delete history.value.after_history_detail['타입']
+            delete history.value.before_history_detail['타입']
+            history.value.after_history_detail['구분 타입'] = '장비'
+            history.value.before_history_detail['구분 타입'] = '장비'
+        }
+        else if(history.value.before_history_detail['타입'] === 1) {
+            delete history.value.after_history_detail['타입']
+            delete history.value.before_history_detail['타입']
+            history.value.after_history_detail['구분 타입'] = '커스텀 필터'
+            history.value.before_history_detail['구분 타입'] = '커스텀 필터'
+        }
+    }
 }
 
 const title = computed(() => {
@@ -68,12 +84,19 @@ const title = computed(() => {
         return ""
 })
 
+const isChangeColor = (before: any, after: any) => {
+    if(before !== after)
+        return 'list-square text-error'
+    else
+        return 'list-square'
+}
+
 defineExpose({
     show
 });
 </script>
 <template>
-    <VDialog v-model="visible" max-width="800">
+    <VDialog v-model="visible" max-width="1200">
         <!-- Dialog close btn -->
         <DialogCloseBtn @click="visible = false" />
         <!-- Dialog Content -->
@@ -98,13 +121,15 @@ defineExpose({
                     <thead>
                         <tr>
                             <th class='list-square'>적용대상</th>
-                            <th class='list-square'>적용값</th>
+                            <th class='list-square'>이전 값</th>
+                            <th class='list-square'>변경 값</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(hist, key) in history.history_detail" :key="key">
+                        <tr v-for="(hist, key) in history.after_history_detail" :key="key">
                             <th class='list-square'>{{ key }}</th>
-                            <td class='list-square'>{{ hist }}</td>
+                            <td class='list-square'>{{ history.before_history_detail[key] }}</td>
+                            <td :class="isChangeColor(history.before_history_detail[key], hist)">{{ hist }}</td>
                         </tr>
                     </tbody>
                 </VTable>

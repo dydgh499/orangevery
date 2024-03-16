@@ -136,6 +136,7 @@ return [
         'favicon_img' => 'favicon 아이콘',
         'passbook_img'  => '통장 사본 이미지',
         'contract_img'  => '계약서 이미지',
+        'bsin_lic_img'  => '사업자 등록증 이미지',
         'id_img'    => '신분증 사본 이미지',
         'og_img'    => '오픈 그래프 이미지',
         'logo_file'  => '로고 이미지',
@@ -156,6 +157,7 @@ return [
         'company_name'    => '법인 상호',
         'business_num'  => '사업자등록번호',
         'sales_name' => '영업점 상호',
+        'is_able_modify_mcht' => '영업점 수정가능 여부',
         'view_type'  => '화면타입',
         'settle_tax_type' => '정산 세율',
         'settle_cycle' => '정산 주기',
@@ -199,8 +201,17 @@ return [
         'sales3_fee' => "수수료",
         'sales4_fee' => "수수료",
         'sales5_fee' => "수수료",
-        'code'=> '제품 ID',
-        'context'=> '상세설명',
+
+        'settle_hold_s_dt' => '지급보류 시작일',
+        'settle_hold_reason' => '지급보류 사유',
+        
+        'website_url' => '웹사이트 URL',
+        'email' => '이메일',
+        'use_noti' => '노티 사용여부',
+
+        'use_pay_verification_mobile' => '결제전 휴대폰 인증 사용여부',
+        'use_multiple_hand_pay' => '다중결제 사용여부',
+        'is_hide_account' => '정산계좌 숨김여부',
         //payment_modules
         'pg_id' => 'PG사',
         'ps_id' => '구간',
@@ -248,6 +259,7 @@ return [
         'terminal_id' => '장비',
         'api_key' => 'API KEY',
         'sub_key' => 'SUB KEY(License)',
+        'p_mid' => 'PMID',
         'mid' => 'MID',
         'serial_num' => '시리얼번호',
         'ship_out_stat' => '출고 상태',

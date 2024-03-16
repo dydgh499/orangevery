@@ -818,7 +818,8 @@ export interface OperatorHistory {
     history_type: number,
     history_title: string,
     history_target: string,
-    history_detail: any,
+    before_history_detail: any,
+    after_history_detail: any,
     created_at: string,
 }
 
