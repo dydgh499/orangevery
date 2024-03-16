@@ -275,18 +275,18 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('merchandises.business_num', '!=', '')
                 ->where('payment_gateways.pg_type', $brand->pg_type)
                 ->where('transactions.brand_id', $brand->brand_id)
+                ->where('transactions.trx_dt', '!=', '2024-03-06')
+                ->where('transactions.trx_dt', '!=', '2024-03-15')
+                ->where('transactions.cxl_dt', '!=', '2024-03-06')
+                ->where('transactions.trx_dt', '!=', '2024-03-15')
                 ->where(function ($query) use ($yesterday) {
                     $query->where(function ($query) use ($yesterday) {                        
                         $query->where('transactions.trx_dt', '<=', $yesterday)
                             ->where('transactions.trx_dt', '>=', '2024-02-28')
-                            ->where('transactions.trx_dt', '!=', '2024-03-06')
-                            ->where('transactions.trx_dt', '!=', '2024-03-15')
                             ->where('transactions.is_cancel', false);
                     })->orWhere(function ($query) use ($yesterday) {
                         $query->where('transactions.cxl_dt', '<=', $yesterday)
                         ->where('transactions.cxl_dt', '>=', '2024-02-28')
-                        ->where('transactions.cxl_dt', '!=', '2024-03-06')
-                        ->where('transactions.trx_dt', '!=', '2024-03-15')
                         ->where('transactions.is_cancel', true);
                     });
                 })
