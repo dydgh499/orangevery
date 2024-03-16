@@ -42,6 +42,9 @@ class OperatorHistoryContoller extends Controller
         $query  = $this->operator_histories
             ->join('operators', 'operator_histories.oper_id', '=', 'operators.id')
             ->where('operator_histories.brand_id', $request->user()->brand_id);
+            
+        if($request->history_type !== null)
+            $query = $query->where('operator_histories.history_type', $request->history_type);
         if($search != '')
         {
             $query = $query->where(function ($query) use ($search) {
