@@ -278,7 +278,7 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('transactions.trx_dt', '!=', '2024-03-06')
                 ->where('transactions.trx_dt', '!=', '2024-03-15')
                 ->where('transactions.cxl_dt', '!=', '2024-03-06')
-                ->where('transactions.trx_dt', '!=', '2024-03-15')
+                ->where('transactions.cxl_dt', '!=', '2024-03-15')
                 ->where(function ($query) use ($yesterday) {
                     $query->where(function ($query) use ($yesterday) {                        
                         $query->where('transactions.trx_dt', '<=', $yesterday)
