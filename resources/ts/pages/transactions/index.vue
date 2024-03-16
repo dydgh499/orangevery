@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
-import { useSearchStore, realtimeResult } from '@/views/transactions/useStore'
-import { useRequestStore } from '@/views/request'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import { selectFunctionCollect } from '@/views/selected'
-import ExtraMenu from '@/views/transactions/ExtraMenu.vue'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
-import CancelTransDialog from '@/layouts/dialogs/CancelTransDialog.vue'
-import CancelPartDialog from '@/layouts/dialogs/CancelPartDialog.vue'
 import CancelDepositDialog from '@/layouts/dialogs/CancelDepositDialog.vue'
+import CancelPartDialog from '@/layouts/dialogs/CancelPartDialog.vue'
+import CancelTransDialog from '@/layouts/dialogs/CancelTransDialog.vue'
 import RealtimeHistoriesDialog from '@/layouts/dialogs/RealtimeHistoriesDialog.vue'
+import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
+import { useRequestStore } from '@/views/request'
+import { selectFunctionCollect } from '@/views/selected'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import ExtraMenu from '@/views/transactions/ExtraMenu.vue'
+import { realtimeResult, useSearchStore } from '@/views/transactions/useStore'
 
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import { user_info, getUserLevel, salesLevels } from '@axios'
 import type { Options } from '@/views/types'
+import { getUserLevel, salesLevels, user_info } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
@@ -128,10 +128,16 @@ onMounted(() => {
                     </template>
                     <template #pg_extra_field>
                         <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
-                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
                                 item-value="id"
-                                @update:modelValue="store.updateQueryString({ mcht_settle_type: store.params.mcht_settle_type })" />
+                                @update:modelValue="store.updateQueryString({ mcht_settle_type: store.params.mcht_settle_type })" />                                
+                        </VCol>
+                        <VCol cols="12" sm="3">
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"
+                                    :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 필터" item-title="title"
+                                    item-value="id"
+                                    @update:modelValue="[store.updateQueryString({ module_type: store.params.module_type })]" />
                         </VCol>
                     </template>
                 </BaseIndexFilterCard>
