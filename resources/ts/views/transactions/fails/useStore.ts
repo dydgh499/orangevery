@@ -11,6 +11,8 @@ export const useSearchStore = defineStore('failSearchStore', () => {
     const { pgs, pss } = useStore()
     const headers = {
         'id': 'NO.',
+        'pg_id': 'PG사',
+        'ps_id': '구간',
         'mcht_name': '가맹점 상호',
         'module_type': '거래타입',
         'amount': '결제시도 금액',

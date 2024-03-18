@@ -3,8 +3,9 @@ import { Searcher } from '@/views/searcher'
 import type { Complaint, Options } from '@/views/types'
 
 export const complaint_types = <Options[]>[
-    { id: 1, title: '유사수신' }, { id: 2, title: '유사투자' },
-    { id: 3, title: '단순소명' }, { id: 4, title: '기타' },
+    { id: 1, title: '본인미사용' }, { id: 2, title: '유사투자' },
+    { id: 3, title: '거래내역' }, { id: 4, title: '취소요청' },
+    { id: 5, title: '단순소명' }, { id: 6, title: '기타' },
 ]
 export const complaint_statuses = <Options[]>[
     { id: 0, title: '처리전' }, { id: 1, title: '처리중' },

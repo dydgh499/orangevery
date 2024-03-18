@@ -47,19 +47,19 @@ export const useRequestStore = defineStore('requestStore', () => {
             }
             if (is_redirect) {
                 if (back_url === '/merchandises/pay-modules')
-                    setTimeout(function () { router.push('/merchandises/edit/' + res.data.mcht_id) }, 500)
+                    setTimeout(function () { router.replace('/merchandises/edit/' + res.data.mcht_id) }, 500)
                 else if (back_url === '/merchandises/noti-urls')
-                    setTimeout(function () { router.push('/merchandises/edit/' + res.data.mcht_id) }, 500)
+                    setTimeout(function () { router.replace('/merchandises/edit/' + res.data.mcht_id) }, 500)
                 else if (back_url === '/merchandises/regular-credit-cards')
-                    setTimeout(function () { router.push('/merchandises/edit/' + res.data.mcht_id) }, 500)            
+                    setTimeout(function () { router.replace('/merchandises/edit/' + res.data.mcht_id) }, 500)            
                 else if (back_url === '/salesforces/under-auto-settings')
-                    setTimeout(function () { router.push('/salesforces/edit/' + res.data.sales_id) }, 500)        
+                    setTimeout(function () { router.replace('/salesforces/edit/' + res.data.sales_id) }, 500)        
                 else if (back_url === '/salesforces')
                     setTimeout(function () { router.push('/salesforces/edit/' + res.data.id) }, 500)
                 else if (back_url === '/merchandises')
                     setTimeout(function () { router.push('/merchandises/edit/' + res.data.id) }, 500)
                 else
-                    setTimeout(function () { router.back() }, 1000)
+                    setTimeout(function () { router.replace(back_url) }, 1000)
             }
         }
     }

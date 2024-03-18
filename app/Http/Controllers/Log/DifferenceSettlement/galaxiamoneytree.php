@@ -22,20 +22,19 @@ class galaxiamoneytree extends DifferenceSettlement implements DifferenceSettlem
         $dr_config_name     = 'different_settlement_dr'.$this->service_name;
         config(['filesystems.disks.'.$main_config_name => [
             'driver' => 'sftp',
-            'host' => "119.207.70.214",
+            'host' => "119.207.70.214", //상용 서버
             'port' => 22,
             'username' => $brand['sftp_id'],
             'password' => $brand['sftp_password'],
             'passive' => false,
         ]]);
-
         config(['filesystems.disks.'.$dr_config_name => [
             'driver' => 'sftp',
-            'host' => "119.207.70.214",
+            'host' => "121.156.124.230",    // 개발 서버
             'port' => 22,
             'username' => $brand['sftp_id'],
             'password' => $brand['sftp_password'],
-            'passive' => false,            
+            'passive' => false,
         ]]);
         [$this->main_sftp_connection, $this->main_connection_stat] = $this->connectSFTPServer($main_config_name, 'main');
         [$this->dr_sftp_connection, $this->dr_connection_stat] = $this->connectSFTPServer($dr_config_name, 'dr');      
@@ -44,21 +43,21 @@ class galaxiamoneytree extends DifferenceSettlement implements DifferenceSettlem
     public function request(Carbon $date, $trans)
     {
         $req_date = $date->format('Ymd');
-        $save_path = "/".$this->brand['rep_mid']."_REQUEST.".$req_date;
+        $save_path = "/request/".$this->brand['rep_mid']."_REQUEST.".$req_date;
         return $this->_request($save_path, $req_date, $trans);
     }
 
     public function response(Carbon $date)
     {
         $req_date = $date->copy()->format('Ymd');
-        $res_path = "/".$this->brand['rep_mid']."_RECEIVE.".$req_date;
+        $res_path = "/receive/".$this->brand['rep_mid']."_RECEIVE.".$req_date;
         return $this->_response($res_path, $req_date);
     }
 
     public function registerRequest(Carbon $date, $mchts, $sub_business_regi_infos)
     {
         $req_date = $date->format('Ymd');
-        $save_path = "/".$this->brand['rep_mid']."_REQUEST_INFO.".$req_date;
+        $save_path = "/request/".$this->brand['rep_mid']."_REQUEST_INFO.".$req_date;
         return $this->_registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos);
     }
     

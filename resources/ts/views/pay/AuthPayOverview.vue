@@ -32,7 +32,6 @@ const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
 })
 
-
 const isMobile = () => {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 }

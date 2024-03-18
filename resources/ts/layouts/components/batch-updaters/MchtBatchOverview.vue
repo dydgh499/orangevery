@@ -154,8 +154,6 @@ const setNotiUrl = () => {
         'note': noti.noti_note,
     })
 }
-
-
 initAllSales()
 </script>
 <template>

@@ -9,30 +9,30 @@ export function settlementHistoryFunctionCollect(store: any) {
     const { printer } = useSearchStore()
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
-    
+
     const rootUrlBuilder = (is_mcht: boolean, id: number) => {
-        const type  = is_mcht ? 'merchandises' : 'salesforces'
+        const type = is_mcht ? 'merchandises' : 'salesforces'
         return '/api/v1/manager/transactions/settle-histories/' + type + '/' + id.toString()
     }
 
     const deposit = async (item: SettlesHistories, is_mcht: boolean, params: any) => {
         const deposit_after_text = item.deposit_status ? '입금취소처리' : '입금처리'
-        if (await alert.value.show('정말 ' + deposit_after_text + ' 하시겠습니까?')) {         
+        if (await alert.value.show('정말 ' + deposit_after_text + ' 하시겠습니까?')) {
             params.current_status = Number(item.deposit_status)
-            
+
             await post(rootUrlBuilder(is_mcht, item.id) + '/deposit', params, true)
             store.setTable()
         }
     }
 
-    const batchDeposit = async(selected:number[], is_mcht: boolean, params:any) => {
+    const batchDeposit = async (selected: number[], is_mcht: boolean, params: any) => {
         if (await alert.value.show('정말 일괄 입금/입금취소처리 하시겠습니까?')) {
             params.data = []
             for (let i = 0; i < selected.length; i++) {
-                const item:SettlesHistories = store.items.find(obj => obj['id'] === selected[i])
+                const item: SettlesHistories = store.items.find(obj => obj['id'] === selected[i])
                 params.data.push({
                     id: item.id,
-                    current_status : Number(item.deposit_status),
+                    current_status: Number(item.deposit_status),
                 })
             }
             await post('/api/v1/manager/transactions/settle-histories/' + (is_mcht ? 'merchandises' : 'salesforces') + '/batch-deposit', params, true)
@@ -52,10 +52,10 @@ export function settlementHistoryFunctionCollect(store: any) {
                         use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
                     },
                 })
-                if(res.status === 201) {
+                if (res.status === 201) {
                     snackbar.value.show('성공하였습니다.', 'success')
                     store.setTable()
-                }    
+                }
             }
             catch (e: any) {
                 snackbar.value.show(e.response.data.message, 'error')
@@ -84,7 +84,7 @@ export function settlementHistoryFunctionCollect(store: any) {
             }
         }
     }
-    
+
     const download = async (item: SettlesHistories, is_mcht: boolean) => {
         if (await alert.value.show('정산매출을 다운로드 하시겠습니까?')) {
             const params:Record<string, string|number> = {

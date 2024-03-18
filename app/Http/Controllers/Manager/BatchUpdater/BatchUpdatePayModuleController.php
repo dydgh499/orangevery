@@ -29,7 +29,6 @@ class BatchUpdatePayModuleController extends Controller
         $this->pay_modules = $pay_modules;
     }
 
-    
     /**
      * 결제모듈 가져오기
      */

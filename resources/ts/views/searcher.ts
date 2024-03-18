@@ -122,7 +122,7 @@ export const Searcher = (path: string) => {
             params.page = 1
             query.page = 1
         }
-        router.push({query: query})
+        router.replace({query: query})
         if(is_chart_update) {
             setChartProcess()
         }

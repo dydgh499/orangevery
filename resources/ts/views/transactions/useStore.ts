@@ -141,7 +141,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     if(getUserLevel() >= 13)
     {
         headers['mid'] = 'MID'
-        headers['tid'] = 'TID'    
+        headers['tid'] = 'TID'
     }
     headers['issuer'] = '발급사'
 

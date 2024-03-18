@@ -161,13 +161,38 @@ class galaxiamoneytree implements DifferenceSettlementInterface
             ];
             $yesterday = Carbon::now()->subDay(1)->format('Ymd');
             for ($i=0; $i < count($sub_business_regi_infos); $i++) 
-            { 
+            {
                 $sub_business_regi_info = $sub_business_regi_infos[$i];
                 $mcht = $mchts->first(function ($mcht) use ($sub_business_regi_info) {
                     return $mcht->business_num === $sub_business_regi_info->business_num;
                 });
                 if($mcht)
                 {
+                    if(substr_count($mcht->phone_num, '-') === 2)
+                    {
+                        $nums = explode('-', $mcht->phone_num);
+                        $region_num = $nums[0];
+                        $number_1 = $nums[1];
+                        $number_2 = $nums[2];
+                    }
+                    else if(strlen($mcht->phone_num) === 9)
+                    {
+                        $region_num = substr($mcht->phone_num, 0, 2);
+                        $number_1 = substr($mcht->phone_num, 2, 4);
+                        $number_2 = substr($mcht->phone_num, 6, 4);
+                    }
+                    else if(strlen($mcht->phone_num) === 10)
+                    {
+                        $region_num = substr($mcht->phone_num, 0, 3);
+                        $number_1 = substr($mcht->phone_num, 3, 4);
+                        $number_2 = substr($mcht->phone_num, 7, 4);
+                    }
+                    else
+                    {
+                        $region_num = '02';
+                        $number_1 = '1234';
+                        $number_2 = '5678';
+                    }
                     $records = $this->setAtypeField("RD", 2);
                     $records .= $this->setNtypeField($sub_business_regi_info->registration_type, 2);
                     $records .= $this->setNtypeField(str_replace('-', '', $brand['business_num']), 10).
@@ -176,13 +201,12 @@ class galaxiamoneytree implements DifferenceSettlementInterface
 
                     $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->sector), 20);
                     $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->mcht_name), 40);
-                    $records .= $this->setNtypeField('', 6);   //우편번호
+                    $records .= $this->setNtypeField('00000', 6);   //우편번호
                     $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->addr), 100);
                     $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->nick_name), 40);
-                    $records .= $this->setNtypeField(str_replace('-', '', $mcht->phone_num), 11);
-                    $records .= $this->setNtypeField('', 3);   //지역번호 필드
-                    $records .= $this->setNtypeField('', 4);   //국번번호 필드
-                    $records .= $this->setNtypeField('', 4);   //개별번호 필드
+                    $records .= $this->setNtypeField($region_num, 3);  //지역번호 필드
+                    $records .= $this->setNtypeField($number_1, 4);   //국번번호 필드
+                    $records .= $this->setNtypeField($number_2, 4);   //개별번호 필드
                     $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->email), 40);   //이메일 필드
                     $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->website_url), 80);   //웹사이트 URL 필드
                     $records .= $this->setNtypeField($yesterday, 8);
@@ -190,7 +214,7 @@ class galaxiamoneytree implements DifferenceSettlementInterface
                     $records .= $this->setAtypeField('', 116);
                     $records .= "\r\n";
                     $full_records .= $records;
-                    
+
                     if($sub_business_regi_info->registration_type === 0)
                         $upload['new_count']++;
                     else if($sub_business_regi_info->registration_type === 1)

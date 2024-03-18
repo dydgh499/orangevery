@@ -149,7 +149,7 @@ class MchtSettleHistoryController extends Controller
         }
         if(count($fail_res))
         {
-            $message = "일괄작업에 실패한 정산건들이 존재합니다.\n\n".json_encode($fail_res, JSON_UNESCAPED_UNICODE);
+            $message = "일괄작업에 실패한 정산건들이 존재합니다.<br><br>".json_encode($fail_res, JSON_UNESCAPED_UNICODE);
             return $this->extendResponse(2000, $message);
         }
         else

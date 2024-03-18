@@ -49,86 +49,110 @@ const addAbleSalesLevels = () => {
                 <VCardItem>
                     <VCardTitle>영업점정보</VCardTitle>
                     <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>영업점 상호</template>
-                            <template #input>
-                                <VTextField v-model="props.item.sales_name" prepend-inner-icon="tabler-building-store"
-                                    placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="3" :mdr="9" v-if="getUserLevel() >= 35">
-                            <template #name>정산 세율</template>
-                            <template #input>
-                                <VRadioGroup v-model="props.item.settle_tax_type" inline :rules="[nullValidator]">
-                                    <VRadio v-for="(tax_type, key, index) in tax_types" :value="tax_type.id" :key="index">
-                                        <template #label>
-                                            <span>
-                                                {{ tax_type.title }}
-                                            </span>
-                                        </template>
-                                    </VRadio>
-                                </VRadioGroup>
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>
-                                정산 주기
-                            </template>
-                            <template #input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_cycle"
-                                    :items="all_cycles" prepend-inner-icon="icon-park-outline:cycle" label="정산 주기 선택"
-                                    item-title="title" item-value="id" persistent-hint single-line
-                                    :rules="[nullValidator]" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>
-                                정산 요일
-                            </template>
-                            <template #input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_day" :items="all_days"
-                                    prepend-inner-icon="icon-park-outline:cycle" label="정산 요일 선택" item-title="title"
-                                    item-value="id" persistent-hint single-line />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>
-                                <BaseQuestionTooltip :location="'top'" :text="'등급'" :content="'영업자 등급은 수정할 수 없습니다.'">
-                                </BaseQuestionTooltip>
-                            </template>
-                            <template #input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
-                                    :items="addAbleSalesLevels()" prepend-inner-icon="ph:share-network" label="영업자 등급 선택"
-                                    item-title="title" item-value="id" persistent-hint single-line :rules="[nullValidator]"
-                                    :readonly="props.item.id != 0" />
-                            </template>
-                        </CreateHalfVCol>
-                        <template v-if="getUserLevel() >= 35">
-                            <CreateHalfVCol :mdl="3" :mdr="9">
-                                <template #name>화면 타입</template>
-                                <template #input>
+                        <VCol cols="12">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>영업점 상호</VCol>
+                                        <VCol md="8">
+                                            <VTextField v-model="props.item.sales_name" prepend-inner-icon="tabler-building-store"
+                                                placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12" v-if="getUserLevel() >= 35">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>정산 주기</VCol>
+                                        <VCol md="8">
+                                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_cycle"
+                                                :items="all_cycles" prepend-inner-icon="icon-park-outline:cycle" label="정산 주기 선택"
+                                                item-title="title" item-value="id" persistent-hint single-line
+                                                :rules="[nullValidator]" />
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>정산 요일</VCol>
+                                        <VCol md="8"> 
+                                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_day" :items="all_days"
+                                                prepend-inner-icon="icon-park-outline:cycle" label="정산 요일 선택" item-title="title"
+                                                item-value="id" persistent-hint single-line />
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12" v-if="getUserLevel() >= 35">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>정산 세율</VCol>
+                                        <VCol md="8">
+                                            <VRadioGroup v-model="props.item.settle_tax_type" inline :rules="[nullValidator]">
+                                                <VRadio v-for="(tax_type, key, index) in tax_types" :value="tax_type.id" :key="index">
+                                                    <template #label>
+                                                        <span>
+                                                            {{ tax_type.title }}
+                                                        </span>
+                                                    </template>
+                                                </VRadio>
+                                            </VRadioGroup>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>                                            
+                                            <BaseQuestionTooltip :location="'top'" :text="'등급'" :content="'영업자 등급은 수정할 수 없습니다.'">
+                                            </BaseQuestionTooltip>
+                                        </VCol>
+                                        <VCol md="8">                                             
+                                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
+                                                :items="addAbleSalesLevels()" prepend-inner-icon="ph:share-network" label="영업자 등급 선택"
+                                                item-title="title" item-value="id" persistent-hint single-line :rules="[nullValidator]"
+                                                :readonly="props.item.id != 0" />
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12" v-if="getUserLevel() >= 35">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>화면 타입</VCol>
+                                        <VCol md="8">
                                     <BooleanRadio :radio="props.item.view_type"
                                         @update:radio="props.item.view_type = $event">
                                         <template #true>상세보기</template>
                                         <template #false>간편보기</template>
                                     </BooleanRadio>
-                                </template>
-                            </CreateHalfVCol>
-                            <CreateHalfVCol :mdl="3" :mdr="9">
-                                <template #name>하위 가맹점 수정권한</template>
-                                <template #input>
-                                    <BooleanRadio :radio="props.item.is_able_modify_mcht"
-                                        @update:radio="props.item.is_able_modify_mcht = $event">
-                                        <template #true>가능</template>
-                                        <template #false>불가능</template>
-                                    </BooleanRadio>
-                                </template>
-                            </CreateHalfVCol>
-                            <VCol>
-                                <VTextarea v-model="props.item.note" counter label="메모사항"
-                                    prepend-inner-icon="twemoji-spiral-notepad" maxlength="95" auto-grow />
-                            </VCol>
-                        </template>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>하위 가맹점 수정권한</VCol>
+                                        <VCol md="6">                                            
+                                            <BooleanRadio :radio="props.item.is_able_modify_mcht"
+                                                @update:radio="props.item.is_able_modify_mcht = $event">
+                                                <template #true>가능</template>
+                                                <template #false>불가능</template>
+                                            </BooleanRadio>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol>
+                            <VTextarea v-model="props.item.note" counter label="메모사항"
+                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="95" auto-grow />
+                        </VCol>
                     </VRow>
                 </VCardItem>
             </VCard>

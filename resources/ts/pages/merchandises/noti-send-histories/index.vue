@@ -72,7 +72,7 @@ const getResponseBody = (body: string) => {
             </template>
             <template #index_extra_field>
                 <VBtn prepend-icon="tabler-calculator" @click="batchRetry()" size="small" v-if="getUserLevel() >= 35">
-                    일괄 재발송
+                    노티 재발송
                 </VBtn>
             </template>
             <template #headers>

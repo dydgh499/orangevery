@@ -56,9 +56,10 @@ class DifferenceSettlement
 
     protected function _request($save_path, $req_date, $trans)
     {
-        $result      = false;
-        $sub_count   = 0;
-        $total_count = 0;
+        $result       = false;
+        $sub_count    = 0;
+        $total_amount = 0;
+        $total_count  = 0;
         $full_record = $this->setStartRecord($req_date);
 
         $mids = $trans->pluck($this->PMID_MODE ? 'p_mid' : 'mid')->unique()->all();
@@ -82,7 +83,8 @@ class DifferenceSettlement
                 $total  = $this->setTotalRecord($count, $amount);
 
                 $full_record .= $header.$data_records.$total;
-                $total_count += $count;                    
+                $total_count += $count;    
+                $total_amount += $amount;
 
                 if($this->service_name === 'danal')
                     $sub_count += 2;  //header, total records
@@ -90,7 +92,7 @@ class DifferenceSettlement
         }
         if($this->service_name === 'danal')
             $sub_count += 2;  // start, end records
-        $full_record .= $this->setEndRecord($total_count + $sub_count);
+        $full_record .= $this->setEndRecord($total_count + $sub_count, $total_amount);
 
         if($this->main_connection_stat)
             $result = $this->main_sftp_connection->put($save_path, $full_record);
@@ -125,7 +127,13 @@ class DifferenceSettlement
     private function setStartRecord($req_date)
     {
         if($this->service_name == 'galaxiamoneytree')
-            return '';
+        {
+            $record_type    = $this->setAtypeField('HD', 2);
+            $create_dt      = $this->setAtypeField(date('Ymd'), 8);
+            $rep_mid        = $this->setAtypeField($this->brand['rep_mid'], 20);
+            $filter         = $this->setAtypeField('', $this->RQ_HEADER_FILTER_SIZE);
+            return $record_type.$create_dt.$rep_mid.$filter."\r\n";  
+        }
         else
         {
             $brand_business_num = str_replace('-', '', $this->brand['business_num']);
@@ -134,14 +142,14 @@ class DifferenceSettlement
             $brand_business_num = $this->setAtypeField($brand_business_num, 10);
             $pg_type        = $this->setAtypeField($this->RQ_PG_NAME, 10);
             $filter         = $this->setAtypeField('', $this->RQ_START_FILTER_SIZE);
-            return $record_type.$req_date.$brand_business_num.$pg_type.$filter."\r\n";                
+            return $record_type.$req_date.$brand_business_num.$pg_type.$filter."\r\n";         
         }
     }
 
     private function setHeaderRecord($rep_mid)
     {
-        if($this->service_name == 'galaxiamoneytree')
-            return $this->service->setHeaderRecord($rep_mid, $this->RQ_HEADER_FILTER_SIZE);
+        if($this->service_name == 'galaxiamoneytree')   //갤럭시아는 없음
+            return '';
         else
         {
             $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::HEADER->value, 2);
@@ -153,8 +161,8 @@ class DifferenceSettlement
 
     private function setTotalRecord($total_count, $total_amount)
     {
-        if($this->service_name == 'galaxiamoneytree')
-            return $this->service->setTotalRecord($this->RQ_TOTAL_FILTER_SIZE, $total_count, $total_amount);
+        if($this->service_name == 'galaxiamoneytree')   //갤럭시아는 없음
+            return '';
         else
         {
             $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::TOTAL->value, 2);
@@ -169,20 +177,26 @@ class DifferenceSettlement
                 $total_amount   = $this->setNtypeField($total_amount, 18);
 
             $filter         = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
-            return $record_type.$total_count.$total_amount.$filter."\r\n";    
+            return $record_type.$total_count.$total_amount.$filter."\r\n";   
         }
     }
 
-    private function setEndRecord($total_count)
+    private function setEndRecord($total_count, $total_amount)
     {
         if($this->service_name == 'galaxiamoneytree')
-            return '';
+        {            
+            $record_type    = $this->setAtypeField('TR', 2);
+            $total_count    = $this->setNtypeField($total_count, 7);
+            $total_amount   = $this->setNtypeField($total_amount, 18);
+            $filter         = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
+            return $record_type.$total_count.$total_amount.$filter."\r\n";
+        }
         else
         {
             $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::END->value, 2);
             $total_count    = $this->setNtypeField($total_count, 7);
             $filter         = $this->setAtypeField('', $this->RQ_END_FILTER_SIZE);
-            return $record_type.$total_count.$filter."\r\n";    
+            return $record_type.$total_count.$filter."\r\n";
         }
     }
 

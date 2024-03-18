@@ -62,7 +62,7 @@ class hecto implements DifferenceSettlementInterface
                     $record_type.$appr_type.$trx_dt.$brand_business_num.$business_num.
                     $trx_id.$installment.$ord_num.$amount.$ori_amount.$ori_trx_dt.
                     $add_field.$filter;
-                $data_records .= $data_record."\n";
+                $data_records .= $data_record."\r\n";
                 $total_count += 1;
             }
         }

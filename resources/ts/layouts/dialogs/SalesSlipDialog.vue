@@ -10,6 +10,8 @@ import corp from '@corp'
 interface Props {
     pgs: PayGateway[],
 }
+
+const reload_mode = ref(false)
 const props = defineProps<Props>()
 
 const snackbar = <any>(inject('snackbar'))
@@ -95,7 +97,8 @@ const getProviderInfo = (): BeforeBrandInfo => {
     }
 }
 
-const show = (item: SalesSlip) => {
+const show = (item: SalesSlip, _reload_mode:boolean=false) => {
+    reload_mode.value = _reload_mode
     trans.value = item
     pg.value = props.pgs.find(pg => pg['id'] === item.pg_id)
     if (trans.value.tax_category_type == 1) {
@@ -112,6 +115,12 @@ const show = (item: SalesSlip) => {
     }
     provider_info.value = getProviderInfo()
     visible.value = true
+}
+
+const close = () => {
+    visible.value = !visible.value
+    if(reload_mode.value)
+        location.reload()
 }
 const cancelColor = computed(() => {
     return trans.value?.is_cancel ? 'text-decoration: line-through;' : ''
@@ -141,7 +150,7 @@ defineExpose({
                 <VIcon end icon="material-symbols:download" />
             </VBtn>
             <!-- Dialog close btn -->
-            <DialogCloseBtn @click="visible = !visible" />
+            <DialogCloseBtn @click="close()" />
         </div>
         <!-- Dialog Content -->
         <div ref="card" style="overflow-y: auto;">

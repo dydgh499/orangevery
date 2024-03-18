@@ -18,9 +18,18 @@ axios.interceptors.response.use((response) => {
     active_count.value--
     return Promise.reject(error);
 });
+
+const show = (_visible: boolean) => {
+    visible.value = _visible
+}
+
 watchEffect(() => {
     visible.value = active_count.value ? true : false
 })
+
+defineExpose({
+    show
+});
 </script>
 <template>
     <VDialog v-model="visible" width="300">

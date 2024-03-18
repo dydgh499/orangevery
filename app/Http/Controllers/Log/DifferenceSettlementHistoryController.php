@@ -131,7 +131,7 @@ class DifferenceSettlementHistoryController extends Controller
         try
         {
             $pg_name = getPGType($brand->pg_type);
-            $path   = $this->base_path.$pg_name;            
+            $path   = $this->base_path.$pg_name;
             $pg     = new $path(json_decode(json_encode($brand), true));
         }
         catch(Exception $e)
@@ -220,16 +220,16 @@ class DifferenceSettlementHistoryController extends Controller
                 $mchts = Merchandise::where('brand_id', $brands[$i]->brand_id)
                     ->where('is_delete', false)
                     ->whereIn('business_num', $sub_business_regi_infos->pluck('business_num')->all())
+                    ->orderby('updated_at', 'desc')
                     ->get([
                         'id', 'sector', 'business_num',
                         'mcht_name','addr',
                         'nick_name','phone_num',
                         'email','website_url',
-                    ]);
-
+                ]);
                 $res = $pg->registerRequest($date, $mchts, $sub_business_regi_infos);
                 if($res)
-                    SubBusinessRegistration::whereIn('id', $sub_business_regi_infos->pluck('id')->all())->update(['registration_result'=>-5]);                
+                    SubBusinessRegistration::whereIn('id', $sub_business_regi_infos->pluck('id')->all())->update(['registration_result'=>-5]);                    
             }
         }
     }
@@ -301,8 +301,8 @@ class DifferenceSettlementHistoryController extends Controller
 
     static public function differenceSettleResponseTest()
     {
-        $ds_id      = 1;
-        $date       = Carbon::now()->subDay(15);
+        $ds_id      = 2;
+        $date       = Carbon::now()->subDay(3);
 
         $brand = Brand::join('different_settlement_infos', 'brands.id', '=', 'different_settlement_infos.brand_id')
             ->where('brands.is_delete', false)

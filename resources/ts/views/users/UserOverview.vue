@@ -176,8 +176,7 @@ watchEffect(() => {
                             <VRow no-gutters>
                                 <SwiperPreview :items="avatars"
                                     :preview="props.item.profile_img ?? avatars[Math.floor(Math.random() * avatars.length)]"
-                                    :label="'프로필'" :lmd="10" :rmd="2"
-                                    @update:file="props.item.profile_file = $event"
+                                    :label="'프로필'" :lmd="10" :rmd="2" @update:file="props.item.profile_file = $event"
                                     @update:path="props.item.profile_img = $event">
                                 </SwiperPreview>
                             </VRow>
@@ -196,23 +195,23 @@ watchEffect(() => {
                             <VRow no-gutters>
                                 <FileInput :label="`통장사본 업로드`"
                                     :preview="props.item.passbook_img ? props.item.passbook_img : '/utils/icons/img-preview.svg'"
-                                    @update:file="props.item.passbook_file = $event" 
+                                    @update:file="props.item.passbook_file = $event"
                                     @update:path="props.item.passbook_img = $event" />
                             </VRow>
                         </VCol>
                         <VCol cols="12">
                             <VRow no-gutters>
-                                <FileInput :label="`신분증 업로드`" :preview="props.item.id_img ? props.item.id_img : '/utils/icons/img-preview.svg'"
-                                    @update:file="props.item.id_file = $event" 
-                                    @update:path="props.item.id_img = $event" />
+                                <FileInput :label="`신분증 업로드`"
+                                    :preview="props.item.id_img ? props.item.id_img : '/utils/icons/img-preview.svg'"
+                                    @update:file="props.item.id_file = $event" @update:path="props.item.id_img = $event" />
                             </VRow>
                         </VCol>
                         <VCol cols="12">
                             <VRow no-gutters>
                                 <FileInput :label="`계약서 업로드`"
                                     :preview="props.item.contract_img ? props.item.contract_img : '/utils/icons/img-preview.svg'"
-                                    @update:file="props.item.contract_file = $event" 
-                                    @update:path="props.item.contract_img = $event"  />
+                                    @update:file="props.item.contract_file = $event"
+                                    @update:path="props.item.contract_img = $event" />
                             </VRow>
                         </VCol>
                         <VCol cols="12">

@@ -37,8 +37,8 @@ const filterPss = computed(() => {
 
 watchEffect(() => {
     if (props.item.pg_type != 0 && props.item.pg_type != null) {
-        const idx = pg_companies.findIndex(item => item.id == props.item.pg_type)
-        if (idx != null) {
+        const idx = pg_companies.findIndex(item => item.id === props.item.pg_type)
+        if (idx !== null) {
             props.item.addr = pg_companies[idx].addr
             props.item.rep_name = pg_companies[idx].rep_name
             props.item.company_name = pg_companies[idx].company_name
@@ -115,7 +115,7 @@ watchEffect(() => {
                             <VCol :md="6" :cols="12">
                                 <VRow no-gutters>
                                     <VCol>
-                                        <label>사업자등록번호</label>
+                                        <label>사업자번호</label>
                                     </VCol>
                                     <VCol md="7">
                                         <VTextField v-model="props.item.business_num" type="text"
@@ -223,6 +223,6 @@ watchEffect(() => {
 </template>
 <style scoped>
 :deep(.v-table__wrapper) {
-  block-size: auto !important;
+    block-size: auto !important;
 }
 </style>
