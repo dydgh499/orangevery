@@ -30,6 +30,15 @@ class welcome1 extends DifferenceSettlement implements DifferenceSettlementInter
             'passphrase' => $brand['sftp_password'],
             'passive' => false,
         ]]);
+        config(['filesystems.disks.'.$dr_config_name => [
+            'driver' => 'sftp',
+            'host' => "118.130.130.27", // 개발서버
+            'port' => 5555,
+            'username' => $brand['sftp_id'],
+            'privateKey' => Storage::disk('local')->get('id_rsa'),
+            'passphrase' => $brand['sftp_password'],
+            'passive' => false,
+        ]]);
         [$this->main_sftp_connection, $this->main_connection_stat] = $this->connectSFTPServer($main_config_name, 'main');
         [$this->dr_sftp_connection, $this->dr_connection_stat] = [null, false];
     }

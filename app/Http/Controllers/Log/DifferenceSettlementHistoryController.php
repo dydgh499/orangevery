@@ -252,10 +252,12 @@ class DifferenceSettlementHistoryController extends Controller
             }
         }
     }
-
+    /*
+    * 차액정산 테스트 업로드
+    */
     static public function differenceSettleRequestTest()
     {
-        $ds_id      = 1;
+        $ds_id      = 2;
         $date       = Carbon::now();
         $yesterday  = $date->copy()->subDay(1)->format('Y-m-d');
 
@@ -276,17 +278,11 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('payment_gateways.pg_type', $brand->pg_type)
                 ->where('transactions.brand_id', $brand->brand_id)
                 ->where(function ($query) use ($yesterday) {
-                    $query->where(function ($query) use ($yesterday) {                        
+                    $query->where(function ($query) use ($yesterday) {
                         $query->where('transactions.trx_dt', '<=', $yesterday)
-                            ->where('transactions.trx_dt', '>=', '2024-02-28')
-                            ->where('transactions.trx_dt', '!=', '2024-03-06')
-                            ->where('transactions.trx_dt', '!=', '2024-03-15')
                             ->where('transactions.is_cancel', false);
                     })->orWhere(function ($query) use ($yesterday) {
                         $query->where('transactions.cxl_dt', '<=', $yesterday)
-                        ->where('transactions.cxl_dt', '>=', '2024-02-28')
-                        ->where('transactions.cxl_dt', '!=', '2024-03-06')
-                        ->where('transactions.cxl_dt', '!=', '2024-03-15')
                         ->where('transactions.is_cancel', true);
                     });
                 })
