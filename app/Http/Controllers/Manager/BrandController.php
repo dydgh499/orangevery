@@ -180,8 +180,10 @@ class BrandController extends Controller
         $data = $this->saveImages($request, $data, $this->imgs);
         
         $query  = $this->brands->where('id', $id);
+        $brand = $query->first();
         $res = $query->update($data);
-
+        
+        Redis::del($brand->dns);
         Redis::set($data['dns'], json_encode($query->with(['beforeBrandInfos'])->first()));
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
