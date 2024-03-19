@@ -274,7 +274,6 @@ class DifferenceSettlementHistoryController extends Controller
                 ->join('payment_gateways', 'transactions.pg_id', '=', 'payment_gateways.id')
                 ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
                 ->where('transactions.is_delete', false)
-                ->where('merchandises.is_delete')
                 ->where('merchandises.business_num', '!=', '')
                 ->where('payment_gateways.pg_type', $brand->pg_type)
                 ->where('transactions.brand_id', $brand->brand_id)
