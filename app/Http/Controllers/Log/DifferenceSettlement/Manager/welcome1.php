@@ -172,23 +172,23 @@ class welcome1 implements DifferenceSettlementInterface
                 });
                 if($mcht)
                 {
-                    $records .= $this->setAtypeField(DifferenceSettleHectoRecordType::DATA->value, 2);
-                    $records .= $this->setNtypeField($sub_business_regi_info->registration_type, 2);
-                    $records .= $this->setNtypeField(str_replace('-', '', $brand['business_num']), 10).
-                    $records .= $this->setNtypeField($sub_business_regi_info->card_company_code, 2);
-                    $records .= $this->setNtypeField(str_replace('-', '', $mchts[$i]->business_num), 10);                
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->sector), 20);
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->mcht_name), 40);
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->website_url), 80);   //웹사이트 URL 필드
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->addr), 100);
-                    $records .= $this->setNtypeField('', 6);   //우편번호
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->nick_name), 40);
-                    $records .= $this->setNtypeField(str_replace('-', '', $mchts[$i]->phone_num), 11);
-                    $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->email), 40);   //이메일 필드
-                    $records .= $this->setNtypeField($yesterday, 8);
-                    $records .= $this->setAtypeField($mchts[$i]->id, 20);
-                    $records .= $this->setAtypeField('', 109);
-                    $records .= "\r\n";
+                    $records .= $this->setAtypeField(DifferenceSettleHectoRecordType::DATA->value, 2)
+                        .$this->setNtypeField($sub_business_regi_info->registration_type, 2)
+                        .$this->setNtypeField(str_replace('-', '', $brand['business_num']), 10)
+                        .$this->setNtypeField($sub_business_regi_info->card_company_code, 2)
+                        .$this->setNtypeField(str_replace('-', '', $mchts[$i]->business_num), 10)
+                        .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->sector), 20)
+                        .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->mcht_name), 40)
+                        .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->website_url), 80)   //웹사이트 URL 필드
+                        .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->addr), 100)
+                        .$this->setNtypeField('00000', 6)   //우편번호
+                        .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->nick_name), 40)
+                        .$this->setNtypeField(str_replace('-', '', $mchts[$i]->phone_num), 11)
+                        .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->email), 40)   //이메일 필드
+                        .$this->setNtypeField($yesterday, 8)
+                        .$this->setAtypeField($mchts[$i]->id, 20)
+                        .$this->setAtypeField('', 109)
+                        ."\r\n";
                 }
             }
             return $records;

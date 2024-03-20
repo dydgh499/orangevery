@@ -257,7 +257,7 @@ class DifferenceSettlementHistoryController extends Controller
     static public function differenceSettleRequestTest()
     {
         //DifferenceSettlementHistoryController::differenceSettleRequestTest()
-        $ds_id      = 2;
+        $ds_id      = 1;
         $date       = Carbon::now();
         $yesterday  = $date->copy()->subDay(1)->format('Y-m-d');
 
@@ -278,11 +278,21 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('transactions.brand_id', $brand->brand_id)
                 ->where(function ($query) use ($yesterday) {
                     $query->where(function ($query) use ($yesterday) {
-                        $query->where('transactions.trx_dt', '<=', $yesterday)
-                            ->where('transactions.is_cancel', false);
+                        $query->where(function ($query) use ($yesterday) {
+                            $query->where('transactions.trx_dt', '=', '2024-03-05')
+                                ->where('transactions.is_cancel', false);
+                        })->orWhere(function ($query) use ($yesterday) {
+                            $query->where('transactions.cxl_dt', '=', '2024-03-05')
+                            ->where('transactions.is_cancel', true);
+                        });
                     })->orWhere(function ($query) use ($yesterday) {
-                        $query->where('transactions.cxl_dt', '<=', $yesterday)
-                        ->where('transactions.is_cancel', true);
+                        $query->where(function ($query) use ($yesterday) {
+                            $query->where('transactions.trx_dt', '=', '2024-03-06')
+                                ->where('transactions.is_cancel', false);
+                        })->orWhere(function ($query) use ($yesterday) {
+                            $query->where('transactions.cxl_dt', '=', '2024-03-06')
+                            ->where('transactions.is_cancel', true);
+                        });
                     });
                 })
                 ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
@@ -296,7 +306,7 @@ class DifferenceSettlementHistoryController extends Controller
 
     static public function differenceSettleResponseTest()
     {
-        $ds_id      = 1;
+        $ds_id = 1;
         for ($i=0; $i < 6; $i++) 
         { 
             $date = Carbon::now()->subDay($i);

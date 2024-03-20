@@ -11,7 +11,6 @@ class galaxiamoneytree implements DifferenceSettlementInterface
 {
     use FileRWTrait;
     public $mcht_cards = [
-        '099' => '전체카드',
         '050' => '국민',
         '078' => '농협',
         '052' => '비씨',
@@ -195,7 +194,7 @@ class galaxiamoneytree implements DifferenceSettlementInterface
                     }
                     $records = $this->setAtypeField("RD", 2);
                     $records .= $this->setNtypeField($sub_business_regi_info->registration_type, 2);
-                    $records .= $this->setNtypeField(str_replace('-', '', $brand['business_num']), 10).
+                    $records .= $this->setNtypeField(str_replace('-', '', $brand['business_num']), 10);
                     $records .= $this->setNtypeField($sub_business_regi_info->card_company_code, 3);
                     $records .= $this->setNtypeField(str_replace('-', '', $mcht->business_num), 10);
 
@@ -241,6 +240,21 @@ class galaxiamoneytree implements DifferenceSettlementInterface
         $records  = $getHeader($brand, $req_date);
         $records .= $datas;
         $records .= $getTrailer($upload);
+        return $records;
+    }
+
+    public function registerResponse($content, $sub_business_regi_infos)
+    {
+        $records = [];
+        $cur_date = date('Y-m-d H:i:s');
+        $lines = explode("\n", $contents);
+        $datas = array_values(array_filter($lines, function($line) {
+            return substr($line, 0, 2) === 'DD';
+        }));
+        for ($i=0; $i < count($datas); $i++) 
+        { 
+            $data = $datas[$i];
+        }
         return $records;
     }
 }
