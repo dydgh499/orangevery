@@ -125,10 +125,11 @@ class hecto implements DifferenceSettlementInterface
             else
             {
                 echo json_encode([
-                    'trans_id'   => $add_field,
+                    'trans_id'   => (int)$add_field,
                     'req_dt'    => $req_dt,
                     'settle_dt' => $settle_dt,
                 ]);
+                echo "\n";
             }
         }
         return $records;
