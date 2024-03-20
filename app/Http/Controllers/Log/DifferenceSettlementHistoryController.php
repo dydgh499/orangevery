@@ -300,6 +300,7 @@ class DifferenceSettlementHistoryController extends Controller
                         })->orWhere(function ($query) use ($yesterday) {
                             $query->where('transactions.cxl_dt', $yesterday)
                             ->where('transactions.is_cancel', true);
+                        });
                     });
                 })
                 ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
