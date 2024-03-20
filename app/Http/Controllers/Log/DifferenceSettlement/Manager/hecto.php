@@ -91,7 +91,7 @@ class hecto implements DifferenceSettlementInterface
             $settle_result_code = $this->getAtypeField($data, 313, 4);
             $card_company_result_code = $this->getAtypeField($data, 317, 2);
             // 정산금이 존재할 때만
-            if($settle_amount > 0)
+            if($supply_amount > 0)
             {
                 if($is_cancel)
                 {

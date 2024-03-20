@@ -56,6 +56,7 @@ export const defaultItemInfo = () => {
         user_pw: '',
         nick_name: '',
         phone_num: '',
+        profile_img: '',
         created_at: null,
         updated_at: null,
     })

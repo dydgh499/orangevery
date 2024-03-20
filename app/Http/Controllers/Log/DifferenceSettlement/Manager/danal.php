@@ -91,7 +91,7 @@ class danal implements DifferenceSettlementInterface
             $settle_dt = $this->getNtypeField($data, 472, 8);
             $settle_result_code = $this->getAtypeField($data, 480, 2);
             // 정산금이 존재할 때만
-            if($settle_amount > 0)
+            if($supply_amount > 0)
             {
                 if($is_cancel)
                 {
