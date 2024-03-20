@@ -1,6 +1,7 @@
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import type { Operator, Options } from '@/views/types';
+import { avatars } from '@/views/users/useStore';
 import { getUserLevel } from '@axios';
 import corp from '@corp';
 
@@ -56,7 +57,7 @@ export const defaultItemInfo = () => {
         user_pw: '',
         nick_name: '',
         phone_num: '',
-        profile_img: '',
+        profile_img: avatars[Math.floor(Math.random() * avatars.length)],
         created_at: null,
         updated_at: null,
     })

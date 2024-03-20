@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 
-import { passwordValidator, requiredValidator } from '@validators'
-import type { Operator } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { operator_levels } from '@/views/services/operators/useStore'
 import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
+import { operator_levels } from '@/views/services/operators/useStore'
+import type { Operator } from '@/views/types'
 import { avatars } from '@/views/users/useStore'
+import { passwordValidator, requiredValidator } from '@validators'
 
 interface Props {
     item: Operator,

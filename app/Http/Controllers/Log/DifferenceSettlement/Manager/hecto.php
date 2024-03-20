@@ -91,7 +91,6 @@ class hecto implements DifferenceSettlementInterface
             $settle_result_code = $this->getAtypeField($data, 313, 4);
             $card_company_result_code = $this->getAtypeField($data, 317, 2);
             // 정산금이 존재할 때만
-            echo $supply_amount.'\n';
             if($supply_amount > 0)
             {
                 if($is_cancel)
@@ -103,7 +102,6 @@ class hecto implements DifferenceSettlementInterface
     
                 $req_dt     = Carbon::createFromFormat('Ymd', (string)$req_dt)->format('Y-m-d');
                 $settle_dt  = Carbon::createFromFormat('Ymd', (string)$settle_dt)->format('Y-m-d');
-                echo $add_field.'\n';
                 if((int)$add_field != 0)
                 {
                     $records[] = [

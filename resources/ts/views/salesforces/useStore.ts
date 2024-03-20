@@ -1,6 +1,7 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { Merchandise, Options, Salesforce, UnderAutoSetting } from '@/views/types'
+import { avatars } from '@/views/users/useStore'
 import { axios, getUserLevel, salesLevels } from '@axios'
 import corp from '@corp'
 import _ from 'lodash'
@@ -292,6 +293,7 @@ export const defaultItemInfo = () => {
         id_img: null,
         contract_img: null,
         bsin_lic_img: null,
+        profile_img: avatars[Math.floor(Math.random() * avatars.length)],
         acct_num: '',
         acct_name: '',
         acct_bank_name: '',

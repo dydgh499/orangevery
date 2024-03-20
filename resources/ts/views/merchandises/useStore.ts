@@ -3,6 +3,7 @@ import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { Merchandise, Options } from '@/views/types'
+import { avatars } from '@/views/users/useStore'
 import { getUserLevel, isAbleModifyMcht, user_info } from '@axios'
 import corp from '@corp'
 
@@ -209,6 +210,7 @@ export const defaultItemInfo = () => {
         withdraw_fee: 0,
         resident_num_front: '',
         resident_num_back: '',
+        profile_img: avatars[Math.floor(Math.random() * avatars.length)],
         use_pay_verification_mobile: Number(corp.pv_options.paid.use_pay_verification_mobile),
         use_multiple_hand_pay: 0,
         use_noti: 0,
