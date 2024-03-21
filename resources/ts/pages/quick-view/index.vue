@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { user_info, getUserLevel } from '@axios'
-import { useRequestStore } from '@/views/request'
-import { useQuickViewStore } from '@/views/quick-view/useStore'
+import router from '@/router'
 import CardLayout from '@/views/quick-view/CardLayout.vue'
+import Recent30DaysContentOverview from '@/views/quick-view/Recent30DaysContentOverview.vue'
+import Recent30DaysRankOverview from '@/views/quick-view/Recent30DaysRankOverview.vue'
 import SettleContentOverview from '@/views/quick-view/SettleContentOverview.vue'
 import SettleContentSkeleton from '@/views/quick-view/SettleContentSkeleton.vue'
-import Recent30DaysRankOverview from '@/views/quick-view/Recent30DaysRankOverview.vue'
-import Recent30DaysContentOverview from '@/views/quick-view/Recent30DaysContentOverview.vue'
+import { useQuickViewStore } from '@/views/quick-view/useStore'
+import { useRequestStore } from '@/views/request'
 import type { MchtRecentTransactions } from '@/views/types'
-import router from '@/router'
+import { getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 
 const transactions = ref(<MchtRecentTransactions>({}))
@@ -40,7 +40,7 @@ const getWithdrawAbleAmount = async() => {
 }
 const isBrightFix = () => {
     // temp function
-    return (corp.id == 14 || corp.id == 12) ? true : false
+    return (corp.id == 14 || corp.id == 12 || corp.id == 30) ? true : false
 }
 
 const requestWithdraw = async() => {

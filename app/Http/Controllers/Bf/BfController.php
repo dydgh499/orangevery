@@ -46,7 +46,7 @@ class BfController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        if($request->brand_id == 12 || $request->brand_id == 14)
+        if($request->brand_id == 12 || $request->brand_id == 14 || $request->brand_id == 30)
         {
             $inst = new AuthController();
             $result = $inst->__signIn(new Merchandise(), $request);  // check Merchandise
