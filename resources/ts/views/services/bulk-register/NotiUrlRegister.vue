@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import { useSearchStore } from '@/views/merchandises/noti-urls/useStore'
-import { useRegisterStore } from '@/views/services/bulk-register/NotiUrlRegisterStore'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { noti_statuses } from '@/views/merchandises/noti-urls/useStore'
-import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
-import { Registration } from '@/views/registration'
-import type { NotiUrl } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { noti_statuses, useSearchStore } from '@/views/merchandises/noti-urls/useStore'
+import { Registration } from '@/views/registration'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { useRegisterStore } from '@/views/services/bulk-register/NotiUrlRegisterStore'
+import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
+import type { NotiUrl } from '@/views/types'
 import { isEmpty } from '@core/utils'
 
 const { store } = useSearchStore()
@@ -29,11 +28,11 @@ const validate = () => {
         const mcht = mchts.find(item => item.mcht_name == items.value[i].mcht_name)
 
         if (mcht == null) {
-            snackbar.value.show((i + 1) + '번째 노티의 가맹점 상호가 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 노티의 가맹점 상호가 이상합니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(items.value[i].send_url)) {
-            snackbar.value.show((i + 1) + '번째 노티주소가 비어있습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 노티주소가 비어있습니다.', 'error')
             is_clear.value = false
         }
         else

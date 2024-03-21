@@ -1,17 +1,16 @@
 <script lang="ts" setup>
-import { lengthValidatorV2 } from '@validators'
-import { useSearchStore } from '@/views/salesforces/useStore'
-import { useRegisterStore } from '@/views/services/bulk-register/SalesforceRegisterStore'
-import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
-import type { Salesforce, Options } from '@/views/types'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BanksExplainDialog from '@/layouts/dialogs/BanksExplainDialog.vue'
-import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { Registration } from '@/views/registration'
+import { settleCycles, settleDays, settleTaxTypes, useSearchStore } from '@/views/salesforces/useStore'
+import { useRegisterStore } from '@/views/services/bulk-register/SalesforceRegisterStore'
+import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
+import type { Options, Salesforce } from '@/views/types'
 import { banks } from '@/views/users/useStore'
-import corp from '@corp'
-import { isEmpty } from '@core/utils'
 import { salesLevels } from '@axios'
+import { isEmpty } from '@core/utils'
+import corp from '@corp'
+import { lengthValidatorV2 } from '@validators'
 
 const { store } = useSearchStore()
 const { head, headers, isPrimaryHeader } = useRegisterStore()
@@ -37,15 +36,16 @@ const validate = () => {
     const user_names = new Set()
     for (let i = 0; i < saleses.value.length; i++) {
         saleses.value[i].settle_day = saleses.value[i].settle_day == -1 ? null : saleses.value[i].settle_day;
-
+        console.log(saleses.value[i])
         const level = all_sales.find(sales => sales.id === saleses.value[i].level)
         const settle_cycle = all_cycles.find(sales => sales.id === saleses.value[i].settle_cycle)
         const settle_day = all_days.find(sales => sales.id === saleses.value[i].settle_day)
         const settle_tax_type = tax_types.find(sales => sales.id === saleses.value[i].settle_tax_type)
         const acct_bank_name = banks.find(sales => sales.title === saleses.value[i].acct_bank_name)
+        saleses.value[i].resident_num = saleses.value[i].resident_num.trim()
 
         if(user_names.has(saleses.value[i].user_name)) {
-            snackbar.value.show((i + 1) + '번째 아이디가 중복됩니다.('+saleses.value[i].user_name+")", 'error')
+            snackbar.value.show((i + 2) + '번째 아이디가 중복됩니다.('+saleses.value[i].user_name+")", 'error')
             is_clear.value = false
             return
         }
@@ -53,59 +53,59 @@ const validate = () => {
             user_names.add(saleses.value[i].user_name)
 
         if (isEmpty(saleses.value[i].user_name)) {
-            snackbar.value.show((i + 1) + '번째 영업점의 아이디는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 영업점의 아이디는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(saleses.value[i].user_pw)) {
-            snackbar.value.show((i + 1) + '번째 영업점의 패스워드는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 영업점의 패스워드는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(saleses.value[i].sales_name)) {
-            snackbar.value.show((i + 1) + '번째 영업점의 상호는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 영업점의 상호는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(saleses.value[i].resident_num)) {
-            snackbar.value.show((i + 1) + '번째 영업점의 주민등록번호는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 영업점의 주민등록번호는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(saleses.value[i].business_num)) {
-            snackbar.value.show((i + 1) + '번째 영업점의 사업자등록번호는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 영업점의 사업자등록번호는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(saleses.value[i].resident_num)) {
-            snackbar.value.show((i + 1) + '번째 영업점의 주민등록번호는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 영업점의 주민등록번호는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (typeof lengthValidatorV2(saleses.value[i].resident_num, 14) != 'boolean') {
-            snackbar.value.show((i + 1) + '번째 영업점의 주민등록번호 포멧이 정확하지 않습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 영업점의 주민등록번호 포멧이 정확하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (level == null) {
-            snackbar.value.show((i + 1) + '번째 영업점의 등급이 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 영업점의 등급이 이상합니다.', 'error')
             is_clear.value = false
         }
         else if (settle_cycle == null) {
-            snackbar.value.show((i + 1) + '번째 영업점의 정산주기가 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 영업점의 정산주기가 이상합니다.', 'error')
             is_clear.value = false
         }
         else if (settle_day == null) {
-            snackbar.value.show((i + 1) + '번째 영업점의 정산일이 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 영업점의 정산일이 이상합니다.', 'error')
             is_clear.value = false
         }
         else if (settle_tax_type == null) {
-            snackbar.value.show((i + 1) + '번째 영업점의 정산세율이 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 영업점의 정산세율이 이상합니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(saleses.value[i].acct_num)) {
-            snackbar.value.show((i + 1) + '번째 영업점의 계좌번호는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 영업점의 계좌번호는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(saleses.value[i].acct_name)) {
-            snackbar.value.show((i + 1) + '번째 영업점의 예금주는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 영업점의 예금주는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (acct_bank_name == null) {
-            snackbar.value.show((i + 1) + '번째 영업점의 입금은행명이 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 영업점의 입금은행명이 이상합니다.', 'error')
             is_clear.value = false
         }
         else {

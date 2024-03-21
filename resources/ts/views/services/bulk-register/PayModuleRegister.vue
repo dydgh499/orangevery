@@ -1,19 +1,18 @@
 <script lang="ts" setup>
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import { useSearchStore } from '@/views/merchandises/pay-modules/useStore'
-import { useRegisterStore } from '@/views/services/bulk-register/PayModRegisterStore'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { module_types, installments, fin_trx_delays, cxl_types, comm_settle_types, under_sales_types } from '@/views/merchandises/pay-modules/useStore'
-import SettleTypeExplainDialog from '@/views/services/bulk-register/SettleTypeExplainDialog.vue'
-import PGExplainDialog from '@/views/services/bulk-register/PGExplainDialog.vue'
 import MidCreateDialog from '@/layouts/dialogs/MidCreateDialog.vue'
-import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
-import { Registration } from '@/views/registration'
-import type { PayModule, Options } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import corp from '@corp';
-import { isEmpty } from '@core/utils'
+import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_types, under_sales_types, useSearchStore } from '@/views/merchandises/pay-modules/useStore'
+import { Registration } from '@/views/registration'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import PGExplainDialog from '@/views/services/bulk-register/PGExplainDialog.vue'
+import { useRegisterStore } from '@/views/services/bulk-register/PayModRegisterStore'
+import SettleTypeExplainDialog from '@/views/services/bulk-register/SettleTypeExplainDialog.vue'
+import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import type { Options, PayModule } from '@/views/types'
 import { axios, salesLevels } from '@axios'
+import { isEmpty } from '@core/utils'
+import corp from '@corp'
 
 
 const { store } = useSearchStore()
@@ -68,75 +67,75 @@ const validate = () => {
             cxl_type = true
         
         if (mcht == null) {
-            snackbar.value.show((i + 1) + '번째 결제모듈의 가맹점 상호가 이상합니다.('+items.value[i].mcht_name+")", 'error')
+            snackbar.value.show((i + 2) + '번째 결제모듈의 가맹점 상호가 이상합니다.('+items.value[i].mcht_name+")", 'error')
             is_clear.value = false
         }
         else if (corp.pv_options.paid.use_pmid && items.value[i].p_mid == null) {
-            snackbar.value.show((i + 1) + '번째 PMID가 입력되지 않았습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 PMID가 입력되지 않았습니다.', 'error')
             is_clear.value = false
         }
         else if (pg_id == null) {
-            snackbar.value.show((i + 1) + '번째 결제모듈의 PG사명이 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 결제모듈의 PG사명이 이상합니다.', 'error')
             is_clear.value = false
         }
         else if (ps_id == null) {
-            snackbar.value.show((i + 1) + '번째 결제모듈의 구간이 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 결제모듈의 구간이 이상합니다.', 'error')
             is_clear.value = false
         }
         else if (ps_id.pg_id != pg_id.id) {
-            snackbar.value.show((i + 1) + '번째 결제모듈의 구간이 ' + pg_id.pg_name + '에 포함되는 구간이 아닙니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 결제모듈의 구간이 ' + pg_id.pg_name + '에 포함되는 구간이 아닙니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(items.value[i].note)) {
-            snackbar.value.show((i + 1) + '번째 결제모듈의 별칭은 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 결제모듈의 별칭은 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(items.value[i].mcht_name ?? '')) {
-            snackbar.value.show((i + 1) + '번째 결제모듈의 가맹점 상호는 필수로 입력해야합니다.', 'error');
+            snackbar.value.show((i + 2) + '번째 결제모듈의 가맹점 상호는 필수로 입력해야합니다.', 'error');
             is_clear.value = false;
         }
         else if (settle_type == null) {
-            snackbar.value.show((i + 1) + '번째 결제모듈의 가맹점 정산타입이 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 결제모듈의 가맹점 정산타입이 이상합니다.', 'error')
             is_clear.value = false
         }
         else if (module_type == null) {
-            snackbar.value.show((i + 1) + '번째 결제모듈의 모듈타입이 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 결제모듈의 모듈타입이 이상합니다.', 'error')
             is_clear.value = false
         }
         else if (installment == null) {
-            snackbar.value.show((i + 1) + '번째 결제모듈의 할부기간이 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 결제모듈의 할부기간이 이상합니다.', 'error')
             is_clear.value = false
         }
         else if (finance_van == null) {
-            snackbar.value.show((i + 1) + '번째 금융 VAN을 찾을 수 없습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 금융 VAN을 찾을 수 없습니다.', 'error')
             is_clear.value = false
         }
         else if (fin_trx_delay == null) {
-            snackbar.value.show((i + 1) + '번째 이체 딜레이 타입을 찾을 수 없습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 이체 딜레이 타입을 찾을 수 없습니다.', 'error')
             is_clear.value = false
         }
         else if (cxl_type == null) {
-            snackbar.value.show((i + 1) + '번째 취소 타입을 찾을 수 없습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 취소 타입을 찾을 수 없습니다.', 'error')
             is_clear.value = false
         }
         else if(items.value[i].contract_s_dt && date_regex.test(items.value[i].contract_s_dt) == false)
         {            
-            snackbar.value.show((i + 1) + '번째 계약 시작일 포멧이 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 계약 시작일 포멧이 이상합니다.', 'error')
             is_clear.value = false
         }
         else if(items.value[i].contract_e_dt && date_regex.test(items.value[i].contract_e_dt) == false)
         {            
-            snackbar.value.show((i + 1) + '번째 계약 종료일 포멧이 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 계약 종료일 포멧이 이상합니다.', 'error')
             is_clear.value = false
         }
         else if(items.value[i].begin_dt && date_regex.test(items.value[i].begin_dt) == false)
         {            
-            snackbar.value.show((i + 1) + '번째 장비 개통일 포멧이 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 장비 개통일 포멧이 이상합니다.', 'error')
             is_clear.value = false
         }
         else if(items.value[i].ship_out_dt && date_regex.test(items.value[i].ship_out_dt) == false)
         {            
-            snackbar.value.show((i + 1) + '번째 장비 출고일 포멧이 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 장비 출고일 포멧이 이상합니다.', 'error')
             is_clear.value = false
         }
         else

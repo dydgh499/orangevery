@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { lengthValidatorV2 } from '@validators'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { Registration } from '@/views/registration'
 import { useRegisterStore } from '@/views/services/bulk-register/MchtBlacklistRegister'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
-import { Registration } from '@/views/registration'
 import type { MchtBlacklist } from '@/views/types'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { isEmpty } from '@core/utils'
+import { lengthValidatorV2 } from '@validators'
 
 const { head, headers } = useRegisterStore()
 const { ExcelReader, openFilePicker, bulkRegister } = Registration()
@@ -19,12 +19,12 @@ const is_clear = ref<boolean>(false)
 const validate = () => {
     for (let i = 0; i < items.value.length; i++) {
        if(isEmpty(items.value[i].block_reason)) {
-            snackbar.value.show((i + 1) + '번째 블랙리스트의 차단사유를 찾을 수 없습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 블랙리스트의 차단사유를 찾을 수 없습니다.', 'error')
             is_clear.value = false
         }
         
         else if (typeof lengthValidatorV2(items.value[i].resident_num, 14) != 'boolean') {
-            snackbar.value.show((i + 1) + '번째 가맹점의 주민등록번호 포멧이 정확하지 않습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 가맹점의 주민등록번호 포멧이 정확하지 않습니다.', 'error')
             is_clear.value = false
         }
         else

@@ -1,18 +1,18 @@
 <script lang="ts" setup>
-import { lengthValidatorV2 } from '@validators'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import { tax_category_types } from '@/views/merchandises/useStore'
-import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
-import { useRegisterStore } from '@/views/services/bulk-register/MerchandiseRegisterStore'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { banks } from '@/views/users/useStore'
-import type { Merchandise, Options } from '@/views/types'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BanksExplainDialog from '@/layouts/dialogs/BanksExplainDialog.vue'
-import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { tax_category_types } from '@/views/merchandises/useStore'
 import { Registration } from '@/views/registration'
-import corp from '@corp'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { useRegisterStore } from '@/views/services/bulk-register/MerchandiseRegisterStore'
+import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
+import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import type { Merchandise, Options } from '@/views/types'
+import { banks } from '@/views/users/useStore'
 import { isEmpty } from '@core/utils'
+import corp from '@corp'
+import { lengthValidatorV2 } from '@validators'
 
 interface extendMerchandise extends Merchandise {
     [key: string]: any;
@@ -68,9 +68,10 @@ const validate = async() => {
         items.value[i].sales3_name = items.value[i].sales3_name?.trim()
         items.value[i].sales4_name = items.value[i].sales4_name?.trim()
         items.value[i].sales5_name = items.value[i].sales5_name?.trim()
+        items.value[i].resident_num = items.value[i].resident_num.trim()
 
         if(user_names.has(items.value[i].user_name)) {
-            snackbar.value.show((i + 1) + '번째 아이디가 중복됩니다.('+items.value[i].user_name+")", 'error')
+            snackbar.value.show((i + 2) + '번째 아이디가 중복됩니다.('+items.value[i].user_name+")", 'error')
             is_clear.value = false
             return
         }
@@ -78,7 +79,7 @@ const validate = async() => {
             user_names.add(items.value[i].user_name)
 
         if(mcht_names.has(items.value[i].mcht_name)) {
-            snackbar.value.show((i + 1) + '번째 상호가 중복됩니다.('+items.value[i].mcht_name+")", 'error')
+            snackbar.value.show((i + 2) + '번째 상호가 중복됩니다.('+items.value[i].mcht_name+")", 'error')
             is_clear.value = false
             return
         }
@@ -86,63 +87,63 @@ const validate = async() => {
             mcht_names.add(items.value[i].mcht_name)
 
         if (isNotExistSalesforce(levels.sales5_use, 5, i)) {
-            snackbar.value.show((i + 1) + '번째 ' + levels.sales5_name + '이(가) 존재하지 않습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 ' + levels.sales5_name + '이(가) 존재하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (isNotExistSalesforce(levels.sales4_use, 4, i)) {
-            snackbar.value.show((i + 1) + '번째 ' + levels.sales4_name + '이(가) 존재하지 않습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 ' + levels.sales4_name + '이(가) 존재하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (isNotExistSalesforce(levels.sales3_use, 3, i)) {
-            snackbar.value.show((i + 1) + '번째 ' + levels.sales3_name + '이(가) 존재하지 않습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 ' + levels.sales3_name + '이(가) 존재하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (isNotExistSalesforce(levels.sales2_use, 2, i)) {
-            snackbar.value.show((i + 1) + '번째 ' + levels.sales2_name + '이(가) 존재하지 않습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 ' + levels.sales2_name + '이(가) 존재하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (isNotExistSalesforce(levels.sales1_use, 1, i)) {
-            snackbar.value.show((i + 1) + '번째 ' + levels.sales1_name + '이(가) 존재하지 않습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 ' + levels.sales1_name + '이(가) 존재하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (isNotExistSalesforce(levels.sales0_use, 0, i)) {
-            snackbar.value.show((i + 1) + '번째 ' + levels.sales0_name + '이(가) 존재하지 않습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 ' + levels.sales0_name + '이(가) 존재하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (isNotExistCustomFilter(items.value[i].custom_id)) {
-            snackbar.value.show((i + 1) + '번째 커스텀필터가 존재하지 않습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 커스텀필터가 존재하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(items.value[i].user_name)) {
-            snackbar.value.show((i + 1) + '번째 가맹점의 아이디는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 가맹점의 아이디는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(items.value[i].mcht_name)) {
-            snackbar.value.show((i + 1) + '번째 가맹점의 상호는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 가맹점의 상호는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(items.value[i].user_pw)) {
-            snackbar.value.show((i + 1) + '번째 가맹점의 패스워드는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 가맹점의 패스워드는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (typeof lengthValidatorV2(items.value[i].resident_num, 14) != 'boolean') {
-            snackbar.value.show((i + 1) + '번째 가맹점의 주민등록번호 포멧이 정확하지 않습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 가맹점의 주민등록번호 포멧이 정확하지 않습니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(items.value[i].sector)) {
-            snackbar.value.show((i + 1) + '번째 가맹점의 업종은 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 가맹점의 업종은 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(items.value[i].acct_num)) {
-            snackbar.value.show((i + 1) + '번째 가맹점의 계좌번호는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 가맹점의 계좌번호는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (isEmpty(items.value[i].acct_name)) {
-            snackbar.value.show((i + 1) + '번째 가맹점의 예금주는 필수로 입력해야합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 가맹점의 예금주는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (acct_bank_name == null) {
-            snackbar.value.show((i + 1) + '번째 가맹점의 입금은행명이 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 가맹점의 입금은행명이 이상합니다.', 'error')
             is_clear.value = false
         }
         else {
@@ -153,7 +154,7 @@ const validate = async() => {
         if (Number(corp.pv_options.paid.use_mcht_blacklist)) {
             let [result, blacklist] = isMchtBlackList(items.value[i])
             if(result) {
-                is_clear.value = await alert.value.show((i + 1) + '번째 가맹점은 아래이유로 인해 블랙리스트로 등록된 가맹점입니다. 그래도 진행하시겠습니까?<br><br><b style="color:red">'+blacklist?.block_reason+'</b>')
+                is_clear.value = await alert.value.show((i + 2) + '번째 가맹점은 아래이유로 인해 블랙리스트로 등록된 가맹점입니다. 그래도 진행하시겠습니까?<br><br><b style="color:red">'+blacklist?.block_reason+'</b>')
             }
         }
         if (is_clear.value == false)

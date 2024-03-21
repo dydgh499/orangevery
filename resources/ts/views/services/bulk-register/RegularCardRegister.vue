@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { useRegisterStore } from '@/views/services/bulk-register/RegularCardRegisterStore'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
-import { Registration } from '@/views/registration'
-import type { RegularCreditCard } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { Registration } from '@/views/registration'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { useRegisterStore } from '@/views/services/bulk-register/RegularCardRegisterStore'
+import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
+import type { RegularCreditCard } from '@/views/types'
 import { isEmpty } from '@core/utils'
 
 const { head, headers } = useRegisterStore()
@@ -26,11 +26,11 @@ const validate = () => {
         const mcht = mchts.find(item => item.mcht_name == items.value[i].mcht_name)
         
         if (mcht == null) {
-            snackbar.value.show((i + 1) + '번째 카드정보의 가맹점 상호가 이상합니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 카드정보의 가맹점 상호가 이상합니다.', 'error')
             is_clear.value = false
         }
         else if(isEmpty(items.value[i].card_num)) {
-            snackbar.value.show((i + 1) + '번째 카드정보의 카드번호를 찾을 수 없습니다.', 'error')
+            snackbar.value.show((i + 2) + '번째 카드정보의 카드번호를 찾을 수 없습니다.', 'error')
             is_clear.value = false
         }
         else
