@@ -69,13 +69,12 @@ class danal implements DifferenceSettlementInterface
     {
         $records = [];
         $cur_date = date('Y-m-d H:i:s');
-        echo $cur_date;
 
         $lines = explode("\n", $contents);
         $datas = array_values(array_filter($lines, function($line) {
             return substr($line, 0, 2) === DifferenceSettleHectoRecordType::DATA->value;
         }));
-        echo count($datas)."\n";
+
         for ($i=0; $i < count($datas); $i++) 
         { 
             $data = $datas[$i];
@@ -89,7 +88,6 @@ class danal implements DifferenceSettlementInterface
             $settle_dt = $this->getNtypeField($data, 472, 8);
             $settle_result_code = $this->getAtypeField($data, 480, 2);
             // 정산금이 존재할 때만
-            echo $supply_amount."\n";
             if($supply_amount > 0)
             {
                 if($is_cancel)
@@ -101,7 +99,6 @@ class danal implements DifferenceSettlementInterface
     
                 $req_dt     = Carbon::createFromFormat('Ymd', (string)$req_dt)->format('Y-m-d');
                 $settle_dt  = Carbon::createFromFormat('Ymd', (string)$settle_dt)->format('Y-m-d');
-                echo (int)$add_field."\n";
                 if((int)$add_field != 0)
                 {
                     $records[] = [
