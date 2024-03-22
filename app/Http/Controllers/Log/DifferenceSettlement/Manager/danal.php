@@ -65,17 +65,12 @@ class danal implements DifferenceSettlementInterface
         return [$data_records, $total_count, $total_amount];
     }
 
-    /*
-    *   1. CPID 중복 (start records)
-    *   2. start record 요청일자
-    *   3. 매출액 (A/N)
-    */
     public function getDataRecord($contents)
     {
         $records = [];
         $cur_date = date('Y-m-d H:i:s');
         echo $cur_date;
-        
+
         $lines = explode("\n", $contents);
         $datas = array_values(array_filter($lines, function($line) {
             return substr($line, 0, 2) === DifferenceSettleHectoRecordType::DATA->value;

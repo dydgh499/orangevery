@@ -113,6 +113,8 @@ class DifferenceSettlement
             else
                 $contents = null;
 
+            echo strlen($contents);
+
             $datas = $contents ? $this->service->getDataRecord($contents) : [];
             logging(['date'=>$req_date, 'datas'=>$datas], $this->service_name.'-difference-settlement-response');
             return $datas;
