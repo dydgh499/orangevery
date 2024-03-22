@@ -11,6 +11,8 @@ class BulkSalesforceRequest extends FormRequest
     public $keys = [
         'user_name',
         'user_pw',
+        'addr',
+        'phone_num',
         'sales_name',
         'nick_name',
         'level'    ,

@@ -91,6 +91,7 @@ class danal implements DifferenceSettlementInterface
             $settle_dt = $this->getNtypeField($data, 472, 8);
             $settle_result_code = $this->getAtypeField($data, 480, 2);
             // 정산금이 존재할 때만
+            echo $supply_amount."\n";
             if($supply_amount > 0)
             {
                 if($is_cancel)
@@ -102,6 +103,7 @@ class danal implements DifferenceSettlementInterface
     
                 $req_dt     = Carbon::createFromFormat('Ymd', (string)$req_dt)->format('Y-m-d');
                 $settle_dt  = Carbon::createFromFormat('Ymd', (string)$settle_dt)->format('Y-m-d');
+                echo (int)$add_field."\n";
                 if((int)$add_field != 0)
                 {
                     $records[] = [
