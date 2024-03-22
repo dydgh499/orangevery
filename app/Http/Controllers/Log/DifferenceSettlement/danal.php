@@ -29,6 +29,7 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
             'password' => $brand['sftp_password'],
             'passive' => false,
         ]]);
+        /*
         config(['filesystems.disks.'.$dr_config_name => [
             'driver' => 'sftp',
             'host' => "150.242.135.206",
@@ -37,8 +38,9 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
             'password' => $brand['sftp_password'],
             'passive' => false,            
         ]]);
+        */
         [$this->main_sftp_connection, $this->main_connection_stat] = $this->connectSFTPServer($main_config_name, 'main');
-        [$this->dr_sftp_connection, $this->dr_connection_stat] = $this->connectSFTPServer($dr_config_name, 'dr');      
+        // [$this->dr_sftp_connection, $this->dr_connection_stat] = $this->connectSFTPServer($dr_config_name, 'dr');      
     }
 
     public function request(Carbon $date, $trans)
