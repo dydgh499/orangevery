@@ -49,7 +49,7 @@ class DifferenceSettlement
         {
             $connection = null;
             $connection_stat = false;
-            logging(['type'=>$type], 'connection fail');
+            logging(['type'=>$type], $service_name.'-difference-settlement-connection-fail');
         }
         return [$connection, $connection_stat];
     }
