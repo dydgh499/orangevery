@@ -78,6 +78,7 @@ class danal implements DifferenceSettlementInterface
         $datas = array_values(array_filter($lines, function($line) {
             return substr($line, 0, 2) === DifferenceSettleHectoRecordType::DATA->value;
         }));
+        echo count($datas)."\n";
         for ($i=0; $i < count($datas); $i++) 
         { 
             $data = $datas[$i];

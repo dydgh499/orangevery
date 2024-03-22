@@ -106,7 +106,6 @@ class DifferenceSettlement
     {
         try
         {
-            echo $res_path."\n";
             if($this->main_connection_stat && $this->main_sftp_connection->exists($res_path))
                 $contents = $this->main_sftp_connection->get($res_path);
             else if($this->dr_connection_stat && $this->dr_sftp_connection->exists($res_path))
