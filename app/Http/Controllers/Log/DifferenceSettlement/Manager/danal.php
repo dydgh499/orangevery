@@ -74,6 +74,8 @@ class danal implements DifferenceSettlementInterface
     {
         $records = [];
         $cur_date = date('Y-m-d H:i:s');
+        echo $cur_date;
+        
         $lines = explode("\n", $contents);
         $datas = array_values(array_filter($lines, function($line) {
             return substr($line, 0, 2) === DifferenceSettleHectoRecordType::DATA->value;
