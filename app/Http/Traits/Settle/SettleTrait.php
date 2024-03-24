@@ -95,9 +95,10 @@ trait SettleTrait
             
         if($request->only_cancel)
             $query = $query->where('transactions.is_cancel', true);
+        if($request->use_realtime_deposit == 0)
+            $query = $query->where('transactions.mcht_settle_type', '!=', -1);
         if($request->use_collect_withdraw)
-        {
-            // 모아서 출금건만 가능
+        {   // 모아서 출금건만 가능
             $query = $query
                 ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
                 ->where('merchandises.use_collect_withdraw', true)

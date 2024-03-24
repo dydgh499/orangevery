@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import HandPayOverview from '@/views/pay/HandPayOverview.vue'
 import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
-import Footer from '@/layouts/components/Footer.vue'
+import HandPayOverview from '@/views/pay/HandPayOverview.vue'
 import { pay } from '@/views/pay/pay'
+import { axios } from '@axios'
 import corp from '@corp'
-import { axios } from '@axios';
 
 const { pay_module, merchandise, updatePayModule } = pay(1)
 const salesslip = ref()
@@ -38,16 +37,6 @@ onMounted(async () => {
             </VCardText>
         </VCard>
         <br>
-        <VCard rounded>
-            <VCardText>
-                <footer class="layout-footer">
-                    <div class="footer-content-container">
-                        <Footer>
-                        </Footer>
-                    </div>
-                </footer>
-            </VCardText>
-        </VCard>
         <SalesSlipDialog ref="salesslip" :pgs="pgs" />
     </section>
 </template>

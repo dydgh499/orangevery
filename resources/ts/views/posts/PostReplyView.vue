@@ -1,10 +1,11 @@
 
 <script setup lang="ts">
-import type { Post } from '@/views/types'
-import { types } from '@/views/posts/useStore'
-import PostReplyView from '@/views/posts/PostReplyView.vue'
-import ExtraMenu from '@/views/posts/ExtraMenu.vue'
 import router from '@/router'
+import ExtraMenu from '@/views/posts/ExtraMenu.vue'
+import PostReplyView from '@/views/posts/PostReplyView.vue'
+import { types } from '@/views/posts/useStore'
+import type { Post } from '@/views/types'
+import { getUserLevel, user_info } from '@axios'
 
 interface Props {
     post: Post,
@@ -15,6 +16,16 @@ const props = defineProps<Props>()
 const store = <any>(inject('store'))
 const head = <any>(inject('head'))
 
+const moveContent = (post: Post) => {
+    if(getUserLevel() < 35) {
+        if(post.writer === user_info.value.user_name)
+            store.edit(post.id)
+        else
+            router.push('/posts/view/' + post.id)
+    }
+    else
+        store.edit(post.id)
+}
 provide('store', store)
 provide('head', head)
 </script>
@@ -22,7 +33,7 @@ provide('head', head)
     <tr>
         <template v-for="(header, key, idx) in head.headers" :key="idx">
             <td v-show="header.visible" :class="key == 'title' ? 'list-square title' : 'list-square'">
-                <span v-if="key == 'id'" class="edit-link" @click="store.edit(props.post['id'])">
+                <span v-if="key == 'id'" class="edit-link" @click="store.edit(moveContent(props.post))">
                     #{{ props.post.id }}
                 </span>
                 <span v-else-if="key == 'type'">
@@ -31,10 +42,10 @@ provide('head', head)
                     </VChip>
                 </span>
                 <span v-else-if="key == 'title'" :style="{ 'margin-left': `${props.depth * 20}px` }" class="edit-link"
-                    @click="router.push('/posts/view/' + props.post['id'])">
+                    @click="moveContent(props.post)">
                     <VIcon icon="gridicons:reply" size="20" class="me-2" />
                     <span>
-                        {{ props.post.title }}
+                        RE: {{ props.post.title }}
                     </span>
                 </span>
                 <span v-else-if="key == 'extra_col'">

@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
-import { useSearchStore } from '@/views/transactions/settle/part/useMerchandiseStore'
-import { useRequestStore } from '@/views/request'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import { selectFunctionCollect } from '@/views/selected'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
+import { useRequestStore } from '@/views/request'
+import { selectFunctionCollect } from '@/views/selected'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import { useSearchStore } from '@/views/transactions/settle/part/useMerchandiseStore'
 import { getUserLevel } from '@axios'
-import { cloneDeep } from 'lodash'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
+import { cloneDeep } from 'lodash'
 
 const route = useRoute()
 const { store, head, exporter, metas } = useSearchStore()
@@ -40,11 +40,8 @@ store.params.dev_use = corp.pv_options.auth.levels.dev_use
 store.params.id = route.params.id
 store.params.s_dt = route.query.s_dt
 store.params.e_dt = route.query.e_dt
+store.params.use_realtime_deposit = 0
 store.params.level = 10
-if (corp.pv_options.paid.use_realtime_deposit)
-    store.params.use_realtime_deposit = 0
-else
-    store.params.use_realtime_deposit = -1
 
 const isSalesCol = (key: string) => {
     const sales_cols = ['amount', 'trx_amount', 'mcht_settle_fee', 'hold_amount', 'total_trx_amount', 'profit']
@@ -162,9 +159,8 @@ watchEffect(() => {
                 </VBtn>
                 <div>
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.use_realtime_deposit"
-                        label="즉시출금 포함" color="primary"
-                        @update:modelValue="[store.updateQueryString({ use_realtime_deposit: store.params.use_realtime_deposit })]"
-                        v-if="corp.pv_options.paid.use_realtime_deposit"/>
+                        label="실시간 포함" color="primary"
+                        @update:modelValue="[store.updateQueryString({ use_realtime_deposit: store.params.use_realtime_deposit })]" />
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.only_cancel" label="취소 매출 조회"
                         color="error"
                         @update:modelValue="store.updateQueryString({ only_cancel: store.params.only_cancel })" />

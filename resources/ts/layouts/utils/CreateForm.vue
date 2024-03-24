@@ -1,10 +1,10 @@
 a
 <script setup lang="ts">
 
-import { VForm } from 'vuetify/components'
-import type { Tab } from '@/views/types'
 import { useRequestStore } from '@/views/request'
-import { user_info } from '@axios'
+import type { Tab } from '@/views/types'
+import { getUserLevel, isAbleModifyMcht, user_info } from '@axios'
+import { VForm } from 'vuetify/components'
 
 interface Props {
     id: number | string,
@@ -22,7 +22,7 @@ const { formRequest, remove, setOneObject } = useRequestStore()
 const disabledConditions = (index: number) => {
     const cond_1 = index == 2 && props.id == 0 && props.path == 'merchandises'
     const cond_2 = index == 3 && props.id == 0 && props.path == 'merchandises'
-    const cond_3 = index == 3 && user_info.value.level < 50 && props.path == 'services/brands'
+    const cond_3 = index == 3 && getUserLevel() < 50 && props.path == 'services/brands'
     return cond_1 || cond_2 || cond_3
 }
 
@@ -36,6 +36,31 @@ const hideConditions = () => {
     const cond_7 = props.path == 'posts/view' ? false : true
     return cond_1 && cond_2 && cond_3 && cond_4 && cond_5 && cond_6 && cond_7
 }
+
+const authHideConditions = () => {
+    const level = getUserLevel()
+    if(level < 35)
+    {
+        if(props.path === 'posts') {
+            if(props.id === 0)
+                return true
+            else if(props.id !== 0 && props.item.writer === user_info.value.user_name)
+                return true
+            else
+                return false
+        }
+        else
+        {
+            if(props.id === 0 && isAbleModifyMcht())
+                return true
+            else
+                return false
+        }
+    }
+    else
+        return true
+}
+
 watchEffect(() => {
     if (props.id) 
         setOneObject('/' + props.path, Number(props.id), props.item)
@@ -53,7 +78,7 @@ watchEffect(() => {
             <slot name="view"></slot>
         </VWindow>
     </VForm>
-    <VCard style="margin-top: 1em;" slot="button" v-show="hideConditions()">
+    <VCard style="margin-top: 1em;" slot="button" v-show="hideConditions() && authHideConditions()">
         <VCol class="d-flex gap-4">
             <VBtn type="button" style="margin-left: auto;" @click="formRequest('/'+props.path, props.item, vForm)">
                 {{ props.id == 0 ? "추가" : "수정" }}

@@ -1,20 +1,25 @@
 <script lang="ts" setup>
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import { useRequestStore } from '@/views/request'
-import { requiredValidator, nullValidator } from '@validators'
-import type { PayModule } from '@/views/types'
-import { 
-    module_types, installments, abnormal_trans_limits, ship_out_stats, under_sales_types, 
-    comm_settle_types, fin_trx_delays, cxl_types
- } from '@/views/merchandises/pay-modules/useStore'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { issuers } from '@/views/complaints/useStore'
-import { VForm } from 'vuetify/components'
+import {
+    abnormal_trans_limits,
+    comm_settle_types,
+    cxl_types,
+    fin_trx_delays,
+    installments,
+    module_types,
+    ship_out_stats, under_sales_types
+} from '@/views/merchandises/pay-modules/useStore'
+import { useRequestStore } from '@/views/request'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import type { PayModule } from '@/views/types'
+import { axios, getUserLevel, isAbleModifyMcht, salesLevels } from '@axios'
 import corp from '@corp'
-import { axios, getUserLevel, salesLevels } from '@axios'
+import { nullValidator, requiredValidator } from '@validators'
+import { VForm } from 'vuetify/components'
 
 interface Props {
     item: PayModule,
@@ -630,7 +635,7 @@ onMounted(() => {
                                     prepend-inner-icon="twemoji-spiral-notepad" auto-grow />
                             </VCol>
                         </VRow>
-                        <VRow>
+                        <VRow v-if="getUserLevel() >= 35 || (props.item.id === 0 && isAbleModifyMcht())">
                             <VCol class="d-flex gap-4">
                                 <VBtn type="button" style="margin-left: auto;"
                                     @click="update('/merchandises/pay-modules', props.item, vForm, false)">

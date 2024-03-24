@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import type { Post } from '@/views/types'
-import { requiredValidator } from '@validators'
-import Editor from '@/layouts/utils/Editor.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { types } from '@/views/posts/useStore'
+import Editor from '@/layouts/utils/Editor.vue'
 import { getUserLevel } from '@/plugins/axios'
+import { types } from '@/views/posts/useStore'
+import type { Post } from '@/views/types'
+import { requiredValidatorV2 } from '@validators'
 
 interface Props {
     item: Post,
@@ -14,6 +14,7 @@ const getPostTypes = computed(() => {
     if(getUserLevel() >= 35)
         return types
     else {
+        props.item.type = 2
         return [{ id: 2, title: "1:1 문의" }]
     }
 })
@@ -39,9 +40,9 @@ const getPostTypes = computed(() => {
                         <CreateHalfVCol :mdl="1" :mdr="11">
                             <template #name>제목</template>
                             <template #input>
-                                <VTextField id="nameHorizontalIcons" v-model="props.item.title"
+                                <VTextField v-model="props.item.title"
                                     prepend-inner-icon="ic-round-subtitles" placeholder="제목을 입력해주세요"
-                                    persistent-placeholder :rules="[requiredValidator]" />
+                                    persistent-placeholder :rules="[requiredValidatorV2(props.item.title, '제목')]" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>

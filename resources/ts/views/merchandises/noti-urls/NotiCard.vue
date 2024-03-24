@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import { useRequestStore } from '@/views/request'
-import { requiredValidator, nullValidator } from '@validators'
-import type { NotiUrl, Merchandise } from '@/views/types'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { useRequestStore } from '@/views/request'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import type { NotiUrl } from '@/views/types'
+import { getUserLevel, isAbleModifyMcht } from '@axios'
+import { nullValidator, requiredValidator } from '@validators'
 import { VForm } from 'vuetify/components'
 
 interface Props {
     item: NotiUrl,
     able_mcht_chanage: boolean,
-    pay_modules: PayModule[]
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
@@ -63,7 +63,7 @@ const { update, remove } = useRequestStore()
                                     prepend-inner-icon="twemoji-spiral-notepad" maxlength="190" auto-grow/>
                             </VCol>
                         </VRow>
-                        <VRow>
+                        <VRow v-if="getUserLevel() >= 35 || (props.item.id === 0 && isAbleModifyMcht())">
                             <VCol class="d-flex gap-4">
                                 <VBtn type="button" style="margin-left: auto;"
                                     @click="update('/merchandises/noti-urls', props.item, vForm, false)">

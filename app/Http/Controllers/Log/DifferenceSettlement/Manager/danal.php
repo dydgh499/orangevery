@@ -102,7 +102,7 @@ class danal implements DifferenceSettlementInterface
                 if((int)$add_field != 0)
                 {
                     $records[] = [
-                        'trans_id'   => $add_field,
+                        'trans_id'   => (int)$add_field,
                         'settle_result_code'    => $settle_result_code,
                         'settle_result_msg'     => $this->getSettleMessage($settle_result_code),
                         'card_company_result_code'  => '',

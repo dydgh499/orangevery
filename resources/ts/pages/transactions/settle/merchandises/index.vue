@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
-import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { selectFunctionCollect } from '@/views/selected'
+import { useStore } from '@/views/services/pay-gateways/useStore'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
 import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { useStore } from '@/views/services/pay-gateways/useStore'
+import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
+import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
@@ -23,13 +23,11 @@ provide('exporter', exporter)
 store.params.level = 10 // taransaction model에서 필수
 store.params.use_cancel_deposit = Number(corp.pv_options.paid.use_cancel_deposit)
 store.params.use_collect_withdraw = Number(corp.pv_options.paid.use_collect_withdraw)
+store.params.use_realtime_deposit = 0
 
 if(corp.pv_options.paid.use_settle_hold)
     store.params.use_settle_hold = 1
-if (corp.pv_options.paid.use_realtime_deposit)
-    store.params.use_realtime_deposit = 0
-else
-    store.params.use_realtime_deposit = -1
+
 
 const { settle_types } = useStore()
 const totals = ref(<any[]>([]))
@@ -72,9 +70,8 @@ onMounted(() => {
                     일괄 정산하기
                 </VBtn>
                 <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.use_realtime_deposit"
-                    label="즉시출금 포함" color="primary"
-                    @update:modelValue="[store.updateQueryString({ use_realtime_deposit: store.params.use_realtime_deposit })]"
-                    v-if="corp.pv_options.paid.use_realtime_deposit" />
+                    label="실시간 포함" color="primary"
+                    @update:modelValue="[store.updateQueryString({ use_realtime_deposit: store.params.use_realtime_deposit })]" />
             </template>
             <template #headers>
                 <tr>

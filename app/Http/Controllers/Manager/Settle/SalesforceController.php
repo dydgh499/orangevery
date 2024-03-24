@@ -172,15 +172,21 @@ class SalesforceController extends Controller
         [$settle_key, $group_key] = $this->getSettleCol($request);
         $cols  = $this->getTotalCols($settle_key);
         $idx = globalLevelByIndex($request->level);
-        $chart = Transaction::where($group_key, $request->id)
+        $query = Transaction::where($group_key, $request->id)
             ->noSettlement("sales".$idx."_settle_id")
             ->where(function ($query) use ($search) {
                 return $query->where('transactions.mid', 'like', "%$search%")
                     ->orWhere('transactions.tid', 'like', "%$search%")
                     ->orWhere('transactions.trx_id', 'like', "%$search%")
                     ->orWhere('transactions.appr_num', 'like', "%$search%");
-            })
-            ->first($cols);
+            });
+            
+        if($request->only_cancel)
+            $query = $query->where('transactions.is_cancel', true);
+        if($request->use_realtime_deposit == 0)
+            $query = $query->where('transactions.mcht_settle_type', '!=', -1);
+
+        $chart = $query->first($cols);
         if($chart)
         {
             $chart = $this->setTransChartFormat($chart);

@@ -60,12 +60,12 @@ class MerchandiseController extends Controller
             ->orWhere(function ($query) use($terminal_settle_ids) {    
                 $query->whereIn('id',$terminal_settle_ids);
             });
-            
+
         if($request->use_realtime_deposit == 0)
-        {   // 즉시출금 제외
+        {   // 실시간 제외
             $mcht_ids = $query->pluck('id')->all();
             $unuse_realtime_ids = PaymentModule::whereIn('mcht_id', $mcht_ids)
-                ->where('use_realtime_deposit', false)
+                ->where('settle_type', '!=', -1)
                 ->pluck('mcht_id')->all();
             $query = $query->whereIn('id', $unuse_realtime_ids);
         }
@@ -159,15 +159,20 @@ class MerchandiseController extends Controller
         $search = $request->input('search', '');
         [$settle_key, $group_key] = $this->getSettleCol($request);
         $cols  = $this->getTotalCols($settle_key);
-        $chart = Transaction::where('mcht_id', $request->id)
+        $query = Transaction::where('mcht_id', $request->id)
             ->noSettlement('mcht_settle_id')
             ->where(function ($query) use ($search) {
                 return $query->where('transactions.mid', 'like', "%$search%")
                     ->orWhere('transactions.tid', 'like', "%$search%")
                     ->orWhere('transactions.trx_id', 'like', "%$search%")
                     ->orWhere('transactions.appr_num', 'like', "%$search%");
-            })
-            ->first($cols);
+            });
+        if($request->only_cancel)
+            $query = $query->where('transactions.is_cancel', true);
+        if($request->use_realtime_deposit == 0)
+            $query = $query->where('transactions.mcht_settle_type', '!=', -1);
+
+        $chart = $query->first($cols);
         if($chart)
         {
             $chart = $this->setTransChartFormat($chart);

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { useSearchStore, types } from '@/views/posts/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import PostReplyView from '@/views/posts/PostReplyView.vue'
-import ExtraMenu from '@/views/posts/ExtraMenu.vue'
 import router from '@/router'
+import ExtraMenu from '@/views/posts/ExtraMenu.vue'
+import PostReplyView from '@/views/posts/PostReplyView.vue'
+import { types, useSearchStore } from '@/views/posts/useStore'
+import type { Post } from '@/views/types'
+import { getUserLevel, user_info } from '@axios'
 import { DateFilters } from '@core/enums'
-import { getUserLevel, isAbleModifyMcht, user_info } from '@axios'
 
 const { store, head, exporter } = useSearchStore()
 
@@ -13,6 +14,16 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
+const moveContent = (post: Post) => {
+    if(getUserLevel() < 35) {
+        if(post.writer === user_info.value.user_name)
+            store.edit(post.id)
+        else
+            router.push('/posts/view/' + post.id)
+    }
+    else
+        store.edit(post.id)
+}
 
 </script>
 <template>
@@ -40,7 +51,7 @@ provide('exporter', exporter)
                 <tr>
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                         <td v-show="_header.visible" :class="_key == 'title' ? 'list-square title' : 'list-square'">
-                            <span v-if="_key == `id`" class="edit-link" @click="store.edit(item['id'])">
+                            <span v-if="_key == `id`" class="edit-link" @click="moveContent(item)">
                                 #{{ item[_key] }}
                             </span>
                             <span v-else-if="_key == 'type'">
@@ -49,7 +60,7 @@ provide('exporter', exporter)
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'title'" class="edit-link"
-                                @click="router.push('/posts/view/' + item['id'])">
+                                @click="moveContent(item)">
                                 {{ item[_key] }}
                             </span>
                             <span v-else-if="_key == 'extra_col'">

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
-import { useSearchStore } from '@/views/transactions/dangers/useStore'
-import { useRequestStore } from '@/views/request'
-import { selectFunctionCollect } from '@/views/selected'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
+import { useRequestStore } from '@/views/request'
+import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import ExtraMenu from '@/views/transactions/dangers/ExtraMenu.vue'
+import { useSearchStore } from '@/views/transactions/dangers/useStore'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 
