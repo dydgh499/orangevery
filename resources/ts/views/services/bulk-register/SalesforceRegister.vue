@@ -72,10 +72,6 @@ const validate = () => {
             snackbar.value.show((i + 2) + '번째 영업점의 사업자등록번호는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
-        else if (isEmpty(saleses.value[i].resident_num)) {
-            snackbar.value.show((i + 2) + '번째 영업점의 주민등록번호는 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
         else if (typeof lengthValidatorV2(saleses.value[i].resident_num, 14) != 'boolean') {
             snackbar.value.show((i + 2) + '번째 영업점의 주민등록번호 포멧이 정확하지 않습니다.', 'error')
             is_clear.value = false
