@@ -51,7 +51,7 @@ class Merchandise extends Authenticatable
         $query = $this->hasMany(Transaction::class, 'mcht_id')->noSettlement('mcht_settle_id');
 
         // 실패건은 제외하고 조회
-        if(request()->use_realtime_deposit == 1)
+        if(request()->use_realtime_deposit === 1)
             $query = $query->whereNotIn('id', RealtimeSendHistory::onlyFailRealtime());
 
         return $query->select($cols);

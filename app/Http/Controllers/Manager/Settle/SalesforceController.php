@@ -183,7 +183,7 @@ class SalesforceController extends Controller
             
         if($request->only_cancel)
             $query = $query->where('transactions.is_cancel', true);
-        if($request->use_realtime_deposit == 0)
+        if($request->use_realtime_deposit === 0)
             $query = $query->where('transactions.mcht_settle_type', '!=', -1);
 
         $chart = $query->first($cols);
