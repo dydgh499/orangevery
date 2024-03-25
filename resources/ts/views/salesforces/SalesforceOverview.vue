@@ -88,7 +88,7 @@ const addAbleSalesLevels = () => {
                         </VCol>
                         <VCol cols="12">
                             <VRow>
-                                <VCol cols="12" md="6">
+                                <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
                                     <VRow no-gutters style="align-items: center;">
                                         <VCol>정산 세율</VCol>
                                         <VCol md="8">
