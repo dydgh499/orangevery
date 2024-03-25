@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import DialogHalfVCol from '@/layouts/utils/DialogHalfVCol.vue'
-import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
-import type { SalesSlip, PayGateway, BeforeBrandInfo } from '@/views/types'
-import html2canvas from "html2canvas"
-import cancel from '@images/salesslip/cancel.png'
-import background from '@images/salesslip/background.jpg'
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
+import type { BeforeBrandInfo, PayGateway, SalesSlip } from '@/views/types'
 import corp from '@corp'
+import background from '@images/salesslip/background.jpg'
+import cancel from '@images/salesslip/cancel.png'
+import html2canvas from "html2canvas"
 
 interface Props {
     pgs: PayGateway[],
@@ -174,6 +174,10 @@ defineExpose({
                     <DialogHalfVCol class="cell">
                         <template #name>거래일시</template>
                         <template #input>{{ trans?.trx_dttm }}</template>
+                    </DialogHalfVCol>
+                    <DialogHalfVCol class="cell" v-if="trans?.is_cancel">
+                        <template #name>취소일시</template>
+                        <template #input>{{ trans?.cxl_dttm }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
                         <template #name>발급사</template>
