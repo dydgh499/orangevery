@@ -113,7 +113,7 @@ trait SettleTrait
     {
         foreach($data['content'] as $content) 
         {
-            if($cancel_deposits)
+            if(count($cancel_deposits))
             {
                 $cancel_deposit = $cancel_deposits->firstWhere('mcht_id', $content->id);        
                 $cancel_deposit_amount = $cancel_deposit ? (int)$cancel_deposit->cancel_deposit_amount : 0;    
