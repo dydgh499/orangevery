@@ -109,24 +109,22 @@ trait SettleTrait
     }
 
     // 최종 정산금 세팅
-    protected function setSettleFinalAmount($data)
+    protected function setSettleFinalAmount($data, $cancel_deposits)
     {
         foreach($data['content'] as $content) 
         {
+            $cancel_deposit = $cancel_deposits->firstWhere('mcht_id', $content->id);
+            $cancel_deposit_amount = $cancel_deposit ? (int)$cancel_deposit->cancel_deposit_amount : 0;
+            $total_withdraw_amount = request()->use_collect_withdraw ? $content->collectWithdraws->sum('total_withdraw_amount') : 0;
+
             $settle = $content->total['profit'] + $content->deduction['amount'];
             $settle += $content->terminal['amount'];
-            $settle += $content->terminal['under_sales_amount'];
-            
-            $cancel_deposit = request()->use_cancel_deposit ? $content->transactions->reduce(function($carry, $transaction) {
-                return $carry + $transaction->cancelDeposits->sum('deposit_amount');
-            }, 0) : 0;
-
-            $total_withdraw_amount = request()->use_collect_withdraw ? $content->collectWithdraws->sum('total_withdraw_amount') : 0;
-            $settle += $cancel_deposit;
+            $settle += $content->terminal['under_sales_amount'];            
+            $settle += $cancel_deposit_amount;
             $settle -= $total_withdraw_amount;
             $settle -= $content->withdraw_fee;
             $content->settle = [
-                'cancel_deposit_amount'   => $cancel_deposit,
+                'cancel_deposit_amount'   => $cancel_deposit_amount,
                 'collect_withdraw_amount' => $total_withdraw_amount * -1,
                 'withdraw_fee' => $content->withdraw_fee * -1,
                 'amount'    => $settle,

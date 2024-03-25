@@ -42,6 +42,26 @@ class MerchandiseController extends Controller
         return globalAuthFilter($query, $request, 'merchandises')->byTargetIds($target_id);
     }
 
+
+    private function getCancelDeposits($request, $data)
+    {
+        if($request->use_cancel_deposit)
+        {
+            $ids = $data['content']->pluck('id')->all();
+            return Transaction::join('cancel_deposits', 'transactions.id', '=', 'cancel_deposits.trans_id')
+            ->where('cancel_deposits.deposit_date', '<=', $request->e_dt)
+            ->where('cancel_deposits.deposit_date', '>=', $request->s_dt)
+            ->whereIn('transactions.mcht_id', $ids)
+            ->groupby('transactions.mcht_id')
+            ->get([
+                'mcht_id',
+                DB::raw('SUM(cancel_deposits.deposit_amount) as cancel_deposit_amount'),
+            ]);
+        }
+        else
+            return [];
+    }
+
     private function commonQuery($request)
     {
         $validated = $request->validate(['s_dt'=>'required|date', 'e_dt'=>'required|date']);
@@ -73,18 +93,12 @@ class MerchandiseController extends Controller
         if($request->use_collect_withdraw)
             $query = $query->with(['collectWithdraws']);
 
-        $with = ['deducts', 'settlePayModules'];
-        // 취소 입금
-        if($request->use_cancel_deposit)
-            $with[] = 'transactions.cancelDeposits';
-        else
-            $with[] = 'transactions';
-
+        $with = ['deducts', 'settlePayModules', 'transactions'];
         $data = $this->getIndexData($request, $query->with($with), 'id', $cols, "created_at", false);
         $data = $this->getSettleInformation($data, $settle_key);
         $data = $this->setTerminalCost($data, $request->s_dt, $request->s_dt, 'mcht_id');
         // set total settle
-        $data = $this->setSettleFinalAmount($data);
+        $data = $this->setSettleFinalAmount($data, $this->getCancelDeposits($request, $data));
         return $data;
     }
 

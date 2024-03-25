@@ -97,7 +97,7 @@ class SalesforceController extends Controller
         }
         $data = $this->setTerminalCost($data, $s_dt, $e_dt, $target_id);
         // set total settle
-        $data = $this->setSettleFinalAmount($data);
+        $data = $this->setSettleFinalAmount($data, []);
         return $data;
     }
     
