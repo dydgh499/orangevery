@@ -47,16 +47,21 @@ class MerchandiseController extends Controller
     {
         if($request->use_cancel_deposit)
         {
-            $ids = $data['content']->pluck('id')->all();
-            return Transaction::join('cancel_deposits', 'transactions.id', '=', 'cancel_deposits.trans_id')
-            ->where('cancel_deposits.deposit_date', '<=', $request->e_dt)
-            ->where('cancel_deposits.deposit_date', '>=', $request->s_dt)
-            ->whereIn('transactions.mcht_id', $ids)
-            ->groupby('transactions.mcht_id')
-            ->get([
-                'mcht_id',
-                DB::raw('SUM(cancel_deposits.deposit_amount) as cancel_deposit_amount'),
-            ]);
+            if(count($data['content']))
+            {
+                $ids = $data['content']->pluck('id')->all();
+                return Transaction::join('cancel_deposits', 'transactions.id', '=', 'cancel_deposits.trans_id')
+                ->where('cancel_deposits.deposit_date', '<=', $request->e_dt)
+                ->where('cancel_deposits.deposit_date', '>=', $request->s_dt)
+                ->whereIn('transactions.mcht_id', $ids)
+                ->groupby('transactions.mcht_id')
+                ->get([
+                    'mcht_id',
+                    DB::raw('SUM(cancel_deposits.deposit_amount) as cancel_deposit_amount'),
+                ]);    
+            }
+            else
+                return [];
         }
         else
             return [];
