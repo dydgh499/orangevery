@@ -3,7 +3,6 @@ import MchtBatchOverview from '@/layouts/components/batch-updaters/MchtBatchOver
 import PayModuleBatchOverview from '@/layouts/components/batch-updaters/PayModuleBatchOverview.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import type { Options, Salesforce } from '@/views/types'
@@ -87,7 +86,7 @@ const addAbleSalesLevels = () => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" v-if="getUserLevel() >= 35">
+                        <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;">
