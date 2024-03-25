@@ -6,7 +6,7 @@ import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import type { Options, Salesforce } from '@/views/types'
-import { getUserLevel } from '@axios'
+import { getUserLevel, salesLevels } from '@axios'
 import corp from '@corp'
 import { nullValidator, requiredValidator } from '@validators'
 
@@ -36,7 +36,7 @@ const addAbleSalesLevels = () => {
         sales.push({ id: 25, title: levels.sales4_name })
     if (levels.sales5_use && getUserLevel() > 30)
         sales.push({ id: 30, title: levels.sales5_name })
-    return sales
+    return props.item.id == 0 ? salesLevels() : sales
 }
 
 </script>
