@@ -47,7 +47,7 @@ const validate = () => {
     var date_regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
     
     for (let i = 0; i < items.value.length; i++) {
-        items.value[i].mcht_name = items.value[i].mcht_name?.trim()
+        items.value[i].mcht_name = items.value[i].mcht_name ? items.value[i].mcht_name?.trim() : ''
         const pg_id = pgs.find(item => item.id === items.value[i].pg_id)
         const ps_id = pss.find(item => item.id === items.value[i].ps_id)
         const settle_type = settle_types.find(item => item.id === items.value[i].settle_type)

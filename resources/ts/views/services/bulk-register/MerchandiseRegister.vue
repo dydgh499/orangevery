@@ -62,13 +62,13 @@ const validate = async() => {
     const mcht_names = new Set()
     for (let i = 0; i < items.value.length; i++) {
         const acct_bank_name = banks.find(sales => sales.title === items.value[i].acct_bank_name)
-        items.value[i].sales0_name = items.value[i].sales0_name?.trim()
-        items.value[i].sales1_name = items.value[i].sales1_name?.trim()
-        items.value[i].sales2_name = items.value[i].sales2_name?.trim()
-        items.value[i].sales3_name = items.value[i].sales3_name?.trim()
-        items.value[i].sales4_name = items.value[i].sales4_name?.trim()
-        items.value[i].sales5_name = items.value[i].sales5_name?.trim()
-        items.value[i].resident_num = items.value[i].resident_num.trim()
+        items.value[i].sales0_name = items.value[i].sales0_name ? items.value[i].sales0_name?.trim() : ''
+        items.value[i].sales1_name = items.value[i].sales1_name ? items.value[i].sales1_name?.trim() : ''
+        items.value[i].sales2_name = items.value[i].sales2_name ? items.value[i].sales2_name?.trim() : ''
+        items.value[i].sales3_name = items.value[i].sales3_name ? items.value[i].sales3_name?.trim() : ''
+        items.value[i].sales4_name = items.value[i].sales4_name ? items.value[i].sales4_name?.trim() : ''
+        items.value[i].sales5_name = items.value[i].sales5_name ? items.value[i].sales5_name?.trim() : ''
+        items.value[i].resident_num = items.value[i].resident_num ? items.value[i].resident_num.trim() : ''
 
         if(user_names.has(items.value[i].user_name)) {
             snackbar.value.show((i + 2) + '번째 아이디가 중복됩니다.('+items.value[i].user_name+")", 'error')

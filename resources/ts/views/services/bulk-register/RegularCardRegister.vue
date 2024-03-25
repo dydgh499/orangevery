@@ -22,7 +22,7 @@ const is_clear = ref<boolean>(false)
 
 const validate = () => {
     for (let i = 0; i < items.value.length; i++) {
-        items.value[i].mcht_name = items.value[i].mcht_name?.trim()
+        items.value[i].mcht_name = items.value[i].mcht_name ? items.value[i].mcht_name?.trim() : ''
         const mcht = mchts.find(item => item.mcht_name == items.value[i].mcht_name)
         
         if (mcht == null) {

@@ -1,11 +1,11 @@
 <script lang="ts" setup>
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import { Registration } from '@/views/registration';
+import { useSalesFilterStore } from '@/views/salesforces/useStore';
+import PGExplainDialog from '@/views/services/bulk-register/PGExplainDialog.vue';
+import { useRegisterStore } from '@/views/services/bulk-register/PayModulePGStore';
+import { useStore } from '@/views/services/pay-gateways/useStore';
 import { axios } from '@axios';
-import { useRegisterStore } from '@/views/services/bulk-register/PayModulePGStore'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import PGExplainDialog from '@/views/services/bulk-register/PGExplainDialog.vue'
-import { Registration } from '@/views/registration'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 
 const { head, headers } = useRegisterStore()
 const { mchts } = useSalesFilterStore()
@@ -26,7 +26,7 @@ const pgExplain = ref()
 
 const validate = () => {
     for (let i = 0; i < items.value.length; i++) {
-        items.value[i].mcht_name = items.value[i].mcht_name?.trim()
+        items.value[i].mcht_name = items.value[i].mcht_name ? items.value[i].mcht_name?.trim() : ''
         const pg_id = pgs.find(item => item.id === items.value[i].pg_id)
         const ps_id = pss.find(item => item.id === items.value[i].ps_id)
         const mcht  = mchts.find(item => item.mcht_name == items.value[i].mcht_name)
