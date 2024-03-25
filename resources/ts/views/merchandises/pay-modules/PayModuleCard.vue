@@ -635,7 +635,7 @@ onMounted(() => {
                                     prepend-inner-icon="twemoji-spiral-notepad" auto-grow />
                             </VCol>
                         </VRow>
-                        <VRow v-if="getUserLevel() >= 35 || (props.item.id === 0 && isAbleModifyMcht())">
+                        <VRow v-if="getUserLevel() >= 35 || (isAbleModifyMcht())">
                             <VCol class="d-flex gap-4">
                                 <VBtn type="button" style="margin-left: auto;"
                                     @click="update('/merchandises/pay-modules', props.item, vForm, false)">

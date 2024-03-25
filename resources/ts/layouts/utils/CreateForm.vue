@@ -51,7 +51,7 @@ const authHideConditions = () => {
         }
         else
         {
-            if(props.id === 0 && isAbleModifyMcht())
+            if(isAbleModifyMcht())
                 return true
             else
                 return false

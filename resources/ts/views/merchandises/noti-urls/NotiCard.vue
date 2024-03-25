@@ -63,7 +63,7 @@ const { update, remove } = useRequestStore()
                                     prepend-inner-icon="twemoji-spiral-notepad" maxlength="190" auto-grow/>
                             </VCol>
                         </VRow>
-                        <VRow v-if="getUserLevel() >= 35 || (props.item.id === 0 && isAbleModifyMcht())">
+                        <VRow v-if="getUserLevel() >= 35 || (isAbleModifyMcht())">
                             <VCol class="d-flex gap-4">
                                 <VBtn type="button" style="margin-left: auto;"
                                     @click="update('/merchandises/noti-urls', props.item, vForm, false)">
