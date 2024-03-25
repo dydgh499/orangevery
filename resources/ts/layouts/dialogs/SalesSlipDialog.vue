@@ -172,7 +172,7 @@ defineExpose({
                         <template #input>{{ trans?.is_cancel ? "취소" : '승인' }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell">
-                        <template #name>거래일시</template>
+                        <template #name>승인일시</template>
                         <template #input>{{ trans?.trx_dttm }}</template>
                     </DialogHalfVCol>
                     <DialogHalfVCol class="cell" v-if="trans?.is_cancel">
