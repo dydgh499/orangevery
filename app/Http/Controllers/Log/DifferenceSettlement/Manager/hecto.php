@@ -82,7 +82,7 @@ class hecto implements DifferenceSettlementInterface
             $data = $datas[$i];
             $is_cancel  = $this->getNtypeField($data, 2, 1);    //원래는 A타입으로 읽어야함 내부 로직상 변경
             $req_dt     = $this->getNtypeField($data, 3, 8);
-            $add_field  = $this->getAtypeField($data, 219, 40);
+            $add_field  = (int)$this->getAtypeField($data, 219, 40);
             $mcht_section_code = $this->getAtypeField($data, 259, 1);
             $supply_amount  = $this->getNtypeField($data, 260, 15);
             $vat_amount     = $this->getNtypeField($data, 275, 15);
@@ -99,27 +99,32 @@ class hecto implements DifferenceSettlementInterface
                     $vat_amount *= -1;
                     $settle_amount *= -1;
                 }
-    
-                $req_dt     = Carbon::createFromFormat('Ymd', (string)$req_dt)->format('Y-m-d');
-                $settle_dt  = Carbon::createFromFormat('Ymd', (string)$settle_dt)->format('Y-m-d');
-                if((int)$add_field != 0)
+                $record = [
+                    'trans_id'   => $add_field,
+                    'settle_result_code'    => $settle_result_code,
+                    'settle_result_msg'     => $this->getSettleMessage($settle_result_code),
+                    'card_company_result_code'  => $card_company_result_code,
+                    'card_company_result_msg'   => $this->getCardCompanyMessage($card_company_result_code),
+                    'mcht_section_code' => $mcht_section_code,
+                    'mcht_section_name'  => $this->getMchtSectionName($mcht_section_code),
+                    'req_dt'    => $req_dt,
+                    'settle_dt' => $settle_dt,
+                    'supply_amount' => $supply_amount,
+                    'vat_amount' => $vat_amount,
+                    'settle_amount' => $settle_amount,
+                    'created_at' => $cur_date,
+                    'updated_at' => $cur_date,
+                ];
+                try
                 {
-                    $records[] = [
-                        'trans_id'   => $add_field,
-                        'settle_result_code'    => $settle_result_code,
-                        'settle_result_msg'     => $this->getSettleMessage($settle_result_code),
-                        'card_company_result_code'  => $card_company_result_code,
-                        'card_company_result_msg'   => $this->getCardCompanyMessage($card_company_result_code),
-                        'mcht_section_code' => $mcht_section_code,
-                        'mcht_section_name'  => $this->getMchtSectionName($mcht_section_code),
-                        'req_dt'    => $req_dt,
-                        'settle_dt' => $settle_dt,
-                        'supply_amount' => $supply_amount,
-                        'vat_amount' => $vat_amount,
-                        'settle_amount' => $settle_amount,
-                        'created_at' => $cur_date,
-                        'updated_at' => $cur_date,
-                    ];
+                    $record['req_dt']     = Carbon::createFromFormat('Ymd', (string)$req_dt)->format('Y-m-d');
+                    $record['settle_dt']  = Carbon::createFromFormat('Ymd', (string)$settle_dt)->format('Y-m-d');
+                    if($add_field !== 0)
+                        $records[] = $record;    
+                }
+                catch(\Throwable $e)
+                {
+                    error($record, 'hecto-('.$e->getMessage().')');
                 }
             }
             else
