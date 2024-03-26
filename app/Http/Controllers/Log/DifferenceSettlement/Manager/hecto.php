@@ -124,7 +124,7 @@ class hecto implements DifferenceSettlementInterface
                 }
                 catch(\Throwable $e)
                 {
-                    error($record, 'hecto-('.$e->getMessage().')');
+                    error($record, 'hecto-difference-settlement-get-data('.$e->getMessage().')');
                 }
             }
             else
