@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager\Settle;
 
 use App\Models\Merchandise;
 use App\Models\Transaction;
+use App\Models\Log\RealtimeSendHistory;
 use App\Models\Log\SettleDeductMerchandise;
 use App\Models\PaymentModule;
 
@@ -86,14 +87,6 @@ class MerchandiseController extends Controller
                 $query->whereIn('id',$terminal_settle_ids);
             });
 
-        if($request->use_realtime_deposit === 0)
-        {   // 실시간 제외
-            $mcht_ids = $query->pluck('id')->all();
-            $unuse_realtime_ids = PaymentModule::whereIn('mcht_id', $mcht_ids)
-                ->where('settle_type', '!=', -1)
-                ->pluck('mcht_id')->all();
-            $query = $query->whereIn('id', $unuse_realtime_ids);
-        }
         // 모아서 출금
         if($request->use_collect_withdraw)
             $query = $query->with(['collectWithdraws']);
@@ -188,8 +181,17 @@ class MerchandiseController extends Controller
             });
         if($request->only_cancel)
             $query = $query->where('transactions.is_cancel', true);
-        if($request->use_realtime_deposit === 0)
+
+        // 실패건은 제외하고 조회
+        if((int)$request->use_realtime_deposit === 1)
+        {
+            $fails = RealtimeSendHistory::onlyFailRealtime();
+            if(count($fails))
+                $query = $query->whereNotIn('transactions.id', $fails);
+        }
+        else
             $query = $query->where('transactions.mcht_settle_type', '!=', -1);
+       //TODO: 영업점으로 통일할때 꼭 mcht_id if 적용
 
         $chart = $query->first($cols);
         if($chart)

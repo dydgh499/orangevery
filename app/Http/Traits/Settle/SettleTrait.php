@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits\Settle;
 use Illuminate\Support\Facades\DB;
+use App\Models\Log\RealtimeSendHistory;
 use App\Models\Transaction;
 
 trait SettleTrait
@@ -95,10 +96,18 @@ trait SettleTrait
             
         if($request->only_cancel)
             $query = $query->where('transactions.is_cancel', true);
-        /*
-        if($request->use_realtime_deposit === 0)
+
+        // 실패건은 제외하고 조회
+        if((int)request()->use_realtime_deposit === 1)
+        {
+            $fails = RealtimeSendHistory::onlyFailRealtime();
+            if(count($fails))
+                $query = $query->whereNotIn('transactions.id', $fails);
+        }
+        else
             $query = $query->where('transactions.mcht_settle_type', '!=', -1);
-        */
+       //TODO: 영업점으로 통일할때 꼭 mcht_id if 적용
+
         if($request->use_collect_withdraw)
         {   // 모아서 출금건만 가능
             $query = $query
