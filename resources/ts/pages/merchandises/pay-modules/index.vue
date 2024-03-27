@@ -166,7 +166,7 @@ onMounted(() => {
                                 <span v-else-if="_key == 'fin_trx_delay'">
                                     {{ fin_trx_delays.find(settle_type => settle_type['id'] === item[_key])?.title }}
                                 </span>
-                                <span v-else-if="_key.includes('_limit') || _key === 'pay_dupe_least'">
+                                <span v-else-if="(_key.includes('_limit') || _key === 'pay_dupe_least') && _key != 'pay_dupe_limit'">
                                     <teamplate
                                         v-if="(item.module_type != 0 || _key == 'abnormal_trans_limit' || _key == 'pay_dupe_least') && item[_key] != 0">
                                         {{ item[_key] }}만원
