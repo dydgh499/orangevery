@@ -150,7 +150,7 @@ const addAbleSalesLevels = () => {
                         </VCol>
                         <VCol>
                             <VTextarea v-model="props.item.note" counter label="메모사항"
-                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="95" auto-grow />
+                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
                         </VCol>
                     </VRow>
                 </VCardItem>

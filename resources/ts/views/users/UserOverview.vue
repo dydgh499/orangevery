@@ -120,15 +120,15 @@ watchEffect(() => {
                             <template #input>
                                 <VRow style="align-items: center;">
                                     <VCol :cols="5">
-                                        <VTextField v-model="props.item.resident_num_front" type="number"
+                                        <VTextField v-model="props.item.resident_num_front" type="number" id="regidentFrontNum"
                                             prepend-inner-icon="carbon-identification" placeholder="800101" maxlength="6" />
                                     </VCol>
                                     <span> - </span>
                                     <VCol :cols="5">
                                         <VTextField v-model="props.item.resident_num_back" placeholder="*******" maxlength="7"
                                             :append-inner-icon="is_resident_num_back_show ? 'tabler-eye' : 'tabler-eye-off'"
-                                            :type="is_resident_num_back_show ? 'number' : 'password'" 
-                                            @click:append-inner="is_resident_num_back_show = !is_resident_num_back_show" />
+                                            :type="is_resident_num_back_show ? 'number' : 'password'"  id="regidentBackNum"
+                                            @click:append-inner="is_resident_num_back_show = !is_resident_num_back_show"/>
                                     </VCol>
                                 </VRow>
                             </template>

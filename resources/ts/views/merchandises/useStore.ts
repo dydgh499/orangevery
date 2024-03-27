@@ -201,7 +201,7 @@ export const defaultItemInfo = () => {
         enabled: 1,
         use_saleslip_prov: 1,
         use_saleslip_sell: 0,
-        is_show_fee: 0,
+        is_show_fee: 1,
         note: '',
         dev_fee: 0,
         use_regular_card: 0,

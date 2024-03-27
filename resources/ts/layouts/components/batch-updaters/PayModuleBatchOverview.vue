@@ -2,7 +2,7 @@
 
 <script lang="ts" setup>
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
-import { abnormal_trans_limits } from '@/views/merchandises/pay-modules/useStore'
+import { abnormal_trans_limits, installments } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { axios } from '@axios'
 import corp from '@corp'
@@ -30,6 +30,7 @@ const pay_module = reactive<any>({
     pay_tid: '',
     api_key: '',
     sub_key: '',
+    installment: 0,
 
     pay_single_limit: 0,
     pay_day_limit: 0,
@@ -139,11 +140,18 @@ const setSubKey = () => {
         'sub_key': pay_module.sub_key,
     })
 }
+const setInstallment = () => {
+    post('set-installment', {
+        'installment': pay_module.installment,
+    })
+}
+
 const setNote = () => {
     post('set-note', {
         'note': pay_module.note,
     })
 }
+
 const filterPgs = computed(() => {
     const filter = pss.filter(item => { return item.pg_id == pay_module.pg_id })
     pay_module.ps_id = psFilter(filter, pay_module.ps_id)
@@ -263,6 +271,7 @@ const filterPgs = computed(() => {
                         </VRow>
                     </VCol>
                 </VRow>
+                <VDivider style="margin: 1em 0;" />
                 <VRow>
                     <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_pay_limit">
                         <VRow no-gutters style="align-items: center;">
@@ -327,6 +336,7 @@ const filterPgs = computed(() => {
                         </VRow>
                     </VCol>
                 </VRow>
+                <VDivider style="margin: 1em 0;" />
                 <VRow>
                     <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
@@ -388,10 +398,26 @@ const filterPgs = computed(() => {
                     </VCol>
                 </VRow>
                 <VRow>
-                    <VCol :md="12" :cols="12">
+                    <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
-                            <VCol md="2">결제모듈 별칭</VCol>
-                            <VCol md="10">
+                            <VCol>할부개월</VCol>
+                            <VCol md="8">
+                                <div class="batch-container">                                    
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.installment"
+                                        :items="installments" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                        label="할부한도 선택" item-title="title" item-value="id" single-line />
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setInstallment()">
+                                        즉시적용
+                                        <VIcon end icon="tabler-direction-sign" />
+                                    </VBtn>
+                                </div>
+                            </VCol>
+                        </VRow>
+                    </VCol>
+                    <VCol :md="6" :cols="12">
+                        <VRow no-gutters style="align-items: center;">
+                            <VCol>결제모듈 별칭</VCol>
+                            <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField v-model="pay_module.note" placeholder='결제모듈 명칭을 적어주세요.😀'
                                         prepend-inner-icon="twemoji-spiral-notepad" />

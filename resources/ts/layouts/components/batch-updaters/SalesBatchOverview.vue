@@ -251,7 +251,7 @@ const setNote = () => {
                                 <VCol md="9">
                                     <div class="batch-container">
                                         <VTextField v-model="salesforces.note" counter label="메모사항"
-                                            prepend-inner-icon="twemoji-spiral-notepad" maxlength="95" auto-grow />
+                                            prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
                                         <VBtn style='margin-bottom: auto; margin-left: 0.5em;' variant="tonal"
                                             @click="setNote()">
                                             즉시적용

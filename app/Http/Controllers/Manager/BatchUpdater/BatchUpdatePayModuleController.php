@@ -187,6 +187,13 @@ class BatchUpdatePayModuleController extends Controller
         return $this->response(1);
     }
 
+    public function setInstallment(Request $request)
+    {
+        $cols = ['installment' => $request->installment];
+        $row = $this->payModuleBatch($request)->update($cols);
+        return $this->response(1);
+    }
+
     /**
      * 결제모듈 별칭 일괄적용
      *

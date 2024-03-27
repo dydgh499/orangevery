@@ -342,7 +342,7 @@ initAllSales()
                                 <VCol md="8">
                                     <div class="batch-container">
                                         <VTextField v-model="noti.noti_note" counter label="메모사항"
-                                            prepend-inner-icon="twemoji-spiral-notepad" maxlength="95" />
+                                            prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" />
                                         <VBtn variant="tonal" @click="setNotiUrl()"
                                             style="margin-bottom: auto; margin-left: 0.5em;">
                                             즉시적용

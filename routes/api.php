@@ -245,6 +245,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
                     Route::post('set-tid', [BatchUpdatePayModuleController::class, 'setTid']);
                     Route::post('set-api-key', [BatchUpdatePayModuleController::class, 'setApiKey']);
                     Route::post('set-sub-key', [BatchUpdatePayModuleController::class, 'setSubKey']);
+                    Route::post('set-installment', [BatchUpdatePayModuleController::class, 'setInstallment']);
                     Route::post('set-note', [BatchUpdatePayModuleController::class, 'setNote']);
                     Route::post('set-pay-limit', [BatchUpdatePayModuleController::class, 'setPayLimit']);
                     Route::post('set-pay-disable-time', [BatchUpdatePayModuleController::class, 'setForbiddenPayTime']);
