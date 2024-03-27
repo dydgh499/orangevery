@@ -112,7 +112,7 @@ class DashboardController extends Controller
                             'amount' => (int)$day->cxl_amount,
                         ],
                         'amount' => $day->appr_amount + $day->cxl_amount,
-                        'profit' =>  $day->profit,
+                        'profit' => (int)$day->profit,
                     ];
                 }
             }
