@@ -17,9 +17,9 @@ const colors = ref(<string[]>([]))
 const dayofweeks = ref(<string[]>([]))
 const series = ref(<Series[]>([
     {
-        name: '매출',
+        name: '매출액',
         data: [] as number[],
-    }
+    },
 ]))
 
 const getSeries = (idays: string[], week: TransWeekChart) => {
@@ -76,6 +76,21 @@ const chartOptions = computed(() => {
         },
         tooltip: {
             enabled: true,
+            custom: function({ series, seriesIndex, dataPointIndex, w }: { series: ApexAxisChartSeries; seriesIndex: number; dataPointIndex: number; w: any }) {
+            const week = monthly_transactions.weekly
+            const idays = Object.keys(week)
+            const data = week[idays[dataPointIndex]]
+            return `<div class="tooltip">
+                    <div style='padding:0.5em;' class='tooltip-header'>
+                        <span>${idays[dataPointIndex]}(${w.globals.labels[dataPointIndex]})<span>
+                    </div>
+                    <div style='padding:0.5em;' class='text-primary'>
+                    <span>매출액: <b>${data['amount'].toLocaleString()} ￦</b></span>
+                    <br>
+                    <span>정산금: <b>${data['profit'].toLocaleString()} ￦</b></span>
+                    </div>
+                </div>`;
+          }
         },
         grid: {
             show: false,
@@ -224,3 +239,9 @@ const chartOptions = computed(() => {
         </VCardText>
     </VCard>
 </template>
+<style>
+.tooltip-header {
+  background-color: rgb(var(--v-theme-primary)) !important;
+  color: rgb(var(--v-theme-on-primary)) !important;
+}
+</style>
