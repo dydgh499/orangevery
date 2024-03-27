@@ -120,7 +120,8 @@ trait SettleHistoryTrait
     */
     protected function SetNullCancelDeposit($data)
     {
-        CancelDeposit::where('mcht_settle_id', $data['id'])->update(['mcht_settle_id' => null]);
+        // FK delete NULL update
+        // CancelDeposit::where('mcht_settle_id', $data['id'])->update(['mcht_settle_id' => null]);
     }
 
     /*

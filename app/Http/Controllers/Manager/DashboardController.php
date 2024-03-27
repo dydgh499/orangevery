@@ -75,7 +75,7 @@ class DashboardController extends Controller
         }
 
         $monthly = DB::select('CALL getMonthlyAmount(?, ?, ?)', [$key, $id, $settle_key]);
-        $daily = DB::select('CALL getDailyAmount(?, ?)', [$key, $id]);
+        $daily = DB::select('CALL getDailyAmount(?, ?, ?)', [$key, $id, $settle_key]);
         [$datas['cur_profit_rate'], $datas['cur_amount_rate'], $datas['cur_profit'], $datas['cur_amount']] = $this->transactionIncrease($key, $id, $settle_key);
 
         foreach($monthly as $month)
@@ -111,7 +111,8 @@ class DashboardController extends Controller
                         'cxl' => [
                             'amount' => (int)$day->cxl_amount,
                         ],
-                        'amount' => $day->appr_amount + $day->cxl_amount
+                        'amount' => $day->appr_amount + $day->cxl_amount,
+                        'profit' =>  $day->profit,
                     ];
                 }
             }
@@ -139,7 +140,7 @@ class DashboardController extends Controller
     public function getUpSideChartFormat($query, $orm, $table, $brand_id)
     {
         $select = '(counts.cur_mon_count - counts.last_month_count) / NULLIF(counts.last_month_count, 1) * 100 AS cur_increase_rate';
-        $increase = $this->increase($orm, $table, $brand_id, $select, 'COUNT(*)');        
+        $increase = $this->increase($orm, $table, $brand_id, $select, 'SUM(is_delete = 0)');        
 
         $datas = [
             'cur_increase_rate' => (float)$increase['cur_increase_rate'],

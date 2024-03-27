@@ -75,7 +75,7 @@ const chartOptions = computed(() => {
             },
         },
         tooltip: {
-            enabled: false,
+            enabled: true,
         },
         grid: {
             show: false,

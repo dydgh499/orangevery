@@ -12,7 +12,7 @@ export function settlementFunctionCollect(store: any) {
     const errorHandler = <any>(inject('$errorHandler'))
 
     const getSettleFormat = (item:Settle, is_mcht:boolean) => {
-        return {            
+        return {
             id: item.id,
             acct_name: item.acct_name,
             acct_num: item.acct_num,
