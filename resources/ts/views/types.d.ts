@@ -618,6 +618,7 @@ export interface Settle extends TotalSettle, Bank {
     business_num: string,
     addr: string,
     use_collect_withdraw: number,    
+    cancel_deposit_idxs: number[],
     settle_transaction_idxs: number[],
     settle_hold_s_dt?: string,
     settle_hold_reason?: string,

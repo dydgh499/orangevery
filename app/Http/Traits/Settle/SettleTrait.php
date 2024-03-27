@@ -115,13 +115,11 @@ trait SettleTrait
     {
         foreach($data['content'] as $content) 
         {
-            if(count($cancel_deposits))
-            {
-                $cancel_deposit = $cancel_deposits->firstWhere('mcht_id', $content->id);        
-                $cancel_deposit_amount = $cancel_deposit ? (int)$cancel_deposit->cancel_deposit_amount : 0;    
-            }
-            else
-                $cancel_deposit_amount = 0;
+            $cancels = $cancel_deposits->filter(function($cancel_deposit) use($content) {  
+                return $cancel_deposit->mcht_id === $content->id;
+            });
+            $cancel_deposit_amount = $cancels->sum('deposit_amount');
+            $cancel_idxs = $cancels->pluck('id')->all();
 
             $total_withdraw_amount = request()->use_collect_withdraw ? $content->collectWithdraws->sum('total_withdraw_amount') : 0;
 
@@ -131,6 +129,8 @@ trait SettleTrait
             $settle += $cancel_deposit_amount;
             $settle -= $total_withdraw_amount;
             $settle -= $content->withdraw_fee;
+
+            $content->cancel_deposit_idxs = $cancel_idxs;
             $content->settle = [
                 'cancel_deposit_amount'   => $cancel_deposit_amount,
                 'collect_withdraw_amount' => $total_withdraw_amount * -1,

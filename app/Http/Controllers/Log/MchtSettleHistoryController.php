@@ -101,6 +101,7 @@ class MchtSettleHistoryController extends Controller
         {
             $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);
             $this->SetPayModuleLastSettleMonth($item['settle_pay_module_idxs'], $seltte_month);   
+            $this->SetCancelDeposit($item['cancel_deposit_idxs'], $c_res->id);
             $this->SetCollectWithdraw($data, $c_res->id);    
             return $c_res->id;
         }
@@ -143,7 +144,7 @@ class MchtSettleHistoryController extends Controller
                 return $this->createMerchandiseCommon($item, $data, $query);
             });
             if($c_id === false)
-                $fail_res[] = '#'.$item['id'].' 영업점이 정산에 실패했습니다.';
+                $fail_res[] = '#'.$item['id'].' 가맹점이 정산에 실패했습니다.';
             else
                 $success_res['ids'][] = $c_id;
         }
@@ -182,6 +183,7 @@ class MchtSettleHistoryController extends Controller
                 $request = $request->merge(['id' => $id]);
                 // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
                 $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
+                $this->SetNullCancelDeposit($hist);
                 $this->SetNullCollectWithdraw($hist);
                 $query->delete();
                 return true;

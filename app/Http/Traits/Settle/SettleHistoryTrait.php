@@ -4,6 +4,7 @@ namespace App\Http\Traits\Settle;
 use App\Models\CollectWithdraw;
 use App\Models\Transaction;
 use App\Models\PaymentModule;
+use App\Models\CancelDeposit;
 use App\Models\Salesforce;
 use Carbon\Carbon;
 
@@ -104,6 +105,22 @@ trait SettleHistoryTrait
     protected function SetPayModuleLastSettleMonth($settle_pay_module_idxs, $settle_month)
     {
         PaymentModule::whereIn('id', $settle_pay_module_idxs)->update(['last_settle_month' => $settle_month]);
+    }
+
+    /*
+    * 정산 - 취소수기입금
+    */
+    protected function SetCancelDeposit($cancel_deposit_idxs, $settle_id)
+    {
+        CancelDeposit::whereIn('id', $cancel_deposit_idxs)->update(['mcht_settle_id' => $settle_id]);
+    }
+    
+    /*
+    * 정산 취소 - 취소수기입금
+    */
+    protected function SetNullCancelDeposit($data)
+    {
+        CancelDeposit::where('mcht_settle_id', $data['id'])->update(['mcht_settle_id' => null]);
     }
 
     /*

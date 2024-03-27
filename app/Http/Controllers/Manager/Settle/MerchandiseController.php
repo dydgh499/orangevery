@@ -51,20 +51,20 @@ class MerchandiseController extends Controller
             {
                 $ids = $data['content']->pluck('id')->all();
                 return Transaction::join('cancel_deposits', 'transactions.id', '=', 'cancel_deposits.trans_id')
-                ->where('cancel_deposits.deposit_date', '<=', $request->e_dt)
-                ->where('cancel_deposits.deposit_date', '>=', $request->s_dt)
-                ->whereIn('transactions.mcht_id', $ids)
-                ->groupby('transactions.mcht_id')
-                ->get([
-                    'mcht_id',
-                    DB::raw('SUM(cancel_deposits.deposit_amount) as cancel_deposit_amount'),
-                ]);    
+                    ->whereNull('cancel_deposits.mcht_settle_id')
+                    ->where('cancel_deposits.deposit_date', '<=', $request->e_dt)
+                    ->whereIn('transactions.mcht_id', $ids)
+                    ->get([
+                        'cancel_deposits.id',
+                        'transactions.mcht_id',
+                        'cancel_deposits.deposit_amount',
+                    ]);
             }
             else
-                return [];
+                return collect([]);
         }
         else
-            return [];
+            return collect([]);
     }
 
     private function commonQuery($request)
