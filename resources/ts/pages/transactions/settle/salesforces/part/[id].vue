@@ -66,6 +66,7 @@ const partSettle = async () => {
     params.cancel_deposit_amount = 0
     params.collect_withdraw_amount = 0
     params.settle_pay_module_idxs = []
+    params.cancel_deposit_idxs    = []
 
     if (await dialog('정말 '+count+'개의 매출을 부분정산하시겠습니까?')) {
         const r = await post('/api/v1/manager/transactions/settle-histories/salesforces', params)
