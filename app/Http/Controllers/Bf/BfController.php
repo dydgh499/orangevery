@@ -156,6 +156,7 @@ class BfController extends Controller
      */
     public function withdrawsBalance(Request $request)
     {
+        logging([], 'test');
         $inst = new QuickViewController(new Transaction);
         return $inst->withdrawAbleAmount($request);
         
