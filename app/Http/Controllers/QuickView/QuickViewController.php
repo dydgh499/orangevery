@@ -195,7 +195,7 @@ class QuickViewController extends Controller
     {
         $a = new QuickViewController(new Transaction);
         $b = new Request();
-        $b->merge(['is_test' => 12]);
+        $b = $b->merge(['is_test' => 12]);
         $ty = [
             151760,
             99712,
