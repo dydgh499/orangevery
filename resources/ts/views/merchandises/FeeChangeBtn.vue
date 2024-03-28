@@ -10,7 +10,9 @@ const props = defineProps<Props>()
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
+const formatDate = <any>(inject('$formatDate'))
 const errorHandler = <any>(inject('$errorHandler'))
+const feeBookDialog = <any>(inject('feeBookDialog'))
 
 const getSalesByClass = () => {
     const idx = getLevelByIndex(props.level)
@@ -20,11 +22,12 @@ const getSalesByClass = () => {
     }
 }
 
-const feeChangeRequest = async (type: string) => {
+const feeChangeRequest = async (type: string, apply_dt: string) => {
     let url = '/api/v1/manager/merchandises/fee-change-histories'
     let params = {}
     if (props.level < 0) {
         params = {
+            apply_dt: apply_dt,
             trx_fee: parseFloat(props.item.trx_fee),
             hold_fee: parseFloat(props.item.hold_fee),
             mcht_id: props.item.id,
@@ -33,6 +36,7 @@ const feeChangeRequest = async (type: string) => {
     }
     else {
         params = Object.assign({
+            apply_dt: apply_dt,
             level: props.level,
             mcht_id: props.item.id,
         }, getSalesByClass())
@@ -50,23 +54,24 @@ const feeChangeRequest = async (type: string) => {
 }
 const directFeeChange = async () => {
     if (await alert.value.show('정말 즉시적용하시겠습니까?'))
-        await feeChangeRequest('direct-apply')
+        await feeChangeRequest('direct-apply', formatDate(new Date))
 }
 const bookFeeChange = async () => {
-    if (await alert.value.show('정말 예약적용하시겠습니까? <b>명일 00시</b>에 반영됩니다.<br><br><h5>실수로 적용된 예약적용 수수료는 "수수료율 변경이력" 탭에서 삭제시 반영되지 않습니다.</h5>'))
-        await feeChangeRequest('book-apply')
+    const apply_dt = await feeBookDialog.value.show()
+    if(apply_dt !== '') {
+        if (await alert.value.show('정말 예약적용하시겠습니까?'))
+        await feeChangeRequest('book-apply', apply_dt)
+    }
 }
 </script>
 <template>
     <VCol cols="12" md="2" style="display: flex; flex-direction: row; justify-content: space-between;">
         <VBtn size="small" variant="tonal" @click="directFeeChange()" style='flex-grow: 1; margin: 0.25em 0.5em;'>
             즉시적용
-            <VIcon end icon="tabler-direction-sign" />
         </VBtn>
         <VBtn size="small" variant="tonal" color="secondary" @click="bookFeeChange()"
             style='flex-grow: 1; margin: 0.25em 0.5em;'>
             예약적용
-            <VIcon end icon="tabler-clock-up" />
         </VBtn>
     </VCol>
 </template>

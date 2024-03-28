@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import { axios } from '@axios'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import corp from '@corp'
@@ -23,7 +23,7 @@ const show = (_user_id: number, _user_type: number) => {
         visible.value = true
     }
     else {
-        snackbar.value.show(`${corp.pv_options.auth.levels.dev_name}는 패스워드를 변경할 수 없습니다.`, 'warning')
+        snackbar.value.show(`잘못된 타입.`, 'warning')
     }
 }
 
@@ -68,7 +68,7 @@ defineExpose({
                             </template>
                             <template #input>
                                 <VTextField v-model="password" counter prepend-inner-icon="tabler-lock"
-                                    :rules="[requiredValidator]"
+                                    :rules="[requiredValidatorV2(password, '새 패스워드')]"
                                     :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
                                     :type="is_show ? 'text' : 'password'" persistent-placeholder
                                     @click:append-inner="is_show = !is_show" autocomplete />

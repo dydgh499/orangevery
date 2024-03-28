@@ -2,8 +2,8 @@
 import { useSearchStore, operator_levels } from '@/views/services/operators/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
-import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
-import ImageDialog from '@/layouts/dialogs/ImageDialog.vue'
+import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
+import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()

@@ -8,7 +8,7 @@ import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/us
 import type { Options, Salesforce } from '@/views/types'
 import { getUserLevel, salesLevels } from '@axios'
 import corp from '@corp'
-import { nullValidator, requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 
 interface Props {
     item: Salesforce,
@@ -20,24 +20,6 @@ const tax_types = settleTaxTypes()
 
 const mchtBatchOverview = ref()
 const payModuleBatchOverview = ref()
-
-const addAbleSalesLevels = () => {
-    const levels = corp.pv_options.auth.levels
-    const sales = <Options[]>([]);
-    if (levels.sales0_use && getUserLevel() > 13)
-        sales.push({ id: 13, title: levels.sales0_name })
-    if (levels.sales1_use && getUserLevel() > 15)
-        sales.push({ id: 15, title: levels.sales1_name })
-    if (levels.sales2_use && getUserLevel() > 17)
-        sales.push({ id: 17, title: levels.sales2_name })
-    if (levels.sales3_use && getUserLevel() > 20)
-        sales.push({ id: 20, title: levels.sales3_name })
-    if (levels.sales4_use && getUserLevel() > 25)
-        sales.push({ id: 25, title: levels.sales4_name })
-    if (levels.sales5_use && getUserLevel() > 30)
-        sales.push({ id: 30, title: levels.sales5_name })
-    return props.item.id == 0 ? salesLevels() : sales
-}
 
 </script>
 <template>
@@ -55,13 +37,13 @@ const addAbleSalesLevels = () => {
                                         <VCol>영업점 상호</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.sales_name" prepend-inner-icon="tabler-building-store"
-                                                placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
+                                                placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.sales_name, '영업점 상호')]" />
                                         </VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" v-if="getUserLevel() >= 35">
+                        <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;">
@@ -70,7 +52,7 @@ const addAbleSalesLevels = () => {
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_cycle"
                                                 :items="all_cycles" prepend-inner-icon="icon-park-outline:cycle" label="정산 주기 선택"
                                                 item-title="title" item-value="id" persistent-hint single-line
-                                                :rules="[nullValidator]" />
+                                                :rules="[requiredValidatorV2(props.item.settle_cycle, '정산 주기')]" />
                                         </VCol>
                                     </VRow>
                                 </VCol>
@@ -88,11 +70,11 @@ const addAbleSalesLevels = () => {
                         </VCol>
                         <VCol cols="12">
                             <VRow>
-                                <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
+                                <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;">
                                         <VCol>정산 세율</VCol>
                                         <VCol md="8">
-                                            <VRadioGroup v-model="props.item.settle_tax_type" inline :rules="[nullValidator]">
+                                            <VRadioGroup v-model="props.item.settle_tax_type" inline :rules="[requiredValidatorV2(props.item.settle_tax_type, '정산 세율')]">
                                                 <VRadio v-for="(tax_type, key, index) in tax_types" :value="tax_type.id" :key="index">
                                                     <template #label>
                                                         <span>
@@ -106,14 +88,14 @@ const addAbleSalesLevels = () => {
                                 </VCol>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;">
-                                        <VCol>                                            
+                                        <VCol>
                                             <BaseQuestionTooltip :location="'top'" :text="'등급'" :content="'영업자 등급은 수정할 수 없습니다.'">
                                             </BaseQuestionTooltip>
                                         </VCol>
                                         <VCol md="8">                                             
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
-                                                :items="addAbleSalesLevels()" prepend-inner-icon="ph:share-network" label="영업자 등급 선택"
-                                                item-title="title" item-value="id" persistent-hint single-line :rules="[nullValidator]"
+                                                :items="salesLevels()" prepend-inner-icon="ph:share-network" label="영업자 등급 선택"
+                                                item-title="title" item-value="id" persistent-hint single-line :rules="[requiredValidatorV2(props.item.level, '영업자 등급')]"
                                                 :readonly="props.item.id != 0" />
                                         </VCol>
                                     </VRow>

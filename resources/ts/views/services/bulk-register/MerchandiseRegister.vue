@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BanksExplainDialog from '@/layouts/dialogs/BanksExplainDialog.vue'
+import BanksExplainDialog from '@/layouts/dialogs/users/BanksExplainDialog.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { tax_category_types } from '@/views/merchandises/useStore'
 import { Registration } from '@/views/registration'

@@ -56,7 +56,12 @@ class MerchandiseRequest extends FormRequest
         if(isOperator($this))
             return true;
         else if(isSalesforce($this))
-            return $this->user()->is_able_modify_mcht;        
+        {
+            if($this->user()->brand_id === 30)
+                return true;
+            else
+                return $this->user()->is_able_modify_mcht;        
+        }
         else
             return false;
     }
@@ -115,6 +120,8 @@ class MerchandiseRequest extends FormRequest
             $data['acct_bank_code'] = "000";
         if($this->has('profile_img'))
             $data['profile_img'] = $this->profile_img;
+        if($data['brand_id'] === 30)    // fixplus의 경우 무조건 1
+            $data['use_regular_card'] = 1;
         return $data;
     }
 }

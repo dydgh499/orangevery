@@ -112,7 +112,7 @@ onMounted(async () => {
                         <VRow>
                             <VCol>
                                 <VTextarea v-model="props.item.nick_name" counter label="별칭(비고)"
-                                    prepend-inner-icon="twemoji-spiral-notepad" auto-grow />
+                                    prepend-inner-icon="twemoji-spiral-notepad" auto-grow maxlength="10"/>
                             </VCol>
                         </VRow>
                     </VCardItem>

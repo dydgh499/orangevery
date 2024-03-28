@@ -9,6 +9,10 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
+const isFeeColumn = (key: string) => {
+    return key.includes('_trx_fee') || key.includes('_hold_fee')
+}
+
 </script>
 <template>
     <BaseIndexView placeholder="가맹점명 검색" :metas="[]" :add="false" add_name="가맹점" :date_filter_type="DateFilters.DATE_RANGE">
@@ -45,15 +49,15 @@ provide('exporter', exporter)
                                     {{ item[_key] ? '변경완료' : '변경예약' }}
                                 </VChip>
                             </span>
-                            <span v-else-if="_key.includes('_fee')"> 
-                                <VChip v-if="item[_key]">
+                            <span v-else-if="isFeeColumn(_key)"> 
+                                <VChip v-if="item[_key]" :color="_key.includes('aft_') ? 'primary': 'default'">
                                     {{ item[_key] + "%" }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'extra_col'">
                                 <ExtraMenu :item="item" :type="'merchandises'"></ExtraMenu>
                             </span>
-                            <span v-else>
+                            <span v-else :class="_key.includes('aft_') ? 'text-primary': ''">
                                 {{ item[_key] }}
                             </span>
                         </td>

@@ -4,7 +4,7 @@ import FileInput from '@/layouts/utils/FileInput.vue'
 import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
 import type { UserPropertie } from '@/views/types'
 import { avatars, banks } from '@/views/users/useStore'
-import { axios } from '@axios'
+import { axios, getUserLevel } from '@axios'
 import corp from '@corp'
 import { nullValidator, requiredValidator } from '@validators'
 
@@ -162,7 +162,7 @@ watchEffect(() => {
                                     :rules="[nullValidator]" @update:modelValue="setAcctBankName()" />
                             </template>
                         </CreateHalfVCol>
-                        <VCol cols="12" v-if="corp.pv_options.paid.use_acct_verification">
+                        <VCol cols="12" v-if="corp.pv_options.paid.use_acct_verification && getUserLevel() >= 35">
                             <VBtn @click="onwerCheck" prepend-icon="ri:pass-valid-line" class="float-right">
                                 예금주 검증
                             </VBtn>

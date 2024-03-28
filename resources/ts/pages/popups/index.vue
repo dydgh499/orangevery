@@ -2,7 +2,7 @@
 import { useSearchStore } from '@/views/popups/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
-import ImageDialog from '@/layouts/dialogs/ImageDialog.vue'
+import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()

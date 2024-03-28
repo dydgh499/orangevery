@@ -84,8 +84,12 @@ export const getUserLevel = () => {
 }
 
 export const isAbleModifyMcht = () => {
-    if(getUserLevel() > 10 && getUserLevel() < 35)
-        return user_info.value.is_able_modify_mcht ? true : false
+    if(getUserLevel() > 10 && getUserLevel() < 35) {
+        if(corp.id === 30)
+            return true
+        else
+            return user_info.value.is_able_modify_mcht ? true : false
+    }
     else
         return false
 }
@@ -101,7 +105,32 @@ export const getViewType = () => {
     else
         return ''
 }
+// -----------------------
 
+export const isFixplusAbleUpdate = (id: number) => {
+    if(corp.id === 30 && id) {
+        if(getUserLevel() === 30)
+            return true
+        else
+            return false
+    }
+    else
+        return true    
+}
+
+
+const currentTimeFormat = () => {
+    const date = new Date()
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    const hour = String(date.getHours()).padStart(2, '0')
+    const min = String(date.getMinutes()).padStart(2, '0')
+    const sec = String(date.getSeconds()).padStart(2, '0')
+    return `${year}-${month}-${day} ${hour}:${min}:${sec}`;
+}
+
+export const token_expire_time = ref(<string>(localStorage.getItem('token-expire-time') || currentTimeFormat()))
 export const pay_token  = ref<string>(localStorage.getItem('access-token') || '')
 export const user_info  = ref<any>(JSON.parse(localStorage.getItem('user_info') || '{}'))
 
@@ -120,6 +149,13 @@ axios.interceptors.request.use((config:any) => {
     // 해당 Interceptor에서 헤더를 설정하기 전에 pay_token.value를 사용하여 헤더 값을 동적으로 설정합니다.
     config.headers['Authorization'] = `Bearer ${pay_token.value}`;
     return config;
+});
+axios.interceptors.response.use((response) => {
+    if(response.headers['token-expire-time']) {
+        token_expire_time.value = response.headers['token-expire-time']
+        localStorage.setItem('token-expire-time', token_expire_time.value)
+    }
+    return response;
 });
 
 watchEffect(() => {

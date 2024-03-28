@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
+import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
 import MultipleHandPayOverview from '@/views/pay/MultipleHandPayOverview.vue'
 import { pay } from '@/views/pay/pay'
 import { axios } from '@axios'

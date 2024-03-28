@@ -9,9 +9,22 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AppAutocomplete: typeof import('./resources/ts/@core/components/app-form-elements/AppAutocomplete.vue')['default']
     AppCardActions: typeof import('./resources/ts/@core/components/AppCardActions.vue')['default']
+    AppCombobox: typeof import('./resources/ts/@core/components/app-form-elements/AppCombobox.vue')['default']
+    AppDateTimePicker: typeof import('./resources/ts/@core/components/app-form-elements/AppDateTimePicker.vue')['default']
+    AppDrawerHeaderSection: typeof import('./resources/ts/@core/components/AppDrawerHeaderSection.vue')['default']
     AppOtpInput: typeof import('./resources/ts/@core/components/AppOtpInput.vue')['default']
+    AppSelect: typeof import('./resources/ts/@core/components/app-form-elements/AppSelect.vue')['default']
+    AppTextarea: typeof import('./resources/ts/@core/components/app-form-elements/AppTextarea.vue')['default']
+    AppTextField: typeof import('./resources/ts/@core/components/app-form-elements/AppTextField.vue')['default']
+    CustomCheckboxes: typeof import('./resources/ts/@core/components/app-form-elements/CustomCheckboxes.vue')['default']
+    CustomCheckboxesWithIcon: typeof import('./resources/ts/@core/components/app-form-elements/CustomCheckboxesWithIcon.vue')['default']
+    CustomCheckboxesWithImage: typeof import('./resources/ts/@core/components/app-form-elements/CustomCheckboxesWithImage.vue')['default']
     CustomizerSection: typeof import('./resources/ts/@core/components/CustomizerSection.vue')['default']
+    CustomRadios: typeof import('./resources/ts/@core/components/app-form-elements/CustomRadios.vue')['default']
+    CustomRadiosWithIcon: typeof import('./resources/ts/@core/components/app-form-elements/CustomRadiosWithIcon.vue')['default']
+    CustomRadiosWithImage: typeof import('./resources/ts/@core/components/app-form-elements/CustomRadiosWithImage.vue')['default']
     DialogCloseBtn: typeof import('./resources/ts/@core/components/DialogCloseBtn.vue')['default']
     ErrorHeader: typeof import('./resources/ts/@core/components/ErrorHeader.vue')['default']
     I18n: typeof import('./resources/ts/@core/components/I18n.vue')['default']

@@ -53,7 +53,7 @@ const all_levels = allLevels()
                                 </VChip>
                             </span>
                             <span v-else-if="_key.includes('_fee')">
-                                <VChip v-if="item[_key]">
+                                <VChip v-if="item[_key]" :color="_key.includes('aft_') ? 'primary': 'default'">
                                     {{ item[_key] + "%" }}
                                 </VChip>
                             </span>
@@ -63,7 +63,7 @@ const all_levels = allLevels()
                             <span v-else-if="_key == 'extra_col'">
                                 <ExtraMenu :item="item" :type="'salesforces'"></ExtraMenu>
                             </span>
-                            <span v-else>
+                            <span v-else :class="_key.includes('aft_') ? 'text-primary': ''">
                                 {{ item[_key] }}
                             </span>
                         </td>

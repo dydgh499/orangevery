@@ -7,6 +7,7 @@ export const useSearchStore = defineStore('salesFeeHistorySearchStore', () => {
 
     const headers: Record<string, string> = {
         'id' : 'NO.',
+        'apply_dt': '적용일',
         'mcht_name' : '가맹점 상호',
         'level': '영업점 등급',
         'bf_sales_name' : '이전 영업점 상호',

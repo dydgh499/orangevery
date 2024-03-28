@@ -6,6 +6,7 @@ export const useSearchStore = defineStore('mchtFeeHistorySearchStore', () => {
     
     const headers: Record<string, string> = {
         'id' : 'NO.',
+        'apply_dt': '적용일',
         'mcht_name' : '가맹점 상호',
         'bf_trx_fee' : '이전 수수료',
         'aft_trx_fee' : '변경 수수료',

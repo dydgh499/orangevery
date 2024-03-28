@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import { axios } from '@axios'
 
 const alert = <any>(inject('alert'))
@@ -99,35 +99,35 @@ defineExpose({
                             <CreateHalfVCol :mdl="3" :mdr="9">
                                 <template #name>상품명</template>
                                 <template #input>
-                                    <VTextField id="nameHorizontalIcons" v-model="item_name"
+                                    <VTextField v-model="item_name"
                                         prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
                                         maxlength="100" placeholder="상품명을 입력해주세요" persistent-placeholder
-                                        :rules="[requiredValidator]" />
+                                        :rules="[requiredValidatorV2(item_name, '상품명')]" />
                                 </template>
                             </CreateHalfVCol>
                             <CreateHalfVCol :mdl="3" :mdr="9">
                                 <template #name>구매자명</template>
                                 <template #input>
-                                    <VTextField id="nameHorizontalIcons" v-model="buyer_name" placeholder="구매자명을 입력해주세요"
-                                        prepend-inner-icon="tabler-user" maxlength="50" :rules="[requiredValidator]" />
+                                    <VTextField v-model="buyer_name" placeholder="구매자명을 입력해주세요"
+                                        prepend-inner-icon="tabler-user" maxlength="50" :rules="[requiredValidatorV2(buyer_name, '구매자명')]" />
                                 </template>
                             </CreateHalfVCol>
 
                             <CreateHalfVCol :mdl="3" :mdr="9">
-                                <template #name>연락처</template>
+                                <template #name>구매자 연락처</template>
                                 <template #input>
-                                    <VTextField id="nameHorizontalIcons" v-model="phone_num" placeholder="구매자 연락처를 입력해주세요"
+                                    <VTextField v-model="phone_num" placeholder="구매자 연락처를 입력해주세요"
                                         prepend-inner-icon="tabler-device-mobile" maxlength="20"
-                                        :rules="[requiredValidator]" />
+                                        :rules="[requiredValidatorV2(phone_num, '구매자 연락처')]" />
                                 </template>
                             </CreateHalfVCol>
 
                             <CreateHalfVCol :mdl="3" :mdr="9">
                                 <template #name>결제금액</template>
                                 <template #input>
-                                    <VTextField id="nameHorizontalIcons" v-model="amount" type="number" suffix="￦"
-                                        placeholder="거래금액을 입력해주세요" prepend-inner-icon="ic:outline-price-change"
-                                        :rules="[requiredValidator]" />
+                                    <VTextField v-model="amount" type="number" suffix="￦"
+                                        placeholder="결제금액을 입력해주세요" prepend-inner-icon="ic:outline-price-change"
+                                        :rules="[requiredValidatorV2(amount, '결제금액')]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

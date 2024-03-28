@@ -154,7 +154,9 @@ export const useRequestStore = defineStore('requestStore', () => {
         if (await alert.value.show('정말 삭제하시겠습니까?')) {
             const res = await request({ url: url, method: 'delete' })
             deleteTreatment(base_url, is_redirect, params, res)
+            return res
         }
+        return undefined
     }
 
     const setNullRemove = (objects: any[]) => {

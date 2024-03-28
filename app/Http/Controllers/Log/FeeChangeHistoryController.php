@@ -30,10 +30,12 @@ class FeeChangeHistoryController extends Controller
     {
         $mcht_histories = MchtFeeChangeHistory::where('is_delete', false)
                     ->where('change_status', 0)
+                    ->where('apply_dt', Carbon::now()->format('Y-m-d'))
                     ->orderby('created_at', 'asc')
                     ->get();
         $sf_histories = SfFeeChangeHistory::where('is_delete', false)
                     ->where('change_status', 0)
+                    ->where('apply_dt', Carbon::now()->format('Y-m-d'))
                     ->orderby('created_at', 'asc')
                     ->get();
 
@@ -140,6 +142,7 @@ class FeeChangeHistoryController extends Controller
         $bf_hold_fee = $mcht->hold_fee;
         $aft_hold_fee = round($request->hold_fee/100, 7);
 
+        $data['apply_dt']    = $request->apply_dt;
         $data['bf_trx_fee']  = $bf_trx_fee;
         $data['aft_trx_fee'] = $aft_trx_fee;
         $udpt_data['trx_fee'] = $aft_trx_fee;
@@ -174,6 +177,7 @@ class FeeChangeHistoryController extends Controller
         $bf_sales_id = $mcht[$sales_key['sales_id']];
         $aft_sales_id = $request->sales_id;
 
+        $data['apply_dt']       = $request->apply_dt;
         $data['bf_trx_fee']     = $bf_trx_fee;
         $data['aft_trx_fee']    = $aft_trx_fee;
         $udpt_data[$sales_key['sales_fee']] = $aft_trx_fee;

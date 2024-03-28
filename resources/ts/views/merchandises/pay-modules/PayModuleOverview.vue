@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { PayModule, Merchandise } from '@/views/types'
 import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue'
-import MidCreateDialog from '@/layouts/dialogs/MidCreateDialog.vue'
+import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
 

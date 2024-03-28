@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import HandPayOverview from '@/views/pay/HandPayOverview.vue'
-import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
+import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { payTest } from '@/views/transactions/pay-test/payTest'
 

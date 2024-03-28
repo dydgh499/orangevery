@@ -3,8 +3,9 @@ a
 
 import { useRequestStore } from '@/views/request'
 import type { Tab } from '@/views/types'
-import { getUserLevel, isAbleModifyMcht, user_info } from '@axios'
+import { getUserLevel, isAbleModifyMcht, user_info, isFixplusAbleUpdate } from '@axios'
 import { VForm } from 'vuetify/components'
+import corp from '@corp';
 
 interface Props {
     id: number | string,
@@ -39,8 +40,7 @@ const hideConditions = () => {
 
 const authHideConditions = () => {
     const level = getUserLevel()
-    if(level < 35)
-    {
+    if(level < 35) {
         if(props.path === 'posts') {
             if(props.id === 0)
                 return true
@@ -52,7 +52,7 @@ const authHideConditions = () => {
         else
         {
             if(isAbleModifyMcht())
-                return true
+                return isFixplusAbleUpdate(props.id as number)
             else
                 return false
         }

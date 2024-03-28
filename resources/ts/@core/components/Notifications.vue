@@ -58,8 +58,8 @@ const getTitleStatus = computed(() => {
                                     </small>
                                 </template>
                             </VListItem>
-                            <VTooltip activator="parent" location="start" transition="scale-transition">
-                                <span>클릭해서 답장하러 가기</span>
+                            <VTooltip activator="parent" location="top" transition="scale-transition" style="max-width: 10em; margin-left: auto;">
+                                <span>답장하러 가기</span>
                             </VTooltip>
                         </router-link>
                         <VDivider />

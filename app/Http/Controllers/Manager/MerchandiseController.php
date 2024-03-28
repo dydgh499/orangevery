@@ -179,44 +179,39 @@ class MerchandiseController extends Controller
     {
         $validated  = $request->validate(['user_pw'=>'required']);
         
-        if($request->user()->tokenCan(15))
+        if($this->isExistMutual($this->merchandises, $request->user()->brand_id, 'mcht_name', $request->mcht_name))
+            return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
+        else
         {
-            if($this->isExistMutual($this->merchandises, $request->user()->brand_id, 'mcht_name', $request->mcht_name))
-                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
+            if($this->isExistUserName($request->user()->brand_id, $request->user_name))
+                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
             else
             {
-                if($this->isExistUserName($request->user()->brand_id, $request->user_name))
-                    return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
-                else
-                {
-                    $user = $request->data();
-                    // 수수료율 정보는 추가시에만 적용되어야함
-                    $user['sales0_id'] = $request->input('sales0_id', null);
-                    $user['sales1_id'] = $request->input('sales1_id', null);
-                    $user['sales2_id'] = $request->input('sales2_id', null);
-                    $user['sales3_id'] = $request->input('sales3_id', null);
-                    $user['sales4_id'] = $request->input('sales4_id', null);
-                    $user['sales5_id'] = $request->input('sales5_id', null);
-                    $user['hold_fee']  = $request->input('hold_fee', 0)/100;
-                    $user['trx_fee']    = $request->input('trx_fee', 0)/100;
-                    $user['sales0_fee'] = $request->input('sales0_fee', 0)/100;
-                    $user['sales1_fee'] = $request->input('sales1_fee', 0)/100;
-                    $user['sales2_fee'] = $request->input('sales2_fee', 0)/100;
-                    $user['sales3_fee'] = $request->input('sales3_fee', 0)/100;
-                    $user['sales4_fee'] = $request->input('sales4_fee', 0)/100;
-                    $user['sales5_fee'] = $request->input('sales5_fee', 0)/100;
-    
-                    $user = $this->saveImages($request, $user, $this->imgs);
-                    $user['user_pw'] = Hash::make($request->input('user_pw'));
-                    $res = $this->merchandises->create($user);
-                    
-                    operLogging(HistoryType::CREATE, $this->target, [], $user, $user['mcht_name']);
-                    return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
-                }
+                $user = $request->data();
+                // 수수료율 정보는 추가시에만 적용되어야함
+                $user['sales0_id'] = $request->input('sales0_id', null);
+                $user['sales1_id'] = $request->input('sales1_id', null);
+                $user['sales2_id'] = $request->input('sales2_id', null);
+                $user['sales3_id'] = $request->input('sales3_id', null);
+                $user['sales4_id'] = $request->input('sales4_id', null);
+                $user['sales5_id'] = $request->input('sales5_id', null);
+                $user['hold_fee']  = $request->input('hold_fee', 0)/100;
+                $user['trx_fee']    = $request->input('trx_fee', 0)/100;
+                $user['sales0_fee'] = $request->input('sales0_fee', 0)/100;
+                $user['sales1_fee'] = $request->input('sales1_fee', 0)/100;
+                $user['sales2_fee'] = $request->input('sales2_fee', 0)/100;
+                $user['sales3_fee'] = $request->input('sales3_fee', 0)/100;
+                $user['sales4_fee'] = $request->input('sales4_fee', 0)/100;
+                $user['sales5_fee'] = $request->input('sales5_fee', 0)/100;
+
+                $user = $this->saveImages($request, $user, $this->imgs);
+                $user['user_pw'] = Hash::make($request->input('user_pw'));
+                $res = $this->merchandises->create($user);
+                
+                operLogging(HistoryType::CREATE, $this->target, [], $user, $user['mcht_name']);
+                return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
             }
         }
-        else
-            return $this->response(951);
     }
 
     /**
@@ -228,7 +223,7 @@ class MerchandiseController extends Controller
      */
     public function show(Request $request, $id)
     {
-        if(isOperator($request) || (isSalesforce($request) && $request->user()->is_able_modify_mcht))
+        if(isOperator($request) || (isSalesforce($request) && $request->user()->is_able_modify_mcht) || $request->user()->brand_id === 30)
         {
             $data = $this->merchandises->where('id', $id)
                 ->with(['regularCreditCards'])
@@ -250,29 +245,23 @@ class MerchandiseController extends Controller
     public function update(MerchandiseRequest $request, $id)
     {
         $data = $request->data();
-        if($this->authCheck($request->user(), $id, 15))
+        if($this->isExistMutual($this->merchandises->where('id', '!=', $id), $request->user()->brand_id, 'mcht_name', $data['mcht_name']))
+            return $this->extendResponse(1001, '이미 존재하는 상호 입니다.');
+        else
         {
-            if($this->isExistMutual($this->merchandises->where('id', '!=', $id), $request->user()->brand_id, 'mcht_name', $data['mcht_name']))
-                return $this->extendResponse(1001, '이미 존재하는 상호 입니다.');
+            $query = $this->merchandises->where('id', $id);
+            $user = $query->first();
+            // 변경된 아이디가 이미 존재할 떄
+            if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $request->user_name))
+                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
             else
             {
-                $query = $this->merchandises->where('id', $id);
-                $user = $query->first();
-                // 변경된 아이디가 이미 존재할 떄
-                if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $request->user_name))
-                    return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
-                else
-                {
-                    $data = $this->saveImages($request, $data, $this->imgs);
-                    $res = $query->update($data);
-                    operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['mcht_name']);
-                    return $this->response($res ? 1 : 990, ['id'=>$id]);    
-                }
-                
+                $data = $this->saveImages($request, $data, $this->imgs);
+                $res = $query->update($data);
+                operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['mcht_name']);
+                return $this->response($res ? 1 : 990, ['id'=>$id]);    
             }
         }
-        else
-            return $this->response(951);
     }
 
     /**
@@ -282,13 +271,18 @@ class MerchandiseController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        $data = $this->merchandises->where('id', $id)->first();
-        $res = $this->delete($this->merchandises->where('id', $id));
-        $res = $this->delete($this->pay_modules->where('mcht_id', $id));
-        $res = $this->delete(NotiUrl::where('mcht_id', $id));
-
-        operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->mcht_name);
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
+        if(isMyMerchandise($request, $id) || isOperator($request) || (isSalesforce($request) && $request->user()->is_able_modify_mcht))
+        {
+            $data = $this->merchandises->where('id', $id)->first();
+            $res = $this->delete($this->merchandises->where('id', $id));
+            $res = $this->delete($this->pay_modules->where('mcht_id', $id));
+            $res = $this->delete(NotiUrl::where('mcht_id', $id));
+    
+            operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->mcht_name);
+            return $this->response($res ? 1 : 990, ['id'=>$id]);    
+        }
+        else
+            return $this->response(951);
     }
 
     /**

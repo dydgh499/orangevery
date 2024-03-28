@@ -1,15 +1,31 @@
 <?php
 
 namespace App\Http\Traits;
+use Laravel\Sanctum\PersonalAccessToken;
+use Carbon\Carbon;
 
 trait AuthTrait
 {
     public function loginInfo($level)
-    {
+    {   // login expire 1 hour
         $auths = $this->getAuthority($level);
         $this->level = $level;
         $token = $this->createToken($this->user_name, $auths)->plainTextToken;
         return ['access_token'=>$token, 'user'=>$this];
+    }
+
+    public function loginAPI($level)
+    {   //login expire 30 hours
+        $auths = $this->getAuthority($level);
+        $this->level = $level;
+        $token_object = $this->createToken($this->user_name, $auths);
+
+        $bearer_token = $token_object->plainTextToken;
+        $access_token = PersonalAccessToken::findToken($bearer_token);
+        if($access_token)
+            PersonalAccessToken::where('id', $access_token->id)->update(['created_at' => Carbon::now()->addHours(30)->format('Y-m-d H:i:s')]);
+
+        return ['access_token'=>$bearer_token, 'user'=>$this];
     }
 
     public function getAuthority($level)

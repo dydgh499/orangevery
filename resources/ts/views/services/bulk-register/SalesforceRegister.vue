@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import BanksExplainDialog from '@/layouts/dialogs/BanksExplainDialog.vue'
+import BanksExplainDialog from '@/layouts/dialogs/users/BanksExplainDialog.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { Registration } from '@/views/registration'
 import { settleCycles, settleDays, settleTaxTypes, useSearchStore } from '@/views/salesforces/useStore'

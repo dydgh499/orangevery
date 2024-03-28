@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SearchFilterDialog from '@/layouts/dialogs/SearchFilterDialog.vue'
+import SearchFilterDialog from '@/layouts/dialogs/utils/SearchFilterDialog.vue'
 import BaseIndexChart from '@/layouts/lists/BaseIndexChart.vue'
 import BaseIndexFilter from '@/layouts/lists/BaseIndexFilter.vue'
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'

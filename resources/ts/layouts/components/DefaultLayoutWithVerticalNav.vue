@@ -7,18 +7,19 @@ import Footer from '@/layouts/components/Footer.vue'
 import NavbarNotifications from '@/layouts/components/NavbarNotifications.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import NavbarZoomSwitcher from '@/layouts/components/NavbarZoomSwitcher.vue'
+import NavTokenableExpireTime from '@/layouts/components/NavTokenableExpireTime.vue'
+
 import UserProfile from '@/layouts/components/UserProfile.vue'
-import { useRequestStore } from '@/views/request'
 import router from '@/router'
 // @layouts plugin
 import { VerticalNavLayout } from '@layouts'
 
-import AlertDialog from '@/layouts/dialogs/AlertDialog.vue'
+import AlertDialog from '@/layouts/dialogs/utils/AlertDialog.vue'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
-import LoadingDialog from '@/layouts/dialogs/LoadingDialog.vue'
-import PayLinkDialog from '@/layouts/dialogs/PayLinkDialog.vue'
+import LoadingDialog from '@/layouts/dialogs/utils/LoadingDialog.vue'
+import PayLinkDialog from '@/layouts/dialogs/transactions/PayLinkDialog.vue'
 import PWASnackbar from '@/layouts/snackbars/PWASnackbar.vue'
-import PopupDialog from '@/layouts/dialogs/PopupDialog.vue'
+import PopupDialog from '@/layouts/dialogs/utils/PopupDialog.vue'
 
 import { axios } from '@axios'
 import { user_info } from '@axios'
@@ -77,6 +78,7 @@ onMounted(() => {
                     <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>님 안녕하세요!
                 </div>
                 <VSpacer />
+                <NavTokenableExpireTime />
                 <NavbarZoomSwitcher />
                 <NavbarThemeSwitcher />
                 <NavbarNotifications class="me-2" v-if="user_info.level >= 35" />

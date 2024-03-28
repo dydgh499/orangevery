@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useQuickViewStore } from '@/views/quick-view/useStore'
-import SalesSlipDialog from '@/layouts/dialogs/SalesSlipDialog.vue'
+import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
 import { payResult } from '@/views/pay/pay'
 

@@ -85,7 +85,7 @@ const title = computed(() => {
 })
 
 const isChangeColor = (before: any, after: any) => {
-    if(before !== after)
+    if(before != after)
         return 'list-square text-error'
     else
         return 'list-square'

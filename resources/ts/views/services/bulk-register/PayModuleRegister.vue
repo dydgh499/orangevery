@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import MidCreateDialog from '@/layouts/dialogs/MidCreateDialog.vue'
+import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_types, under_sales_types, useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { Registration } from '@/views/registration'

@@ -6,7 +6,7 @@ import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 
-import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
+import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 
 import { module_types } from '@/views/merchandises/pay-modules/useStore'

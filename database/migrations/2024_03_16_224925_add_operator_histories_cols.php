@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('operator_histories', function (Blueprint $table) {
-            $table->string('before_history_detail', 1500)->default('')->nullable()->comment('이전 상세이력');
+            $table->string('before_history_detail', 3000)->default('')->nullable()->comment('이전 상세이력');
             $table->renameColumn('history_detail', 'after_history_detail');
         });
         Schema::table('operator_histories', function (Blueprint $table) {
-            $table->string('after_history_detail', 1500)->change();
+            $table->string('after_history_detail', 3000)->change();
         });
     }
 

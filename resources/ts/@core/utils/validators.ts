@@ -1,12 +1,24 @@
 import { isEmpty, isEmptyArray, isNullOrUndefined } from './index'
 
-export const requiredValidatorV2 = (value: unknown, name:string) => {
-    if (isNullOrUndefined(value) || isEmptyArray(value) || value === false)
-        return name+'를 입력해주세요.'
-
-return !!String(value).trim().length || name+'를 입력해주세요.'
+const checkDirectObject = (name: string) => {
+    //name의 마지막 음절의 유니코드(UTF-16) 
+    const charCode = name.charCodeAt(name.length - 1);    
+    //유니코드의 한글 범위 내에서 해당 코드의 받침 확인
+    const consonantCode = (charCode - 44032) % 28;    
+    if(consonantCode === 0){
+        //0이면 받침 없음 -> 를
+        return `${name}를`;
+    }
+    //1이상이면 받침 있음 -> 을
+    return `${name}을`;
 }
 
+export const requiredValidatorV2 = (value: unknown, name:string) => {
+    const message = checkDirectObject(name)+' 입력해주세요.'
+    if (isNullOrUndefined(value) || isEmptyArray(value) || value === false)
+        return message
+    return !!String(value).trim().length || message
+}
 // 👉 Required Validator
 export const requiredValidator = (value: unknown) => {
     if (isNullOrUndefined(value) || isEmptyArray(value) || value === false)

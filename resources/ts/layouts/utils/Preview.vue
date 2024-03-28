@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ImageDialog from '@/layouts/dialogs/ImageDialog.vue'
+import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
 import VuePdfApp from "vue3-pdf-app";
 import "vue3-pdf-app/dist/icons/main.css";
 

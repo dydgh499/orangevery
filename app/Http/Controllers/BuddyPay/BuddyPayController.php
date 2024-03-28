@@ -50,7 +50,7 @@ class BuddyPayController extends Controller
         $result = $inst->__signIn(new Merchandise(), $request);  // check Merchandise
         if($result['result'] == 1)
         {
-            $data = $result['user']->loginInfo(10);
+            $data = $result['user']->loginAPI(10);
             $data['user'] = [
                 'id' => $data['user']->id,
                 'user_name' => $data['user']->user_name,

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCRMStore } from '@/views/dashboards/crm/crm'
 import { history_types } from '@/views/services/operator-histories/useStore'
-import ImageDialog from '@/layouts/dialogs/ImageDialog.vue'
+import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
 
 const { operator_histories } = useCRMStore()

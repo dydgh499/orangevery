@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Transaction } from '@/views/types'
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import { cloneDeep } from 'lodash'
 import { axios } from '@axios'
 
@@ -58,10 +58,10 @@ defineExpose({
                             <label>취소시간</label>
                         </VCol>
                         <VCol cols="12" md="4">
-                            <VTextField v-model="cxl_dt" type="date" :rules="[requiredValidator]"/>
+                            <VTextField v-model="cxl_dt" type="date" :rules="[requiredValidatorV2(cxl_dt, '취소일')]"/>
                         </VCol>
                         <VCol cols="12" md="4">
-                            <VTextField v-model="cxl_tm" type="time" step="1" :rules="[requiredValidator]" />
+                            <VTextField v-model="cxl_tm" type="time" step="1" :rules="[requiredValidatorV2(cxl_dt, '취소시간')]" />
                         </VCol>
                     </VRow>
                 </VCol>

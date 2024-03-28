@@ -8,6 +8,9 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
+use App\Http\Controllers\Manager\CodeGenerator\TidGenerator;
+use App\Http\Controllers\Manager\CodeGenerator\MidGenerator;
+
 use App\Http\Requests\Manager\BulkRegister\BulkPayModuleRequest;
 use App\Http\Requests\Manager\BulkRegister\BulkPayModulePGRequest;
 
@@ -124,42 +127,37 @@ class PaymentModuleController extends Controller
                 ->where($key, $value)
                 ->exists();
         };
-        
-        if($request->user()->tokenCan(10))
+
+        $data = $request->data();
+        if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'tid', $data['tid']))
+            return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['tid'=>$data['tid']]);
+        if($request->use_mid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
+            return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid'=>$data['mid']]);
+        if($data['module_type'] == 0 && $data['serial_num'] != '')
         {
-            $data = $request->data();
-            if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'tid', $data['tid']))
-                return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['tid'=>$data['tid']]);
-            if($request->use_mid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
-                return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid'=>$data['mid']]);
-            if($data['module_type'] == 0 && $data['serial_num'] != '')
-            {
-                $res = $this->pay_modules
-                    ->where('brand_id', $request->user()->brand_id)
-                    ->where('serial_num', $data['serial_num'])
-                    ->where('module_type', 0)
-                    ->where('is_delete', false)
-                    ->exists();
-                if($res)
-                    return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
-            }
-
-            $res = DB::transaction(function () use($data) {
-                $res = $this->pay_modules->create($data);
-                if($data['module_type'] != 0)
-                {
-                    $this->pay_modules
-                        ->where('id', $res->id)
-                        ->update(['pay_key' => $this->getNewPayKey($res->id)]);
-                }
-                return $res;
-            });
-
-            operLogging(HistoryType::CREATE, $this->target, [], $data, $data['note']."(#".$res->id.")");
-            return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);
+            $res = $this->pay_modules
+                ->where('brand_id', $request->user()->brand_id)
+                ->where('serial_num', $data['serial_num'])
+                ->where('module_type', 0)
+                ->where('is_delete', false)
+                ->exists();
+            if($res)
+                return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
         }
-        else
-            return $this->response(951);
+
+        $res = DB::transaction(function () use($data) {
+            $res = $this->pay_modules->create($data);
+            if($data['module_type'] != 0)
+            {
+                $this->pay_modules
+                    ->where('id', $res->id)
+                    ->update(['pay_key' => $this->getNewPayKey($res->id)]);
+            }
+            return $res;
+        });
+
+        operLogging(HistoryType::CREATE, $this->target, [], $data, $data['note']."(#".$res->id.")");
+        return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);
     }
 
     /**
@@ -171,7 +169,7 @@ class PaymentModuleController extends Controller
      */
     public function show(Request $request, $id)
     {
-        if($this->authCheck($request->user(), $id, 15))
+        if($this->authCheck($request->user(), $id, 13))
         {
             $data = $this->pay_modules->where('id', $id)->first();
             return $data ? $this->response(0, $data) : $this->response(1000);
@@ -198,34 +196,29 @@ class PaymentModuleController extends Controller
                 ->exists();
         };  // tid 중복해서 사용하는 브랜드들은 ..?
 
-        if($this->authCheck($request->user(), $id, 15))
+        $data = $request->data();
+        if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
+            return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid'=>$data['tid']]);
+        if($request->use_mid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
+            return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid'=>$data['mid']]);            
+
+        if($data['module_type'] == 0 && $data['serial_num'] != '')
         {
-            $data = $request->data();
-            if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
-                return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid'=>$data['tid']]);
-            if($request->use_mid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
-                return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid'=>$data['mid']]);            
-
-            if($data['module_type'] == 0 && $data['serial_num'] != '')
-            {
-                $res = $this->pay_modules
-                    ->where('brand_id', $request->user()->brand_id)
-                    ->where('serial_num', $data['serial_num'])
-                    ->where('id', '!=', $id)
-                    ->where('module_type', 0)
-                    ->where('is_delete', false)
-                    ->exists();
-                if($res)
-                    return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
-            }
-            $before = $this->pay_modules->where('id', $id)->first();
-            $res = $this->pay_modules->where('id', $id)->update($data);
-
-            operLogging(HistoryType::UPDATE, $this->target, $before, $data, $data['note']."(#".$id.")");
-            return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
+            $res = $this->pay_modules
+                ->where('brand_id', $request->user()->brand_id)
+                ->where('serial_num', $data['serial_num'])
+                ->where('id', '!=', $id)
+                ->where('module_type', 0)
+                ->where('is_delete', false)
+                ->exists();
+            if($res)
+                return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
         }
-        else
-            return $this->response(951);
+        $before = $this->pay_modules->where('id', $id)->first();
+        $res = $this->pay_modules->where('id', $id)->update($data);
+
+        operLogging(HistoryType::UPDATE, $this->target, $before, $data, $data['note']."(#".$id.")");
+        return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
     }
 
     /**
@@ -356,31 +349,7 @@ class PaymentModuleController extends Controller
     public function tidCreate(Request $request)
     {
         //0523070000 pg(2) + ym(2) + idx(4)
-        $pg_type = sprintf("%02d", $request->pg_type);
-        $date = date('ym');
-
-        $cur_month = Carbon::now()->startOfMonth();
-        $next_month = $cur_month->copy()->addMonth(1)->startOfMonth()->format('Y-m-d');
-        $cur_month = $cur_month->format('Y-m-d');
-        $pay_modules = $this->pay_modules
-            ->where('created_at', '>=', $cur_month)
-            ->where('created_at', '<', $next_month)
-            ->get(['tid']);
-
-        $pattern = '/^'.$pg_type.$date.'[0-9]{4}$/';
-        $cur_modules = $pay_modules->filter(function($pay_module) use($pattern) {  
-            return preg_match($pattern, $pay_module->tid) === 1;
-        });
-        if($cur_modules->count())
-        {
-            $idx = $cur_modules->map(function($pay_module) {
-                return (int)substr($pay_module->tid, -4);
-            })->max()+1;
-        }
-        else
-            $idx = 0;
-
-        $tid = sprintf($pg_type.$date.'%04d', $idx);
+        $tid = TidGenerator::create($request->pg_type);
         return $this->response(0, ['tid'=>$tid]);    
     }
     
@@ -389,12 +358,7 @@ class PaymentModuleController extends Controller
      */
     public function midCreate(Request $request)
     {
-        $mid_code = $request->mid_code;
-        do {
-            $num = sprintf("%06d", rand(0, 999999));
-            $mid = $mid_code.$num;
-        }
-        while($this->pay_modules->where('mid', $mid)->exists());
+        $mid = MidGenerator::create($request->mid_code);
         return $this->response(0, ['mid'=>$mid]);    
     }
 
@@ -403,26 +367,28 @@ class PaymentModuleController extends Controller
      */
     public function midBulkCreate(Request $request)
     {
-        $mid_code = $request->mid_code;
-        $pay_mod_count = $request->pay_mod_count;
-        $new_mids = [];
-        $existing_mids = $this->pay_modules
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
-            ->pluck('mid')
-            ->toArray();
-
-        while (count($new_mids) < $pay_mod_count) 
-        {
-            $num = sprintf("%06d", rand(0, 999999));
-            $candidate_mid = $mid_code.$num;        
-            // 발급한 mid 목록과, 기존 mid 목록에 없는 것만 추가
-            if (!in_array($candidate_mid, $new_mids) && !in_array($candidate_mid, $existing_mids)) 
-                $new_mids[] = $candidate_mid;
-        }
+        $new_mids = MidGenerator::bulkCreate($request->mid_code, $request->pay_mod_count);        
         return $this->response(0, ['new_mids'=>$new_mids]);    
     }
 
+    /**
+     * TID 대량발급
+     */
+    public function tidBulkCreate(Request $request)
+    {
+        $new_pg_tids = [];
+        for ($i=0; $i <count($request->groups); $i++) 
+        {
+            $new_tids = TidGenerator::bulkCreate($request->groups[$i]['pg_type'], $request->groups[$i]['count']);
+            $new_pg_tids[] = [
+                'pg_id'     => $request->groups[$i]['pg_id'],
+                'new_tids' => $new_tids,
+            ];
+        }
+        return $this->response(0, $new_pg_tids);    
+    }
+
+    
     public function getNewPayKey($id)
     {
         return $id.Str::random(64 - strlen((string)$id));

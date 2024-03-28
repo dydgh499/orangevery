@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/services/mcht-blacklists/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import MchtBlacklistCreateDialog from '@/layouts/dialogs/MchtBlacklistCreateDialog.vue'
+import MchtBlacklistCreateDialog from '@/layouts/dialogs/users/MchtBlacklistCreateDialog.vue'
 import ExtraMenu from '@/views/services/mcht-blacklists/ExtraMenu.vue'
 import { DateFilters } from '@core/enums'
 

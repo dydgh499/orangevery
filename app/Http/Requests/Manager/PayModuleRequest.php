@@ -64,7 +64,12 @@ class PayModuleRequest extends FormRequest
         if(isOperator($this))
             return true;
         else if(isSalesforce($this))
-            return $this->user()->is_able_modify_mcht;        
+        {
+            if($this->user()->brand_id === 30)
+                return true;
+            else
+                return $this->user()->is_able_modify_mcht;        
+        }
         else
             return false;
     }

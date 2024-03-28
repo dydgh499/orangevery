@@ -1,3 +1,5 @@
+import { VBtn } from 'vuetify/components/VBtn'
+
 import { createVuetify } from 'vuetify'
 import defaults from './defaults'
 import { icons } from './icons'
@@ -11,4 +13,7 @@ export default createVuetify({
   defaults,
   icons,
   theme,
+  aliases: {
+    IconBtn: VBtn,
+  },
 })

@@ -5,7 +5,7 @@ import { selectFunctionCollect } from '@/views/selected'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
-import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
+import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 
 import { settleCycles, settleDays, settleTaxTypes, getAutoSetting } from '@/views/salesforces/useStore'

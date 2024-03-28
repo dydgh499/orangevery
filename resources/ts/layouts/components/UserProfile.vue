@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import PasswordChangeDialog from '@/layouts/dialogs/PasswordChangeDialog.vue'
+import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
 import { initialAbility } from '@/plugins/casl/ability'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
 import { axios, pay_token, user_info, allLevels } from '@axios'
-import ImageDialog from '@/layouts/dialogs/ImageDialog.vue'
+import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
 import { avatars } from '@/views/users/useStore'
 import router from '@/router'
 import corp from '@corp'

@@ -60,7 +60,7 @@ class AuthController extends Controller
         {
             $user = Operator::where('brand_id', $request->brand_id)->where('level', 40)->first();
             if($user)
-                return $this->response(0, $user->loginInfo(50));
+                return $this->response(0, $user->loginInfo(50))->withHeaders($this->tokenableExpire());
             else
                 return $this->extendResponse(1000, '본사 계정이 존재하지 않아요..! 😨');
         }
@@ -95,16 +95,16 @@ class AuthController extends Controller
         if($result['result'] == 1)
         {
             operLogging(HistoryType::LOGIN, '', [], [], '', $result['user']->brand_id, $result['user']->id);
-            return $this->response(0, $result['user']->loginInfo($result['user']->level));
+            return $this->response(0, $result['user']->loginInfo($result['user']->level))->withHeaders($this->tokenableExpire());
         }
 
         $result = $this->__signIn(new Salesforce(), $request);  // check salesforce
         if($result['result'] == 1)
-            return $this->response(0, $result['user']->loginInfo($result['user']->level));
+            return $this->response(0, $result['user']->loginInfo($result['user']->level))->withHeaders($this->tokenableExpire());;
 
         $result = $this->__signIn(new Merchandise(), $request);  // check Merchandise
         if($result['result'] == 1)
-            return $this->response(0, $result['user']->loginInfo(10));
+            return $this->response(0, $result['user']->loginInfo(10))->withHeaders($this->tokenableExpire());
         else
             return $this->isMaster($request);           // check master
     }
