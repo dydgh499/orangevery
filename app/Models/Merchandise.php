@@ -50,14 +50,17 @@ class Merchandise extends Authenticatable
         $cols = ['id', 'mcht_id', 'pmod_id', 'amount', 'mcht_settle_amount', 'mcht_settle_fee', 'hold_fee', 'is_cancel', 'created_at'];
         $query = $this->hasMany(Transaction::class, 'mcht_id')->noSettlement('mcht_settle_id');
         // 실패건은 제외하고 조회
-        if((int)request()->use_realtime_deposit === 1)
+        if(request()->use_realtime_deposit !== null)
         {
-            $fails = RealtimeSendHistory::onlyFailRealtime();
-            if(count($fails))
-                $query = $query->whereNotIn('id', $fails);
+            if((int)request()->use_realtime_deposit === 1)
+            {
+                $fails = RealtimeSendHistory::onlyFailRealtime();
+                if(count($fails))
+                    $query = $query->whereNotIn('id', $fails);
+            }
+            else
+                $query = $query->where('mcht_settle_type', '!=', -1);    
         }
-        else
-            $query = $query->where('mcht_settle_type', '!=', -1);
         return $query->select($cols);
     }
 
