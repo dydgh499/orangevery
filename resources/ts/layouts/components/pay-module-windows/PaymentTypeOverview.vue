@@ -2,7 +2,7 @@
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { PayModule } from '@/views/types'
 import { 
-    module_types, installments,  currencies
+    module_types, installments
  } from '@/views/merchandises/pay-modules/useStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
@@ -20,19 +20,6 @@ const snackbar = <any>(inject('snackbar'))
 const { mchts } = useSalesFilterStore()
 const { pgs, pss, settle_types, psFilter, setFee } = useStore()
 
-const setPGKeyInfo = () => {
-    if(props.item.pg_id) {
-        const pg = pgs.find(obj => obj.id === props.item.pg_id)
-        if(pg) {
-            props.item.api_key = pg.api_key 
-            props.item.sub_key = pg.sub_key
-            props.item.p_mid = pg.p_mid
-            snackbar.value.show('결제 정보들이 세팅되었습니다.', 'success')
-        }
-    }
-    else
-        snackbar.value.show('PG사를 먼저 선택해주세요.', 'warning')
-}
 
 const onModuleTypeChange = () => {
     props.item.note = module_types.find(obj => obj.id === props.item.module_type)?.title || ''
@@ -128,7 +115,6 @@ const filterPgs = computed(() => {
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>
                     <span>PG사</span>
-                    <VBtn size="small" variant="tonal" @click="setPGKeyInfo()" style="margin-left: 0.5em">가져오기</VBtn>
                 </template>
                 <template #input>
                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_id" :items="pgs"
@@ -181,54 +167,6 @@ const filterPgs = computed(() => {
                 <template #name><span class="font-weight-bold">이체 수수료</span></template>
                 <template #input>
                     {{ props.item.settle_fee }} ₩
-                </template>
-            </CreateHalfVCol>
-        </VRow>
-        <VRow v-if="getUserLevel() >= 35">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>결제통화</template>
-                <template #input>
-                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.payment_currency"
-                        label="결제통화 선택" :items="currencies" prepend-inner-icon="material-symbols:currency-exchange"
-                        item-title="title" item-value="id" single-line />
-                </template>
-            </CreateHalfVCol>
-        </VRow>
-        <VRow v-else>
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name><span class="font-weight-bold">결제통화</span></template>
-                <template #input>
-                    {{ currencies.find(obj => obj.id === props.item.payment_currency)?.title }}
-                </template>
-            </CreateHalfVCol>
-        </VRow>
-        <VRow v-if="getUserLevel() >= 35">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>정산통화</template>
-                <template #input>
-                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_currency" label="정산통화 선택"
-                        :items="currencies" prepend-inner-icon="material-symbols:currency-exchange" item-title="title"
-                        item-value="id" single-line />
-                </template>
-            </CreateHalfVCol>
-        </VRow>
-        <VRow v-else>
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name><span class="font-weight-bold">정산통화</span></template>
-                <template #input>
-                    {{ currencies.find(obj => obj.id === props.item.settle_currency)?.title }}
-                </template>
-            </CreateHalfVCol>
-        </VRow>
-        <VRow v-if="getUserLevel() >= 35">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>차액정산 사용여부</template>
-                <template #input>
-                    <BooleanRadio :radio="props.item.use_different_settle"
-                        @update:radio="props.item.use_different_settle = $event">
-                        <template #true>사용</template>
-                        <template #false>미사용</template>
-                    </BooleanRadio>
                 </template>
             </CreateHalfVCol>
         </VRow>

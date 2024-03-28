@@ -93,15 +93,6 @@ const payKeyCreate = async() => {
         </VRow>
         <VRow v-if="getUserLevel() >= 35">
             <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>GMID</template>
-                <template #input>
-                    <VTextField type="text" v-model="props.item.g_mid" prepend-inner-icon="material-symbols:ad-group"
-                        placeholder="GMID 입력" persistent-placeholder />
-                </template>
-            </CreateHalfVCol>
-        </VRow>
-        <VRow v-if="getUserLevel() >= 35">
-            <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>MID</template>
                 <template #input>
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
