@@ -51,9 +51,6 @@ if (Number(corp.pv_options.auth.levels.dev_use))
 // 실시간이체 사용여부
 if (Number(corp.pv_options.paid.use_realtime_deposit))
     store.params.use_realtime_deposit = 1
-// 취소입금 사용여부
-if (Number(corp.pv_options.paid.use_cancel_deposit))
-    store.params.use_cancel_deposit = 1
 
 const getAllLevels = () => {
     const sales = salesLevels()

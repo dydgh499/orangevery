@@ -33,8 +33,7 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
     headers2['deduction']['amount'] = '차감완료금'
 
     const settles:any = {}
-    if(corp.pv_options.paid.use_cancel_deposit)
-        settles['cancel_deposit_amount'] = '취소입금합계'
+    settles['cancel_deposit_amount'] = '취소입금합계'
     if(corp.pv_options.paid.use_collect_withdraw)
         settles['collect_withdraw_amount'] = '모아서출금합계'
     if(corp.pv_options.paid.use_withdraw_fee)
@@ -122,9 +121,7 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
             datas[i]['terminal.amount'] = datas[i]['terminal']['amount']
             datas[i]['terminal.under_sales_amount'] = datas[i]['terminal']['under_sales_amount']
 
-            
-            if(corp.pv_options.paid.use_cancel_deposit)
-                datas[i]['settle.cancel_deposit_amount'] = datas[i]['settle']['cancel_deposit_amount']
+            datas[i]['settle.cancel_deposit_amount'] = datas[i]['settle']['cancel_deposit_amount']
             if(corp.pv_options.paid.use_collect_withdraw)
                 datas[i]['settle.collect_withdraw_amount'] = datas[i]['settle']['collect_withdraw_amount']
             if(corp.pv_options.paid.use_withdraw_fee)

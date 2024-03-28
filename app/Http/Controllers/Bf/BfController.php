@@ -248,7 +248,6 @@ class BfController extends Controller
             'level' => 10,
             'use_search_date_detail' => 0,
             'use_realtime_deposit'   => 0,
-            'use_cancel_deposit'     => 0,
         ]);
         $inst   = new TransactionController(new Transaction);
         $inst->cols = [

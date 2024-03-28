@@ -46,23 +46,18 @@ class MerchandiseController extends Controller
 
     private function getCancelDeposits($request, $data)
     {
-        if($request->use_cancel_deposit)
+        if(count($data['content']))
         {
-            if(count($data['content']))
-            {
-                $ids = $data['content']->pluck('id')->all();
-                return Transaction::join('cancel_deposits', 'transactions.id', '=', 'cancel_deposits.trans_id')
-                    ->whereNull('cancel_deposits.mcht_settle_id')
-                    ->where('cancel_deposits.deposit_date', '<=', $request->e_dt)
-                    ->whereIn('transactions.mcht_id', $ids)
-                    ->get([
-                        'cancel_deposits.id',
-                        'transactions.mcht_id',
-                        'cancel_deposits.deposit_amount',
-                    ]);
-            }
-            else
-                return collect([]);
+            $ids = $data['content']->pluck('id')->all();
+            return Transaction::join('cancel_deposits', 'transactions.id', '=', 'cancel_deposits.trans_id')
+                ->whereNull('cancel_deposits.mcht_settle_id')
+                ->where('cancel_deposits.deposit_date', '<=', $request->e_dt)
+                ->whereIn('transactions.mcht_id', $ids)
+                ->get([
+                    'cancel_deposits.id',
+                    'transactions.mcht_id',
+                    'cancel_deposits.deposit_amount',
+                ]);
         }
         else
             return collect([]);

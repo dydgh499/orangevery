@@ -21,7 +21,6 @@ provide('head', head)
 provide('exporter', exporter)
 
 store.params.level = 10 // taransaction model에서 필수
-store.params.use_cancel_deposit = Number(corp.pv_options.paid.use_cancel_deposit)
 store.params.use_collect_withdraw = Number(corp.pv_options.paid.use_collect_withdraw)
 store.params.use_realtime_deposit = 0
 

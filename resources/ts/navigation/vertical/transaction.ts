@@ -48,12 +48,10 @@ const getSettleManagement = () => {
         ]
         
         if(user_info.value.level >= 35) {
-            if (corp.pv_options.paid.use_cancel_deposit) {
-                settle_childs.push({
-                    title: '취소 수기 입금',
-                    to: 'transactions-settle-cancel-deposits',
-                })
-            }
+            settle_childs.push({
+                title: '취소 수기 입금',
+                to: 'transactions-settle-cancel-deposits',
+            })
             if(corp.pv_options.paid.use_collect_withdraw) {
                 settle_childs.push({
                     title: '모아서 출금 이력',

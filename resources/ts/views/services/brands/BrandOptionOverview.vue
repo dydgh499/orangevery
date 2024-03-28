@@ -246,14 +246,6 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>결제 링크생성(가맹점)</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_hand_pay_drct" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>수기결제 SMS</template>
                             <template #input>
                                 <VSwitch hide-details v-model="props.item.paid.use_hand_pay_sms" color="primary" />
@@ -423,14 +415,6 @@ const md = user_info.value.level == 50 ? 4 : 12
                             <template #name>본사 지정계좌 출금</template>
                             <template #input>
                                 <VSwitch hide-details v-model="props.item.paid.use_head_office_withdraw" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>취소 후 입금</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_cancel_deposit" color="primary" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>

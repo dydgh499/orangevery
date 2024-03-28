@@ -142,12 +142,10 @@ class TransactionController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $with  = [];
+        $with  = ['cancelDeposits'];
         $query = $this->commonSelect($request);
         if($request->use_realtime_deposit && $request->level == 10)
             $with[] = 'realtimes';
-        if($request->use_cancel_deposit)
-            $with[] = 'cancelDeposits';
         if(count($with))
             $query = $query->with($with);
 

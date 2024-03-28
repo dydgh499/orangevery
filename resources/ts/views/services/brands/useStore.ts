@@ -174,7 +174,6 @@ export const defaultItemInfo = () => {
             }),
             paid: reactive<PaidOption>({
                 use_acct_verification: false,
-                use_hand_pay_drct: false,
                 use_hand_pay_sms: false,
                 use_realtime_deposit: false,
                 use_issuer_filter: false,
@@ -191,7 +190,6 @@ export const defaultItemInfo = () => {
                 use_withdraw_fee: false,
                 use_noti: false,
                 use_head_office_withdraw: false,
-                use_cancel_deposit: false,
                 use_collect_withdraw_scheduler: false,
                 use_finance_van_deposit: false,
                 use_pmid: false,

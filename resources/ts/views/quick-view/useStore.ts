@@ -41,13 +41,11 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
             class: 'copy()',
             params: url.origin + '/pay/' + type + "?e=" + params,
         })
-        if(corp.pv_options.paid.use_hand_pay_drct) {
-            pays.push({
-                title: '링크생성',
-                class: 'direct()',
-                params: url.origin + '/pay/' + type + "?e=" + params,
-            })
-        }
+        pays.push({
+            title: '링크생성',
+            class: 'direct()',
+            params: url.origin + '/pay/' + type + "?e=" + params,
+        })
         if(corp.pv_options.paid.use_hand_pay_sms) {
             pays.push({
                 title: 'SMS 결제 전송',

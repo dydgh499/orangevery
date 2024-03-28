@@ -45,7 +45,6 @@
         public $subsidiary_use_control = false; // 하위 영업점 전산 사용 ON/OFF
         public $use_acct_verification = false;  // 예금주 검증
         public $use_realtime_deposit = false;   // 실시간 결제모듈
-        public $use_hand_pay_drct = true;      // 결제 링크생성(가맹점)
         public $use_issuer_filter = false;      // 카드사 필터링
         public $use_forb_pay_time = false;      // 결제금지시간 지정 사용 여부
         public $use_hand_pay_sms = false;       // 수기결제 SMS
@@ -61,7 +60,6 @@
         public $use_withdraw_fee = true;       // 출금 수수료
         public $use_head_office_withdraw = false; // 가상계좌 출금
         public $use_noti = false;               // 노티 사용여부
-        public $use_cancel_deposit = false;     // 취소입금건 관리 사용여부
         public $use_finance_van_deposit = false; // 금융 VAN 송금 사용여부
         public $use_before_brand_info = false;  // 이전 서비스 정보 사용
         public $use_multiple_hand_pay = false;  // 다중 수기결제

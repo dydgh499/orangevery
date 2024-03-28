@@ -316,7 +316,6 @@ interface FreeOption {
 interface PaidOption {
     use_acct_verification: boolean, // 예금주 검증
     subsidiary_use_control: boolean, // 하위 영업점 전산 사용 ON/OFF
-    use_hand_pay_drct: boolean, // 결제 링크생성(가맹점)
     use_hand_pay_sms: boolean, // 수기결제 SMS
     use_realtime_deposit: boolean,  // 실시간 결제모듈
     use_issuer_filter: boolean, // 카드사 필터링
@@ -334,7 +333,6 @@ interface PaidOption {
     use_withdraw_fee: boolean,  // 출금 수수료
     use_head_office_withdraw: boolean,
     use_noti: boolean,
-    use_cancel_deposit: boolean, //입금 내역 관리
     use_finance_van_deposit: boolean, //금융 VAN 송금
     use_before_brand_info: boolean, // 이전 서비스 정보 사용
     use_multiple_hand_pay: boolean, // 다중 수기결제
