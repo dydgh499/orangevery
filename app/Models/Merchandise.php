@@ -52,6 +52,7 @@ class Merchandise extends Authenticatable
         // 실패건은 제외하고 조회
         if(request()->use_realtime_deposit !== null)
         {
+            logging([], 'test');
             if((int)request()->use_realtime_deposit === 1)
             {
                 $fails = RealtimeSendHistory::onlyFailRealtime();
