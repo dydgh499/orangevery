@@ -206,7 +206,7 @@ class QuickViewController extends Controller
             print_r($a->_withdrawAbleAmount($b, $t));
         }
         $b = new Request();
-        $b->merge(['is_test' => 14]);
+        $b = $b->merge(['is_test' => 14]);
         $mn = [
             150623,
             149102,
