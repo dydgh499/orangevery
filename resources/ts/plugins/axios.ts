@@ -150,13 +150,6 @@ axios.interceptors.request.use((config:any) => {
     config.headers['Authorization'] = `Bearer ${pay_token.value}`;
     return config;
 });
-axios.interceptors.response.use((response) => {
-    if(response.headers['token-expire-time']) {
-        token_expire_time.value = response.headers['token-expire-time']
-        localStorage.setItem('token-expire-time', token_expire_time.value)
-    }
-    return response;
-});
 
 watchEffect(() => {
     localStorage.setItem('access-token', pay_token.value)

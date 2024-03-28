@@ -2,7 +2,7 @@
 import { token_expire_time } from '@axios'
 
 
-const remaining_time = ref(<string>("00:00"))
+const remaining_time = ref(<string>("00:00:00"))
 
 const updateRemainingTime = () => {
     const expire = new Date(token_expire_time.value)

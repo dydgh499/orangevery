@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { PayModule } from '@/views/types'
-import { 
+import {
     module_types, installments
- } from '@/views/merchandises/pay-modules/useStore'
+} from '@/views/merchandises/pay-modules/useStore'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
