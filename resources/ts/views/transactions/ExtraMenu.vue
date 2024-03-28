@@ -111,7 +111,7 @@ const isRealtimeTransaction = () => {
     return getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit
 }
 const isUseCancelDeposit = () => {
-    return getUserLevel() >= 35 && corp.pv_options.paid.use_cancel_deposit && props.item.is_cancel && !props.item.mcht_settle_id
+    return getUserLevel() >= 35 && corp.pv_options.paid.use_cancel_deposit && props.item.is_cancel
 }
 
 </script>
