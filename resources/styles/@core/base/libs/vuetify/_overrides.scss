@@ -139,6 +139,11 @@ h6,
   }
 }
 
+/* stylelint-disable-next-line no-duplicate-selectors */
+.v-selection-control--density-default {
+  --v-selection-control-size: 28px !important;
+}
+
 .v-radio-group {
   .v-selection-control-group {
     .v-radio:not(:last-child) {

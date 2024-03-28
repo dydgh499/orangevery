@@ -62,7 +62,7 @@ class AuthController extends Controller
             if($user)
                 return $this->response(0, $user->loginInfo(50))->withHeaders($this->tokenableExpire());
             else
-                return $this->extendResponse(1000, '본사 계정이 존재하지 않아요..! 😨');
+                return $this->extendResponse(1000, '계정이 존재하지 않아요..! 😨');
         }
         else
             return $this->extendResponse(1000, __('auth.not_found_obj'));
