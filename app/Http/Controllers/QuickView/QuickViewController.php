@@ -190,4 +190,68 @@ class QuickViewController extends Controller
         $data = $this->_withdrawAbleAmount($request, $request->user()->id);
         return $this->response(0, $data);        
     }
+
+    static public function test()
+    {
+        $a = new QuickViewController(new Transaction);
+        $b = new Request();
+        $b->merge(['is_test' => 12]);
+        $ty = [
+            151760,
+            99712,
+        ];
+        foreach($ty as $t)
+        {
+            echo $t;
+            print_r($a->_withdrawAbleAmount($b, $t));
+        }
+        $b = new Request();
+        $b->merge(['is_test' => 14]);
+        $mn = [
+            150623,
+            149102,
+            119546,
+            118157,
+            100933,
+            100328,
+            100169,
+            100046,
+            99867,
+            99734,
+            99360,
+            99373,
+            98763,
+            98761,
+            97452,
+            97467,
+            96597,
+            96682,
+            96707,
+            95868,
+            95972,
+            96009,
+            96029,
+            96032,
+            96033,
+            94306,
+            95380,
+            92689,
+            92905,
+            92906,
+            93218,
+            93291,
+            93313,
+            93437,
+            93539,
+            93563,
+            93630,
+        ];
+        foreach($mn as $n)
+        {
+            echo $n;
+            print_r($a->_withdrawAbleAmount($b, $n));
+        }
+        
+
+    }
 }
