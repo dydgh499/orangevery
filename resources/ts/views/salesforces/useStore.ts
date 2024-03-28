@@ -50,9 +50,8 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
         'level' : '등급',
         'user_name' : '영업점 ID',
         'sales_name': '영업점 상호',
+        'under_auto_settings': '수수료율',
     }
-    if(corp.pv_options.paid.use_sales_auto_setting)
-        headers['under_auto_settings'] = '수수료율'
     if(getUserLevel() >= 35)
         headers['is_able_modify_mcht'] = '가맹점 수정권한'
 

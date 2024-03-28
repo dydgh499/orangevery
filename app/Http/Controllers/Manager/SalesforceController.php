@@ -93,8 +93,7 @@ class SalesforceController extends Controller
     public function index(IndexRequest $request)
     {
         $query = $this->commonSelect($request);
-        if($request->use_sales_auto_setting)
-            $query->with(['underAutoSettings']);
+        $query->with(['underAutoSettings']);
 
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);

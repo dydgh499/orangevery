@@ -138,7 +138,7 @@ const payModuleBatchOverview = ref()
                 </VCardItem>
             </VCard>
             <br>
-            <VCard v-if="corp.pv_options.paid.use_sales_auto_setting && getUserLevel() >= 35">
+            <VCard v-if="getUserLevel() >= 35">
                 <VCardItem>
                     <VCol cols="12">
                         <VRow>

@@ -25,9 +25,6 @@ const tax_types = settleTaxTypes()
 const password = ref()
 const batchDialog = ref()
 
-if(corp.pv_options.paid.use_sales_auto_setting)
- store.params.use_sales_auto_setting = 1
-
 provide('password', password)
 provide('store', store)
 provide('head', head)

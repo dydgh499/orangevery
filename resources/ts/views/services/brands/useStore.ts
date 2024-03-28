@@ -186,7 +186,6 @@ export const defaultItemInfo = () => {
                 use_tid_create: false,
                 use_mid_create: false,
                 use_pay_verification_mobile: false,
-                use_sales_auto_setting: false,
                 use_regular_card: false,
                 use_collect_withdraw: false,
                 use_withdraw_fee: false,

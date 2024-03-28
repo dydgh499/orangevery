@@ -50,7 +50,6 @@
         public $use_forb_pay_time = false;      // 결제금지시간 지정 사용 여부
         public $use_hand_pay_sms = false;       // 수기결제 SMS
         public $use_pay_verification_mobile = false; // 결제전 휴대폰 인증
-        public $use_sales_auto_setting = true; // 영업점 자동 세팅
         public $use_pay_limit = false;          // 결제한도 지정 사용 여부
         public $use_online_pay = false;         // 온라인 결제 사용 여부
         public $use_tid_create = false;         // tid 생성버튼 사용여부

@@ -271,14 +271,6 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>영업점 자동 세팅</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_sales_auto_setting" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>단골고객 카드등록</template>
                             <template #input>
                                 <VSwitch hide-details v-model="props.item.paid.use_regular_card" color="primary" />

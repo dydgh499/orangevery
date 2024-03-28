@@ -328,7 +328,6 @@ interface PaidOption {
     use_mid_create: boolean,    // MID 생성버튼
     use_pmid: boolean,
     use_pay_verification_mobile: boolean, //휴대폰인증 
-    use_sales_auto_setting: boolean, // 영업점 자동 세팅
     use_regular_card: boolean,
     use_collect_withdraw: boolean, // 가맹점 모아서 출금
     use_collect_withdraw_scheduler: boolean, // 모아서 출금 스케줄링
