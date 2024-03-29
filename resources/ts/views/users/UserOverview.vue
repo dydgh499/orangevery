@@ -162,7 +162,7 @@ watchEffect(() => {
                                     :rules="[nullValidator]" @update:modelValue="setAcctBankName()" />
                             </template>
                         </CreateHalfVCol>
-                        <VCol cols="12" v-if="corp.pv_options.paid.use_acct_verification && getUserLevel() >= 35">
+                        <VCol cols="12" v-if="corp.pv_options.paid.use_acct_verification ">
                             <VBtn @click="onwerCheck" prepend-icon="ri:pass-valid-line" class="float-right">
                                 예금주 검증
                             </VBtn>
