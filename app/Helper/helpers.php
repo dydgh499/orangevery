@@ -24,6 +24,11 @@
         return $pgs[$pg_type-1];
     }
     
+    function isMyMerchandise($request, $id)
+    {
+        return isMerchandise($request) && $request->user()->id === (int)$id;
+    }
+    
     function isMainBrand($brand_id)
     {
         return $brand_id == env('MAIN_BRAND_ID', 1) ? true : false;

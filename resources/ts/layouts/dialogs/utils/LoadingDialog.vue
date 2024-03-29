@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { axios } from '@axios'
-import { token_expire_time } from '@axios'
 
 const active_count = ref(0)
 const visible = ref(false)
