@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { UserAbility } from '@/plugins/casl/AppAbility'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
-import { axios, pay_token, user_info } from '@axios'
+import { axios, pay_token, user_info, token_expire_time } from '@axios'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import corp from '@corp'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
@@ -46,9 +46,12 @@ const login = () => {
             const { access_token, user } = r.data
             user['level'] = user['level'] == null ? 10 : user['level']
             const abilities = getAbilities()
-            ability.update(abilities);
+            ability.update(abilities)
             pay_token.value = access_token
-            user_info.value = user
+            user_info.value = user            
+            token_expire_time.value = r.headers['token-expire-time']
+
+            localStorage.setItem('token-expire-time', token_expire_time.value)
             localStorage.setItem('abilities', JSON.stringify(abilities))
             // Redirect to `to` query if exist or redirect to index route
             router.replace(route.query.to ? String(route.query.to) : '/')

@@ -14,10 +14,6 @@ axios.interceptors.request.use((config) => {
 });
 axios.interceptors.response.use((response) => {
     active_count.value--
-    if(response.headers['token-expire-time']) {
-        token_expire_time.value = response.headers['token-expire-time']
-        localStorage.setItem('token-expire-time', token_expire_time.value)
-    }
     return response;
 });
 
