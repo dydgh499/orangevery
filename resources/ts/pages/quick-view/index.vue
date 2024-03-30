@@ -97,7 +97,7 @@ watchEffect(() => {
                             수기결제
                             <VIcon end icon="fluent-payment-32-regular" />
                         </VBtn>
-                        <VBtn variant="tonal" @click="toComplaintLink()" class="shortcut-button" color="error">
+                        <VBtn variant="tonal" @click="toComplaintLink()" class="shortcut-button" color="error" v-if="getUserLevel() === 10">
                             민원관리
                             <VIcon end icon="ic-round-sentiment-dissatisfied" />
                         </VBtn>
