@@ -53,7 +53,7 @@ class MerchandiseController extends Controller
             $ids = $data['content']->pluck('id')->all();
             return Transaction::join('cancel_deposits', 'transactions.id', '=', 'cancel_deposits.trans_id')
                 ->whereNull('cancel_deposits.mcht_settle_id')
-                ->where('cancel_deposits.deposit_date', '<=', $request->e_dt)
+                ->where('cancel_deposits.deposit_dt', '<=', $request->e_dt)
                 ->whereIn('transactions.mcht_id', $ids)
                 ->get([
                     'cancel_deposits.id',

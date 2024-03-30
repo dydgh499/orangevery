@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id');
             $table->unsignedInteger('trans_id')->nullable()->comment('취소 FK')->constrained('transactions')->onDelete('SET NULL');
             $table->integer('deposit_amount')->default(0)->comment('입금 금액');
-            $table->date('deposit_date')->nullable()->comment('입금 날짜');
+            $table->date('deposit_dt')->nullable()->comment('입금 날짜');
             $table->string('deposit_history', 255)->default('')->comment('입금 내역');
             $table->timestamps();
         });

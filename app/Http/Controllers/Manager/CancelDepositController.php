@@ -13,6 +13,7 @@ use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 /**
  * @group Cancel deposit API
@@ -67,6 +68,8 @@ class CancelDepositController extends Controller
     public function store(CancelDepositRequest $request)
     {
         $data = $request->data();
+        $deposit_dt = Carbon::createFromFormat('Y-m-d', $data['deposit_dt']);
+        
         $res = $this->deposits->create($data);
         return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }

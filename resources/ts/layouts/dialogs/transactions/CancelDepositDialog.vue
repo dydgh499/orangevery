@@ -23,7 +23,7 @@ const addNewCancelDeposit = () => {
         trans_id: trans.value?.id,
         deposit_amount: 0,
         deposit_history: '',
-        deposit_date: formatDate(new Date()),
+        deposit_dt: formatDate(new Date()),
     }))
 }
 const closeDialog = () => {
@@ -65,7 +65,7 @@ onMounted(() => {
                         <tr v-for="(_cancel_deposit, key) in trans?.cancel_deposits" :key="key">
                             <td class='list-square'>{{ trans?.mcht_name }}</td>
                             <td class='list-square'>
-                                <VTextField v-model="_cancel_deposit.deposit_date" type="date" />
+                                <VTextField v-model="_cancel_deposit.deposit_dt" type="date" />
                             </td>
                             <td class='list-square'>
                                 <VTextField v-model="_cancel_deposit.deposit_amount" type="number" />

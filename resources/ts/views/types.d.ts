@@ -855,7 +855,7 @@ export interface CancelDeposit {
     mcht_name?: string,
     deposit_amount: number,
     deposit_history: string,
-    deposit_date: string,
+    deposit_dt: string,
     created_at: string,
     updated_at: string,
 }
