@@ -170,7 +170,9 @@ export const defaultItemInfo = () => {
                 use_fix_table_view: true,
                 fix_table_size: 749,
                 init_search_filter: false,
-                resident_num_masking: false
+                resident_num_masking: false,
+                default_installment: 0,
+                default_abnormal_trans_limit: 0
             }),
             paid: reactive<PaidOption>({
                 use_acct_verification: false,

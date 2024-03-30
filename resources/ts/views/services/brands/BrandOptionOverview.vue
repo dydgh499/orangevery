@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import type { FreeOption, PaidOption, AuthOption } from '@/views/types'
+import { abnormal_trans_limits, installments } from '@/views/merchandises/pay-modules/useStore'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { user_info } from '@/plugins/axios';
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
@@ -111,7 +112,33 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VCardTitle class="pt-10">
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>할부개월 기본 값</template>
+                            <template #input>
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.default_installment"
+                                    :items="installments" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                    label="할부한도 선택" item-title="title" item-value="id" single-line />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>이상거래한도 기본 값</template>
+                            <template #input>
+                                <VSelect v-model="props.item.free.default_abnormal_trans_limit" :items="abnormal_trans_limits"
+                                        prepend-inner-icon="jam-triangle-danger" label="이상거래 한도" item-title="title"
+                                        item-value="id" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                </VCardItem>
+            </VCard>
+        </VCol>
+        <VCol cols="12" :md="md">
+            <VCard>
+                <VCardItem>
+                    <VCardTitle>
                         <BaseQuestionTooltip location="top" text="매출전표 가맹점표기 정보"
                             :content="`가맹점 옵션중 매출전표 공급자 표기정보(PG/본사)를 본사로 설정할 시<br>매출전표에서 하단 정보들이 보여집니다.`">
                         </BaseQuestionTooltip>
@@ -220,268 +247,271 @@ const md = user_info.value.level == 50 ? 4 : 12
                 </VCardItem>
             </VCard>
         </VCol>
-        <VCol cols="12" :md="md" v-show="user_info.level == 50">
-            <VCard>
-                <VCardItem>
-                    <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="가맹점 옵션(유료)"
-                            :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
-                        </BaseQuestionTooltip>
-                    </VCardTitle>
-                    <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>예금주 검증</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_acct_verification" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>가맹점 전산 사용 ON/OFF</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.subsidiary_use_control" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>수기결제 SMS</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_hand_pay_sms" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>결제전 휴대폰 인증</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_pay_verification_mobile"
-                                    color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>단골고객 카드등록</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_regular_card" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>모아서 출금</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_collect_withdraw" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>모아서 출금 스케줄링</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_collect_withdraw_scheduler"
-                                    color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>출금 수수료</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_withdraw_fee" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>정산계좌 숨김사용</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_hide_account" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>
-                                <BaseQuestionTooltip location="top" text="다중 수기결제"
-                                    :content="`사용 가맹점당 3개의 결제모듈이 존재해야 활성화 됩니다.`">
-                                </BaseQuestionTooltip>
-                            </template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_multiple_hand_pay" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
+        <template v-if="user_info.level == 50">
+            <VCol cols="12" :md="md">
+                <VCard>
+                    <VCardItem>
+                        <VCardTitle>
+                            <BaseQuestionTooltip location="top" text="가맹점 옵션(유료)"
+                                :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
+                            </BaseQuestionTooltip>
+                        </VCardTitle>
+                        <VRow class="pt-5">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>예금주 검증</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_acct_verification" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>가맹점 전산 사용 ON/OFF</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.subsidiary_use_control" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>수기결제 SMS</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_hand_pay_sms" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>결제전 휴대폰 인증</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_pay_verification_mobile"
+                                        color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>단골고객 카드등록</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_regular_card" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>모아서 출금</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_collect_withdraw" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>모아서 출금 스케줄링</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_collect_withdraw_scheduler"
+                                        color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>출금 수수료</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_withdraw_fee" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>정산계좌 숨김사용</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_hide_account" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>
+                                    <BaseQuestionTooltip location="top" text="다중 수기결제"
+                                        :content="`사용 가맹점당 3개의 결제모듈이 존재해야 활성화 됩니다.`">
+                                    </BaseQuestionTooltip>
+                                </template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_multiple_hand_pay" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                    </VCardItem>
+                </VCard>
+            </VCol>
+            <VCol cols="12" :md="md">
+                <VCard>
+                    <VCardItem>
+                        <VCardTitle>
+                            <BaseQuestionTooltip location="top" text="결제모듈 옵션(유료)"
+                                :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
+                            </BaseQuestionTooltip>
+                        </VCardTitle>
+                        <VRow class="pt-5">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>실시간 결제모듈</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_realtime_deposit" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>카드사 필터링</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_issuer_filter" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>중복결제 검증</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_dup_pay_validation" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>결제금지시간 지정</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_forb_pay_time" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>결제한도 지정</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_pay_limit" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>온라인 결제 사용여부</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_online_pay" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>TID 발급버튼 사용여부</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_tid_create" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>MID 발급버튼 사용여부</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_mid_create" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>PMID 사용 여부</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_pmid" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VCardTitle class="pt-10">
+                            <BaseQuestionTooltip location="top" text="브랜드 옵션(유료)"
+                                :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
+                            </BaseQuestionTooltip>
+                        </VCardTitle>
+                        <VRow class="pt-5">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>노티 사용여부</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_noti" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>본사 지정계좌 출금</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_head_office_withdraw" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>이상거래, 결제실패, 실시간이체 관리 영업점 노출여부</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.auth.visibles.abnormal_trans_sales"
+                                        color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>
+                                    <BaseQuestionTooltip location="top" text="기간별 사업자정보 사용"
+                                        :content="`기간별로 사업자정보가 매출전표에 표기됩니다.(공급자 정보: 본사정보로 체크되어야합니다.)`">
+                                    </BaseQuestionTooltip>
+                                </template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_before_brand_info" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>가맹점 블랙리스트</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_mcht_blacklist" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>부분취소</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_part_cancel" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VCardTitle class="pt-10">
+                            <BaseQuestionTooltip location="top" text="정산 옵션(유료)"
+                                :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
+                            </BaseQuestionTooltip>
+                        </VCardTitle>
+                        <VRow class="pt-5">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                    <template #name>금융VAN 송금 사용여부</template>
+                                    <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_finance_van_deposit" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                    <template #name>지급보류 사용여부</template>
+                                    <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_settle_hold" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                    <template #name>정산시 승인/취소 수 사용</template>
+                                    <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_settle_count" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                            
+                        </VRow>
                 </VCardItem>
             </VCard>
-        </VCol>
-        <VCol cols="12" :md="md" v-show="user_info.level == 50">
-            <VCard>
-                <VCardItem>
-                    <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="결제모듈 옵션(유료)"
-                            :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
-                        </BaseQuestionTooltip>
-                    </VCardTitle>
-                    <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>실시간 결제모듈</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_realtime_deposit" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>카드사 필터링</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_issuer_filter" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>중복결제 검증</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_dup_pay_validation" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>결제금지시간 지정</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_forb_pay_time" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>결제한도 지정</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_pay_limit" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>온라인 결제 사용여부</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_online_pay" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>TID 발급버튼 사용여부</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_tid_create" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>MID 발급버튼 사용여부</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_mid_create" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>PMID 사용 여부</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_pmid" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VCardTitle class="pt-10">
-                        <BaseQuestionTooltip location="top" text="브랜드 옵션(유료)"
-                            :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
-                        </BaseQuestionTooltip>
-                    </VCardTitle>
-                    <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>노티 사용여부</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_noti" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>본사 지정계좌 출금</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_head_office_withdraw" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>이상거래, 결제실패, 실시간이체 관리 영업점 노출여부</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.auth.visibles.abnormal_trans_sales"
-                                    color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>
-                                <BaseQuestionTooltip location="top" text="기간별 사업자정보 사용"
-                                    :content="`기간별로 사업자정보가 매출전표에 표기됩니다.(공급자 정보: 본사정보로 체크되어야합니다.)`">
-                                </BaseQuestionTooltip>
-                            </template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_before_brand_info" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>가맹점 블랙리스트</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_mcht_blacklist" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>부분취소</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_part_cancel" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VCardTitle class="pt-10">
-                        <BaseQuestionTooltip location="top" text="정산 옵션(유료)"
-                            :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
-                        </BaseQuestionTooltip>
-                    </VCardTitle>
-                    <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>금융VAN 송금 사용여부</template>
-                                <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_finance_van_deposit" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>지급보류 사용여부</template>
-                                <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_settle_hold" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>정산시 승인/취소 수 사용</template>
-                                <template #input>
-                                <VSwitch hide-details v-model="props.item.paid.use_settle_count" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                        
-                    </VRow>
-            </VCardItem>
-        </VCard>
-    </VCol>
-</VRow></template>
+            </VCol>
+        </template>
+    </VRow>
+</template>

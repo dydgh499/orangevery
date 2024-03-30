@@ -4,10 +4,10 @@ import PayModuleDialog from '@/layouts/dialogs/pay-modules/PayModuleDialog.vue'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 
-import { defaultItemInfo } from '@/views/merchandises/pay-modules/useStore'
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
 import { getUserLevel } from '@axios'
+import corp from '@corp'
 
 interface Props {
     item: Merchandise,
@@ -86,9 +86,9 @@ const addNewPayModule = async () => {
         ship_out_dt: null,
         ship_out_stat: 0,
         is_old_auth: 0,    
-        installment: 0,
+        installment: corp.pv_options.free.default_installment,
         pay_dupe_limit:0,
-        abnormal_trans_limit: 0,
+        abnormal_trans_limit: corp.pv_options.free.default_abnormal_trans_limit,
         pay_dupe_least: 0,
         pay_year_limit: 0,
         pay_month_limit: 0,

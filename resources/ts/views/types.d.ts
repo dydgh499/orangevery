@@ -303,6 +303,8 @@ interface FreeOption {
     fix_table_size: number,
     init_search_filter: boolean,
     resident_num_masking: boolean,
+    default_installment: number,
+    default_abnormal_trans_limit: number,
     sales_slip: {
         merchandise: BrandBaseInfo
     },
