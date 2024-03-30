@@ -197,7 +197,7 @@ class DashboardController extends Controller
 
     public function getRecentDangerHistories(Request $request)
     {
-        $request->merge([
+        request()->merge([
             'page' => 1,
             'page_size' => 9,
         ]);
@@ -223,7 +223,7 @@ class DashboardController extends Controller
     {   
         if(isOperator($request))
         {
-            $request->merge([
+            request()->merge([
                 'page' => 1,
                 'page_size' => 5,
             ]);

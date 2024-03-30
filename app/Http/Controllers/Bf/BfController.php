@@ -244,7 +244,7 @@ class BfController extends Controller
     
     public function transactionIndex(IndexRequest $request)
     {
-        $request->merge([
+        request()->merge([
             'level' => 10,
             'use_search_date_detail' => 0,
             'use_realtime_deposit'   => 0,
