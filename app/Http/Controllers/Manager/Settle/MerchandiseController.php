@@ -66,7 +66,7 @@ class MerchandiseController extends Controller
     private function commonQuery($request)
     {
         $validated = $request->validate(['s_dt'=>'required|date', 'e_dt'=>'required|date']);
-        [$settle_key, $group_key] = $this->getSettleCol($request);
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
         $cols = array_merge($this->getDefaultCols(), ['mcht_name', 'use_collect_withdraw', 'withdraw_fee']);
         if($request->input('use_settle_hold', 0))
@@ -83,12 +83,14 @@ class MerchandiseController extends Controller
             });
 
         // 모아서 출금
+        if($request->mcht_id)
+            $query = $query->where('id', $request->mcht_id);
         if($request->use_collect_withdraw)
             $query = $query->with(['collectWithdraws']);
 
         $with = ['deducts', 'settlePayModules', 'transactions'];
         $data = $this->getIndexData($request, $query->with($with), 'id', $cols, "created_at", false);
-        $data = $this->getSettleInformation($data, $settle_key);
+        $data = $this->getSettleInformation($data, $target_settle_amount);
         $data = $this->setTerminalCost($data, $request->s_dt, $request->s_dt, 'mcht_id');
         // set total settle
         $data = $this->setSettleFinalAmount($data, $this->getCancelDeposits($request, $data));
@@ -121,7 +123,7 @@ class MerchandiseController extends Controller
                 'transfer' => 0,
             ]
         ];
-        [$settle_key, $group_key] = $this->getSettleCol($request);
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
         $transactions = collect();
         $data = $this->commonQuery($request);
@@ -139,7 +141,7 @@ class MerchandiseController extends Controller
             $total['settle']['deposit'] += $item->settle['deposit'];
             $total['settle']['transfer'] += $item->settle['transfer'];
         }
-        $chart = getDefaultTransChartFormat($transactions, $settle_key);
+        $chart = getDefaultTransChartFormat($transactions, $target_settle_amount);
         $total = array_merge($total, $chart);
         return $this->response(0, $total);
     }
@@ -153,62 +155,5 @@ class MerchandiseController extends Controller
     public function deduct(Request $request) 
     {
         return $this->commonDeduct($this->settleDeducts, 'mcht_id', $request);
-    }
-
-    public function part(Request $request)
-    {
-        $data = $this->partSettleCommonQuery($request, 'mcht_id', 'mcht_settle_id');
-        return $this->response(0, $data);
-    }
-
-    public function partChart(Request $request)
-    {
-        $search = $request->input('search', '');
-        [$settle_key, $group_key] = $this->getSettleCol($request);
-        $cols  = $this->getTotalCols($settle_key);
-        $query = Transaction::where('mcht_id', $request->id)
-            ->noSettlement('mcht_settle_id')
-            ->where(function ($query) use ($search) {
-                return $query->where('transactions.mid', 'like', "%$search%")
-                    ->orWhere('transactions.tid', 'like', "%$search%")
-                    ->orWhere('transactions.trx_id', 'like', "%$search%")
-                    ->orWhere('transactions.appr_num', 'like', "%$search%");
-            });
-        if($request->only_cancel)
-            $query = $query->where('transactions.is_cancel', true);
-
-        // 실패건은 제외하고 조회
-        if((int)$request->use_realtime_deposit === 1)
-        {
-            $fails = RealtimeSendHistory::onlyFailRealtime();
-            if(count($fails))
-                $query = $query->whereNotIn('transactions.id', $fails);
-        }
-        else
-            $query = $query->where('transactions.mcht_settle_type', '!=', -1);
-       //TODO: 영업점으로 통일할때 꼭 mcht_id if 적용
-
-        $chart = $query->first($cols);
-        if($chart)
-        {
-            $chart = $this->setTransChartFormat($chart);
-            return $this->response(0, $chart);        
-        }
-        else
-        {
-            return $this->response(0, [
-                'appr'  => [
-                    'amount'=> 0,
-                    'count' => 0,
-                ],
-                'cxl'   => [
-                    'amount'=> 0,
-                    'count' => 0,
-                ],
-                'amount'    => 0,
-                'count'     => 0,
-                'profit'    => 0,
-            ]);
-        }
     }
 }

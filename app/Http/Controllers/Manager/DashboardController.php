@@ -26,7 +26,7 @@ class DashboardController extends Controller
     use ManagerTrait, ExtendResponseTrait;
 
 
-    public function transactionIncrease($key, $id, $settle_key)
+    public function transactionIncrease($key, $id, $settle_amount)
     {
         $cur_e_dt = Carbon::now()->format('Y-m-d');
         $cur_s_dt = Carbon::now()->startOfMonth()->format('Y-m-d');
@@ -34,9 +34,9 @@ class DashboardController extends Controller
         $last_s_dt = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
 
         $info = Transaction::selectRaw("
-            SUM(CASE WHEN date(trx_dt) BETWEEN '$cur_s_dt' AND '$cur_e_dt' THEN $settle_key ELSE 0 END) AS cur_profit,
+            SUM(CASE WHEN date(trx_dt) BETWEEN '$cur_s_dt' AND '$cur_e_dt' THEN $settle_amount ELSE 0 END) AS cur_profit,
             SUM(CASE WHEN date(trx_dt) BETWEEN '$cur_s_dt' AND '$cur_e_dt' THEN amount ELSE 0 END) AS cur_amount,
-            SUM(CASE WHEN date(trx_dt) BETWEEN '$last_s_dt' AND '$last_e_dt' THEN $settle_key ELSE 0 END) AS last_profit,
+            SUM(CASE WHEN date(trx_dt) BETWEEN '$last_s_dt' AND '$last_e_dt' THEN $settle_amount ELSE 0 END) AS last_profit,
             SUM(CASE WHEN date(trx_dt) BETWEEN '$last_s_dt' AND '$last_e_dt' THEN amount ELSE 0 END) AS last_amount")
             ->where($key, $id)
             ->whereRaw("(date(trx_dt) BETWEEN '$last_s_dt' AND '$last_e_dt' OR date(trx_dt) BETWEEN '$cur_s_dt' AND '$cur_e_dt')")
@@ -64,19 +64,19 @@ class DashboardController extends Controller
         {
             $key = 'brand_id';
             $id =  $request->user()->brand_id;
-            $settle_key = 'brand_settle_amount';
+            $settle_amount = 'brand_settle_amount';
         }
         else if(isSalesforce($request))
         {
             $idx = globalLevelByIndex($request->user()->level);
             $key = 'sales'.$idx.'_id';
             $id =  $request->user()->id;
-            $settle_key = 'sales'.$idx.'_settle_amount';
+            $settle_amount = 'sales'.$idx.'_settle_amount';
         }
 
-        $monthly = DB::select('CALL getMonthlyAmount(?, ?, ?)', [$key, $id, $settle_key]);
-        $daily = DB::select('CALL getDailyAmount(?, ?, ?)', [$key, $id, $settle_key]);
-        [$datas['cur_profit_rate'], $datas['cur_amount_rate'], $datas['cur_profit'], $datas['cur_amount']] = $this->transactionIncrease($key, $id, $settle_key);
+        $monthly = DB::select('CALL getMonthlyAmount(?, ?, ?)', [$key, $id, $settle_amount]);
+        $daily = DB::select('CALL getDailyAmount(?, ?, ?)', [$key, $id, $settle_amount]);
+        [$datas['cur_profit_rate'], $datas['cur_amount_rate'], $datas['cur_profit'], $datas['cur_amount']] = $this->transactionIncrease($key, $id, $settle_amount);
 
         foreach($monthly as $month)
         {

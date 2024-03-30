@@ -61,7 +61,9 @@ const requestWithdraw = async() => {
         snackbar.value.show('출금 가능 금액을 초과하였습니다.', 'warning')
 }
 
-
+const toComplaintLink = () => {
+    router.push('complaints')
+}
 
 watchEffect(() => {
     if(Object.keys(transactions.value).length)
@@ -94,6 +96,10 @@ watchEffect(() => {
                             v-if="hands.length > 0 && hands[0].show_pay_view">
                             수기결제
                             <VIcon end icon="fluent-payment-32-regular" />
+                        </VBtn>
+                        <VBtn variant="tonal" @click="toComplaintLink()" class="shortcut-button" color="error">
+                            민원관리
+                            <VIcon end icon="ic-round-sentiment-dissatisfied" />
                         </VBtn>
                     </VCol>
                 </template>

@@ -5,7 +5,7 @@ import { types } from '@/views/posts/useStore'
 import PostReplyView from '@/views/posts/PostReplyView.vue'
 import ExtraMenu from '@/views/posts/ExtraMenu.vue'
 import router from '@/router'
-import { user_info, getUserLevel } from '@axios'
+import { getUserLevel, user_info, allLevels } from '@axios'
 
 interface Props {
     post: Post,
@@ -40,6 +40,22 @@ provide('head', head)
                     <VChip :color="store.getSelectIdColor(types.find(obj => obj.id === props.post[key])?.id)">
                         {{ types.find(obj => obj.id === props.post[key])?.title }}
                     </VChip>
+                </span>
+                <span v-else-if="key == 'writer'">
+                    <div>
+                        <template v-if="props.post['level'] >= 35">                           
+                            <VChip :color="store.getAllLevelColor(props.post['level'])">
+                                운영자
+                            </VChip>
+                        </template>
+                        <template v-else>
+                            <span style="margin: 0.1em;">{{ props.post[key] }}</span>
+                            <br>
+                            <VChip :color="store.getAllLevelColor(props.post['level'])">
+                                {{ allLevels().find(obj => obj.id === props.post['level'])?.title }}
+                            </VChip>
+                        </template>
+                    </div>
                 </span>
                 <span v-else-if="key == 'title'" :style="{ 'margin-left': `${props.depth * 20}px` }" class="edit-link"
                     @click="moveContent(props.post)">

@@ -4,6 +4,7 @@ namespace App\Http\Traits\Settle;
 use Illuminate\Support\Facades\DB;
 use App\Models\Log\RealtimeSendHistory;
 use App\Models\Transaction;
+use Illuminate\Http\Request;
 
 trait SettleTrait
 {
@@ -15,10 +16,10 @@ trait SettleTrait
             "acct_num", "acct_name", "acct_bank_name", "acct_bank_code",
         ];
     }
-    public function getSettleInformation($data, $settle_key)
+    public function getSettleInformation($data, $settle_amount)
     {
         foreach($data['content'] as $content) {
-            $chart = getDefaultTransChartFormat($content->transactions, $settle_key);
+            $chart = getDefaultTransChartFormat($content->transactions, $settle_amount);
             $content->total = $chart['total'];
             $content->appr = $chart['appr'];
             $content->cxl = $chart['cxl'];
@@ -64,49 +65,40 @@ trait SettleTrait
         return $this->response(1);
     }
 
-    protected function getTargetInfo($level)
-    {   //SettleHistoryTrait와 같은 함수 존재
-        $idx = globalLevelByIndex($level);
-        $target_id = 'sales'.$idx.'_id';
-        $target_settle_id = 'sales'.$idx.'_settle_id';
-        return [$target_id, $target_settle_id];
-    }
-
-    protected function partSettleCommonQuery($request, $target_id, $target_settle_id)
+    protected function partSettleCommonQuery($request)
     {
         $search = $request->input('search', '');
-        $cols = [
-            'transactions.*', 
-            DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
-            DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
-            'merchandises.mcht_name',
-        ];
-        [$settle_key, $group_key] = $this->getSettleCol($request);
-        array_push($cols, $settle_key." AS profit");
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
         $query = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
-            ->where("transactions.".$target_id, $request->id)
             ->noSettlement($target_settle_id)
-            ->where(function ($query) use ($search) {
+            ->globalFilter();
+
+        if($search !== "")
+        {
+            $query = $query->where(function ($query) use ($search) {
                 return $query->where('transactions.mid', 'like', "%$search%")
                     ->orWhere('transactions.tid', 'like', "%$search%")
                     ->orWhere('transactions.trx_id', 'like', "%$search%")
                     ->orWhere('transactions.appr_num', 'like', "%$search%");
             });
-            
+        }
+        if($request->id)
+            $query = $query->where("transactions.".$target_id, $request->id);
         if($request->only_cancel)
             $query = $query->where('transactions.is_cancel', true);
 
-        // 실패건은 제외하고 조회
-        if((int)request()->use_realtime_deposit === 1)
-        {
-            $fails = RealtimeSendHistory::onlyFailRealtime();
-            if(count($fails))
-                $query = $query->whereNotIn('transactions.id', $fails);
+        if((int)$request->level === 10)
+        {   // 영업점 단계에서는 없음
+            if((int)$request->use_realtime_deposit === 1)
+            {   // 실패건은 제외하고 조회
+                $fails = RealtimeSendHistory::onlyFailRealtime();
+                if(count($fails))
+                    $query = $query->whereNotIn('transactions.id', $fails);
+            }
+            else
+                $query = $query->where('transactions.mcht_settle_type', '!=', -1);    
         }
-        else
-            $query = $query->where('transactions.mcht_settle_type', '!=', -1);
-       //TODO: 영업점으로 통일할때 꼭 mcht_id if 적용
 
         if($request->use_collect_withdraw)
         {   // 모아서 출금건만 가능
@@ -115,8 +107,7 @@ trait SettleTrait
                 ->where('merchandises.use_collect_withdraw', true)
                 ->where('payment_modules.fin_trx_delay', -1);
         }
-        $data = $this->transPagenation($query, 'transactions', $cols, $request->page, $request->page_size);
-        return $data;
+        return $query;
     }
 
     // 최종 정산금 세팅
@@ -151,5 +142,38 @@ trait SettleTrait
             $content->makeHidden(['transactions', 'collectWithdraws']);
         }
         return $data;
+    }
+
+    /**
+     * 부분정산 데이터 출력
+     */
+    public function part(Request $request)
+    {
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
+        $cols = [
+            'transactions.*', 
+            DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"),
+            DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
+            'merchandises.mcht_name',
+            $target_settle_amount." AS profit",
+        ];
+        $query  = $this->partSettleCommonQuery($request);
+        $data   = $this->transPagenation($query, 'transactions', $cols, $request->page, $request->page_size);
+
+        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
+        $salesforces    = globalGetSalesByIds($sales_ids);
+        $data['content'] = globalMappingSales($salesforces, $data['content']);
+        return $this->response(0, $data);
+    }
+
+    /**
+     * 부분정산 차트 데이터 출력
+     */
+    public function partChart(Request $request)
+    {
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
+        $cols  = $this->getTotalCols($target_settle_amount);
+        $chart  = $this->partSettleCommonQuery($request)->first($cols);
+        return $this->response(0, $this->setTransChartFormat($chart));
     }
 }

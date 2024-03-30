@@ -91,7 +91,7 @@ class SalesSettleHistoryController extends Controller
     {
         $data['level']  = $item['level'];
         $seltte_month   = date('Ym', strtotime($data['settle_dt']));
-        [$target_id, $target_settle_id] = $this->getTargetInfo($item['level']);
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($item['level']);
 
         $c_res = $this->settle_sales_hist->create($data);
         if($c_res)
@@ -170,7 +170,7 @@ class SalesSettleHistoryController extends Controller
     
     protected function deleteSalesforceCommon($request, $id, $user_id)
     {
-        [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
         $result = DB::transaction(function () use($request, $id, $target_settle_id, $user_id) {
             $query = $this->settle_sales_hist->where('id', $id);
             $hist  = $query->first();

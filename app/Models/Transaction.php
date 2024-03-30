@@ -119,40 +119,23 @@ class Transaction extends Model
             ->globalFilter()
             ->settleDateTypeTransaction();
     }
-    
-    private function getProfitCol($level)
-    {
-        if($level == 10)
-            $settle_key = 'mcht_settle_amount';
-        else if($level < 35)
-            $settle_key = 'sales'.globalLevelByIndex($level).'_settle_amount';
-        else
-        {
-            $settle = $level == 50 ? 'dev' :'brand';
-            $settle_key = $settle."_settle_amount";
-        }
-        return $settle_key;
-    }
 
     public function getTrxAmountAttribute()
     {   //거래 수수료(거래수수료 + 유보금 + 입금수수료)
-        $level = request()->level;
-        $settle_key = $this->getProfitCol($level);
-
-        if($level == 10)
-            return $this->amount - $this[$settle_key] - $this->mcht_settle_fee;
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo(request()->level);
+        if(request()->level === 10)
+            return $this->amount - $this[$target_settle_amount] - $this->mcht_settle_fee;
         else
-            return $this->amount - $this[$settle_key];
+            return $this->amount - $this[$target_settle_amount];
     }
 
     public function getTotalTrxAmountAttribute()
     {
-        $level = request()->level;
-        $settle_key = $this->getProfitCol($level);
-        if($level == 50)
-            return $this->amount - $this[$settle_key] - $this->dev_realtime_settle_amount;
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo(request()->level);
+        if(request()->level === 50)
+            return $this->amount - $this[$target_settle_amount] - $this->dev_realtime_settle_amount;
         else
-            return $this->amount - $this[$settle_key];
+            return $this->amount - $this[$target_settle_amount];
     }
 
     public function getHoldAmountAttribute()

@@ -63,14 +63,13 @@ class SalesforceController extends Controller
     private function commonQuery($request)
     {
         $validated = $request->validate(['s_dt'=>'required|date', 'e_dt'=>'required|date']);
-        [$settle_key, $group_key] = $this->getSettleCol($request);
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
         $cols   = array_merge($this->getDefaultCols(), ['sales_name', 'level', 'settle_cycle', 'settle_day', 'settle_tax_type', 'last_settle_dt']);
         $search = $request->input('search', '');
         $level  = $request->level;
         $s_dt   = $request->s_dt;
         $e_dt   = $request->e_dt;
-        [$target_id, $target_settle_id] =  $this->getTargetInfo($level);
 
         // ----- 영업점 목록 조회 ---------
         $sales_ids = $this->getExistTransUserIds($target_id, $target_settle_id);   
@@ -89,7 +88,7 @@ class SalesforceController extends Controller
                         ->with(['transactions', 'deducts', 'merchandises.settlePayModules']);
 
         $data = $this->getIndexData($request, $query, 'id', $cols, "created_at", false);     
-        $data = $this->getSettleInformation($data, $settle_key);
+        $data = $this->getSettleInformation($data, $target_settle_amount);
         foreach($data['content'] as $content)
         {
             $content->settlePayModules = $content->merchandises->pluck('settlePayModules')->flatten();
@@ -125,7 +124,7 @@ class SalesforceController extends Controller
                 'transfer' => 0,
             ]
         ];
-        [$settle_key, $group_key] = $this->getSettleCol($request);
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
         $transactions = collect();
         $data = $this->commonQuery($request);
@@ -141,7 +140,7 @@ class SalesforceController extends Controller
             $total['settle']['deposit'] += $item->settle['deposit'];
             $total['settle']['transfer'] += $item->settle['transfer'];
         }
-        $chart = getDefaultTransChartFormat($transactions, $settle_key);
+        $chart = getDefaultTransChartFormat($transactions, $target_settle_amount);
         $total = array_merge($total, $chart);
         return $this->response(0, $total);
     }
@@ -154,60 +153,5 @@ class SalesforceController extends Controller
     public function deduct(Request $request) 
     {
         return $this->commonDeduct($this->settleDeducts, 'sales_id', $request);
-    }
-
-    public function part(Request $request)
-    {
-        [$target_id, $target_settle_id] = $this->getTargetInfo($request->level);
-        $data = $this->partSettleCommonQuery($request, $target_id, $target_settle_id);
-        $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
-        $salesforces    = globalGetSalesByIds($sales_ids);
-        $data['content'] = globalMappingSales($salesforces, $data['content']);            
-        return $this->response(0, $data);
-    }
-
-    public function partChart(Request $request)
-    {
-        $search = $request->input('search', '');
-        [$settle_key, $group_key] = $this->getSettleCol($request);
-        $cols  = $this->getTotalCols($settle_key);
-        $idx = globalLevelByIndex($request->level);
-        $query = Transaction::where($group_key, $request->id)
-            ->noSettlement("sales".$idx."_settle_id")
-            ->where(function ($query) use ($search) {
-                return $query->where('transactions.mid', 'like', "%$search%")
-                    ->orWhere('transactions.tid', 'like', "%$search%")
-                    ->orWhere('transactions.trx_id', 'like', "%$search%")
-                    ->orWhere('transactions.appr_num', 'like', "%$search%");
-            });
-            
-        if($request->only_cancel)
-            $query = $query->where('transactions.is_cancel', true);
-        if($request->use_realtime_deposit === 0)
-            $query = $query->where('transactions.mcht_settle_type', '!=', -1);
-
-        $chart = $query->first($cols);
-        if($chart)
-        {
-            $chart = $this->setTransChartFormat($chart);
-            return $this->response(0, $chart);        
-        }
-        else
-        {
-            return $this->response(0, [
-                'appr'  => [
-                    'amount'=> 0,
-                    'count' => 0,
-                ],
-                'cxl'   => [
-                    'amount'=> 0,
-                    'count' => 0,
-                ],
-                'amount'    => 0,
-                'count'     => 0,
-                'profit'    => 0,
-            ]);
-        }
-        
     }
 }

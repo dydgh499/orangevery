@@ -640,12 +640,14 @@ export interface SettlesHistories extends Bank{
 export interface Post {
     id: number,
     title: string,
+    level: number,
     content: string,
     type:number,
     writer: string,
     replies?: object[],
     parent_id: number | null,
     is_reply: number,
+    updated_at: string,
 }
 
 export interface Complaint {

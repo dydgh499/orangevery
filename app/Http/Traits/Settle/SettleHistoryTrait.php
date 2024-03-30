@@ -91,14 +91,6 @@ trait SettleHistoryTrait
             return 1000;
     }
 
-    protected function getTargetInfo($level)
-    {   //SettleTrait와 같은 함수 존재
-        $idx = globalLevelByIndex($level);
-        $target_id =  'sales'.$idx.'_id';
-        $target_settle_id =  'sales'.$idx.'_settle_id';
-        return [$target_id, $target_settle_id];
-    }
-
     /*
     * 정산 - 통신비
     */

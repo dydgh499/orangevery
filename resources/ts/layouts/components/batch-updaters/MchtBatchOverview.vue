@@ -76,31 +76,23 @@ const post = async (page: string, params: any) => {
 }
 
 const setSalesFee = (sales_idx: number) => {
-    if (merchandise['sales' + sales_idx + "_fee"] && merchandise['sales' + sales_idx + "_id"]) {
-        post('sales-fee-direct-apply', {
-            'sales_fee': parseFloat(merchandise['sales' + sales_idx + "_fee"]),
-            'sales_id': merchandise['sales' + sales_idx + "_id"],
-            'level': getIndexByLevel(sales_idx),
-        })
-    }
-    else
-        snackbar.value.show('수수료율 또는 ' + levels['sales' + sales_idx + '_name'] + '을 입력해주세요.', 'warning')
+    post('sales-fee-direct-apply', {
+        'sales_fee': parseFloat(merchandise['sales' + sales_idx + "_fee"]),
+        'sales_id': merchandise['sales' + sales_idx + "_id"],
+        'level': getIndexByLevel(sales_idx),
+    })
 }
 
 const setSalesFeeBooking = async (sales_idx: number) => {
-    if (merchandise['sales' + sales_idx + "_fee"] && merchandise['sales' + sales_idx + "_id"]) {
-        if (await alert.value.show('정말 예약적용하시겠습니까? <b>명일 00시</b>에 반영됩니다.<br><br><h5>잘못 적용된 예약적용 수수료는 "수수료율 변경이력" 탭에서 삭제시 반영취소할 수 있습니다.</h5>')) {
-            const params = {
-                'sales_fee': parseFloat(merchandise['sales' + sales_idx + "_fee"]),
-                'sales_id': merchandise['sales' + sales_idx + "_id"],
-                'level': getIndexByLevel(sales_idx),
-            }
-            const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/sales-fee-book-apply', Object.assign(params, getCommonParams()))
-            snackbar.value.show('성공하였습니다.', 'success')
+    if (await alert.value.show('정말 예약적용하시겠습니까? <b>명일 00시</b>에 반영됩니다.<br><br><h5>잘못 적용된 예약적용 수수료는 "수수료율 변경이력" 탭에서 삭제시 반영취소할 수 있습니다.</h5>')) {
+        const params = {
+            'sales_fee': parseFloat(merchandise['sales' + sales_idx + "_fee"]),
+            'sales_id': merchandise['sales' + sales_idx + "_id"],
+            'level': getIndexByLevel(sales_idx),
         }
+        const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/sales-fee-book-apply', Object.assign(params, getCommonParams()))
+        snackbar.value.show('성공하였습니다.', 'success')
     }
-    else
-        snackbar.value.show('수수료율 또는 ' + levels['sales' + sales_idx + '_name'] + '을 입력해주세요.', 'warning')
 }
 
 const setMchtFee = () => {

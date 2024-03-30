@@ -13,7 +13,7 @@ class Post extends Model
     protected   $primaryKey   = 'id';
     protected   $guarded      = [];
     public      $cols = [
-        'id', 'parent_id', 'title', 'type', 'writer', 'created_at', 'updated_at'
+        'id', 'level', 'parent_id', 'title', 'type', 'writer', 'created_at', 'updated_at'
     ];
 
     // 자식 답변들

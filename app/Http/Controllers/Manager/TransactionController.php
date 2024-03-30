@@ -49,12 +49,12 @@ class TransactionController extends Controller
 
     public function getTransactionData($request, $query)
     {
-        [$settle_key, $group_key] = $this->getSettleCol($request);
-        if($settle_key == 'dev_settle_amount')
-            $profit = DB::raw("($settle_key + dev_realtime_settle_amount) AS profit");
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
+        if($target_settle_amount === 'dev_settle_amount')
+            $profit = DB::raw("($target_settle_amount + dev_realtime_settle_amount) AS profit");
         else
-            $profit = "$settle_key AS profit";
-        array_push($this->cols, $profit);
+            $profit = "$target_settle_amount AS profit";
+        $this->cols[] = $profit;
 
         $page      = $request->input('page');
         $page_size = $request->input('page_size');
@@ -73,15 +73,15 @@ class TransactionController extends Controller
         if($request->no_settlement)
         {
             if($request->level == 10)
-                $settle_key = 'mcht_settle_id';
+                $settle_amount = 'mcht_settle_id';
             else if($request->level <= 30)
             {
                 $idx = globalLevelByIndex($request->level);
-                $settle_key = 'sales'.$idx.'_settle_id';
+                $settle_amount = 'sales'.$idx.'_settle_id';
             }
             else
-                $settle_key = 'dev_settle_id';
-            $query = $query->whereNull("transactions.$settle_key");
+                $settle_amount = 'dev_settle_id';
+            $query = $query->whereNull("transactions.$settle_amount");
         }
 
         for ($i=0; $i < 6; $i++) 
@@ -127,9 +127,9 @@ class TransactionController extends Controller
      */
     public function chart(IndexRequest $request)
     {
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
         $query  = $this->commonSelect($request);
-        [$settle_key, $group_key] = $this->getSettleCol($request);
-        $cols = $this->getTotalCols($settle_key);
+        $cols = $this->getTotalCols($target_settle_amount);
         $chart = $query->first($cols);
         $chart = $this->setTransChartFormat($chart);
         return $this->response(0, $chart);

@@ -5,7 +5,7 @@ import ExtraMenu from '@/views/posts/ExtraMenu.vue'
 import PostReplyView from '@/views/posts/PostReplyView.vue'
 import { types, useSearchStore } from '@/views/posts/useStore'
 import type { Post } from '@/views/types'
-import { getUserLevel, user_info } from '@axios'
+import { getUserLevel, user_info, allLevels } from '@axios'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
@@ -58,6 +58,22 @@ const moveContent = (post: Post) => {
                                 <VChip :color="store.getSelectIdColor(types.find(obj => obj.id === item[_key])?.id)">
                                     {{ types.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
+                            </span>
+                            <span v-else-if="_key == 'writer'">
+                                <div>
+                                    <template v-if="item['level'] >= 35">                           
+                                        <VChip :color="store.getAllLevelColor(item['level'])">
+                                            운영자
+                                        </VChip>
+                                    </template>
+                                    <template v-else>
+                                        <span style="margin: 0.1em;">{{ item[_key] }}</span>
+                                        <br>
+                                        <VChip :color="store.getAllLevelColor(item['level'])">
+                                            {{ allLevels().find(obj => obj.id === item['level'])?.title }}
+                                        </VChip>
+                                    </template>
+                                </div>
                             </span>
                             <span v-else-if="_key == 'title'" class="edit-link"
                                 @click="moveContent(item)">

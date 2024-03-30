@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { Post } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { types } from '@/views/posts/useStore'
 
 interface Props {
     post: Post,
@@ -32,8 +31,8 @@ const props = defineProps<Props>()
                 </template>
             </CreateHalfVCol>
         </VRow>
-        <div style="float: right;">
-            <span class="text-sm" style="margin-right: 1em">
+        <div style="float: inline-end;">
+            <span class="text-sm" style="margin-right: 1em;">
                 작성자: <span class="text-primary">{{ props.post?.writer}}</span>
             </span>
             <span class="text-sm">
@@ -44,13 +43,14 @@ const props = defineProps<Props>()
 </template>
 <style scoped>
 .post-title {
-    margin-left: 0.5em; 
-    border-bottom:1px solid rgba(var(--v-border-color), 0.5); 
-    padding-bottom: 0.3em;
+  border-block-end: 1px solid rgba(var(--v-border-color), 0.5) !important;
+  margin-inline-start: 0.5em;
+  padding-block-end: 0.3em;
 }
+
 .ql-editor {
   box-sizing: border-box;
-  border: 1px solid rgba(var(--v-border-color), 0.5);
+  border: 1px solid rgba(var(--v-border-color), 0.5) !important;
   border-radius: 0.5em;
   block-size: 100%;
   line-height: 1.42;

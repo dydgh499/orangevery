@@ -137,12 +137,12 @@ trait TransactionTrait
     }
 
     
-    public function getTotalCols($settle_key, $group_key=null)
+    public function getTotalCols($settle_amount, $group_key=null)
     {
-        if($settle_key == 'dev_settle_amount')
-            $profit  = "(SUM($settle_key) + SUM(dev_realtime_settle_amount)) AS profit";
+        if($settle_amount === 'dev_settle_amount')
+            $profit  = "(SUM($settle_amount) + SUM(dev_realtime_settle_amount)) AS profit";
         else
-            $profit = "SUM($settle_key) AS profit";
+            $profit = "SUM($settle_amount) AS profit";
 
         $cols = [
             DB::raw("SUM(IF(is_cancel = 0, amount, 0)) AS appr_amount"),
@@ -160,39 +160,17 @@ trait TransactionTrait
     {
         return [
             'appr'  => [
-                'amount'=> (int)$chart->appr_amount,
-                'count' => (int)$chart->appr_count,
+                'amount'=> $chart ? (int)$chart->appr_amount : 0,
+                'count' => $chart ? (int)$chart->appr_count: 0,
             ],
             'cxl'   => [
-                'amount'=> (int)$chart->cxl_amount,
-                'count' => (int)$chart->cxl_count,
+                'amount'=> $chart ? (int)$chart->cxl_amount : 0,
+                'count' => $chart ? (int)$chart->cxl_count : 0,
             ],
-            'amount'    => $chart->appr_amount + $chart->cxl_amount,
-            'count'     => $chart->appr_count + $chart->cxl_count,
-            'profit'    => (int)$chart->profit,
+            'amount'    => $chart ? $chart->appr_amount + $chart->cxl_amount : 0,
+            'count'     => $chart ? $chart->appr_count + $chart->cxl_count : 0,
+            'profit'    => $chart ? (int)$chart->profit : 0,
         ];
-    }
-
-    public function getSettleCol($request)
-    {
-        if($request->level == 10)
-        {
-            $group_key = 'mcht_id';
-            $settle_key = 'mcht_settle_amount';
-        }
-        else if($request->level < 35)
-        {   // 13, 15, 17, 20 ,25, 30
-            $idx = globalLevelByIndex($request->level);
-            $group_key  = 'sales'.$idx.'_id';
-            $settle_key = 'sales'.$idx.'_settle_amount';
-        }
-        else
-        {
-            $group_key = 'brand_id';
-            $settle = $request->level == 50 ? 'dev' :'brand';
-            $settle_key = $settle."_settle_amount";
-        }
-        return [$settle_key, $group_key];
     }
 
     public function getNotiSendFormat($tran, $temp='')

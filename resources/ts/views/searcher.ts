@@ -27,9 +27,23 @@ const StatusColorSetter = () => {
         else
             return 'default'
     }
+    
+    const getAllLevelColor = (id: number) => {
+        if (id === 10)
+            return "primary"
+        else if (id === 13 || id === 15)
+            return "warning"
+        else if (id === 17 || id === 20)
+            return "info"
+        else if (id === 25 || id === 30)
+            return "success"
+        else
+            return "info"
+    }
     return {
         booleanTypeColor,
         getSelectIdColor,
+        getAllLevelColor,
     }
 }
 
@@ -82,6 +96,7 @@ export const Searcher = (path: string) => {
     const {
         booleanTypeColor,
         getSelectIdColor,
+        getAllLevelColor,
     } = StatusColorSetter()
     
     const getChartData = async() => { return _getChartData(getParams())  }
@@ -156,7 +171,8 @@ export const Searcher = (path: string) => {
         setTable, getItems, base_url, updateQueryString,
         items, params, pagenation, getChartProcess, setChartProcess,
         edit, getChartData, getPercentage,
-        get, booleanTypeColor, getSelectIdColor, getAllDataFormat,
+        get, booleanTypeColor, getSelectIdColor, getAllLevelColor, 
+        getAllDataFormat,
         pagenationCouputed, is_skeleton
     }
 }

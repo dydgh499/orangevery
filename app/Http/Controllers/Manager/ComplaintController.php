@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 /**
  * @group Complaint API
  *
- * 민원조회 API 입니다. 조회를 제외하고 마스터 이상권한이 요구됩니다.
+ * 민원조회 API 입니다. 조회를 제외하고 가맹점 이상권한이 요구됩니다.
  */
 class ComplaintController extends Controller
 {
@@ -37,20 +37,34 @@ class ComplaintController extends Controller
     {
         $search = $request->input('search', '');
         $query  = $this->complaints
-            ->where('is_delete', false)
-            ->where('brand_id', $request->user()->brand_id)
-            ->where('tid', 'like', "%$search%");
-        $query = $query->with(['mcht', 'pg']);
+            ->join('merchandises', 'complaints.mcht_id', '=', 'merchandises.id')
+            ->join('payment_gateways', 'complaints.pg_id', '=', 'payment_gateways.id')
+            ->where('complaints.brand_id', $request->user()->brand_id)
+            ->where('merchandises.brand_id', $request->user()->brand_id)
+            ->where('payment_gateways.brand_id', $request->user()->brand_id)
+            ->where('complaints.is_delete', false)
+            ->where('merchandises.is_delete', false)
+            ->where('payment_gateways.is_delete', false)
+            ->where(function ($query) use ($search) {
+                return $query->where('complaints.tid', 'like', "%$search%")
+                    ->orWhere('complaints.appr_num', 'like', "%$search%")
+                    ->orWhere('complaints.cust_name', 'like', "%$search%")
+                    ->orWhere('merchandises.mcht_name', 'like', "%$search%");
+            });
 
-        $data = $this->getIndexData($request, $query);
+            
+        if($request->history_type !== null)
+            $query->where('complaints.type', $request->history_type);
+        $query = globalAuthFilter($query, $request, 'complaints');
+
+        $data = $this->getIndexData($request, $query, 'complaints.id', ['complaints.*', 'merchandises.mcht_name', 'payment_gateways.pg_name'], 'complaints.created_at');
         return $this->response(0, $data);
-
     }
 
     /**
      * 추가
      *
-     * 마스터 이상 가능
+     * 가맹점 이상 가능
      *
      */
     public function store(ComplaintRequest $request)
@@ -77,7 +91,7 @@ class ComplaintController extends Controller
     /**
      * 업데이트
      *
-     * 마스터 이상 가능
+     * 가맹점 이상 가능
      *
      * @urlParam id integer required 공지사항 PK
      * @return \Illuminate\Http\Response
@@ -92,7 +106,7 @@ class ComplaintController extends Controller
     /**
      * 단일삭제
      *
-     * 마스터 이상 가능
+     * 가맹점 이상 가능
      *
      * @urlParam id integer required 공지사항 PK
      * @return \Illuminate\Http\Response

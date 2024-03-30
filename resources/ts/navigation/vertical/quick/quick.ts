@@ -45,6 +45,21 @@ const getUserTap = () => {
 
 const getAbilitiesMenu = computed(() => {
     const payments = getPaymentMenu
+    const services = [
+        { heading: 'Service' },
+        {
+            title: '공지사항',
+            icon: { icon: 'fe-notice-active' },
+            to: 'posts',
+        },
+    ]    
+    if(getUserLevel() === 10) {
+        services.push({
+            title: '민원관리',
+            icon: { icon: 'ic-round-sentiment-dissatisfied' },
+            to: 'complaints',
+        })
+    }
     return [
         { heading: '' },
         {
@@ -55,12 +70,7 @@ const getAbilitiesMenu = computed(() => {
         ...getUserTap(),
         { heading: 'Transaction' },
         ...payments,
-        { heading: 'Service' },
-        {
-            title: '공지사항',
-            icon: { icon: 'fe-notice-active' },
-            to: 'posts',
-        },
+        ...services,
     ]
 })
 export default getAbilitiesMenu

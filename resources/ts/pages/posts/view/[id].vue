@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import CreateForm from '@/layouts/utils/CreateForm.vue'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import PostContentView from '@/views/posts/PostContentView.vue'
 import { types } from '@/views/posts/useStore'
 import type { Post, Tab } from '@/views/types'
 import router from '@/router'
@@ -35,40 +35,7 @@ watchEffect(() => {
                         <!-- 👉 개인정보 -->
                         <VCol cols="12" md="12">
                             <VCard>
-                                <VCardItem>
-                                    <VCardTitle>
-                                        <b>
-                                            {{ types.find(obj => obj.id === post?.type)?.title }} 
-                                        </b>
-                                    </VCardTitle>
-                                    <VRow class="pt-5">
-                                        <VCol md="1">
-                                            작성자
-                                        </VCol>
-                                        <VCol md="3">
-                                            {{  post?.writer }}
-                                        </VCol>
-                                    </VRow>
-                                    <VRow>
-                                        <CreateHalfVCol :mdl="1" :mdr="11">
-                                            <template #name>제목</template>
-                                            <template #input>
-                                                <VTextField :value="post?.title"
-                                                    prepend-inner-icon="ic-round-subtitles" persistent-placeholder
-                                                    readonly />
-                                            </template>
-                                        </CreateHalfVCol>
-                                    </VRow>
-                                    <VRow>
-                                        <CreateHalfVCol :mdl="1" :mdr="11">
-                                            <template #name>내용</template>
-                                            <template #input>
-                                                <div v-html="post?.content" class="ql-editor">
-                                                </div>
-                                            </template>
-                                        </CreateHalfVCol>
-                                    </VRow>
-                                </VCardItem>
+                                <PostContentView :post="post" :title="types.find(obj => obj.id === post?.type)?.title"/>
                             </VCard>
                         </VCol>
                     </VRow>
@@ -85,21 +52,3 @@ watchEffect(() => {
         </VCard>
     </section>
 </template>
-<style scoped>
-.ql-editor {
-  box-sizing: border-box;
-  border: 1px solid rgba(var(--v-border-color), 0.5);
-  border-radius: 0.5em;
-  block-size: 100%;
-  line-height: 1.42;
-  min-block-size: 20em;
-  outline: none;
-  overflow-y: auto;
-  padding-block: 12px;
-  padding-inline: 15px;
-  tab-size: 4;
-  text-align: start;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-</style>

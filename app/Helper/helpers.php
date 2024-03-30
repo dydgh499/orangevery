@@ -324,7 +324,7 @@
         return $chart;
     }
 
-    function getDefaultTransChartFormat($data, $settle_key)
+    function getDefaultTransChartFormat($data, $settle_amount)
     {
         $chart = [
             'appr' => [
@@ -361,7 +361,7 @@
             $type = $transaction->is_cancel ? 'cxl' : 'appr';
             $chart[$type]['amount'] += $transaction->amount;
             $chart[$type]['count']++;
-            $chart[$type]['profit'] += $transaction[$settle_key];
+            $chart[$type]['profit'] += $transaction[$settle_amount];
             $chart[$type]['trx_amount'] += $transaction->trx_amount;
             $chart[$type]['hold_amount'] += $transaction->hold_amount;
             $chart[$type]['settle_fee'] += $transaction->mcht_settle_fee;
@@ -403,8 +403,26 @@
         }
     }
 
-    function zeroCheck($request, $key)
+    function getTargetInfo(int $level)
     {
-        // 0 허용, 빈값, null 안됨
-        return ($request->input($key, 0) || $request->input($key, '') == 0) && !is_null($request->input($key, null));
+        if($level === 10)
+        {
+            $target_id = 'mcht_id';
+            $target_settle_id = 'mcht_settle_id';
+            $target_settle_amount = 'mcht_settle_amount';
+        }
+        else if($level < 35)
+        {
+            $idx = globalLevelByIndex($level);
+            $target_id = 'sales'.$idx.'_id';
+            $target_settle_id = 'sales'.$idx.'_settle_id';
+            $target_settle_amount = 'sales'.$idx.'_settle_amount';
+        }
+        else
+        {
+            $target_id = 'brand_id';
+            $target_settle_id = '';
+            $target_settle_amount = ($request->level == 50 ? 'dev' :'brand')."_settle_amount";
+        }
+        return [$target_id, $target_settle_id, $target_settle_amount];
     }

@@ -1,6 +1,7 @@
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { Complaint, Options } from '@/views/types'
+import { getUserLevel } from '@axios'
 
 export const complaint_types = <Options[]>[
     { id: 1, title: '본인미사용' }, { id: 2, title: '유사투자' },
@@ -25,22 +26,23 @@ export const useSearchStore = defineStore('complaintSearchStore', () => {
     const headers: Record<string, string|object> = {
         'id' : 'NO.',
         'mcht_name' : '가맹점 상호',
-        'tid' : 'TID',
+        'created_at' : '접수시간',
         'cust_name' : '고객명',
         'appr_dt' : '승인일',
         'appr_num' : '승인번호',
         'phone_num' : '연락처',
-        'hand_cust_name' : '수기작성성함',
-        'hand_phone_num' : '수기작성연락처',
         'note'  : '민원내용',
-        'issuer' : '발급사',
-        'pg_name': 'PG사',
-        'type': '민원타입',
-        'is_deposit': '입금상태',
-        'entry_path': '인입경로',
-        'created_at' : '생성시간',
-        'updated_at' : '업데이트시간',
-    }
+    };
+    if(getUserLevel() >= 35)
+        headers['pg_name'] = 'PG사'
+    headers['type'] = '민원타입'
+    headers['tid']  = '거래번호'
+
+    if(getUserLevel() >= 35)
+        headers['is_deposit'] = '입금상태'
+    headers['entry_path'] = '인입경로'
+    headers['updated_at'] = '업데이트시간'
+    
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)

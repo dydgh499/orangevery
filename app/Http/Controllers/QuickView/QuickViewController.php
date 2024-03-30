@@ -33,12 +33,13 @@ class QuickViewController extends Controller
     private function get3MonthlyTransactions($request)
     {
         $one_month_ago = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
-        [$settle_key, $group_key] = $this->getSettleCol($request);
-        $cols = $this->getTotalCols($settle_key);
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
+
+        $cols = $this->getTotalCols($target_settle_amount);
         array_push($cols, DB::raw("DATE_FORMAT(trx_dt, '%Y-%m-%d') as day"));
 
         return $this->transactions
-            ->where($group_key, $request->user()->id)
+            ->where($target_id, $request->user()->id)
             ->whereBetween('trx_dt', [$one_month_ago, DB::raw('CURDATE()')])
             ->groupby(DB::raw("DATE_FORMAT(trx_dt, '%Y-%m-%d')"))
             ->orderBy('day', 'desc')
@@ -48,13 +49,14 @@ class QuickViewController extends Controller
     private function getMchtRankTransactions($request)
     {
         $one_month_ago = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
-        [$settle_key, $group_key] = $this->getSettleCol($request);
-        $cols = $this->getTotalCols($settle_key, 'merchandises.id');
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
+
+        $cols = $this->getTotalCols($target_settle_amount, 'merchandises.id');
         array_push($cols, 'merchandises.mcht_name');
 
         return $this->transactions
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
-            ->where('transactions.'.$group_key, $request->user()->id)
+            ->where('transactions.'.$target_id, $request->user()->id)
             ->whereBetween('transactions.trx_dt', [$one_month_ago, DB::raw('CURDATE()')])
             ->groupby('merchandises.id')
             ->orderBy('appr_amount', 'desc')
@@ -65,7 +67,7 @@ class QuickViewController extends Controller
     {
         $transactions = [];
         $now = Carbon::now();
-        $last_month = $now->copy()->subMonthNoOverflow();
+        $last_month = $now->copy()->subMonthNoOverflow(1);
         
         $str_now = $now->format('Y-m-d');
         $str_cur_month = $now->format('Y-m');
