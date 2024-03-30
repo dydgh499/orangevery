@@ -1,4 +1,4 @@
-import { isEmpty, isEmptyArray, isNullOrUndefined } from './index'
+import { isEmpty, isEmptyArray, isNullOrUndefined } from './index';
 
 const checkDirectObject = (name: string) => {
     //name의 마지막 음절의 유니코드(UTF-16) 
@@ -24,12 +24,6 @@ export const requiredValidator = (value: unknown) => {
     if (isNullOrUndefined(value) || isEmptyArray(value) || value === false)
         return '이 필드는 필수로 입력이 요구됩니다.'
 
-    return !!String(value).trim().length || '이 필드는 필수로 입력이 요구됩니다.'
-}
-
-export const nullValidator = (value: unknown) => {
-    if (isNullOrUndefined(value) || isEmptyArray(value))
-        return '이 필드는 필수로 입력이 요구됩니다.'
     return !!String(value).trim().length || '이 필드는 필수로 입력이 요구됩니다.'
 }
 

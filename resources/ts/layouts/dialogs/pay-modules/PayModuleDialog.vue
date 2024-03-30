@@ -22,6 +22,8 @@ const visible = ref(false)
 const midCreateDlg = ref(null)
 const pay_module = ref(<PayModule>({}))
 
+provide('midCreateDlg', midCreateDlg)
+
 const { update, remove } = useRequestStore()
 
 let resolveCallback: (modify: boolean) => void;
@@ -57,7 +59,7 @@ const payModuleRemove = async () => {
         }
     }
 }
-provide('midCreateDlg', midCreateDlg)
+
 defineExpose({
     show
 });
@@ -71,7 +73,7 @@ defineExpose({
                 <VTabs v-model="tab">
                     <VTab>결제타입</VTab>
                     <VTab>결제정보</VTab>
-                    <VTab v-if="pay_module.module_type < 2">장비정보</VTab>
+                    <VTab>장비정보</VTab>
                     <VTab v-if="isAbleModiy(pay_module.id)">옵션정보</VTab>
                 </VTabs>
                 <PerfectScrollbar :options="{ wheelPropagation: false }">
@@ -82,7 +84,7 @@ defineExpose({
                         <VWindowItem>
                             <PaymentInfoOverview :item="pay_module" />
                         </VWindowItem>
-                        <VWindowItem v-if="pay_module.module_type < 2">
+                        <VWindowItem>
                             <TerminalInfoOverview :item="pay_module" />
                         </VWindowItem>
                         <VWindowItem v-if="isAbleModiy(pay_module.id)">

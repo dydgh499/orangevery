@@ -1,20 +1,16 @@
 <script lang="ts" setup>
 import type { PayModule } from '@/views/types'
-import {
-    abnormal_trans_limits, cxl_types
-} from '@/views/merchandises/pay-modules/useStore'
+import { abnormal_trans_limits, cxl_types } from '@/views/merchandises/pay-modules/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { requiredValidatorV2 } from '@validators'
 import { issuers } from '@/views/complaints/useStore'
-import { isAbleModiy } from '@axios'
 import corp from '@corp'
 
 interface Props {
     item: PayModule,
 }
-
 const props = defineProps<Props>()
 
 </script>
@@ -87,7 +83,8 @@ const props = defineProps<Props>()
                     <template #name>일 결제 한도</template>
                     <template #input>
                         <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_day_limit"
-                            type="number" suffix="만원" :rules="[requiredValidatorV2(props.item.pay_day_limit, '일 결제 한도')]" />
+                            type="number" suffix="만원"
+                            :rules="[requiredValidatorV2(props.item.pay_day_limit, '일 결제 한도')]" />
                     </template>
                 </CreateHalfVCol>
             </VRow>

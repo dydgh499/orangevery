@@ -78,7 +78,7 @@ const clearSettleHoldClear = async () => {
 initAllSales()
 </script>
 <template>
-    <VRow>
+    <VRow class="match-height">
         <!-- 👉 개인정보 -->
         <VCol cols="12" md="6">
             <VCard>
@@ -210,7 +210,7 @@ initAllSales()
                                         <VTextField v-model="props.item.trx_fee" type="number" suffix="%"
                                             :rules="[requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율')]" v-if="isAbleModiy(props.item.id)"/>
                                     </VCol>
-                                    <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VCol cols="12" :md="props.item.id ? 2 : 3">
                                         <VTextField v-model="props.item.hold_fee" type="number" suffix="%"
                                             :rules="[requiredValidatorV2(props.item.hold_fee, '가맹점 유보금')]" v-if="isAbleModiy(props.item.id)"  />
                                     </VCol>
@@ -398,7 +398,7 @@ initAllSales()
                             </VCol>
                             <VCol cols="12" v-if="corp.pv_options.paid.subsidiary_use_control || corp.pv_options.paid.use_hide_account">
                                 <VRow>
-                                    <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.subsidiary_use_control">
+                                    <VCol md="6" v-if="corp.pv_options.paid.subsidiary_use_control">
                                         <VRow no-gutters style="align-items: center;">
                                             <VCol>전산 사용상태</VCol>
                                             <VCol md="6">
@@ -412,7 +412,7 @@ initAllSales()
                                             </VCol>
                                         </VRow>
                                     </VCol>
-                                    <VCol v-if="corp.pv_options.paid.use_hide_account">
+                                    <VCol md="6" v-if="corp.pv_options.paid.use_hide_account">
                                         <VRow no-gutters style="align-items: center;">
                                             <VCol>정산계좌 숨김</VCol>
                                             <VCol md="6">
@@ -477,7 +477,7 @@ initAllSales()
                                             </VCol>
                                         </VRow>
                                     </VCol>
-                                    <VCol v-if="corp.pv_options.paid.use_multiple_hand_pay">
+                                    <VCol v-if="corp.pv_options.paid.use_multiple_hand_pay" md="6">
                                         <VRow no-gutters :md="6" style="align-items: center;">
                                             <VCol>다중 수기결제 사용 여부</VCol>
                                             <VCol md="6">
@@ -507,7 +507,7 @@ initAllSales()
                                             </VCol>
                                         </VRow>
                                     </VCol>
-                                    <VCol>
+                                    <VCol md="6">
                                         <VRow no-gutters style="align-items: center;">
                                             <VCol md="12">
                                                 <div class="batch-container">     

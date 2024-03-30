@@ -9,7 +9,6 @@ import { dev_settle_types } from '@/views/services/brands/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BeforeBrandInfoCard from '@/views/services/brands/before-brand-infos/BeforeBrandInfoCard.vue'
 import DifferentSettlementInfoCard from '@/views/services/brands/different-settlement-infos/DifferentSettlementInfoCard.vue'
-import { nullValidator } from '@validators'
 
 interface Props {
     item: Brand,
@@ -184,7 +183,7 @@ watchEffect(() => {
                                 <VCol md="8">
                                     <VTextField v-model="props.item.pv_options.auth.levels.dev_name"
                                         prepend-inner-icon="ph:share-network" placeholder="개발사 등급 명칭을 입력해주세요"
-                                        persistent-placeholder :rules="[nullValidator]" />
+                                        persistent-placeholder />
                                 </VCol>
                             </VRow>
                         </VCol>

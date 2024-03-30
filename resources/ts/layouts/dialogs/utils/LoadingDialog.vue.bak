@@ -9,16 +9,15 @@ axios.interceptors.request.use((config) => {
     return config;
 }, (error) => {
     active_count.value++
-    return Promise.reject(error)
+    return Promise.reject(error);
 });
 axios.interceptors.response.use((response) => {
     active_count.value--
     return response;
 }, (error) => {
     active_count.value--
-    return Promise.reject(error)
+    return Promise.reject(error);
 });
-
 
 const show = (_visible: boolean) => {
     visible.value = _visible

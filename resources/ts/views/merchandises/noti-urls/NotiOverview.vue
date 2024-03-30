@@ -3,6 +3,7 @@ import type { NotiUrl, Merchandise } from '@/views/types'
 import { getAllNotiUrls } from '@/views/merchandises/noti-urls/useStore'
 import NotiCard from '@/views/merchandises/noti-urls/NotiCard.vue'
 import { useRequestStore } from '@/views/request'
+import { isAbleModiy } from '@axios'
 
 interface Props {
     item: Merchandise,
@@ -29,14 +30,14 @@ watchEffect(() => {
 </script>
 <template>
     <VCard style="margin-top: 1em;">
-        <VCol class="d-flex gap-4" v-if="getUserLevel() >= 35">
+        <VCol class="d-flex gap-4" v-if="isAbleModiy(0)">
             <VBtn type="button" style="margin-left: auto;" @click="addNewNotiUrl">
                 노티 신규추가
                 <VIcon end icon="tabler-plus" />
             </VBtn>
         </VCol>
     </VCard>
-    <VRow>
-        <NotiCard v-for="(item, index) in noti_urls" :key="index" style="margin-top: 1em;" :item="item" :able_mcht_chanage="false" :pay_modules="pay_modules"/>
+    <VRow style="margin-top: 1em;">
+        <NotiCard v-for="(item, index) in noti_urls" :key="index" :item="item" :able_mcht_chanage="false"/>
     </VRow>
 </template>

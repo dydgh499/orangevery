@@ -18,7 +18,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { PayModule } from '@/views/types'
 import { axios, getUserLevel, salesLevels, isAbleModiy } from '@axios'
 import corp from '@corp'
-import { nullValidator, requiredValidator } from '@validators'
+import { requiredValidator, requiredValidator } from '@validators'
 import { VForm } from 'vuetify/components'
 
 interface Props {
@@ -112,7 +112,7 @@ onMounted(() => {
                                 <template #input>
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id"
                                         :items="mchts" prepend-inner-icon="tabler-building-store" label="가맹점 선택"
-                                        item-title="mcht_name" item-value="id" single-line :rules=[nullValidator] :eager="true"/>
+                                        item-title="mcht_name" item-value="id" single-line :rules=[requiredValidator] :eager="true"/>
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -539,7 +539,7 @@ onMounted(() => {
                                 </template>
                                 <template #input>
                                     <VTextField v-model="props.item.pay_dupe_limit" label="중복결제 허용회수" type="number"
-                                        suffix="회 허용" :rules="[nullValidator]" />
+                                        suffix="회 허용" :rules="[requiredValidator]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -553,7 +553,7 @@ onMounted(() => {
                                 </template>
                                 <template #input>
                                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_single_limit"
-                                        type="number" suffix="만원" :rules="[nullValidator]" />
+                                        type="number" suffix="만원" :rules="[requiredValidator]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -562,7 +562,7 @@ onMounted(() => {
                                 <template #name>일 결제 한도</template>
                                 <template #input>
                                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_day_limit"
-                                        type="number" suffix="만원" :rules="[nullValidator]" />
+                                        type="number" suffix="만원" :rules="[requiredValidator]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -572,7 +572,7 @@ onMounted(() => {
                                 <template #input>
                                     <VTextField prepend-inner-icon="tabler-currency-won"
                                         v-model="props.item.pay_month_limit" type="number" suffix="만원"
-                                        :rules="[nullValidator]" />
+                                        :rules="[requiredValidator]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -581,7 +581,7 @@ onMounted(() => {
                                 <template #name>연 결제 한도</template>
                                 <template #input>
                                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_year_limit"
-                                        type="number" suffix="만원" :rules="[nullValidator]" />
+                                        type="number" suffix="만원" :rules="[requiredValidator]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

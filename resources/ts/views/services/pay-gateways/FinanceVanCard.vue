@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { requiredValidator, nullValidator } from '@validators'
+import { requiredValidator } from '@validators'
 import type { FinanceVan } from '@/views/types'
 import { VForm } from 'vuetify/components'
 import { useRequestStore } from '@/views/request'
@@ -133,7 +133,7 @@ onMounted(async () => {
                                 <template #input>
                                     <VTextField type="text" v-model="props.item.dev_fee"
                                         prepend-inner-icon="ph:share-network" placeholder="0.1" suffix="%"
-                                        persistent-placeholder :rules="[nullValidator]" />
+                                        persistent-placeholder />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -164,7 +164,7 @@ onMounted(async () => {
                                     :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
                                     label="은행 선택" item-title="title" item-value="code" persistent-hint single-line
                                     :hint="getAcctBankName()"
-                                    :rules="[nullValidator]" />
+                                    :rules="[requiredValidator]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

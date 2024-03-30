@@ -144,9 +144,11 @@ export const useRequestStore = defineStore('requestStore', () => {
         if (is_valid.valid && await alert.value.show('정말 ' + reqType + '하시겠습니까?')) {
             const res = await request({ url: url, data: params, method: params.id != 0 ? 'put' : 'post' })
             afterTreatment(base_url, is_redirect, params, res)
+            return res
         }
         else if (is_valid.valid == false)
             snackbar.value.show(reqType + '조건에 맞지않는 필드가 존재합니다.', 'warning')
+        return undefined
     }
 
     const remove = async (base_url: string, params: any, is_redirect: boolean = true) => {

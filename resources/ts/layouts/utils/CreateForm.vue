@@ -73,7 +73,7 @@ watchEffect(() => {
             <slot name="view"></slot>
         </VWindow>
     </VForm>
-    <VCard style="margin-top: 1em;" slot="button" v-show="hideConditions() && authHideConditions()">
+    <VCard style="margin-top: 1em;" slot="button" v-if="hideConditions() && authHideConditions()">
         <VCol class="d-flex gap-4">
             <VBtn type="button" style="margin-left: auto;" @click="formRequest('/'+props.path, props.item, vForm)">
                 {{ props.id == 0 ? "추가" : "수정" }}
