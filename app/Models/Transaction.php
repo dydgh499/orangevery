@@ -122,20 +122,30 @@ class Transaction extends Model
 
     public function getTrxAmountAttribute()
     {   //거래 수수료(거래수수료 + 유보금 + 입금수수료)
-        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo(request()->level);
-        if(request()->level === 10)
-            return $this->amount - $this[$target_settle_amount] - $this->mcht_settle_fee;
+        if(request()->level)
+        {
+            [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo(request()->level);
+            if((int)request()->level === 10)
+                return $this->amount - $this[$target_settle_amount] - $this->mcht_settle_fee;
+            else
+                return $this->amount - $this[$target_settle_amount];    
+        }
         else
-            return $this->amount - $this[$target_settle_amount];
+            return 0;
     }
 
     public function getTotalTrxAmountAttribute()
     {
-        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo(request()->level);
-        if(request()->level === 50)
-            return $this->amount - $this[$target_settle_amount] - $this->dev_realtime_settle_amount;
+        if(request()->level)
+        {
+            [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo(request()->level);
+            if((int)request()->level === 50)
+                return $this->amount - $this[$target_settle_amount] - $this->dev_realtime_settle_amount;
+            else
+                return $this->amount - $this[$target_settle_amount];
+        }
         else
-            return $this->amount - $this[$target_settle_amount];
+            return 0;
     }
 
     public function getHoldAmountAttribute()
