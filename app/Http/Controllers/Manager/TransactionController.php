@@ -8,6 +8,8 @@ use App\Models\Salesforce;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\TransactionTrait;
+use App\Http\Traits\Salesforce\UnderSalesTrait;
+
 use App\Http\Requests\Manager\TransactionRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\QuickView\QuickViewController;
@@ -27,7 +29,7 @@ use App\Enums\HistoryType;
  */
 class TransactionController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, TransactionTrait;
+    use ManagerTrait, ExtendResponseTrait, TransactionTrait, UnderSalesTrait;
     protected $transactions;
     protected $target;
     public $cols;
@@ -157,6 +159,7 @@ class TransactionController extends Controller
         
         foreach($data['content'] as $content)
         {
+            $content = $this->hiddenSalesInfos($request, $content);
             $content->append(['resident_num_front', 'resident_num_back']);
             $content->setHidden(['resident_num']);
         }

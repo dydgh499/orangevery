@@ -8,6 +8,7 @@ use App\Models\NotiUrl;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
+use App\Http\Traits\Salesforce\UnderSalesTrait;
 
 use App\Http\Requests\Manager\BulkRegister\BulkMerchandiseRequest;
 use App\Http\Requests\Manager\MerchandiseRequest;
@@ -30,7 +31,7 @@ use App\Models\Log\SfFeeChangeHistory;
  */
 class MerchandiseController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, StoresTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait, UnderSalesTrait;
     protected $merchandises, $pay_modules;
     protected $target;
     protected $imgs;
@@ -164,6 +165,10 @@ class MerchandiseController extends Controller
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
+        foreach($data['content'] as $content)
+        {
+            $content = $this->hiddenSalesInfos($request, $content);
+        }
         return $this->response(0, $data);
     }
 

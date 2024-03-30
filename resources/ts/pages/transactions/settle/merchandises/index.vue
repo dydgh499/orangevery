@@ -3,6 +3,7 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { selectFunctionCollect } from '@/views/selected'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
 import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
@@ -13,6 +14,7 @@ import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
+const { findSalesName } = useSalesFilterStore()
 const { getSettleStyle, batchSettle, isSalesCol, movePartSettle } = settlementFunctionCollect(store)
 const { selected, all_selected } = selectFunctionCollect(store)
 
@@ -173,6 +175,14 @@ onMounted(() => {
                                             v-if="getUserLevel() >= 35">#{{ item[_key] }}</span>
                                         <span class="edit-link" v-else>#{{ item[_key] }}</span>
                                     </div>
+                                </span>
+                                <span v-else-if="(_key as string).includes('_id') && (_key as string).includes('sales')">
+                                    {{ findSalesName(_key as string, item[_key]) }}
+                                </span>
+                                <span v-else-if="(_key as string).includes('_fee')">
+                                    <VChip v-if="item[_key]">
+                                        {{ (item[_key] * 100).toFixed(3) }} %
+                                    </VChip>
                                 </span>
                                 <span v-else-if="_key == 'settle_hold_s_dt'">
                                     <VChip color="error" v-if="item[_key]">

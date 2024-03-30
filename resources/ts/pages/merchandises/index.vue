@@ -17,7 +17,7 @@ import { template } from 'lodash'
 
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { pgs, settle_types }   = useStore()
+const { pgs, settle_types } = useStore()
 const password  = ref()
 const batchDialog = ref()
 

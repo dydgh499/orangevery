@@ -14,6 +14,38 @@ trait UnderSalesTrait
             ->get($s_keys);
     }
 
+    public function getViewableSalesCols($request, $cols)
+    {
+        [$levels, $s_keys] = $this->getViewableSalesInfos($request);
+        foreach($s_keys as $keys)
+        {
+            $key = explode('_', $keys);
+            $cols[] = "merchandises.".$key[0]."_id";
+            $cols[] = "merchandises.".$key[0]."_fee";
+        }
+        return $cols;
+    }
+
+    public function hiddenSalesInfos($request, $content)
+    {
+        $levels = [13, 15, 17, 20, 25, 30];
+        for ($i=0; $i <count($levels); $i++) 
+        { 
+            if($request->user()->tokenCan($levels[$i]) === false)
+            {
+                $idx = globalLevelByIndex($levels[$i]);
+                $key = 'sales'.$idx;
+                $content[$key] = null;
+                $content[$key."_id"] = null;
+                $content[$key."_fee"] = null;
+                $content[$key."_name"] = null;
+                $content[$key."_settle_amount"] = null;
+                $content[$key."_settle_id"] = null;
+            }
+        }
+        return $content;
+    }
+
     public function getViewableSalesInfos($request)
     {
         $levels = [];

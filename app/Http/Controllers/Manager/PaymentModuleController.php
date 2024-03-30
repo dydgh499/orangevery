@@ -7,6 +7,7 @@ use App\Models\PaymentModule;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
+use App\Http\Traits\Salesforce\UnderSalesTrait;
 
 use App\Http\Controllers\Manager\CodeGenerator\TidGenerator;
 use App\Http\Controllers\Manager\CodeGenerator\MidGenerator;
@@ -32,7 +33,7 @@ use App\Enums\HistoryType;
  */
 class PaymentModuleController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, StoresTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait, UnderSalesTrait;
     protected $pay_modules;
     protected $target;
 
@@ -107,6 +108,8 @@ class PaymentModuleController extends Controller
     public function index(IndexRequest $request)
     {
         $cols = ['payment_modules.*', 'merchandises.mcht_name'];
+        $cols = $this->getViewableSalesCols($request, $cols);
+
         $query = $this->commonSelect($request);
         $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
         return $this->response(0, $data);

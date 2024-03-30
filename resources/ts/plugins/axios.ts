@@ -5,6 +5,26 @@ import axiosIns from 'axios';
 
 const levels = corp.pv_options.auth.levels
 
+
+export const getSalesLevelByCol = (key: string) => {
+    switch(key) {
+        case 'sales5_id':
+            return 5;
+        case 'sales4_id':
+            return 4;
+        case 'sales3_id':
+            return 3;
+        case 'sales2_id':
+            return 2;
+        case 'sales1_id':
+            return 1;
+        case 'sales0_id':
+            return 0;
+        default:
+            return -1;
+    }
+}
+
 export const getLevelByIndex = (level:number) => {
     switch(level) {
         case 13:

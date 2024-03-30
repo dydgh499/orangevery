@@ -141,15 +141,18 @@ class SalesforceController extends Controller
      */
     public function show(Request $request, $id)
     {
-        if($this->authCheck($request->user(), $id, 13))
+        $data = $this->salesforces->where('id', $id)
+            ->with(['underAutoSettings'])
+            ->first();
+        if($data)
         {
-            $data = $this->salesforces->where('id', $id)
-                ->with(['underAutoSettings'])
-                ->first();
-            return $data ? $this->response(0, $data) : $this->response(1000);
+            if($request->user()->tokenCan($data->level) === false)
+                return $this->response(951);
+            else
+                return $this->response(0, $data);
         }
         else
-            return $this->response(951);
+            return $this->response(1000);
     }
 
     /**

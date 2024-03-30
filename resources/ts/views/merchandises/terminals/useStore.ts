@@ -1,19 +1,48 @@
 import { Header } from '@/views/headers'
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { getUserLevel } from '@axios'
+import corp from '@corp'
 
 export const useSearchStore = defineStore('terminalSearchStore', () => {
     const store = Searcher('merchandises/terminals')
     const head = Header('merchandises/terminals', '장비 관리')
-    const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
+    const { pgs, pss, settle_types, terminals } = useStore()
+    const { findSalesName } = useSalesFilterStore()
+    const levels = corp.pv_options.auth.levels
 
     const headers1: Record<string, string> = {
         'id': 'NO.',
         'mcht_name': '가맹점 상호',
         'note': '별칭',
         'module_type': '모듈타입',
+    }
+
+    if (levels.sales5_use && getUserLevel() >= 30) {
+        headers1['sales5_id'] = levels.sales5_name
+        headers1['sales5_fee'] = '수수료'
+    }
+    if (levels.sales4_use && getUserLevel() >= 25) {
+        headers1['sales4_id'] = levels.sales4_name
+        headers1['sales4_fee'] = '수수료'
+    }
+    if (levels.sales3_use && getUserLevel() >= 20) {
+        headers1['sales3_id'] = levels.sales3_name
+        headers1['sales3_fee'] = '수수료'
+    }
+    if (levels.sales2_use && getUserLevel() >= 17) {
+        headers1['sales2_id'] = levels.sales2_name
+        headers1['sales2_fee'] = '수수료'
+    }
+    if (levels.sales1_use && getUserLevel() >= 15) {
+        headers1['sales1_id'] = levels.sales1_name
+        headers1['sales1_fee'] = '수수료'
+    }
+    if (levels.sales0_use && getUserLevel() >= 13) {
+        headers1['sales0_id'] = levels.sales0_name
+        headers1['sales0_fee'] = '수수료'
     }
     if(getUserLevel() >= 35)
     {
@@ -60,6 +89,30 @@ export const useSearchStore = defineStore('terminalSearchStore', () => {
             datas[i]['settle_type'] = settle_types.find(settle_type => settle_type['id'] === datas[i]['settle_type'])?.name as string
             datas[i]['terminal_id'] = terminals.find(terminal => terminal['id'] === datas[i]['terminal_id'])?.name as string
 
+            if (levels.sales5_use && getUserLevel() >= 30) {
+                datas[i]['sales5_id'] = findSalesName('sales5_id', datas[i]['sales5_id'])
+                datas[i]['sales5_fee'] = (datas[i]['sales5_fee'] * 100).toFixed(3)
+            }
+            if (levels.sales4_use && getUserLevel() >= 25) {
+                datas[i]['sales4_id'] = findSalesName('sales4_id', datas[i]['sales4_id'])
+                datas[i]['sales4_fee'] = (datas[i]['sales4_fee'] * 100).toFixed(3)
+            }
+            if (levels.sales3_use && getUserLevel() >= 20) {
+                datas[i]['sales3_id'] = findSalesName('sales3_id', datas[i]['sales3_id'])
+                datas[i]['sales3_fee'] = (datas[i]['sales3_fee'] * 100).toFixed(3)
+            }
+            if (levels.sales2_use && getUserLevel() >= 17) {
+                datas[i]['sales2_id'] = findSalesName('sales2_id', datas[i]['sales2_id'])
+                datas[i]['sales2_fee'] = (datas[i]['sales2_fee'] * 100).toFixed(3)
+            }
+            if (levels.sales1_use && getUserLevel() >= 15) {
+                datas[i]['sales1_id'] = findSalesName('sales1_id', datas[i]['sales1_id'])
+                datas[i]['sales1_fee'] = (datas[i]['sales1_fee'] * 100).toFixed(3)
+            }
+            if (levels.sales0_use && getUserLevel() >= 13) {
+                datas[i]['sales5_id'] = findSalesName('sales0_id', datas[i]['sales0_id'])
+                datas[i]['sales0_fee'] = (datas[i]['sales0_fee'] * 100).toFixed(3)
+            }
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)

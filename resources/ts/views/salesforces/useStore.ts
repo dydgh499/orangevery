@@ -2,7 +2,7 @@ import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { Merchandise, Options, Salesforce, UnderAutoSetting } from '@/views/types'
 import { avatars } from '@/views/users/useStore'
-import { axios, getUserLevel, salesLevels } from '@axios'
+import { axios, getSalesLevelByCol, getUserLevel, salesLevels } from '@axios'
 import corp from '@corp'
 import _ from 'lodash'
 
@@ -289,6 +289,11 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
         }
     }
     
+    const findSalesName = (key: string, value: number) => {
+        const level = getSalesLevelByCol(key)
+        return sales[level].value.find(obj => obj.id === value)?.sales_name
+    }
+
     return {
         all_sales,
         sales,
@@ -299,6 +304,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
         setUnderSalesFilter,
         hintSalesApplyFee,
         hintSalesSettleFee,
+        findSalesName,
     }
 })
 

@@ -6,9 +6,11 @@ use App\Models\Transaction;
 use App\Models\PaymentModule;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\StoresTrait;
+use App\Http\Traits\Salesforce\UnderSalesTrait;
+
 use App\Http\Requests\Manager\PayModuleRequest;
 use App\Http\Requests\Manager\IndexRequest;
-use App\Http\Traits\StoresTrait;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -21,7 +23,7 @@ use Carbon\Carbon;
  */
 class TerminalController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, StoresTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait, UnderSalesTrait;
     protected $payModules;
 
     public function __construct(PaymentModule $payModules)
@@ -39,6 +41,9 @@ class TerminalController extends Controller
      */
     public function index(IndexRequest $request)
     {
+        $cols = ['payment_modules.*', 'merchandises.mcht_name'];
+        $cols = $this->getViewableSalesCols($request, $cols);
+
         $search = $request->input('search', '');
         $query = $this->payModules
             ->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
@@ -72,7 +77,7 @@ class TerminalController extends Controller
                 ->orWhere('merchandises.mcht_name', 'like', "%$search%");
         });
 
-        $data = $this->getIndexData($request, $query, 'payment_modules.id', ['payment_modules.*', 'merchandises.mcht_name'], 'payment_modules.created_at');
+        $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
         return $this->response(0, $data);
     }
 }

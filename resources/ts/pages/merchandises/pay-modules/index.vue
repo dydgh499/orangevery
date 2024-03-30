@@ -2,6 +2,7 @@
 import { useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useRequestStore } from '@/views/request'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { module_types, installments, fin_trx_delays, cxl_types, comm_settle_types } from '@/views/merchandises/pay-modules/useStore'
 
@@ -14,6 +15,7 @@ import { getUserLevel, isAbleModiy } from '@axios'
 
 const { request } = useRequestStore()
 const { pgs, pss, settle_types, finance_vans, terminals } = useStore()
+const { findSalesName } = useSalesFilterStore()
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected, dialog } = selectFunctionCollect(store)
 const batchDialog = ref()
@@ -117,6 +119,14 @@ onMounted(() => {
                                     <VChip
                                         :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
                                         {{ module_types.find(module_type => module_type['id'] === item[_key])?.title }}
+                                    </VChip>
+                                </span>
+                                <span v-else-if="(_key as string).includes('_id') && (_key as string).includes('sales')">
+                                    {{ findSalesName(_key as string, item[_key]) }}
+                                </span>
+                                <span v-else-if="(_key as string).includes('_fee')">
+                                    <VChip v-if="item[_key]">
+                                        {{ (item[_key] * 100).toFixed(3) }} %
                                     </VChip>
                                 </span>
                                 <span v-else-if="_key == 'installment'">

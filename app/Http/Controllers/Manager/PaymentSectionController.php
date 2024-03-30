@@ -30,7 +30,7 @@ class PaymentSectionController extends Controller
     /**
      * 목록출력
      *
-     * 가맹점 이상 가능
+     * 운영자 이상 가능
      */
     public function index(IndexRequest $request)
     {
@@ -44,7 +44,7 @@ class PaymentSectionController extends Controller
     /**
      * 추가
      *
-     * 대리점 이상 가능
+     * 운영자 이상 가능
      *
      */
     public function store(PaySectionRequest $request)
@@ -57,7 +57,7 @@ class PaymentSectionController extends Controller
     /**
      * 단일조회
      *
-     * 가맹점 이상 가능
+     * 운영자 이상 가능
      *
      * @urlParam id integer required 유저 PK
      */
@@ -70,7 +70,7 @@ class PaymentSectionController extends Controller
     /**
      * 업데이트
      *
-     * 가맹점 이상 가능
+     * 운영자 이상 가능
      *
      * @urlParam id integer required 유저 PK
      */

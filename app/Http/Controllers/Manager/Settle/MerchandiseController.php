@@ -17,6 +17,8 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleTrait;
 use App\Http\Traits\Settle\SettleTerminalTrait;
 use App\Http\Traits\Settle\TransactionTrait;
+use App\Http\Traits\Salesforce\UnderSalesTrait;
+
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
 
@@ -27,7 +29,7 @@ use Illuminate\Support\Facades\DB;
  */
 class MerchandiseController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, SettleTrait, SettleTerminalTrait, TransactionTrait;
+    use ManagerTrait, ExtendResponseTrait, SettleTrait, SettleTerminalTrait, TransactionTrait, UnderSalesTrait;
     protected $merchandises, $settleDeducts;
 
     public function __construct(Merchandise $merchandises, SettleDeductMerchandise $settleDeducts)
@@ -69,6 +71,7 @@ class MerchandiseController extends Controller
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
         $cols = array_merge($this->getDefaultCols(), ['mcht_name', 'use_collect_withdraw', 'withdraw_fee']);
+        $cols = $this->getViewableSalesCols($request, $cols);
         if($request->input('use_settle_hold', 0))
             $cols = array_merge($cols, ['settle_hold_s_dt', 'settle_hold_reason']);
 

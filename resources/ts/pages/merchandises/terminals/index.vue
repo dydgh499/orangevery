@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useSearchStore } from '@/views/merchandises/terminals/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { module_types, installments, ship_out_stats, under_sales_types } from '@/views/merchandises/pay-modules/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
@@ -9,6 +10,7 @@ import { DateFilters } from '@core/enums'
 
 const { pgs, pss, settle_types, terminals } = useStore()
 const { store, head, exporter } = useSearchStore()
+const { findSalesName } = useSalesFilterStore()
 
 provide('store', store)
 provide('head', head)
@@ -70,6 +72,14 @@ const isMchtUnableCol = (key: string) => {
                         <span v-else-if="_key == 'module_type' && isMchtUnableCol(_key) == false">
                             <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
                                 {{ module_types.find(obj => obj.id === item[_key])?.title }}
+                            </VChip>
+                        </span>
+                        <span v-else-if="(_key as string).includes('_id') && (_key as string).includes('sales')">
+                            {{ findSalesName(_key as string, item[_key]) }}
+                        </span>
+                        <span v-else-if="(_key as string).includes('_fee')">
+                            <VChip v-if="item[_key]">
+                                {{ (item[_key] * 100).toFixed(3) }} %
                             </VChip>
                         </span>
                         <span v-else-if="_key == 'installment' && isMchtUnableCol(_key) == false">
