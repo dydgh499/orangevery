@@ -139,7 +139,6 @@ class Transaction extends Model
         if(request()->level)
         {
             [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo(request()->level);
-            logging([$target_id, $target_settle_id, $target_settle_amount]);
             if((int)request()->level === 50)
                 return $this->amount - $this[$target_settle_amount] - $this->dev_realtime_settle_amount;
             else
