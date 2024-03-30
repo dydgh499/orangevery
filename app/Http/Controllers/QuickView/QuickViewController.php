@@ -65,7 +65,7 @@ class QuickViewController extends Controller
     {
         $transactions = [];
         $now = Carbon::now();
-        $last_month = $now->copy()->subMonth();
+        $last_month = $now->copy()->subMonthNoOverflow();
         
         $str_now = $now->format('Y-m-d');
         $str_cur_month = $now->format('Y-m');
