@@ -70,8 +70,8 @@ const openFile = () => {
 <template>
     <section>        
         <template v-if="props.ext === 'pdf'">
-            <vue-pdf-app :pdf="props.preview.replace('https://team.payvery.kr', '')" class="preview pdf-viewer" :style="props.previewStyle" page-scale="page-height"
-                :config="config" @click="openFile()"/>
+            <VuePdfApp :pdf="props.preview.replace('https://team.payvery.kr', '')" class="preview pdf-viewer" :style="props.previewStyle" page-scale="page-height"
+                :config="config" @click="openFile()" :key="props.preview.replace('https://team.payvery.kr', '')"/>
         </template>
         <template v-else>
             <VImg rounded :src="props.preview" class="preview" @click="imageDialog.show(props.preview)"
