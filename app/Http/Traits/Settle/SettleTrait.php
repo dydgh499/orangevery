@@ -149,6 +149,7 @@ trait SettleTrait
      */
     public function part(Request $request)
     {
+        $validated = $request->validate(['id'=>'required']);
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
         $cols = [
             'transactions.*', 
@@ -171,6 +172,7 @@ trait SettleTrait
      */
     public function partChart(Request $request)
     {
+        $validated = $request->validate(['id'=>'required']);
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
         $cols  = $this->getTotalCols($target_settle_amount);
         $chart  = $this->partSettleCommonQuery($request)->first($cols);
