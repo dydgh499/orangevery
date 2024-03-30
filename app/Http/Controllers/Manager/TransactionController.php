@@ -49,17 +49,17 @@ class TransactionController extends Controller
         ];
     }
 
-    public function getTransactionData($request, $query)
+    public function getTransactionData($query, $level)
     {
-        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($level);
         if($target_settle_amount === 'dev_settle_amount')
             $profit = DB::raw("($target_settle_amount + dev_realtime_settle_amount) AS profit");
         else
             $profit = "$target_settle_amount AS profit";
         $this->cols[] = $profit;
 
-        $page      = $request->input('page');
-        $page_size = $request->input('page_size');
+        $page      = request()->input('page');
+        $page_size = request()->input('page_size');
         return $this->transPagenation($query, 'transactions', $this->cols, $page, $page_size);
     }
 
@@ -152,7 +152,7 @@ class TransactionController extends Controller
         if(count($with))
             $query = $query->with($with);
 
-        $data   = $this->getTransactionData($request, $query);
+        $data   = $this->getTransactionData($query, $request->level);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);

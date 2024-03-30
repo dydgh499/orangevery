@@ -244,7 +244,7 @@ class BfController extends Controller
     
     public function transactionIndex(IndexRequest $request)
     {
-        $request = request()->merge([
+        request()->merge([
             'level' => 10,
             'use_search_date_detail' => 0,
             'use_realtime_deposit'   => 0,
@@ -262,7 +262,7 @@ class BfController extends Controller
             DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"), DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
         ];
         $query  = $inst->commonSelect($request);
-        $data   = $inst->getTransactionData($request, $query);
+        $data   = $inst->getTransactionData($query, 10);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
