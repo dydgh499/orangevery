@@ -60,7 +60,6 @@ class BrandController extends Controller
      */
     public function chart(Request $request)
     {
-        $request->merge(['level'=> 50]);
         $chart = $this->brands->first([
             DB::raw("(SUM(deposit_amount) + SUM(extra_deposit_amount)) AS total_deposit_amount"),
             DB::raw("SUM(deposit_amount) AS deposit_amount"),
@@ -108,7 +107,6 @@ class BrandController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $request->merge(['level'=> 50]);
         $search     = $request->input('search', '');
         $brand_id   = $request->user()->brand_id;
 

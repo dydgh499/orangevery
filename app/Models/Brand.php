@@ -63,7 +63,8 @@ class Brand extends Model
     }
     
     public function devAmount()
-    {
+    {        
+        request()->merge(['level'=> 50]);
         $s_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
         $e_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->endOfMonth()->format('Y-m-d');
 
