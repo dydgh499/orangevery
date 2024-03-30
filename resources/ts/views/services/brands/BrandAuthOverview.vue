@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import type { FreeOption, PaidOption, AuthOption } from '@/views/types'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
@@ -31,7 +31,7 @@ const props = defineProps<Props>()
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.sales5_name"
                                     prepend-inner-icon="ph:share-network" placeholder="사용할 등급 명칭을 입력해주세요"
-                                    persistent-placeholder :rules="[requiredValidator]" />
+                                    persistent-placeholder :rules="[requiredValidatorV2(props.item.auth.levels.sales5_name, '등급6 명칭')]" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -41,7 +41,7 @@ const props = defineProps<Props>()
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.sales4_name"
                                     prepend-inner-icon="ph:share-network" placeholder="사용할 등급 명칭을 입력해주세요"
-                                    persistent-placeholder :rules="[requiredValidator]" />
+                                    persistent-placeholder :rules="[requiredValidatorV2(props.item.auth.levels.sales4_name, '등급5 명칭')]" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -51,7 +51,7 @@ const props = defineProps<Props>()
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.sales3_name"
                                     prepend-inner-icon="ph:share-network" placeholder="사용할 등급 명칭을 입력해주세요"
-                                    persistent-placeholder :rules="[requiredValidator]" />
+                                    persistent-placeholder :rules="[requiredValidatorV2(props.item.auth.levels.sales3_name, '등급4 명칭')]" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -62,7 +62,7 @@ const props = defineProps<Props>()
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.sales2_name"
                                     prepend-inner-icon="ph:share-network" placeholder="사용할 등급 명칭을 입력해주세요"
-                                    persistent-placeholder :rules="[requiredValidator]" />
+                                    persistent-placeholder :rules="[requiredValidatorV2(props.item.auth.levels.sales2_name, '등급3 명칭')]" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -73,7 +73,7 @@ const props = defineProps<Props>()
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.sales1_name"
                                     prepend-inner-icon="ph:share-network" placeholder="사용할 등급 명칭을 입력해주세요"
-                                    persistent-placeholder :rules="[requiredValidator]" />
+                                    persistent-placeholder :rules="[requiredValidatorV2(props.item.auth.levels.sales1_name, '등급2 명칭')]" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
@@ -84,7 +84,7 @@ const props = defineProps<Props>()
                             <template #input>
                                 <VTextField v-model="props.item.auth.levels.sales0_name"
                                     prepend-inner-icon="ph:share-network" placeholder="사용할 등급 명칭을 입력해주세요"
-                                    persistent-placeholder :rules="[requiredValidator]" />
+                                    persistent-placeholder :rules="[requiredValidatorV2(props.item.auth.levels.sales0_name, '등급1 명칭')]" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>

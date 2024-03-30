@@ -4,6 +4,7 @@ import PayModuleDialog from '@/layouts/dialogs/pay-modules/PayModuleDialog.vue'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 
+import { defaultItemInfo } from '@/views/merchandises/pay-modules/useStore'
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
 import { getUserLevel } from '@axios'
@@ -61,7 +62,7 @@ const editNewPayModule = async (item: PayModule) => {
 const addNewPayModule = async () => {
     const pay_module = <PayModule>({
         id: 0,
-        mcht_id: null,
+        mcht_id: props.item.id,
         pg_id: null,
         ps_id: null,
         settle_type: null,

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { VForm } from 'vuetify/components'
 import type { Classification } from '@/views/types'
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import { useRequestStore } from '@/views/request'
 
 interface Props {
@@ -22,7 +22,7 @@ const { update, remove } = useRequestStore()
                 <VCol cols="12">
                     <VRow no-gutters>
                         <VTextField v-model="props.item.name" prepend-inner-icon="mdi-vector-intersection"
-                            placeholder="구간명 입력" persistent-placeholder :rules="[requiredValidator]"
+                            placeholder="구간명 입력" persistent-placeholder :rules="[requiredValidatorV2(props.item.name, '구간')]"
                             style="display: inline-block;" />
                     </VRow>
                 </VCol>

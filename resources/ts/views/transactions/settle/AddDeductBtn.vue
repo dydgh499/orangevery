@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { requiredValidator } from '@validators'
 import { axios } from '@axios'
 
 interface Props {

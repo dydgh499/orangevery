@@ -19,14 +19,6 @@ export const requiredValidatorV2 = (value: unknown, name:string) => {
         return message
     return !!String(value).trim().length || message
 }
-// 👉 Required Validator
-export const requiredValidator = (value: unknown) => {
-    if (isNullOrUndefined(value) || isEmptyArray(value) || value === false)
-        return '이 필드는 필수로 입력이 요구됩니다.'
-
-    return !!String(value).trim().length || '이 필드는 필수로 입력이 요구됩니다.'
-}
-
 // 👉 Email Validator
 export const emailValidator = (value: unknown) => {
     if (isEmpty(value))

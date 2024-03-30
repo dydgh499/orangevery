@@ -6,7 +6,7 @@ import { useHeadOfficeAccountStore } from '@/views/services/head-office-withdraw
 import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { HeadOffceAccount, FinanceVan } from '@/views/types'
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 
 const { head_office_accounts } = useHeadOfficeAccountStore()
 const { post } = useRequestStore()
@@ -92,7 +92,7 @@ const deposit = async () => {
                                 <template #name>출금금액 입력</template>
                                 <template #input>
                                     <VTextField v-model="amount" type="number" suffix="￦" placeholder="출금금액 입력"
-                                        prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidator]" />
+                                        prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidatorV2(amount, '출금금액')]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

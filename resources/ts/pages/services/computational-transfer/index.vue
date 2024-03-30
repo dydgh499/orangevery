@@ -4,7 +4,7 @@ import { settleCycles, settleDays } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import { reactive } from 'vue';
 import { axios } from '@axios';
 import { cloneDeep } from 'lodash'
@@ -98,17 +98,17 @@ const register = async() => {
                                         <!-- domain -->
                                         <VCol cols="12">
                                             <VTextField v-model="login_info.domain" label="도메인 입력" type="domain"
-                                                :rules="[requiredValidator]" :disabled="Boolean(is_transfer)"/>
+                                                :rules="[requiredValidatorV2(login_info.domain, '도메인')]" :disabled="Boolean(is_transfer)"/>
                                         </VCol>
                                         <!-- user_name -->
                                         <VCol cols="12">
                                             <VTextField v-model="login_info.user_name" label="아이디 입력" type="user_name"
-                                                :rules="[requiredValidator]" :disabled="Boolean(is_transfer)" />
+                                                :rules="[requiredValidatorV2(login_info.user_name, '도메인')]" :disabled="Boolean(is_transfer)" />
                                         </VCol>
                                         <!-- password -->
                                         <VCol cols="12">
                                             <VTextField v-model="login_info.user_pw" label="패스워드 입력"
-                                                :rules="[requiredValidator]" :type="is_visible ? 'text' : 'password'"
+                                                :rules="[requiredValidatorV2(login_info.user_pw, '패스워드')]" :type="is_visible ? 'text' : 'password'"
                                                 :append-inner-icon="is_visible ? 'tabler-eye-off' : 'tabler-eye'"
                                                 @click:append-inner="is_visible = !is_visible" class="mb-6" :disabled="Boolean(is_transfer)"/>
 

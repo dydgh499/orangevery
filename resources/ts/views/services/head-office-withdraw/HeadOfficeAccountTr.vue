@@ -2,7 +2,7 @@
 import { useRequestStore } from '@/views/request'
 import type { HeadOffceAccount } from '@/views/types'
 import { VForm } from 'vuetify/components'
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import { banks } from '@/views/users/useStore'
 
 interface Props {
@@ -40,7 +40,7 @@ const setAcctBankName = () => {
                         :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
                         label="은행 선택"
                         :hint="`${props.item.acct_bank_name}, 은행 코드: ${props.item.acct_bank_code ? props.item.acct_bank_code : '000'} `"
-                        item-title="title" item-value="code" persistent-hint single-line :rules="[requiredValidator]" create
+                        item-title="title" item-value="code" persistent-hint single-line :rules="[requiredValidatorV2(props.item.acct_bank_code, '은행정보')]" create
                         @update:modelValue="setAcctBankName()" style="margin: 0 0.5em;" />
             </VForm>
         </td>

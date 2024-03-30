@@ -5,7 +5,7 @@ import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
 import { operator_levels } from '@/views/services/operators/useStore'
 import type { Operator } from '@/views/types'
 import { avatars } from '@/views/users/useStore'
-import { passwordValidator, requiredValidator } from '@validators'
+import { passwordValidator, requiredValidatorV2 } from '@validators'
 
 interface Props {
     item: Operator,
@@ -28,7 +28,7 @@ const is_show = ref(false)
                             <template #name>아이디</template>
                             <template #input>
                                 <VTextField v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
-                                    placeholder="ID로 사용됩니다." persistent-placeholder :rules="[requiredValidator]"
+                                    placeholder="ID로 사용됩니다." persistent-placeholder :rules="[requiredValidatorV2(props.item.user_name, '아이디')]"
                                     maxlength="30" />
                             </template>
                         </CreateHalfVCol>
@@ -37,7 +37,7 @@ const is_show = ref(false)
                             <template #name>패스워드</template>
                             <template #input>
                                 <VTextField v-model="props.item.user_pw" counter prepend-inner-icon="tabler-lock"
-                                    :rules="[requiredValidator, passwordValidator]"
+                                    :rules="[requiredValidatorV2(props.item.user_pw, '패스워드'), passwordValidator]"
                                     :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
                                     :type="is_show ? 'text' : 'password'" placeholder="소문자,대문자,특수문자로 이루어진 8자 이상 문자열"
                                     persistent-placeholder @click:append-inner="is_show = !is_show" autocomplete />
@@ -48,7 +48,7 @@ const is_show = ref(false)
                             <template #name>대표자명</template>
                             <template #input>
                                 <VTextField v-model="props.item.nick_name" prepend-inner-icon="tabler-user"
-                                    placeholder="사용자명으로 사용됩니다." :rules="[requiredValidator]" persistent-placeholder />
+                                    placeholder="사용자명으로 사용됩니다." :rules="[requiredValidatorV2(props.item.nick_name, '대표자명')]" persistent-placeholder />
                             </template>
                         </CreateHalfVCol>
                         <!-- 👉 Mobile -->
@@ -57,7 +57,7 @@ const is_show = ref(false)
                             <template #input>
                                 <VTextField v-model="props.item.phone_num" type="number"
                                     prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호 입력"
-                                    :rules="[requiredValidator]" persistent-placeholder />
+                                    :rules="[requiredValidatorV2(props.item.phone_num, '휴대폰번호')]" persistent-placeholder />
                             </template>
                         </CreateHalfVCol>
                         <CreateHalfVCol :mdl="3" :mdr="9">
@@ -65,7 +65,7 @@ const is_show = ref(false)
                             <template #input>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
                                     :items="operator_levels" prepend-inner-icon="tabler-adjustments-up" label="등급 선택"
-                                    item-title="title" item-value="id" single-line :rules="[requiredValidator]"
+                                    item-title="title" item-value="id" single-line :rules="[requiredValidatorV2(props.item.level, '등급')]"
                                     :readonly="props.id != 0" />
                             </template>
                         </CreateHalfVCol>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
-import { requiredValidator, lengthValidatorV2 } from '@validators'
+import { lengthValidatorV2, requiredValidatorV2 } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { reactive, watchEffect } from 'vue';
 import { VForm } from 'vuetify/components'
@@ -90,29 +90,29 @@ watchEffect(async() => {
                     <template #input>
                         <VTextField v-model="hand_pay_info.item_name" type="text"
                             prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
-                            maxlength="100" :rules="[requiredValidator]" placeholder="상품명을 입력해주세요" />
+                            maxlength="100" :rules="[requiredValidatorV2(hand_pay_info.item_name, '상품명')]" placeholder="상품명을 입력해주세요" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                     <template #name>상품금액</template>
                     <template #input>
-                        <VTextField v-model="hand_pay_info.amount" suffix="₩" placeholder="거래금액을 입력해주세요"
-                            prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidator]" />
+                        <VTextField v-model="hand_pay_info.amount" suffix="₩" placeholder="상품금액을 입력해주세요"
+                            prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidatorV2(hand_pay_info.amount, '상품금액')]" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 12px 0;">
                     <template #name>구매자명</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.buyer_name" type="text" placeholder="구매자명을 입력해주세요"
-                            :rules="[requiredValidator]" prepend-inner-icon="tabler-user" />
+                            :rules="[requiredValidatorV2(hand_pay_info.buyer_name, '구매자명')]" prepend-inner-icon="tabler-user" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style=" padding: 0;">
-                    <template #name>휴대폰번호</template>
+                    <template #name>구매자 연락처</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.buyer_phone" type="number"
-                            prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호를 입력해주세요"
-                            :rules="[requiredValidator]" />
+                            prepend-inner-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
+                            :rules="[requiredValidatorV2(hand_pay_info.buyer_phone, '구매자 연락처')]" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-top: 12px;">
@@ -120,7 +120,7 @@ watchEffect(async() => {
                     <template #input>
                         <VTextField v-model="hand_pay_info.card_num" type="text" persistent-placeholder counter
                             prepend-inner-icon="emojione:credit-card" placeholder="카드번호를 입력해주세요"
-                            :rules="[requiredValidator]" maxlength="18" autocomplete="cc-number" />
+                            :rules="[requiredValidatorV2(hand_pay_info.card_num, '카드번호')]" maxlength="18" autocomplete="cc-number" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
@@ -128,7 +128,7 @@ watchEffect(async() => {
                     <template #input>
                         <VTextField v-model="hand_pay_info.yymm" type="text"
                             prepend-inner-icon="ic-baseline-calendar-today" placeholder="(MM/YY:0324)"
-                            :rules="[requiredValidator, lengthValidatorV2(hand_pay_info.yymm, 4)]" maxlength="4" />
+                            :rules="[requiredValidatorV2(hand_pay_info.yymm, '유효기간'), lengthValidatorV2(hand_pay_info.yymm, 4)]" maxlength="4" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 12px 0;">
@@ -136,7 +136,7 @@ watchEffect(async() => {
                     <template #input>
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="hand_pay_info.installment"
                             :items="filterInstallment" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
-                            item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
+                            item-title="title" item-value="id" single-line :rules="[requiredValidatorV2(hand_pay_info.installment, '할부기간')]" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 6px 0;" v-if="hand_pay_info.is_old_auth">

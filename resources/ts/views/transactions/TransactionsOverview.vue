@@ -9,7 +9,7 @@ import type { Merchandise, Options, PayModule, PaySection, Transaction } from '@
 import { getIndexByLevel, getUserLevel } from '@axios'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 import corp from '@corp'
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import { ko } from 'date-fns/locale'
 
 interface Props {
@@ -145,7 +145,7 @@ onMounted(async () => {
                                         </VCol>
                                         <VCol>
                                             <VTextField v-model="props.item['sales'+(6 - i)+'_fee']" type="number" suffix="%"
-                                                :rules="[requiredValidator]" />
+                                                :rules="[requiredValidatorV2(props.item['sales'+(6 - i)+'_fee'], levels['sales'+(6-i)+'_name']+'수수료율')]" />
                                         </VCol>
                                     </VRow>
                                 </template>
@@ -168,7 +168,7 @@ onMounted(async () => {
                                     </VCol>
                                     <VCol>
                                         <VTextField v-model="props.item.mcht_fee" type="number" suffix="%"
-                                            :rules="[requiredValidator]" />
+                                            :rules="[requiredValidatorV2(props.item.mcht_id, '가맹점')]" />
                                     </VCol>
                                 </VRow>
                             </template>
@@ -179,7 +179,7 @@ onMounted(async () => {
                                     <template #name>유보금 수수료율</template>
                                     <template #input>
                                         <VTextField v-model="props.item.hold_fee" type="number" suffix="%"
-                                            :rules="[requiredValidator]" />
+                                            :rules="[requiredValidatorV2(props.item.hold_fee, '유보금')]" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -245,7 +245,7 @@ onMounted(async () => {
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pmod_id"
                                             :items="filterPayMod" prepend-inner-icon="ic-outline-send-to-mobile"
                                             label="결제모듈 선택" item-title="note" item-value="id" single-line
-                                            :rules=[requiredValidator] @update:modelValue="changePaymodEvent()" />
+                                            :rules="[requiredValidatorV2(props.item.pmod_id, '결제모듈')]" @update:modelValue="changePaymodEvent()" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -258,7 +258,7 @@ onMounted(async () => {
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.module_type"
                                             :items="module_types" prepend-inner-icon="ic-outline-send-to-mobile"
                                             label="결제모듈 타입 선택" item-title="title" item-value="id" single-line
-                                            :rules=[requiredValidator] />
+                                            :rules="[requiredValidatorV2(props.item.module_type, '결제모듈 타입')]" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -283,7 +283,7 @@ onMounted(async () => {
                                     <template #input>
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_id" :items="pgs"
                                             prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_name"
-                                            item-value="id" single-line :rules=[requiredValidator] />
+                                            item-value="id" single-line :rules="[requiredValidatorV2(props.item.pg_id, 'PG사')]" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -296,7 +296,7 @@ onMounted(async () => {
                                     <template #input>
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.ps_id"
                                             :items="filterPgs" prepend-inner-icon="mdi-vector-intersection" label="구간 선택"
-                                            item-title="name" item-value="id" single-line :rules=[requiredValidator] />
+                                            item-title="name" item-value="id" single-line :rules="[requiredValidatorV2(props.item.ps_id, '구간')]" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -308,7 +308,7 @@ onMounted(async () => {
                                     <template #name>구간 수수료</template>
                                     <template #input>
                                         <VTextField v-model="props.item.ps_fee" type="number" suffix="%"
-                                            :rules="[requiredValidator]" />
+                                            :rules="[requiredValidatorV2(props.item.ps_fee, '구간 수수료')]" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -321,7 +321,7 @@ onMounted(async () => {
                                     <template #input>
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_settle_type"
                                             :items="settle_types" prepend-inner-icon="ic-outline-send-to-mobile"
-                                            label="정산일 선택" item-title="name" item-value="id" :rules=[requiredValidator] />
+                                            label="정산일 선택" item-title="name" item-value="id" :rules="[requiredValidatorV2(props.item.mcht_settle_type, '정산일')]" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -332,7 +332,7 @@ onMounted(async () => {
                                     <template #name>입금 수수료</template>
                                     <template #input>
                                         <VTextField v-model="props.item.mcht_settle_fee" type="number" suffix="￦"
-                                            :rules="[requiredValidator]" />
+                                            :rules="[requiredValidatorV2(props.item.mcht_settle_fee, '이체 수수료')]" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -342,7 +342,7 @@ onMounted(async () => {
                                 <CreateHalfVCol :mdl="4" :mdr="8">
                                     <template #name>MID</template>
                                     <template #input>
-                                        <VTextField v-model="props.item.mid" type="text" :rules="[requiredValidator]"
+                                        <VTextField v-model="props.item.mid" type="text" :rules="[requiredValidatorV2(props.item.mid, 'MID')]"
                                             prepend-inner-icon="tabler-user" />
                                     </template>
                                 </CreateHalfVCol>
@@ -438,7 +438,7 @@ onMounted(async () => {
                                     <template #input>
                                         <VTextField v-model="props.item.amount" type="number" suffix="￦"
                                             placeholder="거래금액을 입력해주세요" prepend-inner-icon="ic:outline-price-change"
-                                            :rules="[requiredValidator]" />
+                                            :rules="[requiredValidatorV2(props.item.amount, '거래금액')]" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -449,7 +449,7 @@ onMounted(async () => {
                                     <template #name>주문번호</template>
                                     <template #input>
                                         <VTextField v-model="props.item.ord_num" type="text" placeholder="주문번호를 입력해주세요"
-                                            prepend-inner-icon="ic:outline-border-color" :rules="[requiredValidator]" />
+                                            prepend-inner-icon="ic:outline-border-color" :rules="[requiredValidatorV2(props.item.ord_num, '주문번호')]" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -461,7 +461,7 @@ onMounted(async () => {
                                     <template #input>
                                         <VTextField v-model="props.item.trx_id" type="text" placeholder="거래번호를 입력해주세요"
                                             prepend-inner-icon="icon-park-twotone:transaction-order"
-                                            :rules="[requiredValidator]" />
+                                            :rules="[requiredValidatorV2(props.item.trx_id, '거래번호')]" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -484,7 +484,7 @@ onMounted(async () => {
                                     <template #input>
                                         <VTextField v-model="props.item.card_num" type="text" placeholder="카드번호를 입력해주세요"
                                             persistent-placeholder counter prepend-inner-icon="emojione:credit-card"
-                                            :rules="[requiredValidator]" maxlength="18" />
+                                            :rules="[requiredValidatorV2(props.item.card_num, '카드번호')]" maxlength="18" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -495,7 +495,7 @@ onMounted(async () => {
                                     <template #name>발급사</template>
                                     <template #input>
                                         <VTextField v-model="props.item.issuer" type="text" placeholder="발급사를 입력해주세요"
-                                            prepend-inner-icon="ph-buildings" :rules="[requiredValidator]" maxlength="20" />
+                                            prepend-inner-icon="ph-buildings" :rules="[requiredValidatorV2(props.item.issuer, '발급사')]" maxlength="20" />
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
@@ -518,7 +518,7 @@ onMounted(async () => {
                                     <template #input>
                                         <VTextField v-model="props.item.appr_num" type="text" placeholder="승인번호를 입력해주세요"
                                             prepend-inner-icon="icon-park-solid:transaction-order" persistent-placeholder
-                                            counter :rules="[requiredValidator]"
+                                            counter :rules="[requiredValidatorV2(props.item.appr_num, '승인번호')]"
                                             maxlength="8" />
                                     </template>
                                 </CreateHalfVCol>

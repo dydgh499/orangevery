@@ -149,6 +149,7 @@ export interface RegularCreditCard {
 }
 
 export interface Merchandise extends MerchandisePropertie, UserPropertie {    
+    contact_num: string,
     regular_credit_cards?: RegularCreditCard[],
     use_pay_verification_mobile: number,
     use_multiple_hand_pay: number,

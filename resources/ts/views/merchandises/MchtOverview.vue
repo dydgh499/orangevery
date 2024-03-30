@@ -89,7 +89,7 @@ initAllSales()
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>가맹점 상호</VCol>
+                                        <VCol>* 가맹점 상호</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.mcht_name" prepend-inner-icon="tabler-building-store"
                                             placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.mcht_name, '가맹점 상호')]" />
@@ -149,6 +149,24 @@ initAllSales()
                                     <VRow v-else>
                                         <VCol class="font-weight-bold">웹사이트 URL</VCol>
                                         <VCol md="8"><span>{{ props.item.website_url }}</span></VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+
+                        <VCol cols="12">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol>가맹점 연락처</VCol>
+                                        <VCol md="8">
+                                            <VTextField v-model="props.item.contact_num" prepend-inner-icon="tabler-building-store"
+                                            placeholder="상호를 입력해주세요" persistent-placeholder type="number" />
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">가맹점 연락처</VCol>
+                                        <VCol md="8"><span>{{ props.item.contact_num }}</span></VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>

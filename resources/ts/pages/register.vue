@@ -6,7 +6,7 @@ import { useGenerateImageVariant } from '@core/composable/useGenerateImageVarian
 import corp from '@corp'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
-import { requiredValidator, businessNumValidator } from '@validators'
+import { requiredValidatorV2, businessNumValidator } from '@validators'
 import { VForm } from 'vuetify/components'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import router from '@/router'
@@ -117,30 +117,30 @@ const sameValidaor = () => {
 
                             <VCol cols="12">
                                 <VTextField v-model="ceo_name" label="대표자명 입력" type="ceo_name"
-                                    :rules="[requiredValidator]" />
+                                    :rules="[requiredValidatorV2(ceo_name, '대표자명')]" />
                             </VCol>
                             <VCol cols="12">
                                 <VTextField v-model="phone_num" label="전화번호 입력" type="phone_num"
-                                    :rules="[requiredValidator]" />
+                                    :rules="[requiredValidatorV2(phone_num, '전화번호')]" />
                             </VCol>
                             <VCol cols="12">
                                 <VTextField v-model="business_num" label="사업자등록번호 입력" type="business_num"
-                                    :rules="[requiredValidator, businessNumValidator(business_num)]" />
+                                    :rules="[requiredValidatorV2(business_num, '사업자등록번호'), businessNumValidator(business_num)]" />
                             </VCol>
                             <!-- user_name -->
                             <VCol cols="12">
-                                <VTextField v-model="user_name" label="아이디 입력" type="user_name" :rules="[requiredValidator]"
+                                <VTextField v-model="user_name" label="아이디 입력" type="user_name" :rules="[requiredValidatorV2(user_name, '아이디')]"
                                     :error-messages="errors.message" />
                             </VCol>
                             <VCol cols="12">
-                                <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidator]"
+                                <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidatorV2(user_pw, '사업자등록번호')]"
                                     :type="isPasswordVisible ? 'text' : 'password'"
                                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                                     @click:append-inner="isPasswordVisible = !isPasswordVisible" />
                             </VCol>
                             <!-- password -->
                             <VCol cols="12">
-                                <VTextField v-model="user_pw_check" label="패스워드 확인" :rules="[requiredValidator, sameValidaor]"
+                                <VTextField v-model="user_pw_check" label="패스워드 확인" :rules="[requiredValidatorV2(user_pw_check, '사업자등록번호'), sameValidaor]"
                                     :type="isPasswordVisible ? 'text' : 'password'"
                                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                                     @click:append-inner="isPasswordVisible = !isPasswordVisible" />

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { reactive, watchEffect } from 'vue';
 import { VForm } from 'vuetify/components'
@@ -67,30 +67,30 @@ watchEffect(async() => {
                     <template #input>
                         <VTextField v-model="auth_pay_info.item_name" type="text" name="item_name"
                             prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
-                            maxlength="100" :rules="[requiredValidator]" placeholder="상품명을 입력해주세요" counter />
+                            maxlength="100" :rules="[requiredValidatorV2(auth_pay_info.item_name, '상품명')]" placeholder="상품명을 입력해주세요" counter />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                     <template #name>상품금액</template>
                     <template #input>
                         <VTextField v-model="auth_pay_info.amount" type="number" suffix="₩" name="amount"
-                            placeholder="거래금액을 입력해주세요" prepend-inner-icon="ic:outline-price-change"
-                            :rules="[requiredValidator]" />
+                            placeholder="상품금액을 입력해주세요" prepend-inner-icon="ic:outline-price-change"
+                            :rules="[requiredValidatorV2(auth_pay_info.amount, '상품금액')]" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 24px 0;">
                     <template #name>구매자명</template>
                     <template #input>
                         <VTextField v-model="auth_pay_info.buyer_name" type="text" name="buyer_name"
-                            placeholder="구매자명을 입력해주세요" :rules="[requiredValidator]" prepend-inner-icon="tabler-user" />
+                            placeholder="구매자명을 입력해주세요" :rules="[requiredValidatorV2(auth_pay_info.buyer_name, '구매자명')]" prepend-inner-icon="tabler-user" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
-                    <template #name>휴대폰번호</template>
+                    <template #name>구매자 연락처</template>
                     <template #input>
                         <VTextField v-model="auth_pay_info.buyer_phone" type="number" name="buyer_phone"
                             prepend-inner-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
-                            :rules="[requiredValidator]" />
+                            :rules="[requiredValidatorV2(auth_pay_info.buyer_phone, '구매자 연락처')]" />
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-bottom: 24px;">
@@ -98,7 +98,7 @@ watchEffect(async() => {
                     <template #input>
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="auth_pay_info.installment" name="installment"
                             :items="filterInstallment" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
-                            label="할부기간 선택" item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
+                            label="할부기간 선택" item-title="title" item-value="id" single-line :rules="[requiredValidatorV2(auth_pay_info.installment, '할부기간')]" />
                     </template>
                 </CreateHalfVCol>
 

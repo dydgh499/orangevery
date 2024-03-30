@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { VForm } from 'vuetify/components'
 import type { PaySection } from '@/views/types'
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import { useRequestStore } from '@/views/request'
 
 interface Props {
@@ -21,7 +21,7 @@ const { update, remove } = useRequestStore()
                 <VCol cols="12">
                     <VRow no-gutters>
                         <VTextField v-model="props.item.name" prepend-inner-icon="mdi-vector-intersection"
-                            placeholder="구간명 입력" persistent-placeholder :rules="[requiredValidator]"
+                            placeholder="구간명 입력" persistent-placeholder :rules="[requiredValidatorV2(props.item.name, '구간명')]"
                             style="display: inline-block;" />
                     </VRow>
                 </VCol>
@@ -32,7 +32,7 @@ const { update, remove } = useRequestStore()
                 <VCol cols="12">
                     <VRow no-gutters>
                         <VTextField v-model="props.item.trx_fee" prepend-inner-icon="tabler-percentage"
-                            placeholder="수수료율 입력" persistent-placeholder :rules="[requiredValidator]"
+                            placeholder="수수료율 입력" persistent-placeholder :rules="[requiredValidatorV2(props.item.trx_fee, '수수료율')]"
                             style="display: inline-block;" />
                     </VRow>
                 </VCol>

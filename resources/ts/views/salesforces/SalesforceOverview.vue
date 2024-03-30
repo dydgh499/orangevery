@@ -34,14 +34,14 @@ const payModuleBatchOverview = ref()
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>영업점 상호</VCol>
+                                        <VCol>* 영업점 상호</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.sales_name" prepend-inner-icon="tabler-building-store"
                                                 placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.sales_name, '영업점 상호')]" />
                                         </VCol>
                                     </VRow>
                                     <VRow v-else>
-                                        <VCol class="font-weight-bold">가맹점 상호</VCol>
+                                        <VCol class="font-weight-bold">영업점 상호</VCol>
                                         <VCol md="8"><span>{{ props.item.sales_name }}</span></VCol>
                                     </VRow>
                                 </VCol>

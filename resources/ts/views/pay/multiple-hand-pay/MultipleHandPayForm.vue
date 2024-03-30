@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { installments } from '@/views/merchandises/pay-modules/useStore'
-import { requiredValidator, lengthValidator, lengthValidatorV2 } from '@validators'
+import { requiredValidatorV2, lengthValidator, lengthValidatorV2 } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { VForm } from 'vuetify/components'
 import type { PayModule, Options, MultipleHandPay } from '@/views/types'
@@ -49,7 +49,7 @@ watchEffect(async () => {
                 <template #name>상품금액</template>
                 <template #input>
                     <VTextField v-model="props.hand_pay_info.amount" type="number" suffix="₩" placeholder="거래금액을 입력해주세요"
-                        prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidator]" />
+                        prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidatorV2(props.hand_pay_info.amount, '거래금액')]" />
                 </template>
             </CreateHalfVCol>
             <CreateHalfVCol :mdl="4" :mdr="8">
@@ -74,7 +74,7 @@ watchEffect(async () => {
                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.hand_pay_info.installment"
                         :items="filterInstallment"
                         prepend-inneer-icon="fluent-credit-card-clock-20-regular" item-title="title" item-value="id"
-                        single-line :rules="[requiredValidator]"/>
+                        single-line :rules="[requiredValidatorV2(props.hand_pay_info.installment, '할부기간')]"/>
                 </template>
             </CreateHalfVCol>
             <CreateHalfVCol :mdl="6" :mdr="6" v-if="props.hand_pay_info.is_old_auth">

@@ -222,7 +222,8 @@ export const defaultItemInfo = () => {
         settle_hold_reason: '',
         is_hide_account: 0,
         website_url: '',
-        email: ''
+        email: '',
+        contact_num: ''
     })
     return {
         path, item

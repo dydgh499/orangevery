@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { businessNumValidator, requiredValidator } from '@validators'
+import { businessNumValidator, requiredValidatorV2 } from '@validators'
 import type { Brand } from '@/views/types'
 import FileInput from '@/layouts/utils/FileInput.vue'
 import { themeConfig } from '@themeConfig'
@@ -35,7 +35,7 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol md="8">
                             <VTextField v-model="props.item.dns" prepend-inner-icon="tabler-world-www"
-                                placeholder="도메인을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
+                                placeholder="도메인을 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.dns, '도메인')]" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -59,7 +59,7 @@ watchEffect(() => {
                                 <VCol md="10">
                                     <VTextField id="addressHorizontalIcons" v-model="props.item.addr"
                                         prepend-inner-icon="tabler-map-pin" placeholder="주소 입력" persistent-placeholder
-                                        maxlength="200" :rules="[requiredValidator]" />
+                                        maxlength="200" :rules="[requiredValidatorV2(props.item.addr, '주소')]" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -72,7 +72,7 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField v-model="props.item.name" prepend-inner-icon="twemoji-desktop-computer"
-                                        placeholder="운영사명을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
+                                        placeholder="운영사명을 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.name, '운영사명')]" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -83,7 +83,7 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField v-model="props.item.company_name" prepend-inner-icon="ph-buildings"
-                                        placeholder="회사명을 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
+                                        placeholder="회사명을 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.company_name, '회사명')]" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -97,7 +97,7 @@ watchEffect(() => {
                                 <VCol md="8">
                                     <VTextField v-model="props.item.ceo_name"
                                         prepend-inner-icon="tabler-user" placeholder="대표자명을 입력해주세요." persistent-placeholder
-                                        :rules="[requiredValidator]" />
+                                        :rules="[requiredValidatorV2(props.item.ceo_name, '대표자명')]" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -110,7 +110,7 @@ watchEffect(() => {
                                     <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
                                         prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
                                         persistent-placeholder
-                                        :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
+                                        :rules="[requiredValidatorV2(props.item.business_num, '사업자등록번호'), businessNumValidator(props.item.business_num)]" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -124,7 +124,7 @@ watchEffect(() => {
                                 <VCol md="8">
                                     <VTextField id="mobileHorizontalIcons" v-model="props.item.phone_num" type="number"
                                         prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호 입력" persistent-placeholder
-                                        :rules="[requiredValidator]" />
+                                        :rules="[requiredValidatorV2(props.item.phone_num, '휴대폰번호')]" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -136,7 +136,7 @@ watchEffect(() => {
                                 <VCol md="8">
                                     <VTextField v-model="props.item.fax_num"
                                         prepend-inner-icon="streamline-emojis:fax-machine" placeholder="팩스번호 입력" persistent-placeholder
-                                        maxlength="200" :rules="[requiredValidator]" />
+                                        maxlength="200" :rules="[requiredValidatorV2(props.item.fax_num, '팩스번호')]" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -169,7 +169,7 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField prepend-inner-icon="tabler-calendar" v-model="props.item.deposit_day"
-                                        type="number" :rules="[requiredValidator]" />
+                                        type="number" :rules="[requiredValidatorV2(props.item.deposit_day, '입금일')]" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -194,7 +194,7 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.deposit_amount"
-                                        type="number" :rules="[requiredValidator]" />
+                                        type="number" :rules="[requiredValidatorV2(props.item.deposit_amount, '입금액')]" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -206,7 +206,7 @@ watchEffect(() => {
                                     <label>{{ props.item.pv_options.auth.levels.dev_name }} 수수료</label>
                                 </VCol>
                                 <VCol md="8">
-                                    <VTextField v-model="props.item.dev_fee" type="number" :rules="[requiredValidator]"
+                                    <VTextField v-model="props.item.dev_fee" type="number"
                                         suffix="%" />
                                 </VCol>
                             </VRow>
@@ -218,8 +218,7 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField prepend-inner-icon="tabler-currency-won"
-                                        v-model="props.item.extra_deposit_amount" type="number"
-                                        :rules="[requiredValidator]" />
+                                        v-model="props.item.extra_deposit_amount" type="number" />
                                 </VCol>
                             </VRow>
                         </VCol>
@@ -233,7 +232,7 @@ watchEffect(() => {
                                 <VCol md="8">
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.dev_settle_type"
                                         :items="dev_settle_types" prepend-inner-icon="ph-buildings" label="수수료 정산 타입 선택"
-                                        item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
+                                        item-title="title" item-value="id" single-line :rules="[requiredValidatorV2(props.item.dev_settle_type, '수수료 정산 타입')]" />
 
                                 </VCol>
                             </VRow>

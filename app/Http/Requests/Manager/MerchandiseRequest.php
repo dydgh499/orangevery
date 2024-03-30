@@ -21,6 +21,7 @@ class MerchandiseRequest extends FormRequest
         'acct_num',
         'acct_name',
         'phone_num',
+        'contact_num',
         'enabled',
         'use_saleslip_prov',
         'use_saleslip_sell',

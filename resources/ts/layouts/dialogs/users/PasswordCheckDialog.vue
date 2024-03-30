@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 
 
@@ -44,7 +44,7 @@ defineExpose({
                         </template>
                         <template #input>
                             <VTextField v-model="password" counter prepend-inner-icon="tabler-lock"
-                                :rules="[requiredValidator]"
+                                :rules="[requiredValidatorV2(password, '패스워드')]"
                                 :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
                                 :type="is_show ? 'text' : 'password'" persistent-placeholder
                                 @click:append-inner="is_show = !is_show" autocomplete />

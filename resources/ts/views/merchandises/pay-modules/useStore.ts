@@ -260,7 +260,7 @@ export const defaultItemInfo =  () => {
     const path  = 'merchandises/pay-modules'
     const item  = reactive<PayModule>({
         id: 0,
-        mcht_id: null,
+        mcht_id: 0,
         pg_id: 0,
         ps_id: 0,
         terminal_id: null,
@@ -278,8 +278,8 @@ export const defaultItemInfo =  () => {
         under_sales_amt: 0,
         under_sales_type: 0,
         under_sales_limit: 0,
-        begin_dt: undefined,
-        ship_out_dt: undefined,
+        begin_dt: null,
+        ship_out_dt: null,
         ship_out_stat: 0,
         is_old_auth: 0,
         installment: 0,

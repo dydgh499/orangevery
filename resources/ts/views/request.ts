@@ -128,8 +128,10 @@ export const useRequestStore = defineStore('requestStore', () => {
             })
             afterTreatment(base_url, is_redirect, params, res)
         }
-        else if (is_valid.valid == false)
-            snackbar.value.show(reqType + '조건에 맞지않는 필드가 존재합니다.', 'warning')
+        else if (is_valid.valid == false) {
+            const message = is_valid.errors.map((error: any) => error.errorMessages).join('<br>')
+            snackbar.value.show(reqType + `조건에 맞지않는 필드가 존재합니다.<br><br>${message}`, 'error')
+        }
     }
 
     const update = async (base_url: string, params: any, vForm: any, is_redirect: boolean = true) => {
@@ -146,8 +148,10 @@ export const useRequestStore = defineStore('requestStore', () => {
             afterTreatment(base_url, is_redirect, params, res)
             return res
         }
-        else if (is_valid.valid == false)
-            snackbar.value.show(reqType + '조건에 맞지않는 필드가 존재합니다.', 'warning')
+        else if (is_valid.valid == false) {            
+            const message = is_valid.errors.map((error: any) => error.errorMessages).join('<br>')
+            snackbar.value.show(reqType + `조건에 맞지않는 필드가 존재합니다.<br><br>${message}`, 'error')
+        }
         return undefined
     }
 

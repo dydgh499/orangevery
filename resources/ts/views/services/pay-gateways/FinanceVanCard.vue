@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import type { FinanceVan } from '@/views/types'
 import { VForm } from 'vuetify/components'
 import { useRequestStore } from '@/views/request'
@@ -55,7 +55,7 @@ onMounted(async () => {
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.finance_company_num"
                                         density="compact" variant="outlined" :items="finance_companies" label="금융 VAN 선택"
-                                        eager item-title="title" item-value="id" :rules="[requiredValidator]" />
+                                        eager item-title="title" item-value="id" :rules="[requiredValidatorV2(props.item.finance_company_num, '금융 VAN')]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -65,7 +65,7 @@ onMounted(async () => {
                                 <template #input>
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_type"
                                         density="compact" variant="outlined" :items="fin_types" label="타입 선택" :eager="true"
-                                        item-title="title" item-value="id" :rules="[requiredValidator]" />
+                                        item-title="title" item-value="id" :rules="[requiredValidatorV2(props.item.fin_type, '타입')]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
@@ -164,7 +164,7 @@ onMounted(async () => {
                                     :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
                                     label="은행 선택" item-title="title" item-value="code" persistent-hint single-line
                                     :hint="getAcctBankName()"
-                                    :rules="[requiredValidator]" />
+                                    :rules="[requiredValidatorV2(props.item.bank_code, '은행정보')]" />
                                 </template>
                             </CreateHalfVCol>
                         </VRow>

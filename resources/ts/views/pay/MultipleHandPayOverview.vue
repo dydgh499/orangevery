@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import MultipleHandPayForm from '@/views/pay/multiple-hand-pay/MultipleHandPayForm.vue'
 import { VForm } from 'vuetify/components'
@@ -263,22 +263,22 @@ onMounted(() => {
                         <template #input>
                             <VTextField v-model="hand_pay_info.item_name" type="text"
                                 prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
-                                maxlength="100" :rules="[requiredValidator]" placeholder="상품명을 입력해주세요" />
+                                maxlength="100" :rules="[requiredValidatorV2(hand_pay_info.item_name, '상품명')]" placeholder="상품명을 입력해주세요" />
                         </template>
                     </CreateHalfVCol>
                     <CreateHalfVCol :mdl="4" :mdr="8">
                         <template #name>구매자명</template>
                         <template #input>
                             <VTextField v-model="hand_pay_info.buyer_name" type="text" placeholder="구매자명을 입력해주세요"
-                                :rules="[requiredValidator]" prepend-inner-icon="tabler-user" />
+                                :rules="[requiredValidatorV2(hand_pay_info.buyer_name, '구매자명')]" prepend-inner-icon="tabler-user" />
                         </template>
                     </CreateHalfVCol>
                     <CreateHalfVCol :mdl="4" :mdr="8">
-                        <template #name>휴대폰번호</template>
+                        <template #name>구매자 연락처</template>
                         <template #input>
                             <VTextField v-model="hand_pay_info.buyer_phone" type="number"
-                                prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호를 입력해주세요"
-                                :rules="[requiredValidator]" />
+                                prepend-inner-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
+                                :rules="[requiredValidatorV2(hand_pay_info.buyer_phone, '구매자 연락처')]" />
                         </template>
                     </CreateHalfVCol>
                     <VCol cols="12">

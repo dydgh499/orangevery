@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { businessNumValidator, requiredValidator } from '@validators'
+import { businessNumValidator, requiredValidatorV2 } from '@validators'
 import type { PayGateway } from '@/views/types'
 import { VForm } from 'vuetify/components'
 import { useStore, pg_settle_types } from '@/views/services/pay-gateways/useStore'
@@ -68,7 +68,7 @@ watchEffect(() => {
                                     <VCol md="7">
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_type"
                                             :items="pg_companies" prepend-inner-icon="ph-buildings" label="PG사 선택"
-                                            item-title="name" item-value="id" single-line :rules="[requiredValidator]" />
+                                            item-title="name" item-value="id" single-line :rules="[requiredValidatorV2(props.item.pg_type, 'PG사')]" />
                                     </VCol>
                                 </VRow>
                             </VCol>
@@ -80,7 +80,7 @@ watchEffect(() => {
                                     <VCol md="7">
                                         <VTextField type="text" v-model="props.item.pg_name"
                                             prepend-inner-icon="tabler-table-alias" placeholder="별칭 입력"
-                                            persistent-placeholder :rules="[requiredValidator]" />
+                                            persistent-placeholder :rules="[requiredValidatorV2(props.item.pg_name, '별칭')]" />
                                     </VCol>
                                 </VRow>
                             </VCol>
@@ -94,7 +94,7 @@ watchEffect(() => {
                                     <VCol md="7">
                                         <VTextField type="text" v-model="props.item.rep_name"
                                             prepend-inner-icon="tabler-user" placeholder="대표자명 입력" persistent-placeholder
-                                            :rules="[requiredValidator]" />
+                                            :rules="[requiredValidatorV2(props.item.rep_name, '대표자명')]" />
                                     </VCol>
                                 </VRow>
                             </VCol>
@@ -106,7 +106,7 @@ watchEffect(() => {
                                     <VCol md="7">
                                         <VTextField type="text" v-model="props.item.company_name"
                                             prepend-inner-icon="tabler-building-store" placeholder="상호명 입력"
-                                            persistent-placeholder :rules="[requiredValidator]" />
+                                            persistent-placeholder :rules="[requiredValidatorV2(props.item.company_name, '상호명')]" />
                                     </VCol>
                                 </VRow>
                             </VCol>
@@ -121,7 +121,7 @@ watchEffect(() => {
                                         <VTextField v-model="props.item.business_num" type="text"
                                             prepend-inner-icon="ic-outline-business-center" placeholder="사업자등록번호 입력"
                                             persistent-placeholder
-                                            :rules="[requiredValidator, businessNumValidator(props.item.business_num)]" />
+                                            :rules="[requiredValidatorV2(props.item.business_num, '사업자등록번호'), businessNumValidator(props.item.business_num)]" />
                                     </VCol>
                                 </VRow>
                             </VCol>
@@ -133,7 +133,7 @@ watchEffect(() => {
                                     <VCol md="7">
                                         <VTextField v-model="props.item.phone_num" type="text"
                                             prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호 입력"
-                                            persistent-placeholder :rules="[requiredValidator]" />
+                                            persistent-placeholder :rules="[requiredValidatorV2(props.item.phone_num, '휴대폰번호')]" />
                                     </VCol>
                                 </VRow>
 
@@ -148,7 +148,7 @@ watchEffect(() => {
                                     <VCol md="7">
                                         <VTextField v-model="props.item.addr" prepend-inner-icon="tabler-map-pin"
                                             placeholder="주소 입력" persistent-placeholder maxlength="200"
-                                            :rules="[requiredValidator]" />
+                                            :rules="[requiredValidatorV2(props.item.addr, '주소')]" />
                                     </VCol>
                                 </VRow>
 
@@ -161,7 +161,7 @@ watchEffect(() => {
                                     <VCol md="7">
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type"
                                             :items="pg_settle_types" prepend-inner-icon="tabler-calculator" label="정산타입 선택"
-                                            item-title="title" item-value="id" single-line :rules="[requiredValidator]" />
+                                            item-title="title" item-value="id" single-line :rules="[requiredValidatorV2(props.item.settle_type, '정산타입')]" />
                                     </VCol>
                                 </VRow>
                             </VCol>
@@ -223,6 +223,6 @@ watchEffect(() => {
 </template>
 <style scoped>
 :deep(.v-table__wrapper) {
-    block-size: auto !important;
+  block-size: auto !important;
 }
 </style>

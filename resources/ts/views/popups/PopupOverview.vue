@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { Popup } from '@/views/types'
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import Editor from '@/layouts/utils/Editor.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 
@@ -42,7 +42,7 @@ const props = defineProps<Props>()
                             <template #input>
                                 <VTextField id="nameHorizontalIcons" v-model="props.item.popup_title"
                                     prepend-inner-icon="ic-round-subtitles" placeholder="제목을 입력해주세요"
-                                    persistent-placeholder :rules="[requiredValidator]" />
+                                    persistent-placeholder :rules="[requiredValidatorV2(props.item.popup_title, '제목')]" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>
