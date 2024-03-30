@@ -4,6 +4,7 @@ namespace App\Http\Traits\Settle;
 use Illuminate\Support\Facades\DB;
 use App\Enums\DevSettleType;
 use App\Models\Log\NotiSendHistory;
+use Carbon\Carbon;
 
 trait TransactionTrait
 {
@@ -269,5 +270,27 @@ trait TransactionTrait
             });
         }
         return $query;
+    }
+
+    function getSettleDate($trx_dt, $add_days, $pg_settle_type, $str_holidays) 
+    {
+        $currDate = Carbon::parse($trx_dt);
+        $holidays = explode(',', $str_holidays); // 공휴일 문자열을 배열로 변환
+    
+        if ($pg_settle_type === 1) 
+        {
+            $counter = 0;
+            while ($counter < $add_days) 
+            {
+                $currDate->addDay();
+                // 주말이 아니고, 공휴일에 포함되지 않는 경우에만 카운터 증가
+                if (!$currDate->isWeekend() && (empty($holidays) || !in_array($currDate->format('Y-m-d'), $holidays))) 
+                    $counter++;
+            }
+        }
+        else
+            $currDate->addDays($add_days);
+    
+        return $currDate->format('Ymd');
     }
 }

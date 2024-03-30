@@ -3,6 +3,7 @@ import type { Transaction, CancelDeposit } from '@/views/types'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
 import { VForm } from 'vuetify/components'
+import { cloneDeep } from 'lodash'
 
 const formatDate = <any>(inject('$formatDate'))
 const { update, remove } = useRequestStore()
@@ -10,26 +11,45 @@ const { update, remove } = useRequestStore()
 const visible = ref(false)
 const trans = ref<Transaction>()
 const vForm = ref<VForm>()
+const cancel_deposit = ref(<CancelDeposit>({}))
 
 const show = (item: Transaction) => {
     trans.value = item
     visible.value = true
-    addNewCancelDeposit()
+    init(trans.value?.id)
+
 }
 
-const addNewCancelDeposit = () => {
-    trans.value?.cancel_deposits?.unshift(<CancelDeposit>({
-        id: 0,
-        trans_id: trans.value?.id,
-        deposit_amount: 0,
-        deposit_history: '',
-        deposit_dt: formatDate(new Date()),
-    }))
+const init = (trans_id: number) => {
+    cancel_deposit.value.id = 0
+    cancel_deposit.value.trans_id = trans_id
+    cancel_deposit.value.deposit_amount = 0
+    cancel_deposit.value.deposit_history = ''
+    cancel_deposit.value.deposit_dt = formatDate(new Date())
 }
+
 const closeDialog = () => {
     visible.value = false
     Object.assign(trans.value?.cancel_deposits as CancelDeposit[], trans.value?.cancel_deposits?.filter(item => item.id !== 0))
 }
+
+const cancelDepositUpdate = async(_cancel_deposit: CancelDeposit) => {
+    const res = await update('/transactions/settle/merchandises/cancel-deposits', _cancel_deposit, vForm.value, false)
+    if(res.status == 201) {
+        trans.value?.cancel_deposits?.unshift(cloneDeep(cancel_deposit.value))
+        init(cancel_deposit.value.trans_id)
+    }
+}
+
+const cancelDepositRemove = async(_cancel_deposit: CancelDeposit) => {
+    const res = await remove('/transactions/settle/merchandises/cancel-deposits', _cancel_deposit, false)
+    if(res.status == 201) {
+        const idx = trans.value?.cancel_deposits?.findIndex(obj => obj.id === _cancel_deposit.id)
+        if(idx !== undefined)
+            trans.value?.cancel_deposits?.splice(idx, 1)
+    }
+}
+
 const totalSettleAmount = computed(() => {
     const total_cancel_deposit = trans.value?.cancel_deposits?.reduce((sum, item) => {
         return parseInt(sum) + (item.deposit_amount ? parseInt(item.deposit_amount) : 0)
@@ -62,6 +82,32 @@ onMounted(() => {
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td class='list-square'>{{ trans?.mcht_name }}</td>
+                            <td class='list-square'>
+                                <VTextField v-model="cancel_deposit.deposit_dt" type="date" />
+                            </td>
+                            <td class='list-square'>
+                                <VTextField v-model="cancel_deposit.deposit_amount" type="number" />
+                            </td>
+                            <td class='list-square'>
+                                <VTextField v-model="cancel_deposit.deposit_history" type="string" />
+                            </td>
+                            <td class="text-center">
+                                <VCol class="d-flex gap-4">
+                                    <VBtn type="button" color="default" variant="text"
+                                        @click="cancelDepositUpdate(cancel_deposit)">
+                                        {{ cancel_deposit.id == 0 ? "추가" : "수정" }}
+                                        <VIcon end icon="tabler-pencil" />
+                                    </VBtn>
+                                    <VBtn type="button" color="default" variant="text" v-if="cancel_deposit.id"
+                                        @click="cancelDepositRemove(cancel_deposit)">
+                                        삭제
+                                        <VIcon end icon="tabler-trash" />
+                                    </VBtn>
+                                </VCol>
+                            </td>
+                        </tr>
                         <tr v-for="(_cancel_deposit, key) in trans?.cancel_deposits" :key="key">
                             <td class='list-square'>{{ trans?.mcht_name }}</td>
                             <td class='list-square'>
@@ -76,12 +122,12 @@ onMounted(() => {
                             <td class="text-center">
                                 <VCol class="d-flex gap-4">
                                     <VBtn type="button" color="default" variant="text"
-                                        @click="update('/transactions/settle/merchandises/cancel-deposits', _cancel_deposit, vForm, false)">
+                                        @click="cancelDepositUpdate(_cancel_deposit)">
                                         {{ _cancel_deposit.id == 0 ? "추가" : "수정" }}
                                         <VIcon end icon="tabler-pencil" />
                                     </VBtn>
                                     <VBtn type="button" color="default" variant="text" v-if="_cancel_deposit.id"
-                                        @click="remove('/transactions/settle/merchandises/cancel-deposits', _cancel_deposit, false)">
+                                        @click="cancelDepositRemove(_cancel_deposit)">
                                         삭제
                                         <VIcon end icon="tabler-trash" />
                                     </VBtn>

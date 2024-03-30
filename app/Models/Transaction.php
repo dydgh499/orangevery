@@ -56,12 +56,11 @@ class Transaction extends Model
         return $query;
     }
 
-    static public function getHolidays()
+    static public function getHolidays($brand_id)
     {
         //조회일로부터 M-1, M+1 공휴일 조회
         $s_dt = Carbon::createFromFormat('Y-m-d', request()->s_dt)->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
         $e_dt = Carbon::createFromFormat('Y-m-d', request()->e_dt)->copy()->addMonthNoOverflow(1)->endOfMonth()->format('Y-m-d');
-        $brand_id = request()->user()->brand_id;
         $key_name = "holidays-".$brand_id."-$s_dt-$e_dt";
 
         $holidays = Redis::get($key_name);
@@ -97,7 +96,7 @@ class Transaction extends Model
         }
         else
         {
-            $holidays = self::getHolidays();
+            $holidays = self::getHolidays(request()->user()->brand_id);
             $trx_dt = "AddBaseWorkingDays(transactions.trx_dt, transactions.mcht_settle_type+1, transactions.pg_settle_type, '$holidays')";
             $cxl_dt = "AddBaseWorkingDays(transactions.cxl_dt, transactions.mcht_settle_type+1, transactions.pg_settle_type, '$holidays')";
         }

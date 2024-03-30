@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Models\Transaction;
 use App\Models\CancelDeposit;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -68,8 +69,17 @@ class CancelDepositController extends Controller
     public function store(CancelDepositRequest $request)
     {
         $data = $request->data();
-        $deposit_dt = Carbon::createFromFormat('Y-m-d', $data['deposit_dt']);
-        
+        $tran = Transaction::where('id', $data['trans_id'])->first();
+        if($tran)
+        {
+            request()->merge([
+                's_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->subDays(30)->format('Y-m-d'),
+                'e_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->addDays(30)->format('Y-m-d'),
+            ]);
+            $holidays = Transaction::getHolidays($request->user()->brand_id);
+            $data['settle_dt'] = $this->getSettleDate($data['deposit_dt'], $tran->mcht_settle_type+1, $tran->pg_settle_type, $holidays);
+        }
+
         $res = $this->deposits->create($data);
         return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
@@ -109,10 +119,40 @@ class CancelDepositController extends Controller
     public function update(CancelDepositRequest $request, $id)
     {
         $data = $request->data();
+        $tran = Transaction::where('id', $data['trans_id'])->first();
+        if($tran)
+        {
+            request()->merge([
+                's_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->subDays(30)->format('Y-m-d'),
+                'e_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->addDays(30)->format('Y-m-d'),
+            ]);
+            $holidays = Transaction::getHolidays($request->user()->brand_id);
+            $data['settle_dt'] = $this->getSettleDate($tran->cxl_dt, $tran->mcht_settle_type+1, $tran->pg_settle_type, $holidays);
+        }
         $res  = $this->deposits->where('id', $id)->update($data);
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 
+    static public function updateAll()
+    {
+        $ist = new CancelDepositController(new CancelDeposit);
+        $cancel_deposits = CancelDeposit::get();
+        foreach($cancel_deposits as $cancel_deposit)
+        {
+            if($cancel_deposit->trans_id)
+            {
+                $tran = Transaction::where('id', $cancel_deposit->trans_id)->first();
+                request()->merge([
+                    's_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->subDays(30)->format('Y-m-d'),
+                    'e_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->addDays(30)->format('Y-m-d'),
+                ]);
+                $holidays = Transaction::getHolidays(14);
+                $cancel_deposit->settle_dt = $ist->getSettleDate($tran->cxl_dt, $tran->mcht_settle_type+1, $tran->pg_settle_type, $holidays);
+                $cancel_deposit->save();    
+            }
+        }
+
+    }
     /**
      * 단일삭제
      *
