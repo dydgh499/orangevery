@@ -38,6 +38,10 @@ class MchtSettleHistoryController extends Controller
         $search = $request->input('search', '');
         $query  = $this->settle_mcht_hist
                 ->join('merchandises', 'settle_histories_merchandises.mcht_id', 'merchandises.id')
+                ->rightJoin('payment_modules', 'settle_histories_merchandises.mcht_id', '=', 'payment_modules.mcht_id')
+                ->where(function ($query) use($request) {
+                    return globalPGFilter($query, $request, 'payment_modules');
+                })
                 ->where('settle_histories_merchandises.brand_id', $request->user()->brand_id)
                 ->where('settle_histories_merchandises.is_delete', false)
                 ->where('merchandises.mcht_name', 'like', "%$search%");
@@ -67,7 +71,7 @@ class MchtSettleHistoryController extends Controller
             DB::raw("SUM(cxl_amount) AS cxl_amount"),
             DB::raw("SUM(total_amount) AS total_amount"),
             DB::raw("SUM(trx_amount) AS trx_amount"),
-            DB::raw("SUM(settle_fee) AS settle_fee"),
+            DB::raw("SUM(settle_histories_merchandises.settle_fee) AS settle_fee"),
             DB::raw("SUM(comm_settle_amount) AS comm_settle_amount"),
             DB::raw("SUM(under_sales_amount) AS under_sales_amount"),
             DB::raw("SUM(deduct_amount) AS deduct_amount"),

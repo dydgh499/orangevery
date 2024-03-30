@@ -10,9 +10,8 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 
 import { DateFilters, ItemTypes } from '@core/enums'
-import { getUserLevel, isAbleModifyMcht } from '@axios'
+import { getUserLevel, isAbleModiy } from '@axios'
 
-const add_able = getUserLevel() >= 35 || isAbleModifyMcht()
 const { request } = useRequestStore()
 const { pgs, pss, settle_types, finance_vans, terminals } = useStore()
 const { store, head, exporter, metas } = useSearchStore()
@@ -51,7 +50,7 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="MID, TID, 가맹점 상호, 별칭 검색" :metas="metas" :add="add_able" add_name="결제모듈"
+        <BaseIndexView placeholder="MID, TID, 가맹점 상호, 별칭 검색" :metas="metas" :add="isAbleModiy(0)" add_name="결제모듈"
             :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true"

@@ -16,7 +16,7 @@ import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { PayModule } from '@/views/types'
-import { axios, getUserLevel, isAbleModifyMcht, salesLevels, isFixplusAbleUpdate } from '@axios'
+import { axios, getUserLevel, salesLevels, isAbleModiy } from '@axios'
 import corp from '@corp'
 import { nullValidator, requiredValidator } from '@validators'
 import { VForm } from 'vuetify/components'
@@ -87,15 +87,6 @@ const filterPgs = computed(() => {
     props.item.ps_id = psFilter(filter, props.item.ps_id)
     return filter
 })
-
-const isAbleUpdate = () => {
-    if(getUserLevel() >= 35)
-        return true
-    else if(isAbleModifyMcht()) 
-        return isFixplusAbleUpdate(props.item.id as number)
-    else
-        return false
-}
 
 onMounted(() => {
     props.item.pg_id = props.item.pg_id == 0 ? null : props.item.pg_id
@@ -644,7 +635,7 @@ onMounted(() => {
                                     prepend-inner-icon="twemoji-spiral-notepad" auto-grow />
                             </VCol>
                         </VRow>
-                        <VRow v-if="isAbleUpdate()">
+                        <VRow v-if="isAbleModiy(props.item.id)">
                             <VCol class="d-flex gap-4">
                                 <VBtn type="button" style="margin-left: auto;"
                                     @click="update('/merchandises/pay-modules', props.item, vForm, false)">

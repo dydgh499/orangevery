@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import HolidayDlg from '@/layouts/dialogs/HolidayDlg.vue'
+import HolidayDlg from '@/layouts/dialogs/services/HolidayDlg.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import ExtraMenu from '@/views/services/holidays/ExtraMenu.vue'
 import { rest_types, useSearchStore } from '@/views/services/holidays/useStore'
+import { useRequestStore } from '@/views/request'
 import { DateFilters } from '@core/enums'
 
 const { 
@@ -11,15 +12,22 @@ const {
     exporter, 
     metas
 } = useSearchStore()
+const { post } = useRequestStore()
+
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+const holidayDlg = ref(null)
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
-
-const snackbar = <any>(inject('snackbar'))
-const holidayDlg = ref(null)
-
 provide('holidayDlg', holidayDlg)
+
+const bulkRegister = async() => {
+    if(await alert.value.show('정말 금년도 공휴일을 대량으로 읽어오시겠습니까?')) {
+        const r = await post('/api/v1/manager/services/holidays/bulk-register', {}, true)
+    }
+}
 
 onMounted(() => {
     snackbar.value.show('업데이트 시기: 매년 12월 30일 다음연도 공휴일 일괄 추가<br><br>추가/수정된 공휴일은 작업 후 최대 5분 이후에 정산내용에 반영됩니다.', 'success')
@@ -34,6 +42,11 @@ onMounted(() => {
                     <VBtn prepend-icon="material-symbols:holiday-village" @click="holidayDlg.show({id:0})" size="small">
                         공휴일 추가
                     </VBtn>
+                    <div>
+                        <VBtn prepend-icon="material-symbols:holiday-village" @click="bulkRegister()" size="small">
+                            금년 공휴일 대량업데이트
+                        </VBtn>
+                    </div>
             </template>
             <template #headers>
                 <tr>

@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import type { Merchandise, UnderAutoSetting } from '@/views/types'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import PasswordCheckDialog from '@/layouts/dialogs/users/PasswordCheckDialog.vue'
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 
-import { getUserLevel, getIndexByLevel } from '@axios'
+import { getUserLevel, getIndexByLevel, isAbleModiy } from '@axios'
 import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
@@ -22,7 +22,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const { post } = useRequestStore()
-const { sales, initAllSales, sales_apply_histories, hintSalesApplyFee } = useSalesFilterStore()
+const { sales, initAllSales, sales_apply_histories, hintSalesApplyFee, hintSalesSettleFee } = useSalesFilterStore()
 const { cus_filters } = useStore()
 
 const alert = <any>(inject('alert'))
@@ -88,21 +88,29 @@ initAllSales()
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>가맹점 상호</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.mcht_name" prepend-inner-icon="tabler-building-store"
-                                            placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidator]" />
+                                            placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.mcht_name, '가맹점 상호')]" />
                                         </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">가맹점 상호</VCol>
+                                        <VCol md="8"><span>{{ props.item.mcht_name }}</span></VCol>
                                     </VRow>
                                 </VCol>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>업종</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.sector" prepend-inner-icon="tabler-building-store"
                                                 placeholder="업종을 입력해주세요" persistent-placeholder />
                                         </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">업종</VCol>
+                                        <VCol md="8"><span>{{ props.item.sector }}</span></VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>
@@ -110,7 +118,7 @@ initAllSales()
                         <VCol cols="12" v-if="corp.use_different_settlement">
                             <VRow>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>이메일</VCol>
                                         <VCol md="8"> 
                                             <VTextField v-model="props.item.email" prepend-inner-icon="material-symbols:mail"
@@ -121,9 +129,13 @@ initAllSales()
                                             </VTextField>
                                         </VCol>
                                     </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">이메일</VCol>
+                                        <VCol md="8"><span>{{ props.item.email }}</span></VCol>
+                                    </VRow>
                                 </VCol>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>웹사이트 URL</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.website_url" prepend-inner-icon="streamline:browser-website-1-solid"
@@ -134,53 +146,88 @@ initAllSales()
                                             </VTextField>
                                         </VCol>
                                     </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">웹사이트 URL</VCol>
+                                        <VCol md="8"><span>{{ props.item.website_url }}</span></VCol>
+                                    </VRow>
                                 </VCol>
                             </VRow>
                         </VCol>
                         <!-- 👉 상위 영업점 수수료율 -->
-                        <template v-for="i in 6" :key="i">
-                            <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i)">
-                                <VRow>
-                                    <VCol cols="12" md="3">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
-                                    <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item['sales'+(6-i)+'_id']"
-                                            :items="sales[6-i].value"
-                                             :label="levels['sales'+(6-i)+'_name'] + '선택'"
-                                            item-title="sales_name" item-value="id" persistent-hint single-line prepend-inner-icon="ph:share-network"
-                                            :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])" @update:modelValue="setSalesUnderAutoSetting(6-i)"/>
-
-                                            <VTooltip activator="parent" location="top" v-if="props.item['sales'+(6-i)+'_id']">
-                                                {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
-                                            </VTooltip>
-                                    </VCol>
-                                    <VCol cols="12" :md="props.item.id ? 2 : 4">
-                                        <VTextField v-model="props.item['sales'+(6-i)+'_fee'] " type="number" suffix="%"
-                                            :rules="[requiredValidator]" />
-                                    </VCol>
-                                    <FeeChangeBtn v-if="props.item.id" :level=getIndexByLevel(6-i) :item="props.item">
-                                    </FeeChangeBtn>
-                                </VRow>
+                        <template v-if="getUserLevel() > 10">
+                            <VDivider/>
+                            <VCol cols="12">
+                                <VCardTitle>영업점 수수료</VCardTitle>
                             </VCol>
+                            <template v-for="i in 6" :key="i">
+                                <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i)">
+                                    <VRow v-if="isAbleModiy(props.item.id)">
+                                        <VCol cols="12" md="3">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
+                                        <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item['sales'+(6-i)+'_id']"
+                                                :items="sales[6-i].value"
+                                                :label="levels['sales'+(6-i)+'_name'] + '선택'"
+                                                item-title="sales_name" item-value="id" persistent-hint single-line prepend-inner-icon="ph:share-network"
+                                                :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])" @update:modelValue="setSalesUnderAutoSetting(6-i)"/>
+
+                                                <VTooltip activator="parent" location="top" v-if="props.item['sales'+(6-i)+'_id']">
+                                                    {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
+                                                </VTooltip>
+                                        </VCol>
+                                        <VCol cols="12" :md="props.item.id ? 2 : 3">
+                                            <VTextField v-model="props.item['sales'+(6-i)+'_fee'] " type="number" suffix="%"
+                                                :rules="[requiredValidatorV2(props.item['sales'+(6-i)+'_fee'], levels['sales'+(6-i)+'_name']+'수수료율')]" />
+
+                                            <div style="font-size: 0.8em;">
+                                                <span style="font-weight: bold;">{{ hintSalesSettleFee(props.item, 6-i) }}</span>
+                                            </div>
+                                        </VCol>
+                                        <FeeChangeBtn v-if="props.item.id" :level=getIndexByLevel(6-i) :item="props.item">
+                                        </FeeChangeBtn>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol md="3" class="font-weight-bold">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
+                                        <VCol md="4">
+                                            {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
+                                        </VCol>
+                                        <VCol md="3">
+                                            <span>{{ props.item['sales'+(6-i)+'_fee'] }} %</span>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </template>
                         </template>
-                        <!-- 👉 가맹점 수수료율 -->
+                        <VDivider/>
                         <VCol cols="12">
-                            <VRow>
+                            <VCardTitle>가맹점 수수료</VCardTitle>
+                        </VCol>
+                        <VCol cols="12">
+                            <VRow v-if="isAbleModiy(props.item.id)">
                                 <VCol cols="12" md="3">
-                                    거래/유보금 수수료율
+                                    가맹점/유보금 수수료율
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 3 : 4">
-                                    <VTextField v-model="props.item.trx_fee" type="number" suffix="%"
-                                        :rules="[requiredValidator]" />
+                                    <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                        <VTextField v-model="props.item.trx_fee" type="number" suffix="%"
+                                            :rules="[requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율')]" v-if="isAbleModiy(props.item.id)"/>
+                                    </VCol>
+                                    <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                        <VTextField v-model="props.item.hold_fee" type="number" suffix="%"
+                                            :rules="[requiredValidatorV2(props.item.hold_fee, '가맹점 유보금')]" v-if="isAbleModiy(props.item.id)"  />
+                                    </VCol>
+                                    <FeeChangeBtn v-if="props.item.id && isAbleModiy(props.item.id)" :level=-1 :item="props.item">
+                                    </FeeChangeBtn>
+                            </VRow>
+                            <VRow v-else>
+                                <VCol md="3" class="font-weight-bold">가맹점/유보금/수수료율</VCol>
+                                <VCol md="4">
+                                    <span>{{ props.item.trx_fee }} %</span>
                                 </VCol>
-                                <VCol cols="12" :md="props.item.id ? 2 : 4">
-                                    <VTextField v-model="props.item.hold_fee" type="number" suffix="%"
-                                        :rules="[requiredValidator]" />
+                                <VCol md="4">
+                                    <span>{{ props.item.hold_fee }} %</span>
                                 </VCol>
-                                <FeeChangeBtn v-if="props.item.id" :level=-1 :item="props.item">
-                                </FeeChangeBtn>
                             </VRow>
                         </VCol>
-                        <VCol>
+                        <VCol v-if="isAbleModiy(props.item.id)">
                             <VTextarea v-model="props.item.note" counter label="메모사항"
                                 prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
                         </VCol>
@@ -197,7 +244,7 @@ initAllSales()
                         <VCol cols="12">
                             <VRow>
                                 <VCol :md="6" :cols="12">
-                                    <VRow no-gutters style="align-items: center;">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>사업자 유형</VCol>
                                         <VCol md="6">
                                             <div class="batch-container">
@@ -208,9 +255,13 @@ initAllSales()
                                             </div>
                                         </VCol>
                                     </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">사업자 유형</VCol>
+                                        <VCol md="6"><span>{{ tax_category_types.find(obj => obj.id === props.item.tax_category_type)?.title }}</span></VCol>
+                                    </VRow>
                                 </VCol>
                                 <VCol>
-                                    <VRow no-gutters style="align-items: center;">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>커스텀 필터</VCol>
                                         <VCol md="6">
                                             <div class="batch-container">     
@@ -221,14 +272,18 @@ initAllSales()
                                             </div>
                                         </VCol>
                                     </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">커스텀 필터</VCol>
+                                        <VCol md="6"><span>{{ cus_filters.find(obj => obj.id === props.item.custom_id)?.title }}</span></VCol>
+                                    </VRow>
                                 </VCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12" v-if="corp.pv_options.paid.use_regular_card || corp.pv_options.paid.use_withdraw_fee">
                             <VRow>
                                 <!-- 👉 단골고객 사용여부 -->
-                                <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_regular_card">
-                                    <VRow no-gutters style="align-items: center;">
+                                <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_regular_card ">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>단골고객 사용여부</VCol>
                                         <VCol md="6">
                                             <div class="batch-container">
@@ -240,16 +295,24 @@ initAllSales()
                                             </div>
                                         </VCol>
                                     </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">단골고객 사용여부</VCol>
+                                        <VCol md="6"><span>{{ props.item.use_regular_card ? "사용" : "미사용" }}</span></VCol>
+                                    </VRow>
                                 </VCol>
                                 <VCol :md="6" v-if="corp.pv_options.paid.use_withdraw_fee">
-                                    <VRow no-gutters style="align-items: center;">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>출금 수수료</VCol>
                                         <VCol md="6">
                                             <div class="batch-container">
-                                        <VTextField v-model="props.item.withdraw_fee" type="number" suffix="₩"
-                                            :rules="[requiredValidator]" />
+                                            <VTextField v-model="props.item.withdraw_fee" type="number" suffix="₩"
+                                                :rules="[requiredValidatorV2(props.item.withdraw_fee, '출금 수수료')]" />
                                             </div>
                                         </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">출금 수수료</VCol>
+                                        <VCol md="6"><span>{{ props.item.withdraw_fee }}₩</span></VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>
@@ -259,21 +322,25 @@ initAllSales()
                                 <VDivider style="margin-bottom: 1em;"/>
                                 <VRow>
                                     <VCol :md="6" :cols="12">
-                                        <VRow no-gutters style="align-items: center;">
+                                        <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                             <VCol>모아서 출금</VCol>
                                             <VCol md="6">
                                                 <div class="batch-container">
-                                            <BooleanRadio :radio="props.item.use_collect_withdraw"
-                                                @update:radio="props.item.use_collect_withdraw = $event">
-                                                <template #true>사용</template>
-                                                <template #false>미사용</template>
-                                            </BooleanRadio>
+                                                    <BooleanRadio :radio="props.item.use_collect_withdraw"
+                                                        @update:radio="props.item.use_collect_withdraw = $event">
+                                                        <template #true>사용</template>
+                                                        <template #false>미사용</template>
+                                                    </BooleanRadio>
                                                 </div>
                                             </VCol>
                                         </VRow>
+                                        <VRow v-else>
+                                            <VCol class="font-weight-bold">모아서 출금</VCol>
+                                            <VCol md="6"><span>{{ props.item.use_collect_withdraw ? "사용" : "미사용" }}</span></VCol>
+                                        </VRow>
                                     </VCol>
                                     <VCol>
-                                        <VRow no-gutters style="align-items: center;">
+                                        <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                             <VCol>
                                             <BaseQuestionTooltip :location="'top'" :text="'모아서 출금 수수료'"
                                                 :content="'모아서 출금 사용시마다 적용되는 수수료 입니다.'">
@@ -282,15 +349,19 @@ initAllSales()
                                             <VCol md="6">
                                                 <div class="batch-container">     
                                             <VTextField v-model="props.item.collect_withdraw_fee" type="number" suffix="₩"
-                                                :rules="[requiredValidator]" />
+                                                :rules="[requiredValidatorV2(props.item.collect_withdraw_fee, '모아서 출금')]" />
                                                 </div>
                                             </VCol>
+                                        </VRow>
+                                        <VRow v-else>
+                                            <VCol class="font-weight-bold">모아서 출금 수수료</VCol>
+                                            <VCol md="6"><span>{{ props.item.collect_withdraw_fee }} ₩</span></VCol>
                                         </VRow>
                                     </VCol>
                                 </VRow>
                             </VCol>
                         </template>
-                        <template v-if="getUserLevel() >= 35">
+                        <template v-if="isAbleModiy(props.item.id)">
                             <VCol cols="12">
                                 <VDivider style="margin-bottom: 1em;"/>
                                 <VRow>
@@ -464,7 +535,7 @@ initAllSales()
                 </VCardItem>
             </VCard>
             <br>
-            <VCard v-if="props.item.use_regular_card">
+            <VCard v-if="props.item.use_regular_card && isAbleModiy(props.item.id)">
                 <VCardItem>
                     <VCol cols="12">
                         <VRow>

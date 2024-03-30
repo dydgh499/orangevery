@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { isAbleModiy } from '@axios'
 import Preview from '@/layouts/utils/Preview.vue'
 import { Pagination, EffectCoverflow, Navigation } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/vue'
@@ -59,41 +60,44 @@ watchEffect(() => {
 </script>
 <template>
     <VCol cols="12" :md="props.lmd" style="padding: 0 0.5em;">
-        <VFileInput accept="image/*" show-size v-model="files" :label="label+' 이미지'"
-            prepend-icon="tabler-camera-up" @change="upload()">
-            <template #selection="{ fileNames }">
-                <template v-for="fileName in fileNames" :key="fileName">
-                    <VChip label size="small" variant="outlined" color="primary" class="me-2">
-                        {{ fileName }}
-                    </VChip>
+        <template v-if="isAbleModiy(0)">
+            <VFileInput accept="image/*" show-size v-model="files" :label="label+' 이미지'"
+                prepend-icon="tabler-camera-up" @change="upload()">
+                <template #selection="{ fileNames }">
+                    <template v-for="fileName in fileNames" :key="fileName">
+                        <VChip label size="small" variant="outlined" color="primary" class="me-2">
+                            {{ fileName }}
+                        </VChip>
+                    </template>
                 </template>
-            </template>
-        </VFileInput>
-        <br>
-        <BaseQuestionTooltip :location="'top'" :text="'기본 '+label+' 이미지'"
-            :content="'기본으로 제공되는 '+label+' 이미지 입니다.<br>하단 스와이프뷰에서 이미지를 선택하신 후, 선택 버튼을 눌러주세요.'">
-        </BaseQuestionTooltip>
-        <br>
-        <br>
-        <div class="coverflow-example">
-            <Swiper class="swiper" :modules="modules" :pagination="true" :effect="'coverflow'" :grab-cursor="true" :navigation="true" 
-                :centered-slides="true" :slides-per-view="'auto'" @swiper="getRef" :coverflow-effect="{
-                    rotate: 50,
-                    stretch: 0,
-                    depth: 100,
-                    modifier: 1,
-                    slideShadows: true
-                }">
-                <SwiperSlide class="slide" :style="previewStyle" v-for="(src, key) in props.items" :key="key">
-                    <VImg rounded :src="src"></VImg>
-                </SwiperSlide>
-            </Swiper>
-        </div>
-        <div style="text-align: end;">
-            <VBtn @click="emits('update:path', props.items[swiper.activeIndex])">
-                선택
-            </VBtn>
-        </div>
+            </VFileInput>
+            <br>
+            <BaseQuestionTooltip :location="'top'" :text="'기본 '+label+' 이미지'"
+                :content="'기본으로 제공되는 '+label+' 이미지 입니다.<br>하단 스와이프뷰에서 이미지를 선택하신 후, 선택 버튼을 눌러주세요.'">
+            </BaseQuestionTooltip>
+            <br>
+            <br>
+            <div class="coverflow-example">
+                <Swiper class="swiper" :modules="modules" :pagination="true" :effect="'coverflow'" :grab-cursor="true" :navigation="true" 
+                    :centered-slides="true" :slides-per-view="'auto'" @swiper="getRef" :coverflow-effect="{
+                        rotate: 50,
+                        stretch: 0,
+                        depth: 100,
+                        modifier: 1,
+                        slideShadows: true
+                    }">
+                    <SwiperSlide class="slide" :style="previewStyle" v-for="(src, key) in props.items" :key="key">
+                        <VImg rounded :src="src"></VImg>
+                    </SwiperSlide>
+                </Swiper>
+            </div>
+            <div style="text-align: end;">
+                <VBtn @click="emits('update:path', props.items[swiper.activeIndex])">
+                    선택
+                </VBtn>
+            </div>
+        </template>
+        <span v-else>{{ label+' 이미지' }}</span>
     </VCol>
     <VCol cols="12" :md="props.rmd">
         <Preview :preview="preview" :style="`inline-size:20em !important;`" :preview-style="previewStyle" class="preview" :ext="ext" />

@@ -100,7 +100,7 @@ class HolidayController extends Controller
             }
         }
 
-        $res = $this->manyInsert(new Holiday, $datas);
+        $res = $this->manyInsert($this->holidays, $datas);
         return $this->response($res ? 1 : 990);
     }
 
@@ -109,20 +109,29 @@ class HolidayController extends Controller
      */
     public function updateHolidays(Request $request)
     {
-        $datas      = [];
-        $cur_time   = date('Y-m-d H:i:s');
-        $holidays   = $this->getOneYearHolidays($request->year);
-        foreach($holidays as $holiday)
+        $is_already_parse = $this->holidays
+            ->where('brand_id', $request->user()->brand_id)
+            ->where('rest_dt', date('Y')."-01-01")
+            ->exists();
+        if($is_already_parse)
+            return $this->extendResponse(1999, '이미 대량으로 읽어온 공휴일이 존재합니다.');
+        else
         {
-            $data = $holiday;
-            $data['brand_id']   = $request->user()->brand_id;
-            $data['created_at'] = $cur_time;
-            $data['updated_at'] = $cur_time;
-            $datas[] = $data;
+            $datas      = [];
+            $cur_time   = date('Y-m-d H:i:s');
+            $holidays   = $this->getOneYearHolidays(date('Y'));
+            foreach($holidays as $holiday)
+            {
+                $data = $holiday;
+                $data['brand_id']   = $request->user()->brand_id;
+                $data['created_at'] = $cur_time;
+                $data['updated_at'] = $cur_time;
+                $datas[] = $data;
+            }
+    
+            $res = $this->manyInsert($this->holidays, $datas);
+            return $this->response($res ? 1 : 990);
         }
-
-        $res = $this->manyInsert(new Holiday, $datas);
-        return $this->response($res ? 1 : 990);
     }
 
     /**

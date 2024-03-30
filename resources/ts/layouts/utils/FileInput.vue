@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import Preview from '@/layouts/utils/Preview.vue'
+import { isAbleModiy } from '@axios'
 
 interface Props {
     preview: string,
@@ -43,15 +44,14 @@ watchEffect(() => {
         ext.value = getFileExtension(props.preview)
 })
 watchEffect(() => {
-    // 업로드 파일 삭제 시
     if(files.value.length === 0 && props.preview.includes('blob:'))
         emits('update:path', '/utils/icons/img-preview.svg')
 })
 </script>
 <template>
     <VRow no-gutters>
-        <VCol cols="12" md="9">
-            <VFileInput accept="*" show-size v-model="files" :label="label" prepend-icon="tabler-paperclip" @change="upload()">
+        <VCol cols="12" md="6">
+            <VFileInput accept="*" v-model="files" :label="label"  @change="upload()" v-if="isAbleModiy(0)">
                 <template #selection="{ fileNames }">
                 <template v-for="fileName in fileNames" :key="fileName">
                     <VChip label size="small" variant="outlined" color="primary" class="me-2">
@@ -60,16 +60,18 @@ watchEffect(() => {
                 </template>
             </template>
             </VFileInput>
+            <span v-else>{{ label.replace(' 업로드', ' 이미지') }}</span>
         </VCol>
-        <VCol cols="12" md="3">
-            <DialogCloseBtn id="close-btn" @click="remove()" v-if="props.preview !== '/utils/icons/img-preview.svg' && files.length === 0"/>
+        <VCol cols="12" md="6">
+            <DialogCloseBtn class="close-btn" @click="remove()" v-if="props.preview !== '/utils/icons/img-preview.svg' && files.length === 0 && isAbleModiy(0)"/>
             <Preview :preview="props.preview" :style="``" :preview-style="previewStyle" class="preview" :ext="ext"/>
         </VCol>
     </VRow>
 </template>
 <style scoped>
-:deep(#close-btn) {
+:deep(.close-btn) {
   inset-block-start: auto !important;
+  inset-inline-end: auto !important;
   margin-inline-end: 2em !important;
 }
 </style>

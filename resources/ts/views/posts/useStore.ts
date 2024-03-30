@@ -54,7 +54,7 @@ export const defaultItemInfo = () => {
         type: 0,
         parent_id: null,
         writer: '',
-        is_reply: false
+        is_reply: 0
     })
     return {
         path, item

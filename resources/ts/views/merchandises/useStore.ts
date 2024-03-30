@@ -4,7 +4,7 @@ import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { Merchandise, Options } from '@/views/types'
 import { avatars } from '@/views/users/useStore'
-import { getUserLevel, isAbleModifyMcht, user_info } from '@axios'
+import { getUserLevel, isAbleModiy, user_info } from '@axios'
 import corp from '@corp'
 
 export const tax_category_types = <Options[]>([
@@ -16,7 +16,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     const head      = Header('merchandises', '가맹점 관리')
     const levels    = corp.pv_options.auth.levels
     const paid      = corp.pv_options.paid
-    const { pgs }   = useStore()
+    const { pgs, settle_types }   = useStore()
     const is_show_acct = ((getUserLevel() == 10 && !user_info.value.is_hide_account) || getUserLevel() >= 13) ? true : false
 
     const headers: Record<string, string> = {
@@ -56,6 +56,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
         headers['trx_fee'] = '수수료'
         headers['hold_fee'] = '유보금 수수료'    
     }
+    headers['settle_types'] = '정산일'
     headers['mcht_name'] = '상호'
     if(getUserLevel() >= 35) {
         headers['mids'] = 'MID'
@@ -84,7 +85,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     headers['created_at'] = '생성시간'
     headers['updated_at'] = '업데이트시간'
 
-    if (getUserLevel() >= 35 || isAbleModifyMcht())
+    if (getUserLevel() >= 35 || isAbleModiy(0))
         headers['extra_col'] = '더보기'
     
 
@@ -122,7 +123,9 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
             stats: '0',
         },
     ])
-
+    const getSettleTypes = (types: any[]) => {
+        return types.map(id => settle_types.find(obj => obj.id === id)?.name)
+    }
     const getModuleTypes = (my_modules: any[]) => {
         return my_modules.map(id => module_types.find(module => module.id === id)?.title )
     };
@@ -140,6 +143,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
                 datas[i]['mids'] = datas[i]['mids'].join(',')
                 datas[i]['tids'] = datas[i]['tids'].join(',')
             }
+            datas[i]['settle_types'] = getSettleTypes(datas[i]['settle_types']).join(',')
             datas[i]['resident_num'] = datas[i]['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }

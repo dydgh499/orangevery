@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
-import OperDetailDialog from '@/layouts/dialogs/OperDetailDialog.vue'
+import OperDetailDialog from '@/layouts/dialogs/histories/OperDetailDialog.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import ExtraMenu from '@/views/services/operator-histories/ExtraMenu.vue'
 import { history_types, useSearchStore } from '@/views/services/operator-histories/useStore'

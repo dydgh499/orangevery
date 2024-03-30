@@ -1,7 +1,6 @@
 import router from '@/router';
 import { useRequestStore } from '@/views/request';
 import type { Pagenation } from '@/views/types';
-import { getUserLevel, isAbleModifyMcht } from '@axios';
 import { DateFilters, StatusColors } from '@core/enums';
 import corp from '@corp';
 import { cloneDeep } from 'lodash';
@@ -88,14 +87,7 @@ export const Searcher = (path: string) => {
     const getChartData = async() => { return _getChartData(getParams())  }
 
     const edit = (id: number = 0) => {
-        const cond_1 = (path === 'merchandises' || path === 'merchandises/pay-modules' || path === 'merchandises/terminals' || path === 'salesforces') && (getUserLevel() >= 35 || isAbleModifyMcht())
-        const cond_2 = getUserLevel() >= 35
-        if(cond_1 || cond_2) {
-            if(id == 0)
-                router.push('/' + path + '/create')
-            else
-                router.push('/' + path + '/edit/' + id)
-        }
+        router.push('/' + path + '/' + (id ? `edit/${id}` : 'create'))
     }
 
     const getSearch = () => {

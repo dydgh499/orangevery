@@ -9,12 +9,11 @@ import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.v
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 
 import { settleCycles, settleDays, settleTaxTypes, getAutoSetting } from '@/views/salesforces/useStore'
-import { getUserLevel, getLevelByIndex, salesLevels, isAbleModifyMcht } from '@axios'
+import { getUserLevel, getLevelByIndex, salesLevels, isAbleModiy } from '@axios'
 import { DateFilters, ItemTypes } from '@core/enums'
 import type { Options } from '@/views/types'
 import corp from '@corp'
 
-const add_able = getUserLevel() >= 35 || isAbleModifyMcht()
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 
@@ -50,7 +49,7 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="아이디, 영업점 상호 검색" :metas="metas" :add="add_able" add_name="영업점" :date_filter_type="DateFilters.NOT_USE">
+        <BaseIndexView placeholder="아이디, 영업점 상호 검색" :metas="metas" :add="isAbleModiy(0)" add_name="영업점" :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                     :sales="true">

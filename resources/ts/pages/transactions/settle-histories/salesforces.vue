@@ -5,7 +5,7 @@ import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-hi
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import FinanceVanDialog from '@/layouts/dialogs/FinanceVanDialog.vue'
+import FinanceVanDialog from '@/layouts/dialogs/services/FinanceVanDialog.vue'
 import { getUserLevel, getLevelByIndex, salesLevels } from '@axios'
 import type { Options } from '@/views/types'
 import { DateFilters } from '@core/enums'

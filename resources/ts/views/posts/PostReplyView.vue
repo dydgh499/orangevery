@@ -1,11 +1,11 @@
 
 <script setup lang="ts">
-import router from '@/router'
-import ExtraMenu from '@/views/posts/ExtraMenu.vue'
-import PostReplyView from '@/views/posts/PostReplyView.vue'
-import { types } from '@/views/posts/useStore'
 import type { Post } from '@/views/types'
-import { getUserLevel, user_info } from '@axios'
+import { types } from '@/views/posts/useStore'
+import PostReplyView from '@/views/posts/PostReplyView.vue'
+import ExtraMenu from '@/views/posts/ExtraMenu.vue'
+import router from '@/router'
+import { user_info, getUserLevel } from '@axios'
 
 interface Props {
     post: Post,
@@ -49,8 +49,7 @@ provide('head', head)
                     </span>
                 </span>
                 <span v-else-if="key == 'extra_col'">
-                    <ExtraMenu :item="props.post">
-                    </ExtraMenu>
+                    <ExtraMenu :item="props.post"/>
                 </span>
                 <span v-else>
                     {{ props.post[key] }}
@@ -58,7 +57,6 @@ provide('head', head)
             </td>
         </template>
     </tr>
-    <PostReplyView v-for="(reply, _idx) in post.replies" :key="_idx" :post="reply" :depth="++props.depth">
-    </PostReplyView>
+    <PostReplyView v-for="(reply, _idx) in post.replies" :key="_idx" :post="reply" :depth="++props.depth"/>
 </template>
   

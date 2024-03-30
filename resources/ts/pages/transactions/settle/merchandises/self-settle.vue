@@ -51,6 +51,11 @@ provide('exporter', exporter)
                                         {{ realtimeMessage(item) }}
                                     </VChip>
                                 </span>
+                                <span v-else-if="_key == 'mcht_settle_id'">
+                                    <VChip :color="Number(item[_key]) === 0 ? 'default' : 'success'">
+                                        {{ Number(item[_key]) === 0 ? '정산안함' : "#"+item[_key]}}
+                                    </VChip>
+                                </span>
                                 <span v-else-if="_key == 'withdraw_amount' || _key == 'withdraw_fee'">
                                     {{ item[_key] ? (item[_key] as number).toLocaleString() : 0 }}
                                 </span>

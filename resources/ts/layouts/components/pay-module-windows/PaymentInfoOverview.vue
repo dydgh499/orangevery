@@ -5,7 +5,8 @@ import { fin_trx_delays } from '@/views/merchandises/pay-modules/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import { axios, getUserLevel } from '@axios'
+import { axios, isAbleModiy } from '@axios'
+import corp from '@corp'
 
 interface Props {
     item: PayModule,
@@ -64,7 +65,7 @@ const payKeyCreate = async() => {
 </script>
 <template>
     <VCardItem>
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>API KEY(license)</template>
                 <template #input>
@@ -73,7 +74,7 @@ const payKeyCreate = async() => {
                 </template>
             </CreateHalfVCol>
         </VRow>
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>SUB KEY(iv)</template>
                 <template #input>
@@ -82,7 +83,7 @@ const payKeyCreate = async() => {
                 </template>
             </CreateHalfVCol>
         </VRow>
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id) && corp.pv_options.paid.use_pmid">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>PMID</template>
                 <template #input>
@@ -91,14 +92,14 @@ const payKeyCreate = async() => {
                 </template>
             </CreateHalfVCol>
         </VRow>
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>MID</template>
                 <template #input>
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
                             placeholder="MID 입력" persistent-placeholder />
-                        <VBtn type="button" variant="tonal" v-if="getUserLevel() >= 35 && props.item.id == 0"
+                        <VBtn type="button" variant="tonal" v-if="isAbleModiy(props.item.id) && props.item.id == 0 && corp.pv_options.paid.use_mid_creat"
                             @click="midCreate()">
                             {{ "생성" }}
                             <VIcon end icon="material-symbols:add-to-home-screen" />
@@ -116,14 +117,14 @@ const payKeyCreate = async() => {
             </CreateHalfVCol>
         </VRow>
         <!-- 👉 TID -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>TID</template>
                 <template #input>
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
                             placeholder="TID 입력" persistent-placeholder />
-                        <VBtn type="button" variant="tonal" v-if="props.item.id == 0" @click="tidCreate()">
+                        <VBtn type="button" variant="tonal" v-if="props.item.id == 0 && corp.pv_options.paid.use_tid_create" @click="tidCreate()">
                             {{ "생성" }}
                             <VIcon end icon="material-symbols:add-to-home-screen" />
                         </VBtn>
@@ -139,7 +140,7 @@ const payKeyCreate = async() => {
                 </template>
             </CreateHalfVCol>
         </VRow>
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>계약 시작일</template>
                 <template #input>
@@ -156,7 +157,7 @@ const payKeyCreate = async() => {
                 </template>
             </CreateHalfVCol>
         </VRow>
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>계약 종료일</template>
                 <template #input>
@@ -173,8 +174,8 @@ const payKeyCreate = async() => {
                 </template>
             </CreateHalfVCol>
         </VRow>
-        <VRow v-if="props.item.id != 0 && props.item.module_type != 0">
-            <CreateHalfVCol :mdl="5" :mdr="7" v-if="getUserLevel() >= 35">
+        <VRow v-if="props.item.id != 0 && props.item.module_type != 0 && corp.pv_options.paid.use_online_pay">
+            <CreateHalfVCol :mdl="5" :mdr="7" v-if="isAbleModiy(props.item.id)">
                 <template #name>
                     <BaseQuestionTooltip :location="'top'" :text="'결제 KEY'"
                         :content="'해당 키를 통해 온라인 결제를 발생시킬 수 있습니다.<br>키를 복사하려면 입력필드에서 더블클릭하세요.'">
@@ -202,7 +203,7 @@ const payKeyCreate = async() => {
                 </template>
             </CreateHalfVCol>
         </VRow>
-        <template v-if="getUserLevel() >= 35">
+        <template v-if="isAbleModiy(props.item.id) && corp.pv_options.paid.use_realtime_deposit">
             <VDivider style="margin: 1em 0;" />
             <VRow>
                 <CreateHalfVCol :mdl="6" :mdr="6">

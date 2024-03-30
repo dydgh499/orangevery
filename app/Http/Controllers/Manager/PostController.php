@@ -173,4 +173,20 @@ class PostController extends Controller
         $data = $this->getIndexData($request, $query, 'id', $this->posts->cols, 'updated_at');
         return $this->response(0, $data);
     }
+    
+    public function parent(Request $request, $id)
+    {
+        $getParent = function($orm, $posts, $id) use (&$getParent) {
+            $parent = $orm->where('id', $id)->first();
+            if($parent)
+            {
+                $posts[] = $parent;
+                if($parent->parent_id)
+                    $posts = $getParent($orm, $posts, $parent->parent_id);
+            }
+            return $posts;
+        };
+        $posts = array_reverse($getParent($this->posts, [], $id));
+        return $this->response(0, $posts);
+    }
 }

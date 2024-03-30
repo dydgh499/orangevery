@@ -5,7 +5,9 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 const vForm = ref()
 const visible = ref(false)
 const formatDate = <any>(inject('$formatDate'))
-const apply_dt = ref(formatDate(new Date))
+
+const cur_date = new Date()
+const apply_dt = ref(formatDate(new Date(cur_date.getFullYear(), cur_date.getMonth(), cur_date.getDate()+1)))
 
 let resolveCallback: (apply_dt: string) => void;
 

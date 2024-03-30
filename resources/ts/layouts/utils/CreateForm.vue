@@ -3,7 +3,7 @@ a
 
 import { useRequestStore } from '@/views/request'
 import type { Tab } from '@/views/types'
-import { getUserLevel, isAbleModifyMcht, user_info, isFixplusAbleUpdate } from '@axios'
+import { getUserLevel, user_info, isAbleModiy } from '@axios'
 import { VForm } from 'vuetify/components'
 import corp from '@corp';
 
@@ -50,12 +50,7 @@ const authHideConditions = () => {
                 return false
         }
         else
-        {
-            if(isAbleModifyMcht())
-                return isFixplusAbleUpdate(props.id as number)
-            else
-                return false
-        }
+            return isAbleModiy(props.id as number)
     }
     else
         return true

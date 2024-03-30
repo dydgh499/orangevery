@@ -17,7 +17,7 @@ const simpleStatisticsDemoCards = ref([
     {
         icon: 'tabler-calculator',
         color: 'warning',
-        title: '금월 정산액',
+        title: '금월 수익금',
         stat: '0',
         subTitle: '작월 대비',
         change: '0%',

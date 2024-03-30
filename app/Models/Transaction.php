@@ -56,7 +56,7 @@ class Transaction extends Model
         return $query;
     }
 
-    public function getHolidays()
+    static public function getHolidays()
     {
         //조회일로부터 M-1, M+1 공휴일 조회
         $s_dt = Carbon::createFromFormat('Y-m-d', request()->s_dt)->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
@@ -97,7 +97,7 @@ class Transaction extends Model
         }
         else
         {
-            $holidays = $this->getHolidays();
+            $holidays = self::getHolidays();
             $trx_dt = "AddBaseWorkingDays(transactions.trx_dt, transactions.mcht_settle_type+1, transactions.pg_settle_type, '$holidays')";
             $cxl_dt = "AddBaseWorkingDays(transactions.cxl_dt, transactions.mcht_settle_type+1, transactions.pg_settle_type, '$holidays')";
         }

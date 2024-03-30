@@ -40,9 +40,7 @@ class CancelDepositController extends Controller
     {
         $search = $request->input('search', '');
         $cols = [
-            'cancel_deposits.id',
-            'cancel_deposits.deposit_amount',
-            'cancel_deposits.deposit_history',
+            'cancel_deposits.*',
             'transactions.acquirer',
             'transactions.installment',
             'transactions.amount',

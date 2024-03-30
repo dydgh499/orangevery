@@ -5,7 +5,7 @@ import { useRequestStore } from '@/views/request';
 import { Searcher } from '@/views/searcher';
 import { useStore } from '@/views/services/pay-gateways/useStore';
 import type { RealtimeHistory, Transaction } from '@/views/types';
-import { getUserLevel, user_info } from '@axios';
+import { getLevelByIndex, getUserLevel, user_info } from '@axios';
 import { StatusColors } from '@core/enums';
 import corp from '@corp';
 import * as XLSX from 'xlsx';
@@ -53,6 +53,17 @@ export const realtimeResult = (item: Transaction) => {
     
 }
 
+export const settleIdCol = (item: Transaction, search_level: number) => {
+    if(search_level === 10)
+        return Number(item['mcht_settle_id']) === 0 ? null : item['mcht_settle_id']
+    else if(search_level < 35) {
+        const dest_level = getLevelByIndex(search_level)
+        return Number(item[`sales${dest_level}_settle_id`]) === 0 ? null : item[`sales${dest_level}_settle_id`]
+    }
+    else
+        return null
+}
+
 export const isRetryAble = (item: Transaction) => {
     const result = realtimeResult(item)
     if(result == StatusColors.Error || result == StatusColors.Timeout)
@@ -83,8 +94,10 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['acquirer'] = '매입사'
     headers['card_num'] = '카드번호'
 
-    if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13)
+    if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
         headers['profit'] = '정산금'
+        headers['settle_id'] = '정산번호'
+    }
 
     if(getUserLevel() >= 35) {
         headers['pg_id'] = 'PG사'

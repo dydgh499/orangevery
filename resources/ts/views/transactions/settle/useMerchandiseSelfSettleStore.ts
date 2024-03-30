@@ -26,6 +26,7 @@ export const useSearchStore = defineStore('merchandiseSelfSettleSearchStore', ()
         'id': 'NO.',
         'mcht_name': '가맹점 상호',
         'result_code': '결과',
+        'mcht_settle_id': '정산번호',
         'withdraw_amount': '출금금액',
         'withdraw_fee': '출금수수료',
         'withdraw_date': '출금일자',

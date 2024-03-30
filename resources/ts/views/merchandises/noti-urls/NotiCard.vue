@@ -4,7 +4,7 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import type { NotiUrl } from '@/views/types'
-import { getUserLevel, isAbleModifyMcht, isFixplusAbleUpdate } from '@axios'
+import { isAbleModiy } from '@axios'
 import { requiredValidatorV2 } from '@validators'
 import { VForm } from 'vuetify/components'
 
@@ -14,15 +14,6 @@ interface Props {
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
-
-const isAbleUpdate = () => {
-    if(getUserLevel() >= 35)
-        return true
-    else if(isAbleModifyMcht()) 
-        return isFixplusAbleUpdate(props.item.id as number)
-    else
-        return false
-}
 
 const { mchts } = useSalesFilterStore()
 const { update, remove } = useRequestStore()
@@ -37,7 +28,7 @@ const { update, remove } = useRequestStore()
                     <VCol cols="12">
                         <VCardItem>
                             <VRow class="pt-3" v-if="props.able_mcht_chanage">
-                                <CreateHalfVCol :mdl="6" :mdr="6" v-if="getUserLevel() >= 35">
+                                <CreateHalfVCol :mdl="6" :mdr="6" v-if="isAbleModiy(props.item.id as number)">
                                     <template #name>소유 가맹점</template>
                                     <template #input>
                                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id"
@@ -53,7 +44,7 @@ const { update, remove } = useRequestStore()
                                 </CreateHalfVCol>
                             </VRow>
                             <VRow class="pt-3">
-                                <CreateHalfVCol :mdl="6" :mdr="6" v-if="getUserLevel() >= 35">
+                                <CreateHalfVCol :mdl="6" :mdr="6" v-if="isAbleModiy(props.item.id as number)">
                                     <template #name>발송 URL</template>
                                     <template #input>
                                         <VTextField v-model="props.item.send_url" type="text" placeholder="https://www.test.com"
@@ -68,7 +59,7 @@ const { update, remove } = useRequestStore()
                                 </CreateHalfVCol>
                             </VRow>
                             <VRow class="pt-3">
-                                <CreateHalfVCol :mdl="6" :mdr="6" v-if="getUserLevel() >= 35">
+                                <CreateHalfVCol :mdl="6" :mdr="6" v-if="isAbleModiy(props.item.id as number)">
                                     <template #name>노티 사용 유무</template>
                                     <template #input>
                                         <BooleanRadio :radio="props.item.noti_status"
@@ -86,7 +77,7 @@ const { update, remove } = useRequestStore()
                                 </CreateHalfVCol>
                             </VRow>
                             <VRow>
-                                <VCol v-if="getUserLevel() >= 35">
+                                <VCol v-if="isAbleModiy(props.item.id as number)">
                                     <VTextarea v-model="props.item.note" counter label="메모사항"
                                         prepend-inner-icon="twemoji-spiral-notepad" maxlength="190" auto-grow/>
                                 </VCol>
@@ -97,7 +88,7 @@ const { update, remove } = useRequestStore()
                                     </template>
                                 </CreateHalfVCol>
                             </VRow>
-                            <VRow v-if="isAbleUpdate()">
+                            <VRow v-if="isAbleModiy(props.item.id as number)">
                                 <VCol class="d-flex gap-4">
                                     <VBtn type="button" style="margin-left: auto;"
                                         @click="update('/merchandises/noti-urls', props.item, vForm, false)">

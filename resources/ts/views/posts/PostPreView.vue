@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import type { Post } from '@/views/types'
-import { requiredValidator } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import Editor from '@/layouts/utils/Editor.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import PostContentView from '@/views/posts/PostContentView.vue'
 import { types } from '@/views/posts/useStore'
 import { axios } from '@axios'
 
@@ -11,16 +12,20 @@ interface Props {
 }
 const props = defineProps<Props>()
 
+const route = useRoute()
 const errorHandler = <any>(inject('$errorHandler'))
-const ori_post = ref<Post>()
+const ori_posts = ref<Post[]>([])
 
 watchEffect(() => {
-    axios.get('/api/v1/manager/posts/' + props.item.parent_id)
+    axios.get('/api/v1/manager/posts/' + route.query.parent_id + '/parent')
         .then(r => {
-            ori_post.value = r.data
-            props.item.type = ori_post.value?.type as number
-            props.item.title = ori_post.value?.title as string
-            props.item.parent_id = ori_post.value?.id as number
+            ori_posts.value = r.data
+            if(ori_posts.value.length) {
+                const last_idx = ori_posts.value.length - 1
+                props.item.type = ori_posts.value[last_idx]?.type
+                props.item.title = ori_posts.value[last_idx]?.title
+                props.item.parent_id = ori_posts.value[last_idx]?.id
+            }
         })
         .catch(e => {
             const r = errorHandler(e)
@@ -32,38 +37,19 @@ watchEffect(() => {
         <!-- 👉 개인정보 -->
         <VCol cols="12" md="12">
             <VCard>
-                <VCardItem>
-                    <VCardTitle>{{ types.find(obj => obj.id === ori_post?.type)?.title }} 원글</VCardTitle>
-                    <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="1" :mdr="11">
-                            <template #name>제목</template>
-                            <template #input>
-                                <VTextField :value="ori_post?.title"
-                                    prepend-inner-icon="ic-round-subtitles" placeholder="제목을 입력해주세요" persistent-placeholder
-                                    readonly />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="1" :mdr="11" style='margin-bottom: 1em;'>
-                            <template #name>내용</template>
-                            <template #input>
-                                <div v-html="ori_post?.content" class="ql-editor" style=" min-height: 15em;border: 1px solid #d1d5db;">
-                                </div>
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                </VCardItem>
-                <VDivider />
+                <template v-for="(ori_post, key) in ori_posts" :key="key">
+                    <PostContentView :post="ori_post" :title="types.find(obj => obj.id === ori_post.type)?.title + ' 원글'"/>
+                    <VDivider />
+                </template>
                 <VCardItem>
                     <VCardTitle>답변 작성</VCardTitle>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="1" :mdr="11">
                             <template #name>제목</template>
                             <template #input>
-                                <VTextField id="nameHorizontalIcons" v-model="props.item.title"
+                                <VTextField v-model="props.item.title"
                                     prepend-inner-icon="ic-round-subtitles" placeholder="제목을 입력해주세요" persistent-placeholder
-                                    :rules="[requiredValidator]" />
+                                    :rules="[requiredValidatorV2(props.item.title, '제목')]" />
                             </template>
                         </CreateHalfVCol>
                     </VRow>

@@ -10,7 +10,7 @@ import { useRequestStore } from '@/views/request'
 import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import ExtraMenu from '@/views/transactions/ExtraMenu.vue'
-import { realtimeResult, useSearchStore } from '@/views/transactions/useStore'
+import { settleIdCol, realtimeResult, useSearchStore } from '@/views/transactions/useStore'
 
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
@@ -160,14 +160,20 @@ onMounted(() => {
                 <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                         <template v-if="key == 'total_trx_amount'">
-                            <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
-                                :content="'총 거래 수수료 = 금액 - (거래 수수료 + 유보금 + 입금 수수료)'">
+                            <BaseQuestionTooltip :location="'top'" :text="store.params.level === 10 ? (header.ko as string) : '총 지급액'"
+                                :content="'총 거래 수수료 = 금액 - (거래 수수료 + 유보금 + 이체 수수료)'">
                             </BaseQuestionTooltip>
                         </template>
                         <template v-else-if="key == 'mcht_settle_fee' && store.params.level == 10">
                             <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
                                 :content="'입금 수수료는 가맹점만 적용됩니다.'">
                             </BaseQuestionTooltip>
+                        </template>
+                        <template v-else-if="key == 'trx_amount'">
+                            <span>{{ store.params.level === 10 ? header.ko : '지급액' }}</span>
+                        </template>
+                        <template v-else-if="key == 'profit'">
+                            <span>{{ store.params.level === 10 ? header.ko : '수익금' }}</span>
                         </template>
                         <template v-else-if="key == 'hold_amount' && store.params.level == 10">
                             <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
@@ -200,6 +206,11 @@ onMounted(() => {
                             <span v-else-if="_key == 'module_type'">
                                 <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
                                     {{ module_types.find(obj => obj.id === item[_key])?.title }}
+                                </VChip>
+                            </span>                            
+                            <span v-else-if="_key == 'settle_id'">
+                                <VChip :color="settleIdCol(item, store.params.level) === null ? 'default' : 'success'">
+                                    {{ settleIdCol(item, store.params.level) === null ? '정산안함' : "#"+settleIdCol(item, store.params.level)}}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'installment'">

@@ -76,11 +76,11 @@ class Merchandise extends Authenticatable
 
     public function scopeFlatSalesIdByFilter($query, $selected_sales_infos, $s_keys)
     {
-        $query = $query->where('brand_id', request()->user()->brand_id)->where('is_delete', false);
+        $query = $query->where('merchandises.brand_id', request()->user()->brand_id)->where('merchandises.is_delete', false);
 
         foreach($selected_sales_infos as $selected_sales_info)
         {
-            $query = $query->where($selected_sales_info['id'], $selected_sales_info['value']);
+            $query = $query->where('merchandises.'.$selected_sales_info['id'], $selected_sales_info['value']);
         }
 
         $sales_ids = $query->get($s_keys)->flatMap(function ($sale) use($s_keys) {
@@ -94,7 +94,7 @@ class Merchandise extends Authenticatable
         })->unique()->values()->all();
         return $sales_ids;
     }
-
+    
     /*
     * 가맹점 정산관리
     */

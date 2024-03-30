@@ -14,6 +14,9 @@ axios.interceptors.request.use((config) => {
 axios.interceptors.response.use((response) => {
     active_count.value--
     return response;
+}, (error) => {
+    active_count.value--
+    return Promise.reject(error);
 });
 
 const show = (_visible: boolean) => {

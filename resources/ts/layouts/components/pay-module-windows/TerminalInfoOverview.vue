@@ -4,7 +4,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import {ship_out_stats, under_sales_types, comm_settle_types } from '@/views/merchandises/pay-modules/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { getUserLevel, salesLevels } from '@axios'
+import { salesLevels, isAbleModiy } from '@axios'
 
 interface Props {
     item: PayModule,
@@ -16,7 +16,7 @@ const { terminals } = useStore()
 <template>
     <VCardItem>
         <!-- 장비 종류 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>장비 타입</template>
                 <template #input>
@@ -35,7 +35,7 @@ const { terminals } = useStore()
             </CreateHalfVCol>
         </VRow>
         <!-- 👉 시리얼 번호 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>시리얼번호</template>
                 <template #input>
@@ -54,7 +54,7 @@ const { terminals } = useStore()
             </CreateHalfVCol>
         </VRow>
         <!-- 통신비 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>통신비</template>
                 <template #input>
@@ -71,7 +71,7 @@ const { terminals } = useStore()
                 </template>
             </CreateHalfVCol>
         </VRow>
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>
                     <BaseQuestionTooltip :location="'top'" :text="'통신비 정산타입'"
@@ -95,7 +95,7 @@ const { terminals } = useStore()
         </VRow>
         <VDivider style="margin: 1em 0;" />
         <!-- 👉 매출미달 차감금 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>매출미달 차감금</template>
                 <template #input>
@@ -113,7 +113,7 @@ const { terminals } = useStore()
             </CreateHalfVCol>
         </VRow>
         <!-- 👉 매출미달 하한금액 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>매출미달 하한금</template>
                 <template #input>
@@ -132,7 +132,7 @@ const { terminals } = useStore()
             </CreateHalfVCol>
         </VRow>
         <!-- 👉 매출미달 적용기간 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>매출미달 적용기간</template>
                 <template #input>
@@ -152,7 +152,7 @@ const { terminals } = useStore()
         </VRow>
         <VDivider style="margin: 1em 0;" />
         <!-- 👉 정산일 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>정산일</template>
                 <template #input>
@@ -169,7 +169,7 @@ const { terminals } = useStore()
             </CreateHalfVCol>
         </VRow>
         <!-- 👉 정산주체 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>정산주체</template>
                 <template #input>
@@ -188,7 +188,7 @@ const { terminals } = useStore()
             </CreateHalfVCol>
         </VRow>
         <!-- 👉 개통일 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>개통일</template>
                 <template #input>
@@ -206,7 +206,7 @@ const { terminals } = useStore()
             </CreateHalfVCol>
         </VRow>
         <!-- 👉 출고일 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>출고일</template>
                 <template #input>
@@ -224,7 +224,7 @@ const { terminals } = useStore()
             </CreateHalfVCol>
         </VRow>
         <!-- 👉 출고상태 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>출고상태</template>
                 <template #input>

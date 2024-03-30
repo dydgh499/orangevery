@@ -83,16 +83,6 @@ export const getUserLevel = () => {
     return 0
 }
 
-export const isAbleModifyMcht = () => {
-    if(getUserLevel() > 10 && getUserLevel() < 35) {
-        if(corp.id === 30)
-            return true
-        else
-            return user_info.value.is_able_modify_mcht ? true : false
-    }
-    else
-        return false
-}
 
 export const getViewType = () => {
     const level = getUserLevel()
@@ -107,17 +97,41 @@ export const getViewType = () => {
 }
 // -----------------------
 
-export const isFixplusAbleUpdate = (id: number) => {
-    if(corp.id === 30 && id) {
-        if(getUserLevel() === 30)
-            return true
+
+export const isAbleModiy = (id: number) => {
+    const isAbleModifyMcht = () => {
+        if(getUserLevel() > 10 && getUserLevel() < 35) {
+            if(corp.id === 30)
+                return true
+            else
+                return user_info.value.is_able_modify_mcht ? true : false
+        }
         else
             return false
     }
-    else
-        return true    
-}
+    const isFixplusAbleUpdate = () => {
+        if(corp.id === 30) {
+            if(getUserLevel() === 30)
+                return true
+            else
+                return false
+        }
+        else
+            return true    
+    }
 
+    if(getUserLevel() >= 35)
+        return true
+    else if(getUserLevel() >= 13) {
+        if(id) {    // update
+            if(isAbleModifyMcht())
+                return isFixplusAbleUpdate()
+        }
+        else // create
+            return isAbleModifyMcht()            
+    }
+    return false
+}
 
 const currentTimeFormat = () => {
     const date = new Date()

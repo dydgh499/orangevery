@@ -10,15 +10,14 @@ import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.v
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
-import { getUserLevel, isAbleModifyMcht } from '@axios'
+import { getUserLevel, isAbleModiy } from '@axios'
 import { DateFilters, ItemTypes } from '@core/enums'
 import corp from '@corp'
 import { template } from 'lodash'
 
-const add_able  = getUserLevel() >= 35 || isAbleModifyMcht()
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { pgs }   = useStore()
+const { pgs, settle_types }   = useStore()
 const password  = ref()
 const batchDialog = ref()
 
@@ -45,7 +44,7 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="아이디, 상호, 연락처, 대표자명, 사업자번호, 예금주, 계좌번호 검색" :metas="metas" :add="add_able" add_name="가맹점"
+        <BaseIndexView placeholder="아이디, 상호, 연락처, 대표자명, 사업자번호, 예금주, 계좌번호 검색" :metas="metas" :add="isAbleModiy(0)" add_name="가맹점"
             :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true"
@@ -98,6 +97,13 @@ onMounted(() => {
                                 <VChip v-if="item[_key]">
                                     {{ (item[_key] as number).toFixed(3) }} %
                                 </VChip>
+                            </span>
+                            <span v-else-if="_key == 'settle_types'">
+                                <select class="custom-select">
+                                    <option v-for="(settle_type, key) in item['settle_types']" :key="key">
+                                        {{ settle_types.find(obj => obj.id === settle_type)?.name }}
+                                    </option>
+                                </select>
                             </span>
                             <span v-else-if="_key == 'mids'">
                                 <select class="custom-select">

@@ -1,5 +1,5 @@
 import { useQuickViewStore } from '@/views/quick-view/useStore'
-import { getUserLevel, isAbleModifyMcht, user_info } from '@axios'
+import { getUserLevel, isAbleModiy, user_info } from '@axios'
 import corp from '@corp'
 
 const { getPaymentMenu } = useQuickViewStore()
@@ -10,7 +10,7 @@ const getUserTap = () => {
         { title: '가맹점 목록', to: 'merchandises' },
         { title: '장비 관리', to: 'merchandises-terminals' }
     ]
-    if (isAbleModifyMcht())
+    if (isAbleModiy(0))
         children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules' })
     
     if(corp.pv_options.paid.use_noti && (getUserLevel() == 10 && user_info.value.use_noti)) {

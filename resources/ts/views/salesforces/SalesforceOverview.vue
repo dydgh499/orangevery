@@ -6,7 +6,7 @@ import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import type { Options, Salesforce } from '@/views/types'
-import { getUserLevel, salesLevels } from '@axios'
+import { getUserLevel, salesLevels, isAbleModiy } from '@axios'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
 
@@ -33,12 +33,16 @@ const payModuleBatchOverview = ref()
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>영업점 상호</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.sales_name" prepend-inner-icon="tabler-building-store"
                                                 placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.sales_name, '영업점 상호')]" />
                                         </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">가맹점 상호</VCol>
+                                        <VCol md="8"><span>{{ props.item.sales_name }}</span></VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>
@@ -46,7 +50,7 @@ const payModuleBatchOverview = ref()
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>정산 주기</VCol>
                                         <VCol md="8">
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_cycle"
@@ -55,9 +59,13 @@ const payModuleBatchOverview = ref()
                                                 :rules="[requiredValidatorV2(props.item.settle_cycle, '정산 주기')]" />
                                         </VCol>
                                     </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">정산 주기</VCol>
+                                        <VCol md="8"><span>{{ all_cycles.find(obj => obj.id === props.item.settle_cycle).title }}</span></VCol>
+                                    </VRow>
                                 </VCol>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>정산 요일</VCol>
                                         <VCol md="8"> 
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_day" :items="all_days"
@@ -65,13 +73,17 @@ const payModuleBatchOverview = ref()
                                                 item-value="id" persistent-hint single-line />
                                         </VCol>
                                     </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">정산 요일</VCol>
+                                        <VCol md="8"><span>{{ all_days.find(obj => obj.id === props.item.settle_day).title }}</span></VCol>
+                                    </VRow>
                                 </VCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>정산 세율</VCol>
                                         <VCol md="8">
                                             <VRadioGroup v-model="props.item.settle_tax_type" inline :rules="[requiredValidatorV2(props.item.settle_tax_type, '정산 세율')]">
@@ -85,9 +97,13 @@ const payModuleBatchOverview = ref()
                                             </VRadioGroup>
                                         </VCol>
                                     </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">정산 세율</VCol>
+                                        <VCol md="8"><span>{{ tax_types.find(obj => obj.id === props.item.settle_tax_type).title }}</span></VCol>
+                                    </VRow>
                                 </VCol>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>
                                             <BaseQuestionTooltip :location="'top'" :text="'등급'" :content="'영업자 등급은 수정할 수 없습니다.'">
                                             </BaseQuestionTooltip>
@@ -98,6 +114,10 @@ const payModuleBatchOverview = ref()
                                                 item-title="title" item-value="id" persistent-hint single-line :rules="[requiredValidatorV2(props.item.level, '영업자 등급')]"
                                                 :readonly="props.item.id != 0" />
                                         </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">등급</VCol>
+                                        <VCol md="8"><span>{{ salesLevels().find(obj => obj.id === props.item.level).title }}</span></VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>
@@ -130,7 +150,7 @@ const payModuleBatchOverview = ref()
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol>
+                        <VCol v-if="isAbleModiy(props.item.id)">
                             <VTextarea v-model="props.item.note" counter label="메모사항"
                                 prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
                         </VCol>

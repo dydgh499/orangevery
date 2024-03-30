@@ -105,6 +105,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         });
 
         Route::prefix('posts')->group(function() {
+            Route::get('{id}/parent', [PostController::class, 'parent']);
             Route::get('recent', [PostController::class, 'recent']);
             Route::post('upload', [PostController::class, 'upload']);    
         });

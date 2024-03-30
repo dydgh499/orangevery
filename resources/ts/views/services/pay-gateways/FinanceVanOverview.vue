@@ -21,7 +21,7 @@ const addNewFinanceVan = () => {
         min_balance_limit: 0,
         corp_code: '',
         corp_name: '',
-        nick_name: '금융 VAN 명칭을 적어주세요.😀',
+        nick_name: '별칭입력',
         withdraw_acct_num: '',
     }))
 }

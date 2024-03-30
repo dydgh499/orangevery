@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import Editor from '@/layouts/utils/Editor.vue'
-import { getUserLevel } from '@/plugins/axios'
-import { types } from '@/views/posts/useStore'
 import type { Post } from '@/views/types'
 import { requiredValidatorV2 } from '@validators'
+import Editor from '@/layouts/utils/Editor.vue'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { types } from '@/views/posts/useStore'
+import { getUserLevel } from '@/plugins/axios'
 
 interface Props {
     item: Post,

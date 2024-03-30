@@ -8,14 +8,14 @@ import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { requiredValidatorV2 } from '@validators'
-import { getUserLevel } from '@axios'
+import { isAbleModiy } from '@axios'
+
 interface Props {
     item: PayModule,
     able_mcht_chanage: boolean,
 }
 
 const props = defineProps<Props>()
-const snackbar = <any>(inject('snackbar'))
 
 const { mchts } = useSalesFilterStore()
 const { pgs, pss, settle_types, psFilter, setFee } = useStore()
@@ -33,7 +33,7 @@ const filterPgs = computed(() => {
 </script>
 <template>
     <VCardItem>
-        <VRow v-if="props.able_mcht_chanage && getUserLevel() >= 35">
+        <VRow v-if="props.able_mcht_chanage && isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>소유 가맹점</template>
                 <template #input>
@@ -52,7 +52,7 @@ const filterPgs = computed(() => {
             </CreateHalfVCol>
         </VRow>
         <!-- 👉 결제 모듈 타입 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>결제모듈 타입</template>
                 <template #input>
@@ -72,7 +72,7 @@ const filterPgs = computed(() => {
             </CreateHalfVCol>
         </VRow>
         <!-- 👉 수기결제 타입(구인증, 비인증) -->
-        <VRow v-show="props.item.module_type == 1 || props.item.module_type == 5" v-if="getUserLevel() >= 35">
+        <VRow v-show="props.item.module_type == 1" v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>수기결제 타입</template>
                 <template #input>
@@ -92,7 +92,7 @@ const filterPgs = computed(() => {
             </CreateHalfVCol>
         </VRow>
         <!-- 👉 할부한도 (수기,인증,간편,실시간,비인증) -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>할부한도</template>
                 <template #input>
@@ -111,7 +111,7 @@ const filterPgs = computed(() => {
             </CreateHalfVCol>
         </VRow>
         <!-- 👉 PG사 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>
                     <span>PG사</span>
@@ -124,7 +124,7 @@ const filterPgs = computed(() => {
             </CreateHalfVCol>
         </VRow>
         <!-- 👉 PG 구간 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>구간</template>
                 <template #input>
@@ -135,7 +135,7 @@ const filterPgs = computed(() => {
                 </template>
             </CreateHalfVCol>
         </VRow>
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>정산일</template>
                 <template #input>
@@ -153,7 +153,7 @@ const filterPgs = computed(() => {
                 </template>
             </CreateHalfVCol>
         </VRow>
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>이체 수수료</template>
                 <template #input>
@@ -171,7 +171,7 @@ const filterPgs = computed(() => {
             </CreateHalfVCol>
         </VRow>
         <!-- 👉 비고 -->
-        <VRow v-if="getUserLevel() >= 35">
+        <VRow v-if="isAbleModiy(props.item.id)">
             <VCol>
                 <VTextarea v-model="props.item.note" counter label="결제모듈 별칭" placeholder='결제모듈 명칭을 적어주세요.😀'
                     prepend-inner-icon="twemoji-spiral-notepad" auto-grow />

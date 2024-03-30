@@ -43,6 +43,11 @@ provide('exporter', exporter)
                         </span>
                         <span v-else-if="_key == 'total_trx_amount'">
                             {{ (item.amount - item.profit).toLocaleString() }}
+                        </span>                         
+                        <span v-else-if="_key == 'mcht_settle_id'">
+                            <VChip :color="Number(item[_key]) === 0 ? 'default' : 'success'">
+                                {{ Number(item[_key]) === 0 ? '정산안함' : "#"+item[_key]}}
+                            </VChip>
                         </span>
                         <span v-else-if="_key == 'amount'" style="color: red !important;">
                             {{ (item.amount).toLocaleString() }}

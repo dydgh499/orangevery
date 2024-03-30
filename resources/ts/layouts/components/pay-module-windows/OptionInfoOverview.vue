@@ -8,6 +8,9 @@ import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { requiredValidatorV2 } from '@validators'
 import { issuers } from '@/views/complaints/useStore'
+import { isAbleModiy } from '@axios'
+import corp from '@corp'
+
 interface Props {
     item: PayModule,
 }
@@ -51,7 +54,7 @@ const props = defineProps<Props>()
                 </template>
             </CreateHalfVCol>
         </VRow>
-        <VRow>
+        <VRow v-if="corp.pv_options.paid.use_dup_pay_validation && props.item.module_type != 0">
             <CreateHalfVCol :mdl="6" :mdr="6">
                 <template #name>
                     <BaseQuestionTooltip :location="'top'" :text="'중복결제 허용회수'"
@@ -64,51 +67,52 @@ const props = defineProps<Props>()
                 </template>
             </CreateHalfVCol>
         </VRow>
-
-        <VRow>
-            <CreateHalfVCol :mdl="6" :mdr="6">
-                <template #name>
-                    <BaseQuestionTooltip :location="'top'" :text="'단건 결제 한도'"
-                        :content="'결제 한도 금액: 1,000,000원 = 100 입력(이하동일)<br><b>온라인 결제</b>만 적용 가능합니다.'">
-                    </BaseQuestionTooltip>
-                </template>
-                <template #input>
-                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_single_limit"
-                        type="number" suffix="만원"
-                        :rules="[requiredValidatorV2(props.item.pay_single_limit, '단건 결제 한도')]" />
-                </template>
-            </CreateHalfVCol>
-        </VRow>
-        <VRow>
-            <CreateHalfVCol :mdl="6" :mdr="6">
-                <template #name>일 결제 한도</template>
-                <template #input>
-                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_day_limit"
-                        type="number" suffix="만원" :rules="[requiredValidatorV2(props.item.pay_day_limit, '일 결제 한도')]" />
-                </template>
-            </CreateHalfVCol>
-        </VRow>
-        <VRow>
-            <CreateHalfVCol :mdl="6" :mdr="6">
-                <template #name>월 결제 한도</template>
-                <template #input>
-                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_month_limit"
-                        type="number" suffix="만원"
-                        :rules="[requiredValidatorV2(props.item.pay_month_limit, '월 결제 한도')]" />
-                </template>
-            </CreateHalfVCol>
-        </VRow>
-        <VRow>
-            <CreateHalfVCol :mdl="6" :mdr="6">
-                <template #name>연 결제 한도</template>
-                <template #input>
-                    <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_year_limit"
-                        type="number" suffix="만원"
-                        :rules="[requiredValidatorV2(props.item.pay_year_limit, '연 결제 한도')]" />
-                </template>
-            </CreateHalfVCol>
-        </VRow>
-        <VRow>
+        <template v-if="corp.pv_options.paid.use_pay_limit && props.item.module_type != 0">
+            <VRow>
+                <CreateHalfVCol :mdl="6" :mdr="6">
+                    <template #name>
+                        <BaseQuestionTooltip :location="'top'" :text="'단건 결제 한도'"
+                            :content="'결제 한도 금액: 1,000,000원 = 100 입력(이하동일)<br><b>온라인 결제</b>만 적용 가능합니다.'">
+                        </BaseQuestionTooltip>
+                    </template>
+                    <template #input>
+                        <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_single_limit"
+                            type="number" suffix="만원"
+                            :rules="[requiredValidatorV2(props.item.pay_single_limit, '단건 결제 한도')]" />
+                    </template>
+                </CreateHalfVCol>
+            </VRow>
+            <VRow>
+                <CreateHalfVCol :mdl="6" :mdr="6">
+                    <template #name>일 결제 한도</template>
+                    <template #input>
+                        <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_day_limit"
+                            type="number" suffix="만원" :rules="[requiredValidatorV2(props.item.pay_day_limit, '일 결제 한도')]" />
+                    </template>
+                </CreateHalfVCol>
+            </VRow>
+            <VRow>
+                <CreateHalfVCol :mdl="6" :mdr="6">
+                    <template #name>월 결제 한도</template>
+                    <template #input>
+                        <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_month_limit"
+                            type="number" suffix="만원"
+                            :rules="[requiredValidatorV2(props.item.pay_month_limit, '월 결제 한도')]" />
+                    </template>
+                </CreateHalfVCol>
+            </VRow>
+            <VRow>
+                <CreateHalfVCol :mdl="6" :mdr="6">
+                    <template #name>연 결제 한도</template>
+                    <template #input>
+                        <VTextField prepend-inner-icon="tabler-currency-won" v-model="props.item.pay_year_limit"
+                            type="number" suffix="만원"
+                            :rules="[requiredValidatorV2(props.item.pay_year_limit, '연 결제 한도')]" />
+                    </template>
+                </CreateHalfVCol>
+            </VRow>
+        </template>
+        <VRow v-if="corp.pv_options.paid.use_forb_pay_time && props.item.module_type != 0">
             <CreateHalfVCol :mdl="6" :mdr="6">
                 <template #name>
                     <BaseQuestionTooltip :location="'top'" :text="'결제금지 시간'"
@@ -124,7 +128,7 @@ const props = defineProps<Props>()
                 </template>
             </CreateHalfVCol>
         </VRow>
-        <VRow>
+        <VRow v-if="corp.pv_options.paid.use_issuer_filter && props.item.module_type != 0">
             <CreateHalfVCol :mdl="6" :mdr="6">
                 <template #name>
                     <BaseQuestionTooltip :location="'top'" :text="'발급사 필터링'" :content="'해당 발급사로 결제된 카드는 강제취소됩니다.'">

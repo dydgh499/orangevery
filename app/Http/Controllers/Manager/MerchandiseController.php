@@ -34,7 +34,6 @@ class MerchandiseController extends Controller
     protected $merchandises, $pay_modules;
     protected $target;
     protected $imgs;
-    protected $pay_mod_cols;
 
     public function __construct(Merchandise $merchandises, PaymentModule $pay_modules)
     {
@@ -55,7 +54,6 @@ class MerchandiseController extends Controller
                 500, 500, 500, 500, 120
             ],
         ];
-        $this->pay_mod_cols = ['mcht_id', 'mid', 'tid', 'module_type', 'pg_id'];
     }
 
     /**
@@ -124,6 +122,7 @@ class MerchandiseController extends Controller
         foreach($data['content'] as $content) 
         {
             $my_modules = isset($module_mcht_ids[$content->id]) ? collect($module_mcht_ids[$content->id]) : collect();
+            $content->settle_types = $my_modules->pluck('settle_type')->values()->toArray();
             $content->mids = $my_modules->pluck('mid')->values()->toArray();
             $content->tids = $my_modules->pluck('tid')->values()->toArray();
             $content->module_types = $my_modules->pluck('module_type')->values()->toArray();    
@@ -147,7 +146,7 @@ class MerchandiseController extends Controller
             ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
             ->whereIn('mcht_id', $mcht_ids)
-            ->get($this->pay_mod_cols);
+            ->get(['mcht_id', 'mid', 'tid', 'module_type', 'pg_id', 'settle_type']);
         
         return $this->mappingPayModules($data, $pay_modules);    
     }
@@ -161,7 +160,7 @@ class MerchandiseController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $data = $this->commonSelect($request);
+        $data           = $this->commonSelect($request);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
@@ -223,16 +222,11 @@ class MerchandiseController extends Controller
      */
     public function show(Request $request, $id)
     {
-        if(isOperator($request) || (isSalesforce($request) && $request->user()->is_able_modify_mcht) || $request->user()->brand_id === 30)
-        {
-            $data = $this->merchandises->where('id', $id)
-                ->with(['regularCreditCards'])
-                ->first();
-            $data->setFeeFormatting(true);
-            return $data ? $this->response(0, $data) : $this->response(1000);
-        }
-        else
-            return $this->response(951);
+        $data = $this->merchandises->where('id', $id)
+            ->with(['regularCreditCards'])
+            ->first();
+        $data->setFeeFormatting(true);
+        return $data ? $this->response(0, $data) : $this->response(1000);
     }
 
     /**
@@ -271,7 +265,7 @@ class MerchandiseController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        if(isMyMerchandise($request, $id) || isOperator($request) || (isSalesforce($request) && $request->user()->is_able_modify_mcht))
+        if(isOperator($request) || (isSalesforce($request) && $request->user()->is_able_modify_mcht))
         {
             $data = $this->merchandises->where('id', $id)->first();
             $res = $this->delete($this->merchandises->where('id', $id));

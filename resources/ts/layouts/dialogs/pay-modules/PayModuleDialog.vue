@@ -8,7 +8,7 @@ import TerminalInfoOverview from '@/layouts/components/pay-module-windows/Termin
 import OptionInfoOverview from '@/layouts/components/pay-module-windows/OptionInfoOverview.vue'
 
 import { useRequestStore } from '@/views/request'
-import { getUserLevel, isAbleModifyMcht } from '@axios'
+import { isAbleModiy } from '@axios'
 import { VForm } from 'vuetify/components'
 
 interface Props {
@@ -72,7 +72,7 @@ defineExpose({
                     <VTab>결제타입</VTab>
                     <VTab>결제정보</VTab>
                     <VTab v-if="pay_module.module_type < 2">장비정보</VTab>
-                    <VTab v-if="getUserLevel() >= 35">옵션정보</VTab>
+                    <VTab v-if="isAbleModiy(pay_module.id)">옵션정보</VTab>
                 </VTabs>
                 <PerfectScrollbar :options="{ wheelPropagation: false }">
                     <VWindow v-model="tab">
@@ -85,14 +85,14 @@ defineExpose({
                         <VWindowItem v-if="pay_module.module_type < 2">
                             <TerminalInfoOverview :item="pay_module" />
                         </VWindowItem>
-                        <VWindowItem v-if="getUserLevel() >= 35">
+                        <VWindowItem v-if="isAbleModiy(pay_module.id)">
                             <OptionInfoOverview :item="pay_module" />
                         </VWindowItem>
                     </VWindow>
                 </PerfectScrollbar>
             </VForm>
             <VDivider />
-            <VRow v-if="getUserLevel() >= 35 || isAbleModifyMcht()" style="padding: 1em;">
+            <VRow v-if="isAbleModiy(pay_module.id)" style="padding: 1em;">
                 <VCol cols="12" class="d-flex gap-4">
                     <VBtn type="button" style="margin-left: auto;" @click="payModuleUpdate()">
                         {{ pay_module.id == 0 ? "추가" : "수정" }}

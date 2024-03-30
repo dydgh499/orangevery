@@ -174,6 +174,32 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
         else
             return ''
     }
+
+    const hintSalesSettleFee = (mcht: Merchandise, sales_id: number): string => {
+        const levels = corp.pv_options.auth.levels
+        const dest_key = `sales${sales_id}`;
+        if (levels[`${dest_key}_use`] && mcht[`${dest_key}_id`]) {
+            let under_fee = -1;
+            for (let i = sales_id-1; i > -1; i--) 
+            {
+                const sales_key = `sales${i}`
+                if(levels[`${sales_key}_use`] && mcht[`sales${i}_id`]) {
+                    under_fee = mcht[`sales${i}_fee`]
+                    break
+                }
+            }
+            if(under_fee === -1) 
+                under_fee = mcht.trx_fee
+
+            mcht[`${dest_key}_settlement_fee`] = (under_fee - mcht[`${dest_key}_fee`]).toFixed(3)
+            return `정산수수료: ${mcht[`${dest_key}_settlement_fee`]}%`
+        }
+        else {
+            mcht[`${dest_key}_settlement_fee`] = 0
+            return ''
+        }
+    }
+
     // 상위 영업점들
     const getAboveSalesFilter = (select_idx:number, params:any) => {
         let _mcht = [];
@@ -272,6 +298,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
         classification,
         setUnderSalesFilter,
         hintSalesApplyFee,
+        hintSalesSettleFee,
     }
 })
 

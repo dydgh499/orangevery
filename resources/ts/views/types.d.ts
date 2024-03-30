@@ -645,7 +645,7 @@ export interface Post {
     writer: string,
     replies?: object[],
     parent_id: number | null,
-    is_reply: boolean,
+    is_reply: number,
 }
 
 export interface Complaint {
