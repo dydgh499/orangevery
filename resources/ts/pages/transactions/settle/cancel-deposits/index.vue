@@ -15,6 +15,11 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
+const getDateFormat = (_settle_dt: number) => {
+    const settle_dt = _settle_dt.toString()
+    return settle_dt.substr(0, 4) + '-' + settle_dt.substr(4, 2) + '-' + settle_dt.substr(6, 2)
+}
+
 </script>
 <template>
     <BaseIndexView placeholder="가맹점 상호 검색" :metas="metas" :add="false" add_name="" :date_filter_type="DateFilters.SETTLE_RANGE">
@@ -43,7 +48,10 @@ provide('exporter', exporter)
                         </span>
                         <span v-else-if="_key == 'total_trx_amount'">
                             {{ (item.amount - item.profit).toLocaleString() }}
-                        </span>                         
+                        </span>
+                        <span v-else-if="_key == 'settle_dt'">
+                            {{ getDateFormat(item[_key]) }}
+                        </span>
                         <span v-else-if="_key == 'mcht_settle_id'">
                             <VChip :color="Number(item[_key]) === 0 ? 'default' : 'success'">
                                 {{ Number(item[_key]) === 0 ? '정산안함' : "#"+item[_key]}}

@@ -60,26 +60,26 @@ class CancelDepositController extends Controller
         return $this->transPagenation($query, 'transactions', $cols, $request->page, $request->page_size);
     }
 
+    public function getSettleDateByTransId($trans_id, $deposit_dt)
+    {
+        $tran = Transaction::where('id', $trans_id)->first();
+        request()->merge([
+            's_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->subDays(30)->format('Y-m-d'),
+            'e_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->addDays(30)->format('Y-m-d'),
+        ]);
+        $holidays = Transaction::getHolidays(14);
+        return $this->getSettleDate($deposit_dt, $tran->mcht_settle_type+1, $tran->pg_settle_type, $holidays);
+    }
+
     /**
      * 추가
      *
      * 마스터 이상 가능
-     *
      */
     public function store(CancelDepositRequest $request)
     {
         $data = $request->data();
-        $tran = Transaction::where('id', $data['trans_id'])->first();
-        if($tran)
-        {
-            request()->merge([
-                's_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->subDays(30)->format('Y-m-d'),
-                'e_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->addDays(30)->format('Y-m-d'),
-            ]);
-            $holidays = Transaction::getHolidays($request->user()->brand_id);
-            $data['settle_dt'] = $this->getSettleDate($data['deposit_dt'], $tran->mcht_settle_type+1, $tran->pg_settle_type, $holidays);
-        }
-
+        $data['settle_dt'] = $this->getSettleDateByTransId($data['trans_id'], $data['deposit_dt']);
         $res = $this->deposits->create($data);
         return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
@@ -119,16 +119,7 @@ class CancelDepositController extends Controller
     public function update(CancelDepositRequest $request, $id)
     {
         $data = $request->data();
-        $tran = Transaction::where('id', $data['trans_id'])->first();
-        if($tran)
-        {
-            request()->merge([
-                's_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->subDays(30)->format('Y-m-d'),
-                'e_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->addDays(30)->format('Y-m-d'),
-            ]);
-            $holidays = Transaction::getHolidays($request->user()->brand_id);
-            $data['settle_dt'] = $this->getSettleDate($tran->cxl_dt, $tran->mcht_settle_type+1, $tran->pg_settle_type, $holidays);
-        }
+        $data['settle_dt'] = $this->getSettleDateByTransId($data['trans_id'], $data['deposit_dt']);
         $res  = $this->deposits->where('id', $id)->update($data);
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
@@ -141,13 +132,7 @@ class CancelDepositController extends Controller
         {
             if($cancel_deposit->trans_id)
             {
-                $tran = Transaction::where('id', $cancel_deposit->trans_id)->first();
-                request()->merge([
-                    's_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->subDays(30)->format('Y-m-d'),
-                    'e_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->addDays(30)->format('Y-m-d'),
-                ]);
-                $holidays = Transaction::getHolidays(14);
-                $cancel_deposit->settle_dt = $ist->getSettleDate($tran->cxl_dt, $tran->mcht_settle_type+1, $tran->pg_settle_type, $holidays);
+                $cancel_deposit->settle_dt = $ist->getSettleDateByTransId($cancel_deposit->trans_id, $cancel_deposit->deposit_dt);
                 $cancel_deposit->save();    
             }
         }

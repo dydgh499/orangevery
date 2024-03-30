@@ -7,9 +7,11 @@ export const useSearchStore = defineStore('cancelDepositSearchStore', () => {
     const headers: Record<string, string> = {
         'id': 'NO.',
         'mcht_name': '가맹점 상호',
+        'settle_dt': '정산일',
+        'mcht_settle_id' : '정산번호',
+        'deposit_dt': '입금일',
         'deposit_amount': '입금금액',
         'deposit_history': '입금내역',
-        'mcht_settle_id' : '정산번호',
         'cxl_dttm': '취소일자',
         'amount': '취소금액',
         'profit': '정산금',
