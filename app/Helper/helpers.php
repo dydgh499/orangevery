@@ -422,7 +422,7 @@
         {
             $target_id = 'brand_id';
             $target_settle_id = '';
-            $target_settle_amount = ($request->level == 50 ? 'dev' :'brand')."_settle_amount";
+            $target_settle_amount = ($level === 50 ? 'dev' :'brand')."_settle_amount";
         }
         return [$target_id, $target_settle_id, $target_settle_amount];
     }
