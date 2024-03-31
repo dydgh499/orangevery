@@ -73,7 +73,7 @@ class HolidayController extends Controller
                 }
             }
             else
-                Log::error("holiday parse fail", $xml);
+                error(['message'=>$xml], "holiday parse fail");
         }
         return $holidays;
     }

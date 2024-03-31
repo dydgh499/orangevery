@@ -291,7 +291,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     
     const findSalesName = (key: string, value: number) => {
         const level = getSalesLevelByCol(key)
-        return sales[level].value.find(obj => obj.id === value)?.sales_name
+        return all_sales[level].find(obj => obj.id === value)?.sales_name
     }
 
     return {
