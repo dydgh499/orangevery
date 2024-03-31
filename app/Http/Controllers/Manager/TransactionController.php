@@ -97,6 +97,8 @@ class TransactionController extends Controller
         $query  = $this->transactions
             ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
+            ->where('payment_modules.brand_id', $request->user()->brand_id)
+            ->where('merchandises.brand_id', $request->user()->brand_id)
             ->globalFilter();
         $query = $this->transDateFilter($request, $query);
         if($search !== "")
