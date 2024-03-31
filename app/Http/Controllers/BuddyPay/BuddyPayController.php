@@ -225,8 +225,9 @@ class BuddyPayController extends Controller
             'payment_modules.note', 'payment_modules.cxl_type',
             DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"), DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
         ];
-        $query  = $inst->commonSelect($request);
-        $data   = $inst->getTransactionData($query, 10);
+        $inst->setTransactionData(10);
+        $query          = $inst->commonSelect($request);
+        $data           = $inst->getIndexData($request, $query, 'transactions.id', $inst->cols, 'transactions.trx_at', false);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);

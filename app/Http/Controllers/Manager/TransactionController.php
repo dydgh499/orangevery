@@ -49,7 +49,7 @@ class TransactionController extends Controller
         ];
     }
 
-    public function getTransactionData($query, $level)
+    public function setTransactionData($level)
     {
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($level);
         if($target_settle_amount === 'dev_settle_amount')
@@ -57,8 +57,6 @@ class TransactionController extends Controller
         else
             $profit = "$target_settle_amount AS profit";
         $this->cols[] = $profit;
-
-        return $this->getIndexData($request, $query, 'transactions.id', $this->cols, 'transactions.trx_at');
     }
 
     public function optionFilter($query, $request)
@@ -100,6 +98,7 @@ class TransactionController extends Controller
             ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
             ->globalFilter();
+        $query = $this->transDateFilter($request, $query);
         if($search !== "")
         {
             $query = $query->where(function ($query) use ($search) {
@@ -129,8 +128,6 @@ class TransactionController extends Controller
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
         $query = $this->commonSelect($request);
-        $query = $this->transDateFilter($request, $query);
-
         $cols = $this->getTotalCols($target_settle_amount);
         $chart = $query->first($cols);
         $chart = $this->setTransChartFormat($chart);
@@ -144,6 +141,8 @@ class TransactionController extends Controller
      */
     public function index(IndexRequest $request)
     {
+        $this->setTransactionData($request->level);
+
         $with  = ['cancelDeposits'];
         $query = $this->commonSelect($request);
         if($request->use_realtime_deposit && $request->level == 10)
@@ -152,7 +151,7 @@ class TransactionController extends Controller
         if(count($with))
             $query = $query->with($with);
 
-        $data           = $this->getTransactionData($query, $request->level);
+        $data           = $this->getIndexData($request, $query, 'transactions.id', $this->cols, 'transactions.trx_at', false);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
@@ -399,7 +398,6 @@ class TransactionController extends Controller
         $cols = array_merge($cols , $this->getTotalCols('mcht_settle_amount'));
 
         $query = $this->commonSelect($request);
-        $query = $this->transDateFilter($request, $query);
         $query = $query
                 ->groupBy('merchandises.id')
                 ->orderBy('merchandises.mcht_name')
@@ -441,37 +439,5 @@ class TransactionController extends Controller
     {
         $ist = new TransactionController(new Transaction);
         $ist->_test();
-    }
-
-    static public function updateTrxSettleAt()
-    {
-        $ist = new TransactionController(new Transaction);
-        $db_trans = $ist->transactions
-            ->where('id', '>=', 100000)
-            ->where('id', '<', 1000000)
-            ->orderBy('id', 'desc')
-            ->get();
-
-        request()->merge([
-            's_dt' => '2022-01-01',
-            'e_dt' => '2024-05-05',
-        ]);
-        $holidays = Transaction::getHolidays(6);
-        foreach($db_trans as $tran)
-        {
-            if($tran->is_cancel)
-            {
-                $tran->settle_dt = $ist->getSettleDate($tran->cxl_dt, $tran->mcht_settle_type+1, $tran->pg_settle_type, $holidays);
-                $tran->trx_at = $tran->cxl_dt." ".$tran->cxl_tm;
-            }
-            else
-            {
-                $tran->settle_dt = $ist->getSettleDate($tran->trx_dt, $tran->mcht_settle_type+1, $tran->pg_settle_type, $holidays);
-                $tran->trx_at = $tran->trx_dt." ".$tran->trx_tm;
-            }
-            if($tran->id%100 === 0)
-                echo $tran->id."\n";
-            $tran->save();
-        }
     }
 }
