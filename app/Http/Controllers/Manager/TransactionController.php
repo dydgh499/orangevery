@@ -441,4 +441,35 @@ class TransactionController extends Controller
         $ist = new TransactionController(new Transaction);
         $ist->_test();
     }
+
+    static public function updateTrxSettleAt()
+    {
+        $ist = new TransactionController(new Transaction);
+        $db_trans = $ist->transactions
+            ->where('id', '<', 100000)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        request()->merge([
+            's_dt' => '2022-01-01',
+            'e_dt' => '2024-05-05',
+        ]);
+        $holidays = Transaction::getHolidays(6);
+        foreach($db_trans as $tran)
+        {
+            if($tran->is_cancel)
+            {
+                $tran->settle_dt = $ist->getSettleDate($tran->cxl_dt, $tran->mcht_settle_type+1, $tran->pg_settle_type, $holidays);
+                $tran->trx_at = $tran->cxl_dt." ".$tran->cxl_tm;
+            }
+            else
+            {
+                $tran->settle_dt = $ist->getSettleDate($tran->trx_dt, $tran->mcht_settle_type+1, $tran->pg_settle_type, $holidays);
+                $tran->trx_at = $tran->trx_dt." ".$tran->trx_tm;
+            }
+            if($tran->id%100 === 0)
+                echo $tran->id."\n";
+            $tran->save();
+        }
+    }
 }
