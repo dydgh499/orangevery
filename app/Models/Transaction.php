@@ -64,7 +64,7 @@ class Transaction extends Model
         $key_name = "holidays-".$brand_id."-$s_dt-$e_dt";
 
         $holidays = Redis::get($key_name);
-        if($holidays == null) 
+        if($holidays == null)
         {
             $rest_dts = Holiday::where('brand_id', $brand_id)
                 ->where("rest_dt", ">=", $s_dt)
@@ -85,38 +85,26 @@ class Transaction extends Model
         return $holidays;
     }
 
-    public function scopeSettleDateTypeTransaction($query)
-    {
-        $s_dt = request()->s_dt;
-        $e_dt = request()->e_dt;
-        if(request()->is_base_trx)
-        {
-            $trx_dt = 'transactions.trx_dt';
-            $cxl_dt = 'transactions.cxl_dt';
-        }
-        else
-        {
-            $holidays = self::getHolidays(request()->user()->brand_id);
-            $trx_dt = "AddBaseWorkingDays(transactions.trx_dt, transactions.mcht_settle_type+1, transactions.pg_settle_type, '$holidays')";
-            $cxl_dt = "AddBaseWorkingDays(transactions.cxl_dt, transactions.mcht_settle_type+1, transactions.pg_settle_type, '$holidays')";
-        }
-        return $query->where(function ($query) use ($s_dt, $e_dt, $trx_dt) {     
-                $query->whereRaw("$trx_dt >= '$s_dt'")
-                    ->whereRaw("$trx_dt <= '$e_dt'")
-                    ->where('transactions.is_cancel', false);
-            })->orWhere(function ($query) use ($s_dt, $e_dt ,$cxl_dt) {
-                $query->whereRaw("$cxl_dt >= '$s_dt'")
-                    ->whereRaw("$cxl_dt <= '$e_dt'")
-                    ->where('transactions.is_cancel', true);
-            });
-    }
-
     // 정산 안한 것들 조회
     public function scopeNoSettlement($query, $target)
     {
+        if(request()->is_base_trx)
+        {
+            $s_dt = strlen(request()->s_dt) === 10 ? date(request()->s_dt." 00:00:00") : request()->s_dt;
+            $e_dt = strlen(request()->e_dt) === 10 ? date(request()->e_dt." 23:59:59") : request()->e_dt;
+            $trx_dt = 'transactions.trx_at';
+        }
+        else
+        {
+            $s_dt = str_replace('-', '', request()->s_dt);
+            $e_dt = str_replace('-', '', request()->e_dt);
+            $trx_dt = 'transactions.settle_dt';
+        }
+        
         return $query->whereNull($target)
-            ->globalFilter()
-            ->settleDateTypeTransaction();
+            ->whereRaw("$trx_dt >= ?", [$s_dt])
+            ->whereRaw("$trx_dt <= ?", [$e_dt])
+            ->globalFilter();
     }
 
     public function getTrxAmountAttribute()

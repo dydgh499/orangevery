@@ -159,8 +159,7 @@ trait SettleTrait
             $target_settle_amount." AS profit",
         ];
         $query  = $this->partSettleCommonQuery($request);
-        $data   = $this->transPagenation($query, 'transactions', $cols, $request->page, $request->page_size);
-
+        $data           = $this->getIndexData($request, $query, 'transactions.id', $cols, 'transactions.trx_at', false);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);

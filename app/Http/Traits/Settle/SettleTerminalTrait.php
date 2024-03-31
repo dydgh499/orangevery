@@ -65,8 +65,9 @@ trait SettleTerminalTrait
             };    
         };
         $getUnderSalesGroup = function($pmod_ids, $s_dt, $e_dt) {
-                $query = Transaction::whereIn('pmod_id', $pmod_ids);     
-                $query = $this->transDateFilter($query, $s_dt, $e_dt, null);    //IN TransactionTrait.php
+                $query = Transaction::whereIn('pmod_id', $pmod_ids)
+                    ->whereRaw("transactions.trx_at >= ?", [$s_dt])
+                    ->whereRaw("transactions.trx_at <= ?", [$e_dt]);
                 return $under_sales = $query->groupby('pmod_id')
                         ->get([DB::raw('SUM(amount) AS total_amount'), 'pmod_id']);
         };

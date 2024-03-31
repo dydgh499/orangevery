@@ -65,7 +65,7 @@ class DifferenceSettlementHistoryController extends Controller
     public function index(IndexRequest $request)
     {
         $query = $this->commonSelect($request);
-        return $this->transPagenation($query, 'difference_settlement_histories', $this->cols, $request->page, $request->page_size);
+        return $this->getIndexData($request, $query, 'difference_settlement_histories.id', $this->cols, 'transactions.trx_at');
     }
 
     public function commonSelect($request)
@@ -89,7 +89,6 @@ class DifferenceSettlementHistoryController extends Controller
                     ->orWhere('merchandises.business_num', 'like', "%$search%");
             });
         }
-        $query = $this->transDateFilter($query, $request->s_dt, $request->e_dt, $request->use_search_date_detail);
         $query = globalPGFilter($query, $request, 'transactions');
         $query = globalSalesFilter($query, $request, 'transactions');
         $query = globalAuthFilter($query, $request, 'transactions');
@@ -103,7 +102,8 @@ class DifferenceSettlementHistoryController extends Controller
      */
     public function chart(IndexRequest $request)
     {
-        $query  = $this->commonSelect($request);
+        $query  = $this->commonSelect($request);        
+        $query  = $this->transDateFilter($request, $query);
         $chart  = $query->first([
             DB::raw("SUM(transactions.amount) AS amount"),
             DB::raw("SUM(difference_settlement_histories.supply_amount) AS supply_amount"),

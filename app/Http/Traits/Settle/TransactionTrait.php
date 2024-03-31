@@ -226,52 +226,6 @@ trait TransactionTrait
         return NotiSendHistory::create($log);        
     }
 
-    public function transPagenation($query, $parent, $cols, $page, $page_size)
-    {
-        $res    = ['page'=>$page, 'page_size'=>$page_size];
-        $sp     = ($res['page'] - 1) * $res['page_size'];
-        $min    = $query->min("$parent.id");
-        
-        if($min != NULL)
-        {
-            $con_query = $query->where("$parent.id", '>=', $min);
-            $res['total']   = $query->count();
-            $con_query = $con_query
-                    ->orderBy("trx_dttm", 'desc')
-                    ->orderBy("cxl_dttm", 'desc')
-                    ->offset($sp)
-                    ->limit($page_size);
-            $res['content'] = $con_query->get($cols);
-        }
-        else
-        {
-            $res['total'] = 0;
-            $res['content'] = [];
-        }
-        return $res;
-    }
-
-    public function transDateFilter($query, $s_dt, $e_dt, $use_search_date_detail)
-    {
-        if($s_dt && $e_dt)
-        {
-            $query = $query->where(function($query) use($s_dt, $e_dt, $use_search_date_detail) {
-                $query->where(function($query) use($s_dt, $e_dt, $use_search_date_detail) {
-                    $search_format = $use_search_date_detail ? "concat(trx_dt, ' ', trx_tm)" : "trx_dt";
-                    $query->where('transactions.is_cancel', false)
-                        ->whereRaw("$search_format >= ?", [$s_dt])
-                        ->whereRaw("$search_format <= ?", [$e_dt]);
-                })->orWhere(function($query) use($s_dt, $e_dt, $use_search_date_detail) {
-                    $search_format = $use_search_date_detail ? "concat(cxl_dt, ' ', cxl_tm)" : "cxl_dt";
-                    $query->where('transactions.is_cancel', true)
-                        ->whereRaw("$search_format >= ?", [$s_dt])
-                        ->whereRaw("$search_format <= ?", [$e_dt]);
-                });
-            });
-        }
-        return $query;
-    }
-
     function getSettleDate($trx_dt, $add_days, $pg_settle_type, $str_holidays) 
     {
         $currDate = Carbon::parse($trx_dt);
@@ -292,5 +246,14 @@ trait TransactionTrait
             $currDate->addDays($add_days);
     
         return $currDate->format('Ymd');
+    }
+
+    function transDateFilter($request, $query)
+    {
+        $s_dt = strlen($request->s_dt) === 10 ? date($request->s_dt." 00:00:00") : $request->s_dt;
+        $e_dt = strlen($request->e_dt) === 10 ? date($request->e_dt." 23:59:59") : $request->e_dt;
+        return $query
+            ->whereRaw("transactions.trx_at >= ?", [$s_dt])
+            ->whereRaw("transactions.trx_at <= ?", [$e_dt]);
     }
 }

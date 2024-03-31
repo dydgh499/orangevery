@@ -56,8 +56,7 @@ class CancelDepositController extends Controller
                 ->join('merchandises', 'merchandises.id', '=', 'transactions.mcht_id')
                 ->where('transactions.brand_id', $request->user()->brand_id)
                 ->where('merchandises.mcht_name', 'like', "%$search%");
-        $query = $this->transDateFilter($query, $request->s_dt, $request->e_dt, $request->use_search_date_detail);
-        return $this->transPagenation($query, 'transactions', $cols, $request->page, $request->page_size);
+        return $this->getIndexData($request, $query, 'transactions.id', $cols, 'transactions.trx_at');
     }
 
     public function getSettleDateByTransId($trans_id, $deposit_dt)

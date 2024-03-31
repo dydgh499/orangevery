@@ -58,9 +58,7 @@ class TransactionController extends Controller
             $profit = "$target_settle_amount AS profit";
         $this->cols[] = $profit;
 
-        $page      = request()->input('page');
-        $page_size = request()->input('page_size');
-        return $this->transPagenation($query, 'transactions', $this->cols, $page, $page_size);
+        return $this->getIndexData($request, $query, 'transactions.id', $this->cols, 'transactions.trx_at');
     }
 
     public function optionFilter($query, $request)
@@ -118,7 +116,6 @@ class TransactionController extends Controller
                     ->orWhere('payment_modules.note', $search);
             });
         }
-        $query = $this->transDateFilter($query, $request->s_dt, $request->e_dt, $request->use_search_date_detail);
         return $this->optionFilter($query ,$request);
     }
 
@@ -130,7 +127,10 @@ class TransactionController extends Controller
     public function chart(IndexRequest $request)
     {
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
-        $query  = $this->commonSelect($request);
+
+        $query = $this->commonSelect($request);
+        $query = $this->transDateFilter($request, $query);
+
         $cols = $this->getTotalCols($target_settle_amount);
         $chart = $query->first($cols);
         $chart = $this->setTransChartFormat($chart);
@@ -152,7 +152,7 @@ class TransactionController extends Controller
         if(count($with))
             $query = $query->with($with);
 
-        $data   = $this->getTransactionData($query, $request->level);
+        $data           = $this->getTransactionData($query, $request->level);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
@@ -397,12 +397,13 @@ class TransactionController extends Controller
             'merchandises.sector', 'merchandises.custom_id',
         ];
         $cols = array_merge($cols , $this->getTotalCols('mcht_settle_amount'));
-        $query = $this->commonSelect($request);        
-        $query = $this->transDateFilter($query, $request->s_dt, $request->e_dt, $request->use_search_date_detail);
-        $grouped = $query
-            ->groupBy('merchandises.id')
-            ->orderBy('merchandises.mcht_name')
-            ->get($cols);
+
+        $query = $this->commonSelect($request);
+        $query = $this->transDateFilter($request, $query);
+        $query = $query
+                ->groupBy('merchandises.id')
+                ->orderBy('merchandises.mcht_name')
+                ->get($cols);
         return $grouped;
     }
 
@@ -446,7 +447,8 @@ class TransactionController extends Controller
     {
         $ist = new TransactionController(new Transaction);
         $db_trans = $ist->transactions
-            ->where('id', '<', 100000)
+            ->where('id', '>=', 100000)
+            ->where('id', '<', 1000000)
             ->orderBy('id', 'desc')
             ->get();
 

@@ -18,12 +18,12 @@ trait ManagerTrait
         {
             if($request->has('s_dt'))
             {
-                $s_dt = date($request->s_dt." 00:00:00");
+                $s_dt = strlen($request->s_dt) === 10 ? date($request->s_dt." 00:00:00") : $request->s_dt;
                 $query = $query->where($date, '>=', $s_dt);
             }
             if($request->has('e_dt'))
             {
-                $e_dt = date($request->e_dt." 23:59:59");
+                $e_dt = strlen($request->e_dt) === 10 ? date($request->e_dt." 23:59:59") : $request->e_dt;
                 $query = $query->where($date, '<=', $e_dt);
             }
         }
