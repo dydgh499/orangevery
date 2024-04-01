@@ -13,7 +13,7 @@
         public $fix_table_size = 749;
         public $init_search_filter = true;
         public $resident_num_masking = true;
-        public $pay_module_detail_view = true;
+        public $pay_module_detail_view = false;
         
         public $sales_slip = [
             'merchandise' => [
