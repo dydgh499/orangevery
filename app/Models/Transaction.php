@@ -103,9 +103,9 @@ class Transaction extends Model
         }
         
         return $query->whereNull($target)
+            ->globalFilter()
             ->whereRaw("$trx_dt >= ?", [$s_dt]) 
-            ->whereRaw("$trx_dt <= ?", [$e_dt])
-            ->globalFilter();
+            ->whereRaw("$trx_dt <= ?", [$e_dt]);
     }
 
     public function getTrxAmountAttribute()
