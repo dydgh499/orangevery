@@ -161,10 +161,13 @@ class danal implements DifferenceSettlementInterface
             $yesterday = Carbon::now()->subDay(1)->format('Ymd');
             for ($i=0; $i < count($sub_business_regi_infos); $i++) 
             { 
+                echo 1;
                 $sub_business_regi_info = $sub_business_regi_infos[$i];
+                echo 2;
                 $filtered_mchts = $mchts->filter(function ($mcht) use ($sub_business_regi_info) {
                     return str_replace('-', '', $mcht->business_num) === str_replace('-', '', $sub_business_regi_info->business_num) && $mcht->p_mid !== '';
                 })->unique('p_mid'); 
+                echo 3;
                 // p_mid가 중복되지 않도록 필터링
                 print_r(json_decode(json_encode($filtered_mchts), true));
                 foreach($filtered_mchts as $mcht)
