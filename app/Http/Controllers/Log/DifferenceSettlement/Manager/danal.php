@@ -163,7 +163,7 @@ class danal implements DifferenceSettlementInterface
             { 
                 $sub_business_regi_info = $sub_business_regi_infos[$i];
                 $mcht = $mchts->first(function ($mcht) use ($sub_business_regi_info) {
-                    return str_replace('-', '', $mcht->business_num) === str_replace('-', '', $sub_business_regi_info->business_num);
+                    return $mcht->business_num === $sub_business_regi_info->business_num;
                 });
                 if($mcht)
                 {
