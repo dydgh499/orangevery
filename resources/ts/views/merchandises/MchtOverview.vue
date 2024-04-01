@@ -553,7 +553,7 @@ initAllSales()
                 </VCardItem>
             </VCard>
             <br>
-            <VCard v-if="props.item.use_regular_card">
+            <VCard v-if="props.item.use_regular_card && isAbleModiy(props.item.id)">
                 <VCardItem>
                     <VCol cols="12">
                         <VRow>
