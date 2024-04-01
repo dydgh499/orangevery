@@ -229,7 +229,7 @@ class DifferenceSettlementHistoryController extends Controller
                     ->whereIn('merchandises.business_num', $sub_business_regi_infos->pluck('business_num')->all());
                     
                     $query = $query->join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
-                        ->where('payment_modules.p_mid', '!=', '');
+                            ->where('payment_modules.p_mid', '!=', '');
                     $cols[] = ['payment_modules.p_mid'];
                 }
                 else

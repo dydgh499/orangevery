@@ -162,15 +162,15 @@ class danal implements DifferenceSettlementInterface
             for ($i=0; $i < count($sub_business_regi_infos); $i++) 
             { 
                 $sub_business_regi_info = $sub_business_regi_infos[$i];
-                $mcht = $mchts->first(function ($mcht) use ($sub_business_regi_info) {
-                    return str_replace('-', '', $mcht->business_num) === str_replace('-', '', $sub_business_regi_info->business_num);
-                });
-                if($mcht)
+                $filtered_mchts = $mchts->filter(function ($mcht) use ($sub_business_regi_info) {
+                    return str_replace('-', '', $mcht->business_num) === str_replace('-', '', $sub_business_regi_info->business_num) && $mcht->p_mid !== '';
+                })->unique('p_mid'); // p_mid가 중복되지 않도록 필터링
+                foreach($filtered_mchts as $mcht)
                 {
                     $records = $this->setAtypeField("DD", 2);
                     $records .= $this->setNtypeField($i+1, 12);
                     $records .= $this->setNtypeField($sub_business_regi_info->registration_type, 2);
-                    $records .= $this->setNtypeField($brand['rep_mid'], 10);
+                    $records .= $this->setNtypeField($mcht->p_mid, 10);    //PMID
                     $records .= $this->setNtypeField($sub_business_regi_info->card_company_code, 3);
                     $records .= $this->setNtypeField(str_replace('-', '', $sub_business_regi_info->business_num), 10);
                     $records .= $this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->sector), 20);
@@ -193,8 +193,6 @@ class danal implements DifferenceSettlementInterface
                         $upload['modify_count']++;
                     $upload['total_count']++;
                 }
-                else
-                    echo 'not-found !!'."\n";
             }
             return [$full_records, $upload];
         };
