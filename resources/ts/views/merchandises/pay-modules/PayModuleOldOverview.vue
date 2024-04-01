@@ -6,6 +6,7 @@ import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
 import { isAbleModiy } from '@axios'
 import type { PayModule, Merchandise } from '@/views/types'
+import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
 
 interface Props {
     item: Merchandise,
@@ -14,7 +15,10 @@ const props = defineProps<Props>()
 
 const { setNullRemove } = useRequestStore()
 
+const midCreateDlg = ref(null)
 const pay_modules = reactive<PayModule[]>([])
+
+provide('midCreateDlg', midCreateDlg)
 
 const addNewPayModule = async () => {
     const pay_module = <PayModule>(defaultItem)
@@ -41,5 +45,6 @@ watchEffect(() => {
         <template v-for="(pay_module, index) in pay_modules" :key="index">
             <PayModuleCard :item="pay_module" :able_mcht_chanage="false" style="margin-top: 1em;"/>
         </template>
+        <MidCreateDialog ref="midCreateDlg" />
     </section>
 </template>
