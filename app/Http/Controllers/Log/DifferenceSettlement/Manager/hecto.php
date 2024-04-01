@@ -244,4 +244,38 @@ class hecto implements DifferenceSettlementInterface
         $records .= $getTrailer($upload);
         return $records;
     }
+
+    public function registerResponse($content)
+    {
+        $pgResultMessage = function($code) {
+            $result_codes = [
+                '00' => '정상처리',
+                '01' => '미정의 등록구분 값',
+                '02' => '미정의 카드사코드 값',
+                '03' => '필수 값 누락',
+                '04' => '중복사업자번호(하위몰)',
+            ];
+            return isset($result_codes[$code]) ? $result_codes[$code] : '알수없는 코드';
+        };
+        $records = [];
+        $lines = explode("\n", $content);
+        $datas = array_values(array_filter($lines, function($line) {
+            return substr($line, 0, 2) === 'RD';
+        }));
+        for ($i=0; $i < count($datas); $i++) 
+        { 
+            /*
+            $data = iconv('EUC-KR', 'UTF-8', $datas[$i]);
+            $add_field      = $this->getNtypeField($data, 372, 12);
+            $pg_result_code = $this->getNtypeField($data, 371, 2);  
+            $pg_result_msg  = $pgResultMessage($pg_result_code);
+            $record = [
+                'id' => (int)$add_field,
+                'registration_result' => (int)$pg_result_code,
+                'registration_msg' => $pg_result_msg,
+            ];
+            */
+        }
+        return $records;
+    }
 }
