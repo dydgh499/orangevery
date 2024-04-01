@@ -34,6 +34,7 @@ watchEffect(() => {
 </script>
 <template>
     <section>
+        <MidCreateDialog ref="midCreateDlg" />
         <VCard style="margin-top: 1em;">
             <VCol class="d-flex gap-4" v-if="isAbleModiy(0)">
                 <VBtn type="button" style="margin-left: auto;" @click="addNewPayModule">
@@ -45,6 +46,5 @@ watchEffect(() => {
         <template v-for="(pay_module, index) in pay_modules" :key="index">
             <PayModuleCard :item="pay_module" :able_mcht_chanage="false" style="margin-top: 1em;"/>
         </template>
-        <MidCreateDialog ref="midCreateDlg" />
     </section>
 </template>

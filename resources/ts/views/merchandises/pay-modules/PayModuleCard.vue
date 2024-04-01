@@ -4,6 +4,7 @@ import PaymentTypeOverview from '@/layouts/components/pay-module-windows/Payment
 import PaymentInfoOverview from '@/layouts/components/pay-module-windows/PaymentInfoOverview.vue'
 import TerminalInfoOverview from '@/layouts/components/pay-module-windows/TerminalInfoOverview.vue'
 import OptionInfoOverview from '@/layouts/components/pay-module-windows/OptionInfoOverview.vue'
+import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
 
 import { VForm } from 'vuetify/components'
 import { useRequestStore } from '@/views/request'
@@ -67,5 +68,6 @@ onMounted(() => {
                 </div>
             </VForm>
         </AppCardActions>
+        <MidCreateDialog ref="midCreateDlg" />
     </section>
 </template>
