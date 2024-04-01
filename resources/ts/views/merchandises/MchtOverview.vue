@@ -78,7 +78,7 @@ const clearSettleHoldClear = async () => {
 initAllSales()
 </script>
 <template>
-    <VRow class="match-height">
+    <VRow>
         <!-- 👉 개인정보 -->
         <VCol cols="12" md="6">
             <VCard>
@@ -553,7 +553,7 @@ initAllSales()
                 </VCardItem>
             </VCard>
             <br>
-            <VCard v-if="props.item.use_regular_card && isAbleModiy(props.item.id)">
+            <VCard v-if="props.item.use_regular_card">
                 <VCardItem>
                     <VCol cols="12">
                         <VRow>

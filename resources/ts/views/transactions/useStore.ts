@@ -234,6 +234,9 @@ export const useSearchStore = defineStore('transSearchStore', () => {
             datas[i]['mcht_settle_type'] = settle_types.find(settle_type => settle_type.id === datas[i]['mcht_settle_type'])?.name as string
             datas[i]['resident_num'] = datas[i]['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
             
+            datas[i]['settle_id'] = settleIdCol(datas[i], store.params.level) === null ? '정산안함' : "#"+settleIdCol(datas[i], store.params.level)
+
+            
             if(levels.sales5_use)
                 datas[i]['sales5_fee'] = (datas[i]['sales5_fee'] * 100).toFixed(3)
             if(levels.sales4_use)

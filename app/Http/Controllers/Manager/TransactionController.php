@@ -293,6 +293,11 @@ class TransactionController extends Controller
         $data['sales3_fee'] = $request->input('sales3_fee', 0);
         $data['sales4_fee'] = $request->input('sales4_fee', 0);
         $data['sales5_fee'] = $request->input('sales5_fee', 0);
+
+        
+        $holidays = Transaction::getHolidays($request->user()->brand_id);
+        $data['settle_dt'] = $this->getSettleDate($data['cxl_dt'], $tran['mcht_settle_type']+1, $data['pg_settle_type'], $holidays);
+        $data['trx_at'] = $data['cxl_dt']." ".$data['cxl_tm'];
         try 
         {
             [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);

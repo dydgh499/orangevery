@@ -207,7 +207,7 @@ onMounted(() => {
                                 <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
                                     {{ module_types.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
-                            </span>                            
+                            </span>
                             <span v-else-if="_key == 'settle_id'">
                                 <VChip :color="settleIdCol(item, store.params.level) === null ? 'default' : 'success'">
                                     {{ settleIdCol(item, store.params.level) === null ? '정산안함' : "#"+settleIdCol(item, store.params.level)}}
