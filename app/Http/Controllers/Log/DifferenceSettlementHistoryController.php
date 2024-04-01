@@ -221,23 +221,20 @@ class DifferenceSettlementHistoryController extends Controller
                     'merchandises.nick_name','merchandises.phone_num',
                     'merchandises.email','merchandises.website_url',
                 ];
+                echo 1;
+                $query = Merchandise::where('merchandises.brand_id', $brands[$i]->brand_id)
+                    ->whereIn('merchandises.business_num', $sub_business_regi_infos->pluck('business_num')->all())
+                    ->where('merchandises.is_delete', false);
 
+                echo 2;
                 if($brands[$i]->pg_type === 22)
                 {
-                    $query = Merchandise::where('merchandises.brand_id', $brands[$i]->brand_id)
-                    ->where('merchandises.is_delete', false)
-                    ->whereIn('merchandises.business_num', $sub_business_regi_infos->pluck('business_num')->all());
-                    
                     $query = $query->join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
                             ->where('payment_modules.p_mid', '!=', '');
                     $cols[] = ['payment_modules.p_mid'];
                 }
-                else
-                {
-                    $query = Merchandise::where('merchandises.brand_id', $brands[$i]->brand_id)
-                        ->where('merchandises.is_delete', false)
-                        ->whereIn('merchandises.business_num', $sub_business_regi_infos->pluck('business_num')->all());
-                }
+                echo 3;
+
                 $mchts = $query->orderby('merchandises.updated_at', 'desc')->get($cols);
                 $res = $pg->registerRequest($date, $mchts, $sub_business_regi_infos);
                 if($res)
