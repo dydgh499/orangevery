@@ -53,6 +53,7 @@ class SalesforceController extends Controller
         if($request->module_type !== null)
             $query = $query->where('payment_modules.module_type', $request->module_type);
         
+        $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');
         if($request->search)
             $query = $query->where('salesforces.sales_name', 'like', "%".$request->search."%");

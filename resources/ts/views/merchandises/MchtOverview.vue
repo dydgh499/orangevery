@@ -5,7 +5,7 @@ import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import PasswordCheckDialog from '@/layouts/dialogs/users/PasswordCheckDialog.vue'
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 
-import { getUserLevel, getIndexByLevel, isAbleModiy } from '@axios'
+import { getUserLevel, getIndexByLevel, isAbleModiy, getLevelByIndex, user_info } from '@axios'
 import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
@@ -74,8 +74,15 @@ const clearSettleHoldClear = async () => {
         props.item.settle_hold_reason = ''
     }
 }
-
 initAllSales()
+
+watchEffect(() => {
+    // 수정가능, 추가상태, 영업점일 경우
+    if(isAbleModiy(props.item.id) && props.item.id === 0 && getUserLevel() < 35) {
+        const idx = getLevelByIndex(getUserLevel())
+        props.item[`sales${idx}_id`] = user_info.value.id
+    }
+})
 </script>
 <template>
     <VRow>
@@ -186,7 +193,7 @@ initAllSales()
                                                 :items="sales[6-i].value"
                                                 :label="levels['sales'+(6-i)+'_name'] + '선택'"
                                                 item-title="sales_name" item-value="id" persistent-hint single-line prepend-inner-icon="ph:share-network"
-                                                :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])" @update:modelValue="setSalesUnderAutoSetting(6-i)"/>
+                                                :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])" @update:modelValue="setSalesUnderAutoSetting(6-i)" :readonly="getUserLevel() <= getIndexByLevel(6-i)"/>
 
                                                 <VTooltip activator="parent" location="top" v-if="props.item['sales'+(6-i)+'_id']">
                                                     {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}

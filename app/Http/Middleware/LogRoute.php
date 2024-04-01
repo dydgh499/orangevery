@@ -22,9 +22,15 @@ class LogRoute
         {
             $logs = [
                 'ip'    => $request->ip(),
-                'method'=> $request->method(),
-                'input' => $request->all(),
+                'method'=> $request->method(),                
             ];
+            $user = $request->user();
+            if(isset($user))
+            {
+                $logs['user_name'] = $user->user_name;
+                $logs['brand_id'] = $user->brand_id;
+            }
+            $logs['input'] = $request->all();
             Log::info($url, $logs);
         }
         catch(Exception $ex)

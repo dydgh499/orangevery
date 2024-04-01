@@ -69,7 +69,7 @@ use App\Http\Controllers\Manager\Settle\SalesforceController as SalesSettleContr
 |
 */
 
-Route::prefix('v1')->middleware('log.route')->group(function() {    
+Route::prefix('v1')->group(function() {    
     
     Route::get('services/mcht-blacklists/all', [MchtBlacklistController::class, 'all']);
     Route::get('merchandises/{id}/sale-slip', [MerchandiseController::class, 'saleSlip']);
@@ -84,18 +84,17 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
     Route::prefix('bonaejas')->group(function() {
         Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
         Route::post('mobile-code-auth', [MessageController::class, 'mobileCodeAuth']);
-        Route::middleware('auth:sanctum')->post('sms-link-send', [MessageController::class, 'smslinkSend']);
+        Route::middleware(['auth:sanctum', 'log.route'])->post('sms-link-send', [MessageController::class, 'smslinkSend']);
     });
     
     Route::prefix('auth')->group(function() {
         Route::post('sign-in', [AuthController::class, 'signin']);
         Route::post('sign-up', [AuthController::class, 'signUp']);
-        Route::middleware('auth:sanctum')->post('sign-out', [AuthController::class, 'signout']);
-        Route::middleware('auth:sanctum')->post('ok', [AuthController::class, 'ok']);
-        Route::middleware('auth:sanctum')->post('onwer-check', [AuthController::class, 'onwerCheck']);
+        Route::middleware(['auth:sanctum', 'log.route'])->post('sign-out', [AuthController::class, 'signout']);
+        Route::middleware(['auth:sanctum', 'log.route'])->post('onwer-check', [AuthController::class, 'onwerCheck']);
     });
 
-    Route::prefix('manager')->middleware('auth:sanctum')->group(function() {
+    Route::prefix('manager')->middleware(['auth:sanctum', 'log.route'])->group(function() {
         Route::prefix('dashsboards')->group(function() {
             Route::get('monthly-transactions-analysis', [DashboardController::class, 'monthlyTranAnalysis']);
             Route::get('upside-merchandises-analysis', [DashboardController::class, 'upSideMchtAnalysis']);
@@ -298,7 +297,7 @@ Route::prefix('v1')->middleware('log.route')->group(function() {
         
     });
 
-    Route::prefix('quick-view')->middleware('auth:sanctum')->group(function() {
+    Route::prefix('quick-view')->middleware(['auth:sanctum', 'log.route'])->group(function() {
         Route::get('', [QuickViewController::class, 'index']);
         Route::get('withdraw-able-amount', [QuickViewController::class, 'withdrawAbleAmount']);        
     });

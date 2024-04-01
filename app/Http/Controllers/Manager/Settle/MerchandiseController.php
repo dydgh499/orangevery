@@ -53,7 +53,7 @@ class MerchandiseController extends Controller
             $query = $query->where('payment_modules.settle_type', $request->mcht_settle_type);
         if($request->module_type !== null)
             $query = $query->where('payment_modules.module_type', $request->module_type);
-
+        $query = globalSalesFilter($query, $request, 'merchandises');
         return globalAuthFilter($query, $request, 'merchandises')->byTargetIds($target_id);
     }
 

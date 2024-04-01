@@ -77,7 +77,6 @@ class MerchandiseRequest extends FormRequest
         $sub = [
             'user_name' => 'required',
             'mcht_name' => 'required',
-            'addr'      => 'required',
             'acct_bank_name' => 'required',
             'acct_num'  => 'nullable|max:30',
             'enabled' => 'required|boolean',
