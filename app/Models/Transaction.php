@@ -48,7 +48,6 @@ class Transaction extends Model
     public function scopeGlobalFilter($query)
     {
         $query = $query
-            ->where('transactions.is_delete', false)
             ->where('transactions.brand_id', request()->user()->brand_id);
         $query = globalPGFilter($query, request(), 'transactions');
         $query = globalSalesFilter($query, request(), 'transactions');

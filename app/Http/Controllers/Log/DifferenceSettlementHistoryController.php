@@ -74,8 +74,7 @@ class DifferenceSettlementHistoryController extends Controller
         $query = $this->difference_settlement_histories
             ->join('transactions', 'difference_settlement_histories.trans_id', '=', 'transactions.id')
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
-            ->where('transactions.brand_id', $request->user()->brand_id)
-            ->where('transactions.is_delete', false);
+            ->where('transactions.brand_id', $request->user()->brand_id);
 
         if($search != '')
         {
@@ -158,7 +157,6 @@ class DifferenceSettlementHistoryController extends Controller
             $trans = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
                 ->join('payment_gateways', 'transactions.pg_id', '=', 'payment_gateways.id')
                 ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
-                ->where('transactions.is_delete', false)
                 ->where('merchandises.business_num', '!=', '')
                 ->where('payment_gateways.pg_type', $brands[$i]->pg_type)
                 ->where('transactions.brand_id', $brands[$i]->brand_id)
@@ -292,7 +290,6 @@ class DifferenceSettlementHistoryController extends Controller
             $trans = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
                 ->join('payment_gateways', 'transactions.pg_id', '=', 'payment_gateways.id')
                 ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
-                ->where('transactions.is_delete', false)
                 ->where('merchandises.business_num', '!=', '')
                 ->where('payment_gateways.pg_type', $brand->pg_type)
                 ->where('transactions.brand_id', $brand->brand_id)

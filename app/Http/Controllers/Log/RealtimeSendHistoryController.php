@@ -118,7 +118,6 @@ class RealtimeSendHistoryController extends Controller
             ->join('transactions', 'realtime_send_histories.trans_id', '=', 'transactions.id')
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
             ->where('transactions.brand_id', $request->user()->brand_id)
-            ->where('transactions.is_delete', false)
             ->where('realtime_send_histories.is_delete', false);
 
         $query = globalPGFilter($query, $request, 'transactions');
