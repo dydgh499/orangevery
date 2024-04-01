@@ -42,6 +42,7 @@ class MerchandiseController extends Controller
     {
         $query = PaymentModule::terminalSettle($level)
             ->where('merchandises.mcht_name', 'like', "%".$request->search."%");
+        $query = globalPGFilter($query, $request, 'payment_modules');
         return globalAuthFilter($query, $request, 'merchandises')->byTargetIds($target_id);
     }
 
