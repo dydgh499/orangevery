@@ -165,14 +165,18 @@ export const defaultItemInfo = () => {
                     receive_phone: '',
                     min_balance_limit: 0
                 },
+                default: {
+                    installment: 0,
+                    abnormal_trans_limit: 0,
+                    is_show_fee: 0
+                },
                 use_tid_duplicate: false,
                 use_mid_duplicate: false,
                 use_fix_table_view: true,
                 fix_table_size: 749,
                 init_search_filter: false,
                 resident_num_masking: false,
-                default_installment: 0,
-                default_abnormal_trans_limit: 0
+
             }),
             paid: reactive<PaidOption>({
                 use_acct_verification: false,

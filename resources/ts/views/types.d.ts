@@ -303,8 +303,6 @@ interface FreeOption {
     fix_table_size: number,
     init_search_filter: boolean,
     resident_num_masking: boolean,
-    default_installment: number,
-    default_abnormal_trans_limit: number,
     sales_slip: {
         merchandise: BrandBaseInfo
     },
@@ -314,6 +312,11 @@ interface FreeOption {
         sender_phone: string,
         receive_phone: string,
         min_balance_limit: number,
+    }
+    default: {
+        installment: number,
+        abnormal_trans_limit: number,
+        is_show_fee: number,
     }
 }
 interface PaidOption {

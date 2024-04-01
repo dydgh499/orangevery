@@ -112,11 +112,12 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
+                    <VCardTitle>기본 값 설정</VCardTitle>
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>할부개월 기본 값</template>
+                            <template #name>할부개월</template>
                             <template #input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.default_installment"
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.default.installment"
                                     :items="installments" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
                                     label="할부한도 선택" item-title="title" item-value="id" single-line />
                             </template>
@@ -124,11 +125,23 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>이상거래한도 기본 값</template>
+                            <template #name>이상거래한도</template>
                             <template #input>
-                                <VSelect v-model="props.item.free.default_abnormal_trans_limit" :items="abnormal_trans_limits"
+                                <VSelect v-model="props.item.free.default.abnormal_trans_limit" :items="abnormal_trans_limits"
                                         prepend-inner-icon="jam-triangle-danger" label="이상거래 한도" item-title="title"
                                         item-value="id" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>가맹점 수수료율 노출</template>
+                            <template #input>
+                                <BooleanRadio :radio="props.item.free.default.is_show_fee"
+                                    @update:radio="props.item.free.default.is_show_fee = $event">
+                                    <template #true>노출</template>
+                                    <template #false>숨김</template>
+                                </BooleanRadio>
                             </template>
                         </CreateHalfVCol>
                     </VRow>

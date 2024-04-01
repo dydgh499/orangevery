@@ -32,6 +32,12 @@
             'receive_phone'=> '',
             'min_balance_limit' => 0,
         ];
+        public $default = [
+            'installment' => 0,
+            'abnormal_trans_limit' => 0,
+            'is_show_fee' => 0,
+        ];
+        
         public function __construct(array $source)
         {
             foreach ($source as $property => $value) 
