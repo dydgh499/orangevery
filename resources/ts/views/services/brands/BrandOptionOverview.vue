@@ -1,5 +1,6 @@
 <script setup lang="ts">
 
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import type { FreeOption, PaidOption, AuthOption } from '@/views/types'
 import { abnormal_trans_limits, installments } from '@/views/merchandises/pay-modules/useStore'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
@@ -112,8 +113,8 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
-                    <VCardTitle>기본 값 설정</VCardTitle>
-                    <VRow>
+                    <VCardTitle class="pt-5">기본 값 설정</VCardTitle>
+                    <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>할부개월</template>
                             <template #input>
