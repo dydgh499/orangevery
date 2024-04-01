@@ -532,6 +532,7 @@ export interface Transaction {
     use_collect_withdraw?: number,
     profit?: number,
     trx_amount?: number,    
+    pg_settle_type: number,
 }
 
 export interface SalesSlip extends Transaction {

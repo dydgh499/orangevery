@@ -182,6 +182,14 @@ class TransactionController extends Controller
             $data = $request->data();
             $data['dev_fee'] = $request->input('dev_fee', 0)/100;
             $data['dev_realtime_fee'] = $request->input('dev_realtime_fee', 0)/100;
+            
+            request()->merge([
+                's_dt' => $data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'],
+                'e_dt' => $data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'],
+            ]);
+            $holidays = Transaction::getHolidays($request->user()->brand_id);
+            $data['settle_dt'] = $this->getSettleDate($data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'], $data['mcht_settle_type']+1, 1, $holidays);
+
             if($data['dev_fee'] >= 1)
                 return $this->extendResponse(991, '개발사 수수료가 이상합니다.<br>관리자에게 문의하세요.');
             else
@@ -242,6 +250,14 @@ class TransactionController extends Controller
         {
             $tran = $this->transactions->where('id', $id)->first();
             $data = $request->data();
+
+            request()->merge([
+                's_dt' => $data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'],
+                'e_dt' => $data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'],
+            ]);
+            $holidays = Transaction::getHolidays($request->user()->brand_id);
+            $data['settle_dt'] = $this->getSettleDate($data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'], $data['mcht_settle_type']+1, 1, $holidays);
+
             $data['dev_fee'] = $tran->dev_fee;
             $data['dev_realtime_fee'] = $tran->dev_realtime_fee;
 
@@ -301,7 +317,6 @@ class TransactionController extends Controller
         
         $holidays = Transaction::getHolidays($request->user()->brand_id);
         $data['settle_dt'] = $this->getSettleDate($data['cxl_dt'], $data['mcht_settle_type']+1, $request->pg_settle_type, $holidays);
-        $data['trx_at'] = $data['cxl_dt']." ".$data['cxl_tm'];
         try 
         {
             [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);

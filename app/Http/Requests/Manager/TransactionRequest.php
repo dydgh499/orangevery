@@ -24,6 +24,7 @@ class TransactionRequest extends FormRequest
         'terminal_id',
         'ps_fee',
         'mcht_settle_fee', 'mcht_settle_type',
+        'pg_settle_type',
         'trx_dt',
         'trx_tm',
         'amount',
@@ -123,7 +124,10 @@ class TransactionRequest extends FormRequest
             $data['cxl_seq'] = 1;
             $data['amount'] *= -1;
             $data['mcht_settle_fee'] *= -1;
+            $data['trx_at'] = $data['cxl_dt']." ".$data['cxl_tm'];
         }
+        else
+            $data['trx_at'] = $data['trx_dt']." ".$data['trx_tm'];
         return $data;
     }
 }
