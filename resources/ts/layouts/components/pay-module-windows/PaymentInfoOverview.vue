@@ -99,7 +99,7 @@ const payKeyCreate = async() => {
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
                             placeholder="MID 입력" persistent-placeholder />
-                        <VBtn type="button" variant="tonal" v-if="isAbleModiy(props.item.id) && props.item.id == 0 && corp.pv_options.paid.use_mid_creat"
+                        <VBtn type="button" variant="tonal" v-if="isAbleModiy(props.item.id) && props.item.id == 0 && corp.pv_options.paid.use_mid_create"
                             @click="midCreate()">
                             {{ "생성" }}
                             <VIcon end icon="material-symbols:add-to-home-screen" />
