@@ -94,13 +94,19 @@ class TransactionController extends Controller
     public function commonSelect($request)
     {
         $search = $request->input('search', '');
+        $query = $this->transactions->where('brand_id', $request->user()->brand_id);
+        $query = $this->transDateFilter($request, $query);
+        $min   = $query->min('id');
+
         $query  = $this->transactions
             ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
-            ->where('payment_modules.brand_id', $request->user()->brand_id)
-            ->where('merchandises.brand_id', $request->user()->brand_id)
-            ->globalFilter();
+            ->where('transactions.brand_id', $request->user()->brand_id);
         $query = $this->transDateFilter($request, $query);
+        if($min)
+            $query = $query->where('transactions.id', '>=', $min);
+            
+        $query = $query->globalFilter();
         if($search !== "")
         {
             $query = $query->where(function ($query) use ($search) {
@@ -153,7 +159,7 @@ class TransactionController extends Controller
         if(count($with))
             $query = $query->with($with);
 
-        $data           = $this->getIndexData($request, $query, 'transactions.id', $this->cols, 'transactions.trx_at', false);
+        $data = $this->transPagenation($request, $query, $this->cols);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);

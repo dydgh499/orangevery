@@ -261,4 +261,18 @@ trait TransactionTrait
         else
             return $query;
     }
+
+    function transPagenation($request, $_query, $cols)
+    {
+        $page      = $request->input('page');
+        $page_size = $request->input('page_size');
+        $sp     = ($page - 1) * $page_size;
+        $res = ['page'=>$page, 'page_size'=>$page_size];
+        $res['total']   = $_query->count();
+        $res['content'] = $_query->orderBy('transactions.trx_at', 'desc')
+            ->offset($sp)
+            ->limit($page_size)
+            ->get($cols);
+        return $res;
+    }
 }

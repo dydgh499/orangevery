@@ -91,7 +91,6 @@ class CreateTransactionsTable extends Migration
             $table->string('buyer_name', 50)->nullable()->comment('구매자명');
             $table->string('buyer_phone', 20)->nullable()->comment('구매자 휴대폰번호');
             $table->string('item_name', 100)->nullable()->comment('상품명');
-            $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
 
             $table->unique(['mcht_id', 'cxl_seq', 'appr_num', 'trx_id'], 'duplicate_unique_key');
