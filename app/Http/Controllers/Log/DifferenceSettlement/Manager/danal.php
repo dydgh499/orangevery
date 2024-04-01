@@ -165,9 +165,9 @@ class danal implements DifferenceSettlementInterface
                 $mcht = $mchts->first(function ($mcht) use ($sub_business_regi_info) {
                     return $mcht->business_num === $sub_business_regi_info->business_num;
                 });
+                echo $sub_business_regi_info->business_num."\n";
                 if($mcht)
                 {
-                    logging([], 'find');
                     $records = $this->setAtypeField("DD", 2);
                     $records .= $this->setNtypeField($i+1, 12);
                     $records .= $this->setNtypeField($sub_business_regi_info->registration_type, 2);
@@ -194,6 +194,8 @@ class danal implements DifferenceSettlementInterface
                         $upload['modify_count']++;
                     $upload['total_count']++;
                 }
+                else
+                    echo 'not-found !!'."\n";
             }
             return [$full_records, $upload];
         };
