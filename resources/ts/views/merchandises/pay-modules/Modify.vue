@@ -10,7 +10,7 @@ import CreateForm from '@/layouts/utils/CreateForm.vue'
 
 import { VForm } from 'vuetify/components'
 import { useRequestStore } from '@/views/request'
-import { getUserLevel, isAbleModiy } from '@axios'
+import { isAbleModiy } from '@axios'
 
 interface Props {
     able_mcht_chanage: boolean,
@@ -27,7 +27,7 @@ const md = ref<number>(3)
 
 onMounted(() => {
     watchEffect(() => {
-        md.value = (item.module_type == 0 || item.module_type == 1) && getUserLevel() >= 35 ? 3 : 4
+        md.value = (item.module_type == 0 || item.module_type == 1) && isAbleModiy(0) ? 3 : 4
     })
 })
 </script>
