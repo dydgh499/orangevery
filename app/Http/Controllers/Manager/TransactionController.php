@@ -152,6 +152,7 @@ class TransactionController extends Controller
         $this->setTransactionData($request->level);
 
         $with  = ['cancelDeposits'];
+        logging([], date('Y-m-d H:i:s'));
         $query = $this->commonSelect($request);
         if($request->use_realtime_deposit && $request->level == 10)
             $with[] = 'realtimes';
