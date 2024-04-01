@@ -189,7 +189,7 @@ class TransactionController extends Controller
             ]);
             $holidays = Transaction::getHolidays($request->user()->brand_id);
             $data['settle_dt'] = $this->getSettleDate($data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'], $data['mcht_settle_type']+1, 1, $holidays);
-
+            $data['pg_settle_type'] = 1;
             if($data['dev_fee'] >= 1)
                 return $this->extendResponse(991, '개발사 수수료가 이상합니다.<br>관리자에게 문의하세요.');
             else
@@ -257,6 +257,7 @@ class TransactionController extends Controller
             ]);
             $holidays = Transaction::getHolidays($request->user()->brand_id);
             $data['settle_dt'] = $this->getSettleDate($data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'], $data['mcht_settle_type']+1, 1, $holidays);
+            $data['pg_settle_type'] = 1;
 
             $data['dev_fee'] = $tran->dev_fee;
             $data['dev_realtime_fee'] = $tran->dev_realtime_fee;

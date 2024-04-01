@@ -24,7 +24,6 @@ class TransactionRequest extends FormRequest
         'terminal_id',
         'ps_fee',
         'mcht_settle_fee', 'mcht_settle_type',
-        'pg_settle_type',
         'trx_dt',
         'trx_tm',
         'amount',
