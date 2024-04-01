@@ -302,7 +302,6 @@ class TransactionController extends Controller
         $holidays = Transaction::getHolidays($request->user()->brand_id);
         $data['settle_dt'] = $this->getSettleDate($data['cxl_dt'], $data['mcht_settle_type']+1, $request->pg_settle_type, $holidays);
         $data['trx_at'] = $data['cxl_dt']." ".$data['cxl_tm'];
-        print_r($data);
         try 
         {
             [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
