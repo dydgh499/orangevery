@@ -215,17 +215,30 @@ class DifferenceSettlementHistoryController extends Controller
                     ->where('pg_type', $brands[$i]->pg_type)
                     ->orderby('business_num')
                     ->get();
+                $cols = [
+                    'merchandises.id', 'merchandises.sector', 'merchandises.business_num',
+                    'merchandises.mcht_name','merchandises.addr',
+                    'merchandises.nick_name','merchandises.phone_num',
+                    'merchandises.email','merchandises.website_url',
+                ];
 
-                $mchts = Merchandise::where('brand_id', $brands[$i]->brand_id)
-                    ->where('is_delete', false)
-                    ->whereIn('business_num', $sub_business_regi_infos->pluck('business_num')->all())
-                    ->orderby('updated_at', 'desc')
-                    ->get([
-                        'id', 'sector', 'business_num',
-                        'mcht_name','addr',
-                        'nick_name','phone_num',
-                        'email','website_url',
-                ]);
+                if($brands[$i]->pg_type === 22)
+                {
+                    $query = Merchandise::where('merchandises.brand_id', $brands[$i]->brand_id)
+                    ->where('merchandises.is_delete', false)
+                    ->whereIn('merchandises.business_num', $sub_business_regi_infos->pluck('business_num')->all());
+                    
+                    $query = $query->join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
+                        ->where('payment_modules.p_mid', '!=', '');
+                    $cols[] = ['payment_modules.p_mid'];
+                }
+                else
+                {
+                    $query = Merchandise::where('merchandises.brand_id', $brands[$i]->brand_id)
+                        ->where('merchandises.is_delete', false)
+                        ->whereIn('merchandises.business_num', $sub_business_regi_infos->pluck('business_num')->all());
+                }
+                $mchts = $query->orderby('merchandises.updated_at', 'desc')->get($cols);
                 $res = $pg->registerRequest($date, $mchts, $sub_business_regi_infos);
                 if($res)
                     SubBusinessRegistration::whereIn('id', $sub_business_regi_infos->pluck('id')->all())->update(['registration_result'=>-5]);                    

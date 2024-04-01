@@ -250,10 +250,15 @@ trait TransactionTrait
 
     function transDateFilter($request, $query)
     {
-        $s_dt = strlen($request->s_dt) === 10 ? date($request->s_dt." 00:00:00") : $request->s_dt;
-        $e_dt = strlen($request->e_dt) === 10 ? date($request->e_dt." 23:59:59") : $request->e_dt;
-        return $query
-            ->whereRaw("transactions.trx_at >= ?", [$s_dt])
-            ->whereRaw("transactions.trx_at <= ?", [$e_dt]);
+        if($request->s_dt && $request->e_dt)
+        {
+            $s_dt = strlen($request->s_dt) === 10 ? date($request->s_dt." 00:00:00") : $request->s_dt;
+            $e_dt = strlen($request->e_dt) === 10 ? date($request->e_dt." 23:59:59") : $request->e_dt;
+            return $query
+                ->whereRaw("transactions.trx_at >= ?", [$s_dt])
+                ->whereRaw("transactions.trx_at <= ?", [$e_dt]);    
+        }
+        else
+            return $query;
     }
 }

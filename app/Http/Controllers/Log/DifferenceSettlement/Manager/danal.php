@@ -165,8 +165,6 @@ class danal implements DifferenceSettlementInterface
                 $mcht = $mchts->first(function ($mcht) use ($sub_business_regi_info) {
                     return str_replace('-', '', $mcht->business_num) === str_replace('-', '', $sub_business_regi_info->business_num);
                 });
-                echo count($mchts)."\n";
-                echo $sub_business_regi_info->business_num."\n";
                 if($mcht)
                 {
                     $records = $this->setAtypeField("DD", 2);
