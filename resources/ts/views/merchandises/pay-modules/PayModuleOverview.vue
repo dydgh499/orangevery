@@ -6,7 +6,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
-import { getUserLevel } from '@axios'
+import { getUserLevel, isAbleModiy } from '@axios'
 import corp from '@corp'
 
 interface Props {
@@ -136,7 +136,7 @@ watchEffect(() => {
                         </VTooltip>
                         </AppTextField>
                     </div>
-                        <VBtn v-if="getUserLevel() >= 35" prepend-icon="tabler-plus" @click="addNewPayModule">
+                        <VBtn v-if="isAbleModiy(0)" prepend-icon="tabler-plus" @click="addNewPayModule">
                             결제모듈 신규추가
                         </VBtn>
                 </div>
