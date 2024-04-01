@@ -31,7 +31,7 @@ watchEffect(() => {
 <template>
     <section>
         <VCard style="margin-top: 1em;">
-            <VCol class="d-flex gap-4" v-if="isAbleModiy(props.item.id)">
+            <VCol class="d-flex gap-4" v-if="isAbleModiy(0)">
                 <VBtn type="button" style="margin-left: auto;" @click="addNewPayModule">
                     결제모듈 신규추가
                     <VIcon end icon="tabler-plus" />
