@@ -117,7 +117,7 @@
             $brand = Brand::where('dns', $request->dns)->with(['beforeBrandInfos'])->first();
             if($brand)
             {
-                Redis::set($request->dns, json_encode($brand), 300);
+                Redis::set($request->dns, json_encode($brand), 'EX', 300);
                 return json_decode(json_encode($brand), true);
             }
             else
