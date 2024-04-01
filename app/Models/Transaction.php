@@ -58,9 +58,11 @@ class Transaction extends Model
 
     static public function getHolidays($brand_id)
     {
+        $s_dt = strlen(request()->s_dt) === 10 ? request()->s_dt : Carbon::createFromFormat('Y-m-d H:i:s', request()->s_dt)->format('Y-m-d');
+        $e_dt = strlen(request()->e_dt) === 10 ? request()->e_dt : Carbon::createFromFormat('Y-m-d H:i:s', request()->e_dt)->format('Y-m-d');
         //조회일로부터 M-1, M+1 공휴일 조회
-        $s_dt = Carbon::createFromFormat('Y-m-d', request()->s_dt)->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
-        $e_dt = Carbon::createFromFormat('Y-m-d', request()->e_dt)->copy()->addMonthNoOverflow(1)->endOfMonth()->format('Y-m-d');
+        $s_dt = Carbon::createFromFormat('Y-m-d', $s_dt)->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
+        $e_dt = Carbon::createFromFormat('Y-m-d', $e_dt)->copy()->addMonthNoOverflow(1)->endOfMonth()->format('Y-m-d');
         $key_name = "holidays-".$brand_id."-$s_dt-$e_dt";
 
         $holidays = Redis::get($key_name);
@@ -102,7 +104,7 @@ class Transaction extends Model
         }
         
         return $query->whereNull($target)
-            ->whereRaw("$trx_dt >= ?", [$s_dt])
+            ->whereRaw("$trx_dt >= ?", [$s_dt]) 
             ->whereRaw("$trx_dt <= ?", [$e_dt])
             ->globalFilter();
     }

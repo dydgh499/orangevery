@@ -283,6 +283,10 @@ class TransactionController extends Controller
     public function cancel(TransactionRequest $request)
     {
         $data = $request->data();
+        request()->merge([
+            's_dt' => $data['cxl_dt'],
+            'e_dt' => $data['cxl_dt'],
+        ]);
         // TransactionRequest 에서 100을 먼저 나눠서 가져오기 떄문에 다시가져옴
         $data['ps_fee']  = $request->input('ps_fee', 0);
         $data['hold_fee'] = $request->input('hold_fee', 0);
@@ -296,8 +300,9 @@ class TransactionController extends Controller
 
         
         $holidays = Transaction::getHolidays($request->user()->brand_id);
-        $data['settle_dt'] = $this->getSettleDate($data['cxl_dt'], $tran['mcht_settle_type']+1, $data['pg_settle_type'], $holidays);
+        $data['settle_dt'] = $this->getSettleDate($data['cxl_dt'], $data['mcht_settle_type']+1, $request->pg_settle_type, $holidays);
         $data['trx_at'] = $data['cxl_dt']." ".$data['cxl_tm'];
+        print_r($data);
         try 
         {
             [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);

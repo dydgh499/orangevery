@@ -66,7 +66,7 @@ class CancelDepositController extends Controller
             's_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->subDays(30)->format('Y-m-d'),
             'e_dt' => Carbon::createFromFormat('Y-m-d', $tran->cxl_dt)->addDays(30)->format('Y-m-d'),
         ]);
-        $holidays = Transaction::getHolidays(14);
+        $holidays = Transaction::getHolidays(request()->user()->brand_id);
         return $this->getSettleDate($deposit_dt, $tran->mcht_settle_type+1, $tran->pg_settle_type, $holidays);
     }
 
