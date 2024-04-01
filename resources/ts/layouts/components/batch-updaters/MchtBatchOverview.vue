@@ -6,7 +6,7 @@ import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { banks } from '@/views/users/useStore'
-import { axios, getIndexByLevel, getUserLevel } from '@axios'
+import { axios, getIndexByLevel, getUserLevel, getLevelByIndex } from '@axios'
 import corp from '@corp'
 
 interface Props {
@@ -147,6 +147,14 @@ const setNotiUrl = () => {
     })
 }
 initAllSales()
+
+watchEffect(() => {
+    if(props.selected_sales_id && props.selected_level) {
+        const idx = getLevelByIndex(props.selected_level)
+        merchandise[`sales${idx}_id`] = props.selected_sales_id
+    }
+})
+
 </script>
 <template>
     <VCard title="가맹점 일괄 작업">
