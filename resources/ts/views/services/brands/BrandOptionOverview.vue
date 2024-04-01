@@ -116,7 +116,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>
-                                <BaseQuestionTooltip location="top" text="결제모듈 리스트 사용" :content="`가맹점 정보 - 결제모듈 정보에서 결제모듈이 리스트로 표현됩니다.<br>(가맹점당 결제모듈 여러개 보유시 사용)`">
+                                <BaseQuestionTooltip location="top" text="결제모듈 간편보기" :content="`가맹점 정보 - 결제모듈 정보에서 결제모듈이 리스트로 표현됩니다.<br>(가맹점당 결제모듈 여러개 보유시 사용)`">
                                 </BaseQuestionTooltip>
                             </template>
                             <template #input>
