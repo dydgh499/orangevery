@@ -168,7 +168,7 @@ class danal implements DifferenceSettlementInterface
                 if($mcht)
                 {
                     $records = $this->setAtypeField("DD", 2);
-                    $records .= $this->setNtypeField($mcht->id, 12);
+                    $records .= $this->setNtypeField($i+1, 12);
                     $records .= $this->setNtypeField($sub_business_regi_info->registration_type, 2);
                     $records .= $this->setNtypeField($brand['rep_mid'], 10);
                     $records .= $this->setNtypeField($sub_business_regi_info->card_company_code, 3);

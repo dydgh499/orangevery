@@ -164,6 +164,7 @@ class welcome1 implements DifferenceSettlementInterface
         $getDatas = function($brand, $mchts, $sub_business_regi_infos) {
             $yesterday = Carbon::now()->subDay(1)->format('Ymd');
             $records = '';
+            $count = 0;
             for ($i=0; $i < count($sub_business_regi_infos); $i++) 
             { 
                 $sub_business_regi_info = $sub_business_regi_infos[$i];
@@ -176,33 +177,107 @@ class welcome1 implements DifferenceSettlementInterface
                         .$this->setNtypeField($sub_business_regi_info->registration_type, 2)
                         .$this->setNtypeField(str_replace('-', '', $brand['business_num']), 10)
                         .$this->setNtypeField($sub_business_regi_info->card_company_code, 2)
-                        .$this->setNtypeField(str_replace('-', '', $mchts[$i]->business_num), 10)
-                        .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->sector), 20)
-                        .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->mcht_name), 40)
+                        .$this->setNtypeField(str_replace('-', '', $mcht->business_num), 10)
+                        .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->sector), 20)
+                        .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->mcht_name), 40)
                         .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->website_url), 80)   //웹사이트 URL 필드
-                        .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->addr), 100)
+                        .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->addr), 100)
                         .$this->setNtypeField('00000', 6)   //우편번호
-                        .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mchts[$i]->nick_name), 40)
-                        .$this->setNtypeField(str_replace('-', '', $mchts[$i]->phone_num), 11)
+                        .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->nick_name), 40)
+                        .$this->setNtypeField(str_replace('-', '', $mcht->phone_num), 11)
                         .$this->setAtypeField(iconv('UTF-8', 'EUC-KR//IGNORE', $mcht->email), 40)   //이메일 필드
                         .$this->setNtypeField($yesterday, 8)
-                        .$this->setAtypeField($mchts[$i]->id, 20)
+                        .$this->setAtypeField($sub_business_regi_info->id, 20)
                         .$this->setAtypeField('', 109)
                         ."\r\n";
+                    $count++;
                 }
             }
-            return $records;
+            return [$records, $count];
         };
-        $getTrailer = function($mchts) {
+        $getTrailer = function($count) {
             return 
                 $this->setAtypeField("30", 2).
-                $this->setNtypeField(count($mchts), 10).
+                $this->setNtypeField($count, 10).
                 $this->setAtypeField('', 488).
                 "\r\n";
         };
+        [$data_records, $count]  = $getDatas($brand, $mchts, $sub_business_regi_infos);
         $records  = $getHeader($brand, $req_date);
-        $records .= $getDatas($brand, $mchts);
-        $records .= $getTrailer($mchts);
+        $records .= $data_records;
+        $records .= $getTrailer($count);
+        return $records;
+    }
+
+    public function registerResponse($content)
+    {
+        $pgResultMessage = function($code) {
+            $result_codes = [
+                '00' => '정상처리',
+                '01' => '등록구분 오류',
+                '11' => '필수값 누락(하위몰)',
+                '12' => '필수값 누락(회사명)',
+                '13' => '필수값 누락(URL)',
+                '14' => '필수값 누락(전화번호)',
+                '15' => '필수값 누락(기타)',
+                '99' => '기타오류',     
+            ];
+            return isset($result_codes[$code]) ? $result_codes[$code] : '알수없는 코드';
+        };
+        $records = [];
+        $lines = explode("\n", $content);
+        $datas = array_values(array_filter($lines, function($line) {
+            return substr($line, 0, 2) === DifferenceSettleHectoRecordType::DATA->value;
+        }));
+        for ($i=0; $i < count($datas); $i++) 
+        { 
+            $data = $datas[$i];
+            $card_company_code = $this->getAtypeField($data, 14, 2);
+            $business_num   = $this->getAtypeField($data, 16, 10);
+
+            $sector         = $this->getAtypeField($data, 26, 20);
+            $mcht_name      = $this->getAtypeField($data, 46, 40);
+            $website_url    = $this->getAtypeField($data, 86, 80);
+            $addr           = $this->getAtypeField($data, 166, 100);
+            $addr_num       = $this->getAtypeField($data, 266, 6);
+            $nick_name      = $this->getAtypeField($data, 272, 40);
+            $phone_num      = $this->getAtypeField($data, 312, 11);
+            
+            $email      = $this->getAtypeField($data, 323, 40);
+            $process_dt = $this->getAtypeField($data, 363, 8);
+            $add_field  = $this->getAtypeField($data, 371, 20);
+            $card_result_code = $this->getAtypeField($data, 391, 2);
+            $pg_result_code   = $this->getAtypeField($data, 393, 2);
+            $pg_result_msg  = $pgResultMessage($pg_result_code);
+            $records[] = [
+                'pg_type'   => 30,
+                'where'     => [
+                    'id'    => $add_field,
+                    'business_num' => $business_num,
+                    'card_company_code' => $card_company_code,
+                ],
+                'update' => [
+                    'registration_result' => $pg_result_code,
+                    'registration_msg' => $pg_result_msg,    
+                ]
+            ];
+            /*
+                print_r([
+                    'business_num' => $business_num,
+                    'card_company_code' => $card_company_code,
+                    'sector' => iconv('EUC-KR', 'UTF-8', $sector),
+                    'mcht_name' => iconv('EUC-KR', 'UTF-8', $mcht_name),
+                    'website_url' => iconv('EUC-KR', 'UTF-8', $website_url),
+                    'addr' => iconv('EUC-KR', 'UTF-8', $addr),
+                    'addr_num' => iconv('EUC-KR', 'UTF-8', $addr_num),
+                    'nick_name' => iconv('EUC-KR', 'UTF-8', $nick_name),
+                    'phone_num' => iconv('EUC-KR', 'UTF-8', $phone_num),
+                    'email' => iconv('EUC-KR', 'UTF-8', $email),
+                    'process_dt' => iconv('EUC-KR', 'UTF-8', $process_dt),
+                    'card_result_code' => iconv('EUC-KR', 'UTF-8', $card_result_code),
+                ]);
+            */
+        }
         return $records;
     }
 }

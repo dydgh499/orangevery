@@ -219,6 +219,23 @@ class DifferenceSettlement
 
     public function _registerResponse($res_path, $req_date)
     {
-        
+        try
+        {
+            if($this->main_connection_stat && $this->main_sftp_connection->exists($res_path))
+                $contents = $this->main_sftp_connection->get($res_path);
+            else if($this->dr_connection_stat && $this->dr_sftp_connection->exists($res_path))
+                $contents = $this->dr_sftp_connection->get($res_path);
+            else
+                $contents = null;
+
+            $datas = $contents ? $this->service->registerResponse($contents) : [];
+            logging(['date'=>$req_date, 'datas'=>$datas, 'contents'=>$contents], $this->service_name.'-sub-business-registration-response');
+            return $datas;
+        }
+        catch(\Throwable $e)
+        {
+            logging(['date'=>$req_date, 'datas'=>[]], $this->service_name.'-sub-business-registration-response('. $e->getMessage().")");
+            return [];
+        }
     }
 }

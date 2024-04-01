@@ -238,19 +238,33 @@ class DifferenceSettlementHistoryController extends Controller
     */
     public function differenceSettleResisterResponse()
     {
-        $brands = $this->getUseDifferentSettlementBrands();
-        $date   = Carbon::now();
+        $pay_gateways = $this->getUseDifferentSettlementPayGateways();
+        $brand  = Brand::first(['business_num']);
+        $date   = Carbon::now()->addDay(4);
 
-        for ($i=0; $i<count($brands); $i++)
+        for ($i=0; $i<count($pay_gateways); $i++)
         {
-            $pg = $this->getPGClass($brands[$i]);
+            $pay_gateways[$i]->business_num = $brand->business_num;
+            $pg = $this->getPGClass($pay_gateways[$i]);
             if($pg)
             {
                 $datas  = $pg->registerResponse($date);
-                //$res  = $this->manyInsert($this->difference_settlement_histories, $datas);
+                foreach($datas as $data)
+                {
+                    if(isset($data['where']['id']))
+                        SubBusinessRegistration::where('id', $data['where']['id'])->update($data['update']);
+                    else
+                    {
+                        SubBusinessRegistration::where('pg_type', $data['pg_type'])
+                            -where('business_num', $data['where']['business_num'])
+                            -where('card_company_code', $data['where']['card_company_code'])
+                            ->update($data['update']);
+                    }
+                }
             }
         }
     }
+
     /*
     * 차액정산 테스트 업로드
     */

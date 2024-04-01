@@ -68,8 +68,12 @@ class danal extends DifferenceSettlement implements DifferenceSettlementInterfac
         return $this->_registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos);
     }
 
-    public function registerResponse($res_path, $req_date)
+    public function registerResponse(Carbon $date)
     {
-        
+        $file_name = $date->copy()->format('ymd');
+        $req_date = $date->copy()->format('Ymd');
+        $brand_business_num = str_replace('-', '', $this->brand['business_num']);
+        $res_path = "/Sellerinfo/DANALto".$this->brand['rep_mid'].".".$file_name;
+        return $this->_registerResponse($res_path, $req_date);
     }
 }
