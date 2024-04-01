@@ -57,7 +57,7 @@ onMounted(() => {
         <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="정산"
             :date_filter_type="DateFilters.SETTLE_RANGE">
             <template #filter>
-                <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true"
+                <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="true"
                     :sales="true">
                     <template #pg_extra_field>
                         <VCol cols="12" sm="3">

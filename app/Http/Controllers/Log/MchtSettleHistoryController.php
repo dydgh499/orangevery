@@ -38,10 +38,12 @@ class MchtSettleHistoryController extends Controller
         $search = $request->input('search', '');
         $query  = $this->settle_mcht_hist
                 ->join('merchandises', 'settle_histories_merchandises.mcht_id', 'merchandises.id')
+                /*
                 ->rightJoin('payment_modules', 'settle_histories_merchandises.mcht_id', '=', 'payment_modules.mcht_id')
                 ->where(function ($query) use($request) {
                     return globalPGFilter($query, $request, 'payment_modules');
                 })
+                */
                 ->where('settle_histories_merchandises.brand_id', $request->user()->brand_id)
                 ->where('settle_histories_merchandises.is_delete', false)
                 ->where('merchandises.mcht_name', 'like', "%$search%");
