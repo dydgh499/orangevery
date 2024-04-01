@@ -425,7 +425,7 @@ class TransactionController extends Controller
         $cols = array_merge($cols , $this->getTotalCols('mcht_settle_amount'));
 
         $query = $this->commonSelect($request);
-        $query = $query
+        $grouped = $query
                 ->groupBy('merchandises.id')
                 ->orderBy('merchandises.mcht_name')
                 ->get($cols);

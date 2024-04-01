@@ -205,7 +205,7 @@ export const defaultItemInfo = () => {
         enabled: 1,
         use_saleslip_prov: 1,
         use_saleslip_sell: 0,
-        is_show_fee: corp.pv_options.free.default.is_show_fee,
+        is_show_fee: Number(corp.pv_options.free.default.is_show_fee),
         note: '',
         dev_fee: 0,
         use_regular_card: 0,
