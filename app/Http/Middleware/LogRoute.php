@@ -29,6 +29,12 @@ class LogRoute
             {
                 $logs['user_name'] = $user->user_name;
                 $logs['brand_id'] = $user->brand_id;
+                if(isMerchandise($request))
+                    $logs['level'] = 10;
+                else if(isSalesforce($request))
+                    $logs['level'] = $user->level;
+                else if(isOperator($request))
+                    $logs['level'] = $user->level;
             }
             $logs['input'] = $request->all();
             Log::info($url, $logs);

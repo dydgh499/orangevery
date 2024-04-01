@@ -303,6 +303,7 @@ interface FreeOption {
     fix_table_size: number,
     init_search_filter: boolean,
     resident_num_masking: boolean,
+    pay_module_detail_view: boolean,
     sales_slip: {
         merchandise: BrandBaseInfo
     },

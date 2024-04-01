@@ -64,7 +64,7 @@ export function settlementHistoryFunctionCollect(store: any) {
     }
 
     const batchCancel = async(selected:number[], is_mcht: boolean) => {
-        if(selected.length > 20)
+        if(selected.length > 20 && is_mcht === false)
             snackbar.value.show('일괄정산취소는 한번에 최대 20개씩 처리 가능합니다.', 'warning')
         else {
             if (await alert.value.show('정말 일괄 정산취소처리 하시겠습니까?')) {

@@ -27,7 +27,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     <VCardTitle>추가 옵션</VCardTitle>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>수기결제 사용여부</template>
+                            <template #name>수기결제 사용</template>
                             <template #input>
                                 <VSwitch hide-details v-model="props.item.free.use_hand_pay" color="primary" />
                             </template>
@@ -35,7 +35,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>인증결제 사용여부</template>
+                            <template #name>인증결제 사용</template>
                             <template #input>
                                 <VSwitch hide-details v-model="props.item.free.use_auth_pay" color="primary" />
                             </template>
@@ -43,7 +43,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>간편결제 사용여부</template>
+                            <template #name>간편결제 사용</template>
                             <template #input>
                                 <VSwitch hide-details v-model="props.item.free.use_simple_pay" color="primary" />
                             </template>
@@ -51,7 +51,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>기간상세조회 사용여부</template>
+                            <template #name>기간상세조회 사용</template>
                             <template #input>
                                 <VSwitch hide-details v-model="props.item.free.use_search_date_detail" color="primary" />
                             </template>
@@ -59,7 +59,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>TID 중복검사 사용여부</template>
+                            <template #name>TID 중복검사 사용</template>
                             <template #input>
                                 <VSwitch hide-details v-model="props.item.free.use_tid_duplicate" color="primary" />
                             </template>
@@ -67,7 +67,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VRow>
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>MID 중복검사 사용여부</template>
+                            <template #name>MID 중복검사 사용</template>
                             <template #input>
                                 <VSwitch hide-details v-model="props.item.free.use_mid_duplicate" color="primary" />
                             </template>
@@ -88,7 +88,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     <VRow>
                         <CreateHalfVCol :mdl="6" :mdr="6">
                             <template #name>
-                                <BaseQuestionTooltip location="top" text="고정 테이블 사용여부" :content="`리스트 화면에서 테이블 헤더가 고정됩니다.`">
+                                <BaseQuestionTooltip location="top" text="고정 테이블 사용" :content="`리스트 화면에서 테이블 헤더가 고정됩니다.`">
                                 </BaseQuestionTooltip>
                             </template>
                             <template #input>
@@ -113,6 +113,18 @@ const md = user_info.value.level == 50 ? 4 : 12
                             </template>
                         </CreateHalfVCol>
                     </VRow>
+                    <VRow>
+                        <CreateHalfVCol :mdl="6" :mdr="6">
+                            <template #name>
+                                <BaseQuestionTooltip location="top" text="결제모듈 리스트 사용" :content="`가맹점 정보 - 결제모듈 정보에서 결제모듈이 리스트로 표현됩니다.<br>(가맹점당 결제모듈 여러개 보유시 사용)`">
+                                </BaseQuestionTooltip>
+                            </template>
+                            <template #input>
+                                <VSwitch hide-details v-model="props.item.free.pay_module_detail_view" color="primary" />
+                            </template>
+                        </CreateHalfVCol>
+                    </VRow>
+                    
                     <VCardTitle class="pt-5">기본 값 설정</VCardTitle>
                     <VRow class="pt-5">
                         <CreateHalfVCol :mdl="6" :mdr="6">
@@ -409,7 +421,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                         </VRow>
                         <VRow>
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>온라인 결제 사용여부</template>
+                                <template #name>온라인 결제 사용</template>
                                 <template #input>
                                     <VSwitch hide-details v-model="props.item.paid.use_online_pay" color="primary" />
                                 </template>
@@ -417,7 +429,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                         </VRow>
                         <VRow>
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>TID 발급버튼 사용여부</template>
+                                <template #name>TID 발급버튼 사용</template>
                                 <template #input>
                                     <VSwitch hide-details v-model="props.item.paid.use_tid_create" color="primary" />
                                 </template>
@@ -425,7 +437,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                         </VRow>
                         <VRow>
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>MID 발급버튼 사용여부</template>
+                                <template #name>MID 발급버튼 사용</template>
                                 <template #input>
                                     <VSwitch hide-details v-model="props.item.paid.use_mid_create" color="primary" />
                                 </template>
@@ -446,7 +458,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                         </VCardTitle>
                         <VRow class="pt-5">
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>노티 사용여부</template>
+                                <template #name>노티 사용</template>
                                 <template #input>
                                     <VSwitch hide-details v-model="props.item.paid.use_noti" color="primary" />
                                 </template>
@@ -504,13 +516,13 @@ const md = user_info.value.level == 50 ? 4 : 12
                         </VCardTitle>
                         <VRow class="pt-5">
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                    <template #name>금융VAN 송금 사용여부</template>
+                                    <template #name>금융VAN 송금 사용</template>
                                     <template #input>
                                     <VSwitch hide-details v-model="props.item.paid.use_finance_van_deposit" color="primary" />
                                 </template>
                             </CreateHalfVCol>
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                    <template #name>지급보류 사용여부</template>
+                                    <template #name>지급보류 사용</template>
                                     <template #input>
                                     <VSwitch hide-details v-model="props.item.paid.use_settle_hold" color="primary" />
                                 </template>

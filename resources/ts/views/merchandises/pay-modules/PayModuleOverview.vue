@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { PayModule, Merchandise } from '@/views/types'
 import PayModuleDialog from '@/layouts/dialogs/pay-modules/PayModuleDialog.vue'
-import { module_types } from '@/views/merchandises/pay-modules/useStore'
+import { module_types, defaultItem } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
@@ -29,12 +29,12 @@ const headers = [
     { title: '생성시간', key: 'created_at' },
     { title: '업데이트시간', key: 'updated_at' },
 ]
-
-const payModuleDlg = ref()
 const props = defineProps<Props>()
+
 const { setNullRemove } = useRequestStore()
 const { pgs, pss, settle_types } = useStore()
 const pay_modules = reactive<PayModule[]>([])
+const payModuleDlg = ref()
 
 // Update data table options
 const updateOptions = (options: any) => {
@@ -54,58 +54,13 @@ const getModuleTypeColor = (module_type: number) => {
         return 'info'
 }
 
-
 const editNewPayModule = async (item: PayModule) => {
     const res = await payModuleDlg.value.show(item)
 }
 
 const addNewPayModule = async () => {
-    const pay_module = <PayModule>({
-        id: 0,
-        mcht_id: props.item.id,
-        pg_id: null,
-        ps_id: null,
-        settle_type: null,
-        settle_fee: 0,
-        terminal_id: null,
-        module_type: 0,
-        api_key: '',
-        sub_key: '',
-        p_mid: '',
-        mid: '',
-        tid: '',
-        serial_num: '',
-        comm_settle_fee: 0,
-        comm_settle_day: 1,
-        comm_settle_type: 0,
-        comm_calc_level: 10,
-        under_sales_amt: 0,
-        under_sales_type: 0,
-        under_sales_limit: 0,
-        begin_dt: null,
-        ship_out_dt: null,
-        ship_out_stat: 0,
-        is_old_auth: 0,    
-        installment: Number(corp.pv_options.free.default.installment),
-        pay_dupe_limit:0,
-        abnormal_trans_limit: Number(corp.pv_options.free.default.abnormal_trans_limit),
-        pay_dupe_least: 0,
-        pay_year_limit: 0,
-        pay_month_limit: 0,
-        pay_day_limit: 0,
-        pay_single_limit: 0,
-        pay_disable_s_tm: null,
-        pay_disable_e_tm: null,
-        contract_s_dt: null,
-        contract_e_dt: null,
-        show_pay_view: 1,
-        note: '장비',
-        filter_issuers: [],
-        fin_id: null,
-        fin_trx_delay: 15,
-        cxl_type: 2,
-        use_realtime_deposit: 0,
-    })
+    const pay_module = <PayModule>(defaultItem)
+    pay_module.mcht_id = props.item.id
     const res = await payModuleDlg.value.show(pay_module)
     if(res)
         pay_modules.unshift(<PayModule>(pay_module))

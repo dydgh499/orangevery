@@ -417,7 +417,8 @@ export const defaultItemInfo = () => {
         dev_settle_type: corp.dev_settle_type,
         dev_realtime_fee: 0,
         dev_fee: (corp.dev_fee * 100).toFixed(3),
-        mcht_settle_amount: 0
+        mcht_settle_amount: 0,
+        pg_settle_type: 1
     })  
     return {
         path, item

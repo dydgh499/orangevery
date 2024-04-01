@@ -4,6 +4,8 @@ import UserOverview from '@/views/users/UserOverview.vue'
 import MchtOverview from '@/views/merchandises/MchtOverview.vue'
 import NotiOverview from '@/views/merchandises/noti-urls/NotiOverview.vue'
 import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOverview.vue'
+import PayModuleOldOverview from '@/views/merchandises/pay-modules/PayModuleOldOverview.vue'
+
 import CreateForm from '@/layouts/utils/CreateForm.vue'
 import { defaultItemInfo } from '@/views/merchandises/useStore'
 import corp from '@corp'
@@ -35,7 +37,8 @@ watchEffect(() => {
                 </VWindowItem>
                 <VWindowItem>
                     <Suspense>
-                        <PayModuleOverview :item="item" />                        
+                        <PayModuleOverview :item="item" v-if="corp.pv_options.free.pay_module_detail_view"/>
+                        <PayModuleOldOverview :item="item" v-else/>               
                     </Suspense>
                 </VWindowItem>
                 <VWindowItem>
