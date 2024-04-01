@@ -41,6 +41,7 @@ class SalesforceController extends Controller
         $query = PaymentModule::terminalSettle($level)
             ->join('salesforces', "merchandises.$target_id", '=', 'salesforces.id');        
         $query = $this->commonSalesQuery($query, $request->s_dt, $request->e_dt);
+        $query = globalPGFilter($query, $request, 'payment_modules');
         $query = globalAuthFilter($query, $request, 'merchandises');
         if($request->search)
             $query = $query->where('salesforces.sales_name', 'like', "%".$request->search."%");
