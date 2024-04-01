@@ -269,12 +269,10 @@ trait TransactionTrait
         $sp     = ($page - 1) * $page_size;
         $res = ['page'=>$page, 'page_size'=>$page_size];
         $res['total']   = $_query->count();
-        logging([], date('Y-m-d H:i:s'));
         $res['content'] = $_query->orderBy('transactions.trx_at', 'desc')
             ->offset($sp)
             ->limit($page_size)
             ->get($cols);
-        logging([], date('Y-m-d H:i:s'));
         return $res;
     }
 }

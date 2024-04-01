@@ -152,14 +152,12 @@ class TransactionController extends Controller
         $this->setTransactionData($request->level);
 
         $with  = ['cancelDeposits'];
-        logging([], date('Y-m-d H:i:s'));
         $query = $this->commonSelect($request);
         if($request->use_realtime_deposit && $request->level == 10)
             $with[] = 'realtimes';
 
         if(count($with))
             $query = $query->with($with);
-
         $data = $this->transPagenation($request, $query, $this->cols);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
