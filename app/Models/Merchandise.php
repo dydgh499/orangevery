@@ -74,15 +74,6 @@ class Merchandise extends Authenticatable
             ->selectRaw('mcht_id, SUM(withdraw_amount + withdraw_fee) as total_withdraw_amount');
     }
 
-    // 출금 가능금액 조회
-    public function collectWithdrawAbleAmounts()
-    {
-        return $this->hasMany(CollectWithdraw::class, 'mcht_id')
-            ->whereIn('result_code', ['0000', '0050'])
-            ->groupBy('mcht_id')
-            ->selectRaw('mcht_id, SUM(withdraw_amount + withdraw_fee) as total_withdraw_amount');
-    }
-
     public function scopeFlatSalesIdByFilter($query, $selected_sales_infos, $s_keys)
     {
         $query = $query->where('merchandises.brand_id', request()->user()->brand_id)->where('merchandises.is_delete', false);

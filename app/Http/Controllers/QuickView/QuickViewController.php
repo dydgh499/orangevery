@@ -152,14 +152,13 @@ class QuickViewController extends Controller
             's_dt' => '2000-01-01',  
             'e_dt' => Carbon::now()->format('Y-m-d'),
         ]);
-        logging(['mcht_id'=>$mcht_id]);
         $merchandise = Merchandise::where('id', $mcht_id)
-            ->with(['transactions.cancelDeposits', 'collectWithdrawAbleAmounts'])
+            ->with(['transactions.cancelDeposits', 'collectWithdraws'])
             ->first(['id', 'collect_withdraw_fee']);
         $pay_modules = PaymentModule::whereIn('id', $merchandise->transactions->pluck('pmod_id')->all())
             ->get(['id', 'fin_trx_delay', 'use_realtime_deposit']);
 
-        $total_withdraw_amount  = $merchandise->collectWithdrawAbleAmounts->sum('total_withdraw_amount'); // 출금액        
+        $total_withdraw_amount  = $merchandise->collectWithdraws->sum('total_withdraw_amount'); // 출금액        
         $cancel_deposit = $merchandise->transactions->reduce(function($carry, $transaction) {
             return $carry + $transaction->cancelDeposits->sum('deposit_amount');
         }, 0);  // 취소 후 입금
