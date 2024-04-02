@@ -152,6 +152,7 @@ class QuickViewController extends Controller
             's_dt' => '2000-01-01',  
             'e_dt' => Carbon::now()->format('Y-m-d'),
         ]);
+        logging(['mcht_id'=>$mcht_id]);
         $merchandise = Merchandise::where('id', $mcht_id)
             ->with(['transactions.cancelDeposits', 'collectWithdrawAbleAmounts'])
             ->first(['id', 'collect_withdraw_fee']);
