@@ -160,15 +160,8 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('merchandises.business_num', '!=', '')
                 ->where('payment_gateways.pg_type', $brands[$i]->pg_type)
                 ->where('transactions.brand_id', $brands[$i]->brand_id)
-                ->where(function ($query) use ($yesterday) {
-                    $query->where(function ($query) use ($yesterday) {                        
-                        $query->where('transactions.trx_dt', $yesterday)
-                            ->where('transactions.is_cancel', false);
-                    })->orWhere(function ($query) use ($yesterday) {
-                        $query->where('transactions.cxl_dt', $yesterday)
-                        ->where('transactions.is_cancel', true);
-                    });
-                })
+                ->where('transactions.trx_at', '>=', $yesterday." 00:00:00")
+                ->where('transactions.trx_at', '<=', $yesterday." 23:59:59")
                 ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
             $pg = $this->getPGClass($brands[$i]);
             if($pg)
@@ -275,9 +268,9 @@ class DifferenceSettlementHistoryController extends Controller
     static public function differenceSettleRequestTest()
     {
         //DifferenceSettlementHistoryController::differenceSettleRequestTest()
-        $ds_id      = 1;
+        $ds_id      = 2;
         $date       = Carbon::now();
-        $yesterday  = $date->copy()->subDay(1)->format('Y-m-d');
+        $yesterday  = $date->copy()->subDay(7)->format('Y-m-d');
 
         $brand = Brand::join('different_settlement_infos', 'brands.id', '=', 'different_settlement_infos.brand_id')
             ->where('brands.is_delete', false)
@@ -293,33 +286,8 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('merchandises.business_num', '!=', '')
                 ->where('payment_gateways.pg_type', $brand->pg_type)
                 ->where('transactions.brand_id', $brand->brand_id)
-                ->where(function ($query) use ($yesterday) {
-                    $query->where(function ($query) use ($yesterday) {
-                        $query->where(function ($query) use ($yesterday) {
-                            $query->where('transactions.trx_dt', '=', '2024-03-05')
-                                ->where('transactions.is_cancel', false);
-                        })->orWhere(function ($query) use ($yesterday) {
-                            $query->where('transactions.cxl_dt', '=', '2024-03-05')
-                            ->where('transactions.is_cancel', true);
-                        });
-                    })->orWhere(function ($query) use ($yesterday) {
-                        $query->where(function ($query) use ($yesterday) {
-                            $query->where('transactions.trx_dt', '=', '2024-03-06')
-                                ->where('transactions.is_cancel', false);
-                        })->orWhere(function ($query) use ($yesterday) {
-                            $query->where('transactions.cxl_dt', '=', '2024-03-06')
-                            ->where('transactions.is_cancel', true);
-                        });
-                    })->orWhere(function ($query) use ($yesterday) {
-                        $query->where(function ($query) use ($yesterday) {
-                            $query->where('transactions.trx_dt', $yesterday)
-                                ->where('transactions.is_cancel', false);
-                        })->orWhere(function ($query) use ($yesterday) {
-                            $query->where('transactions.cxl_dt', $yesterday)
-                            ->where('transactions.is_cancel', true);
-                        });
-                    });
-                })
+                ->where('transactions.trx_at', '>=', $yesterday." 00:00:00")
+                ->where('transactions.trx_at', '<=', "2024-04-02 00:00:00")
                 ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
 
             $ist = new DifferenceSettlementHistoryController(new DifferenceSettlementHistory);

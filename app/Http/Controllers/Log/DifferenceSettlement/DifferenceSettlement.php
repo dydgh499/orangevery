@@ -179,6 +179,17 @@ class DifferenceSettlement
 
             if($this->service_name == 'hecto' || $this->service_name == 'welcome1')
                 $total_amount   = $this->setAtypeField($total_amount, 18);
+            else if($this->service_name == 'danal')
+            {
+                if($total_amount < 0)
+                {
+                    $total_amount = $this->setNtypeField($total_amount, 17);
+                    $total_amount = "-".$total_amount;
+                }
+                else
+                    $total_amount = $this->setNtypeField($total_amount, 18);
+
+            }
             else // danal
                 $total_amount   = $this->setNtypeField($total_amount, 18);
 
