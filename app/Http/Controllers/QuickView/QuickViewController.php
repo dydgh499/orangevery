@@ -174,7 +174,7 @@ class QuickViewController extends Controller
             else
                 return $carry;
         }, 0);  // 정산금
-        logging(['total_withdraw_amount'=>$total_withdraw_amount, 'cancel_deposit'=>$cancel_deposit, 'profit'=>$profit]);
+        logging(['total_withdraw_amount'=>$total_withdraw_amount, 'cancel_deposit'=>$cancel_deposit, 'profit'=>$profit, 'merchandise'=>json_decode(json_encode($merchandise), true)]);
 
         return [
             'profit' => ($profit + $cancel_deposit - $total_withdraw_amount),
