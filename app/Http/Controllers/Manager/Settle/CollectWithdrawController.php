@@ -80,7 +80,7 @@ class CollectWithdrawController extends Controller
                 else
                     return $carry;
             }, 0);  // 정산금
-            $content->withdraw_able_amount = ( $content->settle_amount + $content->cancel_deposit - $content->total_withdraw_amount);
+            $content->withdraw_able_amount = ( $content->settle_amount + $content->cancel_deposit - $content->total_withdraw_amount) - $collect_withdraw_fee;
             $content->makeHidden(['collect_withdraws', 'transactions']);
         }
         return $data;
