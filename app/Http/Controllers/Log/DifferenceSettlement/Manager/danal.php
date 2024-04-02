@@ -151,6 +151,7 @@ class danal implements DifferenceSettlementInterface
                 ."\r\n";
         };
         $getDatas = function($brand, $mchts, $sub_business_regi_infos) {
+            $seq = 1;
             $full_records = '';
             $upload = [
                 'new_count' => 0, 
@@ -169,7 +170,7 @@ class danal implements DifferenceSettlementInterface
                 foreach($filtered_mchts as $mcht)
                 {
                     $records = $this->setAtypeField("DD", 2);
-                    $records .= $this->setNtypeField($i+1, 12);
+                    $records .= $this->setNtypeField($seq, 12);
                     $records .= $this->setNtypeField($sub_business_regi_info->registration_type, 2);
                     $records .= $this->setNtypeField($mcht->p_mid, 10);    //PMID
                     $records .= $this->setNtypeField($sub_business_regi_info->card_company_code, 3);
@@ -193,6 +194,7 @@ class danal implements DifferenceSettlementInterface
                     else if($sub_business_regi_info->registration_type === 2)
                         $upload['modify_count']++;
                     $upload['total_count']++;
+                    $seq++;
                 }
             }
             return [$full_records, $upload];
