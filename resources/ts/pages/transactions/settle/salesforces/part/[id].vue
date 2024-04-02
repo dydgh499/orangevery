@@ -64,7 +64,6 @@ const partSettle = async () => {
     params.comm_settle_amount = 0
     params.under_sales_amount = 0
     params.cancel_deposit_amount = 0
-    params.collect_withdraw_amount = 0
     params.settle_pay_module_idxs = []
     params.cancel_deposit_idxs    = []
 

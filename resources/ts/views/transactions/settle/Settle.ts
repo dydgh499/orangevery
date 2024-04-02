@@ -60,12 +60,12 @@ export function settlementFunctionCollect(store: any) {
                     if(isSettleHoldMcht(item))
                         return
                     else {
-                        if(item.settle.amount > 0)
-                            datas.push(getSettleFormat(item, is_mcht))
-                        else {
+                        if(item.settle.amount < 0) {
                             snackbar.value.show(`#${item.id} ${item.mcht_name}은 정산액이 0원 미만이기 때문에 정산할 수 없습니다.`, 'error')
-                            return
+                            return    
                         }
+                        else
+                            datas.push(getSettleFormat(item, is_mcht))
                     }
                 }
             }
