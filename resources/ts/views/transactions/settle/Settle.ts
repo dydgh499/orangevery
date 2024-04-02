@@ -61,7 +61,7 @@ export function settlementFunctionCollect(store: any) {
                         return
                     else {
                         if(item.settle.amount < 0) {
-                            snackbar.value.show(`#${item.id} ${item.mcht_name}은 정산액이 0원 미만이기 때문에 정산할 수 없습니다.`, 'error')
+                            snackbar.value.show(`#${item.id} ${is_mcht ? item.mcht_name : item.sales_name}은 정산액이 0원 미만이기 때문에 정산할 수 없습니다.`, 'error')
                             return    
                         }
                         else
