@@ -135,7 +135,7 @@ trait SettleTrait
                 'deposit'   => $settle,
                 'transfer'  => $settle,
             ];
-            $content->makeHidden(['transactions', 'collectWithdraws']);
+            $content->makeHidden(['transactions']);
         }
         return $data;
     }

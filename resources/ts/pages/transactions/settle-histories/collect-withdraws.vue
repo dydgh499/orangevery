@@ -1,6 +1,6 @@
 
 <script setup lang="ts">
-import { useSearchStore, realtimeResult, realtimeMessage } from '@/views/transactions/settle/useMerchandiseSelfSettleStore'
+import { useSearchStore, realtimeResult, realtimeMessage } from '@/views/transactions/settle-histories/useCollectWithdrawHistoryStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { DateFilters } from '@core/enums'
@@ -15,7 +15,7 @@ provide('exporter', exporter)
 </script>
 <template>
     <section>
-        <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="실시간 이체 이력" :date_filter_type="DateFilters.SETTLE_RANGE">
+        <BaseIndexView placeholder="가맹점 상호 검색" :metas="[]" :add="false" add_name="" :date_filter_type="DateFilters.SETTLE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="true" :sales="true" v-if="getUserLevel() >= 35">
                 </BaseIndexFilterCard>
@@ -70,3 +70,4 @@ provide('exporter', exporter)
         </BaseIndexView>
     </section>
 </template>
+@/views/transactions/settle-histories/useMerchandiseSelfSettleStore

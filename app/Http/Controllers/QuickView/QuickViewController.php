@@ -135,7 +135,7 @@ class QuickViewController extends Controller
         }
         foreach($mchts as &$mcht)
         {
-            $mcht = $toIntFormat($mcht);            
+            $mcht = $toIntFormat($mcht);
         }
         $monthly = $this->groupedByMonth($daily);
         $group = [
@@ -148,7 +148,7 @@ class QuickViewController extends Controller
     
     public function _withdrawAbleAmount($request, $mcht_id)
     {
-        $request->merge([
+        request()->merge([
             's_dt' => '2000-01-01',  
             'e_dt' => Carbon::now()->format('Y-m-d'),
         ]);

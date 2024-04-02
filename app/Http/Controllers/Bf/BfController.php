@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Bf;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuickView\QuickViewController;
-use App\Http\Controllers\Manager\CollectWithdrawController;
+use App\Http\Controllers\Manager\Settle\CollectWithdrawController;
 use App\Http\Controllers\Manager\TransactionController;
 use App\Http\Controllers\Log\RealtimeSendHistoryController;
 

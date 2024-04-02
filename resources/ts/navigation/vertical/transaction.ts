@@ -48,16 +48,16 @@ const getSettleManagement = () => {
         ]
         
         if(user_info.value.level >= 35) {
+            if(corp.pv_options.paid.use_collect_withdraw) {
+                settle_childs.push({
+                    title: '모아서 출금 관리',
+                    to: 'transactions-settle-collect-withdraws'
+                })
+            }
             settle_childs.push({
                 title: '취소 수기 입금',
                 to: 'transactions-settle-cancel-deposits',
             })
-            if(corp.pv_options.paid.use_collect_withdraw) {
-                settle_childs.push({
-                    title: '모아서 출금 이력',
-                    to: 'transactions-settle-merchandises-self-settle'
-                })
-            }
         }
         
         settles.push({
@@ -86,6 +86,12 @@ const getSettleHistoryTap = () => {
             settle_history_childs.push({
                 title: '차액 정산 이력',
                 to: 'transactions-settle-histories-difference',
+            })
+        }
+        if(user_info.value.level >= 35 && corp.pv_options.paid.use_collect_withdraw) {
+            settle_history_childs.push({
+                title: '모아서 출금 이력',
+                to: 'transactions-settle-histories-collect-withdraws'
             })
         }
         settle_histories.push({

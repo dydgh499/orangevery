@@ -19,9 +19,9 @@ export const realtimeMessage = (item: any) => {
         return item.message
 }
 
-export const useSearchStore = defineStore('merchandiseSelfSettleSearchStore', () => {
-    const store = Searcher('transactions/settle/merchandises/collect-withdraws')
-    const head  = Header('transactions/settle/merchandises/collect-withdraws', '모아서 출금 이력')
+export const useSearchStore = defineStore('collectWithdrawHistoryStore', () => {
+    const store = Searcher('transactions/settle-histories/collect-withdraws')
+    const head  = Header('transactions/settle-histories/collect-withdraws', '모아서 출금 이력')
     const headers:Record<string, string> = {
         'id': 'NO.',
         'mcht_name': '가맹점 상호',

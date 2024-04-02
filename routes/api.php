@@ -30,7 +30,8 @@ use App\Http\Controllers\Manager\PopupController;
 use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Manager\TransactionController;
 use App\Http\Controllers\Manager\CancelDepositController;
-use App\Http\Controllers\Manager\CollectWithdrawController;
+
+
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateMchtController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateSalesController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdatePayModuleController;
@@ -58,6 +59,9 @@ use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 
 use App\Http\Controllers\Manager\Settle\MerchandiseController as MchtSettleController;
 use App\Http\Controllers\Manager\Settle\SalesforceController as SalesSettleController;
+use App\Http\Controllers\Manager\Settle\CollectWithdrawController;
+
+use App\Http\Controllers\Log\CollectWithdrawHistoryController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -146,14 +150,13 @@ Route::prefix('v1')->group(function() {
             Route::post('dangers/batch-checked', [DangerTransController::class, 'batchChecked']);
             
             Route::prefix('settle')->group(function() {
+                Route::apiResource('collect-withdraws', CollectWithdrawController::class);
                 Route::prefix('merchandises')->group(function() {
                     Route::get('/', [MchtSettleController::class, 'index']);
                     Route::get('/chart', [MchtSettleController::class, 'chart']);
                     Route::post('/deduct', [MchtSettleController::class, 'deduct']);
                     Route::get('/part', [MchtSettleController::class, 'part']);
                     Route::get('/part/chart', [MchtSettleController::class, 'partChart']);
-                    
-                    Route::apiResource('collect-withdraws', CollectWithdrawController::class);
                     Route::apiResource('cancel-deposits', CancelDepositController::class);
                 });
                 Route::prefix('salesforces')->group(function() {
@@ -164,10 +167,10 @@ Route::prefix('v1')->group(function() {
                     Route::get('/part/chart', [SalesSettleController::class, 'partChart']);
                 });
             });
-
             Route::prefix('settle-histories')->group(function() {
                 Route::get('difference', [DifferenceSettlementHistoryController::class, 'index']);
                 Route::get('difference/chart', [DifferenceSettlementHistoryController::class, 'chart']);
+                Route::apiResource('collect-withdraws', CollectWithdrawHistoryController::class);
                 
                 Route::get('merchandises/chart', [MchtSettleHistoryController::class, 'chart']);
                 Route::post('merchandises/batch', [MchtSettleHistoryController::class, 'batch']);

@@ -47,7 +47,8 @@ class Merchandise extends Authenticatable
     public function transactions()
     {
         $cols = ['id', 'mcht_id', 'pmod_id', 'amount', 'mcht_settle_amount', 'mcht_settle_fee', 'hold_fee', 'is_cancel', 'created_at'];
-        $query = $this->hasMany(Transaction::class, 'mcht_id')->noSettlement('mcht_settle_id');
+        $query = $this->hasMany(Transaction::class, 'mcht_id')
+            ->noSettlement('mcht_settle_id');
         // 실패건은 제외하고 조회
         if(request()->use_realtime_deposit !== null)
         {
@@ -63,14 +64,19 @@ class Merchandise extends Authenticatable
         return $query->select($cols);
     }
 
+    public function collectWithdrawTransAmount()
+    {
+        $query = $this->hasMany(Transaction::class, 'mcht_id')
+            ->noSettlement('mcht_settle_id')
+            ->selectRaw('id', 'mcht_id', 'profit', 'pmod_id');
+    }
+
     public function collectWithdraws()
     {
         return $this->hasMany(CollectWithdraw::class, 'mcht_id')
             ->whereNull('mcht_settle_id')
             ->whereIn('result_code',['0000', '0050'])
             ->groupBy('mcht_id')
-            ->where('withdraw_date', '>=', request()->s_dt)
-            ->where('withdraw_date', '<=', request()->e_dt)
             ->selectRaw('mcht_id, SUM(withdraw_amount + withdraw_fee) as total_withdraw_amount');
     }
 
