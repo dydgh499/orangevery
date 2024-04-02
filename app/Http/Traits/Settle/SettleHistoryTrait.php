@@ -115,37 +115,7 @@ trait SettleHistoryTrait
         // FK delete NULL update
         // CancelDeposit::where('mcht_settle_id', $data['id'])->update(['mcht_settle_id' => null]);
     }
-
-    /*
-    * 정산 - 모아서출금합계
-    */
-    protected function SetCollectWithdraw($data, $settle_id)
-    {
-        if($data['collect_withdraw_amount'])
-        {
-            return CollectWithdraw::where('mcht_id', $data['mcht_id'])
-                    ->whereNull('mcht_settle_id')
-                    ->update(['mcht_settle_id' => $settle_id]);
-        }
-        return true;
-    }
-
-    /*
-    * 정산 취소 - 모아서출금합계
-    */
-    protected function SetNullCollectWithdraw($data)
-    {
-        if($data['collect_withdraw_amount'])
-        {
-            return CollectWithdraw::where('mcht_id', $data['mcht_id'])
-                    ->where('mcht_settle_id', $data['id'])
-                    ->update(['mcht_settle_id' => null]);
-        }
-        return true;
-    }
-
     
-
     protected function GetSettlePayModuleIds($data, $target_settle_id, $settle_id)
     {
         return Transaction::where('brand_id', $data['brand_id'])

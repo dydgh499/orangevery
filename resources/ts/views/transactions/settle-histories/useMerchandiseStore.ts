@@ -34,8 +34,6 @@ export const useSearchStore = defineStore('transSettlesHistoryMchtSearchStore', 
 
     // use_settle_count
     headers_1['cancel_deposit_amount'] = '취소입금합계'
-    if(corp.pv_options.paid.use_collect_withdraw)
-        headers_1['collect_withdraw_amount'] = '모아서 출금합계'
 
     const headers_2:Record<string, string | object> = {
         'settle_amount': '정산액'

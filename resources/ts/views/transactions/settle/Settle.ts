@@ -31,7 +31,6 @@ export function settlementFunctionCollect(store: any) {
             comm_settle_amount: item.terminal.amount,
             under_sales_amount: item.terminal.under_sales_amount,
             cancel_deposit_amount: item.settle.cancel_deposit_amount || 0,
-            collect_withdraw_amount: item.settle.collect_withdraw_amount || 0,
             cancel_deposit_idxs: item.cancel_deposit_idxs,
             settle_transaction_idxs: item.settle_transaction_idxs,
             settle_pay_module_idxs: item.terminal.settle_pay_module_idxs,
@@ -60,8 +59,14 @@ export function settlementFunctionCollect(store: any) {
                 if(item) {
                     if(isSettleHoldMcht(item))
                         return
-                    else
-                        datas.push(getSettleFormat(item, is_mcht))
+                    else {
+                        if(item.settle.amount > 0)
+                            datas.push(getSettleFormat(item, is_mcht))
+                        else {
+                            snackbar.value.show(`#${item.id} ${item.mcht_name}은 정산액이 0원 미만이기 때문에 정산할 수 없습니다.`, 'error')
+                            return
+                        }
+                    }
                 }
             }
             try {
@@ -82,6 +87,10 @@ export function settlementFunctionCollect(store: any) {
     const settle = async (name:string, item:Settle, is_mcht: boolean) => {
         if(isSettleHoldMcht(item))
             return
+        if(item.settle.amount < 0) {
+            snackbar.value.show(`#${item.id} ${item.mcht_name}은 정산액이 0원 미만이기 때문에 정산할 수 없습니다.`, 'error')
+            return
+        }
         if (await alert.value.show('정말 ' + name + '님을(를) 정산 하시겠습니까?')) {
             const params = cloneDeep(store.params)
             const p = getSettleFormat(item, is_mcht)

@@ -35,7 +35,7 @@ const totals = ref(<any[]>([]))
 const snackbar = <any>(inject('snackbar'))
 
 const isExtendSettleCols = (parent_key: string, key: string) => {
-    return parent_key === 'settle' && (key === 'cancel_deposit_amount' || key === 'collect_withdraw_amount' || key === 'collect_withdraw_fee')
+    return parent_key === 'settle' && (key === 'cancel_deposit_amount' || key === 'collect_withdraw_fee')
 }
 
 onMounted(() => {

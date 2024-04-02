@@ -41,7 +41,8 @@ class MerchandiseController extends Controller
     protected function getTerminalSettleIds($request, $level, $target_id)
     {
         $query = PaymentModule::terminalSettle($level)
-            ->where('merchandises.mcht_name', 'like', "%".$request->search."%");
+            ->where('merchandises.mcht_name', 'like', "%".$request->search."%")
+            ->where('merchandises.use_collect_withdraw', false);
             
         if($request->pg_id)
             $query = $query->where('payment_modules.pg_id', $request->pg_id);
@@ -93,6 +94,7 @@ class MerchandiseController extends Controller
         $terminal_settle_ids = $this->getTerminalSettleIds($request, 10, 'id');
 
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)
+            ->where('use_collect_withdraw', false)
             ->where('mcht_name', 'like', "%".$request->search."%")
             ->orWhere(function ($query) use($terminal_settle_ids) {    
                 $query->whereIn('id',$terminal_settle_ids);
@@ -101,8 +103,6 @@ class MerchandiseController extends Controller
         // 모아서 출금
         if($request->mcht_id)
             $query = $query->where('id', $request->mcht_id);
-        if($request->use_collect_withdraw)
-            $query = $query->with(['collectWithdraws']);
 
         $with = ['deducts', 'settlePayModules', 'transactions'];
         $data = $this->getIndexData($request, $query->with($with), 'id', $cols, "created_at", false);
@@ -133,7 +133,6 @@ class MerchandiseController extends Controller
             ],
             'settle' => [
                 'cancel_deposit_amount' => 0,
-                'collect_withdraw_amount' => 0,
                 'amount' => 0,
                 'deposit' => 0,
                 'transfer' => 0,
@@ -152,7 +151,6 @@ class MerchandiseController extends Controller
             $total['terminal']['settle_pay_module_idxs'] += count($item->terminal['settle_pay_module_idxs']);
 
             $total['settle']['cancel_deposit_amount'] += $item->settle['cancel_deposit_amount'];
-            $total['settle']['collect_withdraw_amount'] += $item->settle['collect_withdraw_amount'];
             $total['settle']['amount'] += $item->settle['amount'];
             $total['settle']['deposit'] += $item->settle['deposit'];
             $total['settle']['transfer'] += $item->settle['transfer'];

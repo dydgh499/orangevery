@@ -78,7 +78,6 @@ class MchtSettleHistoryController extends Controller
             DB::raw("SUM(under_sales_amount) AS under_sales_amount"),
             DB::raw("SUM(deduct_amount) AS deduct_amount"),
             DB::raw("SUM(cancel_deposit_amount) AS cancel_deposit_amount"),
-            DB::raw("SUM(collect_withdraw_amount) AS collect_withdraw_amount"),
             DB::raw("SUM(settle_amount) AS settle_amount"),
         ]);
         return $this->response(0, $total);
@@ -99,7 +98,6 @@ class MchtSettleHistoryController extends Controller
     {
         $data['settle_fee']                 = $item['settle_fee'];
         $data['cancel_deposit_amount']      = $item['cancel_deposit_amount'] ? $item['cancel_deposit_amount'] : 0;
-        $data['collect_withdraw_amount']    = $item['collect_withdraw_amount'] ? $item['collect_withdraw_amount'] : 0;
         $seltte_month = date('Ym', strtotime($data['settle_dt']));
 
         $c_res = $this->settle_mcht_hist->create($data);
@@ -108,7 +106,6 @@ class MchtSettleHistoryController extends Controller
             $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);
             $this->SetPayModuleLastSettleMonth($item['settle_pay_module_idxs'], $seltte_month);   
             $this->SetCancelDeposit($item['cancel_deposit_idxs'], $c_res->id);
-            $this->SetCollectWithdraw($data, $c_res->id);    
             return $c_res->id;
         }
         else
@@ -190,7 +187,6 @@ class MchtSettleHistoryController extends Controller
                 // 삭제시에는 거래건이 적용되기전, 먼저 반영되어야함
                 $this->RollbackPayModuleLastSettleMonth($hist, $target_settle_id);
                 $this->SetNullCancelDeposit($hist);
-                $this->SetNullCollectWithdraw($hist);
                 $query->delete();
                 return true;
             }

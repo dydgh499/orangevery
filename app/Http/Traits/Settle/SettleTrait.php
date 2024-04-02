@@ -121,19 +121,15 @@ trait SettleTrait
             $cancel_deposit_amount = $cancels->sum('deposit_amount');
             $cancel_idxs = $cancels->pluck('id')->all();
 
-            $total_withdraw_amount = request()->use_collect_withdraw ? $content->collectWithdraws->sum('total_withdraw_amount') : 0;
-
             $settle = $content->total['profit'] + $content->deduction['amount'];
             $settle += $content->terminal['amount'];
             $settle += $content->terminal['under_sales_amount'];            
             $settle += $cancel_deposit_amount;
-            $settle -= $total_withdraw_amount;
             $settle -= $content->withdraw_fee;
 
             $content->cancel_deposit_idxs = $cancel_idxs;
             $content->settle = [
                 'cancel_deposit_amount'   => $cancel_deposit_amount,
-                'collect_withdraw_amount' => $total_withdraw_amount * -1,
                 'withdraw_fee' => $content->withdraw_fee * -1,
                 'amount'    => $settle,
                 'deposit'   => $settle,
