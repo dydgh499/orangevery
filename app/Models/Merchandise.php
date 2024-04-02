@@ -78,7 +78,6 @@ class Merchandise extends Authenticatable
     public function collectWithdrawAbleAmounts()
     {
         return $this->hasMany(CollectWithdraw::class, 'mcht_id')
-            ->whereNull('mcht_settle_id')
             ->whereIn('result_code', ['0000', '0050'])
             ->groupBy('mcht_id')
             ->selectRaw('mcht_id, SUM(withdraw_amount + withdraw_fee) as total_withdraw_amount');
