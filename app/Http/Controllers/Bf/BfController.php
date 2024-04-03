@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Bf;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\Manager\Settle\CollectWithdrawController;
+use App\Http\Controllers\Log\CollectWithdrawHistoryController;
 use App\Http\Controllers\Manager\TransactionController;
 use App\Http\Controllers\Log\RealtimeSendHistoryController;
 
@@ -338,7 +339,7 @@ class BfController extends Controller
             'collect_withdraws.result_code',
             'collect_withdraws.message',
         ];
-        $inst = new CollectWithdrawController(new CollectWithdraw);
+        $inst = new CollectWithdrawHistoryController(new CollectWithdraw);
         $query = $inst->commonSelect($request)
             ->where('merchandises.id', $request->user()->id);
 
