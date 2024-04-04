@@ -29,6 +29,7 @@ class RegularCreditCardRequest extends FormRequest
         $sub = [
             'card_num' => 'required',
             'note' => 'required',
+            'yymm' => 'nullable',
         ];
         return $this->getRules($this->keys, $sub);
     }
