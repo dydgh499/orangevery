@@ -23,7 +23,16 @@ const all_days = settleDays()
 const tax_types = settleTaxTypes()
 const password = ref()
 const batchDialog = ref()
-const sales_parent_structure = getUserLevel() > 10 && getUserLevel() < 35 ? Number(corp.pv_options.paid.sales_parent_structure) : 1
+const isSalesforceParemntStructureHideFilter = () => {
+    if(getUserLevel() > 10 && getUserLevel() < 35) {
+        if(Number(corp.pv_options.paid.sales_parent_structure))
+            return false
+        else
+            return true
+    }
+    else
+        return true
+}
 
 provide('password', password)
 provide('store', store)
@@ -31,7 +40,7 @@ provide('head', head)
 provide('exporter', exporter)
 
 store.params.level = null
-store.params.sales_parent_structure = sales_parent_structure
+store.params.sales_parent_structure = getUserLevel() > 10 && getUserLevel() < 35 ? Number(corp.pv_options.paid.sales_parent_structure) : 0
 
 onMounted(() => {
     watchEffect(async() => {
@@ -54,14 +63,14 @@ onMounted(() => {
         <BaseIndexView placeholder="아이디, 영업점 상호 검색" :metas="metas" :add="isAbleModiy(0)" add_name="영업점" :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
-                    :sales="store.params.sales_parent_structure ? false : true">
+                    :sales="isSalesforceParemntStructureHideFilter()">
                     <template #sales_extra_field>
                         <VCol cols="12" sm="3">
                             <VSelect v-model="store.params.level" :items="[<Options>({ id: null, title: '전체' })].concat(salesLevels())" density="compact" label="조회 등급"
                                 item-title="title" item-value="id"
                                 @update:modelValue="store.updateQueryString({ level: store.params.level })" />
                         </VCol>
-                        <VCol cols="12" sm="3" v-if="store.params.sales_parent_structure === false">
+                        <VCol cols="12" sm="3" v-if="isSalesforceParemntStructureHideFilter()">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
                                 :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`영업점 정산주기 선택`"
                                 item-title="title" item-value="id" @update:modelValue="store.updateQueryString({settle_cycle: store.params.settle_cycle})"/>
