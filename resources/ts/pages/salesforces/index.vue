@@ -23,7 +23,7 @@ const all_days = settleDays()
 const tax_types = settleTaxTypes()
 const password = ref()
 const batchDialog = ref()
-const sales_parent_structure = getUserLevel() > 10 && getUserLevel() < 35 ? Number(corp.pv_options.paid.sales_parent_structure) : 0
+const sales_parent_structure = getUserLevel() > 10 && getUserLevel() < 35 ? Number(corp.pv_options.paid.sales_parent_structure) : 1
 
 provide('password', password)
 provide('store', store)
