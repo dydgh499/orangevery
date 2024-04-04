@@ -23,6 +23,7 @@ const all_days = settleDays()
 const tax_types = settleTaxTypes()
 const password = ref()
 const batchDialog = ref()
+const sales_parent_structure = getUserLevel() > 10 && getUserLevel() < 35 ? Number(corp.pv_options.paid.sales_parent_structure) : 0
 
 provide('password', password)
 provide('store', store)
@@ -30,7 +31,7 @@ provide('head', head)
 provide('exporter', exporter)
 
 store.params.level = null
-store.params.sales_parent_structure = Number(corp.pv_options.paid.sales_parent_structure)
+store.params.sales_parent_structure = sales_parent_structure
 
 onMounted(() => {
     watchEffect(async() => {
