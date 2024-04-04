@@ -34,7 +34,7 @@ export const settleTaxTypes = () => {
 }
 
 export const getAutoSetting = (auto_settings: UnderAutoSetting[]) => {
-    return auto_settings.map(item => `${item.note} - ${item.sales_fee}%`)
+    return auto_settings.map(item => `${item.note} ${item.sales_fee}%`)
 }
 
 export const useSearchStore = defineStore('salesSearchStore', () => {

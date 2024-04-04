@@ -40,12 +40,15 @@ class RegularCreditCardRequest extends FormRequest
     public function bodyParameters()
     {
         $params = $this->getDocsParameters($this->keys);
+        $params['card_num']['example']  = '1234123412341234';
+        $params['note']['example']      = '비고';
+
         return $params;
     }
     public function data()
     {
         $data = $this->getParmasBaseKey();
-        $data['mcht_id'] = $this->mcht_id;
+        $data['mcht_id'] = isset($this->mcht_id) ? $this->mcht_id : $this->user()->id; //level 10일때
         return $data;
     }
 }

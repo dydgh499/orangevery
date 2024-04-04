@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Bf\BfController;
+use App\Http\Controllers\Manager\RegularCreditCardController;
 
 Route::middleware('log.route')->group(function() {
     Route::post('sign-in', [BfController::class, 'login']);
@@ -13,5 +14,6 @@ Route::middleware('log.route')->group(function() {
         Route::get('withdraws/balance', [BfController::class, 'withdrawsBalance']);
         Route::post('withdraws', [BfController::class, 'withdrawsStore']);
         Route::post('pay/hand', [BfController::class, 'handPay']);
+        Route::apiResource('regular-credit-cards', RegularCreditCardController::class);
     });
 });

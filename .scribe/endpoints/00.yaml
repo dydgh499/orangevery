@@ -1,17 +1,17 @@
-name: 'EZPG API'
+name: 'BF Mobile API'
 description: |-
 
-  EZPG와 Smart Data간 API 입니다.
+  BF Mobile과 PAYVERY간 API 입니다.
 endpoints:
   -
     httpMethods:
       - POST
-    uri: api/v1/ezpg/sign-in
+    uri: api/v1/bf/sign-in
     metadata:
-      groupName: 'EZPG API'
+      groupName: 'BF Mobile API'
       groupDescription: |-
 
-        EZPG와 Smart Data간 API 입니다.
+        BF Mobile과 PAYVERY간 API 입니다.
       subgroup: ''
       subgroupDescription: ''
       title: 로그인
@@ -26,25 +26,34 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
+      brand_id:
+        name: brand_id
+        description: '법인코드를 의미하며 TYINT: 12, MNWORKS: 14가 요구됩니다.'
+        required: true
+        example: 12.0
+        type: number
+        enumValues: []
+        custom: []
       user_name:
         name: user_name
-        description: '가맹점 아이디'
+        description: '유저 ID.'
         required: true
-        example: nisi
+        example: test0001
         type: string
         enumValues: []
         custom: []
       user_pw:
         name: user_pw
-        description: '가맹점 패스워드'
+        description: 패스워드.
         required: true
-        example: voluptatem
+        example: test0001
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      user_name: nisi
-      user_pw: voluptatem
+      brand_id: 12.0
+      user_name: test0001
+      user_pw: test0001
     fileParameters: []
     responses:
       -
@@ -86,12 +95,210 @@ endpoints:
   -
     httpMethods:
       - GET
-    uri: api/v1/ezpg/transactions
+    uri: api/v1/bf/pay-modules
     metadata:
-      groupName: 'EZPG API'
+      groupName: 'BF Mobile API'
       groupDescription: |-
 
-        EZPG와 Smart Data간 API 입니다.
+        BF Mobile과 PAYVERY간 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '결제모듈정보 조회'
+      description: '결제모듈정보를 불러옵니다.<br>한도 및 수기결제에 필요한 데이터들을 조회합니다.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {ACCESS_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |
+          [
+              {
+                  "id":1,
+                  "is_old_auth":1,
+                  "module_type":1,
+                  "installment":12,
+                  "pay_year_limit":100,
+                  "pay_month_limit":200,
+                  "pay_day_limit":0,
+                  "pay_single_limit":300,
+                  "pay_year_amount": 3640000,
+                  "pay_month_amount": 3640000,
+                  "pay_day_amount": 1640000,
+                  "pay_able_amount":-2640000,
+                  "show_pay_view": 0,        
+                  "use_realtime_deposit":0,
+                  "fin_trx_delay":0
+              },
+              {
+                  "id":5,
+                  "is_old_auth":0,
+                  "module_type":1,
+                  "installment":12,
+                  "pay_year_limit":100,
+                  "pay_month_limit":200,
+                  "pay_day_limit":0,
+                  "pay_single_limit":300,
+                  "pay_year_amount": 3640000,
+                  "pay_month_amount": 3640000,
+                  "pay_day_amount": 1640000,
+                  "pay_able_amount":-2640000,
+                  "show_pay_view": 0,
+                  "use_realtime_deposit":1,
+                  "fin_trx_delay":15
+              }    
+          ]
+        headers: []
+        description: ''
+        custom: []
+    responseFields:
+      id:
+        name: id
+        description: '결제모듈 고유번호'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      module_type:
+        name: module_type
+        description: '모듈 타입(0=장비, 1=수기, 2=인증, 3=간편)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      settle_fee:
+        name: settle_fee
+        description: '입금 수수료'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      is_old_auth:
+        name: is_old_auth
+        description: '비인증, 구인증 여부(비인증=0, 구인증=1)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      installment:
+        name: installment
+        description: 할부한도(0~12)
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      pay_year_limit:
+        name: pay_year_limit
+        description: '연결제 한도(만 단위)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_month_limit:
+        name: pay_month_limit
+        description: '월결제 한도(만 단위)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_single_limit:
+        name: pay_single_limit
+        description: '일결제 한도(만 단위)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_year_amount:
+        name: pay_year_amount
+        description: '연결제 금액'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_month_amount:
+        name: pay_month_amount
+        description: '월결제 금액'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_day_amount:
+        name: pay_day_amount
+        description: '일결제 금액'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      pay_able_amount:
+        name: pay_able_amount
+        description: '결제 가능금액(연,월,일,결제한도가 지정되지 않은 경우 null로 반환합니다.)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      show_pay_view:
+        name: show_pay_view
+        description: '결제창 노출여부'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      use_realtime_deposit:
+        name: use_realtime_deposit
+        description: '실시간 이체 사용여부(미사용=0, 사용=1)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      fin_trx_delay:
+        name: fin_trx_delay
+        description: '실시간 이체 딜레이(모아서 출금=-1, 즉시입금=0, 15분=15, 30분=30, 45분=45, 60분=60), 모아서 출금 외 모두 즉시입금'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer PvagZ6f4Ecba8e3dVkh561D'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/bf/transactions
+    metadata:
+      groupName: 'BF Mobile API'
+      groupDescription: |-
+
+        BF Mobile과 PAYVERY간 API 입니다.
       subgroup: ''
       subgroupDescription: ''
       title: '결제내역 조회'
@@ -141,7 +348,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: dolorem
+        example: sed
         type: string
         enumValues: []
         custom: []
@@ -150,7 +357,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: dolorem
+      search: sed
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -197,15 +404,16 @@ endpoints:
                       "item_name": "ㅁㅁㅁㅁㅁ",
                       "note": "수기결제",
                       "cxl_type": 1,
+                      "fin_trx_delay": 15,
                       "trx_dttm": " ",
                       "cxl_dttm": " ",
                       "profit": 920,
                       "sales0_name": "",
                       "sales1_name": "",
                       "sales2_name": "",
-                      "sales3_name": "지사1",
-                      "sales4_name": "총판1",
-                      "sales5_name": "대리점1",
+                      "sales3_name": "61.지환Q(대5)",
+                      "sales4_name": "61.파주Q(지5)",
+                      "sales5_name": "61.n미소비씨(총)",
                       "trx_amount": 1000,
                       "hold_amount": 0,
                       "total_trx_amount": 1000
@@ -244,15 +452,16 @@ endpoints:
                       "item_name": "ㅁㅁㅁㅁㅁ",
                       "note": "수기결제",
                       "cxl_type": 1,
+                      "fin_trx_delay": 15,
                       "trx_dttm": " ",
                       "cxl_dttm": " ",
                       "profit": -920,
                       "sales0_name": "",
                       "sales1_name": "",
                       "sales2_name": "",
-                      "sales3_name": "지사1",
-                      "sales4_name": "총판1",
-                      "sales5_name": "대리점1",
+                      "sales3_name": "61.지환Q(대5)",
+                      "sales4_name": "61.파주Q(지5)",
+                      "sales5_name": "61.n미소비씨(총)",
                       "trx_amount": -1000,
                       "hold_amount": 0,
                       "total_trx_amount": -1000
@@ -291,15 +500,16 @@ endpoints:
                       "item_name": "ㅁㅁㅁㅁㅁ",
                       "note": "수기결제",
                       "cxl_type": 1,
+                      "fin_trx_delay": 15,
                       "trx_dttm": " ",
                       "cxl_dttm": " ",
                       "profit": 920,
                       "sales0_name": "",
                       "sales1_name": "",
                       "sales2_name": "",
-                      "sales3_name": "지사1",
-                      "sales4_name": "총판1",
-                      "sales5_name": "대리점1",
+                      "sales3_name": "61.지환Q(대5)",
+                      "sales4_name": "61.파주Q(지5)",
+                      "sales5_name": "61.n미소비씨(총)",
                       "trx_amount": 1000,
                       "hold_amount": 0,
                       "total_trx_amount": 1000
@@ -446,6 +656,14 @@ endpoints:
         type: integer
         enumValues: []
         custom: []
+      'content.*.fin_trx_delay':
+        name: 'content.*.fin_trx_delay'
+        description: '이체 딜레이(분)'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
       'content.*.mcht_settle_fee':
         name: 'content.*.mcht_settle_fee'
         description: '가맹점 입금 수수료'
@@ -473,7 +691,841 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer a615bakg4PfVdZ8e36hvDEc'
+      - 'Bearer g5Z48fVv13PaEkDd6b6hcae'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/bf/realtime-histories
+    metadata:
+      groupName: 'BF Mobile API'
+      groupDescription: |-
+
+        BF Mobile과 PAYVERY간 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '실시간 이체내역 조회'
+      description: '로그인한 가맹점의 실시간 이체내역을 조회합니다.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {ACCESS_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: '조회 페이지'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        custom: []
+      page_size:
+        name: page_size
+        description: '조회 사이즈'
+        required: true
+        example: 20
+        type: integer
+        enumValues: []
+        custom: []
+      s_dt:
+        name: s_dt
+        description: '검색 시작일'
+        required: false
+        example: '2023-11-01'
+        type: string
+        enumValues: []
+        custom: []
+      e_dt:
+        name: e_dt
+        description: '검색 종료일'
+        required: false
+        example: '2023-11-30'
+        type: string
+        enumValues: []
+        custom: []
+      search:
+        name: search
+        description: '검색어(승인번호, 계좌번호)'
+        required: false
+        example: est
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      page: 1
+      page_size: 20
+      s_dt: '2023-11-01'
+      e_dt: '2023-11-30'
+      search: est
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |
+          {
+              "page": "1",
+              "page_size": "20",
+              "total": 2,
+              "content": [
+                  {
+                      "mcht_name": "런비지니스클럽",
+                      "appr_num": "30018849",
+                      "trx_id": "202311210528348",
+                      "id": 36455,
+                      "trans_id": 545443,
+                      "mcht_id": 99713,
+                      "finance_id": 16,
+                      "result_code": "0000",
+                      "request_type": 6170,
+                      "message": "이체 성공",
+                      "amount": 920,
+                      "acct_num": "16610204163775",
+                      "acct_bank_name": "국민은행",
+                      "acct_bank_code": "004",
+                      "trans_seq_num": "22119433199713",
+                      "is_delete": 0,
+                      "created_at": "2023-11-21 19:43:31",
+                      "updated_at": "2023-11-21 19:43:31"
+                  },
+                  {
+                      "mcht_name": "런비지니스클럽",
+                      "appr_num": "33597580",
+                      "trx_id": "202311210523140",
+                      "id": 36391,
+                      "trans_id": 543678,
+                      "mcht_id": 99713,
+                      "finance_id": 16,
+                      "result_code": "-2",
+                      "request_type": -2,
+                      "message": "취소된 입금건으로 이체하지 않았습니다.(543690)",
+                      "amount": 920,
+                      "acct_num": "",
+                      "acct_bank_name": "국민은행",
+                      "acct_bank_code": "",
+                      "trans_seq_num": "22115564399713",
+                      "is_delete": 0,
+                      "created_at": "2023-11-21 15:56:43",
+                      "updated_at": "2023-11-21 15:56:43"
+                  }
+              ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields:
+      page:
+        name: page
+        description: '조회 페이지'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      page_size:
+        name: page_size
+        description: '조회 사이즈'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      total:
+        name: total
+        description: '총 개수'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      content:
+        name: content
+        description: 결과
+        required: false
+        example: null
+        type: 'object[]'
+        enumValues: []
+        custom: []
+      'content.*.result_code':
+        name: 'content.*.result_code'
+        description: 결과코드(0000=정상)
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.request_type':
+        name: 'content.*.request_type'
+        description: '요청타입(6170=이체조회, 6140=이체요청)<br>request_type:6170, result_code:0000 인 것만 성공 이체건으로 인식합니다.'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.message':
+        name: 'content.*.message'
+        description: '결과 메세지'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.acct_num':
+        name: 'content.*.acct_num'
+        description: '이체 계좌번호'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.acct_bank_name':
+        name: 'content.*.acct_bank_name'
+        description: '이체 은행명'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.acct_bank_code':
+        name: 'content.*.acct_bank_code'
+        description: '이체 은행코드'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.trans_seq_num':
+        name: 'content.*.trans_seq_num'
+        description: '이체번호(고유 값 아님)'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer aVfceghvE4DP866bdka13Z5'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/bf/self-withdraws
+    metadata:
+      groupName: 'BF Mobile API'
+      groupDescription: |-
+
+        BF Mobile과 PAYVERY간 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '가맹점 모아서 출금내역 조회'
+      description: '로그인한 가맹점의 모아서 출금내역을 조회합니다.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {ACCESS_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      page:
+        name: page
+        description: '페이지 번호.'
+        required: true
+        example: 1
+        type: integer
+        enumValues: []
+        custom: []
+      page_size:
+        name: page_size
+        description: '페이지 사이즈.'
+        required: true
+        example: 20
+        type: integer
+        enumValues: []
+        custom: []
+      s_dt:
+        name: s_dt
+        description: 시작일.
+        required: false
+        example: '2023-10-14'
+        type: string
+        enumValues: []
+        custom: []
+      e_dt:
+        name: e_dt
+        description: 종료일.
+        required: false
+        example: '2023-10-15'
+        type: string
+        enumValues: []
+        custom: []
+    cleanQueryParameters:
+      page: 1
+      page_size: 20
+      s_dt: '2023-10-14'
+      e_dt: '2023-10-15'
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |
+          {
+              "page": "1",
+              "page_size": "20",
+              "total": 6,
+              "content": [
+                  {
+                      "withdraw_amount": 1879000,
+                      "created_at": "2023-11-22 03:12:12",
+                      "acct_num": "110373658934",
+                      "acct_name": "조현진",
+                      "acct_bank_name": "신한은행",
+                      "acct_bank_code": "088",
+                      "result_code": "0000",
+                      "message": "정상 처리"
+                  },
+                  {
+                      "withdraw_amount": 6473600,
+                      "created_at": "2023-11-22 03:12:12",
+                      "acct_num": "110373658934",
+                      "acct_name": "조현진",
+                      "acct_bank_name": "신한은행",
+                      "acct_bank_code": "088",
+                      "result_code": "0000",
+                      "message": "정상 처리"
+                  },
+                  {
+                      "withdraw_amount": 854400,
+                      "created_at": "2023-11-22 03:12:12",
+                      "acct_num": "110373658934",
+                      "acct_name": "조현진",
+                      "acct_bank_name": "신한은행",
+                      "acct_bank_code": "088",
+                      "result_code": "0000",
+                      "message": "정상 처리"
+                  },
+                  {
+                      "withdraw_amount": 2809600,
+                      "created_at": "2023-11-22 03:12:12",
+                      "acct_num": "110373658934",
+                      "acct_name": "조현진",
+                      "acct_bank_name": "신한은행",
+                      "acct_bank_code": "088",
+                      "result_code": "0000",
+                      "message": "정상 처리"
+                  },
+                  {
+                      "withdraw_amount": 2809600,
+                      "created_at": "2023-11-21 03:12:12",
+                      "acct_num": "110373658934",
+                      "acct_name": "조현진",
+                      "acct_bank_name": "신한은행",
+                      "acct_bank_code": "088",
+                      "result_code": "0000",
+                      "message": "정상 처리"
+                  },
+                  {
+                      "withdraw_amount": 4688600,
+                      "created_at": "2023-11-21 03:12:12",
+                      "acct_num": "110373658934",
+                      "acct_name": "조현진",
+                      "acct_bank_name": "신한은행",
+                      "acct_bank_code": "088",
+                      "result_code": "0000",
+                      "message": "정상 처리"
+                  }
+              ]
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields:
+      content:
+        name: content
+        description: 결과
+        required: false
+        example: null
+        type: 'object[]'
+        enumValues: []
+        custom: []
+      'content.*.withdraw_amount':
+        name: 'content.*.withdraw_amount'
+        description: '출금 금액'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.withdraw_fee':
+        name: 'content.*.withdraw_fee'
+        description: '출금 수수료'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      'content.*.created_at':
+        name: 'content.*.created_at'
+        description: 출금신청시간
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.acct_num':
+        name: 'content.*.acct_num'
+        description: 계좌번호
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.acct_name':
+        name: 'content.*.acct_name'
+        description: 예금주명
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.acct_bank_name':
+        name: 'content.*.acct_bank_name'
+        description: 은행명
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.acct_bank_code':
+        name: 'content.*.acct_bank_code'
+        description: 은행코드
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.result_code':
+        name: 'content.*.result_code'
+        description: 결과코드
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      'content.*.message':
+        name: 'content.*.message'
+        description: '결과 메세지'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 5EZcdkgV6ahabfev1P34D68'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - GET
+    uri: api/v1/bf/withdraws/balance
+    metadata:
+      groupName: 'BF Mobile API'
+      groupDescription: |-
+
+        BF Mobile과 PAYVERY간 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: '출금가능금액 조회'
+      description: '출금가능한금액을 조회합니다.<br>즉시 출금 결제모듈의 매출은 포함되지 않습니다.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {ACCESS_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        status: 200
+        content: |
+          {
+              "profit": 412320,
+              "withdraw_fee": 1000
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields:
+      profit:
+        name: profit
+        description: 출금가능한도
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer b8hka1E6aVc6DP5egv3Z4df'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/bf/withdraws
+    metadata:
+      groupName: 'BF Mobile API'
+      groupDescription: |-
+
+        BF Mobile과 PAYVERY간 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 출금요청
+      description: '출금가능한금액을 조회합니다.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {ACCESS_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      withdraw_amount:
+        name: withdraw_amount
+        description: '출금요청할 금액.<br>출금가능금액을 초과할 수 없습니다.'
+        required: true
+        example: 1000.0
+        type: number
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      withdraw_amount: 1000.0
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |
+          {
+              "id": 123
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields:
+      id:
+        name: id
+        description: '출금요청 고유번호'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer D54b361gVZEdev8aakP6cfh'
+    controller: null
+    method: null
+    route: null
+    custom: []
+  -
+    httpMethods:
+      - POST
+    uri: api/v1/bf/pay/hand
+    metadata:
+      groupName: 'BF Mobile API'
+      groupDescription: |-
+
+        BF Mobile과 PAYVERY간 API 입니다.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 수기결제
+      description: '수기결제 API 입니다.'
+      authenticated: true
+      custom: []
+    headers:
+      Authorization: 'Bearer {ACCESS_TOKEN}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      pmod_id:
+        name: pmod_id
+        description: '결제모듈 고유번호.'
+        required: true
+        example: 1023.0
+        type: number
+        enumValues: []
+        custom: []
+      yymm:
+        name: yymm
+        description: '4자리 YYMM 유효기간.'
+        required: true
+        example: 2311.0
+        type: number
+        enumValues: []
+        custom: []
+      card_num:
+        name: card_num
+        description: 카드번호.
+        required: true
+        example: '1234000000005678'
+        type: string
+        enumValues: []
+        custom: []
+      buyer_name:
+        name: buyer_name
+        description: 구매자명.
+        required: true
+        example: 홍길동
+        type: string
+        enumValues: []
+        custom: []
+      buyer_phone:
+        name: buyer_phone
+        description: '휴대폰 번호.'
+        required: true
+        example: '01000000000'
+        type: string
+        enumValues: []
+        custom: []
+      installment:
+        name: installment
+        description: '할부기간(0=일시불,2,3,4,5,6,7,8,9,10,11).<br>결제모듈의 할부한도를 초과할 수 없습니다.'
+        required: true
+        example: 0.0
+        type: number
+        enumValues: []
+        custom: []
+      amount:
+        name: amount
+        description: 구매금액.
+        required: true
+        example: 10000
+        type: string
+        enumValues: []
+        custom: []
+      ord_num:
+        name: ord_num
+        description: '중복되지 않는 주문번호.<br>50자 이하로 작성해야합니다.'
+        required: true
+        example: 1700385517624H102302
+        type: string
+        enumValues: []
+        custom: []
+      item_name:
+        name: item_name
+        description: 상품명.
+        required: true
+        example: '메가커피 아메리카노 L'
+        type: string
+        enumValues: []
+        custom: []
+      auth_num:
+        name: auth_num
+        description: '인증정보<b>(구인증 필수 값)</b>.<br>카도번호 소유주가 법인인경우 사업자번호, 개인인경우 주민등록번호 앞자리를 입력합니다.'
+        required: false
+        example: '901212'
+        type: string
+        enumValues: []
+        custom: []
+      card_pw:
+        name: card_pw
+        description: '카드비밀번호 앞 2자리<b>(구인증 필수 값)</b>.'
+        required: false
+        example: '34'
+        type: string
+        enumValues: []
+        custom: []
+    cleanBodyParameters:
+      pmod_id: 1023.0
+      yymm: 2311.0
+      card_num: '1234000000005678'
+      buyer_name: 홍길동
+      buyer_phone: '01000000000'
+      installment: 0.0
+      amount: 10000
+      ord_num: 1700385517624H102302
+      item_name: '메가커피 아메리카노 L'
+      auth_num: '901212'
+      card_pw: '34'
+    fileParameters: []
+    responses:
+      -
+        status: 201
+        content: |
+          {
+              "mid": "wel000707m",
+              "tid": "90387",
+              "amount": 100,
+              "ord_num": "1704385517624H102402",
+              "appr_num": "57480451",
+              "item_name": "메가커피 아메리카노 L",
+              "pg_id": 112,
+              "trx_id": "202311200495962",
+              "acquirer": "IBK",
+              "issuer": "IBK",
+              "card_num": "414003******3964",
+              "installment": "00",
+              "buyer_name": "홍길동",
+              "trx_dttm": "2023-11-20 00:09:39",
+              "method": "수기",
+              "is_cancel": 0
+          }
+        headers: []
+        description: ''
+        custom: []
+    responseFields:
+      mid:
+        name: mid
+        description: '가맹점 MID'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      tid:
+        name: tid
+        description: '단말기 TID'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      amount:
+        name: amount
+        description: 거래금액
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      ord_num:
+        name: ord_num
+        description: '가맹점 주문번호'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      appr_num:
+        name: appr_num
+        description: 승인번호
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      item_name:
+        name: item_name
+        description: 상품명
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      trx_id:
+        name: trx_id
+        description: 거래번호
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      acquirer:
+        name: acquirer
+        description: 매입사명
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      issuer:
+        name: issuer
+        description: 발급사명
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      card_num:
+        name: card_num
+        description: 카드번호
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      installment:
+        name: installment
+        description: 할부기간
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      method:
+        name: method
+        description: 결제방식
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      trx_dttm:
+        name: trx_dttm
+        description: '거래시간(Y-m-d H:i:s)'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      is_cancel:
+        name: is_cancel
+        description: 취소여부
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer ka6f1Z8gvEPae6VD4hbc5d3'
     controller: null
     method: null
     route: null

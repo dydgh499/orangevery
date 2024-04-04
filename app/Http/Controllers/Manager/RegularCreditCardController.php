@@ -14,7 +14,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 /**
- * @group Regular Credit Card API
+ * @group Regular Customer Card API
  *
  * 지정 신용 카드 API 입니다.
  */
@@ -29,28 +29,31 @@ class RegularCreditCardController extends Controller
     }
 
     /**
-     * 목록출력
+     * 카드 목록출력
      *
-     * 가맹점 이상 가능
-     *
-     * @queryParam search string 검색어(제목)
+     * 카드목록을 불러옵니다.
      */
-    public function index(IndexRequest $request)
+    public function index(Request $request)
     {
-
+        $data = $this->cards->where('mcht_id', $request->user()->id)->get();
+        return $this->response(0, $data);
     }
 
     /**
      * 추가
      *
-     * 마스터 이상 가능
-     *
+     * 단골고객 카드를 추가합니다. (10개이상 등록 불가능)
      */
     public function store(RegularCreditCardRequest $request)
     {
         $data = $request->data();
-        $res = $this->cards->create($data);
-        return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);
+        if($this->cards->where('mcht_id', $data['mcht_id'])->count() < 10)
+        {
+            $res = $this->cards->create($data);
+            return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);    
+        }
+        else
+            return $this->extendResponse(1999, '10개이상 등록할 수 없습니다.');
     }
 
     /**
@@ -70,7 +73,7 @@ class RegularCreditCardController extends Controller
     /**
      * 업데이트
      *
-     * 마스터 이상 가능
+     * 단골고객 카드정보를 업데이트합니다.
      *
      * @urlParam id integer required 정기등록카드 PK
      * @return \Illuminate\Http\Response
@@ -85,7 +88,7 @@ class RegularCreditCardController extends Controller
     /**
      * 단일삭제
      *
-     * 마스터 이상 가능
+     * 가맹점 이상 가능
      *
      * @urlParam id integer required 정기등록카드 PK
      * @return \Illuminate\Http\Response
