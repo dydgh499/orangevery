@@ -5,8 +5,10 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
-import type { Options, Salesforce } from '@/views/types'
-import { getUserLevel, salesLevels, isAbleModiy } from '@axios'
+import type { Salesforce } from '@/views/types'
+
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { getUserLevel, getLevelByIndex, salesLevels, isAbleModiy } from '@axios'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
 
@@ -14,12 +16,23 @@ interface Props {
     item: Salesforce,
 }
 const props = defineProps<Props>()
+
+const { sales } = useSalesFilterStore()
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
 
 const mchtBatchOverview = ref()
 const payModuleBatchOverview = ref()
+
+const getParentSales = computed(()  => {
+    const idx = getLevelByIndex(props.item.level)
+    if(idx < 5) {
+        return sales[idx+1].value
+    }
+    else
+        return []
+})
 
 </script>
 <template>
@@ -122,6 +135,32 @@ const payModuleBatchOverview = ref()
                                 </VCol>
                             </VRow>
                         </VCol>
+                        
+                        <VCol cols="12" v-if="isAbleModiy(props.item.id) && corp.pv_options.paid.sales_parent_structure">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>기본 수수료</VCol>
+                                        <VCol md="8">
+                                            <VTextField v-model="props.item.sales_fee" type="number" suffix="%"/>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>상위 영업점</VCol>
+                                        <VCol md="8">
+                                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.parent_id"
+                                                :items="getParentSales"
+                                                :label="'상위영업점 선택'"
+                                                item-title="sales_name" item-value="id" persistent-hint single-line prepend-inner-icon="ph:share-network"
+                                                />
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+
                         <VCol cols="12" v-if="getUserLevel() >= 35">
                             <VRow>
                                 <VCol cols="12" md="6">
@@ -150,10 +189,11 @@ const payModuleBatchOverview = ref()
                                 </VCol>
                             </VRow>
                         </VCol>
+
                         <VCol v-if="isAbleModiy(props.item.id)">
                             <VTextarea v-model="props.item.note" counter label="메모사항"
                                 prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
-                        </VCol>
+                        </VCol>                        
                     </VRow>
                 </VCardItem>
             </VCard>

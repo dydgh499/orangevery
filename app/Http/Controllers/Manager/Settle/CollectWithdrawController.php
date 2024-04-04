@@ -109,7 +109,7 @@ class CollectWithdrawController extends Controller
             ->unique()
             ->all();
         request()->merge([
-            's_dt' => '2000-01-01',  
+            's_dt' => '2000-01-01',
             'e_dt' => Carbon::now()->format('Y-m-d'),
         ]);
         $mchts = Merchandise::whereIn('id', $mcht_ids)

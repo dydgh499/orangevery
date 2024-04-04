@@ -278,6 +278,19 @@ const md = user_info.value.level == 50 ? 4 : 12
                 <VCard>
                     <VCardItem>
                         <VCardTitle>
+                            <BaseQuestionTooltip location="top" text="영업점 옵션(유료)"
+                                :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
+                            </BaseQuestionTooltip>
+                        </VCardTitle>
+                        <VRow class="pt-5">
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>종속 구조 설정</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.sales_parent_structure" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        <VCardTitle class="pt-10">
                             <BaseQuestionTooltip location="top" text="가맹점 옵션(유료)"
                                 :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
                             </BaseQuestionTooltip>
@@ -451,7 +464,13 @@ const md = user_info.value.level == 50 ? 4 : 12
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        <VCardTitle class="pt-10">
+                    </VCardItem>
+                </VCard>
+            </VCol>
+            <VCol cols="12" :md="md">
+                <VCard>
+                    <VCardItem>
+                        <VCardTitle>
                             <BaseQuestionTooltip location="top" text="브랜드 옵션(유료)"
                                 :content="`${corp.pv_options.auth.levels.dev_name}만 확인 가능한 정보입니다.`">
                             </BaseQuestionTooltip>
@@ -532,11 +551,10 @@ const md = user_info.value.level == 50 ? 4 : 12
                                     <template #input>
                                     <VSwitch hide-details v-model="props.item.paid.use_settle_count" color="primary" />
                                 </template>
-                            </CreateHalfVCol>
-                            
+                            </CreateHalfVCol>                            
                         </VRow>
-                </VCardItem>
-            </VCard>
+                    </VCardItem>
+                </VCard>
             </VCol>
         </template>
     </VRow>

@@ -56,10 +56,105 @@ class SalesforceController extends Controller
      */
     public function chart(Request $request)
     {
-        $query = $this->commonSelect($request, true);
-        $data = $this->getIndexData($request, $query);
-        $chart = getDefaultUsageChartFormat($data);
-        return $this->response(0, $chart);
+        if(isSalesforce($request) && $request->sales_parent_structure)
+        {
+            [$child_ids, $count] = $this->parentStructureSelect($request);
+            $data = [
+                'total'     => $count,
+                'content'   => $this->salesforces->whereIn('id', $child_ids)->get(['created_at', 'is_delete']),
+            ];
+            $chart = getDefaultUsageChartFormat($data);
+            return $this->response(0, $chart);
+        }
+        else
+        {
+            $query = $this->commonSelect($request, true);
+            $data = $this->getIndexData($request, $query);
+            $chart = getDefaultUsageChartFormat($data);
+            return $this->response(0, $chart);    
+        }
+    }
+
+    protected function getUnderSalesforces($request, $offset, $is_select_level)
+    {
+        $search = $request->input('search', '');
+        $getUnderSalesforces = function($is_select_level, $is_dest_level, $parent_ids, $search) {
+            $query = $this->salesforces->whereIn('parent_id', $parent_ids);
+            if($is_select_level === false && $search)
+            {
+                $query = $query->where(function($query) use ($search) {
+                    return $query->where('sales_name', 'like', "%$search%")
+                        ->orWhere('user_name', 'like', "%$search%");
+                });
+            }
+            else if($is_select_level && $is_dest_level && $search)
+            {
+                $query = $query->where(function($query) use ($search) {
+                    return $query->where('sales_name', 'like', "%$search%")
+                        ->orWhere('user_name', 'like', "%$search%");
+                });
+            }
+            return $query->pluck('id')->all();
+        };
+
+        $total_ids = [$request->user()->id];
+        $parent_ids = $total_ids;
+        
+        for ($i=0; $i < $offset; $i++) 
+        {
+            $is_dest_level = $i+1 === $offset;
+            $ids = $getUnderSalesforces($is_select_level, $is_dest_level, $parent_ids, $search);
+
+            if($is_select_level && $is_dest_level)
+                return $ids;
+
+            if(count($ids))
+            {
+                $total_ids = array_merge($total_ids, $ids);
+                $parent_ids = $ids;    
+            }
+            else
+                return $total_ids;
+        }
+
+        return $total_ids;
+    }
+
+    protected function parentStructureSelect($request)
+    {
+        if($request->user()->level === (int)$request->level)
+        {
+            $search = $request->input('search', '');
+            if($search)
+            {
+                if((strpos($request->user()->sales_name, $search) !== false || strpos($request->user()->user_name, $search) !== false))
+                    return [[$request->user()->id], 1];
+                else
+                    return [[], 0];
+            }
+            else
+                return [[$request->user()->id], 1];
+        }
+
+        $my_idx = globalLevelByIndex($request->user()->level);
+        if($request->level)
+        {
+            $dest_idx = globalLevelByIndex($request->level);
+            $offset = $my_idx - $dest_idx;
+            $child_ids = $this->getUnderSalesforces($request, $offset, true);
+        }
+        else
+            $child_ids = $this->getUnderSalesforces($request, $my_idx, false);
+
+        $page      = $request->input('page');
+        $page_size = $request->input('page_size');
+        $sp = ($page - 1) * $page_size;
+        $count = count($child_ids);
+        if($sp <$count)
+            $child_ids = array_slice($child_ids, $sp, $page_size);
+        else
+            return [[], 0];
+        return [$child_ids, $count];
     }
 
     private function commonSelect($request, $is_all=false)
@@ -75,11 +170,12 @@ class SalesforceController extends Controller
         if($is_all == false)
             $query = $query->where('is_delete', false);
 
+
         $sales_ids = $this->underSalesFilter($request);
         if(count($sales_ids))
             $query = $query->whereIn('salesforces.id', $sales_ids);
         if($request->level)
-            $query = $query->where('salesforces.level', $request->level);
+            $query = $query->where('salesforces.level', $request->level);    
 
         return $query;
     }
@@ -92,11 +188,29 @@ class SalesforceController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $query = $this->commonSelect($request);
-        $query->with(['underAutoSettings']);
-
-        $data = $this->getIndexData($request, $query);
-        return $this->response(0, $data);
+        if(isSalesforce($request) && $request->sales_parent_structure)
+        {
+            [$child_ids, $count] = $this->parentStructureSelect($request);
+            $data = [
+                'page'      => $request->page, 
+                'page_size' => $request->page_size,
+                'total'     => $count,
+                'content'   => $this->salesforces
+                    ->whereIn('id', $child_ids)
+                    ->with(['underAutoSettings'])
+                    ->get(),
+            ];
+            return $this->response(0, $data);
+        }
+        else
+        {
+            
+            $query = $this->commonSelect($request);
+            $query->with(['underAutoSettings']);
+    
+            $data = $this->getIndexData($request, $query);
+            return $this->response(0, $data);    
+        }
     }
 
     /**
@@ -204,29 +318,60 @@ class SalesforceController extends Controller
             return $this->response(951);
     }
 
+    private function getRecursionChilds($data, $sales)
+    {
+        if($sales)
+        {
+            for ($i=0; $i <count($sales->childs); $i++) 
+            {
+                $data = $this->getRecursionChilds($data, $sales->childs[$i]);
+            }
+
+            $data["level_".$sales->level][] = $sales;
+            $sales->makeHidden(['childs']);
+            return $data;    
+        }
+        else
+            return $data;
+    }
+
     public function classification(Request $request)
     {
-        $data = [];
-        if(isMerchandise($request) == false)
+        $data = [
+            'level_13' => [], 'level_15' => [],
+            'level_17' => [], 'level_20' => [], 
+            'level_25' => [], 'level_30' => [],
+        ];
+        if($request->sales_parent_structure)
         {
-            [$levels, $sales_keys] = $this->getViewableSalesInfos($request);
-            $grouped = $this->salesforces
-                ->where('brand_id', $request->user()->brand_id)
-                ->where('is_delete', false)
-                ->with(['underAutoSettings'])
-                ->get(['id', 'sales_name', 'level'])
-                ->groupBy('level');
-                
-            if(isSalesforce($request))
-                $grouped = $this->salesClassFilter($request, $grouped, $levels);   
-
-            for($i=0; $i<count($levels); $i++)
-            {
-                $level = $levels[$i];
-                $data["level_$level"] = isset($grouped[$level]) ? $grouped[$level] : [];
-            }
+            $sales = $this->salesforces->where('id', $request->user()->id)->with(['childs'])->first();
+            $data = $this->getRecursionChilds($data, $sales);
+            return $this->response(0, $data);
         }
-        return $this->response(0, $data);
+        else
+        {
+            if(isMerchandise($request) == false)
+            {
+                [$levels, $sales_keys] = $this->getViewableSalesInfos($request);
+                $grouped = $this->salesforces
+                    ->where('brand_id', $request->user()->brand_id)
+                    ->where('is_delete', false)
+                    ->with(['underAutoSettings'])
+                    ->get(['id', 'sales_name', 'level'])
+                    ->groupBy('level');
+                    
+                if(isSalesforce($request))
+                    $grouped = $this->salesClassFilter($request, $grouped, $levels);   
+    
+                for($i=0; $i<count($levels); $i++)
+                {
+                    $level = $levels[$i];
+                    $data["level_$level"] = isset($grouped[$level]) ? $grouped[$level] : [];
+                }
+            }
+            return $this->response(0, $data);
+        }
+
     }
 
     public function feeApplyHistories(Request $request)

@@ -76,21 +76,11 @@ class BrandController extends Controller
     {
         if(isMainBrand($request->user()->brand_id) && $request->user()->tokenCan(50))
         {
-            $s_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
-            $e_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->endOfMonth()->format('Y-m-d');
-
+            $s_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d 00:00:00');
+            $e_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->endOfMonth()->format('Y-m-d 23:59:59');
             $sum = Transaction::join('brands', 'transactions.brand_id', '=', 'brands.id')
-                ->where(function($query) use($s_dt, $e_dt) {
-                    $query->where(function($query) use($s_dt, $e_dt) {
-                        $query->where('transactions.is_cancel', false)
-                            ->whereRaw("concat(trx_dt, ' ', trx_tm) >= ?", [$s_dt])
-                            ->whereRaw("concat(trx_dt, ' ', trx_tm) <= ?", [$e_dt]);
-                    })->orWhere(function($query) use($s_dt, $e_dt) {
-                        $query->where('transactions.is_cancel', true)
-                            ->whereRaw("concat(cxl_dt, ' ', cxl_tm) >= ?", [$s_dt])
-                            ->whereRaw("concat(cxl_dt, ' ', cxl_tm) <= ?", [$e_dt]);
-                    });
-                })
+                ->where('transactions.trx_at', '>=', $s_dt)
+                ->where('transactions.trx_at', '<=', $e_dt)
                 ->first([DB::raw('SUM(dev_realtime_settle_amount + dev_settle_amount) as dev_realtime_settle_amount')]);
             return $sum->dev_realtime_settle_amount;
         }

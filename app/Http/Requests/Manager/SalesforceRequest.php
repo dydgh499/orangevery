@@ -32,6 +32,12 @@ class SalesforceRequest extends FormRequest
         'bsin_lic_img',
         'id_img',
     ];
+    public $integer_keys = [
+        'sales_fee'
+    ];
+    public $nullable_keys = [
+        'parent_id'
+    ];
 
     public function authorize()
     {
@@ -64,6 +70,7 @@ class SalesforceRequest extends FormRequest
             'acct_bank_name' => 'required',
             'settle_tax_type' => 'required',
             'settle_cycle' => 'required',
+            'sales_fee' => 'nullable|numeric|max:10',
             'passbook_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
             'contract_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
             'bsin_lic_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
@@ -84,7 +91,7 @@ class SalesforceRequest extends FormRequest
     }
     public function data()
     {
-        $data = [];
+        $data = array_merge($this->getParmasBaseKeyV2($this->integer_keys, 0), $this->getParmasBaseKeyV2($this->nullable_keys, null));
         for ($i=0; $i < count($this->keys) ; $i++)
         {
             $key = $this->keys[$i];

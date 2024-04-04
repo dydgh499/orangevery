@@ -77,6 +77,7 @@
         public $use_settle_hold = false;        // 지급보류
         public $use_hide_account = false;       // 계좌숨김
         public $use_settle_count = true;       // 정산시 승인/취소수 노출
+        public $sales_parent_structure = false;
         
         public function __construct(array $source)
         {

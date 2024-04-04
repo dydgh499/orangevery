@@ -5,6 +5,27 @@ use App\Models\Merchandise;
 
 trait UnderSalesTrait
 {
+    public function globalIndexByLevel($level)
+    {
+        switch($level)
+        {
+            case 0:
+                return 13;
+            case 1:
+                return 15;
+            case 2:
+                return 17;
+            case 3:
+                return 20;
+            case 4:
+                return 25;
+            case 5:
+                return 30;
+            default:
+                return "UNKNOWUN";
+        }
+    }
+
     public function getUnderSalesIds($request, $s_keys)
     {
         $idx = globalLevelByIndex($request->user()->level);

@@ -156,6 +156,8 @@ export interface Merchandise extends MerchandisePropertie, UserPropertie {
 }
 
 export interface Salesforce extends SalesforcePropertie, UserPropertie {
+    parent_id?: number,
+    sales_fee?: number,
     is_able_modify_mcht: number,
     under_auto_settings?: UnderAutoSetting[]
 }
@@ -348,6 +350,7 @@ interface PaidOption {
     use_settle_hold: boolean, // 지급보류
     use_hide_account: boolean, // 계좌 숨김
     use_settle_count: boolean, // 정산시 개수 노출
+    sales_parent_structure: boolean, // 영업점 종속구조
 }
 interface AuthOption {
     levels: {
