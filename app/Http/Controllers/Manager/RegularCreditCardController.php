@@ -64,7 +64,7 @@ class RegularCreditCardController extends Controller
      * @urlParam id integer required 정기등록카드 PK
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
         $data = $this->cards->where('id', $id)->first();
         return $this->response($data ? 0 : 1000, $data);
@@ -78,7 +78,7 @@ class RegularCreditCardController extends Controller
      * @urlParam id integer required 정기등록카드 PK
      * @return \Illuminate\Http\Response
      */
-    public function update(RegularCreditCardRequest $request, $id)
+    public function update(RegularCreditCardRequest $request, int $id)
     {
         $data = $request->data();
         $res  = $this->cards->where('id', $id)->update($data);
@@ -93,7 +93,7 @@ class RegularCreditCardController extends Controller
      * @urlParam id integer required 정기등록카드 PK
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $res = $this->cards->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);
