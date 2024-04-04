@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Models\Operator;
 use App\Models\Merchandise;
 use App\Models\PaymentModule;
 use App\Models\NotiUrl;
@@ -412,7 +413,7 @@ class MerchandiseController extends Controller
      */
     public function clearSettleHold(Request $requset, $id)
     {
-        $data = $this->merchandises->where('id', $id)->first(['user_pw']);
+        $data = Operator::where('id', $requset->user()->id)->first(['user_pw']);
         if($data)
         {
             if(Hash::check($requset->user_pw, $data->user_pw))
