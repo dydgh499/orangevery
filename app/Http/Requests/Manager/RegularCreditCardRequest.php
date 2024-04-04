@@ -11,6 +11,7 @@ class RegularCreditCardRequest extends FormRequest
     public $keys = [
         'card_num',
         'note',
+        'yymm',
     ];
 
     public function authorize(): bool

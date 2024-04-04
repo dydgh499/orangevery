@@ -3,6 +3,7 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import RegularCreditCardTr from '@/views/merchandises/regular-credit-cards/RegularCreditCardTr.vue'
 import type { Merchandise, RegularCreditCard } from '@/views/types'
 import { useRequestStore } from '@/views/request'
+import corp from '@corp'
 
 interface Props {
     item: Merchandise,
@@ -34,6 +35,7 @@ watchEffect(() => {
                 <th scope="col" style="text-align: center;">No.</th>
                 <th scope="col" style="text-align: center;">별칭</th>
                 <th scope="col" style="text-align: center;">카드번호</th>
+                <th scope="col" style="text-align: center;" v-if="corp.id === 30">유효기간</th>
                 <th scope="col" style="text-align: center;"></th>
             </tr>
         </thead>

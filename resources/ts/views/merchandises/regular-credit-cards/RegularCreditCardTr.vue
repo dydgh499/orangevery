@@ -2,6 +2,7 @@
 import { useRequestStore } from '@/views/request'
 import type { RegularCreditCard } from '@/views/types'
 import { VForm } from 'vuetify/components'
+import corp from '@corp'
 
 interface Props {
     item: RegularCreditCard,
@@ -30,6 +31,15 @@ const { update, remove } = useRequestStore()
                 <VCol cols="12">
                     <VRow no-gutters>
                         <VTextField v-model="props.item.card_num" type="number" placeholder="1234000000001234"/>
+                    </VRow>
+                </VCol>
+            </VForm>
+        </td>
+        <td style="width: 20%;" v-if="corp.id === 30">
+            <VForm ref="vForm">
+                <VCol cols="12">
+                    <VRow no-gutters>
+                        <VTextField v-model="props.item.yymm" type="text" placeholder="yymm"/>
                     </VRow>
                 </VCol>
             </VForm>
