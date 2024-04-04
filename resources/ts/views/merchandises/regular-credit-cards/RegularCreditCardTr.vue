@@ -16,7 +16,7 @@ const { update, remove } = useRequestStore()
 <template>
     <tr>
         <td style="width: 10%;">{{ index + 1 }}</td>
-        <td style="width: 40%;">
+        <td style="width: 30%;">
             <VForm ref="vForm">
                 <VCol cols="12">
                     <VRow no-gutters>
@@ -26,7 +26,7 @@ const { update, remove } = useRequestStore()
                 </VCol>
             </VForm>
         </td>
-        <td style="width: 40%;">
+        <td style="width: 30%;">
             <VForm ref="vForm">
                 <VCol cols="12">
                     <VRow no-gutters>
