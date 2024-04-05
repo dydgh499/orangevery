@@ -127,6 +127,7 @@
         {
             $default = json_decode($brand, true);
             $options = json_decode(json_encode(new PvOptions($brand)), true);
+            logging($options);
             return array_merge($default, $options);
         }
     }
