@@ -41,9 +41,10 @@ class QuickViewController extends Controller
         array_push($cols, DB::raw("DATE_FORMAT(trx_at, '%Y-%m-%d') as day"));
 
         return $this->transactions
-            ->where($target_id, $request->user()->id)
+            ->where('brand_id', $request->user()->brand_id)
             ->where('trx_at', '>=', $one_month_ago)
             ->where('trx_at', '<=', $curl_date)
+            ->where($target_id, $request->user()->id)
             ->groupby(DB::raw("DATE_FORMAT(trx_at, '%Y-%m-%d')"))
             ->orderBy('day', 'desc')
             ->get($cols);
@@ -61,9 +62,10 @@ class QuickViewController extends Controller
 
         return $this->transactions
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
-            ->where('transactions.'.$target_id, $request->user()->id)
+            ->where('transactions.brand_id', $request->user()->brand_id)
             ->where('transactions.trx_at', '>=', $one_month_ago)
             ->where('transactions.trx_at', '<=', $curl_date)
+            ->where('transactions.'.$target_id, $request->user()->id)
             ->groupby('transactions.mcht_id')
             ->orderBy('appr_amount', 'desc')
             ->get($cols);
