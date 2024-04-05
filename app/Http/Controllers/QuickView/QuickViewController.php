@@ -56,7 +56,7 @@ class QuickViewController extends Controller
 
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
-        $cols = $this->getTotalCols($target_settle_amount, 'merchandises.id');
+        $cols = $this->getTotalCols($target_settle_amount, 'transactions.mcht_id');
         array_push($cols, 'merchandises.mcht_name');
 
         return $this->transactions
@@ -64,7 +64,7 @@ class QuickViewController extends Controller
             ->where('transactions.'.$target_id, $request->user()->id)
             ->where('transactions.trx_at', '>=', $one_month_ago)
             ->where('transactions.trx_at', '<=', $curl_date)
-            ->groupby('merchandises.id')
+            ->groupby('transactions.mcht_id')
             ->orderBy('appr_amount', 'desc')
             ->get($cols);
     }
