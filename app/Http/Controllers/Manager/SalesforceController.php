@@ -337,19 +337,20 @@ class SalesforceController extends Controller
 
     public function classification(Request $request)
     {
-        $data = [
-            'level_13' => [], 'level_15' => [],
-            'level_17' => [], 'level_20' => [], 
-            'level_25' => [], 'level_30' => [],
-        ];
+
         if($request->sales_parent_structure)
         {
+            $data = [
+                'level_13' => [], 'level_15' => [],
+                'level_17' => [], 'level_20' => [], 
+                'level_25' => [], 'level_30' => [],
+            ];
             $sales = $this->salesforces->where('id', $request->user()->id)->with(['childs'])->first();
             $data = $this->getRecursionChilds($data, $sales);
-            return $this->response(0, $data);
         }
         else
         {
+            $data = [];
             if(isMerchandise($request) == false)
             {
                 [$levels, $sales_keys] = $this->getViewableSalesInfos($request);
@@ -369,8 +370,8 @@ class SalesforceController extends Controller
                     $data["level_$level"] = isset($grouped[$level]) ? $grouped[$level] : [];
                 }
             }
-            return $this->response(0, $data);
         }
+        return $this->response(0, $data);
 
     }
 
