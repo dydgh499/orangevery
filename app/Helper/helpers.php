@@ -126,8 +126,8 @@
         else
         {
             $default = json_decode($brand, true);
-            $default['pv_options'] = json_decode(json_encode(new PvOptions($brand['pv_options'])), true);
-            return $default;
+            $options = json_decode(json_encode(new PvOptions($brand)), true);
+            return array_merge($default, $options);
         }
     }
     
