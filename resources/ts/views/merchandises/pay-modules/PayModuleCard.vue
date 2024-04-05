@@ -10,6 +10,7 @@ import { VForm } from 'vuetify/components'
 import { useRequestStore } from '@/views/request'
 import { isAbleModiy } from '@axios'
 import type { PayModule } from '@/views/types'
+import corp from '@corp';
 
 interface Props {
     item: PayModule,
@@ -22,7 +23,10 @@ const md = ref<number>(3)
 
 onMounted(() => {
     watchEffect(() => {
-        md.value = (props.item.module_type == 0 || props.item.module_type == 1) && isAbleModiy(0) ? 3 : 4
+        if(corp.id !== 30)
+            md.value = (props.item.module_type == 0 || props.item.module_type == 1) && isAbleModiy(0) ? 3 : 4
+        else
+            md.value = 4
     })
 })
 </script>
@@ -41,11 +45,13 @@ onMounted(() => {
                         <VCardTitle>결제정보</VCardTitle>
                         <PaymentInfoOverview :item="props.item" />
                     </VCol>
-                    <VDivider :vertical="$vuetify.display.mdAndUp" />
-                    <VCol cols="12" :md="md" v-if="props.item.module_type < 2">
-                        <VCardTitle>장비정보</VCardTitle>
-                        <TerminalInfoOverview :item="props.item" />
-                    </VCol>
+                    <template v-if="corp.id !== 30">
+                        <VDivider :vertical="$vuetify.display.mdAndUp" />
+                        <VCol cols="12" :md="md" v-if="props.item.module_type < 2">
+                            <VCardTitle>장비정보</VCardTitle>
+                            <TerminalInfoOverview :item="props.item" />
+                        </VCol>
+                    </template>
                     <template v-if="isAbleModiy(item.id)">
                         <VDivider :vertical="$vuetify.display.mdAndUp" />
                         <VCol cols="12" :md="md">

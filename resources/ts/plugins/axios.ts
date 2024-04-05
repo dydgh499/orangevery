@@ -1,10 +1,9 @@
+import { isFixplusSalesAbleUpdate } from '@/plugins/fixplus';
 import type { Options } from '@/views/types';
 import corp from '@corp';
 import axiosIns from 'axios';
 
-
 const levels = corp.pv_options.auth.levels
-
 
 export const getSalesLevelByCol = (key: string) => {
     switch(key) {
@@ -103,7 +102,6 @@ export const getUserLevel = () => {
     return 0
 }
 
-
 export const getViewType = () => {
     const level = getUserLevel()
     if(level == 10)
@@ -121,33 +119,18 @@ export const getViewType = () => {
 export const isAbleModiy = (id: number) => {
     const isAbleModifyMcht = () => {
         if(getUserLevel() > 10 && getUserLevel() < 35) {
-            if(corp.id === 30)
-                return true
-            else
-                return user_info.value.is_able_modify_mcht ? true : false
+            return user_info.value.is_able_modify_mcht ? true : false
         }
         else
             return false
     }
-    const isFixplusAbleUpdate = () => {
-        if(corp.id === 30) {
-            if(getUserLevel() === 30)
-                return true
-            else
-                return false
-        }
-        else
-            return true    
-    }
-
+    
     if(getUserLevel() >= 35)
         return true
     else if(getUserLevel() >= 13) {
-        if(id) {    // update
-            if(isAbleModifyMcht())
-                return isFixplusAbleUpdate()
-        }
-        else // create
+        if(corp.id === 30)
+            return isFixplusSalesAbleUpdate(id)
+        else
             return isAbleModifyMcht()            
     }
     return false

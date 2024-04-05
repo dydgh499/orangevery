@@ -1,11 +1,11 @@
 import { getUserLevel } from '@axios'
 import corp from '@corp'
 
-const getAbilitiesMenu = computed(() => {
+const getUserChildMenu = () => {
+    const users = [
+        { title: '가맹점 목록', to: 'merchandises' }
+    ]
     const logs = []
-    const sales = []
-    const sales_child = []
-
     if(getUserLevel() >= 35) {
         logs.push({
             title: '수수료율 변경이력',
@@ -30,6 +30,19 @@ const getAbilitiesMenu = computed(() => {
         }
     }
     
+    if(corp.id !== 30) {
+        users.push({ title: '장비 관리', to: 'merchandises-terminals' })
+    }
+    users.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules' })
+    users.push(...logs)
+    return users
+}
+
+const getAbilitiesMenu = computed(() => {
+    const sales = []
+    const sales_child = []
+    const users_child = getUserChildMenu()
+    
     if(getUserLevel() >= 35) {
         sales_child.push({
             title: '수수료율 변경이력',
@@ -53,12 +66,7 @@ const getAbilitiesMenu = computed(() => {
         {
             title: '가맹점 관리',
             icon: { icon: 'tabler-user' },
-            children: [
-                { title: '가맹점 목록', to: 'merchandises' },
-                { title: '장비 관리', to: 'merchandises-terminals' },
-                { title: '결제모듈 관리', to: 'merchandises-pay-modules' },
-                ...logs,
-            ]
+            children: users_child
         },
         ...sales,
     ]    

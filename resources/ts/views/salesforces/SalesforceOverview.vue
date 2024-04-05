@@ -142,7 +142,7 @@ const getParentSales = computed(()  => {
                                     <VRow no-gutters style="align-items: center;">
                                         <VCol>기본 수수료</VCol>
                                         <VCol md="8">
-                                            <VTextField v-model="props.item.sales_fee" type="number" suffix="%"/>
+                                            <VTextField v-model="props.item.sales_fee" type="number" suffix="%" :rules="[requiredValidatorV2(props.item.sales_fee, '기본 수수료')]"/>
                                         </VCol>
                                     </VRow>
                                 </VCol>
@@ -153,7 +153,8 @@ const getParentSales = computed(()  => {
                                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.parent_id"
                                                 :items="getParentSales"
                                                 :label="'상위영업점 선택'"
-                                                item-title="sales_name" item-value="id" persistent-hint single-line prepend-inner-icon="ph:share-network"
+                                                item-title="sales_name" item-value="id" persistent-hint single-line prepend-inner-icon="ph:share-network" 
+                                                :rules="[requiredValidatorV2(props.item.parent_id, '상위 영업점')]"
                                                 />
                                         </VCol>
                                     </VRow>

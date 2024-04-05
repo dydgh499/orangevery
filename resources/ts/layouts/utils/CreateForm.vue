@@ -3,7 +3,8 @@ a
 
 import { useRequestStore } from '@/views/request'
 import type { Tab } from '@/views/types'
-import { getUserLevel, user_info, isAbleModiy } from '@axios'
+import { getUserLevel, user_info, isAbleModiy, axios } from '@axios'
+import { IS_FIXPLUS_AGCY1_MODIFY_ABLE, IS_FIXPLUS_AGCY2_MODIFY_ABLE } from '@/plugins/fixplus';
 import { VForm } from 'vuetify/components'
 import corp from '@corp';
 
@@ -60,6 +61,20 @@ watchEffect(() => {
     if (props.id) 
         setOneObject('/' + props.path, Number(props.id), props.item)
 });
+
+watchEffect(() => {
+    if(corp.id === 30) {
+        if(props.id && props.path === 'merchandises' && getUserLevel() <= 20) {
+            if(getUserLevel() === 20) {
+                //하위 영업점이 등록되어 잇는 경우, 수정불가
+                IS_FIXPLUS_AGCY1_MODIFY_ABLE.value = props.item['sales2_id'] ? false : true
+            }
+            axios.get('/api/v1/bf/occuerred-sale', {params: {mcht_id:props.id}}).then( r => {
+                IS_FIXPLUS_AGCY2_MODIFY_ABLE.value = r.data.exist === false
+            }).catch(e => {})
+        }
+    }
+})
 </script>
 <template>
     <VTabs v-model="tab" class="v-tabs-pill">

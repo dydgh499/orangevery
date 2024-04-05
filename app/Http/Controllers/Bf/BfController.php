@@ -346,4 +346,13 @@ class BfController extends Controller
         $data = $this->getIndexData($request, $query, 'collect_withdraws.id', $cols, 'collect_withdraws.created_at');
         return $this->response(0, $data);
     }
+
+    /*
+    * 매출이 발생했는지 확인 (픽스플러스 전용)
+    */
+    public function occuerredSale(Request $request)
+    {
+        $exist = Transaction::where('mcht_id', $request->mcht_id)->exists();
+        return $this->response(0, ['exist'=>$exist]);
+    }
 }
