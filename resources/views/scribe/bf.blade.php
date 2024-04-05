@@ -39,6 +39,7 @@
   </head>
 
 
+
 <body data-languages="[&quot;javascript&quot;,&quot;php&quot;,&quot;python&quot;,&quot;bash&quot;]">
 
 <a href="#" id="nav-button">
@@ -135,7 +136,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2024-04-04 12:32:40</li>
+        <li>마지막 업데이트:  2024-04-05 13:41:53</li>
     </ul>
 </div>
 
@@ -774,7 +775,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "sed",
+    "search": "nihil",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -806,7 +807,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'sed',
+            'search' =&gt; 'nihil',
         ],
     ]
 );
@@ -824,7 +825,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'sed',
+  'search': 'nihil',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -838,7 +839,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=sed" \
+    --get "https://team.payvery.kr/api/v1/bf/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=nihil" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1135,10 +1136,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-transactions"
-               value="sed"
+               value="nihil"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>sed</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>nihil</code></p>
             </div>
                 </form>
 
@@ -1328,7 +1329,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "est",
+    "search": "excepturi",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -1360,7 +1361,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'est',
+            'search' =&gt; 'excepturi',
         ],
     ]
 );
@@ -1378,7 +1379,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'est',
+  'search': 'excepturi',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1392,7 +1393,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=est" \
+    --get "https://team.payvery.kr/api/v1/bf/realtime-histories?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=excepturi" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1585,10 +1586,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-bf-realtime-histories"
-               value="est"
+               value="excepturi"
                data-component="query">
     <br>
-<p>검색어(승인번호, 계좌번호) <br>예시: <code>est</code></p>
+<p>검색어(승인번호, 계좌번호) <br>예시: <code>excepturi</code></p>
             </div>
                 </form>
 
@@ -3273,6 +3274,17 @@ vary: Origin
     <br>
 <p>비고. <br>예시: <code>비고</code></p>
         </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>yymm</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i><b>optional</b></i> &nbsp;
+                <input type="text" style="display: none"
+                              name="yymm"                data-endpoint="POSTapi-v1-bf-regular-credit-cards"
+               value=""
+               data-component="body">
+    <br>
+<p>유효기간.</p>
+        </div>
         </form>
 
                     <h2 id="regular-customer-card-api-GETapi-v1-bf-regular-credit-cards--id-">단일조회</h2>
@@ -3289,7 +3301,7 @@ vary: Origin
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://team.payvery.kr/api/v1/bf/regular-credit-cards/19"
+    "https://team.payvery.kr/api/v1/bf/regular-credit-cards/10"
 );
 
 const headers = {
@@ -3307,7 +3319,7 @@ fetch(url, {
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;get(
-    'https://team.payvery.kr/api/v1/bf/regular-credit-cards/19',
+    'https://team.payvery.kr/api/v1/bf/regular-credit-cards/10',
     [
         'headers' =&gt; [
             'Authorization' =&gt; 'Bearer {ACCESS_TOKEN}',
@@ -3324,7 +3336,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     <pre><code class="language-python">import requests
 import json
 
-url = 'https://team.payvery.kr/api/v1/bf/regular-credit-cards/19'
+url = 'https://team.payvery.kr/api/v1/bf/regular-credit-cards/10'
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
   'Content-Type': 'application/json',
@@ -3337,7 +3349,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://team.payvery.kr/api/v1/bf/regular-credit-cards/19" \
+    --get "https://team.payvery.kr/api/v1/bf/regular-credit-cards/10" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3450,10 +3462,10 @@ vary: Origin
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="GETapi-v1-bf-regular-credit-cards--id-"
-               value="19"
+               value="10"
                data-component="url">
     <br>
-<p>정기등록카드 PK <br>예시: <code>19</code></p>
+<p>정기등록카드 PK <br>예시: <code>10</code></p>
             </div>
                     </form>
 
@@ -3471,7 +3483,7 @@ vary: Origin
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://team.payvery.kr/api/v1/bf/regular-credit-cards/12"
+    "https://team.payvery.kr/api/v1/bf/regular-credit-cards/20"
 );
 
 const headers = {
@@ -3495,7 +3507,7 @@ fetch(url, {
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;put(
-    'https://team.payvery.kr/api/v1/bf/regular-credit-cards/12',
+    'https://team.payvery.kr/api/v1/bf/regular-credit-cards/20',
     [
         'headers' =&gt; [
             'Authorization' =&gt; 'Bearer {ACCESS_TOKEN}',
@@ -3516,7 +3528,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     <pre><code class="language-python">import requests
 import json
 
-url = 'https://team.payvery.kr/api/v1/bf/regular-credit-cards/12'
+url = 'https://team.payvery.kr/api/v1/bf/regular-credit-cards/20'
 payload = {
     "card_num": "1234123412341234",
     "note": "비고"
@@ -3533,7 +3545,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "https://team.payvery.kr/api/v1/bf/regular-credit-cards/12" \
+    "https://team.payvery.kr/api/v1/bf/regular-credit-cards/20" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
@@ -3655,10 +3667,10 @@ vary: Origin
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="PUTapi-v1-bf-regular-credit-cards--id-"
-               value="12"
+               value="20"
                data-component="url">
     <br>
-<p>정기등록카드 PK <br>예시: <code>12</code></p>
+<p>정기등록카드 PK <br>예시: <code>20</code></p>
             </div>
                             <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
         <div style=" padding-left: 28px;  clear: unset;">
@@ -3683,6 +3695,17 @@ vary: Origin
     <br>
 <p>비고. <br>예시: <code>비고</code></p>
         </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>yymm</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i><b>optional</b></i> &nbsp;
+                <input type="text" style="display: none"
+                              name="yymm"                data-endpoint="PUTapi-v1-bf-regular-credit-cards--id-"
+               value=""
+               data-component="body">
+    <br>
+<p>유효기간.</p>
+        </div>
         </form>
 
                     <h2 id="regular-customer-card-api-DELETEapi-v1-bf-regular-credit-cards--id-">단일삭제</h2>
@@ -3699,7 +3722,7 @@ vary: Origin
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "https://team.payvery.kr/api/v1/bf/regular-credit-cards/4"
+    "https://team.payvery.kr/api/v1/bf/regular-credit-cards/13"
 );
 
 const headers = {
@@ -3717,7 +3740,7 @@ fetch(url, {
 <div class="php-example">
     <pre><code class="language-php">$client = new \GuzzleHttp\Client();
 $response = $client-&gt;delete(
-    'https://team.payvery.kr/api/v1/bf/regular-credit-cards/4',
+    'https://team.payvery.kr/api/v1/bf/regular-credit-cards/13',
     [
         'headers' =&gt; [
             'Authorization' =&gt; 'Bearer {ACCESS_TOKEN}',
@@ -3734,7 +3757,7 @@ print_r(json_decode((string) $body));</code></pre></div>
     <pre><code class="language-python">import requests
 import json
 
-url = 'https://team.payvery.kr/api/v1/bf/regular-credit-cards/4'
+url = 'https://team.payvery.kr/api/v1/bf/regular-credit-cards/13'
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
   'Content-Type': 'application/json',
@@ -3747,7 +3770,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "https://team.payvery.kr/api/v1/bf/regular-credit-cards/4" \
+    "https://team.payvery.kr/api/v1/bf/regular-credit-cards/13" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -3860,10 +3883,10 @@ vary: Origin
  &nbsp;
                 <input type="number" style="display: none"
                step="any"               name="id"                data-endpoint="DELETEapi-v1-bf-regular-credit-cards--id-"
-               value="4"
+               value="13"
                data-component="url">
     <br>
-<p>정기등록카드 PK <br>예시: <code>4</code></p>
+<p>정기등록카드 PK <br>예시: <code>13</code></p>
             </div>
                     </form>
 

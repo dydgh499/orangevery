@@ -1038,6 +1038,10 @@ html {
   background-color: blue;
 }
 
+.badge.badge-purple {
+  background-color: purple;
+}
+
 .badge.badge-darkblue {
   background-color: darkblue;
 }

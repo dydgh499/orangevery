@@ -1,6 +1,7 @@
 
 
 <script lang="ts" setup>
+import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
@@ -20,9 +21,12 @@ const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
+const formatDate = <any>(inject('$formatDate'))
 
 const { cus_filters } = useStore()
 const { sales, initAllSales } = useSalesFilterStore()
+
+const feeBookDialog = ref()
 
 const levels = corp.pv_options.auth.levels
 
@@ -80,18 +84,23 @@ const setSalesFee = (sales_idx: number) => {
         'sales_fee': parseFloat(merchandise['sales' + sales_idx + "_fee"]),
         'sales_id': merchandise['sales' + sales_idx + "_id"],
         'level': getIndexByLevel(sales_idx),
+        'apply_dt': formatDate(new Date),
     })
 }
 
 const setSalesFeeBooking = async (sales_idx: number) => {
-    if (await alert.value.show('정말 예약적용하시겠습니까? <b>명일 00시</b>에 반영됩니다.<br><br><h5>잘못 적용된 예약적용 수수료는 "수수료율 변경이력" 탭에서 삭제시 반영취소할 수 있습니다.</h5>')) {
-        const params = {
-            'sales_fee': parseFloat(merchandise['sales' + sales_idx + "_fee"]),
-            'sales_id': merchandise['sales' + sales_idx + "_id"],
-            'level': getIndexByLevel(sales_idx),
+    const apply_dt = await feeBookDialog.value.show()
+    if(apply_dt !== '') {
+        if (await alert.value.show('정말 예약적용하시겠습니까?')) {
+            const params = {
+                'sales_fee': parseFloat(merchandise['sales' + sales_idx + "_fee"]),
+                'sales_id': merchandise['sales' + sales_idx + "_id"],
+                'level': getIndexByLevel(sales_idx),
+                'apply_dt': apply_dt,
+            }
+            const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/sales-fee-book-apply', Object.assign(params, getCommonParams()))
+            snackbar.value.show('성공하였습니다.', 'success')
         }
-        const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/sales-fee-book-apply', Object.assign(params, getCommonParams()))
-        snackbar.value.show('성공하였습니다.', 'success')
     }
 }
 
@@ -99,17 +108,22 @@ const setMchtFee = () => {
     post('mcht-fee-direct-apply', {
         'mcht_fee': parseFloat(merchandise.mcht_fee),
         'hold_fee': parseFloat(merchandise.hold_fee),
+        'apply_dt': formatDate(new Date),
     })
 }
 
 const setMchtFeeBooking = async () => {
-    if (await alert.value.show('정말 예약적용하시겠습니까? <b>명일 00시</b>에 반영됩니다.<br><br><h5>잘못 적용된 예약적용 수수료는 "수수료율 변경이력" 탭에서 삭제시 반영취소할 수 있습니다.</h5>')) {
-        const params = {
-            'mcht_fee': parseFloat(merchandise.mcht_fee),
-            'hold_fee': parseFloat(merchandise.hold_fee),
+    const apply_dt = await feeBookDialog.value.show()
+    if(apply_dt !== '') {
+        if (await alert.value.show('정말 예약적용하시겠습니까?')) {
+            const params = {
+                'mcht_fee': parseFloat(merchandise.mcht_fee),
+                'hold_fee': parseFloat(merchandise.hold_fee),
+                'apply_dt': apply_dt,
+            }
+            const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/mcht-fee-book-apply', Object.assign(params, getCommonParams()))
+            snackbar.value.show('성공하였습니다.', 'success')
         }
-        const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/mcht-fee-book-apply', Object.assign(params, getCommonParams()))
-        snackbar.value.show('성공하였습니다.', 'success')
     }
 }
 
@@ -157,7 +171,8 @@ watchEffect(() => {
 
 </script>
 <template>
-    <VCard title="가맹점 일괄 작업">
+    <section>
+        <VCard title="가맹점 일괄 작업">
         <VCardText>
             <template v-if="props.selected_sales_id === 0 && props.selected_level === 0">
                 <b>선택된 가맹점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
@@ -357,6 +372,8 @@ watchEffect(() => {
             </div>
         </VCardText>
     </VCard>
+    <FeeBookDialog ref="feeBookDialog"/>
+    </section>
 </template>
 <style scoped>
 .batch-container {

@@ -156,14 +156,15 @@ return [
         'theme_css' => 'JSON 포멧의 CSS',
         'company_name'    => '법인 상호',
         'business_num'  => '사업자등록번호',
+        //salesforces
         'sales_name' => '영업점 상호',
+        'sales_fee' => '영업점 수수료',
+        'parent_id' => '상위 영업점',
         'is_able_modify_mcht' => '영업점 수정가능 여부',
         'view_type'  => '화면타입',
         'settle_tax_type' => '정산 세율',
         'settle_cycle' => '정산 주기',
         'settle_day' => '정산일',
-        'send_url'  => '전송 URL',
-        'mcht_id'   => '가맹점',
         //index form
         'page'      => '페이지 번호',
         'page_size' => '페이지 사이즈',
@@ -286,10 +287,11 @@ return [
         'corp_name' => '법인명',
         //noti
         'noti_status' => '노티 사용 상태',
+        'send_url'  => '전송 URL',
+        'mcht_id'   => '가맹점',
         //
         'pg_type' => 'PG 타입',
         'pg_name' => 'PG사 별칭',
-        //
         'id' => '고유번호',
         // pay
         'pmod_id'   => '결제모듈 고유번호',

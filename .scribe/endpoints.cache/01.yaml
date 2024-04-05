@@ -45,7 +45,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer Z5cv6bE1ea4k6DfaVhg3P8d'
+      - 'Bearer gceD1kahdPf45b836avZ6EV'
     controller: null
     method: null
     route: null
@@ -90,6 +90,14 @@ endpoints:
         type: string
         enumValues: []
         custom: []
+      yymm:
+        name: yymm
+        description: 유효기간.
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
     cleanBodyParameters:
       card_num: '1234123412341234'
       note: 비고
@@ -108,7 +116,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer Eh5c84a6fdv6VbkaPgD1e3Z'
+      - 'Bearer beDakVa3g8c4ZP15Efdv6h6'
     controller: null
     method: null
     route: null
@@ -137,12 +145,12 @@ endpoints:
         name: id
         description: '정기등록카드 PK'
         required: true
-        example: 19
+        example: 10
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 19
+      id: 10
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -162,7 +170,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer 6hgakcfE13Dd5648eVZPbva'
+      - 'Bearer a1v566gfcPDEZab84dVh3ke'
     controller: null
     method: null
     route: null
@@ -192,12 +200,12 @@ endpoints:
         name: id
         description: '정기등록카드 PK'
         required: true
-        example: 12
+        example: 20
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 12
+      id: 20
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
@@ -214,6 +222,14 @@ endpoints:
         description: 비고.
         required: true
         example: 비고
+        type: string
+        enumValues: []
+        custom: []
+      yymm:
+        name: yymm
+        description: 유효기간.
+        required: false
+        example: null
         type: string
         enumValues: []
         custom: []
@@ -235,7 +251,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer b8aE5kd41h6Zcfa3vgDVP6e'
+      - 'Bearer 18fEZeP5kDba36vd6a4hcVg'
     controller: null
     method: null
     route: null
@@ -264,12 +280,12 @@ endpoints:
         name: id
         description: '정기등록카드 PK'
         required: true
-        example: 4
+        example: 13
         type: integer
         enumValues: []
         custom: []
     cleanUrlParameters:
-      id: 4
+      id: 13
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -289,7 +305,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer Eg34vadcke5PfVaZ16bh6D8'
+      - 'Bearer 4bd6k3DaeP65vEVa1fc8Zgh'
     controller: null
     method: null
     route: null

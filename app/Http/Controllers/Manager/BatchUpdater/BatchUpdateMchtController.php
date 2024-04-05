@@ -89,6 +89,7 @@ class BatchUpdateMchtController extends Controller
                 'brand_id' => $request->user()->brand_id,
                 'mcht_id'   => $js_mcht['id'],
                 'level'     => $request->level,
+                'apply_dt'  => $request->apply_dt,
                 'bf_trx_fee' => $bf_trx_fee,
                 'aft_trx_fee' => $aft_trx_fee,
                 'bf_sales_id' => $bf_sales_id,
@@ -117,6 +118,7 @@ class BatchUpdateMchtController extends Controller
             array_push($datas, [
                 'brand_id' => $request->user()->brand_id,
                 'mcht_id'   => $js_mcht['id'],
+                'apply_dt'  => $request->apply_dt,
                 'bf_trx_fee' => $js_mcht['trx_fee'],
                 'aft_trx_fee' => $aft_trx_fee,
                 'bf_hold_fee' => $js_mcht['hold_fee'],
