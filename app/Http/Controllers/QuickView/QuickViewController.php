@@ -32,23 +32,28 @@ class QuickViewController extends Controller
 
     private function get3MonthlyTransactions($request)
     {
-        $one_month_ago = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
+        $one_month_ago = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d 00:00:00');
+        $curl_date = Carbon::now()->format('Y-m-d 23:59:59');
+
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
         $cols = $this->getTotalCols($target_settle_amount);
-        array_push($cols, DB::raw("DATE_FORMAT(trx_dt, '%Y-%m-%d') as day"));
+        array_push($cols, DB::raw("DATE_FORMAT(trx_at, '%Y-%m-%d') as day"));
 
         return $this->transactions
             ->where($target_id, $request->user()->id)
-            ->whereBetween('trx_dt', [$one_month_ago, DB::raw('CURDATE()')])
-            ->groupby(DB::raw("DATE_FORMAT(trx_dt, '%Y-%m-%d')"))
+            ->where('trx_at', '>=', $one_month_ago)
+            ->where('trx_at', '<=', $curl_date)
+            ->groupby(DB::raw("DATE_FORMAT(trx_at, '%Y-%m-%d')"))
             ->orderBy('day', 'desc')
             ->get($cols);
     }
 
     private function getMchtRankTransactions($request)
     {
-        $one_month_ago = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
+        $one_month_ago = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d 00:00:00');
+        $curl_date = Carbon::now()->format('Y-m-d 23:59:59');
+
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
         $cols = $this->getTotalCols($target_settle_amount, 'merchandises.id');
@@ -57,7 +62,8 @@ class QuickViewController extends Controller
         return $this->transactions
             ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
             ->where('transactions.'.$target_id, $request->user()->id)
-            ->whereBetween('transactions.trx_dt', [$one_month_ago, DB::raw('CURDATE()')])
+            ->where('transactions.trx_at', '>=', $one_month_ago)
+            ->where('transactions.trx_at', '<=', $curl_date)
             ->groupby('merchandises.id')
             ->orderBy('appr_amount', 'desc')
             ->get($cols);
