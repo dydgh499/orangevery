@@ -147,7 +147,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     })
 
     const classification = async () => {
-        const sales_parent_structure = getUserLevel() > 10 && getUserLevel() < 35 ? Number(corp.pv_options.paid.sales_parent_structure) : 0
+        const sales_parent_structure = getUserLevel() > 10 && getUserLevel() < 35 ? Number(corp.pv_options.paid.sales_parent_structure ?? 0) : 0
         const r = await axios.get('/api/v1/manager/salesforces/classification?sales_parent_structure=' + sales_parent_structure)
         const keys = Object.keys(r.data);
         for (let i = 0; i < keys.length; i++) {

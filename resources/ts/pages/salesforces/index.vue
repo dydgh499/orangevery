@@ -40,7 +40,7 @@ provide('head', head)
 provide('exporter', exporter)
 
 store.params.level = null
-store.params.sales_parent_structure = getUserLevel() > 10 && getUserLevel() < 35 ? Number(corp.pv_options.paid.sales_parent_structure) : 0
+store.params.sales_parent_structure = getUserLevel() > 10 && getUserLevel() < 35 ? Number(corp.pv_options.paid.sales_parent_structure ?? 0) : 0
 
 onMounted(() => {
     watchEffect(async() => {
