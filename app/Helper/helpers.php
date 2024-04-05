@@ -128,7 +128,6 @@
             $default = json_decode($brand, true);
             $str_pv_options = json_encode($default['pv_options']);
             $default['pv_options'] = json_decode(json_encode(new PvOptions($str_pv_options)), true);
-            logging($default);
             return $default;
         }
     }
