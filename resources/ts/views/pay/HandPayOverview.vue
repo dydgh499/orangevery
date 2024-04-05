@@ -90,21 +90,24 @@ watchEffect(async() => {
                     <template #input>
                         <VTextField v-model="hand_pay_info.item_name" type="text"
                             prepend-inner-icon="streamline:shopping-bag-hand-bag-2-shopping-bag-purse-goods-item-products"
-                            maxlength="100" :rules="[requiredValidatorV2(hand_pay_info.item_name, '상품명')]" placeholder="상품명을 입력해주세요" />
+                            maxlength="100" :rules="[requiredValidatorV2(hand_pay_info.item_name, '상품명')]" placeholder="상품명을 입력해주세요" 
+                            :readonly="urlParams.get('item_name') ? true : false"/>
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0;">
                     <template #name>상품금액</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.amount" suffix="₩" placeholder="상품금액을 입력해주세요"
-                            prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidatorV2(hand_pay_info.amount, '상품금액')]" />
+                            prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidatorV2(hand_pay_info.amount, '상품금액')]" 
+                            :readonly="urlParams.get('amount') ? true : false"/>
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 12px 0;">
                     <template #name>구매자명</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.buyer_name" type="text" placeholder="구매자명을 입력해주세요"
-                            :rules="[requiredValidatorV2(hand_pay_info.buyer_name, '구매자명')]" prepend-inner-icon="tabler-user" />
+                            :rules="[requiredValidatorV2(hand_pay_info.buyer_name, '구매자명')]" prepend-inner-icon="tabler-user" 
+                            :readonly="urlParams.get('buyer_name') ? true : false"/>
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style=" padding: 0;">
@@ -112,7 +115,8 @@ watchEffect(async() => {
                     <template #input>
                         <VTextField v-model="hand_pay_info.buyer_phone" type="number"
                             prepend-inner-icon="tabler-device-mobile" placeholder="구매자 연락처를 입력해주세요"
-                            :rules="[requiredValidatorV2(hand_pay_info.buyer_phone, '구매자 연락처')]" />
+                            :rules="[requiredValidatorV2(hand_pay_info.buyer_phone, '구매자 연락처')]" 
+                            :readonly="urlParams.get('phone_num') ? true : false"/>
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="4" :mdr="8" style="padding: 0; padding-top: 12px;">
