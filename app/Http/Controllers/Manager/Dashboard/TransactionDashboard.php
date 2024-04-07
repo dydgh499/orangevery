@@ -28,7 +28,7 @@ class TransactionDashboard
     {
         $weekly = [];
 
-        $s_dt = Carbon::now()->subDay(7)->format('Y-m-d 00:00:00');
+        $s_dt = Carbon::now()->subDay(6)->format('Y-m-d 00:00:00');
         $e_dt = Carbon::now()->format('Y-m-d 23:59:59');
         
         $query = Transaction::where('brand_id', $brand_id)
