@@ -43,7 +43,7 @@ class TransactionDashboard
                 SUM(IF(is_cancel = 0, amount, 0)) AS appr_amount,
                 SUM(IF(is_cancel = 1, amount, 0)) AS cxl_amount,
                 SUM($target_settle_amount) AS profit"
-            );
+            )->get();
         foreach($daily as $day)
         {
             $weekly[$day->day] = [
