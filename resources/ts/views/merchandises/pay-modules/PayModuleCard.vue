@@ -1,16 +1,16 @@
 
 <script setup lang="ts">
-import PaymentTypeOverview from '@/layouts/components/pay-module-windows/PaymentTypeOverview.vue'
-import PaymentInfoOverview from '@/layouts/components/pay-module-windows/PaymentInfoOverview.vue'
-import TerminalInfoOverview from '@/layouts/components/pay-module-windows/TerminalInfoOverview.vue'
 import OptionInfoOverview from '@/layouts/components/pay-module-windows/OptionInfoOverview.vue'
+import PaymentInfoOverview from '@/layouts/components/pay-module-windows/PaymentInfoOverview.vue'
+import PaymentTypeOverview from '@/layouts/components/pay-module-windows/PaymentTypeOverview.vue'
+import TerminalInfoOverview from '@/layouts/components/pay-module-windows/TerminalInfoOverview.vue'
 import MidCreateDialog from '@/layouts/dialogs/pay-modules/MidCreateDialog.vue'
 
-import { VForm } from 'vuetify/components'
 import { useRequestStore } from '@/views/request'
-import { isAbleModiy } from '@axios'
 import type { PayModule } from '@/views/types'
-import corp from '@corp';
+import { isAbleModiy } from '@axios'
+import corp from '@corp'
+import { VForm } from 'vuetify/components'
 
 interface Props {
     item: PayModule,
@@ -18,8 +18,12 @@ interface Props {
 }
 const vForm = ref<VForm>()
 const props = defineProps<Props>()
+const midCreateDlg = ref(null)
+
 const { update, remove } = useRequestStore()
 const md = ref<number>(3)
+
+provide('midCreateDlg', midCreateDlg)
 
 onMounted(() => {
     watchEffect(() => {

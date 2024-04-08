@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import type { PayModule, Merchandise } from '@/views/types'
 import PayModuleDialog from '@/layouts/dialogs/pay-modules/PayModuleDialog.vue'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import type { Merchandise, PayModule } from '@/views/types'
 
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
-import { getUserLevel, isAbleModiy } from '@axios'
+import { isAbleModiy } from '@axios'
 import corp from '@corp'
 
 interface Props {
