@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/merchandises/pay-modules/useStore'
-import { useStore } from '@/views/services/pay-gateways/useStore'
+import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_types, useSearchStore } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { selectFunctionCollect } from '@/views/selected'
-import { module_types, installments, fin_trx_delays, cxl_types, comm_settle_types } from '@/views/merchandises/pay-modules/useStore'
+import { useStore } from '@/views/services/pay-gateways/useStore'
 
+import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 
-import { DateFilters, ItemTypes } from '@core/enums'
 import { getUserLevel, isAbleModiy } from '@axios'
+import { DateFilters, ItemTypes } from '@core/enums'
 
 const { request } = useRequestStore()
 const { pgs, pss, settle_types, finance_vans, terminals } = useStore()
@@ -76,7 +75,7 @@ onMounted(() => {
                     color="error" size="small">
                     일괄 삭제
                 </VBtn>
-                <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.un_use" label="최근 1달 미결제 결제모듈 조회"
+                <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.un_use" label="작월 미결제 결제모듈 조회"
                     color="warning" @update:modelValue="store.updateQueryString({ un_use: store.params.un_use })" />
             </template>
             <template #headers>

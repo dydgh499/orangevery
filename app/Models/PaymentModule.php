@@ -66,6 +66,20 @@ class PaymentModule extends Model
         ->all();
     }
 
+    public function scopeNotUseLastMonth($query, $brand_id)
+    {
+        $s_dt = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d 00:00:00');
+        $e_dt = Carbon::now()->subMonthNoOverflow(1)->endOfMonth()->format('Y-m-d 59:59:59');
+
+        $trans_pmod_ids = Transaction::where('brand_id', $brand_id)
+            ->where('trx_dt', '>=', $s_dt)
+            ->where('trx_dt', '>=', $e_dt)
+            ->where('is_cancel', false)
+            ->distinct()->pluck('pmod_id')->all();
+        return $query->whereNotIn('payment_modules.id', $trans_pmod_ids);
+
+    }
+
     protected function beginDt(): Attribute
     {
         return $this->dateAttribute();

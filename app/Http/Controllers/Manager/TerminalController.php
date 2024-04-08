@@ -56,18 +56,11 @@ class TerminalController extends Controller
         $query = $query
                 ->where('payment_modules.brand_id', $request->user()->brand_id)
                 ->where('payment_modules.module_type', 0);
+
         if($request->ship_out_stat != null)
             $query = $query->where('payment_modules.ship_out_stat', $request->ship_out_stat);
-
         if($request->un_use)
-        {
-            $before_month = Carbon::now()->subMonthNoOverflow(1)->format('Y-m-d');
-            $trans_pmod_ids = Transaction::where('brand_id', $request->user()->brand_id)
-                ->where('trx_dt', '>=', $before_month)
-                ->where('is_cancel', false)
-                ->distinct()->pluck('pmod_id')->all();
-            $query = $query->whereNotIn('payment_modules.id', $trans_pmod_ids);
-        }
+            $query = $query->notUseLastMonth($request->user()->brand_id);
         
         $query = $query->where(function ($query) use ($search) {
             return $query

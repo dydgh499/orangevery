@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/merchandises/terminals/useStore'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { module_types, installments, ship_out_stats, under_sales_types } from '@/views/merchandises/pay-modules/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { getUserLevel, isAbleModiy, allLevels } from '@axios'
+import { installments, module_types, ship_out_stats, under_sales_types } from '@/views/merchandises/pay-modules/useStore'
+import { useSearchStore } from '@/views/merchandises/terminals/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import { allLevels, getUserLevel, isAbleModiy } from '@axios'
 import { DateFilters } from '@core/enums'
 
 const { pgs, pss, settle_types, terminals } = useStore()
@@ -47,7 +47,7 @@ const isMchtUnableCol = (key: string) => {
             </BaseIndexFilterCard>
         </template>
         <template #index_extra_field>
-            <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.un_use" label="최근 1달 미결제 단말기 조회" color="warning" @update:modelValue="store.updateQueryString({un_use: store.params.un_use})"/>
+            <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.un_use" label="작월 미결제 단말기 조회" color="warning" @update:modelValue="store.updateQueryString({un_use: store.params.un_use})"/>
         </template>
         <template #headers>
             <tr>

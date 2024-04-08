@@ -80,14 +80,7 @@ class PaymentModuleController extends Controller
             $query = $query->where('payment_modules.module_type', $request->module_type);
 
         if($request->un_use)
-        {
-            $before_month = Carbon::now()->subMonthNoOverflow(1)->format('Y-m-d');
-            $trans_pmod_ids = Transaction::where('brand_id', $request->user()->brand_id)
-                ->where('trx_dt', '>=', $before_month)
-                ->where('is_cancel', false)
-                ->distinct()->pluck('pmod_id')->all();
-            $query = $query->whereNotIn('payment_modules.id', $trans_pmod_ids);
-        }
+            $query = $query->notUseLastMonth($request->user()->brand_id);
 
         return $query->where(function ($query) use ($search) {
             return $query->where('payment_modules.mid', 'like', "%$search%")
