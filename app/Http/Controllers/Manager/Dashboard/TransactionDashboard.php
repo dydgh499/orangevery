@@ -153,7 +153,7 @@ class TransactionDashboard
 
     static public function getMonthTransactionsByRedis($brand_id, $trx_dt, $target_settle_amount, $transaction_count)
     {
-        $key_name = 'dashboards-transactions-month-'.$brand_id.'-'.$trx_dt.'-'.$target_settle_amount;
+        $key_name = 'dashboards-transactions-month-'.$brand_id.'-'.$trx_dt.'-'.request()->user()->id.'-'.$target_settle_amount;
         $redis_trans = Redis::get($key_name);
         if($redis_trans === null)
             return self::setMonthTransactionsByRedis($key_name, $brand_id, $trx_dt, $target_settle_amount);
