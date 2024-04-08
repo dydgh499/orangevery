@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Message\MessageController;
 
-use App\Http\Controllers\Manager\DashboardController;
+use App\Http\Controllers\Manager\Dashboard\DashboardController;
 use App\Http\Controllers\Manager\BrandController;
 use App\Http\Controllers\Manager\BeforeBrandInfoController;
 use App\Http\Controllers\Manager\DifferentSettlementInfoController;

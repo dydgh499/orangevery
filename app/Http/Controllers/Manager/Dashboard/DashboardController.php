@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Manager;
+namespace App\Http\Controllers\Manager\Dashboard;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Merchandise;
@@ -43,7 +43,7 @@ class DashboardController extends Controller
             'cur_amount' => 0,
         ];
         // set increase
-        [$datas['cur_profit_rate'], $datas['cur_amount_rate'], $datas['cur_profit'], $datas['cur_amount']] = TransactionDashboard::getIncrease($brand_id);
+        [$datas['cur_profit_rate'], $datas['cur_amount_rate'], $datas['cur_profit'], $datas['cur_amount']] = TransactionDashboard::getIncrease($brand_id, $target_settle_amount);
         // set daliy
         $datas['weekly'] = TransactionDashboard::getDaily($brand_id, $target_settle_amount);
         // set month

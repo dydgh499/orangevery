@@ -59,20 +59,20 @@ class TransactionDashboard
         return $weekly;
     }
 
-    static public function getIncrease($brand_id)
+    static public function getIncrease($brand_id, $target_settle_amount)
     {
-        $cur_e_dt = Carbon::now()->format('Y-m-d');
-        $cur_s_dt = Carbon::now()->startOfMonth()->format('Y-m-d');
-        $last_e_dt = Carbon::now()->subMonthNoOverflow(1)->format('Y-m-d');
-        $last_s_dt = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d');
+        $cur_e_dt = Carbon::now()->format('Y-m-d 23:59:59');
+        $cur_s_dt = Carbon::now()->startOfMonth()->format('Y-m-d 00:00:00');
+        $last_e_dt = Carbon::now()->subMonthNoOverflow(1)->format('Y-m-d 23:59:59');
+        $last_s_dt = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d 00:00:00');
 
         $current_month_range = "(trx_at >= '$cur_s_dt' AND trx_at <= '$cur_e_dt')";
         $last_month_range = "(trx_at >= '$last_s_dt' AND trx_at <= '$last_e_dt')";
 
         $query = Transaction::selectRaw("
-            SUM(CASE WHEN $current_month_range THEN brand_settle_amount ELSE 0 END) AS cur_profit,
+            SUM(CASE WHEN $current_month_range THEN $target_settle_amount ELSE 0 END) AS cur_profit,
             SUM(CASE WHEN $current_month_range THEN amount ELSE 0 END) AS cur_amount,
-            SUM(CASE WHEN $last_month_range THEN brand_settle_amount ELSE 0 END) AS last_profit,
+            SUM(CASE WHEN $last_month_range THEN $target_settle_amount ELSE 0 END) AS last_profit,
             SUM(CASE WHEN $last_month_range THEN amount ELSE 0 END) AS last_amount")
             ->where('brand_id', $brand_id)
             ->where(function ($query) use ($current_month_range, $last_month_range) {
