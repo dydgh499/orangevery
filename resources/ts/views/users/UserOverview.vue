@@ -1,15 +1,17 @@
 <script lang="ts" setup>
 import FileInput from '@/layouts/utils/FileInput.vue'
 import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
+import { autoUpdateMerchandiseAccount } from '@/plugins/fixplus'
 import type { UserPropertie } from '@/views/types'
 import { avatars, banks } from '@/views/users/useStore'
-import { axios, isAbleModiy, getUserLevel } from '@axios'
+import { axios, getUserLevel, isAbleModiy } from '@axios'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
 
 interface Props {
     item: UserPropertie,
     id: number | string,
+    is_mcht: boolean,
 }
 const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
@@ -28,7 +30,7 @@ const onwerCheck = async () => {
         try {
             const params = {
                 acct_cd: props.item.acct_bank_code,
-                acct_num: props.item.acct_num,
+                acct_num: props.item.acct_num.trim().replace('-', ''),
                 acct_nm: props.item.acct_name
             }
             const r = await axios.post('/api/v1/auth/onwer-check', params)
@@ -44,7 +46,12 @@ const onwerCheck = async () => {
 watchEffect(() => {
     props.item.resident_num = props.item.resident_num_front + props.item.resident_num_back
 })
-
+watchEffect(() => {
+    if(props.is_mcht) {
+        if(corp.id === 30 && props.item.id === 0) 
+            autoUpdateMerchandiseAccount(props.item)
+    }
+})
 </script>
 <template>
     <VRow class="match-height">
@@ -149,8 +156,8 @@ watchEffect(() => {
                                 <VCol md="10">
                                     <div style="display: flex;">
                                         <VTextField v-model="props.item.business_num" type="text"
-                                            prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
-                                            persistent-placeholder>
+                                            prepend-inner-icon="ic-outline-business-center" placeholder="1231212345"
+                                            persistent-placeholder maxlength="13">
                                             <VTooltip activator="parent" location="top" v-if="corp.use_different_settlement">
                                                 {{ "사업자번호를 입력하지 않거나, 정확하게 입력하지 않으면 차액정산대상에서 제외됩니다." }}
                                             </VTooltip>
@@ -206,7 +213,7 @@ watchEffect(() => {
                                 <VCol md="10">
                                     <VTextField id="acctNumHorizontalIcons" v-model="props.item.acct_num"
                                 prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력" persistent-placeholder maxlength="20" 
-                                :rules="[requiredValidatorV2(props.item.acct_num, '계좌번호')]"/>
+                                :rules="[requiredValidatorV2(props.item.acct_num, '계좌번호')]" @update:model-value="escapeCharacter"/>
                                 </VCol>
                             </VRow>
                             <VRow v-else>

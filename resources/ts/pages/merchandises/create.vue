@@ -1,13 +1,13 @@
 
 <script setup lang="ts">
-import UserOverview from '@/views/users/UserOverview.vue'
 import MchtOverview from '@/views/merchandises/MchtOverview.vue'
 import NotiOverview from '@/views/merchandises/noti-urls/NotiOverview.vue'
-import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOverview.vue'
 import PayModuleOldOverview from '@/views/merchandises/pay-modules/PayModuleOldOverview.vue'
+import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOverview.vue'
+import UserOverview from '@/views/users/UserOverview.vue'
 
-import { defaultItemInfo } from '@/views/merchandises/useStore'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
+import { defaultItemInfo } from '@/views/merchandises/useStore'
 import type { Tab } from '@/views/types'
 import corp from '@corp'
 
@@ -28,7 +28,7 @@ const id = ref<number>(0)
         <CreateForm :id="id" :path="path" :tabs="tabs" :item="item">
             <template #view>
                 <VWindowItem>
-                    <UserOverview :item="item" :id="id" />
+                    <UserOverview :item="item" :id="id" :is_mcht="true"/>
                 </VWindowItem>
                 <VWindowItem>
                     <MchtOverview :item="item"/>

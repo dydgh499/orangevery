@@ -1,19 +1,21 @@
 <script lang="ts" setup>
-import { requiredValidatorV2 } from '@validators'
-import type { Merchandise, UnderAutoSetting } from '@/views/types'
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
-import PasswordCheckDialog from '@/layouts/dialogs/users/PasswordCheckDialog.vue'
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
+import PasswordCheckDialog from '@/layouts/dialogs/users/PasswordCheckDialog.vue'
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import type { Merchandise, UnderAutoSetting } from '@/views/types'
+import { requiredValidatorV2 } from '@validators'
 
-import { getUserLevel, getIndexByLevel, isAbleModiy, getLevelByIndex, user_info } from '@axios'
+import UnderAutoSettingDialog from '@/layouts/dialogs/users/UnderAutoSettingDialog.vue'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
+import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
+
+import { autoUpdateMerchandiseAgencyInfo } from '@/plugins/fixplus'
+import { tax_category_types } from '@/views/merchandises/useStore'
 import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import UnderAutoSettingDialog from '@/layouts/dialogs/users/UnderAutoSettingDialog.vue'
-import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import { tax_category_types } from '@/views/merchandises/useStore'
+import { getIndexByLevel, getLevelByIndex, getUserLevel, isAbleModiy, user_info } from '@axios'
 import corp from '@corp'
 
 interface Props {
@@ -22,7 +24,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const { post } = useRequestStore()
-const { sales, initAllSales, sales_apply_histories, hintSalesApplyFee, hintSalesSettleFee } = useSalesFilterStore()
+const { sales, all_sales, initAllSales, sales_apply_histories, hintSalesApplyFee, hintSalesSettleFee } = useSalesFilterStore()
 const { cus_filters } = useStore()
 
 const alert = <any>(inject('alert'))
@@ -81,6 +83,14 @@ watchEffect(() => {
     if(isAbleModiy(props.item.id) && props.item.id === 0 && getUserLevel() < 35) {
         const idx = getLevelByIndex(getUserLevel())
         props.item[`sales${idx}_id`] = user_info.value.id
+    }
+})
+watchEffect(() => {
+    if(corp.id === 30 && props.item.id === 0) {
+        // 대리점의 경우
+        if(getUserLevel() === 17 || getUserLevel() === 20) {
+            autoUpdateMerchandiseAgencyInfo(props.item, all_sales)
+        }
     }
 })
 </script>

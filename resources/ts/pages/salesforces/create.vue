@@ -1,9 +1,9 @@
 
 <script setup lang="ts">
-import UserOverview from '@/views/users/UserOverview.vue'
-import SalesforceOverview from '@/views/salesforces/SalesforceOverview.vue'
 import CreateForm from '@/layouts/utils/CreateForm.vue'
+import SalesforceOverview from '@/views/salesforces/SalesforceOverview.vue'
 import { defaultItemInfo } from '@/views/salesforces/useStore'
+import UserOverview from '@/views/users/UserOverview.vue'
 
 const {path, item } = defaultItemInfo()
 const tabs = [
@@ -17,7 +17,7 @@ const id = ref<number>(0)
         <CreateForm :id="id" :path="path" :tabs="tabs" :item="item">
             <template #view>
                 <VWindowItem>
-                    <UserOverview :item="item" :id="id" />
+                    <UserOverview :item="item" :id="id" :is_mcht="false" />
                 </VWindowItem>
                 <VWindowItem>
                     <SalesforceOverview :item="item" />

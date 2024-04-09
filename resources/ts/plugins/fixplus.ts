@@ -1,6 +1,7 @@
 
 import router from '@/router';
-import { getUserLevel } from '@axios';
+import { Merchandise, Salesforce } from '@/views/types';
+import { getLevelByIndex, getUserLevel, user_info } from '@axios';
 
 export const IS_FIXPLUS_AGCY1_MODIFY_ABLE = ref(<boolean>(false))
 export const IS_FIXPLUS_AGCY2_MODIFY_ABLE = ref(<boolean>(false))
@@ -43,4 +44,39 @@ export const isFixplusSalesAbleUpdate = (id: number) => {
     }
     else
         return false
+}
+
+// 계정정보 자동업데이트(ID: 사업자, PW: 휴대폰)
+export const autoUpdateMerchandiseAccount = (merchandise: Merchandise) => {    
+    if( merchandise.business_num.length >= 10)
+        merchandise.user_name = merchandise.business_num
+    if (merchandise.phone_num.length >= 8)
+        merchandise.user_pw = merchandise.phone_num
+} 
+
+// 영업점 수수료 자동업데이트
+export const autoUpdateMerchandiseAgencyInfo = (merchandise: Merchandise, all_sales: Salesforce[][]) => {    
+    const idx = getLevelByIndex(getUserLevel())
+    let dest_sales = user_info.value
+    for (let i = idx; i < 5; i++) 
+    {
+        merchandise[`sales${i}_id`] = dest_sales.id
+        merchandise[`sales${i}_fee`] = dest_sales.sales_fee
+        
+        dest_sales = all_sales[i+1].find(obj => obj.id === dest_sales.parent_id)
+        if(dest_sales) {
+            merchandise[`sales${i+1}_id`] = dest_sales.id
+            merchandise[`sales${i+1}_fee`] = dest_sales.sales_fee
+        }
+        else
+            break
+    }
+}
+
+// 영업점 정보 자동업데이트
+export const autoUpdateSalesforceInfo = (salesforce: Salesforce) => {
+    salesforce.settle_cycle = 0
+    salesforce.settle_day = null
+    salesforce.settle_tax_type = 0
+    salesforce.view_type = 1
 }

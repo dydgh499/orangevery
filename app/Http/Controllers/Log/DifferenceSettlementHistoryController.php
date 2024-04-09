@@ -297,30 +297,25 @@ class DifferenceSettlementHistoryController extends Controller
         }
     }
 
-    static public function differenceSettleResponseTest()
+    static public function differenceSettleResponseTest($ds_id, $sub_day)
     {
-        $ds_id = 1;
-        for ($i=2; $i < 4; $i++)
-        { 
-            $date = Carbon::now()->subDay($i);
-            $brand = Brand::join('different_settlement_infos', 'brands.id', '=', 'different_settlement_infos.brand_id')
-                ->where('brands.is_delete', false)
-                ->where('different_settlement_infos.is_delete', false)
-                ->where('brands.use_different_settlement', true)
-                ->where('different_settlement_infos.id', $ds_id)
-                ->first(['brands.business_num', 'different_settlement_infos.*']);       
-    
-            if($brand)
+        $date = Carbon::now()->subDay($sub_day);
+        $brand = Brand::join('different_settlement_infos', 'brands.id', '=', 'different_settlement_infos.brand_id')
+            ->where('brands.is_delete', false)
+            ->where('different_settlement_infos.is_delete', false)
+            ->where('brands.use_different_settlement', true)
+            ->where('different_settlement_infos.id', $ds_id)
+            ->first(['brands.business_num', 'different_settlement_infos.*']);       
+
+        if($brand)
+        {
+            $ist = new DifferenceSettlementHistoryController(new DifferenceSettlementHistory);
+            $pg = $ist->getPGClass($brand);
+            if($pg)
             {
-                $ist = new DifferenceSettlementHistoryController(new DifferenceSettlementHistory);
-                $pg = $ist->getPGClass($brand);
-                if($pg)
-                {
-                    $datas  = $pg->response($date);
-                    $res    = $ist->manyInsert($ist->difference_settlement_histories, $datas);
-                }
+                $datas  = $pg->response($date);
+                $res    = $ist->manyInsert($ist->difference_settlement_histories, $datas);
             }
-    
         }
     }
 }

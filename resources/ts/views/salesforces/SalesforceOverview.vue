@@ -7,8 +7,9 @@ import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderA
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import type { Salesforce } from '@/views/types'
 
+import { autoUpdateSalesforceInfo } from '@/plugins/fixplus'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { getUserLevel, getLevelByIndex, salesLevels, isAbleModiy } from '@axios'
+import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
 
@@ -34,6 +35,10 @@ const getParentSales = computed(()  => {
         return []
 })
 
+watchEffect(() => {
+    if(corp.id === 30 && props.item.id === 0) 
+        autoUpdateSalesforceInfo(props.item)
+})
 </script>
 <template>
     <VRow>
@@ -60,7 +65,7 @@ const getParentSales = computed(()  => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12">
+                        <VCol cols="12" v-if="corp.id !== 30">
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
@@ -95,7 +100,7 @@ const getParentSales = computed(()  => {
                         </VCol>
                         <VCol cols="12">
                             <VRow>
-                                <VCol cols="12" md="6">
+                                <VCol cols="12" md="6"  v-if="corp.id !== 30">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>정산 세율</VCol>
                                         <VCol md="8">
@@ -154,7 +159,7 @@ const getParentSales = computed(()  => {
                                                 :items="getParentSales"
                                                 :label="'상위영업점 선택'"
                                                 item-title="sales_name" item-value="id" persistent-hint single-line prepend-inner-icon="ph:share-network" 
-                                                :rules="[requiredValidatorV2(props.item.parent_id, '상위 영업점')]"
+                                                :rules="props.item.level < 30 ? [requiredValidatorV2(props.item.parent_id, '상위 영업점')] : []"
                                                 />
                                         </VCol>
                                     </VRow>
@@ -164,7 +169,7 @@ const getParentSales = computed(()  => {
 
                         <VCol cols="12" v-if="getUserLevel() >= 35">
                             <VRow>
-                                <VCol cols="12" md="6">
+                                <VCol cols="12" md="6" v-if="corp.id !== 30">
                                     <VRow no-gutters style="align-items: center;">
                                         <VCol>화면 타입</VCol>
                                         <VCol md="8">

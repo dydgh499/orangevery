@@ -188,7 +188,7 @@ class SalesforceController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        if(isSalesforce($request) && $request->sales_parent_structure)
+        if(isSalesforce($request) && $request->sales_parent_structure && $request->user()->tokenCan(30) === false)
         {
             [$child_ids, $count] = $this->parentStructureSelect($request);
             $data = [
@@ -335,17 +335,37 @@ class SalesforceController extends Controller
             return $data;
     }
 
+    private function getParentSalesId($request)
+    {
+        $idx = globalLevelByIndex($request->user()->level);
+
+        $parent_id = $request->user()->parent_id;
+        if($parent_id)
+        {
+            for ($i=$idx; $i < 5; $i++)
+            {
+                $parent = $this->salesforces->where('id', $parent_id)->first(['parent_id']);
+                if($parent && $parent->parent_id)
+                    $parent_id = $parent->parent_id;
+                else
+                    return $parent_id;
+            }
+        }
+        else
+            $request->user()->id;
+    }
+
     public function classification(Request $request)
     {
-
-        if($request->sales_parent_structure)
+        if($request->sales_parent_structure && isSalesforce($request) && $request->user()->tokenCan(30) === false)
         {
             $data = [
                 'level_13' => [], 'level_15' => [],
                 'level_17' => [], 'level_20' => [], 
                 'level_25' => [], 'level_30' => [],
             ];
-            $sales = $this->salesforces->where('id', $request->user()->id)->with(['childs'])->first();
+            $parent_id = $this->getParentSalesId($request);
+            $sales = $this->salesforces->where('id', $parent_id)->with(['childs'])->first();
             $data = $this->getRecursionChilds($data, $sales);
         }
         else
@@ -360,7 +380,7 @@ class SalesforceController extends Controller
                     ->with(['underAutoSettings'])
                     ->get(['id', 'sales_name', 'level'])
                     ->groupBy('level');
-                    
+
                 if(isSalesforce($request))
                     $grouped = $this->salesClassFilter($request, $grouped, $levels);   
     
@@ -372,7 +392,6 @@ class SalesforceController extends Controller
             }
         }
         return $this->response(0, $data);
-
     }
 
     public function feeApplyHistories(Request $request)

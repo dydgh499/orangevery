@@ -54,12 +54,13 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
     }
     if(getUserLevel() >= 35)
         headers['is_able_modify_mcht'] = '가맹점 수정권한'
-
+    if(corp.id !== 30) {        
+        headers['view_type'] = '화면타입'
+        headers['settle_cycle'] = '정산 주기'
+        headers['settle_day'] = '정산 요일'
+        headers['settle_tax_type'] = '정산 세율'
+    }
     Object.assign(headers, {
-        'view_type' : '화면타입',
-        'settle_cycle' : '정산 주기',
-        'settle_day' : '정산 요일',
-        'settle_tax_type': '정산 세율',
         'nick_name' : '대표자명',
         'phone_num' : '연락처',
         'resident_num' : '주민등록번호',
