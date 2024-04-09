@@ -234,6 +234,10 @@ export interface PayGateway {
     phone_num: string,
     addr:string,
     settle_type:number,
+    p_mid: string,
+    mid: string,
+    api_key: string,
+    sub_key: string,
 }
 
 export interface PaySection {
@@ -633,7 +637,7 @@ export interface Settle extends TotalSettle, Bank {
     settle_hold_reason?: string,
 }
 
-export interface SettlesHistories extends Bank{
+export interface SettlesHistory extends Bank{
     id: number,
     mcht_id: number
     mcht_name: string,    

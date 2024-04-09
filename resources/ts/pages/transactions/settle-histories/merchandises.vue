@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { useSearchStore, deposit_statuses } from '@/views/transactions/settle-histories/useMerchandiseStore'
-import { selectFunctionCollect } from '@/views/selected'
-import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
-import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue'
+import FinanceVanDialog from '@/layouts/dialogs/services/FinanceVanDialog.vue'
+import AddDeductDialog from '@/layouts/dialogs/transactions/AddDeductDialog.vue'
+
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import FinanceVanDialog from '@/layouts/dialogs/services/FinanceVanDialog.vue'
+import { selectFunctionCollect } from '@/views/selected'
+import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue'
+import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
+import { deposit_statuses, useSearchStore } from '@/views/transactions/settle-histories/useMerchandiseStore'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
@@ -15,6 +17,7 @@ const { selected, all_selected } = selectFunctionCollect(store)
 const { batchDeposit, batchCancel } = settlementHistoryFunctionCollect(store)
 const totals = ref(<any[]>([]))
 const financeDialog = ref()
+const addDeductDialog = ref()
 
 store.params.use_finance_van_deposit = Number(corp.pv_options.paid.use_finance_van_deposit)
 
@@ -22,6 +25,7 @@ provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 provide('financeDialog', financeDialog)
+provide('addDeductDialog', addDeductDialog)
 
 const isNumberFormatCol = (_key: string) => {
     return _key.includes('amount') || _key.includes('_fee') || _key.includes('_deposit') || _key.includes('_count')
@@ -123,8 +127,7 @@ onMounted(() => {
                                 </VChip>
                             </span>
                             <span v-else-if="_key === 'extra_col'">
-                                <ExtraMenu :id="item['id']" :name="item['mcht_name']" :is_mcht="true" :item="item">
-                                </ExtraMenu>
+                                <ExtraMenu :id="item['id']" :name="item['mcht_name']" :is_mcht="true" :item="item"/>
                             </span>
                             <span v-else>
                                 {{ item[_key] }}
@@ -135,5 +138,6 @@ onMounted(() => {
             </template>
         </BaseIndexView>
         <FinanceVanDialog ref="financeDialog" />
+        <AddDeductDialog ref="addDeductDialog" />
     </div>
 </template>

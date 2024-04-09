@@ -17,6 +17,10 @@ class PayGatewayRequest extends FormRequest
         'phone_num',
         'addr',
         'settle_type',
+        'p_mid',
+        'mid',
+        'api_key',
+        'sub_key',
     ];
 
     public function authorize()

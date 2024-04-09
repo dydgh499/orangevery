@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import { businessNumValidator, requiredValidatorV2 } from '@validators'
-import type { PayGateway } from '@/views/types'
-import { VForm } from 'vuetify/components'
-import { useStore, pg_settle_types } from '@/views/services/pay-gateways/useStore'
-import PaySectionTr from '@/views/services/pay-gateways/PaySectionTr.vue'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { useRequestStore } from '@/views/request'
+import PaySectionTr from '@/views/services/pay-gateways/PaySectionTr.vue'
+import { pg_settle_types, useStore } from '@/views/services/pay-gateways/useStore'
+import type { PayGateway } from '@/views/types'
+import corp from '@corp'
+import { businessNumValidator, requiredValidatorV2 } from '@validators'
+import { VForm } from 'vuetify/components'
 
 interface Props {
     item: PayGateway,
@@ -162,6 +164,59 @@ watchEffect(() => {
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type"
                                             :items="pg_settle_types" prepend-inner-icon="tabler-calculator" label="정산타입 선택"
                                             item-title="title" item-value="id" single-line :rules="[requiredValidatorV2(props.item.settle_type, '정산타입')]" />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>                        
+                        <VCardTitle style=" margin-top: 1em; margin-bottom: 1em;">                            
+                            <BaseQuestionTooltip :location="'top'" :text="'대표 결제 정보'"
+                                :content="'결제모듈 등록 시 대표 결제정보 값들을 불러올 수 있습니다.'"/>
+                        </VCardTitle>
+                        <VRow>
+                            <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_pmid">
+                                <VRow no-gutters>
+                                    <VCol>
+                                        <label>PMID</label>
+                                    </VCol>
+                                    <VCol md="7">
+                                    <VTextField type="text" v-model="props.item.p_mid" prepend-inner-icon="tabler-user"
+                                        placeholder="PMID 입력" persistent-placeholder />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol :md="6" :cols="12">
+                                <VRow no-gutters>
+                                    <VCol>
+                                        <label>MID</label>
+                                    </VCol>
+                                    <VCol md="7">
+                                    <VTextField type="text" v-model="props.item.p_mid" prepend-inner-icon="tabler-user"
+                                        placeholder="MID 입력" persistent-placeholder />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                        </VRow>
+                        <VRow>
+                            <VCol :md="6" :cols="12">
+                                <VRow no-gutters>
+                                    <VCol>
+                                        <label>API KEY</label>
+                                    </VCol>
+                                    <VCol md="7">
+                                    <VTextField type="text" v-model="props.item.api_key"
+                                        prepend-inner-icon="ic-baseline-vpn-key" placeholder="API KEY 입력"
+                                        persistent-placeholder />
+                                    </VCol>
+                                </VRow>
+                            </VCol>
+                            <VCol :md="6" :cols="12">
+                                <VRow no-gutters>
+                                    <VCol>
+                                        <label>SUB KEY(iv)</label>
+                                    </VCol>
+                                    <VCol md="7">
+                                    <VTextField type="text" v-model="props.item.sub_key" prepend-inner-icon="ic-sharp-key"
+                                        placeholder="SUB KEY 입력" persistent-placeholder />
                                     </VCol>
                                 </VRow>
                             </VCol>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Log;
 
 use Illuminate\Support\Facades\DB;
 use App\Models\Log\SettleHistoryMerchandise;
+use App\Models\Merchandise;
 use App\Models\Transaction;
 use App\Models\PaymentModule;
 
@@ -170,7 +171,7 @@ class MchtSettleHistoryController extends Controller
         else
         {
             $code = $this->deleteMchtforceCommon($request, $id, 'mcht_settle_id');
-            return $this->response($code, ['id'=>$id]);
+            return $this->response($code ? 1 : 1000, ['id'=>$id]);
         }
     }
 
@@ -259,5 +260,43 @@ class MchtSettleHistoryController extends Controller
         }
         else
             return $this->response(951);
+    }
+
+    /**
+     * 추가차감
+     */
+    public function addDeduct(Request $request, $id)
+    {
+        return $this->addDeductHistory($request, $id, $this->settle_mcht_hist);
+    }
+
+    /**
+     * 계좌정보 연동
+     */
+    public function linkAccount(Request $request, $id)
+    {
+        $code = $this->linkAccountHistory($request, $id, $this->settle_mcht_hist, new Merchandise);
+        return $this->response($code);
+    }
+
+    /*
+    * 정산이력 - 일괄정산
+    */
+    public function batchLinkAccount(Request $request)
+    {
+        $fail_res = [];
+        for ($i=0; $i < count($request->data); $i++) 
+        {
+            $code = $this->linkAccountHistory($request, $request->data[$i], $this->settle_mcht_hist, new Merchandise);
+            if($code !== 1)
+                array_push($fail_res, '#'.$request->data[$i]);
+        }
+        if(count($fail_res))
+        {
+            $message = "일괄작업에 실패한 이력들이 존재합니다.\n\n".json_encode($fail_res, JSON_UNESCAPED_UNICODE);
+            return $this->extendResponse(2000, $message);
+        }
+        else
+            return $this->response(1);
     }
 }

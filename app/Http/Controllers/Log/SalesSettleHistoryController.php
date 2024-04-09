@@ -245,4 +245,21 @@ class SalesSettleHistoryController extends Controller
         else
             return $this->response(951);
     }
+
+    /**
+     * 추가차감
+     */
+    public function addDeduct(Request $request, $id)
+    {
+        return $this->addDeductHistory($request, $id, $this->settle_sales_hist);
+    }
+
+    /**
+     * 계좌정보 연동
+     */
+    public function linkAccount(Request $request, $id)
+    {
+        $code = $this->linkAccountHistory($request, $id, $this->settle_sales_hist, new Salesforce);
+        return $this->response($code);
+    }
 }

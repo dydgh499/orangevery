@@ -163,4 +163,54 @@ trait SettleHistoryTrait
         }
         return $res;
     }
+
+    public function addDeductHistory($request, $id, $orm)
+    {
+        if($request->user()->tokenCan(35))
+        {
+            $history = $orm->where('id', $id)->first();
+            if($history)
+            {
+                $history->deduct_amount += (int)$request->deduct_amount;
+                $history->settle_amount -= (int)$request->deduct_amount;
+                if($history->deposit_status)
+                    $history->deposit_amount -= (int)$request->deduct_amount;
+                $history->save();
+                return $this->response(1);
+            }
+            else
+                return $this->response(1000);
+        }
+        else
+            return $this->response(951);
+    }
+
+    public function linkAccountHistory($request, $id, $orm, $user_orm)
+    {
+        if($request->user()->tokenCan(35))
+        {
+            $history = $orm->where('id', $id)->first();
+            if($history)
+            {
+                $user = $user_orm->where('id', $history->mcht_id)->first([
+                    'acct_name', 'acct_num', 'acct_bank_name', 'acct_bank_code',
+                ]);
+                if($user)
+                {
+                    $history->acct_name = $user->acct_name;
+                    $history->acct_num = $user->acct_num;
+                    $history->acct_bank_name = $user->acct_bank_name;
+                    $history->acct_bank_code = $user->acct_bank_code;
+                    $history->save();
+                    return 1;
+                }
+                else
+                    return 1000;
+            }
+            else
+                return 1000;
+        }
+        else
+            return 951;
+    }
 }

@@ -1,14 +1,16 @@
 <script lang="ts" setup>
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import type { PayModule } from '@/views/types'
-import {
-    module_types, installments
-} from '@/views/merchandises/pay-modules/useStore'
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { requiredValidatorV2 } from '@validators'
+import {
+    installments,
+    module_types
+} from '@/views/merchandises/pay-modules/useStore'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import type { PayModule } from '@/views/types'
 import { isAbleModiy } from '@axios'
+import corp from '@corp'
+import { requiredValidatorV2 } from '@validators'
 
 interface Props {
     item: PayModule,
@@ -16,11 +18,26 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const snackbar = <any>(inject('snackbar'))
 
 const { mchts } = useSalesFilterStore()
 const { pgs, pss, settle_types, psFilter, setFee } = useStore()
 
-
+const setPGKeyInfo = () => {
+    if(props.item.pg_id) {
+        const pg = pgs.find(obj => obj.id === props.item.pg_id)
+        if(pg) {
+            props.item.mid = pg.mid
+            props.item.api_key = pg.api_key 
+            props.item.sub_key = pg.sub_key
+            if(corp.pv_options.paid.use_pmid)
+                props.item.p_mid = pg.p_mid
+            snackbar.value.show('결제 정보들이 세팅되었습니다.', 'success')
+        }
+    }
+    else
+        snackbar.value.show('PG사를 먼저 선택해주세요.', 'warning')
+}
 const onModuleTypeChange = () => {
     props.item.note = module_types.find(obj => obj.id === props.item.module_type)?.title || ''
 }
@@ -115,6 +132,7 @@ const filterPgs = computed(() => {
             <CreateHalfVCol :mdl="5" :mdr="7">
                 <template #name>
                     <span>PG사</span>
+                    <VBtn size="small" variant="tonal" @click="setPGKeyInfo()" style="margin-left: 0.5em;">가져오기</VBtn>
                 </template>
                 <template #input>
                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_id" :items="pgs"

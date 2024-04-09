@@ -1,19 +1,21 @@
 <script setup lang="ts">
-import { SettlesHistories } from '@/views/types'
-import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
+import { SettlesHistory } from '@/views/types'
 import corp from '@corp'
 
 interface Props {
     name: string,
-    item: SettlesHistories,
+    item: SettlesHistory,
     is_mcht: boolean
 }
 
 const props = defineProps<Props>()
 const store = <any>(inject('store'))
-const { deposit, cancel, download } = settlementHistoryFunctionCollect(store)
 const financeDialog = <any>(inject('financeDialog'))
+const addDeductDialog = <any>(inject('addDeductDialog'))
+
+const { deposit, cancel, download, addDeduct, linkAccount } = settlementHistoryFunctionCollect(store)
 
 const getDepositParams = async () => {
     const params:any = {
@@ -28,11 +30,12 @@ const getDepositParams = async () => {
     }
     deposit(props.item, props.is_mcht, params)
 }
+
 </script>
 <template>
     <VBtn icon size="x-small" color="default" variant="text">
         <VIcon size="22" icon="tabler-dots-vertical" />
-        <VMenu activator="parent" width="230">
+        <VMenu activator="parent" width="250">
             <VList>
                 <VListItem value="deposit" @click="getDepositParams()">
                     <template #prepend>
@@ -45,6 +48,18 @@ const getDepositParams = async () => {
                         <VIcon size="24" class="me-3" icon="tabler:device-tablet-cancel" />
                     </template>
                     <VListItemTitle>정산취소</VListItemTitle>
+                </VListItem>
+                <VListItem value="deduct" @click="addDeduct(addDeductDialog, props.item, props.is_mcht)">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="ic:twotone-plus-minus-alt" />
+                    </template>
+                    <VListItemTitle>추가차감</VListItemTitle>
+                </VListItem>
+                <VListItem value="account-linking" @click="linkAccount(props.item, props.is_mcht)">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="ri-bank-card-fill" />
+                    </template>
+                    <VListItemTitle>계좌정보 동기화</VListItemTitle>
                 </VListItem>
                 <VListItem value="download" @click="download(props.item, props.is_mcht)" style="width: fit-content;">
                     <template #prepend>

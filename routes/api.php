@@ -174,6 +174,8 @@ Route::prefix('v1')->group(function() {
                 
                 Route::get('merchandises/chart', [MchtSettleHistoryController::class, 'chart']);
                 Route::post('merchandises/batch', [MchtSettleHistoryController::class, 'batch']);
+                Route::post('merchandises/{id}/add-deduct', [MchtSettleHistoryController::class, 'addDeduct']);
+                Route::post('merchandises/{id}/link-account', [MchtSettleHistoryController::class, 'linkAccount']);
                 Route::post('merchandises/{id}/deposit', [MchtSettleHistoryController::class, 'setDeposit']);
                 Route::post('merchandises/batch-deposit', [MchtSettleHistoryController::class, 'setBatchDeposit']);
                 
@@ -182,6 +184,8 @@ Route::prefix('v1')->group(function() {
                 
                 Route::get('salesforces/chart', [SalesSettleHistoryController::class, 'chart']);
                 Route::post('salesforces/batch', [SalesSettleHistoryController::class, 'batch']);
+                Route::post('salesforces/{id}/add-deduct', [SalesSettleHistoryController::class, 'addDeduct']);
+                Route::post('salesforces/{id}/link-account', [SalesSettleHistoryController::class, 'linkAccount']);
                 Route::post('salesforces/{id}/deposit', [SalesSettleHistoryController::class, 'setDeposit']);
                 Route::post('salesforces/batch-deposit', [SalesSettleHistoryController::class, 'setBatchDeposit']);
                 Route::apiResource('salesforces', SalesSettleHistoryController::class);
