@@ -34,15 +34,6 @@ const getLevels = () => {
     return sales
 }
 
-const isSalesCol = (key: string) => {
-    const sales_cols = ['total_amount', 'total_trx_amount', 'total_profit']
-    for (let i = 0; i < sales_cols.length; i++) {
-        if (sales_cols[i] === key)
-            return true
-    }
-    return false
-}
-
 onMounted(() => {
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
@@ -69,7 +60,7 @@ onMounted(() => {
 <template>
     <div>
         <BaseIndexView placeholder="상호, MID, TID, 승인번호, 거래번호, 결제모듈 별칭, 주민번호, 사업자번호, 발급사, 매입사, 휴대폰 번호 검색" :metas="metas"
-            :add="user_info.level >= 35" add_name="매출" :date_filter_type="DateFilters.DATE_RANGE">
+            :add="false" add_name="매출" :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">
