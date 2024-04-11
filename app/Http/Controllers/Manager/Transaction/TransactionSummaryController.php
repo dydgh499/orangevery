@@ -1,26 +1,18 @@
 <?php
-
 namespace App\Http\Controllers\Manager\Transaction;
 
 use App\Models\Transaction;
-use App\Models\Log\RealtimeSendHistory;
 use App\Models\Salesforce;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\TransactionTrait;
 use App\Http\Traits\Salesforce\UnderSalesTrait;
-
-use App\Http\Requests\Manager\TransactionRequest;
 use App\Http\Requests\Manager\IndexRequest;
-use App\Http\Controllers\QuickView\QuickViewController;
 
 use Carbon\Carbon;
-use App\Enums\DevSettleType;
-use Illuminate\Database\QueryException;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Enums\HistoryType;
 
 class TransactionSummaryController extends Controller
 {

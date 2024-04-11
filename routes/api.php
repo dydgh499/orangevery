@@ -144,9 +144,9 @@ Route::prefix('v1')->group(function() {
             Route::get('chart', [TransactionController::class, 'chart']);
             Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);            
             Route::get('fails', [FailTransController::class, 'index']);
-            
-            Route::get('summary', [TransactionSummaryController::class, 'index']);
+
             Route::get('summary/chart', [TransactionSummaryController::class, 'chart']);
+            Route::get('summary', [TransactionSummaryController::class, 'index']);
 
             Route::get('dangers', [DangerTransController::class, 'index']);
             Route::delete('dangers/{id}', [DangerTransController::class, 'destroy']);
