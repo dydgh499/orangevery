@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import MchtBatchOverview from '@/layouts/components/batch-updaters/MchtBatchOverview.vue'
-import SalesBatchOverview from '@/layouts/components/batch-updaters/SalesBatchOverview.vue'
 import PayModuleBatchOverview from '@/layouts/components/batch-updaters/PayModuleBatchOverview.vue'
+import SalesBatchOverview from '@/layouts/components/batch-updaters/SalesBatchOverview.vue'
 import { ItemTypes } from '@core/enums'
 
 interface Props {

@@ -133,7 +133,7 @@ export function settlementHistoryFunctionCollect(store: any) {
         const dest_name = is_mcht ? '가맹점' : '영업점'
         if (await alert.value.show(`정말 선택한 ${dest_name}들의 계좌정보를 동기화하시겠습니까?`)) {
             params.data = selected
-            await post('/api/v1/manager/transactions/settle-histories/' + (is_mcht ? 'merchandises' : 'salesforces') + '/batch-link-deposit', params, true)
+            await post('/api/v1/manager/transactions/settle-histories/' + (is_mcht ? 'merchandises' : 'salesforces') + '/batch-link-account', params, true)
             store.setTable()
         }
     }

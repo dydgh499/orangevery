@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import SettleHistoryBatchDialog from '@/layouts/dialogs/SettleHistoryBatchDialog.vue'
 import FinanceVanDialog from '@/layouts/dialogs/services/FinanceVanDialog.vue'
 import AddDeductDialog from '@/layouts/dialogs/transactions/AddDeductDialog.vue'
+
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { selectFunctionCollect } from '@/views/selected'
 import ExtraMenu from '@/views/transactions/settle-histories/ExtraMenu.vue'
-import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
 import { deposit_statuses, useSearchStore } from '@/views/transactions/settle-histories/useSalesforceStore'
 
 import type { Options } from '@/views/types'
@@ -15,10 +16,10 @@ import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { batchDeposit, batchCancel } = settlementHistoryFunctionCollect(store)
 const all_sales = salesLevels()
 const financeDialog = ref()
 const addDeductDialog = ref()
+const settleHistoryBatchDialog = ref()
 
 store.params.use_finance_van_deposit = Number(corp.pv_options.paid.use_finance_van_deposit)
 
@@ -34,21 +35,6 @@ const isNumberFormatCol = (_key: string) => {
     return _key.includes('amount') || _key.includes('_fee') || _key.includes('_deposit') || _key.includes('_count')
 }
 
-const getBatchDepositParams = async () => {
-    if (selected.value) {
-        const params: any = {
-            brand_id: corp.id,
-            use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
-        }
-        if (params['use_finance_van_deposit']) {
-            params['fin_id'] = await financeDialog.value.show()
-            // 선택안함
-            if (params['fin_id'] == 0)
-                return 0
-        }
-        batchDeposit(selected.value, false, params)
-    }
-}
 
 onMounted(() => {
     watchEffect(async () => {
@@ -83,13 +69,8 @@ onMounted(() => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="tabler:report-money" @click="getBatchDepositParams()" v-if="getUserLevel() >= 35"
-                    size="small">
-                    일괄 입금/미입금처리
-                </VBtn>
-                <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchCancel(selected, false)"
-                    v-if="getUserLevel() >= 35" color="error" size="small">
-                    일괄 정산취소
+                <VBtn prepend-icon="carbon:batch-job" @click="settleHistoryBatchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
+                    일괄 작업
                 </VBtn>
             </template>
             <template #headers>
@@ -154,5 +135,6 @@ onMounted(() => {
         </BaseIndexView>
         <FinanceVanDialog ref="financeDialog" />
         <AddDeductDialog ref="addDeductDialog" />
+        <SettleHistoryBatchDialog ref="settleHistoryBatchDialog" :selected_idxs="selected" :store="store" :is_mcht="false"/>
     </div>
 </template>

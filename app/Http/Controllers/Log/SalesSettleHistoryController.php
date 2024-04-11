@@ -262,4 +262,25 @@ class SalesSettleHistoryController extends Controller
         $code = $this->linkAccountHistory($request, $id, $this->settle_sales_hist, new Salesforce);
         return $this->response($code);
     }
+
+    /*
+    * 정산이력 - 일괄정산
+    */
+    public function batchLinkAccount(Request $request)
+    {
+        $fail_res = [];
+        for ($i=0; $i < count($request->data); $i++) 
+        {
+            $code = $this->linkAccountHistory($request, $request->data[$i], $this->settle_mcht_hist, new Salesforce);
+            if($code !== 1)
+                array_push($fail_res, '#'.$request->data[$i]);
+        }
+        if(count($fail_res))
+        {
+            $message = "일괄작업에 실패한 이력들이 존재합니다.\n\n".json_encode($fail_res, JSON_UNESCAPED_UNICODE);
+            return $this->extendResponse(2000, $message);
+        }
+        else
+            return $this->response(1);
+    }
 }
