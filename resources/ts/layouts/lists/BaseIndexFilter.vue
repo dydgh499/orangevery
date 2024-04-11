@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useThemeConfig } from '@core/composable/useThemeConfig'
-import { ko } from 'date-fns/locale'
-import { DateFilters } from '@core/enums'
 import { DateSetter } from '@/views/searcher'
+import { useThemeConfig } from '@core/composable/useThemeConfig'
+import { DateFilters } from '@core/enums'
 import corp from '@corp'
+import { ko } from 'date-fns/locale'
 
 interface Props {
     placeholder: string,
@@ -73,7 +73,7 @@ const handleEnterKey = (event: KeyboardEvent) => {
 
 const useDateSelecter = computed(() => {
     return (
-        head.path === 'transactions' || head.path === 'transactions/settle/merchandises' || head.path === 'transactions/settle/salesforces' || 
+        head.path === 'transactions' || head.path === 'transactions/groups' || head.path === 'transactions/settle/merchandises' || head.path === 'transactions/settle/salesforces' || 
         head.path === 'transactions/settle-histories/merchandises' || head.path === 'transactions/settle-histories/salesforces'
     )
 })

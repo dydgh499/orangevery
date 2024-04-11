@@ -4,7 +4,7 @@ namespace App\Http\Controllers\BuddyPay;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuickView\QuickViewController;
-use App\Http\Controllers\Manager\TransactionController;
+use App\Http\Controllers\Manager\Transaction\TransactionController;
 
 use App\Models\Merchandise;
 use App\Models\PaymentModule;

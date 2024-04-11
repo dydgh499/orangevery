@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\Manager\Settle\CollectWithdrawController;
 use App\Http\Controllers\Log\CollectWithdrawHistoryController;
-use App\Http\Controllers\Manager\TransactionController;
+use App\Http\Controllers\Manager\Transaction\TransactionController;
 use App\Http\Controllers\Log\RealtimeSendHistoryController;
 
 use App\Models\Merchandise;

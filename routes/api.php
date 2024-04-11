@@ -28,7 +28,8 @@ use App\Http\Controllers\Manager\PostController;
 use App\Http\Controllers\Manager\PopupController;
 
 use App\Http\Controllers\Manager\ComplaintController;
-use App\Http\Controllers\Manager\TransactionController;
+use App\Http\Controllers\Manager\Transaction\TransactionController;
+use App\Http\Controllers\Manager\Transaction\TransactionGroupController;
 use App\Http\Controllers\Manager\CancelDepositController;
 
 
@@ -149,6 +150,8 @@ Route::prefix('v1')->group(function() {
             Route::post('dangers/{id}/checked', [DangerTransController::class, 'checked']);
             Route::post('dangers/batch-checked', [DangerTransController::class, 'batchChecked']);
             
+            Route::get('groups', [TransactionGroupController::class, 'index']);
+            Route::get('groups/chart', [TransactionGroupController::class, 'chart']);
             Route::prefix('settle')->group(function() {
                 Route::apiResource('collect-withdraws', CollectWithdrawController::class);
                 Route::prefix('merchandises')->group(function() {

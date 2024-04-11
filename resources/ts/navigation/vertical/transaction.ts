@@ -32,6 +32,27 @@ const getPaymentTap = () => {
     return payment
 }
 
+const getTransactionTap = () => {
+    let transactions = []
+    transactions.push({
+        title: '매출 관리',
+        icon: { icon: 'ic-outline-payments' },
+        children: [
+            {
+                title: '상세 조회',
+                to: 'transactions',
+            },
+        ]
+    })
+    if(user_info.value.level >= 10) {
+        transactions[0].children.push({
+            title: '통계 조회',
+            to: 'transactions-groups',
+        })
+    }
+    return transactions
+}
+
 const getSettleManagement = () => {
     const settles = []
     let settle_childs = []
@@ -130,6 +151,7 @@ const getRiskTap = () => {
 
 const getAbilitiesMenu = computed(() => {
     const payment = getPaymentTap()
+    const transactions = getTransactionTap()
     const settles = getSettleManagement()
     const settle_histories = getSettleHistoryTap()
     const risks = getRiskTap()
@@ -137,11 +159,7 @@ const getAbilitiesMenu = computed(() => {
     return [
         { heading: 'Transaction' },
         ...payment,
-        {
-            title: '매출 관리',
-            icon: { icon: 'ic-outline-payments' },
-            to: 'transactions',
-        },
+        ...transactions,
         ...settles,
         ...settle_histories,
         ...risks,

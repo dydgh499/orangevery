@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Manager;
+namespace App\Http\Controllers\Manager\Transaction;
 
 use App\Models\Transaction;
 use App\Models\Log\RealtimeSendHistory;
@@ -70,16 +70,8 @@ class TransactionController extends Controller
         
         if($request->no_settlement)
         {
-            if($request->level == 10)
-                $settle_amount = 'mcht_settle_id';
-            else if($request->level <= 30)
-            {
-                $idx = globalLevelByIndex($request->level);
-                $settle_amount = 'sales'.$idx.'_settle_id';
-            }
-            else
-                $settle_amount = 'dev_settle_id';
-            $query = $query->whereNull("transactions.$settle_amount");
+            [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
+            $query = $query->whereNull("transactions.$target_settle_id");
         }
 
         for ($i=0; $i < 6; $i++) 
@@ -158,7 +150,7 @@ class TransactionController extends Controller
 
         if(count($with))
             $query = $query->with($with);
-        $data = $this->transPagenation($request, $query, $this->cols);
+        $data = $this->transPagenation($request, $query, $this->cols, 'transactions.trx_at');
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
