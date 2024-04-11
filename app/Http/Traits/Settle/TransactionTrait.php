@@ -268,7 +268,15 @@ trait TransactionTrait
         $page_size = $request->input('page_size');
         $sp     = ($page - 1) * $page_size;
         $res = ['page'=>$page, 'page_size'=>$page_size];
-        $res['total']   = $_query->count();
+        if($order_by === 'transactions.trx_at')
+            $res['total'] = $_query->count();
+        else
+        {
+            $res['total'] = $_query->clone()->select($order_by, DB::raw('COUNT(*) as count'))
+                ->groupBy($order_by)
+                ->get()
+                ->count();
+        }
         $res['content'] = $_query->orderBy($order_by, 'desc')
             ->offset($sp)
             ->limit($page_size)
