@@ -137,17 +137,18 @@ Route::prefix('v1')->group(function() {
             Route::apiResource('holidays', HolidayController::class);
             Route::post('holidays/bulk-register', [HolidayController::class, 'updateHolidays']);
         });
+
+
         Route::prefix('transactions')->group(function() {            
+            Route::get('summary/chart', [TransactionSummaryController::class, 'chart']);
+            Route::get('summary', [TransactionSummaryController::class, 'index']);
+            
             Route::post('noti/{id}', [TransactionController::class, 'noti']);
             Route::post('batch-retry', [TransactionController::class, 'batchRetry']);
             Route::post('cancel', [TransactionController::class, 'cancel']);
             Route::get('chart', [TransactionController::class, 'chart']);
             Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);            
             Route::get('fails', [FailTransController::class, 'index']);
-
-            Route::get('summary/chart', [TransactionSummaryController::class, 'chart']);
-            Route::get('summary', [TransactionSummaryController::class, 'index']);
-
             Route::get('dangers', [DangerTransController::class, 'index']);
             Route::delete('dangers/{id}', [DangerTransController::class, 'destroy']);
             Route::post('dangers/{id}/checked', [DangerTransController::class, 'checked']);
