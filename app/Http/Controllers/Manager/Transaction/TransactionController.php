@@ -91,7 +91,7 @@ class TransactionController extends Controller
 
         if(count($with))
             $query = $query->with($with);
-        $data = $this->transPagenation($request, $query, $this->cols, 'transactions.trx_at');
+        $data = $this->transPagenation($request, $query, $this->cols, 'transactions.trx_at', false);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);

@@ -61,7 +61,7 @@ class TransactionSummaryController extends Controller
 
         $query = $this->commonSelect($request);
         $query = $query->groupBy("transactions.$target_id");
-        $data = $this->transPagenation($request, $query, $cols, "transactions.$target_id");
+        $data = $this->transPagenation($request, $query, $cols, "transactions.$target_id", true);
 
         if((int)$request->level !== 10)
         {

@@ -262,21 +262,23 @@ trait TransactionTrait
             return $query;
     }
 
-    public function transPagenation($request, $_query, $cols, $order_by)
+    public function transPagenation($request, $_query, $cols, $order_by, $groupby)
     {
         $page      = $request->input('page');
         $page_size = $request->input('page_size');
         $sp     = ($page - 1) * $page_size;
         $res = ['page'=>$page, 'page_size'=>$page_size];
-        if($order_by === 'transactions.trx_at')
-            $res['total'] = $_query->count();
-        else
+
+        if($groupby)
         {
             $res['total'] = $_query->clone()->select($order_by, DB::raw('COUNT(*) as count'))
-                ->groupBy($order_by)
-                ->get()
-                ->count();
+            ->groupBy($order_by)
+            ->get()
+            ->count();
         }
+        else
+            $res['total'] = $_query->count();
+
         $res['content'] = $_query->orderBy($order_by, 'desc')
             ->offset($sp)
             ->limit($page_size)
