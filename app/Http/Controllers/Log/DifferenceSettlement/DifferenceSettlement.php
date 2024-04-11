@@ -120,7 +120,7 @@ class DifferenceSettlement
             }
 
             $datas = $contents ? $this->service->getDataRecord($contents) : [];
-            logging(['date'=>$req_date, 'datas'=>$datas], $this->service_name.'-difference-settlement-response');
+            logging(['date'=>$req_date, 'data-count'=>count($datas)], $this->service_name.'-difference-settlement-response');
             return $datas;
         }
         catch(\Throwable $e)
@@ -188,9 +188,8 @@ class DifferenceSettlement
                 }
                 else
                     $total_amount = $this->setNtypeField($total_amount, 18);
-
             }
-            else // danal
+            else // danal, nicepay
                 $total_amount   = $this->setNtypeField($total_amount, 18);
 
             $filter         = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
