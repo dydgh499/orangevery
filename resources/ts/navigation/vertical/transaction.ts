@@ -47,7 +47,7 @@ const getTransactionTap = () => {
     if(user_info.value.level >= 10) {
         transactions[0].children.push({
             title: '통계 조회',
-            to: 'transactions-groups',
+            to: 'transactions-summary',
         })
     }
     return transactions

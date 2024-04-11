@@ -145,13 +145,13 @@ Route::prefix('v1')->group(function() {
             Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);            
             Route::get('fails', [FailTransController::class, 'index']);
             
+            Route::get('summary', [TransactionSummaryController::class, 'index']);
+            Route::get('summary/chart', [TransactionSummaryController::class, 'chart']);
+
             Route::get('dangers', [DangerTransController::class, 'index']);
             Route::delete('dangers/{id}', [DangerTransController::class, 'destroy']);
             Route::post('dangers/{id}/checked', [DangerTransController::class, 'checked']);
-            Route::post('dangers/batch-checked', [DangerTransController::class, 'batchChecked']);
-            
-            Route::get('summary', [TransactionSummaryController::class, 'index']);
-            Route::get('summary/chart', [TransactionSummaryController::class, 'chart']);
+            Route::post('dangers/batch-checked', [DangerTransController::class, 'batchChecked']);            
             
             Route::prefix('settle')->group(function() {
                 Route::apiResource('collect-withdraws', CollectWithdrawController::class);
