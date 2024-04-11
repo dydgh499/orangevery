@@ -1,12 +1,11 @@
 a
 <script setup lang="ts">
 
-import { useRequestStore } from '@/views/request'
-import type { Tab } from '@/views/types'
-import { getUserLevel, user_info, isAbleModiy, axios } from '@axios'
-import { IS_FIXPLUS_AGCY1_MODIFY_ABLE, IS_FIXPLUS_AGCY2_MODIFY_ABLE } from '@/plugins/fixplus';
-import { VForm } from 'vuetify/components'
-import corp from '@corp';
+import { IS_FIXPLUS_AGCY1_MODIFY_ABLE, IS_FIXPLUS_AGCY2_MODIFY_ABLE, isFixplus } from '@/plugins/fixplus';
+import { useRequestStore } from '@/views/request';
+import type { Tab } from '@/views/types';
+import { axios, getUserLevel, isAbleModiy, user_info } from '@axios';
+import { VForm } from 'vuetify/components';
 
 interface Props {
     id: number | string,
@@ -63,7 +62,7 @@ watchEffect(() => {
 });
 
 watchEffect(() => {
-    if(corp.id === 30) {
+    if(isFixplus()) {
         if(props.id && props.path === 'merchandises' && getUserLevel() <= 20) {
             if(getUserLevel() === 20) {
                 //하위 영업점이 등록되어 잇는 경우, 수정불가

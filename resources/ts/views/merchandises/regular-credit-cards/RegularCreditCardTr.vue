@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+import { isFixplus } from '@/plugins/fixplus'
 import { useRequestStore } from '@/views/request'
 import type { RegularCreditCard } from '@/views/types'
 import { VForm } from 'vuetify/components'
-import corp from '@corp'
 
 interface Props {
     item: RegularCreditCard,
@@ -35,7 +35,7 @@ const { update, remove } = useRequestStore()
                 </VCol>
             </VForm>
         </td>
-        <td style="width: 20%;" v-if="corp.id === 30">
+        <td style="width: 20%;" v-if="isFixplus()">
             <VForm ref="vForm">
                 <VCol cols="12">
                     <VRow no-gutters>

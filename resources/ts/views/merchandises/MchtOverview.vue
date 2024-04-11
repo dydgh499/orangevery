@@ -10,7 +10,7 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
 import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
 
-import { autoUpdateMerchandiseAgencyInfo } from '@/plugins/fixplus'
+import { autoUpdateMerchandiseAgencyInfo, isFixplus, isFixplusAgency } from '@/plugins/fixplus'
 import { tax_category_types } from '@/views/merchandises/useStore'
 import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
@@ -86,7 +86,7 @@ watchEffect(() => {
     }
 })
 watchEffect(() => {
-    if(corp.id === 30 && props.item.id === 0) {
+    if(isFixplus() && props.item.id === 0) {
         // 대리점의 경우
         if(getUserLevel() === 17 || getUserLevel() === 20) {
             autoUpdateMerchandiseAgencyInfo(props.item, all_sales)
@@ -189,7 +189,7 @@ watchEffect(() => {
                             </VRow>
                         </VCol>
                         <!-- 👉 상위 영업점 수수료율 -->
-                        <template v-if="getUserLevel() > 10">
+                        <template v-if="getUserLevel() > 10 && isFixplusAgency() === false">
                             <VDivider/>
                             <VCol cols="12">
                                 <VCardTitle>영업점 수수료</VCardTitle>

@@ -2,6 +2,7 @@
 import router from '@/router';
 import { Merchandise, Salesforce } from '@/views/types';
 import { getLevelByIndex, getUserLevel, user_info } from '@axios';
+import corp from './corp';
 
 export const IS_FIXPLUS_AGCY1_MODIFY_ABLE = ref(<boolean>(false))
 export const IS_FIXPLUS_AGCY2_MODIFY_ABLE = ref(<boolean>(false))
@@ -80,3 +81,8 @@ export const autoUpdateSalesforceInfo = (salesforce: Salesforce) => {
     salesforce.settle_tax_type = 0
     salesforce.view_type = 1
 }
+
+export const isFixplus = () => corp.id === 30
+// 픽스플러스 대리점인 경우
+export const isFixplusAgency = () => isFixplus() && getUserLevel() <= 20
+

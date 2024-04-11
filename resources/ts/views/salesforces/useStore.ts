@@ -1,3 +1,4 @@
+import { isFixplus } from '@/plugins/fixplus'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { Merchandise, Options, Salesforce, UnderAutoSetting } from '@/views/types'
@@ -50,8 +51,9 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
         'level' : '등급',
         'user_name' : '영업점 ID',
         'sales_name': '영업점 상호',
-        'under_auto_settings': '수수료율',
     }
+    if(isFixplus() === false)
+        headers['under_auto_settings'] = '수수료율'
     if(getUserLevel() >= 35)
         headers['is_able_modify_mcht'] = '가맹점 수정권한'
     if(corp.id !== 30) {        

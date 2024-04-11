@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import FileInput from '@/layouts/utils/FileInput.vue'
 import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
-import { autoUpdateMerchandiseAccount } from '@/plugins/fixplus'
+import { autoUpdateMerchandiseAccount, isFixplus } from '@/plugins/fixplus'
 import type { UserPropertie } from '@/views/types'
 import { avatars, banks } from '@/views/users/useStore'
 import { axios, getUserLevel, isAbleModiy } from '@axios'
@@ -43,12 +43,19 @@ const onwerCheck = async () => {
     }
 }
 
+const isFixplusMcht = () => {
+    if(props.is_mcht) 
+        return isFixplus() ? true : false
+    else
+        return false
+}
+
 watchEffect(() => {
     props.item.resident_num = props.item.resident_num_front + props.item.resident_num_back
 })
 watchEffect(() => {
     if(props.is_mcht) {
-        if(corp.id === 30 && props.item.id === 0) 
+        if(isFixplus() && props.item.id === 0)
             autoUpdateMerchandiseAccount(props.item)
     }
 })
@@ -60,7 +67,7 @@ watchEffect(() => {
             <VCard>
                 <VCardItem>
                     <VCardTitle>기본정보</VCardTitle>
-                    <VRow class="pt-3">
+                    <VRow class="pt-3" v-if="isFixplusMcht() === false">
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
                                 <VCol>
@@ -270,7 +277,7 @@ watchEffect(() => {
                         </VBtn>
                     </VCol>
                 </VCardItem>
-                <VCardItem>
+                <VCardItem v-if="isFixplus() === false">
                     <VCardTitle>프로필 이미지</VCardTitle>
                     <VRow class="pt-5">
                         <VCol cols="12">
@@ -287,7 +294,7 @@ watchEffect(() => {
             </VCard>
         </VCol>
         <!-- 👉 계약정보 -->
-        <VCol cols="12" md="6">
+        <VCol cols="12" md="6" v-if="isFixplus() === false">
             <VCard>
                 <VCardItem>
                     <VCardTitle>계약파일</VCardTitle>

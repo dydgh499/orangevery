@@ -1,4 +1,4 @@
-import { isFixplusSalesAbleUpdate } from '@/plugins/fixplus';
+import { isFixplus, isFixplusSalesAbleUpdate } from '@/plugins/fixplus';
 import type { Options } from '@/views/types';
 import corp from '@corp';
 import axiosIns from 'axios';
@@ -128,7 +128,7 @@ export const isAbleModiy = (id: number) => {
     if(getUserLevel() >= 35)
         return true
     else if(getUserLevel() >= 13) {
-        if(corp.id === 30)
+        if(isFixplus())
             return isFixplusSalesAbleUpdate(id)
         else
             return isAbleModifyMcht()            

@@ -3,6 +3,7 @@ import MchtBatchOverview from '@/layouts/components/batch-updaters/MchtBatchOver
 import PayModuleBatchOverview from '@/layouts/components/batch-updaters/PayModuleBatchOverview.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import { isFixplus } from '@/plugins/fixplus'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import type { Salesforce } from '@/views/types'
@@ -36,7 +37,7 @@ const getParentSales = computed(()  => {
 })
 
 watchEffect(() => {
-    if(corp.id === 30 && props.item.id === 0) 
+    if(isFixplus() && props.item.id === 0) 
         autoUpdateSalesforceInfo(props.item)
 })
 </script>
@@ -204,7 +205,7 @@ watchEffect(() => {
                 </VCardItem>
             </VCard>
             <br>
-            <VCard v-if="getUserLevel() >= 35">
+            <VCard v-if="getUserLevel() >= 35 && isFixplus() === false">
                 <VCardItem>
                     <VCol cols="12">
                         <VRow>
