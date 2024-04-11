@@ -4,8 +4,8 @@ import { getUserLevel, user_info } from '@axios';
 
 
 export const useSearchStore = defineStore('transGroupSearchStore', () => {    
-    const store = Searcher('transactions/groups')
-    const head  = Header('transactions/groups', '매출 관리')
+    const store = Searcher('transactions/summary')
+    const head  = Header('transactions/summary', '매출 관리')
     const headers: Record<string, string> = {
         'user_name': '상호',
         'total_count': '총 거래건수',

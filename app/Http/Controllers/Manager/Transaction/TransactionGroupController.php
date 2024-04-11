@@ -22,7 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Enums\HistoryType;
 
-class TransactionGroupController extends Controller
+class TransactionSummaryController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait, TransactionTrait, UnderSalesTrait;
     protected $transactions;

@@ -73,7 +73,7 @@ const handleEnterKey = (event: KeyboardEvent) => {
 
 const useDateSelecter = computed(() => {
     return (
-        head.path === 'transactions' || head.path === 'transactions/groups' || head.path === 'transactions/settle/merchandises' || head.path === 'transactions/settle/salesforces' || 
+        head.path === 'transactions' || head.path === 'transactions/summary' || head.path === 'transactions/settle/merchandises' || head.path === 'transactions/settle/salesforces' || 
         head.path === 'transactions/settle-histories/merchandises' || head.path === 'transactions/settle-histories/salesforces'
     )
 })

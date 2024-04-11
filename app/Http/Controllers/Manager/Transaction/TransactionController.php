@@ -59,65 +59,6 @@ class TransactionController extends Controller
         $this->cols[] = $profit;
     }
 
-    public function optionFilter($query, $request)
-    {
-        if($request->only_cancel)
-            $query = $query->where('transactions.is_cancel', true);
-        if($request->mcht_settle_id)
-            $query = $query->where('transactions.mcht_settle_id', $request->mcht_settle_id);
-        if($request->only_realtime_fail)
-            $query->whereIn('transactions.id', RealtimeSendHistory::onlyFailRealtime());
-        
-        if($request->no_settlement)
-        {
-            [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
-            $query = $query->whereNull("transactions.$target_settle_id");
-        }
-
-        for ($i=0; $i < 6; $i++) 
-        {
-            $col = 'sales'.$i.'_settle_id';
-            if($request->has($col))
-                $query = $query->where('transactions.'.$col, $request->input($col));
-        }
-        return $query;
-    }
-
-    public function commonSelect($request)
-    {
-        $search = $request->input('search', '');
-        $query = $this->transactions->where('brand_id', $request->user()->brand_id);
-        $query = $this->transDateFilter($request, $query);
-        $min   = $query->min('id');
-
-        $query  = $this->transactions
-            ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
-            ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
-            ->where('transactions.brand_id', $request->user()->brand_id);
-        $query = $this->transDateFilter($request, $query);
-        if($min)
-            $query = $query->where('transactions.id', '>=', $min);
-            
-        $query = $query->globalFilter();
-        if($search !== "")
-        {
-            $query = $query->where(function ($query) use ($search) {
-                return $query->where('transactions.mid', 'like', "%$search%")
-                    ->orWhere('transactions.tid', 'like', "%$search%")
-                    ->orWhere('transactions.appr_num', 'like', "%$search%")
-                    ->orWhere('transactions.issuer', 'like', "%$search%")
-                    ->orWhere('transactions.acquirer', 'like', "%$search%")
-                    ->orWhere('transactions.buyer_phone', 'like', "%$search%")
-                    ->orWhere('merchandises.mcht_name', 'like', "%$search%")
-                    ->orWhere('merchandises.resident_num', 'like', "%$search%")
-                    ->orWhere('merchandises.business_num', 'like', "%$search%")
-                    ->orWhere('transactions.trx_id', $search)
-                    ->orWhere('payment_modules.note', $search);
-            });
-        }
-        return $this->optionFilter($query ,$request);
-    }
-
     /**
      * 차트 데이터 출력
      *

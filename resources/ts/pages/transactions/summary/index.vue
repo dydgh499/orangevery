@@ -2,7 +2,7 @@
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { useSearchStore } from '@/views/transactions/groups/useStore'
+import { useSearchStore } from '@/views/transactions/summary/useStore'
 
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import type { Options } from '@/views/types'
