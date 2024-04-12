@@ -38,10 +38,9 @@ trait SettleTrait
     }
 
     private function getDefaultQuery($query, $request, $ids)
-    {
+    {   // 삭제된 가맹점, 영업점도 나와야함
         return $query
             ->where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
             ->whereIn('id', $ids);
     }
 

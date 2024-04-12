@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('sub_key', 100)->default('')->comment('sub_key');
         });
         Schema::table('payment_modules', function (Blueprint $table) {
-            $table->unsignedInteger('payment_term_min')->default(0)->comment('결제 텀 체크');
+            $table->tinyInteger('payment_term_min', false, true)->default(0)->comment('결제 텀 체크');
         });
     }
 
