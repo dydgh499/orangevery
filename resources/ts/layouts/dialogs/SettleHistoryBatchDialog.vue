@@ -1,6 +1,7 @@
 
 
 <script lang="ts" setup>
+import FinanceVanDialog from '@/layouts/dialogs/services/FinanceVanDialog.vue'
 import { settlementHistoryFunctionCollect } from '@/views/transactions/settle-histories/SettleHistory'
 import corp from '@corp'
 
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const financeDialog = <any>(inject('$financeDialog'))
+const financeDialog = ref()
 const visible = ref(false)
 
 const { batchDeposit, batchCancel, batchLinkAccount } = settlementHistoryFunctionCollect(props.store)
@@ -41,6 +42,7 @@ defineExpose({
 });
 </script>
 <template>
+    <div>
         <VDialog v-model="visible" persistent style="max-width: 600px;">
             <DialogCloseBtn @click="visible = !visible" />
             <VCard title="정산이력 일괄작업">
@@ -66,6 +68,8 @@ defineExpose({
                 </VCardText>
             </VCard>
         </VDialog>
+        <FinanceVanDialog ref="financeDialog" />
+    </div>
 </template>
 <style scoped>
 .batch-container {
