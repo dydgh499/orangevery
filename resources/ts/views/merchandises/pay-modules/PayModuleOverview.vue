@@ -104,6 +104,7 @@ const addNewPayModule = async () => {
         cxl_type: 2,
         use_realtime_deposit: 0,
         pay_dupe_least: 0,
+        payment_term_min: 0,
         p_mid: ''
     })
     pay_module.mcht_id = props.item.id

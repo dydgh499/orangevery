@@ -1,23 +1,24 @@
 <script lang="ts" setup>
-import FileInput from '@/layouts/utils/FileInput.vue'
-import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
-import type { UserPropertie } from '@/views/types'
-import { avatars, banks } from '@/views/users/useStore'
-import { axios, getUserLevel, isAbleModiy } from '@axios'
+import { autoUpdateMerchandiseAgencyInfo, autoUpdateMerchandiseInfo, isFixplusAgency } from '@/plugins/fixplus'
+import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import type { Merchandise } from '@/views/types'
+import { banks } from '@/views/users/useStore'
+import { axios, getIndexByLevel, getLevelByIndex, getUserLevel, isAbleModiy, user_info } from '@axios'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
 
 interface Props {
-    item: UserPropertie,
-    id: number | string,
-    is_mcht: boolean,
+    item: Merchandise,
 }
+const levels = corp.pv_options.auth.levels
+
 const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
-const is_show = ref(false)
 const is_resident_num_back_show = ref(false)
+
+const { sales, all_sales, initAllSales, sales_apply_histories, hintSalesApplyFee, hintSalesSettleFee } = useSalesFilterStore()
 
 const setAcctBankName = () => {
     const bank = banks.find(obj => obj.code == props.item.acct_bank_code)
@@ -42,51 +43,34 @@ const onwerCheck = async () => {
     }
 }
 
+initAllSales()
 
 watchEffect(() => {
     props.item.resident_num = props.item.resident_num_front + props.item.resident_num_back
 })
+watchEffect(() => {
+    // 수정가능, 추가상태, 영업점일 경우
+    if(isAbleModiy(props.item.id) && props.item.id === 0 && getUserLevel() < 35) {
+        const idx = getLevelByIndex(getUserLevel())
+        props.item[`sales${idx}_id`] = user_info.value.id
+    }
+})
+watchEffect(() => {
+    if(props.item.id === 0) {
+        autoUpdateMerchandiseInfo(props.item)
+        if(getUserLevel() === 17 || getUserLevel() === 20) {
+            autoUpdateMerchandiseAgencyInfo(props.item, all_sales)
+        }
+    }
+})
 </script>
 <template>
     <VRow class="match-height">
-        <!-- 👉 개인정보 -->
         <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
                     <VCardTitle>기본정보</VCardTitle>
-                    <VRow class="pt-3">
-                        <VCol cols="12" md="6">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol>
-                                    <label>* 아이디</label>
-                                </VCol>
-                                <VCol md="8">
-                                    <VTextField type='text' v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
-                                        placeholder="아이디 입력" persistent-placeholder :rules="[requiredValidatorV2(props.item.user_name, '아이디')]"
-                                        maxlength="30"/>
-                                </VCol>
-                            </VRow>
-                            <VRow v-else>
-                                <VCol class="font-weight-bold">아이디</VCol>
-                                <VCol md="8"><span>{{ props.item.user_name }}</span></VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol cols="12" md="6" v-if="props.id == 0">
-                            <VRow no-gutters>
-                                <VCol>
-                                    <label>* 패스워드</label>
-                                </VCol>
-                                <VCol md="8">
-                                    <VTextField v-model="props.item.user_pw" counter prepend-inner-icon="tabler-lock"
-                                    :rules="[requiredValidatorV2(props.item.user_pw, '패스워드')]"
-                                    :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
-                                    :type="is_show ? 'text' : 'password'" persistent-placeholder
-                                    @click:append-inner="is_show = !is_show" autocomplete="new-password" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                    <VRow>
+                    <VRow class="pt-5">
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
                                 <VCol>
@@ -207,7 +191,7 @@ watchEffect(() => {
                                 <VCol md="10">
                                     <VTextField id="acctNumHorizontalIcons" v-model="props.item.acct_num"
                                 prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력" persistent-placeholder maxlength="20" 
-                                :rules="[requiredValidatorV2(props.item.acct_num, '계좌번호')]" />
+                                :rules="[requiredValidatorV2(props.item.acct_num, '계좌번호')]"/>
                                 </VCol>
                             </VRow>
                             <VRow v-else>
@@ -264,58 +248,176 @@ watchEffect(() => {
                         </VBtn>
                     </VCol>
                 </VCardItem>
-                <VCardItem>
-                    <VCardTitle>프로필 이미지</VCardTitle>
-                    <VRow class="pt-5">
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <SwiperPreview :items="avatars"
-                                    :preview="props.item.profile_img ?? avatars[Math.floor(Math.random() * avatars.length)]"
-                                    :label="'프로필'" :lmd="10" :rmd="2" @update:file="props.item.profile_file = $event"
-                                    @update:path="props.item.profile_img = $event">
-                                </SwiperPreview>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                </VCardItem>
             </VCard>
         </VCol>
-        <!-- 👉 계약정보 -->
         <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>계약파일</VCardTitle>
+                    <VCardTitle>가맹점정보</VCardTitle>
                     <VRow class="pt-5">
-                        <VCol cols="12" md=6>
-                            <VRow no-gutters>
-                                <FileInput :label="`통장사본 업로드`"
-                                    :preview="props.item.passbook_img ? props.item.passbook_img : '/utils/icons/img-preview.svg'"
-                                    @update:file="props.item.passbook_file = $event"
-                                    @update:path="props.item.passbook_img = $event" />
+                        <VCol cols="12">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol>* 가맹점 상호</VCol>
+                                        <VCol md="8">
+                                            <VTextField v-model="props.item.mcht_name" prepend-inner-icon="tabler-building-store"
+                                            placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.mcht_name, '가맹점 상호')]" />
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">가맹점 상호</VCol>
+                                        <VCol md="8"><span>{{ props.item.mcht_name }}</span></VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol>업종</VCol>
+                                        <VCol md="8">
+                                            <VTextField v-model="props.item.sector" prepend-inner-icon="tabler-building-store"
+                                                placeholder="업종을 입력해주세요" persistent-placeholder />
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">업종</VCol>
+                                        <VCol md="8"><span>{{ props.item.sector }}</span></VCol>
+                                    </VRow>
+                                </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" md=6>
-                            <VRow no-gutters>
-                                <FileInput :label="`신분증 업로드`"
-                                    :preview="props.item.id_img ? props.item.id_img : '/utils/icons/img-preview.svg'"
-                                    @update:file="props.item.id_file = $event" @update:path="props.item.id_img = $event" />
+                        <VCol cols="12" v-if="corp.use_different_settlement">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol>이메일</VCol>
+                                        <VCol md="8"> 
+                                            <VTextField v-model="props.item.email" prepend-inner-icon="material-symbols:mail"
+                                                placeholder="이메일을 입력해주세요" persistent-placeholder>
+                                                <VTooltip activator="parent" location="top" maxlength="50">
+                                                    하위몰이 대표 이메일주소
+                                                </VTooltip>
+                                            </VTextField>
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">이메일</VCol>
+                                        <VCol md="8"><span>{{ props.item.email }}</span></VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol>웹사이트 URL</VCol>
+                                        <VCol md="8">
+                                            <VTextField v-model="props.item.website_url" prepend-inner-icon="streamline:browser-website-1-solid"
+                                                placeholder="웹사이트 URL 입력해주세요" persistent-placeholder maxlength="250">
+                                                <VTooltip activator="parent" location="top">
+                                                    하위몰이 없는경우 2차PG사 URL을 입력해주세요.
+                                                </VTooltip>
+                                            </VTextField>
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">웹사이트 URL</VCol>
+                                        <VCol md="8"><span>{{ props.item.website_url }}</span></VCol>
+                                    </VRow>
+                                </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" md=6>
-                            <VRow no-gutters>
-                                <FileInput :label="`계약서 업로드`"
-                                    :preview="props.item.contract_img ? props.item.contract_img : '/utils/icons/img-preview.svg'"
-                                    @update:file="props.item.contract_file = $event"
-                                    @update:path="props.item.contract_img = $event" />
+
+                        <VCol cols="12">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol>가맹점 연락처</VCol>
+                                        <VCol md="8">
+                                            <VTextField v-model="props.item.contact_num" prepend-inner-icon="tabler-building-store"
+                                            placeholder="상호를 입력해주세요" persistent-placeholder type="number" />
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">가맹점 연락처</VCol>
+                                        <VCol md="8"><span>{{ props.item.contact_num }}</span></VCol>
+                                    </VRow>
+                                </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" md=6>
-                            <VRow no-gutters>
-                                <FileInput :label="`사업자 등록증 업로드`"
-                                    :preview="props.item.bsin_lic_img ? props.item.bsin_lic_img : '/utils/icons/img-preview.svg'"
-                                    @update:file="props.item.bsin_lic_file = $event"
-                                    @update:path="props.item.bsin_lic_img = $event" />
+                        <!-- 👉 상위 영업점 수수료율 -->
+                        <template v-if="getUserLevel() > 10 && isFixplusAgency() === false">
+                            <VDivider/>
+                            <VCol cols="12">
+                                <VCardTitle>영업점 수수료</VCardTitle>
+                            </VCol>
+                            <template v-for="i in 6" :key="i">
+                                <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i)">
+                                    <VRow v-if="isAbleModiy(props.item.id)">
+                                        <VCol cols="12" md="3">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
+                                        <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item['sales'+(6-i)+'_id']"
+                                                :items="sales[6-i].value"
+                                                :label="levels['sales'+(6-i)+'_name'] + '선택'"
+                                                item-title="sales_name" item-value="id" persistent-hint single-line prepend-inner-icon="ph:share-network"
+                                                :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])" :readonly="getUserLevel() <= getIndexByLevel(6-i)"/>
+
+                                                <VTooltip activator="parent" location="top" v-if="props.item['sales'+(6-i)+'_id']">
+                                                    {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
+                                                </VTooltip>
+                                        </VCol>
+                                        <VCol cols="12" :md="props.item.id ? 2 : 3">
+                                            <VTextField v-model="props.item['sales'+(6-i)+'_fee'] " type="number" suffix="%"
+                                                :rules="[requiredValidatorV2(props.item['sales'+(6-i)+'_fee'], levels['sales'+(6-i)+'_name']+'수수료율')]" />
+
+                                            <div style="font-size: 0.8em;">
+                                                <span style="font-weight: bold;">{{ hintSalesSettleFee(props.item, 6-i) }}</span>
+                                            </div>
+                                        </VCol>
+                                        <FeeChangeBtn v-if="props.item.id" :level=getIndexByLevel(6-i) :item="props.item">
+                                        </FeeChangeBtn>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol md="3" class="font-weight-bold">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
+                                        <VCol md="4">
+                                            {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
+                                        </VCol>
+                                        <VCol md="3">
+                                            <span>{{ props.item['sales'+(6-i)+'_fee'] }} %</span>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </template>
+                        </template>
+                        <VDivider/>
+                        <VCol cols="12">
+                            <VCardTitle>가맹점 수수료</VCardTitle>
+                        </VCol>
+                        <VCol cols="12">
+                            <VRow v-if="isAbleModiy(props.item.id)">
+                                <VCol cols="12" md="3">
+                                    가맹점/유보금 수수료율
+                                </VCol>
+                                    <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                        <VTextField v-model="props.item.trx_fee" type="number" suffix="%"
+                                            :rules="[requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율')]" v-if="isAbleModiy(props.item.id)"/>
+                                    </VCol>
+                                    <VCol cols="12" :md="props.item.id ? 2 : 3">
+                                        <VTextField v-model="props.item.hold_fee" type="number" suffix="%"
+                                            :rules="[requiredValidatorV2(props.item.hold_fee, '가맹점 유보금')]" v-if="isAbleModiy(props.item.id)"  />
+                                    </VCol>
+                                    <FeeChangeBtn v-if="props.item.id && isAbleModiy(props.item.id)" :level=-1 :item="props.item">
+                                    </FeeChangeBtn>
                             </VRow>
+                            <VRow v-else>
+                                <VCol md="3" class="font-weight-bold">가맹점/유보금/수수료율</VCol>
+                                <VCol md="4">
+                                    <span>{{ props.item.trx_fee }} %</span>
+                                </VCol>
+                                <VCol md="4">
+                                    <span>{{ props.item.hold_fee }} %</span>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol v-if="isAbleModiy(props.item.id)">
+                            <VTextarea v-model="props.item.note" counter label="메모사항"
+                                prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
                         </VCol>
                     </VRow>
                 </VCardItem>

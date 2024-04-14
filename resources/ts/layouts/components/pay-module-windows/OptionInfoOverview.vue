@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import type { PayModule } from '@/views/types'
-import { abnormal_trans_limits, cxl_types } from '@/views/merchandises/pay-modules/useStore'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import { requiredValidatorV2 } from '@validators'
 import { issuers } from '@/views/complaints/useStore'
+import { abnormal_trans_limits, cxl_types } from '@/views/merchandises/pay-modules/useStore'
+import type { PayModule } from '@/views/types'
 import corp from '@corp'
+import { requiredValidatorV2 } from '@validators'
 
 interface Props {
     item: PayModule,
@@ -146,6 +146,19 @@ const props = defineProps<Props>()
                         <template #true>노출</template>
                         <template #false>숨김</template>
                     </BooleanRadio>
+                </template>
+            </CreateHalfVCol>
+        </VRow>
+        <VRow v-if="props.item.module_type != 0">
+            <CreateHalfVCol :mdl="6" :mdr="6">
+                <template #name>
+                    <BaseQuestionTooltip :location="'top'" :text="'결제 허용 간격'" :content="'중복결제 방지를 위해 결제 텀을 설정합니다.'">
+                    </BaseQuestionTooltip>
+                </template>
+                <template #input>
+                    <VTextField prepend-inner-icon="material-symbols:shutter-speed-minus" v-model="props.item.payment_term_min"
+                        type="number" suffix="분"
+                        :rules="[requiredValidatorV2(props.item.payment_term_min, '결제 허용 간격')]" />
                 </template>
             </CreateHalfVCol>
         </VRow>

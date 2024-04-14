@@ -3,9 +3,9 @@
 import PayModuleCard from '@/views/merchandises/pay-modules/PayModuleCard.vue'
 import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
+import type { Merchandise, PayModule } from '@/views/types'
 import { isAbleModiy } from '@axios'
-import type { PayModule, Merchandise } from '@/views/types'
-import corp from '@corp';
+import corp from '@corp'
 
 interface Props {
     item: Merchandise,
@@ -65,9 +65,10 @@ const addNewPayModule = async () => {
         cxl_type: 2,
         use_realtime_deposit: 0,
         pay_dupe_least: 0,
+        payment_term_min: 0,
         p_mid: ''
     })
-        pay_module.mcht_id = props.item.id
+    pay_module.mcht_id = props.item.id
     pay_modules.unshift(<PayModule>(pay_module))
 }
 

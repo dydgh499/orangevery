@@ -8,8 +8,11 @@ const getUserTap = () => {
     const users = []
     const children = [
         { title: '가맹점 목록', to: 'merchandises' },
-        { title: '장비 관리', to: 'merchandises-terminals' }
     ]
+    
+    if(corp.id !== 30) {
+        children.push({ title: '장비 관리', to: 'merchandises-terminals' })
+    }
     if (isAbleModiy(0))
         children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules' })
     

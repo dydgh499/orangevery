@@ -1,7 +1,8 @@
 
 import router from '@/router';
-import { Merchandise, Salesforce } from '@/views/types';
-import { getLevelByIndex, getUserLevel, user_info } from '@axios';
+import { useStore } from '@/views/services/pay-gateways/useStore';
+import { Merchandise, PayModule, Salesforce } from '@/views/types';
+import { axios, getLevelByIndex, getUserLevel, user_info } from '@axios';
 import corp from './corp';
 
 export const IS_FIXPLUS_AGCY1_MODIFY_ABLE = ref(<boolean>(false))
@@ -47,13 +48,83 @@ export const isFixplusSalesAbleUpdate = (id: number) => {
         return false
 }
 
-// 계정정보 자동업데이트(ID: 사업자, PW: 휴대폰)
-export const autoUpdateMerchandiseAccount = (merchandise: Merchandise) => {    
+// 가맹점정보 자동업데이트(ID: 사업자, PW: 휴대폰)
+export const autoUpdateMerchandiseInfo = (merchandise: Merchandise) => {  
+    merchandise.tax_category_type = 0
+    merchandise.use_regular_card  = 1
+    merchandise.use_collect_withdraw = 1
+    merchandise.use_saleslip_prov = 1
+    merchandise.use_saleslip_sell = 0  
     if( merchandise.business_num.length >= 10)
         merchandise.user_name = merchandise.business_num
     if (merchandise.phone_num.length >= 8)
         merchandise.user_pw = merchandise.phone_num
 } 
+
+export const autoInsertPaymentModule = (mcht_id: number) => {
+    const { pgs } = useStore()
+    const fin_id = 29
+    const pg_id  = 171
+    const ps_id  = 340
+
+    const pay_module = <PayModule><unknown>({
+        id: 0,
+        mcht_id: mcht_id,
+        terminal_id: null,
+        settle_type: -1,
+        module_type: 1,
+        tid: mcht_id,
+        serial_num: '',
+        comm_settle_fee: 0,
+        comm_settle_day: 1,
+        comm_settle_type: 0,
+        comm_calc_level: 10,
+        under_sales_amt: 0,
+        under_sales_type: 0,
+        under_sales_limit: 0,
+        begin_dt: null,
+        ship_out_dt: null,
+        ship_out_stat: 0,
+        is_old_auth: 0,
+        installment: 10,
+        note: '수기결제',
+        settle_fee: 0,
+        pay_dupe_limit: 0,
+        abnormal_trans_limit: 300,
+        pay_year_limit: 60000,
+        pay_month_limit: 5000,
+        pay_day_limit: 2000,
+        pay_single_limit: 300,
+        pay_disable_s_tm: null,
+        pay_disable_e_tm: null,
+        show_pay_view: 1,
+        pay_key: '',
+        filter_issuers: [],
+        contract_s_dt: null,
+        contract_e_dt: null,
+        fin_trx_delay: 0,
+        cxl_type: 0,
+        use_realtime_deposit: 1,
+        pay_dupe_least: 0,
+        payment_term_min: 0,
+        p_mid: ''
+    })
+
+    pay_module.fin_id = fin_id
+    const pg = pgs.find(obj => obj.id === pg_id)
+    if(pg) {
+        pay_module.pg_id = pg_id
+        pay_module.ps_id = ps_id
+        pay_module.api_key = pg.api_key
+        pay_module.sub_key = pg.sub_key
+        pay_module.mid = pg.mid
+    }
+    const params:any = pay_module
+
+    params.use_mid_duplicate = Number(corp.pv_options.free.use_mid_duplicate)
+    params.use_tid_duplicate = Number(corp.pv_options.free.use_tid_duplicate)
+    axios.post('/api/v1/manager/merchandises/pay-modules', params)
+}
 
 // 영업점 수수료 자동업데이트
 export const autoUpdateMerchandiseAgencyInfo = (merchandise: Merchandise, all_sales: Salesforce[][]) => {    

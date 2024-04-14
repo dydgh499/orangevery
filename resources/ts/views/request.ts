@@ -1,3 +1,4 @@
+import { autoInsertPaymentModule } from '@/plugins/fixplus'
 import router from '@/router'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
@@ -31,6 +32,9 @@ export const useRequestStore = defineStore('requestStore', () => {
                 else if (back_url === '/merchandises') {
                     mchts.push(params)
                     mchts.sort((a:Merchandise, b:Merchandise) => a.mcht_name.localeCompare(b.mcht_name))
+                    if(corp.id === 30) {
+                        autoInsertPaymentModule(params.id)
+                    }
                 }
                 else if (back_url == '/salesforces/under-auto-settings') {
                     all_sales.forEach(sales => {
@@ -136,8 +140,8 @@ export const useRequestStore = defineStore('requestStore', () => {
 
     const update = async (base_url: string, params: any, vForm: any, is_redirect: boolean = true) => {
         if(base_url == 'merchandises/pay-modules') {
-            params.use_mid_duplicate = Number(corp.pv_options.free.use_mid_duplicate);
-            params.use_tid_duplicate = Number(corp.pv_options.free.use_tid_duplicate);
+            params.use_mid_duplicate = Number(corp.pv_options.free.use_mid_duplicate)
+            params.use_tid_duplicate = Number(corp.pv_options.free.use_tid_duplicate)
         }
 
         //payment moduels use_tid_duplicate

@@ -221,6 +221,7 @@ export interface PayModule {
     fin_trx_delay: number,
     cxl_type: number,
     use_realtime_deposit: number,
+    payment_term_min: number,
     pay_key?: string,
 }
 

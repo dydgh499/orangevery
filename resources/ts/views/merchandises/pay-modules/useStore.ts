@@ -303,6 +303,7 @@ export const defaultItemInfo =  () => {
         cxl_type: 2,
         use_realtime_deposit: 0,
         pay_dupe_least: 0,
+        payment_term_min: 0,
         p_mid: ''
     })
     //카드사 필터 및 다른 필터옵션들

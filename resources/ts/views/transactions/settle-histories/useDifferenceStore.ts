@@ -487,9 +487,8 @@ export const useSearchStore = defineStore('transSettlesHistoryDifferenceSearchSt
         headers['pg_id'] = 'PG사'
         headers['ps_id'] = '구간'
         headers['ps_fee'] = '구간 수수료'
-        headers['mcht_section_name'] = '카드사측 응답 구간'
-        headers['req_dt'] = '정산 요청 날짜'
-        headers['settle_dt'] = '정산 처리 날짜'
+        headers['mcht_section_name'] = '가맹점 구간'
+        headers['settle_dt'] = '정산 예정일'
     }
     headers['mcht_name'] = '가맹점'
     headers['amount'] = '거래금액'
