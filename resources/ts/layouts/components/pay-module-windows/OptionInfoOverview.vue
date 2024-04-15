@@ -149,10 +149,10 @@ const props = defineProps<Props>()
                 </template>
             </CreateHalfVCol>
         </VRow>
-        <VRow v-if="props.item.module_type != 0">
+        <VRow v-if="props.item.module_type == 1">
             <CreateHalfVCol :mdl="6" :mdr="6">
                 <template #name>
-                    <BaseQuestionTooltip :location="'top'" :text="'결제 허용 간격'" :content="'중복결제 방지를 위해 결제 텀을 설정합니다.'">
+                    <BaseQuestionTooltip :location="'top'" :text="'결제 허용 간격'" :content="'중복결제 방지를 위해 결제 텀을 설정합니다.<br>동일 결제모듈+금액+카드번호 조건일 시 동작합니다.'">
                     </BaseQuestionTooltip>
                 </template>
                 <template #input>
