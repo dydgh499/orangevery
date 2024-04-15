@@ -57,40 +57,6 @@ export const betweenValidator = (value: unknown, min: number, max: number) => {
     return (Number(min) <= valueAsNumber && Number(max) >= valueAsNumber) || `Enter number between ${min} and ${max}`
 }
 
-// 👉 Integer Validator
-export const integerValidator = (value: unknown) => {
-    if (isEmpty(value))
-        return true
-
-    if (Array.isArray(value))
-        return value.every(val => /^-?[0-9]+$/.test(String(val))) || '이 필드는 정수여야 합니다.'
-
-    return /^-?[0-9]+$/.test(String(value)) || '이 필드는 정수여야 합니다.'
-}
-
-// 👉 Regex Validator
-export const regexValidator = (value: unknown, regex: RegExp | string): string | boolean => {
-    if (isEmpty(value))
-        return true
-
-    let regeX = regex
-    if (typeof regeX === 'string')
-        regeX = new RegExp(regeX)
-
-    if (Array.isArray(value))
-        return value.every(val => regexValidator(val, regeX))
-
-    return regeX.test(String(value)) || '정규식 필드 형식이 잘못되었습니다.'
-}
-
-// 👉 Alpha Validator
-export const alphaValidator = (value: unknown) => {
-    if (isEmpty(value))
-        return true
-
-    return /^[A-Z]*$/i.test(String(value)) || 'Alpha 필드는 알파벳 문자만 포함할 수 있습니다.'
-}
-
 // 👉 URL Validator
 export const urlValidator = (value: unknown) => {
     if (isEmpty(value))
@@ -114,6 +80,7 @@ export const lengthValidatorV2 = (value: unknown, length: number) => {
         return true
     return String(value).length === length || `${length}자 이어야 합니다.`
 }
+
 // 👉 Alpha-dash Validator
 export const alphaDashValidator = (value: unknown) => {
     if (isEmpty(value))
@@ -123,9 +90,10 @@ export const alphaDashValidator = (value: unknown) => {
 
     return /^[0-9A-Z_-]*$/i.test(valueAsString) || '모든 문자가 유효하지 않습니다.'
 }
+
 // custom
 export const businessNumValidator = (value: string) => {
-    return (/^[0-9]{3}-[0-9]{2}-[0-9]{5}$/.test(value) || value.length <= 10) || '유효한 사업자등록번호를 입력하세요.'
+    return (/^[0-9]{10}$/.test(value)) || '유효한 사업자등록번호를 입력하세요.'
 }
 
 export const extensionValidator = (files: File[], values: string[]) => {

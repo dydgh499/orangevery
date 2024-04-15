@@ -1,17 +1,17 @@
 <script setup lang="ts">
+import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import { UserAbility } from '@/plugins/casl/AppAbility'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
+import router from '@/router'
 import { axios, pay_token, user_info } from '@axios'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import corp from '@corp'
-import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
-import { themeConfig } from '@themeConfig'
-import { requiredValidatorV2, businessNumValidator } from '@validators'
-import { VForm } from 'vuetify/components'
-import Snackbar from '@/layouts/snackbars/Snackbar.vue'
-import router from '@/router'
 import authV2MaskDark from '@images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@images/pages/misc-mask-light.png'
+import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
+import { themeConfig } from '@themeConfig'
+import { requiredValidatorV2 } from '@validators'
+import { VForm } from 'vuetify/components'
 
 import authV2LoginDefault1 from '@images/pages/auth-v2-login-default1.png'
 
@@ -125,7 +125,7 @@ const sameValidaor = () => {
                             </VCol>
                             <VCol cols="12">
                                 <VTextField v-model="business_num" label="사업자등록번호 입력" type="business_num"
-                                    :rules="[requiredValidatorV2(business_num, '사업자등록번호'), businessNumValidator(business_num)]" />
+                                    :rules="[requiredValidatorV2(business_num, '사업자등록번호')]" />
                             </VCol>
                             <!-- user_name -->
                             <VCol cols="12">

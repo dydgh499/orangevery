@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import { businessNumValidator, requiredValidatorV2 } from '@validators'
-import type { Brand } from '@/views/types'
-import FileInput from '@/layouts/utils/FileInput.vue'
-import { themeConfig } from '@themeConfig'
-import { config } from '@layouts/config'
-import { getUserLevel } from '@/plugins/axios';
-import { dev_settle_types } from '@/views/services/brands/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import FileInput from '@/layouts/utils/FileInput.vue'
+import { getUserLevel } from '@/plugins/axios'
 import BeforeBrandInfoCard from '@/views/services/brands/before-brand-infos/BeforeBrandInfoCard.vue'
 import DifferentSettlementInfoCard from '@/views/services/brands/different-settlement-infos/DifferentSettlementInfoCard.vue'
+import { dev_settle_types } from '@/views/services/brands/useStore'
+import type { Brand } from '@/views/types'
+import { config } from '@layouts/config'
+import { themeConfig } from '@themeConfig'
+import { requiredValidatorV2 } from '@validators'
 
 interface Props {
     item: Brand,
@@ -110,7 +110,7 @@ watchEffect(() => {
                                     <VTextField id="businessHorizontalIcons" v-model="props.item.business_num" type="text"
                                         prepend-inner-icon="ic-outline-business-center" placeholder="123-12-12345"
                                         persistent-placeholder
-                                        :rules="[requiredValidatorV2(props.item.business_num, '사업자등록번호'), businessNumValidator(props.item.business_num)]" />
+                                        :rules="[requiredValidatorV2(props.item.business_num, '사업자등록번호')]" />
                                 </VCol>
                             </VRow>
                         </VCol>

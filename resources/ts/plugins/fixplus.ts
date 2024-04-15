@@ -157,3 +157,4 @@ export const isFixplus = () => corp.id === 30
 // 픽스플러스 대리점인 경우
 export const isFixplusAgency = () => isFixplus() && getUserLevel() <= 20
 
+export const isBrightFix = () => corp.id === 12 || corp.id === 14 || corp.id === 30

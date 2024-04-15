@@ -5,7 +5,7 @@ import PaySectionTr from '@/views/services/pay-gateways/PaySectionTr.vue'
 import { pg_settle_types, useStore } from '@/views/services/pay-gateways/useStore'
 import type { PayGateway } from '@/views/types'
 import corp from '@corp'
-import { businessNumValidator, requiredValidatorV2 } from '@validators'
+import { requiredValidatorV2 } from '@validators'
 import { VForm } from 'vuetify/components'
 
 interface Props {
@@ -123,7 +123,7 @@ watchEffect(() => {
                                         <VTextField v-model="props.item.business_num" type="text"
                                             prepend-inner-icon="ic-outline-business-center" placeholder="사업자등록번호 입력"
                                             persistent-placeholder
-                                            :rules="[requiredValidatorV2(props.item.business_num, '사업자등록번호'), businessNumValidator(props.item.business_num)]" />
+                                            :rules="[requiredValidatorV2(props.item.business_num, '사업자등록번호')]" />
                                     </VCol>
                                 </VRow>
                             </VCol>

@@ -1,17 +1,18 @@
 <script setup lang="ts">
+import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import { UserAbility } from '@/plugins/casl/AppAbility'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
-import { axios, pay_token, user_info, token_expire_time } from '@axios'
+import { isBrightFix } from '@/plugins/fixplus'
+import router from '@/router'
+import { axios, getUserLevel, pay_token, token_expire_time, user_info } from '@axios'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import corp from '@corp'
+import authV2MaskDark from '@images/pages/misc-mask-dark.png'
+import authV2MaskLight from '@images/pages/misc-mask-light.png'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
 import { requiredValidatorV2 } from '@validators'
 import { VForm } from 'vuetify/components'
-import Snackbar from '@/layouts/snackbars/Snackbar.vue'
-import router from '@/router'
-import authV2MaskDark from '@images/pages/misc-mask-dark.png'
-import authV2MaskLight from '@images/pages/misc-mask-light.png'
 
 import authV2LoginDefault1 from '@images/pages/auth-v2-login-default1.png'
 
@@ -54,7 +55,10 @@ const login = () => {
             localStorage.setItem('token-expire-time', token_expire_time.value)
             localStorage.setItem('abilities', JSON.stringify(abilities))
             // Redirect to `to` query if exist or redirect to index route
-            router.replace(route.query.to ? String(route.query.to) : '/')
+            if(isBrightFix() && getUserLevel() > 10)
+                router.replace('transactions/summary')
+            else
+                router.replace(route.query.to ? String(route.query.to) : '/')
         })
         .catch(e => {
             console.log(e)

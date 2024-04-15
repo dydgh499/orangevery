@@ -6,7 +6,7 @@ import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { isFixplus } from '@/plugins/fixplus'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
-import type { Salesforce } from '@/views/types'
+import type { Options, Salesforce } from '@/views/types'
 
 import { autoUpdateSalesforceInfo } from '@/plugins/fixplus'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
@@ -27,6 +27,33 @@ const tax_types = settleTaxTypes()
 const mchtBatchOverview = ref()
 const payModuleBatchOverview = ref()
 
+
+const getSalesLevel = () => {
+    if(props.item.id)
+        return salesLevels()
+    else {
+        const levels = corp.pv_options.auth.levels
+        const sales = <Options[]>([])
+        if(levels.sales0_use && getUserLevel() >= 13)
+            sales.push({id: 13, title: levels.sales0_name})
+        if(levels.sales1_use && getUserLevel() >= 15)
+            sales.push({id: 15, title: levels.sales1_name})
+        if(levels.sales2_use && getUserLevel() >= 17)
+            sales.push({id: 17, title: levels.sales2_name})
+        if(levels.sales3_use && getUserLevel() >= 20)
+            sales.push({id: 20, title: levels.sales3_name})
+        if(levels.sales4_use && getUserLevel() >= 25)
+            sales.push({id: 25, title: levels.sales4_name})
+        if(levels.sales5_use && getUserLevel() >= 30)
+            sales.push({id: 30, title: levels.sales5_name})
+        return sales
+    }
+}
+
+const initParentSales = () => {
+    if(props.item.id === 0 && corp.pv_options.paid.sales_parent_structure)
+        props.item.parent_id = null
+}
 const getParentSales = computed(()  => {
     const idx = getLevelByIndex(props.item.level)
     if(idx < 5) {
@@ -35,6 +62,8 @@ const getParentSales = computed(()  => {
     else
         return []
 })
+if(props.item.id === 0 && getSalesLevel().length > 0)
+    props.item.level = getSalesLevel()[0].id as number
 
 watchEffect(() => {
     if(isFixplus() && props.item.id === 0) 
@@ -129,9 +158,9 @@ watchEffect(() => {
                                         </VCol>
                                         <VCol md="8">                                             
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
-                                                :items="salesLevels()" prepend-inner-icon="ph:share-network" label="영업자 등급 선택"
+                                                :items="getSalesLevel()" prepend-inner-icon="ph:share-network" label="영업자 등급 선택"
                                                 item-title="title" item-value="id" persistent-hint single-line :rules="[requiredValidatorV2(props.item.level, '영업자 등급')]"
-                                                :readonly="props.item.id != 0" />
+                                                :readonly="props.item.id != 0" @update:model-value="initParentSales()"/>
                                         </VCol>
                                     </VRow>
                                     <VRow v-else>

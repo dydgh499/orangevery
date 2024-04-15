@@ -5,7 +5,7 @@ import type { Merchandise } from '@/views/types'
 import { banks } from '@/views/users/useStore'
 import { axios, getIndexByLevel, getLevelByIndex, getUserLevel, isAbleModiy, user_info } from '@axios'
 import corp from '@corp'
-import { requiredValidatorV2 } from '@validators'
+import { businessNumValidator, lengthValidator, requiredValidatorV2 } from '@validators'
 
 interface Props {
     item: Merchandise,
@@ -16,9 +16,8 @@ const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
-const is_resident_num_back_show = ref(false)
 
-const { sales, all_sales, initAllSales, sales_apply_histories, hintSalesApplyFee, hintSalesSettleFee } = useSalesFilterStore()
+const { sales, all_sales, initAllSales, hintSalesApplyFee, hintSalesSettleFee } = useSalesFilterStore()
 
 const setAcctBankName = () => {
     const bank = banks.find(obj => obj.code == props.item.acct_bank_code)
@@ -44,10 +43,6 @@ const onwerCheck = async () => {
 }
 
 initAllSales()
-
-watchEffect(() => {
-    props.item.resident_num = props.item.resident_num_front + props.item.resident_num_back
-})
 watchEffect(() => {
     // 수정가능, 추가상태, 영업점일 경우
     if(isAbleModiy(props.item.id) && props.item.id === 0 && getUserLevel() < 35) {
@@ -96,7 +91,8 @@ watchEffect(() => {
                                 <VCol md="8">
                                     <VTextField v-model="props.item.phone_num" type="text"
                                     prepend-inner-icon="tabler-device-mobile" placeholder="010-0000-0000"
-                                    persistent-placeholder maxlength="13" />                                    
+                                    persistent-placeholder maxlength="13"
+                                    :rules="[requiredValidatorV2(props.item.phone_num, '휴대폰번호'), lengthValidator(props.item.phone_num, 8)]"/>
                                 </VCol>
                             </VRow>
                             <VRow v-else>
@@ -135,10 +131,8 @@ watchEffect(() => {
                                     <div style="display: flex;">
                                         <VTextField v-model="props.item.business_num" type="text"
                                             prepend-inner-icon="ic-outline-business-center" placeholder="1231212345"
-                                            persistent-placeholder maxlength="13">
-                                            <VTooltip activator="parent" location="top" v-if="corp.use_different_settlement">
-                                                {{ "사업자번호를 입력하지 않거나, 정확하게 입력하지 않으면 차액정산대상에서 제외됩니다." }}
-                                            </VTooltip>
+                                            persistent-placeholder maxlength="13"
+                                            :rules="[requiredValidatorV2(props.item.business_num, '사업자번호'), businessNumValidator(props.item.business_num)]">
                                         </VTextField>
                                     </div>
                                 </VCol>
@@ -146,35 +140,6 @@ watchEffect(() => {
                             <VRow v-else>
                                 <VCol class="font-weight-bold">사업자등록번호</VCol>
                                 <VCol md="10"><span>{{ props.item.business_num }}</span></VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                    <VRow>
-                        <VCol cols="12">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol>
-                                    <label>주민등록번호</label>
-                                </VCol>
-                                <VCol md="10">
-                                    <VRow style="align-items: center;">
-                                        <VCol :cols="5">
-                                            <VTextField v-model="props.item.resident_num_front" type="number" id="regidentFrontNum"
-                                                prepend-inner-icon="carbon-identification" placeholder="800101" maxlength="6"/>
-                                        </VCol>
-                                        <span> - </span>
-                                        <VCol :cols="5">
-                                            <VTextField v-model="props.item.resident_num_back" placeholder="*******" id="regidentBackNum"
-                                                maxlength="7"
-                                                :append-inner-icon="is_resident_num_back_show ? 'tabler-eye' : 'tabler-eye-off'"
-                                                :type="is_resident_num_back_show ? 'number' : 'password'"
-                                                @click:append-inner="is_resident_num_back_show = !is_resident_num_back_show" />
-                                        </VCol>
-                                    </VRow>
-                                </VCol>
-                            </VRow>
-                            <VRow v-else>
-                                <VCol class="font-weight-bold">주민등록번호</VCol>
-                                <VCol md="10"><span>{{ props.item.resident_num_front }} - *******</span></VCol>
                             </VRow>
                         </VCol>
                     </VRow>
@@ -270,19 +235,6 @@ watchEffect(() => {
                                         <VCol md="8"><span>{{ props.item.mcht_name }}</span></VCol>
                                     </VRow>
                                 </VCol>
-                                <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>업종</VCol>
-                                        <VCol md="8">
-                                            <VTextField v-model="props.item.sector" prepend-inner-icon="tabler-building-store"
-                                                placeholder="업종을 입력해주세요" persistent-placeholder />
-                                        </VCol>
-                                    </VRow>
-                                    <VRow v-else>
-                                        <VCol class="font-weight-bold">업종</VCol>
-                                        <VCol md="8"><span>{{ props.item.sector }}</span></VCol>
-                                    </VRow>
-                                </VCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12" v-if="corp.use_different_settlement">
@@ -319,24 +271,6 @@ watchEffect(() => {
                                     <VRow v-else>
                                         <VCol class="font-weight-bold">웹사이트 URL</VCol>
                                         <VCol md="8"><span>{{ props.item.website_url }}</span></VCol>
-                                    </VRow>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-
-                        <VCol cols="12">
-                            <VRow>
-                                <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>가맹점 연락처</VCol>
-                                        <VCol md="8">
-                                            <VTextField v-model="props.item.contact_num" prepend-inner-icon="tabler-building-store"
-                                            placeholder="상호를 입력해주세요" persistent-placeholder type="number" />
-                                        </VCol>
-                                    </VRow>
-                                    <VRow v-else>
-                                        <VCol class="font-weight-bold">가맹점 연락처</VCol>
-                                        <VCol md="8"><span>{{ props.item.contact_num }}</span></VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>
