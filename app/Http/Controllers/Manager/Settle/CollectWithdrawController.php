@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Manager\Settle;
 
+use App\Models\CancelDeposit;
+use App\Models\Log\RealtimeSendHistory;
 use App\Models\Transaction;
 use App\Models\Merchandise;
 use App\Models\PaymentModule;
@@ -49,7 +51,6 @@ class CollectWithdrawController extends Controller
         $isRealtimeDeposit = function($pay_modules, $idx) {
             if($idx !== false)
             {   // 즉시출금의 경우, 정산금에 포함하지 않는다.
-                
                 if($pay_modules[$idx]['use_realtime_deposit'] && $pay_modules[$idx]['fin_trx_delay'] > -1)
                     return true;
                 else
@@ -62,19 +63,20 @@ class CollectWithdrawController extends Controller
         $pay_modules = $this->getPayModules($data);
         foreach($data['content'] as $content)
         {
+            $module_ids = array_column($pay_modules, 'id');
             $content->total_withdraw_amount = $content->collectWithdraws->sum('total_withdraw_amount');
             $content->cancel_deposit = $content->transactions->reduce(function($carry, $transaction) {
                 return $carry + $transaction->cancelDeposits->sum('deposit_amount');
             }, 0);
-            $content->total_amount = $content->transactions->reduce(function($carry, $transaction) use($pay_modules, $isRealtimeDeposit) {
-                $idx = array_search($transaction->pmod_id, array_column($pay_modules, 'id'));
+            $content->total_amount = $content->transactions->reduce(function($carry, $transaction) use($module_ids, $pay_modules, $isRealtimeDeposit) {
+                $idx = array_search($transaction->pmod_id, $module_ids);
                 if($isRealtimeDeposit($pay_modules, $idx) === false)
                     return $carry + $transaction->amount;
                 else
                     return $carry;
             }, 0);
-            $content->settle_amount = $content->transactions->reduce(function($carry, $transaction) use($pay_modules, $isRealtimeDeposit) {
-                $idx = array_search($transaction->pmod_id, array_column($pay_modules, 'id'));
+            $content->settle_amount = $content->transactions->reduce(function($carry, $transaction) use($module_ids, $pay_modules, $isRealtimeDeposit) {
+                $idx = array_search($transaction->pmod_id, $module_ids);
                 if($isRealtimeDeposit($pay_modules, $idx) === false)
                     return $carry + $transaction->mcht_settle_amount;
                 else
@@ -86,7 +88,7 @@ class CollectWithdrawController extends Controller
         return $data;
     }
 
-    public function commonSelect(IndexRequest $request)
+    public function commonSelect(Request $request)
     {
         $search     = $request->input('search', '');
         $page      = $request->input('page');
@@ -142,6 +144,45 @@ class CollectWithdrawController extends Controller
         return $this->response(0, $data);
     }
     
+    /**
+     * 출금가능금액이 -1000원 이하인 가맹점들 리턴
+     *
+     * 운영자 이상 가능
+     */
+    public function danger(Request $request)
+    {
+        logging([], 'test-1');
+        $mcht_ids = CollectWithdraw::join('merchandises', 'collect_withdraws.mcht_id', 'merchandises.id')
+            ->where('collect_withdraws.brand_id', $request->user()->brand_id)
+            ->where('merchandises.brand_id', $request->user()->brand_id)
+            ->where('is_delete', false)
+            ->pluck('mcht_id')
+            ->unique()
+            ->all();
+
+        request()->merge([
+            's_dt' => '2000-01-01',
+            'e_dt' => Carbon::now()->format('Y-m-d'),
+        ]);
+        logging([], 'test-2');
+        $mchts = Merchandise::whereIn('id', $mcht_ids)
+            ->get([
+                'id',
+                'collect_withdraw_fee',
+                'mcht_name',
+            ]);
+        logging([], 'test-3');
+        $data = $this->setOutputData(['content' => $mchts]);
+        $danger_mchts = [];
+        logging([], 'test-4');
+        foreach($data['content'] as $content)
+        {
+            if($content->withdraw_able_amount < -1000)
+                $danger_mchts[] = $content;
+        }
+        return $this->response(0, $danger_mchts);
+    }
+
     /**
      * 모아서 출금 요청
      *

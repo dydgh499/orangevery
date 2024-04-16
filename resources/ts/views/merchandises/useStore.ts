@@ -1,3 +1,4 @@
+import { fixplusMchtIndexHeader, isFixplus } from '@/plugins/fixplus'
 import { Header } from '@/views/headers'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { Searcher } from '@/views/searcher'
@@ -11,17 +12,12 @@ export const tax_category_types = <Options[]>([
     {id:0, title:'과세'}, {id:1, title:'면세'}, 
 ])
 
-export const useSearchStore = defineStore('mchtSearchStore', () => {
-    const store     = Searcher('merchandises')
-    const head      = Header('merchandises', '가맹점 관리')
+const getMchtHeaders = () => {
     const levels    = corp.pv_options.auth.levels
     const paid      = corp.pv_options.paid
-    const { pgs, settle_types }   = useStore()
     const is_show_acct = ((getUserLevel() == 10 && !user_info.value.is_hide_account) || getUserLevel() >= 13) ? true : false
-
-    const headers: Record<string, string> = {
-        'id': 'NO.',
-    }
+    const headers: Record<string, string> = {}
+    headers['id'] = 'NO.'
     if (corp.pv_options.paid.use_settle_hold) {
         headers['settle_hold_s_dt'] = '지급보류 시작일'
         headers['settle_hold_reason'] = '지급보류 사유'
@@ -80,15 +76,21 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     }
     
     if (paid.subsidiary_use_control)
-        headers['enabled'] = '전산사용여부'
-
+        headers['enabled'] = '전산사용여부'     
     headers['created_at'] = '생성시간'
     headers['updated_at'] = '업데이트시간'
+    return headers
+}
 
+export const useSearchStore = defineStore('mchtSearchStore', () => {
+    const store     = Searcher('merchandises')
+    const head      = Header('merchandises', '가맹점 관리')
+    const { pgs, settle_types }   = useStore()
+
+    const headers: Record<string, string> = isFixplus() ? fixplusMchtIndexHeader() : getMchtHeaders()
     if (getUserLevel() >= 35 || isAbleModiy(0))
         headers['extra_col'] = '더보기'
     
-
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)

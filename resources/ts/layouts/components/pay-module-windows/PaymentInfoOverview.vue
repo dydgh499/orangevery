@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import type { PayModule } from '@/views/types'
-import { fin_trx_delays } from '@/views/merchandises/pay-modules/useStore'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { fin_trx_delays } from '@/views/merchandises/pay-modules/useStore'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import type { PayModule } from '@/views/types'
 import { axios, isAbleModiy } from '@axios'
 import corp from '@corp'
 
@@ -17,7 +17,7 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 const midCreateDlg = <any>(inject('midCreateDlg'))
-
+const is_readonly_fin_trx_delay = ref(false)
 const { pgs, finance_vans } = useStore()
 
 const tidCreate = async() => {
@@ -61,6 +61,15 @@ const payKeyCreate = async() => {
         }
     }
 }
+
+const useCollectWithdrawTrxFinDelayValidate = () => {
+    if (corp.pv_options.paid.use_collect_withdraw && props.item.use_realtime_deposit && props.item.id) {
+        axios.get('/api/v1/bf/occuerred-sale', {params: {mcht_id:props.item.mcht_id}}).then( r => {
+                is_readonly_fin_trx_delay.value = r.data.exist
+            }).catch(e => {})
+    }
+}
+useCollectWithdrawTrxFinDelayValidate()
 
 </script>
 <template>
@@ -233,7 +242,7 @@ const payKeyCreate = async() => {
                     <template #input>
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_trx_delay"
                             :items="fin_trx_delays" prepend-inner-icon="streamline-emojis:bug" label="이체 딜레이 선택"
-                            item-title="title" item-value="id" single-line />
+                            item-title="title" item-value="id" single-line :readonly="is_readonly_fin_trx_delay"/>
                     </template>
                 </CreateHalfVCol>
             </VRow>

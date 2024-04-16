@@ -67,7 +67,6 @@ class SalesforceRequest extends FormRequest
             'view_type' => 'required',
             'is_able_modify_mcht' => 'required',
             'level'     => 'required',
-            'acct_bank_name' => 'required',
             'settle_tax_type' => 'required',
             'settle_cycle' => 'required',
             'sales_fee' => 'nullable|numeric|max:10',

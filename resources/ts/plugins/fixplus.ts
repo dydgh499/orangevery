@@ -158,3 +158,21 @@ export const isFixplus = () => corp.id === 30
 export const isFixplusAgency = () => isFixplus() && getUserLevel() <= 20
 
 export const isBrightFix = () => corp.id === 12 || corp.id === 14 || corp.id === 30
+
+export const fixplusMchtIndexHeader = () => {
+    const headers: Record<string, string> = {
+        'id': 'NO.',
+    }
+    headers['mcht_name'] = '상호'
+    headers['created_at'] = '생성시간'
+    headers['user_name'] = '가맹점 ID'
+    headers['nick_name'] = '대표자명'
+    headers['phone_num'] = '연락처'
+    headers['business_num'] = '사업자등록번호'
+    headers['acct_bank_name'] = '은행'
+    headers['acct_num'] = '계좌번호'    
+    headers['acct_name'] = '예금주'
+    headers['trx_fee'] = '수수료'
+    headers['hold_fee'] = '유보금 수수료'
+    return headers
+}

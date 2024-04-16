@@ -156,7 +156,9 @@ Route::prefix('v1')->group(function() {
             Route::post('dangers/batch-checked', [DangerTransController::class, 'batchChecked']);            
             
             Route::prefix('settle')->group(function() {
+                Route::get('collect-withdraws/dangers', [CollectWithdrawController::class, 'danger']);
                 Route::apiResource('collect-withdraws', CollectWithdrawController::class);
+                
                 Route::prefix('merchandises')->group(function() {
                     Route::get('/', [MchtSettleController::class, 'index']);
                     Route::get('/chart', [MchtSettleController::class, 'chart']);

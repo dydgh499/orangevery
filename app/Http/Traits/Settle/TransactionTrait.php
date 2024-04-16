@@ -4,6 +4,7 @@ namespace App\Http\Traits\Settle;
 use Illuminate\Support\Facades\DB;
 use App\Enums\DevSettleType;
 use App\Models\Log\NotiSendHistory;
+use App\Models\Log\RealtimeSendHistory;
 use Carbon\Carbon;
 
 trait TransactionTrait

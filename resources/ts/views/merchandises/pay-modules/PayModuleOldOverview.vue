@@ -19,7 +19,6 @@ const pay_modules = reactive<PayModule[]>([])
 
 provide('midCreateDlg', midCreateDlg)
 const addNewPayModule = async () => {
-
     const pay_module = <PayModule>({
         id: 0,
         mcht_id: null,
