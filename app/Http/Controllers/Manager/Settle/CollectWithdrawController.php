@@ -61,6 +61,7 @@ class CollectWithdrawController extends Controller
         };
 
         $pay_modules = $this->getPayModules($data);
+        logging([], 'test-4');
         foreach($data['content'] as $content)
         {
             $module_ids = array_column($pay_modules, 'id');
@@ -151,7 +152,6 @@ class CollectWithdrawController extends Controller
      */
     public function danger(Request $request)
     {
-        logging([], 'test-1');
         $mcht_ids = CollectWithdraw::join('merchandises', 'collect_withdraws.mcht_id', 'merchandises.id')
             ->where('collect_withdraws.brand_id', $request->user()->brand_id)
             ->where('merchandises.brand_id', $request->user()->brand_id)
@@ -164,7 +164,6 @@ class CollectWithdrawController extends Controller
             's_dt' => '2000-01-01',
             'e_dt' => Carbon::now()->format('Y-m-d'),
         ]);
-        logging([], 'test-2');
         $mchts = Merchandise::whereIn('id', $mcht_ids)
             ->get([
                 'id',
@@ -174,7 +173,7 @@ class CollectWithdrawController extends Controller
         logging([], 'test-3');
         $data = $this->setOutputData(['content' => $mchts]);
         $danger_mchts = [];
-        logging([], 'test-4');
+        logging([], 'test-5');
         foreach($data['content'] as $content)
         {
             if($content->withdraw_able_amount < -1000)
