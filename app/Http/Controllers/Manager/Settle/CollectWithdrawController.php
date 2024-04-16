@@ -61,30 +61,34 @@ class CollectWithdrawController extends Controller
         };
 
         $pay_modules = $this->getPayModules($data);
-        logging([], 'test-4');
-        foreach($data['content'] as $content)
+        $module_ids = array_column($pay_modules, 'id');
+        
+        foreach($data['content'] as &$content)
         {
-            $module_ids = array_column($pay_modules, 'id');
+            $content->total_amount = 0;
+            $content->settle_amount = 0;
             $content->total_withdraw_amount = $content->collectWithdraws->sum('total_withdraw_amount');
+
+            $transactions = json_decode(json_encode($content->transactions), true);
+            $not_realtime_transactions = [];
+            
+            for ($i=0; $i < count($transactions); $i++) 
+            { 
+                $idx = array_search($transactions[$i]['pmod_id'], $module_ids);
+                if($isRealtimeDeposit($pay_modules, $idx) === false)
+                    $not_realtime_transactions[] = $transactions[$i];
+            }
+            for ($i=0; $i < count($not_realtime_transactions) ; $i++) 
+            {
+                $content->total_amount += $not_realtime_transactions[$i]['amount'];
+                $content->settle_amount += $not_realtime_transactions[$i]['mcht_settle_amount'];
+            }
+
             $content->cancel_deposit = $content->transactions->reduce(function($carry, $transaction) {
                 return $carry + $transaction->cancelDeposits->sum('deposit_amount');
             }, 0);
-            $content->total_amount = $content->transactions->reduce(function($carry, $transaction) use($module_ids, $pay_modules, $isRealtimeDeposit) {
-                $idx = array_search($transaction->pmod_id, $module_ids);
-                if($isRealtimeDeposit($pay_modules, $idx) === false)
-                    return $carry + $transaction->amount;
-                else
-                    return $carry;
-            }, 0);
-            $content->settle_amount = $content->transactions->reduce(function($carry, $transaction) use($module_ids, $pay_modules, $isRealtimeDeposit) {
-                $idx = array_search($transaction->pmod_id, $module_ids);
-                if($isRealtimeDeposit($pay_modules, $idx) === false)
-                    return $carry + $transaction->mcht_settle_amount;
-                else
-                    return $carry;
-            }, 0);  // 정산금
             $content->withdraw_able_amount = ( $content->settle_amount + $content->cancel_deposit - $content->total_withdraw_amount) - $content->collect_withdraw_fee;
-            $content->makeHidden(['collect_withdraws', 'transactions']);
+            $content->makeHidden(['collectWithdraws', 'transactions', 'resident_num_front', 'resident_num_back']);
         }
         return $data;
     }
@@ -104,12 +108,12 @@ class CollectWithdrawController extends Controller
         $query = globalAuthFilter($query, $request, 'merchandises');
         $query = globalSalesFilter($query, $request, 'merchandises');
 
-        $count = $query->pluck('mcht_id')->unique()->count();
-        $mcht_ids = $query->orderBy('collect_withdraws.created_at', 'desc')
+        $count = $query->distinct()->pluck('mcht_id')->count();
+        $mcht_ids = $query
+            ->distinct()
             ->offset($sp)
             ->limit($page_size)
             ->pluck('mcht_id')
-            ->unique()
             ->all();
         request()->merge([
             's_dt' => '2000-01-01',
@@ -152,34 +156,15 @@ class CollectWithdrawController extends Controller
      */
     public function danger(Request $request)
     {
-        $mcht_ids = CollectWithdraw::join('merchandises', 'collect_withdraws.mcht_id', 'merchandises.id')
-            ->where('collect_withdraws.brand_id', $request->user()->brand_id)
-            ->where('merchandises.brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
-            ->pluck('mcht_id')
-            ->unique()
-            ->all();
-
-        request()->merge([
-            's_dt' => '2000-01-01',
-            'e_dt' => Carbon::now()->format('Y-m-d'),
-        ]);
-        $mchts = Merchandise::whereIn('id', $mcht_ids)
-            ->get([
-                'id',
-                'collect_withdraw_fee',
-                'mcht_name',
-            ]);
-        logging([], 'test-3');
+        [$mchts, $count] = $this->commonSelect($request);        
         $data = $this->setOutputData(['content' => $mchts]);
         $danger_mchts = [];
-        logging([], 'test-5');
         foreach($data['content'] as $content)
         {
             if($content->withdraw_able_amount < -1000)
                 $danger_mchts[] = $content;
         }
-        return $this->response(0, $danger_mchts);
+        return $this->response(0, ['data'=>$danger_mchts, 'count'=>$count]);
     }
 
     /**

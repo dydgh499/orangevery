@@ -1,21 +1,47 @@
 <script lang="ts" setup>
+import corp from '@/plugins/corp';
+import { axios, getUserLevel } from '@axios';
 
 const visible = ref(false)
 const dangers = ref(<any[]>([]))
 
-let resolveCallback: (isAgreed: boolean) => void;
-const show = (datas: any[]): Promise<boolean> => {
-    visible.value = true
-    dangers.value = datas
-
-    return new Promise<boolean>((resolve) => {
-        resolveCallback = resolve;
-    });
+const getDangerCollectWithdraws = async (page: number, page_size: number) => {
+    return await axios.get('/api/v1/manager/transactions/settle/collect-withdraws/dangers', {
+        params: {
+            page: page, 
+            page_size: page_size,
+            search: ''
+        }
+    })
 }
+const setDangerCollectWithdraws = async () => {
+    const page_size = 999
+    const _dangers:any[] = []
+    if(corp.pv_options.paid.use_collect_withdraw && getUserLevel() >= 35) {
+        const res = await getDangerCollectWithdraws(1, page_size);
+        if(res.data.count > 0) {
+            _dangers.push(...res.data.data)
+            const total_count = res.data.count
 
-defineExpose({
-    show
-});
+            const least = (total_count/page_size) - parseInt(total_count/page_size)
+            const total_page = parseInt(total_count/page_size) + (least > 0 ? 1 : 0)
+            const promises = []
+            for (let i = 0; i < total_page-1; i++) {
+                promises.push(getDangerCollectWithdraws(i+2, page_size));
+            }
+
+            const results = await Promise.all(promises)
+            for (let i = 0; i < results.length; i++) {
+                _dangers.push(...results[i].data.data)
+            }
+        }
+        dangers.value = _dangers
+        if( dangers.value.length)
+            visible.value = true
+    }
+}
+setDangerCollectWithdraws()
+
 </script>
 <template>
     <VDialog v-model="visible" persistent max-width="900">
