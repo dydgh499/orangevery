@@ -120,7 +120,6 @@ class CollectWithdrawController extends Controller
             'e_dt' => Carbon::now()->format('Y-m-d'),
         ]);
         $mchts = Merchandise::whereIn('id', $mcht_ids)
-            ->orderBy('created_at', 'desc')
             ->with(['collectWithdraws', 'transactions.cancelDeposits'])
             ->get([
                 'id',
