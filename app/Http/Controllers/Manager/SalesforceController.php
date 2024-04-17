@@ -188,7 +188,8 @@ class SalesforceController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        if(isSalesforce($request) && $request->sales_parent_structure && $request->user()->tokenCan(30) === false)
+        // 영업점이면서, 종속구조사용
+        if(isSalesforce($request) && $request->sales_parent_structure)
         {
             [$child_ids, $count] = $this->parentStructureSelect($request);
             $data = [
@@ -352,12 +353,12 @@ class SalesforceController extends Controller
             }
         }
         else
-            $request->user()->id;
+            return $request->user()->id;
     }
 
     public function classification(Request $request)
     {
-        if($request->sales_parent_structure && isSalesforce($request) && $request->user()->tokenCan(30) === false)
+        if($request->sales_parent_structure && isSalesforce($request))
         {
             $data = [
                 'level_13' => [], 'level_15' => [],

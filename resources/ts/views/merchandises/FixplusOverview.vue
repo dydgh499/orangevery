@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { autoUpdateMerchandiseAgencyInfo, autoUpdateMerchandiseInfo, isFixplusAgency } from '@/plugins/fixplus'
+import { autoUpdateMerchandiseAgencyInfo, autoUpdateMerchandiseInfo, isDistMchtFeeMdofiyAble, isFixplusAgency } from '@/plugins/fixplus'
+import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import type { Merchandise } from '@/views/types'
 import { banks } from '@/views/users/useStore'
 import { axios, getIndexByLevel, getLevelByIndex, getUserLevel, isAbleModiy, user_info } from '@axios'
 import corp from '@corp'
 import { businessNumValidator, lengthValidator, requiredValidatorV2 } from '@validators'
-
 interface Props {
     item: Merchandise,
 }
@@ -324,28 +324,25 @@ watchEffect(() => {
                             <VCardTitle>가맹점 수수료</VCardTitle>
                         </VCol>
                         <VCol cols="12">
-                            <VRow v-if="isAbleModiy(props.item.id)">
+                            <VRow v-if="isAbleModiy(props.item.id) && isDistMchtFeeMdofiyAble(all_sales)">
                                 <VCol cols="12" md="3">
-                                    가맹점/유보금 수수료율
+                                    가맹점 수수료율
                                 </VCol>
                                     <VCol cols="12" :md="props.item.id ? 3 : 4">
                                         <VTextField v-model="props.item.trx_fee" type="number" suffix="%"
                                             :rules="[requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율')]" v-if="isAbleModiy(props.item.id)"/>
                                     </VCol>
                                     <VCol cols="12" :md="props.item.id ? 2 : 3">
-                                        <VTextField v-model="props.item.hold_fee" type="number" suffix="%"
-                                            :rules="[requiredValidatorV2(props.item.hold_fee, '가맹점 유보금')]" v-if="isAbleModiy(props.item.id)"  />
                                     </VCol>
                                     <FeeChangeBtn v-if="props.item.id && isAbleModiy(props.item.id)" :level=-1 :item="props.item">
                                     </FeeChangeBtn>
                             </VRow>
                             <VRow v-else>
-                                <VCol md="3" class="font-weight-bold">가맹점/유보금/수수료율</VCol>
+                                <VCol md="3" class="font-weight-bold">가맹점 수수료율</VCol>
                                 <VCol md="4">
                                     <span>{{ props.item.trx_fee }} %</span>
                                 </VCol>
                                 <VCol md="4">
-                                    <span>{{ props.item.hold_fee }} %</span>
                                 </VCol>
                             </VRow>
                         </VCol>

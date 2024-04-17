@@ -109,12 +109,23 @@ export const useQuickViewStore = defineStore('useQuickViewStore', () => {
                 }
             }
         }
-
-        payment_menus.push({
+        const transactions = {
             title: '매출 관리',
             icon: { icon: 'ic-outline-payments' },
-            to: 'transactions',
-        });
+            children: [
+                {
+                    title: '상세 조회',
+                    to: 'transactions',
+                },
+            ]
+        }
+        if(getUserLevel() > 10) {
+            transactions.children.push({
+                title: '통계 조회',
+                to: 'transactions-summary',
+            })
+        }
+        payment_menus.push(transactions)    
 
         if(getUserLevel() == 10 && corp.pv_options.paid.use_collect_withdraw) {
             payment_menus.push({

@@ -1,11 +1,11 @@
 
 <script setup lang="ts">
-import type { Post } from '@/views/types'
-import { types } from '@/views/posts/useStore'
-import PostReplyView from '@/views/posts/PostReplyView.vue'
-import ExtraMenu from '@/views/posts/ExtraMenu.vue'
 import router from '@/router'
-import { getUserLevel, user_info, allLevels } from '@axios'
+import ExtraMenu from '@/views/posts/ExtraMenu.vue'
+import PostReplyView from '@/views/posts/PostReplyView.vue'
+import { types } from '@/views/posts/useStore'
+import type { Post } from '@/views/types'
+import { allLevels, getUserLevel, user_info } from '@axios'
 
 interface Props {
     post: Post,
@@ -33,7 +33,7 @@ provide('head', head)
     <tr>
         <template v-for="(header, key, idx) in head.headers" :key="idx">
             <td v-show="header.visible" :class="key == 'title' ? 'list-square title' : 'list-square'">
-                <span v-if="key == 'id'" class="edit-link" @click="store.edit(moveContent(props.post))">
+                <span v-if="key == 'id'" class="edit-link" @click="moveContent(props.post)">
                     #{{ props.post.id }}
                 </span>
                 <span v-else-if="key == 'type'">

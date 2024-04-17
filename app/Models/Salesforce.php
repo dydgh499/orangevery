@@ -58,7 +58,7 @@ class Salesforce extends Authenticatable
     {
         return $this->hasMany(Salesforce::class, 'parent_id')
             ->with('childs')
-            ->select(['id', 'parent_id', 'sales_fee', 'level', 'sales_name']);
+            ->select(['id', 'parent_id', 'sales_fee', 'level', 'sales_name', 'is_able_under_modify']);
     }
 
     public function underAutoSettings()

@@ -2,12 +2,13 @@
 import MchtBatchOverview from '@/layouts/components/batch-updaters/MchtBatchOverview.vue'
 import PayModuleBatchOverview from '@/layouts/components/batch-updaters/PayModuleBatchOverview.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import type { Options, Salesforce } from '@/views/types'
 import { banks } from '@/views/users/useStore'
 
-import { autoUpdateSalesforceInfo } from '@/plugins/fixplus'
+import { autoUpdateSalesforceInfo, isDistAgcyUnderSalesModifyAble } from '@/plugins/fixplus'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios'
+import { axios, getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
 
@@ -16,12 +17,47 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const { sales } = useSalesFilterStore()
+const alert = <any>(inject('alert'))
+const snackbar = <any>(inject('snackbar'))
+const errorHandler = <any>(inject('$errorHandler'))
+const formatDate = <any>(inject('$formatDate'))
+
+const { sales, all_sales } = useSalesFilterStore()
 
 const is_show = ref(false)
+const mcht_fee = ref(0)
 const is_resident_num_back_show = ref(false)
 const mchtBatchOverview = ref()
 const payModuleBatchOverview = ref()
+
+const setMchtFee = () => {
+    const getCommonParams = () => {
+        return {
+            'selected_idxs': [],
+            'selected_sales_id': props.item.id,
+            'selected_level': props.item.level,
+        }
+    }
+    const post = async (page: string, params: any) => {
+        try {
+            if (await alert.value.show('정말 해당 지사의 하위 가맹점 수수료율을 <b>'+mcht_fee.value+'%</b>로 일괄적용하시겠습니까?')) {
+                Object.assign(params, getCommonParams())
+                const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/' + page, params)
+                snackbar.value.show('성공하였습니다.', 'success')
+            }
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            const r = errorHandler(e)
+        }
+    }
+    
+    post('mcht-fee-direct-apply', {
+        'mcht_fee': mcht_fee.value,
+        'hold_fee': 0,
+        'apply_dt': formatDate(new Date),
+    })
+}
 
 const setAcctBankName = () => {
     const bank = banks.find(obj => obj.code == props.item.acct_bank_code)
@@ -78,11 +114,11 @@ watchEffect(() => {
                     <VCardTitle>기본정보</VCardTitle>
                     <VRow class="pt-3">
                         <VCol cols="12" md="6">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModiy(props.item.id) && isDistAgcyUnderSalesModifyAble(props.item, all_sales)">
                                 <VCol>
                                     <label>* 아이디</label>
                                 </VCol>
-                                <VCol md="8">
+                                <VCol md="8"> 
                                     <VTextField type='text' v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
                                         placeholder="아이디 입력" persistent-placeholder :rules="[requiredValidatorV2(props.item.user_name, '아이디')]"
                                         maxlength="30"/>
@@ -112,12 +148,12 @@ watchEffect(() => {
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
                                 <VCol>
-                                    <label>대표자명</label>
+                                    <label>* 대표자명</label>
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField id="nickNameHorizontalIcons" v-model="props.item.nick_name"
                                     prepend-inner-icon="tabler-user" placeholder="대표자명 입력" persistent-placeholder
-                                    v-if="isAbleModiy(props.item.id)"
+                                    v-if="isAbleModiy(props.item.id) && isDistAgcyUnderSalesModifyAble(props.item, all_sales)"
                                     :rules="[requiredValidatorV2(props.item.nick_name, '대표자명')]"/>
                                     <span v-else>{{ props.item.nick_name }}</span>
                                 </VCol>
@@ -128,9 +164,9 @@ watchEffect(() => {
                             </VRow>
                         </VCol>
                         <VCol cols="12" md="6">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModiy(props.item.id) && isDistAgcyUnderSalesModifyAble(props.item, all_sales)">
                                 <VCol>
-                                    <label>휴대폰번호</label>
+                                    <label>* 휴대폰번호</label>
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField v-model="props.item.phone_num" type="text"
@@ -148,7 +184,7 @@ watchEffect(() => {
                     
                     <VRow>
                         <VCol cols="12" md="12">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModiy(props.item.id) && isDistAgcyUnderSalesModifyAble(props.item, all_sales)">
                                 <VCol>
                                     <label>주소</label>
                                 </VCol>
@@ -167,7 +203,7 @@ watchEffect(() => {
                     
                     <VRow>
                         <VCol cols="12">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModiy(props.item.id) && isDistAgcyUnderSalesModifyAble(props.item, all_sales)">
                                 <VCol>
                                     <label>사업자등록번호</label>
                                 </VCol>
@@ -191,7 +227,7 @@ watchEffect(() => {
                     </VRow>
                     <VRow>
                         <VCol cols="12">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModiy(props.item.id) && isDistAgcyUnderSalesModifyAble(props.item, all_sales)">
                                 <VCol>
                                     <label>주민등록번호</label>
                                 </VCol>
@@ -219,7 +255,7 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                 </VCardItem>
-                <VCardItem v-if="isAbleModiy(props.item.id)">
+                <VCardItem v-if="isAbleModiy(props.item.id) && isDistAgcyUnderSalesModifyAble(props.item, all_sales)" style="padding-top: 0;">
                     <VCardTitle>은행정보</VCardTitle>
                     <VRow class="pt-3">
                         <VCol cols="12" :md="12">
@@ -237,7 +273,7 @@ watchEffect(() => {
                     </VRow>
                     <VRow>
                         <VCol cols="12" md="6">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModiy(props.item.id) && isDistAgcyUnderSalesModifyAble(props.item, all_sales)">
                                 <VCol>
                                     <label>예금주</label>
                                 </VCol>
@@ -252,7 +288,7 @@ watchEffect(() => {
                             </VRow>
                         </VCol>
                         <VCol cols="12" md="6">
-                            <VRow no-gutters v-if="isAbleModiy(props.item.id)">
+                            <VRow no-gutters v-if="isAbleModiy(props.item.id) && isDistAgcyUnderSalesModifyAble(props.item, all_sales)">
                                 <VCol>
                                     <label>은행</label>
                                 </VCol>
@@ -271,13 +307,13 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                 </VCardItem>
-                <VCardItem>
+                <VCardItem style="padding-top: 0;">
                     <VCardTitle>영업점정보</VCardTitle>
                     <VRow class="pt-5">
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id) && isDistAgcyUnderSalesModifyAble(props.item, all_sales)">
                                         <VCol>* 영업점 상호</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.sales_name" prepend-inner-icon="tabler-building-store"
@@ -290,7 +326,7 @@ watchEffect(() => {
                                     </VRow>
                                 </VCol>
                                 <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id) && isDistAgcyUnderSalesModifyAble(props.item, all_sales)">
                                         <VCol>
                                             <BaseQuestionTooltip :location="'top'" :text="'등급'" :content="'영업자 등급은 수정할 수 없습니다.'">
                                             </BaseQuestionTooltip>
@@ -309,7 +345,7 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" v-if="isAbleModiy(props.item.id) && corp.pv_options.paid.sales_parent_structure">
+                        <VCol cols="12" v-if="isAbleModiy(props.item.id) && isDistAgcyUnderSalesModifyAble(props.item, all_sales)">
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;">
@@ -334,7 +370,40 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <VCol v-if="isAbleModiy(props.item.id)">
+                        <VCol cols="12" v-if="isAbleModiy(props.item.id) && getUserLevel() >= 30 && props.item.level == 25">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>
+                                            <BaseQuestionTooltip :location="'top'" :text="'하위영업점 수정권한'" :content="'이 설정 값은 총판, 운영사만 확인가능한 <b>지사</b>고유 설정 값 입니다.<br><br>지사이하 하위 영업점들이 <b>하위 영업점 정보 및 가맹점 수수료</b>를 수정/수정불가하게 설정할 수 있습니다.'">
+                                            </BaseQuestionTooltip>
+                                        </VCol>
+                                        <VCol md="6">
+                                            <BooleanRadio :radio="props.item.is_able_under_modify"
+                                                @update:radio="props.item.is_able_under_modify = $event">
+                                                <template #true>가능</template>
+                                                <template #false>불가</template>
+                                            </BooleanRadio>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>가맹점 수수료 일괄적용</VCol>
+                                        <VCol md="3">
+                                            <VTextField v-model="mcht_fee" type="number" suffix="%"/>
+                                        </VCol>
+                                        <VCol md="3">
+                                            <VBtn variant="tonal" @click="setMchtFee()" size="small"
+                                                style="margin-bottom: auto; margin-left: 0.5em;">
+                                                즉시적용
+                                            </VBtn>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>                        
+                        <VCol v-if="isAbleModiy(props.item.id) && isDistAgcyUnderSalesModifyAble(props.item, all_sales)">
                             <VTextarea v-model="props.item.note" counter label="메모사항"
                                 prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
                         </VCol>                        

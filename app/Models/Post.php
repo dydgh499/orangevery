@@ -20,6 +20,7 @@ class Post extends Model
     public function replies()
     {
         return $this->hasMany(Post::class, 'parent_id')
+            ->where('is_delete', false)
             ->with('replies')
             ->select($this->cols);
     }

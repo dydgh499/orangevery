@@ -1,10 +1,10 @@
-import { user_info } from '@axios'
+import { getUserLevel } from '@axios'
 import corp from '@corp'
 
 
 const getPaymentTap = () => {
     let payment = []
-    if(user_info.value.level >= 35) {
+    if(getUserLevel() >= 35) {
         payment.push({
             title: '결제',
             icon: { icon: 'fluent-payment-32-regular' },
@@ -44,7 +44,7 @@ const getTransactionTap = () => {
             },
         ]
     })
-    if(user_info.value.level >= 10) {
+    if(getUserLevel() > 10) {
         transactions[0].children.push({
             title: '통계 조회',
             to: 'transactions-summary',
@@ -56,7 +56,7 @@ const getTransactionTap = () => {
 const getSettleManagement = () => {
     const settles = []
     let settle_childs = []
-    if (user_info.value.level > 10) {
+    if (getUserLevel() > 10) {
         settle_childs = [
             {
                 title: '가맹점 정산 관리',
@@ -68,7 +68,7 @@ const getSettleManagement = () => {
             },
         ]
         
-        if(user_info.value.level >= 35) {
+        if(getUserLevel() >= 35) {
             if(corp.pv_options.paid.use_collect_withdraw) {
                 settle_childs.push({
                     title: '모아서 출금 관리',
@@ -93,7 +93,7 @@ const getSettleManagement = () => {
 const getSettleHistoryTap = () => {
     const settle_histories = []
     const settle_history_childs = []
-    if (user_info.value.level > 10) {
+    if (getUserLevel() > 10) {
 
         settle_history_childs.push({
             title: '가맹점 정산 이력',
@@ -103,13 +103,13 @@ const getSettleHistoryTap = () => {
             title: '영업점 정산 이력',
             to: 'transactions-settle-histories-salesforces',
         })
-        if (user_info.value.level >= 35 && corp.use_different_settlement) {
+        if (getUserLevel() >= 35 && corp.use_different_settlement) {
             settle_history_childs.push({
                 title: '차액 정산 이력',
                 to: 'transactions-settle-histories-difference',
             })
         }
-        if(user_info.value.level >= 35 && corp.pv_options.paid.use_collect_withdraw) {
+        if(getUserLevel() >= 35 && corp.pv_options.paid.use_collect_withdraw) {
             settle_history_childs.push({
                 title: '모아서 출금 이력',
                 to: 'transactions-settle-histories-collect-withdraws'
@@ -126,7 +126,7 @@ const getSettleHistoryTap = () => {
 
 const getRiskTap = () => {
     const risks = []
-    if (user_info.value.level >= 35 || corp.pv_options.auth.visibles.abnormal_trans_sales) {
+    if (getUserLevel() >= 35 || corp.pv_options.auth.visibles.abnormal_trans_sales) {
         risks.push({
             title: '이상거래 관리',
             icon: { icon: 'jam-triangle-danger' },

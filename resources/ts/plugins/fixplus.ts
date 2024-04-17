@@ -14,8 +14,8 @@ export const isFixplusSalesAbleUpdate = (id: number) => {
         if(getUserLevel() === 30) { //총판
             return true
         }
-        else if(getUserLevel() === 25) {    //지사
-            return id ? true : false    //수정가능, 등록불가
+        else if(getUserLevel() === 25) { //지사
+            return true
         }
         else {  //대리점
             if(id) {
@@ -61,6 +61,7 @@ export const autoUpdateMerchandiseInfo = (merchandise: Merchandise) => {
         merchandise.user_pw = merchandise.phone_num
 } 
 
+// 결제모듈 자동등록
 export const autoInsertPaymentModule = (mcht_id: number) => {
     const { pgs } = useStore()
     const fin_id = 29
@@ -124,6 +125,37 @@ export const autoInsertPaymentModule = (mcht_id: number) => {
     params.use_mid_duplicate = Number(corp.pv_options.free.use_mid_duplicate)
     params.use_tid_duplicate = Number(corp.pv_options.free.use_tid_duplicate)
     axios.post('/api/v1/manager/merchandises/pay-modules', params)
+}
+
+// 영업점 하위 영업점 수정권한
+export const isDistAgcyUnderSalesModifyAble = (item: Salesforce, all_sales: Salesforce[][]) => {
+    if(item.id === user_info.value.id)
+        return true
+    else
+        return isDistMchtFeeMdofiyAble(all_sales)
+}
+
+// 가맹점 수수료 수정권한
+export const isDistMchtFeeMdofiyAble = (all_sales: Salesforce[][]) => {
+    if(getUserLevel() === 10)   //가맹점
+        return false
+    else if(getUserLevel() > 10 && getUserLevel() <= 25) { // 대리점 ~ 지사
+        const idx = getLevelByIndex(getUserLevel())
+        let dest_sales = user_info.value
+    
+        for (let i = idx; i < 5; i++) 
+        {        
+            dest_sales = all_sales[i+1].find(obj => obj.id === dest_sales.parent_id)
+            if(dest_sales && dest_sales.level === 25)
+                return dest_sales.is_able_under_modify
+            else
+                break
+        }
+        return false
+    }
+    else // 운영자, 총판
+        return true
+
 }
 
 // 영업점 수수료 자동업데이트
