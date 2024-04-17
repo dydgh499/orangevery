@@ -136,7 +136,7 @@ watchEffect(() => {
                                     <VTextField v-model="props.item.phone_num" type="text"
                                     prepend-inner-icon="tabler-device-mobile" placeholder="010-0000-0000"
                                     persistent-placeholder maxlength="13" 
-                                    :rules="[requiredValidatorV2(props.item.phone_num, '대표자명')]"/>                                    
+                                    :rules="[requiredValidatorV2(props.item.phone_num, '휴대폰번호')]"/>                                    
                                 </VCol>
                             </VRow>
                             <VRow v-else>
