@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { autoUpdateMerchandiseAgencyInfo, autoUpdateMerchandiseInfo, isDistMchtFeeMdofiyAble, isFixplusAgency } from '@/plugins/fixplus'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
+import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import type { Merchandise } from '@/views/types'
 import { banks } from '@/views/users/useStore'
@@ -213,6 +214,14 @@ watchEffect(() => {
                         </VBtn>
                     </VCol>
                 </VCardItem>
+
+                <VCardItem v-if="props.item.use_regular_card && isAbleModiy(props.item.id)">
+                    <VCol cols="12">
+                        <VRow class="pt-3">
+                            <RegularCreditCard :item="props.item" />
+                        </VRow>
+                    </VCol>
+                </VCardItem>
             </VCard>
         </VCol>
         <VCol cols="12" md="6">
@@ -233,44 +242,6 @@ watchEffect(() => {
                                     <VRow v-else>
                                         <VCol class="font-weight-bold">가맹점 상호</VCol>
                                         <VCol md="8"><span>{{ props.item.mcht_name }}</span></VCol>
-                                    </VRow>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol cols="12" v-if="corp.use_different_settlement">
-                            <VRow>
-                                <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>이메일</VCol>
-                                        <VCol md="8"> 
-                                            <VTextField v-model="props.item.email" prepend-inner-icon="material-symbols:mail"
-                                                placeholder="이메일을 입력해주세요" persistent-placeholder>
-                                                <VTooltip activator="parent" location="top" maxlength="50">
-                                                    하위몰이 대표 이메일주소
-                                                </VTooltip>
-                                            </VTextField>
-                                        </VCol>
-                                    </VRow>
-                                    <VRow v-else>
-                                        <VCol class="font-weight-bold">이메일</VCol>
-                                        <VCol md="8"><span>{{ props.item.email }}</span></VCol>
-                                    </VRow>
-                                </VCol>
-                                <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>웹사이트 URL</VCol>
-                                        <VCol md="8">
-                                            <VTextField v-model="props.item.website_url" prepend-inner-icon="streamline:browser-website-1-solid"
-                                                placeholder="웹사이트 URL 입력해주세요" persistent-placeholder maxlength="250">
-                                                <VTooltip activator="parent" location="top">
-                                                    하위몰이 없는경우 2차PG사 URL을 입력해주세요.
-                                                </VTooltip>
-                                            </VTextField>
-                                        </VCol>
-                                    </VRow>
-                                    <VRow v-else>
-                                        <VCol class="font-weight-bold">웹사이트 URL</VCol>
-                                        <VCol md="8"><span>{{ props.item.website_url }}</span></VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>
