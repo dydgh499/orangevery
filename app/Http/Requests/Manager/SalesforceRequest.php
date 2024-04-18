@@ -33,7 +33,8 @@ class SalesforceRequest extends FormRequest
         'id_img',
     ];
     public $integer_keys = [
-        'sales_fee'
+        'sales_fee',
+        'is_able_under_modify',
     ];
     public $nullable_keys = [
         'parent_id'
