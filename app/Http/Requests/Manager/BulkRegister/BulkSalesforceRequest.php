@@ -48,8 +48,6 @@ class BulkSalesforceRequest extends FormRequest
             '*.nick_name' => 'required',
             '*.level'     => 'required',
             '*.resident_num' => 'required',
-            '*.business_num' => 'required',
-            '*.sector' => 'required',
             '*.acct_num' => 'required',
             '*.acct_name' => 'required',
             '*.acct_bank_name' => 'required',

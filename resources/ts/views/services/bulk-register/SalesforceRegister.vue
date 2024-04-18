@@ -60,16 +60,8 @@ const validate = () => {
             snackbar.value.show((i + 2) + '번째 영업점의 패스워드는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
-        else if (isEmpty(saleses.value[i].sales_name)) {
-            snackbar.value.show((i + 2) + '번째 영업점의 상호는 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
         else if (isEmpty(saleses.value[i].resident_num)) {
             snackbar.value.show((i + 2) + '번째 영업점의 주민등록번호는 필수로 입력해야합니다.', 'error')
-            is_clear.value = false
-        }
-        else if (isEmpty(saleses.value[i].business_num)) {
-            snackbar.value.show((i + 2) + '번째 영업점의 사업자등록번호는 필수로 입력해야합니다.', 'error')
             is_clear.value = false
         }
         else if (typeof lengthValidatorV2(saleses.value[i].resident_num, 14) != 'boolean') {
