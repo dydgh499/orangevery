@@ -77,7 +77,7 @@ class BulkSalesforceRequest extends FormRequest
             for ($j=0; $j < count($this->keys) ; $j++) 
             {
                 $key = $this->keys[$j];
-                $data[$key] = $_datas[$i][$key];
+                $data[$key] = isset($_datas[$i][$key]) ? $_datas[$i][$key] : null;
             }
             array_push($datas, $data);
         }
