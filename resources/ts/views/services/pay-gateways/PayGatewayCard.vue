@@ -190,7 +190,7 @@ watchEffect(() => {
                                         <label>MID</label>
                                     </VCol>
                                     <VCol md="7">
-                                    <VTextField type="text" v-model="props.item.p_mid" prepend-inner-icon="tabler-user"
+                                    <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
                                         placeholder="MID 입력" persistent-placeholder />
                                     </VCol>
                                 </VRow>

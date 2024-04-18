@@ -1,5 +1,6 @@
 
 <script setup lang="ts">
+import { isFixplus } from '@/plugins/fixplus'
 import FixplusOverview from '@/views/merchandises/FixplusOverview.vue'
 import MchtOverview from '@/views/merchandises/MchtOverview.vue'
 import NotiOverview from '@/views/merchandises/noti-urls/NotiOverview.vue'
@@ -16,8 +17,8 @@ const {path, item } = defaultItemInfo()
 const tabs = <Tab[]>([])
 
 
-if(corp.id === 30) {
-    tabs.push({ icon: 'tabler-user-check', title: '개인정보' })
+if(isFixplus()) {
+    tabs.push({ icon: 'tabler-user-check', title: '가맹점정보' })
 }
 else {
     tabs.push(...[

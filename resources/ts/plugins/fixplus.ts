@@ -139,10 +139,13 @@ export const isDistAgcyUnderSalesModifyAble = (item: Salesforce, all_sales: Sale
 export const isDistMchtFeeMdofiyAble = (all_sales: Salesforce[][]) => {
     if(getUserLevel() === 10)   //가맹점
         return false
-    else if(getUserLevel() > 10 && getUserLevel() <= 25) { // 대리점 ~ 지사
+    else if(getUserLevel() === 25) { //  지사
+        return user_info.value.is_able_under_modify
+    }
+    else if(getUserLevel() > 10 && getUserLevel() <= 25) { // 대리점
         const idx = getLevelByIndex(getUserLevel())
         let dest_sales = user_info.value
-    
+
         for (let i = idx; i < 5; i++) 
         {        
             dest_sales = all_sales[i+1].find(obj => obj.id === dest_sales.parent_id)

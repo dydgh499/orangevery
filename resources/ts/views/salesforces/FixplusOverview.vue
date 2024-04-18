@@ -129,7 +129,7 @@ watchEffect(() => {
                                 <VCol md="8"><span>{{ props.item.user_name }}</span></VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" md="6" v-if="props.item.id == 0">
+                        <VCol cols="12" md="6" v-if="props.item.id == 0 && isDistAgcyUnderSalesModifyAble(props.item, all_sales)">
                             <VRow no-gutters>
                                 <VCol>
                                     <label>* 패스워드</label>
