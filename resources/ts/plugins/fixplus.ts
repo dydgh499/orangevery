@@ -194,7 +194,7 @@ export const isFixplusAgency = () => isFixplus() && getUserLevel() <= 20
 
 export const isBrightFix = () => corp.id === 12 || corp.id === 14 || corp.id === 30
 
-export const fixplusMchtIndexHeader = () => {
+export const getFixplusMchtHeader = () => {
     const headers: Record<string, string> = {
         'id': 'NO.',
     }
@@ -209,5 +209,34 @@ export const fixplusMchtIndexHeader = () => {
     headers['acct_name'] = '예금주'
     headers['trx_fee'] = '수수료'
     headers['hold_fee'] = '유보금 수수료'
+    return headers
+}
+
+export const getFixplusSalesHeader = () => {
+    const headers: Record<string, string> = {
+        'id' : 'NO.',
+        'level' : '등급',
+        'user_name' : '영업점 ID',
+        'sales_name': '영업점 상호',
+    }
+    if(getUserLevel() >= 35)
+        headers['is_able_modify_mcht'] = '가맹점 수정권한'
+    headers['view_type'] = '화면타입'
+    headers['settle_cycle'] = '정산 주기'
+    headers['settle_day'] = '정산 요일'
+    headers['settle_tax_type'] = '정산 세율'
+    Object.assign(headers, {
+        'nick_name' : '대표자명',
+        'phone_num' : '연락처',
+        'resident_num' : '주민등록번호',
+        'business_num' : '사업자등록번호',
+        'sector' : '업종',
+        'addr' : '주소',
+        'acct_name' : '예금주',
+        'acct_num' : '계좌번호',
+        'acct_bank_name' : '은행',
+        'created_at' : '생성시간',
+        'extra_col' : '더보기',
+    })
     return headers
 }

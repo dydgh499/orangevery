@@ -22,10 +22,10 @@ const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 const formatDate = <any>(inject('$formatDate'))
 
-const { sales, all_sales } = useSalesFilterStore()
+const { sales, all_sales, sales_apply_histories } = useSalesFilterStore()
 
 const is_show = ref(false)
-const mcht_fee = ref(0)
+const mcht_fee = ref()
 const is_resident_num_back_show = ref(false)
 const mchtBatchOverview = ref()
 const payModuleBatchOverview = ref()

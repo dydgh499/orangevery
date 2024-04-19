@@ -1,4 +1,4 @@
-import { isFixplus } from '@/plugins/fixplus'
+import { getFixplusSalesHeader, isFixplus } from '@/plugins/fixplus'
 import { Header } from '@/views/headers'
 import { Searcher } from '@/views/searcher'
 import type { Merchandise, Options, Salesforce, UnderAutoSetting } from '@/views/types'
@@ -38,30 +38,20 @@ export const getAutoSetting = (auto_settings: UnderAutoSetting[]) => {
     return auto_settings.map(item => `${item.note} ${item.sales_fee}%`)
 }
 
-export const useSearchStore = defineStore('salesSearchStore', () => {
-    const store = Searcher('salesforces')
-    const head  = Header('salesforces', '영업점 관리')
-    const all_sales = salesLevels()
-    const all_cycles = settleCycles()
-    const all_days = settleDays()
-    const tax_types = settleTaxTypes()
-    
+const getSalesHeaders = () => {
     const headers: Record<string, string> = {
         'id' : 'NO.',
         'level' : '등급',
         'user_name' : '영업점 ID',
         'sales_name': '영업점 상호',
     }
-    if(isFixplus() === false)
-        headers['under_auto_settings'] = '수수료율'
+    headers['under_auto_settings'] = '수수료율'
     if(getUserLevel() >= 35)
         headers['is_able_modify_mcht'] = '가맹점 수정권한'
-    if(corp.id !== 30) {        
-        headers['view_type'] = '화면타입'
-        headers['settle_cycle'] = '정산 주기'
-        headers['settle_day'] = '정산 요일'
-        headers['settle_tax_type'] = '정산 세율'
-    }
+    headers['view_type'] = '화면타입'
+    headers['settle_cycle'] = '정산 주기'
+    headers['settle_day'] = '정산 요일'
+    headers['settle_tax_type'] = '정산 세율'
     Object.assign(headers, {
         'nick_name' : '대표자명',
         'phone_num' : '연락처',
@@ -78,6 +68,19 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
         'updated_at' : '업데이트시간',
         'extra_col' : '더보기',
     })
+    return headers
+}
+
+export const useSearchStore = defineStore('salesSearchStore', () => {
+    const store = Searcher('salesforces')
+    const head  = Header('salesforces', '영업점 관리')
+    const all_sales = salesLevels()
+    const all_cycles = settleCycles()
+    const all_days = settleDays()
+    const tax_types = settleTaxTypes()
+    
+
+    const headers: Record<string, string> = isFixplus() ? getFixplusSalesHeader() : getSalesHeaders()
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)

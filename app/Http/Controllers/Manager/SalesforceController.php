@@ -79,7 +79,9 @@ class SalesforceController extends Controller
     {
         $search = $request->input('search', '');
         $getUnderSalesforces = function($is_select_level, $is_dest_level, $parent_ids, $search) {
-            $query = $this->salesforces->whereIn('parent_id', $parent_ids);
+            $query = $this->salesforces
+                ->whereIn('parent_id', $parent_ids)
+                ->where('is_delete', false);
             if($is_select_level === false && $search)
             {
                 $query = $query->where(function($query) use ($search) {

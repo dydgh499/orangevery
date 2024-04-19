@@ -1,4 +1,4 @@
-import { fixplusMchtIndexHeader, isFixplus } from '@/plugins/fixplus'
+import { getFixplusMchtHeader, isFixplus } from '@/plugins/fixplus'
 import { Header } from '@/views/headers'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
 import { Searcher } from '@/views/searcher'
@@ -87,7 +87,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     const head      = Header('merchandises', '가맹점 관리')
     const { pgs, settle_types }   = useStore()
 
-    const headers: Record<string, string> = isFixplus() ? fixplusMchtIndexHeader() : getMchtHeaders()
+    const headers: Record<string, string> = isFixplus() ? getFixplusMchtHeader() : getMchtHeaders()
     if (getUserLevel() >= 35 || isAbleModiy(0))
         headers['extra_col'] = '더보기'
     
