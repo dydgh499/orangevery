@@ -14,15 +14,15 @@ import router from '@/router'
 // @layouts plugin
 import { VerticalNavLayout } from '@layouts'
 
-import AlertDialog from '@/layouts/dialogs/utils/AlertDialog.vue'
-import Snackbar from '@/layouts/snackbars/Snackbar.vue'
-import LoadingDialog from '@/layouts/dialogs/utils/LoadingDialog.vue'
 import PayLinkDialog from '@/layouts/dialogs/transactions/PayLinkDialog.vue'
-import PWASnackbar from '@/layouts/snackbars/PWASnackbar.vue'
+import AlertDialog from '@/layouts/dialogs/utils/AlertDialog.vue'
+import LoadingDialog from '@/layouts/dialogs/utils/LoadingDialog.vue'
 import PopupDialog from '@/layouts/dialogs/utils/PopupDialog.vue'
+import PWASnackbar from '@/layouts/snackbars/PWASnackbar.vue'
+import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 
-import { axios } from '@axios'
-import { user_info } from '@axios'
+import { isFixplus } from '@/plugins/fixplus'
+import { axios, getUserLevel, user_info } from '@axios'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { config } from '@layouts/config'
 
@@ -75,7 +75,14 @@ onMounted(() => {
                     <VNodeRenderer :nodes="config.app.logo" />
                 </div>
                 <div v-else>
-                    <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>님 안녕하세요!
+                    <template v-if="isFixplus()">
+                        <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>
+                        <span v-if="getUserLevel() === 10" class="text-primary font-weight-bold">({{ user_info.mcht_name }})</span>
+                        <span v-else-if="getUserLevel() < 35" class="text-primary font-weight-bold">({{ user_info.sales_name }})</span>님 안녕하세요!
+                    </template>
+                    <template v-else>
+                        <span class="text-primary font-weight-bold">{{ user_info.user_name }}</span>님 안녕하세요!
+                    </template>
                 </div>
                 <VSpacer />
                 <NavTokenableExpireTime />

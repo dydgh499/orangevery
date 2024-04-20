@@ -419,6 +419,16 @@ class SalesforceController extends Controller
         return $this->response($res ? 1 : 990);        
     }
 
+    public function mchtBatchFee(Request $request, $id)
+    {
+        $validated = $request->validate(['mcht_batch_fee'=>'required']);
+        $res = $this->salesforces
+            ->where('id', $id)
+            ->update(['mcht_batch_fee' => $request->mcht_batch_fee/100]);
+        return $this->response($res ? 1 : 990);        
+    }
+
+
     public function bulkRegister(BulkSalesforceRequest $request)
     {
         $current = date('Y-m-d H:i:s');

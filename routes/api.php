@@ -226,6 +226,7 @@ Route::prefix('v1')->group(function() {
                 Route::post('{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
             });
             Route::get('classification', [SalesforceController::class, 'classification']);
+            Route::post('{id}/mcht-batch-fee', [SalesforceController::class, 'mchtBatchFee']);
             Route::post('{id}/password-change', [SalesforceController::class, 'passwordChange']);
             Route::post('bulk-register', [SalesforceController::class, 'bulkRegister']);
             Route::apiResource('under-auto-settings', UnderAutoSettingController::class);

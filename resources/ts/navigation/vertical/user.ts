@@ -1,3 +1,4 @@
+import { isFixplus } from '@/plugins/fixplus'
 import { getUserLevel } from '@axios'
 import corp from '@corp'
 
@@ -30,10 +31,10 @@ const getUserChildMenu = () => {
         }
     }
     
-    if(corp.id !== 30) {
+    if(isFixplus() === false) 
         users.push({ title: '장비 관리', to: 'merchandises-terminals' })
-    }
-    users.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules' })
+    if(isFixplus() === false || (isFixplus() && getUserLevel() >= 35))
+        users.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules' })
     users.push(...logs)
     return users
 }

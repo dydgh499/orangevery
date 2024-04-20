@@ -159,6 +159,7 @@ export interface Merchandise extends MerchandisePropertie, UserPropertie {
 export interface Salesforce extends SalesforcePropertie, UserPropertie {
     parent_id?: number,
     sales_fee?: number,
+    mcht_batch_fee?: number,
     is_able_modify_mcht: number,
     is_able_under_modify: number,
     under_auto_settings?: UnderAutoSetting[]

@@ -17,6 +17,7 @@ use App\Models\UnderAutoSetting;
 use App\Models\Log\SettleDeductSalesforce;
 use App\Models\Log\SettleHistorySalesforce;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Http\Traits\Models\AttributeTrait;
 
 class Salesforce extends Authenticatable
@@ -74,5 +75,12 @@ class Salesforce extends Authenticatable
         
         return $this->hasMany(Merchandise::class,  $target_id)
             ->select(['id', $target_id]); 
+    }
+
+    protected function MchtBatchFee() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => round($value * 100, 3),
+        );
     }
 }

@@ -25,6 +25,11 @@ const setAcctBankName = () => {
     props.item.acct_bank_name = bank ? bank.title : '선택안함'
 }
 
+const phoneNumberUpdater = () => {
+    var regex = /[^0-9]/g;
+    props.item.phone_num = props.item.phone_num.replace(regex, "");
+}
+
 const onwerCheck = async () => {
     if (await alert.value.show('정말 예금주 검증을 하시겠습니까?')) {
         try {
@@ -41,6 +46,18 @@ const onwerCheck = async () => {
             const r = errorHandler(e)
         }
     }
+}
+
+const getSalesSelectRule = (idx: number) => {
+    if(getUserLevel() > 10 && getUserLevel() < 35) {
+        const my_idx = getLevelByIndex(getUserLevel())
+        if(my_idx <= 6 - idx)
+            return [requiredValidatorV2(props.item['sales'+(6-idx)+'_id'], levels['sales'+(6-idx)+'_name'])]
+        else
+            return []
+    }
+    else
+        return []
 }
 
 initAllSales()
@@ -91,8 +108,8 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField v-model="props.item.phone_num" type="text"
-                                    prepend-inner-icon="tabler-device-mobile" placeholder="010-0000-0000"
-                                    persistent-placeholder maxlength="13"
+                                    prepend-inner-icon="tabler-device-mobile" placeholder="01000000000"
+                                    persistent-placeholder maxlength="13" @input="phoneNumberUpdater()"
                                     :rules="[requiredValidatorV2(props.item.phone_num, '휴대폰번호'), lengthValidator(props.item.phone_num, 8)]"/>
                                 </VCol>
                             </VRow>
@@ -261,7 +278,8 @@ watchEffect(() => {
                                                 :items="sales[6-i].value"
                                                 :label="levels['sales'+(6-i)+'_name'] + '선택'"
                                                 item-title="sales_name" item-value="id" persistent-hint single-line prepend-inner-icon="ph:share-network"
-                                                :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])" :readonly="getUserLevel() <= getIndexByLevel(6-i)"/>
+                                                :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])" :readonly="getUserLevel() <= getIndexByLevel(6-i)"
+                                                :rules="getSalesSelectRule(i)"/>
 
                                                 <VTooltip activator="parent" location="top" v-if="props.item['sales'+(6-i)+'_id']">
                                                     {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}

@@ -128,11 +128,8 @@ export const autoInsertPaymentModule = (mcht_id: number) => {
 }
 
 // 영업점 하위 영업점 수정권한
-export const isDistAgcyUnderSalesModifyAble = (item: Salesforce, all_sales: Salesforce[][]) => {
-    if(item.id === user_info.value.id)
-        return true
-    else
-        return isDistMchtFeeMdofiyAble(all_sales)
+export const isDistAgcyUnderSalesModifyAble = (all_sales: Salesforce[][]) => {
+    return isDistMchtFeeMdofiyAble(all_sales)
 }
 
 // 가맹점 수수료 수정권한

@@ -1,3 +1,4 @@
+import { isFixplus } from '@/plugins/fixplus'
 import { useQuickViewStore } from '@/views/quick-view/useStore'
 import { getUserLevel, isAbleModiy, user_info } from '@axios'
 import corp from '@corp'
@@ -10,10 +11,10 @@ const getUserTap = () => {
         { title: '가맹점 목록', to: 'merchandises' },
     ]
     
-    if(corp.id !== 30) {
+    if(isFixplus() === false) {
         children.push({ title: '장비 관리', to: 'merchandises-terminals' })
     }
-    if (isAbleModiy(0))
+    if (isAbleModiy(0) && isFixplus() === false)
         children.push({ title: '결제모듈 관리', to: 'merchandises-pay-modules' })
     
     if(corp.pv_options.paid.use_noti && (getUserLevel() == 10 && user_info.value.use_noti)) {

@@ -10,7 +10,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 const { setNullRemove } = useRequestStore()
-const regular_credit_cards = reactive<RegularCreditCard[]>(props.item.regular_credit_cards || [])
+const regular_credit_cards = reactive<RegularCreditCard[]>([])
 const addNewRegularCreditCard = () => {
     const regular_credit_card = <RegularCreditCard>({
         id: 0,
@@ -20,6 +20,11 @@ const addNewRegularCreditCard = () => {
     })
     regular_credit_cards.push(regular_credit_card)
 }
+
+watchEffect(() => {
+    if(props.item.regular_credit_cards != undefined)
+        Object.assign(regular_credit_cards, props.item.regular_credit_cards)
+})
 watchEffect(() => {
     setNullRemove(regular_credit_cards)
 })
