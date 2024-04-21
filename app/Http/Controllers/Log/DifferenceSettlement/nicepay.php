@@ -48,7 +48,7 @@ class nicepay extends DifferenceSettlement implements DifferenceSettlementInterf
         $brand_business_num = str_replace('-', '', $this->brand['business_num']);
         $file_name = $file_date."_MD_".$brand_business_num.".00";
 
-        $save_path = "/$file_name";
+        $save_path = "/EDI_MARGIN/$file_name";
         return $this->_request($save_path, $req_date, $trans);
     }
 
@@ -59,7 +59,7 @@ class nicepay extends DifferenceSettlement implements DifferenceSettlementInterf
         $brand_business_num = str_replace('-', '', $this->brand['business_num']);
         $file_name = $file_date."_SD_".$brand_business_num.".00";
 
-        $save_path = "/RECV/$file_name";
+        $save_path = "/EDI_MARGIN/RECV/$file_name";
         return $this->_response($save_path, $req_date);
     }
 
@@ -70,7 +70,7 @@ class nicepay extends DifferenceSettlement implements DifferenceSettlementInterf
         $brand_business_num = str_replace('-', '', $this->brand['business_num']);
         $file_name = $file_date."_RS_".$brand_business_num.".00";
 
-        $save_path = "/$file_name";
+        $save_path = "/EDI_MARGIN/$file_name";
         return $this->_registerRequest($save_path, $req_date, $mchts, $sub_business_regi_infos);
     }
 
@@ -81,7 +81,7 @@ class nicepay extends DifferenceSettlement implements DifferenceSettlementInterf
         $brand_business_num = str_replace('-', '', $this->brand['business_num']);
         $file_name = $file_date."_RR_".$brand_business_num.".00";
 
-        $save_path = "/RECV/$file_name";
+        $save_path = "/EDI_MARGIN/RECV/$file_name";
         return $this->_registerResponse($save_path, $req_date);
     }
 }
