@@ -52,7 +52,7 @@ class nicepay implements DifferenceSettlementInterface
                     $this->setAtypeField('', 161).
                     "\r\n";
     
-                $data_record .= $records;
+                $data_records .= $records;
             }
         }
         return [$data_records, $total_count, $total_amount];

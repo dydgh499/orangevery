@@ -287,6 +287,7 @@ class DifferenceSettlementHistoryController extends Controller
                 ->where('payment_gateways.pg_type', $brand->pg_type)
                 ->where('transactions.brand_id', $brand->brand_id)
                 ->where('transactions.trx_at', '>=', $yesterday." 00:00:00")
+                ->where('transactions.trx_at', '<=', $yesterday." 23:59:59")
                 ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
 
             $ist = new DifferenceSettlementHistoryController(new DifferenceSettlementHistory);
