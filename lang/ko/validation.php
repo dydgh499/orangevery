@@ -188,6 +188,7 @@ return [
         'enabled' => '전산 활성화 여부',
         'custom_id' => '커스텀 필터',
         'tax_category_type' => '사업자 유형',
+        'contact_num' => '가맹점 연락처',
         //
         'tags' => '태그',
         'files' => '파일',

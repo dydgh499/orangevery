@@ -55,10 +55,8 @@ export const autoUpdateMerchandiseInfo = (merchandise: Merchandise) => {
     merchandise.use_collect_withdraw = 1
     merchandise.use_saleslip_prov = 1
     merchandise.use_saleslip_sell = 0  
-    if( merchandise.business_num.length >= 10)
-        merchandise.user_name = merchandise.business_num
-    if (merchandise.phone_num.length >= 8)
-        merchandise.user_pw = merchandise.phone_num
+    merchandise.user_name = merchandise.business_num
+    merchandise.user_pw = merchandise.phone_num
 } 
 
 // 결제모듈 자동등록
@@ -162,18 +160,17 @@ export const isDistMchtFeeMdofiyAble = (all_sales: Salesforce[][]) => {
 export const autoUpdateMerchandiseAgencyInfo = (merchandise: Merchandise, all_sales: Salesforce[][]) => {    
     const idx = getLevelByIndex(getUserLevel())
     let dest_sales = user_info.value
+
+    merchandise[`sales${idx}_id`] = dest_sales.id
+    merchandise[`sales${idx}_fee`] = dest_sales.sales_fee
     for (let i = idx; i < 5; i++) 
     {
-        merchandise[`sales${i}_id`] = dest_sales.id
-        merchandise[`sales${i}_fee`] = dest_sales.sales_fee
-        
-        dest_sales = all_sales[i+1].find(obj => obj.id === dest_sales.parent_id)
-        if(dest_sales) {
-            merchandise[`sales${i+1}_id`] = dest_sales.id
-            merchandise[`sales${i+1}_fee`] = dest_sales.sales_fee
+        let _dest_sales = all_sales[i+1].find(obj => obj.id === dest_sales.parent_id)
+        if(_dest_sales) {
+            merchandise[`sales${i+1}_id`] = _dest_sales.id
+            merchandise[`sales${i+1}_fee`] = _dest_sales.sales_fee
+            dest_sales = _dest_sales
         }
-        else
-            break
     }
 }
 

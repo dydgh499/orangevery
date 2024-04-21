@@ -1,8 +1,9 @@
 a
 <script setup lang="ts">
 
-import { IS_FIXPLUS_AGCY1_MODIFY_ABLE, IS_FIXPLUS_AGCY2_MODIFY_ABLE, isFixplus } from '@/plugins/fixplus';
+import { IS_FIXPLUS_AGCY1_MODIFY_ABLE, IS_FIXPLUS_AGCY2_MODIFY_ABLE, isDistAgcyUnderSalesModifyAble, isFixplus } from '@/plugins/fixplus';
 import { useRequestStore } from '@/views/request';
+import { useSalesFilterStore } from '@/views/salesforces/useStore';
 import type { Tab } from '@/views/types';
 import { axios, getUserLevel, isAbleModiy, user_info } from '@axios';
 import { VForm } from 'vuetify/components';
@@ -18,6 +19,7 @@ const props = defineProps<Props>()
 const tab = ref(0)
 const vForm = ref<VForm>()
 
+const { all_sales } = useSalesFilterStore()
 const { formRequest, remove, setOneObject } = useRequestStore()
 
 const disabledConditions = (index: number) => {
@@ -49,8 +51,12 @@ const authHideConditions = () => {
             else
                 return false
         }
-        else
-            return isAbleModiy(props.id as number)
+        else {
+            if(isFixplus())
+                return isAbleModiy(props.id as number) && isDistAgcyUnderSalesModifyAble(all_sales)
+            else
+                return isAbleModiy(props.id as number)
+        }
     }
     else
         return true

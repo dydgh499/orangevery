@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/salesforces/useStore'
+import { useSalesFilterStore, useSearchStore } from '@/views/salesforces/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
@@ -8,6 +8,7 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 
+import { isDistAgcyUnderSalesModifyAble, isFixplus } from '@/plugins/fixplus'
 import { getAutoSetting, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import type { Options } from '@/views/types'
 import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios'
@@ -16,8 +17,8 @@ import corp from '@corp'
 
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
+const { all_sales } = useSalesFilterStore()
 
-const all_sales = salesLevels()
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
@@ -32,6 +33,12 @@ const isSalesforceParemntStructureHideFilter = () => {
     }
     else
         return true
+}
+const isAbleAdd = () => {
+    if(isFixplus())
+        return isAbleModiy(0) && isDistAgcyUnderSalesModifyAble(all_sales)
+    else
+        return isAbleModiy(0)
 }
 
 provide('password', password)
@@ -60,7 +67,7 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="아이디, 영업점 상호 검색" :metas="metas" :add="isAbleModiy(0)" add_name="영업점" :date_filter_type="DateFilters.NOT_USE">
+        <BaseIndexView placeholder="아이디, 영업점 상호 검색" :metas="metas" :add="isAbleAdd()" add_name="영업점" :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                     :sales="isSalesforceParemntStructureHideFilter()">
@@ -121,7 +128,7 @@ onMounted(() => {
                                 </span>
                                 <span v-else-if="_key == 'level'">
                                     <VChip :color="store.getSelectIdColor(getLevelByIndex(item[_key]))">
-                                        {{ all_sales.find(obj => obj.id === item[_key])?.title }}
+                                        {{ salesLevels().find(obj => obj.id === item[_key])?.title }}
                                     </VChip>
                                 </span>
                                 <span v-else-if="_key == 'settle_cycle'">

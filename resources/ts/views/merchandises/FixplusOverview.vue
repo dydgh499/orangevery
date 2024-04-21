@@ -5,7 +5,7 @@ import RegularCreditCard from '@/views/merchandises/regular-credit-cards/Regular
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import type { Merchandise } from '@/views/types'
 import { banks } from '@/views/users/useStore'
-import { axios, getIndexByLevel, getLevelByIndex, getUserLevel, isAbleModiy, user_info } from '@axios'
+import { axios, getIndexByLevel, getLevelByIndex, getUserLevel, isAbleModiy } from '@axios'
 import corp from '@corp'
 import { businessNumValidator, lengthValidator, requiredValidatorV2 } from '@validators'
 interface Props {
@@ -62,16 +62,10 @@ const getSalesSelectRule = (idx: number) => {
 
 initAllSales()
 watchEffect(() => {
-    // 수정가능, 추가상태, 영업점일 경우
-    if(isAbleModiy(props.item.id) && props.item.id === 0 && getUserLevel() < 35) {
-        const idx = getLevelByIndex(getUserLevel())
-        props.item[`sales${idx}_id`] = user_info.value.id
-    }
-})
-watchEffect(() => {
-    if(props.item.id === 0) {
+    if(props.item.id === 0 && isAbleModiy(props.item.id)) {
         autoUpdateMerchandiseInfo(props.item)
-        if(getUserLevel() === 17 || getUserLevel() === 20) {
+        // 대리점, 지사
+        if(getUserLevel() > 10 && getUserLevel() < 35) {
             autoUpdateMerchandiseAgencyInfo(props.item, all_sales)
         }
     }
