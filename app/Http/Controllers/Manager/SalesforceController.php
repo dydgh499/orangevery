@@ -338,24 +338,29 @@ class SalesforceController extends Controller
             return $data;
     }
 
-    private function getParentSalesId($request)
+    private function getParents($request)
     {
-        $idx = globalLevelByIndex($request->user()->level);
+        $parents = [];
 
         $parent_id = $request->user()->parent_id;
         if($parent_id)
         {
+            $idx = globalLevelByIndex($request->user()->level);
             for ($i=$idx; $i < 5; $i++)
             {
-                $parent = $this->salesforces->where('id', $parent_id)->first(['parent_id']);
-                if($parent && $parent->parent_id)
-                    $parent_id = $parent->parent_id;
+                $parent = $this->salesforces->where('id', $parent_id)->first(['id', 'parent_id', 'sales_fee', 'level', 'sales_name', 'is_able_under_modify', 'mcht_batch_fee']);
+                if($parent)
+                    $parents[] = $parent;
+
+                if($parent->parent_id === null)
+                    return $parents;
                 else
-                    return $parent_id;
+                    $parent_id = $parent->parent_id;
             }
+            return $parents;
         }
         else
-            return $request->user()->id;
+            return $parents;
     }
 
     public function classification(Request $request)
@@ -367,8 +372,14 @@ class SalesforceController extends Controller
                 'level_17' => [], 'level_20' => [], 
                 'level_25' => [], 'level_30' => [],
             ];
-            $parent_id = $this->getParentSalesId($request);
-            $sales = $this->salesforces->where('id', $parent_id)->with(['childs'])->first();
+            // parent
+            $parents = $this->getParents($request);
+            foreach($parents as $parent)
+            {
+                $data["level_".$parent->level][] = $parent;
+            }
+            // child, self
+            $sales = $this->salesforces->where('id', $request->user()->id)->with(['childs'])->first();
             $data = $this->getRecursionChilds($data, $sales);
         }
         else

@@ -264,8 +264,8 @@ watchEffect(() => {
                                 <VCardTitle>영업점 수수료</VCardTitle>
                             </VCol>
                             <template v-for="i in 6" :key="i">
-                                <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i)">
-                                    <VRow v-if="isAbleModiy(props.item.id)">
+                                <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i) && (props.item['sales'+(6-i)+'_fee'] > 0)">
+                                    <VRow v-if="isAbleModiy(props.item.id) && isDistMchtFeeMdofiyAble(all_sales)">
                                         <VCol cols="12" md="3">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
                                         <VCol cols="12" :md="props.item.id ? 3 : 4">
                                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item['sales'+(6-i)+'_id']"
@@ -280,7 +280,7 @@ watchEffect(() => {
                                                 </VTooltip>
                                         </VCol>
                                         <VCol cols="12" :md="props.item.id ? 2 : 3">
-                                            <VTextField v-model="props.item['sales'+(6-i)+'_fee'] " type="number" suffix="%"
+                                            <VTextField v-model="props.item['sales'+(6-i)+'_fee']" type="number" suffix="%"
                                                 :rules="[requiredValidatorV2(props.item['sales'+(6-i)+'_fee'], levels['sales'+(6-i)+'_name']+'수수료율')]" 
                                                 :readonly="getUserLevel() <= getIndexByLevel(6-i)"/>
 
