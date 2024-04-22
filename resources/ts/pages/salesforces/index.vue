@@ -8,7 +8,6 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 
-import { isDistAgcyUnderSalesModifyAble, isFixplus } from '@/plugins/fixplus'
 import { getAutoSetting, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import type { Options } from '@/views/types'
 import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios'
@@ -33,12 +32,6 @@ const isSalesforceParemntStructureHideFilter = () => {
     }
     else
         return true
-}
-const isAbleAdd = () => {
-    if(isFixplus())
-        return isAbleModiy(0) && isDistAgcyUnderSalesModifyAble(all_sales)
-    else
-        return isAbleModiy(0)
 }
 
 provide('password', password)
@@ -67,7 +60,7 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="아이디, 영업점 상호 검색" :metas="metas" :add="isAbleAdd()" add_name="영업점" :date_filter_type="DateFilters.NOT_USE">
+        <BaseIndexView placeholder="아이디, 영업점 상호 검색" :metas="metas" :add="isAbleModiy(0)" add_name="영업점" :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                     :sales="isSalesforceParemntStructureHideFilter()">
