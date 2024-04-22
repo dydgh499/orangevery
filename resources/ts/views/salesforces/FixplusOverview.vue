@@ -383,7 +383,7 @@ watchEffect(() => {
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;">
                                         <VCol>
-                                            <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점수수료 변경'" :content="'이 설정 값은 총판, 운영사만 확인가능한 <b>지사</b>고유 설정 값 입니다.<br><br>지사이하 하위 영업점들이 <b>하위 영업점 정보 및 가맹점 수수료</b>를 수정/수정불가하게 설정할 수 있습니다.'">
+                                            <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점수수료 변경'" :content="'이 설정 값은 총판, 운영사만 확인가능한 <b>지사</b>고유 설정 값 입니다.<br><br>지사이하 하위 영업점들이 <b>하위 가맹점 수수료</b>를 수정/수정불가하게 설정할 수 있습니다.'">
                                             </BaseQuestionTooltip>
                                         </VCol>
                                         <VCol md="6">
