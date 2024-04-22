@@ -54,12 +54,12 @@ class Salesforce extends Authenticatable
             ->select();
     }
 
-    // 자식 답변들
+    // 자식 영업점들
     public function childs()
     {
         return $this->hasMany(Salesforce::class, 'parent_id')
             ->with('childs')
-            ->select(['id', 'parent_id', 'sales_fee', 'level', 'sales_name', 'is_able_under_modify']);
+            ->select(['id', 'parent_id', 'sales_fee', 'level', 'sales_name', 'is_able_under_modify', 'mcht_batch_fee']);
     }
 
     public function underAutoSettings()

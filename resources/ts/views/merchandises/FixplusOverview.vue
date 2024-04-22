@@ -5,7 +5,7 @@ import RegularCreditCard from '@/views/merchandises/regular-credit-cards/Regular
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import type { Merchandise } from '@/views/types'
 import { banks } from '@/views/users/useStore'
-import { axios, getIndexByLevel, getLevelByIndex, getUserLevel, isAbleModiy, user_info } from '@axios'
+import { axios, getIndexByLevel, getLevelByIndex, getUserLevel, isAbleModiy } from '@axios'
 import corp from '@corp'
 import { businessNumValidator, lengthValidator, requiredValidatorV2 } from '@validators'
 interface Props {
@@ -67,7 +67,6 @@ watchEffect(() => {
         // 대리점, 지사
         if(getUserLevel() > 10 && getUserLevel() < 35) {
             autoUpdateMerchandiseAgencyInfo(props.item, all_sales)
-            props.item.trx_fee = user_info.value.mcht_batch_fee
         }
     }
 })
@@ -282,7 +281,8 @@ watchEffect(() => {
                                         </VCol>
                                         <VCol cols="12" :md="props.item.id ? 2 : 3">
                                             <VTextField v-model="props.item['sales'+(6-i)+'_fee'] " type="number" suffix="%"
-                                                :rules="[requiredValidatorV2(props.item['sales'+(6-i)+'_fee'], levels['sales'+(6-i)+'_name']+'수수료율')]" />
+                                                :rules="[requiredValidatorV2(props.item['sales'+(6-i)+'_fee'], levels['sales'+(6-i)+'_name']+'수수료율')]" 
+                                                :readonly="getUserLevel() <= getIndexByLevel(6-i)"/>
 
                                             <div style="font-size: 0.8em;">
                                                 <span style="font-weight: bold;">{{ hintSalesSettleFee(props.item, 6-i) }}</span>

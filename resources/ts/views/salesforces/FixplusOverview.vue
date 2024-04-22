@@ -22,7 +22,7 @@ const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 const formatDate = <any>(inject('$formatDate'))
 
-const { sales } = useSalesFilterStore()
+const { sales, all_sales } = useSalesFilterStore()
 
 const is_show = ref(false)
 const is_resident_num_back_show = ref(false)
@@ -50,7 +50,7 @@ const setMchtFee = async () => {
             snackbar.value.show(e.response.data.message, 'error')
             const r = errorHandler(e)
         }
-    }    
+    }
     const res = await post('mcht-fee-direct-apply', {
         'mcht_fee': props.item.mcht_batch_fee,
         'hold_fee': 0,
@@ -111,7 +111,7 @@ const getParentSales = computed(()  => {
 setDefaultLevel()
 watchEffect(() => {
     if(props.item.id === 0) 
-        autoUpdateSalesforceInfo(props.item)
+        autoUpdateSalesforceInfo(props.item, all_sales)
 })
 </script>
 <template>

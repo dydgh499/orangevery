@@ -158,28 +158,46 @@ export const isDistMchtFeeMdofiyAble = (all_sales: Salesforce[][]) => {
 
 // 영업점 수수료 자동업데이트
 export const autoUpdateMerchandiseAgencyInfo = (merchandise: Merchandise, all_sales: Salesforce[][]) => {    
+    const updateMchtFee = (idx: number, dest_sales: Salesforce, merchandise: Merchandise) => {
+        merchandise[`sales${idx}_id`] = dest_sales.id
+        merchandise[`sales${idx}_fee`] = dest_sales.sales_fee
+        if(dest_sales.level === 25)
+            merchandise.trx_fee = dest_sales.mcht_batch_fee
+        return merchandise
+    }
+
     const idx = getLevelByIndex(getUserLevel())
     let dest_sales = user_info.value
+    merchandise = updateMchtFee(idx, dest_sales, merchandise)
 
-    merchandise[`sales${idx}_id`] = dest_sales.id
-    merchandise[`sales${idx}_fee`] = dest_sales.sales_fee
     for (let i = idx; i < 5; i++) 
     {
         let _dest_sales = all_sales[i+1].find(obj => obj.id === dest_sales.parent_id)
         if(_dest_sales) {
-            merchandise[`sales${i+1}_id`] = _dest_sales.id
-            merchandise[`sales${i+1}_fee`] = _dest_sales.sales_fee
+            merchandise = updateMchtFee(i+1, _dest_sales, merchandise)
             dest_sales = _dest_sales
         }
     }
 }
 
 // 영업점 정보 자동업데이트
-export const autoUpdateSalesforceInfo = (salesforce: Salesforce) => {
+export const autoUpdateSalesforceInfo = (salesforce: Salesforce, all_sales: Salesforce[][]) => {
     salesforce.settle_cycle = 0
     salesforce.settle_day = null
     salesforce.settle_tax_type = 0
     salesforce.view_type = 1
+
+    const idx = getLevelByIndex(getUserLevel())
+    let dest_sales = user_info.value
+
+    for (let i = idx; i < 5; i++) 
+    {
+        let _dest_sales = all_sales[i+1].find(obj => obj.id === dest_sales.parent_id)
+        if(_dest_sales) {
+            salesforce.sales_fee = _dest_sales.sales_fee
+            break
+        }
+    }
 }
 
 export const isFixplus = () => corp.id === 30

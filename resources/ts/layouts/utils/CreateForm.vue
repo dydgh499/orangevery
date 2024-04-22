@@ -1,7 +1,7 @@
 a
 <script setup lang="ts">
 
-import { IS_FIXPLUS_AGCY1_MODIFY_ABLE, IS_FIXPLUS_AGCY2_MODIFY_ABLE, isDistAgcyUnderSalesModifyAble, isFixplus } from '@/plugins/fixplus';
+import { IS_FIXPLUS_AGCY1_MODIFY_ABLE, IS_FIXPLUS_AGCY2_MODIFY_ABLE, isFixplus } from '@/plugins/fixplus';
 import { useRequestStore } from '@/views/request';
 import { useSalesFilterStore } from '@/views/salesforces/useStore';
 import type { Tab } from '@/views/types';
@@ -51,12 +51,8 @@ const authHideConditions = () => {
             else
                 return false
         }
-        else {
-            if(isFixplus())
-                return isAbleModiy(props.id as number) && isDistAgcyUnderSalesModifyAble(all_sales)
-            else
-                return isAbleModiy(props.id as number)
-        }
+        else 
+            return isAbleModiy(props.id as number)
     }
     else
         return true
