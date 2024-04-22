@@ -60,6 +60,15 @@ const getSalesSelectRule = (idx: number) => {
         return []
 }
 
+const validateSalesFee = (idx: number) => {
+    if(idx < 5 && getUserLevel() < 35) {
+        if(props.item[`sales${idx+1}_fee`] < props.item[`sales${idx}_fee`]) {
+            snackbar.value.show(levels[`sales${idx}_name`] +"수수료는 "+levels[`sales${idx+1}_name`]+"수수료보다 같거나 커야합니다.", 'warning')
+            props.item[`sales${idx}_fee`] = props.item[`sales${idx+1}_fee`]
+        }
+    }
+}
+
 initAllSales()
 watchEffect(() => {
     if(props.item.id === 0 && isAbleModiy(props.item.id)) {
@@ -257,7 +266,6 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <!-- 👉 상위 영업점 수수료율 -->
                         <template v-if="getUserLevel() > 10 && isFixplusAgency() === false">
                             <VDivider/>
                             <VCol cols="12">
@@ -282,7 +290,8 @@ watchEffect(() => {
                                         <VCol cols="12" :md="props.item.id ? 2 : 3">
                                             <VTextField v-model="props.item['sales'+(6-i)+'_fee']" type="number" suffix="%"
                                                 :rules="[requiredValidatorV2(props.item['sales'+(6-i)+'_fee'], levels['sales'+(6-i)+'_name']+'수수료율')]" 
-                                                :readonly="getUserLevel() <= getIndexByLevel(6-i)"/>
+                                                :readonly="getUserLevel() <= getIndexByLevel(6-i)"
+                                                @update:modelValue="validateSalesFee(6-i)"/>
 
                                             <div style="font-size: 0.8em;">
                                                 <span style="font-weight: bold;">{{ hintSalesSettleFee(props.item, 6-i) }}</span>
