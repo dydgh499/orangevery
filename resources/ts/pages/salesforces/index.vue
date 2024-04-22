@@ -143,6 +143,9 @@ onMounted(() => {
                                             {{ setting }}
                                         </option>
                                     </select>
+                                </span>                                
+                                <span v-else-if="_key == 'sales_fee'">
+                                    {{ item[_key].toLocaleString() }}%
                                 </span>
                                 <span v-else-if="_key == 'settle_day'">
                                     {{ all_days.find(sales => sales.id === item[_key])?.title }}

@@ -202,7 +202,6 @@ export const getFixplusMchtHeader = () => {
     headers['acct_num'] = '계좌번호'    
     headers['acct_name'] = '예금주'
     headers['trx_fee'] = '수수료'
-    headers['hold_fee'] = '유보금 수수료'
     return headers
 }
 
@@ -215,10 +214,7 @@ export const getFixplusSalesHeader = () => {
     }
     if(getUserLevel() >= 35)
         headers['is_able_modify_mcht'] = '가맹점 수정권한'
-    headers['view_type'] = '화면타입'
-    headers['settle_cycle'] = '정산 주기'
-    headers['settle_day'] = '정산 요일'
-    headers['settle_tax_type'] = '정산 세율'
+    headers['sales_fee'] = '영업점 수수료'
     Object.assign(headers, {
         'nick_name' : '대표자명',
         'phone_num' : '연락처',
