@@ -276,6 +276,7 @@ Route::prefix('v1')->group(function() {
                 Route::post('tid-create', [PaymentModuleController::class, 'tidCreate']);
                 Route::post('mid-create', [PaymentModuleController::class, 'midCreate']);
                 Route::post('mid-bulk-create', [PaymentModuleController::class, 'midBulkCreate']);
+                Route::post('tid-bulk-create', [PaymentModuleController::class, 'tidBulkCreate']);
                 Route::post('pay-key-create', [PaymentModuleController::class, 'payKeyCreate']);
                 Route::post('bulk-register', [PaymentModuleController::class, 'bulkRegister']);
                 Route::post('pg-bulk-updater', [PaymentModuleController::class, 'bulkRegisterPG']);

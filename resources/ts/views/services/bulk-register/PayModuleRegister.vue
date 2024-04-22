@@ -21,6 +21,7 @@ const { head, headers, isPrimaryHeader } = useRegisterStore()
 const { mchts } = useSalesFilterStore()
 
 const use_mid_create = ref(Number(corp.pv_options.paid.use_mid_create))
+const use_tid_create = ref(0)
 const use_online_pay = ref(0)
 const all_levels = [{ id: 10, title: '가맹점' }, ...salesLevels()]
 const auth_types: Options[] = [
@@ -43,7 +44,7 @@ const midCreateDlg = ref()
 const settleTypeExplain = ref()
 const pgExplain = ref()
 
-const validate = () => {
+const validate = async () => {
     var date_regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
     
     for (let i = 0; i < items.value.length; i++) {
@@ -149,7 +150,9 @@ const validate = () => {
     is_clear.value = true
 
     if(corp.pv_options.paid.use_mid_create && use_mid_create.value)
-        midCreater()
+        await midCreater()
+    if(corp.pv_options.paid.use_tid_create && use_tid_create.value)
+        await tidCreater()
     if(corp.pv_options.paid.use_online_pay && use_online_pay.value)
        payKeyCreater()
 }
@@ -169,6 +172,31 @@ const midCreater = async () => {
         }
         snackbar.value.show('MID들이 발급 되었습니다.', 'success')
     }
+}
+
+const tidCreater = async () => {
+    snackbar.value.show('TID들을 자동 발급 중입니다.', 'primary')
+    const unique_pgids = [
+        ...new Set(
+            items.value
+            .filter(item => (item?.tid === undefined || item?.tid?.trim() === ''))
+            .map(item => item.pg_id)
+        )
+    ];
+    const group_by_pgids = unique_pgids.map(pg_id => ({
+        pg_id,
+        pg_type: pgs.find(item => item.id === pg_id)?.pg_type,
+        count: items.value.filter(item => item.pg_id === pg_id).length
+    }));
+    const r = await axios.post('/api/v1/manager/merchandises/pay-modules/tid-bulk-create', {groups: group_by_pgids})
+    const new_tid_gruops = r.data
+    for (let i = 0; i < items.value.length; i++) {
+        let idx = new_tid_gruops.findIndex(obj => obj.pg_id === items.value[i].pg_id)
+        if(idx !== null && new_tid_gruops[idx]['new_tids'].length) {
+            items.value[i].tid = new_tid_gruops[idx]['new_tids'].shift()
+        }
+    }
+    snackbar.value.show('TID들이 발급 되었습니다.', 'success')
 }
 
 const payKeyCreater = () => {
@@ -201,7 +229,7 @@ const payModRegister = async () => {
 watchEffect(async () => {
     if (excel.value) {
         items.value = await ExcelReader(headers, excel.value[0]) as PayModule[]
-        validate()
+        await validate()
     }
 })
 </script>
@@ -220,6 +248,7 @@ watchEffect(async () => {
                 </template>
                 <template #input>
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="use_mid_create" label="MID 자동발급 여부" color="primary" v-if="corp.pv_options.paid.use_mid_create"/>
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="use_tid_create" label="TID 자동발급 여부" color="primary" v-if="corp.pv_options.paid.use_tid_create"/>
                     <VSwitch hide-details :false-value=0 :true-value=1 v-model="use_online_pay" label="PAY KEY 자동발급 여부" color="primary" v-if="corp.pv_options.paid.use_online_pay"/>
                 </template>
             </CreateHalfVCol>
