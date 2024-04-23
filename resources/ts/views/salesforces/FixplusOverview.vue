@@ -360,7 +360,7 @@ watchEffect(() => {
                                         <VCol>기본 수수료</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.sales_fee" type="number" suffix="%" :rules="[requiredValidatorV2(props.item.sales_fee, '기본 수수료')]"
-                                            :readonly="props.item.id === 0 || (getUserLevel() > 35 || (getUserLevel() > props.item.level))"/>
+                                            :readonly="props.item.id !== 0 || (getUserLevel() <= props.item.level)"/>
                                         </VCol>
                                     </VRow>
                                 </VCol>
