@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
 import { useSearchStore } from '@/views/transactions/settle/cancel-deposits/useStore'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { DateFilters } from '@core/enums'
 
 const { 
