@@ -348,7 +348,10 @@ class SalesforceController extends Controller
             $idx = globalLevelByIndex($request->user()->level);
             for ($i=$idx; $i < 5; $i++)
             {
-                $parent = $this->salesforces->where('id', $parent_id)->first(['id', 'parent_id', 'sales_fee', 'level', 'sales_name', 'is_able_under_modify', 'mcht_batch_fee']);
+                $parent = $this->salesforces
+                    ->where('id', $parent_id)
+                    ->where('is_delete', false)
+                    ->first(['id', 'parent_id', 'sales_fee', 'level', 'sales_name', 'is_able_under_modify', 'mcht_batch_fee']);
                 if($parent)
                     $parents[] = $parent;
 

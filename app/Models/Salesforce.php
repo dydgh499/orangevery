@@ -58,6 +58,7 @@ class Salesforce extends Authenticatable
     public function childs()
     {
         return $this->hasMany(Salesforce::class, 'parent_id')
+            ->where('is_delete', false)
             ->with('childs')
             ->select(['id', 'parent_id', 'sales_fee', 'level', 'sales_name', 'is_able_under_modify', 'mcht_batch_fee']);
     }

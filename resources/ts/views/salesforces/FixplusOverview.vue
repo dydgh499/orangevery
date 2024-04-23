@@ -359,7 +359,8 @@ watchEffect(() => {
                                     <VRow no-gutters style="align-items: center;">
                                         <VCol>기본 수수료</VCol>
                                         <VCol md="8">
-                                            <VTextField v-model="props.item.sales_fee" type="number" suffix="%" :rules="[requiredValidatorV2(props.item.sales_fee, '기본 수수료')]"/>
+                                            <VTextField v-model="props.item.sales_fee" type="number" suffix="%" :rules="[requiredValidatorV2(props.item.sales_fee, '기본 수수료')]"
+                                            :readonly="props.item.id === 0 || (getUserLevel() > 35 || (getUserLevel() > props.item.level))"/>
                                         </VCol>
                                     </VRow>
                                 </VCol>
@@ -395,7 +396,7 @@ watchEffect(() => {
                                         </VCol>
                                     </VRow>
                                 </VCol>
-                                <VCol cols="12" md="6">
+                                <VCol cols="12" md="6" v-if="props.item.id">
                                     <VRow no-gutters style="align-items: center;">
                                         <VCol>가맹점 수수료 일괄적용</VCol>
                                         <VCol md="3">
