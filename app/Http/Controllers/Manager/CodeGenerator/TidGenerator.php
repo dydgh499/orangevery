@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager\CodeGenerator;
 
 use App\Http\Controllers\Manager\CodeGenerator\GeneratorInterface;
 use App\Models\PaymentModule;
+use App\Models\PaymentGateway;
 use Carbon\Carbon;
 
 class TidGenerator implements GeneratorInterface
@@ -14,10 +15,13 @@ class TidGenerator implements GeneratorInterface
         $date = date('ym');
 
         $cur_month = Carbon::now()->startOfMonth();
-        $next_month = $cur_month->copy()->addMonth(1)->startOfMonth()->format('Y-m-d');
-        $cur_month = $cur_month->format('Y-m-d');
-        return PaymentModule::where('created_at', '>=', $cur_month)
+        $next_month = $cur_month->copy()->addMonth(1)->startOfMonth()->format('Y-m-d 23:59:59');
+        $cur_month = $cur_month->format('Y-m-d 00:00:00');
+
+        $pay_modules = PaymentModule::where('is_delete', false)
+            ->where('created_at', '>=', $cur_month)
             ->where('created_at', '<', $next_month)
+            ->whereIn('pg_id', PaymentGateway::where('is_delete', false)->where('pg_type', $pg_type)->pluck('id')->all())
             ->get(['tid']);
 
         $pattern = '/^'.$pg_type.$date.'[0-9]{4}$/';
