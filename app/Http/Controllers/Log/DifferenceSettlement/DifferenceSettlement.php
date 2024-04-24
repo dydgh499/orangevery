@@ -86,11 +86,11 @@ class DifferenceSettlement
                 $total_count += $count;    
                 $total_amount += $amount;
 
-                if($this->service_name === 'danal')
+                if($this->service_name === 'danal' || $this->service_name === 'nicepay')
                     $sub_count += 2;  //header, total records
             }
         }
-        if($this->service_name === 'danal')
+        if($this->service_name === 'danal' || $this->service_name === 'nicepay')
             $sub_count += 2;  // start, end records
         $full_record .= $this->setEndRecord($total_count + $sub_count, $total_amount);
 

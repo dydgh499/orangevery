@@ -268,7 +268,7 @@ class DifferenceSettlementHistoryController extends Controller
     static public function differenceSettleRequestTest()
     {
         //DifferenceSettlementHistoryController::differenceSettleRequestTest()
-        $ds_id      = 2;
+        $ds_id      = 3;
         $date       = Carbon::now();
         $yesterday  = $date->copy()->subDay(0)->format('Y-m-d');
 
