@@ -395,7 +395,7 @@ class SalesforceController extends Controller
                     ->where('brand_id', $request->user()->brand_id)
                     ->where('is_delete', false)
                     ->with(['underAutoSettings'])
-                    ->get(['id', 'sales_name', 'level'])
+                    ->get(['id', 'sales_name', 'level', 'settle_tax_type'])
                     ->groupBy('level');
 
                 if(isSalesforce($request))

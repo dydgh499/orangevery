@@ -282,7 +282,6 @@ watchEffect(() => {
                                                 item-title="sales_name" item-value="id" persistent-hint single-line prepend-inner-icon="ph:share-network"
                                                 :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])" :readonly="getUserLevel() <= getIndexByLevel(6-i)"
                                                 :rules="getSalesSelectRule(i)"/>
-
                                                 <VTooltip activator="parent" location="top" v-if="props.item['sales'+(6-i)+'_id']">
                                                     {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
                                                 </VTooltip>

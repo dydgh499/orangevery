@@ -24,7 +24,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const { post } = useRequestStore()
-const { sales, all_sales, initAllSales, sales_apply_histories, hintSalesApplyFee, hintSalesSettleFee } = useSalesFilterStore()
+const { sales, all_sales, initAllSales, sales_apply_histories, hintSalesApplyFee, hintSalesSettleFee, hintSalesSettleTaxTypeText } = useSalesFilterStore()
 const { cus_filters } = useStore()
 
 const alert = <any>(inject('alert'))
@@ -207,14 +207,18 @@ watchEffect(() => {
 
                                                 <VTooltip activator="parent" location="top" v-if="props.item['sales'+(6-i)+'_id']">
                                                     {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
-                                                </VTooltip>
+                                                </VTooltip>                                                
                                         </VCol>
                                         <VCol cols="12" :md="props.item.id ? 2 : 3">
                                             <VTextField v-model="props.item['sales'+(6-i)+'_fee'] " type="number" suffix="%"
                                                 :rules="[requiredValidatorV2(props.item['sales'+(6-i)+'_fee'], levels['sales'+(6-i)+'_name']+'수수료율')]" />
 
-                                            <div style="font-size: 0.8em;">
-                                                <span style="font-weight: bold;">{{ hintSalesSettleFee(props.item, 6-i) }}</span>
+                                            <div style="font-size: 0.8em; font-weight: bold; text-align: center;" v-if="props.item['sales'+(6-i)+'_id']">
+                                                <span>{{ hintSalesSettleFee(props.item, 6-i) }}</span>
+                                                <br>
+                                                <span>
+                                                    ({{ hintSalesSettleTaxTypeText(props.item['sales'+(6-i)+'_id'], all_sales[(6-i)]) }})
+                                                </span>
                                             </div>
                                         </VCol>
                                         <FeeChangeBtn v-if="props.item.id" :level=getIndexByLevel(6-i) :item="props.item">

@@ -6,7 +6,7 @@ import corp from '@corp';
 import { cloneDeep } from 'lodash';
 
 
-const StatusColorSetter = () => {
+export const StatusColorSetter = () => {
     const booleanTypeColor = (type: boolean | null) => {
         return Boolean(type) ? "default" : "success";
     };

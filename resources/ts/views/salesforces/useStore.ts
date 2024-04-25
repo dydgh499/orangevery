@@ -182,6 +182,15 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
             return ''
     }
 
+    const hintSalesSettleTaxType = (sales_id: number, sales:Salesforce[]) => {
+        return sales.find(obj => obj.id === sales_id)?.settle_tax_type as number
+    }
+
+    const hintSalesSettleTaxTypeText = (sales_id: number, sales:Salesforce[]) => {
+        const settle_tax_type = hintSalesSettleTaxType(sales_id, sales)
+        return settleTaxTypes().find(obj => obj.id === settle_tax_type)?.title
+    }
+
     const hintSalesSettleFee = (mcht: Merchandise, sales_id: number): string => {
         const levels = corp.pv_options.auth.levels
         const dest_key = `sales${sales_id}`;
@@ -190,8 +199,8 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
             for (let i = sales_id-1; i > -1; i--) 
             {
                 const sales_key = `sales${i}`
-                if(levels[`${sales_key}_use`] && mcht[`sales${i}_id`]) {
-                    under_fee = mcht[`sales${i}_fee`]
+                if(levels[`${sales_key}_use`] && mcht[`${sales_key}_id`]) {
+                    under_fee = mcht[`${sales_key}_fee`]
                     break
                 }
             }
@@ -312,6 +321,8 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
         hintSalesApplyFee,
         hintSalesSettleFee,
         findSalesName,
+        hintSalesSettleTaxType,
+        hintSalesSettleTaxTypeText,
     }
 })
 
