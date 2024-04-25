@@ -8,9 +8,8 @@ import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderA
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import type { Options, Salesforce } from '@/views/types'
 
-import { autoUpdateSalesforceInfo } from '@/plugins/fixplus'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
-import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios'
+import { getUserLevel, isAbleModiy, salesLevels } from '@axios'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
 
@@ -50,25 +49,9 @@ const getSalesLevel = () => {
     }
 }
 
-const initParentSales = () => {
-    if(props.item.id === 0 && corp.pv_options.paid.sales_parent_structure)
-        props.item.parent_id = null
-}
-const getParentSales = computed(()  => {
-    const idx = getLevelByIndex(props.item.level)
-    if(idx < 5) {
-        return sales[idx+1].value
-    }
-    else
-        return []
-})
 if(props.item.id === 0 && getSalesLevel().length > 0)
     props.item.level = getSalesLevel()[0].id as number
 
-watchEffect(() => {
-    if(isFixplus() && props.item.id === 0) 
-        autoUpdateSalesforceInfo(props.item)
-})
 </script>
 <template>
     <VRow>
@@ -166,32 +149,6 @@ watchEffect(() => {
                                     <VRow v-else>
                                         <VCol class="font-weight-bold">등급</VCol>
                                         <VCol md="8"><span>{{ salesLevels().find(obj => obj.id === props.item.level).title }}</span></VCol>
-                                    </VRow>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        
-                        <VCol cols="12" v-if="isAbleModiy(props.item.id) && corp.pv_options.paid.sales_parent_structure">
-                            <VRow>
-                                <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;">
-                                        <VCol>기본 수수료</VCol>
-                                        <VCol md="8">
-                                            <VTextField v-model="props.item.sales_fee" type="number" suffix="%" :rules="[requiredValidatorV2(props.item.sales_fee, '기본 수수료')]"/>
-                                        </VCol>
-                                    </VRow>
-                                </VCol>
-                                <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;">
-                                        <VCol>상위 영업점</VCol>
-                                        <VCol md="8">
-                                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.parent_id"
-                                                :items="getParentSales"
-                                                :label="'상위영업점 선택'"
-                                                item-title="sales_name" item-value="id" persistent-hint single-line prepend-inner-icon="ph:share-network" 
-                                                :rules="props.item.level < 30 ? [requiredValidatorV2(props.item.parent_id, '상위 영업점')] : []"
-                                                />
-                                        </VCol>
                                     </VRow>
                                 </VCol>
                             </VRow>

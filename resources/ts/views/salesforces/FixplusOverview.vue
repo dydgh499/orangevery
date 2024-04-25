@@ -99,6 +99,7 @@ const initParentSales = () => {
     if(props.item.id === 0 && corp.pv_options.paid.sales_parent_structure)
         props.item.parent_id = null
 }
+
 const getParentSales = computed(()  => {
     const idx = getLevelByIndex(props.item.level)
     if(idx < 5) {
@@ -127,8 +128,8 @@ const TrxFeeReadonly = () => {
 
 setDefaultLevel()
 watchEffect(() => {
-    if(props.item.id === 0) 
-        autoUpdateSalesforceInfo(props.item, all_sales)
+    if(props.item.id === 0 )
+        autoUpdateSalesforceInfo(props.item)
 })
 </script>
 <template>

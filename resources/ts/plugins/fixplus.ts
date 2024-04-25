@@ -181,22 +181,14 @@ export const autoUpdateMerchandiseAgencyInfo = (merchandise: Merchandise, all_sa
 }
 
 // 영업점 정보 자동업데이트
-export const autoUpdateSalesforceInfo = (salesforce: Salesforce, all_sales: Salesforce[][]) => {
+export const autoUpdateSalesforceInfo = (salesforce: Salesforce) => {
     salesforce.settle_cycle = 0
     salesforce.settle_day = null
     salesforce.settle_tax_type = 0
     salesforce.view_type = 1
 
-    const idx = getLevelByIndex(getUserLevel())
-    let dest_sales = user_info.value
-
-    for (let i = idx; i < 5; i++) 
-    {
-        let _dest_sales = all_sales[i+1].find(obj => obj.id === dest_sales.parent_id)
-        if(_dest_sales) {
-            salesforce.sales_fee = _dest_sales.sales_fee
-            break
-        }
+    if(getUserLevel() <= 30) {
+        salesforce.sales_fee = user_info.value.sales_fee
     }
 }
 
