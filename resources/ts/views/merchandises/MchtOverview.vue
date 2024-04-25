@@ -24,7 +24,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const { post } = useRequestStore()
-const { sales, all_sales, initAllSales, sales_apply_histories, hintSalesApplyFee, hintSalesSettleFee, hintSalesSettleTaxTypeText } = useSalesFilterStore()
+const { sales, all_sales, initAllSales, sales_apply_histories, hintSalesApplyFee, hintSalesSettleFee, hintSalesSettleTaxTypeText, hintSalesSettleTotalFee } = useSalesFilterStore()
 const { cus_filters } = useStore()
 
 const alert = <any>(inject('alert'))
@@ -209,7 +209,7 @@ watchEffect(() => {
                                                     {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
                                                 </VTooltip>                                                
                                         </VCol>
-                                        <VCol cols="12" :md="props.item.id ? 2 : 3">
+                                        <VCol cols="12" :md="props.item.id ? 3 : 4">
                                             <VTextField v-model="props.item['sales'+(6-i)+'_fee'] " type="number" suffix="%"
                                                 :rules="[requiredValidatorV2(props.item['sales'+(6-i)+'_fee'], levels['sales'+(6-i)+'_name']+'수수료율')]" />
 
@@ -217,7 +217,8 @@ watchEffect(() => {
                                                 <span>{{ hintSalesSettleFee(props.item, 6-i) }}</span>
                                                 <br>
                                                 <span>
-                                                    ({{ hintSalesSettleTaxTypeText(props.item['sales'+(6-i)+'_id'], all_sales[(6-i)]) }})
+                                                    ({{ hintSalesSettleTaxTypeText(props.item, 6-i, all_sales[(6-i)]) }})
+                                                    = {{ hintSalesSettleTotalFee(props.item, 6-i, all_sales[(6-i)]) }}%
                                                 </span>
                                             </div>
                                         </VCol>
@@ -249,7 +250,7 @@ watchEffect(() => {
                                         <VTextField v-model="props.item.trx_fee" type="number" suffix="%"
                                             :rules="[requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율')]" v-if="isAbleModiy(props.item.id)"/>
                                     </VCol>
-                                    <VCol cols="12" :md="props.item.id ? 2 : 3">
+                                    <VCol cols="12" :md="props.item.id ? 3 : 4">
                                         <VTextField v-model="props.item.hold_fee" type="number" suffix="%"
                                             :rules="[requiredValidatorV2(props.item.hold_fee, '가맹점 유보금')]" v-if="isAbleModiy(props.item.id)"  />
                                     </VCol>

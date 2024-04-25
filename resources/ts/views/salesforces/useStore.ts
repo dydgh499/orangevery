@@ -186,17 +186,36 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
         return sales.find(obj => obj.id === sales_id)?.settle_tax_type as number
     }
 
-    const hintSalesSettleTaxTypeText = (sales_id: number, sales:Salesforce[]) => {
-        const settle_tax_type = hintSalesSettleTaxType(sales_id, sales)
+    const hintSalesSettleTaxTypeText = (mcht: Merchandise, sales_idx: number, sales:Salesforce[]) => {
+        const settle_tax_type = hintSalesSettleTaxType(mcht[`sales${sales_idx}_id`], sales)
         return settleTaxTypes().find(obj => obj.id === settle_tax_type)?.title
     }
 
-    const hintSalesSettleFee = (mcht: Merchandise, sales_id: number): string => {
+    
+    const hintSalesSettleTotalFee = (mcht: Merchandise, sales_idx: number, sales:Salesforce[]) => {
+        let trx_fee = Number(hintSalesSettleFee(mcht, sales_idx).replace('정산수수료: ', '').replace('%', ''))
+        const settle_tax_type = hintSalesSettleTaxType(mcht[`sales${sales_idx}_id`], sales)
+        switch(settle_tax_type) {
+            case 1:
+                trx_fee *= 0.967;
+                break;
+            case 2:
+                trx_fee *= 0.9;
+                break;
+            case 3:
+                trx_fee *= 0.9;
+                trx_fee *= 0.967;
+                break;
+        }
+        return trx_fee.toFixed(4)
+    }
+
+    const hintSalesSettleFee = (mcht: Merchandise, sales_idx: number): string => {
         const levels = corp.pv_options.auth.levels
-        const dest_key = `sales${sales_id}`;
+        const dest_key = `sales${sales_idx}`;
         if (levels[`${dest_key}_use`] && mcht[`${dest_key}_id`]) {
             let under_fee = -1;
-            for (let i = sales_id-1; i > -1; i--) 
+            for (let i = sales_idx-1; i > -1; i--) 
             {
                 const sales_key = `sales${i}`
                 if(levels[`${sales_key}_use`] && mcht[`${sales_key}_id`]) {
@@ -207,7 +226,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
             if(under_fee === -1) 
                 under_fee = mcht.trx_fee
 
-            mcht[`${dest_key}_settlement_fee`] = (under_fee - mcht[`${dest_key}_fee`]).toFixed(3)
+            mcht[`${dest_key}_settlement_fee`] = (under_fee - mcht[`${dest_key}_fee`]).toFixed(4)
             return `정산수수료: ${mcht[`${dest_key}_settlement_fee`]}%`
         }
         else {
@@ -323,6 +342,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
         findSalesName,
         hintSalesSettleTaxType,
         hintSalesSettleTaxTypeText,
+        hintSalesSettleTotalFee,
     }
 })
 
