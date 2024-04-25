@@ -6,7 +6,7 @@ import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import type { Options, Salesforce } from '@/views/types'
 import { banks } from '@/views/users/useStore'
 
-import { autoUpdateSalesforceInfo } from '@/plugins/fixplus'
+import { autoUpdateSalesforceInfo, isDistMchtFeeMdofiyAble } from '@/plugins/fixplus'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { axios, getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios'
 import corp from '@corp'
@@ -107,6 +107,23 @@ const getParentSales = computed(()  => {
     else
         return []
 })
+
+const TrxFeeReadonly = () => {
+    if(getUserLevel() >= 30)
+        return true
+    else
+    {
+        if(props.item.id !== 0) {
+            if(getUserLevel() <= props.item.level)
+                return false
+            else
+                return true
+        }
+        else {
+            return isDistMchtFeeMdofiyAble(all_sales)
+        }
+    }
+}
 
 setDefaultLevel()
 watchEffect(() => {
@@ -360,7 +377,7 @@ watchEffect(() => {
                                         <VCol>기본 수수료</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.sales_fee" type="number" suffix="%" :rules="[requiredValidatorV2(props.item.sales_fee, '기본 수수료')]"
-                                            :readonly="props.item.id !== 0 || (getUserLevel() <= props.item.level)"/>
+                                            :readonly="!TrxFeeReadonly()"/>
                                         </VCol>
                                     </VRow>
                                 </VCol>
