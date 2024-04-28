@@ -266,7 +266,7 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <template v-if="getUserLevel() > 10 && isFixplusAgency() === false">
+                        <template v-if="getUserLevel() >= 35 && isFixplusAgency() === false">
                             <VDivider/>
                             <VCol cols="12">
                                 <VCardTitle>영업점 수수료</VCardTitle>
