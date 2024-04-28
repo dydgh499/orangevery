@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Manager\Transaction;
 
-use App\Models\PaymentModule;
+use App\Models\Merchandise;
 use App\Models\Transaction;
 use App\Models\Salesforce;
 use App\Http\Traits\ManagerTrait;
@@ -1125,7 +1125,7 @@ class TransactionSummaryController extends Controller
         ];
         foreach($datas as $data)
         {
-            $res = PaymentModule::where('mcht_id', $data[0])
+            $res = Merchandise::where('id', $data[0])
                 ->where('brand_id', 13)->update([
                 'sales1_fee' => $data[1],
                 'sales2_fee' => $data[2],
