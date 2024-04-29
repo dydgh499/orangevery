@@ -73,6 +73,7 @@ export const isRetryAble = (item: Transaction) => {
 }
 
 export const useSearchStore = defineStore('transSearchStore', () => {    
+    const snackbar = <any>(inject('snackbar'))
     const store = Searcher('transactions')
     const head  = Header('transactions', '매출 관리')    
     const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
@@ -218,6 +219,11 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     }
 
     const exporter = async (type: number) => {      
+        let count = metas.value[2]['subtitle'].replaceAll('건', '')
+        if(Number(count.replaceAll(',', '')) > 100000) {
+            snackbar.value.show('10만개 이상 다운로드 할 수 없습니다. 검색 폭을 줄여주세요.', 'warning')
+            return
+        }
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         printer(type, r.data.content)
     }
@@ -233,7 +239,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
             datas[i]['custom_id'] = cus_filters.find(cus => cus.id === datas[i]['custom_id'])?.name as string
             datas[i]['mcht_settle_type'] = settle_types.find(settle_type => settle_type.id === datas[i]['mcht_settle_type'])?.name as string
             datas[i]['resident_num'] = datas[i]['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
-            
+
             datas[i]['settle_id'] = settleIdCol(datas[i], store.params.level) === null ? '정산안함' : "#"+settleIdCol(datas[i], store.params.level)
 
             
