@@ -170,19 +170,19 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>가맹점 연락처</VCol>
+                                        <VCol>* 사업장 연락처</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.contact_num" prepend-inner-icon="tabler-building-store"
-                                            placeholder="상호를 입력해주세요" persistent-placeholder type="number" />
+                                            placeholder="사업장 연락처를 입력해주세요" persistent-placeholder type="number" 
+                                            :rules="[requiredValidatorV2(props.item.contact_num, '사업장 연락처')]"/>
                                         </VCol>
                                     </VRow>
                                     <VRow v-else>
-                                        <VCol class="font-weight-bold">가맹점 연락처</VCol>
+                                        <VCol class="font-weight-bold">사업장 연락처</VCol>
                                         <VCol md="8"><span>{{ props.item.contact_num }}</span></VCol>
                                     </VRow>
                                 </VCol>
@@ -197,7 +197,7 @@ watchEffect(() => {
                             <template v-for="i in 6" :key="i">
                                 <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i)">
                                     <VRow v-if="isAbleModiy(props.item.id)">
-                                        <VCol cols="12" md="3">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
+                                        <VCol cols="12" md="3">* {{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
                                         <VCol cols="12" :md="props.item.id ? 3 : 4">
                                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item['sales'+(6-i)+'_id']"
                                                 :items="sales[6-i].value"
@@ -244,7 +244,7 @@ watchEffect(() => {
                         <VCol cols="12">
                             <VRow v-if="isAbleModiy(props.item.id)">
                                 <VCol cols="12" md="3">
-                                    가맹점/유보금 수수료율
+                                    * 가맹점/유보금 수수료율
                                 </VCol>
                                     <VCol cols="12" :md="props.item.id ? 3 : 4">
                                         <VTextField v-model="props.item.trx_fee" type="number" suffix="%"
@@ -342,7 +342,7 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol :md="6" v-if="corp.pv_options.paid.use_withdraw_fee">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>출금 수수료</VCol>
+                                        <VCol>* 출금 수수료</VCol>
                                         <VCol md="6">
                                             <div class="batch-container">
                                             <VTextField v-model="props.item.withdraw_fee" type="number" suffix="₩"
@@ -382,14 +382,14 @@ watchEffect(() => {
                                     <VCol>
                                         <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                             <VCol>
-                                            <BaseQuestionTooltip :location="'top'" :text="'모아서 출금 수수료'"
+                                            <BaseQuestionTooltip :location="'top'" :text="'* 모아서 출금 수수료'"
                                                 :content="'모아서 출금 사용시마다 적용되는 수수료 입니다.'">
                                             </BaseQuestionTooltip>
                                         </VCol>
                                             <VCol md="6">
                                                 <div class="batch-container">     
-                                            <VTextField v-model="props.item.collect_withdraw_fee" type="number" suffix="₩"
-                                                :rules="[requiredValidatorV2(props.item.collect_withdraw_fee, '모아서 출금')]" />
+                                                    <VTextField v-model="props.item.collect_withdraw_fee" type="number" suffix="₩"
+                                                        :rules="[requiredValidatorV2(props.item.collect_withdraw_fee, '모아서 출금')]" />
                                                 </div>
                                             </VCol>
                                         </VRow>

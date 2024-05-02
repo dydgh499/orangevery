@@ -107,7 +107,7 @@ watchEffect(() => {
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
                                 <VCol>
-                                    <label>휴대폰번호</label>
+                                    <label>대표자 연락처</label>
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField v-model="props.item.phone_num" type="text"
@@ -116,7 +116,7 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold">휴대폰번호</VCol>
+                                <VCol class="font-weight-bold">대표자 연락처</VCol>
                                 <VCol md="8"><span>{{ props.item.phone_num }}</span></VCol>
                             </VRow>
                         </VCol>
@@ -206,8 +206,7 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol md="10">
                                     <VTextField id="acctNumHorizontalIcons" v-model="props.item.acct_num"
-                                prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력" persistent-placeholder maxlength="20" 
-                                :rules="[requiredValidatorV2(props.item.acct_num, '계좌번호')]" />
+                                    prepend-inner-icon="ri-bank-card-fill" placeholder="계좌번호 입력" persistent-placeholder maxlength="20" />
                                 </VCol>
                             </VRow>
                             <VRow v-else>
@@ -226,12 +225,11 @@ watchEffect(() => {
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
                                 <VCol>
-                                    <label>* 예금주</label>
+                                    <label>예금주</label>
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField v-model="props.item.acct_name"
-                                    prepend-inner-icon="tabler-user" placeholder="예금주 입력" persistent-placeholder maxlength="40" 
-                                    :rules="[requiredValidatorV2(props.item.acct_name, '예금주')]"/>
+                                    prepend-inner-icon="tabler-user" placeholder="예금주 입력" persistent-placeholder maxlength="40" />
                                 </VCol>
                             </VRow>
                             <VRow v-else>
@@ -248,8 +246,8 @@ watchEffect(() => {
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.acct_bank_code"
                                     :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
                                     label="은행 선택" item-title="title" item-value="code" persistent-hint single-line
-                                    :hint="`${props.item.acct_bank_name}, 은행 코드: ${props.item.acct_bank_code ? props.item.acct_bank_code : '000'} `"
-                                    :rules="[requiredValidatorV2(props.item.acct_bank_code, '은행')]" @update:modelValue="setAcctBankName()" />
+                                    :hint="`${props.item.acct_bank_name}, 은행 코드: ${props.item.acct_bank_code ? props.item.acct_bank_code : '000'} `" 
+                                    @update:modelValue="setAcctBankName()" />
                                 </VCol>
                             </VRow>
                             <VRow v-else>
