@@ -3,7 +3,12 @@ import { installments, module_types } from '@/views/merchandises/pay-modules/use
 import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { Danger } from '@/views/types'
+import { Options } from '@/views/types'
 import { getUserLevel } from '@axios'
+
+export const danger_types = <Options[]>([
+    {id:0, title:'중복결제'}, {id:1, title:'한도초과'}, {id:2, title:'할부초과'}
+])
 
 export const useSearchStore = defineStore('dangerSearchStore', () => {    
     const store = Searcher('transactions/dangers')
@@ -53,7 +58,7 @@ export const useSearchStore = defineStore('dangerSearchStore', () => {
             datas[i]['ps_id'] =  pss.find(ps => ps['id'] === datas[i]['ps_id'])?.name as string
             datas[i]['terminal_id'] = terminals.find(terminal => terminal['id'] === datas[i]['terminal_id'])?.name as string
             datas[i]['is_checked'] = datas[i]['is_checked'] ? '확인' : '미확인'
-            datas[i]['danger_type'] = datas[i]['danger_type'] ? '한도초과' : '중복결제'
+            datas[i]['danger_type'] = danger_types.find(obj => obj.id === datas[i]['danger_type'])?.title
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)        

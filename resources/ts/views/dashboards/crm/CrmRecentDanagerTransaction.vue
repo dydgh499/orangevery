@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
-import { useCRMStore } from '@/views/dashboards/crm/crm'
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
+import { useCRMStore } from '@/views/dashboards/crm/crm'
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
+import { danger_types } from '@/views/transactions/dangers/useStore'
 
 const is_skeleton = <any>(inject('is_skeleton'))
 
@@ -115,8 +116,8 @@ const getSelectIdColor = (id: number | undefined) => {
                             {{ transition.trx_dttm }}
                         </td>
                         <td class="list-square">
-                            <VChip :color="booleanTypeColor(!transition.danger_type)">
-                                {{ transition.danger_type ? '한도초과' : '중복결제' }}
+                            <VChip :color="getSelectIdColor(transition.danger_type)">
+                                {{ danger_types.find(obj => obj.id === transition.danger_type)?.title }}
                             </VChip>
                         </td>
                     </tr>

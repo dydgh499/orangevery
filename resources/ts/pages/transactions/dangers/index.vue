@@ -6,7 +6,7 @@ import { useRequestStore } from '@/views/request'
 import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import ExtraMenu from '@/views/transactions/dangers/ExtraMenu.vue'
-import { useSearchStore } from '@/views/transactions/dangers/useStore'
+import { danger_types, useSearchStore } from '@/views/transactions/dangers/useStore'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 
@@ -110,8 +110,8 @@ const batchCheck = async () => {
                                 {{ (item[_key] as number).toLocaleString() }}
                             </span>
                             <span v-else-if="_key == `danger_type`">
-                                <VChip :color="store.booleanTypeColor(!item[_key])">
-                                    {{ item[_key] ? '한도초과' : '중복결제' }}
+                                <VChip :color="store.getSelectIdColor(item[_key])">
+                                    {{ danger_types.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == `is_checked`">
