@@ -58,9 +58,7 @@ export const autoUpdateMerchandiseInfo = (merchandise: Merchandise) => {
     merchandise.user_name = merchandise.business_num
     merchandise.user_pw = merchandise.phone_num
 } 
-
-// 결제모듈 자동등록
-export const autoInsertPaymentModule = (mcht_id: number) => {
+export const getAutoInsertPaymentModuleFormat = (mcht_id: number) => {
     const { pgs } = useStore()
     const fin_id = 29
     const pg_id  = 171
@@ -105,7 +103,7 @@ export const autoInsertPaymentModule = (mcht_id: number) => {
         cxl_type: 0,
         use_realtime_deposit: 1,
         pay_dupe_least: 0,
-        payment_term_min: 0,
+        payment_term_min: 1,
         p_mid: ''
     })
 
@@ -118,8 +116,21 @@ export const autoInsertPaymentModule = (mcht_id: number) => {
         pay_module.sub_key = pg.sub_key
         pay_module.mid = pg.mid
     }
-    const params:any = pay_module
+    return pay_module
+}
 
+export const bulkAutoInsertPaymentModuleFormat = (mcht_ids: number[]) => {
+    const pay_modules = []
+    for (let i = 0; i < mcht_ids.length; i++) 
+    {
+        pay_modules.push(getAutoInsertPaymentModuleFormat(mcht_ids[i]))
+    }
+    return pay_modules
+}
+
+// 결제모듈 자동등록
+export const autoInsertPaymentModule = (mcht_id: number) => {
+    const params:any = getAutoInsertPaymentModuleFormat(mcht_id)
     params.use_mid_duplicate = Number(corp.pv_options.free.use_mid_duplicate)
     params.use_tid_duplicate = Number(corp.pv_options.free.use_tid_duplicate)
     axios.post('/api/v1/manager/merchandises/pay-modules', params)

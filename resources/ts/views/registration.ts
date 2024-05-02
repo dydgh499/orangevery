@@ -1,3 +1,4 @@
+import { bulkAutoInsertPaymentModuleFormat, isFixplus } from '@/plugins/fixplus';
 import { axios } from '@axios';
 import * as XLSX from 'xlsx';
 
@@ -65,6 +66,11 @@ export const Registration = () => {
                 const r = await axios.post('/api/v1/manager/'+path+'/bulk-register', items)
                 snackbar.value.show('성공하였습니다.', 'success')
                 result = true
+
+                if(name === '가맹점' && isFixplus()) {
+                    const pay_modules = bulkAutoInsertPaymentModuleFormat(r.data)
+                    await axios.post('/api/v1/manager/merchandises/pay-modules/bulk-register', pay_modules)
+                }
             }
             catch (e: any) {
                 snackbar.value.show(e.response.data.message, 'error')

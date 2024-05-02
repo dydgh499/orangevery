@@ -226,6 +226,7 @@ const payModRegister = async () => {
     if (await bulkRegister('결제모듈', 'merchandises/pay-modules', items.value))
         location.reload()
 }
+
 watchEffect(async () => {
     if (excel.value) {
         items.value = await ExcelReader(headers, excel.value[0]) as PayModule[]

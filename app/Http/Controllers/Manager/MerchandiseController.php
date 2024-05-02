@@ -20,7 +20,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Enums\HistoryType;
 
-
 use App\Http\Controllers\Log\FeeChangeHistoryController;
 use App\Models\Log\MchtFeeChangeHistory;
 use App\Models\Log\SfFeeChangeHistory;
@@ -373,7 +372,12 @@ class MerchandiseController extends Controller
                     return $data;
                 })->toArray();
                 $res = $this->manyInsert($this->merchandises, $merchandises);
-                return $this->response($res ? 1 : 990);
+                $mcht_ids = $this->merchandises
+                        ->where('brand_id', 30)
+                        ->where('created_at', $current)
+                        ->pluck('id')->all();
+
+                return $this->response($res ? 1 : 990, $mcht_ids);
             }    
         }
     }

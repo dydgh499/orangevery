@@ -1,3 +1,4 @@
+import { isFixplus } from '@/plugins/fixplus';
 import router from '@/router';
 import { Header } from '@/views/headers';
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore';
@@ -83,8 +84,10 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     const levels = corp.pv_options.auth.levels
     const headers: Record<string, string> = {
         'id': 'NO.',
-        'module_type': '거래 타입',
-        'note': '결제모듈 별칭',
+    }
+    if(isFixplus() === false) {
+        headers['module_type'] = '거래 타입'
+        headers['note'] = '결제모듈 별칭'
     }
     headers['trx_dttm'] = '거래 시간'
     headers['cxl_dttm'] = '취소 시간'

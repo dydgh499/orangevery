@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { autoUpdateMerchandiseAgencyInfo, autoUpdateMerchandiseInfo, isDistMchtFeeMdofiyAble, isFixplusAgency } from '@/plugins/fixplus'
+import { autoUpdateMerchandiseAgencyInfo, autoUpdateMerchandiseInfo, isDistMchtFeeMdofiyAble } from '@/plugins/fixplus'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
 import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
@@ -266,13 +266,13 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <template v-if="getUserLevel() >= 35 && isFixplusAgency() === false">
+                        <template v-if="getUserLevel() >= 35">
                             <VDivider/>
                             <VCol cols="12">
                                 <VCardTitle>영업점 수수료</VCardTitle>
                             </VCol>
                             <template v-for="i in 6" :key="i">
-                                <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i)">
+                                <VCol cols="12" v-if="levels['sales'+(6-i)+'_use']">
                                     <VRow v-if="isAbleModiy(props.item.id)">
                                         <VCol cols="12" md="3">{{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
                                         <VCol cols="12" :md="props.item.id ? 3 : 4">
@@ -280,7 +280,7 @@ watchEffect(() => {
                                                 :items="sales[6-i].value"
                                                 :label="levels['sales'+(6-i)+'_name'] + '선택'"
                                                 item-title="sales_name" item-value="id" persistent-hint single-line prepend-inner-icon="ph:share-network"
-                                                :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])" :readonly="getUserLevel() <= getIndexByLevel(6-i)"
+                                                :hint="hintSalesApplyFee(props.item['sales'+(6-i)+'_id'])"
                                                 :rules="getSalesSelectRule(i)"/>
                                                 <VTooltip activator="parent" location="top" v-if="props.item['sales'+(6-i)+'_id']">
                                                     {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
@@ -288,9 +288,9 @@ watchEffect(() => {
                                         </VCol>
                                         <VCol cols="12" :md="props.item.id ? 2 : 3">
                                             <VTextField v-model="props.item['sales'+(6-i)+'_fee']" type="number" suffix="%"
-                                                :rules="[requiredValidatorV2(props.item['sales'+(6-i)+'_fee'], levels['sales'+(6-i)+'_name']+'수수료율')]" 
-                                                :readonly="getUserLevel() <= getIndexByLevel(6-i)"
-                                                @update:modelValue="validateSalesFee(6-i)"/>
+                                                :rules="[requiredValidatorV2(props.item['sales'+(6-i)+'_fee'], levels['sales'+(6-i)+'_name']+'수수료율')]"                                                 
+                                                @update:modelValue="validateSalesFee(6-i)"
+                                            />
 
                                             <div style="font-size: 0.8em;">
                                                 <span style="font-weight: bold;">{{ hintSalesSettleFee(props.item, 6-i) }}</span>

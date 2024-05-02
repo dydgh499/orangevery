@@ -39,7 +39,7 @@ const { update, remove } = useRequestStore()
             <VForm ref="vForm">
                 <VCol cols="12">
                     <VRow no-gutters>
-                        <VTextField v-model="props.item.yymm" type="text" placeholder="yymm"/>
+                        <VTextField v-model="props.item.yymm" type="text" placeholder="mmyy"/>
                     </VRow>
                 </VCol>
             </VForm>
