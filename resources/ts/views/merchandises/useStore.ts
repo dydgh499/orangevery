@@ -61,7 +61,8 @@ const getMchtHeaders = () => {
         headers['pgs'] = 'PG사'
     }
     headers['nick_name'] = '대표자명'
-    headers['phone_num'] = '연락처'
+    headers['phone_num'] = '대표자 연락처'
+    headers['contact_num'] = '사업장 연락처'
     headers['resident_num'] = '주민등록번호'
     headers['business_num'] = '사업자등록번호'
 
