@@ -101,18 +101,21 @@ class MchtSettleHistoryController extends Controller
         $data['cancel_deposit_amount']      = $item['cancel_deposit_amount'] ? $item['cancel_deposit_amount'] : 0;
         $seltte_month = date('Ym', strtotime($data['settle_dt']));
 
-        $c_res = $this->settle_mcht_hist->create($data);
-        if($c_res)
+        if(count($item['settle_transaction_idxs']) === (clone $query)->noSettlement('mcht_settle_id')->count())
         {
-            $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);
-            $this->SetPayModuleLastSettleMonth($item['settle_pay_module_idxs'], $seltte_month);   
-            $this->SetCancelDeposit($item['cancel_deposit_idxs'], $c_res->id);
-            return $c_res->id;
+            $c_res = $this->settle_mcht_hist->create($data);
+            if($c_res)
+            {
+                $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);
+                $this->SetPayModuleLastSettleMonth($item['settle_pay_module_idxs'], $seltte_month);   
+                $this->SetCancelDeposit($item['cancel_deposit_idxs'], $c_res->id);
+                return $c_res->id;
+            }
+            else
+                return 0;    
         }
         else
-            return false;
-
-        return $this->response($c_res ? 1 : 990, ['id'=>$c_res->id]);
+            return -1;
     }
 
     /*
@@ -127,7 +130,12 @@ class MchtSettleHistoryController extends Controller
             $query = Transaction::whereIn('id', $item['settle_transaction_idxs']);
             return $this->createMerchandiseCommon($item, $data, $query);
         });
-        return $this->response($c_id ? 1 : 990, ['id'=>$c_id]);
+        if($c_id)
+            return $this->response(1, ['id'=>$c_id]);
+        else if($c_id === 0)
+            return $this->response(990);
+        else if($c_id === -1)
+            return $this->extendResponse(2000, '이미 정산이 완료된 건입니다.');
     }
     
     /*
@@ -147,8 +155,10 @@ class MchtSettleHistoryController extends Controller
                 $query = Transaction::whereIn('id', $item['settle_transaction_idxs']);
                 return $this->createMerchandiseCommon($item, $data, $query);
             });
-            if($c_id === false)
+            if($c_id === 0)
                 $fail_res[] = '#'.$item['id'].' 가맹점이 정산에 실패했습니다.';
+            else if($c_id === -1)
+                $fail_res[] = '#'.$item['id'].' 이미 정산이 완료된 건입니다.';
             else
                 $success_res['ids'][] = $c_id;
         }
