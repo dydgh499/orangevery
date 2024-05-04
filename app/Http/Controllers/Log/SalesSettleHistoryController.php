@@ -147,7 +147,7 @@ class SalesSettleHistoryController extends Controller
                 return $this->createSalesforceCommon($item, $data, $query);             
             });
             if($c_id === 0)
-                $fail_res[] = '#'.$item['id'].' 가맹점이 정산에 실패했습니다.';
+                $fail_res[] = '#'.$item['id'].' 영업점이 정산에 실패했습니다.';
             else if($c_id === -1)
                 $fail_res[] = '#'.$item['id'].' 이미 정산이 완료된 건입니다.';
             else
