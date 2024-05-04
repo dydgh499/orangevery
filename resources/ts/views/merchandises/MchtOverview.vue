@@ -177,7 +177,7 @@ watchEffect(() => {
                                         <VCol>* 사업장 연락처</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.contact_num" prepend-inner-icon="tabler-building-store"
-                                            placeholder="사업장 연락처를 입력해주세요" persistent-placeholder type="number" 
+                                            placeholder="사업장 연락처를 입력해주세요" persistent-placeholder type="text" 
                                             :rules="[requiredValidatorV2(props.item.contact_num, '사업장 연락처')]"/>
                                         </VCol>
                                     </VRow>
