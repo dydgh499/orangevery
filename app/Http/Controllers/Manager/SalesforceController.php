@@ -172,9 +172,7 @@ class SalesforceController extends Controller
         if($is_all == false)
             $query = $query->where('is_delete', false);
 
-
         $sales_ids = $this->underSalesFilter($request);
-        logging($sales_ids);
         if(count($sales_ids))
             $query = $query->whereIn('salesforces.id', $sales_ids);
         if($request->level)
