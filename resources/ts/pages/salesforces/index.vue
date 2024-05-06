@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useSalesFilterStore, useSearchStore } from '@/views/salesforces/useStore'
+import { useSearchStore } from '@/views/salesforces/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 
 import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
@@ -8,7 +8,8 @@ import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 
-import { getAutoSetting, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
+import { isMchtFeeModifyAble } from '@/plugins/fixplus'
+import { getAutoSetting, settleCycles, settleDays, settleTaxTypes, useSalesFilterStore } from '@/views/salesforces/useStore'
 import type { Options } from '@/views/types'
 import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios'
 import { DateFilters, ItemTypes } from '@core/enums'
@@ -159,6 +160,20 @@ onMounted(() => {
                                     <VChip
                                         :color="store.booleanTypeColor(!item[_key])">
                                         {{ item[_key] ? '가능' : '불가능' }}
+                                    </VChip>
+                                </span>
+                                <span v-else-if="_key == 'is_able_under_modify'">
+                                    <VChip v-if="item['level'] === 25"
+                                        :color="store.booleanTypeColor(!item[_key])">
+                                        {{ item[_key] ? '가능' : '불가능' }}
+                                    </VChip>
+                                    <VChip v-else-if="item['level'] === 30"
+                                        :color="store.booleanTypeColor(false)">
+                                        {{ '가능' }}
+                                    </VChip>
+                                    <VChip v-else
+                                        :color="store.booleanTypeColor(!isMchtFeeModifyAble(all_sales, item))">
+                                        {{ isMchtFeeModifyAble(all_sales, item) ? '가능' : '불가능' }}
                                     </VChip>
                                 </span>
                                 <span v-else-if="_key == 'view_type'">

@@ -138,29 +138,31 @@ export const autoInsertPaymentModule = (mcht_id: number) => {
 
 // 영업점 하위 영업점 수정권한
 export const isDistAgcyUnderSalesModifyAble = (all_sales: Salesforce[][]) => {
-    return isDistMchtFeeMdofiyAble(all_sales)
+    return isDistMchtFeeModifyAble(all_sales)
+}
+
+export const isMchtFeeModifyAble = (all_sales: Salesforce[][], dest_sales: Salesforce) => {
+    console.log(dest_sales)
+    const idx = getLevelByIndex(dest_sales.level)
+    for (let i = idx; i < 5; i++)  {
+        dest_sales = all_sales[i+1].find(obj => obj.id === dest_sales.parent_id)
+        if(dest_sales && dest_sales.level === 25)
+            return Boolean(dest_sales.is_able_under_modify)
+        else
+            break
+    }
+    return false
 }
 
 // 가맹점 수수료 수정권한
-export const isDistMchtFeeMdofiyAble = (all_sales: Salesforce[][]) => {
+export const isDistMchtFeeModifyAble = (all_sales: Salesforce[][]) => {
     if(getUserLevel() === 10)   //가맹점
         return false
     else if(getUserLevel() === 25) { //  지사
         return user_info.value.is_able_under_modify
     }
     else if(getUserLevel() > 10 && getUserLevel() <= 25) { // 대리점
-        const idx = getLevelByIndex(getUserLevel())
-        let dest_sales = user_info.value
-
-        for (let i = idx; i < 5; i++) 
-        {        
-            dest_sales = all_sales[i+1].find(obj => obj.id === dest_sales.parent_id)
-            if(dest_sales && dest_sales.level === 25)
-                return dest_sales.is_able_under_modify
-            else
-                break
-        }
-        return false
+        return isMchtFeeModifyAble(all_sales, user_info.value)
     }
     else // 운영자, 총판
         return true
@@ -234,7 +236,7 @@ export const getFixplusSalesHeader = () => {
         'sales_name': '영업점 상호',
     }
     if(getUserLevel() >= 35)
-        headers['is_able_modify_mcht'] = '가맹점 수정권한'
+        headers['is_able_under_modify'] = '하위 가맹점수수료 변경권한'
     headers['sales_fee'] = '영업점 수수료'
     Object.assign(headers, {
         'nick_name' : '대표자명',

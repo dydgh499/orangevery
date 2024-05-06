@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { autoUpdateMerchandiseAgencyInfo, autoUpdateMerchandiseInfo, isDistMchtFeeMdofiyAble } from '@/plugins/fixplus'
+import { autoUpdateMerchandiseAgencyInfo, autoUpdateMerchandiseInfo, isDistMchtFeeModifyAble } from '@/plugins/fixplus'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
 import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
@@ -316,7 +316,7 @@ watchEffect(() => {
                             <VCardTitle>가맹점 수수료</VCardTitle>
                         </VCol>
                         <VCol cols="12">
-                            <VRow v-if="isAbleModiy(props.item.id) && isDistMchtFeeMdofiyAble(all_sales)">
+                            <VRow v-if="isAbleModiy(props.item.id) && isDistMchtFeeModifyAble(all_sales)">
                                 <VCol cols="12" md="3">
                                     가맹점 수수료율
                                 </VCol>

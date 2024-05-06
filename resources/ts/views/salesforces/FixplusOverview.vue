@@ -6,7 +6,7 @@ import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import type { Options, Salesforce } from '@/views/types'
 import { banks } from '@/views/users/useStore'
 
-import { autoUpdateSalesforceInfo, isDistMchtFeeMdofiyAble } from '@/plugins/fixplus'
+import { autoUpdateSalesforceInfo, isDistMchtFeeModifyAble } from '@/plugins/fixplus'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { axios, getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios'
 import corp from '@corp'
@@ -121,7 +121,7 @@ const TrxFeeReadonly = () => {
                 return true
         }
         else {
-            return isDistMchtFeeMdofiyAble(all_sales)
+            return isDistMchtFeeModifyAble(all_sales)
         }
     }
 }

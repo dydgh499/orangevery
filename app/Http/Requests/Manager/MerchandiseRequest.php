@@ -49,7 +49,6 @@ class MerchandiseRequest extends FormRequest
         'bsin_lic_file',
         'id_file',
         'profile_file',
-
     ];
 
     public function authorize()
