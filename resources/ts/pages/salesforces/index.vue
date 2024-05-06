@@ -1,29 +1,37 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/salesforces/useStore'
-import { selectFunctionCollect } from '@/views/selected'
+import { useSearchStore } from '@/views/salesforces/useStore';
+import { selectFunctionCollect } from '@/views/selected';
 
-import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
-import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
-import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
+import BatchDialog from '@/layouts/dialogs/BatchDialog.vue';
+import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue';
+import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue';
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import UserExtraMenu from '@/views/users/UserExtraMenu.vue';
 
-import { isMchtFeeModifyAble } from '@/plugins/fixplus'
-import { getAutoSetting, settleCycles, settleDays, settleTaxTypes, useSalesFilterStore } from '@/views/salesforces/useStore'
-import type { Options } from '@/views/types'
-import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios'
-import { DateFilters, ItemTypes } from '@core/enums'
-import corp from '@corp'
+import { getAutoSetting, settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore';
+import type { Options } from '@/views/types';
+import { getLevelByIndex, getUserLevel, isAbleModiy, salesLevels } from '@axios';
+import { DateFilters, ItemTypes } from '@core/enums';
+import corp from '@corp';
 
 const { store, head, exporter, metas } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
-const { all_sales } = useSalesFilterStore()
 
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
 const password = ref()
 const batchDialog = ref()
+
+
+provide('password', password)
+provide('store', store)
+provide('head', head)
+provide('exporter', exporter)
+
+store.params.level = null
+store.params.sales_parent_structure = getUserLevel() > 10 && getUserLevel() < 35 ? Number(corp.pv_options.paid.sales_parent_structure ?? 0) : 0
+
 const isSalesforceParemntStructureHideFilter = () => {
     if(getUserLevel() > 10 && getUserLevel() < 35) {
         if(Number(corp.pv_options.paid.sales_parent_structure))
@@ -34,14 +42,6 @@ const isSalesforceParemntStructureHideFilter = () => {
     else
         return true
 }
-
-provide('password', password)
-provide('store', store)
-provide('head', head)
-provide('exporter', exporter)
-
-store.params.level = null
-store.params.sales_parent_structure = getUserLevel() > 10 && getUserLevel() < 35 ? Number(corp.pv_options.paid.sales_parent_structure ?? 0) : 0
 
 onMounted(() => {
     watchEffect(async() => {
@@ -160,20 +160,6 @@ onMounted(() => {
                                     <VChip
                                         :color="store.booleanTypeColor(!item[_key])">
                                         {{ item[_key] ? '가능' : '불가능' }}
-                                    </VChip>
-                                </span>
-                                <span v-else-if="_key == 'is_able_under_modify'">
-                                    <VChip v-if="item['level'] === 25"
-                                        :color="store.booleanTypeColor(!item[_key])">
-                                        {{ item[_key] ? '가능' : '불가능' }}
-                                    </VChip>
-                                    <VChip v-else-if="item['level'] === 30"
-                                        :color="store.booleanTypeColor(false)">
-                                        {{ '가능' }}
-                                    </VChip>
-                                    <VChip v-else
-                                        :color="store.booleanTypeColor(!isMchtFeeModifyAble(all_sales, item))">
-                                        {{ isMchtFeeModifyAble(all_sales, item) ? '가능' : '불가능' }}
                                     </VChip>
                                 </span>
                                 <span v-else-if="_key == 'view_type'">

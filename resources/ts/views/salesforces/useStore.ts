@@ -141,17 +141,21 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
 })
 
 export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
+    const is_sales_loaded = ref(false)
     const all_sales = Array.from({ length: SALES_LEVEL_SIZE }, () => <Salesforce[]>([]))
     const sales = Array.from({ length: SALES_LEVEL_SIZE }, () => ref<Salesforce[]>([]))
     const sales_apply_histories = ref(<any[]>([]))
     const mchts = ref(<Merchandise[]>([]))
     
-    onMounted(() => { 
-        classification() 
-        getAllMchts()
-        feeApplyHistoires()
+    onMounted(async () => { 
+        await Promise.all([
+            classification(),
+            getAllMchts(),
+            feeApplyHistoires(),
+        ])
+        is_sales_loaded.value = true
     })
-
+    const isSalesLoaded = computed(() => { return is_sales_loaded.value })
     const classification = async () => {
         const sales_parent_structure = getUserLevel() > 10 && getUserLevel() < 35 ? Number(corp.pv_options.paid.sales_parent_structure ?? 0) : 0
         const r = await axios.get('/api/v1/manager/salesforces/classification?sales_parent_structure=' + sales_parent_structure)
@@ -330,6 +334,7 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     }
 
     return {
+        isSalesLoaded,
         all_sales,
         sales,
         sales_apply_histories,

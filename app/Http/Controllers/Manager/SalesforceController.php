@@ -375,14 +375,25 @@ class SalesforceController extends Controller
                 'level_17' => [], 'level_20' => [], 
                 'level_25' => [], 'level_30' => [],
             ];
-            // parent
-            $parents = $this->getParents($request);
-            foreach($parents as $parent)
+            if(isSalesforce($request))
             {
-                $data["level_".$parent->level][] = $parent;
+                // parent
+                $parents = $this->getParents($request);
+                foreach($parents as $parent)
+                {
+                    $data["level_".$parent->level][] = $parent;
+                }
+                // child, self
+                $sales = $this->salesforces->where('id', $request->user()->id)->with(['childs'])->first();
             }
-            // child, self
-            $sales = $this->salesforces->where('id', $request->user()->id)->with(['childs'])->first();
+            else if(isOperator($request))
+            {
+                $sales = $this->salesforces
+                    ->where('brand_id', $request->user()->brand_id)
+                    ->where('level', 30)
+                    ->with(['childs'])
+                    ->get();
+            }
             $data = $this->getRecursionChilds($data, $sales);
         }
         else
@@ -395,7 +406,7 @@ class SalesforceController extends Controller
                     ->where('brand_id', $request->user()->brand_id)
                     ->where('is_delete', false)
                     ->with(['underAutoSettings'])
-                    ->get(['id', 'sales_name', 'level', 'settle_tax_type'])
+                    ->get(['id', 'sales_name', 'level', 'settle_tax_type', 'parent_id', 'is_able_under_modify', 'mcht_batch_fee', 'sales_fee'])
                     ->groupBy('level');
 
                 if(isSalesforce($request))

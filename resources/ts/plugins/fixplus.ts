@@ -142,13 +142,12 @@ export const isDistAgcyUnderSalesModifyAble = (all_sales: Salesforce[][]) => {
 }
 
 export const isMchtFeeModifyAble = (all_sales: Salesforce[][], dest_sales: Salesforce) => {
-    console.log(dest_sales)
     const idx = getLevelByIndex(dest_sales.level)
     for (let i = idx; i < 5; i++)  {
         dest_sales = all_sales[i+1].find(obj => obj.id === dest_sales.parent_id)
         if(dest_sales && dest_sales.level === 25)
             return Boolean(dest_sales.is_able_under_modify)
-        else
+        else if(dest_sales === undefined)
             break
     }
     return false
@@ -235,8 +234,6 @@ export const getFixplusSalesHeader = () => {
         'user_name' : '영업점 ID',
         'sales_name': '영업점 상호',
     }
-    if(getUserLevel() >= 35)
-        headers['is_able_under_modify'] = '하위 가맹점수수료 변경권한'
     headers['sales_fee'] = '영업점 수수료'
     Object.assign(headers, {
         'nick_name' : '대표자명',
