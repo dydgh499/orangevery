@@ -393,8 +393,8 @@ class SalesforceController extends Controller
                     ->where('brand_id', $request->user()->brand_id)
                     ->where('level', 30)
                     ->with(['childs'])
-                    ->get();
-                    
+                    ->get(['id', 'parent_id', 'sales_fee', 'level', 'sales_name', 'is_able_under_modify', 'mcht_batch_fee']);
+
                 foreach($_sales as $sales)
                 {
                     $data = $this->getRecursionChilds($data, $sales);
