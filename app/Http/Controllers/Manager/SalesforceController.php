@@ -385,16 +385,22 @@ class SalesforceController extends Controller
                 }
                 // child, self
                 $sales = $this->salesforces->where('id', $request->user()->id)->with(['childs'])->first();
+                $data = $this->getRecursionChilds($data, $sales);
             }
             else if(isOperator($request))
             {
-                $sales = $this->salesforces
+                $_sales = $this->salesforces
                     ->where('brand_id', $request->user()->brand_id)
                     ->where('level', 30)
                     ->with(['childs'])
                     ->get();
+                    
+                foreach($_sales as $sales)
+                {
+                    $data = $this->getRecursionChilds($data, $sales);
+                }
+
             }
-            $data = $this->getRecursionChilds($data, $sales);
         }
         else
         {
