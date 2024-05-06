@@ -174,6 +174,7 @@ class SalesforceController extends Controller
 
 
         $sales_ids = $this->underSalesFilter($request);
+        logging($sales_ids);
         if(count($sales_ids))
             $query = $query->whereIn('salesforces.id', $sales_ids);
         if($request->level)
@@ -200,7 +201,6 @@ class SalesforceController extends Controller
                 'total'     => $count,
                 'content'   => $this->salesforces
                     ->whereIn('id', $child_ids)
-                    ->with(['underAutoSettings'])
                     ->get(),
             ];
             return $this->response(0, $data);
