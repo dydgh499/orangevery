@@ -146,29 +146,29 @@ onMounted(() => {
             </template>
             <template #headers>
                 <tr>
-                    <template v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                        <th v-if="key == 'total_trx_amount'">
+                    <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
+                        <span v-if="key == 'total_trx_amount'">
                             <BaseQuestionTooltip :location="'top'" :text="store.params.level === 10 ? (header.ko as string) : '총 지급액'"
                                 :content="'총 거래 수수료 = 금액 - (거래 수수료 + 유보금 + 이체 수수료)'">
                             </BaseQuestionTooltip>
-                        </th>
-                        <th v-else-if="key == 'mcht_settle_fee' && store.params.level == 10">
+                        </span>
+                        <span v-else-if="key == 'mcht_settle_fee' && store.params.level == 10">
                             <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
                                 :content="'입금 수수료는 가맹점만 적용됩니다.'">
                             </BaseQuestionTooltip>
-                        </th>
-                        <th v-else-if="key == 'trx_amount'">
+                        </span>
+                        <span v-else-if="key == 'trx_amount'">
                             <span>{{ store.params.level === 10 ? header.ko : '지급액' }}</span>
-                        </th>
-                        <th v-else-if="key == 'profit'">
+                        </span>
+                        <span v-else-if="key == 'profit'">
                             <span>{{ store.params.level === 10 ? header.ko : '수익금' }}</span>
-                        </th>
-                        <th v-else-if="key == 'hold_amount' && store.params.level == 10">
+                        </span>
+                        <span v-else-if="key == 'hold_amount' && store.params.level == 10">
                             <BaseQuestionTooltip :location="'top'" :text="(header.ko as string)"
                                 :content="'유보금은 가맹점만 적용됩니다.'">
                             </BaseQuestionTooltip>
-                        </th>
-                        <th v-else>
+                        </span>
+                        <span v-else>
                             <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 50">
                                 <VCheckbox v-model="all_selected" class="check-label" />
                                 <span>선택/취소</span>
@@ -176,8 +176,8 @@ onMounted(() => {
                             <span v-else>
                                 {{ header.ko }}
                             </span>
-                        </th>
-                    </template>
+                        </span>
+                    </th>
                 </tr>
             </template>
             <template #body>
