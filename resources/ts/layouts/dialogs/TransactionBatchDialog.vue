@@ -4,6 +4,7 @@
 import ChangeSettleDateDialog from '@/layouts/dialogs/transactions/ChangeSettleDateDialog.vue'
 import { useRequestStore } from '@/views/request'
 import { getUserLevel } from '@axios'
+import corp from '@corp'
 
 interface Props {
     selected_idxs: number[],
