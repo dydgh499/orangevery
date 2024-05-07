@@ -66,10 +66,12 @@ defineExpose({
                             <VBtn prepend-icon="tabler-calculator" @click="changeSettleDay()" size="small" color="warning">
                                 정산일 변경
                             </VBtn>
-                            <span style="margin: 0.25em 0;"></span>
-                            <VBtn prepend-icon="tabler-calculator" @click="batchRetry('/api/v1/manager/transactions/batch-retry')" size="small">
-                                노티 재발송
-                            </VBtn>
+                            <template v-if="corp.pv_options.paid.use_noti">
+                                <span style="margin: 0.25em 0;"></span>
+                                <VBtn prepend-icon="tabler-calculator" @click="batchRetry('/api/v1/manager/transactions/batch-retry')" size="small">
+                                    노티 재발송
+                                </VBtn>
+                            </template>
                             <span style="margin: 0.25em 0;"></span>
                             <VBtn prepend-icon="tabler-calculator" @click="batchRetry('/api/v1/manager/transactions/batch-self-retry')" v-if="getUserLevel() >= 50" size="small" color="error">
                                 노티 자체 재발송
