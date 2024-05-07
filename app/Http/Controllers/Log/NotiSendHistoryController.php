@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Log;
 use App\Models\Log\NotiSendHistory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Manager\Transaction\NotiRetrySender;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -66,8 +67,8 @@ class NotiSendHistoryController extends Controller
             ->orderby('retry_count', 'desc')
             ->first($this->cols);
 
-        $res = $this->notiSender($noti->send_url, $noti, $noti->temp);
-        $res = $this->save($res, $noti);
+        $res = NotiRetrySender::notiSender($noti->send_url, $noti, $noti->temp);
+        $res =NotiRetrySender::save($res, $noti);
         return $this->response($res ? 1 : 990);
     }
 
@@ -83,8 +84,8 @@ class NotiSendHistoryController extends Controller
 
         foreach($notis as $noti)
         {
-            $res = $this->notiSender($noti->send_url, $noti, $noti->temp);
-            $res = $this->save($res, $noti);
+            $res = NotiRetrySender::notiSender($noti->send_url, $noti, $noti->temp);
+            $res = NotiRetrySender::save($res, $noti);
         }
         return $this->response(1);
     }
@@ -98,7 +99,7 @@ class NotiSendHistoryController extends Controller
             ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')
             ->where('noti_send_histories.trans_id', $trans_id)
             ->first($this->cols);
-        $params = $this->getNotiSendFormat($noti, $noti->temp);
+        $params = NotiRetrySender::getNotiSendFormat($noti, $noti->temp);
         $params['send_url'] = $noti->send_url;
         return $this->response(0, $params);
     }

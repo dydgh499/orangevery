@@ -7,6 +7,7 @@ import { useRequestStore } from '@/views/request'
 import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useSearchStore } from '@/views/transactions/settle/part/useMerchandiseStore'
+import { getDateFormat } from '@/views/transactions/useStore'
 import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
@@ -258,6 +259,9 @@ watchEffect(() => {
                             <span v-else-if="_key == 'terminal_id'">
                                 {{ terminals.find(terminal => terminal['id'] === item[_key])?.name }}
                             </span>
+                            <td v-else-if="_key == 'settle_dt'">
+                                {{ getDateFormat(item[_key]) }}
+                            </td>
                             <span v-else-if="isSalesCol(_key as string)">
                                 {{ Number(item[_key]).toLocaleString() }}
                             </span>

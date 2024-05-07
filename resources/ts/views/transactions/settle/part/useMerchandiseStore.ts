@@ -25,6 +25,7 @@ export const useSearchStore = defineStore('transSettlesMchtPartSearchStore', () 
     headers['acquirer'] = '매입사'
     headers['card_num'] = '카드번호'
     headers['profit'] = '정산금'
+    headers['settle_dt'] = '정산 예정일'
 
     if(getUserLevel() >= 35) {
         headers['pg_id'] = 'PG사'

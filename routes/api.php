@@ -142,7 +142,9 @@ Route::prefix('v1')->group(function() {
         Route::prefix('transactions')->group(function() {                        
             Route::post('noti/{id}', [TransactionController::class, 'noti']);
             Route::post('batch-retry', [TransactionController::class, 'batchRetry']);
+            Route::post('batch-self-retry', [TransactionController::class, 'batchSelfRetry']);
             Route::post('cancel', [TransactionController::class, 'cancel']);
+            Route::post('change-settle-date', [TransactionController::class, 'changeSettleDate']);
             Route::get('chart', [TransactionController::class, 'chart']);
             Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);            
             Route::get('fails', [FailTransController::class, 'index']);

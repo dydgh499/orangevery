@@ -13,6 +13,7 @@ use App\Http\Traits\Salesforce\UnderSalesTrait;
 use App\Http\Requests\Manager\TransactionRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\QuickView\QuickViewController;
+use App\Http\Controllers\Manager\Transaction\NotiRetrySender;
 
 use Carbon\Carbon;
 use App\Enums\DevSettleType;
@@ -319,14 +320,48 @@ class TransactionController extends Controller
     /*
      * 노티 자체 대량 재전송
      */
-    public function batchRetry(Request $request)
+    public function batchSelfRetry(Request $request)
     {
         $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/noti/payvery';
         $trans = $this->transactions->whereIn('id', $request->selected)->get();
         foreach($trans as $tran)
         {
-            $res = $this->notiSender($url, $tran, '');
+            $res = NotiRetrySender::notiSender($url, $tran, '');
         }
+        return $this->response(1);
+    }
+
+    /*
+     * 노티 대량 재전송
+     */
+    public function batchRetry(Request $request)
+    {
+        $fail_res    = [];
+        $success_res = [];
+        for ($i=0; $i <count($request->selected); $i++) 
+        {
+            [$_success_res, $_fail_res] = NotiRetrySender::notiSenderWrap($request->selected[$i]);
+            $success_res = array_merge($success_res, $_success_res);
+            $fail_res = array_merge($fail_res, $_fail_res);
+        }
+        if(count($fail_res))
+        {
+            $message = "일괄작업에 실패한 정산건들이 존재합니다.<br><br>".implode(' ', $fail_res);
+            return $this->extendResponse(2000, $message);
+        }
+        else
+            return $this->response(1, $success_res);
+    }
+
+    /*
+     * 정산일 변경
+     */
+    public function changeSettleDate(Request $request)
+    {
+        $settle_dt = Carbon::createFromFormat('Y-m-d', (string)$request->settle_dt)->format('Ymd');
+        $this->transactions
+            ->whereIn('id', $request->selected)
+            ->update(['settle_dt' => $settle_dt]);
         return $this->response(1);
     }
 
@@ -335,19 +370,14 @@ class TransactionController extends Controller
     */
     public function noti(Request $request, $id)
     {
-        $tran = $this->transactions
-            ->join('noti_urls', 'transactions.mcht_id', '=', 'noti_urls.mcht_id')
-            ->where('transactions.id', $id)
-            ->first(['transactions.*', 'noti_urls.send_url']);
-        if($tran)
+        [$success_res, $fail_res]  = NotiRetrySender::notiSenderWrap($id);        
+        if(count($fail_res))
         {
-            $tran->retry_count = 0;
-            $res = $this->notiSender($tran->send_url, $tran, '');
-            $this->save($res, $tran);    
-            return $this->response(1);    
+            $message = "일괄작업에 실패한 정산건들이 존재합니다.<br><br>".implode(' ', $fail_res);
+            return $this->extendResponse(2000, $message);
         }
         else
-            return $this->response(1000);
+            return $this->response(1, $success_res);
     }
 
     /*
@@ -382,7 +412,7 @@ class TransactionController extends Controller
         $trans = json_decode(json_encode($db_trans), true);
         $trans = $this->setSettleAmount($trans, $dev_settle_type);
         $i=0;
-        
+
         foreach($db_trans as $tran)
         {
             $tran->brand_settle_amount = $trans[$i]['brand_settle_amount'];

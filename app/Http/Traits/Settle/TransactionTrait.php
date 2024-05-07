@@ -175,58 +175,6 @@ trait TransactionTrait
         ];
     }
 
-    public function getNotiSendFormat($tran, $temp='')
-    {
-        return [
-            'mid'   => $tran->mid,
-            'tid'    => $tran->tid,
-            'trx_id'    => $tran->trx_id,
-            'amount'    => $tran->amount,
-            'ord_num'   => $tran->ord_num,
-            'appr_num'  => $tran->appr_num,
-            'item_name' => $tran->item_name,
-            'buyer_name'    => $tran->buyer_name,
-            'buyer_phone'   => $tran->buyer_phone,
-            'acquirer'      => $tran->acquirer,
-            'issuer'        => $tran->issuer,
-            'card_num'      => $tran->card_num,
-            'installment'   => $tran->installment,
-            'trx_dttm'      => $tran->trx_dt." ".$tran->trx_tm,
-            'is_cancel'     => $tran->is_cancel,
-            'temp'          => $temp,
-        ];
-    }
-
-    public function notiSender($url, $tran, $temp='')
-    {
-        $headers = [
-            'Content-Type'  => 'application/json',
-            'Accept' => 'application/json',
-        ];
-        $params = $this->getNotiSendFormat($tran, $temp);
-        if($tran->is_cancel)
-        {
-            $params['amount'] *= -1;
-            $params['cxl_dttm'] = $tran->cxl_dttm;
-            $params['ori_trx_id'] = $tran->ori_trx_id;
-        }
-        return post($url, $params, $headers);
-    }
-
-    public function save($res, $noti)
-    {
-        $body = json_encode($res['body']);
-        $log = [
-            'http_code' => $res['code'],
-            'message'   => $body ? $body : $res['body'],
-            'send_url'  => $noti->send_url,
-            'trans_id'  => $noti->id,
-            'brand_id'  => $noti->brand_id,
-            'retry_count' => $noti->retry_count+1,
-        ];
-        return NotiSendHistory::create($log);        
-    }
-
     function getSettleDate($trx_dt, $add_days, $pg_settle_type, $str_holidays) 
     {
         $currDate = Carbon::parse($trx_dt);
