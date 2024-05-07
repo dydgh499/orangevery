@@ -85,36 +85,39 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
     
-    const metas = ref([
-        {
-            icon: 'tabler-user-check',
-            color: 'primary',
-            title: '금월 추가된 영업점',
-            stats: '0',
-            percentage: 0,
-        },
-        {
-            icon: 'tabler-user-exclamation',
-            color: 'error',
-            title: '금월 감소한 영업점',
-            percentage: 0,
-            stats: '0',
-        },
-        {
-            icon: 'tabler-user-check',
-            color: 'primary',
-            title: '금주 추가된 영업점',
-            percentage: 0,
-            stats: '0',
-        },
-        {
-            icon: 'tabler-user-exclamation',
-            color: 'error',
-            title: '금주 감소한 영업점',
-            percentage: 0,
-            stats: '0',
-        },
-    ])
+    const metas = ref([])
+    if(corp.pv_options.paid.sales_parent_structure === false) {
+        Object.assign(metas.value, [
+            {
+                icon: 'tabler-user-check',
+                color: 'primary',
+                title: '금월 추가된 영업점',
+                stats: '0',
+                percentage: 0,
+            },
+            {
+                icon: 'tabler-user-exclamation',
+                color: 'error',
+                title: '금월 감소한 영업점',
+                percentage: 0,
+                stats: '0',
+            },
+            {
+                icon: 'tabler-user-check',
+                color: 'primary',
+                title: '금주 추가된 영업점',
+                percentage: 0,
+                stats: '0',
+            },
+            {
+                icon: 'tabler-user-exclamation',
+                color: 'error',
+                title: '금주 감소한 영업점',
+                percentage: 0,
+                stats: '0',
+            },
+        ])
+    }
 
     const exporter = async (type: number) => {
         const keys = Object.keys(head.flat_headers.value)

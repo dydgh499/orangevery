@@ -28,6 +28,10 @@ const moveContent = (post: Post) => {
 }
 provide('store', store)
 provide('head', head)
+
+const getChildDepth = computed(() => {
+    return props.depth + 1
+})
 </script>
 <template>
     <tr>
@@ -73,6 +77,6 @@ provide('head', head)
             </td>
         </template>
     </tr>
-    <PostReplyView v-for="(reply, _idx) in post.replies" :key="_idx" :post="reply" :depth="++props.depth"/>
+    <PostReplyView v-for="(reply, _idx) in post.replies" :key="_idx" :post="reply" :depth="getChildDepth"/>
 </template>
   
