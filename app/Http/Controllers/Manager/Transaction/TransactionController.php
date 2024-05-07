@@ -382,6 +382,7 @@ class TransactionController extends Controller
         $trans = json_decode(json_encode($db_trans), true);
         $trans = $this->setSettleAmount($trans, $dev_settle_type);
         $i=0;
+        
         foreach($db_trans as $tran)
         {
             $tran->brand_settle_amount = $trans[$i]['brand_settle_amount'];
