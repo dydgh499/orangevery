@@ -379,11 +379,11 @@ class TransactionController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
-        $trans = json_decode(json_encode($db_trans), true);
         foreach($db_trans as $tran)
         {
             $tran->dev_realtime_fee = 0.001;
         }
+        $trans = json_decode(json_encode($db_trans), true);
         $trans = $this->setSettleAmount($trans, $dev_settle_type);
         $i=0;
         foreach($db_trans as $tran)
