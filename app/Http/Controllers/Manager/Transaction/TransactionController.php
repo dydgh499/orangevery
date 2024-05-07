@@ -374,12 +374,16 @@ class TransactionController extends Controller
     {
         $dev_settle_type = DevSettleType::NOT_APPLY->value;
         $db_trans = $this->transactions
-            ->where('brand_id', 4)
-            ->where('sales4_id', 11551)
+            ->where('brand_id', 19)
+            ->where('mcht_settle_type', -1)
             ->orderBy('id', 'desc')
             ->get();
 
         $trans = json_decode(json_encode($db_trans), true);
+        foreach($db_trans as $tran)
+        {
+            $tran->dev_realtime_fee = 0.001;
+        }
         $trans = $this->setSettleAmount($trans, $dev_settle_type);
         $i=0;
         foreach($db_trans as $tran)

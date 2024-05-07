@@ -174,11 +174,11 @@ watchEffect(() => {
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>* 사업장 연락처</VCol>
+                                        <VCol>사업장 연락처</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.contact_num" prepend-inner-icon="tabler-building-store"
-                                            placeholder="사업장 연락처를 입력해주세요" persistent-placeholder type="text" 
-                                            :rules="[requiredValidatorV2(props.item.contact_num, '사업장 연락처')]"/>
+                                            placeholder="사업장 연락처를 입력해주세요" persistent-placeholder type="text"
+                                            />
                                         </VCol>
                                     </VRow>
                                     <VRow v-else>
