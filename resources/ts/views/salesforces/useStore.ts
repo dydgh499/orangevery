@@ -120,17 +120,34 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
     }
 
     const exporter = async (type: number) => {
+        const getSalesData = (salesforce: Salesforce) => {            
+            let data:any = {}
+            data['level'] = all_sales.find(obj => obj['id'] === salesforce['level'])?.title as string
+            data['settle_cycle'] = all_cycles.find(obj => obj['id'] === salesforce['settle_cycle'])?.title as string
+            data['settle_day'] = all_days.find(obj => obj['id'] === salesforce['settle_day'])?.title as string
+            data['settle_tax_type'] = tax_types.find(obj => obj['id'] === salesforce['settle_tax_type'])?.title as string
+            data['resident_num'] = salesforce['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : salesforce['resident_num_back'])
+            data = head.sortAndFilterByHeader(salesforce, keys)
+            return data
+        }
+        const getChildDatas = (datas:any[], childs: Salesforce[]) => {
+            for (let i = 0; i < childs.length; i++) {
+                datas.push(getSalesData(childs[i]))
+                if(childs[i].childs?.length) {
+                    datas = getChildDatas(datas, childs[i]?.childs as Salesforce[])
+                }
+            }
+            return datas
+        }
+
         const keys = Object.keys(head.flat_headers.value)
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
-        let datas = r.data.content;
-        for (let i = 0; i < datas.length; i++) {
-            datas[i]['level'] = all_sales.find(obj => obj['id'] === datas[i]['level'])?.title as string
-            datas[i]['settle_cycle'] = all_cycles.find(obj => obj['id'] === datas[i]['settle_cycle'])?.title as string
-            datas[i]['settle_day'] = all_days.find(obj => obj['id'] === datas[i]['settle_day'])?.title as string
-            datas[i]['settle_tax_type'] = tax_types.find(obj => obj['id'] === datas[i]['settle_tax_type'])?.title as string
-            datas[i]['resident_num'] = datas[i]['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
-
-            datas[i] = head.sortAndFilterByHeader(datas[i], keys)
+        let datas:any = []
+        for (let i = 0; i < r.data.content.length; i++) {
+            datas.push(getSalesData(r.data.content[i]))
+            if(corp.pv_options.paid.sales_parent_structure) {
+                datas = getChildDatas(datas, r.data.content[i]?.childs as Salesforce[])
+            }
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }
