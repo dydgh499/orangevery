@@ -168,8 +168,6 @@ onMounted(() => {
                                 :content="'유보금은 가맹점만 적용됩니다.'">
                             </BaseQuestionTooltip>
                         </th>
-                        <template v-else-if="key === 'settle_dt' && store.params.level !== 10">
-                        </template>
                         <th v-else>
                             <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 50">
                                 <VCheckbox v-model="all_selected" class="check-label" />
@@ -203,11 +201,9 @@ onMounted(() => {
                                     {{ settleIdCol(item, store.params.level) === null ? '정산안함' : "#"+settleIdCol(item, store.params.level)}}
                                 </VChip>
                             </td>
-                            <td v-else-if="_key == 'settle_dt' && store.params.level === 10">
+                            <td v-else-if="_key == 'settle_dt'">
                                 {{ getDateFormat(item[_key]) }}
                             </td>
-                            <template v-else-if="_key == 'settle_dt' && store.params.level !== 10">
-                            </template>
                             <td v-else-if="_key == 'installment'">
                                 {{ installments.find(inst => inst['id'] === item[_key])?.title }}
                             </td>

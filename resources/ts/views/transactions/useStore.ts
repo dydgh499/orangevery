@@ -105,7 +105,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
 
     if((getUserLevel() == 10 && user_info.value.is_show_fee) || getUserLevel() >= 13) {
         headers['profit'] = '정산금'
-        headers['settle_dt'] = '정산예정일'
+        headers['settle_dt'] = '가맹점 정산예정일'
         headers['settle_id'] = '정산번호'
     }
 
@@ -239,9 +239,6 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     
     const printer = (type:number, datas: Transaction[]) => {
         const keys = Object.keys(head.flat_headers.value)
-        if(store.params.level !== 10) {
-            Object.assign(keys, keys.filter(key => key !== 'settle_dt'))
-        }
         for (let i = 0; i <datas.length; i++) {
             datas[i]['module_type'] = module_types.find(module_type => module_type['id'] === datas[i]['module_type'])?.title as string
             datas[i]['installment'] = installments.find(inst => inst['id'] === datas[i]['installment'])?.title as string
