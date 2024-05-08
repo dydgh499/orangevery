@@ -16,8 +16,9 @@ interface Props {
 }
 const props = defineProps<Props>()
 const store = <any>(inject('store'))
-const head = <any>(inject('head'))
-const { selected } = selectFunctionCollect(store)
+const head = <any>(inject('head')) 
+const { selected, all_selected } = selectFunctionCollect(store)
+
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()

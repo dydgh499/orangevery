@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useSearchStore, complaint_types } from '@/views/complaints/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { DateFilters } from '@core/enums'
+import { complaint_types, useSearchStore } from '@/views/complaints/useStore'
 import { getUserLevel } from '@axios'
+import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 provide('store', store)
@@ -13,7 +13,6 @@ provide('exporter', exporter)
 <template>
     <BaseIndexView placeholder="가맹점 상호, 고객명, 승인번호, 거래번호 검색" :metas="[]" :add="getUserLevel() >= 35 ? true : false" add_name="민원" :date_filter_type="DateFilters.SETTLE_RANGE">
         <template #index_extra_field>
-            
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.history_type" density="compact" variant="outlined" item-title="title" item-value="id"
                     :items="[{ id: null, title: '전체' }].concat(complaint_types)" label="민원 상태" eager  @update:modelValue="store.updateQueryString({complaint_type: store.params.complaint_type})" />
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
@@ -62,10 +61,10 @@ provide('exporter', exporter)
 </template>
 <style>
 .content {
-    overflow: hidden; 
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    word-break:break-all;
-    width: 500px !important;
+  overflow: hidden;
+  inline-size: 500px !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
 }
 </style>

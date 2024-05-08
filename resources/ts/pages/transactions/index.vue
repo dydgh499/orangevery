@@ -183,71 +183,71 @@ onMounted(() => {
             <template #body>
                 <tr v-for="(item, index) in store.getItems" :key="item['id']">
                     <template v-for="(_header, _key, _index) in head.headers" :key="_key">
-                        <template v-if="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square'>
-                            <td v-if="_key == 'id'">
+                        <td v-if="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square' >
+                            <span v-if="_key == 'id'">
                                 <div class='check-label-container'>
                                     <VCheckbox v-if="getUserLevel() >= 50" v-model="selected" :value="item[_key]"
                                         class="check-label" />
                                     <span class="edit-link" @click="getUserLevel() >= 35 ? store.edit(item['id']) : ''">#{{ item[_key] }}</span>
                                 </div>
-                            </td>
-                            <td v-else-if="_key == 'module_type'">
+                            </span>
+                            <span v-else-if="_key == 'module_type'">
                                 <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
                                     {{ module_types.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
-                            </td>
-                            <td v-else-if="_key == 'settle_id'">
+                            </span>
+                            <span v-else-if="_key == 'settle_id'">
                                 <VChip :color="settleIdCol(item, store.params.level) === null ? 'default' : 'success'">
                                     {{ settleIdCol(item, store.params.level) === null ? '정산안함' : "#"+settleIdCol(item, store.params.level)}}
                                 </VChip>
-                            </td>
-                            <td v-else-if="_key == 'settle_dt'">
+                            </span>
+                            <span v-else-if="_key == 'settle_dt'">
                                 {{ getDateFormat(item[_key]) }}
-                            </td>
-                            <td v-else-if="_key == 'installment'">
+                            </span>
+                            <span v-else-if="_key == 'installment'">
                                 {{ installments.find(inst => inst['id'] === item[_key])?.title }}
-                            </td>
-                            <td v-else-if="_key == 'pg_id'">
+                            </span>
+                            <span v-else-if="_key == 'pg_id'">
                                 {{ pgs.find(pg => pg['id'] === item[_key])?.pg_name }}
-                            </td>
-                            <td v-else-if="_key == 'ps_id'">
+                            </span>
+                            <span v-else-if="_key == 'ps_id'">
                                 {{ pss.find(ps => ps['id'] === item[_key])?.name }}
-                            </td>
-                            <td v-else-if="_key == 'mcht_settle_type'">
+                            </span>
+                            <span v-else-if="_key == 'mcht_settle_type'">
                                 {{ settle_types.find(settle_type => settle_type['id'] === item[_key])?.name }}
-                            </td>
-                            <td v-else-if="_key == 'terminal_id'">
+                            </span>
+                            <span v-else-if="_key == 'terminal_id'">
                                 {{ terminals.find(terminal => terminal['id'] === item[_key])?.name }}
-                            </td>
-                            <td v-else-if="isSalesCol(_key as string)">
+                            </span>
+                            <span v-else-if="isSalesCol(_key as string)">
                                 {{ Number(item[_key]).toLocaleString() }}
-                            </td>
-                            <td v-else-if="_key.toString().includes('_fee') && _key != 'mcht_settle_fee'">
+                            </span>
+                            <span v-else-if="_key.toString().includes('_fee') && _key != 'mcht_settle_fee'">
                                 <VChip v-if="item[_key]">
                                     {{ (item[_key] * 100).toFixed(3) }} %
                                 </VChip>
-                            </td>
-                            <td v-else-if="_key == 'resident_num'">
+                            </span>
+                            <span v-else-if="_key == 'resident_num'">
                                 <span>{{ item['resident_num_front'] }}</span>
                                 <span style="margin: 0 0.25em;">-</span>
                                 <span v-if="corp.pv_options.free.resident_num_masking">*******</span>
                                 <span v-else>{{ item['resident_num_back'] }}</span>
-                            </td>
-                            <td v-else-if="_key == 'custom_id'">
+                            </span>
+                            <span v-else-if="_key == 'custom_id'">
                                 {{ cus_filters.find(cus => cus.id === item[_key])?.name }}
-                            </td>
-                            <td v-else-if="_key == 'realtime_result'">
+                            </span>
+                            <span v-else-if="_key == 'realtime_result'">
                                 <VChip :color="store.getSelectIdColor(realtimeResult(item))">
                                     {{ realtimeMessage(item) }}
                                 </VChip>
-                            </td>
-                            <td v-else-if="_key == 'extra_col'">
+                            </span>
+                            <span v-else-if="_key == 'extra_col'">
                                 <ExtraMenu :item="item"></ExtraMenu>
-                            </td>
-                            <td v-else>
+                            </span>
+                            <span v-else>
                                 {{ item[_key] }}
-                            </td>
-                        </template>
+                            </span>
+                        </td>
                     </template>
                 </tr>
             </template>

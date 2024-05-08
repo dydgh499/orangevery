@@ -139,9 +139,9 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
             }
             return datas
         }
-
         const keys = Object.keys(head.flat_headers.value)
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
+
         let datas:any = []
         for (let i = 0; i < r.data.content.length; i++) {
             datas.push(getSalesData(r.data.content[i]))

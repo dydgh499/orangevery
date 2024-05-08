@@ -95,6 +95,7 @@ class BfController extends Controller
     public function payModules(Request $request)
     {
         $pay_modules = PaymentModule::where('mcht_id', $request->user()->id)
+            ->where('is_delete', false)
             ->where('module_type', 1)
             ->with(['payLimitAmount'])
             ->get([
