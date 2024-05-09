@@ -121,6 +121,7 @@ class BulkPayModuleRequest extends FormRequest
         { 
             $data = array_merge($this->getParmasBaseKeyV3($_datas[$i], $this->integer_keys, 0), $this->getParmasBaseKeyV3($_datas[$i], $this->string_keys, ''));
             $data = array_merge($data, $this->getParmasBaseKeyV3($_datas[$i], $this->nullable_keys, null));
+            $data['payment_term_min'] = 1;
             array_push($datas, $data);
         }
         return collect($datas);

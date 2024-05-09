@@ -72,8 +72,8 @@ class PaymentModule extends Model
         $e_dt = Carbon::now()->subMonthNoOverflow(1)->endOfMonth()->format('Y-m-d 59:59:59');
 
         $trans_pmod_ids = Transaction::where('brand_id', $brand_id)
-            ->where('trx_dt', '>=', $s_dt)
-            ->where('trx_dt', '>=', $e_dt)
+            ->where('trx_at', '>=', $s_dt)
+            ->where('trx_at', '<=', $e_dt)
             ->where('is_cancel', false)
             ->distinct()->pluck('pmod_id')->all();
         return $query->whereNotIn('payment_modules.id', $trans_pmod_ids);
