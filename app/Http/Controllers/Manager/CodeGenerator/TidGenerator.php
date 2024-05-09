@@ -41,8 +41,6 @@ class TidGenerator implements GeneratorInterface
         }
         else
             $idx = 0;
-        if(($pg_type === 1 && $pg_type === 12) && date('ym') === '2404')
-            $idx -= 5000;
         return $idx;
     }
 

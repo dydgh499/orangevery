@@ -1,11 +1,10 @@
 a
 <script setup lang="ts">
 
-import { IS_FIXPLUS_AGCY1_MODIFY_ABLE, IS_FIXPLUS_AGCY2_MODIFY_ABLE, isFixplus } from '@/plugins/fixplus';
 import { useRequestStore } from '@/views/request';
 import { useSalesFilterStore } from '@/views/salesforces/useStore';
 import type { Tab } from '@/views/types';
-import { axios, getUserLevel, isAbleModiy, user_info } from '@axios';
+import { getUserLevel, isAbleModiy, user_info } from '@axios';
 import { VForm } from 'vuetify/components';
 
 interface Props {
@@ -63,19 +62,6 @@ watchEffect(() => {
         setOneObject('/' + props.path, Number(props.id), props.item)
 });
 
-watchEffect(() => {
-    if(isFixplus()) {
-        if(props.id && props.path === 'merchandises' && getUserLevel() <= 20) {
-            if(getUserLevel() === 20) {
-                //하위 영업점이 등록되어 잇는 경우, 수정불가
-                IS_FIXPLUS_AGCY1_MODIFY_ABLE.value = props.item['sales2_id'] ? false : true
-            }
-            axios.get('/api/v1/bf/occuerred-sale', {params: {mcht_id:props.id}}).then( r => {
-                IS_FIXPLUS_AGCY2_MODIFY_ABLE.value = r.data.exist === false
-            }).catch(e => {})
-        }
-    }
-})
 </script>
 <template>
     <VTabs v-model="tab" class="v-tabs-pill">

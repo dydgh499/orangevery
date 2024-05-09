@@ -5,8 +5,6 @@ import { Merchandise, PayModule, Salesforce } from '@/views/types';
 import { axios, getLevelByIndex, getUserLevel, user_info } from '@axios';
 import corp from './corp';
 
-export const IS_FIXPLUS_AGCY1_MODIFY_ABLE = ref(<boolean>(false))
-export const IS_FIXPLUS_AGCY2_MODIFY_ABLE = ref(<boolean>(false))
 // 픽스플러스 영업점 업데이트 가능 여부
 export const isFixplusSalesAbleUpdate = (id: number) => {   
     const path = router.currentRoute.value.path
@@ -17,20 +15,8 @@ export const isFixplusSalesAbleUpdate = (id: number) => {
         else if(getUserLevel() === 25) { //지사
             return true
         }
-        else {  //대리점
-            if(id) {
-                if(getUserLevel() === 20) { // 대리점 1일 경우, 대리점 2가 있는지 여부에 따라 2가 있으면 업데이트 못함
-                    // 하위 대리점이 없을 경우
-                    if(IS_FIXPLUS_AGCY1_MODIFY_ABLE.value) 
-                        return IS_FIXPLUS_AGCY2_MODIFY_ABLE.value   //매출이 발생했는지 확인
-                    else    //하위 대리점이 있을 경우 (수정 불가)
-                        IS_FIXPLUS_AGCY1_MODIFY_ABLE.value
-                }
-                else    //대리점 2일 경우 가맹점 정보 수정 가능
-                    return IS_FIXPLUS_AGCY2_MODIFY_ABLE.value
-            }
-            else
-                return true
+        else {
+            return true;
         }
     }
     else if(path.includes('/salesforces')) {
