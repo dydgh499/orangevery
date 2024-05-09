@@ -69,7 +69,7 @@ class PaymentModule extends Model
     public function scopeNotUseLastMonth($query, $brand_id)
     {
         $s_dt = Carbon::now()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d 00:00:00');
-        $e_dt = Carbon::now()->subMonthNoOverflow(1)->endOfMonth()->format('Y-m-d 29:59:59');
+        $e_dt = Carbon::now()->subMonthNoOverflow(1)->endOfMonth()->format('Y-m-d 23:59:59');
 
         $trans_pmod_ids = Transaction::where('brand_id', $brand_id)
             ->where('trx_at', '>=', $s_dt)
