@@ -166,7 +166,7 @@ onMounted(() => {
                             </BaseQuestionTooltip>
                         </span>
                         <span v-else>
-                            <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 50">
+                            <div class='check-label-container' v-if="key == 'id' && getUserLevel() >= 35">
                                 <VCheckbox v-model="all_selected" class="check-label" />
                                 <span>선택/취소</span>
                             </div>
@@ -183,7 +183,7 @@ onMounted(() => {
                         <td v-if="_header.visible" :style="item['is_cancel'] ? 'color:red;' : ''" class='list-square' >
                             <span v-if="_key == 'id'">
                                 <div class='check-label-container'>
-                                    <VCheckbox v-if="getUserLevel() >= 50" v-model="selected" :value="item[_key]"
+                                    <VCheckbox v-if="getUserLevel() >= 35" v-model="selected" :value="item[_key]"
                                         class="check-label" />
                                     <span class="edit-link" @click="getUserLevel() >= 35 ? store.edit(item['id']) : ''">#{{ item[_key] }}</span>
                                 </div>

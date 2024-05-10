@@ -182,18 +182,20 @@ class DifferenceSettlement
             else if($this->service_name == 'danal')
             {
                 if($total_amount < 0)
-                {
                     $total_amount = $this->setNtypeField($total_amount, 17);
-                    $total_amount = "-".$total_amount;
-                }
                 else
                     $total_amount = $this->setNtypeField($total_amount, 18);
             }
             else // nicepay
                 $total_amount   = $this->setNtypeField($total_amount, 18);
 
-            $filter         = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
-            return $record_type.$total_count.$total_amount.$filter."\r\n";   
+            $filter     = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
+            $total_record = $record_type.$total_count.$total_amount.$filter."\r\n";
+
+            if($this->service_name == 'danal' && $total_amount < 0)
+                return "-".$total_record;
+            else
+                $total_record;
         }
     }
 
