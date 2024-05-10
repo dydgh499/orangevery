@@ -40,12 +40,12 @@ export const realtimeResult = (item: Transaction) => {
         return StatusColors.Processing
     if(is_cancel)   // 취소
         return StatusColors.Cancel
+    if(is_deposit_cancel_job)
+        return StatusColors.DepositCancelJob
     if(item.use_realtime_deposit == 0) // 사용안함
         return StatusColors.Default
     if(is_error)    // 에러
         return StatusColors.Error
-    if(is_deposit_cancel_job)
-        return StatusColors.DepositCancelJob
 
     if(item.fin_trx_delay as number < 0 && item.realtimes?.length == 0)    // 모아서 출금
         return StatusColors.Info
