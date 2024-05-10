@@ -26,6 +26,7 @@ export const StatusColors = {
     Cancel  : 6,
     Timeout : 7,
     Processing : 8,
+    DepositCancelJob : 9,
 } as const
 
 export const DateFilters = {

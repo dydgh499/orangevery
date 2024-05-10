@@ -46,6 +46,23 @@ const changeSettleDay = () => {
     changeSettleDateDialog.value.show(props.selected_idxs)
 }
 
+const singleDepositCancelJobReservation = async (trx_ids: number[]) => {
+    if (await alert.value.show('정말 해당 거래건을 이체예약취소처리 하시겠습니까?')) {
+        const params = {
+            'trx_ids': trx_ids,
+        }
+        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit-cancel-job-reservation', params, true)
+        if(r.status == 201) {
+            props.store.setChartProcess()
+            props.store.setTable()
+        }
+    }
+}
+
+const isRealtimeTransaction = () => {
+    return getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit
+}
+
 const show = () => {
     visible.value = true
 }
@@ -71,6 +88,12 @@ defineExpose({
                                 <span style="margin: 0.25em 0;"></span>
                                 <VBtn prepend-icon="tabler-calculator" @click="batchRetry('/api/v1/manager/transactions/batch-retry')" size="small">
                                     노티 재발송
+                                </VBtn>
+                            </template>
+                            <template v-if="isRealtimeTransaction() && getUserLevel() >= 50">
+                                <span style="margin: 0.25em 0;"></span>
+                                <VBtn prepend-icon="tabler-calculator" @click="singleDepositCancelJobReservation(props.selected_idxs)" size="small" color="warning">
+                                    이체예약취소
                                 </VBtn>
                             </template>
                             <span style="margin: 0.25em 0;"></span>

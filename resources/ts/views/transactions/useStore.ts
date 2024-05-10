@@ -33,6 +33,7 @@ export const realtimeResult = (item: Transaction) => {
     const is_sending = item.realtimes?.find(obj => obj.result_code === '0050' && obj.request_type === 6170)
     const is_cancel = item.realtimes?.find(obj => obj.request_type === -2)
     const is_error  = item.realtimes?.find(obj => obj.result_code !== '0000' && obj.result_code !== '0050')
+    const is_deposit_cancel_job  = item.realtimes?.find(obj => obj.request_type === -5)
     if(is_success)  //성공
         return StatusColors.Success
     if(is_sending)  // 처리중
@@ -43,6 +44,8 @@ export const realtimeResult = (item: Transaction) => {
         return StatusColors.Default
     if(is_error)    // 에러
         return StatusColors.Error
+    if(is_deposit_cancel_job)
+        return StatusColors.DepositCancelJob
 
     if(item.fin_trx_delay as number < 0 && item.realtimes?.length == 0)    // 모아서 출금
         return StatusColors.Info
@@ -359,6 +362,8 @@ export const useSearchStore = defineStore('transSearchStore', () => {
             return '취소'
         else if(code === StatusColors.Timeout)
             return '이체예정시간 초과'
+        else if(code === StatusColors.DepositCancelJob)
+            return '이체예약취소'
         else
             return '알수없는 상태'
     }

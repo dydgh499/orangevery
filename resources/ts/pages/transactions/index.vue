@@ -41,9 +41,6 @@ provide('cancelPart', cancelPart)
 provide('cancelDeposit', cancelDeposit)
 provide('realtimeHistories', realtimeHistories)
 
-const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
-
 store.params.level = 10
 // 개발사 사용여부
 if (Number(corp.pv_options.auth.levels.dev_use))

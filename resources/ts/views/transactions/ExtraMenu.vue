@@ -58,10 +58,10 @@ const retryDeposit = async () => {
     }
 }
 
-const singleDepositCancelJobReservation = async () => {
+const singleDepositCancelJobReservation = async (trx_ids: number[]) => {
     if (await alert.value.show('정말 해당 거래건을 이체예약취소처리 하시겠습니까?')) {
         const params = {
-            'trx_ids': [props.item.id],
+            'trx_ids': trx_ids,
         }
         const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit-cancel-job-reservation', params, true)
         if(r.status == 201) {
@@ -152,7 +152,7 @@ const isUseCancelDeposit = () => {
                     </template>
                     <VListItemTitle>재이체</VListItemTitle>
                 </VListItem>
-                <VListItem value="retry-realtime-deposit" class="pg-cancel" @click="singleDepositCancelJobReservation()"
+                <VListItem value="retry-realtime-deposit" class="single-deposit-cancel-job" @click="singleDepositCancelJobReservation([props.item.id])"
                     v-if="isRealtimeTransaction() && realtimeResult(props.item) === StatusColors.Primary && getUserLevel() >= 50">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="material-symbols:free-cancellation-outline" />
