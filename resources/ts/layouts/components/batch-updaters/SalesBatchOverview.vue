@@ -3,9 +3,9 @@
 <script lang="ts" setup>
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
+import { Salesforce } from '@/views/types'
 import { banks } from '@/views/users/useStore'
 import { axios } from '@axios'
-import { Salesforce } from '@/views/types'
 
 interface Props {
     selected_idxs: number[],

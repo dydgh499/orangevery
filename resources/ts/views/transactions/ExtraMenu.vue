@@ -43,7 +43,7 @@ const complaint = () => {
     })
 }
 const retryDeposit = async () => {
-    if (await alert.value.show('정말 해당 가맹점의 거래건을 재이체(정산) 하시겠습니까?')) {
+    if (await alert.value.show('정말 해당 거래건을 재이체(정산) 하시겠습니까?')) {
         const params = {
             'trx_id': props.item.id,
             'mid': props.item.mid,
@@ -51,6 +51,19 @@ const retryDeposit = async () => {
             'pmod_id': props.item.pmod_id,
         }
         const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit', params, true)
+        if(r.status == 201) {
+            store.setChartProcess()
+            store.setTable()
+        }
+    }
+}
+
+const singleDepositCancelJobReservation = async () => {
+    if (await alert.value.show('정말 해당 거래건을 이체예약취소처리 하시겠습니까?')) {
+        const params = {
+            'trx_ids': [props.item.id],
+        }
+        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit-cancel-job-reservation', params, true)
         if(r.status == 201) {
             store.setChartProcess()
             store.setTable()
@@ -139,8 +152,16 @@ const isUseCancelDeposit = () => {
                     </template>
                     <VListItemTitle>재이체</VListItemTitle>
                 </VListItem>
+                <VListItem value="retry-realtime-deposit" class="pg-cancel" @click="singleDepositCancelJobReservation()"
+                    v-if="isRealtimeTransaction() && realtimeResult(props.item) === StatusColors.Primary && getUserLevel() >= 50">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="material-symbols:free-cancellation-outline" />
+                    </template>
+                    <VListItemTitle>이체예약취소</VListItemTitle>
+                </VListItem>
+                
                 <VListItem value="noti" class="noti" @click="noti()"
-                    v-if="corp.pv_options.paid.use_noti && getUserLevel() >= 50">
+                    v-if="corp.pv_options.paid.use_noti && getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="emojione:envelope" />
                     </template>

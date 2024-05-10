@@ -46,8 +46,6 @@ const getSalesHeaders = () => {
         'sales_name': '영업점 상호',
     }
     headers['under_auto_settings'] = '수수료율'
-    if(getUserLevel() >= 35)
-        headers['is_able_modify_mcht'] = '가맹점 수정권한'
     headers['view_type'] = '화면타입'
     headers['settle_cycle'] = '정산 주기'
     headers['settle_day'] = '정산 요일'

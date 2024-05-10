@@ -191,6 +191,8 @@ Route::prefix('v1')->group(function() {
                 Route::post('merchandises/batch-deposit', [MchtSettleHistoryController::class, 'setBatchDeposit']);
                 
                 Route::post('merchandises/single-deposit', [MchtSettleHistoryController::class, 'singleDeposit']);
+                Route::post('merchandises/single-deposit-cancel-job-reservation', [MchtSettleHistoryController::class, 'singleDepositCancelJobReservation']);
+
                 Route::apiResource('merchandises', MchtSettleHistoryController::class);
                 
                 Route::get('salesforces/chart', [SalesSettleHistoryController::class, 'chart']);

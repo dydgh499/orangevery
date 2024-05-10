@@ -71,12 +71,6 @@ const getChildDepth = computed(() => {
                         {{ tax_types.find(sales => sales.id === props.salesforce[key])?.title }}
                     </VChip>
                 </span>
-                <span v-else-if="key == 'is_able_modify_mcht'">
-                    <VChip
-                        :color="store.booleanTypeColor(!props.salesforce[key])">
-                        {{ props.salesforce[key] ? '가능' : '불가능' }}
-                    </VChip>
-                </span>
                 <span v-else-if="key == 'view_type'">
                     <VChip
                         :color="store.booleanTypeColor(!props.salesforce[key])">
