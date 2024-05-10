@@ -73,7 +73,7 @@ defineExpose({
 </script>
 <template>
     <div>
-        <VDialog v-model="visible" persistent style="max-width: 600px;">
+        <VDialog v-model="visible" persistent style="max-width: 700px;">
             <DialogCloseBtn @click="visible = !visible" />
             <VCard title="매출 일괄작업">
                 <VCardText>
