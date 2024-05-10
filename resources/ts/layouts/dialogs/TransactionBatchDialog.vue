@@ -90,7 +90,7 @@ defineExpose({
                                     노티 재발송
                                 </VBtn>
                             </template>
-                            <template v-if="isRealtimeTransaction() && getUserLevel() >= 50">
+                            <template v-if="isRealtimeTransaction() && getUserLevel() >= 35">
                                 <span style="margin: 0.25em 0;"></span>
                                 <VBtn prepend-icon="tabler-calculator" @click="singleDepositCancelJobReservation(props.selected_idxs)" size="small" color="warning">
                                     이체예약취소

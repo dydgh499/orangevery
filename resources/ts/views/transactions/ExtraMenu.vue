@@ -153,7 +153,7 @@ const isUseCancelDeposit = () => {
                     <VListItemTitle>재이체</VListItemTitle>
                 </VListItem>
                 <VListItem value="retry-realtime-deposit" class="single-deposit-cancel-job" @click="singleDepositCancelJobReservation([props.item.id])"
-                    v-if="isRealtimeTransaction() && realtimeResult(props.item) === StatusColors.Primary && getUserLevel() >= 50">
+                    v-if="isRealtimeTransaction() && realtimeResult(props.item) === StatusColors.Primary && getUserLevel() >= 35">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="material-symbols:free-cancellation-outline" />
                     </template>

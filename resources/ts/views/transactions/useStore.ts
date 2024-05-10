@@ -31,9 +31,10 @@ export const realtimeResult = (item: Transaction) => {
     //실시간 수수료 존재시(실시간 사용)    
     const is_success = item.realtimes?.find(obj => obj.result_code === '0000' && obj.request_type === 6170)
     const is_sending = item.realtimes?.find(obj => obj.result_code === '0050' && obj.request_type === 6170)
-    const is_cancel = item.realtimes?.find(obj => obj.request_type === -2)
+    const is_cancel = item.realtimes?.find(obj => obj.result_code === '-2')
     const is_error  = item.realtimes?.find(obj => obj.result_code !== '0000' && obj.result_code !== '0050')
-    const is_deposit_cancel_job  = item.realtimes?.find(obj => obj.request_type === -5)
+    const is_deposit_cancel_job  = item.realtimes?.find(obj => obj.result_code === '-5')
+
     if(is_success)  //성공
         return StatusColors.Success
     if(is_sending)  // 처리중
