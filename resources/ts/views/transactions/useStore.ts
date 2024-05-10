@@ -356,14 +356,14 @@ export const useSearchStore = defineStore('transSearchStore', () => {
             return '결과 처리중'
         else if(code === StatusColors.Info)
             return '모아서 출금예정'
+        else if(code === StatusColors.DepositCancelJob)
+            return '이체예약취소'
         else if(code === StatusColors.Error)
             return '실패'
         else if(code === StatusColors.Cancel)
             return '취소'
         else if(code === StatusColors.Timeout)
             return '이체예정시간 초과'
-        else if(code === StatusColors.DepositCancelJob)
-            return '이체예약취소'
         else
             return '알수없는 상태'
     }
