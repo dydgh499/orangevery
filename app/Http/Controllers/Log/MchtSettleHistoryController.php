@@ -277,9 +277,8 @@ class MchtSettleHistoryController extends Controller
         if($request->user()->tokenCan(35))
         {
             $validated = $request->validate(['trx_ids.*'=>'required|numeric']);
-            $data = $request->all();
             $url = $this->base_noti_url.'/single-deposit-cancel-job-reservation';
-            $res = post($url,['trx_ids' => $data]);
+            $res = post($url,$request->all());
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
         }
         else
