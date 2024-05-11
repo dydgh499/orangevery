@@ -123,6 +123,7 @@ class MerchandiseController extends Controller
         foreach($data['content'] as $content) 
         {
             $my_modules = isset($module_mcht_ids[$content->id]) ? collect($module_mcht_ids[$content->id]) : collect();
+            $content->serial_nums  = $my_modules->pluck('serial_num')->values()->toArray();
             $content->settle_types = $my_modules->pluck('settle_type')->values()->toArray();
             $content->mids = $my_modules->pluck('mid')->values()->toArray();
             $content->tids = $my_modules->pluck('tid')->values()->toArray();
@@ -147,7 +148,7 @@ class MerchandiseController extends Controller
             ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
             ->whereIn('mcht_id', $mcht_ids)
-            ->get(['mcht_id', 'mid', 'tid', 'module_type', 'pg_id', 'settle_type']);
+            ->get(['mcht_id', 'mid', 'tid', 'module_type', 'pg_id', 'settle_type', 'serial_num']);
         
         return $this->mappingPayModules($data, $pay_modules);    
     }

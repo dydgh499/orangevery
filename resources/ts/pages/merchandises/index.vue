@@ -133,6 +133,13 @@ onMounted(() => {
                                     </option>
                                 </select>
                             </span>
+                            <span v-else-if="_key == 'serial_nums'">
+                                <select class="custom-select">
+                                    <option v-for="(_pg, key) in item['serial_nums']" :key="key">
+                                        {{ pgs.find(pg => pg.id === _pg)?.pg_name }}
+                                    </option>
+                                </select>
+                            </span>
                             <span v-else-if="_key == 'resident_num'">
                                 <span>{{ item['resident_num_front'] }}</span>
                                 <span style="margin: 0 0.25em;">-</span>

@@ -76,7 +76,7 @@ export const settleIdCol = (item: Transaction, search_level: number) => {
 
 export const isRetryAble = (item: Transaction) => {
     const result = realtimeResult(item)
-    if(result == StatusColors.Error || result == StatusColors.Timeout)
+    if(result == StatusColors.Error || result == StatusColors.Timeout ||  result == StatusColors.DepositCancelJob)
         return true
     else
         return false

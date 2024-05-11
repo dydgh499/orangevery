@@ -55,6 +55,7 @@ const getMchtHeaders = () => {
     headers['settle_types'] = '정산일'
     headers['mcht_name'] = '상호'
     if(getUserLevel() >= 35) {
+        headers['serial_nums'] = '시리얼번호'
         headers['mids'] = 'MID'
         headers['tids'] = 'TID'
         headers['module_types'] = '모듈타입'
@@ -142,9 +143,10 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
         for (let i = 0; i < datas.length; i++) {
             if(getUserLevel() >= 35) {
                 datas[i]['module_types'] = getModuleTypes(datas[i]['module_types']).join(',')
+                datas[i]['serial_nums'] = datas[i]['serial_nums'].join(',')
                 datas[i]['pgs'] = getPGs(datas[i]['pgs']).join(',')
                 datas[i]['mids'] = datas[i]['mids'].join(',')
-                datas[i]['tids'] = datas[i]['tids'].join(',')
+                datas[i]['tids'] = datas[i]['tids'].join(',')                
             }
             datas[i]['settle_types'] = getSettleTypes(datas[i]['settle_types']).join(',')
             datas[i]['resident_num'] = datas[i]['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : datas[i]['resident_num_back'])
