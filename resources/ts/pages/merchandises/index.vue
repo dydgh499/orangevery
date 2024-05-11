@@ -135,8 +135,8 @@ onMounted(() => {
                             </span>
                             <span v-else-if="_key == 'serial_nums'">
                                 <select class="custom-select">
-                                    <option v-for="(_pg, key) in item['serial_nums']" :key="key">
-                                        {{ pgs.find(pg => pg.id === _pg)?.pg_name }}
+                                    <option v-for="(serial_num, key) in item['serial_nums']" :key="key">
+                                        {{ serial_num }}
                                     </option>
                                 </select>
                             </span>

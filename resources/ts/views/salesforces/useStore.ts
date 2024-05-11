@@ -119,14 +119,16 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
 
     const exporter = async (type: number) => {
         const getSalesData = (salesforce: Salesforce) => {            
-            let data:any = {}
+            let data:any = salesforce
             data['level'] = all_sales.find(obj => obj['id'] === salesforce['level'])?.title as string
             data['settle_cycle'] = all_cycles.find(obj => obj['id'] === salesforce['settle_cycle'])?.title as string
             data['settle_day'] = all_days.find(obj => obj['id'] === salesforce['settle_day'])?.title as string
             data['settle_tax_type'] = tax_types.find(obj => obj['id'] === salesforce['settle_tax_type'])?.title as string
             data['resident_num'] = salesforce['resident_num_front'] + "-" + (corp.pv_options.free.resident_num_masking ? "*******" : salesforce['resident_num_back'])
-            data = head.sortAndFilterByHeader(salesforce, keys)
-            return data
+            data['view_type'] = data['view_type'] ? '상세보기' : '간편보기' 
+            if(isFixplus() === false)
+                data['under_auto_settings'] = JSON.stringify(getAutoSetting(data['under_auto_settings']))
+            return head.sortAndFilterByHeader(data, keys)
         }
         const getChildDatas = (datas:any[], childs: Salesforce[]) => {
             for (let i = 0; i < childs.length; i++) {
@@ -137,6 +139,7 @@ export const useSearchStore = defineStore('salesSearchStore', () => {
             }
             return datas
         }
+
         const keys = Object.keys(head.flat_headers.value)
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
 
