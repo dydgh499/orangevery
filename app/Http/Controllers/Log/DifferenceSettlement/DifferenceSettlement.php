@@ -195,7 +195,7 @@ class DifferenceSettlement
             if($this->service_name == 'danal' && $total_amount < 0)
                 return "-".$total_record;
             else
-                $total_record;
+                return $total_record;
         }
     }
 
