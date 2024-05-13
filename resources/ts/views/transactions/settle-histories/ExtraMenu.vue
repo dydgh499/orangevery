@@ -18,15 +18,16 @@ const addDeductDialog = <any>(inject('addDeductDialog'))
 const { deposit, cancel, download, addDeduct, linkAccount } = settlementHistoryFunctionCollect(store)
 
 const getDepositParams = async () => {
-    const params:any = {
-        brand_id: corp.id,
-        use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
-    }
+    const params:any = {brand_id: corp.id,}
     if(params['use_finance_van_deposit']) {
         params['fin_id'] = await financeDialog.value.show()
         // 선택안함
         if(params['fin_id'] == 0)
-            return 0
+            return 0        
+        else if(params['fin_id'] == -1)
+            params.use_finance_van_deposit = 0
+        else
+            params.use_finance_van_deposit = Number(corp.pv_options.paid.use_finance_van_deposit)
     }
     deposit(props.item, props.is_mcht, params)
 }

@@ -19,15 +19,16 @@ const { batchDeposit, batchCancel, batchLinkAccount } = settlementHistoryFunctio
 
 const getBatchDepositParams = async () => {
     if (props.selected_idxs) {
-        const params: any = {
-            brand_id: corp.id,
-            use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
-        }
+        const params: any = {brand_id: corp.id,}
         if (params['use_finance_van_deposit']) {
             params['fin_id'] = await financeDialog.value.show()
             // 선택안함
             if (params['fin_id'] == 0)
                 return 0
+            else if(params['fin_id'] == -1)
+                params.use_finance_van_deposit = 0
+            else
+                params.use_finance_van_deposit = Number(corp.pv_options.paid.use_finance_van_deposit)
         }
         batchDeposit(props.selected_idxs, props.is_mcht, params)
     }

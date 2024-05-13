@@ -68,6 +68,9 @@ defineExpose({
                     <VBtn @click="selected()">
                         <span style="font-weight: bold;">이체하기</span>
                     </VBtn>
+                    <VBtn @click="visible = false; resolveCallback(-1)" color="warning">
+                        <span style="font-weight: bold;">입금상태만 변경</span>
+                    </VBtn>
                 </VRow>
             </VCardText>
         </VCard>
