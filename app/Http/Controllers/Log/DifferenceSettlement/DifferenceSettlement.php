@@ -182,15 +182,10 @@ class DifferenceSettlement
             if($this->service_name == 'hecto' || $this->service_name == 'welcome1')
                 $total_amount   = $this->setAtypeField($total_amount, 18);
             else if($this->service_name == 'danal' && $total_amount < 0)
-            {
-                $total_amount   = $this->setNtypeField(abs($total_amount), 17);
-                return "-".$record_type.$total_count.$total_amount.$filter."\r\n";
-            }
+                $total_amount   = "-".$this->setNtypeField(abs($total_amount), 17);
             else // nicepay
-            {
                 $total_amount   = $this->setNtypeField($total_amount, 18);
-                return $record_type.$total_count.$total_amount.$filter."\r\n";
-            }
+            return $record_type.$total_count.$total_amount.$filter."\r\n";
         }
     }
 
