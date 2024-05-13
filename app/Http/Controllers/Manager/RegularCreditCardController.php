@@ -42,7 +42,7 @@ class RegularCreditCardController extends Controller
     /**
      * 추가
      *
-     * 단골고객 카드를 추가합니다. (10개이상 등록 불가능)
+     * 단골고객 카드를 추가합니다. (20개이상 등록 불가능)
      */
     public function store(RegularCreditCardRequest $request)
     {
@@ -53,7 +53,7 @@ class RegularCreditCardController extends Controller
             return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);    
         }
         else
-            return $this->extendResponse(1999, '10개이상 등록할 수 없습니다.');
+            return $this->extendResponse(1999, '20개이상 등록할 수 없습니다.');
     }
 
     /**
