@@ -268,32 +268,34 @@ class DifferenceSettlementHistoryController extends Controller
     static public function differenceSettleRequestTest()
     {
         //DifferenceSettlementHistoryController::differenceSettleRequestTest()
-        $ds_id      = 3;
+        $ds_ids      = [1,2];
         $date       = Carbon::now();
         $yesterday  = $date->copy()->subDay(0)->format('Y-m-d');
-
-        $brand = Brand::join('different_settlement_infos', 'brands.id', '=', 'different_settlement_infos.brand_id')
+        foreach($ds_ids as $ds_id)
+        {
+            $brand = Brand::join('different_settlement_infos', 'brands.id', '=', 'different_settlement_infos.brand_id')
             ->where('brands.is_delete', false)
             ->where('different_settlement_infos.is_delete', false)
             ->where('brands.use_different_settlement', true)
             ->where('different_settlement_infos.id', $ds_id)
             ->first(['brands.business_num', 'different_settlement_infos.*']);
-        if($brand)
-        {
-            $trans = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
-                ->join('payment_gateways', 'transactions.pg_id', '=', 'payment_gateways.id')
-                ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
-                ->where('merchandises.business_num', '!=', '')
-                ->where('payment_gateways.pg_type', $brand->pg_type)
-                ->where('transactions.brand_id', $brand->brand_id)
-                ->where('transactions.trx_at', '>=', "2024-03-26 00:00:00")
-                ->where('transactions.trx_at', '<=', "2024-04-23 23:59:59")
-                ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
+            if($brand)
+            {
+                $trans = Transaction::join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
+                    ->join('payment_gateways', 'transactions.pg_id', '=', 'payment_gateways.id')
+                    ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
+                    ->where('merchandises.business_num', '!=', '')
+                    ->where('payment_gateways.pg_type', $brand->pg_type)
+                    ->where('transactions.brand_id', $brand->brand_id)
+                    ->where('transactions.trx_at', '>=', "2024-05-08 00:00:00")
+                    ->where('transactions.trx_at', '<=', "2024-05-13 23:59:59")
+                    ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
 
-            $ist = new DifferenceSettlementHistoryController(new DifferenceSettlementHistory);
-            $pg = $ist->getPGClass($brand);
-            if($pg)
-                $res = $pg->request($date, $trans);
+                $ist = new DifferenceSettlementHistoryController(new DifferenceSettlementHistory);
+                $pg = $ist->getPGClass($brand);
+                if($pg)
+                    $res = $pg->request($date, $trans);
+            }
         }
     }
 
