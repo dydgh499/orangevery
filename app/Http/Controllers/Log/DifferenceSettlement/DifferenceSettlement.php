@@ -172,6 +172,8 @@ class DifferenceSettlement
         else
         {
             $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::TOTAL->value, 2);
+            $filter         = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
+
             if($this->service_name == 'welcome1')
                 $total_count    = $this->setAtypeField($total_count, 7);
             else
@@ -179,23 +181,16 @@ class DifferenceSettlement
 
             if($this->service_name == 'hecto' || $this->service_name == 'welcome1')
                 $total_amount   = $this->setAtypeField($total_amount, 18);
-            else if($this->service_name == 'danal')
+            else if($this->service_name == 'danal' && $total_amount < 0)
             {
-                if($total_amount < 0)
-                    $total_amount = $this->setNtypeField($total_amount, 17);
-                else
-                    $total_amount = $this->setNtypeField($total_amount, 18);
+                $total_amount   = $this->setNtypeField(abs($total_amount), 17);
+                return "-".$record_type.$total_count.$total_amount.$filter."\r\n";
             }
             else // nicepay
+            {
                 $total_amount   = $this->setNtypeField($total_amount, 18);
-
-            $filter     = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
-            $total_record = $record_type.$total_count.$total_amount.$filter."\r\n";
-
-            if($this->service_name == 'danal' && $total_amount < 0)
-                return "-".$total_record;
-            else
-                return $total_record;
+                return $record_type.$total_count.$total_amount.$filter."\r\n";
+            }
         }
     }
 
