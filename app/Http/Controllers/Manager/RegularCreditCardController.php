@@ -47,7 +47,7 @@ class RegularCreditCardController extends Controller
     public function store(RegularCreditCardRequest $request)
     {
         $data = $request->data();
-        if($this->cards->where('mcht_id', $data['mcht_id'])->count() < 10)
+        if($this->cards->where('mcht_id', $data['mcht_id'])->count() < 20)
         {
             $res = $this->cards->create($data);
             return $this->response($res ? 1 : 990, ['id'=>$res->id, 'mcht_id'=>$data['mcht_id']]);    
