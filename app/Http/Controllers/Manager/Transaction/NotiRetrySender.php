@@ -24,7 +24,7 @@ class NotiRetrySender
 
     static public function getNotiSendFormat($tran, $temp='')
     {
-        return [
+        $params = [
             'mid'   => $tran->mid,
             'tid'    => $tran->tid,
             'trx_id'    => $tran->trx_id,
@@ -42,6 +42,13 @@ class NotiRetrySender
             'is_cancel'     => $tran->is_cancel,
             'temp'          => $temp,
         ];
+        if($tran->is_cancel)
+        {
+            $params['amount'] *= -1;
+            $params['cxl_dttm'] = $tran->cxl_dt." ".$tran->cxl_tm;
+            $params['ori_trx_id'] = $tran->ori_trx_id;
+        }
+        return $params;
     }
 
     static public function notiSender($url, $tran, $temp='')
@@ -51,12 +58,6 @@ class NotiRetrySender
             'Accept' => 'application/json',
         ];
         $params = self::getNotiSendFormat($tran, $temp);
-        if($tran->is_cancel)
-        {
-            $params['amount'] *= -1;
-            $params['cxl_dttm'] = $tran->cxl_dt." ".$tran->cxl_tm;
-            $params['ori_trx_id'] = $tran->ori_trx_id;
-        }
         return post($url, $params, $headers);
     }
 

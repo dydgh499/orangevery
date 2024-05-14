@@ -68,7 +68,7 @@ class NotiSendHistoryController extends Controller
             ->first($this->cols);
 
         $res = NotiRetrySender::notiSender($noti->send_url, $noti, $noti->temp);
-        $res =NotiRetrySender::save($res, $noti);
+        $res = NotiRetrySender::save($res, $noti);
         return $this->response($res ? 1 : 990);
     }
 
