@@ -54,7 +54,7 @@ class NotiRetrySender
         if($tran->is_cancel)
         {
             $params['amount'] *= -1;
-            $params['cxl_dttm'] = $tran->cxl_dttm;
+            $params['cxl_dttm'] = $tran->cxl_dt." ".$tran->cxl_tm;
             $params['ori_trx_id'] = $tran->ori_trx_id;
         }
         return post($url, $params, $headers);
