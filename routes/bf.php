@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Bf\BfController;
-use App\Http\Controllers\Manager\RegularCreditCardController;
+use App\Http\Controllers\Manager\Merchandise\RegularCreditCardController;
 
 Route::middleware('log.route')->group(function() {
     Route::post('sign-in', [BfController::class, 'login']);

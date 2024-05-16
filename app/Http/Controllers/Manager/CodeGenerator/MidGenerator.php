@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Manager\CodeGenerator;
 
 use App\Http\Controllers\Manager\CodeGenerator\GeneratorInterface;
-use App\Models\PaymentModule;
+use App\Models\Merchandise\PaymentModule;
 use Carbon\Carbon;
 
 class MidGenerator implements GeneratorInterface

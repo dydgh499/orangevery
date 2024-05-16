@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Log;
 
 use App\Models\Merchandise;
 use App\Models\Transaciton;
-use App\Models\HeadOfficeAccount;
+use App\Models\Service\HeadOfficeAccount;
 use App\Models\Log\RealtimeSendHistory;
 
 use App\Http\Traits\ManagerTrait;

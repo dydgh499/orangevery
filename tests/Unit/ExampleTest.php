@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use App\Models\PaymentModule;
+use App\Models\Merchandise\PaymentModule;
 
 class ExampleTest extends TestCase
 {

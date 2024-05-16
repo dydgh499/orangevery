@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Options\PvOptions;
 use App\Models\Options\ThemeCSS;
 use App\Models\Transaction;
-use App\Models\BeforeBrandInfo;
-use App\Models\DifferentSettlementInfo;
+use App\Models\Service\BeforeBrandInfo;
+use App\Models\Service\DifferentSettlementInfo;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Http\Traits\Models\AttributeTrait;

@@ -9,6 +9,7 @@ import UnderAutoSettingDialog from '@/layouts/dialogs/users/UnderAutoSettingDial
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
 import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
+import SpecifiedTimeDisableLimitPaymentCard from '@/views/merchandises/specified-time-disable-limit-payments/SpecifiedTimeDisableLimitPaymentCard.vue'
 
 import { autoUpdateMerchandiseAgencyInfo, isFixplus, isFixplusAgency } from '@/plugins/fixplus'
 import { tax_category_types } from '@/views/merchandises/useStore'
@@ -569,6 +570,9 @@ watchEffect(() => {
                                     </VCol>
                                 </VRow>
                                 <VDivider style="margin-bottom: 1em;"/>
+                            </VCol>
+                            <VCol cols="12" v-if="corp.pv_options.paid.use_specified_limit">
+                                <SpecifiedTimeDisableLimitPaymentCard :item="props.item"/>
                             </VCol>
                         </template>
                     </VRow>

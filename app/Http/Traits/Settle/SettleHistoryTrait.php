@@ -3,7 +3,7 @@
 namespace App\Http\Traits\Settle;
 use App\Models\CollectWithdraw;
 use App\Models\Transaction;
-use App\Models\PaymentModule;
+use App\Models\Merchandise\PaymentModule;
 use App\Models\CancelDeposit;
 use App\Models\Salesforce;
 use Carbon\Carbon;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Manager\Settle;
 use App\Models\Merchandise;
 use App\Models\Salesforce;
 use App\Models\Transaction;
-use App\Models\PaymentModule;
+use App\Models\Merchandise\PaymentModule;
 use App\Models\Log\SettleDeductSalesforce;
 
 use App\Http\Controllers\Controller;

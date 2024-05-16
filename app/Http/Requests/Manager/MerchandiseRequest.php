@@ -36,12 +36,14 @@ class MerchandiseRequest extends FormRequest
         'withdraw_fee',
         'is_show_fee',
         'note',
+        'profile_img',
         'passbook_img',
         'contract_img',
         'bsin_lic_img',
         'id_img',
         'website_url',
         'email',
+        'specified_time_disable_limit',
     ];
     public $file_keys = [
         'passbook_file',
@@ -117,8 +119,6 @@ class MerchandiseRequest extends FormRequest
         $data['custom_id'] = $this->input('custom_id', null);
         if($data['acct_bank_code'] == '')
             $data['acct_bank_code'] = "000";
-        if($this->has('profile_img'))
-            $data['profile_img'] = $this->profile_img;
         if($data['brand_id'] === 30)    // fixplus의 경우 무조건 1
             $data['use_regular_card'] = 1;
         return $data;

@@ -9,10 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 
-use App\Models\PaymentModule;
+use App\Models\Merchandise\PaymentModule;
 use App\Models\Transaction;
 use App\Models\CollectWithdraw;
-use App\Models\RegularCreditCard;
+use App\Models\Merchandise\RegularCreditCard;
+use App\Models\Merchandise\SpecifiedTimeDisableLimitPayment;
 
 use App\Models\Log\SettleDeductMerchandise;
 use App\Models\Log\RealtimeSendHistory;
@@ -36,6 +37,12 @@ class Merchandise extends Authenticatable
         return $this->hasMany(RegularCreditCard::class, 'mcht_id');
     }
 
+    public function specifiedTimeDisableLimitPayments()
+    {
+        return $this->hasMany(SpecifiedTimeDisableLimitPayment::class, 'mcht_id');
+    }
+
+    
     public function noSettles()
     {
         $cols = ['id', 'mcht_id', 'pmod_id', 'amount', 'mcht_settle_amount', 'mcht_settle_fee', 'hold_fee', 'is_cancel', 'created_at'];

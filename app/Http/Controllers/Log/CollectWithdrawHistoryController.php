@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Log;
 
 use App\Models\Merchandise;
-use App\Models\PaymentModule;
+use App\Models\Merchandise\PaymentModule;
 use App\Models\CollectWithdraw;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;

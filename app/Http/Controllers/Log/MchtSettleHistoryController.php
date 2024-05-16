@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Log\SettleHistoryMerchandise;
 use App\Models\Merchandise;
 use App\Models\Transaction;
-use App\Models\PaymentModule;
+use App\Models\Merchandise\PaymentModule;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

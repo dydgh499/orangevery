@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Manager;
 use App\Models\FinanceVan;
 use App\Models\PaymentGateway;
 use App\Models\PaymentSection;
-use App\Models\Classification;
+use App\Models\Service\Classification;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\PayGatewayRequest;

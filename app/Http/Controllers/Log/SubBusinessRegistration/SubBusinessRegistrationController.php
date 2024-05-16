@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Log\SubBusinessRegistration;
 
 use Carbon\Carbon;
 use App\Models\Merchandise;
-use App\Models\DifferentSettlementInfo;
+use App\Models\Service\DifferentSettlementInfo;
 use App\Models\Log\SubBusinessRegistration;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;

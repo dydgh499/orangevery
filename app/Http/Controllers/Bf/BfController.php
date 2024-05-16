@@ -10,7 +10,7 @@ use App\Http\Controllers\Manager\Transaction\TransactionController;
 use App\Http\Controllers\Log\RealtimeSendHistoryController;
 
 use App\Models\Merchandise;
-use App\Models\PaymentModule;
+use App\Models\Merchandise\PaymentModule;
 use App\Models\Transaction;
 use App\Models\CollectWithdraw;
 use App\Models\Log\RealtimeSendHistory;

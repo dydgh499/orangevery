@@ -1,12 +1,12 @@
 <script setup lang="ts">
 
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
-import type { FreeOption, PaidOption, AuthOption } from '@/views/types'
-import { abnormal_trans_limits, installments } from '@/views/merchandises/pay-modules/useStore'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
+import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { user_info } from '@/plugins/axios';
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import corp from '@corp'
+import { abnormal_trans_limits, installments } from '@/views/merchandises/pay-modules/useStore';
+import type { AuthOption, FreeOption, PaidOption } from '@/views/types';
+import corp from '@corp';
 
 interface Props {
     item: {
@@ -381,6 +381,19 @@ const md = user_info.value.level == 50 ? 4 : 12
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>
+                                    <BaseQuestionTooltip location="top" text="지정시간 결제제한"
+                                        :content="`지정시간대에 결제, 이체를 설정한 상한금 이상으로 할 수 없습니다.`">
+                                    </BaseQuestionTooltip>
+                                </template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_specified_limit" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
+                        
                     </VCardItem>
                 </VCard>
             </VCol>

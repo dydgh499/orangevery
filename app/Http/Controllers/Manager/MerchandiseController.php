@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Manager;
 
 use App\Models\Operator;
 use App\Models\Merchandise;
-use App\Models\PaymentModule;
-use App\Models\NotiUrl;
+use App\Models\Merchandise\PaymentModule;
+use App\Models\Merchandise\NotiUrl;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
@@ -15,14 +15,12 @@ use App\Http\Requests\Manager\BulkRegister\BulkMerchandiseRequest;
 use App\Http\Requests\Manager\MerchandiseRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Manager\Service\BrandInfo;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Enums\HistoryType;
 
-use App\Http\Controllers\Log\FeeChangeHistoryController;
-use App\Models\Log\MchtFeeChangeHistory;
-use App\Models\Log\SfFeeChangeHistory;
 
 /**
  * @group Merchandise API
@@ -228,9 +226,14 @@ class MerchandiseController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $data = $this->merchandises->where('id', $id)
-            ->with(['regularCreditCards'])
-            ->first();
+        $with = [];
+        $b_info = BrandInfo::getBrandById($request->user()->brand_id);        
+        if($b_info['pv_options']['paid']['use_regular_card'])
+            array_push($with, 'regularCreditCards');
+        if($b_info['pv_options']['paid']['use_specified_limit']);
+            array_push($with, 'specifiedTimeDisableLimitPayments');
+
+        $data = $this->merchandises->where('id', $id)->with($with)->first();
         $data->setFeeFormatting(true);
         return $data ? $this->response(0, $data) : $this->response(1000);
     }

@@ -228,7 +228,8 @@ export const defaultItemInfo = () => {
         is_hide_account: 0,
         website_url: '',
         email: '',
-        contact_num: ''
+        contact_num: '',
+        specified_time_disable_limit: 0
     })
     return {
         path, item

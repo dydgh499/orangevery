@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Manager\BatchUpdater;
 
-use App\Models\PaymentModule;
+use App\Models\Merchandise\PaymentModule;
 use App\Models\Log\MchtFeeChangeHistory;
 use App\Models\Log\SfFeeChangeHistory;
 use App\Models\Log\SfFeeApplyHistory;

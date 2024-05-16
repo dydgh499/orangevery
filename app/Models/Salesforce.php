@@ -11,9 +11,9 @@ use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 
 use App\Models\Merchandise;
-use App\Models\PaymentModule;
+use App\Models\Merchandise\PaymentModule;
 use App\Models\Transaction;
-use App\Models\UnderAutoSetting;
+use App\Models\Salesforce\UnderAutoSetting;
 use App\Models\Log\SettleDeductSalesforce;
 use App\Models\Log\SettleHistorySalesforce;
 

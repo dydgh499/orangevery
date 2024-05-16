@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Manager\BatchUpdater;
 
 use App\Models\Merchandise;
-use App\Models\NotiUrl;
+use App\Models\Merchandise\NotiUrl;
 use App\Models\Log\MchtFeeChangeHistory;
 use App\Models\Log\SfFeeChangeHistory;
 use App\Models\Log\SfFeeApplyHistory;

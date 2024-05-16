@@ -3,13 +3,13 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Classification;
+use App\Models\Service\Classification;
 use App\Models\Merchandise;
 use App\Models\PaymentGateway;
 use App\Models\PaymentSection;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\PaymentModule>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Merchandise\PaymentModule>
  */
 class PaymentModuleFactory extends Factory
 {

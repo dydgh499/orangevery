@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\LoginRequest;
+use App\Http\Controllers\Manager\Service\BrandInfo;
 
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
@@ -37,8 +38,7 @@ class AuthController extends Controller
      */
     public function domain(Request $request)
     {
-        $request->dns = $_SERVER['HTTP_HOST'];
-        $brand = getBrandByDNS($request);
+        $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
         if($brand)
         {
             $brand['color'] = $brand['theme_css']['main_color'];

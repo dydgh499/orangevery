@@ -109,29 +109,6 @@
         return httpSender(2, $url, $params, $headers);
     }
 
-    function getBrandByDNS($request)
-    {
-        $brand = Redis::get($request->dns);
-        if($brand == null || env('APP_ENV', 'local') === 'local')
-        {
-            $brand = Brand::where('dns', $request->dns)->with(['beforeBrandInfos'])->first();
-            if($brand)
-            {
-                Redis::set($request->dns, json_encode($brand), 'EX', 300);
-                return json_decode(json_encode($brand), true);
-            }
-            else
-                return [];
-        }
-        else
-        {
-            $default = json_decode($brand, true);
-            $str_pv_options = json_encode($default['pv_options']);
-            $default['pv_options'] = json_decode(json_encode(new PvOptions($str_pv_options)), true);
-            return $default;
-        }
-    }
-    
     function globalAuthFilter($query, $request, $parent_table='')
     {
         $table = $parent_table != "" ? $parent_table."." : "";

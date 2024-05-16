@@ -1,0 +1,83 @@
+<script lang="ts" setup>
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import SpecifiedTimeDisableLimitPaymentTr from '@/views/merchandises/specified-time-disable-limit-payments/SpecifiedTimeDisableLimitPaymentTr.vue'
+import { useRequestStore } from '@/views/request'
+import type { Merchandise, SpecifiedTimeDisableLimitPayment } from '@/views/types'
+import { requiredValidatorV2 } from '@validators'
+
+interface Props {
+    item: Merchandise,
+}
+const props = defineProps<Props>()
+const { setNullRemove } = useRequestStore()
+const specified_time_disable_limit_payments = reactive<SpecifiedTimeDisableLimitPayment[]>(props.item.specified_time_disable_limit_payments || [])
+const addNewSpecifiedTimeDisableLimitPayment = () => {
+    const specified_time_disable_limit_payment = <SpecifiedTimeDisableLimitPayment>({
+        id: 0,
+        mcht_id: props.item.id,
+        disable_s_tm: null,
+        disable_e_tm: null,
+        disable_type: 0,
+    })
+    specified_time_disable_limit_payments.push(specified_time_disable_limit_payment)
+}
+watchEffect(() => {
+    setNullRemove(specified_time_disable_limit_payments)
+})
+</script>
+<template>
+    <VRow style="margin-bottom: 1em;">
+        <VCol :md="6" :cols="12">
+            <VCardTitle>
+                <BaseQuestionTooltip location="top" text="지정시간 결제제한" :content="`지정시간대에 결제, 이체를 설정한 상한금 이상으로 할 수 없습니다.`" />
+            </VCardTitle>
+        </VCol>
+        <VCol :md="6" :cols="12">
+            <VRow no-gutters style="align-items: center;">
+                <VCol>결제 상한금</VCol>
+                <VCol md="6">
+                    <div class="batch-container">
+                    <VTextField v-model="props.item.specified_time_disable_limit" type="number" suffix="만원"
+                        :rules="[requiredValidatorV2(props.item.specified_time_disable_limit, '출금 수수료')]" />
+                    </div>
+                </VCol>
+            </VRow>
+        </VCol>
+    </VRow>
+
+    <VTable style="width: 100%;margin-bottom: 1em;text-align: center;">
+        <thead>
+            <tr>
+                <th scope="col" class='list-square'>No.</th>
+                <th scope="col" class='list-square'>제한타입</th>
+                <th scope="col" class='list-square'>시작시간</th>
+                <th scope="col" class='list-square'>종료시간</th>
+                <th scope="col" class='list-square'>추가/수정</th>
+            </tr>
+        </thead>
+        <tbody>
+            <SpecifiedTimeDisableLimitPaymentTr v-for="(item, index) in specified_time_disable_limit_payments"
+                :key="item.id" style="margin-top: 1em;" :item="item" :index="index" />
+        </tbody>
+        <tfoot v-show="Boolean(props.item.id == 0)">
+            <tr>
+                <td colspan="4" class="text-center">
+                    가맹점을 추가하신 후 사용 가능합니다.
+                </td>
+            </tr>
+        </tfoot>
+    </VTable>
+    <VRow v-show="Boolean(props.item.id != 0)">
+        <VCol class="d-flex gap-4">
+            <VBtn type="button" style="margin-left: auto;" @click="addNewSpecifiedTimeDisableLimitPayment()">
+                세팅정보 신규추가
+                <VIcon end icon="tabler-plus" />
+            </VBtn>
+        </VCol>
+    </VRow>
+</template>
+<style scoped>
+:deep(.v-table__wrapper) {
+  block-size: auto !important;
+}
+</style>

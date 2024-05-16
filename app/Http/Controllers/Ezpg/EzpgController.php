@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Manager\Transaction\TransactionController;
 
 use App\Models\Merchandise;
-use App\Models\PaymentModule;
+use App\Models\Merchandise\PaymentModule;
 use App\Models\Transaction;
 
 use App\Http\Requests\Manager\IndexRequest;

@@ -9,7 +9,7 @@ use App\Models\Brand;
 use App\Models\Merchandise;
 use App\Models\Salesforce;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Classification;
+use App\Models\Service\Classification;
 
 class MerchandiseFactory extends Factory
 {

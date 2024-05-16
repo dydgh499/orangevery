@@ -6,7 +6,7 @@ use App\Models\Merchandise;
 use App\Models\Transaction;
 use App\Models\Log\RealtimeSendHistory;
 use App\Models\Log\SettleDeductMerchandise;
-use App\Models\PaymentModule;
+use App\Models\Merchandise\PaymentModule;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

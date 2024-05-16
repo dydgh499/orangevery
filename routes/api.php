@@ -4,44 +4,43 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Message\MessageController;
-
 use App\Http\Controllers\Manager\Dashboard\DashboardController;
+
 use App\Http\Controllers\Manager\BrandController;
-use App\Http\Controllers\Manager\BeforeBrandInfoController;
-use App\Http\Controllers\Manager\DifferentSettlementInfoController;
+use App\Http\Controllers\Manager\Service\BeforeBrandInfoController;
+use App\Http\Controllers\Manager\Service\DifferentSettlementInfoController;
+use App\Http\Controllers\Manager\Service\MchtBlacklistController;
+use App\Http\Controllers\Manager\Service\HeadOfficeAccountController;
+use App\Http\Controllers\Manager\Service\ClassificationController;
+use App\Http\Controllers\Manager\Service\HolidayController;
+
 use App\Http\Controllers\Manager\OperatorController;
+use App\Http\Controllers\Manager\FinanceVanController;
 
 use App\Http\Controllers\Manager\MerchandiseController;
-use App\Http\Controllers\Manager\SalesforceController;
-use App\Http\Controllers\Manager\TerminalController;
+use App\Http\Controllers\Manager\Merchandise\TerminalController;
+use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
+use App\Http\Controllers\Manager\Merchandise\RegularCreditCardController;
+use App\Http\Controllers\Manager\Merchandise\NotiUrlController;
+use App\Http\Controllers\Manager\Merchandise\SpecifiedTimeDisableLimitPaymentController;
 
-use App\Http\Controllers\Manager\FinanceVanController;
-use App\Http\Controllers\Manager\PaymentModuleController;
+
+use App\Http\Controllers\Manager\SalesforceController;
+use App\Http\Controllers\Manager\Salesforce\UnderAutoSettingController;
+
 use App\Http\Controllers\Manager\PaymentGatewayController;
 use App\Http\Controllers\Manager\PaymentSectionController;
-use App\Http\Controllers\Manager\NotiUrlController;
 
-use App\Http\Controllers\Manager\MchtBlacklistController;
-use App\Http\Controllers\Manager\HeadOfficeAccountController;
-use App\Http\Controllers\Manager\ClassificationController;
 use App\Http\Controllers\Manager\PostController;
 use App\Http\Controllers\Manager\PopupController;
 
 use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Manager\Transaction\TransactionController;
 use App\Http\Controllers\Manager\Transaction\TransactionSummaryController;
-use App\Http\Controllers\Manager\CancelDepositController;
-
 
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateMchtController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateSalesController;
 use App\Http\Controllers\Manager\BatchUpdater\BatchUpdatePayModuleController;
-use App\Http\Controllers\Manager\Service\HolidayController;
-
-use App\Http\Controllers\Manager\UnderAutoSettingController;
-use App\Http\Controllers\Manager\RegularCreditCardController;
-
-
 
 use App\Http\Controllers\Log\SubBusinessRegistration\SubBusinessRegistrationController;
 use App\Http\Controllers\Log\DifferenceSettlementHistoryController;
@@ -61,6 +60,7 @@ use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 use App\Http\Controllers\Manager\Settle\MerchandiseController as MchtSettleController;
 use App\Http\Controllers\Manager\Settle\SalesforceController as SalesSettleController;
 use App\Http\Controllers\Manager\Settle\CollectWithdrawController;
+use App\Http\Controllers\Manager\Settle\CancelDepositController;
 
 use App\Http\Controllers\Log\CollectWithdrawHistoryController;
 /*
@@ -287,7 +287,6 @@ Route::prefix('v1')->group(function() {
                 Route::delete('batch-remove', [PaymentModuleController::class, 'batchRemove']);    
             });
             Route::apiResource('pay-modules', PaymentModuleController::class); 
-
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
             Route::prefix('fee-change-histories')->group(function() {
                 Route::delete('{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
@@ -306,6 +305,7 @@ Route::prefix('v1')->group(function() {
 
             Route::post('noti-urls/bulk-register', [NotiUrlController::class, 'bulkRegister']);
             Route::apiResource('noti-urls', NotiUrlController::class); 
+            Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisableLimitPaymentController::class);
             Route::apiResource('sub-business-registrations', SubBusinessRegistrationController::class); 
         });
         
