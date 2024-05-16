@@ -5,6 +5,7 @@ import CancelPartDialog from '@/layouts/dialogs/transactions/CancelPartDialog.vu
 import CancelTransDialog from '@/layouts/dialogs/transactions/CancelTransDialog.vue'
 import RealtimeHistoriesDialog from '@/layouts/dialogs/transactions/RealtimeHistoriesDialog.vue'
 import SalesSlipDialog from '@/layouts/dialogs/transactions/SalesSlipDialog.vue'
+import MchtBlacklistCreateDialog from '@/layouts/dialogs/users/MchtBlacklistCreateDialog.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
 import { selectFunctionCollect } from '@/views/selected'
@@ -29,6 +30,8 @@ const cancelPart = ref()
 const cancelDeposit = ref()
 const realtimeHistories = ref()
 const transactionBatchDialog = ref()
+const mchtBlackListDlg = ref(null)
+
 const levels = corp.pv_options.auth.levels
 
 provide('store', store)
@@ -40,6 +43,7 @@ provide('cancelTran', cancelTran)
 provide('cancelPart', cancelPart)
 provide('cancelDeposit', cancelDeposit)
 provide('realtimeHistories', realtimeHistories)
+provide('mchtBlackListDlg', mchtBlackListDlg)
 
 store.params.level = 10
 // 개발사 사용여부
@@ -255,5 +259,6 @@ onMounted(() => {
         <CancelDepositDialog ref="cancelDeposit" />
         <RealtimeHistoriesDialog ref="realtimeHistories" />
         <TransactionBatchDialog ref="transactionBatchDialog" :selected_idxs="selected" :store="store" :is_mcht="true"/>
+        <MchtBlacklistCreateDialog ref="mchtBlackListDlg" />
 </div>
 </template>

@@ -37,7 +37,7 @@ class NotiRetrySender
             'acquirer'      => $tran->acquirer,
             'issuer'        => $tran->issuer,
             'card_num'      => $tran->card_num,
-            'installment'   => $tran->installment,
+            'installment'   => sprintf("%02d", $tran->installment),
             'trx_dttm'      => $tran->trx_dt." ".$tran->trx_tm,
             'is_cancel'     => $tran->is_cancel,
             'temp'          => $temp,

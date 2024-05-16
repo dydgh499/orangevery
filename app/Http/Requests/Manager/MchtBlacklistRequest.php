@@ -16,6 +16,7 @@ class MchtBlacklistRequest extends FormRequest
         'resident_num',
         'addr',
         'block_reason',
+        'card_num',
     ];
 
     public function authorize(): bool
@@ -30,7 +31,7 @@ class MchtBlacklistRequest extends FormRequest
      */
     public function rules(): array
     {
-        $sub = ['block_reason' => 'required',];
+        $sub = ['block_reason' => 'required'];
         return $this->getRules($this->keys, $sub);
     }
 

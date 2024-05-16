@@ -15,6 +15,7 @@ class BulkMchtBlacklistRequest extends FormRequest
         'business_num',
         'resident_num',
         'addr',
+        'card_num',
         'block_reason',
     ];
     public function bodyParameters()
@@ -34,9 +35,7 @@ class BulkMchtBlacklistRequest extends FormRequest
      */
     public function rules()
     {
-        $sub = [
-            '*' => 'required|array',
-        ];
+        $sub = [];
         return $sub;
     }
     

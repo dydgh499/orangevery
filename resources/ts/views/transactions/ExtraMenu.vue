@@ -2,7 +2,7 @@
 import router from '@/router'
 import { useRequestStore } from '@/views/request'
 import { isRetryAble, realtimeResult } from '@/views/transactions/useStore'
-import type { SalesSlip } from '@/views/types'
+import type { MchtBlacklist, SalesSlip } from '@/views/types'
 import { getUserLevel, pay_token } from '@axios'
 import { StatusColors } from '@core/enums'
 import corp from '@corp'
@@ -25,6 +25,7 @@ const cancelTran = <any>(inject('cancelTran'))
 const cancelDeposit = <any>(inject('cancelDeposit'))
 const cancelPart = <any>(inject('cancelPart'))
 const realtimeHistories = <any>(inject('realtimeHistories'))
+const mchtBlackListDlg = <any>(inject('mchtBlackListDlg'))
 
 const complaint = () => {
     const params = {
@@ -117,6 +118,12 @@ const noti = async () => {
     }
 }
 
+const blacklist = () => {
+    mchtBlackListDlg.value.show(<MchtBlacklist>{
+        id: 0,
+        card_num: props.item.card_num
+    })
+}
 const isCancelSafeDate = () => {
     return getUserLevel() == 10 && props.item.trx_dt == formatDate(new Date())
 }
@@ -126,7 +133,6 @@ const isRealtimeTransaction = () => {
 const isUseCancelDeposit = () => {
     return getUserLevel() >= 35 && props.item.is_cancel
 }
-
 </script>
 <template>
     <VBtn icon size="x-small" color="default" variant="text">
@@ -144,6 +150,12 @@ const isUseCancelDeposit = () => {
                         <VIcon size="24" class="me-3" icon="ic-round-sentiment-dissatisfied" />
                     </template>
                     <VListItemTitle>민원처리</VListItemTitle>
+                </VListItem>
+                <VListItem value="blacklist" @click="blacklist()" v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_mcht_blacklist">
+                    <template #prepend>
+                        <VIcon size="24" class="me-3" icon="arcticons:callsblacklist" />
+                    </template>
+                    <VListItemTitle>블랙리스트 등록</VListItemTitle>
                 </VListItem>
                 <VListItem value="retry-realtime-deposit" class="retry-realtime-deposit" @click="retryDeposit()"
                     v-if="isRealtimeTransaction() && isRetryAble(props.item)">

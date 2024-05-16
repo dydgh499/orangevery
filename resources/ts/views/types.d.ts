@@ -899,6 +899,7 @@ export interface MchtBlacklist {
     business_num: string,
     resident_num: string,
     addr: string,
+    card_num: string,
     block_reason: string,
 }
 

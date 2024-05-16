@@ -15,6 +15,7 @@ export const useSearchStore = defineStore('mchtBlacklistSearchStore', () => {
         'business_num': '사업자번호',
         'resident_num': '주민등록번호',
         'addr': '주소',
+        'card_num': '카드번호',
         'block_reason': '차단 사유',
         'created_at': '생성 시간',
         'updated_at': '업데이트 시간',

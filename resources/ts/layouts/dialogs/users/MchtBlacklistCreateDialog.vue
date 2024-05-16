@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import type { MchtBlacklist } from '@/views/types'
 import { useRequestStore } from '@/views/request'
+import type { MchtBlacklist } from '@/views/types'
 import { VForm } from 'vuetify/components'
 
 const { update } = useRequestStore()
@@ -20,6 +20,7 @@ const mcht_blacklist = ref<MchtBlacklist>({
     resident_num: '',
     addr: '',
     block_reason: '',
+    card_num: '',
 })
 
 const show = (_mcht_blacklist: MchtBlacklist): Promise<boolean> => {
@@ -104,7 +105,6 @@ defineExpose({
                             </VRow>
                         </VCol>
                     </VRow>
-
                     <VRow class="pt-3">
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters>
@@ -126,6 +126,19 @@ defineExpose({
                                     <VTextField id="addressHorizontalIcons" v-model="mcht_blacklist.addr"
                                         prepend-inner-icon="tabler-map-pin" placeholder="주소 입력" persistent-placeholder
                                         maxlength="100" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                    <VRow class="pt-3">
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters>
+                                <VCol>
+                                    <label>카드번호</label>
+                                </VCol>
+                                <VCol md="8">
+                                    <VTextField v-model="mcht_blacklist.card_num" prepend-inner-icon="emojione:credit-card"
+                                        placeholder="1234567812345678" persistent-placeholder maxlength="18"/>
                                 </VCol>
                             </VRow>
                         </VCol>

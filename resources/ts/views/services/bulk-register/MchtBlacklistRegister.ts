@@ -9,6 +9,7 @@ export const useRegisterStore = defineStore('MchtBlacklistRegisterStore', () => 
         business_num: '사업자번호(X)',
         resident_num: '주민등록번호(X)',
         addr: '주소(X)',
+        card_num: '카드번호(X)',
         block_reason: '차단 사유(O)',
     }
     head.sub_headers.value = []
