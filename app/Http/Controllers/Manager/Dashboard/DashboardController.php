@@ -75,7 +75,7 @@ class DashboardController extends Controller
 
         $datas = [
             'cur_increase_rate' => (float)$increase['cur_increase_rate'],
-            'total' => $query->count(),
+            'total' => (clone $query)->where('is_delete', 0)->count(),
             'graph' => [],
         ];
         $monthly = $query

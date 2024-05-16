@@ -346,7 +346,7 @@ class TransactionController extends Controller
         }
         if(count($fail_res))
         {
-            $message = "일괄작업에 실패한 정산건들이 존재합니다.<br><br>".implode(' ', $fail_res);
+            $message = "일괄작업에 실패한 노티건들이 존재합니다.<br><br>".implode(' ', $fail_res);
             return $this->extendResponse(2000, $message);
         }
         else
@@ -373,7 +373,7 @@ class TransactionController extends Controller
         [$success_res, $fail_res]  = NotiRetrySender::notiSenderWrap($id);        
         if(count($fail_res))
         {
-            $message = "일괄작업에 실패한 정산건들이 존재합니다.<br><br>".implode(' ', $fail_res);
+            $message = "일괄작업에 실패한 노티건들이 존재합니다.<br><br>".implode(' ', $fail_res);
             return $this->extendResponse(2000, $message);
         }
         else
