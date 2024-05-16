@@ -13,7 +13,7 @@ use App\Models\Merchandise\PaymentModule;
 use App\Models\Transaction;
 use App\Models\CollectWithdraw;
 use App\Models\Merchandise\RegularCreditCard;
-use App\Models\Merchandise\SpecifiedTimeDisableLimitPayment;
+use App\Models\Merchandise\SpecifiedTimeDisablePayment;
 
 use App\Models\Log\SettleDeductMerchandise;
 use App\Models\Log\RealtimeSendHistory;
@@ -39,7 +39,7 @@ class Merchandise extends Authenticatable
 
     public function specifiedTimeDisableLimitPayments()
     {
-        return $this->hasMany(SpecifiedTimeDisableLimitPayment::class, 'mcht_id');
+        return $this->hasMany(SpecifiedTimeDisablePayment::class, 'mcht_id');
     }
 
     

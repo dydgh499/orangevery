@@ -155,7 +155,7 @@ export interface Merchandise extends MerchandisePropertie, UserPropertie {
     use_pay_verification_mobile: number,
     use_multiple_hand_pay: number,
     specified_time_disable_limit?: number,
-    specified_time_disable_limit_payments?: SpecifiedTimeDisableLimitPayment[],
+    specified_time_disable_limit_payments?: SpecifiedTimeDisablePayment[],
 }
 
 export interface Salesforce extends SalesforcePropertie, UserPropertie {
@@ -923,7 +923,7 @@ export interface SubBusinessRegistration {
     card_company_name: number,
 }
 
-export interface SpecifiedTimeDisableLimitPayment {
+export interface SpecifiedTimeDisablePayment {
     id: number,
     mcht_id: number,
     disable_s_tm: string | null,

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import SpecifiedTimeDisableLimitPaymentTr from '@/views/merchandises/specified-time-disable-limit-payments/SpecifiedTimeDisableLimitPaymentTr.vue'
+import SpecifiedTimeDisablePaymentTr from '@/views/merchandises/specified-time-disable-payments/SpecifiedTimeDisablePaymentTr.vue'
 import { useRequestStore } from '@/views/request'
-import type { Merchandise, SpecifiedTimeDisableLimitPayment } from '@/views/types'
+import type { Merchandise, SpecifiedTimeDisablePayment } from '@/views/types'
 import { requiredValidatorV2 } from '@validators'
 
 interface Props {
@@ -10,9 +10,9 @@ interface Props {
 }
 const props = defineProps<Props>()
 const { setNullRemove } = useRequestStore()
-const specified_time_disable_limit_payments = reactive<SpecifiedTimeDisableLimitPayment[]>(props.item.specified_time_disable_limit_payments || [])
-const addNewSpecifiedTimeDisableLimitPayment = () => {
-    const specified_time_disable_limit_payment = <SpecifiedTimeDisableLimitPayment>({
+const specified_time_disable_limit_payments = reactive<SpecifiedTimeDisablePayment[]>(props.item.specified_time_disable_limit_payments || [])
+const addNewSpecifiedTimeDisablePayment = () => {
+    const specified_time_disable_limit_payment = <SpecifiedTimeDisablePayment>({
         id: 0,
         mcht_id: props.item.id,
         disable_s_tm: null,
@@ -56,7 +56,7 @@ watchEffect(() => {
             </tr>
         </thead>
         <tbody>
-            <SpecifiedTimeDisableLimitPaymentTr v-for="(item, index) in specified_time_disable_limit_payments"
+            <SpecifiedTimeDisablePaymentTr v-for="(item, index) in specified_time_disable_limit_payments"
                 :key="item.id" style="margin-top: 1em;" :item="item" :index="index" />
         </tbody>
         <tfoot v-show="Boolean(props.item.id == 0)">
@@ -69,7 +69,7 @@ watchEffect(() => {
     </VTable>
     <VRow v-show="Boolean(props.item.id != 0)">
         <VCol class="d-flex gap-4">
-            <VBtn type="button" style="margin-left: auto;" @click="addNewSpecifiedTimeDisableLimitPayment()">
+            <VBtn type="button" style="margin-left: auto;" @click="addNewSpecifiedTimeDisablePayment()">
                 세팅정보 신규추가
                 <VIcon end icon="tabler-plus" />
             </VBtn>

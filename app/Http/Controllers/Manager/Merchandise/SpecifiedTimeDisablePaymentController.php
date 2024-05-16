@@ -1,11 +1,11 @@
 <?php
 namespace App\Http\Controllers\Manager\Merchandise;
 
-use App\Models\Merchandise\SpecifiedTimeDisableLimitPayment;
+use App\Models\Merchandise\SpecifiedTimeDisablePayment;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
-use App\Http\Requests\Manager\Merchandise\SpecifiedTimeDisableLimitPaymentRequest;
+use App\Http\Requests\Manager\Merchandise\SpecifiedTimeDisablePaymentRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Enums\HistoryType;
 
@@ -17,12 +17,12 @@ use Illuminate\Http\Request;
  *
  * 지정시간 결제불가 API 입니다.
  */
-class SpecifiedTimeDisableLimitPaymentController extends Controller
+class SpecifiedTimeDisablePaymentController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
     protected $specified_time_disable_payments;
 
-    public function __construct(SpecifiedTimeDisableLimitPayment $specified_time_disable_payments)
+    public function __construct(SpecifiedTimeDisablePayment $specified_time_disable_payments)
     {
         $this->specified_time_disable_payments = $specified_time_disable_payments;
     }
@@ -44,7 +44,7 @@ class SpecifiedTimeDisableLimitPaymentController extends Controller
      * 대리점 이상 가능
      *
      */
-    public function store(SpecifiedTimeDisableLimitPaymentRequest $request)
+    public function store(SpecifiedTimeDisablePaymentRequest $request)
     {
         $data = $request->data();
         $res = $this->specified_time_disable_payments->create($data);
@@ -71,7 +71,7 @@ class SpecifiedTimeDisableLimitPaymentController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function update(SpecifiedTimeDisableLimitPaymentRequest $request, $id)
+    public function update(SpecifiedTimeDisablePaymentRequest $request, $id)
     {
         $data = $request->data();
         $res = $this->specified_time_disable_payments->where('id', $id)->update($data);

@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { useRequestStore } from '@/views/request'
-import type { Options, SpecifiedTimeDisableLimitPayment } from '@/views/types'
+import type { Options, SpecifiedTimeDisablePayment } from '@/views/types'
 import { requiredValidatorV2 } from '@validators'
 import { VForm } from 'vuetify/components'
 
 interface Props {
-    item: SpecifiedTimeDisableLimitPayment,
+    item: SpecifiedTimeDisablePayment,
     index: number,
 }
 const vForm = ref<VForm>()

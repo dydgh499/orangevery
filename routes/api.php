@@ -22,7 +22,7 @@ use App\Http\Controllers\Manager\Merchandise\TerminalController;
 use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
 use App\Http\Controllers\Manager\Merchandise\RegularCreditCardController;
 use App\Http\Controllers\Manager\Merchandise\NotiUrlController;
-use App\Http\Controllers\Manager\Merchandise\SpecifiedTimeDisableLimitPaymentController;
+use App\Http\Controllers\Manager\Merchandise\SpecifiedTimeDisablePaymentController;
 
 
 use App\Http\Controllers\Manager\SalesforceController;
@@ -305,7 +305,7 @@ Route::prefix('v1')->group(function() {
 
             Route::post('noti-urls/bulk-register', [NotiUrlController::class, 'bulkRegister']);
             Route::apiResource('noti-urls', NotiUrlController::class); 
-            Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisableLimitPaymentController::class);
+            Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisablePaymentController::class);
             Route::apiResource('sub-business-registrations', SubBusinessRegistrationController::class); 
         });
         

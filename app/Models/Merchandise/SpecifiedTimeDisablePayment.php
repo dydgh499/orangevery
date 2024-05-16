@@ -6,7 +6,7 @@ use App\Http\Traits\Models\AttributeTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SpecifiedTimeDisableLimitPayment extends Model
+class SpecifiedTimeDisablePayment extends Model
 {
     use HasFactory, AttributeTrait;
 

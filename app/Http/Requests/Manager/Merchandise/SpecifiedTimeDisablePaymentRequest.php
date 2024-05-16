@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
 
 
-class SpecifiedTimeDisableLimitPaymentRequest extends FormRequest
+class SpecifiedTimeDisablePaymentRequest extends FormRequest
 {
     use FormRequestTrait;
 
