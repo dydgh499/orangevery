@@ -68,7 +68,7 @@ class NotiRetrySender
         $trans = Transaction::join('noti_urls', 'transactions.mcht_id', '=', 'noti_urls.mcht_id')
             ->where('noti_urls.is_delete', false)
             ->where('transactions.id', $id)
-            ->first(['transactions.*', 'noti_urls.send_url']);
+            ->get(['transactions.*', 'noti_urls.send_url']);
 
         if(count($trans) === 0)
             $fail_res[] = '#'.$id.":".__("validation.not_found_obj")."<br>";

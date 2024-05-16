@@ -29,8 +29,6 @@ const getDepositParams = async () => {
             return 0        
         else if(params['fin_id'] == -1)
             params.use_finance_van_deposit = 0
-        else
-            params.use_finance_van_deposit = Number(corp.pv_options.paid.use_finance_van_deposit)
     }
     deposit(props.item, props.is_mcht, params)
 }
