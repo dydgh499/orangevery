@@ -78,7 +78,8 @@
         public $use_hide_account = false;       // 계좌숨김
         public $use_settle_count = true;       // 정산시 승인/취소수 노출
         public $sales_parent_structure = false;
-        
+        public $use_specified_limit = false;    // 지정시간 제한
+
         public function __construct(array $source)
         {
             foreach ($source as $property => $value) 

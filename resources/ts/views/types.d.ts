@@ -213,8 +213,8 @@ export interface PayModule {
     pay_month_limit: number,
     pay_day_limit: number,
     pay_single_limit: number,
-    pay_disable_s_tm: date | null,
-    pay_disable_e_tm: date | null,
+    pay_disable_s_tm: string | null,
+    pay_disable_e_tm: string | null,
     contract_s_dt: date | null,
     contract_e_dt: date | null,
     show_pay_view: number,
@@ -360,6 +360,7 @@ interface PaidOption {
     use_hide_account: boolean, // 계좌 숨김
     use_settle_count: boolean, // 정산시 개수 노출
     sales_parent_structure: boolean, // 영업점 종속구조
+    use_specified_limit: boolean,   // 지정시간 제한
 }
 interface AuthOption {
     levels: {

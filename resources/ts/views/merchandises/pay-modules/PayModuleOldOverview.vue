@@ -65,7 +65,7 @@ const addNewPayModule = async () => {
         use_realtime_deposit: 0,
         pay_dupe_least: 0,
         payment_term_min: 1,
-        p_mid: ''
+        p_mid: '',
     })
     pay_module.mcht_id = props.item.id
     pay_modules.unshift(<PayModule>(pay_module))

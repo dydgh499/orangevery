@@ -32,8 +32,6 @@ class PayModuleRequest extends FormRequest
         'pay_month_limit',
         'pay_day_limit',
         'pay_single_limit',
-        'pay_disable_s_tm',
-        'pay_disable_e_tm',
         'installment',
         'note',
     ];
@@ -49,7 +47,10 @@ class PayModuleRequest extends FormRequest
         'ship_out_dt',
         'fin_id',
         'fin_trx_delay',
+        'pay_disable_s_tm',
+        'pay_disable_e_tm',
     ];
+    
     public $integer_keys = [
         'under_sales_type',
         'under_sales_limit',
