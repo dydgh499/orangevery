@@ -93,7 +93,7 @@ class MerchandiseRequest extends FormRequest
             'bsin_lic_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
             'id_file'        => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf',
             'profile_file'  => 'file|mimes:jpg,bmp,png,jpeg,webp',
-
+            'note' => 'nullable|max:300',
         ];
         return $this->getRules($this->keys, $sub);
     }

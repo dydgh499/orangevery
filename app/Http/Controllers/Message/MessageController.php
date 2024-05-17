@@ -91,9 +91,9 @@ class MessageController extends Controller
         }
     }
 
-    public function send($phone_num, $message)
+    public function send($phone_num, $message, $brand_id)
     {
-        $brand = BrandInfo::getBrandById($request->user()->brand_id);
+        $brand = BrandInfo::getBrandById($brand_id);
         if($brand)
         {
             $bonaeja = $brand['pv_options']['free']['bonaeja'];
@@ -121,7 +121,7 @@ class MessageController extends Controller
     public function smslinkSend(Request $request)
     {
         $validated = $request->validate(['phone_num'=>'required']);
-        return $this->send($request->phone_num, $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n".$request->url);
+        return $this->send($request->phone_num, $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n".$request->url, $request->user()->brand_id);
     }
 
     /*
@@ -136,7 +136,7 @@ class MessageController extends Controller
             $rand   = random_int(100000, 999999);
             $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
             if($res)
-                return $this->send($request->phone_num, "[".$brand['name']."] 인증번호 [$rand]을(를) 입력해주세요");
+                return $this->send($request->phone_num, "[".$brand['name']."] 인증번호 [$rand]을(를) 입력해주세요", $request->brand_id);
             else
                 return $this->response(1000, '모바일 코드 발급에 실패하였습니다.');
         }
