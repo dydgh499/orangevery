@@ -8,7 +8,7 @@ use App\Models\CollectWithdraw;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
-use App\Http\Requests\Manager\CollectWithdrawRequest;
+use App\Http\Requests\Manager\Settle\CollectWithdrawRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
 use Carbon\Carbon;

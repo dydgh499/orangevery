@@ -17,7 +17,7 @@ use App\Models\Log\RealtimeSendHistory;
 
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\LoginRequest;
-use App\Http\Requests\Manager\CollectWithdrawRequest;
+use App\Http\Requests\Manager\Settle\CollectWithdrawRequest;
 use App\Http\Requests\Pay\HandPayRequest;
 
 use App\Http\Traits\ManagerTrait;
