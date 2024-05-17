@@ -9,5 +9,7 @@ Route::middleware('log.route')->group(function() {
         Route::get('pay-modules', [BuddyPayController::class, 'payModules']);
         Route::get('transactions', [BuddyPayController::class, 'transactionIndex']);
         Route::post('pay/hand', [BuddyPayController::class, 'handPay']);
+        Route::post('mobile-code-issuance', [BuddyPayController::class, 'mobileCodeIssuence']);
+        Route::post('mobile-code-auth', [BuddyPayController::class, 'mobileCodeAuth']);
     });
 });

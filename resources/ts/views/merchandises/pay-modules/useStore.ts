@@ -7,7 +7,9 @@ import { axios, getUserLevel, pay_token, user_info } from '@axios'
 import corp from '@corp'
 
 export const simplePays = <StringOptions[]>([
-    { id: "KAKAO", title: "카카오" }, { id: "NAVER", title: "네이버" },
+    { id: "KAKAO", title: "카카오페이" }, 
+    { id: "NAVER", title: "네이버페이" }, 
+    { id: "APPLE", title: "애플페이"},
 ])
 
 export const abnormal_trans_limits = <Options[]>([

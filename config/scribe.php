@@ -9,18 +9,18 @@ return [
     /*
      * The HTML <title> for the generated documentation. If this is empty, Scribe will infer it from config('app.name').
      */
-    'title' => 'PV BF Mobile API',
+    'title' => 'BuddyPay Mobile API',
 
     /*
      * A short description of your API. Will be included in the docs webpage, Postman collection and OpenAPI spec.
      */
-    'description' => '본 문서는 PAYVERY와 BF간 인터페이스에 대하여 기술합니다.',
+    'description' => '본 문서는 Buddy Pay와 Buddy Pay Mobile간 인터페이스에 대하여 기술합니다.',
 
     /*
      * The base URL displayed in the docs. If this is empty, Scribe will use the value of config('app.url') at generation time.
      * If you're using `laravel` type, you can set this to a dynamic string, like '{{ config("app.tenant_url") }}' to get a dynamic base URL.
      */
-    'base_url' => 'https://team.payvery.kr',
+    'base_url' => 'https://pg.buddypay.co.kr',
 
     /*
      * Tell Scribe what routes to generate documentation for.
@@ -37,7 +37,7 @@ return [
                 /*
                  * Match only routes whose paths match this pattern (use * as a wildcard to match any characters). Example: 'users/*'.
                  */
-                'prefixes' => ['api/v1/bf/*'],
+                'prefixes' => ['api/v1/buddy-pay/*'],
 
                 /*
                  * Match only routes whose domains match this pattern (use * as a wildcard to match any characters). Example: 'api.*'.
@@ -166,7 +166,7 @@ return [
          * URL path to use for the docs endpoint (if `add_routes` is true).
          * By default, `/docs` opens the HTML page, `/docs.postman` opens the Postman collection, and `/docs.openapi` the OpenAPI spec.
          */
-        'docs_url' => '/docs/bf',
+        'docs_url' => '/docs/buddy-pay',
 
         /*
          * Directory within `public` in which to store CSS and JS assets.
@@ -194,7 +194,7 @@ return [
          * The base URL for the API tester to use (for example, you can set this to your staging URL).
          * Leave as null to use the current app URL when generating (config("app.url")).
          */
-        'base_url' => 'https://team.payvery.kr',
+        'base_url' => 'https://pg.buddypay.co.kr',
 
         /**
          * Fetch a CSRF token before each request, and add it as an X-XSRF-TOKEN header. Needed if you're using Laravel Sanctum.
@@ -416,7 +416,7 @@ INTRO
      * - 'logo' => 'img/logo.png' // for `laravel` type
      *
      */
-    'logo' => '/logo.svg',
+    'logo' => '/storage/images/logos/lbzWFWCjpQKREx853xe3Kzuwymz5kZcmDgvBDF06.svg',
 
     /**
      * Customize the "Last updated" value displayed in the docs by specifying tokens and formats.

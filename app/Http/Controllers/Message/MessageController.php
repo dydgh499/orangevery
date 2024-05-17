@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Message;
 use App\Models\Brand;
 
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Controllers\Manager\Service\BrandInfo;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,10 +22,10 @@ class MessageController extends Controller
 
     public function index(Request $request)
     {
-        $brand = Brand::where('id', $request->user()->brand_id)->first();
+        $brand = BrandInfo::getBrandById($request->user()->brand_id);
         if($brand)
         {
-            $bonaeja = $brand->pv_options->free->bonaeja;
+            $bonaeja = $brand['pv_options']['free']['bonaeja'];
             $params = [
                 'user_id'   => $bonaeja['user_id'],
                 'api_key'   => $bonaeja['api_key'],
@@ -47,10 +48,10 @@ class MessageController extends Controller
      */
     public function chart(Request $request)
     {
-        $brand = Brand::where('id', $request->user()->brand_id)->first();
+        $brand = BrandInfo::getBrandById($request->user()->brand_id);
         if($brand)
         {
-            $bonaeja = $brand->pv_options->free->bonaeja;
+            $bonaeja = $brand['pv_options']['free']['bonaeja'];
             $params = [
                 'user_id'   => $bonaeja['user_id'],
                 'api_key'   => $bonaeja['api_key'],
@@ -90,11 +91,12 @@ class MessageController extends Controller
         }
     }
 
-    public function send($brand, $phone_num, $message)
+    public function send($phone_num, $message)
     {
+        $brand = BrandInfo::getBrandById($request->user()->brand_id);
         if($brand)
         {
-            $bonaeja = $brand->pv_options->free->bonaeja;
+            $bonaeja = $brand['pv_options']['free']['bonaeja'];
             $sms = [
                 'user_id'   => $bonaeja['user_id'],
                 'sender'    => $bonaeja['sender_phone'],
@@ -112,27 +114,6 @@ class MessageController extends Controller
             }
         }
     }
-
-    /*
-     * 모바일 코드 발급
-     */
-    public function mobileCodeIssuence(Request $request)
-    {
-        $validated = $request->validate(['phone_num'=>'required', 'brand_id'=>'required']);
-        $brand  = Brand::where('id', $request->brand_id)->first();
-        if($brand)
-        {
-            $rand   = random_int(100000, 999999);
-            $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
-            if($res)
-                return $this->send($brand, $request->phone_num, "[".$brand->name."] 인증번호 [$rand]을(를) 입력해주세요");
-            else
-                return $this->response(1000, '모바일 코드 발급에 실패하였습니다.');
-        }
-        return $this->response(1000, '존재하지 않는 전산입니다.');
-
-    }
-
     
     /*
     * SMS 문자발송
@@ -140,11 +121,27 @@ class MessageController extends Controller
     public function smslinkSend(Request $request)
     {
         $validated = $request->validate(['phone_num'=>'required']);
-        $brand  = Brand::where('id', $request->user()->brand_id)->first();
+        return $this->send($request->phone_num, $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n".$request->url);
+    }
+
+    /*
+     * 모바일 코드 발급
+     */
+    public function mobileCodeIssuence(Request $request)
+    {
+        $validated = $request->validate(['phone_num'=>'required', 'brand_id'=>'required']);
+        $brand = BrandInfo::getBrandById($request->brand_id);
         if($brand)
-            return $this->send($brand, $request->phone_num, $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n".$request->url);
-        else
-            return $this->response(1000, '존재하지 않는 전산입니다.');
+        {
+            $rand   = random_int(100000, 999999);
+            $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
+            if($res)
+                return $this->send($request->phone_num, "[".$brand->name."] 인증번호 [$rand]을(를) 입력해주세요");
+            else
+                return $this->response(1000, '모바일 코드 발급에 실패하였습니다.');
+        }
+        return $this->response(1000, '존재하지 않는 전산입니다.');
+
     }
 
     /**

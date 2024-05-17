@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\BuddyPay;
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\Manager\Transaction\TransactionController;
 
@@ -233,5 +234,34 @@ class BuddyPayController extends Controller
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
         return $this->response(0, $data);
+    }
+
+    
+    /**
+     * 모바일 코드 발급
+     * 
+     * 인증번호를 문자로 전달합니다.
+     * 
+     * @bodyParam phone_num string required 휴대폰번호 Example: 01000001234
+     */
+    public function mobileCodeIssuence(Request $request)
+    {
+        $request = $request->merge([
+            'brand_id' => 19
+        ]);
+        return resolve(MessageController::class)->mobileCodeIssuence($request);
+    }
+
+    /**
+     * 휴대폰 인증번호 확인
+     *
+     * 제한시간은 3분이며 3분이후에 생성된 키값이 자동으로 삭제됩니다.
+     *
+     * @bodyParam verification_number string required 문자로 전달받은 인증번호 Example: 1028933
+     * @bodyParam phone_num string required 휴대폰번호 Example: 01000000000
+    */
+    public function mobileCodeAuth(Request $request)
+    {
+        return resolve(MessageController::class)->mobileCodeAuth($request);
     }
 }
