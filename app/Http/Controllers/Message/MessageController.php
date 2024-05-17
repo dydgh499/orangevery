@@ -109,7 +109,7 @@ class MessageController extends Controller
                 return $this->extendResponse(1000, '통신 과정에서 에러가 발생했습니다.');
             else
             {
-                $this->bonaejaDepositValidate($bonaeja, $brand->name);
+                $this->bonaejaDepositValidate($bonaeja, $brand['name']);
                 return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1000, $res['body']['message']);
             }
         }
