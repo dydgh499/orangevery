@@ -136,7 +136,7 @@ class MessageController extends Controller
             $rand   = random_int(100000, 999999);
             $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
             if($res)
-                return $this->send($request->phone_num, "[".$brand->name."] 인증번호 [$rand]을(를) 입력해주세요");
+                return $this->send($request->phone_num, "[".$brand['name']."] 인증번호 [$rand]을(를) 입력해주세요");
             else
                 return $this->response(1000, '모바일 코드 발급에 실패하였습니다.');
         }
