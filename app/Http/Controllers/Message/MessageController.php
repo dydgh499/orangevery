@@ -108,11 +108,11 @@ class MessageController extends Controller
             ];
             $res = post("https://api.bonaeja.com/api/msg/v1/send", $sms);
             if($res['code'] == 500)
-                return $this->extendResponse(1000, '통신 과정에서 에러가 발생했습니다.');
+                return $this->extendResponse(1999, '통신 과정에서 에러가 발생했습니다.');
             else
             {
                 $this->bonaejaDepositValidate($bonaeja, $brand['name']);
-                return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1000, $res['body']['message']);
+                return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1999, $res['body']['message']);
             }
         }
     }
@@ -154,7 +154,7 @@ class MessageController extends Controller
     {
         if($brand['pv_options']['paid']['use_pay_verification_mobile'])
         {
-            $over_key_name = "phone-auth-limit-over-".$mcht_id.":".$phone_num;
+            $over_key_name = "3phone-auth-limit-over-".$mcht_id.":".$phone_num;
             $is_over = Redis::get($over_key_name);
             if($is_over)
                 return false;
@@ -170,10 +170,10 @@ class MessageController extends Controller
                         {
                             $end_time = $e_tm->diffInSeconds(Carbon::now());
 
-                            $count_key_name = "phone-auth-limit-count-".$mcht_id.":".$phone_num;
+                            $count_key_name = "3phone-auth-limit-count-".$mcht_id.":".$phone_num;
                             $try_count = ((int)Redis::get($count_key_name)) + 1;
                             
-                            Redis::set($count_key_name, $try_count, 'EX', $end_time);
+                            Redis::set($count_key_name, $try_count, 'EX', $end_time);                            
                             if($mcht->phone_auth_limit_count < $try_count)
                             {
                                 Redis::set($over_key_name, 'over', 'EX', $end_time);
@@ -202,15 +202,16 @@ class MessageController extends Controller
             {
                 $rand = random_int(100000, 999999);
                 $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
+
                 if($res)
                     return $this->send($request->phone_num, "[".$brand['name']."] 인증번호 [$rand]을(를) 입력해주세요", $request->brand_id);
                 else
-                    return $this->response(1000, '모바일 코드 발급에 실패하였습니다.');    
+                    return $this->extendResponse(1999, '모바일 코드 발급에 실패하였습니다.');    
             }
             else
-                return $this->response(1000, '휴대폰 인증허용 회수를 초과하였습니다.');    
+                return $this->extendResponse(1999, '휴대폰 인증허용 회수를 초과하였습니다.');    
         }
-        return $this->response(1000, '존재하지 않는 전산입니다.');
+        return $this->extendResponse(1000, '존재하지 않는 전산입니다.');
 
     }
 
