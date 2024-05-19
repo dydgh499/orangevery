@@ -60,6 +60,7 @@ use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 use App\Http\Controllers\Manager\Settle\MerchandiseController as MchtSettleController;
 use App\Http\Controllers\Manager\Settle\SalesforceController as SalesSettleController;
 use App\Http\Controllers\Manager\Settle\CollectWithdrawController;
+use App\Http\Controllers\Manager\Settle\RepMerchandiseController;
 use App\Http\Controllers\Manager\Settle\CancelDepositController;
 
 use App\Http\Controllers\Log\CollectWithdrawHistoryController;
@@ -168,6 +169,7 @@ Route::prefix('v1')->group(function() {
                     Route::get('/part', [MchtSettleController::class, 'part']);
                     Route::get('/part/chart', [MchtSettleController::class, 'partChart']);
                     Route::apiResource('cancel-deposits', CancelDepositController::class);
+                    Route::post('representative-settle', [RepMerchandiseController::class, 'index']);
                 });
                 Route::prefix('salesforces')->group(function() {
                     Route::get('/', [SalesSettleController::class, 'index']);

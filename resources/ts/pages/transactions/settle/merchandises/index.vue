@@ -2,14 +2,14 @@
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import { selectFunctionCollect } from '@/views/selected'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
+import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
 import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
 import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
-import { getUserLevel } from '@axios'
+import { axios, getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
@@ -39,6 +39,8 @@ const isExtendSettleCols = (parent_key: string, key: string) => {
 }
 
 onMounted(() => {
+    axios.post('/api/v1/manager/transactions/settle/merchandises/representative-settle', store.params)
+    
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
             const r = await store.getChartData()

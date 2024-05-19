@@ -154,6 +154,11 @@ export interface Merchandise extends MerchandisePropertie, UserPropertie {
     regular_credit_cards?: RegularCreditCard[],
     use_pay_verification_mobile: number,
     use_multiple_hand_pay: number,
+    phone_auth_limit_s_tm?: string,
+    phone_auth_limit_e_tm?: string,
+    phone_auth_limit_count?: number,
+    single_payment_limit_s_tm?: string,
+    single_payment_limit_e_tm?: string,
     specified_time_disable_limit?: number,
     specified_time_disable_limit_payments?: SpecifiedTimeDisablePayment[],
 }
@@ -346,7 +351,7 @@ interface PaidOption {
     use_tid_create: boolean,    // TID 생성버튼
     use_mid_create: boolean,    // MID 생성버튼
     use_pmid: boolean,
-    use_pay_verification_mobile: boolean, //휴대폰인증 
+    use_pay_verification_mobile: boolean, //휴대폰 인증 
     use_regular_card: boolean,
     use_collect_withdraw: boolean, // 가맹점 모아서 출금
     use_collect_withdraw_scheduler: boolean, // 모아서 출금 스케줄링

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Message;
 
 use App\Models\Brand;
+use App\Models\Merchandise;
 
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Controllers\Manager\Service\BrandInfo;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Manager\Service\BrandInfo;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
+use Carbon\Carbon;
 
 /**
  * @group Message API
@@ -124,21 +126,89 @@ class MessageController extends Controller
         return $this->send($request->phone_num, $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n".$request->url, $request->user()->brand_id);
     }
 
+    private function payDisableTimeType($s_tm, $e_tm)
+    {
+        $cond_1 = $s_tm && $e_tm;
+        $cond_2 = $s_tm !== "00:00:00" || $e_tm !== "00:00:00";
+        if ($cond_1 && $cond_2)
+        {
+            $current_time = Carbon::now();
+
+            $start_time_today = Carbon::today()->setTimeFromTimeString($s_tm);
+            $end_time_today = Carbon::today()->setTimeFromTimeString($e_tm);
+
+            $start_time_yesterday = Carbon::yesterday()->setTimeFromTimeString($s_tm);
+            $end_time_tomorrow = Carbon::tomorrow()->setTimeFromTimeString($e_tm);
+
+            //어제 ~ 오늘
+            if($current_time->between($start_time_yesterday, $end_time_today))
+                return [1, $start_time_yesterday, $end_time_today];
+            //오늘 ~ 다음날
+            if ($current_time->between($start_time_today, $end_time_tomorrow))
+                return [2, $start_time_today, $end_time_tomorrow];
+        }
+        return [0, '', ''];
+    }
+
+    private function mobileAuthLimitValidate($brand, $phone_num, $mcht_id)
+    {
+        if($brand['pv_options']['auth']['use_pay_verification_mobile'])
+        {
+            $over_key_name = "phone-auth-limit-over-".$mcht_id.":".$phone_num;
+            $is_over = Redis::get($over_key_name);
+            if($is_over)
+                return false;
+            else
+            {
+                $mcht = Merchandise::where('id', $mcht_id)->first();
+                if($mcht)
+                {
+                    if($mcht->phone_auth_limit_count)
+                    {
+                        [$time_type, $s_tm, $e_tm] = $this->payDisableTimeType($mcht->phone_auth_limit_s_tm, $mcht->phone_auth_limit_e_tm);
+                        if($time_type > 0)
+                        {
+                            $end_time = $mcht->phone_auth_limit_e_tm->diffInSeconds(Carbon::now());
+
+                            $count_key_name = "phone-auth-limit-count-".$mcht_id.":".$phone_num;
+                            $try_count = ((int)Redis::get($count_key_name)) + 1;
+                            
+                            Redis::set($count_key_name, $try_count, 'EX', $end_time);
+                            if($mcht->phone_auth_limit_count < $try_count)
+                            {
+                                Redis::set($over_key_name, 'over', 'EX', $end_time);
+                                return false;
+                            }
+                            else
+                                return true;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     /*
      * 모바일 코드 발급
      */
     public function mobileCodeIssuence(Request $request)
     {
-        $validated = $request->validate(['phone_num'=>'required', 'brand_id'=>'required']);
+        $validated = $request->validate(['phone_num'=>'required', 'brand_id'=>'required', 'mcht_id'=>'required']);
         $brand = BrandInfo::getBrandById($request->brand_id);
         if($brand)
         {
-            $rand   = random_int(100000, 999999);
-            $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
-            if($res)
-                return $this->send($request->phone_num, "[".$brand['name']."] 인증번호 [$rand]을(를) 입력해주세요", $request->brand_id);
+            if($this->mobileAuthLimitValidate($brand, $request->phone_num, $request->mcht_id))
+            {
+                $rand = random_int(100000, 999999);
+                $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
+                if($res)
+                    return $this->send($request->phone_num, "[".$brand['name']."] 인증번호 [$rand]을(를) 입력해주세요", $request->brand_id);
+                else
+                    return $this->response(1000, '모바일 코드 발급에 실패하였습니다.');    
+            }
             else
-                return $this->response(1000, '모바일 코드 발급에 실패하였습니다.');
+                return $this->response(1000, '휴대폰 인증허용 회수를 초과하였습니다.');    
         }
         return $this->response(1000, '존재하지 않는 전산입니다.');
 

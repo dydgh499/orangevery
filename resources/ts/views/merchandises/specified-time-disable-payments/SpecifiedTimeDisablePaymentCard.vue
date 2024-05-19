@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import SpecifiedTimeDisablePaymentTr from '@/views/merchandises/specified-time-disable-payments/SpecifiedTimeDisablePaymentTr.vue'
 import { useRequestStore } from '@/views/request'
 import type { Merchandise, SpecifiedTimeDisablePayment } from '@/views/types'
@@ -26,25 +25,36 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VRow style="margin-bottom: 1em;">
+    <VRow>
         <VCol :md="6" :cols="12">
-            <VCardTitle>
-                <BaseQuestionTooltip location="top" text="지정시간 결제제한" :content="`지정시간대에 결제, 이체를 설정한 상한금 이상으로 할 수 없습니다.`" />
-            </VCardTitle>
+            <VCardTitle>지정시간 결제제한</VCardTitle>
         </VCol>
-        <VCol :md="6" :cols="12">
+    </VRow>
+    <VRow style="margin-bottom: 1em;">
+        <VCol :md="4" :cols="12">
             <VRow no-gutters style="align-items: center;">
-                <VCol>결제 상한금</VCol>
-                <VCol md="6">
-                    <div class="batch-container">
-                    <VTextField v-model="props.item.specified_time_disable_limit" type="number" suffix="만원"
-                        :rules="[requiredValidatorV2(props.item.specified_time_disable_limit, '출금 수수료')]" />
+                <VCol>단건 결제한도 하향 설정</VCol>
+            </VRow>
+        </VCol>
+        <VCol :md="8" :cols="12">
+            <VRow no-gutters style="align-items: center;">
+                <VCol md="12">
+                    <div class="flex-container">
+                        <VTextField v-model="props.item.specified_time_disable_limit" type="number" suffix="만원" label="단건 결제한도"
+                        :rules="[requiredValidatorV2(props.item.specified_time_disable_limit, '단건 결제한도')]" 
+                        style="max-width: 120px;margin-right: 1em;"/>
+
+                        <VTextField v-model="props.item.single_payment_limit_s_tm" type="time" label="적용시작시간"
+                        style="max-width: 150px;"/>
+                        <span style="margin: 0 1em;">~</span>
+                        <VTextField v-model="props.item.single_payment_limit_e_tm" type="time" label="적용종료시간"
+                        style="max-width: 150px;"/>
                     </div>
                 </VCol>
             </VRow>
         </VCol>
     </VRow>
-
+    
     <VTable style="width: 100%;margin-bottom: 1em;text-align: center;">
         <thead>
             <tr>
@@ -79,5 +89,11 @@ watchEffect(() => {
 <style scoped>
 :deep(.v-table__wrapper) {
   block-size: auto !important;
+}
+
+.flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

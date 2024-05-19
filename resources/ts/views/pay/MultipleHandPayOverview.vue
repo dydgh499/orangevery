@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
-import { requiredValidatorV2 } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import MultipleHandPayForm from '@/views/pay/multiple-hand-pay/MultipleHandPayForm.vue'
-import { VForm } from 'vuetify/components'
-import type { Merchandise, PayModule, SalesSlip, MultipleHandPay } from '@/views/types'
-import { cloneDeep } from 'lodash'
+import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
+import type { Merchandise, MultipleHandPay, PayModule, SalesSlip } from '@/views/types'
 import { axios } from '@axios'
 import corp from '@corp'
+import { requiredValidatorV2 } from '@validators'
+import { cloneDeep } from 'lodash'
+import { VForm } from 'vuetify/components'
 
 interface Props {
     pay_module: PayModule,
@@ -373,7 +373,8 @@ onMounted(() => {
         <VCardText>
             <MobileVerification
                 v-if="corp.pv_options.paid.use_pay_verification_mobile && props.merchandise.use_pay_verification_mobile"
-                @update:pay_button="is_show_pay_button = $event" :phone_num="hand_pay_info.buyer_phone" />
+                @update:pay_button="is_show_pay_button = $event" :phone_num="hand_pay_info.buyer_phone" 
+                :merchandise="props.merchandise"/>
             <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">
                 <VBtn block @click="pays()">
                     결제하기

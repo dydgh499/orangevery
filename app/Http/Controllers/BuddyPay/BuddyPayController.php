@@ -240,14 +240,15 @@ class BuddyPayController extends Controller
     /**
      * 모바일 코드 발급
      * 
-     * 인증번호를 문자로 전달합니다.
+     * 인증번호를 문자로 전달합니다.<br>mcht_id는 login API의 응답 값에서 id 파라미터를 의미합니다.
      * 
      * @bodyParam phone_num string required 휴대폰번호 Example: 01000001234
+     * @bodyParam mcht_id number required 가맹점 고유번호 Example: 15
      */
     public function mobileCodeIssuence(Request $request)
     {
         $request = $request->merge([
-            'brand_id' => 19
+            'brand_id' => 19,
         ]);
         return resolve(MessageController::class)->mobileCodeIssuence($request);
     }

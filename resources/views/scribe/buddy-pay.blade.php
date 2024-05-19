@@ -44,6 +44,7 @@
     <script src="/vendor/scribe/js/theme-default-4.25.0.js"></script>
 </head>
 
+
 <body data-languages="[&quot;javascript&quot;,&quot;php&quot;,&quot;python&quot;,&quot;bash&quot;]">
 
 <a href="#" id="nav-button">
@@ -55,6 +56,7 @@
 <div class="tocify-wrapper">
         <div style="display: inline-flex; align-items: center; text-align: center; vertical-align: middle; padding: 1em; justify-content: left;">
         <img src="https://pg.buddypay.co.kr/storage/images/logos/lbzWFWCjpQKREx853xe3Kzuwymz5kZcmDgvBDF06.svg" alt="logo" class="logo" width="20%" /><span style='margin-left: 0.5em; font-size: 1.7em;'>BuddyPay</span>
+        <span style='margin-left: 0.5em; font-size: 1.7em;'>BuddyPay</span>
     </div>
     
             <div class="lang-selector">
@@ -107,11 +109,11 @@
             </div>
 
     <ul class="toc-footer" id="toc-footer">
-                                        <li><a>Documentation powered by BuddyPay ✍</a></li>
+                                        <li><a>Documentation powered by Buddypay ✍</a></li>
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2024-05-17 14:40:07</li>
+        <li>마지막 업데이트:  2024-05-20 00:37:42</li>
     </ul>
 </div>
 
@@ -224,8 +226,8 @@ const headers = {
 };
 
 let body = {
-    "user_name": "delectus",
-    "user_pw": "cumque"
+    "user_name": "ex",
+    "user_pw": "eligendi"
 };
 
 fetch(url, {
@@ -245,8 +247,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'user_name' =&gt; 'delectus',
-            'user_pw' =&gt; 'cumque',
+            'user_name' =&gt; 'ex',
+            'user_pw' =&gt; 'eligendi',
         ],
     ]
 );
@@ -260,8 +262,8 @@ import json
 
 url = 'https://pg.buddypay.co.kr/api/v1/buddy-pay/sign-in'
 payload = {
-    "user_name": "delectus",
-    "user_pw": "cumque"
+    "user_name": "ex",
+    "user_pw": "eligendi"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -278,8 +280,8 @@ response.json()</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"user_name\": \"delectus\",
-    \"user_pw\": \"cumque\"
+    \"user_name\": \"ex\",
+    \"user_pw\": \"eligendi\"
 }"
 </code></pre></div>
 
@@ -377,10 +379,10 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="user_name"                data-endpoint="POSTapi-v1-buddy-pay-sign-in"
-               value="delectus"
+               value="ex"
                data-component="body">
     <br>
-<p>가맹점 아이디 <br>예시: <code>delectus</code></p>
+<p>가맹점 아이디 <br>예시: <code>ex</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>user_pw</code></b>&nbsp;&nbsp;
@@ -388,10 +390,10 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="user_pw"                data-endpoint="POSTapi-v1-buddy-pay-sign-in"
-               value="cumque"
+               value="eligendi"
                data-component="body">
     <br>
-<p>가맹점 패스워드 <br>예시: <code>cumque</code></p>
+<p>가맹점 패스워드 <br>예시: <code>eligendi</code></p>
         </div>
         </form>
 
@@ -717,7 +719,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "ut",
+    "search": "deserunt",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -749,7 +751,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'ut',
+            'search' =&gt; 'deserunt',
         ],
     ]
 );
@@ -767,7 +769,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'ut',
+  'search': 'deserunt',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -781,7 +783,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://pg.buddypay.co.kr/api/v1/buddy-pay/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=ut" \
+    --get "https://pg.buddypay.co.kr/api/v1/buddy-pay/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=deserunt" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1075,10 +1077,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-buddy-pay-transactions"
-               value="ut"
+               value="deserunt"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>ut</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>deserunt</code></p>
             </div>
                 </form>
 
@@ -1699,7 +1701,7 @@ response.json()</code></pre></div>
 <small class="badge badge-darkred">인증 필요</small>
 </p>
 
-<p>인증번호를 문자로 전달합니다.</p>
+<p>인증번호를 문자로 전달합니다.<br>mcht_id는 login API의 응답 값에서 id 파라미터를 의미합니다.</p>
 
 <span id="example-requests-POSTapi-v1-buddy-pay-mobile-code-issuance">
 <blockquote>예시 요청:</blockquote>
@@ -1717,7 +1719,8 @@ const headers = {
 };
 
 let body = {
-    "phone_num": "01000001234"
+    "phone_num": "01000001234",
+    "mcht_id": 15
 };
 
 fetch(url, {
@@ -1739,6 +1742,7 @@ $response = $client-&gt;post(
         ],
         'json' =&gt; [
             'phone_num' =&gt; '01000001234',
+            'mcht_id' =&gt; 15.0,
         ],
     ]
 );
@@ -1752,7 +1756,8 @@ import json
 
 url = 'https://pg.buddypay.co.kr/api/v1/buddy-pay/mobile-code-issuance'
 payload = {
-    "phone_num": "01000001234"
+    "phone_num": "01000001234",
+    "mcht_id": 15
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -1771,7 +1776,8 @@ response.json()</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"phone_num\": \"01000001234\"
+    \"phone_num\": \"01000001234\",
+    \"mcht_id\": 15
 }"
 </code></pre></div>
 
@@ -1887,6 +1893,17 @@ vary: Origin
                data-component="body">
     <br>
 <p>휴대폰번호 <br>예시: <code>01000001234</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>mcht_id</code></b>&nbsp;&nbsp;
+<small>number</small>&nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="mcht_id"                data-endpoint="POSTapi-v1-buddy-pay-mobile-code-issuance"
+               value="15"
+               data-component="body">
+    <br>
+<p>가맹점 고유번호 <br>예시: <code>15</code></p>
         </div>
         </form>
 

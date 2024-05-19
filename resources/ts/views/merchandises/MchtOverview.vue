@@ -502,22 +502,8 @@ watchEffect(() => {
                                     </VCol>
                                 </VRow>
                             </VCol>
-                            <VCol cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile || corp.pv_options.paid.use_multiple_hand_pay">
+                            <VCol cols="12" v-if="corp.pv_options.paid.use_multiple_hand_pay">
                                 <VRow>
-                                    <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile">
-                                        <VRow no-gutters style="align-items: center;">
-                                            <VCol>결제전 휴대폰 인증</VCol>
-                                            <VCol md="6">
-                                                <div class="batch-container">
-                                                    <BooleanRadio :radio="props.item.use_pay_verification_mobile"
-                                                        @update:radio="props.item.use_pay_verification_mobile = $event">
-                                                        <template #true>활성</template>
-                                                        <template #false>비활성</template>
-                                                    </BooleanRadio>
-                                                </div>
-                                            </VCol>
-                                        </VRow>
-                                    </VCol>
                                     <VCol v-if="corp.pv_options.paid.use_multiple_hand_pay" md="6">
                                         <VRow no-gutters :md="6" style="align-items: center;">
                                             <VCol>다중 수기결제 사용 여부</VCol>
@@ -569,7 +555,43 @@ watchEffect(() => {
                                         </VRow>
                                     </VCol>
                                 </VRow>
-                                <VDivider style="margin-bottom: 1em;"/>
+                                <VDivider/>
+                            </VCol>
+                            <VCol cols="12" v-if="corp.pv_options.paid.use_pay_verification_mobile">
+                                <VRow>
+                                    <VCol :md="6" :cols="12">
+                                    <VCardTitle>결제 전 휴대폰 인증 허용설정</VCardTitle>       
+                                    </VCol>                             
+                                </VRow>
+                                <VRow style="margin-bottom: 1em;">
+                                    <VCol :md="4" :cols="12">
+                                        <VRow no-gutters style="align-items: center;">
+                                            <VCol md="5">휴대폰 인증</VCol>
+                                            <VCol md="7">
+                                            <div class="batch-container">
+                                                <BooleanRadio :radio="props.item.use_pay_verification_mobile"
+                                                    @update:radio="props.item.use_pay_verification_mobile = $event">
+                                                    <template #true>활성</template>
+                                                    <template #false>비활성</template>
+                                                </BooleanRadio>
+                                            </div>
+                                            </VCol>
+                                        </VRow>
+                                    </VCol>
+                                    <VCol :md="8" :cols="12">
+                                        <div class="flex-container">
+                                            <VTextField v-model="props.item.phone_auth_limit_count" type="number" suffix="회 허용" label="인증 허용 회수"
+                                                :rules="[requiredValidatorV2(props.item.phone_auth_limit_count, '인증 허용 회수')]" 
+                                                style="max-width: 120px; margin-right: 1em;"/>
+                                            <VTextField v-model="props.item.phone_auth_limit_s_tm" type="time" label="적용시작시간"
+                                                style="max-width: 150px;"/>
+                                            <span style="margin: 0 1em;">~</span>
+                                            <VTextField v-model="props.item.phone_auth_limit_e_tm" type="time" label="적용종료시간"
+                                                style="max-width: 150px;"/>
+                                        </div>
+                                    </VCol>
+                                </VRow>
+                                <VDivider />
                             </VCol>
                             <VCol cols="12" v-if="corp.pv_options.paid.use_specified_limit">
                                 <SpecifiedTimeDisablePaymentCard :item="props.item"/>
@@ -594,3 +616,10 @@ watchEffect(() => {
         <FeeBookDialog ref="feeBookDialog"/>
     </VRow>
 </template>
+<style scoped>
+.flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>

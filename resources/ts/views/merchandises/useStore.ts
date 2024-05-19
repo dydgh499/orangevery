@@ -229,7 +229,8 @@ export const defaultItemInfo = () => {
         website_url: '',
         email: '',
         contact_num: '',
-        specified_time_disable_limit: 0
+        specified_time_disable_limit: 0,
+        phone_auth_limit_count: 0,
     })
     return {
         path, item

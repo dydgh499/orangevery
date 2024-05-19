@@ -43,7 +43,6 @@ class MerchandiseRequest extends FormRequest
         'id_img',
         'website_url',
         'email',
-        'specified_time_disable_limit',
     ];
     public $file_keys = [
         'passbook_file',
@@ -52,7 +51,17 @@ class MerchandiseRequest extends FormRequest
         'id_file',
         'profile_file',
     ];
-
+    public $integer_keys = [
+        'specified_time_disable_limit',
+        'phone_auth_limit_count',
+    ];
+    public $nullable_keys = [
+        'custom_id',
+        'single_payment_limit_s_tm',
+        'single_payment_limit_e_tm',
+        'phone_auth_limit_s_tm',
+        'phone_auth_limit_e_tm',
+    ];
     public function authorize()
     {
         if(isOperator($this))
@@ -106,6 +115,9 @@ class MerchandiseRequest extends FormRequest
     public function bodyParameters()
     {
         $params = array_merge($this->getDocsParameters($this->keys), $this->getDocsParameters($this->file_keys));
+        $params = array_merge($params, $this->getDocsParameters($this->integer_keys));
+        $params = array_merge($params, $this->getDocsParameters($this->nullable_keys));
+        
         $params['passbook_file']['description']  .= '(max-width:500px 이상은 리사이징)';
         $params['contract_file']['description']  .= '(max-width:500px 이상은 리사이징)';
         $params['bsin_lic_file']['description']  .= '(max-width:500px 이상은 리사이징)';
@@ -114,9 +126,9 @@ class MerchandiseRequest extends FormRequest
     }
     public function data()
     {
-        $data = $this->getParmasBaseKey();
+        $data = array_merge($this->getParmasBaseKey(), $this->getParmasBaseKeyV2($this->integer_keys, 0));
+        $data = array_merge($data, $this->getParmasBaseKeyV2($this->nullable_keys, null));
         $data['brand_id'] = $this->user()->brand_id;
-        $data['custom_id'] = $this->input('custom_id', null);
         if($data['acct_bank_code'] == '')
             $data['acct_bank_code'] = "000";
         if($data['brand_id'] === 30)    // fixplus의 경우 무조건 1

@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { Merchandise } from '@/views/types';
+import { axios, getUserLevel } from '@axios';
 import corp from '@corp';
-import { getUserLevel, axios } from '@axios'
 
 interface Props {
     totalInput?: number,
     default?: string,
     phone_num: string,
+    merchandise: Merchandise,
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -67,7 +69,9 @@ const timer = () => {
 }
 const requestCodeIssuance = async () => {
     try {
-        const r = await axios.post('/api/v1/bonaejas/mobile-code-issuance', { phone_num: props.phone_num, brand_id: corp.id })
+        const r = await axios.post('/api/v1/bonaejas/mobile-code-issuance', { 
+            phone_num: props.phone_num, brand_id: corp.id, mcht_id: props.merchandise.id
+        })
         snackbar.value.show('입력하신 휴대폰번호로 인증번호를 보냈습니다!<br>6자리 인증번호를 입력해주세요.', 'success')
         button_status.value = 1
 

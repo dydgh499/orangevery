@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore'
-import { installments } from '@/views/merchandises/pay-modules/useStore'
-import { lengthValidatorV2, requiredValidatorV2 } from '@validators'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import { installments } from '@/views/merchandises/pay-modules/useStore';
+import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore';
+import type { HandPay, Merchandise, Options, PayModule, SalesSlip } from '@/views/types';
+import { axios } from '@axios';
+import corp from '@corp';
+import { lengthValidatorV2, requiredValidatorV2 } from '@validators';
+import { cloneDeep } from 'lodash';
 import { reactive, watchEffect } from 'vue';
-import { VForm } from 'vuetify/components'
-import type { Merchandise, PayModule, SalesSlip, Options, HandPay } from '@/views/types'
-import { cloneDeep } from 'lodash'
-import { axios } from '@axios'
-import corp from '@corp'
+import { VForm } from 'vuetify/components';
 
 interface Props {
     pay_module: PayModule,
@@ -160,7 +160,8 @@ watchEffect(async() => {
                     </template>
                 </CreateHalfVCol>
                 <MobileVerification v-if="corp.pv_options.paid.use_pay_verification_mobile && props.merchandise.use_pay_verification_mobile"
-                    @update:pay_button="is_show_pay_button = $event" :phone_num="hand_pay_info.buyer_phone" />
+                    @update:pay_button="is_show_pay_button = $event" :phone_num="hand_pay_info.buyer_phone" 
+                    :merchandise="props.merchandise"/>
 
                 <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">
                     <VBtn block type="submit">

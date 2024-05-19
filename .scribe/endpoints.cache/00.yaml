@@ -32,7 +32,7 @@ endpoints:
         name: user_name
         description: '가맹점 아이디'
         required: true
-        example: delectus
+        example: ex
         type: string
         enumValues: []
         custom: []
@@ -40,13 +40,13 @@ endpoints:
         name: user_pw
         description: '가맹점 패스워드'
         required: true
-        example: cumque
+        example: eligendi
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      user_name: delectus
-      user_pw: cumque
+      user_name: ex
+      user_pw: eligendi
     fileParameters: []
     responses:
       -
@@ -258,7 +258,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer faDcdvEk6aZh3gVb16458eP'
+      - 'Bearer fDc546agEh8dve1ZkbP3a6V'
     controller: null
     method: null
     route: null
@@ -321,7 +321,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: ut
+        example: deserunt
         type: string
         enumValues: []
         custom: []
@@ -330,7 +330,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: ut
+      search: deserunt
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -653,7 +653,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer D68Zcgehfd3aaP6E5Vb4kv1'
+      - 'Bearer cP1Z6ahEfeb38VdvaD5k64g'
     controller: null
     method: null
     route: null
@@ -924,7 +924,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer VDEaf43begh1a8kPcd65Zv6'
+      - 'Bearer 1hfPa4adbv58ZD3cgE66kVe'
     controller: null
     method: null
     route: null
@@ -941,7 +941,7 @@ endpoints:
       subgroup: ''
       subgroupDescription: ''
       title: '모바일 코드 발급'
-      description: '인증번호를 문자로 전달합니다.'
+      description: '인증번호를 문자로 전달합니다.<br>mcht_id는 login API의 응답 값에서 id 파라미터를 의미합니다.'
       authenticated: true
       custom: []
     headers:
@@ -961,8 +961,17 @@ endpoints:
         type: string
         enumValues: []
         custom: []
+      mcht_id:
+        name: mcht_id
+        description: '가맹점 고유번호'
+        required: true
+        example: 15.0
+        type: number
+        enumValues: []
+        custom: []
     cleanBodyParameters:
       phone_num: '01000001234'
+      mcht_id: 15.0
     fileParameters: []
     responses:
       -
@@ -978,7 +987,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer fvaa6D58Ec1Vk6he3Pgb4Zd'
+      - 'Bearer cb3Z6af6hPdak5vg1DEV8e4'
     controller: null
     method: null
     route: null
@@ -1041,7 +1050,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer gkEVae4dcZ8P1hvf636Da5b'
+      - 'Bearer a466DVEh3g5abZfkcd8e1Pv'
     controller: null
     method: null
     route: null
