@@ -150,6 +150,7 @@ class MessageController extends Controller
         return [0, '', ''];
     }
 
+    // 휴대폰 인증허용회수 검증
     private function mobileAuthLimitValidate($brand, $phone_num, $mcht_id)
     {
         if($brand['pv_options']['paid']['use_pay_verification_mobile'])
