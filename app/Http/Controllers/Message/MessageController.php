@@ -152,7 +152,7 @@ class MessageController extends Controller
 
     private function mobileAuthLimitValidate($brand, $phone_num, $mcht_id)
     {
-        if($brand['pv_options']['auth']['use_pay_verification_mobile'])
+        if($brand['pv_options']['paid']['use_pay_verification_mobile'])
         {
             $over_key_name = "phone-auth-limit-over-".$mcht_id.":".$phone_num;
             $is_over = Redis::get($over_key_name);
@@ -168,7 +168,7 @@ class MessageController extends Controller
                         [$time_type, $s_tm, $e_tm] = $this->payDisableTimeType($mcht->phone_auth_limit_s_tm, $mcht->phone_auth_limit_e_tm);
                         if($time_type > 0)
                         {
-                            $end_time = $mcht->phone_auth_limit_e_tm->diffInSeconds(Carbon::now());
+                            $end_time = $e_tm->diffInSeconds(Carbon::now());
 
                             $count_key_name = "phone-auth-limit-count-".$mcht_id.":".$phone_num;
                             $try_count = ((int)Redis::get($count_key_name)) + 1;
