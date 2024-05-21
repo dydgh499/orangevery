@@ -80,7 +80,7 @@ class NotiRetrySender
                 $res = self::notiSender($tran->send_url, $tran, '');
                 self::save($res, $tran);
 
-                if($res['code'] === 201)
+                if($res['code'] === 200 || $res['code'] === 201)
                     $success_res[] = '#'.$id;
                 else
                     $fail_res[] = '#'.$id.":".$res['body']."<br>";
