@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { installments } from '@/views/merchandises/pay-modules/useStore';
-import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore';
 import type { HandPay, Merchandise, Options, PayModule, SalesSlip } from '@/views/types';
 import { axios } from '@axios';
 import corp from '@corp';
@@ -20,7 +19,6 @@ const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 const salesslip = <any>(inject('salesslip'))
 
-const { customValidFormRequest } =  useMchtBlacklistStore()
 const sale_slip = ref(<SalesSlip>({}))
 const hand_pay_info = reactive(<HandPay>({
     yymm: '',
@@ -73,9 +71,6 @@ watchEffect(() => {
     hand_pay_info.ord_num = props.pay_module.id + "H" + Date.now().toString().substr(0, 10)
     if(props.merchandise.use_pay_verification_mobile == 0)
         is_show_pay_button.value = true
-})
-watchEffect(async() => {
-    await customValidFormRequest(props.merchandise)
 })
 </script>
 <template>

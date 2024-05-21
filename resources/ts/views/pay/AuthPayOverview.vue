@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { installments } from '@/views/merchandises/pay-modules/useStore';
-import { useMchtBlacklistStore } from '@/views/services/mcht-blacklists/useStore';
 import type { AuthPay, Merchandise, Options, PayModule } from '@/views/types';
 import corp from '@corp';
 import { requiredValidatorV2 } from '@validators';
@@ -16,7 +15,6 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const { customValidFormRequest } =  useMchtBlacklistStore()
 const is_show_pay_button = ref(corp.pv_options.paid.use_pay_verification_mobile ? false : true)
 const auth_pay_info = reactive(<AuthPay>({}))
 const vForm = ref<VForm>()
@@ -46,9 +44,6 @@ watchEffect(() => {
         is_show_pay_button.value = true
 })
 
-watchEffect(async() => {
-    await customValidFormRequest(props.merchandise)
-})
 </script>
 <template>
     <VCard flat rounded>

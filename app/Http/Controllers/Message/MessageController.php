@@ -213,7 +213,6 @@ class MessageController extends Controller
                 return $this->extendResponse(1999, '휴대폰 인증허용 회수를 초과하였습니다.');    
         }
         return $this->extendResponse(1000, '존재하지 않는 전산입니다.');
-
     }
 
     /**
