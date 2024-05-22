@@ -23,6 +23,11 @@ const input = (amount: number) => {
     resolveCallback(amount)
 }
 
+const handleEvent = (event: KeyboardEvent) => {
+    event.preventDefault()
+    input(amount.value)
+}
+
 defineExpose({
     show
 });
@@ -42,7 +47,9 @@ defineExpose({
                                 </BaseQuestionTooltip>
                             </VCol>
                             <VCol cols="12" md="7">
-                                <VTextField v-model="amount" type="number" suffix="￦" />
+                                <VTextField v-model="amount" type="number" suffix="￦" 
+                                @keydown.enter="handleEvent"
+                                />
                             </VCol>
                         </VRow>
                     </VCol>

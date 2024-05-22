@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
 
 const visible = ref(false)
 const amount = ref(0)
@@ -18,6 +18,11 @@ const show = (_amount: number): Promise<number> => {
 const input = (amount: number) => {
     visible.value = false
     resolveCallback(amount)
+}
+
+const handleEvent = (event: KeyboardEvent) => {
+    event.preventDefault()
+    input(amount.value)
 }
 
 defineExpose({
@@ -40,7 +45,9 @@ defineExpose({
                             </VCol>
                             <VCol cols="12" md="8">
                                 <VTextField v-model="amount" type="number" suffix="￦" placeholder="취소금액을 입력해주세요"
-                                    prepend-inner-icon="ic:outline-price-change" />
+                                    prepend-inner-icon="ic:outline-price-change" 
+                                @keydown.enter="handleEvent"
+                                />
                             </VCol>
                         </VRow>
                     </VCol>

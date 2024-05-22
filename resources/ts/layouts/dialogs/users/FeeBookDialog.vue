@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { requiredValidatorV2 } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { requiredValidatorV2 } from '@validators'
 
 const vForm = ref()
 const visible = ref(false)
@@ -24,6 +24,11 @@ const submit = async(apply_dt: string) => {
     resolveCallback(apply_dt)
 }
 
+const handleEvent = (event: KeyboardEvent) => {
+    event.preventDefault()
+    submit()
+}
+
 defineExpose({
     show
 });
@@ -36,7 +41,9 @@ defineExpose({
                     <CreateHalfVCol :mdl="6" :mdr="6">
                         <template #name>적용일</template>
                         <template #input>
-                            <VTextField v-model="apply_dt" type="date" :rules="[requiredValidatorV2(apply_dt, '적용일')]"/>
+                            <VTextField v-model="apply_dt" type="date" :rules="[requiredValidatorV2(apply_dt, '적용일')]"                            
+                            @keydown.enter="handleEvent"
+                            />
                         </template>
                     </CreateHalfVCol>
                 </VForm>

@@ -38,6 +38,11 @@ watchEffect(() => {
         mid_codes.value = []
 })
 
+const handleEvent = (event: KeyboardEvent) => {
+    event.preventDefault()
+    selected()
+}
+
 defineExpose({
     show
 });
@@ -53,7 +58,9 @@ defineExpose({
                         <template #name></template>
                         <template #input>
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="mid_code" :items="mid_codes"
-                                label="발급할 MID코드 선택" single-line/>
+                                label="발급할 MID코드 선택" single-line
+                                @keydown.enter="handleEvent"
+                                />
                         </template>
                     </CreateHalfVCol>
                     <VCol class="d-flex gap-4">

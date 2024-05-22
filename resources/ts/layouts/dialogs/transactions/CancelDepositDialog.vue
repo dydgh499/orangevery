@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { Transaction, CancelDeposit } from '@/views/types'
 import { installments } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
-import { VForm } from 'vuetify/components'
+import type { CancelDeposit, Transaction } from '@/views/types'
 import { cloneDeep } from 'lodash'
+import { VForm } from 'vuetify/components'
 
 const formatDate = <any>(inject('$formatDate'))
 const { update, remove } = useRequestStore()

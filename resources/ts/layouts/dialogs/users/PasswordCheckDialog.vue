@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { requiredValidatorV2 } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { requiredValidatorV2 } from '@validators'
 
 
 const password = ref()
@@ -17,7 +17,7 @@ const show = () => {
 }
 
 const onAgree = () => {
-        visible.value = false;
+    visible.value = false;
     resolveCallback(password.value); // 동의 버튼 누름
 };
 
@@ -25,6 +25,11 @@ const onCancel = () => {
     visible.value = false;
     resolveCallback(''); // 취소 버튼 누름
 };
+
+const handleEvent = (event: KeyboardEvent) => {
+    event.preventDefault()
+    onAgree()
+}
 
 defineExpose({
     show
@@ -47,7 +52,9 @@ defineExpose({
                                 :rules="[requiredValidatorV2(password, '패스워드')]"
                                 :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
                                 :type="is_show ? 'text' : 'password'" persistent-placeholder
-                                @click:append-inner="is_show = !is_show" autocomplete />
+                                @click:append-inner="is_show = !is_show"
+                                @keydown.enter="handleEvent"
+                                autocomplete />
                         </template>
                     </CreateHalfVCol>
                 </VCol>

@@ -36,6 +36,11 @@ const submit = async() => {
     }
 }
 
+const handleEvent = (event: KeyboardEvent) => {
+    event.preventDefault()
+    submit()
+}
+
 defineExpose({
     show
 });
@@ -54,7 +59,9 @@ defineExpose({
                                 <label>날짜선택</label>
                             </VCol>
                             <VCol cols="12" md="5">
-                                <VTextField v-model="settle_dt" type="date" :rules="[requiredValidatorV2(settle_dt, '정산일')]"/>
+                                <VTextField v-model="settle_dt" type="date" :rules="[requiredValidatorV2(settle_dt, '정산일')]"
+                                @keydown.enter="handleEvent"
+                                />
                             </VCol>
                         </VRow>
                     </VCol>
