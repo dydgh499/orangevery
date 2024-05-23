@@ -169,7 +169,7 @@ Route::prefix('v1')->group(function() {
                     Route::get('/part', [MchtSettleController::class, 'part']);
                     Route::get('/part/chart', [MchtSettleController::class, 'partChart']);
                     Route::apiResource('cancel-deposits', CancelDepositController::class);
-                    Route::post('representative-settle', [RepMerchandiseController::class, 'index']);
+                    Route::post('representative-settle', [RepMerchandiseController::class, 'settlement']);
                 });
                 Route::prefix('salesforces')->group(function() {
                     Route::get('/', [SalesSettleController::class, 'index']);
@@ -258,7 +258,6 @@ Route::prefix('v1')->group(function() {
             Route::get('terminals', [TerminalController::class, 'index']);   
             Route::post('bulk-register', [MerchandiseController::class, 'bulkRegister']);
 
-            
             Route::prefix('pay-modules')->group(function() {
                 Route::prefix('batch-updaters')->group(function() {
                     Route::post('set-payment-gateway', [BatchUpdatePayModuleController::class, 'setPaymentGateway']);

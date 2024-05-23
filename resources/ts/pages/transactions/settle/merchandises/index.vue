@@ -9,13 +9,13 @@ import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
 import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
 import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
 import { useSearchStore } from '@/views/transactions/settle/useMerchandiseStore'
-import { axios, getUserLevel } from '@axios'
+import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
 const { findSalesName } = useSalesFilterStore()
-const { getSettleStyle, batchSettle, isSalesCol, movePartSettle } = settlementFunctionCollect(store)
+const { getSettleStyle, batchSettle, isSalesCol, movePartSettle, representativeSettle } = settlementFunctionCollect(store)
 const { selected, all_selected } = selectFunctionCollect(store)
 
 provide('store', store)
@@ -39,8 +39,6 @@ const isExtendSettleCols = (parent_key: string, key: string) => {
 }
 
 onMounted(() => {
-    axios.post('/api/v1/manager/transactions/settle/merchandises/representative-settle', store.params)
-    
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
             const r = await store.getChartData()
@@ -71,6 +69,17 @@ onMounted(() => {
                 <VBtn prepend-icon="tabler-calculator" @click="batchSettle(selected, true)" v-if="getUserLevel() >= 35"
                     size="small">
                     일괄 정산하기
+                </VBtn>
+                <VBtn prepend-icon="tabler-calculator" @click="representativeSettle()" v-if="getUserLevel() >= 35 && corp.id === 4" color="warning"
+                    size="small">
+                    대표가맹점 정산하기
+                    <VTooltip activator="parent" location="top" maxlength="50">
+                        계좌번호가 같은 가맹점이 2개 이상인 가맹점들간 서로 그룹화하여 한 가맹점에 정산금을 몰아주어 정산합니다.
+                        <br>
+                        나머지 가맹점들은 추가차감을 통해 0원으로 정산됩니다.
+                        <br>
+                        (정산금 총합계가 0보다 작으면 해당 가맹점 그룹은 정산에 제외됩니다.)
+                    </VTooltip>
                 </VBtn>
                 <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.use_realtime_deposit"
                     label="실시간 포함" color="primary"

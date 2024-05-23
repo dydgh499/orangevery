@@ -185,7 +185,6 @@ class MchtSettleHistoryController extends Controller
         }
     }
 
-
     protected function deleteMchtforceCommon($request, $id, $target_settle_id)
     {
         $result = DB::transaction(function () use($request, $id, $target_settle_id) {

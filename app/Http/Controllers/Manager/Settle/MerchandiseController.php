@@ -58,27 +58,6 @@ class MerchandiseController extends Controller
         return globalAuthFilter($query, $request, 'merchandises')->byTargetIds($target_id);
     }
 
-
-    private function getCancelDeposits($request, $data)
-    {
-        if(count($data['content']))
-        {
-            $ids = $data['content']->pluck('id')->all();
-            return Transaction::join('cancel_deposits', 'transactions.id', '=', 'cancel_deposits.trans_id')
-                ->whereNull('cancel_deposits.mcht_settle_id')
-                ->where('cancel_deposits.settle_dt', '<=', Carbon::createFromFormat('Y-m-d', $request->e_dt)->format('Ymd'))
-                ->where('cancel_deposits.settle_dt', '>=', Carbon::createFromFormat('Y-m-d', $request->s_dt)->format('Ymd'))
-                ->whereIn('transactions.mcht_id', $ids)
-                ->get([
-                    'cancel_deposits.id',
-                    'transactions.mcht_id',
-                    'cancel_deposits.deposit_amount',
-                ]);
-        }
-        else
-            return collect([]);
-    }
-
     private function commonQuery($request)
     {
         $validated = $request->validate(['s_dt'=>'required|date', 'e_dt'=>'required|date']);
@@ -107,9 +86,9 @@ class MerchandiseController extends Controller
         $with = ['deducts', 'settlePayModules', 'transactions'];
         $data = $this->getIndexData($request, $query->with($with), 'id', $cols, "created_at", false);
         $data = $this->getSettleInformation($data, $target_settle_amount);
-        $data = $this->setTerminalCost($data, $request->s_dt, $request->s_dt, 'mcht_id');
+        $data = $this->setTerminalCost($data, $request->s_dt, $request->e_dt, 'mcht_id');
         // set total settle
-        $data = $this->setSettleFinalAmount($data, $this->getCancelDeposits($request, $data));
+        $data = $this->setSettleFinalAmount($data, $this->getCancelDeposits($request->s_dt, $request->e_dt, $data));
         return $data;
     }
 

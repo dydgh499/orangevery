@@ -2,7 +2,6 @@
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { requiredValidatorV2 } from '@validators'
 
-
 const password = ref()
 const visible = ref(false)
 const is_show = ref(false)

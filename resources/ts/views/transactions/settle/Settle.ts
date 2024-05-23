@@ -50,6 +50,20 @@ export function settlementFunctionCollect(store: any) {
         return false
     }
     
+    const representativeSettle = async() => {
+        if (await alert.value.show('정말 대표가맹점 정산을 하시겠습니까?')) {
+            
+            const params = cloneDeep(store.params)
+            params.page_size = 99999999
+            params.page = 1
+            const r = await post('/api/v1/manager/transactions/settle/merchandises/representative-settle', params, true)
+            if(r.status === 201) {
+                store.setChartProcess()
+                store.setTable()    
+            }
+        }
+    }
+
     const batchSettle = async(selected:number[], is_mcht: boolean) => {
         if (await alert.value.show('정말 일괄 정산을 하시겠습니까?')) {
             const params = cloneDeep(store.params)
@@ -133,7 +147,8 @@ export function settlementFunctionCollect(store: any) {
     }
     
     return {
-        batchSettle, settle, getSettleStyle, isSalesCol, movePartSettle, isAbleMchtDepositCollect
+        batchSettle, settle, getSettleStyle, isSalesCol, movePartSettle, isAbleMchtDepositCollect,
+        representativeSettle
     }
 }
 

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Log\RealtimeSendHistory;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 trait SettleTrait
 {
@@ -137,6 +138,27 @@ trait SettleTrait
             $content->makeHidden(['transactions']);
         }
         return $data;
+    }
+
+    // 취소 수기입금 건
+    private function getCancelDeposits($s_dt, $e_dt, $data)
+    {
+        if(count($data['content']))
+        {
+            $ids = $data['content']->pluck('id')->all();
+            return Transaction::join('cancel_deposits', 'transactions.id', '=', 'cancel_deposits.trans_id')
+                ->whereNull('cancel_deposits.mcht_settle_id')
+                ->where('cancel_deposits.settle_dt', '<=', Carbon::createFromFormat('Y-m-d', $e_dt)->format('Ymd'))
+                ->where('cancel_deposits.settle_dt', '>=', Carbon::createFromFormat('Y-m-d', $s_dt)->format('Ymd'))
+                ->whereIn('transactions.mcht_id', $ids)
+                ->get([
+                    'cancel_deposits.id',
+                    'transactions.mcht_id',
+                    'cancel_deposits.deposit_amount',
+                ]);
+        }
+        else
+            return collect([]);
     }
 
     /**
