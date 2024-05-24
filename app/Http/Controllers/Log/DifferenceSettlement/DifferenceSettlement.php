@@ -94,8 +94,6 @@ class DifferenceSettlement
             $sub_count += 2;  // start, end records
         $full_record .= $this->setEndRecord($total_count + $sub_count, $total_amount);
 
-        if($this->service_name === 'nicepay')
-            Storage::disk('local')->put('test', $full_record);
         if($this->main_connection_stat)
             $result = $this->main_sftp_connection->put($save_path, $full_record);
         if($this->dr_connection_stat)
@@ -176,17 +174,18 @@ class DifferenceSettlement
             $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::TOTAL->value, 2);
             $filter         = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
 
-            if($this->service_name == 'welcome1')
+            if($this->service_name === 'welcome1')
                 $total_count    = $this->setAtypeField($total_count, 7);
             else
                 $total_count    = $this->setNtypeField($total_count, 7);
 
-            if($this->service_name == 'hecto' || $this->service_name == 'welcome1')
+            if($this->service_name === 'hecto' || $this->service_name === 'welcome1')
                 $total_amount   = $this->setAtypeField($total_amount, 18);
-            else if($this->service_name == 'danal' && $total_amount < 0)
+            else if(($this->service_name === 'nicepay' || $this->service_name === 'danal') && $total_amount < 0)
                 $total_amount   = "-".$this->setNtypeField(abs($total_amount), 17);
             else
                 $total_amount   = $this->setNtypeField($total_amount, 18);
+
             return $record_type.$total_count.$total_amount.$filter."\r\n";
         }
     }
