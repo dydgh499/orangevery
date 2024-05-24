@@ -94,6 +94,8 @@ class DifferenceSettlement
             $sub_count += 2;  // start, end records
         $full_record .= $this->setEndRecord($total_count + $sub_count, $total_amount);
 
+        if($this->service_name === 'nicepay')
+            Storage::disk('local')->put('test', $full_record);
         if($this->main_connection_stat)
             $result = $this->main_sftp_connection->put($save_path, $full_record);
         if($this->dr_connection_stat)

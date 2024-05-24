@@ -188,7 +188,6 @@ class RepMerchandiseController extends Controller
 
         $response = resolve(MchtSettleHistoryController::class)->batch($req);
         #$res = $this->manyInsert($this->settleDeducts, $add_deducts);
-
         return $response;
     }
 }
