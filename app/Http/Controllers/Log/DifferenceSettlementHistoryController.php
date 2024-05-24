@@ -268,7 +268,7 @@ class DifferenceSettlementHistoryController extends Controller
     static public function differenceSettleRequestTest()
     {
         //DifferenceSettlementHistoryController::differenceSettleRequestTest()
-        $ds_ids      = [2];
+        $ds_ids      = [3];
         $date       = Carbon::now();
         $yesterday  = $date->copy()->subDay(0)->format('Y-m-d');
         foreach($ds_ids as $ds_id)
@@ -287,8 +287,8 @@ class DifferenceSettlementHistoryController extends Controller
                     ->where('merchandises.business_num', '!=', '')
                     ->where('payment_gateways.pg_type', $brand->pg_type)
                     ->where('transactions.brand_id', $brand->brand_id)
-                    ->where('transactions.trx_at', '>=', "2024-05-08 00:00:00")
-                    ->where('transactions.trx_at', '<=', "2024-05-13 23:59:59")
+                    ->where('transactions.trx_at', '>=', "2024-05-23 00:00:00")
+                    ->where('transactions.trx_at', '<=', "2024-05-23 23:59:59")
                     ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
 
                 $ist = new DifferenceSettlementHistoryController(new DifferenceSettlementHistory);
