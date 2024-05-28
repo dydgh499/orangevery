@@ -181,6 +181,7 @@ class MerchandiseController extends Controller
      */
     public function store(MerchandiseRequest $request)
     {
+        $b_info = BrandInfo::getBrandById($request->user()->brand_id);
         $validated = $request->validate(['user_pw'=>'required']);
         if($this->isExistMutual($this->merchandises, $request->user()->brand_id, 'mcht_name', $request->mcht_name))
             return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
@@ -209,15 +210,16 @@ class MerchandiseController extends Controller
 
                 $user = $this->saveImages($request, $user, $this->imgs);
                 $user['user_pw'] = Hash::make($request->input('user_pw'));
-                $res = $this->merchandises->create($user);
-                
-                $b_info = BrandInfo::getBrandById($request->user()->brand_id);
-                if($res && $b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
+
+                if($b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
                 {
-                    $user['id'] = $res->id;
-                    SysLinkService::create($user);
+                    $res = SysLinkService::create($user);
+                    if($res['code'] !== 'SUCCESS')
+                        return $this->extendResponse(1999, $res['message']);
                 }
 
+                $res = $this->merchandises->create($user);
+                
                 operLogging(HistoryType::CREATE, $this->target, [], $user, $user['mcht_name']);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
             }
@@ -270,15 +272,16 @@ class MerchandiseController extends Controller
             else
             {
                 $data = $this->saveImages($request, $data, $this->imgs);
-                $res = $query->update($data);
-                
+                // -- update syslink
                 $b_info = BrandInfo::getBrandById($request->user()->brand_id);
-                if($res && $b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
+                if($b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
                 {
-                    $data['id'] = $id;
-                    SysLinkService::update($data);
+                   $res = SysLinkService::update($data);
+                    if($res['code'] !== 'SUCCESS')
+                        return $this->extendResponse(1999, $res['message']);
                 }
 
+                $res = $query->update($data);                
                 operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['mcht_name']);
                 return $this->response($res ? 1 : 990, ['id'=>$id]);    
             }

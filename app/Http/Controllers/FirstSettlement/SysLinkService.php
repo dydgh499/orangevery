@@ -3,6 +3,7 @@ namespace App\Http\Controllers\FirstSettlement;
 
 class SysLinkService
 {
+    static private $host = "https://dapi.syslink.kr";
     static private $headers = [
         'Content-Type' => 'application/json; charset=utf-8',
         'Authorization' => 'sk_de0c1dbee096ee9a54d9341cd60fc',
@@ -11,7 +12,7 @@ class SysLinkService
     static public function create($mcht)
     {
         $params = [
-            "id"          => $mcht['id'],
+            "id"          => $mcht['user_name'],
             "status"      => "active",
             "brnType"     => "사업자",
             "brn"         => $mcht['business_num'],
@@ -28,7 +29,7 @@ class SysLinkService
                 "holder"    => $mcht['acct_name']
             ]
         ];
-        $res = post('https://api.syslink.kr/v1/sapp/create', $params, self::$headers);
+        $res = post(self::$host.'/v1/sapp/create', $params, self::$headers);
         return $res['body'];
     }
 
@@ -46,20 +47,20 @@ class SysLinkService
             "email"       => "",
             "address"     => $mcht['addr'],
         ];
-        $res = post('https://api.syslink.kr/v1/sapp/update/'.$mcht['id'], $params, self::$headers);
+        $res = post(self::$host.'/v1/sapp/update/'.$mcht['user_name'], $params, self::$headers);
 
         $acct_params = [
             "bankCd"    => $mcht['acct_bank_code'],
             "account"   => $mcht['acct_num'],
             "holder"    => $mcht['acct_name']
         ];
-        $res = post('https://api.syslink.kr/v1/accnt/update/'.$mcht['user_name'], $acct_params, self::$headers);
+        $res = post(self::$host.'/v1/accnt/update/'.$mcht['user_name'], $acct_params, self::$headers);
         return $res['body'];
     }
 
-    static public function show($id)
+    static public function show($user_name)
     {
-        $res = get('https://api.syslink.kr/'.$id, [], self::$headers);
+        $res = get(self::$host.'/v1/sapp/retrieve/'.$user_name, [], self::$headers);
         return $res['body'];
     }
 }
