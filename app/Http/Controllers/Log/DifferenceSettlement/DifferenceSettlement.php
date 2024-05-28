@@ -86,11 +86,11 @@ class DifferenceSettlement
                 $total_count += $count;    
                 $total_amount += $amount;
 
-                if($this->service_name === 'danal' || $this->service_name === 'nicepay')
+                if($this->service_name === 'danal' || $this->service_name === 'nicepay' || $this->service_name === 'welcome')
                     $sub_count += 2;  //header, total records
             }
         }
-        if($this->service_name === 'danal' || $this->service_name === 'nicepay')
+        if($this->service_name === 'danal' || $this->service_name === 'nicepay' || $this->service_name === 'welcome')
             $sub_count += 2;  // start, end records
         $full_record .= $this->setEndRecord($total_count + $sub_count, $total_amount);
 
@@ -146,8 +146,9 @@ class DifferenceSettlement
             $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::START->value, 2);
             $req_date       = $this->setNtypeField($req_date, 8);
             $brand_business_num = $this->setAtypeField($brand_business_num, 10);
-            $pg_type        = $this->setAtypeField($this->RQ_PG_NAME, 10);
-            $filter         = $this->setAtypeField('', $this->RQ_START_FILTER_SIZE);
+
+            $pg_type = $this->service_name === 'welcome' ? '' : $this->setAtypeField($this->RQ_PG_NAME, 10);
+            $filter  = $this->setAtypeField('', $this->RQ_START_FILTER_SIZE);
             return $record_type.$req_date.$brand_business_num.$pg_type.$filter."\r\n";         
         }
     }
@@ -171,22 +172,22 @@ class DifferenceSettlement
             return '';
         else
         {
-            $record_type    = $this->setAtypeField(DifferenceSettleHectoRecordType::TOTAL->value, 2);
-            $filter         = $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE);
+            $total_records  = $this->setAtypeField(DifferenceSettleHectoRecordType::TOTAL->value, 2);
 
             if($this->service_name === 'welcome1')
-                $total_count    = $this->setAtypeField($total_count, 7);
+                $total_records .= $this->setAtypeField($total_count, 7);
             else
-                $total_count    = $this->setNtypeField($total_count, 7);
+                $total_records .= $this->setNtypeField($total_count, 7);
 
             if($this->service_name === 'hecto' || $this->service_name === 'welcome1')
-                $total_amount   = $this->setAtypeField($total_amount, 18);
+                $total_records .= $this->setAtypeField($total_amount, 18);
             else if(($this->service_name === 'nicepay' || $this->service_name === 'danal') && $total_amount < 0)
-                $total_amount   = "-".$this->setNtypeField(abs($total_amount), 17);
-            else
-                $total_amount   = $this->setNtypeField($total_amount, 18);
+                $total_records .= "-".$this->setNtypeField(abs($total_amount), 17);
+            else if($this->service_name !== 'welcome1')
+                $total_records .= $this->setNtypeField($total_amount, 18);
 
-            return $record_type.$total_count.$total_amount.$filter."\r\n";
+            $total_records .= $this->setAtypeField('', $this->RQ_TOTAL_FILTER_SIZE)."\r\n";
+            return $total_records;
         }
     }
 
