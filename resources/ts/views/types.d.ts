@@ -368,6 +368,7 @@ interface PaidOption {
     use_settle_count: boolean, // 정산시 개수 노출
     sales_parent_structure: boolean, // 영업점 종속구조
     use_specified_limit: boolean,   // 지정시간 제한
+    use_syslink: boolean,
 }
 interface AuthOption {
     levels: {

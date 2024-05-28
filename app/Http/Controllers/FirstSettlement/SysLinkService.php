@@ -5,13 +5,13 @@ class SysLinkService
 {
     static private $headers = [
         'Content-Type' => 'application/json; charset=utf-8',
-        'Authorization' => 'sk_xxxxxxxxxxxxxxxx',
+        'Authorization' => 'sk_de0c1dbee096ee9a54d9341cd60fc',
     ];
 
     static public function create($mcht)
     {
         $params = [
-            "id"          => $mcht['user_name'],
+            "id"          => $mcht['id'],
             "status"      => "active",
             "brnType"     => "사업자",
             "brn"         => $mcht['business_num'],
@@ -46,7 +46,7 @@ class SysLinkService
             "email"       => "",
             "address"     => $mcht['addr'],
         ];
-        $res = post('https://api.syslink.kr/v1/sapp/update/'.$mcht['user_name'], $params, self::$headers);
+        $res = post('https://api.syslink.kr/v1/sapp/update/'.$mcht['id'], $params, self::$headers);
 
         $acct_params = [
             "bankCd"    => $mcht['acct_bank_code'],
@@ -57,9 +57,9 @@ class SysLinkService
         return $res['body'];
     }
 
-    static public function show($syslink_sid)
+    static public function show($id)
     {
-        $res = get('https://api.syslink.kr/'.$syslink_sid, [], self::$headers);
+        $res = get('https://api.syslink.kr/'.$id, [], self::$headers);
         return $res['body'];
     }
 }

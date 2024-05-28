@@ -10,7 +10,7 @@ export const payTest = (module_type:number) => {
     const pay_modules = ref<PayModule[]>([])
     
     const { merchandise, pay_module, pay_url, updateMerchandise } = pay(module_type)
-    const return_url = new URL(window.location.href).origin + '/transactions/pay-test/result'
+    const return_url = new URL(window.location.href).origin + '/build/transactions/pay-test/result'
 
     watchEffect(async () => { 
         //가맹점 선택시 호출

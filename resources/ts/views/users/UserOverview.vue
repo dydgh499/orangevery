@@ -317,6 +317,9 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                 </VCardItem>
+                <VCardItem v-if="corp.pv_options.paid.use_syslink">                    
+                    <VCardTitle>SYSLINK 연동정보</VCardTitle>
+                </VCardItem>
             </VCard>
         </VCol>
     </VRow>

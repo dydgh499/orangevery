@@ -16,6 +16,7 @@ use App\Http\Requests\Manager\MerchandiseRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\FirstSettlement\SysLinkService;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -180,8 +181,7 @@ class MerchandiseController extends Controller
      */
     public function store(MerchandiseRequest $request)
     {
-        $validated  = $request->validate(['user_pw'=>'required']);
-        
+        $validated = $request->validate(['user_pw'=>'required']);
         if($this->isExistMutual($this->merchandises, $request->user()->brand_id, 'mcht_name', $request->mcht_name))
             return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
         else
@@ -211,6 +211,13 @@ class MerchandiseController extends Controller
                 $user['user_pw'] = Hash::make($request->input('user_pw'));
                 $res = $this->merchandises->create($user);
                 
+                $b_info = BrandInfo::getBrandById($request->user()->brand_id);
+                if($res && $b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
+                {
+                    $user['id'] = $res->id;
+                    SysLinkService::create($user);
+                }
+
                 operLogging(HistoryType::CREATE, $this->target, [], $user, $user['mcht_name']);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
             }
@@ -227,14 +234,17 @@ class MerchandiseController extends Controller
     public function show(Request $request, $id)
     {
         $with = [];
-        $b_info = BrandInfo::getBrandById($request->user()->brand_id);        
+        $b_info = BrandInfo::getBrandById($request->user()->brand_id);
         if($b_info['pv_options']['paid']['use_regular_card'])
             array_push($with, 'regularCreditCards');
         if($b_info['pv_options']['paid']['use_specified_limit']);
             array_push($with, 'specifiedTimeDisableLimitPayments');
-
         $data = $this->merchandises->where('id', $id)->with($with)->first();
         $data->setFeeFormatting(true);
+
+        if($b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
+            $data['syslink'] = SysLinkService::show($id);
+
         return $data ? $this->response(0, $data) : $this->response(1000);
     }
 
@@ -261,6 +271,14 @@ class MerchandiseController extends Controller
             {
                 $data = $this->saveImages($request, $data, $this->imgs);
                 $res = $query->update($data);
+                
+                $b_info = BrandInfo::getBrandById($request->user()->brand_id);
+                if($res && $b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
+                {
+                    $data['id'] = $id;
+                    SysLinkService::update($data);
+                }
+
                 operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['mcht_name']);
                 return $this->response($res ? 1 : 990, ['id'=>$id]);    
             }

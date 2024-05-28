@@ -393,6 +393,14 @@ const md = user_info.value.level == 50 ? 4 : 12
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>syslink 선정산 사용여부</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_syslink" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>
                         
                     </VCardItem>
                 </VCard>
