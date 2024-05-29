@@ -25,5 +25,4 @@ Route::prefix('docs')->middleware('auth.docs')->group(function() {
     });
 });
 Route::get('{any}', [AuthController::class, 'domain'])->where('any','.*');
-Route::post('/transactions/pay/result', [AuthController::class, 'domain'])->where('any','.*');
-Route::post('/transactions/pay-test/result', [AuthController::class, 'domain'])->where('any','.*');
+Route::post('{any}', [AuthController::class, 'domain'])->where('any','.*');
