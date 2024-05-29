@@ -8,7 +8,7 @@ export const pay = (module_type: number) => {
     const merchandise = ref(<Merchandise>({}))
     const pay_module = ref(<PayModule>{})
 
-    const return_url = new URL(window.location.href).origin + '/build/pay/result'
+    const return_url = new URL(window.location.href).origin + '/pay/result'
     const pay_url = ref(<string>(''))
     if (module_type == 2)
         pay_url.value = process.env.NOTI_URL + '/v2/online/pay/auth'
