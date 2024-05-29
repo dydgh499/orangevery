@@ -279,7 +279,7 @@ watchEffect(() => {
             </VCard>
         </VCol>
         <!-- 👉 계약정보 -->
-        <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
+        <VCol cols="12" md="6" v-if="getUserLevel() >= 35 || corp.id !== 8">
             <VCard>
                 <VCardItem>
                     <VCardTitle>계약파일</VCardTitle>
