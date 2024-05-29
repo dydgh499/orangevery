@@ -44,6 +44,7 @@ class NotiRetrySender
         ];
         if($tran->is_cancel)
         {
+            $params['amount'] *= -1;    // ezpg
             $params['cxl_dttm'] = $tran->cxl_dt." ".$tran->cxl_tm;
             $params['ori_trx_id'] = $tran->ori_trx_id;
         }
