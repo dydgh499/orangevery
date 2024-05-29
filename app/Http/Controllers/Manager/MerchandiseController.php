@@ -245,7 +245,7 @@ class MerchandiseController extends Controller
         $data->setFeeFormatting(true);
 
         if($b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
-            $data['syslink'] = SysLinkService::show($id);
+            $data['syslink'] = SysLinkService::show($data['user_name']);
 
         return $data ? $this->response(0, $data) : $this->response(1000);
     }
@@ -276,7 +276,11 @@ class MerchandiseController extends Controller
                 $b_info = BrandInfo::getBrandById($request->user()->brand_id);
                 if($b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
                 {
-                   $res = SysLinkService::update($data);
+                    if($request->syslink['code'] !== 'SUCCESS')
+                        $res = SysLinkService::create($data);
+                    else
+                        $res = SysLinkService::update($data);
+
                     if($res['code'] !== 'SUCCESS')
                         return $this->extendResponse(1999, $res['message']);
                 }

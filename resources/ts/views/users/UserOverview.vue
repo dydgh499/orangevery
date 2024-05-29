@@ -317,8 +317,9 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                 </VCardItem>
-                <VCardItem v-if="corp.pv_options.paid.use_syslink">                    
+                <VCardItem v-if="corp.pv_options.paid.use_syslink && props.is_mcht && props.id">
                     <VCardTitle>SYSLINK 연동정보</VCardTitle>
+                    <span :class="props.item?.syslink?.code === 'SUCCESS' ? 'text-success' : 'text-error'">{{ props.item?.syslink?.message }}</span>
                 </VCardItem>
             </VCard>
         </VCol>
