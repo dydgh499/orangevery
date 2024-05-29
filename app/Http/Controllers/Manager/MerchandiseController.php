@@ -16,7 +16,7 @@ use App\Http\Requests\Manager\MerchandiseRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Manager\Service\BrandInfo;
-use App\Http\Controllers\FirstSettlement\SysLinkService;
+use App\Http\Controllers\FirstSettlement\SysLink;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -213,7 +213,7 @@ class MerchandiseController extends Controller
 
                 if($b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
                 {
-                    $res = SysLinkService::create($user);
+                    $res = SysLink::create($user);
                     if($res['code'] !== 'SUCCESS')
                         return $this->extendResponse(1999, $res['message']);
                 }
@@ -245,7 +245,7 @@ class MerchandiseController extends Controller
         $data->setFeeFormatting(true);
 
         if($b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
-            $data['syslink'] = SysLinkService::show($data['user_name']);
+            $data['syslink'] = SysLink::show($data['user_name']);
 
         return $data ? $this->response(0, $data) : $this->response(1000);
     }
@@ -277,9 +277,9 @@ class MerchandiseController extends Controller
                 if($b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
                 {
                     if($request->syslink['code'] !== 'SUCCESS')
-                        $res = SysLinkService::create($data);
+                        $res = SysLink::create($data);
                     else
-                        $res = SysLinkService::update($data);
+                        $res = SysLink::update($data);
 
                     if($res['code'] !== 'SUCCESS')
                         return $this->extendResponse(1999, $res['message']);

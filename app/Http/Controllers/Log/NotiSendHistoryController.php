@@ -99,7 +99,7 @@ class NotiSendHistoryController extends Controller
             ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')
             ->where('noti_send_histories.trans_id', $trans_id)
             ->first($this->cols);
-        $params = NotiRetrySender::getNotiSendFormat($noti, $noti->temp);
+        [$params, $headers] = NotiRetrySender::getNotiSendFormat($noti, $noti->temp);
         $params['send_url'] = $noti->send_url;
         return $this->response(0, $params);
     }

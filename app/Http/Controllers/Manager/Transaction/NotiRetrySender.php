@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Manager\Transaction;
 
+use App\Http\Controllers\FirstSettlement\Bonacamp;
+use App\Http\Controllers\FirstSettlement\SysLink;
+
 use App\Models\Log\NotiSendHistory;
 use App\Models\Transaction;
 use Carbon\Carbon;
@@ -48,16 +51,22 @@ class NotiRetrySender
             $params['cxl_dttm'] = $tran->cxl_dt." ".$tran->cxl_tm;
             $params['ori_trx_id'] = $tran->ori_trx_id;
         }
-        return $params;
-    }
-
-    static public function notiSender($url, $tran, $temp='')
-    {
         $headers = [
             'Content-Type'  => 'application/json',
             'Accept' => 'application/json',
         ];
-        $params = self::getNotiSendFormat($tran, $temp);
+        
+        return [$params, $headers];
+    }
+
+    static public function notiSender($url, $tran, $temp='')
+    {
+        if($url === 'http://121.141.60.135:40610/otif/bfix/approvTrans')
+            [$params, $headers] = Bonacamp::getParams($tran);
+        else if($url === 'https://dapi.syslink.kr/v1/payout/set')
+            [$params, $headers] = SysLink::getParams($tran);
+        else
+            [$params, $headers] = self::getNotiSendFormat($tran, $temp);
         return post($url, $params, $headers);
     }
 

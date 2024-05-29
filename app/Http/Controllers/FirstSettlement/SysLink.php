@@ -1,7 +1,10 @@
 <?php
 namespace App\Http\Controllers\FirstSettlement;
 
-class SysLinkService
+use App\Http\Controllers\FirstSettlement\FirstSettlementBase;
+use App\Http\Controllers\FirstSettlement\FirstSettlementInterface;
+
+class SysLink extends FirstSettlementBase implements FirstSettlementInterface
 {
     static private $host = "https://dapi.syslink.kr";
     static private $headers = [
@@ -62,5 +65,55 @@ class SysLinkService
     {
         $res = get(self::$host.'/v1/sapp/retrieve/'.$user_name, [], self::$headers);
         return $res['body'];
+    }
+
+    static public function getParams($tran)
+    {
+        $root_trx_dt = str_replace('-', '', $tran['trx_dt']);
+        $module_type = $tran['module_type'] === 0 ? 'OFFLINE' : 'ONLINE';
+
+        if((int)$tran['is_cancel'])
+        {
+
+            $mcht = self::getMcht($tran['mcht_id']);
+            $user_name = $mcht['user_name'];
+            $ori_trx_id = $tran['ori_trx_id'];
+            $trx_type = '취소';
+            $trx_dt = str_replace('-', '', $tran['cxl_dt']);
+        }
+        else
+        {
+            $user_name = $tran['user_name'];
+            $ori_trx_id = $tran['trx_id'];
+            $trx_type = '승인';
+            $trx_dt = str_replace('-', '', $tran['trx_dt']);
+        }
+        $params = [
+            "sappId"   => $user_name,
+            "amount"   => $tran['mcht_settle_amount'],
+            "trackId"  => $tran['ord_num'],
+            "reserve1" => $tran['id'],
+            "reserve2" => "",
+            "trxs" => [
+                [
+                    "trackId"       => $tran['ord_num'],
+                    "orgTrxId"      => $tran['trx_id'],
+                    "method"        => "CARD",
+                    "route"         => $module_type,
+                    "trxType"       => $trx_type,
+                    "number"        => $tran['card_num'],
+                    "unitType"      => "신용",
+                    "amount"        => $tran['amount'],
+                    "authCd"        => $tran['appr_num'],
+                    "installment"   => sprintf("%02d", $tran['installment']),
+                    "pdtName"       => $tran['item_name'],
+                    "custName"      => $tran['buyer_name'],
+                    "trxDay"        => $trx_dt,
+                    "rootDay"       => $root_trx_dt,
+                    "rootOrgTrxId"  => $ori_trx_id,
+                ]
+            ]
+        ];
+        return [$params, self::$headers];
     }
 }
