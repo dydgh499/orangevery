@@ -94,8 +94,8 @@ Route::prefix('v1')->group(function() {
     });
     
     Route::prefix('auth')->group(function() {
-        Route::post('sign-in', [AuthController::class, 'signin']);
-        Route::post('sign-up', [AuthController::class, 'signUp']);
+        Route::middleware(['log.route'])->post('sign-in', [AuthController::class, 'signin']);
+        Route::middleware(['log.route'])->post('sign-up', [AuthController::class, 'signUp']);
         Route::middleware(['auth:sanctum', 'log.route'])->post('sign-out', [AuthController::class, 'signout']);
         Route::middleware(['auth:sanctum', 'log.route'])->post('onwer-check', [AuthController::class, 'onwerCheck']);
     });
