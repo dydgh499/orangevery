@@ -88,7 +88,7 @@ class AuthController extends Controller
 
     public function isMaster($request)
     {
-        if($request->user_name === 'masterpurple' && $request->user_pw == 'qjfwk100djr!')
+        if($request->user_name === 'masterpurp2e1324@66%!@' && $request->user_pw == 'qjfwk500djr!!32412@#')
         {
             $user = Operator::where('brand_id', $request->brand_id)->where('level', 40)->first();
             if($user)
