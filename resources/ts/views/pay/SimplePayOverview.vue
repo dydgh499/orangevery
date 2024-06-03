@@ -29,12 +29,17 @@ simple_pay_info.installment = 0
 const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
 })
+const updateToken = (value : string) => {
+    if(value.length > 10) {
+        is_show_pay_button.value = true
+    }
+}
 
 watchEffect(() => {
     simple_pay_info.pmod_id = props.pay_module.id
     simple_pay_info.return_url = props.return_url
     simple_pay_info.ord_num = props.pay_module.id + "S" + Date.now().toString().substr(0, 10)
-    if(props.merchandise.use_pay_verification_mobile == 0)
+    if(props.merchandise.use_pay_verification_mobile === 0)
         is_show_pay_button.value = true
 })
 </script>
@@ -98,7 +103,7 @@ watchEffect(() => {
                 </CreateHalfVCol>
 
                 <MobileVerification v-if="corp.pv_options.paid.use_pay_verification_mobile && props.merchandise.use_pay_verification_mobile"
-                    @update:pay_button="is_show_pay_button = $event" :phone_num="simple_pay_info.buyer_phone" 
+                    @update:token="updateToken($event)" :phone_num="simple_pay_info.buyer_phone" 
                     :merchandise="props.merchandise"/>
                 <VCol cols="12" style="padding: 0;">
                     <VBtn block type="submit">

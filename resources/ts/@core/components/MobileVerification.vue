@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<Props>(), {
     default: '',
 })
 
-const emits = defineEmits(['update:pay_button'])
+const emits = defineEmits(['update:token'])
 
 const snackbar = <any>(inject('snackbar'))
 const button_status = ref(0)
@@ -30,7 +30,7 @@ let countdown_timer = <any>(null)
 digits.value = props.default.split('')
 if (getUserLevel() >= 35) {
     button_status.value = 2
-    emits('update:pay_button', true)
+    emits('update:token', true)
 }
 
 const handleKeyDown = (index: number) => {
@@ -90,14 +90,14 @@ const verification = async () => {
         await requestCodeIssuance()
     }
     else if (button_status.value === 1) {
-        const r = await axios.post('/api/v1/bonaejas/mobile-code-auth', { phone_num: props.phone_num, verification_number: digits.value.join('') })
-        if (r.status == 200) {
-            emits('update:pay_button', true)
+        try {
+            const r = await axios.post('/api/v1/bonaejas/mobile-code-auth', { phone_num: props.phone_num, verification_number: digits.value.join('') })
+            emits('update:token', r.data.token)
             button_status.value = 2
             snackbar.value.show('인증에 성공하였습니다.', 'success')
         }
-        else {
-            snackbar.value.show('인증번호가 다릅니다. 다시 확인해주세요.', 'warning')
+        catch(e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
         }
     }
     else if (button_status.value === 2) {

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import { UserAbility } from '@/plugins/casl/AppAbility'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
@@ -32,9 +33,13 @@ const errors = ref<Record<string, string | undefined>>({
 })
 
 const snackbar = ref(null)
+const passwordAuthDialog = ref()
 const refVForm = ref<VForm>()
 const user_name = ref('')
 const user_pw = ref('')
+const token = ref('')
+
+provide('snackbar', snackbar)
 
 const getAbilities = (): UserAbility[] => {
     let auth: UserAbility[] = [];
@@ -42,7 +47,7 @@ const getAbilities = (): UserAbility[] => {
     return auth;
 }
 const login = () => {
-    axios.post('/api/v1/auth/sign-in', { brand_id: corp.id, user_name: user_name.value, user_pw: user_pw.value })
+    axios.post('/api/v1/auth/sign-in', { brand_id: corp.id, user_name: user_name.value, user_pw: user_pw.value, token: token.value })
         .then(r => {
             const { access_token, user } = r.data
             user['level'] = user['level'] == null ? 10 : user['level']
@@ -60,7 +65,20 @@ const login = () => {
             else
                 router.replace(route.query.to ? String(route.query.to) : '/')
         })
-        .catch(e => {
+        .catch(async e => {
+            if(e.response.data.code === 956) {
+                let phone_num = e.response.data.data.phone_num
+                if(phone_num) {
+                    phone_num = phone_num.replaceAll(' ', '').replaceAll('-', '')
+                    token.value = await passwordAuthDialog.value.show(phone_num)
+                    if(token.value !== '')
+                        login()
+                }
+                else
+                    snackbar.value.show('등록된 로그인정보가 없습니다.<br>관리자에게 문의해주세요.', 'warning')
+            }
+            else
+                pay_token.value = ''
             console.log(e)
             errors.value = e.response.data
         })
@@ -136,6 +154,7 @@ const onSubmit = () => {
         </VCol>
     </VRow>
     <Snackbar ref="snackbar" />
+    <PasswordAuthDialog ref="passwordAuthDialog"/>
 </template>
 
 <style lang="scss">

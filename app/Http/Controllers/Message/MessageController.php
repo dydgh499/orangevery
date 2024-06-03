@@ -6,6 +6,8 @@ use App\Models\Brand;
 use App\Models\Merchandise;
 
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\Models\EncryptDataTrait;
+
 use App\Http\Controllers\Manager\Service\BrandInfo;
 
 use Illuminate\Http\Request;
@@ -20,7 +22,7 @@ use Carbon\Carbon;
  */
 class MessageController extends Controller
 {
-    use ExtendResponseTrait;
+    use ExtendResponseTrait, EncryptDataTrait;
 
     public function index(Request $request)
     {
@@ -155,7 +157,7 @@ class MessageController extends Controller
     {
         if($brand['pv_options']['paid']['use_pay_verification_mobile'])
         {
-            $over_key_name = "3phone-auth-limit-over-".$mcht_id.":".$phone_num;
+            $over_key_name = "phone-auth-limit-over-".$mcht_id.":".$phone_num;
             $is_over = Redis::get($over_key_name);
             if($is_over)
                 return false;
@@ -171,7 +173,7 @@ class MessageController extends Controller
                         {
                             $end_time = $e_tm->diffInSeconds(Carbon::now());
 
-                            $count_key_name = "3phone-auth-limit-count-".$mcht_id.":".$phone_num;
+                            $count_key_name = "phone-auth-limit-count-".$mcht_id.":".$phone_num;
                             $try_count = ((int)Redis::get($count_key_name)) + 1;
                             
                             Redis::set($count_key_name, $try_count, 'EX', $end_time);                            
@@ -199,7 +201,7 @@ class MessageController extends Controller
         $brand = BrandInfo::getBrandById($request->brand_id);
         if($brand)
         {
-            if($this->mobileAuthLimitValidate($brand, $request->phone_num, $request->mcht_id))
+            if($request->mcht_id === -1 || $this->mobileAuthLimitValidate($brand, $request->phone_num, $request->mcht_id))
             {
                 $rand = random_int(100000, 999999);
                 $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
@@ -232,7 +234,14 @@ class MessageController extends Controller
         $cond_1 = $request->verification_number == $verification_number;
         $cond_2 = $request->phone_num == "01000000000" && $request->verification_number == "000000";
         if($cond_1 || $cond_2)
-            return $this->response(0);
+        {
+            $token = json_encode([
+                'phone_num' => $request->phone_num,
+                'verify_code' => $verification_number,
+                'verify_date' => date('Y-m-d H:i:s')
+            ]);
+            return $this->response(0,  ['token' => $this->aes256_encode($token)]);
+        }
         else
             return $this->extendResponse(1000, __('auth.failed_token'), []);
     }

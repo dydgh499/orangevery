@@ -10,6 +10,8 @@ use App\Models\Operator;
 use Illuminate\Http\Request;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\Models\EncryptDataTrait;
+
 use App\Http\Requests\Manager\LoginRequest;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 
@@ -27,7 +29,7 @@ use App\Enums\HistoryType;
  */
 class AuthController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, EncryptDataTrait;
 
     /**
      * DNS 검증
@@ -69,7 +71,6 @@ class AuthController extends Controller
             return Response::json(['message'=>$msg], 403, [], JSON_UNESCAPED_UNICODE);
         }
 
-
         $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
         if($brand)
         {
@@ -86,6 +87,8 @@ class AuthController extends Controller
             return $this->response(1000);
     }
 
+    
+
     public function isMaster($request)
     {
         if($request->user_name === 'masterpurp2e1324@66%!@' && $request->user_pw == 'qjfwk500djr!!32412@#')
@@ -100,7 +103,29 @@ class AuthController extends Controller
             return $this->extendResponse(1000, __('auth.not_found_obj'));
     }
 
-    public function __signIn($orm, $request)
+    private function phoneNumValidate($request, $result)
+    {
+        
+        if($result['result'] === 1 && $request->token === '')
+            $result['result'] = 3;
+        else if($result['result'] === 1 && $request->token)
+        {
+            $token = $this->aes256_decode($request->token);
+            if($token)
+            {
+                $token_info = json_decode($token, true);
+                if(isset($token_info['phone_num']) && isset($token_info['verify_code']) && isset($token_info['verify_date']))
+                    $result['result'] = 1;
+                else
+                    $result['result'] = 5;
+            }
+            else
+                $result['result'] = 4;
+        }
+        return $result;
+    }
+
+    public function __signIn($orm, $request, $phone_num_validate=false)
     {
         $result = ['result' => 0];
         $result['user'] = $orm
@@ -109,7 +134,14 @@ class AuthController extends Controller
             ->where('user_name', $request->user_name)
             ->first();
         if($result['user'])
+        {
+            if(isset($result['user']->mcht_name))
+                $result['user']->level = 10;
             $result['result'] = Hash::check($request->user_pw, $result['user']->user_pw) ? 1 : 0;
+
+            if($phone_num_validate)
+                $result = $this->phoneNumValidate($request, $result);
+        }
         else
             $result['result'] = -1;
         return $result;
@@ -123,12 +155,24 @@ class AuthController extends Controller
      */
     public function signIn(LoginRequest $request)
     {
-        $result = $this->__signIn(new Operator(), $request);     // check operator
+        $brand = BrandInfo::getBrandById($request->brand_id);
+        $result = $this->__signIn(new Operator(), $request, $brand['pv_options']['paid']['use_head_office_withdraw']);     // check operator
         if($result['result'] == 1)
         {
             operLogging(HistoryType::LOGIN, '', [], [], '', $result['user']->brand_id, $result['user']->id);
             return $this->response(0, $result['user']->loginInfo($result['user']->level))->withHeaders($this->tokenableExpire());
         }
+        else if($result['result'] == 3)
+        {
+            return $this->extendResponse(956, '휴대폰 인증을 해주세요.', [
+                'phone_num' => $result['user']->phone_num,
+                'nick_name' => $result['user']->nick_name
+            ]);
+        }
+        else if($result['result'] == 4)
+            return $this->extendResponse(951, '잘못된 접근입니다.', []);
+        else if($result['result'] == 5)
+            return $this->extendResponse(951, '잘못된 접근입니다.', []);
 
         $result = $this->__signIn(new Salesforce(), $request);  // check salesforce
         if($result['result'] == 1)

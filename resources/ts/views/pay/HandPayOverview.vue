@@ -65,6 +65,12 @@ const filterInstallment = computed(() => {
     return installments.filter((obj: Options) => { return obj.id <= (props.pay_module.installment || 0) })
 })
 
+const updateToken = (value : string) => {
+    if(value.length > 10) {
+        is_show_pay_button.value = true
+    }
+}
+
 watchEffect(() => {
     hand_pay_info.pmod_id = props.pay_module.id
     hand_pay_info.is_old_auth = props.pay_module.is_old_auth
@@ -155,7 +161,7 @@ watchEffect(() => {
                     </template>
                 </CreateHalfVCol>
                 <MobileVerification v-if="corp.pv_options.paid.use_pay_verification_mobile && props.merchandise.use_pay_verification_mobile"
-                    @update:pay_button="is_show_pay_button = $event" :phone_num="hand_pay_info.buyer_phone" 
+                    @update:token="updateToken($event)" :phone_num="hand_pay_info.buyer_phone" 
                     :merchandise="props.merchandise"/>
 
                 <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">

@@ -220,6 +220,12 @@ const setProcessTableWidth = () => {
     }
 }
 
+const updateToken = (value : string) => {
+    if(value.length > 10) {
+        is_show_pay_button.value = true
+    }
+}
+
 watchEffect(async () => {
     if (props.merchandise.use_pay_verification_mobile == 0)
         is_show_pay_button.value = true
@@ -368,7 +374,7 @@ onMounted(() => {
         <VCardText>
             <MobileVerification
                 v-if="corp.pv_options.paid.use_pay_verification_mobile && props.merchandise.use_pay_verification_mobile"
-                @update:pay_button="is_show_pay_button = $event" :phone_num="hand_pay_info.buyer_phone" 
+                @update:token="updateToken($event)" :phone_num="hand_pay_info.buyer_phone" 
                 :merchandise="props.merchandise"/>
             <VCol cols="12" style="padding: 0;" v-if="is_show_pay_button">
                 <VBtn block @click="pays()">
