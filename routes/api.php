@@ -208,7 +208,7 @@ Route::prefix('v1')->group(function() {
             });
             Route::prefix('realtime-histories')->group(function() {
                 Route::post('get-balance', [RealtimeSendHistoryController::class, 'getBalance']);
-                Route::post('head-office-transfer', [RealtimeSendHistoryController::class, 'headOfficeTransfer']);
+                //Route::post('head-office-transfer', [RealtimeSendHistoryController::class, 'headOfficeTransfer']);
                 
             });            
             Route::apiResource('realtime-histories', RealtimeSendHistoryController::class);
