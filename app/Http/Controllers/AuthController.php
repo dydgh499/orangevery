@@ -66,10 +66,10 @@ class AuthController extends Controller
             $msg = '이상접근이 탐지되었습니다. 해당 접속로그는 관리자에게 전송되어 분석될 예정입니다.';
             error(array_merge($request->all(), $data), $msg);
             
-            return Response::json(['message'=>$msg, 'data'=>array_merge($request->all(), $data)], 403, [], JSON_UNESCAPED_UNICODE);   
+            return Response::json(['message'=>$msg], 403, [], JSON_UNESCAPED_UNICODE);
         }
 
-        
+
         $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
         if($brand)
         {
