@@ -63,7 +63,7 @@ class AuthController extends Controller
         [$result, $data] = $this->isForeginIP($request);
         if($result === false)
         {
-            $msg = '이상접근이 탐지되었습니다. 해당 접속로그는 관리자에게 전송되어 분석될 예정입니다.';
+            $msg = 'Abnormal access has been detected. The access log will be sent to the administrator and analyzed.';
             error(array_merge($request->all(), $data), $msg);
             
             return Response::json(['message'=>$msg], 403, [], JSON_UNESCAPED_UNICODE);
