@@ -36,8 +36,40 @@ class AuthController extends Controller
      * @bodyParam dns string required 검증할 DNS 입력 Example: localhost
      *
      */
+    private function isForeginIP($request)
+    {
+        $token = "2c693805e1bced";
+        $ip = $request->ip() === '127.0.0.1' ? '183.107.112.147' : $request->ip();
+        // 
+        $res = get("https://ipinfo.io/$ip/geo", []);
+        if($res['code'] !== 200)
+        {
+            error(array_merge($request->all(), $res), 'ip blacklist API count over');
+            return [true, []];
+        }
+        else
+        {
+            if(strtoupper($res['body']['country']) === 'KR')
+                return [true, []];
+            else
+            {
+                return [false, $res];
+            }
+        }
+    }
+
     public function domain(Request $request)
     {
+        [$result, $data] = $this->isForeginIP($request);
+        if($result === false)
+        {
+            $msg = '이상접근이 탐지되었습니다. 해당 접속로그는 관리자에게 전송되어 분석될 예정입니다.';
+            error(array_merge($request->all(), $data), $msg);
+            
+            return Response::json(['message'=>$msg, 'data'=>array_merge($request->all(), $data)], 403, [], JSON_UNESCAPED_UNICODE);   
+        }
+
+        
         $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
         if($brand)
         {
