@@ -55,13 +55,10 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
-            if($request->ip() === '194.114.136.88')
-                return response()->json(['message'=>__('auth.throttle', ["seconds"=> 60])], 429);
-
-            return Limit::perMinute(600)->by(optional($request->user())->id ?: $request->ip())->response(function() use($request) {
+            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip())->response(function() use($request) {
                 $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all()];
-                Log::critical(__('auth.throttle', ["seconds"=> 60]), $logs);
-                return response()->json(['message'=>__('auth.throttle', ["seconds"=> 60])], 429);
+                Log::critical(__('auth.throttle', ["seconds"=> 36000]), $logs);
+                return response()->json(['message'=>__('auth.throttle', ["seconds"=> 36000])], 429);
             });
         });
 
