@@ -182,17 +182,23 @@ class RealtimeSendHistoryController extends Controller
      */
     public function headOfficeTransfer(Request $request)
     {
-        $data = $request->all();
-        $privacy = HeadOfficeAccount::where('id', $request->head_office_acct_id)->first();
-        $params = [
-            'fin_id'    => $request->fin_id,
-            'mcht_id'   => -1,
-            'withdraw_amount' => $request->withdraw_amount,
-            'withdraw_fee' => 0,
-        ];
-        if($privacy)
-        $params = array_merge($params, $privacy->toArray());
-        $res    = post($this->base_noti_url.'/collect-deposit', $params);
-        return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
+        if($request->user()->tokenCan(35))
+        {
+            $data = $request->all();
+            $privacy = HeadOfficeAccount::where('id', $request->head_office_acct_id)->first();
+            $params = [
+                'fin_id'    => $request->fin_id,
+                'mcht_id'   => -1,
+                'withdraw_amount' => $request->withdraw_amount,
+                'withdraw_fee' => 0,
+            ];
+            if($privacy)
+            $params = array_merge($params, $privacy->toArray());
+            $res    = post($this->base_noti_url.'/collect-deposit', $params);
+            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
+        }
+        else
+            return $this->extendResponse(403, '잘못된 접근입니다.', '');
+
     }
 }
