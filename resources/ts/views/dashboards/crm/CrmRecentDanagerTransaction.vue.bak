@@ -7,8 +7,9 @@ import { danger_types } from '@/views/transactions/dangers/useStore'
 const is_skeleton = <any>(inject('is_skeleton'))
 
 const { danger_histories } = useCRMStore()
-
-
+const booleanTypeColor = (type: boolean | null) => {
+    return Boolean(type) ? "default" : "success";
+}
 const getSelectIdColor = (id: number | undefined) => {
     if (id == 0)
         return "default"

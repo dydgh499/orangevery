@@ -104,6 +104,36 @@ watchEffect(() => {
                     </VCol>
                 </template>
             </CardLayout>
+            <CardLayout :padding="true" v-if="getUserLevel() == 10 && user_info.use_collect_withdraw && isBrightFix()">
+                <template #content>
+                    <VCol class="d-flex justify-space-between small-font">
+                        <div>
+                            <div>
+                                <span>출금가능 금액</span>                                
+                            </div>
+                            <div style="font-weight: bold;">
+                                {{ able_balance.toLocaleString() }}원
+                            </div>
+                        </div>
+                        <VAvatar rounded variant="tonal" icon="fa6-solid:money-bill-transfer" />
+                    </VCol>
+                    <VCol style="padding-top: 0;" class="d-flex justify-space-between small-font">
+                        <div>
+                            <div>
+                                <span>출금금액 입력</span>
+                            </div>
+                            <div style="display: inline-flex;">
+                                <VTextField v-model="amount" type="number" suffix="￦" placeholder="출금금액 입력"
+                                    prepend-inner-icon="ic:outline-price-change" />
+                                <VBtn type="button" @click="requestWithdraw()" style="margin-left: 0.5em;">
+                                    출금하기
+                                    <VIcon end icon="fa6-solid:money-bill-transfer" />
+                                </VBtn>
+                            </div>
+                        </div>
+                    </VCol>
+                </template>
+            </CardLayout>
             <template v-if="is_skeleton">
                 <CardLayout v-for="(transaction, key) in 3" :key="key" :padding="true">
                     <template #content>
