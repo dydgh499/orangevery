@@ -51,11 +51,12 @@ class HeadOfficeAccountController extends Controller
      */
     public function store(HeadOfficeAccountRequest $request)
     {
-        /*
-        $data = $request->data();
-        $res = $this->head_office_accounts->create($data);
-        return $this->response($res ? 1 : 990, ['id'=>$res->id]);
-        */
+        if($request->user()->brand_id === 19)
+        {
+            $data = $request->data();
+            $res = $this->head_office_accounts->create($data);
+            return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
+        }
         return $this->extendResponse(1999, '지금은 추가할 수 없습니다,');
     }
 
@@ -83,11 +84,12 @@ class HeadOfficeAccountController extends Controller
      */
     public function update(HeadOfficeAccountRequest $request, $id)
     {
-        /*
-        $data = $request->data();
-        $res  = $this->head_office_accounts->where('id', $id)->update($data);
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
-        */
+        if($request->user()->brand_id === 19)
+        {
+            $data = $request->data();
+            $res  = $this->head_office_accounts->where('id', $id)->update($data);
+            return $this->response($res ? 1 : 990, ['id'=>$id]);
+        }
         return $this->extendResponse(1999, '지금은 업데이트할 수 없습니다.');
     }
 
