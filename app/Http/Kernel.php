@@ -21,7 +21,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \App\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \Illuminatech\MultipartMiddleware\MultipartFormDataParser::class, // parse multipart request, before operating input        
+        \Illuminatech\MultipartMiddleware\MultipartFormDataParser::class, // parse multipart request, before operating input
     ];
 
     /**

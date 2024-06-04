@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0c4dcacef10b0efc2ee9629738c6dd22",
+    "content-hash": "80e68734366488ceca1491cae3ab064a",
     "packages": [
         {
             "name": "arcanedev/log-viewer",
@@ -1605,6 +1605,151 @@
             "time": "2022-05-21T17:30:32+00:00"
         },
         {
+            "name": "ipinfo/ipinfo",
+            "version": "v3.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ipinfo/php.git",
+                "reference": "6832701a5ecb9e3b17864d122cb201a7e7e8ec02"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ipinfo/php/zipball/6832701a5ecb9e3b17864d122cb201a7e7e8ec02",
+                "reference": "6832701a5ecb9e3b17864d122cb201a7e7e8ec02",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^6.3||^7.0",
+                "php": ">=8.0",
+                "symfony/cache": "^6.3",
+                "symfony/http-foundation": "^6.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10.0.0",
+                "squizlabs/php_codesniffer": "^3.5.8"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ipinfo\\ipinfo\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "James Timmins",
+                    "email": "jameshtimmins@gmail.com",
+                    "homepage": "https://github.com/jhtimmins",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Uman Shahzad",
+                    "email": "uman@mslm.io",
+                    "homepage": "https://github.com/UmanShahzad",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Umar Farooq",
+                    "email": "umar@ipinfo.io",
+                    "homepage": "https://github.com/rm-Umar",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The official PHP library for IPinfo, the most reliable, accurate, and in-depth source of IP address data available anywhere. We process terabytes of data to produce our custom IP geolocation, company, carrier and IP type data sets. Visit our developer docs at https://ipinfo.io/developers.",
+            "homepage": "https://github.com/ipinfo/php",
+            "keywords": [
+                "ipinfo"
+            ],
+            "support": {
+                "issues": "https://github.com/ipinfo/php/issues",
+                "source": "https://github.com/ipinfo/php/tree/v3.1.2"
+            },
+            "time": "2023-10-02T12:42:34+00:00"
+        },
+        {
+            "name": "ipinfo/ipinfolaravel",
+            "version": "v2.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ipinfo/laravel.git",
+                "reference": "77f184337229e38ffe29de5f2640b52554c04c9c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ipinfo/laravel/zipball/77f184337229e38ffe29de5f2640b52554c04c9c",
+                "reference": "77f184337229e38ffe29de5f2640b52554c04c9c",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": ">=7 <11",
+                "ipinfo/ipinfo": "^3.1.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.4.2",
+                "orchestra/testbench": ">=6.4.0",
+                "phpunit/phpunit": ">=8 <10",
+                "sempro/phpunit-pretty-print": "^1.3.0",
+                "squizlabs/php_codesniffer": "^3.5.8"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "ipinfo\\ipinfolaravel\\ipinfolaravelServiceProvider"
+                    ],
+                    "aliases": {
+                        "ipinfolaravel": "ipinfo\\ipinfolaravel\\Facades\\ipinfolaravel"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ipinfo\\ipinfolaravel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "James Timmins",
+                    "email": "jameshtimmins@gmail.com",
+                    "homepage": "https://www.ipinfo.io"
+                },
+                {
+                    "name": "Uman Shahzad",
+                    "email": "uman@mslm.io",
+                    "homepage": "https://github.com/UmanShahzad"
+                },
+                {
+                    "name": "Soban Mahmood",
+                    "email": "soban.mahmood@mslm.io",
+                    "homepage": "https://github.com/SobanMahmood"
+                }
+            ],
+            "description": "The official Laravel library for IPinfo, the most reliable, accurate, and in-depth source of IP address data available anywhere. We process terabytes of data to produce our custom IP geolocation, company, carrier and IP type data sets. Visit our developer docs at https://ipinfo.io/developers.",
+            "homepage": "https://github.com/ipinfo/ipinfolaravel",
+            "keywords": [
+                "ipinfolaravel",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/ipinfo/laravel/issues",
+                "source": "https://github.com/ipinfo/laravel/tree/v2.6.0"
+            },
+            "time": "2023-07-31T07:26:00+00:00"
+        },
+        {
             "name": "laravel/framework",
             "version": "v10.22.0",
             "source": {
@@ -2046,75 +2191,6 @@
                 "source": "https://github.com/laravel/tinker/tree/v2.8.2"
             },
             "time": "2023-08-15T14:27:00+00:00"
-        },
-        {
-            "name": "laravie/parser",
-            "version": "v2.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/laravie/parser.git",
-                "reference": "11bcf705da402527c49b9bebdf68dec3e04d057f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/laravie/parser/zipball/11bcf705da402527c49b9bebdf68dec3e04d057f",
-                "reference": "11bcf705da402527c49b9bebdf68dec3e04d057f",
-                "shasum": ""
-            },
-            "require": {
-                "ext-simplexml": "*",
-                "illuminate/collections": "^8.0 || ^9.0 || ^10.0",
-                "php": "^7.3 || ^8.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "^1.4.2",
-                "phpstan/phpstan": "^1.9.14",
-                "phpunit/phpunit": "^9.5.10"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.0-dev"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/helpers.php"
-                ],
-                "psr-4": {
-                    "Laravie\\Parser\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mior Muhammad Zaki",
-                    "email": "crynobone@gmail.com",
-                    "homepage": "https://github.com/crynobone"
-                }
-            ],
-            "description": "XML Document Parser for PHP",
-            "keywords": [
-                "parser",
-                "xml"
-            ],
-            "support": {
-                "source": "https://github.com/laravie/parser/tree/v2.3.0"
-            },
-            "funding": [
-                {
-                    "url": "https://paypal.me/crynobone",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://liberapay.com/crynobone",
-                    "type": "liberapay"
-                }
-            ],
-            "time": "2023-02-14T10:32:44+00:00"
         },
         {
             "name": "league/commonmark",
@@ -3071,81 +3147,6 @@
                 }
             ],
             "time": "2023-02-08T01:06:31+00:00"
-        },
-        {
-            "name": "orchestra/parser",
-            "version": "v8.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/orchestral/parser.git",
-                "reference": "148b905cdcee0e81e87ecf214442634f103f08b7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/orchestral/parser/zipball/148b905cdcee0e81e87ecf214442634f103f08b7",
-                "reference": "148b905cdcee0e81e87ecf214442634f103f08b7",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/container": "^10.0",
-                "laravie/parser": "^2.3",
-                "php": "^8.0"
-            },
-            "require-dev": {
-                "laravel/pint": "^1.4",
-                "orchestra/testbench": "^8.0",
-                "phpstan/phpstan": "^1.9.14",
-                "phpunit/phpunit": "^10.0.7"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "9.0-dev"
-                },
-                "laravel": {
-                    "providers": [
-                        "Orchestra\\Parser\\XmlServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Orchestra\\Parser\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Mior Muhammad Zaki",
-                    "email": "crynobone@gmail.com",
-                    "homepage": "https://github.com/crynobone"
-                }
-            ],
-            "description": "XML Document Parser for Laravel and PHP",
-            "keywords": [
-                "laravel",
-                "orchestra-platform",
-                "orchestral",
-                "parser",
-                "xml"
-            ],
-            "support": {
-                "source": "https://github.com/orchestral/parser/tree/v8.0.0"
-            },
-            "funding": [
-                {
-                    "url": "https://paypal.me/crynobone",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://liberapay.com/crynobone",
-                    "type": "liberapay"
-                }
-            ],
-            "time": "2023-02-15T01:13:52+00:00"
         },
         {
             "name": "paragonie/constant_time_encoding",
@@ -4271,6 +4272,178 @@
                 }
             ],
             "time": "2023-04-15T23:01:58+00:00"
+        },
+        {
+            "name": "symfony/cache",
+            "version": "v6.4.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/cache.git",
+                "reference": "287142df5579ce223c485b3872df3efae8390984"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/cache/zipball/287142df5579ce223c485b3872df3efae8390984",
+                "reference": "287142df5579ce223c485b3872df3efae8390984",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "psr/cache": "^2.0|^3.0",
+                "psr/log": "^1.1|^2|^3",
+                "symfony/cache-contracts": "^2.5|^3",
+                "symfony/service-contracts": "^2.5|^3",
+                "symfony/var-exporter": "^6.3.6|^7.0"
+            },
+            "conflict": {
+                "doctrine/dbal": "<2.13.1",
+                "symfony/dependency-injection": "<5.4",
+                "symfony/http-kernel": "<5.4",
+                "symfony/var-dumper": "<5.4"
+            },
+            "provide": {
+                "psr/cache-implementation": "2.0|3.0",
+                "psr/simple-cache-implementation": "1.0|2.0|3.0",
+                "symfony/cache-implementation": "1.1|2.0|3.0"
+            },
+            "require-dev": {
+                "cache/integration-tests": "dev-master",
+                "doctrine/dbal": "^2.13.1|^3|^4",
+                "predis/predis": "^1.1|^2.0",
+                "psr/simple-cache": "^1.0|^2.0|^3.0",
+                "symfony/config": "^5.4|^6.0|^7.0",
+                "symfony/dependency-injection": "^5.4|^6.0|^7.0",
+                "symfony/filesystem": "^5.4|^6.0|^7.0",
+                "symfony/http-kernel": "^5.4|^6.0|^7.0",
+                "symfony/messenger": "^5.4|^6.0|^7.0",
+                "symfony/var-dumper": "^5.4|^6.0|^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Cache\\": ""
+                },
+                "classmap": [
+                    "Traits/ValueWrapper.php"
+                ],
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Provides extended PSR-6, PSR-16 (and tags) implementations",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "caching",
+                "psr6"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/cache/tree/v6.4.8"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-05-31T14:49:08+00:00"
+        },
+        {
+            "name": "symfony/cache-contracts",
+            "version": "v3.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/cache-contracts.git",
+                "reference": "df6a1a44c890faded49a5fca33c2d5c5fd3c2197"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/cache-contracts/zipball/df6a1a44c890faded49a5fca33c2d5c5fd3c2197",
+                "reference": "df6a1a44c890faded49a5fca33c2d5c5fd3c2197",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1",
+                "psr/cache": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "3.5-dev"
+                },
+                "thanks": {
+                    "name": "symfony/contracts",
+                    "url": "https://github.com/symfony/contracts"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Contracts\\Cache\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Generic abstractions related to caching",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "abstractions",
+                "contracts",
+                "decoupling",
+                "interfaces",
+                "interoperability",
+                "standards"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/cache-contracts/tree/v3.5.0"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2024-04-18T09:32:20+00:00"
         },
         {
             "name": "symfony/console",
@@ -6522,6 +6695,80 @@
                 }
             ],
             "time": "2023-08-24T14:51:05+00:00"
+        },
+        {
+            "name": "symfony/var-exporter",
+            "version": "v6.3.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/var-exporter.git",
+                "reference": "374d289c13cb989027274c86206ddc63b16a2441"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/374d289c13cb989027274c86206ddc63b16a2441",
+                "reference": "374d289c13cb989027274c86206ddc63b16a2441",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "symfony/var-dumper": "^5.4|^6.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\VarExporter\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Allows exporting any serializable PHP data structure to plain PHP code",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "clone",
+                "construct",
+                "export",
+                "hydrate",
+                "instantiate",
+                "lazy-loading",
+                "proxy",
+                "serialize"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/var-exporter/tree/v6.3.6"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2023-10-13T09:16:49+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -9473,80 +9720,6 @@
                 }
             ],
             "time": "2023-08-23T06:24:34+00:00"
-        },
-        {
-            "name": "symfony/var-exporter",
-            "version": "v6.3.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/var-exporter.git",
-                "reference": "374d289c13cb989027274c86206ddc63b16a2441"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-exporter/zipball/374d289c13cb989027274c86206ddc63b16a2441",
-                "reference": "374d289c13cb989027274c86206ddc63b16a2441",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1"
-            },
-            "require-dev": {
-                "symfony/var-dumper": "^5.4|^6.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\VarExporter\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Allows exporting any serializable PHP data structure to plain PHP code",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "clone",
-                "construct",
-                "export",
-                "hydrate",
-                "instantiate",
-                "lazy-loading",
-                "proxy",
-                "serialize"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/var-exporter/tree/v6.3.6"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2023-10-13T09:16:49+00:00"
         },
         {
             "name": "symfony/yaml",

@@ -43,7 +43,11 @@ class AuthController extends Controller
         $token = "2c693805e1bced";
         $ip = $request->ip() === '127.0.0.1' ? '183.107.112.147' : $request->ip();
         // 
-        $res = get("https://ipinfo.io/$ip/geo?token=$token", []);
+        $res = get("https://ipinfo.io/$ip", [], [
+            'Authorization' => "Bearer {$token}",
+            'User-Agent' => 'Laravel',
+            "Accept" =>  "application/json",
+        ]);
         if($res['code'] !== 200)
         {
             error(array_merge($request->all(), $res), 'ip blacklist API count over');
