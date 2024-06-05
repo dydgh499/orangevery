@@ -56,13 +56,18 @@ trait SettleTrait
     private function commonDeduct($orm, $col, $request)
     {
         $validated = $request->validate(['amount'=>'required|integer', 'e_dt'=>'required|date', 'id'=>'required']);
-        $res = $orm->create([
-            'brand_id'  => $request->user()->brand_id,
-            'amount'    => $request->amount * -1,
-            'deduct_dt' => $request->e_dt,
-            $col   => $request->id,
-        ]);
-        return $this->response(1);
+        if($request->amount < 3000000)
+        {
+            $res = $orm->create([
+                'brand_id'  => $request->user()->brand_id,
+                'amount'    => $request->amount * -1,
+                'deduct_dt' => $request->e_dt,
+                $col   => $request->id,
+            ]);
+            return $this->response(1);    
+        }
+        else
+            return $this->extendResponse(1999, '추가차감은 300만원 이상할 수 없습니다.');
     }
 
     protected function partSettleCommonQuery($request)
