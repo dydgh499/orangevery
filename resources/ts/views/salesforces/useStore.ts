@@ -62,13 +62,17 @@ const getSalesHeaders = () => {
         'acct_bank_name' : '은행',
         'acct_bank_code' : '은행코드',
         'last_settle_dt': '마지막 정산일',
-        'is_lock' : '계정잠김여부',
-        'locked_at' : '계정잠금시간',
-        'created_at' : '생성시간',
-        'updated_at' : '업데이트시간',
-        'extra_col' : '더보기',
     })
-    return headers
+   
+    if(getUserLevel() >= 35) {
+        headers['is_lock'] = '계정잠김여부'
+        headers['locked_at'] = '계정잠금시간'
+    }
+
+    headers['created_at'] = '생성시간'
+    headers['updated_at'] = '업데이트시간'
+    headers['extra_col'] = '더보기'
+   return headers
 }
 
 export const useSearchStore = defineStore('salesSearchStore', () => {
