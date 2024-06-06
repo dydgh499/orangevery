@@ -158,7 +158,7 @@ class DashboardController extends Controller
         {
             request()->merge([
                 'page' => 1,
-                'page_size' => 10,
+                'page_size' => 20,
             ]);
             $operator_histories = new OperatorHistory();
             $query = $operator_histories
