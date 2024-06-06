@@ -87,7 +87,7 @@ const getLevelByChipColor = (level: number) => {
                                 </div>
                             </div>
                         </VTimelineItem>
-                        <VTimelineItem v-show="!Boolean(locked_users.length) && is_skeleton" size="x-small">
+                        <VTimelineItem v-show="!Boolean(locked_users.length) && !is_skeleton" size="x-small">
                             <div class="d-flex justify-space-between">
                                 <span class="text-sm">
                                     잠금된 계정이 존재하지 않습니다.
