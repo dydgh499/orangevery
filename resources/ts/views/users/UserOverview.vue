@@ -5,7 +5,7 @@ import type { UserPropertie } from '@/views/types'
 import { avatars, banks } from '@/views/users/useStore'
 import { axios, getUserLevel, isAbleModiy } from '@axios'
 import corp from '@corp'
-import { requiredValidatorV2 } from '@validators'
+import { passwordValidator, requiredValidatorV2 } from '@validators'
 
 interface Props {
     item: UserPropertie,
@@ -78,7 +78,7 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField v-model="props.item.user_pw" counter prepend-inner-icon="tabler-lock"
-                                    :rules="[requiredValidatorV2(props.item.user_pw, '패스워드')]"
+                                    :rules="[requiredValidatorV2(props.item.user_pw, '패스워드'), passwordValidator]"
                                     :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
                                     :type="is_show ? 'text' : 'password'" persistent-placeholder
                                     @click:append-inner="is_show = !is_show" autocomplete="new-password" />

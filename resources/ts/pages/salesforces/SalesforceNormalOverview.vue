@@ -146,6 +146,11 @@ onMounted(() => {
                                         :color="store.booleanTypeColor(!item[_key])">
                                         {{ item[_key] ? '가능' : '불가능' }}
                                     </VChip>
+                                </span>                                
+                                <span v-else-if="_key == 'is_lock'">
+                                    <VChip :color="store.booleanTypeColor(item[_key])">
+                                        {{ item[_key] ? 'LOCK' : 'X' }}
+                                    </VChip>
                                 </span>
                                 <span v-else-if="_key == 'view_type'">
                                     <VChip
@@ -154,7 +159,7 @@ onMounted(() => {
                                     </VChip>
                                 </span>
                                 <span v-else-if="_key == 'extra_col'">
-                                    <UserExtraMenu :id="item['id']" :type="1"></UserExtraMenu>
+                                    <UserExtraMenu :item="item" :type="1" :key="item['id']"/>
                                 </span>
                                 <span v-else>
                                     {{ item[_key] }}

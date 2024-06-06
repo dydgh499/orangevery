@@ -78,7 +78,10 @@ const getMchtHeaders = () => {
     }
     
     if (paid.subsidiary_use_control)
-        headers['enabled'] = '전산사용여부'     
+        headers['enabled'] = '전산사용여부'
+
+    headers['is_lock'] = '계정잠김여부'
+    headers['locked_at'] = '계정잠금시간'
     headers['created_at'] = '생성시간'
     headers['updated_at'] = '업데이트시간'
     return headers

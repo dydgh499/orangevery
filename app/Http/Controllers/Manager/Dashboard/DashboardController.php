@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Manager\Dashboard;
 use Illuminate\Support\Facades\DB;
 use App\Models\Merchandise;
 use App\Models\Salesforce;
+use App\Models\Operator;
+
 use App\Models\Log\DangerTransaction;
 use App\Models\Log\OperatorHistory;
 
@@ -156,7 +158,7 @@ class DashboardController extends Controller
         {
             request()->merge([
                 'page' => 1,
-                'page_size' => 5,
+                'page_size' => 10,
             ]);
             $operator_histories = new OperatorHistory();
             $query = $operator_histories
@@ -164,6 +166,31 @@ class DashboardController extends Controller
                 ->where('operator_histories.brand_id', $request->user()->brand_id);
             $data = $this->getIndexData($request, $query, 'operator_histories.id', $operator_histories->cols, 'operator_histories.created_at');
             return $this->response(0, $data);
+        }
+        else
+            return $this->response(0, ['content'=>[]]);
+    }
+
+    public function getLockedUsers(Request $request)
+    {
+        if(isOperator($request))
+        {
+            $getUsers = function($orm, $type) {
+                $cols = ['id', 'user_name', 'nick_name', 'phone_num', 'locked_at'];
+                $cols[] = $type === 'merchandise' ? DB::raw('10 as level') : 'level';
+    
+                return $orm->where('is_delete', false)
+                    ->where('is_lock', true)
+                    ->select($cols);
+            };
+
+            $mcht = $getUsers(new Merchandise, 'merchandise');
+            $sale = $getUsers(new Salesforce, 'salesforce');
+            $oper = $getUsers(new Operator, 'operator');
+            $query = $mcht->unionAll($sale)->unionAll($oper);    
+            
+            $content = $query->orderBy('level', 'desc')->orderBy('id', 'desc')->get();
+            return $this->response(0, ['content' => $content]);
         }
         else
             return $this->response(0, ['content'=>[]]);

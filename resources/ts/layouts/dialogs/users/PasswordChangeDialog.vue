@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { getUserTypeName } from '@/views/users/useStore'
 import { axios } from '@axios'
-import { requiredValidatorV2 } from '@validators'
+import { passwordValidator, requiredValidatorV2 } from '@validators'
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
@@ -26,18 +27,13 @@ const show = (_user_id: number, _user_type: number) => {
     }
 }
 
+
 const submit = async () => {
+    const [name, path] = getUserTypeName(user_type.value)
     const is_valid = await vForm.value.validate();
-    if (is_valid.valid && await alert.value.show('정말 패스워드를 변경하시겠습니까?')) {
-        let page = ''
-        if (user_type.value == 0)
-            page = 'merchandises'
-        else if (user_type.value == 1)
-            page = 'salesforces'
-        else if (user_type.value == 2)
-            page = 'services/operators'
+    if (is_valid.valid && await alert.value.show(`정말 패스워드를 변경하시겠습니까?`)) {
         try {
-            const r = await axios.post('/api/v1/manager/' + page + '/'+user_id.value+'/password-change', { user_pw: password.value })
+            const r = await axios.post(`/api/v1/manager/${path}/${user_id.value}/password-change`, { user_pw: password.value })
             snackbar.value.show('성공하였습니다.', 'success')
         }
         catch (e: any) {
@@ -72,7 +68,7 @@ defineExpose({
                             </template>
                             <template #input>
                                 <VTextField v-model="password" counter prepend-inner-icon="tabler-lock"
-                                    :rules="[requiredValidatorV2(password, '새 패스워드')]"
+                                    :rules="[requiredValidatorV2(password, '새 패스워드'), passwordValidator]"
                                     :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
                                     :type="is_show ? 'text' : 'password'" persistent-placeholder
                                     @click:append-inner="is_show = !is_show" 

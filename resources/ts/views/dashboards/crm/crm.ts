@@ -1,4 +1,4 @@
-import type { Danger, MonthlyTransChart, OperatorHistory, UpSideChart } from '@/views/types'
+import type { Danger, LockedUser, MonthlyTransChart, OperatorHistory, UpSideChart } from '@/views/types'
 import { axios } from '@axios'
 import { orderBy } from 'lodash'
 
@@ -9,15 +9,17 @@ export const useCRMStore = defineStore('CRMStore', () => {
     const upside_salesforces = ref(<UpSideChart>({}))
     const danger_histories = ref(<Danger[]>[])
     const operator_histories = ref(<OperatorHistory[]>([]))
-    
+    const locked_users = ref(<LockedUser[]>([])
+)
     const getGraphData = async() => {
         try {
-            const [r1, r2, r3, r4, r5] = await Promise.all([
+            const [r1, r2, r3, r4, r5, r6] = await Promise.all([
                 axios.get('/api/v1/manager/dashsboards/monthly-transactions-analysis'),
                 axios.get('/api/v1/manager/dashsboards/upside-merchandises-analysis'),
                 axios.get('/api/v1/manager/dashsboards/upside-salesforces-analysis'),
                 axios.get('/api/v1/manager/dashsboards/recent-danger-histories'),
                 axios.get('/api/v1/manager/dashsboards/recent-operator-histories'),
+                axios.get('/api/v1/manager/dashsboards/locked-users'),
             ])
             const sortedKeys = orderBy(Object.keys(r1.data), [], ['desc']);
             const sortedData = sortedKeys.reduce((acc, key) => {
@@ -29,6 +31,7 @@ export const useCRMStore = defineStore('CRMStore', () => {
             Object.assign(upside_salesforces.value, r3.data)
             Object.assign(danger_histories.value, r4.data.content)
             Object.assign(operator_histories.value, r5.data.content)
+            Object.assign(locked_users.value, r6.data.content)
         }
         catch (e) {
             const r = errorHandler(e)
@@ -71,6 +74,7 @@ export const useCRMStore = defineStore('CRMStore', () => {
         upside_salesforces,
         danger_histories,
         operator_histories,
+        locked_users,
         getColors,
         getDayOfWeeks,
         getMonths,

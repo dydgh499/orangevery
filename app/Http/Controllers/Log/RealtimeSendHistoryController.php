@@ -11,7 +11,7 @@ use App\Models\Log\RealtimeSendHistory;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
-use App\Http\Controllers\Message\AuthPhoneNum;
+use App\Http\Controllers\Auth\AuthPhoneNum;
 
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;

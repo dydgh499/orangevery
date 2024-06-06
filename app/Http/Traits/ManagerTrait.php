@@ -4,6 +4,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\Hash;
 
 
 trait ManagerTrait
@@ -124,18 +125,36 @@ trait ManagerTrait
         $auth = false;
         if($session->tokenCan($req_level))
             $auth = true;
-        else if($session->id == $id)
+        else if($session->id === $id)
             $auth = true;
 
         return $auth;
     }
 
-    public function oldDataDelete($orm)
+    public function _passwordChange($query, $request)
     {
-        $one_month_ago = Carbon::now()->subMonth(3);
-        $orm->query()
-            ->where('is_delete', true)
-            ->where('updated_at', '<', $one_month_ago)
-            ->delete();
+        $validated = $request->validate(['user_pw'=>'required', 'id' => 'required|numeric']);
+        if($this->authCheck($request->user(), $request->id, 35))
+        {
+            $res = $query->update([
+                'user_pw' => Hash::make($request->user_pw),
+                'password_change_at' => date('Y-m-d H:i:s'),
+            ]);
+            return $this->response($res ? 1 : 990);    
+        }
+        else
+            return $this->response(951);
+    }
+
+    public function _unlockAccount($query, $request)
+    {
+        $validated = $request->validate(['id' => 'required|numeric']);
+        if($this->authCheck($request->user(), $request->id, 35))
+        {
+            $res = $query->update(['is_lock' => 0]);
+            return $this->response($res ? 1 : 990);    
+        }
+        else
+            return $this->response(951);
     }
 }

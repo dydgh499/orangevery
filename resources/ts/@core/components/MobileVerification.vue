@@ -28,7 +28,8 @@ const countdown_time = ref(180)
 let countdown_timer = <any>(null)
 
 digits.value = props.default.split('')
-if (getUserLevel() >= 35) {
+
+if (getUserLevel() >= 35 && props.merchandise.id !== -1) {
     button_status.value = 2
     emits('update:token', true)
 }

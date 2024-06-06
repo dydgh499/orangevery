@@ -4,7 +4,6 @@ namespace App\Http\Traits;
 
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
 
 trait ExtendResponseTrait 
 {
@@ -22,12 +21,6 @@ trait ExtendResponseTrait
             }        
         }
         return join("\n<br>", $data);
-    }
-
-    private function tokenableExpire()
-    {
-        $created_at = Carbon::now();        
-        return ['Token-Expire-Time' => $created_at->addMinutes(config('sanctum.expiration'))->format('Y-m-d H:i:s')];
     }
 
     public function storesResponse($exceptions)

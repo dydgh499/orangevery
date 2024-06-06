@@ -114,7 +114,7 @@ store.params.sales_parent_structure = 1
                                         </VChip>
                                     </span>
                                     <span v-else-if="_key == 'extra_col'">
-                                        <UserExtraMenu :id="item['id']" :type="1"></UserExtraMenu>
+                                        <UserExtraMenu :item="item" :type="1" :key="item['id']" />
                                     </span>
                                     <span v-else>
                                         {{ item[_key] }}

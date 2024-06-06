@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/popups/useStore'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { useSearchStore } from '@/views/popups/useStore'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
@@ -64,9 +63,6 @@ const showAvatar = (preview: string) => {
                                 <span v-else-if="_key == 'profile_img'">
                                     <VAvatar :image="item[_key]" class="me-3 preview"
                                         @click="showAvatar(item['profile_img'])" />
-                                </span>
-                                <span v-else-if="_key == 'extra_col'">
-                                    <UserExtraMenu :id="item['id']" :type="2"></UserExtraMenu>
                                 </span>
                                 <span v-else>
                                     {{ item[_key] }}

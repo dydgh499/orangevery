@@ -73,6 +73,9 @@ export interface BasePropertie {
     phone_num: string,    
     profile_file?: File | null,
     profile_img?: string,
+    is_lock?: number,
+    locked_at?: string,
+    password_change_at?: string,
     created_at: datetime | null,
     updated_at: datetime | null,
 }
@@ -830,6 +833,15 @@ export interface UpSideChart {
     graph:{
         [key: string]: UpSideChartData
     }
+}
+
+export interface LockedUser {
+    id: number,
+    level: number,
+    user_name: string,
+    nick_name: string,
+    phone_num: string,
+    locked_at: string,
 }
 
 export interface NotiUrl {

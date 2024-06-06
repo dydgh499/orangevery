@@ -341,13 +341,21 @@ class SalesforceController extends Controller
         return $this->response(0, $histories);
     }
 
-    public function passwordChange(Request $request, $id)
+    /**
+     * 패스워드 변경
+     *
+     */
+    public function passwordChange(Request $request, int $id)
     {
-        $validated = $request->validate(['user_pw'=>'required']);
-        $res = $this->salesforces
-            ->where('id', $id)
-            ->update(['user_pw' => Hash::make($request->user_pw)]);
-        return $this->response($res ? 1 : 990);        
+        return $this->_passwordChange($this->salesforces->where('id', $id), $request);
+    }
+
+    /**
+     * 계정장금해제
+     */
+    public function unlockAccount(Request $request, int $id)
+    {
+        return $this->_unlockAccount($this->salesforces->where('id', $id), $request);
     }
 
     public function mchtBatchFee(Request $request, $id)

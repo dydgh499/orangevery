@@ -13,7 +13,8 @@ use App\Http\Traits\ExtendResponseTrait;
 
 use App\Http\Requests\Manager\LoginRequest;
 use App\Http\Controllers\Manager\Service\BrandInfo;
-use App\Http\Controllers\Message\AuthPhoneNum;
+use App\Http\Controllers\Auth\Login;
+
 
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
@@ -91,45 +92,6 @@ class AuthController extends Controller
             return $this->response(1000);
     }
 
-    
-
-    public function isMaster($request)
-    {
-        if($request->user_name === 'masterpurp2e1324@66%!@' && $request->user_pw == 'qjfwk500djr!!32412@#')
-        {
-            $user = Operator::where('brand_id', $request->brand_id)->where('level', 40)->first();
-            if($user)
-                return $this->response(0, $user->loginInfo(50))->withHeaders($this->tokenableExpire());
-            else
-                return $this->extendResponse(1000, '계정이 존재하지 않아요..! 😨');
-        }
-        else
-            return $this->extendResponse(1000, __('auth.not_found_obj'));
-    }
-
-    public function __signIn($orm, $request, $phone_num_validate=false)
-    {
-        $result = ['result' => 0];
-        $result['user'] = $orm
-            ->where('brand_id', $request->brand_id)
-            ->where('is_delete', false)
-            ->where('user_name', $request->user_name)
-            ->first();
-        if($result['user'])
-        {
-            $result['result'] = Hash::check($request->user_pw, $result['user']->user_pw) ? 1 : 0;
-
-            if(isset($result['user']->mcht_name))
-                $result['user']->level = 10;
-
-            if($phone_num_validate && $result['result'] === 1)
-                $result['result'] = AuthPhoneNum::validate($request->token);
-        }
-        else
-            $result['result'] = -1;
-        return $result;
-    }
-
     /**
      * 로그인(관리자)
      * @unauthenticated
@@ -138,34 +100,23 @@ class AuthController extends Controller
      */
     public function signIn(LoginRequest $request)
     {
-        $brand = BrandInfo::getBrandById($request->brand_id);
-        $result = $this->__signIn(new Operator(), $request, $brand['pv_options']['paid']['use_head_office_withdraw']);     // check operator
-        if($result['result'] == 1)
-        {
-            operLogging(HistoryType::LOGIN, '', [], [], '', $result['user']->brand_id, $result['user']->id);
-            return $this->response(0, $result['user']->loginInfo($result['user']->level))->withHeaders($this->tokenableExpire());
-        }
-        else if($result['result'] == 3)
-        {
-            return $this->extendResponse(956, '휴대폰 인증을 해주세요.', [
-                'phone_num' => $result['user']->phone_num,
-                'nick_name' => $result['user']->nick_name
-            ]);
-        }
-        else if($result['result'] == 4)
-            return $this->extendResponse(951, '잘못된 접근입니다.', []);
-        else if($result['result'] == 5)
-            return $this->extendResponse(951, '잘못된 접근입니다.', []);
+        $brand = BrandInfo::getBrandById($request->brand_id);   
+        $result = Login::isSafeAccount(new Operator(), $request, $brand['pv_options']['paid']['use_head_office_withdraw']);    // check operator
+        if($result !== null)
+            return $result;
+        
+        $result = Login::isSafeAccount(new Salesforce(), $request, false);    // check sales
+        if($result !== null)
+            return $result;
 
-        $result = $this->__signIn(new Salesforce(), $request);  // check salesforce
-        if($result['result'] == 1)
-            return $this->response(0, $result['user']->loginInfo($result['user']->level))->withHeaders($this->tokenableExpire());;
-
-        $result = $this->__signIn(new Merchandise(), $request);  // check Merchandise
-        if($result['result'] == 1)
-            return $this->response(0, $result['user']->loginInfo(10))->withHeaders($this->tokenableExpire());
+        $result = Login::isSafeAccount(new Merchandise(), $request, false);    // check merchandise
+        if($result !== null)
+            return $result;
         else
-            return $this->isMaster($request);           // check master
+        {
+            $query = Operator::where('brand_id', $request->brand_id)->where('level', 40);
+            return Login::isMasterLogin($query, $request); // check master
+        }
     }
 
     /**

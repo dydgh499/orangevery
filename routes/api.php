@@ -107,6 +107,7 @@ Route::prefix('v1')->group(function() {
             Route::get('upside-salesforces-analysis', [DashboardController::class, 'upSideSaleAnalysis']);
             Route::get('recent-danger-histories', [DashboardController::class, 'getRecentDangerHistories']);
             Route::get('recent-operator-histories', [DashboardController::class, 'getRecentOperatorHistories']);
+            Route::get('locked-users', [DashboardController::class, 'getLockedUsers']);            
         });
 
         Route::prefix('posts')->group(function() {
@@ -119,6 +120,7 @@ Route::prefix('v1')->group(function() {
             Route::get('bonaejas/chart', [MessageController::class, 'chart']);
             Route::get('pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
             Route::post('operators/{id}/password-change', [OperatorController::class, 'passwordChange']);
+            Route::post('operators/{id}/unlock-account', [OperatorController::class, 'unlockAccount']);
             Route::get('brands/chart', [BrandController::class, 'chart']);
             
             Route::apiResource('brands/before-brand-infos', BeforeBrandInfoController::class);
@@ -234,6 +236,7 @@ Route::prefix('v1')->group(function() {
             Route::get('classification', [SalesforceController::class, 'classification']);
             Route::post('{id}/mcht-batch-fee', [SalesforceController::class, 'mchtBatchFee']);
             Route::post('{id}/password-change', [SalesforceController::class, 'passwordChange']);
+            Route::post('{id}/unlock-account', [SalesforceController::class, 'unlockAccount']);
             Route::post('bulk-register', [SalesforceController::class, 'bulkRegister']);
             Route::apiResource('under-auto-settings', UnderAutoSettingController::class);
         });
@@ -250,6 +253,7 @@ Route::prefix('v1')->group(function() {
                 Route::post('set-account-info', [BatchUpdateMchtController::class, 'setAccountInfo']);
             });
             Route::post('{id}/password-change', [MerchandiseController::class, 'passwordChange']);
+            Route::post('{id}/unlock-account', [MerchandiseController::class, 'unlockAccount']);
             Route::post('{id}/set-settle-hold', [MerchandiseController::class, 'setSettleHold']);
             Route::post('{id}/clear-settle-hold', [MerchandiseController::class, 'clearSettleHold']);
 

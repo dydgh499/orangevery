@@ -9,6 +9,7 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Models\EncryptDataTrait;
 
 use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Auth\AuthPhoneNum;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -152,46 +153,6 @@ class MessageController extends Controller
         return [0, '', ''];
     }
 
-    // 휴대폰 인증허용회수 검증
-    private function mobileAuthLimitValidate($brand, $phone_num, $mcht_id)
-    {
-        if($brand['pv_options']['paid']['use_pay_verification_mobile'])
-        {
-            $over_key_name = "phone-auth-limit-over-".$mcht_id.":".$phone_num;
-            $is_over = Redis::get($over_key_name);
-            if($is_over)
-                return false;
-            else
-            {
-                $mcht = Merchandise::where('id', $mcht_id)->first();
-                if($mcht)
-                {
-                    if($mcht->phone_auth_limit_count)
-                    {
-                        [$time_type, $s_tm, $e_tm] = $this->payDisableTimeType($mcht->phone_auth_limit_s_tm, $mcht->phone_auth_limit_e_tm);
-                        if($time_type > 0)
-                        {
-                            $end_time = $e_tm->diffInSeconds(Carbon::now());
-
-                            $count_key_name = "phone-auth-limit-count-".$mcht_id.":".$phone_num;
-                            $try_count = ((int)Redis::get($count_key_name)) + 1;
-                            
-                            Redis::set($count_key_name, $try_count, 'EX', $end_time);                            
-                            if($mcht->phone_auth_limit_count < $try_count)
-                            {
-                                Redis::set($over_key_name, 'over', 'EX', $end_time);
-                                return false;
-                            }
-                            else
-                                return true;
-                        }
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
     /*
      * 모바일 코드 발급
      */
@@ -201,7 +162,7 @@ class MessageController extends Controller
         $brand = BrandInfo::getBrandById($request->brand_id);
         if($brand)
         {
-            if($request->mcht_id === -1 || $this->mobileAuthLimitValidate($brand, $request->phone_num, $request->mcht_id))
+            if($request->mcht_id === -1 || AuthPhoneNum::limitValidate($brand, $request->phone_num, $request->mcht_id))
             {
                 $rand = random_int(100000, 999999);
                 $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);

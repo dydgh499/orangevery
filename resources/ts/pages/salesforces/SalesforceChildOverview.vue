@@ -78,7 +78,7 @@ const getChildDepth = computed(() => {
                     </VChip>
                 </span>
                 <span v-else-if="key == 'extra_col'">
-                    <UserExtraMenu :id="props.salesforce['id']" :type="1"></UserExtraMenu>
+                    <UserExtraMenu :item="props.salesforce" :type="1" :key="item['id']"/>
                 </span>
                 <span v-else>
                     {{ props.salesforce[key] }}

@@ -22,6 +22,8 @@ export const useSearchStore = defineStore('operatorSearchStore', () => {
         'user_name' : 'ID',
         'nick_name' : '성명',
         'phone_num' : '연락처',
+        'is_lock' : '계정잠김여부',
+        'locked_at' : '계정잠금시간',
         'created_at' : '생성시간',
         'updated_at' : '업데이트시간',
     }

@@ -39,7 +39,7 @@ const is_show = ref(false)
                                 <VTextField v-model="props.item.user_pw" counter prepend-inner-icon="tabler-lock"
                                     :rules="[requiredValidatorV2(props.item.user_pw, '패스워드'), passwordValidator]"
                                     :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
-                                    :type="is_show ? 'text' : 'password'" placeholder="소문자,대문자,특수문자로 이루어진 8자 이상 문자열"
+                                    :type="is_show ? 'text' : 'password'" placeholder="소문자,대문자,특수문자로 이루어진 10자 이상 문자열"
                                     persistent-placeholder @click:append-inner="is_show = !is_show" autocomplete />
                             </template>
                         </CreateHalfVCol>

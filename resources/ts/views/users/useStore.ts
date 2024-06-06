@@ -95,3 +95,14 @@ export const avatars = [
     avatar_24,
     avatar_25,
 ]
+
+export const getUserTypeName = (type: number) => {
+    if(type === 0)
+        return ['가맹점', 'merchandises']
+    else if(type === 1)
+        return ['영업자', 'salesforces']
+    else if(type === 2)
+        return ['운영자', 'services/operators']
+    else
+        return ['', '']
+}

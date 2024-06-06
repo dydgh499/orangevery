@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useSearchStore, operator_levels } from '@/views/services/operators/useStore'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
 import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { operator_levels, useSearchStore } from '@/views/services/operators/useStore'
+import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
@@ -54,11 +54,16 @@ const showAvatar = (preview: string) => {
                                         {{ operator_levels.find(obj => obj.id === item[_key])?.title }}
                                     </VChip>
                                 </span>
+                                <span v-else-if="_key == 'is_lock'">
+                                    <VChip :color="store.booleanTypeColor(item[_key])">
+                                        {{ item[_key] ? 'LOCK' : 'X' }}
+                                    </VChip>
+                                </span>
                                 <span v-else-if="_key == 'profile_img'">
                                     <VAvatar :image="item[_key]" class="me-3 preview" @click="showAvatar(item['profile_img'])"/>
                                 </span>
                                 <span v-else-if="_key == 'extra_col'">
-                                    <UserExtraMenu :id="item['id']" :type="2"></UserExtraMenu>
+                                    <UserExtraMenu :item="item" :type="2" :key="item['id']" />
                                 </span>
                                 <span v-else>
                                     {{ item[_key] }}

@@ -17,6 +17,7 @@ const { finance_vans } = useStore()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const passwordAuthDialog = ref()
+const token = ref('')
  
 const fin_id = ref(null)
 const head_office_acct_id = ref(null)
@@ -49,16 +50,17 @@ const depositAcctHint = () => {
 const deposit = async () => {
     if(amount.value) {
         const phone_num = user_info.value.phone_num.replaceAll(' ', '').replaceAll('-', '')
-        const token = await passwordAuthDialog.value.show(phone_num)
-        if(token !== '') {
+        token.value = await passwordAuthDialog.value.show(phone_num)
+        
+        if(token.value !== '') {
             if(await alert.value.show('정말 '+amount.value+'원을 이체하시겠습니까?')) {
                 const params = {
                     fin_id: fin_id.value,
                     head_office_acct_id: head_office_acct_id.value,
                     withdraw_amount: amount.value,
-                    token: token
+                    token: token.value
                 }
-                const r = await post('/api/v1/manager/transactions/realtime-histories/head-office-transfer', params)
+                const r = await post('/api/v1/manager/transactions/realtime-histories/head-office-transfer', params, true)
             }
         }
     }
@@ -68,65 +70,67 @@ const deposit = async () => {
 </script>
 <template>
     <section>
-        <VRow class="match-height">
-            <!-- 👉 운영정보 -->
-            <VCol cols="12" md="4">
-                <VCard>
-                    <VCardItem>
-                        <VCardTitle style="margin-bottom: 1em;">본사 지정계좌 이체</VCardTitle>
-                        <VDivider style="margin: 1em 0;" />
-                        <VRow class="pt-3">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>출금 이체모듈 선택<br>
-                                    <h4>
-                                        {{ withdrawAcctBalance() }}
-                                    </h4>
-                                </template>
-                                <template #input>
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="fin_id" :items="finance_vans"
-                                        label="출금 이체모듈 선택" item-title="nick_name" item-value="id" 
-                                        persistent-hint single-line  :hint="withdrawAcctHint()"/>
-                                </template>
-                            </CreateHalfVCol>
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>지정계좌 선택</template>
-                                <template #input>
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="head_office_acct_id"
-                                        :items="head_office_accounts" label="입금 계좌 선택" item-title="acct_num" item-value="id"
-                                        persistent-hint single-line  :hint="depositAcctHint()" />
-                                </template>
-                            </CreateHalfVCol>
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>출금금액 입력</template>
-                                <template #input>
-                                    <VTextField v-model="amount" type="number" suffix="￦" placeholder="출금금액 입력"
-                                        prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidatorV2(amount, '출금금액')]" />
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
-                        <VRow>
-                        <VCol class="d-flex gap-4">
-                            <VBtn type="button" style="margin-left: auto;" @click="deposit()">
-                                지정계좌로 이체
-                                <VIcon end icon="fa6-solid:money-bill-transfer" />
-                            </VBtn>
-                        </VCol>
-                    </VRow>
-                    </VCardItem>
-                </VCard>
-            </VCol>
-            <VCol cols="12" md="8">
-                <VCard>
-                    <VCardItem>
-                        <VCol cols="12">
-                            <VRow>
-                                <HeadOfficeAccountCard />
+        <div>
+            <VRow class="match-height">
+                <!-- 👉 운영정보 -->
+                <VCol cols="12" md="4">
+                    <VCard>
+                        <VCardItem>
+                            <VCardTitle style="margin-bottom: 1em;">본사 지정계좌 이체</VCardTitle>
+                            <VDivider style="margin: 1em 0;" />
+                            <VRow class="pt-3">
+                                <CreateHalfVCol :mdl="6" :mdr="6">
+                                    <template #name>출금 이체모듈 선택<br>
+                                        <h4>
+                                            {{ withdrawAcctBalance() }}
+                                        </h4>
+                                    </template>
+                                    <template #input>
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="fin_id" :items="finance_vans"
+                                            label="출금 이체모듈 선택" item-title="nick_name" item-value="id" 
+                                            persistent-hint single-line  :hint="withdrawAcctHint()"/>
+                                    </template>
+                                </CreateHalfVCol>
+                                <CreateHalfVCol :mdl="6" :mdr="6">
+                                    <template #name>지정계좌 선택</template>
+                                    <template #input>
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="head_office_acct_id"
+                                            :items="head_office_accounts" label="입금 계좌 선택" item-title="acct_num" item-value="id"
+                                            persistent-hint single-line  :hint="depositAcctHint()" />
+                                    </template>
+                                </CreateHalfVCol>
+                                <CreateHalfVCol :mdl="6" :mdr="6">
+                                    <template #name>출금금액 입력</template>
+                                    <template #input>
+                                        <VTextField v-model="amount" type="number" suffix="￦" placeholder="출금금액 입력"
+                                            prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidatorV2(amount, '출금금액')]" />
+                                    </template>
+                                </CreateHalfVCol>
                             </VRow>
-                        </VCol>
-                    </VCardItem>
-                </VCard>
-            </VCol>
-        </VRow>
-        <PasswordAuthDialog ref="passwordAuthDialog"/>
+                            <VRow>
+                            <VCol class="d-flex gap-4">
+                                <VBtn type="button" style="margin-left: auto;" @click="deposit()">
+                                    지정계좌로 이체
+                                    <VIcon end icon="fa6-solid:money-bill-transfer" />
+                                </VBtn>
+                            </VCol>
+                        </VRow>
+                        </VCardItem>
+                    </VCard>
+                </VCol>
+                <VCol cols="12" md="8">
+                    <VCard>
+                        <VCardItem>
+                            <VCol cols="12">
+                                <VRow>
+                                    <HeadOfficeAccountCard />
+                                </VRow>
+                            </VCol>
+                        </VCardItem>
+                    </VCard>
+                </VCol>
+            </VRow>
+            <PasswordAuthDialog ref="passwordAuthDialog"/>
+        </div>
     </section>
 </template>

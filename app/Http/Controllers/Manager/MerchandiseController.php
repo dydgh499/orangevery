@@ -359,15 +359,18 @@ class MerchandiseController extends Controller
     /**
      * 패스워드 변경
      *
-     * 가맹점 이상 가능
      */
-    public function passwordChange(Request $request, $id)
+    public function passwordChange(Request $request, int $id)
     {
-        $validated = $request->validate(['user_pw'=>'required']);
-        $res = $this->merchandises
-            ->where('id', $id)
-            ->update(['user_pw' => Hash::make($request->user_pw)]);
-        return $this->response($res ? 1 : 990);        
+        return $this->_passwordChange($this->merchandises->where('id', $id), $request);
+    }
+
+    /**
+     * 계정장금해제
+     */
+    public function unlockAccount(Request $request, int $id)
+    {
+        return $this->_unlockAccount($this->merchandises->where('id', $id), $request);
     }
 
     /**
