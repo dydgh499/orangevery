@@ -60,7 +60,7 @@ class BfController extends Controller
                     'mcht_name' => $data['user']->mcht_name,
                     'level' => 10,
                 ];
-                return $inst->response(0, $data);
+                return $this->response(0, $data);
             }
             else
                 return $this->extendResponse(1000, __('auth.not_found_obj'));
