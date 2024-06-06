@@ -32,7 +32,7 @@ class Login
             if(isset($result['user']->mcht_name))
                 $result['user']->level = 10;
 
-            if($result['user']->is_lock === 0)
+            if($result['user']->is_lock)
                 $result['result'] = 6;            
             else if(Hash::check($request->user_pw, $result['user']->user_pw))
             {
