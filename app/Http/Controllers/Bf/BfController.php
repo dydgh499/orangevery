@@ -19,6 +19,7 @@ use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\LoginRequest;
 use App\Http\Requests\Manager\Settle\CollectWithdrawRequest;
 use App\Http\Requests\Pay\HandPayRequest;
+use App\Http\Controllers\Auth\Login;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -49,8 +50,7 @@ class BfController extends Controller
     {
         if($request->brand_id == 12 || $request->brand_id == 14 || $request->brand_id == 30)
         {
-            $inst = new AuthController();
-            $result = $inst->__signIn(new Merchandise(), $request);  // check Merchandise
+            $result = Login::signIn(new Merchandise(), $request, false);    // check merchandise
             if($result['result'] == 1)
             {
                 $data = $result['user']->loginAPI(10);

@@ -18,6 +18,7 @@ use App\Http\Requests\Pay\HandPayRequest;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
+use App\Http\Controllers\Auth\Login;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -47,8 +48,7 @@ class BuddyPayController extends Controller
         $validated = $request->validate(['user_name'=>'required|string', 'user_pw'=>'required|string']);
         $request = $request->merge(['brand_id' => 19]);
 
-        $inst = new AuthController();
-        $result = $inst->__signIn(new Merchandise(), $request);  // check Merchandise
+        $result = Login::signIn(new Merchandise(), $request, false);    // check merchandise
         if($result['result'] == 1)
         {
             $data = $result['user']->loginAPI(10);

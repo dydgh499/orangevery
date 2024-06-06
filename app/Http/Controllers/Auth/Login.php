@@ -18,7 +18,7 @@ class Login
         return ['Token-Expire-Time' => $created_at->addMinutes(config('sanctum.expiration'))->format('Y-m-d H:i:s')];
     }
 
-    static private function __signIn($orm, $request, $phone_num_validate=false)
+    static public function signIn($orm, $request, $phone_num_validate=false)
     {
         $result = ['result' => 0];
         $result['user'] = $orm
@@ -71,7 +71,7 @@ class Login
     static public function isSafeAccount($orm, $request, $phone_num_validate)
     {
         $inst = new Login();
-        $result = self::__signIn((clone $orm), $request, $phone_num_validate);     // check operator
+        $result = self::signIn((clone $orm), $request, $phone_num_validate);     // check operator
         if($result['result'] === 0)
         {
             $limit = AccountLock::setPasswordWrongCounter($result['user']);
