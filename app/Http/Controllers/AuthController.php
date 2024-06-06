@@ -10,10 +10,10 @@ use App\Models\Operator;
 use Illuminate\Http\Request;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Traits\Models\EncryptDataTrait;
 
 use App\Http\Requests\Manager\LoginRequest;
 use App\Http\Controllers\Manager\Service\BrandInfo;
+use App\Http\Controllers\Message\AuthPhoneNum;
 
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
@@ -29,7 +29,7 @@ use App\Enums\HistoryType;
  */
 class AuthController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, EncryptDataTrait;
+    use ManagerTrait, ExtendResponseTrait;
 
     /**
      * DNS 검증
@@ -40,7 +40,7 @@ class AuthController extends Controller
      */
     private function isForeginIP($request)
     {
-        $token = "2c693805e1bced";
+        $token = env('IPINFO_API_KEY', '2c693805e1bced');
         $ip = $request->ip() === '127.0.0.1' ? '183.107.112.147' : $request->ip();
         // 
         $res = get("https://ipinfo.io/$ip", [], [
@@ -107,28 +107,6 @@ class AuthController extends Controller
             return $this->extendResponse(1000, __('auth.not_found_obj'));
     }
 
-    private function phoneNumValidate($request, $result)
-    {
-        
-        if($result['result'] === 1 && $request->token === '')
-            $result['result'] = 3;
-        else if($result['result'] === 1 && $request->token)
-        {
-            $token = $this->aes256_decode($request->token);
-            if($token)
-            {
-                $token_info = json_decode($token, true);
-                if(isset($token_info['phone_num']) && isset($token_info['verify_code']) && isset($token_info['verify_date']))
-                    $result['result'] = 1;
-                else
-                    $result['result'] = 5;
-            }
-            else
-                $result['result'] = 4;
-        }
-        return $result;
-    }
-
     public function __signIn($orm, $request, $phone_num_validate=false)
     {
         $result = ['result' => 0];
@@ -139,12 +117,13 @@ class AuthController extends Controller
             ->first();
         if($result['user'])
         {
-            if(isset($result['user']->mcht_name))
-                $result['user']->level = 10;
             $result['result'] = Hash::check($request->user_pw, $result['user']->user_pw) ? 1 : 0;
 
-            if($phone_num_validate)
-                $result = $this->phoneNumValidate($request, $result);
+            if(isset($result['user']->mcht_name))
+                $result['user']->level = 10;
+
+            if($phone_num_validate && $result['result'] === 1)
+                $result['result'] = AuthPhoneNum::validate($request->token);
         }
         else
             $result['result'] = -1;

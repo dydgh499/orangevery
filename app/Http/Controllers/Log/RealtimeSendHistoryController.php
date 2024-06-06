@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Log;
 
+use App\Models\FinanceVan;
 use App\Models\Merchandise;
 use App\Models\Transaciton;
 use App\Models\Service\HeadOfficeAccount;
@@ -10,6 +11,7 @@ use App\Models\Log\RealtimeSendHistory;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
+use App\Http\Controllers\Message\AuthPhoneNum;
 
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
@@ -182,23 +184,46 @@ class RealtimeSendHistoryController extends Controller
      */
     public function headOfficeTransfer(Request $request)
     {
-        if($request->user()->tokenCan(35))
+        $validated = $request->validate([
+            'fin_id'=>'required|numeric',
+            'head_office_acct_id'=>'required|numeric',
+            'withdraw_amount'=>'required|numeric',
+            'token'=>'required|string',
+        ]);
+
+        if(AuthPhoneNum::validate($request->token) === 1)
         {
-            $data = $request->all();
-            $privacy = HeadOfficeAccount::where('id', $request->head_office_acct_id)->first();
-            $params = [
-                'fin_id'    => $request->fin_id,
-                'mcht_id'   => -1,
-                'withdraw_amount' => $request->withdraw_amount,
-                'withdraw_fee' => 0,
-            ];
-            if($privacy)
-            $params = array_merge($params, $privacy->toArray());
-            $res    = post($this->base_noti_url.'/collect-deposit', $params);
-            return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
+            if($request->user()->tokenCan(35))
+            {
+                $data = $request->all();
+                // parameter 변조 방지
+                $privacy = HeadOfficeAccount::where('id', $request->head_office_acct_id)
+                    ->where('brand_id', $request->user()->brand_id)
+                    ->first();
+                $finance = FinanceVan::where('id', $request->fin_id)
+                    ->where('brand_id', $request->user()->brand_id)
+                    ->first();
+
+                $params = [
+                    'fin_id'    => $request->fin_id,
+                    'mcht_id'   => -1,
+                    'withdraw_amount' => $request->withdraw_amount,
+                    'withdraw_fee' => 0,
+                ];
+
+                if($privacy && $finance)
+                {
+                    $params = array_merge($params, $privacy->toArray());
+                    $res    = post($this->base_noti_url.'/collect-deposit', $params);
+                    return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);    
+                }
+                else
+                    return $this->extendResponse(403, '잘못된 접근입니다.', '');
+            }
+            else
+                return $this->extendResponse(403, '잘못된 접근입니다.', '');    
         }
         else
             return $this->extendResponse(403, '잘못된 접근입니다.', '');
-
     }
 }

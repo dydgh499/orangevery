@@ -41,7 +41,7 @@ defineExpose({
                 <VCardTitle class="text-h6 font-weight-bold mb-2">SMS 휴대폰번호 인증</VCardTitle>
                 <br>
                 <span class="text-base">
-                    로그인을 하기위해 휴대폰 인증이 필요합니다.
+                    휴대폰 인증이 필요합니다.
                 </span>
                 <MobileVerification :totalInput="6" :phone_num="phone_num" :merchandise="merchandise" @update:token="onAgree($event)"
                     ref="mobileVerfication"

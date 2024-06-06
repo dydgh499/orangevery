@@ -46,6 +46,7 @@ const getAbilities = (): UserAbility[] => {
     auth.push({ action: 'manage', subject: 'all' })
     return auth;
 }
+
 const login = () => {
     axios.post('/api/v1/auth/sign-in', { brand_id: corp.id, user_name: user_name.value, user_pw: user_pw.value, token: token.value })
         .then(r => {

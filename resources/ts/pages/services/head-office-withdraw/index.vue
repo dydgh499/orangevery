@@ -1,11 +1,13 @@
 
 <script setup lang="ts">
+import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import { user_info } from '@/plugins/axios'
+import { useRequestStore } from '@/views/request'
 import HeadOfficeAccountCard from '@/views/services/head-office-withdraw/HeadOfficeAccountCard.vue'
 import { useHeadOfficeAccountStore } from '@/views/services/head-office-withdraw/useStore'
-import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import type { HeadOffceAccount, FinanceVan } from '@/views/types'
+import type { FinanceVan, HeadOffceAccount } from '@/views/types'
 import { requiredValidatorV2 } from '@validators'
 
 const { head_office_accounts } = useHeadOfficeAccountStore()
@@ -14,7 +16,8 @@ const { finance_vans } = useStore()
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
-
+const passwordAuthDialog = ref()
+ 
 const fin_id = ref(null)
 const head_office_acct_id = ref(null)
 const amount = ref(0)
@@ -45,13 +48,18 @@ const depositAcctHint = () => {
 
 const deposit = async () => {
     if(amount.value) {
-        if(await alert.value.show('정말 '+amount.value+'원을 이체하시겠습니까?')) {
-            const params = {
-                fin_id: fin_id.value,
-                head_office_acct_id: head_office_acct_id.value,
-                withdraw_amount: amount.value
+        const phone_num = user_info.value.phone_num.replaceAll(' ', '').replaceAll('-', '')
+        const token = await passwordAuthDialog.value.show(phone_num)
+        if(token !== '') {
+            if(await alert.value.show('정말 '+amount.value+'원을 이체하시겠습니까?')) {
+                const params = {
+                    fin_id: fin_id.value,
+                    head_office_acct_id: head_office_acct_id.value,
+                    withdraw_amount: amount.value,
+                    token: token
+                }
+                const r = await post('/api/v1/manager/transactions/realtime-histories/head-office-transfer', params)
             }
-            const r = await post('/api/v1/manager/transactions/realtime-histories/head-office-transfer', params)
         }
     }
     else
@@ -119,5 +127,6 @@ const deposit = async () => {
                 </VCard>
             </VCol>
         </VRow>
+        <PasswordAuthDialog ref="passwordAuthDialog"/>
     </section>
 </template>
