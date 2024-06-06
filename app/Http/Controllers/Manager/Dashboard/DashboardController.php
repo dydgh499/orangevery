@@ -175,21 +175,23 @@ class DashboardController extends Controller
     {
         if(isOperator($request))
         {
-            $getUsers = function($orm, $type) {
+            $getUsers = function($orm, $brand_id, $type) {
                 $cols = ['id', 'user_name', 'nick_name', 'phone_num', 'locked_at'];
                 $cols[] = $type === 'merchandise' ? DB::raw('10 as level') : 'level';
-    
-                return $orm->where('is_delete', false)
+
+                return $orm
+                    ->where('brand_id', $brand_id)
+                    ->where('is_delete', false)
                     ->where('is_lock', true)
                     ->select($cols);
             };
-
-            $mcht = $getUsers(new Merchandise, 'merchandise');
-            $sale = $getUsers(new Salesforce, 'salesforce');
-            $oper = $getUsers(new Operator, 'operator');
+            $brand_id = $request->user()->brand_id;
+            $mcht = $getUsers(new Merchandise, $brand_id, 'merchandise');
+            $sale = $getUsers(new Salesforce, $brand_id, 'salesforce');
+            $oper = $getUsers(new Operator, $brand_id, 'operator');
             $query = $mcht->unionAll($sale)->unionAll($oper);    
             
-            $content = $query->orderBy('level', 'desc')->orderBy('id', 'desc')->get();
+            $content = $query->orderBy('level', 'desc')->orderBy('locked_at', 'desc')->get();
             return $this->response(0, ['content' => $content]);
         }
         else
