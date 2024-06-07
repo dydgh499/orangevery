@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import CreateHalfVColV2 from '@/layouts/utils/CreateHalfVColV2.vue';
 import { getUserLevel } from '@/plugins/axios';
@@ -127,7 +126,7 @@ const mchtPwLevels = <Options[]>([
                             <BaseQuestionTooltip location="top" text="가맹점 ID 입력 난이도" :content="`가맹점 ID 추가/수정시 요구되는 검증 난이도입니다.`"/>
                         </template>
                         <template #l_input>
-                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure['mcht_id_level']"
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure.mcht_id_level"
                                 :items="mchtIdLevels" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
                                 label="ID 난이도 선택" item-title="title" item-value="id" single-line />
                         </template>
@@ -135,9 +134,9 @@ const mchtPwLevels = <Options[]>([
                             <BaseQuestionTooltip location="top" text="가맹점 PW 입력 난이도" :content="`가맹점 패스워드 추가/수정시 요구되는 검증 난이도입니다.`"/>
                         </template>
                         <template #r_input>
-                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure['mcht_pw_level']"
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure.mcht_pw_level"
                                 :items="mchtPwLevels" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
-                                label="패스워드 난이도 선택" item-title="title" item-value="id" single-line />
+                                label="패스워드 난이도 선택"  item-title="title" item-value="id" single-line />
                         </template>
                     </CreateHalfVColV2>
                 </VCardItem>
@@ -248,12 +247,9 @@ const mchtPwLevels = <Options[]>([
                             <template #l_name>
                                 가맹점 수수료율 노출
                             </template>
-                            <template #l_input>
-                                <BooleanRadio :radio="props.item.free.default.is_show_fee"
-                                    @update:radio="props.item.free.default.is_show_fee = $event">
-                                    <template #true>노출</template>
-                                    <template #false>숨김</template>
-                                </BooleanRadio>
+                            <template #l_input>                                
+                            <VSwitch hide-details v-model="props.item.free.default.is_show_fee"
+                                color="primary" :false-value=0 :true-value=1 />
                             </template>
                             <template #r_name>             
                             </template>
@@ -266,16 +262,14 @@ const mchtPwLevels = <Options[]>([
                             </template>
                             <template #l_input>
                                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.default.installment"
-                                    :items="installments" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
-                                    label="할부한도 선택" item-title="title" item-value="id" single-line />
+                                    :items="installments" prepend-inneer-icon="fluent-credit-card-clock-20-regular"  item-title="title" item-value="id" single-line />
                             </template>
                             <template #r_name>
                                 이상거래한도      
                             </template>
                             <template #r_input>
                                 <VSelect v-model="props.item.free.default.abnormal_trans_limit" :items="abnormal_trans_limits"
-                                    prepend-inner-icon="jam-triangle-danger" label="이상거래한도" item-title="title"
-                                    item-value="id" />
+                                    prepend-inner-icon="jam-triangle-danger" item-title="title" item-value="id"  single-line />
                             </template>
                         </CreateHalfVColV2>
                     </div>

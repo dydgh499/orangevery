@@ -51,6 +51,12 @@
                 if (property_exists($this, $property)) 
                     $this->$property = $value;
             }
+            
+            $this->default['installment'] = (int)$this->default['installment'];
+            $this->default['is_show_fee'] = (int)$this->default['is_show_fee'];
+            $this->default['abnormal_trans_limit'] = (int)$this->default['abnormal_trans_limit'];
+            $this->secure['mcht_id_level'] = (int)$this->secure['mcht_id_level'];
+            $this->secure['mcht_pw_level'] = (int)$this->secure['mcht_pw_level'];
         }
     }
 

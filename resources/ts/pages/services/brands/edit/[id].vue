@@ -1,11 +1,11 @@
 
 <script setup lang="ts">
-import BrandOverview from '@/views/services/brands/BrandOverview.vue'
+import CreateForm from '@/layouts/utils/CreateForm.vue'
+import BrandAuthOverview from '@/views/services/brands/BrandAuthOverview.vue'
 import BrandDesignOverview from '@/views/services/brands/BrandDesignOverview.vue'
 import BrandOptionOverview from '@/views/services/brands/BrandOptionOverview.vue'
-import BrandAuthOverview from '@/views/services/brands/BrandAuthOverview.vue'
+import BrandOverview from '@/views/services/brands/BrandOverview.vue'
 import { defaultItemInfo } from '@/views/services/brands/useStore'
-import CreateForm from '@/layouts/utils/CreateForm.vue'
 import type { Tab } from '@/views/types'
 import { getUserLevel } from '@axios'
 
@@ -35,7 +35,7 @@ watchEffect(() => {
                     <BrandDesignOverview :item="item" />
                 </VWindowItem>
                 <VWindowItem>
-                    <BrandOptionOverview :item="item.pv_options"/>
+                    <BrandOptionOverview :item="item.pv_options" :key="item.id"/>
                 </VWindowItem>
                 <VWindowItem>
                     <BrandAuthOverview :item="item.pv_options"/>
