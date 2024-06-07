@@ -138,7 +138,7 @@ class OperatorController extends Controller
     }
 
     /**
-     * 계정장금해제
+     * 계정잠금해제
      */
     public function unlockAccount(Request $request, int $id)
     {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Traits\ExtendResponseTrait;
 
 use App\Http\Controllers\Auth\AuthPhoneNum;
+use App\Http\Controllers\Auth\AccountLock;
 use Illuminate\Support\Facades\Hash;
 use App\Enums\HistoryType;
 use Carbon\Carbon;

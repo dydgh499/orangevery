@@ -182,7 +182,7 @@ class DashboardController extends Controller
                 return $orm
                     ->where('brand_id', $brand_id)
                     ->where('is_delete', false)
-                    ->where('is_lock', true)
+                    ->where('is_lock', 1)
                     ->select($cols);
             };
             $brand_id = $request->user()->brand_id;

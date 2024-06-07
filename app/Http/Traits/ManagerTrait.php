@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Auth\AccountLock;
 
 
 trait ManagerTrait
@@ -150,8 +151,14 @@ trait ManagerTrait
     {
         if($this->authCheck($request->user(), $request->id, 35))
         {
-            $res = $query->update(['is_lock' => 0]);
-            return $this->response($res ? 1 : 990);    
+            $user = $query->first();
+
+            $user->is_lock = 0;
+            $user->save();
+            if(isset($user->mcht_name))
+                $user->level = 10;
+            AccountLock::initPasswordWrongCounter($user);
+            return $this->response(1);    
         }
         else
             return $this->response(951);
