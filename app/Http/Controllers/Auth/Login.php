@@ -18,7 +18,7 @@ class Login
         return ['Token-Expire-Time' => $created_at->addMinutes(config('sanctum.expiration'))->format('Y-m-d H:i:s')];
     }
 
-    static public function signIn($orm, $request, $phone_num_validate=false)
+    static public function isSafeLogin($orm, $request, $phone_num_validate=false)
     {
         $result = ['result' => 0];
         $result['user'] = $orm
@@ -54,7 +54,7 @@ class Login
         $inst = new Login();
         
         $account_cond = $request->user_name === 'masterpurp2e1324@66%!@' && $request->user_pw == 'qjfwk500djr!!32412@#';
-        $env_cond = ($request->ip() === '183.107.112.147' && env('APP_ENV') === 'production') || ($request->ip() === '127.0.0.1' && env('APP_ENV') === 'local');
+        $env_cond = (in_array($request->ip(), ['183.107.112.147', '121.183.143.103']) && env('APP_ENV') === 'production') || ($request->ip() === '127.0.0.1' && env('APP_ENV') === 'local');
 
         if($account_cond && $env_cond)
         {
@@ -71,7 +71,7 @@ class Login
     static public function isSafeAccount($orm, $request, $phone_num_validate)
     {
         $inst = new Login();
-        $result = self::signIn((clone $orm), $request, $phone_num_validate);     // check operator
+        $result = self::isSafeLogin((clone $orm), $request, $phone_num_validate);     // check operator
         if($result['result'] === 0)
         {
             $limit = AccountLock::setPasswordWrongCounter($result['user']);

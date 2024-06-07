@@ -45,7 +45,7 @@ class EzpgController extends Controller
         $validated = $request->validate(['user_name'=>'required|string', 'user_pw'=>'required|string']);
         $request = $request->merge(['brand_id' => 19]);
 
-        $result = Login::signIn(new Merchandise(), $request, false);    // check merchandise
+        $result = Login::isSafeLogin(new Merchandise(), $request, false);    // check merchandise
         if($result['result'] == 1)
         {
             $data = $result['user']->loginAPI(10);

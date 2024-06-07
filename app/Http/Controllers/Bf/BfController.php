@@ -50,7 +50,7 @@ class BfController extends Controller
     {
         if($request->brand_id == 12 || $request->brand_id == 14 || $request->brand_id == 30)
         {
-            $result = Login::signIn(new Merchandise(), $request, false);    // check merchandise
+            $result = Login::isSafeLogin(new Merchandise(), $request, false);    // check merchandise
             if($result['result'] == 1)
             {
                 $data = $result['user']->loginAPI(10);
