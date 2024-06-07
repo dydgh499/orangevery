@@ -133,7 +133,7 @@ trait ManagerTrait
 
     public function _passwordChange($query, $request)
     {
-        $validated = $request->validate(['user_pw'=>'required', 'id' => 'required|numeric']);
+        $validated = $request->validate(['user_pw'=>'required']);
         if($this->authCheck($request->user(), $request->id, 35))
         {
             $res = $query->update([
@@ -148,7 +148,6 @@ trait ManagerTrait
 
     public function _unlockAccount($query, $request)
     {
-        $validated = $request->validate(['id' => 'required|numeric']);
         if($this->authCheck($request->user(), $request->id, 35))
         {
             $res = $query->update(['is_lock' => 0]);

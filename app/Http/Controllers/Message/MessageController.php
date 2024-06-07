@@ -129,30 +129,6 @@ class MessageController extends Controller
         return $this->send($request->phone_num, $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n".$request->url, $request->user()->brand_id);
     }
 
-    private function payDisableTimeType($s_tm, $e_tm)
-    {
-        $cond_1 = $s_tm && $e_tm;
-        $cond_2 = $s_tm !== "00:00:00" || $e_tm !== "00:00:00";
-        if ($cond_1 && $cond_2)
-        {
-            $current_time = Carbon::now();
-
-            $start_time_today = Carbon::today()->setTimeFromTimeString($s_tm);
-            $end_time_today = Carbon::today()->setTimeFromTimeString($e_tm);
-
-            $start_time_yesterday = Carbon::yesterday()->setTimeFromTimeString($s_tm);
-            $end_time_tomorrow = Carbon::tomorrow()->setTimeFromTimeString($e_tm);
-
-            //어제 ~ 오늘
-            if($current_time->between($start_time_yesterday, $end_time_today))
-                return [1, $start_time_yesterday, $end_time_today];
-            //오늘 ~ 다음날
-            if ($current_time->between($start_time_today, $end_time_tomorrow))
-                return [2, $start_time_today, $end_time_tomorrow];
-        }
-        return [0, '', ''];
-    }
-
     /*
      * 모바일 코드 발급
      */

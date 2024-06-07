@@ -46,7 +46,7 @@ class AuthPhoneNum
 
     
     // 휴대폰 인증허용회수 검증
-    private function limitValidate($brand, $phone_num, $mcht_id)
+    static private function limitValidate($brand, $phone_num, $mcht_id)
     {
         if($brand['pv_options']['paid']['use_pay_verification_mobile'])
         {
@@ -61,7 +61,7 @@ class AuthPhoneNum
                 {
                     if($mcht->phone_auth_limit_count)
                     {
-                        [$time_type, $s_tm, $e_tm] = $this->payDisableTimeType($mcht->phone_auth_limit_s_tm, $mcht->phone_auth_limit_e_tm);
+                        [$time_type, $s_tm, $e_tm] = self::payDisableTimeType($mcht->phone_auth_limit_s_tm, $mcht->phone_auth_limit_e_tm);
                         if($time_type > 0)
                         {
                             $end_time = $e_tm->diffInSeconds(Carbon::now());
@@ -83,5 +83,29 @@ class AuthPhoneNum
             }
         }
         return true;
+    }
+
+    static private function payDisableTimeType($s_tm, $e_tm)
+    {
+        $cond_1 = $s_tm && $e_tm;
+        $cond_2 = $s_tm !== "00:00:00" || $e_tm !== "00:00:00";
+        if ($cond_1 && $cond_2)
+        {
+            $current_time = Carbon::now();
+
+            $start_time_today = Carbon::today()->setTimeFromTimeString($s_tm);
+            $end_time_today = Carbon::today()->setTimeFromTimeString($e_tm);
+
+            $start_time_yesterday = Carbon::yesterday()->setTimeFromTimeString($s_tm);
+            $end_time_tomorrow = Carbon::tomorrow()->setTimeFromTimeString($e_tm);
+
+            //어제 ~ 오늘
+            if($current_time->between($start_time_yesterday, $end_time_today))
+                return [1, $start_time_yesterday, $end_time_today];
+            //오늘 ~ 다음날
+            if ($current_time->between($start_time_today, $end_time_tomorrow))
+                return [2, $start_time_today, $end_time_tomorrow];
+        }
+        return [0, '', ''];
     }
 }
