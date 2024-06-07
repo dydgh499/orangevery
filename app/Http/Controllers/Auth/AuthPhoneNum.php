@@ -46,7 +46,7 @@ class AuthPhoneNum
 
     
     // 휴대폰 인증허용회수 검증
-    static private function limitValidate($brand, $phone_num, $mcht_id)
+    static public function limitValidate($brand, $phone_num, $mcht_id)
     {
         if($brand['pv_options']['paid']['use_pay_verification_mobile'])
         {
