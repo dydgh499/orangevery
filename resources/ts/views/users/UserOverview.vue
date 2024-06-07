@@ -42,6 +42,29 @@ const onwerCheck = async () => {
     }
 }
 
+const idRules = computed(() => {
+    if(props.is_mcht) {
+        if(corp.pv_options.free.secure['mcht_id_level'] === 0)
+            return [requiredValidatorV2(props.item.user_name, '아이디')]
+        else if(corp.pv_options.free.secure['mcht_id_level'] === 1)
+            return [requiredValidatorV2(props.item.user_name, '아이디'), lengthValidator(props.item.user_name, 8)]
+    }
+    else
+        return [requiredValidatorV2(props.item.user_name, '아이디'), lengthValidator(props.item.user_name, 8)]
+})
+
+const passwordRules = computed(() => {
+    if(props.is_mcht) {
+        if(corp.pv_options.free.secure['mcht_pw_level'] === 0)
+            return [requiredValidatorV2(props.item.user_name, '아이디')]
+        else if(corp.pv_options.free.secure['mcht_pw_level'] === 1)
+            return [requiredValidatorV2(props.item.user_name, '아이디'), lengthValidator(props.item.user_name, 8)]
+        else if(corp.pv_options.free.secure['mcht_pw_level'] === 2)
+            return [requiredValidatorV2(props.item.user_name, '아이디'), passwordValidator]
+    }
+    else
+        return [requiredValidatorV2(props.item.user_pw, '패스워드'), passwordValidator]
+})
 
 watchEffect(() => {
     props.item.resident_num = props.item.resident_num_front + props.item.resident_num_back
@@ -62,7 +85,7 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField type='text' v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
-                                        placeholder="아이디 입력" persistent-placeholder :rules="[requiredValidatorV2(props.item.user_name, '아이디'), lengthValidator(props.item.user_name, 8)]"
+                                        placeholder="아이디 입력" persistent-placeholder :rules="idRules"
                                         maxlength="30"/>
                                 </VCol>
                             </VRow>
@@ -78,7 +101,7 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField v-model="props.item.user_pw" counter prepend-inner-icon="tabler-lock"
-                                    :rules="[requiredValidatorV2(props.item.user_pw, '패스워드'), passwordValidator]"
+                                    :rules="passwordRules"
                                     :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
                                     :type="is_show ? 'text' : 'password'" persistent-placeholder
                                     @click:append-inner="is_show = !is_show" autocomplete="new-password" />

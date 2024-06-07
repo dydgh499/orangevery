@@ -14,7 +14,7 @@
         public $init_search_filter = true;
         public $resident_num_masking = true;
         public $pay_module_detail_view = false;
-        
+
         public $sales_slip = [
             'merchandise' => [
                 'company_name' => '',
@@ -37,6 +37,12 @@
             'abnormal_trans_limit' => 0,
             'is_show_fee' => 0,
         ];
+        
+        public $secure = [
+            'mcht_id_level' => 1,
+            'mcht_pw_level' => 2,
+        ];
+
 
         public function __construct(array $source)
         {

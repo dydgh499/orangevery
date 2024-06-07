@@ -3,9 +3,10 @@
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
+import CreateHalfVColV2 from '@/layouts/utils/CreateHalfVColV2.vue';
 import { user_info } from '@/plugins/axios';
 import { abnormal_trans_limits, installments } from '@/views/merchandises/pay-modules/useStore';
-import type { AuthOption, FreeOption, PaidOption } from '@/views/types';
+import type { AuthOption, FreeOption, Options, PaidOption } from '@/views/types';
 import corp from '@corp';
 
 interface Props {
@@ -16,265 +17,273 @@ interface Props {
     },
 }
 const props = defineProps<Props>()
-const md = user_info.value.level == 50 ? 4 : 12
+
+const mchtIdLevels = <Options[]>([
+    {id: 0, title: '1단계(검증없음)'},
+    {id: 1, title: '2단계(8자이상)'},
+])
+const mchtPwLevels = <Options[]>([
+    {id: 0, title: '1단계(검증없음)'},
+    {id: 1, title: '2단계(8자이상)'},
+    {id: 2, title: '3단계(8자이상+대소문자,특수문자포함)'},
+])
 // 화면 타입은 영업점 개별 선택
 </script>
 <template>
     <VRow class="match-height">
-        <VCol cols="12" :md="md">
+        <VCol cols="12" :md="6">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>추가 옵션</VCardTitle>
+                    <VCardTitle>결제 사용여부</VCardTitle>
                     <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>수기결제 사용</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.free.use_hand_pay" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>인증결제 사용</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.free.use_auth_pay" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>간편결제 사용</template>
-                            <template #input>
+                        <VCol md="4">
+                            <VRow style="align-items: center;">
+                                <VCol :md="6">수기결제</VCol>
+                                <VCol :md="6">
+                                    <VSwitch hide-details v-model="props.item.free.use_hand_pay" color="primary" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol md="4">
+                            <VRow style="align-items: center;">
+                                <VCol :md="6">인증결제</VCol>
+                                <VCol :md="6">
+                                    <VSwitch hide-details v-model="props.item.free.use_auth_pay" color="primary" />
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol md="4">
+                            <VRow style="align-items: center;">
+                                <VCol :md="6">간편결제</VCol>
+                                <VCol :md="6">
                                 <VSwitch hide-details v-model="props.item.free.use_simple_pay" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
+                                </VCol>
+                            </VRow>
+                        </VCol>
                     </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>기간상세조회 사용</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.free.use_search_date_detail" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>TID 중복검사 사용</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.free.use_tid_duplicate" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>MID 중복검사 사용</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.free.use_mid_duplicate" color="primary" />
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>
-                                <BaseQuestionTooltip location="top" text="검색옵션 자동 초기화"
-                                    :content="`목록 페이지에서 선택한 검색옵션들이 메뉴 이동시 자동으로 초기화됩니다.`">
-                                </BaseQuestionTooltip>
-                            </template>
-                            <template #input>
+                    <VCardTitle class="pt-10">기능 옵션</VCardTitle>
+                    <CreateHalfVColV2 :mdl="7" :mdr="5" class="pt-5">
+                        <template #l_name>MID 중복검사 사용</template>
+                        <template #l_input>
+                            <VSwitch hide-details v-model="props.item.free.use_mid_duplicate" color="primary" />
+                        </template>
+                        <template #r_name>TID 중복검사 사용</template>
+                        <template #r_input>
+                            <VSwitch hide-details v-model="props.item.free.use_tid_duplicate" color="primary" />
+                        </template>
+                    </CreateHalfVColV2>
+                    <CreateHalfVColV2 :mdl="7" :mdr="5">
+                        <template #l_name>
+                            <BaseQuestionTooltip location="top" text="검색옵션 자동 초기화"
+                                    :content="`목록 페이지에서 선택한 검색옵션들이 메뉴 이동시 자동으로 초기화됩니다.`"/>
+                        </template>
+                        <template #l_input>
                                 <VSwitch hide-details v-model="props.item.free.init_search_filter" color="primary" />
+                        </template>
+                        <template #r_name>
+                            <BaseQuestionTooltip location="top" text="결제모듈 상세보기" :content="`가맹점 정보 - 결제모듈 정보에서 결제모듈이 리스트로 표현됩니다.<br>(가맹점당 결제모듈 여러개 보유시 사용)`"/>
+                        </template>
+                        <template #r_input>
+                            <VSwitch hide-details v-model="props.item.free.pay_module_detail_view" color="primary" />
+                        </template>
+                    </CreateHalfVColV2>
+
+                    <VCardTitle class="pt-10">화면 옵션</VCardTitle>
+                    <CreateHalfVColV2 :mdl="7" :mdr="5" class="pt-5">
+                        <template #l_name>    
+                            <BaseQuestionTooltip location="top" text="날짜 상세조회" :content="`(연-월-일 ~ 연-월-일) 조회방식에서<br>(연-월-일 시:분:초 ~ 연-월-일 시:분:초) 방식으로 조회합니다.`"/>
+                        </template>
+                        <template #l_input>
+                            <VSwitch hide-details v-model="props.item.free.use_search_date_detail" color="primary" />
+                        </template>
+                        <template #r_name>
+                            <BaseQuestionTooltip location="top" text="주민등록번호 뒷자리 마스킹" :content="`전산내 표기되는 모든 주민번호뒷자리가 * 표시로 마스킹되어 표시됩니다.`"/>
+                        </template>
+                        <template #r_input>
+                            <VSwitch hide-details v-model="props.item.free.resident_num_masking" color="primary" />
+                        </template>
+                    </CreateHalfVColV2>
+
+                    <CreateHalfVColV2 :mdl="7" :mdr="5">
+                        <template #l_name>
+                            <BaseQuestionTooltip location="top" text="고정 테이블 사용" :content="`리스트 화면에서 테이블 헤더가 고정됩니다.`"/>
+                        </template>
+                        <template #l_input>
+                            <VSwitch hide-details v-model="props.item.free.use_fix_table_view"
+                                color="primary" />
+                        </template>
+                        <template #r_name>고정 테이블 사이즈</template>
+                        <template #r_input>
+                            <VTextField v-model="props.item.free.fix_table_size" placeholder="사이즈 입력"
+                                        type="number" suffix="px" v-if="props.item.free.use_fix_table_view" />
+                        </template>
+                    </CreateHalfVColV2>
+
+                    <VCardTitle class="pt-10">                        
+                        보안 옵션<span><b class="text-error" style="font-size: 0.6em;"> (보안 옵션 해제로인한 금융사고는 책임지지 않습니다.)</b></span>
+                    </VCardTitle>
+                    <CreateHalfVColV2 :mdl="7" :mdr="5" class="pt-5">
+                        <template #l_name>
+                            <BaseQuestionTooltip location="top" text="가맹점 ID 입력 난이도" :content="`가맹점 ID 추가/수정시 요구되는 검증 난이도입니다.`"/>
+                        </template>
+                        <template #l_input>
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure['mcht_id_level']"
+                                :items="mchtIdLevels" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                label="ID 난이도 선택" item-title="title" item-value="id" single-line />
+                        </template>
+                        <template #r_name>
+                            <BaseQuestionTooltip location="top" text="가맹점 PW 입력 난이도" :content="`가맹점 패스워드 추가/수정시 요구되는 검증 난이도입니다.`"/>
+                        </template>
+                        <template #r_input>
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure['mcht_pw_level']"
+                                :items="mchtPwLevels" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                label="패스워드 난이도 선택" item-title="title" item-value="id" single-line />
+                        </template>
+                    </CreateHalfVColV2>
+                </VCardItem>
+            </VCard>
+        </VCol>
+        <VCol cols="12" :md="6">
+            <VCard>
+                <VCardItem>
+                    <VCardTitle>
+                        <BaseQuestionTooltip location="top" text="매출전표 가맹점표기 정보"
+                            :content="`가맹점 옵션중 매출전표 가맹점표기 정보(PG/본사)를 본사로 설정할 시<br>매출전표에서 하단 정보들이 보여집니다.`">
+                        </BaseQuestionTooltip>
+                    </VCardTitle>
+                    <CreateHalfVColV2 :mdl="5" :mdr="7" class="pt-5">
+                        <template #l_name>회사명</template>
+                        <template #l_input>
+                            <VTextField  prepend-inner-icon="ph-buildings"
+                                v-model="props.item.free.sales_slip.merchandise.company_name" placeholder="회사명 입력"
+                                type="text" />
+                        </template>
+                        <template #r_name>대표자명</template>
+                        <template #r_input>
+                                <VTextField prepend-inner-icon="tabler-user"
+                                    v-model="props.item.free.sales_slip.merchandise.rep_name" placeholder="대표자명 입력"
+                                    type="text" />
+                        </template>
+                    </CreateHalfVColV2>
+                    <CreateHalfVColV2 :mdl="5" :mdr="7">
+                        <template #l_name>연락처</template>
+                        <template #l_input>
+                                <VTextField prepend-inner-icon="tabler-device-mobile"
+                                    v-model="props.item.free.sales_slip.merchandise.phone_num" placeholder="연락처 입력"
+                                    type="text" />
+                        </template>
+                        <template #r_name>사업자등록번호</template>
+                        <template #r_input>
+                                <VTextField prepend-inner-icon="ic-outline-business-center" 
+                                    v-model="props.item.free.sales_slip.merchandise.business_num"
+                                    placeholder="사업자등록번호 입력" type="text" />
+                        </template>
+                    </CreateHalfVColV2>
+                    <CreateHalfVColV2 :mdl="5" :mdr="7">
+                        <template #l_name>주소</template>
+                        <template #l_input>
+                                <VTextField prepend-inner-icon="tabler-map-pin"
+                                    v-model="props.item.free.sales_slip.merchandise.addr" placeholder="주소 입력"
+                                    type="text" />
+                        </template>
+                        <template #r_name></template>
+                        <template #r_input>
+                        </template>
+                    </CreateHalfVColV2>
+
+                    <div>
+                        <VCardTitle class="pt-10">
+                            <BaseQuestionTooltip :location="'top'" text="문자 발송정보" content="전산내 문자발송 서비스에 사용됩니다." />
+                        </VCardTitle>
+
+                        <CreateHalfVColV2 :mdl="5" :mdr="7" class="pt-5">
+                            <template #l_name>회원 ID</template>
+                            <template #l_input>
+                                    <VTextField prepend-inner-icon="tabler-user" v-model="props.item.free.bonaeja.user_id"
+                                        placeholder="대표자명을 입력해주세요." type="text" />
                             </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>
-                                <BaseQuestionTooltip location="top" text="고정 테이블 사용" :content="`리스트 화면에서 테이블 헤더가 고정됩니다.`">
-                                </BaseQuestionTooltip>
+                            <template #r_name>API KEY</template>
+                            <template #r_input>
+                                <VTextField prepend-inner-icon="ic-baseline-vpn-key"
+                                    v-model="props.item.free.bonaeja.api_key" placeholder="API KEY를 입력해주세요."
+                                    type="text" />
                             </template>
-                            <template #input>
-                                <VRow no-gutters>
-                                    <VCol md="4">
-                                        <VSwitch hide-details v-model="props.item.free.use_fix_table_view"
-                                            color="primary" />
-                                    </VCol>
-                                    <VCol md="8">
-                                        <VTextField v-model="props.item.free.fix_table_size" placeholder="사이즈 입력"
-                                            type="number" suffix="px" v-if="props.item.free.use_fix_table_view" />
-                                    </VCol>
-                                </VRow>
+                        </CreateHalfVColV2>
+                        <CreateHalfVColV2 :mdl="5" :mdr="7">
+                            <template #l_name>발신자번호</template>
+                            <template #l_input>
+                                    <VTextField prepend-inner-icon="tabler-device-mobile"
+                                        v-model="props.item.free.bonaeja.sender_phone" placeholder="연락처를 입력해주세요."
+                                        type="text" />
                             </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>주민등록번호 뒷자리 숨김</template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.free.resident_num_masking" color="primary" />
+                            <template #r_name></template>
+                            <template #r_input>
                             </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>
-                                <BaseQuestionTooltip location="top" text="결제모듈 상세보기" :content="`가맹점 정보 - 결제모듈 정보에서 결제모듈이 리스트로 표현됩니다.<br>(가맹점당 결제모듈 여러개 보유시 사용)`">
-                                </BaseQuestionTooltip>
+                        </CreateHalfVColV2>
+                        
+                        <CreateHalfVColV2 :mdl="5" :mdr="7">
+                            <template #l_name>
+                                <BaseQuestionTooltip :location="'top'" text="포인트 하한금"
+                                    content="보내자 보유포인트가 하한금 미만으로 떨어지면 수신자 번호에 알림문자가 발송됩니다." />
                             </template>
-                            <template #input>
-                                <VSwitch hide-details v-model="props.item.free.pay_module_detail_view" color="primary" />
+                            <template #l_input>
+                                <VTextField type="number" v-model="props.item.free.bonaeja.min_balance_limit"
+                                    prepend-inner-icon="tabler-currency-won" placeholder="유보금미달 알림금"
+                                    persistent-placeholder suffix="만원" />
                             </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    
-                    <VCardTitle class="pt-5">기본 값 설정</VCardTitle>
-                    <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>할부개월</template>
-                            <template #input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.default.installment"
-                                    :items="installments" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
-                                    label="할부한도 선택" item-title="title" item-value="id" single-line />
+                            <template #r_name>수신자번호</template>
+                            <template #r_input>
+                                <VTextField type="number" v-model="props.item.free.bonaeja.receive_phone"
+                                        prepend-inner-icon="tabler-device-mobile" placeholder="01012345678"
+                                        persistent-placeholder />
                             </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>이상거래한도</template>
-                            <template #input>
-                                <VSelect v-model="props.item.free.default.abnormal_trans_limit" :items="abnormal_trans_limits"
-                                        prepend-inner-icon="jam-triangle-danger" label="이상거래 한도" item-title="title"
-                                        item-value="id" />
+                        </CreateHalfVColV2>
+                    </div>
+
+                    <div>
+                        <VCardTitle class="pt-10">
+                            <BaseQuestionTooltip location="top" text="기본 설정 값" :content="`각 정보 추가시 기본으로 세팅되어있는 값들을 변경합니다.`"/> 
+                            </VCardTitle>
+                        <CreateHalfVColV2 :mdl="6" :mdr="6" class="pt-5">
+                            <template #l_name>
+                                가맹점 수수료율 노출
                             </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="6" :mdr="6">
-                            <template #name>가맹점 수수료율 노출</template>
-                            <template #input>
+                            <template #l_input>
                                 <BooleanRadio :radio="props.item.free.default.is_show_fee"
                                     @update:radio="props.item.free.default.is_show_fee = $event">
                                     <template #true>노출</template>
                                     <template #false>숨김</template>
                                 </BooleanRadio>
                             </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                </VCardItem>
-            </VCard>
-        </VCol>
-        <VCol cols="12" :md="md">
-            <VCard>
-                <VCardItem>
-                    <VCardTitle>
-                        <BaseQuestionTooltip location="top" text="매출전표 가맹점표기 정보"
-                            :content="`가맹점 옵션중 매출전표 공급자 표기정보(PG/본사)를 본사로 설정할 시<br>매출전표에서 하단 정보들이 보여집니다.`">
-                        </BaseQuestionTooltip>
-                    </VCardTitle>
-                    <VRow class="pt-5">
-                        <CreateHalfVCol :mdl="4" :mdr="8">
-                            <template #name>회사명</template>
-                            <template #input>
-                                <VTextField prepend-inner-icon="ph-buildings"
-                                    v-model="props.item.free.sales_slip.merchandise.company_name" placeholder="회사명을 입력해주세요."
-                                    type="text" />
+                            <template #r_name>             
                             </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="4" :mdr="8">
-                            <template #name>대표자명</template>
-                            <template #input>
-                                <VTextField prepend-inner-icon="tabler-user"
-                                    v-model="props.item.free.sales_slip.merchandise.rep_name" placeholder="대표자명을 입력해주세요."
-                                    type="text" />
+                            <template #r_input>
                             </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="4" :mdr="8">
-                            <template #name>연락처</template>
-                            <template #input>
-                                <VTextField prepend-inner-icon="tabler-device-mobile"
-                                    v-model="props.item.free.sales_slip.merchandise.phone_num" placeholder="연락처를 입력해주세요."
-                                    type="text" />
+                        </CreateHalfVColV2>
+                        <CreateHalfVColV2 :mdl="6" :mdr="6">
+                            <template #l_name>
+                                할부개월
                             </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="4" :mdr="8">
-                            <template #name>사업자등록번호</template>
-                            <template #input>
-                                <VTextField prepend-inner-icon="ic-outline-business-center"
-                                    v-model="props.item.free.sales_slip.merchandise.business_num"
-                                    placeholder="사업자등록번호를 입력해주세요." type="text" />
+                            <template #l_input>
+                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.default.installment"
+                                    :items="installments" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                    label="할부한도 선택" item-title="title" item-value="id" single-line />
                             </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <VRow>
-                        <CreateHalfVCol :mdl="4" :mdr="8">
-                            <template #name>주소</template>
-                            <template #input>
-                                <VTextField prepend-inner-icon="tabler-map-pin"
-                                    v-model="props.item.free.sales_slip.merchandise.addr" placeholder="주소를 입력해주세요."
-                                    type="text" />
+                            <template #r_name>
+                                이상거래한도      
                             </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                    <div>
-                        <VCardTitle class="pt-10">
-                            <BaseQuestionTooltip :location="'top'" text="문자 발송정보" content="전산내 문자발송 서비스에 사용됩니다." />
-                        </VCardTitle>
-                        <VRow class="pt-5">
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>회원 ID</template>
-                                <template #input>
-                                    <VTextField prepend-inner-icon="tabler-user" v-model="props.item.free.bonaeja.user_id"
-                                        placeholder="대표자명을 입력해주세요." type="text" />
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
-                        <VRow>
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>API KEY</template>
-                                <template #input>
-                                    <VTextField prepend-inner-icon="ic-baseline-vpn-key"
-                                        v-model="props.item.free.bonaeja.api_key" placeholder="API KEY를 입력해주세요."
-                                        type="text" />
-                                </template>
-                            </CreateHalfVCol>
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>발신자 번호</template>
-                                <template #input>
-                                    <VTextField prepend-inner-icon="tabler-device-mobile"
-                                        v-model="props.item.free.bonaeja.sender_phone" placeholder="연락처를 입력해주세요."
-                                        type="text" />
-                                </template>
-                            </CreateHalfVCol>
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>수신자 번호</template>
-                                <template #input>
-                                    <VTextField type="number" v-model="props.item.free.bonaeja.receive_phone"
-                                        prepend-inner-icon="tabler-device-mobile" placeholder="01012345678"
-                                        persistent-placeholder />
-                                </template>
-                            </CreateHalfVCol>
-                            <CreateHalfVCol :mdl="6" :mdr="6">
-                                <template #name>
-                                    <BaseQuestionTooltip :location="'top'" text="유보금미달알림 하한금"
-                                        content="보유금액이 지정 하한금 미만으로 떨어지면, 수신자 번호에 알림문자가 발송됩니다." />
-                                </template>
-                                <template #input>
-                                    <VTextField type="number" v-model="props.item.free.bonaeja.min_balance_limit"
-                                        prepend-inner-icon="tabler-currency-won" placeholder="유보금미달 알림금"
-                                        persistent-placeholder suffix="만원" />
-                                </template>
-                            </CreateHalfVCol>
-                        </VRow>
+                            <template #r_input>
+                                <VSelect v-model="props.item.free.default.abnormal_trans_limit" :items="abnormal_trans_limits"
+                                    prepend-inner-icon="jam-triangle-danger" label="이상거래한도" item-title="title"
+                                    item-value="id" />
+                            </template>
+                        </CreateHalfVColV2>
                     </div>
                 </VCardItem>
             </VCard>
         </VCol>
         <template v-if="user_info.level == 50">
-            <VCol cols="12" :md="md">
+            <VCol cols="12" :md="4">
                 <VCard>
                     <VCardItem>
                         <VCardTitle>
@@ -405,7 +414,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VCardItem>
                 </VCard>
             </VCol>
-            <VCol cols="12" :md="md">
+            <VCol cols="12" :md="4">
                 <VCard>
                     <VCardItem>
                         <VCardTitle>
@@ -488,7 +497,7 @@ const md = user_info.value.level == 50 ? 4 : 12
                     </VCardItem>
                 </VCard>
             </VCol>
-            <VCol cols="12" :md="md">
+            <VCol cols="12" :md="4">
                 <VCard>
                     <VCardItem>
                         <VCardTitle>

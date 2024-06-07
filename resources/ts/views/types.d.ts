@@ -335,11 +335,15 @@ interface FreeOption {
         sender_phone: string,
         receive_phone: string,
         min_balance_limit: number,
-    }
+    },
     default: {
         installment: number,
         abnormal_trans_limit: number,
         is_show_fee: number,
+    },
+    secure: {
+        mcht_id_level: number,
+        mcht_pw_level: number,
     }
 }
 interface PaidOption {
