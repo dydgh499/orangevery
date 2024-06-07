@@ -56,11 +56,11 @@ const idRules = computed(() => {
 const passwordRules = computed(() => {
     if(props.is_mcht) {
         if(corp.pv_options.free.secure['mcht_pw_level'] === 0)
-            return [requiredValidatorV2(props.item.user_name, '아이디')]
+            return [requiredValidatorV2(props.item.user_pw, '패스워드')]
         else if(corp.pv_options.free.secure['mcht_pw_level'] === 1)
-            return [requiredValidatorV2(props.item.user_name, '아이디'), lengthValidator(props.item.user_name, 8)]
+            return [requiredValidatorV2(props.item.user_pw, '패스워드'), lengthValidator(props.item.user_pw, 8)]
         else if(corp.pv_options.free.secure['mcht_pw_level'] === 2)
-            return [requiredValidatorV2(props.item.user_name, '아이디'), passwordValidator]
+            return [requiredValidatorV2(props.item.user_pw, '패스워드'), passwordValidator]
     }
     else
         return [requiredValidatorV2(props.item.user_pw, '패스워드'), passwordValidator]

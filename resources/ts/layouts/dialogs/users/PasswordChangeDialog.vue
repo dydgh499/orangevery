@@ -2,7 +2,8 @@
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { getUserTypeName } from '@/views/users/useStore'
 import { axios } from '@axios'
-import { passwordValidator, requiredValidatorV2 } from '@validators'
+import corp from '@corp'
+import { lengthValidator, passwordValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators'
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
@@ -49,6 +50,21 @@ const handleEvent = (event: KeyboardEvent) => {
     submit()
 }
 
+const passwordRules = computed(() => {
+    if(user_type.value === 0) {
+        if(corp.pv_options.free.secure['mcht_pw_level'] === 0)
+            return [requiredValidatorV2(password.value, '패스워드')]
+        else if(corp.pv_options.free.secure['mcht_pw_level'] === 1)
+            return [requiredValidatorV2(password.value, '패스워드'), lengthValidator(password.value, 8)]
+        else if(corp.pv_options.free.secure['mcht_pw_level'] === 2)
+            return [requiredValidatorV2(password.value, '패스워드'), passwordValidator]
+    }
+    else if(user_type.value === 1)
+        [requiredValidatorV2(password, '새 패스워드'), passwordValidator]
+    else
+        return [requiredValidatorV2(password, '새 패스워드'), passwordValidatorV2]
+})
+
 defineExpose({
     show
 });
@@ -68,7 +84,7 @@ defineExpose({
                             </template>
                             <template #input>
                                 <VTextField v-model="password" counter prepend-inner-icon="tabler-lock"
-                                    :rules="[requiredValidatorV2(password, '새 패스워드'), passwordValidator]"
+                                    :rules="passwordRules"
                                     :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
                                     :type="is_show ? 'text' : 'password'" persistent-placeholder
                                     @click:append-inner="is_show = !is_show" 

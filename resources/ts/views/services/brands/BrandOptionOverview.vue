@@ -4,7 +4,7 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue';
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue';
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import CreateHalfVColV2 from '@/layouts/utils/CreateHalfVColV2.vue';
-import { user_info } from '@/plugins/axios';
+import { getUserLevel } from '@/plugins/axios';
 import { abnormal_trans_limits, installments } from '@/views/merchandises/pay-modules/useStore';
 import type { AuthOption, FreeOption, Options, PaidOption } from '@/views/types';
 import corp from '@corp';
@@ -243,7 +243,7 @@ const mchtPwLevels = <Options[]>([
                     <div>
                         <VCardTitle class="pt-10">
                             <BaseQuestionTooltip location="top" text="기본 설정 값" :content="`각 정보 추가시 기본으로 세팅되어있는 값들을 변경합니다.`"/> 
-                            </VCardTitle>
+                        </VCardTitle>
                         <CreateHalfVColV2 :mdl="6" :mdr="6" class="pt-5">
                             <template #l_name>
                                 가맹점 수수료율 노출
@@ -282,7 +282,7 @@ const mchtPwLevels = <Options[]>([
                 </VCardItem>
             </VCard>
         </VCol>
-        <template v-if="user_info.level == 50">
+        <template v-if="getUserLevel() === 50">
             <VCol cols="12" :md="4">
                 <VCard>
                     <VCardItem>
