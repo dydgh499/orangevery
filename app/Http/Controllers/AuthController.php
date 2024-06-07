@@ -19,6 +19,7 @@ use App\Http\Controllers\Auth\Login;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redis;
 use App\Enums\HistoryType;
@@ -71,8 +72,7 @@ class AuthController extends Controller
         if($result === false)
         {
             $msg = 'Abnormal access has been detected. The access log will be sent to the administrator and analyzed.';
-            error(array_merge($request->all(), $data), $msg);
-            
+            Log::alert($msg, array_merge($request->all(), $data));
             return Response::json(['message'=>$msg], 403, [], JSON_UNESCAPED_UNICODE);
         }
 
