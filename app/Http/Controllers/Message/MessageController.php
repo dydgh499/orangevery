@@ -102,21 +102,27 @@ class MessageController extends Controller
         if($brand)
         {
             $bonaeja = $brand['pv_options']['free']['bonaeja'];
-            $sms = [
-                'user_id'   => $bonaeja['user_id'],
-                'sender'    => $bonaeja['sender_phone'],
-                'api_key'   => $bonaeja['api_key'],
-                'receiver'  => $phone_num,
-                'msg'       =>  $message,
-            ];
-            $res = post("https://api.bonaeja.com/api/msg/v1/send", $sms);
-            if($res['code'] == 500)
-                return $this->extendResponse(1999, '통신 과정에서 에러가 발생했습니다.');
-            else
+            
+            if($bonaeja['user_id'])
             {
-                $this->bonaejaDepositValidate($bonaeja, $brand['name']);
-                return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1999, $res['body']['message']);
+                $sms = [
+                    'user_id'   => $bonaeja['user_id'],
+                    'sender'    => $bonaeja['sender_phone'],
+                    'api_key'   => $bonaeja['api_key'],
+                    'receiver'  => $phone_num,
+                    'msg'       =>  $message,
+                ];
+                $res = post("https://api.bonaeja.com/api/msg/v1/send", $sms);
+                if($res['code'] == 500)
+                    return $this->extendResponse(1999, '통신 과정에서 에러가 발생했습니다.');
+                else
+                {
+                    $this->bonaejaDepositValidate($bonaeja, $brand['name']);
+                    return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1999, $res['body']['message']);
+                }
             }
+            else
+                return $this->extendResponse(1999, '문자발송 플랫폼과 연동되어있지 않습니다. 계약 이후 사용 가능합니다.');
         }
     }
     
