@@ -11,7 +11,6 @@ let resolveCallback: (token: string) => void;
 const show = async (_phone_num: string): Promise<string> => {
     phone_num.value = _phone_num
     visible.value = true
-    console.log(123)
     return new Promise<string>((resolve) => {
         resolveCallback = resolve;
     });

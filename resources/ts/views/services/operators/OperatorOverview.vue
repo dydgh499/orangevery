@@ -5,7 +5,7 @@ import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
 import { operator_levels } from '@/views/services/operators/useStore'
 import type { Operator } from '@/views/types'
 import { avatars } from '@/views/users/useStore'
-import { passwordValidator, requiredValidatorV2 } from '@validators'
+import { lengthValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators'
 
 interface Props {
     item: Operator,
@@ -28,7 +28,7 @@ const is_show = ref(false)
                             <template #name>아이디</template>
                             <template #input>
                                 <VTextField v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
-                                    placeholder="ID로 사용됩니다." persistent-placeholder :rules="[requiredValidatorV2(props.item.user_name, '아이디')]"
+                                    placeholder="ID로 사용됩니다." persistent-placeholder :rules="[requiredValidatorV2(props.item.user_name, '아이디'), lengthValidator(props.item.user_name, 8)]"
                                     maxlength="30" />
                             </template>
                         </CreateHalfVCol>
@@ -37,7 +37,7 @@ const is_show = ref(false)
                             <template #name>패스워드</template>
                             <template #input>
                                 <VTextField v-model="props.item.user_pw" counter prepend-inner-icon="tabler-lock"
-                                    :rules="[requiredValidatorV2(props.item.user_pw, '패스워드'), passwordValidator]"
+                                    :rules="[requiredValidatorV2(props.item.user_pw, '패스워드'), passwordValidatorV2]"
                                     :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
                                     :type="is_show ? 'text' : 'password'" placeholder="소문자,대문자,특수문자로 이루어진 10자 이상 문자열"
                                     persistent-placeholder @click:append-inner="is_show = !is_show" autocomplete />

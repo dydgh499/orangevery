@@ -45,6 +45,19 @@ export const passwordValidator = (password: string) => {
     )
 }
 
+// 👉 Password Validator
+export const passwordValidatorV2 = (password: string) => {
+    const regExp = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%&*()]).{10,}/
+
+    const validPassword = regExp.test(password)
+
+    return (
+        // eslint-disable-next-line operator-linebreak
+        validPassword ||
+        '최소 10자의 대문자, 소문자, 특수 문자 및 숫자가 하나 이상 포함되어야 합니다.'
+    )
+}
+
 // 👉 Confirm Password Validator
 export const confirmedValidator = (value: string, target: string) =>
 

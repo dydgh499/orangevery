@@ -5,7 +5,7 @@ import type { UserPropertie } from '@/views/types'
 import { avatars, banks } from '@/views/users/useStore'
 import { axios, getUserLevel, isAbleModiy } from '@axios'
 import corp from '@corp'
-import { passwordValidator, requiredValidatorV2 } from '@validators'
+import { lengthValidator, passwordValidator, requiredValidatorV2 } from '@validators'
 
 interface Props {
     item: UserPropertie,
@@ -62,7 +62,7 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField type='text' v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
-                                        placeholder="아이디 입력" persistent-placeholder :rules="[requiredValidatorV2(props.item.user_name, '아이디')]"
+                                        placeholder="아이디 입력" persistent-placeholder :rules="[requiredValidatorV2(props.item.user_name, '아이디'), lengthValidator(props.item.user_name, 8)]"
                                         maxlength="30"/>
                                 </VCol>
                             </VRow>
