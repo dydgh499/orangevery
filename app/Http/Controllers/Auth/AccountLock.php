@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Redis;
 
 class AccountLock
 {
-    static public $RETRY_MAX_COUNT = 5;
+    static public $RETRY_MAX_COUNT = 3;
 
     static function setPasswordWrongCounter($user)
     {
