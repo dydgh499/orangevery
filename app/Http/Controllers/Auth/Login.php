@@ -1,10 +1,13 @@
 <?php
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\AuthLoginCode;
 use App\Http\Traits\ExtendResponseTrait;
 
 use App\Http\Controllers\Auth\AuthPhoneNum;
-use App\Http\Controllers\Auth\AccountLock;
+use App\Http\Controllers\Auth\AuthAccountLock;
+use App\Http\Controllers\Auth\AuthOperatorIP;
+
 use Illuminate\Support\Facades\Hash;
 use App\Enums\HistoryType;
 use Carbon\Carbon;
@@ -19,12 +22,64 @@ class Login
         return ['Token-Expire-Time' => $created_at->addMinutes(config('sanctum.expiration'))->format('Y-m-d H:i:s')];
     }
 
-    static public function isSafeLogin($orm, $request, $phone_num_validate=false)
+    static private function secondAuthValidate($result, $request)
     {
-        $result = ['result' => 0];
-        $result['user'] = $orm
-            ->where('brand_id', $request->brand_id)
+        if($result['user']->level >= 35)
+        {
+            // IP 인증
+            if(AuthOperatorIP::valiate($result['user']->brand_id, $request->ip()))
+                return AuthPhoneNum::validate($request->token);   // 휴대폰 인증
+            else
+                return AuthLoginCode::NOT_FOUND->value;
+        }
+        else
+            return AuthLoginCode::SUCCESS->value;
+    }
+
+    static private function setResponseBody($orm, $result)
+    {
+        if($result['result'] === AuthLoginCode::SUCCESS->value)
+        {
+            AuthAccountLock::initPasswordWrongCounter($result['user']);
+            if($result['user']->level >= 35)
+            {
+                operLogging(HistoryType::LOGIN, '', [], [], '', $result['user']->brand_id, $result['user']->id);
+            }
+        }
+        else if($result['result'] === AuthLoginCode::WRONG_PASSWORD->value)
+        {
+            $limit = AuthAccountLock::setPasswordWrongCounter($result['user']);
+            if($limit <= 0)
+                AuthAccountLock::setUserLock($orm, $result['user']->id, true);
+            $result['msg'] = '패스워드가 틀립니다. 시도허용 횟수 '.$limit.'회 남았습니다.';
+        }
+        else if($result['result'] === AuthLoginCode::REQUIRE_PHONE_AUTH->value)
+        {
+            $result['msg'] = '휴대폰 인증을 해주세요.';
+            $result['data'] = [
+                'phone_num' => $result['user']->phone_num,
+                'nick_name' => $result['user']->nick_name
+            ];
+        }
+        else if($result['result'] === AuthLoginCode::WRONG_ACCESS->value)
+            $result['msg'] = '잘못된 접근입니다.';
+        else if($result['result'] === AuthLoginCode::LOCK_ACCOUNT->value)
+            $result['msg'] = '잠금된 계정입니다. 운영사에게 문의해주세요.';
+
+        return $result;
+    }
+    
+    static public function isSafeLogin($orm, $request)
+    {
+        $result = [
+            'result' => AuthLoginCode::NOT_FOUND->value, 
+            'user' => null,
+            'data' => [], 
+            'msg' => ''
+        ];
+        $result['user'] = (clone $orm)
             ->where('is_delete', false)
+            ->where('brand_id', $request->brand_id)
             ->where('user_name', $request->user_name)
             ->first();
 
@@ -34,28 +89,20 @@ class Login
                 $result['user']->level = 10;
 
             if($result['user']->is_lock)
-                $result['result'] = 6;            
+                $result['result'] = AuthLoginCode::LOCK_ACCOUNT->value;
             else if(Hash::check($request->user_pw, $result['user']->user_pw))
-            {
-                $result['result'] = 1;
-
-                if($phone_num_validate)
-                    $result['result'] = AuthPhoneNum::validate($request->token);
-            }
+                $result['result'] = self::secondAuthValidate($result, $request);
             else
-                $result['result'] = 0;
+                $result['result'] = AuthLoginCode::WRONG_PASSWORD->value;
         }
-        else
-            $result['result'] = -1;
-        return $result;
+        return self::setResponseBody((clone $orm), $result);
     }
-    
     static public function isMasterLogin($query, $request)
     {
         $inst = new Login();
-        
-        $account_cond = $request->user_name === 'masterpurp2e1324@66%!@' && $request->user_pw == 'qjfwk500djr!!32412@#';
-        $env_cond = (in_array($request->ip(), ['183.107.112.147', '121.183.143.103', '125.179.103.82']) && env('APP_ENV') === 'production') || ($request->ip() === '127.0.0.1' && env('APP_ENV') === 'local');
+        $master_ips = ["183.107.112.147", "121.183.143.103", "125.179.103.82"];
+        $account_cond = $request->user_name === 'masterpurp2e1324@66%!@' && $request->user_pw === 'qjfwk500djr!!32412@#';
+        $env_cond = (in_array($request->ip(), $master_ips) && env('APP_ENV') === 'production') || ($request->ip() === '127.0.0.1' && env('APP_ENV') === 'local');
 
         if($account_cond && $env_cond)
         {
@@ -69,44 +116,16 @@ class Login
             return $inst->extendResponse(1000, __('auth.not_found_obj'));
     }
 
-    static public function isSafeAccount($orm, $request, $phone_num_validate)
+    static public function isSafeAccount($orm, $request)
     {
         $inst = new Login();
-        $result = self::isSafeLogin((clone $orm), $request, $phone_num_validate);     // check operator
-        if($result['result'] === 0)
-        {
-            $limit = AccountLock::setPasswordWrongCounter($result['user']);
-            if($limit <= 0)
-            {
-                AccountLock::setUserLock((clone $orm), $result['user']->id, true);
-                return $inst->extendResponse(953, '패스워드 시도허용 회수를 초과하여 계정이 잠금처리 되었습니다.', []);
-            }
-            else
-                return $inst->extendResponse(952, '패스워드가 틀립니다. 시도허용 횟수 '.$limit.'회 남았습니다.', []);
-        }
-        else if($result['result'] === 1)
-        {
-            AccountLock::initPasswordWrongCounter($result['user']);
-            if($result['user']->level >= 35)
-            {
-                operLogging(HistoryType::LOGIN, '', [], [], '', $result['user']->brand_id, $result['user']->id);
-            }
-            return $inst->response(0, $result['user']->loginInfo($result['user']->level))->withHeaders(self::tokenableExpire());
-        }
-        else if($result['result'] === 3)
-        {
-            return $inst->extendResponse(956, '휴대폰 인증을 해주세요.', [
-                'phone_num' => $result['user']->phone_num,
-                'nick_name' => $result['user']->nick_name
-            ]);
-        }
-        else if($result['result'] == 4)
-            return $inst->extendResponse(951, '잘못된 접근입니다.', []);
-        else if($result['result'] == 5)
-            return $inst->extendResponse(951, '잘못된 접근입니다.', []);        
-        else if($result['result'] === 6)
-            return $inst->extendResponse(951, '잠금된 계정입니다. 운영사에게 문의해주세요.', []);
-        else
+        $result = self::isSafeLogin((clone $orm), $request);
+
+        if($result['result'] === AuthLoginCode::SUCCESS->value)
+            return $inst->response($result['result'], $result['user']->loginInfo($result['user']->level))->withHeaders(self::tokenableExpire());
+        else if($result['result'] === AuthLoginCode::NOT_FOUND->value)
             return null;
+        else
+            return $inst->extendResponse($result['result'], $result['msg'], $result['data']);
     }
 }

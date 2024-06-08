@@ -48,8 +48,8 @@ class BuddyPayController extends Controller
         $validated = $request->validate(['user_name'=>'required|string', 'user_pw'=>'required|string']);
         $request = $request->merge(['brand_id' => 19]);
 
-        $result = Login::isSafeLogin(new Merchandise(), $request, false);    // check merchandise
-        if($result['result'] == 1)
+        $result = Login::isSafeLogin(new Merchandise(), $request);    // check merchandise
+        if($result['result'] === 0)
         {
             $data = $result['user']->loginAPI(10);
             $data['user'] = [
@@ -59,8 +59,10 @@ class BuddyPayController extends Controller
             ];
             return $this->response(0, $data);
         }
-        else
+        else if($result['result'] === -1)
             return $this->extendResponse(1000, __('auth.not_found_obj'));
+        else
+            return $this->extendResponse($result['result'], $result['msg'], $result['data']);
     }
 
     

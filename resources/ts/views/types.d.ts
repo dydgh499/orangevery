@@ -445,6 +445,7 @@ export interface Brand extends Contract {
     use_different_settlement: number,
     before_brand_infos: BeforeBrandInfo[],
     different_settlement_infos: DifferentSettlementInfo[],
+    operator_ips: OperatorIp[],
     updated_at: datetime,
     created_at: datetime,
 }
@@ -461,6 +462,12 @@ export interface DifferentSettlementInfo {
     rep_mid: string,
     sftp_id: string,
     sftp_password: string,
+}
+
+export interface OperatorIp {
+    id: number,
+    brand_id: number,
+    enable_ip: string,
 }
 
 export interface DeductionHeader {

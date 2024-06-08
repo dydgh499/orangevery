@@ -23,4 +23,12 @@ trait EncryptDataTrait
         [$aes_key, $iv] = $this->get_aes256_key();
         return openssl_decrypt(base64_decode($value), 'AES-256-CBC', $aes_key, true, $iv);
     }
+    
+    protected function enableIp(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $this->aes256_decode($value),
+            set: fn ($value) => $this->aes256_encode($value),
+        );
+    }
 }

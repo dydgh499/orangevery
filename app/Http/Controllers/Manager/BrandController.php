@@ -151,8 +151,11 @@ class BrandController extends Controller
      */
     public function show(Request $request, $id)
     {
+        $with = ['beforeBrandInfos', 'differentSettlementInfos'];
+        if($request->user()->tokenCan(50))
+            $with[] = 'operatorIps';
         $data = $this->brands->where('id', $id)
-            ->with(['beforeBrandInfos', 'differentSettlementInfos'])
+            ->with($with)
             ->first();
         return $this->response($data ? 0 : 1000, $data);
     }

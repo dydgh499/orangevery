@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Options\PvOptions;
 use App\Models\Options\ThemeCSS;
 use App\Models\Transaction;
+use App\Models\Service\OperatorIP;
 use App\Models\Service\BeforeBrandInfo;
 use App\Models\Service\DifferentSettlementInfo;
 
@@ -46,6 +47,12 @@ class Brand extends Model
         return Attribute::make(
             get: fn ($value) => (boolean)$value,
         );
+    }
+
+    public function operatorIps()
+    {
+        return $this->hasMany(OperatorIP::class, 'brand_id')
+            ->select();
     }
 
     public function beforeBrandInfos()

@@ -19,23 +19,4 @@ trait AttributeTrait
     {
         return $date->format("Y-m-d H:i:s");
     }
-
-    protected function get_aes256_key()
-    {
-        $aes_key    = env('AES_256_KEY', 'pu3pleve3yf2gh2ngUnt1l10B1ll1on');
-        $iv         = env('AES_256_IV', '1234567890123456');
-        return [$aes_key, $iv];
-    }
-
-    protected function aes256_encode($value)
-    {
-        [$aes_key, $iv] = $this->get_aes256_key();
-        return base64_encode(openssl_encrypt($value, 'AES-256-CBC', $aes_key, true, $iv));
-    }
-
-    protected function aes256_decode($value)
-    {
-        [$aes_key, $iv] = $this->get_aes256_key();
-        return openssl_decrypt(base64_decode($value), 'AES-256-CBC', $aes_key, true, $iv);
-    }
 }

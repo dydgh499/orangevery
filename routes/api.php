@@ -12,6 +12,7 @@ use App\Http\Controllers\Manager\Service\DifferentSettlementInfoController;
 use App\Http\Controllers\Manager\Service\MchtBlacklistController;
 use App\Http\Controllers\Manager\Service\HeadOfficeAccountController;
 use App\Http\Controllers\Manager\Service\ClassificationController;
+use App\Http\Controllers\Manager\Service\OperatorIPController;
 use App\Http\Controllers\Manager\Service\HolidayController;
 
 use App\Http\Controllers\Manager\OperatorController;
@@ -125,9 +126,10 @@ Route::prefix('v1')->group(function() {
             
             Route::apiResource('brands/before-brand-infos', BeforeBrandInfoController::class);
             Route::apiResource('brands/different-settlement-infos', DifferentSettlementInfoController::class);
+            Route::apiResource('brands/operator-ips', OperatorIPController::class);
             Route::apiResource('brands', BrandController::class);
                         
-            Route::apiResource('operators', OperatorController::class);
+            Route::apiResource('operators', OperatorController::class);            
             Route::apiResource('operator-histories', OperatorHistoryContoller::class);
             Route::apiResource('pay-gateways', PaymentGatewayController::class);
             Route::apiResource('pay-sections', PaymentSectionController::class);

@@ -1,17 +1,11 @@
 <?php
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\AuthLoginCode;
 use App\Http\Traits\Models\EncryptDataTrait;
 use App\Models\Merchandise;
 use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
-
-enum AuthPhoneNumReturnType: int {
-    case SUCCESS = 1;
-    case TOKEN_EMPTY = 3;
-    case TOKEN_AES_DECODE_FAIL  = 4;
-    case TOKEN_CONTENT_WRONG    = 5;
-}
 
 class AuthPhoneNum
 {
@@ -27,7 +21,7 @@ class AuthPhoneNum
     static function validate($token)
     {
         if($token === '')
-            return AuthPhoneNumReturnType::TOKEN_EMPTY->value;
+            return AuthLoginCode::REQUIRE_PHONE_AUTH->value;
         else
         {
             $auth_info = self::tokenDecode($token);
@@ -35,12 +29,12 @@ class AuthPhoneNum
             {
                 $token_info = json_decode($auth_info, true);
                 if(isset($token_info['phone_num']) && isset($token_info['verify_code']) && isset($token_info['verify_date']))
-                    return AuthPhoneNumReturnType::SUCCESS->value;
+                    return AuthLoginCode::SUCCESS->value;
                 else
-                    return AuthPhoneNumReturnType::TOKEN_CONTENT_WRONG->value;
+                    return AuthLoginCode::WRONG_ACCESS->value;
             }
             else
-                return AuthPhoneNumReturnType::TOKEN_AES_DECODE_FAIL->value;
+                return AuthLoginCode::WRONG_ACCESS->value;
         }
     }
 

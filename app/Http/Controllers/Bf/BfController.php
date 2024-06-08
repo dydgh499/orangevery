@@ -50,8 +50,8 @@ class BfController extends Controller
     {
         if($request->brand_id == 12 || $request->brand_id == 14 || $request->brand_id == 30)
         {
-            $result = Login::isSafeLogin(new Merchandise(), $request, false);    // check merchandise
-            if($result['result'] == 1)
+            $result = Login::isSafeLogin(new Merchandise(), $request);    // check merchandise
+            if($result['result'] === 0)
             {
                 $data = $result['user']->loginAPI(10);
                 $data['user'] = [
@@ -62,8 +62,10 @@ class BfController extends Controller
                 ];
                 return $this->response(0, $data);
             }
-            else
+            else if($result['result'] === -1)
                 return $this->extendResponse(1000, __('auth.not_found_obj'));
+            else
+                return $this->extendResponse($result['result'], $result['msg'], $result['data']);
         }
         else
             return $this->response(951);
