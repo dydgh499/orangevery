@@ -60,7 +60,7 @@ const passwordRules = computed(() => {
             return [requiredValidatorV2(password.value, '패스워드'), passwordValidator]
     }
     else if(user_type.value === 1)
-        [requiredValidatorV2(password, '새 패스워드'), passwordValidator]
+        return [requiredValidatorV2(password, '새 패스워드'), passwordValidator]
     else
         return [requiredValidatorV2(password, '새 패스워드'), passwordValidatorV2]
 })

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -55,12 +56,11 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip())->response(function() use($request) {
-                $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all()];
-                Log::critical(__('auth.throttle', ["seconds"=> 36000]), $logs);
-                return response()->json(['message'=>__('auth.throttle', ["seconds"=> 36000])], 429);
+            return Limit::perMinute(100)->by(optional($request->user())->id ?: $request->ip())->response(function() use($request) {
+                Redis::set('blocked:'.$request->ip(), 1, 'EX', (3600*10));
+                critical("매크로가 탐지되었습니다.");
+                return response('Too Many Requests', 429);
             });
         });
-
     }
 }

@@ -72,7 +72,6 @@ return [
 
     'download'      => [
         'prefix'    => 'laravel-',
-
         'extension' => 'log',
     ],
 
@@ -83,7 +82,6 @@ return [
 
     'menu'  => [
         'filter-route'  => 'log-viewer::logs.filter',
-
         'icons-enabled' => true,
     ],
 

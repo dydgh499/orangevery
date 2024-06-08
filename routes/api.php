@@ -77,7 +77,6 @@ use App\Http\Controllers\Log\CollectWithdrawHistoryController;
 */
 
 Route::prefix('v1')->group(function() {    
-    
     Route::get('services/mcht-blacklists/all', [MchtBlacklistController::class, 'all']);
     Route::get('merchandises/{id}/sale-slip', [MerchandiseController::class, 'saleSlip']);
     Route::get('pay-gateways/{id}/sale-slip', [PaymentGatewayController::class, 'saleSlip']);

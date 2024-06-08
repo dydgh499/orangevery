@@ -362,6 +362,17 @@
         Log::error($msg, $data);
     }
 
+    function critical($msg)
+    {
+        $logs = [
+            'ip' => request()->ip(), 
+            'url'=> request()->url(),
+            'method' => request()->method(),
+            'input' => request()->all()
+        ];
+        Log::critical($msg, $logs);
+    }
+
     function operLogging(HistoryType $history_type, $history_target, $before_history_detail, $after_history_detail, $history_title='', $brand_id='', $oper_id='')
     {
         $cond_1 = $history_type == HistoryType::LOGIN;
