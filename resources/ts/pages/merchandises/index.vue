@@ -62,9 +62,13 @@ onMounted(() => {
             <template #index_extra_field>
                 <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
                     일괄 작업
-                </VBtn>                
-                <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.settle_hold" label="지급보류건 조회"
-                    color="error" @update:modelValue="store.updateQueryString({ settle_hold: store.params.settle_hold })" v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_settle_hold"/>
+                </VBtn>
+                <div>
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.settle_hold" label="지급보류건 조회"
+                        color="error" @update:modelValue="store.updateQueryString({ settle_hold: store.params.settle_hold })" v-if="getUserLevel() >= 35 && corp.pv_options.paid.use_settle_hold"/>
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.is_lock" label="잠금계정 조회"
+                        color="warning" @update:modelValue="store.updateQueryString({ is_lock: store.params.is_lock })" v-if="getUserLevel() >= 35"/>
+                </div>
             </template>
             <template #headers>
                 <tr>

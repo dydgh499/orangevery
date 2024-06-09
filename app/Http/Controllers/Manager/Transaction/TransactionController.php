@@ -434,7 +434,7 @@ class TransactionController extends Controller
 
     static public function test()
     {
-        $ist = new TransactionController(new Transaction);
-        $ist->_test();
+        $inst = new TransactionController(new Transaction);
+        $inst->_test();
     }
 }

@@ -57,6 +57,8 @@ class OperatorController extends Controller
                 return $query->where('user_name', 'like', "%$search%")
                     ->orWhere('nick_name', 'like', "%$search%");
             });
+        if($request->is_lock)
+            $query = $query->where('is_lock', 1);    
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }
@@ -134,7 +136,10 @@ class OperatorController extends Controller
      */
     public function passwordChange(Request $request, int $id)
     {
-        return $this->_passwordChange($this->operators->where('id', $id), $request);
+        if(isOperator($request))
+            return $this->_passwordChange($this->operators->where('id', $id), $request);
+        else
+            return $this->response(951);
     }
 
     /**
@@ -142,6 +147,9 @@ class OperatorController extends Controller
      */
     public function unlockAccount(Request $request, int $id)
     {
-        return $this->_unlockAccount($this->operators->where('id', $id), $request);
+        if(isOperator($request))
+            return $this->_unlockAccount($this->operators->where('id', $id));
+        else
+            return $this->response(951);
     }
 }

@@ -1,3 +1,4 @@
+import corp from '@corp'
 import avatar_1 from '@images/avatars/avatar_1.svg'
 import avatar_10 from '@images/avatars/avatar_10.svg'
 import avatar_11 from '@images/avatars/avatar_11.svg'
@@ -23,6 +24,7 @@ import avatar_6 from '@images/avatars/avatar_6.svg'
 import avatar_7 from '@images/avatars/avatar_7.svg'
 import avatar_8 from '@images/avatars/avatar_8.svg'
 import avatar_9 from '@images/avatars/avatar_9.svg'
+import { lengthValidator, passwordValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators'
 
 export const banks = [
     { code: "001", title: "한국은행" }, { code: "002", title: "산업은행" }, { code: "003", title: "기업은행" },
@@ -106,3 +108,30 @@ export const getUserTypeName = (type: number) => {
     else
         return ['', '']
 }
+
+export const getUserIdValidate = (user_type: number, user_name: string) => {
+    if(user_type === 0) {
+        if(corp.pv_options.free.secure['mcht_id_level'] === 0)
+            return [requiredValidatorV2(user_name, '아이디')]
+        else if(corp.pv_options.free.secure['mcht_id_level'] === 1)
+            return [requiredValidatorV2(user_name, '아이디'), lengthValidator(user_name, 8)]
+    }
+    else
+        return [requiredValidatorV2(user_name, '아이디'), lengthValidator(user_name, 8)]
+}
+
+export const getUserPasswordValidate = (user_type: number, password: string) => {
+    if(user_type === 0) {
+        if(corp.pv_options.free.secure['mcht_pw_level'] === 0)
+            return [requiredValidatorV2(password, '패스워드')]
+        else if(corp.pv_options.free.secure['mcht_pw_level'] === 1)
+            return [requiredValidatorV2(password, '패스워드'), lengthValidator(password, 8)]
+        else if(corp.pv_options.free.secure['mcht_pw_level'] === 2)
+            return [requiredValidatorV2(password, '패스워드'), passwordValidator]
+    }
+    else if(user_type === 1)
+        return [requiredValidatorV2(password, '새 패스워드'), passwordValidator]
+    else
+        return [requiredValidatorV2(password, '새 패스워드'), passwordValidatorV2]
+}
+

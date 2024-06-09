@@ -4,6 +4,7 @@ import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { operator_levels, useSearchStore } from '@/views/services/operators/useStore'
 import UserExtraMenu from '@/views/users/UserExtraMenu.vue'
+import { getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
@@ -28,6 +29,10 @@ const showAvatar = (preview: string) => {
             <template #index_extra_field>
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
                     :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
+                <div>
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.is_lock" label="잠금계정 조회"
+                        color="warning" @update:modelValue="store.updateQueryString({ is_lock: store.params.is_lock })" v-if="getUserLevel() >= 35"/>
+                </div>
             </template>
             <template #headers>
                 <tr>

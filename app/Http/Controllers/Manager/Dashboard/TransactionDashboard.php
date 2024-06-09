@@ -5,6 +5,7 @@ use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Ablilty\Ablilty;
 
 class TransactionDashboard
 {
@@ -169,7 +170,7 @@ class TransactionDashboard
 
     static public function ifSalesLevel($query)
     {
-        if(isSalesforce(request()))
+        if(Ablilty::isSalesforce(request()))
         {
             $id = request()->user()->id;
             [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo(request()->user()->level);

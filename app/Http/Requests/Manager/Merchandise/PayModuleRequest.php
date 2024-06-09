@@ -4,6 +4,7 @@ namespace App\Http\Requests\Manager\Merchandise;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
+use App\Http\Controllers\Ablilty\Ablilty;
 
 class PayModuleRequest extends FormRequest
 {
@@ -63,9 +64,9 @@ class PayModuleRequest extends FormRequest
 
     public function authorize()
     {
-        if(isOperator($this))
+        if(Ablilty::isOperator($this))
             return true;
-        else if(isSalesforce($this))
+        else if(Ablilty::isSalesforce($this))
         {
             if($this->user()->brand_id === 30)
                 return true;

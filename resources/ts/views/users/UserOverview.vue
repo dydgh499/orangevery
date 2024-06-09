@@ -2,10 +2,9 @@
 import FileInput from '@/layouts/utils/FileInput.vue'
 import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
 import type { UserPropertie } from '@/views/types'
-import { avatars, banks } from '@/views/users/useStore'
+import { avatars, banks, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore'
 import { axios, getUserLevel, isAbleModiy } from '@axios'
 import corp from '@corp'
-import { lengthValidator, passwordValidator, requiredValidatorV2 } from '@validators'
 
 interface Props {
     item: UserPropertie,
@@ -43,27 +42,11 @@ const onwerCheck = async () => {
 }
 
 const idRules = computed(() => {
-    if(props.is_mcht) {
-        if(corp.pv_options.free.secure['mcht_id_level'] === 0)
-            return [requiredValidatorV2(props.item.user_name, '아이디')]
-        else if(corp.pv_options.free.secure['mcht_id_level'] === 1)
-            return [requiredValidatorV2(props.item.user_name, '아이디'), lengthValidator(props.item.user_name, 8)]
-    }
-    else
-        return [requiredValidatorV2(props.item.user_name, '아이디'), lengthValidator(props.item.user_name, 8)]
+    return getUserIdValidate(props.is_mcht ? 0 : 1, props.item.user_name)
 })
 
 const passwordRules = computed(() => {
-    if(props.is_mcht) {
-        if(corp.pv_options.free.secure['mcht_pw_level'] === 0)
-            return [requiredValidatorV2(props.item.user_pw, '패스워드')]
-        else if(corp.pv_options.free.secure['mcht_pw_level'] === 1)
-            return [requiredValidatorV2(props.item.user_pw, '패스워드'), lengthValidator(props.item.user_pw, 8)]
-        else if(corp.pv_options.free.secure['mcht_pw_level'] === 2)
-            return [requiredValidatorV2(props.item.user_pw, '패스워드'), passwordValidator]
-    }
-    else
-        return [requiredValidatorV2(props.item.user_pw, '패스워드'), passwordValidator]
+    return getUserPasswordValidate(props.is_mcht ? 0 : 1, props.item.user_pw)
 })
 
 watchEffect(() => {

@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Manager;
 
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Traits\FormRequestTrait;
 

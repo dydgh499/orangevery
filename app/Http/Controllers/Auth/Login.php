@@ -8,20 +8,14 @@ use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Auth\AuthAccountLock;
 use App\Http\Controllers\Auth\AuthOperatorIP;
+use App\Http\Controllers\Auth\AuthPasswordChange;
 
 use Illuminate\Support\Facades\Hash;
 use App\Enums\HistoryType;
-use Carbon\Carbon;
 
 class Login
 {
     use ExtendResponseTrait;
-
-    static private function tokenableExpire()
-    {
-        $created_at = Carbon::now();        
-        return ['Token-Expire-Time' => $created_at->addMinutes(config('sanctum.expiration'))->format('Y-m-d H:i:s')];
-    }
 
     static private function secondAuthValidate($result, $request)
     {
@@ -40,7 +34,12 @@ class Login
                 return AuthLoginCode::NOT_FOUND->value;
         }
         else
-            return AuthLoginCode::SUCCESS->value;
+        {
+            if($result['user']->password_change_at === null)
+                return AuthLoginCode::REQUIRE_PASSWORD_CHANGE->value;
+            else
+                return AuthLoginCode::SUCCESS->value;
+        }
     }
 
     static private function setResponseBody($orm, $result)
@@ -57,7 +56,7 @@ class Login
         {
             $limit = AuthAccountLock::setPasswordWrongCounter($result['user']);
             if($limit <= 0)
-                AuthAccountLock::setUserLock($orm, $result['user']->id, true);
+                AuthAccountLock::setUserLock($orm, $result['user']->id);
             $result['msg'] = '패스워드가 틀립니다. 시도허용 횟수 '.$limit.'회 남았습니다.';
         }
         else if($result['result'] === AuthLoginCode::REQUIRE_PHONE_AUTH->value)
@@ -70,6 +69,11 @@ class Login
         }
         else if($result['result'] === AuthLoginCode::WRONG_ACCESS->value)
             $result['msg'] = '잘못된 접근입니다.';
+        else if($result['result'] === AuthLoginCode::REQUIRE_PASSWORD_CHANGE->value)
+        {
+            $result['msg'] = '최초 접속으로 패스워드 변경이 필요합니다.';
+            $result['data'] = AuthPasswordChange::getPasswordResetToken($result['user']);
+        }
         else if($result['result'] === AuthLoginCode::LOCK_ACCOUNT->value)
             $result['msg'] = '잠금된 계정입니다. 운영사에게 문의해주세요.';
 
@@ -104,6 +108,7 @@ class Login
         }
         return self::setResponseBody((clone $orm), $result);
     }
+
     static public function isMasterLogin($query, $request)
     {
         $inst = new Login();
@@ -115,7 +120,7 @@ class Login
         {
             $user = $query->first();
             if($user)
-                return $inst->response(0, $user->loginInfo(50))->withHeaders(self::tokenableExpire());
+                return $inst->response(0, $user->loginInfo(50))->withHeaders($inst->tokenableExpire());
             else
                 return $inst->extendResponse(1000, '계정이 존재하지 않아요..! 😨');
         }
@@ -129,7 +134,7 @@ class Login
         $result = self::isSafeLogin((clone $orm), $request);
 
         if($result['result'] === AuthLoginCode::SUCCESS->value)
-            return $inst->response($result['result'], $result['user']->loginInfo($result['user']->level))->withHeaders(self::tokenableExpire());
+            return $inst->response($result['result'], $result['user']->loginInfo($result['user']->level))->withHeaders($inst->tokenableExpire());
         else if($result['result'] === AuthLoginCode::NOT_FOUND->value)
             return null;
         else

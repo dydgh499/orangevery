@@ -27,11 +27,22 @@ class AuthAccountLock
         Redis::set($key_name, 0, 'EX', 1);
     }
 
-    static public function setUserLock($orm, $id, $lock_status)
+    static public function setUserLock($orm, $id)
     {
         return $orm->where('id', $id)->update([
-            'is_lock' => $lock_status, 
+            'is_lock' => 1, 
             'locked_at' => date('Y-m-d H:i:s')
         ]);
+    }
+
+    static public function setUserUnlock($user)
+    {
+        $user->is_lock = 0;
+        $user->save();
+
+        if(isset($user->mcht_name))
+            $user->level = 10;
+        
+        self::initPasswordWrongCounter($user);
     }
 }

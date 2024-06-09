@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Manager;
 
 use App\Models\Post;
+
+use App\Http\Controllers\Ablilty\Ablilty;
+
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\PostRequest;
@@ -47,7 +50,7 @@ class PostController extends Controller
 
         if($request->type)
             $query = $query->where('type', $request->type);
-        if(isOperator($request) == false)
+        if(Ablilty::isOperator($request) == false)
         {
             $query = $query->where(function($q) use($request) {
                 $q->where('type', '!=', 2)
@@ -73,7 +76,7 @@ class PostController extends Controller
         $data = $request->data();
 
         $data['writer'] = $request->user()->user_name;
-        $data['level'] = isMerchandise($request) ? 10 : $request->user()->level;
+        $data['level'] = Ablilty::isMerchandise($request) ? 10 : $request->user()->level;
         $i_res = $this->posts->create($data);
 
         if($data['parent_id'] != null)

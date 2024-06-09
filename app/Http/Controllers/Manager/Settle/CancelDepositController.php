@@ -125,13 +125,13 @@ class CancelDepositController extends Controller
 
     static public function updateAll()
     {
-        $ist = new CancelDepositController(new CancelDeposit);
+        $inst = new CancelDepositController(new CancelDeposit);
         $cancel_deposits = CancelDeposit::get();
         foreach($cancel_deposits as $cancel_deposit)
         {
             if($cancel_deposit->trans_id)
             {
-                $cancel_deposit->settle_dt = $ist->getSettleDateByTransId($cancel_deposit->trans_id, $cancel_deposit->deposit_dt);
+                $cancel_deposit->settle_dt = $inst->getSettleDateByTransId($cancel_deposit->trans_id, $cancel_deposit->deposit_dt);
                 $cancel_deposit->save();    
             }
         }

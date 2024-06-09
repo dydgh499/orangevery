@@ -67,6 +67,9 @@ const login = () => {
                 router.replace(route.query.to ? String(route.query.to) : '/')
         })
         .catch(async e => {
+            if(e.response.data.code === 955) {
+                router.replace('reset-password?token='+encodeURIComponent(e.response.data.data.token)+"&level="+encodeURIComponent(e.response.data.data.level))
+            }
             if(e.response.data.code === 956) {
                 let phone_num = e.response.data.data.phone_num
                 if(phone_num) {

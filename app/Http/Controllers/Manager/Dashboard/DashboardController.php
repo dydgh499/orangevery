@@ -17,6 +17,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Controllers\Manager\Dashboard\TransactionDashboard;
+use App\Http\Controllers\Ablilty\Ablilty;
 
 
 /**
@@ -34,7 +35,7 @@ class DashboardController extends Controller
     public function monthlyTranAnalysis(Request $request)
     {
         $brand_id = $request->user()->brand_id;
-        $level = isOperator($request) ? 35 : $request->user()->level;
+        $level = Ablilty::isOperator($request) ? 35 : $request->user()->level;
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($level);
         $datas = [
             'monthly' => [],
@@ -122,7 +123,7 @@ class DashboardController extends Controller
     public function upSideSaleAnalysis(Request $request)
     {
         $query = Salesforce::where('brand_id', $request->user()->brand_id);
-        if(isSalesforce($request))
+        if(Ablilty::isSalesforce($request))
             $query = $query->where('id', $request->user()->id);        
         $chart = $this->getUpSideChartFormat($query, new Salesforce, 'salesforces', $request->user()->brand_id);
         return $this->response(0, $chart);
@@ -154,7 +155,7 @@ class DashboardController extends Controller
 
     public function getRecentOperatorHistories(Request $request)
     {   
-        if(isOperator($request))
+        if(Ablilty::isOperator($request))
         {
             request()->merge([
                 'page' => 1,
@@ -173,7 +174,7 @@ class DashboardController extends Controller
 
     public function getLockedUsers(Request $request)
     {
-        if(isOperator($request))
+        if(Ablilty::isOperator($request))
         {
             $getUsers = function($orm, $brand_id, $type) {
                 $cols = ['id', 'user_name', 'nick_name', 'phone_num', 'locked_at'];

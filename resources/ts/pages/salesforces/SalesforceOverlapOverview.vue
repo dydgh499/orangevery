@@ -49,6 +49,10 @@ store.params.sales_parent_structure = 1
                 <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
                     일괄 작업
                 </VBtn>
+                <div>
+                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.is_lock" label="잠금계정 조회"
+                        color="warning" @update:modelValue="store.updateQueryString({ is_lock: store.params.is_lock })" v-if="getUserLevel() >= 35"/>
+                </div>
             </template>
             <template #headers>
                 <tr>

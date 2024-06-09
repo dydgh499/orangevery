@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Manager;
 
+use App\Http\Controllers\Ablilty\Ablilty;
+
 use App\Models\Operator;
 use App\Models\Merchandise;
 use App\Models\Merchandise\PaymentModule;
@@ -106,6 +108,8 @@ class MerchandiseController extends Controller
                         ->orWhere($full_parent.'acct_num', 'like', "%$search%")
                         ->orWhere($full_parent.'acct_name', 'like', "%$search%");
                 });
+        if($request->is_lock)
+            $query = $query->where($full_parent.'is_lock', 1);
         if($request->input('settle_hold', 0))
             $query = $query->whereNotNull($full_parent.'settle_hold_s_dt');
         if($is_all == false)
@@ -211,7 +215,7 @@ class MerchandiseController extends Controller
                 $user = $this->saveImages($request, $user, $this->imgs);
                 $user['user_pw'] = Hash::make($request->input('user_pw'));
 
-                if($b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
+                if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request))
                 {
                     $res = SysLink::create($user);
                     if($res['code'] !== 'SUCCESS')
@@ -244,7 +248,7 @@ class MerchandiseController extends Controller
         $data = $this->merchandises->where('id', $id)->with($with)->first();
         $data->setFeeFormatting(true);
 
-        if($b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
+        if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request))
             $data['syslink'] = SysLink::show($data['user_name']);
 
         return $data ? $this->response(0, $data) : $this->response(1000);
@@ -274,7 +278,7 @@ class MerchandiseController extends Controller
                 $data = $this->saveImages($request, $data, $this->imgs);
                 // -- update syslink
                 $b_info = BrandInfo::getBrandById($request->user()->brand_id);
-                if($b_info['pv_options']['paid']['use_syslink'] && isOperator($request))
+                if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request))
                 {
                     if($request->syslink['code'] !== 'SUCCESS')
                         $res = SysLink::create($data);
@@ -299,7 +303,7 @@ class MerchandiseController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        if(isOperator($request) || (isSalesforce($request) && $request->user()->is_able_modify_mcht))
+        if(Ablilty::isOperator($request) || (Ablilty::isSalesforce($request) && $request->user()->is_able_modify_mcht))
         {
             $data = $this->merchandises->where('id', $id)->first();
             $res = $this->delete($this->merchandises->where('id', $id));
@@ -327,10 +331,10 @@ class MerchandiseController extends Controller
             'page_size' => 9999999,
         ]);
         $cols = ['merchandises.id', 'merchandises.mcht_name'];
-        if(isMerchandise($request))
+        if(Ablilty::isMerchandise($request))
         {
         }
-        else if(isSalesforce($request))
+        else if(Ablilty::isSalesforce($request))
         {   // 영업자
             if($request->user()->level > 10)
                 $cols[] = 'sales0_id';
@@ -345,7 +349,7 @@ class MerchandiseController extends Controller
             if($request->user()->level > 25)
                 $cols[] = 'sales5_id';
         }
-        else if(isOperator($request))
+        else if(Ablilty::isOperator($request))
             $cols = array_merge($cols, ['sales5_id', 'sales4_id', 'sales3_id', 'sales2_id', 'sales1_id', 'sales0_id']);
 
         $query = $this->merchandises
@@ -362,7 +366,10 @@ class MerchandiseController extends Controller
      */
     public function passwordChange(Request $request, int $id)
     {
-        return $this->_passwordChange($this->merchandises->where('id', $id), $request);
+        if(Ablilty::isMyMerchandise($request, $id) || isOperator($request))
+            return $this->_passwordChange($this->merchandises->where('id', $id), $request);
+        else
+            return $this->response(951);
     }
 
     /**
@@ -370,7 +377,10 @@ class MerchandiseController extends Controller
      */
     public function unlockAccount(Request $request, int $id)
     {
-        return $this->_unlockAccount($this->merchandises->where('id', $id), $request);
+        if(isOperator($request))
+            return $this->_unlockAccount($this->merchandises->where('id', $id));
+        else
+            return $this->response(951);
     }
 
     /**

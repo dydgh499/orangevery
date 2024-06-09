@@ -196,7 +196,7 @@ class BuddyPayController extends Controller
      * @responseField is_cancel integer 취소여부
      */
     public function handPay(HandPayRequest $request)
-    {        
+    {
         $getYYMM = function($mmyy) {
             if(mb_strlen($mmyy, 'utf-8') == 4)
             {

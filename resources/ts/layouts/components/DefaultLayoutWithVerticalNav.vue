@@ -15,9 +15,11 @@ import router from '@/router'
 import { VerticalNavLayout } from '@layouts'
 
 import PayLinkDialog from '@/layouts/dialogs/transactions/PayLinkDialog.vue'
+import PasswordChangeNoticeDialog from '@/layouts/dialogs/users/PasswordChangeNoticeDialog.vue'
 import AlertDialog from '@/layouts/dialogs/utils/AlertDialog.vue'
 import LoadingDialog from '@/layouts/dialogs/utils/LoadingDialog.vue'
 import PopupDialog from '@/layouts/dialogs/utils/PopupDialog.vue'
+
 import PWASnackbar from '@/layouts/snackbars/PWASnackbar.vue'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 
@@ -32,6 +34,7 @@ const snackbar = ref(null)
 const loading = ref(null)
 const payLink = ref(null)
 const pwaSnackbar = ref(null)
+const passwordChangeNoticeDialog = ref(null)
 
 const is_pay_link = ref(router.currentRoute.value.path.includes('/pay/'))
 
@@ -43,6 +46,16 @@ provide('payLink', payLink)
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
+
+const passwordChangeWarningValidate = () => {
+    const last_change_at = new Date(user_info.value.password_change_at ?? '2024-06-09 12:00:00')
+    const now = new Date()
+    const diff = now.getTime() - last_change_at.getTime()
+    console.log(diff)
+    const diffInDays = diff / (1000 * 3600 * 24)
+    if(diffInDays >= 90) 
+        passwordChangeNoticeDialog.value.show()
+}
 
 onMounted(() => {
     axios.get('/api/v1/manager/popups/currently', {
@@ -58,6 +71,7 @@ onMounted(() => {
     .catch(e => { 
         console.log(e) 
     })
+    passwordChangeWarningValidate()
 })
 </script>
 
@@ -104,6 +118,7 @@ onMounted(() => {
             <LoadingDialog ref="loading" />
             <PayLinkDialog ref="payLink" />
             <PopupDialog ref="popup"/>
+            <PasswordChangeNoticeDialog ref="passwordChangeNoticeDialog"/>
         </RouterView>
 
         <!-- 👉 Footer -->

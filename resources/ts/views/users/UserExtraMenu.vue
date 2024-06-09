@@ -44,8 +44,6 @@ const unlockAccount = async () => {
                     </template>
                     <VListItemTitle>패스워드변경</VListItemTitle>
                 </VListItem>
-            </VList>
-            <VList>
                 <VListItem value="unlockAccount" @click="unlockAccount()" v-if="getUserLevel() >= 35 && props.item?.is_lock">
                         <template #prepend>
                             <VIcon size="24" class="me-3" icon="tabler-lock" />

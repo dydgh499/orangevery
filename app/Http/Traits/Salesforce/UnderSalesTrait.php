@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits\Salesforce;
 use App\Models\Merchandise;
+use App\Http\Controllers\Ablilty\Ablilty;
 
 trait UnderSalesTrait
 {
@@ -131,7 +132,7 @@ trait UnderSalesTrait
             }
         }
 
-        if(isSalesforce($request))
+        if(Ablilty::isSalesforce($request))
         {
             $selected_sales_infos[] = [
                 'id' => 'sales'.globalLevelByIndex($request->user()->level).'_id',
@@ -142,7 +143,7 @@ trait UnderSalesTrait
         if(count($selected_sales_infos))
         {
             $sales_ids = array_merge($sales_ids, Merchandise::flatSalesIdByFilter($selected_sales_infos, $s_keys));
-            if(isSalesforce($request) && count($sales_ids) == 0)
+            if(Ablilty::isSalesforce($request) && count($sales_ids) == 0)
                 $sales_ids[] = $request->user()->id;
             return $sales_ids;
         }

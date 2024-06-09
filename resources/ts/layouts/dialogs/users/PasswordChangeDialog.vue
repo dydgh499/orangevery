@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { getUserTypeName } from '@/views/users/useStore'
+import { getUserPasswordValidate, getUserTypeName } from '@/views/users/useStore'
 import { axios } from '@axios'
-import corp from '@corp'
-import { lengthValidator, passwordValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators'
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
@@ -50,19 +48,9 @@ const handleEvent = (event: KeyboardEvent) => {
     submit()
 }
 
+
 const passwordRules = computed(() => {
-    if(user_type.value === 0) {
-        if(corp.pv_options.free.secure['mcht_pw_level'] === 0)
-            return [requiredValidatorV2(password.value, '패스워드')]
-        else if(corp.pv_options.free.secure['mcht_pw_level'] === 1)
-            return [requiredValidatorV2(password.value, '패스워드'), lengthValidator(password.value, 8)]
-        else if(corp.pv_options.free.secure['mcht_pw_level'] === 2)
-            return [requiredValidatorV2(password.value, '패스워드'), passwordValidator]
-    }
-    else if(user_type.value === 1)
-        return [requiredValidatorV2(password, '새 패스워드'), passwordValidator]
-    else
-        return [requiredValidatorV2(password, '새 패스워드'), passwordValidatorV2]
+    return getUserPasswordValidate(user_type.value, password.value)
 })
 
 defineExpose({

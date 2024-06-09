@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\AuthLoginCode;
+
 use App\Models\Brand;
 use App\Models\Salesforce;
 use App\Models\Merchandise;
@@ -11,10 +13,12 @@ use Illuminate\Http\Request;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
+use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Auth\AuthPasswordChange;
+
 use App\Http\Requests\Manager\LoginRequest;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Auth\Login;
-
 
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
@@ -22,7 +26,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redis;
-use App\Enums\HistoryType;
+use Carbon\Carbon;
 
 /**
  * @group Auth API
@@ -92,6 +96,43 @@ class AuthController extends Controller
         }
         else
             return $this->response(1000);
+    }
+    
+    /*
+    * 패스워드 변경(초기화)
+    */
+    public function resetPassword(Request $request)
+    {
+        $request->validate(['token' => 'required', 'user_pw' => 'required', 'level'=>'required|numeric']);
+
+        $result = AuthPasswordChange::getTokenContent($request->token);
+        if($result['result'] === AuthLoginCode::SUCCESS->value)
+        {
+            $result = AuthPasswordChange::updateFirstPassword($result, $request->user_pw);
+            if($result['result'] === AuthLoginCode::SUCCESS->value)
+                return $this->response(0, $result['data'])->withHeaders($this->tokenableExpire());
+            else
+                return $this->extendResponse($result['result'], $result['msg'], []);
+        }
+        else
+            return $this->extendResponse($result['result'], $result['msg'], []);
+    }
+
+    /*
+    * 패스워드 1달 연장(가맹점, 영업점, 운영자)
+    */
+    public function extendPasswordAt(Request $request)
+    {
+        $params = ['password_change_at' => Carbon::now()->addMonthNoOverflow(1)->format('Y-m-d H:i:s')];
+        if(Ablilty::isMerchandise($request))
+            $orm = new Merchandise;
+        else if(Ablilty::isSalesforce($request))
+            $orm = new Salesforce;
+        else
+            $orm = new Operator;
+
+        $orm->where('id', $request->user()->id)->update($params);
+        return $this->response(1, $params);
     }
 
     /**

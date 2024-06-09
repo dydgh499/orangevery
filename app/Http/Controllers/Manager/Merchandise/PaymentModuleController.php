@@ -23,6 +23,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Enums\HistoryType;
+use App\Http\Controllers\Ablilty\Ablilty;
+
 
 /**
  * @group Payment Module API
@@ -251,7 +253,7 @@ class PaymentModuleController extends Controller
             'page' => 1,
             'page_size' => 99999999,
         ]);
-        if(isSalesforce($request) || isOperator($request))
+        if(Ablilty::isSalesforce($request) || Ablilty::isOperator($request))
             $cols = ['payment_modules.*'];
         else
         {

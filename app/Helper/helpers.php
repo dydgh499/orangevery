@@ -10,6 +10,7 @@
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Facades\Redis;
     use App\Models\Options\PvOptions;
+    use App\Http\Controllers\Ablilty\Ablilty;
 
     function getPGType($pg_type)
     {
@@ -23,32 +24,9 @@
         ];
         return $pgs[$pg_type-1];
     }
-    
-    function isMyMerchandise($request, $id)
-    {
-        return isMerchandise($request) && $request->user()->id === (int)$id;
-    }
-
     function isMainBrand($brand_id)
     {
         return $brand_id == env('MAIN_BRAND_ID', 1) ? true : false;
-    }
-
-    function isMerchandise($request)
-    {
-        return $request->user()->tokenCan(13) == false ? true : false;
-    }
-    
-    function isSalesforce($request)
-    {
-        $cond_1 = $request->user()->tokenCan(13) == true;
-        $cond_2 = $request->user()->tokenCan(35) == false;
-        return $cond_1 && $cond_2;
-    }
-
-    function isOperator($request)
-    {
-        return $request->user()->tokenCan(35);
     }
 
     function httpSender($type, $url, $params, $headers=[], $retry=0)
@@ -112,17 +90,17 @@
     function globalAuthFilter($query, $request, $parent_table='')
     {
         $table = $parent_table != "" ? $parent_table."." : "";
-        if(isMerchandise($request))
+        if(Ablilty::isMerchandise($request))
         {   // 가맹점
             $col = $parent_table == 'merchandises' ? "id" : 'mcht_id';
             $query = $query->where($table.$col,  $request->user()->id);
         }
-        else if(isSalesforce($request))
+        else if(Ablilty::isSalesforce($request))
         {   // 영업자
             $idx = globalLevelByIndex($request->user()->level);            
             $query = $query->where($table."sales".$idx."_id",  $request->user()->id);
         }
-        else if(isOperator($request))
+        else if(Ablilty::isOperator($request))
         {   // all
 
         }
@@ -376,7 +354,7 @@
     function operLogging(HistoryType $history_type, $history_target, $before_history_detail, $after_history_detail, $history_title='', $brand_id='', $oper_id='')
     {
         $cond_1 = $history_type == HistoryType::LOGIN;
-        $cond_2 = $history_type != HistoryType::LOGIN && isOperator(request());
+        $cond_2 = $history_type != HistoryType::LOGIN && Ablilty::isOperator(request());
         if($cond_1 || $cond_2)
         {
             $request = request()->merge([

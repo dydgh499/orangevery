@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers\Manager\Salesforce;
 use App\Models\Salesforce;
+use App\Http\Controllers\Ablilty\Ablilty;
+
 
 class SalesforceOverlap
 {
@@ -32,14 +34,14 @@ class SalesforceOverlap
 
     static public function OverlapSearch($request)
     {
-        if(isSalesforce($request))
+        if(Ablilty::isSalesforce($request))
         {
             if(request()->level === null)
                 $query = Salesforce::where('id', $request->user()->id);
             else
                 $query = Salesforce::whereIn('id', self::getSalesforceChilds($request));
         }
-        else if(isOperator($request))
+        else if(Ablilty::isOperator($request))
         {
             $query = Salesforce::where('brand_id', $request->user()->brand_id)
                 ->where('is_delete', false);

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Manager;
 use App\Models\Salesforce;
 use App\Models\Merchandise;
 use App\Models\Log\SfFeeApplyHistory;
+
+use App\Http\Controllers\Ablilty\Ablilty;
+
 use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -81,7 +84,8 @@ class SalesforceController extends Controller
             $query = $query->whereIn('salesforces.id', $sales_ids);
         if($request->level)
             $query = $query->where('salesforces.level', $request->level);    
-
+        if($request->is_lock)
+            $query = $query->where('salesforces.is_lock', 1);
         return $query;
     }
     /**
@@ -125,7 +129,7 @@ class SalesforceController extends Controller
      */
     public function store(SalesforceRequest $request)
     {
-        if(isSalesforce($request) &&  $request->level >= $request->user()->level)
+        if(Ablilty::isSalesforce($request) &&  $request->level >= $request->user()->level)
             return $this->extendResponse(1999, "추가할 수 없는 등급입니다.");
 
         $validated = $request->validate(['user_pw'=>'required']);
@@ -268,14 +272,14 @@ class SalesforceController extends Controller
 
     public function classification(Request $request)
     {
-        if($request->sales_parent_structure && isSalesforce($request))
+        if($request->sales_parent_structure && Ablilty::isSalesforce($request))
         {
             $data = [
                 'level_13' => [], 'level_15' => [],
                 'level_17' => [], 'level_20' => [], 
                 'level_25' => [], 'level_30' => [],
             ];
-            if(isSalesforce($request))
+            if(Ablilty::isSalesforce($request))
             {
                 // parent
                 $parents = $this->getParents($request);
@@ -287,7 +291,7 @@ class SalesforceController extends Controller
                 $sales = $this->salesforces->where('id', $request->user()->id)->with(['childs'])->first();
                 $data = $this->getRecursionChilds($data, $sales);
             }
-            else if(isOperator($request))
+            else if(Ablilty::isOperator($request))
             {
                 $_sales = $this->salesforces
                     ->where('brand_id', $request->user()->brand_id)
@@ -305,7 +309,7 @@ class SalesforceController extends Controller
         else
         {
             $data = [];
-            if(isMerchandise($request) == false)
+            if(Ablilty::isMerchandise($request) == false)
             {
                 [$levels, $sales_keys] = $this->getViewableSalesInfos($request);
                 $grouped = $this->salesforces
@@ -315,7 +319,7 @@ class SalesforceController extends Controller
                     ->get(['id', 'sales_name', 'level', 'settle_tax_type', 'parent_id', 'is_able_under_modify', 'mcht_batch_fee', 'sales_fee'])
                     ->groupBy('level');
 
-                if(isSalesforce($request))
+                if(Ablilty::isSalesforce($request))
                     $grouped = $this->salesClassFilter($request, $grouped, $levels);   
     
                 for($i=0; $i<count($levels); $i++)
@@ -330,7 +334,7 @@ class SalesforceController extends Controller
 
     public function feeApplyHistories(Request $request)
     {
-        if(isOperator($request))
+        if(Ablilty::isOperator($request))
         {
             $histories = SfFeeApplyHistory::where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
@@ -347,7 +351,10 @@ class SalesforceController extends Controller
      */
     public function passwordChange(Request $request, int $id)
     {
-        return $this->_passwordChange($this->salesforces->where('id', $id), $request);
+        if(Ablilty::isMySalesforce($request, $id) || isOperator($request))
+            return $this->_passwordChange($this->salesforces->where('id', $id), $request);
+        else
+            return $this->response(951);
     }
 
     /**
@@ -355,7 +362,10 @@ class SalesforceController extends Controller
      */
     public function unlockAccount(Request $request, int $id)
     {
-        return $this->_unlockAccount($this->salesforces->where('id', $id), $request);
+        if(isOperator($request))
+            return $this->_unlockAccount($this->salesforces->where('id', $id));
+        else
+            return $this->response(951);
     }
 
     public function mchtBatchFee(Request $request, $id)

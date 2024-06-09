@@ -291,8 +291,8 @@ class DifferenceSettlementHistoryController extends Controller
                     ->where('transactions.trx_at', '<=', "2024-05-23 23:59:59")
                     ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
 
-                $ist = new DifferenceSettlementHistoryController(new DifferenceSettlementHistory);
-                $pg = $ist->getPGClass($brand);
+                $inst = new DifferenceSettlementHistoryController(new DifferenceSettlementHistory);
+                $pg = $inst->getPGClass($brand);
                 if($pg)
                     $res = $pg->request($date, $trans);
             }
@@ -311,12 +311,12 @@ class DifferenceSettlementHistoryController extends Controller
 
         if($brand)
         {
-            $ist = new DifferenceSettlementHistoryController(new DifferenceSettlementHistory);
-            $pg = $ist->getPGClass($brand);
+            $inst = new DifferenceSettlementHistoryController(new DifferenceSettlementHistory);
+            $pg = $inst->getPGClass($brand);
             if($pg)
             {
                 $datas  = $pg->response($date);
-                $res    = $ist->manyInsert($ist->difference_settlement_histories, $datas);
+                $res    = $inst->manyInsert($inst->difference_settlement_histories, $datas);
             }
         }
     }

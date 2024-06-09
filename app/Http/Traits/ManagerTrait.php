@@ -135,32 +135,16 @@ trait ManagerTrait
     public function _passwordChange($query, $request)
     {
         $validated = $request->validate(['user_pw'=>'required']);
-        if($this->authCheck($request->user(), $request->id, 35))
-        {
-            $res = $query->update([
-                'user_pw' => Hash::make($request->user_pw),
-                'password_change_at' => date('Y-m-d H:i:s'),
-            ]);
-            return $this->response($res ? 1 : 990);    
-        }
-        else
-            return $this->response(951);
+        $res = $query->update([
+            'user_pw' => Hash::make($request->user_pw),
+            'password_change_at' => date('Y-m-d H:i:s'),
+        ]);
+        return $this->response($res ? 1 : 990);   
     }
 
-    public function _unlockAccount($query, $request)
+    public function _unlockAccount($query)
     {
-        if($this->authCheck($request->user(), $request->id, 35))
-        {
-            $user = $query->first();
-
-            $user->is_lock = 0;
-            $user->save();
-            if(isset($user->mcht_name))
-                $user->level = 10;
-            AuthAccountLock::initPasswordWrongCounter($user);
-            return $this->response(1);    
-        }
-        else
-            return $this->response(951);
+        AuthAccountLock::setUserUnlock($query->first());
+        return $this->response(1);
     }
 }

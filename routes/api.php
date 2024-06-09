@@ -93,11 +93,13 @@ Route::prefix('v1')->group(function() {
         Route::middleware(['auth:sanctum', 'log.route'])->post('sms-link-send', [MessageController::class, 'smslinkSend']);
     });
     
-    Route::prefix('auth')->group(function() {
-        Route::middleware(['log.route'])->post('sign-in', [AuthController::class, 'signin']);
-        Route::middleware(['log.route'])->post('sign-up', [AuthController::class, 'signUp']);
-        Route::middleware(['auth:sanctum', 'log.route'])->post('sign-out', [AuthController::class, 'signout']);
-        Route::middleware(['auth:sanctum', 'log.route'])->post('onwer-check', [AuthController::class, 'onwerCheck']);
+    Route::middleware(['log.route'])->prefix('auth')->group(function() {
+        Route::post('reset-password', [AuthController::class, 'resetPassword']);    
+        Route::post('sign-in', [AuthController::class, 'signin']);
+        Route::post('sign-up', [AuthController::class, 'signUp']);
+        Route::middleware(['auth:sanctum'])->post('extend-password-at', [AuthController::class, 'extendPasswordAt']);   
+        Route::middleware(['auth:sanctum'])->post('sign-out', [AuthController::class, 'signout']);
+        Route::middleware(['auth:sanctum'])->post('onwer-check', [AuthController::class, 'onwerCheck']);
     });
 
     Route::prefix('manager')->middleware(['auth:sanctum', 'log.route'])->group(function() {
