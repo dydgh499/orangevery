@@ -142,7 +142,7 @@ trait ManagerTrait
         $user->save();
 
         AuthAccountLock::initPasswordWrongCounter($user);
-        return $this->response($res ? 1 : 990);   
+        return $this->response(1);   
     }
 
     public function _unlockAccount($query)
