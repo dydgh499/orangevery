@@ -3,6 +3,25 @@
     "user": {
         "id": 12,
         "user_name": "test0001",
-        "level": 10
+        "level": 10,
+        "single_payment_limit_s_tm" : "23:00",
+        "single_payment_limit_e_tm" : "07:00",
+        "single_payment_limit_amount" : 3000000,
+        "specified_time_disable" : [
+            {
+                "id": 1,
+                "mcht_id": 12,
+                "disable_s_tm": "23:00",
+                "disable_e_tm": "07:00",
+                "disable_type": 0
+            },
+            {
+                "id": 2,
+                "mcht_id": 12,
+                "disable_s_tm": "23:00",
+                "disable_e_tm": "07:00",
+                "disable_type": 1
+            }
+        ]
     }
 }

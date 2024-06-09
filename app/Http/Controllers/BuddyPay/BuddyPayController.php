@@ -9,6 +9,7 @@ use App\Http\Controllers\Manager\Transaction\TransactionController;
 
 use App\Models\Merchandise;
 use App\Models\Merchandise\PaymentModule;
+use App\Models\Merchandise\SpecifiedTimeDisablePayment;
 use App\Models\Transaction;
 
 use App\Http\Requests\Manager\IndexRequest;
@@ -35,6 +36,8 @@ class BuddyPayController extends Controller
     /**
      * 로그인
      * 
+     * 각 한도의 종료시간이 시작시간보다 작을 경우, 종료시간은 다음날로 계산됩니다.
+     * 
      * @unauthenticated
      * 
      * @bodyParam user_name string required 가맹점 아이디
@@ -42,6 +45,16 @@ class BuddyPayController extends Controller
      * @responseFile 200 storage/buddyPay/login.json
      * @responseField access_token string Bearer 토큰 값
      * @responseField user object 유저정보
+     * @responseField user.level integer 로그인 레벨
+     * @responseField user.single_payment_limit_s_tm string 단건결제한도 시작시간
+     * @responseField user.single_payment_limit_e_tm string 단건결제한도 종료시간
+     * @responseField user.single_payment_limit_amount integer 단건결제한도 상한금
+     * @responseField user.specified_time_disable object 지정시간 거래제한 정보
+     * @responseField user.specified_time_disable.id integer 지정시간 거래제한 고유번호
+     * @responseField user.specified_time_disable.mcht_id integer 가맹점 고유번호
+     * @responseField user.specified_time_disable.disable_s_tm string 거래제한 시작시간
+     * @responseField user.specified_time_disable.disable_e_tm string 종료제한 시작시간
+     * @responseField user.specified_time_disable.disable_type integer 제한타입(0=결제금지,1=이체금지)
      */
     public function login(Request $request)
     {
@@ -56,6 +69,10 @@ class BuddyPayController extends Controller
                 'id' => $data['user']->id,
                 'user_name' => $data['user']->user_name,
                 'level' => 10,
+                'single_payment_limit_s_tm' => $data['user']->single_payment_limit_s_tm,
+                'single_payment_limit_e_tm' => $data['user']->single_payment_limit_e_tm,
+                'single_payment_limit_amount' => $data['user']->specified_time_disable_limit * 10000,
+                'specified_time_disable' => SpecifiedTimeDisablePayment::where('mcht_id', $data['user']->id)->get(),
             ];
             return $this->response(0, $data);
         }

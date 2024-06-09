@@ -43,8 +43,6 @@
     <script src="/vendor/scribe/js/tryitout-4.25.0.js"></script>
     <script src="/vendor/scribe/js/theme-default-4.25.0.js"></script>
 </head>
-
-
 <body data-languages="[&quot;javascript&quot;,&quot;php&quot;,&quot;python&quot;,&quot;bash&quot;]">
 
 <a href="#" id="nav-button">
@@ -55,7 +53,7 @@
 </a>
 <div class="tocify-wrapper">
         <div style="display: inline-flex; align-items: center; text-align: center; vertical-align: middle; padding: 1em; justify-content: left;">
-        <img src="https://pg.buddypay.co.kr/storage/images/logos/lbzWFWCjpQKREx853xe3Kzuwymz5kZcmDgvBDF06.svg" alt="logo" class="logo" width="20%" /><span style='margin-left: 0.5em; font-size: 1.7em;'>BuddyPay</span>
+        <img src="/storage/images/logos/lbzWFWCjpQKREx853xe3Kzuwymz5kZcmDgvBDF06.svg" alt="logo" class="logo" width="20%"/>
         <span style='margin-left: 0.5em; font-size: 1.7em;'>BuddyPay</span>
     </div>
     
@@ -109,11 +107,11 @@
             </div>
 
     <ul class="toc-footer" id="toc-footer">
-                                        <li><a>Documentation powered by Buddypay ✍</a></li>
+                                        <li><a>Documentation powered by BuddyPay ✍</a></li>
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2024-05-20 00:37:42</li>
+        <li>마지막 업데이트:  2024-06-09 18:18:59</li>
     </ul>
 </div>
 
@@ -209,7 +207,7 @@
 <p>
 </p>
 
-
+<p>각 한도의 종료시간이 시작시간보다 작을 경우, 종료시간은 다음날로 계산됩니다.</p>
 
 <span id="example-requests-POSTapi-v1-buddy-pay-sign-in">
 <blockquote>예시 요청:</blockquote>
@@ -226,8 +224,8 @@ const headers = {
 };
 
 let body = {
-    "user_name": "ex",
-    "user_pw": "eligendi"
+    "user_name": "sunt",
+    "user_pw": "a"
 };
 
 fetch(url, {
@@ -247,8 +245,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'user_name' =&gt; 'ex',
-            'user_pw' =&gt; 'eligendi',
+            'user_name' =&gt; 'sunt',
+            'user_pw' =&gt; 'a',
         ],
     ]
 );
@@ -262,8 +260,8 @@ import json
 
 url = 'https://pg.buddypay.co.kr/api/v1/buddy-pay/sign-in'
 payload = {
-    "user_name": "ex",
-    "user_pw": "eligendi"
+    "user_name": "sunt",
+    "user_pw": "a"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -280,8 +278,8 @@ response.json()</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"user_name\": \"ex\",
-    \"user_pw\": \"eligendi\"
+    \"user_name\": \"sunt\",
+    \"user_pw\": \"a\"
 }"
 </code></pre></div>
 
@@ -298,7 +296,26 @@ response.json()</code></pre></div>
     &quot;user&quot;: {
         &quot;id&quot;: 12,
         &quot;user_name&quot;: &quot;test0001&quot;,
-        &quot;level&quot;: 10
+        &quot;level&quot;: 10,
+        &quot;single_payment_limit_s_tm&quot;: &quot;23:00&quot;,
+        &quot;single_payment_limit_e_tm&quot;: &quot;07:00&quot;,
+        &quot;single_payment_limit_amount&quot;: 3000000,
+        &quot;specified_time_disable&quot;: [
+            {
+                &quot;id&quot;: 1,
+                &quot;mcht_id&quot;: 12,
+                &quot;disable_s_tm&quot;: &quot;23:00&quot;,
+                &quot;disable_e_tm&quot;: &quot;07:00&quot;,
+                &quot;disable_type&quot;: 0
+            },
+            {
+                &quot;id&quot;: 2,
+                &quot;mcht_id&quot;: 12,
+                &quot;disable_s_tm&quot;: &quot;23:00&quot;,
+                &quot;disable_e_tm&quot;: &quot;07:00&quot;,
+                &quot;disable_type&quot;: 1
+            }
+        ]
     }
 }</code>
  </pre>
@@ -379,10 +396,10 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="user_name"                data-endpoint="POSTapi-v1-buddy-pay-sign-in"
-               value="ex"
+               value="sunt"
                data-component="body">
     <br>
-<p>가맹점 아이디 <br>예시: <code>ex</code></p>
+<p>가맹점 아이디 <br>예시: <code>sunt</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>user_pw</code></b>&nbsp;&nbsp;
@@ -390,10 +407,10 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="user_pw"                data-endpoint="POSTapi-v1-buddy-pay-sign-in"
-               value="eligendi"
+               value="a"
                data-component="body">
     <br>
-<p>가맹점 패스워드 <br>예시: <code>eligendi</code></p>
+<p>가맹점 패스워드 <br>예시: <code>a</code></p>
         </div>
         </form>
 
@@ -407,11 +424,89 @@ response.json()</code></pre></div>
 <p>Bearer 토큰 값</p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>user</code></b>&nbsp;&nbsp;
+        <details>
+            <summary style="padding-bottom: 10px;">
+                <b style="line-height: 2;"><code>user</code></b>&nbsp;&nbsp;
 <small>object</small>&nbsp;
  &nbsp;
 <br>
 <p>유저정보</p>
+            </summary>
+                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>level</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>로그인 레벨</p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>single_payment_limit_s_tm</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>단건결제한도 시작시간</p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>single_payment_limit_e_tm</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>단건결제한도 종료시간</p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>single_payment_limit_amount</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>단건결제한도 상한금</p>
+                    </div>
+                                                                <div style=" margin-left: 14px; clear: unset;">
+        <details>
+            <summary style="padding-bottom: 10px;">
+                <b style="line-height: 2;"><code>specified_time_disable</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+<br>
+<p>지정시간 거래제한 정보</p>
+            </summary>
+                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>지정시간 거래제한 고유번호</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>mcht_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>가맹점 고유번호</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>disable_s_tm</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>거래제한 시작시간</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>disable_e_tm</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>종료제한 시작시간</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>disable_type</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>제한타입(0=결제금지,1=이체금지)</p>
+                    </div>
+                                    </details>
+        </div>
+                                        </details>
         </div>
                         <h2 id="buddypay-mobile-api-GETapi-v1-buddy-pay-pay-modules">결제모듈정보 조회</h2>
 
@@ -719,7 +814,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "deserunt",
+    "search": "at",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -751,7 +846,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'deserunt',
+            'search' =&gt; 'at',
         ],
     ]
 );
@@ -769,7 +864,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'deserunt',
+  'search': 'at',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -783,7 +878,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://pg.buddypay.co.kr/api/v1/buddy-pay/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=deserunt" \
+    --get "https://pg.buddypay.co.kr/api/v1/buddy-pay/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=at" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1077,10 +1172,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-buddy-pay-transactions"
-               value="deserunt"
+               value="at"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>deserunt</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>at</code></p>
             </div>
                 </form>
 
