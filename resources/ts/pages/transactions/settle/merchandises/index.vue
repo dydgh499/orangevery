@@ -187,6 +187,14 @@ onMounted(() => {
                                         <span class="edit-link" v-else>#{{ item[_key] }}</span>
                                     </div>
                                 </span>
+                                <span v-else-if="(_key as string).includes('_id') && (_key as string).includes('sales')">
+                                    {{ findSalesName(_key as string, item[_key]) }}
+                                </span>
+                                <span v-else-if="_key.toString().includes('_fee') && _key != 'mcht_settle_fee'">
+                                    <VChip v-if="item[_key]">
+                                        {{ (item[_key] * 100).toFixed(3) }} %
+                                    </VChip>
+                                </span>
                                 <span v-else-if="_key == 'resident_num'">
                                     <span>
                                         <span>{{ item['resident_num_front'] }}</span>
