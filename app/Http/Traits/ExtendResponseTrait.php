@@ -51,15 +51,13 @@ trait ExtendResponseTrait
             $http_code = 500; 
             Log::error($msg, $logs);
         }
-        else if($code > 990 && $code <= 2000)
-        {
-            $http_code = 409;
-            Log::notice($msg, $logs);
-        }
         else if($code < 5)
             $http_code = '20'.$code;
         else
-            $http_code = 409;
+        {
+            $http_code = 409;            
+            Log::notice($msg, $logs);
+        }
         
         return Response::json(['code'=>$code, 'message'=>$msg, 'data'=>$data], $http_code, [], JSON_UNESCAPED_UNICODE);        
     }
