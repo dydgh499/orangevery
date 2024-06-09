@@ -19,6 +19,7 @@ use App\Http\Traits\Settle\SettleTerminalTrait;
 use App\Http\Traits\Settle\TransactionTrait;
 use App\Http\Traits\Salesforce\UnderSalesTrait;
 
+
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
 

@@ -1,0 +1,62 @@
+<?php
+namespace App\Http\Controllers\Manager\Settle;
+
+use Illuminate\Support\Facades\Redis;
+use Carbon\Carbon;
+
+class AddDeduct
+{
+    static private function getAddDeductCount($key_name)
+    {
+        return (int)Redis::get($key_name);
+    }
+
+    static private function setAddDeductCount($key_name, $count)
+    {
+        $limit_sec = (Carbon::now()->addDays(1))->diffInSeconds(Carbon::now());
+        Redis::set($key_name, $count, 'EX', $limit_sec);
+    }
+
+    static private function calcAddDeductCount($key_name, $plus)
+    {
+        $count = self::getAddDeductCount($key_name) + $plus;
+        self::setAddDeductCount($key_name, $count);
+    }
+
+    static private function countValidate($request, $key_name, $max_count)
+    {
+        $count  = self::getAddDeductCount($key_name);
+        if($count >= $max_count)
+            return false;
+        else
+        {
+            self::calcAddDeductCount($key_name, 1);
+            return true;
+        }
+    }
+
+    static private function amountValidate($request)
+    {
+        return abs($request->amount) < 3000000 ? true : false;
+    }
+
+    static public function validate($request, $col)
+    {
+        $base_key = 'add-deduct-brand-';
+        if(in_array($request->user()->brand_id, [12, 14]))
+        {
+            if(self::amountValidate($request) === false)
+                return -3;
+
+            $key_name = $base_key.$request->user()->brand_id;
+            if(self::countValidate($request, $key_name, 10) === false)
+                return -1;
+
+            $key_name = $base_key.$request->id."-".($col === 'mcht_id' ? 10 : $request->user()->level);
+            if(self::countValidate($request, $key_name, 1) === false)
+                return -2;
+
+        }
+        return 1;
+    }
+}

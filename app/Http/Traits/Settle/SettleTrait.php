@@ -4,6 +4,8 @@ namespace App\Http\Traits\Settle;
 use Illuminate\Support\Facades\DB;
 use App\Models\Log\RealtimeSendHistory;
 use App\Models\Transaction;
+
+use App\Http\Controllers\Manager\Settle\AddDeduct;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -56,18 +58,22 @@ trait SettleTrait
     private function commonDeduct($orm, $col, $request)
     {
         $validated = $request->validate(['amount'=>'required|integer', 'e_dt'=>'required|date', 'id'=>'required']);
-        if($request->amount < 3000000)
-        {
-            $res = $orm->create([
-                'brand_id'  => $request->user()->brand_id,
-                'amount'    => $request->amount * -1,
-                'deduct_dt' => $request->e_dt,
-                $col   => $request->id,
-            ]);
-            return $this->response(1);    
-        }
-        else
+
+        $code = AddDeduct::validate($request, $col);
+        if($code === -1)
+            return $this->extendResponse(1999, '하루 추가차감 최대회수 10회를 초과하였습니다.');
+        else if($code === -2)
+            return $this->extendResponse(1999, '한 가맹점당 추가차감은 1번씩만 가능합니다.');
+        else if($code === -3)
             return $this->extendResponse(1999, '추가차감은 300만원 이상할 수 없습니다.');
+
+        $res = $orm->create([
+            'brand_id'  => $request->user()->brand_id,
+            'amount'    => $request->amount * -1,
+            'deduct_dt' => $request->e_dt,
+            $col   => $request->id,
+        ]);
+        return $this->response(1);
     }
 
     protected function partSettleCommonQuery($request)
