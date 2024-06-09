@@ -46,15 +46,21 @@ class BuddyPayController extends Controller
      * @responseField access_token string Bearer 토큰 값
      * @responseField user object 유저정보
      * @responseField user.level integer 로그인 레벨
-     * @responseField user.single_payment_limit_s_tm string 단건결제한도 시작시간
-     * @responseField user.single_payment_limit_e_tm string 단건결제한도 종료시간
-     * @responseField user.single_payment_limit_amount integer 단건결제한도 상한금
-     * @responseField user.specified_time_disable object 지정시간 거래제한 정보
-     * @responseField user.specified_time_disable.id integer 지정시간 거래제한 고유번호
-     * @responseField user.specified_time_disable.mcht_id integer 가맹점 고유번호
-     * @responseField user.specified_time_disable.disable_s_tm string 거래제한 시작시간
-     * @responseField user.specified_time_disable.disable_e_tm string 종료제한 시작시간
-     * @responseField user.specified_time_disable.disable_type integer 제한타입(0=결제금지,1=이체금지)
+     * @responseField user.mcht_option object 가맹점 옵션
+     * @responseField user.mcht_option.downward_s_tm string 단건결제한도 시작시간
+     * @responseField user.mcht_option.downward_e_tm string 단건결제한도 종료시간
+     * @responseField user.mcht_option.downward_limit integer 단건결제한도 상한금
+     * @responseField user.payment_option object 결제모듈 옵션
+     * @responseField user.payment_option.pay_year_limit string 연 결제한도(만원단위)
+     * @responseField user.payment_option.pay_month_limit string 월 결제한도(만원단위)
+     * @responseField user.payment_option.pay_day_limit integer 일 결제한도(만원단위)
+     * @responseField user.payment_option.pay_single_limit integer 단건 결제한도(만원단위)
+     * @responseField user.payment_option.pay_disable_s_tm integer 결제금지 시작시간
+     * @responseField user.payment_option.pay_disable_e_tm integer 결제금지 종료시간
+     * @responseField user.specified_time_option object 지정시간 옵션
+     * @responseField user.specified_time_option.disable_s_tm string 거래제한 시작시간
+     * @responseField user.specified_time_option.disable_e_tm string 종료제한 시작시간
+     * @responseField user.specified_time_option.disable_type integer 제한타입(0=결제금지,1=이체금지)
      */
     public function login(Request $request)
     {
@@ -69,10 +75,22 @@ class BuddyPayController extends Controller
                 'id' => $data['user']->id,
                 'user_name' => $data['user']->user_name,
                 'level' => 10,
-                'single_payment_limit_s_tm' => $data['user']->single_payment_limit_s_tm,
-                'single_payment_limit_e_tm' => $data['user']->single_payment_limit_e_tm,
-                'single_payment_limit_amount' => $data['user']->specified_time_disable_limit * 10000,
-                'specified_time_disable' => SpecifiedTimeDisablePayment::where('mcht_id', $data['user']->id)->get(),
+                'mcht_option' => [
+                    'downward_s_tm' => $data['user']->single_payment_limit_s_tm,
+                    'downward_e_tm' => $data['user']->single_payment_limit_e_tm,
+                    'downward_limit' => $data['user']->specified_time_disable_limit,    
+                ],
+                'payment_option' => PaymentModule::where('mcht_id', $data['user']->id)->get([
+                    'id',
+                    'mcht_id',
+                    'pay_year_limit', 
+                    'pay_month_limit', 
+                    'pay_day_limit', 
+                    'pay_single_limit', 
+                    'pay_disable_s_tm', 
+                    'pay_disable_e_tm',
+                ]),
+                'specified_time_option' => SpecifiedTimeDisablePayment::where('mcht_id', $data['user']->id)->get(),
             ];
             return $this->response(0, $data);
         }

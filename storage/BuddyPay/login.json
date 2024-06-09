@@ -4,10 +4,34 @@
         "id": 12,
         "user_name": "test0001",
         "level": 10,
-        "single_payment_limit_s_tm" : "23:00",
-        "single_payment_limit_e_tm" : "07:00",
-        "single_payment_limit_amount" : 3000000,
-        "specified_time_disable" : [
+        "mcht_option" : {
+            "downward_s_tm" : "23:00",
+            "downward_e_tm" : "07:00",
+            "downward_limit" : 300
+        },
+        "payment_option" : [
+            {
+                "id" : 1,
+                "mcht_id" : 12,
+                "pay_year_limit" : 10000, 
+                "pay_month_limit" : 1000, 
+                "pay_day_limit" : 30, 
+                "pay_single_limit" : 3,
+                "pay_disable_s_tm" : "23:00", 
+                "pay_disable_e_tm" : "07:00"
+            },
+            {
+                "id" : 2,
+                "mcht_id" : 12,
+                "pay_year_limit" : 10000, 
+                "pay_month_limit" : 1000, 
+                "pay_day_limit" : 30, 
+                "pay_single_limit" : 3,
+                "pay_disable_s_tm" : "13:00", 
+                "pay_disable_e_tm" : "23:00"
+            }
+        ],
+        "specified_time_option" : [
             {
                 "id": 1,
                 "mcht_id": 12,

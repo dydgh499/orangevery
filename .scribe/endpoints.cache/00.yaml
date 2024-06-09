@@ -32,7 +32,7 @@ endpoints:
         name: user_name
         description: '가맹점 아이디'
         required: true
-        example: sunt
+        example: placeat
         type: string
         enumValues: []
         custom: []
@@ -40,13 +40,13 @@ endpoints:
         name: user_pw
         description: '가맹점 패스워드'
         required: true
-        example: a
+        example: at
         type: string
         enumValues: []
         custom: []
     cleanBodyParameters:
-      user_name: sunt
-      user_pw: a
+      user_name: placeat
+      user_pw: at
     fileParameters: []
     responses:
       -
@@ -58,10 +58,34 @@ endpoints:
                   "id": 12,
                   "user_name": "test0001",
                   "level": 10,
-                  "single_payment_limit_s_tm" : "23:00",
-                  "single_payment_limit_e_tm" : "07:00",
-                  "single_payment_limit_amount" : 3000000,
-                  "specified_time_disable" : [
+                  "mcht_option" : {
+                      "downward_s_tm" : "23:00",
+                      "downward_e_tm" : "07:00",
+                      "downward_limit" : 300
+                  },
+                  "payment_option" : [
+                      {
+                          "id" : 1,
+                          "mcht_id" : 12,
+                          "pay_year_limit" : 10000, 
+                          "pay_month_limit" : 1000, 
+                          "pay_day_limit" : 30, 
+                          "pay_single_limit" : 3,
+                          "pay_disable_s_tm" : "23:00", 
+                          "pay_disable_e_tm" : "07:00"
+                      },
+                      {
+                          "id" : 2,
+                          "mcht_id" : 12,
+                          "pay_year_limit" : 10000, 
+                          "pay_month_limit" : 1000, 
+                          "pay_day_limit" : 30, 
+                          "pay_single_limit" : 3,
+                          "pay_disable_s_tm" : "13:00", 
+                          "pay_disable_e_tm" : "23:00"
+                      }
+                  ],
+                  "specified_time_option" : [
                       {
                           "id": 1,
                           "mcht_id": 12,
@@ -107,72 +131,120 @@ endpoints:
         type: integer
         enumValues: []
         custom: []
-      user.single_payment_limit_s_tm:
-        name: user.single_payment_limit_s_tm
+      user.mcht_option:
+        name: user.mcht_option
+        description: '가맹점 옵션'
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        custom: []
+      user.mcht_option.downward_s_tm:
+        name: user.mcht_option.downward_s_tm
         description: '단건결제한도 시작시간'
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      user.single_payment_limit_e_tm:
-        name: user.single_payment_limit_e_tm
+      user.mcht_option.downward_e_tm:
+        name: user.mcht_option.downward_e_tm
         description: '단건결제한도 종료시간'
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      user.single_payment_limit_amount:
-        name: user.single_payment_limit_amount
+      user.mcht_option.downward_limit:
+        name: user.mcht_option.downward_limit
         description: '단건결제한도 상한금'
         required: false
         example: null
         type: integer
         enumValues: []
         custom: []
-      user.specified_time_disable:
-        name: user.specified_time_disable
-        description: '지정시간 거래제한 정보'
+      user.payment_option:
+        name: user.payment_option
+        description: '결제모듈 옵션'
         required: false
         example: null
         type: object
         enumValues: []
         custom: []
-      user.specified_time_disable.id:
-        name: user.specified_time_disable.id
-        description: '지정시간 거래제한 고유번호'
+      user.payment_option.pay_year_limit:
+        name: user.payment_option.pay_year_limit
+        description: '연 결제한도(만원단위)'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      user.payment_option.pay_month_limit:
+        name: user.payment_option.pay_month_limit
+        description: '월 결제한도(만원단위)'
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        custom: []
+      user.payment_option.pay_day_limit:
+        name: user.payment_option.pay_day_limit
+        description: '일 결제한도(만원단위)'
         required: false
         example: null
         type: integer
         enumValues: []
         custom: []
-      user.specified_time_disable.mcht_id:
-        name: user.specified_time_disable.mcht_id
-        description: '가맹점 고유번호'
+      user.payment_option.pay_single_limit:
+        name: user.payment_option.pay_single_limit
+        description: '단건 결제한도(만원단위)'
         required: false
         example: null
         type: integer
         enumValues: []
         custom: []
-      user.specified_time_disable.disable_s_tm:
-        name: user.specified_time_disable.disable_s_tm
+      user.payment_option.pay_disable_s_tm:
+        name: user.payment_option.pay_disable_s_tm
+        description: '결제금지 시작시간'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      user.payment_option.pay_disable_e_tm:
+        name: user.payment_option.pay_disable_e_tm
+        description: '결제금지 종료시간'
+        required: false
+        example: null
+        type: integer
+        enumValues: []
+        custom: []
+      user.specified_time_option:
+        name: user.specified_time_option
+        description: '지정시간 옵션'
+        required: false
+        example: null
+        type: object
+        enumValues: []
+        custom: []
+      user.specified_time_option.disable_s_tm:
+        name: user.specified_time_option.disable_s_tm
         description: '거래제한 시작시간'
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      user.specified_time_disable.disable_e_tm:
-        name: user.specified_time_disable.disable_e_tm
+      user.specified_time_option.disable_e_tm:
+        name: user.specified_time_option.disable_e_tm
         description: '종료제한 시작시간'
         required: false
         example: null
         type: string
         enumValues: []
         custom: []
-      user.specified_time_disable.disable_type:
-        name: user.specified_time_disable.disable_type
+      user.specified_time_option.disable_type:
+        name: user.specified_time_option.disable_type
         description: '제한타입(0=결제금지,1=이체금지)'
         required: false
         example: null
@@ -357,7 +429,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer ZkV4bgaad6P1Df3Ehecv586'
+      - 'Bearer 8g3bfaZcDh4ekEv5aVd6P16'
     controller: null
     method: null
     route: null
@@ -420,7 +492,7 @@ endpoints:
         name: search
         description: '검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭)'
         required: false
-        example: at
+        example: sint
         type: string
         enumValues: []
         custom: []
@@ -429,7 +501,7 @@ endpoints:
       page_size: 20
       s_dt: '2023-11-01'
       e_dt: '2023-11-30'
-      search: at
+      search: sint
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -752,7 +824,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer fk641gDv6Z53aPehbadEVc8'
+      - 'Bearer bvfhg5aZdkVc8661Ea3P4eD'
     controller: null
     method: null
     route: null
@@ -1023,7 +1095,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer EacV6h5DfkPbaZ6ed8341vg'
+      - 'Bearer VbhD5fvZ6k18c34gd6eaPaE'
     controller: null
     method: null
     route: null
@@ -1086,7 +1158,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer aEe315bv86DgcZPVk6fh4da'
+      - 'Bearer ceDfVd3h6k8bPEga6a1v45Z'
     controller: null
     method: null
     route: null
@@ -1149,7 +1221,7 @@ endpoints:
     auth:
       - headers
       - Authorization
-      - 'Bearer a6hdk13b6Eeg5Z4vDca8PVf'
+      - 'Bearer EgkvV661D8chZb4Pdaae35f'
     controller: null
     method: null
     route: null

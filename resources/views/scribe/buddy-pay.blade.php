@@ -107,11 +107,11 @@
             </div>
 
     <ul class="toc-footer" id="toc-footer">
-                                        <li><a>Documentation powered by BuddyPay ✍</a></li>
+                                        <li><a>Documentation powered by Buddypay ✍</a></li>
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>마지막 업데이트:  2024-06-09 18:18:59</li>
+        <li>마지막 업데이트:  2024-06-09 18:35:57</li>
     </ul>
 </div>
 
@@ -224,8 +224,8 @@ const headers = {
 };
 
 let body = {
-    "user_name": "sunt",
-    "user_pw": "a"
+    "user_name": "placeat",
+    "user_pw": "at"
 };
 
 fetch(url, {
@@ -245,8 +245,8 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'user_name' =&gt; 'sunt',
-            'user_pw' =&gt; 'a',
+            'user_name' =&gt; 'placeat',
+            'user_pw' =&gt; 'at',
         ],
     ]
 );
@@ -260,8 +260,8 @@ import json
 
 url = 'https://pg.buddypay.co.kr/api/v1/buddy-pay/sign-in'
 payload = {
-    "user_name": "sunt",
-    "user_pw": "a"
+    "user_name": "placeat",
+    "user_pw": "at"
 }
 headers = {
   'Content-Type': 'application/json',
@@ -278,8 +278,8 @@ response.json()</code></pre></div>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"user_name\": \"sunt\",
-    \"user_pw\": \"a\"
+    \"user_name\": \"placeat\",
+    \"user_pw\": \"at\"
 }"
 </code></pre></div>
 
@@ -297,10 +297,34 @@ response.json()</code></pre></div>
         &quot;id&quot;: 12,
         &quot;user_name&quot;: &quot;test0001&quot;,
         &quot;level&quot;: 10,
-        &quot;single_payment_limit_s_tm&quot;: &quot;23:00&quot;,
-        &quot;single_payment_limit_e_tm&quot;: &quot;07:00&quot;,
-        &quot;single_payment_limit_amount&quot;: 3000000,
-        &quot;specified_time_disable&quot;: [
+        &quot;mcht_option&quot;: {
+            &quot;downward_s_tm&quot;: &quot;23:00&quot;,
+            &quot;downward_e_tm&quot;: &quot;07:00&quot;,
+            &quot;downward_limit&quot;: 300
+        },
+        &quot;payment_option&quot;: [
+            {
+                &quot;id&quot;: 1,
+                &quot;mcht_id&quot;: 12,
+                &quot;pay_year_limit&quot;: 10000,
+                &quot;pay_month_limit&quot;: 1000,
+                &quot;pay_day_limit&quot;: 30,
+                &quot;pay_single_limit&quot;: 3,
+                &quot;pay_disable_s_tm&quot;: &quot;23:00&quot;,
+                &quot;pay_disable_e_tm&quot;: &quot;07:00&quot;
+            },
+            {
+                &quot;id&quot;: 2,
+                &quot;mcht_id&quot;: 12,
+                &quot;pay_year_limit&quot;: 10000,
+                &quot;pay_month_limit&quot;: 1000,
+                &quot;pay_day_limit&quot;: 30,
+                &quot;pay_single_limit&quot;: 3,
+                &quot;pay_disable_s_tm&quot;: &quot;13:00&quot;,
+                &quot;pay_disable_e_tm&quot;: &quot;23:00&quot;
+            }
+        ],
+        &quot;specified_time_option&quot;: [
             {
                 &quot;id&quot;: 1,
                 &quot;mcht_id&quot;: 12,
@@ -396,10 +420,10 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="user_name"                data-endpoint="POSTapi-v1-buddy-pay-sign-in"
-               value="sunt"
+               value="placeat"
                data-component="body">
     <br>
-<p>가맹점 아이디 <br>예시: <code>sunt</code></p>
+<p>가맹점 아이디 <br>예시: <code>placeat</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>user_pw</code></b>&nbsp;&nbsp;
@@ -407,10 +431,10 @@ response.json()</code></pre></div>
  &nbsp;
                 <input type="text" style="display: none"
                               name="user_pw"                data-endpoint="POSTapi-v1-buddy-pay-sign-in"
-               value="a"
+               value="at"
                data-component="body">
     <br>
-<p>가맹점 패스워드 <br>예시: <code>a</code></p>
+<p>가맹점 패스워드 <br>예시: <code>at</code></p>
         </div>
         </form>
 
@@ -439,51 +463,101 @@ response.json()</code></pre></div>
 <br>
 <p>로그인 레벨</p>
                     </div>
-                                                                <div style="margin-left: 14px; clear: unset;">
-                        <b style="line-height: 2;"><code>single_payment_limit_s_tm</code></b>&nbsp;&nbsp;
+                                                                <div style=" margin-left: 14px; clear: unset;">
+        <details>
+            <summary style="padding-bottom: 10px;">
+                <b style="line-height: 2;"><code>mcht_option</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+<br>
+<p>가맹점 옵션</p>
+            </summary>
+                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>downward_s_tm</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
  &nbsp;
 <br>
 <p>단건결제한도 시작시간</p>
                     </div>
-                                                                <div style="margin-left: 14px; clear: unset;">
-                        <b style="line-height: 2;"><code>single_payment_limit_e_tm</code></b>&nbsp;&nbsp;
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>downward_e_tm</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
  &nbsp;
 <br>
 <p>단건결제한도 종료시간</p>
                     </div>
-                                                                <div style="margin-left: 14px; clear: unset;">
-                        <b style="line-height: 2;"><code>single_payment_limit_amount</code></b>&nbsp;&nbsp;
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>downward_limit</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
 <p>단건결제한도 상한금</p>
                     </div>
-                                                                <div style=" margin-left: 14px; clear: unset;">
+                                    </details>
+        </div>
+                                                                    <div style=" margin-left: 14px; clear: unset;">
         <details>
             <summary style="padding-bottom: 10px;">
-                <b style="line-height: 2;"><code>specified_time_disable</code></b>&nbsp;&nbsp;
+                <b style="line-height: 2;"><code>payment_option</code></b>&nbsp;&nbsp;
 <small>object</small>&nbsp;
  &nbsp;
 <br>
-<p>지정시간 거래제한 정보</p>
+<p>결제모듈 옵션</p>
             </summary>
                                                 <div style="margin-left: 28px; clear: unset;">
-                        <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
+                        <b style="line-height: 2;"><code>pay_year_limit</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>연 결제한도(만원단위)</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>pay_month_limit</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+<br>
+<p>월 결제한도(만원단위)</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>pay_day_limit</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>지정시간 거래제한 고유번호</p>
+<p>일 결제한도(만원단위)</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
-                        <b style="line-height: 2;"><code>mcht_id</code></b>&nbsp;&nbsp;
+                        <b style="line-height: 2;"><code>pay_single_limit</code></b>&nbsp;&nbsp;
 <small>integer</small>&nbsp;
  &nbsp;
 <br>
-<p>가맹점 고유번호</p>
+<p>단건 결제한도(만원단위)</p>
                     </div>
                                                                 <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>pay_disable_s_tm</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>결제금지 시작시간</p>
+                    </div>
+                                                                <div style="margin-left: 28px; clear: unset;">
+                        <b style="line-height: 2;"><code>pay_disable_e_tm</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+<br>
+<p>결제금지 종료시간</p>
+                    </div>
+                                    </details>
+        </div>
+                                                                    <div style=" margin-left: 14px; clear: unset;">
+        <details>
+            <summary style="padding-bottom: 10px;">
+                <b style="line-height: 2;"><code>specified_time_option</code></b>&nbsp;&nbsp;
+<small>object</small>&nbsp;
+ &nbsp;
+<br>
+<p>지정시간 옵션</p>
+            </summary>
+                                                <div style="margin-left: 28px; clear: unset;">
                         <b style="line-height: 2;"><code>disable_s_tm</code></b>&nbsp;&nbsp;
 <small>string</small>&nbsp;
  &nbsp;
@@ -814,7 +888,7 @@ const params = {
     "page_size": "20",
     "s_dt": "2023-11-01",
     "e_dt": "2023-11-30",
-    "search": "at",
+    "search": "sint",
 };
 Object.keys(params)
     .forEach(key =&gt; url.searchParams.append(key, params[key]));
@@ -846,7 +920,7 @@ $response = $client-&gt;get(
             'page_size' =&gt; '20',
             's_dt' =&gt; '2023-11-01',
             'e_dt' =&gt; '2023-11-30',
-            'search' =&gt; 'at',
+            'search' =&gt; 'sint',
         ],
     ]
 );
@@ -864,7 +938,7 @@ params = {
   'page_size': '20',
   's_dt': '2023-11-01',
   'e_dt': '2023-11-30',
-  'search': 'at',
+  'search': 'sint',
 }
 headers = {
   'Authorization': 'Bearer {ACCESS_TOKEN}',
@@ -878,7 +952,7 @@ response.json()</code></pre></div>
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "https://pg.buddypay.co.kr/api/v1/buddy-pay/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=at" \
+    --get "https://pg.buddypay.co.kr/api/v1/buddy-pay/transactions?page=1&amp;page_size=20&amp;s_dt=2023-11-01&amp;e_dt=2023-11-30&amp;search=sint" \
     --header "Authorization: Bearer {ACCESS_TOKEN}" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
@@ -1172,10 +1246,10 @@ response.json()</code></pre></div>
 <i><b>optional</b></i> &nbsp;
                 <input type="text" style="display: none"
                               name="search"                data-endpoint="GETapi-v1-buddy-pay-transactions"
-               value="at"
+               value="sint"
                data-component="query">
     <br>
-<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>at</code></p>
+<p>검색어(MID, TID, 거래번호, 승인번호, 발급사, 매입사, 결제모듈 별칭) <br>예시: <code>sint</code></p>
             </div>
                 </form>
 
