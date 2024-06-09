@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 use App\Enums\AuthLoginCode;
 use App\Http\Traits\ExtendResponseTrait;
 
+use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Auth\AuthAccountLock;
 use App\Http\Controllers\Auth\AuthOperatorIP;
@@ -28,7 +29,13 @@ class Login
         {
             // IP 인증
             if(AuthOperatorIP::valiate($result['user']->brand_id, $request->ip()))
-                return AuthPhoneNum::validate($request->token);   // 휴대폰 인증
+            {
+                $brand = BrandInfo::getBrandById($result['user']->brand_id);   
+                if($brand['pv_options']['paid']['use_head_office_withdraw'])
+                    return AuthPhoneNum::validate($request->token);   // 휴대폰 인증
+                else
+                    return AuthLoginCode::SUCCESS->value;
+            }
             else
                 return AuthLoginCode::NOT_FOUND->value;
         }

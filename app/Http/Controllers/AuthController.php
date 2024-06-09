@@ -102,16 +102,15 @@ class AuthController extends Controller
      */
     public function signIn(LoginRequest $request)
     {
-        $brand = BrandInfo::getBrandById($request->brand_id);   
-        $result = Login::isSafeAccount(new Operator(), $request, $brand['pv_options']['paid']['use_head_office_withdraw']);    // check operator
+        $result = Login::isSafeAccount(new Operator(), $request);    // check operator
         if($result !== null)
             return $result;
         
-        $result = Login::isSafeAccount(new Salesforce(), $request, false);    // check sales
+        $result = Login::isSafeAccount(new Salesforce(), $request);    // check sales
         if($result !== null)
             return $result;
 
-        $result = Login::isSafeAccount(new Merchandise(), $request, false);    // check merchandise
+        $result = Login::isSafeAccount(new Merchandise(), $request);    // check merchandise
         if($result !== null)
             return $result;
         else
