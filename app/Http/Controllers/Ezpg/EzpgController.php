@@ -46,7 +46,7 @@ class EzpgController extends Controller
         $request = $request->merge(['brand_id' => 19]);
 
         $result = Login::isSafeLogin(new Merchandise(), $request);    // check merchandise
-        if($result['result'] === 0)
+        if($result['result'] === 0 || $result['result'] === 955)
         {
             $data = $result['user']->loginAPI(10);
             $data['user'] = [
