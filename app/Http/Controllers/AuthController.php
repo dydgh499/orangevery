@@ -49,6 +49,9 @@ class AuthController extends Controller
         $token = env('IPINFO_API_KEY', '2c693805e1bced');
         $ip = $request->ip() === '127.0.0.1' ? '183.107.112.147' : $request->ip();
         // 
+        if(in_array($ip, ["183.107.112.147", "121.183.143.103", "125.179.103.82"]))
+            return [true, []];
+
         $res = get("https://ipinfo.io/$ip", [], [
             'Authorization' => "Bearer {$token}",
             'User-Agent' => 'Laravel',
