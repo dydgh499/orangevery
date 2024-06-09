@@ -32,7 +32,7 @@ class Ablilty
         return $request->user()->tokenCan(35);
     }
 
-    static function isMyOperator($request)
+    static function isMyOperator($request, int $id)
     {
         return self::isOperator($request) && $request->user()->id === $id;
     }
