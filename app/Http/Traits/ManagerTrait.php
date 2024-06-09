@@ -135,10 +135,13 @@ trait ManagerTrait
     public function _passwordChange($query, $request)
     {
         $validated = $request->validate(['user_pw'=>'required']);
-        $res = $query->update([
-            'user_pw' => Hash::make($request->user_pw),
-            'password_change_at' => date('Y-m-d H:i:s'),
-        ]);
+
+        $user = $query->first();
+        $user->user_pw = Hash::make($request->user_pw);
+        $user->password_change_at = date('Y-m-d H:i:s');
+        $user->save();
+
+        AuthAccountLock::initPasswordWrongCounter($user);
         return $this->response($res ? 1 : 990);   
     }
 
