@@ -191,7 +191,7 @@ class RealtimeSendHistoryController extends Controller
             'token'=>'required|string',
         ]);
 
-        if(AuthPhoneNum::validate($request->token) === 1)
+        if(AuthPhoneNum::validate($request->token) === 0)
         {
             if($request->user()->tokenCan(35))
             {
@@ -224,6 +224,6 @@ class RealtimeSendHistoryController extends Controller
                 return $this->extendResponse(403, '잘못된 접근입니다.', '');    
         }
         else
-            return $this->extendResponse(403, '잘못된 접근입니다.', '');
+            return $this->extendResponse(951, '잘못된 접근입니다.', '');
     }
 }
