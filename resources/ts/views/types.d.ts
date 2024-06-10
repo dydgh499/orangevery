@@ -344,6 +344,7 @@ interface FreeOption {
     secure: {
         mcht_id_level: number,
         mcht_pw_level: number,
+        account_lock_limit: number,
     }
 }
 interface PaidOption {

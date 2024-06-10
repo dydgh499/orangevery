@@ -26,6 +26,13 @@ const mchtPwLevels = <Options[]>([
     {id: 1, title: '2단계(8자이상)'},
     {id: 2, title: '3단계(8자이상+대소문자,특수문자포함)'},
 ])
+const accountLockLimits = <Options[]>([
+    {id: 3, title: '3회(기본)'},
+    {id: 4, title: '4회'},
+    {id: 5, title: '5회'},
+    {id: 6, title: '6회'},
+    {id: 7, title: '7회'},
+])
 // 화면 타입은 영업점 개별 선택
 </script>
 <template>
@@ -137,6 +144,20 @@ const mchtPwLevels = <Options[]>([
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure.mcht_pw_level"
                                 :items="mchtPwLevels" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
                                 label="패스워드 난이도 선택"  item-title="title" item-value="id" single-line />
+                        </template>
+                    </CreateHalfVColV2>
+                    <CreateHalfVColV2 :mdl="7" :mdr="5" class="pt-5">
+                        <template #l_name>
+                            <BaseQuestionTooltip location="top" text="패스워드 허용회수" :content="`로그인시 패스워드 오입력으로 계정이 잠금되는 시도회수를 설정합니다.`"/>
+                        </template>
+                        <template #l_input>
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure.account_lock_limit"
+                                :items="accountLockLimits" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                label="패스워드 허용회수" item-title="title" item-value="id" single-line />
+                        </template>
+                        <template #r_name>
+                        </template>
+                        <template #r_input>
                         </template>
                     </CreateHalfVColV2>
                 </VCardItem>

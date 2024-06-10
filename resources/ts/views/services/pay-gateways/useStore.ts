@@ -100,13 +100,9 @@ export const useStore = defineStore('payGatewayStore', () => {
         }
     })
     const getFianaceVansBalance = async () => {
-        const promises = <any>[]
         for (let i = 0; i < finance_vans.value.length; i++)  {
-            promises.push(post('/api/v1/manager/transactions/realtime-histories/get-balance', finance_vans.value[i], false))
-        }
-        const results = await Promise.all(promises)
-        for (let i = 0; i < results.length; i++) {
-            const data = results[i].data
+            let res = await post('/api/v1/manager/transactions/realtime-histories/get-balance', finance_vans.value[i], false)
+            let data = res.data
             if(data.code == 1) {
                 finance_vans.value[i].balance = <number>(parseInt(data['data']['WDRW_CAN_AMT']))
             } 

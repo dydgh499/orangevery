@@ -13,14 +13,13 @@ export const useCRMStore = defineStore('CRMStore', () => {
 )
     const getGraphData = async() => {
         try {
-            const [r1, r2, r3, r4, r5, r6] = await Promise.all([
-                axios.get('/api/v1/manager/dashsboards/monthly-transactions-analysis'),
-                axios.get('/api/v1/manager/dashsboards/upside-merchandises-analysis'),
-                axios.get('/api/v1/manager/dashsboards/upside-salesforces-analysis'),
-                axios.get('/api/v1/manager/dashsboards/recent-danger-histories'),
-                axios.get('/api/v1/manager/dashsboards/recent-operator-histories'),
-                axios.get('/api/v1/manager/dashsboards/locked-users'),
-            ])
+            const r1 = await axios.get('/api/v1/manager/dashsboards/monthly-transactions-analysis')
+            const r2 = await axios.get('/api/v1/manager/dashsboards/upside-merchandises-analysis')
+            const r3 = await axios.get('/api/v1/manager/dashsboards/upside-salesforces-analysis')
+            const r4 = await axios.get('/api/v1/manager/dashsboards/recent-danger-histories')
+            const r5 = await axios.get('/api/v1/manager/dashsboards/recent-operator-histories')
+            const r6 = await axios.get('/api/v1/manager/dashsboards/locked-users')
+            
             const sortedKeys = orderBy(Object.keys(r1.data), [], ['desc']);
             const sortedData = sortedKeys.reduce((acc, key) => {
               acc[key] = r1.data[key];

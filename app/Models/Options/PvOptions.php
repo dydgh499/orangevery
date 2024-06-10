@@ -41,6 +41,7 @@
         public $secure = [
             'mcht_id_level' => 1,
             'mcht_pw_level' => 2,
+            'account_lock_limit' => 3,
         ];
 
 
@@ -55,8 +56,10 @@
             $this->default['installment'] = (int)$this->default['installment'];
             $this->default['is_show_fee'] = (int)$this->default['is_show_fee'];
             $this->default['abnormal_trans_limit'] = (int)$this->default['abnormal_trans_limit'];
+
             $this->secure['mcht_id_level'] = (int)$this->secure['mcht_id_level'];
             $this->secure['mcht_pw_level'] = (int)$this->secure['mcht_pw_level'];
+            $this->secure['account_lock_limit'] = isset($this->secure['account_lock_limit']) ? (int)$this->secure['account_lock_limit'] : 3;
         }
     }
 

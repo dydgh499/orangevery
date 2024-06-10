@@ -1,12 +1,11 @@
 <?php
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Manager\Service\BrandInfo;
 use Illuminate\Support\Facades\Redis;
 
 class AuthAccountLock
 {
-    static public $RETRY_MAX_COUNT = 3;
-
     static public function getPasswordWrongCounter($user)
     {
         $key_name = 'password-wrong'.$user->brand_id.'-'.$user->level."-".$user->id;
@@ -18,7 +17,9 @@ class AuthAccountLock
         $key_name = 'password-wrong'.$user->brand_id.'-'.$user->level."-".$user->id;
         $count = self::getPasswordWrongCounter($user) + 1;
         Redis::set($key_name, $count);
-        return self::$RETRY_MAX_COUNT - $count;
+
+        $brand = BrandInfo::getBrandById($user->brand_id);   
+        return $brand['pv_options']['free']['secure']['account_lock_limit'] - $count;
     }
 
     static public function initPasswordWrongCounter($user)

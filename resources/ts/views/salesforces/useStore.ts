@@ -175,11 +175,9 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
     const mchts = ref(<Merchandise[]>([]))
     
     onMounted(async () => { 
-        await Promise.all([
-            classification(),
-            getAllMchts(),
-            feeApplyHistoires(),
-        ])
+        await classification()
+        await getAllMchts()
+        await feeApplyHistoires()
         is_sales_loaded.value = true
     })
     const isSalesLoaded = computed(() => { return is_sales_loaded.value })
