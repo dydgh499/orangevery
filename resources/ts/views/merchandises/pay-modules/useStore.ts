@@ -159,9 +159,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         headers2['fin_id'] = '이체 모듈 타입'
         headers2['fin_trx_delay'] = '이체 딜레이'
     }
-    if(corp.pv_options.paid.use_online_pay)
-        headers2['pay_key'] = '결제 KEY'
-
+    
     const headers = {
         ...headers1,
         ...headers2,
