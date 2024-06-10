@@ -8,6 +8,7 @@ use App\Models\Log\RealtimeSendHistory;
 use App\Models\Log\SettleDeductMerchandise;
 use App\Models\Merchandise\PaymentModule;
 
+use App\Http\Controllers\Manager\Settle\AddDeduct;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -148,6 +149,14 @@ class MerchandiseController extends Controller
 
     public function deduct(Request $request) 
     {
-        return $this->commonDeduct($this->settleDeducts, 'mcht_id', $request);
+        $code = AddDeduct::validate($request, 'mcht_id');
+        if($code === -1)
+            return $this->extendResponse(1999, '하루 추가차감 최대회수 10회를 초과하였습니다.');
+        else if($code === -2)
+            return $this->extendResponse(1999, '한 가맹점당 추가차감은 1번씩만 가능합니다.');
+        else if($code === -3)
+            return $this->extendResponse(1999, '추가차감은 300만원 이상할 수 없습니다.');
+        else
+            return $this->commonDeduct($this->settleDeducts, 'mcht_id', $request);
     }
 }
