@@ -56,7 +56,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(100)->by(optional($request->user())->id ?: $request->ip())->response(function() use($request) {
+            return Limit::perMinute(500)->by(optional($request->user())->id ?: $request->ip())->response(function() use($request) {
                 Redis::set('blocked:'.$request->ip(), 1, 'EX', (3600*10));
                 critical("매크로가 탐지되었습니다.");
                 return response('Too Many Requests', 429);
