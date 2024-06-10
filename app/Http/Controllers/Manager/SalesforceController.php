@@ -362,7 +362,7 @@ class SalesforceController extends Controller
      */
     public function unlockAccount(Request $request, int $id)
     {
-        if(isOperator($request))
+        if(Ablilty::isOperator($request))
             return $this->_unlockAccount($this->salesforces->where('id', $id));
         else
             return $this->response(951);

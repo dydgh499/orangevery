@@ -377,7 +377,7 @@ class MerchandiseController extends Controller
      */
     public function unlockAccount(Request $request, int $id)
     {
-        if(isOperator($request))
+        if(Ablilty::isOperator($request))
             return $this->_unlockAccount($this->merchandises->where('id', $id));
         else
             return $this->response(951);
