@@ -75,7 +75,7 @@ class Login
             $result['data'] = AuthPasswordChange::getPasswordResetToken($result['user']);
         }
         else if($result['result'] === AuthLoginCode::LOCK_ACCOUNT->value)
-            $result['msg'] = '잠금된 계정입니다. 운영사에게 문의해주세요.';
+            $result['msg'] = '패스워드를 3회이상 잘못 입력하여 잠금된 계정입니다. 운영사에게 문의해주세요.';
 
         return $result;
     }
