@@ -30,7 +30,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VCard style="margin-top: 1em;">
+    <VCard>
         <VCol class="d-flex gap-4">
             <VBtn type="button" style="margin-left: auto;" @click="addNewFinanceVan">
                 금융VAN 신규추가
@@ -38,7 +38,7 @@ watchEffect(() => {
             </VBtn>
         </VCol>
     </VCard>
-    <VRow style="margin-top: 1em;">
+    <VRow>
         <FinanceVanCard v-for="finance_van in finance_vans" :key="finance_van.id" style="margin-top: 1em;" :item="finance_van"/>
     </VRow>
 </template>
