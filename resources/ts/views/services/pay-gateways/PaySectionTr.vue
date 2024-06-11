@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { VForm } from 'vuetify/components'
+import { useRequestStore } from '@/views/request'
 import type { PaySection } from '@/views/types'
 import { requiredValidatorV2 } from '@validators'
-import { useRequestStore } from '@/views/request'
+import { VForm } from 'vuetify/components'
 
 interface Props {
     item: PaySection,
@@ -46,6 +46,10 @@ const { update, remove } = useRequestStore()
                 </VBtn>
                 <VBtn type="button" color="default" variant="text" v-if="props.item.id" @click="remove('/services/pay-sections', props.item, false)">
                     삭제
+                    <VIcon end icon="tabler-trash" />
+                </VBtn>
+                <VBtn type="button" color="default" variant="text" v-else @click="props.item.id = -1">
+                    입력란 제거
                     <VIcon end icon="tabler-trash" />
                 </VBtn>
             </VCol>

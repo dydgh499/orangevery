@@ -51,7 +51,7 @@ const passwordChangeWarningValidate = () => {
     const last_change_at = new Date(user_info.value.password_change_at ?? '2024-06-09 12:00:00')
     const now = new Date()
     const diff = now.getTime() - last_change_at.getTime()
-    console.log(diff)
+
     const diffInDays = diff / (1000 * 3600 * 24)
     if(diffInDays >= 90) 
         passwordChangeNoticeDialog.value.show()

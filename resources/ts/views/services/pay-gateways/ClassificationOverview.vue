@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import type { Classification } from '@/views/types'
+import { useRequestStore } from '@/views/request'
 import ClassificationTr from '@/views/services/pay-gateways/ClassificationTr.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { useRequestStore } from '@/views/request'
+import type { Classification } from '@/views/types'
 
 const { terminals, cus_filters } = useStore()
 const { setNullRemove } = useRequestStore()
@@ -35,7 +35,7 @@ watchEffect(() => {
                         </thead>
                         <tbody>
                             <ClassificationTr v-for="(item, index) in terminals" :key="index" :item="item" :index="index"
-                                :base_count="0">
+                                :base_count="0" :placeholder="'장비'">
                             </ClassificationTr>
                         </tbody>
                     </VTable>
@@ -64,7 +64,7 @@ watchEffect(() => {
                         </thead>
                         <tbody>
                             <ClassificationTr v-for="(item, index) in cus_filters" :key="index" :item="item" :index="index"
-                                :base_count="0">
+                                :base_count="0" :placeholder="'커스텀 필터'">
                             </ClassificationTr>
                         </tbody>
                     </VTable>

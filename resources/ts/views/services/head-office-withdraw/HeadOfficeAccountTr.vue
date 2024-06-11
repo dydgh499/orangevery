@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { useRequestStore } from '@/views/request'
 import type { HeadOffceAccount } from '@/views/types'
-import { VForm } from 'vuetify/components'
-import { requiredValidatorV2 } from '@validators'
 import { banks } from '@/views/users/useStore'
+import { requiredValidatorV2 } from '@validators'
+import { VForm } from 'vuetify/components'
 
 interface Props {
     item: HeadOffceAccount,
@@ -54,6 +54,10 @@ const setAcctBankName = () => {
                 <VBtn type="button" color="default" variant="text" v-if="props.item.id"
                     @click="remove('/services/head-office-accounts', props.item, false)">
                     삭제
+                    <VIcon end icon="tabler-trash" />
+                </VBtn>
+                <VBtn type="button" color="default" variant="text" v-else @click="props.item.id = -1">
+                    입력란 제거
                     <VIcon end icon="tabler-trash" />
                 </VBtn>
             </VCol>

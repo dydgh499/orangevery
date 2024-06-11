@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import type { FinanceVan } from '@/views/types'
+import { useRequestStore } from '@/views/request'
 import FinanceVanCard from '@/views/services/pay-gateways/FinanceVanCard.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { useRequestStore } from '@/views/request'
+import type { FinanceVan } from '@/views/types'
 
 const { finance_vans } = useStore()
 const { setNullRemove } = useRequestStore()
@@ -30,8 +30,6 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <FinanceVanCard v-for="finance_van in finance_vans" :key="finance_van.id" style="margin-top: 1em;" :item="finance_van"/>
-    <!-- 👉 submit -->
     <VCard style="margin-top: 1em;">
         <VCol class="d-flex gap-4">
             <VBtn type="button" style="margin-left: auto;" @click="addNewFinanceVan">
@@ -40,4 +38,7 @@ watchEffect(() => {
             </VBtn>
         </VCol>
     </VCard>
+    <VRow style="margin-top: 1em;">
+        <FinanceVanCard v-for="finance_van in finance_vans" :key="finance_van.id" style="margin-top: 1em;" :item="finance_van"/>
+    </VRow>
 </template>

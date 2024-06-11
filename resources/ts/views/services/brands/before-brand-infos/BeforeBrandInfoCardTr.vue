@@ -55,6 +55,10 @@ const { update, remove } = useRequestStore()
                     삭제
                     <VIcon end icon="tabler-trash" />
                 </VBtn>
+                <VBtn type="button" color="default" variant="text" v-else @click="props.item.id = -1">
+                    입력란 제거
+                    <VIcon end icon="tabler-trash" />
+                </VBtn>
             </VCol>
         </td>
     </tr>

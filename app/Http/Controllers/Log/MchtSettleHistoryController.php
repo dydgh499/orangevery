@@ -95,18 +95,22 @@ class MchtSettleHistoryController extends Controller
         return $this->response(0, $data);
     }
 
-    protected function createMerchandiseCommon($item, $data, $query)
+    protected function createMerchandiseCommon($item, $data, $target_settle_id)
     {
+        $db_count = Transaction::whereIn('id', $item['settle_transaction_idxs'])->noSettlement($target_settle_id)->count();
         $data['settle_fee']                 = $item['settle_fee'];
         $data['cancel_deposit_amount']      = $item['cancel_deposit_amount'] ? $item['cancel_deposit_amount'] : 0;
         $seltte_month = date('Ym', strtotime($data['settle_dt']));
 
-        if(count($item['settle_transaction_idxs']) === (clone $query)->noSettlement('mcht_settle_id')->count())
+        if(count($item['settle_transaction_idxs']) === $db_count)
         {
             $c_res = $this->settle_mcht_hist->create($data);
             if($c_res)
             {
-                $this->SetTransSettle($query, 'mcht_settle_id', $c_res->id);
+                $chunks = array_chunk($item['settle_transaction_idxs'], 1000);
+                foreach ($chunks as $chunk) {
+                    $res = $this->SetTransSettle(Transaction::whereIn('id', $chunk), $target_settle_id, $c_res->id);
+                }
                 $this->SetPayModuleLastSettleMonth($item['settle_pay_module_idxs'], $seltte_month);   
                 $this->SetCancelDeposit($item['cancel_deposit_idxs'], $c_res->id);
                 return $c_res->id;
@@ -127,8 +131,7 @@ class MchtSettleHistoryController extends Controller
         $data = $request->data('mcht_id');
 
         $c_id = DB::transaction(function () use($item, $data) {
-            $query = Transaction::whereIn('id', $item['settle_transaction_idxs']);
-            return $this->createMerchandiseCommon($item, $data, $query);
+            return $this->createMerchandiseCommon($item, $data, 'mcht_settle_id');
         });
         if($c_id)
             return $this->response(1, ['id'=>$c_id]);
@@ -152,8 +155,7 @@ class MchtSettleHistoryController extends Controller
             $data = $request->data('mcht_id', $item);
 
             $c_id = DB::transaction(function () use($item, $data) {
-                $query = Transaction::whereIn('id', $item['settle_transaction_idxs']);
-                return $this->createMerchandiseCommon($item, $data, $query);
+                return $this->createMerchandiseCommon($item, $data, 'mcht_settle_id');
             });
             if($c_id === 0)
                 $fail_res[] = '#'.$item['id'].' 가맹점이 정산에 실패했습니다.';

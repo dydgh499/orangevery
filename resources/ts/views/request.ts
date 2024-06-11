@@ -171,10 +171,9 @@ export const useRequestStore = defineStore('requestStore', () => {
 
     const setNullRemove = (objects: any[]) => {
         // findIndex는 배열에 1개만 존재할 경우 참조가 되지 않음
-        for (let i = 0; i < objects.length; i++) {
+        for (let i = objects.length - 1; i >= 0; i--) {
             if (objects[i].id === -1) {
-                objects.splice(i, 1)
-                return
+                objects.splice(i, 1);
             }
         }
     }

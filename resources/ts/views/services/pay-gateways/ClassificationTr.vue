@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { VForm } from 'vuetify/components'
+import { useRequestStore } from '@/views/request'
 import type { Classification } from '@/views/types'
 import { requiredValidatorV2 } from '@validators'
-import { useRequestStore } from '@/views/request'
+import { VForm } from 'vuetify/components'
 
 interface Props {
     item: Classification,
     index: number,
     base_count: number,
+    placeholder: string,
 }
 const props = defineProps<Props>()
 const vForm = ref<VForm>()
@@ -22,7 +23,7 @@ const { update, remove } = useRequestStore()
                 <VCol cols="12">
                     <VRow no-gutters>
                         <VTextField v-model="props.item.name" prepend-inner-icon="mdi-vector-intersection"
-                            placeholder="구간명 입력" persistent-placeholder :rules="[requiredValidatorV2(props.item.name, '구간')]"
+                            :placeholder="`${props.placeholder} 입력`" persistent-placeholder :rules="[requiredValidatorV2(props.item.name, '구간')]"
                             style="display: inline-block;" />
                     </VRow>
                 </VCol>
@@ -36,6 +37,10 @@ const { update, remove } = useRequestStore()
                 </VBtn>
                 <VBtn type="button" color="default" variant="text" v-if="props.item.id" @click="remove('/services/classifications', props.item, false)">
                     삭제
+                    <VIcon end icon="tabler-trash" />
+                </VBtn>
+                <VBtn type="button" color="default" variant="text" v-else @click="props.item.id = -1">
+                    입력란 제거
                     <VIcon end icon="tabler-trash" />
                 </VBtn>
             </VCol>

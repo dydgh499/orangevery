@@ -87,18 +87,21 @@ class SalesSettleHistoryController extends Controller
         return $this->response(0, $data);
     }
 
-    protected function createSalesforceCommon($item, $data, $query)
+    protected function createSalesforceCommon($item, $data, $target_settle_id)
     {
+        $db_count = Transaction::whereIn('id', $item['settle_transaction_idxs'])->noSettlement($target_settle_id)->count();
         $data['level']  = $item['level'];
         $seltte_month   = date('Ym', strtotime($data['settle_dt']));
-        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($item['level']);
 
-        if(count($item['settle_transaction_idxs']) === (clone $query)->noSettlement($target_settle_id)->count())
+        if(count($item['settle_transaction_idxs']) === $db_count)
         {
             $c_res = $this->settle_sales_hist->create($data);
             if($c_res)
             {
-                $this->SetTransSettle($query, $target_settle_id, $c_res->id);
+                $chunks = array_chunk($item['settle_transaction_idxs'], 1000);
+                foreach ($chunks as $chunk) {
+                    $res = $this->SetTransSettle(Transaction::whereIn('id', $chunk), $target_settle_id, $c_res->id);
+                }
                 $this->SetPayModuleLastSettleMonth($item['settle_pay_module_idxs'], $seltte_month);    
                 Salesforce::where('id', $item['id'])->update(['last_settle_dt' => $data['settle_dt']]);
                 return $c_res->id;
@@ -119,8 +122,8 @@ class SalesSettleHistoryController extends Controller
         $data = $request->data('sales_id');
 
         $c_id = DB::transaction(function () use($item, $data) {
-            $query = Transaction::whereIn('id', $item['settle_transaction_idxs']);
-            return $this->createSalesforceCommon($item, $data, $query);
+            [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($item['level']);
+            return $this->createSalesforceCommon($item, $data, $target_settle_id);
         });
         if($c_id)
             return $this->response(1, ['id'=>$c_id]);
@@ -143,8 +146,8 @@ class SalesSettleHistoryController extends Controller
             $data = $request->data('sales_id', $item);
 
             $c_id = DB::transaction(function () use($item, $data) {
-                $query = Transaction::whereIn('id', $item['settle_transaction_idxs']);
-                return $this->createSalesforceCommon($item, $data, $query);             
+                [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($item['level']);
+                return $this->createSalesforceCommon($item, $data, $target_settle_id);
             });
             if($c_id === 0)
                 $fail_res[] = '#'.$item['id'].' 영업점이 정산에 실패했습니다.';
