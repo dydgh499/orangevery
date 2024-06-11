@@ -162,13 +162,12 @@ class RepMerchandiseController extends Controller
             }
         }
         
-        $acct_num_groups = array_filter($acct_num_groups, function($acct_num_group) {
+        $acct_num_groups = array_values(array_filter($acct_num_groups, function($acct_num_group) {
             return $acct_num_group['settle_amount'] > 0;
-        });
-        $add_deducts = array_filter($add_deducts, function($add_deduct) use($acct_num_groups) {
+        }));
+        $add_deducts = array_values(array_filter($add_deducts, function($add_deduct) use($acct_num_groups) {
             return  array_search($add_deduct['mcht_id'], array_column($acct_num_groups, 'id')) !== false;
-        });
-
+        }));
         return [$acct_num_groups, $add_deducts];
     }
 
