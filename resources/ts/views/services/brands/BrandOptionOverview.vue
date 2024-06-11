@@ -580,7 +580,7 @@ const accountLockLimits = <Options[]>([
                         </VCardTitle>
                         <VRow class="pt-5">
                             <CreateHalfVCol :mdl="6" :mdr="6">
-                                    <template #name>금융VAN 송금 사용</template>
+                                    <template #name>지급대행 사용</template>
                                     <template #input>
                                     <VSwitch hide-details v-model="props.item.paid.use_finance_van_deposit" color="primary" />
                                 </template>

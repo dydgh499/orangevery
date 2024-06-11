@@ -72,7 +72,7 @@ onMounted(() => {
                                     삭제
                                     <VIcon end icon="tabler-trash" />
                                 </VBtn>
-                                <VBtn type="button" color="warning" v-else @click="props.item.id = -1">
+                                <VBtn type="button" color="warning" v-else @click="props.item.id = -1" style="margin-left: 1em;">
                                     입력란 제거
                                     <VIcon end icon="tabler-trash" />
                                 </VBtn>
