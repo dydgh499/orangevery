@@ -182,6 +182,7 @@ class RepMerchandiseController extends Controller
             'datas' => $acct_num_groups,
             'e_dt' => $request->e_dt,
         ]);
+        logging($acct_num_groups);
         $req->setUserResolver(function () use ($request) {
             return $request->user();
         });
