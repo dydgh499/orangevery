@@ -37,7 +37,7 @@ class AddDeduct
 
     static private function amountValidate($request)
     {
-        return abs($request->amount) < 3000000 ? true : false;
+        return abs((int)$request->amount) < 3000000 ? true : false;
     }
 
     static public function validate($request, $col)
@@ -47,7 +47,6 @@ class AddDeduct
         {
             if(self::amountValidate($request) === false)
                 return -3;
-
 
             $s_dt = Carbon::createFromFormat('Y-m-d H:i:s', '2024-06-11 09:30:00');
             $e_dt = Carbon::createFromFormat('Y-m-d H:i:s', '2024-06-11 12:00:00');
