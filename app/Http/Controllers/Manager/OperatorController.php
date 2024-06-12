@@ -133,22 +133,16 @@ class OperatorController extends Controller
             $result = AuthPhoneNum::validate((string)$request->token);
             if($result === AuthLoginCode::REQUIRE_PHONE_AUTH->value)
             {
-                $admin = $this->operators
-                    ->where('brand_id', $request->user()->brand_id)
-                    ->where('level', 40)
-                    ->where('is_delete', false)
-                    ->first();
-
                 $request = $request->merge([
-                    'phone_num' => $admin->phone_num,
-                    'brand_id'  => $admin->brand_id,
+                    'phone_num' => $request->user()->phone_num,
+                    'brand_id'  => $request->user()->brand_id,
                     'mcht_id'   => -1,
                 ]);
                 resolve(MessageController::class)->mobileCodeIssuence($request);
-                $msg = '직원 휴대폰번호 변경은 본사 휴대폰번호 인증이 필요합니다.<br>'.$admin->nick_name.'님에게 인증번호를 보냈습니다.';
+                $msg = '직원 휴대폰번호 변경은 본사 휴대폰번호 인증이 필요합니다.<br>'.$request->user()->nick_name.'님에게 인증번호를 보냈습니다.';
                 $data = [
-                    'phone_num' => $admin->phone_num,
-                    'nick_name' => $admin->nick_name
+                    'phone_num' => $request->user()->phone_num,
+                    'nick_name' => $request->user()->nick_name
                 ];
             }
             else if($result === AuthLoginCode::WRONG_ACCESS->value)
@@ -167,29 +161,34 @@ class OperatorController extends Controller
      */
     public function update(OperatorReqeust $request, int $id)
     {
-        $data = $request->data();
-        $data = $this->saveImages($request, $data, $this->imgs);
-        $query = $this->operators->where('id', $id);
-        $user = $query->first();
-
-        if((int)$data['level'] === 40)
-        {   // 본사는 전화번호 변경 불가
-            unset($data['phone_num']);
-        }
-        else if((int)$data['level'] === 35 && $user->phone_num !== $data['phone_num'])
+        if($request->user()->level > 35)
         {
-            [$result, $msg, $datas] = $this->employeePhoneValidate($request);
-            if($result !== AuthLoginCode::SUCCESS->value)
-                return $this->extendResponse($result, $msg, $datas);
-        }
+            $data = $request->data();
+            $data = $this->saveImages($request, $data, $this->imgs);
+            $query = $this->operators->where('id', $id);
+            $user = $query->first();
 
-        if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $request->user_name))
-            return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+            if((int)$data['level'] === 40)
+            {   // 본사는 전화번호 변경 불가
+                unset($data['phone_num']);
+            }
+            else if((int)$data['level'] === 35 && $user->phone_num !== $data['phone_num'])
+            {
+                [$result, $msg, $datas] = $this->employeePhoneValidate($request);
+                if($result !== AuthLoginCode::SUCCESS->value)
+                    return $this->extendResponse($result, $msg, $datas);
+            }
+
+            if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $request->user_name))
+                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+            else
+            {
+                $res = $query->update($data);
+                return $this->response($res ? 1 : 990);    
+            }
+        }
         else
-        {
-            $res = $query->update($data);
-            return $this->response($res ? 1 : 990);    
-        }
+            return $this->response(951);
     }
 
     /**
