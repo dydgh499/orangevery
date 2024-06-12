@@ -112,17 +112,11 @@ class MessageController extends Controller
                     'receiver'  => $phone_num,
                     'msg'       =>  $message,
                 ];
-                $res = post("https://api.bonaeja.com/api/msg/v1/send", $sms);
-                if($res['code'] == 500)
-                    return $this->extendResponse(1999, '통신 과정에서 에러가 발생했습니다.');
-                else
-                {
-                    $this->bonaejaDepositValidate($bonaeja, $brand['name']);
-                    return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1999, $res['body']['message']);
-                }
+                return post("https://api.bonaeja.com/api/msg/v1/send", $sms);
+                
             }
             else
-                return $this->extendResponse(1999, '문자발송 플랫폼과 연동되어있지 않습니다. 계약 이후 사용 가능합니다.');
+                return null;
         }
     }
     
@@ -132,7 +126,17 @@ class MessageController extends Controller
     public function smslinkSend(Request $request)
     {
         $validated = $request->validate(['phone_num'=>'required']);
-        return $this->send($request->phone_num, $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n".$request->url, $request->user()->brand_id);
+        $res = $this->send($request->phone_num, $request->buyer_name."님\n아래 url로 접속해 결제를 진행해주세요.\n\n".$request->url, $request->user()->brand_id);
+
+        if($res == null)
+            return $this->extendResponse(1999, '문자발송 플랫폼과 연동되어있지 않습니다. 계약 이후 사용 가능합니다.');
+        else if($res['code'] == 500)
+            return $this->extendResponse(1999, '통신 과정에서 에러가 발생했습니다.');
+        else
+        {
+            $this->bonaejaDepositValidate($bonaeja, $brand['name']);
+            return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1999, $res['body']['message']);
+        }
     }
 
     /*
@@ -147,12 +151,20 @@ class MessageController extends Controller
             if($request->mcht_id === -1 || AuthPhoneNum::limitValidate($brand, $request->phone_num, $request->mcht_id))
             {
                 $rand = random_int(100000, 999999);
-                $res = Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
+                $res = $this->send($request->phone_num, "[".$brand['name']."] 인증번호 [$rand]을(를) 입력해주세요", $request->brand_id);
 
-                if($res)
-                    return $this->send($request->phone_num, "[".$brand['name']."] 인증번호 [$rand]을(를) 입력해주세요", $request->brand_id);
+                if($res == null)
+                    return $this->extendResponse(1999, '문자발송 플랫폼과 연동되어있지 않습니다. 계약 이후 사용 가능합니다.');
+                else if($res['code'] == 500)
+                    return $this->extendResponse(1999, '통신 과정에서 에러가 발생했습니다.');
                 else
-                    return $this->extendResponse(1999, '모바일 코드 발급에 실패하였습니다.');    
+                {
+                    if($res['body']['code'] === 100)
+                        Redis::set("verify-code:".$request->phone_num, $rand, 'EX', 180);
+
+                    $this->bonaejaDepositValidate($bonaeja, $brand['name']);
+                    return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1999, $res['body']['message']);
+                }   
             }
             else
                 return $this->extendResponse(1999, '휴대폰 인증허용 회수를 초과하였습니다.');    
@@ -174,9 +186,8 @@ class MessageController extends Controller
         $phone_num = $request->phone_num;
         $verification_number = Redis::get("verify-code:".$phone_num);
 
-        $cond_1 = $request->verification_number == $verification_number;
-        $cond_2 = $request->phone_num == "01000000000" && $request->verification_number == "000000" && env('local');
-        if($cond_1 || $cond_2)
+        $cond_1 = $request->verification_number === $verification_number;
+        if($cond_1)
         {
             $token = json_encode([
                 'phone_num' => $request->phone_num,
