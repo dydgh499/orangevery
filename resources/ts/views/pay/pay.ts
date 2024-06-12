@@ -11,9 +11,9 @@ export const pay = (module_type: number) => {
     const return_url = new URL(window.location.href).origin + '/pay/result'
     const pay_url = ref(<string>(''))
     if (module_type == 2)
-        pay_url.value = process.env.NOTI_URL + '/v2/online/pay/auth'
+        pay_url.value = import.meta.env.VITE_NOTI_URL + '/v2/online/pay/auth'
     else if (module_type == 3)
-        pay_url.value = process.env.NOTI_URL + '/v2/online/pay/simple'
+        pay_url.value = import.meta.env.VITE_NOTI_URL + '/v2/online/pay/simple'
 
     const decryptQuery = () => {
         const encrypt = decodeURIComponent(route.query.e as string)
