@@ -20,7 +20,7 @@ class CheckBlockedIp
         $ip = $request->ip();
         $blocked = Redis::get("blocked:".$request->ip());
 
-        if ($blocked || in_array($ip, ['49.254.135.236','115.144.15.235'])) {
+        if ($blocked || in_array($ip, ['49.254.135.236', '115.144.15.235'])) {
             critical("차단된 IP 접속");
             return response('Your IP has been temporarily blocked due to excessive requests. Access information will be analyzed.', 429);
         }

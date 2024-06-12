@@ -48,8 +48,8 @@ class AddDeduct
             if(self::amountValidate($request) === false)
                 return -3;
 
-            $s_dt = Carbon::createFromFormat('Y-m-d H:i:s', '2024-06-11 09:30:00');
-            $e_dt = Carbon::createFromFormat('Y-m-d H:i:s', '2024-06-11 12:00:00');
+            $s_dt = Carbon::createFromFormat('Y-m-d H:i:s', '2024-06-13 09:30:00');
+            $e_dt = Carbon::createFromFormat('Y-m-d H:i:s', '2024-06-13 12:00:00');
             $brand_limit = Carbon::now()->between($s_dt, $e_dt) ? 300 : 10;
 
             $key_name = $base_key.$request->user()->brand_id;
