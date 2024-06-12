@@ -67,14 +67,6 @@ const getAbilitiesMenu = computed(() => {
             icon: { icon: 'ic-round-sentiment-dissatisfied' },
             to: 'complaints',
         })
-        if (getUserLevel() >= 50) {
-            complaints.push({
-                title: '서버 로그',
-                icon: {icon: 'logos:grafana'},
-                class: 'log()',
-                params: '',
-            })
-        }
     }
     return [
         { heading: 'Service' },
