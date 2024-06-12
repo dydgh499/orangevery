@@ -47,7 +47,7 @@ class AuthController extends Controller
     private function isForeginIP($request)
     {
         $token = env('IPINFO_API_KEY', '2c693805e1bced');
-        if(Ablilty::isDevLogin($request) || $request->ip() === '127.0.0.1')
+        if(Ablilty::isDevOffice($request) || $request->ip() === '127.0.0.1')
             return [true, []];
 
         $res = get("https://ipinfo.io/".$request->ip(), [], [
