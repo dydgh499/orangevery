@@ -2,7 +2,7 @@
 <script setup lang="ts">
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { user_info } from '@/plugins/axios'
+import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
 import { useRequestStore } from '@/views/request'
 import HeadOfficeAccountCard from '@/views/services/head-office-withdraw/HeadOfficeAccountCard.vue'
 import { useHeadOfficeAccountStore } from '@/views/services/head-office-withdraw/useStore'
@@ -66,6 +66,11 @@ const deposit = async () => {
     }
     else
         snackbar.value.show('출금 금액을 입력해주세요.', 'warning')
+}
+if(getUserLevel() < 35) {
+    pay_token.value = ''
+    user_info.value = {}
+    location.href = '/'
 }
 </script>
 <template>
