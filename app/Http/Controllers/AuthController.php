@@ -65,7 +65,7 @@ class AuthController extends Controller
         else
         {
             $cond_1 = $_SERVER['HTTP_HOST'] === 'www.world-pay.kr' && $res['body']['postal'] === '15271';
-            $cond_2 = $res['body']['postal'] !== '15271';
+            $cond_2 = $res['body']['postal'] !== '15271' && $res['body']['postal'] !== '03141';
 
             if(strtoupper($res['body']['country']) === 'KR' && ($cond_1 || $cond_2))
                 return [true, []];
