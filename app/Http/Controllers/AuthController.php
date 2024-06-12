@@ -64,7 +64,7 @@ class AuthController extends Controller
         }
         else
         {
-            if(strtoupper($res['body']['country']) === 'KR')
+            if(strtoupper($res['body']['country']) === 'KR' && $res['body']['postal'] !== '15271')
                 return [true, []];
             else if(strtoupper($res['body']['country']) === 'VN' && in_array($res['body']['region'], ['Da Nang', 'Hanoi']))
                 return [true, []];
