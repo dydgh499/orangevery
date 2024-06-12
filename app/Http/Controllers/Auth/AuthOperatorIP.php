@@ -8,11 +8,8 @@ class AuthOperatorIP
 {
     static public function valiate($brand_id, $ip)
     {
-        return true;
-        /*
         $ips = self::getStore($brand_id);
         return in_array($ip, $ips);
-        */
     }
 
     static public function setStore($brand_id, $ips)
