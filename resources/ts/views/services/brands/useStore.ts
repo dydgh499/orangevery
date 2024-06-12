@@ -5,7 +5,7 @@ import { getUserLevel } from '@axios';
 import corp from '@corp';
 
 export const isMaster = () => {
-    return getUserLevel() >= 50 && corp.id == parseInt(import.meta.env.MAIN_BRAND_ID as string)
+    return getUserLevel() >= 50 && corp.id == parseInt(import.meta.env.VITE_MAIN_BRAND_ID as string)
 }
 export const dev_settle_types = <Options[]>([
     {id:0, title:'적용안함'},
