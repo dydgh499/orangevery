@@ -16,7 +16,7 @@ class CheckDevelopOfficeIP
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Ablilty::isDevOffice($request->ip()))
+        if(Ablilty::isDevOffice($request))
             return $next($request);
         else
             return response('Your IP has been temporarily blocked due to excessive requests. Access information will be analyzed.', 403);
