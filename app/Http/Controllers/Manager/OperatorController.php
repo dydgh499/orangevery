@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager;
 use App\Models\Operator;
 use App\Http\Controllers\Ablilty\Ablilty;
 
+use App\Models\Service\OperatorIP;
 use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -81,6 +82,8 @@ class OperatorController extends Controller
             $user = $request->data();
             $user = $this->saveImages($request, $user, $this->imgs);
             $user['user_pw'] = Hash::make($request->input('user_pw'));
+            
+            
             $res = $this->operators->create($user);
             return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
         }

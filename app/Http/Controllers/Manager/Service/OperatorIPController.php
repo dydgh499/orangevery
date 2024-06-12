@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager\Service;
 
+use App\Http\Controllers\Auth\AuthOperatorIP;
 use App\Models\Service\OperatorIP;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -47,6 +48,10 @@ class OperatorIPController extends Controller
     {
         $data = $request->data();
         $res = $this->operator_ips->create($data);
+
+        $ips = $this->operator_ips->where('brand_id', $data['brand_id'])->get()->pluck('enable_ip')->all();
+        AuthOperatorIP::setStore($data['brand_id'], $ips);
+
         return $this->response($res ? 1 : 990, ['id'=>$res->id, 'brand_id'=>$data['brand_id']]);
     }
 
@@ -72,6 +77,10 @@ class OperatorIPController extends Controller
     {
         $data = $request->data();
         $res  = $this->operator_ips->where('id', $id)->update($data);
+
+        $ips = $this->operator_ips->where('brand_id', $data['brand_id'])->get()->pluck('enable_ip')->all();
+        AuthOperatorIP::setStore($data['brand_id'], $ips);
+
         return $this->response($res ? 1 : 990, ['id'=>$id, 'brand_id'=>$data['brand_id']]);
     }
 
