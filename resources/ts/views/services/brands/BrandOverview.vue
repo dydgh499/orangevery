@@ -4,10 +4,8 @@ import FileInput from '@/layouts/utils/FileInput.vue'
 import { getUserLevel } from '@/plugins/axios'
 import BeforeBrandInfoCard from '@/views/services/brands/before-brand-infos/BeforeBrandInfoCard.vue'
 import DifferentSettlementInfoCard from '@/views/services/brands/different-settlement-infos/DifferentSettlementInfoCard.vue'
-import OperatorIpCard from '@/views/services/brands/operator-ips/OperatorIpCard.vue'
 import { dev_settle_types } from '@/views/services/brands/useStore'
 import type { Brand } from '@/views/types'
-import corp from '@corp'
 import { config } from '@layouts/config'
 import { themeConfig } from '@themeConfig'
 import { requiredValidatorV2 } from '@validators'
@@ -305,6 +303,7 @@ watchEffect(() => {
                 </VCardItem>
             </VCard>
             <br>
+            <!--
             <VCard v-if="getUserLevel() === 50 && corp.id >= 1">
                 <VCardItem>
                     <VCol cols="12">
@@ -314,6 +313,7 @@ watchEffect(() => {
                     </VCol>
                 </VCardItem>
             </VCard>
+            -->
             <br>
             <VCard v-if="props.item.pv_options.paid.use_before_brand_info">
                 <VCardItem>

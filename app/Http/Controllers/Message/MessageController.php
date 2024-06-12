@@ -27,6 +27,12 @@ class MessageController extends Controller
 
     public function index(Request $request)
     {
+        return $this->response(0, [
+            'page' => 1,
+            'page_size' => 20,
+            'total' => 0,
+            'content' => []
+        ]);
         $brand = BrandInfo::getBrandById($request->user()->brand_id);
         if($brand)
         {
