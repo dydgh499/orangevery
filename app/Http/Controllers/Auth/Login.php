@@ -22,16 +22,18 @@ class Login
         if($result['user']->level >= 35)
         {
             // IP 인증
-            if(AuthOperatorIP::valiate($result['user']->brand_id, $request->ip()))
+            $brand = BrandInfo::getBrandById($result['user']->brand_id);
+            if($brand['pv_options']['paid']['use_head_office_withdraw'])
             {
-                $brand = BrandInfo::getBrandById($result['user']->brand_id);   
-                if($brand['pv_options']['paid']['use_head_office_withdraw'])
+                if(AuthOperatorIP::valiate($result['user']->brand_id, $request->ip()))
+                {
                     return AuthPhoneNum::validate($request->token);   // 휴대폰 인증
+                }
                 else
-                    return AuthLoginCode::SUCCESS->value;
+                    return AuthLoginCode::NOT_FOUND->value;
             }
             else
-                return AuthLoginCode::NOT_FOUND->value;
+                return AuthLoginCode::SUCCESS->value;
         }
         else
         {
