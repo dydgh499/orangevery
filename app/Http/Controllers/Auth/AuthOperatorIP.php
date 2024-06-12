@@ -15,7 +15,7 @@ class AuthOperatorIP
     static public function setStore($brand_id, $ips)
     {
         $key_name = "operator-ip-".$brand_id;
-        Redis::set($key_name, json_encode($ips));
+        Redis::set($key_name, json_encode($ips), 'EX', 300);
     }
 
     static public function getStore($brand_id)
