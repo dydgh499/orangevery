@@ -175,7 +175,7 @@ class MessageController extends Controller
         $verification_number = Redis::get("verify-code:".$phone_num);
 
         $cond_1 = $request->verification_number == $verification_number;
-        $cond_2 = $request->phone_num == "01000000000" && $request->verification_number == "000000";
+        $cond_2 = $request->phone_num == "01000000000" && $request->verification_number == "000000" && env('local');
         if($cond_1 || $cond_2)
         {
             $token = json_encode([
