@@ -155,7 +155,7 @@ class TransactionController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         $data = $this->transactions->where('id', $id)->first();
         if($data)
@@ -183,7 +183,7 @@ class TransactionController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function update(TransactionRequest $request, $id)
+    public function update(TransactionRequest $request, int $id)
     {
         try
         {
@@ -368,7 +368,7 @@ class TransactionController extends Controller
     /*
     * 노티 전송 -> 가맹점
     */
-    public function noti(Request $request, $id)
+    public function noti(Request $request, int $id)
     {
         [$success_res, $fail_res]  = NotiRetrySender::notiSenderWrap($id);        
         if(count($fail_res))

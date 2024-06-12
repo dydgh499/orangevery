@@ -110,7 +110,7 @@ class PostController extends Controller
      * @urlParam id integer required 공지사항 PK
      * @return \Illuminate\Http\Response
      */
-    public function update(PostRequest $request, $id)
+    public function update(PostRequest $request, int $id)
     {
         $data = $request->data();
         $res  = $this->posts->where('id', $id)->update($data);
@@ -177,7 +177,7 @@ class PostController extends Controller
         return $this->response(0, $data);
     }
     
-    public function parent(Request $request, $id)
+    public function parent(Request $request, int $id)
     {
         $getParent = function($orm, $posts, $id) use (&$getParent) {
             $parent = $orm->where('id', $id)->first();

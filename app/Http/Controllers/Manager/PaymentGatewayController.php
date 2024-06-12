@@ -65,7 +65,7 @@ class PaymentGatewayController extends Controller
      *
      * @urlParam id integer required PG사 id
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         $data = $this->pay_gateways->where('id', $id)->first();
         return $data ? $this->response(0, $data) : $this->response(1000);
@@ -78,7 +78,7 @@ class PaymentGatewayController extends Controller
      *
      * @urlParam id integer required PG사 id
      */
-    public function update(PayGatewayRequest $request, $id)
+    public function update(PayGatewayRequest $request, int $id)
     {
         $data = $request->data();
         $res = $this->pay_gateways->where('id', $id)->update($data);
@@ -90,7 +90,7 @@ class PaymentGatewayController extends Controller
      *
      * @urlParam id integer required PG사 id
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         if($this->authCheck($request->user(), $id, 35))
         {
@@ -125,7 +125,7 @@ class PaymentGatewayController extends Controller
      *
      * @urlParam id integer required PG사 id
      */
-    public function saleSlip(Request $request, $id)
+    public function saleSlip(Request $request, int $id)
     {
         $cols = ['id', 'pg_type' ,'company_name', 'business_num', 'rep_name', 'addr'];      
         $datas = $this->pay_gateways->where('id', $id)->get($cols);

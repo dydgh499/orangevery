@@ -160,7 +160,7 @@ class SalesforceController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         $data = $this->salesforces->where('id', $id)
             ->with(['underAutoSettings'])
@@ -183,7 +183,7 @@ class SalesforceController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function update(SalesforceRequest $request, $id)
+    public function update(SalesforceRequest $request, int $id)
     {
         $data = $request->data();
         $data = $this->saveImages($request, $data, $this->imgs);
@@ -368,7 +368,7 @@ class SalesforceController extends Controller
             return $this->response(951);
     }
 
-    public function mchtBatchFee(Request $request, $id)
+    public function mchtBatchFee(Request $request, int $id)
     {
         $validated = $request->validate(['mcht_batch_fee'=>'required']);
         $res = $this->salesforces

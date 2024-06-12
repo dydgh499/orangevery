@@ -79,7 +79,7 @@ class MchtBlacklistController extends Controller
      * @urlParam id integer required 정기등록카드 PK
      * @return \Illuminate\Http\Response
      */
-    public function update(MchtBlacklistRequest $request, $id)
+    public function update(MchtBlacklistRequest $request, int $id)
     {
         $data = $request->data();
         $res  = $this->mcht_blacklists->where('id', $id)->update($data);

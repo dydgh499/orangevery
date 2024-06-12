@@ -62,7 +62,7 @@ class OperatorController extends Controller
             });
         if($request->is_lock)
             $query = $query->where('is_lock', 1);
-        if($request->user()->level() < 40)
+        if($request->user()->level < 40)
             $query = $query->where('id', $request->user()->id);
 
         $data = $this->getIndexData($request, $query);
@@ -98,7 +98,7 @@ class OperatorController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         if($request->user()->level() === 35 && $request->user()->id !== $id)
             $this->response(951);
@@ -116,13 +116,13 @@ class OperatorController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function update(OperatorReqeust $request, $id)
+    public function update(OperatorReqeust $request, int $id)
     {
         $data = $request->data();
         $data = $this->saveImages($request, $data, $this->imgs);
         $query = $this->operators->where('id', $id);
+        $user = $query->first(['user_name', 'phone_num']);
 
-        $user = $query->first(['user_name']);
         if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $request->user_name))
             return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
         else
@@ -137,7 +137,7 @@ class OperatorController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         $res = $this->delete($this->operators->where('id', $id));
         return $this->response($res ? 1 : 990, ['id'=>$id]);

@@ -115,7 +115,7 @@ class CancelDepositController extends Controller
      * @urlParam id integer required 정기등록카드 PK
      * @return \Illuminate\Http\Response
      */
-    public function update(CancelDepositRequest $request, $id)
+    public function update(CancelDepositRequest $request, int $id)
     {
         $data = $request->data();
         $data['settle_dt'] = $this->getSettleDateByTransId($data['trans_id'], $data['deposit_dt']);

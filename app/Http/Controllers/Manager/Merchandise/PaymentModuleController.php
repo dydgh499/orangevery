@@ -163,7 +163,7 @@ class PaymentModuleController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         if($this->authCheck($request->user(), $id, 13))
         {
@@ -181,7 +181,7 @@ class PaymentModuleController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function update(PayModuleRequest $request, $id)
+    public function update(PayModuleRequest $request, int $id)
     {
         // 같은 브랜드에서 똑같은 값이 존재할 떄
         $isDuplicateId = function($bid, $pid, $key, $value) {
@@ -320,7 +320,7 @@ class PaymentModuleController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function saleSlip(Request $request, $id)
+    public function saleSlip(Request $request, int $id)
     {
         $cols = [
             'merchandises.addr',

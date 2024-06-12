@@ -58,7 +58,7 @@ class SpecifiedTimeDisablePaymentController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         $data = $this->specified_time_disable_payments->where('id', $id)->first();
         return $data ? $this->response(0, $data) : $this->response(1000);
@@ -71,7 +71,7 @@ class SpecifiedTimeDisablePaymentController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function update(SpecifiedTimeDisablePaymentRequest $request, $id)
+    public function update(SpecifiedTimeDisablePaymentRequest $request, int $id)
     {
         $data = $request->data();
         $res = $this->specified_time_disable_payments->where('id', $id)->update($data);
@@ -83,7 +83,7 @@ class SpecifiedTimeDisablePaymentController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         $res = $this->specified_time_disable_payments->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);

@@ -173,7 +173,7 @@ class HolidayController extends Controller
      *
      * @urlParam id integer required 브랜드 PK
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         $data = $this->holidays->where('id', $id)->first();
         return $this->response($data ? 0 : 1000, $data);
@@ -184,7 +184,7 @@ class HolidayController extends Controller
      *
      * @urlParam id integer required 브랜드 PK
      */
-    public function update(HolidayRequest $request, $id)
+    public function update(HolidayRequest $request, int $id)
     {
         $res = $this->holidays->where('id', $id)->update($request->data());
         return $this->response($res ? 1 : 990, ['id'=>$id]);
@@ -197,7 +197,7 @@ class HolidayController extends Controller
      *
      * @urlParam id integer required 브랜드 PK
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         $res = $this->holidays->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);

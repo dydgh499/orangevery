@@ -125,12 +125,12 @@ class FeeChangeHistoryController extends Controller
         return $this->response($res ? 4 : 990);
     }
 
-    public function deleteMerchandise(Request $request, $id)
+    public function deleteMerchandise(Request $request, int $id)
     {
         return $this->deleteHistory($this->mcht_fee_histories, '가맹점 수수료율', $id);
     }
 
-    public function deleteSalesforce(Request $request, $id)
+    public function deleteSalesforce(Request $request, int $id)
     {
         return $this->deleteHistory($this->sf_fee_histories, '영업점 수수료율', $id);
     }

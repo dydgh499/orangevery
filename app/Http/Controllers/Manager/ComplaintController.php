@@ -96,7 +96,7 @@ class ComplaintController extends Controller
      * @urlParam id integer required 공지사항 PK
      * @return \Illuminate\Http\Response
      */
-    public function update(ComplaintRequest $request, $id)
+    public function update(ComplaintRequest $request, int $id)
     {
         $data = $request->data();
         $res  = $this->complaints->where('id', $id)->update($data);

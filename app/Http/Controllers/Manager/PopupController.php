@@ -93,7 +93,7 @@ class PopupController extends Controller
      * @urlParam id integer required 팝업 PK
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         $data = $this->popups->where('id', $id)->first();
         return $this->response($data ? 0 : 1000, $data);
@@ -107,7 +107,7 @@ class PopupController extends Controller
      * @urlParam id integer required 팝업 PK
      * @return \Illuminate\Http\Response
      */
-    public function update(PopupRequest $request, $id)
+    public function update(PopupRequest $request, int $id)
     {
         $data = $request->data();
         $result = $this->popups->where('id', $id)->update($data);
@@ -122,7 +122,7 @@ class PopupController extends Controller
      * @urlParam id integer required 팝업 PK
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         $result = $this->delete($this->popups->where('id', $id));
         return $this->response($result);

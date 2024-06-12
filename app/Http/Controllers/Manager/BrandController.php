@@ -131,15 +131,7 @@ class BrandController extends Controller
      */
     public function store(BrandRequest $request)
     {
-        if($request->user()->tokenCan(35))
-        {
-            $data = $request->data();
-            $data = $this->saveImages($request, $data, $this->imgs);
-            $res = $this->brands->create($data);
-            return $this->response($res ? 1 : 990, ['id'=>$res->id]);
-        }
-        else
-            return $this->response(951);
+        return $this->response(951);
     }
 
     /**
@@ -149,15 +141,21 @@ class BrandController extends Controller
      *
      * @urlParam id integer required 브랜드 PK
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
-        $with = ['beforeBrandInfos', 'differentSettlementInfos'];
-        if($request->user()->tokenCan(50) && $request->ip() === '183.107.112.147')
-            $with[] = 'operatorIps';
-        $data = $this->brands->where('id', $id)
-            ->with($with)
-            ->first();
-        return $this->response($data ? 0 : 1000, $data);
+        if($request->user()->brand_id !== $id)
+            return $this->response(951);
+        else
+        {
+            $with = ['beforeBrandInfos', 'differentSettlementInfos'];
+            if($request->user()->tokenCan(50) && $request->ip() === '183.107.112.147')
+                $with[] = 'operatorIps';
+
+            $data = $this->brands->where('id', $id)
+                ->with($with)
+                ->first();
+            return $this->response($data ? 0 : 1000, $data);
+        }
     }
 
     /**
@@ -167,21 +165,26 @@ class BrandController extends Controller
      *
      * @urlParam id integer required 브랜드 PK
      */
-    public function update(BrandRequest $request, $id)
+    public function update(BrandRequest $request, int $id)
     {
-        $data = $request->data();
-        $data = $this->saveImages($request, $data, $this->imgs);
-        
-        $query  = $this->brands->where('id', $id);
-        $brand = $query->first();
-        $res = $query->update($data);
-        if($res)
+        if($request->ip() === '183.107.112.147')
         {
-            $b_info = json_encode($query->with(['beforeBrandInfos'])->first());
-            Redis::set($brand->dns, $b_info, 'EX', 300);    
-            Redis::set("brand-info-$id", $b_info, 'EX', 300);
+            $data = $request->data();
+            $data = $this->saveImages($request, $data, $this->imgs);
+            
+            $query  = $this->brands->where('id', $id);
+            $brand = $query->first();
+            $res = $query->update($data);
+            if($res)
+            {
+                $b_info = json_encode($query->with(['beforeBrandInfos'])->first());
+                Redis::set($brand->dns, $b_info, 'EX', 300);    
+                Redis::set("brand-info-$id", $b_info, 'EX', 300);
+            }
+            return $this->response($res ? 1 : 990, ['id'=>$id]);    
         }
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
+        else
+            return $this->response(951);
     }
 
     /**
@@ -191,7 +194,7 @@ class BrandController extends Controller
      *
      * @urlParam id integer required 브랜드 PK
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         $brand = $this->brands->where('id', $id)->first();
         $res = $this->delete($this->brands->where('id', $id), ['logo_img', 'favicon_img']);

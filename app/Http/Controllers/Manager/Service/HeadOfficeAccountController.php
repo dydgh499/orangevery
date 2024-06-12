@@ -81,7 +81,7 @@ class HeadOfficeAccountController extends Controller
      * @urlParam id integer required 정기등록카드 PK
      * @return \Illuminate\Http\Response
      */
-    public function update(HeadOfficeAccountRequest $request, $id)
+    public function update(HeadOfficeAccountRequest $request, int $id)
     {
         /*
             $data = $request->data();

@@ -75,7 +75,7 @@ class BeforeBrandInfoController extends Controller
      * @urlParam id integer required 정기등록카드 PK
      * @return \Illuminate\Http\Response
      */
-    public function update(BeforeBrandInfoRequest $request, $id)
+    public function update(BeforeBrandInfoRequest $request, int $id)
     {
         $data = $request->data();
         $res  = $this->before_brand_infos->where('id', $id)->update($data);

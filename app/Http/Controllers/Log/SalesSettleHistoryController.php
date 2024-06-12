@@ -169,7 +169,7 @@ class SalesSettleHistoryController extends Controller
     /*
     * 정산이력 - 정산취소
     */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {        
         if($request->use_finance_van_deposit && $request->current_status)
             return $this->extendResponse(2000, "입금완료된 정산건은 정산취소 할수 없습니다.");
@@ -216,7 +216,7 @@ class SalesSettleHistoryController extends Controller
     /**
      * 입금상태 변경
      */
-    public function setDeposit(Request $request, $id)
+    public function setDeposit(Request $request, int $id)
     {
         if($request->user()->tokenCan(35))
         {
@@ -264,7 +264,7 @@ class SalesSettleHistoryController extends Controller
     /**
      * 추가차감
      */
-    public function addDeduct(Request $request, $id)
+    public function addDeduct(Request $request, int $id)
     {
         return $this->addDeductHistory($request, $id, $this->settle_sales_hist);
     }
@@ -272,7 +272,7 @@ class SalesSettleHistoryController extends Controller
     /**
      * 계좌정보 연동
      */
-    public function linkAccount(Request $request, $id)
+    public function linkAccount(Request $request, int $id)
     {
         $code = $this->linkAccountHistory($request, $id, $this->settle_sales_hist, new Salesforce);
         return $this->response($code);

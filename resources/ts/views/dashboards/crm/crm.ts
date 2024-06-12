@@ -1,5 +1,5 @@
 import type { Danger, LockedUser, MonthlyTransChart, OperatorHistory, UpSideChart } from '@/views/types'
-import { axios } from '@axios'
+import { axios, getUserLevel } from '@axios'
 import { orderBy } from 'lodash'
 
 export const useCRMStore = defineStore('CRMStore', () => {
@@ -14,11 +14,6 @@ export const useCRMStore = defineStore('CRMStore', () => {
     const getGraphData = async() => {
         try {
             const r1 = await axios.get('/api/v1/manager/dashsboards/monthly-transactions-analysis')
-            const r2 = await axios.get('/api/v1/manager/dashsboards/upside-merchandises-analysis')
-            const r3 = await axios.get('/api/v1/manager/dashsboards/upside-salesforces-analysis')
-            const r4 = await axios.get('/api/v1/manager/dashsboards/recent-danger-histories')
-            const r5 = await axios.get('/api/v1/manager/dashsboards/recent-operator-histories')
-            const r6 = await axios.get('/api/v1/manager/dashsboards/locked-users')
             
             const sortedKeys = orderBy(Object.keys(r1.data), [], ['desc']);
             const sortedData = sortedKeys.reduce((acc, key) => {
@@ -26,11 +21,23 @@ export const useCRMStore = defineStore('CRMStore', () => {
               return acc;
             }, {} as Record<string, typeof r1.data["2023-06"]>);
             Object.assign(monthly_transactions.value, sortedData)
+
+            const [r2, r3, r4] = await Promise.all([
+                axios.get('/api/v1/manager/dashsboards/upside-merchandises-analysis'),
+                axios.get('/api/v1/manager/dashsboards/upside-salesforces-analysis'),
+                axios.get('/api/v1/manager/dashsboards/recent-danger-histories'),
+            ])
             Object.assign(upside_merchandises.value, r2.data)
             Object.assign(upside_salesforces.value, r3.data)
             Object.assign(danger_histories.value, r4.data.content)
-            Object.assign(operator_histories.value, r5.data.content)
-            Object.assign(locked_users.value, r6.data.content)
+            if(getUserLevel() >= 35) {
+                const [r5, r6] = await Promise.all([
+                    axios.get('/api/v1/manager/dashsboards/recent-operator-histories'),
+                    axios.get('/api/v1/manager/dashsboards/locked-users'),
+                ])
+                Object.assign(operator_histories.value, r5.data.content)
+                Object.assign(locked_users.value, r6.data.content)    
+            }
         }
         catch (e) {
             const r = errorHandler(e)

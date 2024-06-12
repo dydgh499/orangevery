@@ -237,7 +237,7 @@ class MerchandiseController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         $with = [];
         $b_info = BrandInfo::getBrandById($request->user()->brand_id);
@@ -261,7 +261,7 @@ class MerchandiseController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function update(MerchandiseRequest $request, $id)
+    public function update(MerchandiseRequest $request, int $id)
     {
         $data = $request->data();
         if($this->isExistMutual($this->merchandises->where('id', '!=', $id), $request->user()->brand_id, 'mcht_name', $data['mcht_name']))
@@ -429,7 +429,7 @@ class MerchandiseController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function saleSlip(Request $request, $id)
+    public function saleSlip(Request $request, int $id)
     {
         $cols = [
             'id', 'addr', 'business_num', 'resident_num', 'mcht_name', 'user_name',

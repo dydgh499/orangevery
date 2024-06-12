@@ -87,7 +87,7 @@ class NotiUrlController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         $data = $this->noti_urls->where('id', $id)->first();
         return $data ? $this->response(0, $data) : $this->response(1000);
@@ -100,7 +100,7 @@ class NotiUrlController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function update(NotiRequest $request, $id)
+    public function update(NotiRequest $request, int $id)
     {
         $data = $request->data();
         $before = $this->noti_urls->where('id', $id)->first();

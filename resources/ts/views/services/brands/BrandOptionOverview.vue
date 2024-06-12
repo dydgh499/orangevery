@@ -297,7 +297,7 @@ const accountLockLimits = <Options[]>([
                 </VCardItem>
             </VCard>
         </VCol>
-        <template v-if="getUserLevel() === 50">
+        <template v-if="getUserLevel() === 50 && corp.id === 1">
             <VCol cols="12" :md="4">
                 <VCard>
                     <VCardItem>

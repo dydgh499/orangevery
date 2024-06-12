@@ -60,7 +60,7 @@ class UnderAutoSettingController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         $data = $this->under_auto_settings->where('id', $id)->first();
         return $data ? $this->response(0, $data) : $this->response(1000);
@@ -73,7 +73,7 @@ class UnderAutoSettingController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function update(UnderAutoSettingRequest $request, $id)
+    public function update(UnderAutoSettingRequest $request, int $id)
     {
         $data = $request->data();
         $res = $this->under_auto_settings->where('id', $id)->update($data);
@@ -85,7 +85,7 @@ class UnderAutoSettingController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         $res = $this->under_auto_settings->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);

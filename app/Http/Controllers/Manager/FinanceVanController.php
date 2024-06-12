@@ -69,7 +69,7 @@ class FinanceVanController extends Controller
      *
      * @urlParam id integer required 금융 VAN PK
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         $data = $this->finance_vans->where('id', $id)->first();
         return $data ? $this->response(0, $data) : $this->response(1000);
@@ -82,7 +82,7 @@ class FinanceVanController extends Controller
      *
      * @urlParam id integer required 금융 VAN PK
      */
-    public function update(FinanceRequest $request, $id)
+    public function update(FinanceRequest $request, int $id)
     {
         $data = $request->data();
         $before = $this->finance_vans->where('id', $id)->first();

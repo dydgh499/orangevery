@@ -66,7 +66,7 @@ class ClassificationController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, int $id)
     {
         $data = $this->classifications->where('id', $id)->first();
         return $data ? $this->response(0, $data) : $this->response(1000);
@@ -79,7 +79,7 @@ class ClassificationController extends Controller
      *
      * @urlParam id integer required 유저 PK
      */
-    public function update(ClassificationReqeust $request, $id)
+    public function update(ClassificationReqeust $request, int $id)
     {
         $data = $request->data();
         $before = $this->classifications->where('id', $id)->first()->toArray();

@@ -123,7 +123,7 @@ class DangerTransController extends Controller
      * 확인/미확인 처리
      *
      */
-    public function checked(Request $request, $id)
+    public function checked(Request $request, int $id)
     {
         $validated = $request->validate(['checked'=>'required']);
         $res = $this->danger_transactions
@@ -147,7 +147,7 @@ class DangerTransController extends Controller
      *
      * @urlParam id integer required 이상거래 PK
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, int $id)
     {
         if($this->authCheck($request->user(), $id, 35))
         {
