@@ -27,6 +27,7 @@ class AuthOperatorIP
         else
         {
             $ips = OperatorIP::where('brand_id', $brand_id)->get()->pluck('enable_ip')->all();
+            logging($ips, 'test');
             self::setStore($brand_id, $ips);
             return $ips;
         }

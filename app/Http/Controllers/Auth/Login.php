@@ -30,7 +30,10 @@ class Login
                     return AuthPhoneNum::validate($request->token);   // 휴대폰 인증
                 }
                 else
+                {
+                    error(['ip'=>$request->ip(), 'all'=>$request->all()], '등록되지 않은 IP 접근');
                     return AuthLoginCode::NOT_FOUND->value;
+                }
             }
             else
                 return AuthLoginCode::SUCCESS->value;
