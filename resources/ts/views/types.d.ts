@@ -187,6 +187,10 @@ export interface UnderAutoSetting {
 
 export interface Operator extends BasePropertie{
     level: number
+    token?: string,
+    result?: number,
+    appr_num?: number,
+    above_phone_num?: number,
 }
 
 export interface PayModule {

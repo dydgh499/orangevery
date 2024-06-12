@@ -35,9 +35,8 @@ const hideConditions = () => {
     const cond_5 = props.path === 'services/pay-gateways' ? false : true
     const cond_6 = props.path === 'services/bulk-register' ? false : true
     const cond_7 = props.path === 'posts/view' ? false : true
-    const cond_8 = props.path === 'services/brands' && corp.id === 1 && getUserLevel() >= 50 ? true : false
 
-    return cond_1 && cond_2 && cond_3 && cond_4 && cond_5 && cond_6 && cond_7 && cond_8
+    return cond_1 && cond_2 && cond_3 && cond_4 && cond_5 && cond_6 && cond_7
 }
 
 const authHideConditions = () => {
@@ -55,7 +54,14 @@ const authHideConditions = () => {
             return isAbleModiy(props.id as number)
     }
     else
-        return true
+    {
+        if(props.path === 'services/brands' && (corp.id === 1 && getUserLevel() >= 50) === false)
+            return false
+        else if(props.path === 'services/operators' && getUserLevel() < 40)
+            return false
+        else
+            return true
+    }
 }
 
 watchEffect(() => {

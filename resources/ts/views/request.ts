@@ -66,6 +66,10 @@ export const useRequestStore = defineStore('requestStore', () => {
                     setTimeout(function () { router.replace(back_url) }, 1000)
             }
         }
+        else if(res.data.code === 956) {
+            params.result = res.data.code
+            params.above_phone_num = res.data.data.phone_num
+        }
     }
 
     const request = async (params: any, use_snackbar: boolean = true) => {

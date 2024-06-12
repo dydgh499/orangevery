@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import { isAbleModiy } from '@axios'
 import Preview from '@/layouts/utils/Preview.vue'
-import { Pagination, EffectCoverflow, Navigation } from 'swiper'
-import { Swiper, SwiperSlide } from 'swiper/vue'
+import { isAbleModiy } from '@axios'
+import { EffectCoverflow, Navigation, Pagination } from 'swiper'
 import 'swiper/css'
-import 'swiper/css/pagination'
-import 'swiper/css/navigation';
 import 'swiper/css/effect-coverflow'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import { Swiper, SwiperSlide } from 'swiper/vue'
 
 interface Props {
     items: any[],

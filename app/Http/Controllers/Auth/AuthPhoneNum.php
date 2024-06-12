@@ -20,6 +20,7 @@ class AuthPhoneNum
     // 휴대폰 토큰 검증
     static function validate($token)
     {
+        logging(['token'=>$token]);
         if($token === '')
             return AuthLoginCode::REQUIRE_PHONE_AUTH->value;
         else

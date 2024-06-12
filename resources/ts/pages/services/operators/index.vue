@@ -23,7 +23,7 @@ const showAvatar = (preview: string) => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="ID 및 성명 검색" :metas="[]" :add="true" add_name="운영자" :date_filter_type="DateFilters.NOT_USE">
+        <BaseIndexView placeholder="ID 및 성명 검색" :metas="[]" :add="getUserLevel() > 35 ? true : false" add_name="운영자" :date_filter_type="DateFilters.NOT_USE">
             <template #filter>
             </template>
             <template #index_extra_field>
