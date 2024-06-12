@@ -61,7 +61,10 @@ class OperatorController extends Controller
                     ->orWhere('nick_name', 'like', "%$search%");
             });
         if($request->is_lock)
-            $query = $query->where('is_lock', 1);    
+            $query = $query->where('is_lock', 1);
+        if($request->user()->level() < 40)
+            $query = $query->where('id', $request->user()->id);
+
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }
@@ -82,8 +85,7 @@ class OperatorController extends Controller
             $user = $request->data();
             $user = $this->saveImages($request, $user, $this->imgs);
             $user['user_pw'] = Hash::make($request->input('user_pw'));
-            
-            
+
             $res = $this->operators->create($user);
             return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
         }
@@ -98,8 +100,13 @@ class OperatorController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $data = $this->operators->where('id', $id)->first();
-        return $data ? $this->response(0, $data) : $this->response(1000);
+        if($request->user()->level() === 35 && $request->user()->id !== $id)
+            $this->response(951);
+        else
+        {
+            $data = $this->operators->where('id', $id)->first();
+            return $data ? $this->response(0, $data) : $this->response(1000);    
+        }
     }
 
     /**

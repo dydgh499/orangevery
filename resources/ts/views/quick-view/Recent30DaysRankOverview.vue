@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { MchtRecentTransaction } from '@/views/types'
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
+import type { MchtRecentTransaction } from '@/views/types'
 
 interface Props {
     transactions: MchtRecentTransaction[],
@@ -12,7 +12,7 @@ let end = '2023-01-01'
 const is_skeleton = ref(true)
 
 watchEffect(() => {
-    if(props.transactions)
+    if(props.transactions && props.transactions.length > 0)
     {
         first = props.transactions[0].mcht_name as string
         end = props.transactions[props.transactions.length - 1].mcht_name as string

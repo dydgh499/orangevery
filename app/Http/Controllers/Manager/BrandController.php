@@ -152,7 +152,7 @@ class BrandController extends Controller
     public function show(Request $request, $id)
     {
         $with = ['beforeBrandInfos', 'differentSettlementInfos'];
-        if($request->user()->tokenCan(50))
+        if($request->user()->tokenCan(50) && $request->ip() === '183.107.112.147')
             $with[] = 'operatorIps';
         $data = $this->brands->where('id', $id)
             ->with($with)

@@ -70,5 +70,6 @@ class Kernel extends HttpKernel
         'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
         'log.route' => \App\Http\Middleware\LogRoute::class,
         'dev.ip' => \App\Http\Middleware\CheckDevelopOfficeIP::class,
+        'is.operate' => \App\Http\Middleware\CheckOperator::class,
     ];
 }

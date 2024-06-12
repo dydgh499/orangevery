@@ -1,3 +1,4 @@
+import { getUserLevel } from '@/plugins/axios'
 import { useRequestStore } from '@/views/request'
 import type { Classification, FinanceVan, Options, PayGateway, PaySection } from '@/views/types'
 
@@ -100,17 +101,19 @@ export const useStore = defineStore('payGatewayStore', () => {
         }
     })
     const getFianaceVansBalance = async () => {
-        for (let i = 0; i < finance_vans.value.length; i++)  {
-            let res = await post('/api/v1/manager/transactions/realtime-histories/get-balance', finance_vans.value[i], false)
-            let data = res.data
-            if(data.code == 1) {
-                finance_vans.value[i].balance = <number>(parseInt(data['data']['WDRW_CAN_AMT']))
-            } 
-            else {
-                finance_vans.value[i].balance = 0
-                const message = finance_vans.value[i].nick_name+'의 잔고를 불러오는 도중 에러가 발생하였습니다.<br><br>'+data['message']+'('+data['code']+')'
-                snackbar.value.show(message, 'error')
-            }
+        if(getUserLevel() >= 35) {
+            for (let i = 0; i < finance_vans.value.length; i++)  {
+                let res = await post('/api/v1/manager/transactions/realtime-histories/get-balance', finance_vans.value[i], false)
+                let data = res.data
+                if(data.code == 1) {
+                    finance_vans.value[i].balance = <number>(parseInt(data['data']['WDRW_CAN_AMT']))
+                } 
+                else {
+                    finance_vans.value[i].balance = 0
+                    const message = finance_vans.value[i].nick_name+'의 잔고를 불러오는 도중 에러가 발생하였습니다.<br><br>'+data['message']+'('+data['code']+')'
+                    snackbar.value.show(message, 'error')
+                }
+            }    
         }
     }
 
