@@ -11,6 +11,7 @@ use App\Http\Requests\Manager\BrandRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
 
+use App\Http\Controllers\Ablilty\Ablilty;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
@@ -143,12 +144,15 @@ class BrandController extends Controller
      */
     public function show(Request $request, int $id)
     {
-        if($request->user()->brand_id !== $id && ($request->user()->tokenCan(50) && $request->ip() === '183.107.112.147'))
+        $cond_1 = Ablilty::isDevLogin($request);
+        $cond_2 = ($request->user()->brand_id !== $id);
+
+        if($cond_1 === false && $cond_2)
             return $this->response(951);
         else
         {
             $with = ['beforeBrandInfos', 'differentSettlementInfos'];
-            if($request->user()->tokenCan(50) && $request->ip() === '183.107.112.147')
+            if($cond_1)
                 $with[] = 'operatorIps';
 
             $data = $this->brands->where('id', $id)
@@ -167,7 +171,8 @@ class BrandController extends Controller
      */
     public function update(BrandRequest $request, int $id)
     {
-        if($request->ip() === '183.107.112.147')
+        $cond_1 = Ablilty::isDevLogin($request);
+        if($cond_1)
         {
             $data = $request->data();
             $data = $this->saveImages($request, $data, $this->imgs);

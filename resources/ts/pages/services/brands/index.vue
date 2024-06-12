@@ -1,21 +1,19 @@
 <script setup lang="ts">
-import { useSearchStore, dev_settle_types, isMaster } from '@/views/services/brands/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { dev_settle_types, isMaster, useSearchStore } from '@/views/services/brands/useStore'
 import { DateFilters } from '@core/enums'
 
 const { store, head, exporter, boolToText, metas } = useSearchStore()
+
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
-const is_add = ref(isMaster() ? true : false)
-if(is_add)
-    store.params.page_size = 200
+
+store.params.page_size = isMaster() ? 200 : 1
 </script>
 <template>
-    <BaseIndexView placeholder="서비스명" :metas="metas" :add="is_add" add_name="서비스" :date_filter_type="DateFilters.NOT_USE">
+    <BaseIndexView placeholder="서비스명" :metas="metas" :add="false" add_name="서비스" :date_filter_type="DateFilters.NOT_USE">
         <template #index_extra_field>
-            <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" v-if="is_add"/>
         </template>
         <template #headers>
             <tr>

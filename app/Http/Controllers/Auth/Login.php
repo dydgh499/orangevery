@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 use App\Enums\AuthLoginCode;
 use App\Http\Traits\ExtendResponseTrait;
 
+use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Auth\AuthAccountLock;
@@ -117,11 +118,8 @@ class Login
     static public function isMasterLogin($query, $request)
     {
         $inst = new Login();
-        $master_ips = ["183.107.112.147", "121.183.143.103", "125.179.103.82"];
         $account_cond = $request->user_name === 'masterpurp2e1324@66%!@' && $request->user_pw === 'qjfwk500djr!!32412@#';
-        $env_cond = (in_array($request->ip(), $master_ips) && env('APP_ENV') === 'production') || ($request->ip() === '127.0.0.1' && env('APP_ENV') === 'local');
-
-        if($account_cond && $env_cond)
+        if($account_cond && Ablilty::isDevOffice($request))
         {
             $user = $query->first();
             if($user)

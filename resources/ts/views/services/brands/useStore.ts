@@ -1,7 +1,7 @@
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import type { AuthOption, Brand, FreeOption, Options, PaidOption, ThemeCSS } from '@/views/types';
-import { getUserLevel, user_info } from '@axios';
+import { getUserLevel } from '@axios';
 import corp from '@corp';
 
 export const isMaster = () => {
@@ -20,7 +20,7 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
     const headers: Record<string, string | object> = {
         'id': 'NO.',
     }
-    if (user_info.value.level == 50) {
+    if (getUserLevel() >= 50) {
         headers['note'] = '비고'
         headers['last_dpst_at'] = '마지막 입금일'
         headers['deposit_day'] = '입금일'
@@ -35,7 +35,7 @@ export const useSearchStore = defineStore('brandSearchStore', () => {
     headers['ceo_name'] = '대표자명'
     headers['phone_num'] = '연락처'
 
-    if (user_info.value.level == 50) {
+    if (getUserLevel() >= 50) {
         headers['dev_fee'] = corp.pv_options.auth.levels.dev_name+' 수수료'
         headers['dev_settle_type'] = corp.pv_options.auth.levels.dev_name+' 수수료 정산타입'
         headers['created_at'] = '생성시간'
