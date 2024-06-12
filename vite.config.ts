@@ -11,8 +11,10 @@ import { VitePWA } from 'vite-plugin-pwa'
 import Layouts from 'vite-plugin-vue-layouts'
 import vuetify from 'vite-plugin-vuetify'
 
-// @ts-expect-error Known error: https://github.com/sxzz/unplugin-vue-macros/issues/257#issuecomment-1410752890
+import dotenv from 'dotenv'
 import DefineOptions from 'unplugin-vue-define-options/vite'
+
+dotenv.config({ path: '../.env' })
 
 // https://vitejs.dev/config/
 export default defineConfig({
