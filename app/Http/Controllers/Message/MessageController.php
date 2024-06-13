@@ -140,7 +140,7 @@ class MessageController extends Controller
             return $this->extendResponse(1999, '통신 과정에서 에러가 발생했습니다.');
         else
         {
-            $brand = BrandInfo::getBrandById($request->brand_id);
+            $brand = BrandInfo::getBrandById($request->user()->brand_id);
             $bonaeja = $brand['pv_options']['free']['bonaeja'];
             $this->bonaejaDepositValidate($bonaeja, $brand['name']);
             return $this->extendResponse($res['body']['code'] == 100 ? 0 : 1999, $res['body']['message']);
