@@ -320,11 +320,11 @@ Route::prefix('v1')->group(function() {
             });
             Route::middleware(['is.operate'])->group(function() {
                 Route::post('regular-credit-cards/bulk-register', [RegularCreditCardController::class, 'bulkRegister']);
-                Route::apiResource('regular-credit-cards', RegularCreditCardController::class);     
                 Route::post('noti-urls/bulk-register', [NotiUrlController::class, 'bulkRegister']);
                 Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisablePaymentController::class);
                 Route::apiResource('sub-business-registrations', SubBusinessRegistrationController::class);         
             });
+            Route::apiResource('regular-credit-cards', RegularCreditCardController::class);     
             Route::apiResource('noti-urls', NotiUrlController::class); 
         });
         
