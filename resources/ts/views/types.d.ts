@@ -86,6 +86,7 @@ export interface UserPropertie extends BasePropertie, Bank, Contract {
 
     resident_num_front: string,
     resident_num_back: string,
+    use_syslink?: boolean,
     syslink?: any,
 }
 

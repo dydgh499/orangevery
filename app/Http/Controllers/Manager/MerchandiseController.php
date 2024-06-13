@@ -215,7 +215,7 @@ class MerchandiseController extends Controller
                 $user = $this->saveImages($request, $user, $this->imgs);
                 $user['user_pw'] = Hash::make($request->input('user_pw'));
 
-                if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request))
+                if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request) && (int)$request->use_syslink)
                 {
                     $res = SysLink::create($user);
                     if($res['code'] !== 'SUCCESS')
@@ -278,7 +278,7 @@ class MerchandiseController extends Controller
                 $data = $this->saveImages($request, $data, $this->imgs);
                 // -- update syslink
                 $b_info = BrandInfo::getBrandById($request->user()->brand_id);
-                if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request))
+                if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request) && (int)$request->use_syslink)
                 {
                     if($request->syslink['code'] !== 'SUCCESS')
                         $res = SysLink::create($data);

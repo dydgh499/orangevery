@@ -323,10 +323,20 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                 </VCardItem>
-                <VCardItem v-if="corp.pv_options.paid.use_syslink && props.is_mcht && props.id">
-                    <VCardTitle>SYSLINK 연동정보</VCardTitle>
-                    <span :class="props.item?.syslink?.code === 'SUCCESS' ? 'text-success' : 'text-error'">{{ props.item?.syslink?.message }}</span>
-                </VCardItem>
+                <template v-if="corp.pv_options.paid.use_syslink">
+                    <div style="display: flex; margin-left: 2em;">
+                        <span>SYSLINK 연동여부</span>
+                        <span style="margin-left: 1em;">
+                            <VSwitch hide-details v-model="props.item.use_syslink" color="primary" />
+                        </span>
+
+                    </div>
+                    <VCardItem v-if="props.is_mcht && props.id">
+                        <VCardTitle>SYSLINK 연동정보</VCardTitle>
+                        <span :class="props.item?.syslink?.code === 'SUCCESS' ? 'text-success' : 'text-error'">{{ props.item?.syslink?.message }}</span>
+                    </VCardItem>
+
+                </template>
             </VCard>
         </VCol>
     </VRow>
