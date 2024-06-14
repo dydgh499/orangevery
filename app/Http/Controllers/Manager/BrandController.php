@@ -146,7 +146,7 @@ class BrandController extends Controller
     {
         $cond_1 = Ablilty::isDevLogin($request);
         $cond_2 = ($request->user()->brand_id !== $id);
-        if($cond_2)
+        if($cond_1 === false && $cond_2)
             return $this->response(951);
         else if($cond_1 === false && $id === 1)
             return $this->response(951);

@@ -248,6 +248,7 @@ class MerchandiseController extends Controller
         $data = $this->merchandises->where('id', $id)->with($with)->first();
         $data->setFeeFormatting(true);
 
+        // URL 조작
         if($data->brand_id != $request->user()->brand_id)
             return $this->response(951);
 
