@@ -7,6 +7,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
+use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Requests\Manager\BulkRegister\BulkRegularCardRequest;
 use App\Http\Requests\Manager\Service\BeforeBrandInfoRequest;
 use App\Http\Requests\Manager\IndexRequest;

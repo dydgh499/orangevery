@@ -8,6 +8,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Models\EncryptDataTrait;
 
+use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Requests\Manager\Service\OperatorIPRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;
