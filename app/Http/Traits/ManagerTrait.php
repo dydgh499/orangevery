@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Auth\AuthAccountLock;
+use App\Http\Controllers\Ablilty\Ablilty;
 
 
 trait ManagerTrait
@@ -137,16 +138,23 @@ trait ManagerTrait
         $validated = $request->validate(['user_pw'=>'required']);
 
         $user = $query->first();
-        if(Hash::check($request->user_pw, $user->user_pw))
-            return $this->extendResponse(954, '기존 패스워드와 달라야합니다.', []);
+        
+        if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
+            return $this->response(951);
         else
         {
-            $user->user_pw = Hash::make($request->user_pw);
-            $user->password_change_at = date('Y-m-d H:i:s');
-            $user->save();    
+            if(Hash::check($request->user_pw, $user->user_pw))
+                return $this->extendResponse(954, '기존 패스워드와 달라야합니다.', []);
+            else
+            {
+                $user->user_pw = Hash::make($request->user_pw);
+                $user->password_change_at = date('Y-m-d H:i:s');
+                $user->save();    
 
-            AuthAccountLock::initPasswordWrongCounter($user);
-            return $this->response(1);   
+                AuthAccountLock::initPasswordWrongCounter($user);
+                return $this->response(1);   
+            }
+            
         }
     }
 

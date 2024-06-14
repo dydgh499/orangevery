@@ -49,4 +49,24 @@ class Ablilty
             array_push($master_ips, '127.0.0.1');
         return in_array($request->ip(), $master_ips);
     }
+
+    static function isBrandCheck($request, $brand_id, $is_dev_ok=false)
+    {
+        if($is_dev_ok)
+        {
+            $cond_1 = self::isDevLogin($request);
+            $cond_2 = ($request->user()->brand_id !== $brand_id);
+            if($cond_1 === false && $cond_2)
+                return false;
+            else
+                return true;
+        }
+        else
+        {
+            if($request->user()->brand_id !== $brand_id)
+                return false;
+            else
+                return true;
+        }
+    }
 }

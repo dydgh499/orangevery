@@ -12,6 +12,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Auth\AuthPhoneNum;
+use App\Http\Controllers\Ablilty\Ablilty;
 
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;

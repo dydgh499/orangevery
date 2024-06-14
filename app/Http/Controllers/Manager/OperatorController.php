@@ -116,11 +116,11 @@ class OperatorController extends Controller
             $this->response(951);
         else
         {
-            $data = $this->operators->where('id', $id)->first();
-            if($data->brand_id != $request->user()->brand_id)
+            $user = $this->operators->where('id', $id)->first();
+            if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
                 return $this->response(951);
-
-            return $data ? $this->response(0, $data) : $this->response(1000);    
+            else
+                return $user ? $this->response(0, $user) : $this->response(1000);    
         }
     }
 
@@ -171,6 +171,9 @@ class OperatorController extends Controller
             $query = $this->operators->where('id', $id);
             $user = $query->first();
 
+            if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
+                return $this->response(951);
+            
             if((int)$data['level'] === 40)
             {   // 본사는 전화번호 변경 불가
                 unset($data['phone_num']);
@@ -201,8 +204,14 @@ class OperatorController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        $res = $this->delete($this->operators->where('id', $id));
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
+        $user = $this->operators->where('id', $id)->first();
+        if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
+            return $this->response(951);
+        else
+        {
+            $res = $this->delete($this->operators->where('id', $id));
+            return $this->response($res ? 1 : 990, ['id'=>$id]);    
+        }
     }
 
     /**

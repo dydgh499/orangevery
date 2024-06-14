@@ -87,8 +87,8 @@ class BrandController extends Controller
         }
         else
             return 0;
-
     }
+    
     /**
      * 목록출력
      *
@@ -145,8 +145,7 @@ class BrandController extends Controller
     public function show(Request $request, int $id)
     {
         $cond_1 = Ablilty::isDevLogin($request);
-        $cond_2 = ($request->user()->brand_id !== $id);
-        if($cond_1 === false && $cond_2)
+        if(Ablilty::isBrandCheck($request, $id) === false)
             return $this->response(951);
         else if($cond_1 === false && $id === 1)
             return $this->response(951);
@@ -174,6 +173,8 @@ class BrandController extends Controller
     public function update(BrandRequest $request, int $id)
     {
         $cond_1 = Ablilty::isDevLogin($request);
+        if(Ablilty::isBrandCheck($request, $id, true) === false)
+            return $this->response(951);
         if($cond_1)
         {
             $data = $request->data();

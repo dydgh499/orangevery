@@ -6,6 +6,7 @@ use App\Models\Service\HeadOfficeAccount;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
+use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Requests\Manager\Service\HeadOfficeAccountRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;
@@ -69,8 +70,13 @@ class HeadOfficeAccountController extends Controller
      */
     public function show($id)
     {
-        $data = $this->head_office_accounts->where('id', $id)->first();
-        return $this->response($data ? 0 : 1000, $data);
+        $query = $this->head_office_accounts->where('id', $id);
+        $user = $user->first();
+
+        if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
+            return $this->response(951);
+        else
+            return $this->response($user ? 0 : 1000, $user);
     }
 
     /**
@@ -101,7 +107,13 @@ class HeadOfficeAccountController extends Controller
      */
     public function destroy($id)
     {
-        $res = $this->head_office_accounts->where('id', $id)->delete();
+        $query = $this->head_office_accounts->where('id', $id);
+        $user = $user->first();
+
+        if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
+            return $this->response(951);
+
+        $res = $query->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
 }
