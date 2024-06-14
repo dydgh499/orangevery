@@ -4,6 +4,7 @@ namespace App\Http\Traits\Settle;
 use Illuminate\Support\Facades\DB;
 use App\Models\Log\RealtimeSendHistory;
 use App\Models\Transaction;
+use App\Http\Controllers\Ablilty\Ablilty;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -57,6 +58,9 @@ trait SettleTrait
     private function commonDeduct($orm, $col, $request)
     {
         $validated = $request->validate(['amount'=>'required|integer', 'e_dt'=>'required|date', 'id'=>'required']);
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $res = $orm->create([
             'brand_id'  => $request->user()->brand_id,
             'amount'    => $request->amount * -1,
