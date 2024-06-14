@@ -1,9 +1,9 @@
 <script lang="ts" setup>
+import { axios, getUserLevel } from '@axios'
 import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import BlotFormatter from 'quill-blot-formatter/dist/BlotFormatter'
 import ImageUploader from 'quill-image-uploader'
-import '@vueup/vue-quill/dist/vue-quill.snow.css'
-import { axios } from '@axios'
 
 interface Props {
     content: string
@@ -16,7 +16,12 @@ const modules = [
         module: BlotFormatter,
         options: {/* options */ }
     },
-    {
+]
+const content = ref(<string>(""))
+const emits = defineEmits(['update:content']);
+
+if(getUserLevel() >= 40) {
+    modules.push({
         name: 'imageUploader',
         module: ImageUploader,
         options: {
@@ -41,11 +46,10 @@ const modules = [
                 })
             }
         }
-    }
-]
+    })
+}
 
-const content = ref(<string>(""))
-const emits = defineEmits(['update:content']);
+
 watchEffect(() => {
     if(content.value != null)
         emits('update:content', content.value)
@@ -55,7 +59,7 @@ watchEffect(() => {
 </script>
 <template>
     <div style="display: block;">
-        <QuillEditor v-model:content="content" contentType="html" :modules="modules" theme="snow" toolbar="full" placeholder="게시글 내용을 작성하세요."/>
+        <QuillEditor v-model:content="content" contentType="html" :modules="modules" theme="snow" :toolbar="getUserLevel() < 40 ? 'minimal' : 'full'" placeholder="게시글 내용을 작성하세요."/>
     </div>
 </template>
 

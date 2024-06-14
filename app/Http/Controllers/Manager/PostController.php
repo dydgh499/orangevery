@@ -140,15 +140,20 @@ class PostController extends Controller
      */
     public function upload(Request $request)
     {
-        $data = [];
-        $imgs = [
-            'params'    => ['file'],
-            'cols'      => ['url'],
-            'folders'   => ['posts'],
-            'sizes'     => [ 1980],
-        ];
-        $data = $this->saveImages($request, $data, $imgs);
-        return $this->response(0, $data);
+        if($request->user()->level >= 40)
+        {
+            $data = [];
+            $imgs = [
+                'params'    => ['file'],
+                'cols'      => ['url'],
+                'folders'   => ['posts'],
+                'sizes'     => [ 1980],
+            ];
+            $data = $this->saveImages($request, $data, $imgs);
+            return $this->response(0, $data);    
+        }
+        else
+            return $this->response(951);
     }
     
     /**

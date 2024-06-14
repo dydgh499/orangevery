@@ -24,20 +24,20 @@ class Login
         {
             // IP 인증
             $brand = BrandInfo::getBrandById($result['user']->brand_id);
-            if($brand['pv_options']['paid']['use_head_office_withdraw'])
+            if(AuthOperatorIP::valiate($result['user']->brand_id, $request->ip()))
             {
-                if(AuthOperatorIP::valiate($result['user']->brand_id, $request->ip()))
+                if($brand['pv_options']['paid']['use_head_office_withdraw'])
                 {
-                    return AuthPhoneNum::validate($request->token);   // 휴대폰 인증
+                    return AuthPhoneNum::validate($request->token);   // 휴대폰 인증    
                 }
                 else
-                {
-                    error(['ip'=>$request->ip(), 'all'=>$request->all()], '등록되지 않은 IP 접근');
-                    return AuthLoginCode::NOT_FOUND->value;
-                }
+                    return AuthLoginCode::SUCCESS->value;
             }
             else
-                return AuthLoginCode::SUCCESS->value;
+            {
+                error(['ip'=>$request->ip(), 'all'=>$request->all()], '등록되지 않은 IP 접근');
+                return AuthLoginCode::NOT_FOUND->value;
+            }
         }
         else
         {

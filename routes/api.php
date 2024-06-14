@@ -115,7 +115,7 @@ Route::prefix('v1')->group(function() {
         Route::prefix('posts')->group(function() {
             Route::get('{id}/parent', [PostController::class, 'parent']);
             Route::get('recent', [PostController::class, 'recent']);
-            Route::post('upload', [PostController::class, 'upload']);    
+            Route::middleware(['is.operate'])->post('upload', [PostController::class, 'upload']);    
         });
         Route::get('services/pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
         Route::prefix('services')->middleware(['is.operate'])->group(function() {
