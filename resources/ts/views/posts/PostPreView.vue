@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import type { Post } from '@/views/types'
-import { requiredValidatorV2 } from '@validators'
-import Editor from '@/layouts/utils/Editor.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import Editor from '@/layouts/utils/Editor.vue'
 import PostContentView from '@/views/posts/PostContentView.vue'
 import { types } from '@/views/posts/useStore'
+import type { Post } from '@/views/types'
 import { axios } from '@axios'
+import { requiredValidatorV2 } from '@validators'
 
 interface Props {
     item: Post,
@@ -17,7 +17,8 @@ const errorHandler = <any>(inject('$errorHandler'))
 const ori_posts = ref<Post[]>([])
 
 watchEffect(() => {
-    axios.get('/api/v1/manager/posts/' + route.query.parent_id + '/parent')
+    if(route.query.parent_id) {
+        axios.get('/api/v1/manager/posts/' + route.query.parent_id + '/parent')
         .then(r => {
             ori_posts.value = r.data
             if(ori_posts.value.length) {
@@ -30,6 +31,7 @@ watchEffect(() => {
         .catch(e => {
             const r = errorHandler(e)
         })
+    }
 })
 </script>
 <template>

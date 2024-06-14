@@ -59,10 +59,15 @@ export const payResult = () => {
 
     const getData = async () => {
         try {
-            const [response1, response2] = await Promise.all([
-                axios.get('/api/v1/pay-modules/' + pmod_id + '/sale-slip'),
-                axios.get('/api/v1/pay-gateways/' + pg_id + '/sale-slip')
-            ]);
+            let response1:any = {}
+            let response2:any = {}
+            if(pmod_id) {
+                let response1 = await axios.get('/api/v1/pay-modules/' + pmod_id + '/sale-slip')
+            }
+            if(pg_id) {
+                let response2 = await axios.get('/api/v1/pay-gateways/' + pg_id + '/sale-slip')
+            }
+
             sale_slip.value = {
                 ...response1.data,
                 ...route.query,
