@@ -248,6 +248,9 @@ class MerchandiseController extends Controller
         $data = $this->merchandises->where('id', $id)->with($with)->first();
         $data->setFeeFormatting(true);
 
+        if($data->brand_id != $request->user()->brand_id)
+            return $this->response(951);
+
         if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request))
             $data['syslink'] = SysLink::show($data['user_name']);
 

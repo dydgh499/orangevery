@@ -47,6 +47,7 @@ class OperatorIPController extends Controller
     public function store(OperatorIPRequest $request)
     {
         $data = $request->data();
+
         $res = $this->operator_ips->create($data);
 
         $ips = $this->operator_ips->where('brand_id', $data['brand_id'])->get()->pluck('enable_ip')->all();
@@ -63,8 +64,7 @@ class OperatorIPController extends Controller
      */
     public function show(int $id)
     {
-        $data = $this->operator_ips->where('id', $id)->first();
-        return $this->response($data ? 0 : 1000, $data);
+        
     }
 
     /**

@@ -117,6 +117,9 @@ class OperatorController extends Controller
         else
         {
             $data = $this->operators->where('id', $id)->first();
+            if($data->brand_id != $request->user()->brand_id)
+                return $this->response(951);
+
             return $data ? $this->response(0, $data) : $this->response(1000);    
         }
     }

@@ -56,8 +56,10 @@ class FinanceVanController extends Controller
     public function store(FinanceRequest $request)
     {
         $data = $request->data();
-        $res = $this->finance_vans->create($data);
-        
+        if($data->brand_id != $request->user()->brand_id)
+            return $this->response(951);
+
+        $res = $this->finance_vans->create($data);        
         operLogging(HistoryType::CREATE, $this->target, [], $data, $data['nick_name']);
         return $this->response($res ? 1 : 990, ['id'=>$res->id]);
     }
