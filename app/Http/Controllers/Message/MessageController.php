@@ -159,7 +159,7 @@ class MessageController extends Controller
             if($request->mcht_id === -1 || AuthPhoneNum::limitValidate($brand, $request->phone_num, $request->mcht_id))
             {
                 $rand = random_int(100000, 999999);
-                $res = $this->send($request->phone_num, "[".$brand['name']."] 인증번호 [$rand]을(를) 입력해주세요", $request->brand_id);
+                $res = $this->send($request->phone_num, "인증번호 [$rand]을(를) 입력해주세요", $request->brand_id);
 
                 if($res == null)
                     return $this->extendResponse(1999, '문자발송 플랫폼과 연동되어있지 않습니다. 계약 이후 사용 가능합니다.');
