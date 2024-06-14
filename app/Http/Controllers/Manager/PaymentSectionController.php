@@ -49,6 +49,9 @@ class PaymentSectionController extends Controller
      */
     public function store(PaySectionRequest $request)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $user = $request->data();
         $res = $this->pay_sections->create($user);
         return $this->response($res ? 1 : 990, ['id'=>$res->id]);
@@ -76,6 +79,9 @@ class PaymentSectionController extends Controller
      */
     public function update(PaySectionRequest $request, int $id)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $data = $request->data();
         $res = $this->pay_sections->where('id', $id)->update($data);
         return $this->response($res ? 1 : 990, ['id'=>$id]);
@@ -88,6 +94,9 @@ class PaymentSectionController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $res = $this->delete($this->pay_sections->where('id', $id));
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }

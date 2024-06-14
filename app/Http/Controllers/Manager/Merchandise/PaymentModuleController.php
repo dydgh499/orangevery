@@ -125,6 +125,9 @@ class PaymentModuleController extends Controller
         };
 
         $data = $request->data();
+        
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'tid', $data['tid']))
             return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['tid'=>$data['tid']]);
         if($request->use_mid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
@@ -193,6 +196,9 @@ class PaymentModuleController extends Controller
         };  // tid 중복해서 사용하는 브랜드들은 ..?
 
         $data = $request->data();
+        
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
             return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid'=>$data['tid']]);
         if($request->use_mid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
@@ -229,6 +235,8 @@ class PaymentModuleController extends Controller
             $data = $this->pay_modules->where('id', $id)->first();
             if($data)
             {
+                if(Ablilty::isEditAbleTime() === false)
+                    return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
                 $res = $this->delete($this->pay_modules->where('id', $id));            
                 operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->note);
                 return $this->response($res, ['id'=>$id, 'mcht_id'=>$data->mcht_id]);    
@@ -344,6 +352,8 @@ class PaymentModuleController extends Controller
      */
     public function tidCreate(Request $request)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         //0523070000 pg(2) + ym(2) + idx(4)
         $tid = TidGenerator::create($request->pg_type);
         return $this->response(0, ['tid'=>$tid]);    
@@ -354,6 +364,9 @@ class PaymentModuleController extends Controller
      */
     public function midCreate(Request $request)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $mid = MidGenerator::create($request->mid_code);
         return $this->response(0, ['mid'=>$mid]);    
     }
@@ -363,6 +376,9 @@ class PaymentModuleController extends Controller
      */
     public function midBulkCreate(Request $request)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $new_mids = MidGenerator::bulkCreate($request->mid_code, $request->pay_mod_count);        
         return $this->response(0, ['new_mids'=>$new_mids]);    
     }
@@ -372,6 +388,9 @@ class PaymentModuleController extends Controller
      */
     public function tidBulkCreate(Request $request)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $new_pg_tids = [];
         for ($i=0; $i <count($request->groups); $i++) 
         {
@@ -395,6 +414,9 @@ class PaymentModuleController extends Controller
      */
     public function payKeyCreate(Request $request)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $pay_key = $this->getNewPayKey($request->id);
         $res = $this->pay_modules
             ->where('id', $request->id)
@@ -407,6 +429,9 @@ class PaymentModuleController extends Controller
      */
     public function batchRemove(Request $request)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $res = $this->pay_modules->whereIn('id', $request->selected)->update(['is_delete' => true]);
         return $this->response($res ? 1 : 990);
     }

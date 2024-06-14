@@ -53,6 +53,9 @@ class PaymentGatewayController extends Controller
      */
     public function store(PayGatewayRequest $request)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $user = $request->data();
         $res = $this->pay_gateways->create($user);
         return $this->response($res ? 1 : 990, ['id'=>$res->id]);
@@ -80,6 +83,9 @@ class PaymentGatewayController extends Controller
      */
     public function update(PayGatewayRequest $request, int $id)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $data = $request->data();
         $res = $this->pay_gateways->where('id', $id)->update($data);
         return $this->response($res ? 1 : 990, ['id'=>$id]);
@@ -94,6 +100,9 @@ class PaymentGatewayController extends Controller
     {
         if($this->authCheck($request->user(), $id, 35))
         {
+            if(Ablilty::isEditAbleTime() === false)
+                return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
             $res = $this->delete($this->pay_gateways->where('id', $id));
             return $this->response($res ? 1 : 990, ['id'=>$id]);
         }

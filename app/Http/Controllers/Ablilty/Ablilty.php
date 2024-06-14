@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Ablilty;
+use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Redis;
 
@@ -57,16 +58,35 @@ class Ablilty
             $cond_1 = self::isDevLogin($request);
             $cond_2 = ($request->user()->brand_id !== $brand_id);
             if($cond_1 === false && $cond_2)
+            {
+                cretical('URL 조작, 파라미터 변조 접근 시도');
                 return false;
+            }
             else
                 return true;
         }
         else
         {
             if($request->user()->brand_id !== $brand_id)
+            {
+                cretical('URL 조작, 파라미터 변조 접근 시도');
                 return false;
+            }
             else
                 return true;
         }
+    }
+
+    static function isEditAbleTime()
+    {   // 21시 ~ 06시까지는 가맹점, 영업점, 운영자, 결제모듈, 금융 VAN, 브랜드 추가/수정 불가
+        $now = Carbon::now();
+
+        if ($now->hour >= 21 || $now->hour < 6) 
+        {
+            cretical('추가/수정불가 시간대에 작업시도');
+            return false;
+        }
+        else
+            return true;
     }
 }

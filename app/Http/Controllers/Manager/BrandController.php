@@ -175,6 +175,8 @@ class BrandController extends Controller
         $cond_1 = Ablilty::isDevLogin($request);
         if(Ablilty::isBrandCheck($request, $id, true) === false)
             return $this->response(951);
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($cond_1)
         {
             $data = $request->data();
@@ -204,6 +206,8 @@ class BrandController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         $brand = $this->brands->where('id', $id)->first();
         $res = $this->delete($this->brands->where('id', $id), ['logo_img', 'favicon_img']);
         return $this->response($res ? 1 : 990, ['id'=>$id]);

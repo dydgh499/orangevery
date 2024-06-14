@@ -187,6 +187,9 @@ class MerchandiseController extends Controller
     {
         $b_info = BrandInfo::getBrandById($request->user()->brand_id);
         $validated = $request->validate(['user_pw'=>'required']);
+        
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($this->isExistMutual($this->merchandises, $request->user()->brand_id, 'mcht_name', $request->mcht_name))
             return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
         else
@@ -268,6 +271,8 @@ class MerchandiseController extends Controller
     public function update(MerchandiseRequest $request, int $id)
     {
         $data = $request->data();
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($this->isExistMutual($this->merchandises->where('id', '!=', $id), $request->user()->brand_id, 'mcht_name', $data['mcht_name']))
             return $this->extendResponse(1001, '이미 존재하는 상호 입니다.');
         else
@@ -309,6 +314,8 @@ class MerchandiseController extends Controller
     {
         if(Ablilty::isOperator($request) || (Ablilty::isSalesforce($request) && $request->user()->is_able_modify_mcht))
         {
+            if(Ablilty::isEditAbleTime() === false)
+                return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
             $data = $this->merchandises->where('id', $id)->first();
             $res = $this->delete($this->merchandises->where('id', $id));
             $res = $this->delete($this->pay_modules->where('mcht_id', $id));

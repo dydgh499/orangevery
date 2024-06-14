@@ -52,6 +52,9 @@ class ClassificationController extends Controller
      */
     public function store(ClassificationReqeust $request)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $data = $request->data();
         $res = $this->classifications->create($data);
 
@@ -81,6 +84,9 @@ class ClassificationController extends Controller
      */
     public function update(ClassificationReqeust $request, int $id)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $data = $request->data();
         $before = $this->classifications->where('id', $id)->first()->toArray();
         $res = $this->classifications->where('id', $id)->update($data);
@@ -96,6 +102,9 @@ class ClassificationController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $res = $this->classifications->where('id', $id)->update(['is_delete'=>true]);
         $data = $this->classifications->where('id', $id)->first();
         if($data)

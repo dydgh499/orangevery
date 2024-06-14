@@ -86,6 +86,8 @@ class OperatorController extends Controller
         $validated = $request->validate(['user_pw'=>'required']);
         if($request->user()->level > 35)
         {
+            if(Ablilty::isEditAbleTime() === false)
+                return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
             if($this->isExistUserName($request->user()->brand_id, $request->user_name))
                 return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
             else
@@ -173,7 +175,9 @@ class OperatorController extends Controller
 
             if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
                 return $this->response(951);
-            
+            if(Ablilty::isEditAbleTime() === false)
+                return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+    
             if((int)$data['level'] === 40)
             {   // 본사는 전화번호 변경 불가
                 unset($data['phone_num']);
@@ -209,6 +213,9 @@ class OperatorController extends Controller
             return $this->response(951);
         else
         {
+            if(Ablilty::isEditAbleTime() === false)
+                return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
             $res = $this->delete($this->operators->where('id', $id));
             return $this->response($res ? 1 : 990, ['id'=>$id]);    
         }

@@ -48,6 +48,9 @@ class BeforeBrandInfoController extends Controller
      */
     public function store(BeforeBrandInfoRequest $request)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $data = $request->data();
         $res = $this->before_brand_infos->create($data);
         return $this->response($res ? 1 : 990, ['id'=>$res->id, 'brand_id'=>$data['brand_id']]);
@@ -77,6 +80,9 @@ class BeforeBrandInfoController extends Controller
      */
     public function update(BeforeBrandInfoRequest $request, int $id)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $data = $request->data();
         $res  = $this->before_brand_infos->where('id', $id)->update($data);
         return $this->response($res ? 1 : 990, ['id'=>$id, 'brand_id'=>$data['brand_id']]);
@@ -92,6 +98,8 @@ class BeforeBrandInfoController extends Controller
      */
     public function destroy($id)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         $res = $this->before_brand_infos->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }

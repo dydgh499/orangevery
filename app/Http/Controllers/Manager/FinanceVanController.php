@@ -58,6 +58,8 @@ class FinanceVanController extends Controller
         $data = $request->data();
         if($data->brand_id != $request->user()->brand_id)
             return $this->response(951);
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $res = $this->finance_vans->create($data);        
         operLogging(HistoryType::CREATE, $this->target, [], $data, $data['nick_name']);
@@ -86,6 +88,9 @@ class FinanceVanController extends Controller
      */
     public function update(FinanceRequest $request, int $id)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $data = $request->data();
         $before = $this->finance_vans->where('id', $id)->first();
         $res = $this->finance_vans->where('id', $id)->update($data);
@@ -100,6 +105,9 @@ class FinanceVanController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+
         $data = $this->finance_vans->where('id', $id)->first();
         $res = $this->delete($this->finance_vans->where('id', $id));
         operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->nick_name);

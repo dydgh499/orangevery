@@ -143,7 +143,9 @@ trait ManagerTrait
             return $this->response(951);
         else
         {
-            if(Hash::check($request->user_pw, $user->user_pw))
+            if(Ablilty::isEditAbleTime() === false)
+                return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+            else if(Hash::check($request->user_pw, $user->user_pw))
                 return $this->extendResponse(954, '기존 패스워드와 달라야합니다.', []);
             else
             {
@@ -160,7 +162,12 @@ trait ManagerTrait
 
     public function _unlockAccount($query)
     {
-        AuthAccountLock::setUserUnlock($query->first());
-        return $this->response(1);
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+        else
+        {
+            AuthAccountLock::setUserUnlock($query->first());
+            return $this->response(1);    
+        }
     }
 }

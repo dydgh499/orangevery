@@ -47,8 +47,10 @@ class OperatorIPController extends Controller
      */
     public function store(OperatorIPRequest $request)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+    
         $data = $request->data();
-
         $res = $this->operator_ips->create($data);
         $ips = $this->operator_ips->where('brand_id', $data['brand_id'])->get()->pluck('enable_ip')->all();
         
@@ -76,6 +78,8 @@ class OperatorIPController extends Controller
      */
     public function update(OperatorIPRequest $request, int $id)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         $data = $request->data();
         $data = $this->setEncryptPersonalInfo($data);
         $res  = $this->operator_ips->where('id', $id)->update($data);
@@ -94,6 +98,8 @@ class OperatorIPController extends Controller
      */
     public function destroy(int $id)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         $res = $this->operator_ips->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
