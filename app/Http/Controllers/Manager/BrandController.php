@@ -160,8 +160,6 @@ class BrandController extends Controller
                 ->with($with)
                 ->first();
 
-            if($data->id != $request->user()->brand_id)
-                return $this->response(951);
             return $this->response($data ? 0 : 1000, $data);
         }
     }
