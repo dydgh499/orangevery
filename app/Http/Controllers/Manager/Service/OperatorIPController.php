@@ -95,4 +95,14 @@ class OperatorIPController extends Controller
         $res = $this->operator_ips->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);
     }
+
+    static public function addIP($brand_id, $enable_ip)
+    {
+        OperatorIP::create([
+            'brand_id' => $brand_id,
+            'enable_ip' => $enable_ip,
+        ]);
+        $ips = OperatorIP::where('brand_id', $brand_id)->get()->pluck('enable_ip')->all();
+        AuthOperatorIP::setStore($brand_id, $ips);
+    }
 }
