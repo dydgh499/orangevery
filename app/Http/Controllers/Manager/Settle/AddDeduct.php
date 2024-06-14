@@ -35,9 +35,9 @@ class AddDeduct
         }
     }
 
-    static private function amountValidate($request)
+    static private function amountValidate($request, $amount_limit)
     {
-        return abs((int)$request->amount) < 3000000 ? true : false;
+        return abs((int)$request->amount) < $amount_limit ? true : false;
     }
 
     static public function validate($request, $col)
@@ -45,9 +45,13 @@ class AddDeduct
         $base_key = 'add-deduct-brand-';
         if(in_array($request->user()->brand_id, [12, 14]))
         {
-            if(self::amountValidate($request) === false)
-                return -3;
+            $amount_limit = 3000000;
+            if($request->id  === 102543)
+                $amount_limit = 7000000;
 
+            if(self::amountValidate($request, $amount_limit) === false)
+                return -3;
+            //
             $s_dt = Carbon::createFromFormat('Y-m-d H:i:s', '2024-06-13 09:30:00');
             $e_dt = Carbon::createFromFormat('Y-m-d H:i:s', '2024-06-13 12:00:00');
             $brand_limit = Carbon::now()->between($s_dt, $e_dt) ? 300 : 10;
@@ -55,11 +59,16 @@ class AddDeduct
             $key_name = $base_key.$request->user()->brand_id;
             if(self::countValidate($request, $key_name, $brand_limit) === false)
                 return -1;
-
+            //
+            $mcht_limit = 1;
             $key_name = $base_key.$request->id."-".($col === 'mcht_id' ? 10 : $request->user()->level);
-            if(self::countValidate($request, $key_name, 1) === false)
-                return -2;
+            if($request->id  === 102543)
+                $mcht_limit = 2;
 
+            if(self::countValidate($request, $key_name, $mcht_limit) === false)
+            {
+                return -2;
+            }
         }
         return 1;
     }
