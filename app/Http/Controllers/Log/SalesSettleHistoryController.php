@@ -14,6 +14,8 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleHistoryTrait;
 use App\Http\Traits\Salesforce\UnderSalesTrait;
+use App\Http\Controllers\Ablilty\Ablilty;
+
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Log\CreateSettleHistoryRequest;
 use App\Http\Requests\Manager\Log\BatchSettleHistoryRequest;
@@ -121,6 +123,9 @@ class SalesSettleHistoryController extends Controller
         $item = $request->all();
         $data = $request->data('sales_id');
 
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+        
         $c_id = DB::transaction(function () use($item, $data) {
             [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($item['level']);
             return $this->createSalesforceCommon($item, $data, $target_settle_id);
