@@ -145,7 +145,7 @@ class BrandController extends Controller
     public function show(Request $request, int $id)
     {
         $cond_1 = Ablilty::isDevLogin($request);
-        if(Ablilty::isBrandCheck($request, $id) === false)
+        if(Ablilty::isBrandCheck($request, $id, true) === false)
             return $this->response(951);
         else if($cond_1 === false && $id === 1)
             return $this->response(951);

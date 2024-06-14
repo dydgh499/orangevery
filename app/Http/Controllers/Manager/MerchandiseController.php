@@ -187,7 +187,7 @@ class MerchandiseController extends Controller
     {
         $b_info = BrandInfo::getBrandById($request->user()->brand_id);
         $validated = $request->validate(['user_pw'=>'required']);
-        
+
         if(Ablilty::isEditAbleTime() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($this->isExistMutual($this->merchandises, $request->user()->brand_id, 'mcht_name', $request->mcht_name))
@@ -252,7 +252,7 @@ class MerchandiseController extends Controller
         $data->setFeeFormatting(true);
 
         // URL 조작
-        if($data->brand_id != $request->user()->brand_id)
+        if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
             return $this->response(951);
 
         if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request))
@@ -279,6 +279,9 @@ class MerchandiseController extends Controller
         {
             $query = $this->merchandises->where('id', $id);
             $user = $query->first();
+
+            if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
+                return $this->response(951);
             // 변경된 아이디가 이미 존재할 떄
             if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $request->user_name))
                 return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
@@ -314,9 +317,13 @@ class MerchandiseController extends Controller
     {
         if(Ablilty::isOperator($request) || (Ablilty::isSalesforce($request) && $request->user()->is_able_modify_mcht))
         {
+            $data = $this->merchandises->where('id', $id)->first();
+
+            if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
+                return $this->response(951);
             if(Ablilty::isEditAbleTime() === false)
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-            $data = $this->merchandises->where('id', $id)->first();
+
             $res = $this->delete($this->merchandises->where('id', $id));
             $res = $this->delete($this->pay_modules->where('mcht_id', $id));
             $res = $this->delete(NotiUrl::where('mcht_id', $id));

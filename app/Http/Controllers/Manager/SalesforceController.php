@@ -169,6 +169,8 @@ class SalesforceController extends Controller
             ->first();
         if($data)
         {
+            if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
+                return $this->response(951);
             if($request->user()->tokenCan($data->level) === false)
                 return $this->response(951);
             else
@@ -198,6 +200,8 @@ class SalesforceController extends Controller
         {
             $query = $this->salesforces->where('id', $id);
             $user = $query->first();
+            if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
+                return $this->response(951);
             // 아이디 중복 검사
             if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $data['user_name']))
                 return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
@@ -221,9 +225,11 @@ class SalesforceController extends Controller
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($this->authCheck($request->user(), $id, 15))
         {
-            $res = $this->delete($this->salesforces->where('id', $id));
             $data = $this->salesforces->where('id', $id)->first();
+            if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
+                return $this->response(951);
 
+            $res = $this->delete($this->salesforces->where('id', $id));
             operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->sales_name);
             return $this->response($res ? 1 : 990, ['id'=>$id]);
         }

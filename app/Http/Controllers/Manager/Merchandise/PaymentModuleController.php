@@ -171,7 +171,13 @@ class PaymentModuleController extends Controller
         if($this->authCheck($request->user(), $id, 13))
         {
             $data = $this->pay_modules->where('id', $id)->first();
-            return $data ? $this->response(0, $data) : $this->response(1000);
+            if($data)
+            {
+                if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
+                    return $this->response(951);
+                else
+                    return $this->response(0, $data);
+            }
         }
         else
             return $this->response(951);
@@ -217,10 +223,16 @@ class PaymentModuleController extends Controller
                 return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
         }
         $before = $this->pay_modules->where('id', $id)->first();
-        $res = $this->pay_modules->where('id', $id)->update($data);
 
-        operLogging(HistoryType::UPDATE, $this->target, $before, $data, $data['note']."(#".$id.")");
-        return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
+        if(Ablilty::isBrandCheck($request, $before->brand_id) === false)
+            return $this->response(951);
+        else
+        {
+            $res = $this->pay_modules->where('id', $id)->update($data);
+
+            operLogging(HistoryType::UPDATE, $this->target, $before, $data, $data['note']."(#".$id.")");
+            return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);    
+        }
     }
 
     /**
@@ -235,6 +247,8 @@ class PaymentModuleController extends Controller
             $data = $this->pay_modules->where('id', $id)->first();
             if($data)
             {
+                if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
+                    return $this->response(951);
                 if(Ablilty::isEditAbleTime() === false)
                     return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
                 $res = $this->delete($this->pay_modules->where('id', $id));            
