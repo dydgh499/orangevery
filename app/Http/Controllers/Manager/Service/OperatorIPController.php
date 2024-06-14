@@ -77,7 +77,7 @@ class OperatorIPController extends Controller
     public function update(OperatorIPRequest $request, int $id)
     {
         $data = $request->data();
-        $data['enable_ip'] = $this->setEncryptPersonalInfo($data);
+        $data = $this->setEncryptPersonalInfo($data);
         $res  = $this->operator_ips->where('id', $id)->update($data);
 
         $ips = $this->operator_ips->where('brand_id', $data['brand_id'])->get()->pluck('enable_ip')->all();
