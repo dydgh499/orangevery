@@ -147,7 +147,7 @@ class MerchandiseController extends Controller
         return $this->response(0, $data);
     }
 
-    public function deduct(Request $request) 
+    public function deduct(Request $request)
     {
         $code = AddDeduct::validate($request, 'mcht_id');
         if($code === -1)

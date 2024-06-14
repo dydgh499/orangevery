@@ -236,12 +236,12 @@ Route::prefix('v1')->group(function() {
                     Route::post('{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
                 });
                 Route::post('{id}/mcht-batch-fee', [SalesforceController::class, 'mchtBatchFee']);
-                Route::post('{id}/password-change', [SalesforceController::class, 'passwordChange']);
                 Route::post('{id}/unlock-account', [SalesforceController::class, 'unlockAccount']);
                 Route::post('bulk-register', [SalesforceController::class, 'bulkRegister']);
                 Route::apiResource('under-auto-settings', UnderAutoSettingController::class);    
             });
 
+            Route::post('{id}/password-change', [SalesforceController::class, 'passwordChange']);
             Route::get('chart', [SalesforceController::class, 'chart']);
             Route::get('fee-apply-histories', [SalesforceController::class, 'feeApplyHistories']);  // 간편보기
             Route::get('classification', [SalesforceController::class, 'classification']);
