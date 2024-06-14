@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthOperatorIP;
 use App\Models\Service\OperatorIP;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\Models\EncryptDataTrait;
 
 use App\Http\Requests\Manager\Service\OperatorIPRequest;
 use App\Http\Requests\Manager\IndexRequest;
@@ -19,7 +20,7 @@ use Illuminate\Http\Request;
  */
 class OperatorIPController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, EncryptDataTrait;
     protected $operator_ips;
 
     public function __construct(OperatorIP $operator_ips)
@@ -49,8 +50,8 @@ class OperatorIPController extends Controller
         $data = $request->data();
 
         $res = $this->operator_ips->create($data);
-
         $ips = $this->operator_ips->where('brand_id', $data['brand_id'])->get()->pluck('enable_ip')->all();
+        
         AuthOperatorIP::setStore($data['brand_id'], $ips);
 
         return $this->response($res ? 1 : 990, ['id'=>$res->id, 'brand_id'=>$data['brand_id']]);
@@ -76,6 +77,7 @@ class OperatorIPController extends Controller
     public function update(OperatorIPRequest $request, int $id)
     {
         $data = $request->data();
+        $data['enable_ip'] = $this->setEncryptPersonalInfo($data);
         $res  = $this->operator_ips->where('id', $id)->update($data);
 
         $ips = $this->operator_ips->where('brand_id', $data['brand_id'])->get()->pluck('enable_ip')->all();

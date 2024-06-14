@@ -31,4 +31,15 @@ trait EncryptDataTrait
             set: fn ($value) => $this->aes256_encode($value),
         );
     }
+
+    public function setEncryptPersonalInfo($data)
+    {
+        $enc_keys = ['enable_ip'];
+        foreach($enc_keys as $enc_key)
+        {
+            if(isset($data[$enc_key]))
+                $data[$enc_key] = $this->aes256_encode($data[$enc_key]);
+        }
+        return $data;
+    }
 }

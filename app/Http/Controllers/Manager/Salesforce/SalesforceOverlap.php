@@ -59,7 +59,7 @@ class SalesforceOverlap
             $query = $query->where(function($query) use ($search) {
                 return $query->where('sales_name', 'like', "%$search%")
                     ->orWhere('user_name', 'like', "%$search%");
-            });    
+            });
         }
 
         $page      = $request->input('page');
