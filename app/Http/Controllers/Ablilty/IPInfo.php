@@ -2,19 +2,60 @@
 
 namespace App\Http\Controllers\Ablilty;
 
+use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Ablilty\Ablilty;
 use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
 
 class IPInfo
 {
-    static public function set($info)
+    static public function isMobile($ip)
+    {
+        $isBand = function($ip, $bands) {
+            foreach($bands as $skt)
+            {
+                if(strlen($ip) > strlen($skt))
+                {
+                    $band = substr($ip, 0, strlen($skt));
+                    if($band === $skt)
+                        return true;
+                }
+            }
+            return false;
+        };
+        $skt_band = [
+            '115.161', '122.202', '223.38', '223.32', '122.32',
+            '211.234', '121.190', '223.39', '223.33', '223.62',
+            '203.226', '175.202', '223.57',   
+        ];
+        $kt_band = [
+            '175.223', '175.252', '210.125', '211.246', '110.70',  
+            '39.7', '118.235',  
+        ];
+        $lgu_band = [
+            '114.200', '117.111', '211.36', '106.102', '61.43',  
+            '125.188', '211.234', '106.101',
+        ];
+        if($isBand($ip, $skt_band))
+            return 'SKT';
+        else if($isBand($ip, $skt_band))
+            return 'KT';
+        else if($isBand($ip, $skt_band))
+            return 'LGU';
+        else
+            return '';
+    }
+
+    static private function set($info)
     {
         Redis::set(request()->ip(), json_encode($info), 'EX', 1800);
     }
 
     static public function get($request)
-    {
+    {    
+        if($request->ip() === '127.0.0.1')
+            return ["ip" => "127.0.0.1", "bogon" => true];
+
         $info = Redis::get($request->ip());
         if($info)
             return json_decode($info, true);
@@ -55,12 +96,25 @@ class IPInfo
                     return true;
                 else
                 {   // 해외 IP 접속
-                    critical('해외 IP 접속');
+                    AbnormalConnection::tryOverseasIP();
                     return false;
                 }
             }
             else
                 return true;    // 'ip blacklist API count over
         }
+    }
+
+    static public function setBlock($ip, $add_sec=0)
+    {
+        if(env('APP_ENV', 'production') === 'local')
+            Redis::set('blocked:'.$ip, 1, 'EX', 1);
+        else
+            Redis::set('blocked:'.$ip, 1, 'EX', 3600+$add_sec);
+    }
+
+    static public function getBlock($ip)
+    {
+        return Redis::get("blocked:".$ip);
     }
 }

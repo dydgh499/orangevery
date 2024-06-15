@@ -7,8 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redis;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -72,9 +71,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function configureRateLimiting()
     {
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(500)->by(optional($request->user())->id ?: $request->ip())->response(function() use($request) {
-                Redis::set('blocked:'.$request->ip(), 1, 'EX', (3600*10));
-                critical("매크로가 탐지되었습니다.");
+            return Limit::perMinute(100)->by(optional($request->user())->id ?: $request->ip())->response(function() use($request) {
+                AbnormalConnection::tryMecro();
                 return response('Too Many Requests', 429);
             });
         });

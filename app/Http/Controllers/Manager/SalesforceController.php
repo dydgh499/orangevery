@@ -14,6 +14,7 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Salesforce\UnderSalesTrait;
 use App\Http\Controllers\Manager\Salesforce\SalesforceOverlap;
 
+use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Requests\Manager\BulkRegister\BulkSalesforceRequest;
 use App\Http\Requests\Manager\SalesforceRequest;
 use App\Http\Requests\Manager\IndexRequest;
@@ -146,13 +147,20 @@ class SalesforceController extends Controller
             {
                 $current = date('Y-m-d H:i:s');
                 $user = $request->data();
-                $user = $this->saveImages($request, $user, $this->imgs);
-                $user['user_pw'] = Hash::make($request->input('user_pw').$current);
-                $user['created_at'] = $current;
-                $res = $this->salesforces->create($user);
-
-                operLogging(HistoryType::CREATE, $this->target, [], $user, $user['sales_name']);
-                return $this->response($res ? 1 : 990, ['id'=>$res->id]);
+                
+                [$result, $msg] = AuthPasswordChange::registerValidate($user['user_name'], $request->user_pw);
+                if($result === false)
+                    return $this->extendResponse(954, $msg, []);
+                else
+                {
+                    $user = $this->saveImages($request, $user, $this->imgs);
+                    $user['user_pw'] = Hash::make($request->user_pw.$current);
+                    $user['created_at'] = $current;
+                    $res = $this->salesforces->create($user);
+    
+                    operLogging(HistoryType::CREATE, $this->target, [], $user, $user['sales_name']);
+                    return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
+                }
             }
         }
     }
@@ -239,87 +247,10 @@ class SalesforceController extends Controller
             return $this->response(951);
     }
 
-    private function getRecursionChilds($data, $sales)
-    {
-        if($sales)
-        {
-            for ($i=0; $i <count($sales->childs); $i++) 
-            {
-                $data = $this->getRecursionChilds($data, $sales->childs[$i]);
-            }
-
-            $data["level_".$sales->level][] = $sales;
-            $sales->makeHidden(['childs']);
-            return $data;    
-        }
-        else
-            return $data;
-    }
-
-    private function getParents($request)
-    {
-        $parents = [];
-
-        $parent_id = $request->user()->parent_id;
-        if($parent_id)
-        {
-            $idx = globalLevelByIndex($request->user()->level);
-            for ($i=$idx; $i < 5; $i++)
-            {
-                $parent = $this->salesforces
-                    ->where('id', $parent_id)
-                    ->where('is_delete', false)
-                    ->first(['id', 'parent_id', 'sales_fee', 'level', 'sales_name', 'is_able_under_modify', 'mcht_batch_fee']);
-                if($parent)
-                    $parents[] = $parent;
-
-                if($parent->parent_id === null)
-                    return $parents;
-                else
-                    $parent_id = $parent->parent_id;
-            }
-            return $parents;
-        }
-        else
-            return $parents;
-    }
-
     public function classification(Request $request)
     {
         if($request->sales_parent_structure && Ablilty::isSalesforce($request))
-        {
-            $data = [
-                'level_13' => [], 'level_15' => [],
-                'level_17' => [], 'level_20' => [], 
-                'level_25' => [], 'level_30' => [],
-            ];
-            if(Ablilty::isSalesforce($request))
-            {
-                // parent
-                $parents = $this->getParents($request);
-                foreach($parents as $parent)
-                {
-                    $data["level_".$parent->level][] = $parent;
-                }
-                // child, self
-                $sales = $this->salesforces->where('id', $request->user()->id)->with(['childs'])->first();
-                $data = $this->getRecursionChilds($data, $sales);
-            }
-            else if(Ablilty::isOperator($request))
-            {
-                $_sales = $this->salesforces
-                    ->where('brand_id', $request->user()->brand_id)
-                    ->where('level', 30)
-                    ->with(['childs'])
-                    ->get(['id', 'parent_id', 'sales_fee', 'level', 'sales_name', 'is_able_under_modify', 'mcht_batch_fee']);
-
-                foreach($_sales as $sales)
-                {
-                    $data = $this->getRecursionChilds($data, $sales);
-                }
-
-            }
-        }
+            $data = SalesforceOverlap::overlapClassification($request);
         else
         {
             $data = [];
@@ -407,6 +338,13 @@ class SalesforceController extends Controller
             return $this->extendResponse(1000, join(',', $exist_sales).'는 이미 존재하는 상호 입니다.');
         else
         {
+            foreach($datas as $data)
+            {
+                [$result, $msg] = AuthPasswordChange::registerValidate($user['user_name'], $data['user_pw']);
+                if($result === false)
+                    return $this->extendResponse(954, $data['user_name']." ".$msg, []);
+            }
+
             $salesforces = $datas->map(function ($data) use($current, $brand_id) {
                 $data['user_pw'] = Hash::make($data['user_pw'].$current);
                 $data['brand_id'] = $brand_id;
@@ -414,6 +352,7 @@ class SalesforceController extends Controller
                 $data['updated_at'] = $current;
                 return $data;
             })->toArray();
+
             $res = $this->manyInsert($this->salesforces, $salesforces);
             return $this->response($res ? 1 : 990);
         }

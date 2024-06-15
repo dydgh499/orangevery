@@ -94,12 +94,18 @@ class OperatorController extends Controller
             else
             {
                 $user = $request->data();
-                $user = $this->saveImages($request, $user, $this->imgs);
-                $user['user_pw'] = Hash::make($request->input('user_pw').$current);
-                $user['created_at'] = $current;
-
-                $res = $this->operators->create($user);
-                return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
+                [$result, $msg] = AuthPasswordChange::registerValidate($user['user_name'], $user['user_pw']);
+                if($result === false)
+                    return $this->extendResponse(954, $msg, []);
+                else
+                {
+                    $user = $this->saveImages($request, $user, $this->imgs);
+                    $user['user_pw'] = Hash::make($request->input('user_pw').$current);
+                    $user['created_at'] = $current;
+    
+                    $res = $this->operators->create($user);
+                    return $this->response($res ? 1 : 990, ['id'=>$res->id]);        
+                }
             }
         }
         else

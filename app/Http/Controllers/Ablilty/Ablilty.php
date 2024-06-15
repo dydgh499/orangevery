@@ -1,8 +1,9 @@
 <?php
 namespace App\Http\Controllers\Ablilty;
-use Carbon\Carbon;
 
+use App\Http\Controllers\Ablilty\AbnormalConnection;
 use Illuminate\Support\Facades\Redis;
+use Carbon\Carbon;
 
 class Ablilty
 {
@@ -59,7 +60,7 @@ class Ablilty
             $cond_2 = ($request->user()->brand_id !== $brand_id);
             if($cond_1 === false && $cond_2)
             {
-                critical('URL 조작, 파라미터 변조 접근 시도');
+                AbnormalConnection::tryParameterModulationApproach();
                 return false;
             }
             else
@@ -69,7 +70,7 @@ class Ablilty
         {
             if($request->user()->brand_id !== $brand_id)
             {
-                critical('URL 조작, 파라미터 변조 접근 시도');
+                AbnormalConnection::tryParameterModulationApproach();
                 return false;
             }
             else
@@ -82,7 +83,7 @@ class Ablilty
         $now = Carbon::now();
         if ($now->hour >= 21 || $now->hour < 6) 
         {
-            critical('추가/수정불가 시간대에 작업시도');
+            AbnormalConnection::tryCannotAllowTime();
             return false;
         }
         else

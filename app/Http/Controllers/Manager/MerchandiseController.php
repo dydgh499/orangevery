@@ -203,36 +203,42 @@ class MerchandiseController extends Controller
             {
                 $current = date("Y-m-d H:i:s");
                 $user = $request->data();
-                // 수수료율 정보는 추가시에만 적용되어야함
-                $user['sales0_id'] = $request->input('sales0_id', null);
-                $user['sales1_id'] = $request->input('sales1_id', null);
-                $user['sales2_id'] = $request->input('sales2_id', null);
-                $user['sales3_id'] = $request->input('sales3_id', null);
-                $user['sales4_id'] = $request->input('sales4_id', null);
-                $user['sales5_id'] = $request->input('sales5_id', null);
-                $user['hold_fee']  = $request->input('hold_fee', 0)/100;
-                $user['trx_fee']    = $request->input('trx_fee', 0)/100;
-                $user['sales0_fee'] = $request->input('sales0_fee', 0)/100;
-                $user['sales1_fee'] = $request->input('sales1_fee', 0)/100;
-                $user['sales2_fee'] = $request->input('sales2_fee', 0)/100;
-                $user['sales3_fee'] = $request->input('sales3_fee', 0)/100;
-                $user['sales4_fee'] = $request->input('sales4_fee', 0)/100;
-                $user['sales5_fee'] = $request->input('sales5_fee', 0)/100;
-                $user = $this->saveImages($request, $user, $this->imgs);
-                $user['user_pw'] = Hash::make($request->input('user_pw').$current);
-                $user['created_at'] = $current;
-
-                if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request) && (int)$request->use_syslink)
-                {
-                    $res = SysLink::create($user);
-                    if($res['code'] !== 'SUCCESS')
-                        return $this->extendResponse(1999, $res['message']);
-                }
-
-                $res = $this->merchandises->create($user);
                 
-                operLogging(HistoryType::CREATE, $this->target, [], $user, $user['mcht_name']);
-                return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
+                [$result, $msg] = AuthPasswordChange::registerValidate($user['user_name'], $request->user_pw);
+                if($result === false)
+                    return $this->extendResponse(954, $msg, []);
+                else
+                {
+                    // 수수료율 정보는 추가시에만 적용되어야함
+                    $user['sales0_id'] = $request->input('sales0_id', null);
+                    $user['sales1_id'] = $request->input('sales1_id', null);
+                    $user['sales2_id'] = $request->input('sales2_id', null);
+                    $user['sales3_id'] = $request->input('sales3_id', null);
+                    $user['sales4_id'] = $request->input('sales4_id', null);
+                    $user['sales5_id'] = $request->input('sales5_id', null);
+                    $user['hold_fee']  = $request->input('hold_fee', 0)/100;
+                    $user['trx_fee']    = $request->input('trx_fee', 0)/100;
+                    $user['sales0_fee'] = $request->input('sales0_fee', 0)/100;
+                    $user['sales1_fee'] = $request->input('sales1_fee', 0)/100;
+                    $user['sales2_fee'] = $request->input('sales2_fee', 0)/100;
+                    $user['sales3_fee'] = $request->input('sales3_fee', 0)/100;
+                    $user['sales4_fee'] = $request->input('sales4_fee', 0)/100;
+                    $user['sales5_fee'] = $request->input('sales5_fee', 0)/100;
+                    $user = $this->saveImages($request, $user, $this->imgs);
+                    $user['user_pw'] = Hash::make($request->user_pw.$current);
+                    $user['created_at'] = $current;
+
+                    if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request) && (int)$request->use_syslink)
+                    {
+                        $res = SysLink::create($user);
+                        if($res['code'] !== 'SUCCESS')
+                            return $this->extendResponse(1999, $res['message']);
+                    }
+
+                    $res = $this->merchandises->create($user);                    
+                    operLogging(HistoryType::CREATE, $this->target, [], $user, $user['mcht_name']);
+                    return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
+                }
             }
         }
     }
@@ -428,6 +434,13 @@ class MerchandiseController extends Controller
                 return $this->extendResponse(1000, join(',', $exist_mchts).'는 이미 존재하는 상호 입니다.');
             else
             {
+                foreach($datas as $data)
+                {
+                    [$result, $msg] = AuthPasswordChange::registerValidate($data['user_name'], $data['user_pw']);
+                    if($result === false)
+                        return $this->extendResponse(954, $data['user_name']." ".$msg, []);    
+                }
+    
                 $merchandises = $datas->map(function ($data) use($current, $brand_id) {
                     $data['user_pw'] = Hash::make($data['user_pw'].$current);
                     $data['brand_id'] = $brand_id;

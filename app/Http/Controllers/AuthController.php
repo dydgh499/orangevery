@@ -25,7 +25,6 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
 
 /**
@@ -194,7 +193,7 @@ class AuthController extends Controller
     public function onwerCheck(Request $request)
     {
         $data = $request->all();
-        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/onwer-check';
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/onwer-check';
         $res = post($url, $data);
         if($res['body']['result'] === 100)
             return $this->response(1, ['message'=> $res['body']['message']]);

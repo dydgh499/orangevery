@@ -139,11 +139,13 @@ trait ManagerTrait
         $validated = $request->validate(['user_pw'=>'required']);
 
         $user = $query->first();
-        
         if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
             return $this->response(951);
         else
         {
+            [$result, $msg] = AuthPasswordChange::passwordValidate($user->user_name, $request->user_pw);
+            if($result === false)
+                return $this->extendResponse(954, $msg, []);
             if(AuthPasswordChange::HashCheck($user, $request->user_pw))
                 return $this->extendResponse(954, '기존 패스워드와 달라야합니다.', []);
             else

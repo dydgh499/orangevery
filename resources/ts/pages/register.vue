@@ -10,7 +10,7 @@ import authV2MaskDark from '@images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@images/pages/misc-mask-light.png'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
-import { requiredValidatorV2 } from '@validators'
+import { lengthValidator, passwordValidatorV2, requiredValidatorV2 } from '@validators'
 import { VForm } from 'vuetify/components'
 
 import authV2LoginDefault1 from '@images/pages/auth-v2-login-default1.png'
@@ -129,18 +129,18 @@ const sameValidaor = () => {
                             </VCol>
                             <!-- user_name -->
                             <VCol cols="12">
-                                <VTextField v-model="user_name" label="아이디 입력" type="user_name" :rules="[requiredValidatorV2(user_name, '아이디')]"
+                                <VTextField v-model="user_name" label="아이디 입력" type="user_name" :rules="[requiredValidatorV2(user_name, '아이디'), lengthValidator(user_name, 8)]""
                                     :error-messages="errors.message" />
                             </VCol>
                             <VCol cols="12">
-                                <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidatorV2(user_pw, '사업자등록번호')]"
+                                <VTextField v-model="user_pw" label="패스워드 입력" :rules="[requiredValidatorV2(user_pw, '패스워드'), passwordValidatorV2]"
                                     :type="isPasswordVisible ? 'text' : 'password'"
                                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                                     @click:append-inner="isPasswordVisible = !isPasswordVisible" />
                             </VCol>
                             <!-- password -->
                             <VCol cols="12">
-                                <VTextField v-model="user_pw_check" label="패스워드 확인" :rules="[requiredValidatorV2(user_pw_check, '사업자등록번호'), sameValidaor]"
+                                <VTextField v-model="user_pw_check" label="패스워드 확인" :rules="[requiredValidatorV2(user_pw_check, '패스워드확인'), passwordValidatorV2]"
                                     :type="isPasswordVisible ? 'text' : 'password'"
                                     :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                                     @click:append-inner="isPasswordVisible = !isPasswordVisible" />

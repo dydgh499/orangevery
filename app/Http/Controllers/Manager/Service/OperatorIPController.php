@@ -55,7 +55,7 @@ class OperatorIPController extends Controller
         $res = $this->operator_ips->create($data);
         $ips = $this->operator_ips->where('brand_id', $data['brand_id'])->get()->pluck('enable_ip')->all();
         
-        AuthOperatorIP::setStore($data['brand_id'], $ips);
+        AuthOperatorIP::set($data['brand_id'], $ips);
 
         return $this->response($res ? 1 : 990, ['id'=>$res->id, 'brand_id'=>$data['brand_id']]);
     }
@@ -86,7 +86,7 @@ class OperatorIPController extends Controller
         $res  = $this->operator_ips->where('id', $id)->update($data);
 
         $ips = $this->operator_ips->where('brand_id', $data['brand_id'])->get()->pluck('enable_ip')->all();
-        AuthOperatorIP::setStore($data['brand_id'], $ips);
+        AuthOperatorIP::set($data['brand_id'], $ips);
 
         return $this->response($res ? 1 : 990, ['id'=>$id, 'brand_id'=>$data['brand_id']]);
     }
@@ -112,6 +112,6 @@ class OperatorIPController extends Controller
             'enable_ip' => $enable_ip,
         ]);
         $ips = OperatorIP::where('brand_id', $brand_id)->get()->pluck('enable_ip')->all();
-        AuthOperatorIP::setStore($brand_id, $ips);
+        AuthOperatorIP::set($brand_id, $ips);
     }
 }

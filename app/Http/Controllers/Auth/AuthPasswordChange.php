@@ -100,4 +100,36 @@ class AuthPasswordChange
         else
             return Hash::check($_user_pw, $user->user_pw);
     }
+    
+
+    static function passwordValidate($user_name, $password)
+    {
+        $pattern = '/(\d)\1{2,}|0123|1234|2345|3456|4567|5678|6789|7890/';
+        if(preg_match($pattern, $password)) 
+            return [false, '패스워드에 연속된 숫자나 중복된 숫자(3개 이상)를 포함할 수 없습니다.'];
+        else if(strpos($password, $user_name) !== false)
+            return [false, '패스워드에 ID를 포함할 수 없습니다.'];
+        else
+            return [true, ''];
+    }
+
+    static public function userNameValidate($user_name)
+    {
+        $ban_words = ['test', 'admin', 'master', 'user'];
+        foreach($ban_words as $ban_word)
+        {
+            if(strpos($user_name, $ban_word) !== false)
+                return [false, "ID에 포함할 수 없는 단어가 존재합니다.($ban_word)"];
+        }
+        return [true, ''];
+    }
+
+    static public function registerValidate($user_name, $password)
+    {
+        [$result, $msg] = self::userNameValidate($user_name);
+        if($result === false)
+            return [$result, $msg];
+        else
+            return self::passwordValidate($user_name, $password);
+    }
 }

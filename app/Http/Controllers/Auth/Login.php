@@ -5,6 +5,7 @@ use App\Enums\AuthLoginCode;
 use App\Http\Traits\ExtendResponseTrait;
 
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Auth\AuthAccountLock;
@@ -33,7 +34,7 @@ class Login
             }
             else
             {
-                critical('등록되지 않은 IP 접근');
+                AbnormalConnection::tryNoRegisterIP($result['user']);
                 return AuthLoginCode::NOT_FOUND->value;
             }
         }

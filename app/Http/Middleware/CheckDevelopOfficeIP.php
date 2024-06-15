@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
 
 class CheckDevelopOfficeIP
 {
@@ -20,7 +21,7 @@ class CheckDevelopOfficeIP
             return $next($request);
         else
         {
-            critical("허용되지 않은 작업 시도 (".$request->ip().")");
+            AbnormalConnection::tryOperationNotPermitted();
             return response('Your IP has been temporarily blocked due to excessive requests. Access information will be analyzed.', 403);
         }
     }

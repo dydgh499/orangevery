@@ -73,4 +73,84 @@ class SalesforceOverlap
             ->get();
         return [$total_count, $content];
     }
+
+    
+    //
+    static private function getParents($request)
+    {
+        $parents = [];
+
+        $parent_id = $request->user()->parent_id;
+        if($parent_id)
+        {
+            $idx = globalLevelByIndex($request->user()->level);
+            for ($i=$idx; $i < 5; $i++)
+            {
+                $parent = Salesforce::where('id', $parent_id)
+                    ->where('is_delete', false)
+                    ->first(['id', 'parent_id', 'sales_fee', 'level', 'sales_name', 'is_able_under_modify', 'mcht_batch_fee']);
+                if($parent)
+                    $parents[] = $parent;
+
+                if($parent->parent_id === null)
+                    return $parents;
+                else
+                    $parent_id = $parent->parent_id;
+            }
+            return $parents;
+        }
+        else
+            return $parents;
+    }
+
+    static private function getRecursionChilds($data, $sales)
+    {
+        if($sales)
+        {
+            for ($i=0; $i <count($sales->childs); $i++) 
+            {
+                $data = self::getRecursionChilds($data, $sales->childs[$i]);
+            }
+
+            $data["level_".$sales->level][] = $sales;
+            $sales->makeHidden(['childs']);
+            return $data;    
+        }
+        else
+            return $data;
+    }
+
+    static public function overlapClassification($request)
+    {
+        $data = [
+            'level_13' => [], 'level_15' => [],
+            'level_17' => [], 'level_20' => [], 
+            'level_25' => [], 'level_30' => [],
+        ];
+        if(Ablilty::isSalesforce($request))
+        {
+            // parent
+            $parents = self::getParents($request);
+            foreach($parents as $parent)
+            {
+                $data["level_".$parent->level][] = $parent;
+            }
+            // child, self
+            $sales = Salesforce::where('id', $request->user()->id)->with(['childs'])->first();
+            $data = self::getRecursionChilds($data, $sales);
+        }
+        else if(Ablilty::isOperator($request))
+        {
+            $_sales = Salesforce::where('brand_id', $request->user()->brand_id)
+                ->where('level', 30)
+                ->with(['childs'])
+                ->get(['id', 'parent_id', 'sales_fee', 'level', 'sales_name', 'is_able_under_modify', 'mcht_batch_fee']);
+
+            foreach($_sales as $sales)
+            {
+                $data = self::getRecursionChilds($data, $sales);
+            }
+        }
+        return $data;
+    }
 }
