@@ -91,9 +91,11 @@ class AuthPasswordChange
 
         if($created_at->greaterThanOrEqualTo($reference_time) || $password_change_at->greaterThanOrEqualTo($reference_time)) 
         {   //06/15 16시 업데이트 이후 수정된 건들 비번+생성시간 비교
-            return Hash::check($_user_pw, $user->user_pw.$user->created_at);
+            return Hash::check($_user_pw.$user->created_at, $user->user_pw);
         }
         else
+        {
             return Hash::check($_user_pw, $user->user_pw);
+        }
     }
 }
