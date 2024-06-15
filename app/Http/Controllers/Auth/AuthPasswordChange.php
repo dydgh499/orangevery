@@ -89,13 +89,15 @@ class AuthPasswordChange
         $password_change_at = Carbon::parse($user->password_change_at);
         $reference_time     = Carbon::parse('2024-06-15 17:20:00');
 
-        if($created_at->greaterThanOrEqualTo($reference_time) || $password_change_at->greaterThanOrEqualTo($reference_time)) 
-        {   //06/15 16시 업데이트 이후 수정된 건들 비번+생성시간 비교
+        if($created_at->greaterThanOrEqualTo($reference_time))
+        {
+            return Hash::check($_user_pw.$user->created_at, $user->user_pw);
+        }
+        else if($user->password_change_at && $password_change_at->greaterThanOrEqualTo($reference_time))
+        {
             return Hash::check($_user_pw.$user->created_at, $user->user_pw);
         }
         else
-        {
             return Hash::check($_user_pw, $user->user_pw);
-        }
     }
 }
