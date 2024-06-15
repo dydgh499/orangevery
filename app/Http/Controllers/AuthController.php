@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
+use App\Http\Controllers\Ablilty\IPInfo;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Auth\AuthPasswordChange;
 
@@ -23,7 +24,6 @@ use App\Http\Controllers\Auth\Login;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
@@ -44,42 +44,12 @@ class AuthController extends Controller
      * @bodyParam dns string required 검증할 DNS 입력 Example: localhost
      *
      */
-    private function isForeginIP($request)
-    {
-        $token = env('IPINFO_API_KEY', '2c693805e1bced');
-        if(Ablilty::isDevOffice($request) || $request->ip() === '127.0.0.1')
-            return [true, []];
-
-        $res = get("https://ipinfo.io/".$request->ip(), [], [
-            'Authorization' => "Bearer {$token}",
-            'User-Agent' => 'Laravel',
-            "Accept" =>  "application/json",
-        ]);
-        if($res['code'] !== 200)
-        {
-            error(array_merge($request->all(), $res), 'ip blacklist API count over');
-            return [true, []];
-        }
-        else
-        {
-            if(strtoupper($res['body']['country']) === 'KR')
-                return [true, []];
-            else if(strtoupper($res['body']['country']) === 'VN' && in_array($res['body']['region'], ['Da Nang', 'Hanoi']))
-                return [true, []];
-            else
-            {
-                return [false, $res];
-            }
-        }
-    }
-
     public function domain(Request $request)
     {
-        [$result, $data] = $this->isForeginIP($request);
+        $result = IPInfo::validate($request);
         if($result === false)
         {
             $msg = 'Abnormal access has been detected. The access log will be sent to the administrator and analyzed.';
-            Log::alert($msg, array_merge($request->all(), $data));
             return Response::json(['message'=>$msg], 403, [], JSON_UNESCAPED_UNICODE);
         }
 

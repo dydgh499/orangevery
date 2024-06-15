@@ -27,12 +27,9 @@ class Login
             if(AuthOperatorIP::valiate($result['user']->brand_id, $request->ip()))
             {
                 if($brand['pv_options']['paid']['use_head_office_withdraw'])
-                {
-                    return AuthPhoneNum::validate($request->token);   // 휴대폰 인증    
-                }
+                    return AuthPhoneNum::validate($request->token);   // 휴대폰 인증
                 else
                     return AuthLoginCode::SUCCESS->value;
-
             }
             else
             {
