@@ -144,9 +144,11 @@ class SalesforceController extends Controller
                 return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
             else
             {
+                $current = date('Y-m-d H:i:s');
                 $user = $request->data();
                 $user = $this->saveImages($request, $user, $this->imgs);
-                $user['user_pw'] = Hash::make($request->input('user_pw'));
+                $user['user_pw'] = Hash::make($request->input('user_pw').$current);
+                $user['created_at'] = $current;
                 $res = $this->salesforces->create($user);
 
                 operLogging(HistoryType::CREATE, $this->target, [], $user, $user['sales_name']);
@@ -406,7 +408,7 @@ class SalesforceController extends Controller
         else
         {
             $salesforces = $datas->map(function ($data) use($current, $brand_id) {
-                $data['user_pw'] = Hash::make($data['user_pw']);
+                $data['user_pw'] = Hash::make($data['user_pw'].$current);
                 $data['brand_id'] = $brand_id;
                 $data['created_at'] = $current;
                 $data['updated_at'] = $current;

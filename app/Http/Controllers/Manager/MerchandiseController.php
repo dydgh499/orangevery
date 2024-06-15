@@ -8,6 +8,7 @@ use App\Models\Operator;
 use App\Models\Merchandise;
 use App\Models\Merchandise\PaymentModule;
 use App\Models\Merchandise\NotiUrl;
+
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
@@ -16,6 +17,8 @@ use App\Http\Traits\Salesforce\UnderSalesTrait;
 use App\Http\Requests\Manager\BulkRegister\BulkMerchandiseRequest;
 use App\Http\Requests\Manager\MerchandiseRequest;
 use App\Http\Requests\Manager\IndexRequest;
+
+use App\Http\Controllers\Auth\AuthPasswordChange;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\FirstSettlement\SysLink;
@@ -198,6 +201,7 @@ class MerchandiseController extends Controller
                 return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
             else
             {
+                $current = date("Y-m-d H:i:s");
                 $user = $request->data();
                 // 수수료율 정보는 추가시에만 적용되어야함
                 $user['sales0_id'] = $request->input('sales0_id', null);
@@ -214,9 +218,9 @@ class MerchandiseController extends Controller
                 $user['sales3_fee'] = $request->input('sales3_fee', 0)/100;
                 $user['sales4_fee'] = $request->input('sales4_fee', 0)/100;
                 $user['sales5_fee'] = $request->input('sales5_fee', 0)/100;
-
                 $user = $this->saveImages($request, $user, $this->imgs);
-                $user['user_pw'] = Hash::make($request->input('user_pw'));
+                $user['user_pw'] = Hash::make($request->input('user_pw').$current);
+                $user['created_at'] = $current;
 
                 if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request) && (int)$request->use_syslink)
                 {
@@ -425,7 +429,7 @@ class MerchandiseController extends Controller
             else
             {
                 $merchandises = $datas->map(function ($data) use($current, $brand_id) {
-                    $data['user_pw'] = Hash::make($data['user_pw']);
+                    $data['user_pw'] = Hash::make($data['user_pw'].$current);
                     $data['brand_id'] = $brand_id;
                     $data['created_at'] = $current;
                     $data['updated_at'] = $current;
@@ -477,10 +481,10 @@ class MerchandiseController extends Controller
      */
     public function clearSettleHold(Request $requset, $id)
     {
-        $data = Operator::where('id', $requset->user()->id)->first(['user_pw']);
+        $data = Operator::where('id', $requset->user()->id)->first();
         if($data)
         {
-            if(Hash::check($requset->user_pw, $data->user_pw))
+            if(AuthPasswordChange::HashCheck($data, $requset->user_pw))
             {
                 $this->merchandises->where('id', $id)->update([
                     'settle_hold_s_dt' => null,

@@ -215,10 +215,7 @@ class MchtSettleHistoryController extends Controller
     public function setDeposit(Request $request, int $id)
     {    
         if($request->user()->tokenCan(35))
-        {            
-            if(Ablilty::isEditAbleTime() === false)
-                return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-
+        {
             $data = ['id'=>$id, 'current_status'=>$request->current_status];
             $result = $this->depositContainer($request, 'mcht', $data, $this->settle_mcht_hist);
             if($result !== '')
@@ -304,9 +301,6 @@ class MchtSettleHistoryController extends Controller
      */
     public function linkAccount(Request $request, int $id)
     {
-        if(Ablilty::isEditAbleTime() === false)
-            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-
         $code = $this->linkAccountHistory($request, $id, $this->settle_mcht_hist, new Merchandise);
         return $this->response($code);
     }

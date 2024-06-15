@@ -80,7 +80,6 @@ class Ablilty
     static function isEditAbleTime()
     {   // 21시 ~ 06시까지는 가맹점, 영업점, 운영자, 결제모듈, 금융 VAN, 브랜드 추가/수정 불가
         $now = Carbon::now();
-
         if ($now->hour >= 21 || $now->hour < 6) 
         {
             critical('추가/수정불가 시간대에 작업시도');

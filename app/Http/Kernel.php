@@ -71,5 +71,6 @@ class Kernel extends HttpKernel
         'log.route' => \App\Http\Middleware\LogRoute::class,
         'dev.ip' => \App\Http\Middleware\CheckDevelopOfficeIP::class,
         'is.operate' => \App\Http\Middleware\CheckOperator::class,
+        'is.edit.able' => \App\Http\Middleware\CheckEditAbleTime::class,
     ];
 }

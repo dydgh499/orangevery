@@ -4,7 +4,6 @@ a
 import { useRequestStore } from '@/views/request';
 import type { Tab } from '@/views/types';
 import { getUserLevel, isAbleModiy, user_info } from '@axios';
-import corp from '@corp';
 import { VForm } from 'vuetify/components';
 
 interface Props {
@@ -23,7 +22,7 @@ const { formRequest, remove, setOneObject } = useRequestStore()
 const disabledConditions = (index: number) => {
     const cond_1 = index == 2 && props.id == 0 && props.path == 'merchandises'
     const cond_2 = index == 3 && props.id == 0 && props.path == 'merchandises'
-    const cond_3 = index == 3 && getUserLevel() < 50 && props.path == 'services/brands'
+    const cond_3 = index == 3 && getUserLevel() < 40 && props.path == 'services/brands'
     return cond_1 || cond_2 || cond_3
 }
 
@@ -55,7 +54,7 @@ const authHideConditions = () => {
     }
     else
     {
-        if(props.path === 'services/brands' && (corp.id === 1 && getUserLevel() >= 50) === false)
+        if(props.path === 'services/brands' && (getUserLevel() >= 40) === false)
             return false
         else if(props.path === 'services/operators' && getUserLevel() < 40)
             return false

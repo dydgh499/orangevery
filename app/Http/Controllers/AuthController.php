@@ -198,13 +198,15 @@ class AuthController extends Controller
                     'phone_num'=>$request->phone_num,
                     'business_num'=>$request->business_num,
                 ]);
+            $current = date("Y-m-d H:i:s");
             $res = Operator::create([
                 'brand_id'  => $request->brand_id,
                 'user_name' => $request->user_name,
-                'user_pw'   => Hash::make($request->user_pw),
+                'user_pw'   => Hash::make($request->user_pw.$current),
                 'nick_name' => '본사',
-                'profile_img' => '/build/assets/avatar_5.644eef84.svg',
-                'level'     => 40,
+                'profile_img'   => '/build/assets/avatar_5.644eef84.svg',
+                'level'         => 40,
+                'created_at'    => $cur_at,
             ]);
             if($res)
             {

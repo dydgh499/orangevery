@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow">
     <link rel="dns-prefetch" href="{{ $json['dns'] }}">
     <link rel="icon" href="{{ $json['favicon_img'] }}"/>
     <meta name="google" content="notranslate" />

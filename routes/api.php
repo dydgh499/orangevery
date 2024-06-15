@@ -4,67 +4,16 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Message\MessageController;
-use App\Http\Controllers\Manager\Dashboard\DashboardController;
-
-use App\Http\Controllers\Manager\BrandController;
-use App\Http\Controllers\Manager\Service\BeforeBrandInfoController;
-use App\Http\Controllers\Manager\Service\DifferentSettlementInfoController;
-use App\Http\Controllers\Manager\Service\MchtBlacklistController;
-use App\Http\Controllers\Manager\Service\HeadOfficeAccountController;
-use App\Http\Controllers\Manager\Service\ClassificationController;
-use App\Http\Controllers\Manager\Service\OperatorIPController;
-use App\Http\Controllers\Manager\Service\HolidayController;
-
-use App\Http\Controllers\Manager\OperatorController;
-use App\Http\Controllers\Manager\FinanceVanController;
-
 use App\Http\Controllers\Manager\MerchandiseController;
-use App\Http\Controllers\Manager\Merchandise\TerminalController;
-use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
-use App\Http\Controllers\Manager\Merchandise\RegularCreditCardController;
-use App\Http\Controllers\Manager\Merchandise\NotiUrlController;
-use App\Http\Controllers\Manager\Merchandise\SpecifiedTimeDisablePaymentController;
-
-
-use App\Http\Controllers\Manager\SalesforceController;
-use App\Http\Controllers\Manager\Salesforce\UnderAutoSettingController;
-
 use App\Http\Controllers\Manager\PaymentGatewayController;
-use App\Http\Controllers\Manager\PaymentSectionController;
-
-use App\Http\Controllers\Manager\PostController;
-use App\Http\Controllers\Manager\PopupController;
-
-use App\Http\Controllers\Manager\ComplaintController;
+use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
 use App\Http\Controllers\Manager\Transaction\TransactionController;
-use App\Http\Controllers\Manager\Transaction\TransactionSummaryController;
-
-use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateMchtController;
-use App\Http\Controllers\Manager\BatchUpdater\BatchUpdateSalesController;
-use App\Http\Controllers\Manager\BatchUpdater\BatchUpdatePayModuleController;
-
-use App\Http\Controllers\Log\SubBusinessRegistration\SubBusinessRegistrationController;
-use App\Http\Controllers\Log\DifferenceSettlementHistoryController;
-use App\Http\Controllers\Log\RealtimeSendHistoryController;
-use App\Http\Controllers\Log\FeeChangeHistoryController;
-use App\Http\Controllers\Log\NotiSendHistoryController;
-use App\Http\Controllers\Log\OperatorHistoryContoller;
-use App\Http\Controllers\Log\MchtSettleHistoryController;
-use App\Http\Controllers\Log\SalesSettleHistoryController;
-
-use App\Http\Controllers\Log\DangerTransController;
-use App\Http\Controllers\Log\FailTransController;
+use App\Http\Controllers\Manager\Dashboard\DashboardController;
+use App\Http\Controllers\Manager\Service\MchtBlacklistController;
 
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\BeforeSystem\BeforeSystemController;
 
-use App\Http\Controllers\Manager\Settle\MerchandiseController as MchtSettleController;
-use App\Http\Controllers\Manager\Settle\SalesforceController as SalesSettleController;
-use App\Http\Controllers\Manager\Settle\CollectWithdrawController;
-use App\Http\Controllers\Manager\Settle\RepMerchandiseController;
-use App\Http\Controllers\Manager\Settle\CancelDepositController;
-
-use App\Http\Controllers\Log\CollectWithdrawHistoryController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -97,9 +46,12 @@ Route::prefix('v1')->group(function() {
         Route::post('reset-password', [AuthController::class, 'resetPassword']);    
         Route::post('sign-in', [AuthController::class, 'signin']);
         Route::post('sign-up', [AuthController::class, 'signUp']);
-        Route::middleware(['auth:sanctum'])->post('extend-password-at', [AuthController::class, 'extendPasswordAt']);   
-        Route::middleware(['auth:sanctum'])->post('sign-out', [AuthController::class, 'signout']);
-        Route::middleware(['auth:sanctum'])->post('onwer-check', [AuthController::class, 'onwerCheck']);
+        
+        Route::middleware(['auth:sanctum'])->group(function() {
+            Route::post('extend-password-at', [AuthController::class, 'extendPasswordAt']);   
+            Route::post('sign-out', [AuthController::class, 'signout']);
+            Route::post('onwer-check', [AuthController::class, 'onwerCheck']);
+        });
     });
 
     Route::prefix('manager')->middleware(['auth:sanctum', 'log.route'])->group(function() {
@@ -111,232 +63,6 @@ Route::prefix('v1')->group(function() {
             Route::get('recent-operator-histories', [DashboardController::class, 'getRecentOperatorHistories']);
             Route::get('locked-users', [DashboardController::class, 'getLockedUsers']);            
         });
-
-        Route::prefix('posts')->group(function() {
-            Route::get('{id}/parent', [PostController::class, 'parent']);
-            Route::get('recent', [PostController::class, 'recent']);
-            Route::middleware(['is.operate'])->post('upload', [PostController::class, 'upload']);    
-        });
-        Route::get('services/pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
-        Route::prefix('services')->middleware(['is.operate'])->group(function() {
-            Route::get('bonaejas', [MessageController::class, 'index']);
-            Route::get('bonaejas/chart', [MessageController::class, 'chart']);
-            Route::post('operators/{id}/password-change', [OperatorController::class, 'passwordChange']);
-            Route::post('operators/{id}/unlock-account', [OperatorController::class, 'unlockAccount']);
-            Route::get('brands/chart', [BrandController::class, 'chart']);
-            
-            Route::apiResource('brands/before-brand-infos', BeforeBrandInfoController::class);
-            Route::apiResource('brands/different-settlement-infos', DifferentSettlementInfoController::class);
-            Route::middleware(['dev.ip'])->apiResource('brands/operator-ips', OperatorIPController::class);
-            Route::apiResource('brands', BrandController::class);
-                        
-            Route::apiResource('operators', OperatorController::class);            
-            Route::apiResource('operator-histories', OperatorHistoryContoller::class);
-            Route::apiResource('pay-gateways', PaymentGatewayController::class);
-            Route::apiResource('pay-sections', PaymentSectionController::class);
-            Route::apiResource('finance-vans', FinanceVanController::class);
-            Route::apiResource('classifications', ClassificationController::class);
-            Route::apiResource('head-office-accounts', HeadOfficeAccountController::class);
-            Route::post('mcht-blacklists/bulk-register', [MchtBlacklistController::class, 'bulkRegister']);            
-            Route::apiResource('mcht-blacklists', MchtBlacklistController::class);            
-
-            Route::apiResource('holidays', HolidayController::class);
-            Route::post('holidays/bulk-register', [HolidayController::class, 'updateHolidays']);
-        });
-
-        Route::prefix('transactions')->group(function() {                        
-            Route::post('noti/{id}', [TransactionController::class, 'noti']);
-            Route::post('batch-retry', [TransactionController::class, 'batchRetry']);
-            Route::post('batch-self-retry', [TransactionController::class, 'batchSelfRetry']);
-            Route::post('cancel', [TransactionController::class, 'cancel']);
-            Route::post('change-settle-date', [TransactionController::class, 'changeSettleDate']);
-            Route::get('chart', [TransactionController::class, 'chart']);
-            Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);            
-            Route::get('fails', [FailTransController::class, 'index']);
-
-            Route::get('summary/chart', [TransactionSummaryController::class, 'chart']);
-            Route::get('summary', [TransactionSummaryController::class, 'index']);
-
-            Route::get('dangers', [DangerTransController::class, 'index']);
-            Route::delete('dangers/{id}', [DangerTransController::class, 'destroy']);
-            Route::post('dangers/{id}/checked', [DangerTransController::class, 'checked']);
-            Route::post('dangers/batch-checked', [DangerTransController::class, 'batchChecked']);            
-            
-            Route::prefix('settle')->group(function() {
-                Route::get('collect-withdraws/dangers', [CollectWithdrawController::class, 'danger']);
-                Route::apiResource('collect-withdraws', CollectWithdrawController::class);
-                
-                Route::prefix('merchandises')->group(function() {
-                    Route::get('/', [MchtSettleController::class, 'index']);
-                    Route::get('/chart', [MchtSettleController::class, 'chart']);
-                    Route::post('/deduct', [MchtSettleController::class, 'deduct']);
-                    Route::get('/part', [MchtSettleController::class, 'part']);
-                    Route::get('/part/chart', [MchtSettleController::class, 'partChart']);
-                    Route::apiResource('cancel-deposits', CancelDepositController::class);
-                    Route::post('representative-settle', [RepMerchandiseController::class, 'settlement']);
-                });
-                Route::prefix('salesforces')->group(function() {
-                    Route::get('/', [SalesSettleController::class, 'index']);
-                    Route::get('/chart', [SalesSettleController::class, 'chart']);
-                    Route::post('/deduct', [SalesSettleController::class, 'deduct']);
-                    Route::get('/part', [SalesSettleController::class, 'part']);
-                    Route::get('/part/chart', [SalesSettleController::class, 'partChart']);
-                });
-            });
-            Route::prefix('settle-histories')->group(function() {
-                Route::middleware(['is.operate'])->group(function() {
-                    Route::get('difference', [DifferenceSettlementHistoryController::class, 'index']);
-                    Route::get('difference/chart', [DifferenceSettlementHistoryController::class, 'chart']);
-                    Route::apiResource('collect-withdraws', CollectWithdrawHistoryController::class);    
-
-                    Route::post('merchandises/batch', [MchtSettleHistoryController::class, 'batch']);
-                    Route::post('merchandises/batch-link-account', [MchtSettleHistoryController::class, 'batchLinkAccount']);
-                    Route::post('merchandises/{id}/add-deduct', [MchtSettleHistoryController::class, 'addDeduct']);
-                    Route::post('merchandises/{id}/link-account', [MchtSettleHistoryController::class, 'linkAccount']);
-                    Route::post('merchandises/{id}/deposit', [MchtSettleHistoryController::class, 'setDeposit']);
-                    Route::post('merchandises/batch-deposit', [MchtSettleHistoryController::class, 'setBatchDeposit']);                    
-                    Route::post('merchandises/single-deposit', [MchtSettleHistoryController::class, 'singleDeposit']);
-                    Route::post('merchandises/single-deposit-cancel-job-reservation', [MchtSettleHistoryController::class, 'singleDepositCancelJobReservation']);
-
-                    Route::post('salesforces/batch', [SalesSettleHistoryController::class, 'batch']);
-                    Route::post('salesforces/batch-link-account', [SalesSettleHistoryController::class, 'batchLinkAccount']);
-                    Route::post('salesforces/{id}/add-deduct', [SalesSettleHistoryController::class, 'addDeduct']);
-                    Route::post('salesforces/{id}/link-account', [SalesSettleHistoryController::class, 'linkAccount']);
-                    Route::post('salesforces/{id}/deposit', [SalesSettleHistoryController::class, 'setDeposit']);
-                    Route::post('salesforces/batch-deposit', [SalesSettleHistoryController::class, 'setBatchDeposit']);    
-                });
-                
-                Route::get('merchandises/chart', [MchtSettleHistoryController::class, 'chart']);
-                Route::apiResource('merchandises', MchtSettleHistoryController::class);
-                
-                Route::get('salesforces/chart', [SalesSettleHistoryController::class, 'chart']);
-                Route::apiResource('salesforces', SalesSettleHistoryController::class);
-            });
-            Route::prefix('realtime-histories')->middleware(['is.operate'])->group(function() {
-                Route::post('get-balance', [RealtimeSendHistoryController::class, 'getBalance']);
-                Route::post('head-office-transfer', [RealtimeSendHistoryController::class, 'headOfficeTransfer']);
-                
-            });            
-            Route::apiResource('realtime-histories', RealtimeSendHistoryController::class);
-        });
-        Route::prefix('salesforces')->group(function() {
-            Route::prefix('batch-updaters')->middleware(['is.operate'])->group(function() {
-                Route::post('set-settle-tax-type', [BatchUpdateSalesController::class, 'setSettleTaxType']);
-                Route::post('set-settle-cycle', [BatchUpdateSalesController::class, 'setSettleCycle']);
-                Route::post('set-settle-day', [BatchUpdateSalesController::class, 'setSettleDay']);
-                Route::post('set-is-able-modify-mcht', [BatchUpdateSalesController::class, 'setIsAbleModifyMcht']);
-                Route::post('set-view-type', [BatchUpdateSalesController::class, 'setViewType']);
-                Route::post('set-account-info', [BatchUpdateSalesController::class, 'setAccountInfo']);
-                Route::post('set-note', [BatchUpdateSalesController::class, 'setNote']);
-            });
-            Route::middleware(['is.operate'])->group(function() {
-                Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
-                Route::prefix('fee-change-histories')->group(function() {
-                    Route::delete('{id}', [FeeChangeHistoryController::class, 'deleteSalesforce']);
-                    Route::post('{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
-                });
-                Route::post('{id}/mcht-batch-fee', [SalesforceController::class, 'mchtBatchFee']);
-                Route::post('{id}/unlock-account', [SalesforceController::class, 'unlockAccount']);
-                Route::post('bulk-register', [SalesforceController::class, 'bulkRegister']);
-                Route::apiResource('under-auto-settings', UnderAutoSettingController::class);    
-            });
-
-            Route::post('{id}/password-change', [SalesforceController::class, 'passwordChange']);
-            Route::get('chart', [SalesforceController::class, 'chart']);
-            Route::get('fee-apply-histories', [SalesforceController::class, 'feeApplyHistories']);  // 간편보기
-            Route::get('classification', [SalesforceController::class, 'classification']);
-
-        });
-        Route::prefix('merchandises')->group(function() {
-            Route::post('{id}/password-change', [MerchandiseController::class, 'passwordChange']);
-            Route::middleware(['is.operate'])->prefix('batch-updaters')->group(function() {
-                Route::post('sales-fee-direct-apply', [BatchUpdateMchtController::class, 'setSalesFeeDirect']);
-                Route::post('sales-fee-book-apply', [BatchUpdateMchtController::class, 'setSalesFeeBooking']);
-                Route::post('mcht-fee-direct-apply', [BatchUpdateMchtController::class, 'setMchtFeeDirect']);
-                Route::post('mcht-fee-book-apply', [BatchUpdateMchtController::class, 'setMchtFeeBooking']);
-                Route::post('set-noti-url', [BatchUpdateMchtController::class, 'setNotiUrl']);                                
-                Route::post('set-enabled', [BatchUpdateMchtController::class, 'setEnabled']);
-                Route::post('set-custom-filter', [BatchUpdateMchtController::class, 'setCustomFilter']);
-                Route::post('set-business-num', [BatchUpdateMchtController::class, 'setBusinessNum']);
-                Route::post('set-account-info', [BatchUpdateMchtController::class, 'setAccountInfo']);
-            });
-            Route::middleware(['is.operate'])->group(function() {
-                Route::post('{id}/unlock-account', [MerchandiseController::class, 'unlockAccount']);
-                Route::post('{id}/set-settle-hold', [MerchandiseController::class, 'setSettleHold']);
-                Route::post('{id}/clear-settle-hold', [MerchandiseController::class, 'clearSettleHold']);
-                Route::post('bulk-register', [MerchandiseController::class, 'bulkRegister']);
-            });
-
-            Route::get('chart', [MerchandiseController::class, 'chart']);
-            Route::get('all', [MerchandiseController::class, 'all']);   
-            Route::get('terminals', [TerminalController::class, 'index']);   
-
-            Route::prefix('pay-modules')->group(function() {
-                Route::middleware(['is.operate'])->prefix('batch-updaters')->group(function() {
-                    Route::post('set-payment-gateway', [BatchUpdatePayModuleController::class, 'setPaymentGateway']);
-                    Route::post('set-abnormal-trans-limit', [BatchUpdatePayModuleController::class, 'setAbnormalTransLimit']);
-                    Route::post('set-dupe-pay-count-validation', [BatchUpdatePayModuleController::class, 'setDupPayCountValidation']);
-                    Route::post('set-dupe-pay-least-validation', [BatchUpdatePayModuleController::class, 'setDupPayLeastValidation']);
-                    Route::post('set-mid', [BatchUpdatePayModuleController::class, 'setMid']);
-                    Route::post('set-tid', [BatchUpdatePayModuleController::class, 'setTid']);
-                    Route::post('set-api-key', [BatchUpdatePayModuleController::class, 'setApiKey']);
-                    Route::post('set-sub-key', [BatchUpdatePayModuleController::class, 'setSubKey']);
-                    Route::post('set-installment', [BatchUpdatePayModuleController::class, 'setInstallment']);
-                    Route::post('set-note', [BatchUpdatePayModuleController::class, 'setNote']);
-                    Route::post('set-pay-limit', [BatchUpdatePayModuleController::class, 'setPayLimit']);
-                    Route::post('set-pay-disable-time', [BatchUpdatePayModuleController::class, 'setForbiddenPayTime']);
-                    Route::post('set-show-pay-view', [BatchUpdatePayModuleController::class, 'setShowPayView']);
-                    Route::post('set-use-realtime-deposit', [BatchUpdatePayModuleController::class, 'setUseRealtimeDeposit']);
-                });
-                
-                Route::get('chart', [PaymentModuleController::class, 'chart']);
-                Route::get('all', [PaymentModuleController::class, 'all']);
-                
-                Route::middleware(['is.operate'])->group(function() {
-                    Route::post('tid-create', [PaymentModuleController::class, 'tidCreate']);
-                    Route::post('mid-create', [PaymentModuleController::class, 'midCreate']);
-                    Route::post('mid-bulk-create', [PaymentModuleController::class, 'midBulkCreate']);
-                    Route::post('tid-bulk-create', [PaymentModuleController::class, 'tidBulkCreate']);
-                    Route::post('pay-key-create', [PaymentModuleController::class, 'payKeyCreate']);
-                    Route::post('bulk-register', [PaymentModuleController::class, 'bulkRegister']);
-                    Route::post('pg-bulk-updater', [PaymentModuleController::class, 'bulkRegisterPG']);
-                    Route::delete('batch-remove', [PaymentModuleController::class, 'batchRemove']);        
-                });
-            });
-            Route::apiResource('pay-modules', PaymentModuleController::class);
-            
-            Route::middleware(['is.operate'])->group(function() {
-                Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
-                Route::prefix('fee-change-histories')->group(function() {
-                    Route::delete('{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
-                    Route::post('{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
-                });
-            });
-            Route::get('noti-send-histories', [NotiSendHistoryController::class, 'index']);
-            Route::prefix('noti-send-histories')->group(function() {
-                Route::get('{trans_id}', [NotiSendHistoryController::class, 'show']);
-                Route::post('{trans_id}/retry', [NotiSendHistoryController::class, 'retry']);
-                Route::post('batch-retry', [NotiSendHistoryController::class, 'batchRetry']);    
-            });
-            Route::middleware(['is.operate'])->group(function() {
-                Route::post('regular-credit-cards/bulk-register', [RegularCreditCardController::class, 'bulkRegister']);
-                Route::post('noti-urls/bulk-register', [NotiUrlController::class, 'bulkRegister']);
-                Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisablePaymentController::class);
-                Route::apiResource('sub-business-registrations', SubBusinessRegistrationController::class);         
-            });
-            Route::apiResource('regular-credit-cards', RegularCreditCardController::class);     
-            Route::apiResource('noti-urls', NotiUrlController::class); 
-        });
-        
-        Route::apiResource('complaints', ComplaintController::class);
-        Route::apiResource('salesforces', SalesforceController::class);
-        Route::apiResource('transactions', TransactionController::class);
-        Route::apiResource('merchandises', MerchandiseController::class);
-        Route::apiResource('posts', PostController::class);
-
-        Route::get('popups/currently', [PopupController::class, 'currently']);
-        Route::middleware(['is.operate'])->apiResource('popups', PopupController::class);
-        
     });
 
     Route::prefix('quick-view')->middleware(['auth:sanctum', 'log.route'])->group(function() {

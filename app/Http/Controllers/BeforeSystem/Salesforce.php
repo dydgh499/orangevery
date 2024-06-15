@@ -43,7 +43,7 @@ class Salesforce
             $item = [
                 'brand_id'  => $brand_id,
                 'user_name' => $sale->ID,
-                'user_pw'   => Hash::make($sale->PW),
+                'user_pw'   => Hash::make($sale->PW.$this->current_time),
                 'sales_name' => $sale->NICK_NM,
                 'nick_name'  => $sale->REP_NM,
                 'resident_num'=> $sale->RESIDENT_NUM,

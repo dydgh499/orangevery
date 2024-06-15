@@ -32,10 +32,11 @@ class Login
                 }
                 else
                     return AuthLoginCode::SUCCESS->value;
+
             }
             else
             {
-                error(['ip'=>$request->ip(), 'all'=>$request->all()], '등록되지 않은 IP 접근');
+                critical(['ip'=>$request->ip(), 'all'=>$request->all()], '등록되지 않은 IP 접근');
                 return AuthLoginCode::NOT_FOUND->value;
             }
         }
@@ -107,7 +108,7 @@ class Login
 
             if($result['user']->is_lock)
                 $result['result'] = AuthLoginCode::LOCK_ACCOUNT->value;
-            else if(Hash::check($request->user_pw, $result['user']->user_pw))
+            else if(AuthPasswordChange::HashCheck($result['user'], $requset->user_pw))
                 $result['result'] = self::secondAuthValidate($result, $request);
             else
                 $result['result'] = AuthLoginCode::WRONG_PASSWORD->value;

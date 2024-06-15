@@ -28,30 +28,7 @@ watchEffect(() => {
         <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>운영정보</VCardTitle>            
-                    <VRow class="pt-3">
-                        <VCol :md="6" :cols="12">
-                            <VRow no-gutters>
-                                <VCol>
-                                    <label>도메인</label>
-                                </VCol>
-                                <VCol md="8">
-                            <VTextField v-model="props.item.dns" prepend-inner-icon="tabler-world-www"
-                                placeholder="도메인을 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.dns, '도메인')]" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                        <VCol :md=6 v-if="getUserLevel() == 50">
-                            <VRow no-gutters>
-                                <VCol>
-                                    <label>차액정산 사용여부</label>
-                                </VCol>
-                                <VCol md="8">
-                                    <VSwitch hide-details :false-value=0 :true-value=1 v-model="props.item.use_different_settlement" color="primary" />
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
+                    <VCardTitle>운영정보</VCardTitle>
                     <VRow class="pt-3" >
                         <VCol :md="12" :cols="12">
                             <VRow no-gutters>

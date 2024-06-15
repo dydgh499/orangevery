@@ -57,7 +57,7 @@ class Merchandise
             $item = [
                 'brand_id'  => $brand_id,
                 'user_name' => $mcht->ID,
-                'user_pw'   => Hash::make($mcht->PW),
+                'user_pw'   => Hash::make($mcht->PW.$this->current_time),
                 'mcht_name' => $mcht->NICK_NM,
                 'nick_name' => $mcht->REP_NM,
                 'sector'    => $mcht->SECTORS,

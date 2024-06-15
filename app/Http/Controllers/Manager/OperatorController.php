@@ -83,6 +83,7 @@ class OperatorController extends Controller
      */
     public function store(OperatorReqeust $request)
     {
+        $current = date("Y-m-d H:i:s");
         $validated = $request->validate(['user_pw'=>'required']);
         if($request->user()->level > 35)
         {
@@ -94,7 +95,8 @@ class OperatorController extends Controller
             {
                 $user = $request->data();
                 $user = $this->saveImages($request, $user, $this->imgs);
-                $user['user_pw'] = Hash::make($request->input('user_pw'));
+                $user['user_pw'] = Hash::make($request->input('user_pw').$current);
+                $user['created_at'] = $current;
 
                 $res = $this->operators->create($user);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
@@ -226,6 +228,8 @@ class OperatorController extends Controller
      */
     public function passwordChange(Request $request, int $id)
     {
+        if(Ablilty::isEditAbleTime() === false)
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if(Ablilty::isOperator($request))
             return $this->_passwordChange($this->operators->where('id', $id), $request);
         else

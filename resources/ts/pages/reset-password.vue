@@ -15,7 +15,7 @@ import { VForm } from 'vuetify/components'
 const ability = useAppAbility()
 
 const route = useRoute()
-const snackbar = ref(null)
+const snackbar = ref(<any>(null))
 const refVForm = ref<VForm>()
 
 const user_pw = ref('')
@@ -47,7 +47,7 @@ const resetPassword = () => {
     }
     else if(route.query.token) {
         axios.post('/api/v1/auth/reset-password', { 
-            token: decodeURIComponent(route.query.token), 
+            token: decodeURIComponent(route.query.token as string), 
             level: route.query.level,
             user_pw: user_pw.value
         })
@@ -81,6 +81,14 @@ const onSubmit = () => {
                 resetPassword()
         })
 }
+const passwordRules = computed(() => {
+    return getUserPasswordValidate(Number(route.query.level) === 10 ? 0 : 1, user_pw.value)
+})
+
+const passwordCheckRules = computed(() => {
+    return getUserPasswordValidate(Number(route.query.level) === 10 ? 0 : 1, user_pw_check.value)
+})
+
 </script>
 
 <template>
@@ -135,12 +143,12 @@ const onSubmit = () => {
                 <VCol cols="12">
                     <VTextField v-model="user_pw" label="새 비밀번호" :type="isPasswordVisible ? 'text' : 'password'" 
                         :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                        :rules="[getUserPasswordValidate(Number(route.query) === 10 ? 0 : 1, password)]"
+                        :rules="passwordRules"
                         @click:append-inner="isPasswordVisible = !isPasswordVisible" 
                         :error-messages="errors.message"/>
                 </VCol>
                 <VCol cols="12" style="margin: 24px 0;">
-                    <VTextField v-model="user_pw_check" label="새 비밀번호 확인" :rules="[getUserPasswordValidate(Number(route.query) === 10 ? 0 : 1, user_pw_check)]"
+                    <VTextField v-model="user_pw_check" label="새 비밀번호 확인" :rules="passwordCheckRules"
                         :type="isPasswordCheckVisible ? 'text' : 'password'"
                         :append-inner-icon="isPasswordCheckVisible ? 'tabler-eye-off' : 'tabler-eye'"
                         @click:append-inner="isPasswordCheckVisible = !isPasswordCheckVisible"/>

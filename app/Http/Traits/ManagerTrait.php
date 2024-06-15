@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Auth\AuthAccountLock;
+use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Controllers\Ablilty\Ablilty;
 
 
@@ -143,20 +144,16 @@ trait ManagerTrait
             return $this->response(951);
         else
         {
-            if(Ablilty::isEditAbleTime() === false)
-                return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-            else if(Hash::check($request->user_pw, $user->user_pw))
+            if(AuthPasswordChange::HashCheck($user, $request->user_pw))
                 return $this->extendResponse(954, '기존 패스워드와 달라야합니다.', []);
             else
             {
-                $user->user_pw = Hash::make($request->user_pw);
+                $user->user_pw = Hash::make($request->user_pw.$user->created_at);
                 $user->password_change_at = date('Y-m-d H:i:s');
-                $user->save();    
-
+                $user->save();
                 AuthAccountLock::initPasswordWrongCounter($user);
-                return $this->response(1);   
+                return $this->response(1);
             }
-            
         }
     }
 

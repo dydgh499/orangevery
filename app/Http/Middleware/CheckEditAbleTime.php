@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Ablilty\Ablilty;
 
-class CheckDevelopOfficeIP
+class CheckEditAbleTime
 {
     /**
      * Handle an incoming request.
@@ -16,12 +16,9 @@ class CheckDevelopOfficeIP
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Ablilty::isDevOffice($request))
+        if(Ablilty::isEditAbleTime())
             return $next($request);
         else
-        {
-            critical("허용되지 않은 작업 시도 (".$request->ip().")");
-            return response('Your IP has been temporarily blocked due to excessive requests. Access information will be analyzed.', 403);
-        }
+            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
     }
 }
