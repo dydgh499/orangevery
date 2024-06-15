@@ -36,7 +36,7 @@ class Login
             }
             else
             {
-                critical(['ip'=>$request->ip(), 'all'=>$request->all()], '등록되지 않은 IP 접근');
+                critical('등록되지 않은 IP 접근');
                 return AuthLoginCode::NOT_FOUND->value;
             }
         }
