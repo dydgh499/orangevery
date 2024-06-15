@@ -467,11 +467,11 @@ class MerchandiseController extends Controller
     /**
      * 지급보류
      */
-    public function setSettleHold(Request $requset, $id)
+    public function setSettleHold(Request $request, $id)
     {
         $this->merchandises->where('id', $id)->update([
-            'settle_hold_s_dt' => $requset->settle_hold_s_dt,
-            'settle_hold_reason' => $requset->settle_hold_reason,
+            'settle_hold_s_dt' => $request->settle_hold_s_dt,
+            'settle_hold_reason' => $request->settle_hold_reason,
         ]);
         return $this->response(1);
     }
@@ -479,12 +479,12 @@ class MerchandiseController extends Controller
     /**
      * 지급보류해제
      */
-    public function clearSettleHold(Request $requset, $id)
+    public function clearSettleHold(Request $request, $id)
     {
-        $data = Operator::where('id', $requset->user()->id)->first();
+        $data = Operator::where('id', $request->user()->id)->first();
         if($data)
         {
-            if(AuthPasswordChange::HashCheck($data, $requset->user_pw))
+            if(AuthPasswordChange::HashCheck($data, $request->user_pw))
             {
                 $this->merchandises->where('id', $id)->update([
                     'settle_hold_s_dt' => null,

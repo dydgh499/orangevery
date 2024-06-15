@@ -108,7 +108,7 @@ class Login
 
             if($result['user']->is_lock)
                 $result['result'] = AuthLoginCode::LOCK_ACCOUNT->value;
-            else if(AuthPasswordChange::HashCheck($result['user'], $requset->user_pw))
+            else if(AuthPasswordChange::HashCheck($result['user'], $request->user_pw))
                 $result['result'] = self::secondAuthValidate($result, $request);
             else
                 $result['result'] = AuthLoginCode::WRONG_PASSWORD->value;
