@@ -129,7 +129,7 @@ const sameValidaor = () => {
                             </VCol>
                             <!-- user_name -->
                             <VCol cols="12">
-                                <VTextField v-model="user_name" label="아이디 입력" type="user_name" :rules="[requiredValidatorV2(user_name, '아이디'), lengthValidator(user_name, 8)]""
+                                <VTextField v-model="user_name" label="아이디 입력" type="user_name" :rules="[requiredValidatorV2(user_name, '아이디'), lengthValidator(user_name, 8)]"
                                     :error-messages="errors.message" />
                             </VCol>
                             <VCol cols="12">
