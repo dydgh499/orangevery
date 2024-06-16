@@ -13,6 +13,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Salesforce\UnderSalesTrait;
 use App\Http\Controllers\Manager\Salesforce\SalesforceOverlap;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
 
 use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Requests\Manager\BulkRegister\BulkSalesforceRequest;
@@ -179,6 +180,12 @@ class SalesforceController extends Controller
             ->first();
         if($data)
         {
+            $sales_cond_1 = (Ablilty::isMySalesforce($request, $id) || $data->level < $request->user()->level);
+            if(($sales_cond_1 || Ablilty::isOperator($request)) === false)
+            {   // URL 조작 (영업점인데 하위가아닌 다른영업점 조회하려할 시) 자신아래 영업점이 아닌경우?
+                AbnormalConnection::tryParameterModulationApproach();
+                return $this->response(951);
+            }
             if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                 return $this->response(951);
             if($request->user()->tokenCan($data->level) === false)
@@ -210,6 +217,7 @@ class SalesforceController extends Controller
         {
             $query = $this->salesforces->where('id', $id);
             $user = $query->first();
+
             if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
                 return $this->response(951);
             // 아이디 중복 검사

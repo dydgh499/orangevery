@@ -95,7 +95,7 @@
         const heightThreshold = window.outerHeight - window.innerHeight > threshold;
         if (widthThreshold || heightThreshold) {
             if (!devtoolsOpen) {
-                alert('개발자 도구가 열려 있습니다.');
+              window.location.href = 'about:blank';
             }
             devtoolsOpen = true;
         } else {
@@ -107,7 +107,6 @@
         document.getElementById('load-default').classList.remove('hidden');
     }
   @endif
-
   const loaderColor = localStorage.getItem("{{ $json['name'] }}-initial-loader-bg") || '#FFFFFF';
   const primaryColor = "{{ $json['color'] }}" || '#EA5455';
 

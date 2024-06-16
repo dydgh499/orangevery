@@ -8,6 +8,7 @@ use App\Http\Controllers\Ablilty\Ablilty;
 use App\Enums\AuthLoginCode;
 use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Auth\AuthPasswordChange;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 
@@ -103,18 +104,22 @@ class OperatorController extends Controller
                     return $this->extendResponse(954, $msg, []);
                 else
                 {
+                    [$result, $msg, $datas] = $this->employeePhoneValidate($request);
+                    if($result !== AuthLoginCode::SUCCESS->value)
+                        return $this->extendResponse($result, $msg, $datas);
+
                     $user = $this->saveImages($request, $user, $this->imgs);
                     $user['user_pw'] = Hash::make($request->input('user_pw').$current);
                     $user['created_at'] = $current;
-    
                     $res = $this->operators->create($user);
+
                     operLogging(HistoryType::CREATE, $this->target, [], ['msg'=>'운영자는 보안상 이력이 남지 않습니다.'], $user['nick_name']);
                     return $this->response($res ? 1 : 990, ['id'=>$res->id]);        
                 }
             }
         }
         else
-            $this->response(951);
+            return $this->response(951);
     }
 
     /**
@@ -128,7 +133,10 @@ class OperatorController extends Controller
     {
         // level이 직원인데 본인이 아닌 유저가 조회하려할 때 실패
         if($request->user()->level === 35 && $request->user()->id !== $id)
-            $this->response(951);
+        {
+            AbnormalConnection::tryParameterModulationApproach();
+            return $this->response(951);
+        }
         else
         {
             $user = $this->operators->where('id', $id)->first();
@@ -145,7 +153,7 @@ class OperatorController extends Controller
         $msg    = '';
         $data   = [];
         
-        $brand = BrandInfo::getBrandById($request->brand_id);
+        $brand = BrandInfo::getBrandById($request->user()->brand_id);
         if($brand['pv_options']['paid']['use_head_office_withdraw'])
         {
             $result = AuthPhoneNum::validate((string)$request->token);
@@ -195,7 +203,7 @@ class OperatorController extends Controller
             {   // 본사는 전화번호 변경 불가
                 unset($data['phone_num']);
             }
-            else if((int)$data['level'] === 35 && $user->phone_num !== $data['phone_num'])
+            else if((int)$data['level'] === 35)
             {
                 [$result, $msg, $datas] = $this->employeePhoneValidate($request);
                 if($result !== AuthLoginCode::SUCCESS->value)

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\AbnormalConnection;
+use App\Http\Controllers\Auth\AuthOperatorIP;
 
 class CheckOperator
 {
@@ -19,8 +21,19 @@ class CheckOperator
     public function handle(Request $request, Closure $next): Response
     {
         if(Ablilty::isOperator($request))
-            return $next($request);
+        {
+            if(AuthOperatorIP::valiate($request->user()->brand_id, $request->ip()))
+                return $next($request);
+            else
+            {
+                AbnormalConnection::tryOperationNotPermitted();
+                return $this->response(951);
+            }
+        }
         else
+        {
+            AbnormalConnection::tryOperationNotPermitted();
             return $this->response(951);
+        }
     }
 }

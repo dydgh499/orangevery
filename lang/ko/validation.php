@@ -189,6 +189,12 @@ return [
         'custom_id' => '커스텀 필터',
         'tax_category_type' => '사업자 유형',
         'contact_num' => '가맹점 연락처',
+        'phone_auth_limit_s_tm' => '휴대폰 인증 허용 시작시간',
+        'phone_auth_limit_e_tm' => '휴대폰 인증 허용 종료시간',
+        'phone_auth_limit_count'=> '휴대폰 인증 허용 회수',
+        'single_payment_limit_s_tm'=> '단일 결제한도 하향 시작시간',
+        'single_payment_limit_e_tm'=> '단일 결제한도 종료 시작시간',
+        'specified_time_disable_limit' => '특정시간 결제, 이체금지 상한 값',
         //
         'tags' => '태그',
         'files' => '파일',
@@ -257,7 +263,7 @@ return [
         'is_deposit' => '입금상태',
         'withdraw_fee' => '출금 수수료',
         'collect_withdraw_fee' => '모아서 출금 수수료',
-
+        'payment_term_min' => '결제 허용 간격',
         'terminal_id' => '장비',
         'api_key' => 'API KEY',
         'sub_key' => 'SUB KEY(License)',
@@ -317,5 +323,7 @@ return [
         // before brand info
         'apply_s_dt' => '적용 시작일',
         'apply_e_dt' => '적용 종료일',
+        // util
+        'msg' => '메세지',
     ],
 ];

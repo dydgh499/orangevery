@@ -18,14 +18,12 @@ const operator_levels:Options[] = []
 
 if(getUserLevel() >= 35)
     operator_levels.push({id:35, title:'직원'})
-if(getUserLevel() >= 40)
-    operator_levels.push({id:40, title:'본사'})
 
 const verification = async () => {
     try {
         const r = await axios.post('/api/v1/bonaejas/mobile-code-auth', { phone_num: props.item.above_phone_num, verification_number: props.item.appr_num })
         props.item.token = r.data.token
-        snackbar.value.show('인증에 성공하였습니다.<br>이어서 수정을 진행해주세요.', 'success')
+        snackbar.value.show('인증에 성공하였습니다.<br>이어서 진행해주세요.', 'success')
     }
     catch(e:any) {
         snackbar.value.show(e.response.data.message, 'warning')

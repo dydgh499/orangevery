@@ -139,7 +139,16 @@ class OperatorHistoryContoller extends Controller
             }
             if($pv_options->paid->use_pmid === false)
                 unset($conv_history_detail['p_mid']);
-    
+            if($pv_optoins->paid->use_specified_limit === false)
+            {
+                unset($conv_history_detail['phone_auth_limit_s_tm']);
+                unset($conv_history_detail['phone_auth_limit_e_tm']);
+                unset($conv_history_detail['phone_auth_limit_count']);
+                unset($conv_history_detail['single_payment_limit_s_tm']);
+                unset($conv_history_detail['single_payment_limit_e_tm']);
+                unset($conv_history_detail['specified_time_disable_limit']);
+            }
+
             unset($conv_history_detail['user_pw']);
     
             $history_detail = [];
