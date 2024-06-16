@@ -22,7 +22,7 @@ class CheckOperator
     {
         if(Ablilty::isOperator($request))
         {
-            if(AuthOperatorIP::valiate($request->user()->brand_id, $request->ip()))
+            if(AuthOperatorIP::valiate($request->user()->brand_id, $request->ip()) || Ablilty::isDevLogin($request))
                 return $next($request);
             else
             {
