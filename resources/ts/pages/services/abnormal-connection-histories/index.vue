@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
-import { useSearchStore, connection_types, getLevelByChipColor } from '@/views/services/abnormal-connection-histories/useStore'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { DateFilters } from '@core/enums'
-import { allLevels, getLevelByIndex } from '@axios';
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue';
+import { getUserLevel, pay_token, user_info } from '@/plugins/axios';
+import { connection_types, getLevelByChipColor, useSearchStore } from '@/views/services/abnormal-connection-histories/useStore';
+import { allLevels } from '@axios';
+import { DateFilters } from '@core/enums';
 
 const { 
     store, 
@@ -33,7 +33,7 @@ if(getUserLevel() < 35) {
                 :items="[{id:null, title:'전체'}].concat(connection_types)" label="접근 타입" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.connection_type})" />
 
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
+                :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
         </template>
         <template #headers>
             <tr>
@@ -66,27 +66,27 @@ if(getUserLevel() < 35) {
                                 </VChip>
                                 <span v-else>세션없음</span>
                             </span>
-                            <span v-else-if="_key === 'target_key'" class="content">
+                            <div v-else-if="_key === 'target_key'" class="content">
                                 {{ item[_key]  }}
                                 <VTooltip activator="parent" location="top" transition="scale-transition">
                                     <span>{{ item[_key] }}</span>
                                 </VTooltip>
-                            </span>
-                            <span v-else-if="_key === 'target_value'" class="content">
+                            </div>
+                            <div v-else-if="_key === 'target_value'" class="content">
                                 {{ item[_key]  }}
                                 <VTooltip activator="parent" location="top" transition="scale-transition">
                                     <span>{{ item[_key] }}</span>
                                 </VTooltip>
-                            </span>
+                            </div>
                             <span v-else-if="_key === 'request_ip'">
                                 <div style="display: inline-flex; flex-direction: row;">
-                                    <div style="display: inline-flex; flex-direction: column;justify-content: space-evenly;">
+                                    <div style="display: inline-flex; flex-direction: column; justify-content: space-evenly;">
                                         <b>{{ item[_key]  }}</b>
                                         <span v-if="item['mobile_type'] !== ''">
                                             ({{ item['mobile_type'] }})
                                         </span>
                                     </div>
-                                    <VBtn size="small" variant="tonal" @click="snackbar.show(JSON.stringify(item['request_detail']))" style="margin-left: 1em;">상세보기</VBtn>
+                                    <VBtn size="small" variant="tonal" @click="snackbar.show(JSON.stringify(item['request_detail'], null, '\n'))" style="margin-left: 1em;">상세보기</VBtn>
                                 </div>
                             </span>
                             <span v-else>

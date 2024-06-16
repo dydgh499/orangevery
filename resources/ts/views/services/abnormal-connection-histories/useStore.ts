@@ -1,7 +1,7 @@
 import { Header } from '@/views/headers';
 import { Searcher } from '@/views/searcher';
 import type { Options } from '@/views/types';
-import { getLevelByIndex } from '@axios';
+import { allLevels, getLevelByIndex } from '@axios';
 
 export const connection_types = <Options[]>([
     {id:0, title:'등록되지 않은 IP에서 운영자계정 로그인시도'},
@@ -12,7 +12,7 @@ export const connection_types = <Options[]>([
     {id:5, title:'매크로 탐지'},
     {id:6, title:'해외 IP 접속'},
 ])
-
+//{id:6, title:'권한이 없습니다.'},
 
 export const getLevelByChipColor = (level: number) => {
     if(level === 10)
@@ -29,13 +29,13 @@ export const useSearchStore = defineStore('abnormalConnectionHistoSearchStore', 
     const headers: Record<string, string | object> = {
         'id': 'NO.',
         'connection_type': '접근타입',
+        'created_at': '접근시간',
         'action': '조치사항',
         'comment': '메모사항',
         'target_level': '등급',
         'target_key': '대상',
         'target_value': '값',
         'request_ip': '접속 IP',
-        'created_at': '접근시간',
     }
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
@@ -50,6 +50,7 @@ export const useSearchStore = defineStore('abnormalConnectionHistoSearchStore', 
         for (let i = 0; i < datas.length; i++) {
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
             datas[i]['connection_type'] = connection_types.find(obj => obj.id === datas[i]['connection_type'])?.title
+            datas[i]['target_level'] = allLevels().find(obj => obj.id === datas[i]['target_level'])?.title
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }

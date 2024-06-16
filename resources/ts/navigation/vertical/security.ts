@@ -35,7 +35,7 @@ const getAbilitiesMenu = computed(() => {
             })
         }
     }
-    
+
     return [
         ...securities,
     ]

@@ -36,7 +36,11 @@ Route::middleware(['is.operate'])->group(function() {
         Route::get('bonaejas', [MessageController::class, 'index']);
         Route::get('bonaejas/chart', [MessageController::class, 'chart']);
         Route::get('brands/chart', [BrandController::class, 'chart']);
-    
+        Route::get('abnormal-connection-histories/secure-report', [AbnormalConnectionController::class, 'secureReport']);
+        Route::get('abnormal-connection-histories/secure-report/detail-work-status', [AbnormalConnectionController::class, 'detailWorkStatus']);
+        
+        Route::get('abnormal-connection-histories', [AbnormalConnectionController::class, 'index']);
+
         Route::middleware(['is.edit.able'])->group(function() {
             Route::post('operators/{id}/password-change', [OperatorController::class, 'passwordChange']);
             Route::post('operators/{id}/unlock-account', [OperatorController::class, 'unlockAccount']);    
@@ -59,7 +63,7 @@ Route::middleware(['is.operate'])->group(function() {
         Route::apiResource('head-office-accounts', HeadOfficeAccountController::class);
         Route::apiResource('mcht-blacklists', MchtBlacklistController::class);            
         Route::apiResource('holidays', HolidayController::class);
-        Route::apiResource('abnormal-connection-histories', AbnormalConnectionController::class);
+        
     });
     Route::apiResource('popups', PopupController::class);
 });

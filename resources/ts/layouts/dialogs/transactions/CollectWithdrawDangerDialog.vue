@@ -45,12 +45,8 @@ setDangerCollectWithdraws()
 </script>
 <template>
     <VDialog v-model="visible" persistent max-width="900">
-        <!-- Dialog close btn -->
         <DialogCloseBtn @click="visible = !visible" />
-        <!-- Dialog Content -->
         <VCard title="모아서출금 이상 가맹점 발견">
-            <VCardText>
-            </VCardText>
             <VCardText class="d-flex justify-end gap-3 flex-wrap">
                 <VTable class="text-no-wrap" style="width: 100%;">
                     <thead>

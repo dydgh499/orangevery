@@ -235,7 +235,7 @@ class MerchandiseController extends Controller
                             return $this->extendResponse(1999, $res['message']);
                     }
 
-                    $res = $this->merchandises->create($user);                    
+                    $res = $this->merchandises->create($user);
                     operLogging(HistoryType::CREATE, $this->target, [], $user, $user['mcht_name']);
                     return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
                 }
