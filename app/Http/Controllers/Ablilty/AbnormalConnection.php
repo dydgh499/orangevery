@@ -82,7 +82,7 @@ class AbnormalConnection
             'target_level'  => request()->user()->level ? request()->user()->level : 10,
             'target_key'    => request()->url(),
             'target_value'  => self::privateDataHidden(request()->all()),
-            'comment' => request()->user()->user_name,
+            'comment' => "ID: ".request()->user()->user_name,
         ]);
     }
 
@@ -101,7 +101,7 @@ class AbnormalConnection
             'target_level'  => request()->user()->level ? request()->user()->level : 10,
             'target_key'    => request()->url(),
             'target_value'  => self::privateDataHidden(request()->all()),
-            'comment'       => request()->user()->user_name,
+            'comment'       => "ID: ".request()->user()->user_name,
         ]);
     }
     
@@ -152,7 +152,7 @@ class AbnormalConnection
                 'target_level'  => request()->user()->level ? request()->user()->level : 10,
                 'target_key'    => request()->url(),
                 'target_value'  => self::privateDataHidden(request()->all()),
-                'comment'       => request()->user()->user_name,
+                'comment'       => "ID: ".request()->user()->user_name,
             ]);    
         }
         else
