@@ -72,10 +72,41 @@
 </html>
 
 <script>
-  document.getElementById('load-custom').onerror = function () {
-      document.getElementById('load-custom').classList.add('hidden');
-      document.getElementById('load-default').classList.remove('hidden');
-  }
+  @if(env('APP_ENV') === 'production' && $ip !== '183.107.112.147')
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+    document.addEventListener('keydown', function(e) {
+        if (
+            e.key === 'F12' || // F12
+            (e.ctrlKey && e.shiftKey && e.key === 'I') || // Ctrl+Shift+I
+            (e.ctrlKey && e.shiftKey && e.key === 'J') || // Ctrl+Shift+J
+            (e.ctrlKey && e.key === 'U') // Ctrl+U
+        ) {
+            e.preventDefault();
+        }
+    });
+
+    let devtoolsOpen = false;
+    const threshold = 160;
+
+    setInterval(function() {
+        const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+        const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+        if (widthThreshold || heightThreshold) {
+            if (!devtoolsOpen) {
+                alert('개발자 도구가 열려 있습니다.');
+            }
+            devtoolsOpen = true;
+        } else {
+            devtoolsOpen = false;
+        }
+    }, 1000);
+    document.getElementById('load-custom').onerror = function () {
+        document.getElementById('load-custom').classList.add('hidden');
+        document.getElementById('load-default').classList.remove('hidden');
+    }
+  @endif
 
   const loaderColor = localStorage.getItem("{{ $json['name'] }}-initial-loader-bg") || '#FFFFFF';
   const primaryColor = "{{ $json['color'] }}" || '#EA5455';

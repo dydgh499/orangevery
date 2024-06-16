@@ -98,7 +98,7 @@ class OperatorController extends Controller
             else
             {
                 $user = $request->data();
-                [$result, $msg] = AuthPasswordChange::registerValidate($user['user_name'], $user['user_pw']);
+                [$result, $msg] = AuthPasswordChange::registerValidate($user['user_name'], $request->input('user_pw'));
                 if($result === false)
                     return $this->extendResponse(954, $msg, []);
                 else

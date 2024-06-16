@@ -61,7 +61,7 @@ class AuthController extends Controller
             $brand['pv_options']['free']['bonaeja'] = [
                 'min_balance_limit' => $brand['pv_options']['free']['bonaeja']['min_balance_limit']
             ];
-            return response(view('application', ['json' => $brand]))
+            return response(view('application', ['json' => $brand, 'ip'=>$request->ip()]))
                 ->withCookie('XSRF-TOKEN', csrf_token());
         }
         else

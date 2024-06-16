@@ -181,7 +181,7 @@ setSecureReport()
                         </span>
                     </div>
                 </b>
-                <VTable class="text-no-wrap">
+                <VTable class="text-no-wrap" style="height: 500px !important;">
                     <thead>
                         <tr>
                             <th class='list-square'>접근타입</th>
@@ -268,7 +268,7 @@ setSecureReport()
 }
 
 :deep(.v-table__wrapper) {
-  block-size: 300px !important;
+  block-size: 200px !important;
 }
 
 :deep(.v-table__wrapper) > th,
