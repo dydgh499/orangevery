@@ -6,10 +6,10 @@ import { allLevels, axios, getUserLevel } from '@axios';
 
 interface WorkStatusByTimezone {
     type: number,
-    yesterday_afternoon: number,
-    yesterday_evening: number,
-    today_last_night: number,
-    today_noon: number
+    yesterday_afternoon: string,
+    yesterday_evening: string,
+    today_last_night: string,
+    today_noon: string
 }
 
 interface LoginHistory {
@@ -44,6 +44,16 @@ const setSecureReport = async () => {
         visible.value = true
     }
 }
+
+const timeZoneTotalCount = (detail_time_type: number) => {
+    const time_types = ['yesterday_afternoon', 'yesterday_evening', 'today_last_night', 'today_noon']
+    let count = 0;
+    for (let i = 0; i < 4; i++)  {
+        count += parseInt(work_status_by_timezone.value[i][time_types[detail_time_type]])
+    }
+    return count
+}
+
 setSecureReport()
 </script>
 <template>
@@ -78,37 +88,37 @@ setSecureReport()
                                 <tr>
                                     <th class='list-square'>12:00 ~ 18:00 (작일)</th>
                                     <td class='list-square' v-for="key in 4" :key="'12-18-' + key">
-                                        {{ work_status_by_timezone[key - 1].yesterday_afternoon }}
+                                        {{ parseInt(work_status_by_timezone[key - 1].yesterday_afternoon).toLocaleString() }}
                                     </td>
                                     <td class='list-square'>
-                                        <VBtn size="small" variant="tonal" @click="detailWorkStatusDialog.show(0, '12:00 - 18:00 (작일)')">상세보기</VBtn>
+                                        <VBtn v-if="timeZoneTotalCount(0)" size="small" variant="tonal" @click="detailWorkStatusDialog.show(0, '12:00 - 18:00 (작일)')">상세보기</VBtn>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class='list-square'>18:00 ~ 24:00 (작일)</th>
                                     <td class='list-square' v-for="key in 4" :key="'18-24-' + key">
-                                        {{ work_status_by_timezone[key - 1].yesterday_evening }}
+                                        {{ parseInt(work_status_by_timezone[key - 1].yesterday_evening).toLocaleString() }}
                                     </td>
                                     <td class='list-square'>
-                                        <VBtn size="small" variant="tonal" @click="detailWorkStatusDialog.show(1, '18:00 - 24:00 (작일)')">상세보기</VBtn>                                        
+                                        <VBtn v-if="timeZoneTotalCount(1)" size="small" variant="tonal" @click="detailWorkStatusDialog.show(1, '18:00 - 24:00 (작일)')">상세보기</VBtn>                                        
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class='list-square'>00:00 ~ 06:00 (금일)</th>
                                     <td class='list-square' v-for="key in 4" :key="'00-06-' + key">
-                                        {{ work_status_by_timezone[key - 1].today_last_night }}
+                                        {{ parseInt(work_status_by_timezone[key - 1].today_last_night).toLocaleString() }}
                                     </td>
                                     <td class='list-square'>
-                                        <VBtn size="small" variant="tonal" @click="detailWorkStatusDialog.show(2, '00:00 - 06:00 (금일)')">상세보기</VBtn>
+                                        <VBtn v-if="timeZoneTotalCount(2)" size="small" variant="tonal" @click="detailWorkStatusDialog.show(2, '00:00 - 06:00 (금일)')">상세보기</VBtn>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class='list-square'>06:00 ~ 12:00 (금일)</th>
                                     <td class='list-square' v-for="key in 4" :key="'06-12-' + key">
-                                        {{ work_status_by_timezone[key - 1].today_noon }}
+                                        {{ parseInt(work_status_by_timezone[key - 1].today_noon).toLocaleString() }}
                                     </td>
                                     <td class='list-square'>
-                                        <VBtn size="small" variant="tonal" @click="detailWorkStatusDialog.show(3, '06:00 - 12:00 (금일)')">상세보기</VBtn>
+                                        <VBtn v-if="timeZoneTotalCount(3)" size="small" variant="tonal" @click="detailWorkStatusDialog.show(3, '06:00 - 12:00 (금일)')">상세보기</VBtn>
                                     </td>
                                 </tr>
                             </tbody>
@@ -195,10 +205,10 @@ setSecureReport()
                                 {{ history['created_at'] }}
                             </td>
                             <td class='list-square'>
-                                {{ history['action'].replace('\n', '<br>') }}
+                                <span v-html="history['action'].replace('(', '<br>(')"></span>
                             </td>
                             <td class='list-square'>
-                                {{ history['comment'].replace('\n', '<br>') }}
+                                <span v-html="history['comment'].replace('(', '<br>(')"></span>
                             </td>
                             <td class='list-square'>
                                 <VChip v-if="history['target_level']"

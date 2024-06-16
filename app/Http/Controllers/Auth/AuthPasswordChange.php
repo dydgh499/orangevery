@@ -115,7 +115,7 @@ class AuthPasswordChange
 
     static public function userNameValidate($user_name)
     {
-        $ban_words = ['test', 'admin', 'master', 'user'];
+        $ban_words = ['test', 'admin', 'master', 'user', 'pay'];
         foreach($ban_words as $ban_word)
         {
             if(strpos($user_name, $ban_word) !== false)

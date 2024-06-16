@@ -125,7 +125,7 @@ class AbnormalConnection
         self::create([
             'brand_id' => $brand['id'],
             'connection_type' => AbnormalConnectionCode::BLOCK_IP->value,
-            'action' => "1시간 IP차단\n(~ ".$block_time.")",
+            'action' => "1시간 IP차단 (~ ".$block_time.")",
             'target_level'  => $level,
             'target_key'    => request()->url(),
             'target_value'  => self::privateDataHidden(request()->all()),
@@ -148,7 +148,7 @@ class AbnormalConnection
             self::create([
                 'brand_id' => request()->user()->brand_id,
                 'connection_type' => AbnormalConnectionCode::BLOCK_IP->value,
-                'action' => "1시간 IP차단\n(~ ".$block_time.")",
+                'action' => "1시간 IP차단 (~ ".$block_time.")",
                 'target_level'  => request()->user()->level ? request()->user()->level : 10,
                 'target_key'    => request()->url(),
                 'target_value'  => self::privateDataHidden(request()->all()),
@@ -161,7 +161,7 @@ class AbnormalConnection
             self::create([
                 'brand_id' => $brand['id'],
                 'connection_type' => AbnormalConnectionCode::BLOCK_IP->value,
-                'action' => "1시간 IP차단\n(~ ".$block_time.")",
+                'action' => "1시간 IP차단 (~ ".$block_time.")",
                 'target_level'  => 0,
                 'target_key'    => request()->url(),
                 'target_value'  => self::privateDataHidden(request()->all()),
@@ -181,7 +181,7 @@ class AbnormalConnection
         {
             $brand_id = request()->user()->brand_id;
             $level    = request()->user()->level ? request()->user()->level : 10;
-            $user_name = "\n(".request()->user()->user_name.")";
+            $user_name = " (".request()->user()->user_name.")";
         }
         else
         {
@@ -205,7 +205,7 @@ class AbnormalConnection
         self::create([
             'brand_id' => $brand_id,
             'connection_type' => AbnormalConnectionCode::MECRO->value,
-            'action' => "1시간 IP차단\n(~ ".$block_time.")",
+            'action' => "1시간 IP차단 (~ ".$block_time.")",
             'target_level'  => $level,
             'target_key'    => request()->url(),
             'target_value'  => self::privateDataHidden(request()->all()),
@@ -231,7 +231,7 @@ class AbnormalConnection
         self::create([
             'brand_id' => $brand_id,
             'connection_type' => AbnormalConnectionCode::OVERSEA_IP->value,
-            'action' => "10분 IP차단\n(~ ".$block_time.")",
+            'action' => "10분 IP차단 (~ ".$block_time.")",
             'target_level'  => 0,
             'target_key'    => request()->url(),
             'target_value'  => self::privateDataHidden(request()->all()),
