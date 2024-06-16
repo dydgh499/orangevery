@@ -141,16 +141,31 @@ class AbnormalConnection
         critical("허용되지 않은 작업 시도 (".request()->ip().")");
         IPInfo::setBlock(request()->ip());
         $block_time = Carbon::now()->addHours(1)->format('Y-m-d H:i:s');
-
-        self::create([
-            'brand_id' => request()->user()->brand_id,
-            'connection_type' => AbnormalConnectionCode::BLOCK_IP->value,
-            'action' => '1시간 IP차단 (~ '.$block_time.')',
-            'target_level'  => request()->user()->level ? request()->user()->level : 10,
-            'target_key'    => request()->url(),
-            'target_value'  => self::privateDataHidden(request()->all()),
-            'comment'       => request()->user()->user_name,
-        ]);
+        if(request()->user())
+        {
+            self::create([
+                'brand_id' => request()->user()->brand_id,
+                'connection_type' => AbnormalConnectionCode::BLOCK_IP->value,
+                'action' => '1시간 IP차단 (~ '.$block_time.')',
+                'target_level'  => request()->user()->level ? request()->user()->level : 10,
+                'target_key'    => request()->url(),
+                'target_value'  => self::privateDataHidden(request()->all()),
+                'comment'       => request()->user()->user_name,
+            ]);    
+        }
+        else
+        {
+            $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
+            self::create([
+                'brand_id' => $brand['id'],
+                'connection_type' => AbnormalConnectionCode::BLOCK_IP->value,
+                'action' => '1시간 IP차단 (~ '.$block_time.')',
+                'target_level'  => 0,
+                'target_key'    => request()->url(),
+                'target_value'  => self::privateDataHidden(request()->all()),
+                'comment'       => '',
+            ]);    
+        }
     }
 
     /*
