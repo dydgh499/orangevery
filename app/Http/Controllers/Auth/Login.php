@@ -109,7 +109,14 @@ class Login
             else if(AuthPasswordChange::HashCheck($result['user'], $request->user_pw))
                 $result['result'] = self::secondAuthValidate($result, $request);
             else
+            {
+                if($result['user']->level >= 35 && AuthOperatorIP::valiate($result['user']->brand_id, $request->ip() === false))
+                {
+                    AbnormalConnection::tryNoRegisterIP($result['user']);
+                }
+
                 $result['result'] = AuthLoginCode::WRONG_PASSWORD->value;
+            }
         }
         return self::setResponseBody((clone $orm), $result);
     }

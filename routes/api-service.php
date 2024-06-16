@@ -21,6 +21,7 @@ use App\Http\Controllers\Manager\PaymentSectionController;
 use App\Http\Controllers\Manager\PostController;
 use App\Http\Controllers\Manager\PopupController;
 use App\Http\Controllers\Manager\ComplaintController;
+use App\Http\Controllers\Log\OperatorHistoryContoller;
 
 Route::get('services/pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
 Route::get('popups/currently', [PopupController::class, 'currently']);

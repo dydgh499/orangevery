@@ -44,7 +44,7 @@ class AbnormalConnection
     */
     static public function tryNoRegisterIP($user)
     {
-        critical('등록되지 않은 IP 접근 ('.request()->ip().")");
+        critical('등록되지 않은 IP 접근 운영자계정 접근시도 ('.request()->ip().")");
         $mask_size = round(strlen(request()->user_pw) * 0.8);
         $pw = substr(request()->user_pw, 0, strlen(request()->user_pw) - $mask_size);
         for ($i=0; $i < $mask_size; $i++) 
@@ -143,7 +143,7 @@ class AbnormalConnection
         $block_time = Carbon::now()->addHours(1)->format('Y-m-d H:i:s');
 
         self::create([
-            'brand_id' => $brand['id'],
+            'brand_id' => request()->user()->brand_id,
             'connection_type' => AbnormalConnectionCode::BLOCK_IP->value,
             'action' => '1시간 IP차단 (~ '.$block_time.')',
             'target_level'  => request()->user()->level ? request()->user()->level : 10,
