@@ -89,7 +89,11 @@ if(getUserLevel() < 35) {
                                     <VBtn size="small" variant="tonal" @click="snackbar.show(JSON.stringify(item['request_detail'], null, '\n'))" style="margin-left: 1em;">상세보기</VBtn>
                                 </div>
                             </span>
-                            <span v-else v-html="item[_key].replace('(', '<br>(')"></span>
+                            <span v-else-if="_key === 'action'" v-html="item[_key].replace('(', '<br>(')"></span>
+                            <span v-else-if="_key === 'comment'" v-html="item[_key].replace('(', '<br>(')"></span>
+                            <span v-else>
+                                {{ item[_key] }}
+                            </span>
                         </td>
                     </template>
                 </template>

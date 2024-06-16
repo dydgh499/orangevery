@@ -37,11 +37,11 @@ class IPInfo
             '125.188', '211.234', '106.101',
         ];
         if($isBand($ip, $skt_band))
-            return 'SKT';
+            return 'SKT 이동통신';
         else if($isBand($ip, $kt_band))
-            return 'KT';
+            return 'KT 이동통신';
         else if($isBand($ip, $lgu_band))
-            return 'LGU';
+            return 'LGU 이동통신';
         else
             return '';
     }
