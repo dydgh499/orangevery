@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
 import { useSearchStore, connection_types, getLevelByChipColor } from '@/views/services/abnormal-connection-histories/useStore'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { DateFilters } from '@core/enums'
@@ -13,10 +14,16 @@ const {
 
 store.params.connection_type = null
 
+const snackbar = <any>(inject('snackbar'))
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
 
+if(getUserLevel() < 35) {
+    pay_token.value = ''
+    user_info.value = {}
+    location.href = '/'
+}
 </script>
 <template>
     <BaseIndexView placeholder="접근시도 IP, 대상, 값" :metas="metas" :add="false" add_name="" :date_filter_type="DateFilters.SETTLE_RANGE">
@@ -79,7 +86,7 @@ provide('exporter', exporter)
                                             ({{ item['mobile_type'] }})
                                         </span>
                                     </div>
-                                    <VBtn size="small" variant="tonal" @click="" style="margin-left: 1em;">상세보기</VBtn>
+                                    <VBtn size="small" variant="tonal" @click="snackbar.show(JSON.stringify(item['request_detail']))" style="margin-left: 1em;">상세보기</VBtn>
                                 </div>
                             </span>
                             <span v-else>
