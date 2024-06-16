@@ -146,7 +146,7 @@ setSecureReport()
                             </thead>
                             <tbody>
                                 <tr v-for="(history, key) in login_histories" :key="key">
-                                    <td>
+                                    <td class='list-square'>
                                         <VAvatar :image="history.profile_img" class="me-3 preview"/>
                                     </td>
                                     <td class='list-square'>{{ history.nick_name }}</td>
@@ -156,7 +156,7 @@ setSecureReport()
                                             {{ allLevels().find(obj => obj.id === history.level)?.title }}
                                         </VChip>
                                     </td>
-                                    <td>{{ history.created_at }}</td>
+                                    <td class='list-square'>{{ history.created_at }}</td>
                                 </tr>
                             </tbody>
                             <tfoot v-if="!Boolean(login_histories.length)">
