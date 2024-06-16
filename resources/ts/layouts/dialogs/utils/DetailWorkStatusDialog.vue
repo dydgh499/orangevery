@@ -67,7 +67,7 @@ defineExpose({
                             </td>
                             <td class='list-square'>
                                 <VChip
-                                    :color="StatusColorSetter().getSelectIdColor(history_types.find(obj => obj.id === item[_key])?.id as number)">
+                                    :color="StatusColorSetter().getSelectIdColor(history_types.find(obj => obj.id === history.history_type)?.id as number)">
                                     {{ history_types.find(obj => obj.id === history.history_type)?.title }}
                                 </VChip>
                             </td>
