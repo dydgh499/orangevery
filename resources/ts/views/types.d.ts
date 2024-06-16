@@ -966,3 +966,18 @@ export interface SpecifiedTimeDisablePayment {
     disable_e_tm: string | null,
     disable_type: number,
 }
+
+export interface AbnormalConnectionHistory {
+    id: number,
+    brand_id: number,
+    connection_type: number,
+    action: string,
+    target_key: string,
+    target_value: string,
+    target_level: string,
+    request_ip: string,
+    request_detail: string,
+    mobile_type: string,
+    comment: string,
+    created_at: string,
+}

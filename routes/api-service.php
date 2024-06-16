@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Manager\BrandController;
 use App\Http\Controllers\Manager\Service\BeforeBrandInfoController;
+use App\Http\Controllers\Manager\Service\AbnormalConnectionController;
 use App\Http\Controllers\Manager\Service\DifferentSettlementInfoController;
+
 use App\Http\Controllers\Manager\Service\MchtBlacklistController;
 use App\Http\Controllers\Manager\Service\HeadOfficeAccountController;
 use App\Http\Controllers\Manager\Service\ClassificationController;
@@ -44,6 +46,7 @@ Route::middleware(['is.operate'])->group(function() {
     
         Route::apiResource('brands/before-brand-infos', BeforeBrandInfoController::class);
         Route::apiResource('brands/different-settlement-infos', DifferentSettlementInfoController::class);
+        
         Route::middleware(['dev.ip'])->apiResource('brands/operator-ips', OperatorIPController::class);
         Route::apiResource('brands', BrandController::class);
     
@@ -56,6 +59,7 @@ Route::middleware(['is.operate'])->group(function() {
         Route::apiResource('head-office-accounts', HeadOfficeAccountController::class);
         Route::apiResource('mcht-blacklists', MchtBlacklistController::class);            
         Route::apiResource('holidays', HolidayController::class);
+        Route::apiResource('abnormal-connection-histories', AbnormalConnectionController::class);
     });
     Route::apiResource('popups', PopupController::class);
 });

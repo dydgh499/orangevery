@@ -59,7 +59,7 @@ provide('exporter', exporter)
         </template>
     </BaseIndexView>
 </template>
-<style>
+<style scoped>
 .content {
   overflow: hidden;
   inline-size: 500px !important;

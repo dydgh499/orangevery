@@ -34,6 +34,10 @@ const getAbilitiesMenu = computed(() => {
             to: 'services-operator-histories',
         })
         operations[0].children.push({
+            title: '이상접속 이력',
+            to: 'services-abnormal-connection-histories',
+        })
+        operations[0].children.push({
             title: '문자발송 이력',
             to: 'services-bonaejas',
         })

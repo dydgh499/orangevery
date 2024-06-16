@@ -38,13 +38,13 @@ class AbnormalConnection
     }
 
     /*
-        1. 등록되지 않은 IP 운영자계정 접근시도 (로그인)
+        1. 등록되지 않은 IP 운영자계정 로그인시도
             1. 대상 ID
             2. PW: 80% 마스킹처리
     */
     static public function tryNoRegisterIP($user)
     {
-        critical('등록되지 않은 IP 접근 운영자계정 접근시도 ('.request()->ip().")");
+        critical('등록되지 않은 IP 운영자계정 로그인시도 ('.request()->ip().")");
         $mask_size = round(strlen(request()->user_pw) * 0.8);
         $pw = substr(request()->user_pw, 0, strlen(request()->user_pw) - $mask_size);
         for ($i=0; $i < $mask_size; $i++) 
@@ -63,7 +63,7 @@ class AbnormalConnection
     }
 
     /*
-        2. URL 조작 파라미터 변조시도
+        2. URL 조작, 파라미터 변조시도
             1. 대상 -> URL
             2. 값 -> 파라미터
     */
@@ -104,13 +104,13 @@ class AbnormalConnection
     }
     
     /*
-        4. 차단된 IP 접속
+        4. 차단된 IP에서 접속시도
             1. 대상 -> 
             2. 값 -> 
     */
     static public function tryBlockIP()
     {
-        critical("차단된 IP 접속 (".request()->ip().")");
+        critical("차단된 IP에서 접속시도 (".request()->ip().")");
         IPInfo::setBlock(request()->ip());
         $block_time = Carbon::now()->addHours(1)->format('Y-m-d H:i:s');
         $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
@@ -163,7 +163,7 @@ class AbnormalConnection
                 'target_level'  => 0,
                 'target_key'    => request()->url(),
                 'target_value'  => self::privateDataHidden(request()->all()),
-                'comment'       => '',
+                'comment'       => '허용되지 않은 작업 시도',
             ]);    
         }
     }

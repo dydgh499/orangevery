@@ -38,9 +38,9 @@ class IPInfo
         ];
         if($isBand($ip, $skt_band))
             return 'SKT';
-        else if($isBand($ip, $skt_band))
+        else if($isBand($ip, $kt_band))
             return 'KT';
-        else if($isBand($ip, $skt_band))
+        else if($isBand($ip, $lgu_band))
             return 'LGU';
         else
             return '';

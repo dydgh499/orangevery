@@ -26,9 +26,21 @@ class AbnormalConnectionController extends Controller
         $this->abnormal_connections = $abnormal_connections;
     }
 
-    public function index()
+    public function index(IndexRequest $request)
     {
+        $search = $request->search;
+        $query = $this->abnormal_connections
+            ->where('brand_id', $request->user()->brand_id)
+            ->where(function ($query) use ($search) {
+                return $query->where('request_ip', 'like', "%$search%")
+                    ->orWhere('target_key', 'like', "%$search%")
+                    ->orWhere('target_value', 'like', "%$search%");
+            });
+        if($request->connection_type !== null)
+            $query = $query->where('connection_type', $request->connection_type);
 
+        $data = $this->getIndexData($request, $query);
+        return $this->response(0, $data);
     }
 
     public function popup()
