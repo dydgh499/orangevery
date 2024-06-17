@@ -77,6 +77,11 @@ console.log(props.salesforce)
                         {{ props.salesforce[key] ? '상세보기' : '간편보기' }}
                     </VChip>
                 </span>
+                <span v-else-if="key == 'is_lock'">
+                    <VChip :color="store.booleanTypeColor(props.salesforce[key])">
+                        {{ props.salesforce[key] ? 'LOCK' : 'X' }}
+                    </VChip>
+                </span>
                 <span v-else-if="key == 'extra_col'">
                     <UserExtraMenu :item="props.salesforce" :type="1" :key="props.salesforce.id"/>
                 </span>

@@ -55,6 +55,7 @@ class nicepay implements DifferenceSettlementInterface
                 $data_records .= $records;
             }
         }
+        logging([$data_records, $total_count, $total_amount]);
         return [$data_records, $total_count, $total_amount];
     }
 

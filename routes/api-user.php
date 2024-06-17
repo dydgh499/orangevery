@@ -27,6 +27,7 @@ Route::prefix('salesforces')->group(function() {
     Route::get('fee-apply-histories', [SalesforceController::class, 'feeApplyHistories']);  // 간편보기
     Route::get('classification', [SalesforceController::class, 'classification']);
 
+        //FIXPLUS
         Route::middleware(['is.edit.able'])->group(function() {
             Route::prefix('fee-change-histories')->group(function() {
                 Route::delete('{id}', [FeeChangeHistoryController::class, 'deleteSalesforce']);

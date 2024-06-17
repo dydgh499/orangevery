@@ -150,7 +150,7 @@ onMounted(() => {
                                         :color="store.booleanTypeColor(!item[_key])">
                                         {{ item[_key] ? '가능' : '불가능' }}
                                     </VChip>
-                                </span>                                
+                                </span>
                                 <span v-else-if="_key == 'is_lock'">
                                     <VChip :color="store.booleanTypeColor(item[_key])">
                                         {{ item[_key] ? 'LOCK' : 'X' }}

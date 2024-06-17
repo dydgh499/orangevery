@@ -117,6 +117,11 @@ store.params.sales_parent_structure = 1
                                             {{ item[_key] ? '상세보기' : '간편보기' }}
                                         </VChip>
                                     </span>
+                                    <span v-else-if="_key == 'is_lock'">
+                                    <VChip :color="store.booleanTypeColor(item[_key])">
+                                            {{ item[_key] ? 'LOCK' : 'X' }}
+                                        </VChip>
+                                    </span>
                                     <span v-else-if="_key == 'extra_col'">
                                         <UserExtraMenu :item="item" :type="1" :key="item['id']" />
                                     </span>

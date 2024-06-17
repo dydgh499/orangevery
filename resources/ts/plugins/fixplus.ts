@@ -194,6 +194,10 @@ export const getFixplusMchtHeader = () => {
     headers['acct_num'] = '계좌번호'    
     headers['acct_name'] = '예금주'
     headers['trx_fee'] = '수수료'
+    if(getUserLevel() >= 35) {
+        headers['is_lock'] = '계정잠김여부'
+        headers['locked_at'] = '계정잠금시간'
+    }
     return headers
 }
 
@@ -215,8 +219,12 @@ export const getFixplusSalesHeader = () => {
         'acct_name' : '예금주',
         'acct_num' : '계좌번호',
         'acct_bank_name' : '은행',
-        'created_at' : '생성시간',
-        'extra_col' : '더보기',
     })
+    if(getUserLevel() >= 35) {
+        headers['is_lock'] = '계정잠김여부'
+        headers['locked_at'] = '계정잠금시간'
+    }
+    headers['created_at'] = '생성시간'
+    headers['extra_col'] = '더보기'
     return headers
 }

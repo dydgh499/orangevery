@@ -120,8 +120,8 @@ class DifferenceSettlementHistoryController extends Controller
     {
         return Brand::join('different_settlement_infos', 'brands.id', '=', 'different_settlement_infos.brand_id')
             ->where('brands.is_delete', false)
-            ->where('different_settlement_infos.is_delete', false)
             ->where('brands.use_different_settlement', true)
+            ->where('different_settlement_infos.is_delete', false)
             ->get(['brands.business_num', 'different_settlement_infos.*']);
     }
 
@@ -287,8 +287,8 @@ class DifferenceSettlementHistoryController extends Controller
                     ->where('merchandises.business_num', '!=', '')
                     ->where('payment_gateways.pg_type', $brand->pg_type)
                     ->where('transactions.brand_id', $brand->brand_id)
-                    ->where('transactions.trx_at', '>=', "2024-05-23 00:00:00")
-                    ->where('transactions.trx_at', '<=', "2024-05-23 23:59:59")
+                    ->where('transactions.trx_at', '>=', "2024-06-01 00:00:00")
+                    ->where('transactions.trx_at', '<=', "2024-06-16 23:59:59")
                     ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
 
                 $inst = new DifferenceSettlementHistoryController(new DifferenceSettlementHistory);

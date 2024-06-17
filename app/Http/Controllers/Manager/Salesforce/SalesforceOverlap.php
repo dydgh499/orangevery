@@ -61,6 +61,8 @@ class SalesforceOverlap
                     ->orWhere('user_name', 'like', "%$search%");
             });
         }
+        if($request->is_lock)
+            $query = $query->where('is_lock', 1);
 
         $page      = $request->input('page');
         $page_size = $request->input('page_size');
@@ -88,7 +90,11 @@ class SalesforceOverlap
             {
                 $parent = Salesforce::where('id', $parent_id)
                     ->where('is_delete', false)
-                    ->first(['id', 'parent_id', 'sales_fee', 'level', 'user_name','sales_name', 'is_able_under_modify', 'mcht_batch_fee', 'business_num']);
+                    ->first([
+                        'id', 'parent_id', 'sales_fee', 'level', 
+                        'user_name','sales_name', 'is_able_under_modify', 
+                        'mcht_batch_fee', 'business_num', 'is_lock', 'locked_at'
+                    ]);
                 if($parent)
                     $parents[] = $parent;
 

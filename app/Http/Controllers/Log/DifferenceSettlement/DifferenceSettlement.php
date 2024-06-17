@@ -56,7 +56,6 @@ class DifferenceSettlement
 
     protected function _request($save_path, $req_date, $trans)
     {
-        $result       = false;
         $sub_count    = 0;
         $total_amount = 0;
         $total_count  = 0;
@@ -94,11 +93,21 @@ class DifferenceSettlement
             $sub_count += 2;  // start, end records
         $full_record .= $this->setEndRecord($total_count + $sub_count, $total_amount);
 
+        $result = false;
         if($this->main_connection_stat)
+        {
             $result = $this->main_sftp_connection->put($save_path, $full_record);
+            logging(['save_path'=>$save_path], $this->service_name.'-difference-settlement-request (main)');
+        }
         if($this->dr_connection_stat)
+        {
             $result = $this->dr_sftp_connection->put($save_path, $full_record);
-        logging(['result'=>$result, 'save_path'=>$save_path], $this->service_name.'-difference-settlement-request');
+            logging(['save_path'=>$save_path], $this->service_name.'-difference-settlement-request (dr)');
+        }
+
+        if($result === false)
+            error(['save_path'=>$save_path], $this->service_name.'-difference-settlement-request (fail)');
+        
         return $result;
     }
 

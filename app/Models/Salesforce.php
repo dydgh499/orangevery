@@ -57,15 +57,18 @@ class Salesforce extends Authenticatable
     // 자식 영업점들
     public function childs()
     {
-        return $this->hasMany(Salesforce::class, 'parent_id')
-            ->where('is_delete', false)
-            ->with('childs')
+        $query = $this->hasMany(Salesforce::class, 'parent_id')
+            ->where('is_delete', false);
+        if($request->is_lock)
+            $query = $query->where('is_lock', 1);
+
+        return $query->with('childs')
             ->select([
                 'id', 'parent_id', 'user_name', 'sales_fee', 
                 'level', 'sales_name', 'nick_name', 'resident_num', 
                 'business_num', 'sector', 'addr', 'phone_num', 
                 'acct_num', 'acct_name', 'acct_bank_name', 'acct_bank_code',
-                'is_able_under_modify', 'mcht_batch_fee', 'created_at'
+                'is_able_under_modify', 'mcht_batch_fee', 'created_at', 'is_lock', 'locked_at'
             ]);
     }
 
