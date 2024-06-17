@@ -26,7 +26,7 @@ class BrandInfo
             $brand = Brand::where($key, $value)->with(['beforeBrandInfos'])->first();
             if($brand)
             {
-                Redis::set($key_name, json_encode($brand), 'EX', 300);
+                Redis::set($key_name, json_encode($brand), 'EX', 600);
                 return json_decode(json_encode($brand), true);
             }
             else

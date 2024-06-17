@@ -48,7 +48,7 @@ class IPInfo
 
     static private function set($info)
     {
-        Redis::set(request()->ip(), json_encode($info), 'EX', 1800);
+        Redis::set(request()->ip(), json_encode($info), 'EX', 3600);
     }
 
     static public function get($request)

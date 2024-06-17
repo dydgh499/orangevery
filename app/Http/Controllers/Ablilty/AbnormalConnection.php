@@ -194,23 +194,25 @@ class AbnormalConnection
         // 운영자 IP 지역은 제한 제외
         if(AuthOperatorIP::valiate($brand_id, request()->ip()))
         {
-            error([], '너무많은 접근시도로 잠시 제한');
-            return true;
+            critical('너무많은 접근시도로 잠시 제한');
+        }
+        else
+        {
+            critical("매크로가 탐지되었습니다. (".request()->ip().")");
+            IPInfo::setBlock(request()->ip());
+    
+            $block_time = Carbon::now()->addHours(1)->format('Y-m-d H:i:s');
+            self::create([
+                'brand_id' => $brand_id,
+                'connection_type' => AbnormalConnectionCode::MECRO->value,
+                'action' => "1시간 IP차단 (~ ".$block_time.")",
+                'target_level'  => $level,
+                'target_key'    => request()->url(),
+                'target_value'  => self::privateDataHidden(request()->all()),
+                'comment'       => '분당 요청수 100회 초과'.$user_name,
+            ]);    
         }
         
-        critical("매크로가 탐지되었습니다. (".request()->ip().")");
-        IPInfo::setBlock(request()->ip());
-
-        $block_time = Carbon::now()->addHours(1)->format('Y-m-d H:i:s');
-        self::create([
-            'brand_id' => $brand_id,
-            'connection_type' => AbnormalConnectionCode::MECRO->value,
-            'action' => "1시간 IP차단 (~ ".$block_time.")",
-            'target_level'  => $level,
-            'target_key'    => request()->url(),
-            'target_value'  => self::privateDataHidden(request()->all()),
-            'comment'       => '분당 요청수 100회 초과'.$user_name,
-        ]);
     }
 
     /*

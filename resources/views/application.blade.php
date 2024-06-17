@@ -87,21 +87,6 @@
         }
     });
 
-    let devtoolsOpen = false;
-    const threshold = 160;
-
-    setInterval(function() {
-        const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-        const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-        if (widthThreshold || heightThreshold) {
-            if (!devtoolsOpen) {
-              window.location.href = 'about:blank';
-            }
-            devtoolsOpen = true;
-        } else {
-            devtoolsOpen = false;
-        }
-    }, 1000);
     document.getElementById('load-custom').onerror = function () {
         document.getElementById('load-custom').classList.add('hidden');
         document.getElementById('load-default').classList.remove('hidden');
