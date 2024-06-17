@@ -71,10 +71,9 @@ Route::prefix('merchandises')->group(function() {
 
     Route::post('mcht-fee-direct-apply', [BatchUpdateMchtController::class, 'setMchtFeeDirect']);
     Route::post('mcht-fee-book-apply', [BatchUpdateMchtController::class, 'setMchtFeeBooking']);
-    Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
     Route::post('fee-change-histories/{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
     Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
-
+    
     Route::middleware(['is.operate'])->group(function() {
         Route::middleware(['is.edit.able'])->group(function() {
             Route::prefix('batch-updaters')->group(function() {
@@ -96,6 +95,7 @@ Route::prefix('merchandises')->group(function() {
             Route::apiResource('sub-business-registrations', SubBusinessRegistrationController::class);             
         });
         Route::post('{id}/unlock-account', [MerchandiseController::class, 'unlockAccount']);
+        Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
     
         Route::prefix('pay-modules')->group(function() {
             Route::middleware(['is.edit.able'])->group(function() {
