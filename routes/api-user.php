@@ -69,13 +69,13 @@ Route::prefix('merchandises')->group(function() {
         Route::post('batch-retry', [NotiSendHistoryController::class, 'batchRetry']);    
     });
 
+    Route::post('mcht-fee-direct-apply', [BatchUpdateMchtController::class, 'setMchtFeeDirect']);
+    Route::post('mcht-fee-book-apply', [BatchUpdateMchtController::class, 'setMchtFeeBooking']);
     Route::middleware(['is.operate'])->group(function() {
         Route::middleware(['is.edit.able'])->group(function() {
             Route::prefix('batch-updaters')->group(function() {
                 Route::post('sales-fee-direct-apply', [BatchUpdateMchtController::class, 'setSalesFeeDirect']);
                 Route::post('sales-fee-book-apply', [BatchUpdateMchtController::class, 'setSalesFeeBooking']);
-                Route::post('mcht-fee-direct-apply', [BatchUpdateMchtController::class, 'setMchtFeeDirect']);
-                Route::post('mcht-fee-book-apply', [BatchUpdateMchtController::class, 'setMchtFeeBooking']);
                 Route::post('set-noti-url', [BatchUpdateMchtController::class, 'setNotiUrl']);
                 Route::post('set-enabled', [BatchUpdateMchtController::class, 'setEnabled']);
                 Route::post('set-custom-filter', [BatchUpdateMchtController::class, 'setCustomFilter']);
