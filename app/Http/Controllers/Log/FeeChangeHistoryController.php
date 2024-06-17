@@ -9,6 +9,9 @@ use App\Models\Merchandise;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Http\Controllers\Ablilty\AbnormalConnection;
+use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Auth\AuthOperatorIP;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
@@ -199,44 +202,55 @@ class FeeChangeHistoryController extends Controller
 
     public function apply(Request $request, $user, $type)
     {
-        $change_status = $type == 'direct-apply' ? 1 : 0;
-        $data = [
-            'mcht_id'   => $request->mcht_id,
-            'brand_id'  => $request->user()->brand_id,
-            'change_status' => $change_status,
-        ];
-        $mchts  = new Merchandise();
-        $mcht   = $mchts->where('id', $request->mcht_id)->first();
-        if($mcht)
+        $cond_1 = (Ablilty::isOperator($request) && AuthOperatorIP::valiate($request->user()->brand_id, $request->ip())) || Ablilty::isDevLogin($request);
+        $cond_2 = Ablilty::isSalesforce($request);
+
+        if($cond_1 || $cond_2)
         {
-            if($user == 'merchandises')
+            $change_status = $type == 'direct-apply' ? 1 : 0;
+            $data = [
+                'mcht_id'   => $request->mcht_id,
+                'brand_id'  => $request->user()->brand_id,
+                'change_status' => $change_status,
+            ];
+            $mchts  = new Merchandise();
+            $mcht   = $mchts->where('id', $request->mcht_id)->first();
+            if($mcht)
             {
-                $resource = $this->getMchtResource($request, $mcht, $data);
-                $orm = $this->mcht_fee_histories;
-                $target = '가맹점 수수료율';
-            }
-            else
-            {
-                $resource = $this->getSalesResource($request, $mcht, $data);
-                $orm = $this->sf_fee_histories;
-                $target = '영업점 수수료율';
-            }
-            
-            $res = DB::transaction(function () use($orm, $resource, $mcht, $mchts, $target) {
-                $res = $orm->create($resource['history']);
-                if($resource['history']['change_status'] == true)
+                if($user == 'merchandises')
                 {
-                    $res = $mchts->where('id', $resource['history']['mcht_id'])->update($resource['update']);
-                    operLogging(HistoryType::UPDATE, $target, $resource['before'], $resource['update'], $mcht->mcht_name);
+                    $resource = $this->getMchtResource($request, $mcht, $data);
+                    $orm = $this->mcht_fee_histories;
+                    $target = '가맹점 수수료율';
                 }
                 else
-                    operLogging(HistoryType::BOOK, $target, $resource['before'], $resource['update'], $mcht->mcht_name);
-
-                return true;
-            }, 3);
-            return $this->response(0);
+                {
+                    $resource = $this->getSalesResource($request, $mcht, $data);
+                    $orm = $this->sf_fee_histories;
+                    $target = '영업점 수수료율';
+                }
+                
+                $res = DB::transaction(function () use($orm, $resource, $mcht, $mchts, $target) {
+                    $res = $orm->create($resource['history']);
+                    if($resource['history']['change_status'] == true)
+                    {
+                        $res = $mchts->where('id', $resource['history']['mcht_id'])->update($resource['update']);
+                        operLogging(HistoryType::UPDATE, $target, $resource['before'], $resource['update'], $mcht->mcht_name);
+                    }
+                    else
+                        operLogging(HistoryType::BOOK, $target, $resource['before'], $resource['update'], $mcht->mcht_name);
+    
+                    return true;
+                }, 3);
+                return $this->response(0);
+            }
+            else
+                return $this->response(1000);    
         }
         else
-            return $this->response(1000);
+        {
+            AbnormalConnection::tryOperationNotPermitted();
+            return $this->response(951);
+        }
     }
 }

@@ -12,6 +12,10 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
+use App\Http\Controllers\Ablilty\AbnormalConnection;
+use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Auth\AuthOperatorIP;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -182,15 +186,26 @@ class BatchUpdateMchtController extends Controller
      */
     public function setMchtFeeDirect(Request $request)
     {
-        $datas = $this->getMchtResource($request, true);
-        $res = DB::transaction(function () use($datas, $request) {
-            $mchts = $this->merchandiseBatch($request)->update([
-                'trx_fee' => $request->mcht_fee/100,
-                'hold_fee' => $request->hold_fee/100,
-            ]);
-            return $this->manyInsert(new MchtFeeChangeHistory(), $datas);
-        });
-        return $this->response($res ? 1 : 990);
+        $cond_1 = (Ablilty::isOperator($request) && AuthOperatorIP::valiate($request->user()->brand_id, $request->ip())) || Ablilty::isDevLogin($request);
+        $cond_2 = Ablilty::isSalesforce($request);
+
+        if($cond_1 || $cond_2)
+        {
+            $datas = $this->getMchtResource($request, true);
+            $res = DB::transaction(function () use($datas, $request) {
+                $mchts = $this->merchandiseBatch($request)->update([
+                    'trx_fee' => $request->mcht_fee/100,
+                    'hold_fee' => $request->hold_fee/100,
+                ]);
+                return $this->manyInsert(new MchtFeeChangeHistory(), $datas);
+            });
+            return $this->response($res ? 1 : 990);    
+        }
+        else
+        {
+            AbnormalConnection::tryOperationNotPermitted();
+            return $this->response(951);
+        }
     }
 
     /**
@@ -198,9 +213,20 @@ class BatchUpdateMchtController extends Controller
      */
     public function setMchtFeeBooking(Request $request)
     {
-        $datas = $this->getMchtResource($request, false);
-        $res = $this->manyInsert(new MchtFeeChangeHistory(), $datas);
-        return $this->response($res ? 1 : 990);
+        $cond_1 = (Ablilty::isOperator($request) && AuthOperatorIP::valiate($request->user()->brand_id, $request->ip())) || Ablilty::isDevLogin($request);
+        $cond_2 = Ablilty::isSalesforce($request);
+
+        if($cond_1 || $cond_2)
+        {
+            $datas = $this->getMchtResource($request, false);
+            $res = $this->manyInsert(new MchtFeeChangeHistory(), $datas);
+            return $this->response($res ? 1 : 990);
+        }
+        else
+        {
+            AbnormalConnection::tryOperationNotPermitted();
+            return $this->response(951);
+        }
     }
 
     public function setEnabled(Request $request)

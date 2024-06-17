@@ -147,7 +147,7 @@ watchEffect(() => {
                                 <VCol md="8"> 
                                     <VTextField type='text' v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
                                         placeholder="아이디 입력" persistent-placeholder :rules="[requiredValidatorV2(props.item.user_name, '아이디')]"
-                                        maxlength="30"/>
+                                        maxlength="30" @update:model-value="props.item.user_name= $event.trim()"/>
                                 </VCol>
                             </VRow>
                             <VRow v-else>

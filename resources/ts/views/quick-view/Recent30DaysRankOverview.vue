@@ -12,10 +12,12 @@ let end = '2023-01-01'
 const is_skeleton = ref(true)
 
 watchEffect(() => {
-    if(props.transactions && props.transactions.length > 0)
+    if(props.transactions)
     {
-        first = props.transactions[0].mcht_name as string
-        end = props.transactions[props.transactions.length - 1].mcht_name as string
+        if(props.transactions.length) {
+            first = props.transactions[0].mcht_name as string
+            end = props.transactions[props.transactions.length - 1].mcht_name as string
+        }
         is_skeleton.value = false
     }
 })
@@ -113,5 +115,12 @@ watchEffect(() => {
             </tr>
             </template>
         </tbody>
+        <tfoot v-if="!Boolean(props.transactions && props.transactions.length)">
+            <tr>
+                <td :colspan="6" class="list-square">
+                    거래건이 존재하지 않습니다.
+                </td>                
+            </tr>
+        </tfoot>
     </VTable>
 </template>

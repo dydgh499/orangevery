@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import { autoUpdateMerchandiseAgencyInfo, autoUpdateMerchandiseInfo, isDistMchtFeeModifyAble } from '@/plugins/fixplus'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
 import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
@@ -17,6 +18,9 @@ const props = defineProps<Props>()
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
+const feeBookDialog = ref()
+
+provide('feeBookDialog', feeBookDialog)
 
 const { sales, all_sales, initAllSales, hintSalesApplyFee, hintSalesSettleFee } = useSalesFilterStore()
 
@@ -346,5 +350,6 @@ watchEffect(() => {
                 </VCardItem>
             </VCard>
         </VCol>
+        <FeeBookDialog ref="feeBookDialog"/>
     </VRow>
 </template>

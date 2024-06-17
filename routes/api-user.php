@@ -69,11 +69,14 @@ Route::prefix('merchandises')->group(function() {
         Route::post('batch-retry', [NotiSendHistoryController::class, 'batchRetry']);    
     });
 
-    Route::prefix('batch-updaters')->group(function() {
-        Route::post('mcht-fee-direct-apply', [BatchUpdateMchtController::class, 'setMchtFeeDirect']);
-        Route::post('mcht-fee-book-apply', [BatchUpdateMchtController::class, 'setMchtFeeBooking']);    
+    //FIXPLUS
+    Route::middleware(['is.edit.able'])->group(function() {
+        Route::post('fee-change-histories/{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
+        Route::prefix('batch-updaters')->group(function() {
+            Route::post('mcht-fee-direct-apply', [BatchUpdateMchtController::class, 'setMchtFeeDirect']);
+            Route::post('mcht-fee-book-apply', [BatchUpdateMchtController::class, 'setMchtFeeBooking']);    
+        });    
     });
-    Route::post('fee-change-histories/{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
 
     Route::middleware(['is.operate'])->group(function() {
         Route::middleware(['is.edit.able'])->group(function() {
@@ -94,10 +97,10 @@ Route::prefix('merchandises')->group(function() {
     
             Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisablePaymentController::class);
             Route::apiResource('sub-business-registrations', SubBusinessRegistrationController::class);             
+            Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
         });
         Route::post('{id}/unlock-account', [MerchandiseController::class, 'unlockAccount']);
         Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
-        Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
     
         Route::prefix('pay-modules')->group(function() {
             Route::middleware(['is.edit.able'])->group(function() {

@@ -135,6 +135,6 @@ export const getUserPasswordValidate = (user_type: number, password: string) => 
         return [requiredValidatorV2(password, '새 패스워드'), passwordValidatorV2]
 }
 
-export const getOnlyNumber = (business_num: string) => {
-    return business_num.replace(/\D/g, '')
+export const getOnlyNumber = (value: string) => {
+    return value.replace(/\D/g, '').trim()
 }
