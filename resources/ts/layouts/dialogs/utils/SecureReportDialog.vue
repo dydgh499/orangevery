@@ -34,7 +34,6 @@ const current_at = ref(<string>(''))
 const snackbar = <any>(inject('snackbar'))
 
 const setSecureReport = async () => {
-    console.log(getCookie(not_open_key))
     if(getUserLevel() >= 35 && getCookie(not_open_key) === null) {
         const res = await axios.get('/api/v1/manager/services/abnormal-connection-histories/secure-report')
         histories.value = res.data.abnormal_connections

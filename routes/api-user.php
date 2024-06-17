@@ -27,6 +27,13 @@ Route::prefix('salesforces')->group(function() {
     Route::get('fee-apply-histories', [SalesforceController::class, 'feeApplyHistories']);  // 간편보기
     Route::get('classification', [SalesforceController::class, 'classification']);
 
+        Route::middleware(['is.edit.able'])->group(function() {
+            Route::prefix('fee-change-histories')->group(function() {
+                Route::delete('{id}', [FeeChangeHistoryController::class, 'deleteSalesforce']);
+                Route::post('{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
+            });
+            Route::post('{id}/mcht-batch-fee', [SalesforceController::class, 'mchtBatchFee']);
+        });
         Route::middleware(['is.operate'])->group(function() {
             Route::prefix('batch-updaters')->middleware(['is.edit.able'])->group(function() {
                 Route::post('set-settle-tax-type', [BatchUpdateSalesController::class, 'setSettleTaxType']);
@@ -39,11 +46,6 @@ Route::prefix('salesforces')->group(function() {
             });
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
             Route::middleware(['is.edit.able'])->group(function() {
-                Route::prefix('fee-change-histories')->group(function() {
-                    Route::delete('{id}', [FeeChangeHistoryController::class, 'deleteSalesforce']);
-                    Route::post('{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
-                });
-                Route::post('{id}/mcht-batch-fee', [SalesforceController::class, 'mchtBatchFee']);
                 Route::post('{id}/unlock-account', [SalesforceController::class, 'unlockAccount']);
                 Route::post('bulk-register', [SalesforceController::class, 'bulkRegister']);
             });

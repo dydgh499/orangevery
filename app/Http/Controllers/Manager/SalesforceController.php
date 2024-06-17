@@ -323,11 +323,16 @@ class SalesforceController extends Controller
 
     public function mchtBatchFee(Request $request, int $id)
     {
-        $validated = $request->validate(['mcht_batch_fee'=>'required']);
-        $res = $this->salesforces
-            ->where('id', $id)
-            ->update(['mcht_batch_fee' => $request->mcht_batch_fee/100]);
-        return $this->response($res ? 1 : 990);        
+        if(Ablilty::isSalesforce($request) || Ablilty::isOperator($request))
+        {
+            $validated = $request->validate(['mcht_batch_fee'=>'required']);
+            $res = $this->salesforces
+                ->where('id', $id)
+                ->update(['mcht_batch_fee' => $request->mcht_batch_fee/100]);
+            return $this->response($res ? 1 : 990);            
+        }
+        else
+            return $this->response(951);
     }
 
 
