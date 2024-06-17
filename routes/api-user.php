@@ -69,11 +69,12 @@ Route::prefix('merchandises')->group(function() {
         Route::post('batch-retry', [NotiSendHistoryController::class, 'batchRetry']);    
     });
 
-    Route::post('mcht-fee-direct-apply', [BatchUpdateMchtController::class, 'setMchtFeeDirect']);
-    Route::post('mcht-fee-book-apply', [BatchUpdateMchtController::class, 'setMchtFeeBooking']);
+    Route::prefix('batch-updaters')->group(function() {
+        Route::post('mcht-fee-direct-apply', [BatchUpdateMchtController::class, 'setMchtFeeDirect']);
+        Route::post('mcht-fee-book-apply', [BatchUpdateMchtController::class, 'setMchtFeeBooking']);    
+    });
     Route::post('fee-change-histories/{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
-    Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
-    
+
     Route::middleware(['is.operate'])->group(function() {
         Route::middleware(['is.edit.able'])->group(function() {
             Route::prefix('batch-updaters')->group(function() {
@@ -96,6 +97,7 @@ Route::prefix('merchandises')->group(function() {
         });
         Route::post('{id}/unlock-account', [MerchandiseController::class, 'unlockAccount']);
         Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
+        Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
     
         Route::prefix('pay-modules')->group(function() {
             Route::middleware(['is.edit.able'])->group(function() {
