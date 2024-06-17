@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Manager\Transaction\TransactionController;
 use App\Http\Controllers\Manager\Transaction\TransactionSummaryController;
 
+use App\Http\Controllers\Log\DifferenceSettlementHistoryController;
 use App\Http\Controllers\Log\RealtimeSendHistoryController;
 use App\Http\Controllers\Log\MchtSettleHistoryController;
 use App\Http\Controllers\Log\SalesSettleHistoryController;
