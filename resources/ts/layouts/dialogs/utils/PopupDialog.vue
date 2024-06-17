@@ -27,8 +27,8 @@ const getCookie = (name: string) => {
 }
 
 const setCookie = function(name: string, value: string, exp: number) {
-    var date = new Date();
-    date.setTime(date.getTime() + exp*24*60*60*1000);
+    var date = new Date()
+    date.setHours(23, 59, 59, 999)
     document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
 };
 
@@ -66,9 +66,10 @@ defineExpose({
   display: flex;
   justify-content: flex-end;
 }
+
 .not-open-today {
-    position: absolute;
-    z-index: 9999;
-    right: 2em;
+  position: absolute;
+  z-index: 9999;
+  inset-inline-end: 2em;
 }
 </style>

@@ -21,7 +21,7 @@ interface LoginHistory {
 
 const detailWorkStatusDialog = <any>inject('detailWorkStatusDialog')
 
-const not_open_key = 'secure-report/hide/'
+const not_open_key = 'secure-report/hide'
 const is_hide = ref(false)
 const visible = ref(false)
 const histories = ref(<AbnormalConnectionHistory[]>([]))
@@ -34,7 +34,8 @@ const current_at = ref(<string>(''))
 const snackbar = <any>(inject('snackbar'))
 
 const setSecureReport = async () => {
-    if(getUserLevel() >= 35 && getCookie(not_open_key) !== null) {
+    console.log(getCookie(not_open_key))
+    if(getUserLevel() >= 35 && getCookie(not_open_key) === null) {
         const res = await axios.get('/api/v1/manager/services/abnormal-connection-histories/secure-report')
         histories.value = res.data.abnormal_connections
         login_histories.value = res.data.login_histories
@@ -57,7 +58,7 @@ const timeZoneTotalCount = (detail_time_type: number) => {
 }
 
 const setOpenStatus = () => {
-    if(is_hide) {
+    if(is_hide.value) {
         setCookie(not_open_key, 'true', 1)
     }
     visible.value = !visible.value
@@ -69,8 +70,8 @@ const getCookie = (name: string) => {
 }
 
 const setCookie = function(name: string, value: string, exp: number) {
-    var date = new Date();
-    date.setTime(date.getTime() + exp*24*60*60*1000);
+    var date = new Date()
+    date.setHours(23, 59, 59, 999)
     document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
 };
 
