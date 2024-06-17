@@ -76,7 +76,7 @@ Route::prefix('merchandises')->group(function() {
                 Route::post('sales-fee-book-apply', [BatchUpdateMchtController::class, 'setSalesFeeBooking']);
                 Route::post('mcht-fee-direct-apply', [BatchUpdateMchtController::class, 'setMchtFeeDirect']);
                 Route::post('mcht-fee-book-apply', [BatchUpdateMchtController::class, 'setMchtFeeBooking']);
-                Route::post('set-noti-url', [BatchUpdateMchtController::class, 'setNotiUrl']);                                
+                Route::post('set-noti-url', [BatchUpdateMchtController::class, 'setNotiUrl']);
                 Route::post('set-enabled', [BatchUpdateMchtController::class, 'setEnabled']);
                 Route::post('set-custom-filter', [BatchUpdateMchtController::class, 'setCustomFilter']);
                 Route::post('set-business-num', [BatchUpdateMchtController::class, 'setBusinessNum']);

@@ -6,8 +6,8 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
-import { banks } from '@/views/users/useStore'
-import { axios, getIndexByLevel, getUserLevel, getLevelByIndex } from '@axios'
+import { banks, getOnlyNumber } from '@/views/users/useStore'
+import { axios, getIndexByLevel, getLevelByIndex, getUserLevel } from '@axios'
 import corp from '@corp'
 
 interface Props {
@@ -301,7 +301,7 @@ watchEffect(() => {
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField v-model="merchandise.business_num" type="text" placeholder="사업자등록번호 입력"
-                                        persistent-placeholder />
+                                        persistent-placeholder @update:model-value="merchandise.business_num = getOnlyNumber($event)"/>
                                     <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setBusinessNum()">
                                         즉시적용
                                         <VIcon end icon="tabler-direction-sign" />

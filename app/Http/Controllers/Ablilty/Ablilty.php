@@ -2,7 +2,6 @@
 namespace App\Http\Controllers\Ablilty;
 
 use App\Http\Controllers\Ablilty\AbnormalConnection;
-use Illuminate\Support\Facades\Redis;
 use Carbon\Carbon;
 
 class Ablilty

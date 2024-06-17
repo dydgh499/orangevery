@@ -61,7 +61,7 @@ class Salesforce extends Authenticatable
             ->where('is_delete', false)
             ->with('childs')
             ->select([
-                'id', 'parent_id', 'sales_fee', 
+                'id', 'parent_id', 'user_name', 'sales_fee', 
                 'level', 'sales_name', 'nick_name', 'resident_num', 
                 'business_num', 'sector', 'addr', 'phone_num', 
                 'acct_num', 'acct_name', 'acct_bank_name', 'acct_bank_code',

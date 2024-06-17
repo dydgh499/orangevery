@@ -126,7 +126,7 @@ store.params.sales_parent_structure = 1
                                 </td>
                         </template>
                     </tr>
-                    <SalesforceChildOverview v-for="(child, _index) in item['childs']" :key="_index" :salesforce="child" :depth="1"/>
+                    <SalesforceChildOverview v-for="(child, _key, _index) in item.childs" :key="_index" :salesforce="child" :depth="1"/>
                 </template>
             </template>
         </BaseIndexView>

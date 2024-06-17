@@ -2,7 +2,7 @@
 import FileInput from '@/layouts/utils/FileInput.vue'
 import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
 import type { UserPropertie } from '@/views/types'
-import { avatars, banks, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore'
+import { avatars, banks, getOnlyNumber, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore'
 import { axios, getUserLevel, isAbleModiy } from '@axios'
 import corp from '@corp'
 
@@ -118,7 +118,8 @@ watchEffect(() => {
                                 <VCol md="8">
                                     <VTextField v-model="props.item.phone_num" type="text"
                                     prepend-inner-icon="tabler-device-mobile" placeholder="010-0000-0000"
-                                    persistent-placeholder maxlength="13" />                                    
+                                    persistent-placeholder maxlength="13" 
+                                    @update:model-value="props.item.phone_num = getOnlyNumber($event)"/>                                    
                                 </VCol>
                             </VRow>
                             <VRow v-else>
@@ -157,7 +158,8 @@ watchEffect(() => {
                                     <div style="display: flex;">
                                         <VTextField v-model="props.item.business_num" type="text"
                                             prepend-inner-icon="ic-outline-business-center" placeholder="1231212345"
-                                            persistent-placeholder maxlength="13">
+                                            persistent-placeholder maxlength="13"
+                                            @update:model-value="props.item.business_num = getOnlyNumber($event)">
                                             <VTooltip activator="parent" location="top" v-if="corp.use_different_settlement">
                                                 {{ "사업자번호를 입력하지 않거나, 정확하게 입력하지 않으면 차액정산대상에서 제외됩니다." }}
                                             </VTooltip>
@@ -181,7 +183,8 @@ watchEffect(() => {
                                     <VRow style="align-items: center;">
                                         <VCol :cols="5">
                                             <VTextField v-model="props.item.resident_num_front" type="number" id="regidentFrontNum"
-                                                prepend-inner-icon="carbon-identification" placeholder="800101" maxlength="6"/>
+                                                prepend-inner-icon="carbon-identification" placeholder="800101" maxlength="6"
+                                                @update:model-value="props.item.resident_num_front = getOnlyNumber($event)"/>
                                         </VCol>
                                         <span> - </span>
                                         <VCol :cols="5">
@@ -189,7 +192,8 @@ watchEffect(() => {
                                                 maxlength="7"
                                                 :append-inner-icon="is_resident_num_back_show ? 'tabler-eye' : 'tabler-eye-off'"
                                                 :type="is_resident_num_back_show ? 'number' : 'password'"
-                                                @click:append-inner="is_resident_num_back_show = !is_resident_num_back_show" />
+                                                @click:append-inner="is_resident_num_back_show = !is_resident_num_back_show" 
+                                                @update:model-value="props.item.resident_num_back = getOnlyNumber($event)"/>
                                         </VCol>
                                     </VRow>
                                 </VCol>

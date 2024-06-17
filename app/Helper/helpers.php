@@ -8,7 +8,6 @@
     use App\Http\Controllers\Log\OperatorHistoryContoller;
     use App\Enums\HistoryType;
     use Illuminate\Support\Facades\DB;
-    use Illuminate\Support\Facades\Redis;
     use App\Models\Options\PvOptions;
     use App\Http\Controllers\Ablilty\Ablilty;
 

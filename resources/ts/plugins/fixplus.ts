@@ -9,26 +9,10 @@ import corp from './corp';
 export const isFixplusSalesAbleUpdate = (id: number) => {   
     const path = router.currentRoute.value.path
     if(path.includes('/merchandises')) {
-        if(getUserLevel() === 30) { //총판
-            return true
-        }
-        else if(getUserLevel() === 25) { //지사
-            return true
-        }
-        else {
-            return true;
-        }
+        return true
     }
     else if(path.includes('/salesforces')) {
-        if(getUserLevel() === 30) { //총판
-            return true
-        }
-        else if(getUserLevel() === 25) {    //지사
-            return true
-        }
-        else {  //대리점
-            return true                
-        }
+        return true                
     }
     else
         return false

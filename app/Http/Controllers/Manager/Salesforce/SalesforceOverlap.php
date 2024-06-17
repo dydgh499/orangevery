@@ -88,7 +88,7 @@ class SalesforceOverlap
             {
                 $parent = Salesforce::where('id', $parent_id)
                     ->where('is_delete', false)
-                    ->first(['id', 'parent_id', 'sales_fee', 'level', 'sales_name', 'is_able_under_modify', 'mcht_batch_fee']);
+                    ->first(['id', 'parent_id', 'sales_fee', 'level', 'user_name','sales_name', 'is_able_under_modify', 'mcht_batch_fee', 'busniess_num']);
                 if($parent)
                     $parents[] = $parent;
 

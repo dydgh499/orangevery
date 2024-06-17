@@ -172,12 +172,12 @@ class BrandController extends Controller
      */
     public function update(BrandRequest $request, int $id)
     {
-        $cond_1 = Ablilty::isDevLogin($request);
+        // 휴대폰 인증
         if(Ablilty::isBrandCheck($request, $id, true) === false)
             return $this->response(951);
         if(Ablilty::isEditAbleTime() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-        if($cond_1)
+        if($request->user()->level > 35)
         {
             $data = $request->data();
             $data = $this->saveImages($request, $data, $this->imgs);
@@ -188,8 +188,8 @@ class BrandController extends Controller
             if($res)
             {
                 $b_info = json_encode($query->with(['beforeBrandInfos'])->first());
-                Redis::set($brand->dns, $b_info, 'EX', 300);    
-                Redis::set("brand-info-$id", $b_info, 'EX', 300);
+                Redis::set($brand->dns, $b_info, 'EX', 600);    
+                Redis::set("brand-info-$id", $b_info, 'EX', 600);
             }
             return $this->response($res ? 1 : 990, ['id'=>$id]);    
         }

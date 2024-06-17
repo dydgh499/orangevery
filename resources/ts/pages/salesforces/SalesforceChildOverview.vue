@@ -26,7 +26,7 @@ const tax_types = settleTaxTypes()
 const getChildDepth = computed(() => {
     return props.depth + 1
 })
-
+console.log(props.salesforce)
 </script>
 
 <template>
@@ -78,7 +78,7 @@ const getChildDepth = computed(() => {
                     </VChip>
                 </span>
                 <span v-else-if="key == 'extra_col'">
-                    <UserExtraMenu :item="props.salesforce" :type="1" :key="item['id']"/>
+                    <UserExtraMenu :item="props.salesforce" :type="1" :key="props.salesforce.id"/>
                 </span>
                 <span v-else>
                     {{ props.salesforce[key] }}
@@ -86,5 +86,5 @@ const getChildDepth = computed(() => {
             </td>
         </template>
     </tr>
-    <SalesforceChildOverview v-for="(child, _idx) in salesforce.childs" :key="_idx" :salesforce="child" :depth="getChildDepth"/>
+    <SalesforceChildOverview v-for="(child, _key, _idx) in props.salesforce.childs" :key="_idx" :salesforce="child" :depth="getChildDepth"/>
 </template>

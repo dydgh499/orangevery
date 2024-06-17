@@ -46,9 +46,6 @@ class AddDeduct
         if(in_array($request->user()->brand_id, [])) //12, 14
         {
             $amount_limit = 3000000;
-            if($request->id  === 102543)
-                $amount_limit = 7000000;
-
             if(self::amountValidate($request, $amount_limit) === false)
                 return -3;
             //
@@ -62,9 +59,6 @@ class AddDeduct
             //
             $mcht_limit = 1;
             $key_name = $base_key.$request->id."-".($col === 'mcht_id' ? 10 : $request->user()->level);
-            if($request->id  === 102543)
-                $mcht_limit = 2;
-
             if(self::countValidate($request, $key_name, $mcht_limit) === false)
             {
                 return -2;

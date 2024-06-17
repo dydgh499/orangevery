@@ -141,7 +141,7 @@ class PostController extends Controller
     public function upload(Request $request)
     {
         if($request->user()->level >= 40)
-        {
+        {        
             $data = [];
             $imgs = [
                 'params'    => ['file'],
