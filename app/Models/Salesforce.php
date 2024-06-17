@@ -59,7 +59,7 @@ class Salesforce extends Authenticatable
     {
         $query = $this->hasMany(Salesforce::class, 'parent_id')
             ->where('is_delete', false);
-        if($request->is_lock)
+        if(request()->is_lock)
             $query = $query->where('is_lock', 1);
 
         return $query->with('childs')

@@ -39,7 +39,7 @@ class Kernel extends ConsoleKernel
         // 차액정산
         $schedule->call(function () {
             (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleRequest();
-        })->daily();
+        })->dailyAt("00:30");
         $schedule->call(function () {
             (new DifferenceSettlementHistoryController(new DifferenceSettlementHistory))->differenceSettleResponse();
         })->dailyAt("09:00");
