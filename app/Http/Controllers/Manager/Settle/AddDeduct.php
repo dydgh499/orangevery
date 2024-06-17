@@ -43,7 +43,7 @@ class AddDeduct
     static public function validate($request, $col)
     {
         $base_key = 'add-deduct-brand-';
-        if(in_array($request->user()->brand_id, [12, 14]))
+        if(in_array($request->user()->brand_id, [])) //12, 14
         {
             $amount_limit = 3000000;
             if($request->id  === 102543)
