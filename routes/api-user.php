@@ -63,7 +63,6 @@ Route::prefix('merchandises')->group(function() {
 
     Route::get('pay-modules/chart', [PaymentModuleController::class, 'chart']);
     Route::get('pay-modules/all', [PaymentModuleController::class, 'all']);
-    Route::apiResource('pay-modules', PaymentModuleController::class);
     
     Route::get('noti-send-histories', [NotiSendHistoryController::class, 'index']);
     Route::prefix('noti-send-histories')->group(function() {
@@ -134,6 +133,8 @@ Route::prefix('merchandises')->group(function() {
             });
         });
     });
+    
+    Route::apiResource('pay-modules', PaymentModuleController::class);
     Route::apiResource('regular-credit-cards', RegularCreditCardController::class);     
     Route::apiResource('noti-urls', NotiUrlController::class);
 });

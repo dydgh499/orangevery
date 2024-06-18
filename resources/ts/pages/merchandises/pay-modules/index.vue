@@ -27,7 +27,7 @@ const batchDelete = async () => {
     const count = selected.value.length
     if (await dialog('정말 ' + count + '개의 결제모듈을 일괄삭제 하시겠습니까?')) {
         const params = { selected: selected.value }
-        const r = await request({ url: `/api/v1/manager/merchandises/pay-modules/batch-remove`, method: 'delete', params: params }, true)
+        const r = await request({ url: `/api/v1/manager/merchandises/pay-modules/batch-remove`, method: 'delete', data: params }, true)
         store.setChartProcess()
         store.setTable()
     }

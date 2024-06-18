@@ -72,7 +72,7 @@ class AbnormalConnection
     static public function tryParameterModulationApproach()
     {
         critical('URL 조작, 파라미터 변조시도 ('.request()->ip().")");
-        IPInfo::setBlock(request()->ip(), -3000);
+        IPInfo::setBlock(request()->ip());
 
         $block_time = Carbon::now()->addHours(1)->format('Y-m-d H:i:s');
         self::create([
