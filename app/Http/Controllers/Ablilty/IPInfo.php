@@ -60,11 +60,11 @@ class IPInfo
         if($info)
             return json_decode($info, true);
         else
-        {
+        {   
             $token = env('IPINFO_API_KEY', '2c693805e1bced');
-            $res = get("https://ipinfo.io/".$request->ip(), [], [
-                'Authorization' => "Bearer {$token}",
-                'User-Agent' => 'Laravel',
+            $res = get("https://ipinfo.io/".$request->ip()."?token=$token", [], [
+                'Authorization' => "Bearer $token",
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
                 "Accept" =>  "application/json",
             ]);
             
