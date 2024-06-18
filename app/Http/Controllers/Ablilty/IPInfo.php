@@ -60,7 +60,7 @@ class IPInfo
         if($info)
             return json_decode($info, true);
         else
-        {   
+        {
             $token = env('IPINFO_API_KEY', '2c693805e1bced');
             $res = get("https://ipinfo.io/".$request->ip()."?token=$token", [], [
                 'Authorization' => "Bearer $token",

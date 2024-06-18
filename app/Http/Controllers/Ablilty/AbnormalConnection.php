@@ -147,7 +147,7 @@ class AbnormalConnection
         {
             self::create([
                 'brand_id' => request()->user()->brand_id,
-                'connection_type' => AbnormalConnectionCode::BLOCK_IP->value,
+                'connection_type' => AbnormalConnectionCode::OPERATION_PERMIITED->value,
                 'action' => "1시간 IP차단 (~ ".$block_time.")",
                 'target_level'  => request()->user()->level ? request()->user()->level : 10,
                 'target_key'    => request()->url(),
@@ -160,7 +160,7 @@ class AbnormalConnection
             $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
             self::create([
                 'brand_id' => $brand['id'],
-                'connection_type' => AbnormalConnectionCode::BLOCK_IP->value,
+                'connection_type' => AbnormalConnectionCode::OPERATION_PERMIITED->value,
                 'action' => "1시간 IP차단 (~ ".$block_time.")",
                 'target_level'  => 0,
                 'target_key'    => request()->url(),
