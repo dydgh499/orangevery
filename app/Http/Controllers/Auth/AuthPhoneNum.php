@@ -82,7 +82,7 @@ class AuthPhoneNum
     static private function payDisableTimeType($s_tm, $e_tm)
     {
         $cond_1 = $s_tm && $e_tm;
-        $cond_2 = $s_tm !== "00:00:00" || $e_tm !== "00:00:00";
+        $cond_2 = $s_tm !== $e_tm;
         if ($cond_1 && $cond_2)
         {
             $current_time = Carbon::now();
@@ -93,12 +93,21 @@ class AuthPhoneNum
             $start_time_yesterday = Carbon::yesterday()->setTimeFromTimeString($s_tm);
             $end_time_tomorrow = Carbon::tomorrow()->setTimeFromTimeString($e_tm);
 
-            //어제 ~ 오늘
-            if($current_time->between($start_time_yesterday, $end_time_today))
-                return [1, $start_time_yesterday, $end_time_today];
-            //오늘 ~ 다음날
-            if ($current_time->between($start_time_today, $end_time_tomorrow))
-                return [2, $start_time_today, $end_time_tomorrow];
+
+            if($start_time_today->lessThan($end_time_today))
+            {   //오늘 ~ 오늘 05:00 ~ 12:00
+                if ($current_time->between($start_time_today, $end_time_today))
+                    return [3, $start_time_today, $end_time_today];
+            }
+            else
+            {
+                //어제 ~ 오늘 23:00 ~ 05:00
+                if($current_time->between($start_time_yesterday, $end_time_today))
+                    return [1, $start_time_yesterday, $end_time_today];
+                //오늘 ~ 다음날 23:00 ~ 05:00
+                if ($current_time->between($start_time_today, $end_time_tomorrow))
+                    return [2, $start_time_today, $end_time_tomorrow];
+            }
         }
         return [0, '', ''];
     }
