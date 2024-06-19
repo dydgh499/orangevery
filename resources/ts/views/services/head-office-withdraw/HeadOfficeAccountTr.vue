@@ -44,24 +44,6 @@ const setAcctBankName = () => {
                         @update:modelValue="setAcctBankName()" style="margin: 0 0.5em;" />
             </VForm>
         </td>
-        <td class="text-center" style="width: 5%;">
-            <VCol class="d-flex gap-4">
-                <VBtn type="button" color="default" variant="text"
-                    @click="update('/services/head-office-accounts', props.item, vForm, false)">
-                    {{ props.item.id == 0 ? "추가" : "수정" }}
-                    <VIcon end icon="tabler-pencil" />
-                </VBtn>
-                <VBtn type="button" color="default" variant="text" v-if="props.item.id"
-                    @click="remove('/services/head-office-accounts', props.item, false)">
-                    삭제
-                    <VIcon end icon="tabler-trash" />
-                </VBtn>
-                <VBtn type="button" color="default" variant="text" v-else @click="props.item.id = -1">
-                    입력란 제거
-                    <VIcon end icon="tabler-trash" />
-                </VBtn>
-            </VCol>
-        </td>
     </tr>
 </template>
 <style scoped>

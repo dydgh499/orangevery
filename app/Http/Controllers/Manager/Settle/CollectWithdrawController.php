@@ -171,7 +171,6 @@ class CollectWithdrawController extends Controller
      * 모아서 출금 요청
      *
      * 가맹점만 가능
-     *
      */
     public function collectDeposit(CollectWithdrawRequest $request)
     {

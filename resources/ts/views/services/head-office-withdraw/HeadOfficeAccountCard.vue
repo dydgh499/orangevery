@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { useRequestStore } from '@/views/request'
 import HeadOfficeAccountTr from '@/views/services/head-office-withdraw/HeadOfficeAccountTr.vue'
 import { useHeadOfficeAccountStore } from '@/views/services/head-office-withdraw/useStore'
 import type { HeadOffceAccount } from '@/views/types'
-import { useRequestStore } from '@/views/request'
 
 const { setNullRemove } = useRequestStore()
 const { head_office_accounts } = useHeadOfficeAccountStore()
@@ -32,7 +32,6 @@ watchEffect(() => {
                 <th scope="col" style="text-align: center;">계좌번호</th>
                 <th scope="col" style="text-align: center;">예금주</th>
                 <th scope="col" style="text-align: center;">출금은행</th>
-                <th scope="col" style="text-align: center;"></th>
             </tr>
         </thead>
         <tbody>
@@ -47,12 +46,4 @@ watchEffect(() => {
             </tr>
         </tfoot>
     </VTable>
-    <VRow>
-        <VCol class="d-flex gap-4">
-            <VBtn type="button" style="margin-left: auto;" @click="addNewHeadOffceAccount()">
-                지정계좌 신규추가
-                <VIcon end icon="tabler-plus" />
-            </VBtn>
-        </VCol>
-    </VRow>
 </template>
