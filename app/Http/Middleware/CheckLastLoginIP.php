@@ -11,6 +11,7 @@ use App\Http\Traits\ExtendResponseTrait;
 
 class CheckLastLoginIP
 {
+    use ExtendResponseTrait;
     /**
      * Handle an incoming request.
      *
