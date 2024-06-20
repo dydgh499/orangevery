@@ -33,8 +33,6 @@ Route::prefix('v1')->group(function() {
 
     Route::post('transactions/hand-pay', [TransactionController::class, 'handPay']);
     Route::post('transactions/pay-cancel', [TransactionController::class, 'payCancel']);
-    Route::post('computational-transfer/login', [BeforeSystemController::class, 'login']);
-    Route::post('computational-transfer/register', [BeforeSystemController::class, 'register']);
 
     Route::prefix('bonaejas')->group(function() {
         Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
@@ -42,7 +40,7 @@ Route::prefix('v1')->group(function() {
         Route::middleware(['auth:sanctum', 'log.route'])->post('sms-link-send', [MessageController::class, 'smslinkSend']);
     });
     
-    Route::middleware(['log.route'])->prefix('auth')->group(function() {
+    Route::prefix('auth')->middleware(['log.route'])->group(function() {
         Route::post('reset-password', [AuthController::class, 'resetPassword']);    
         Route::post('sign-in', [AuthController::class, 'signin']);
         Route::post('sign-up', [AuthController::class, 'signUp']);
@@ -52,9 +50,12 @@ Route::prefix('v1')->group(function() {
             Route::post('sign-out', [AuthController::class, 'signout']);
             Route::post('onwer-check', [AuthController::class, 'onwerCheck']);
         });
-    });
+    }); 
 
     Route::prefix('manager')->middleware(['auth:sanctum', 'log.route'])->group(function() {
+        Route::post('computational-transfer/login', [BeforeSystemController::class, 'login']);
+        Route::post('computational-transfer/register', [BeforeSystemController::class, 'register']);
+    
         Route::prefix('dashsboards')->group(function() {
             Route::get('monthly-transactions-analysis', [DashboardController::class, 'monthlyTranAnalysis']);
             Route::get('upside-merchandises-analysis', [DashboardController::class, 'upSideMchtAnalysis']);

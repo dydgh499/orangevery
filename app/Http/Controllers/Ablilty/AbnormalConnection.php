@@ -78,7 +78,7 @@ class AbnormalConnection
         self::create([
             'brand_id' => request()->user()->brand_id,
             'connection_type' => AbnormalConnectionCode::PARAM_MODULATION_APPROCH->value,
-            'action' => '10분 IP차단 (~ '.$block_time.')',
+            'action' => '1시간 IP차단 (~ '.$block_time.')',
             'target_level'  => request()->user()->level ? request()->user()->level : 10,
             'target_key'    => request()->url(),
             'target_value'  => self::privateDataHidden(request()->all()),
@@ -241,9 +241,16 @@ class AbnormalConnection
         ]);
     }
 
-    /*
-        시간대별 가맹점 등록/수정사항 -> 개수 -> 상세조회 00~06
-        시간대별 영업점 등록/수정사항 -> 개수 -> 상세조회 06~12
-        시간대별 운영자 등록/수정사항 -> 개수 -> 상세조회 06~18, 18~00
-    */
+    static public function notSameLoginIP()
+    {
+        self::create([
+            'brand_id' => request()->user()->brand_id,
+            'connection_type' => AbnormalConnectionCode::NOT_SAME_LOGIN_IP->value,
+            'action'        => "로그아웃",
+            'target_level'  => request()->user()->level ? request()->user()->level : 10,
+            'target_key'    => request()->url(),
+            'target_value'  => self::privateDataHidden(request()->all()),
+            'comment'       =>  'ID: '.request()->user()->user_name.'('.request()->user()->last_login_ip.' -> '.request()->user()->ip().')',
+        ]);
+    }
 }

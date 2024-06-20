@@ -72,5 +72,6 @@ class Kernel extends HttpKernel
         'dev.ip' => \App\Http\Middleware\CheckDevelopOfficeIP::class,
         'is.operate' => \App\Http\Middleware\CheckOperator::class,
         'is.edit.able' => \App\Http\Middleware\CheckEditAbleTime::class,
+        'last.login.ip' => \App\Http\Middleware\CheckLastLoginIP::class,
     ];
 }

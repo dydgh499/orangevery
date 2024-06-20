@@ -6,12 +6,11 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Ablilty\Ablilty;
-use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
+use App\Http\Traits\ExtendResponseTrait;
 
-class CheckEditAbleTime
+class CheckLastLoginIP
 {
-    use ExtendResponseTrait;
     /**
      * Handle an incoming request.
      *
@@ -19,9 +18,12 @@ class CheckEditAbleTime
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Ablilty::isEditAbleTime())
+        if($request->user()->last_login_ip === $request->ip() || Ablilty::isDevLogin($request))
             return $next($request);
         else
-            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+        {
+            AbnormalConnection::notSameLoginIP();
+            return $this->extendResponse(951, '세션이 변경되었습니다.');
+        }
     }
 }

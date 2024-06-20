@@ -43,7 +43,7 @@ class nicepay implements DifferenceSettlementInterface
                     $this->setAtypeField($brand_business_num, 10).
                     $this->setAtypeField($business_num, 10).
                     $this->setAtypeField($trans[$i]->trx_id, 30).
-                    $this->setNtypeField( $trans[$i]->is_cancel ? $trans[$i]->ori_trx_id : $trans[$i]->trx_id, 30).
+                    $this->setNtypeField($trans[$i]->is_cancel ? $trans[$i]->ori_trx_id : $trans[$i]->trx_id, 30).
                     $this->setAtypeField($trans[$i]->ord_num, 70).
                     $this->setNtypeField(abs($trans[$i]->amount), 15).
                     $this->setNtypeField(abs($trans[$i]->amount), 15).

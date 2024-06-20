@@ -1,15 +1,15 @@
 
 <script setup lang="ts">
-import { settleCycles, settleDays } from '@/views/salesforces/useStore'
-import { useStore } from '@/views/services/pay-gateways/useStore'
+import { settleCycles, settleDays } from '@/views/salesforces/useStore';
+import { useStore } from '@/views/services/pay-gateways/useStore';
 
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { requiredValidatorV2 } from '@validators'
-import { reactive } from 'vue';
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue';
 import { axios } from '@axios';
-import { cloneDeep } from 'lodash'
-import { VForm } from 'vuetify/components'
-import corp from '@corp'
+import corp from '@corp';
+import { requiredValidatorV2 } from '@validators';
+import { cloneDeep } from 'lodash';
+import { reactive } from 'vue';
+import { VForm } from 'vuetify/components';
 
 const {  settle_types } = useStore()
 
@@ -34,7 +34,7 @@ const login = async() => {
     const is_valid = await vForm.value?.validate();
     if (is_valid?.valid && await alert.value.show('정말 로그인 하시겠습니까?')) {
         try {
-            const r = await axios.post('/api/v1/computational-transfer/login', cloneDeep(login_info))
+            const r = await axios.post('/api/v1/manager/computational-transfer/login', cloneDeep(login_info))
             snackbar.value.show('성공하였습니다.', 'success')
             login_info.token = r.data.token
             is_disabled.value = false
@@ -53,7 +53,7 @@ const register = async() => {
                 token: login_info.token,
                 brand_id: corp.id,
             }
-            const r = await axios.post('/api/v1/computational-transfer/register', params);
+            const r = await axios.post('/api/v1/manager/computational-transfer/register', params);
             snackbar.value.show(r.data.message, 'success')
             login_info.token = r.data.token
             is_disabled.value = false

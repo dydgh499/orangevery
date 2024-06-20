@@ -161,6 +161,9 @@ class AuthController extends Controller
         ]);
 
         return DB::transaction(function () use($request) {
+            if(Operator::where('brand_id')->where('level', 40)->where('is_delete', false)->exists())
+                return $this->extendResponse(951, '잘못된 접근입니다.', []);
+
             $res = Brand::where('id', $request->brand_id)
                 ->update([
                     'ceo_name'=>$request->ceo_name,
