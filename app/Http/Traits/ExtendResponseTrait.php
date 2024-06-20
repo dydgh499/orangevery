@@ -76,6 +76,7 @@ trait ExtendResponseTrait
             case 951:   $msg = __("auth.auth"); break;
             case 952:   $msg = __("auth.password"); break;
             case 953:   $msg = "CSRF token mismatch"; break;
+            case 954:   $msg = "세션이 변경되었습니다."; break;
             
             //-------------- server error ----------------- (990 ~ 999)
             case 990:   $msg = "시스템 에러입니다."; break;
@@ -102,7 +103,7 @@ trait ExtendResponseTrait
                 $http_code = 404;
             else if($code == 950)
                 $http_code = 401;
-            else if($code == 951 || $code == 952)
+            else if($code == 951 || $code == 952 || $code == 954)
                 $http_code = 403;                
             else if($code == 953)
                 $http_code = 419;
