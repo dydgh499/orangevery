@@ -250,7 +250,7 @@ class AbnormalConnection
             'target_level'  => request()->user()->level ? request()->user()->level : 10,
             'target_key'    => request()->url(),
             'target_value'  => self::privateDataHidden(request()->all()),
-            'comment'       =>  'ID: '.request()->user()->user_name.'('.request()->user()->last_login_ip.' -> '.request()->user()->ip().')',
+            'comment'       =>  'ID: '.request()->user()->user_name.'('.request()->user()->last_login_ip.' -> '.request()->ip().')',
         ]);
     }
 }
