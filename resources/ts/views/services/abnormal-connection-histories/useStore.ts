@@ -11,8 +11,8 @@ export const connection_types = <Options[]>([
     {id:4, title:'허용되지 않은 작업 시도'},
     {id:5, title:'매크로 탐지'},
     {id:6, title:'해외 IP 접속'},
+    {id:7, title:'세션변경'},
 ])
-//{id:6, title:'권한이 없습니다.'},
 
 export const getLevelByChipColor = (level: number) => {
     if(level === 10)
