@@ -56,9 +56,10 @@ class Login
             {
                 operLogging(HistoryType::LOGIN, '', [], [], '', $result['user']->brand_id, $result['user']->id);
             }
-            $result['user']->last_login_at = date('Y-m-d H:i:s');
-            $result['user']->last_login_ip = request()->ip();
-            $result['user']->save();
+            (clone $orm)->where('id', $result['user']->id)->update([
+                'last_login_at' => date('Y-m-d H:i:s'),
+                'last_login_ip' => request()->ip(),
+            ]);
         }
         else if($result['result'] === AuthLoginCode::WRONG_PASSWORD->value)
         {
