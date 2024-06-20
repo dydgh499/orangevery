@@ -24,7 +24,7 @@ class CheckLastLoginIP
         else
         {
             AbnormalConnection::notSameLoginIP();
-            return $this->response(951, '세션이 변경되었습니다.');
+            return $this->response(954);
         }
     }
 }
