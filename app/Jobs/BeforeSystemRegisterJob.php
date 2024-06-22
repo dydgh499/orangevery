@@ -26,6 +26,7 @@ use App\Http\Controllers\BeforeSystem\Transaction;
 use App\Http\Controllers\BeforeSystem\RealtimeSendHistory;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redis;
 
 class BeforeSystemRegisterJob implements ShouldQueue
 {
@@ -126,6 +127,9 @@ class BeforeSystemRegisterJob implements ShouldQueue
             logging(['realtime histories'=>'ok'], 'before-system-register-job');
 
             $this->payvery->table('brands')->where('id', $this->brand_id)->update(['is_transfer'=>2]);
+            $b_info = json_encode($this->payvery->table('brands')->where('id', $this->brand_id)->with(['beforeBrandInfos'])->first());
+            Redis::set($brand->dns, $b_info, 'EX', 600);    
+            Redis::set("brand-info-$id", $b_info, 'EX', 600);
             return true;
         });
         logging(['finish'=>$result], 'before-system-register-job');
