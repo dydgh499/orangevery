@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\IPInfo;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Traits\ExtendResponseTrait;
 
@@ -23,8 +24,13 @@ class CheckLastLoginIP
             return $next($request);
         else
         {
-            AbnormalConnection::notSameLoginIP();
-            return $this->response(954);
+            if(IPInfo::isMobile($request->ip()) === IPInfo::isMobile($request->user()->last_login_ip))
+                return $next($request);
+            else
+            {
+                AbnormalConnection::notSameLoginIP();
+                return $this->response(954);    
+            }
         }
     }
 }
