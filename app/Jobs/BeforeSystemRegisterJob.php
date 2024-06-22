@@ -127,9 +127,6 @@ class BeforeSystemRegisterJob implements ShouldQueue
             logging(['realtime histories'=>'ok'], 'before-system-register-job');
 
             $this->payvery->table('brands')->where('id', $this->brand_id)->update(['is_transfer'=>2]);
-            $b_info = json_encode($this->payvery->table('brands')->where('id', $this->brand_id)->first());
-            Redis::set($b_info->dns, $b_info, 'EX', 600);    
-            Redis::set("brand-info-$id", $b_info, 'EX', 600);
             return true;
         });
         logging(['finish'=>$result], 'before-system-register-job');
