@@ -91,7 +91,7 @@ class BeforeSystemController extends Controller
             ->onQueue('computational-transfer');
         sleep(10);
 
-        $b_info = json_encode($this->payvery->table('brands')->where('id', $brand_id)->with(['beforeBrandInfos'])->first());
+        $b_info = json_encode($this->payvery->table('brands')->where('id', $brand_id)->first());
         Redis::set($brand->dns, $b_info, 'EX', 600);    
         Redis::set("brand-info-$id", $b_info, 'EX', 600);
 
