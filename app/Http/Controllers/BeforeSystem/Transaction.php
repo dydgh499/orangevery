@@ -59,6 +59,8 @@ class Transaction
                 ->orderby('PK', 'ASC')
                 ->chunk(999, function($transactions) use(&$items, $brand_id) {
                     $payvery_mchts_ids = array_column($this->payvery_mchts, 'id');
+                    $holidays = Transaction::getHolidays($brand_id);
+                    
                     foreach ($transactions as $transaction) {
                         $mcht_id = $this->getId($this->connect_mchts, $transaction->USER_PK);
                         if(!$mcht_id)
@@ -120,7 +122,8 @@ class Transaction
                                 $amount *= -1;
                                 $dpst_fee *= -1;
                             }
-                            $items[] = [
+
+                            $item = [
                                 'brand_id' => $brand_id,
                                 'mcht_id' => $mcht_id,
                                 'brand_settle_amount' => 0,
@@ -165,7 +168,7 @@ class Transaction
                                 'terminal_id' => $terminal_id,
                                 'mcht_fee' => $transaction->MD_FEE,
                                 'hold_fee' => $transaction->HOLD_AMT_FEE,
-                                'pg_settle_type' => 0,      //주말포함
+                                'pg_settle_type' => 1,      //주말포함
                                 'mcht_settle_type' => $settle_type,    //D+1 통일
                                 'mcht_settle_fee' => $dpst_fee,
                                 'mcht_settle_id' => null,
@@ -200,6 +203,9 @@ class Transaction
                                 'created_at' => $this->current_time,
                                 'updated_at' => $this->current_time,
                             ];
+                            $item['settle_dt'] = $this->getSettleDate($item['is_cancel'] ? $item['cxl_dt'] : $item['trx_dt'], $item['mcht_settle_type']+1, 1, $holidays);
+                            $item['trx_at'] = $item['is_cancel'] ? ($item['cxl_dt']." ".$item['cxl_tm']) : ($item['trx_dt']." ".$item['trx_tm']);
+                            $items[] = $item;
                         }
                     }
                 });
