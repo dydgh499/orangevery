@@ -31,7 +31,7 @@ Route::get('posts/{id}/parent', [PostController::class, 'parent']);
 Route::get('posts/recent', [PostController::class, 'recent']);
 
 Route::middleware(['is.operate'])->group(function() {
-    Route::middleware(['is.edit.time'])->post('posts/upload', [PostController::class, 'upload']);  
+    Route::middleware(['is.edit.able'])->post('posts/upload', [PostController::class, 'upload']);  
     Route::prefix('services')->group(function() {
         Route::get('bonaejas', [MessageController::class, 'index']);
         Route::get('bonaejas/chart', [MessageController::class, 'chart']);
