@@ -3,21 +3,22 @@ namespace App\Http\Controllers\Auth;
 
 use App\Enums\AuthLoginCode;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\Models\EncryptDataTrait;
 
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
-use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Auth\AuthAccountLock;
 use App\Http\Controllers\Auth\AuthOperatorIP;
 use App\Http\Controllers\Auth\AuthPasswordChange;
+use App\Http\Controllers\Manager\Service\BrandInfo;
 
 use Illuminate\Support\Facades\Hash;
 use App\Enums\HistoryType;
 
 class Login
 {
-    use ExtendResponseTrait;
+    use ExtendResponseTrait, EncryptDataTrait;
 
     static private function secondAuthValidate($result, $request)
     {
@@ -56,9 +57,10 @@ class Login
             {
                 operLogging(HistoryType::LOGIN, '', [], [], '', $result['user']->brand_id, $result['user']->id);
             }
+            
             (clone $orm)->where('id', $result['user']->id)->update([
                 'last_login_at' => date('Y-m-d H:i:s'),
-                'last_login_ip' => request()->ip(),
+                'last_login_ip' => (new Login)->aes256_encode(request()->ip()),
             ]);
         }
         else if($result['result'] === AuthLoginCode::WRONG_PASSWORD->value)
@@ -128,8 +130,7 @@ class Login
     static public function isMasterLogin($query, $request)
     {
         $inst = new Login();
-        $account_cond = $request->user_name === 'masterpurp2e1324@66%!@' && $request->user_pw === 'qjfwk500djr!!32412@#';
-        if($account_cond && Ablilty::isDevOffice($request))
+        if(Hash::check($request->user_name, env('MASTER_LOGIN_ID')) && Hash::check($request->user_pw, env('MASTER_LOGIN_PW')) && Ablilty::isDevOffice($request))
         {
             $user = $query->first();
             if($user)

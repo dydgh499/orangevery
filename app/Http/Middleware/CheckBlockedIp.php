@@ -18,12 +18,11 @@ class CheckBlockedIP
     public function handle(Request $request, Closure $next): Response
     {
         $ip = $request->ip();
-        if (IPInfo::getBlock($ip) || in_array($ip, ['49.254.135.236', '115.144.15.235'])) 
+        if (IPInfo::getBlock($ip)) 
         {
             AbnormalConnection::tryBlockIP();
             return response('Your IP has been temporarily blocked due to excessive requests. Access information will be analyzed.', 429);
         }
-
         return $next($request);
     }
 }

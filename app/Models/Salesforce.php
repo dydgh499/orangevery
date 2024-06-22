@@ -19,10 +19,11 @@ use App\Models\Log\SettleHistorySalesforce;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Http\Traits\Models\AttributeTrait;
+use App\Http\Traits\Models\EncryptDataTrait;
 
 class Salesforce extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, AuthTrait, AttributeTrait;
+    use HasApiTokens, HasFactory, Notifiable, AuthTrait, AttributeTrait, EncryptDataTrait;
 
     protected   $table      = 'salesforces';
     protected   $primaryKey = 'id';

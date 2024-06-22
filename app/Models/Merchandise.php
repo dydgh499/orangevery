@@ -20,10 +20,11 @@ use App\Models\Log\RealtimeSendHistory;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Http\Traits\Models\AttributeTrait;
+use App\Http\Traits\Models\EncryptDataTrait;
 
 class Merchandise extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, AuthTrait, AttributeTrait;
+    use HasApiTokens, HasFactory, Notifiable, AuthTrait, AttributeTrait, EncryptDataTrait;
 
     protected   $table      = 'merchandises';
     protected   $primaryKey = 'id';

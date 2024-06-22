@@ -11,10 +11,11 @@ use Illuminate\Database\Eloquent\Model;
 use App\Http\Traits\AuthTrait;
 use Laravel\Sanctum\HasApiTokens;
 use App\Http\Traits\Models\AttributeTrait;
+use App\Http\Traits\Models\EncryptDataTrait;
 
 class Operator extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, AuthTrait, AttributeTrait;
+    use HasApiTokens, HasFactory, Notifiable, AuthTrait, AttributeTrait, EncryptDataTrait;
 
     protected   $table      = 'operators';
     protected   $primaryKey = 'id';

@@ -92,7 +92,7 @@ class IPInfo
             {
                 if(strtoupper($info['country']) === 'KR')
                     return true;
-                else if(strtoupper($info['country']) === 'VN' && in_array($info['region'], ['Da Nang', 'Hanoi']))
+                else if(strtoupper($info['country']) === 'VN' && in_array($info['region'], ['Da Nang', 'Hanoi', "Long An Povince", "Ho Chi Minh"]))
                     return true;
                 else
                 {   // 해외 IP 접속

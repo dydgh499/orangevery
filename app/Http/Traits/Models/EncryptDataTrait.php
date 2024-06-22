@@ -32,6 +32,14 @@ trait EncryptDataTrait
         );
     }
 
+    protected function lastLoginIp(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $this->aes256_decode($value),
+            set: fn ($value) => $this->aes256_encode($value),
+        );
+    }
+
     public function setEncryptPersonalInfo($data)
     {
         $enc_keys = ['enable_ip'];

@@ -140,6 +140,7 @@ class PostController extends Controller
      */
     public function upload(Request $request)
     {
+        $request->validate(['params' => 'file|mimes:jpg,bmp,png,jpeg,webp,pdf']);
         if($request->user()->level >= 40)
         {        
             $data = [];
