@@ -5,7 +5,6 @@ namespace App\Http\Controllers\BeforeSystem;
 use App\Http\Traits\StoresTrait;
 use App\Http\Traits\BeforeSystem\BeforeSystemTrait;
 use App\Http\Traits\Settle\TransactionTrait;
-use App\Models\Transaction as CurrentTransaction;
 
 class Transaction
 {
@@ -60,7 +59,6 @@ class Transaction
                 ->orderby('PK', 'ASC')
                 ->chunk(999, function($transactions) use(&$items, $brand_id) {
                     $payvery_mchts_ids = array_column($this->payvery_mchts, 'id');
-                    $holidays = CurrentTransaction::getHolidays($brand_id);
                     
                     foreach ($transactions as $transaction) {
                         $mcht_id = $this->getId($this->connect_mchts, $transaction->USER_PK);
@@ -204,7 +202,7 @@ class Transaction
                                 'created_at' => $this->current_time,
                                 'updated_at' => $this->current_time,
                             ];
-                            $item['settle_dt'] = $this->getSettleDate($item['is_cancel'] ? $item['cxl_dt'] : $item['trx_dt'], $item['mcht_settle_type']+1, 1, $holidays);
+                            $item['settle_dt'] = $this->getSettleDate($item['is_cancel'] ? $item['cxl_dt'] : $item['trx_dt'], $item['mcht_settle_type']+1, 1, '');
                             $item['trx_at'] = $item['is_cancel'] ? ($item['cxl_dt']." ".$item['cxl_tm']) : ($item['trx_dt']." ".$item['trx_tm']);
                             $items[] = $item;
                         }
