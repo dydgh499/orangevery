@@ -92,7 +92,7 @@ class BeforeSystemController extends Controller
         sleep(10);
 
         $b_info = json_encode($this->payvery->table('brands')->where('id', $brand_id)->first());
-        Redis::set($brand->dns, $b_info, 'EX', 600);    
+        Redis::set($b_info->dns, $b_info, 'EX', 600);    
         Redis::set("brand-info-$id", $b_info, 'EX', 600);
 
         return $this->extendResponse(1, '전산 이전 작업을 예약하였습니다.<br>5분 내외로 이전 전산에대한 정보가 반영됩니다.');
