@@ -37,7 +37,7 @@ defineExpose({
 });
 </script>
 <template>
-    <VDialog v-model="popup.visible" persistent v-for="(popup, index) in popups" :key="index" max-width="900">
+    <VDialog v-model="popup.visible" persistent v-for="(popup, index) in popups" :key="index" max-width="900" style="height: 50% !important;">
         <!-- Dialog close btn -->
         <div class="button-container">
             <VCheckbox v-model="popup.is_hide" class="check-label not-open-today" label="오늘 안보기" />
