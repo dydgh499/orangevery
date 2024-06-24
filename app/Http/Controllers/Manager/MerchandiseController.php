@@ -408,7 +408,7 @@ class MerchandiseController extends Controller
      */
     public function passwordChange(Request $request, int $id)
     {
-        if(Ablilty::isMyMerchandise($request, $id) || Ablilty::isOperator($request))
+        if(Ablilty::isMyMerchandise($request, $id) || Ablilty::isOperator($request) || Ablilty::isSalesforce($request))
             return $this->_passwordChange($this->merchandises->where('id', $id), $request);
         else
             return $this->response(951);
