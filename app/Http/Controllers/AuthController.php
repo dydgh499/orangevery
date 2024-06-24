@@ -178,7 +178,7 @@ class AuthController extends Controller
                 'nick_name' => '본사',
                 'profile_img'   => '/build/assets/avatar_5.644eef84.svg',
                 'level'         => 40,
-                'created_at'    => $cur_at,
+                'created_at'    => $current,
             ]);
             if($res)
             {
