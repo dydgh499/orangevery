@@ -277,12 +277,7 @@ class MerchandiseController extends Controller
             return $data ? $this->response(0, $data) : $this->response(1000);    
         }
         else
-        {
-            AbnormalConnection::tryParameterModulationApproach();
-            return $this->response(951);
-        }
-
-        
+            return $this->response(1000);
     }
 
     /**

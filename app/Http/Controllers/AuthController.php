@@ -163,7 +163,6 @@ class AuthController extends Controller
         return DB::transaction(function () use($request) {
             if(Operator::where('brand_id')->where('level', 40)->where('is_delete', false)->exists())
                 return $this->extendResponse(951, '잘못된 접근입니다.', []);
-
             $res = Brand::where('id', $request->brand_id)
                 ->update([
                     'ceo_name'=>$request->ceo_name,
@@ -177,16 +176,12 @@ class AuthController extends Controller
                 'user_pw'   => Hash::make($request->user_pw.$current),
                 'nick_name' => '본사',
                 'profile_img'   => '/build/assets/avatar_5.644eef84.svg',
+                'phone_num'     =>$request->phone_num,
                 'level'         => 40,
                 'created_at'    => $current,
             ]);
-            if($res)
-            {
-                $user = Operator::where('id', $res->id)->first();
-                return $this->response(0, $user->loginInfo(40));
-            }
-            else
-                return $this->response(990);
+            $user = Operator::where('id', $res->id)->first();
+            return $this->response(0, $user->loginInfo(40));
         }, 3);
     }
 

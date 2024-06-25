@@ -53,7 +53,7 @@ defineExpose({
 <style scoped>
 :deep(.v-overlay__content) {
   inline-size: fit-content !important;
-  min-inline-size: 400px !important;
+  min-inline-size: 350px !important;
 }
 
 :deep(img) {
@@ -72,4 +72,5 @@ defineExpose({
   z-index: 9999;
   inset-inline-end: 2em;
 }
+
 </style>
