@@ -282,7 +282,7 @@ class MerchandiseController extends Controller
 
     /**
      * 업데이트
-     *
+     * 
      * 가맹점 이상 가능
      *
      * @urlParam id integer required 유저 PK
