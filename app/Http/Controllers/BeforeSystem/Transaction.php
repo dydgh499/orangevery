@@ -56,7 +56,7 @@ class Transaction
         $items = [];
         $datas = $paywell_table
                 ->where('DNS_PK', $before_brand_id)
-                ->where('TRADE_DT', '<=', '2023-02-05')
+                ->where('TRADE_DT', '<=', '2023-01-01')
                 ->orderby('PK', 'ASC')
                 ->chunk(999, function($transactions) use(&$items, $brand_id) {
                     $payvery_mchts_ids = array_column($this->payvery_mchts, 'id');
