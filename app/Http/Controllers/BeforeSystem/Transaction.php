@@ -56,11 +56,11 @@ class Transaction
         $items = [];
         $datas = $paywell_table
                 ->where('DNS_PK', $before_brand_id)
-                ->where('TRADE_DT', '<=', '2023-07-05')
+                ->where('TRADE_DT', '<=', '2023-02-05')
                 ->orderby('PK', 'ASC')
                 ->chunk(999, function($transactions) use(&$items, $brand_id) {
                     $payvery_mchts_ids = array_column($this->payvery_mchts, 'id');
-                    print('insert prepare items: '.count($items).'\n');
+                    print('insert prepare items: '.count($items)."\r\n");
                     foreach ($transactions as $transaction) {
                         $mcht_id = $this->getId($this->connect_mchts, $transaction->USER_PK);
                         if(!$mcht_id)
@@ -212,10 +212,11 @@ class Transaction
                         }
                     }
                 });
+        print('set settle amount prepare items: '.count($items)."\r\n");
         $items = json_decode(json_encode($items), true);
         $items = $this->setSettleAmount($items, $this->dev_settle_type);
         $this->paywell = $items;
-        print("complate transactions getPaywell - found:".count($this->paywell)."\n");
+        print("complate transactions getPaywell - found:".count($this->paywell)."\r\n");
     }
 
     public function setPayvery($payvery_table, $brand_id)
@@ -232,7 +233,7 @@ class Transaction
                 $datas[] = $paywell;
         }
         $this->paywell = $datas;
-        print("complate transactions array_filter - filtered:".count($this->paywell)."\n");
+        print("complate transactions array_filter - filtered:".count($this->paywell)."\r\n");
         $items = $this->getPayveryFormat($this->paywell);
         $res   = $this->manyInsert($payvery_table, $items);
         if($res)
