@@ -121,7 +121,7 @@ class Transaction
                             $amount = $transaction->TRADE_PR;
                             $dpst_fee = $transaction->DPST_FEE;
                             if($transaction->IS_CANCEL)
-                            {  
+                            {
                                 $amount *= -1;
                                 $dpst_fee *= -1;
                             }
@@ -208,7 +208,8 @@ class Transaction
                             ];
                             $item['settle_dt'] = $this->getSettleDate($item['is_cancel'] ? $item['cxl_dt'] : $item['trx_dt'], $item['mcht_settle_type']+1, 1, '');
                             $item['trx_at'] = $item['is_cancel'] ? ($item['cxl_dt']." ".$item['cxl_tm']) : ($item['trx_dt']." ".$item['trx_tm']);
-                            $items[] = $item;
+                            if($item['trx_dt'] !== '1970-01-01')
+                                $items[] = $item;
                         }
                     }
                 });
