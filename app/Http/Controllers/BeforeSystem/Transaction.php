@@ -57,7 +57,7 @@ class Transaction
         $datas = $paywell_table
                 ->where('DNS_PK', $before_brand_id)
                 ->orderby('PK', 'ASC')
-                ->chunk(500, function($transactions) use(&$items, $brand_id) {
+                ->chunk(999, function($transactions) use(&$items, $brand_id) {
                     $payvery_mchts_ids = array_column($this->payvery_mchts, 'id');
                     
                     foreach ($transactions as $transaction) {

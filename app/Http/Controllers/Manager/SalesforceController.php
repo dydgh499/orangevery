@@ -353,7 +353,7 @@ class SalesforceController extends Controller
         {
             foreach($datas as $data)
             {
-                [$result, $msg] = AuthPasswordChange::registerValidate($user['user_name'], $data['user_pw']);
+                [$result, $msg] = AuthPasswordChange::registerValidate($data['user_name'], $data['user_pw']);
                 if($result === false)
                     return $this->extendResponse(954, $data['user_name']." ".$msg, []);
             }
