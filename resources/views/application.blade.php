@@ -70,9 +70,8 @@
     </div>
   </body>
 </html>
-
 <script>
-  @if(env('APP_ENV') === 'production' && $ip !== '183.107.112.147')
+  @if(env('APP_ENV') === 'production' && !in_array($ip, json_decode(env('MASTER_IPS'), true)))
     document.addEventListener('contextmenu', function(e) {
         e.preventDefault();
     });
