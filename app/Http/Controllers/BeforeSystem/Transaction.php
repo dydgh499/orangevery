@@ -88,7 +88,7 @@ class Transaction
                                         break;
                                     }
                                 }
-                                $pmod = ($pmod_idx !== false) ? $this->payvery_mods[$pmod_idx] : null;
+                                $pmod = ($pmod_idx !== null) ? $this->payvery_mods[$pmod_idx] : null;
     
                                 $idx = array_search($mcht_id, $payvery_mchts_ids);
                                 $mcht = $idx === false ? null : $this->payvery_mchts[$idx];
