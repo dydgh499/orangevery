@@ -288,7 +288,7 @@ class BeforeSystemController extends Controller
         return [$afs, $bfs, $items];
     }
 
-    public function TransactionUpdate()
+    public function TransactionUpdate($s_dt, $e_dt)
     {
         $brand_id = 42;
         $before_brand_id = 5;
@@ -310,7 +310,7 @@ class BeforeSystemController extends Controller
 
         $before_query = $this->paywell->table('deposit');
         $current_query = $this->payvery->table('transactions');
-        $transaction->getPaywell($before_query, $brand_id, $before_brand_id);
-        $transaction->setPayvery($current_query, $brand_id);
+        $transaction->getPaywell($before_query, $brand_id, $before_brand_id, $s_dt, $e_dt);
+        $transaction->setPayvery($current_query, $brand_id, $s_dt, $e_dt);
     }
 }

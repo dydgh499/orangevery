@@ -51,13 +51,13 @@ class Transaction
         return isset($items[$id]) ? $items[$id] : 0;
     }
 
-    public function getPaywell($paywell_table, $brand_id, $before_brand_id)
+    public function getPaywell($paywell_table, $brand_id, $before_brand_id, $s_dt, $e_dt)
     {
         $items = [];
         $datas = $paywell_table
                 ->where('DNS_PK', $before_brand_id)
-                ->where('TRADE_DT', '>', '2023-01-01')
-                ->where('TRADE_DT', '<=', '2023-05-01')
+                ->where('TRADE_DT', '>', $s_dt)
+                ->where('TRADE_DT', '<=', $e_dt)
                 ->orderby('PK', 'ASC')
                 ->chunk(999, function($transactions) use(&$items, $brand_id) {
                     $payvery_mchts_ids = array_column($this->payvery_mchts, 'id');
@@ -221,10 +221,12 @@ class Transaction
         print("complate transactions getPaywell - found:".count($this->paywell)."\r\n");
     }
 
-    public function setPayvery($payvery_table, $brand_id)
+    public function setPayvery($payvery_table, $brand_id, $s_dt, $e_dt)
     {
         $tran_ids = $payvery_table
             ->where('brand_id', $brand_id)
+            ->where('trx_dt', '>', $s_dt." 00:00:00")
+            ->where('trx_dt', '<=', $e_dt." 23:59:59")
             ->pluck('trx_id')
             ->toArray();
         $datas = [];
