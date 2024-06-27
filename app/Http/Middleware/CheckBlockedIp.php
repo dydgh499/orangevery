@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Ablilty\IPInfo;
 
-class CheckBlockedIP
+class CheckBlockedIp
 {
     /**
      * Handle an incoming request.
