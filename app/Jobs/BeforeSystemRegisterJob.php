@@ -33,7 +33,7 @@ class BeforeSystemRegisterJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, StoresTrait;
 
     public $maxExceptions = 1;
-    public $tries = 3;
+    public $tries = 1;
 
     public $brand_id;
     public $before_brand_id;
@@ -109,6 +109,7 @@ class BeforeSystemRegisterJob implements ShouldQueue
             $pg->payvery_pgs = $pmod->payvery;  // 수기, 인증, 간편 관련 PG사 추가됨
 
             logging(['paymod'=>'ok'], 'before-system-register-job');
+            /*
             // 실시간일시 개발사 수수료 0.1 고정
             $transaction = new Transaction($brand->use_realtime_deposit, $brand->dev_settle_type);
             $transaction->connectPGInfo($pg->paywell_to_payvery, $ps->paywell_to_payvery, $cfic->paywell_to_payvery);
@@ -125,7 +126,7 @@ class BeforeSystemRegisterJob implements ShouldQueue
             $realtime_logs->getPaywell($this->paywell->table('realtime_trans_log'), $this->brand_id, $this->before_brand_id);
             $realtime_logs->setPayvery($this->payvery->table('realtime_send_histories'), $this->brand_id);
             logging(['realtime histories'=>'ok'], 'before-system-register-job');
-
+            */
             $this->payvery->table('brands')->where('id', $this->brand_id)->update(['is_transfer'=>2]);
             return true;
         });

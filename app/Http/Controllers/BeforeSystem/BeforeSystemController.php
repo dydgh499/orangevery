@@ -290,8 +290,8 @@ class BeforeSystemController extends Controller
 
     public function TransactionUpdate()
     {
-        $brand_id = 9;
-        $before_brand_id = 17;
+        $brand_id = 42;
+        $before_brand_id = 5;
         $use_realtime = false;
         $dev_settle_type = 0;
 
