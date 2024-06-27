@@ -20,11 +20,13 @@ trait BeforeSystemTrait
 
     public function getPayveryFormat($paywell, $col='PK')
     {
-        $items = array_map(function($obj) use($col) {
+        $items = [];
+        foreach ($paywell as $obj) 
+        {
             $array = (array)$obj;
             unset($array[$col]);
-            return (object)$array;
-        }, $paywell);
+            $items[] = $array;
+        }
         return json_decode(json_encode($items), true);
     }
 
