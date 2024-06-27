@@ -56,10 +56,11 @@ class Transaction
         $items = [];
         $datas = $paywell_table
                 ->where('DNS_PK', $before_brand_id)
+                ->where('TRADE_DT', '<=', '2023-07-05')
                 ->orderby('PK', 'ASC')
                 ->chunk(999, function($transactions) use(&$items, $brand_id) {
                     $payvery_mchts_ids = array_column($this->payvery_mchts, 'id');
-                    
+                    print('insert prepare items: '.count($items).'\n');
                     foreach ($transactions as $transaction) {
                         $mcht_id = $this->getId($this->connect_mchts, $transaction->USER_PK);
                         if(!$mcht_id)
@@ -68,7 +69,6 @@ class Transaction
                             if($idx !== false)
                             {
                                 $mcht = $this->payvery_mchts[$idx];
-                                print("found mcht by merchandise name - found:".$mcht['mcht_name']."\n");
                                 $mcht_id = $this->payvery_mchts[$idx]['id'];
                             }
                             else
