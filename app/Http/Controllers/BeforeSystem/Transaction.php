@@ -81,9 +81,13 @@ class Transaction
 
                             if($mcht_id != -1)
                             {
-                                $pmod_idx = array_search(true, array_map(function($item) use($mcht_id, $mid, $tid) {
-                                    return $item['mcht_id'] == $mcht_id && $item['mid'] == $mid && $item['tid'] == $tid;
-                                }, $this->payvery_mods));
+                                $pmod_idx = null;
+                                foreach ($this->payvery_mods as $index => $item) {
+                                    if ($item['mcht_id'] == $mcht_id && $item['mid'] == $mid && $item['tid'] == $tid) {
+                                        $pmod_idx = $index;
+                                        break;
+                                    }
+                                }
                                 $pmod = ($pmod_idx !== false) ? $this->payvery_mods[$pmod_idx] : null;
     
                                 $idx = array_search($mcht_id, $payvery_mchts_ids);
