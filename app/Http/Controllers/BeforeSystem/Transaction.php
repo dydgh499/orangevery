@@ -60,7 +60,7 @@ class Transaction
                 ->orderby('PK', 'ASC')
                 ->chunk(999, function($transactions) use(&$items, $brand_id) {
                     $payvery_mchts_ids = array_column($this->payvery_mchts, 'id');
-                    print('insert prepare items: '.count($items)."\r\n");
+                    #print('insert prepare items: '.count($items)."\r\n");
                     foreach ($transactions as $transaction) {
                         $mcht_id = $this->getId($this->connect_mchts, $transaction->USER_PK);
                         if(!$mcht_id)
@@ -107,7 +107,7 @@ class Transaction
                                 $module_type = 0;
                                 $terminal_id = 0;
                                 $settle_type = 0;
-                                print("*** not found mcht by merchandise name - found:".$transaction->MD_NM." *** \n");
+                                #print("*** not found mcht by merchandise name - found:".$transaction->MD_NM." *** \n");
                             }
 
                             $sales4_id = $this->getId($this->connect_sales, $transaction->SLSFC_PK);
