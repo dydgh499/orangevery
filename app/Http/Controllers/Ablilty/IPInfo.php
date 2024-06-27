@@ -53,7 +53,7 @@ class IPInfo
 
     static public function get($request)
     {    
-        if($request->ip() === '127.0.0.1')
+        if($request->ip() === '127.0.0.1' || $request->ip() === env('LB_IP'))
             return ["ip" => "127.0.0.1", "bogon" => true];
 
         $info = Redis::get($request->ip());

@@ -9,7 +9,6 @@ use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
 use Illuminate\Support\Facades\DB;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
