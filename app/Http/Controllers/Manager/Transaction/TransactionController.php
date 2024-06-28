@@ -404,9 +404,9 @@ class TransactionController extends Controller
     {
         $dev_settle_type = DevSettleType::NOT_APPLY->value;
         $db_trans = $this->transactions
-            ->where('brand_id', 4)
+            ->where('mcht_id', 101727)
             ->where('trx_at', '>=', '2024-06-01 00:00:00')
-            ->where('trx_at', '<=', '2024-06-02 23:59:59')
+            ->where('trx_at', '<=', '2024-06-28 23:59:59')
             ->orderBy('id', 'desc')
             ->get();
 
