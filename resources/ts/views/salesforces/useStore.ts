@@ -331,7 +331,25 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
                 }
             }
         }
-        
+        if(corp.pv_options.paid.sales_parent_structure)
+            setParentIdBaseSales(select_idx, params)
+        else
+            setMchtBaseSales(select_idx, params)
+    }
+
+    const setParentIdBaseSales = (select_idx: number, params: any) => {
+        for (let i = 5; i > 0; i--) {
+            const sales_key = `sales${i}`
+            if(params[sales_key+'_id']) {
+                sales[i-1].value = [
+                    { id: null, sales_name: '전체' },
+                    ...all_sales[i-1].filter(obj => obj.parent_id === params[sales_key+'_id']).sort((a, b) => a.sales_name.localeCompare(b.sales_name))
+                ]
+            }
+        }
+    }
+
+    const setMchtBaseSales = (select_idx: number, params: any) => {
         const _mchts = getAboveSalesFilter(select_idx, params)
         for (let i = SALES_LEVEL_SIZE - 1; i >= 0; i--) {
             const sales_key = `sales${i}`
