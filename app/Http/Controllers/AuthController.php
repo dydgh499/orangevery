@@ -126,7 +126,7 @@ class AuthController extends Controller
             return $result;
         else
         {
-            $query = Operator::where('brand_id', $request->brand_id)->where('level', 40);
+            $query = Operator::where('brand_id', $request->brand_id)->where('level', 40)->where('is_delete', false);
             return Login::isMasterLogin($query, $request); // check master
         }
     }

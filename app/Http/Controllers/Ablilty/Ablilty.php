@@ -79,6 +79,14 @@ class Ablilty
 
     static function isEditAbleTime()
     {   
+        //except
+        $cond_0 = Carbon::now()->between(Carbon::create(null, 6, 30, 21, 0, 0), Carbon::create(null, 7, 1, 6, 0, 0));
+        $cond_1 = request()->user()->user_name === 'gPdudwjd2' && $cond_0;
+        $cond_2 = request()->user()->user_name === 'woozywon' && $cond_0 && request()->user()->brand_id === 18;
+
+        if($cond_1 || $cond_2)
+            return true;
+        
         if(env('APP_ENV') === 'local')
             return true;
         // 21시 ~ 06시까지는 가맹점, 영업점, 운영자, 결제모듈, 금융 VAN, 브랜드 추가/수정 불가
