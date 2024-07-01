@@ -331,9 +331,11 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
                 }
             }
         }
-        if(corp.pv_options.paid.sales_parent_structure)
+        /*
+        if(corp.pv_options.paid.sales_parent_structure && getUserLevel() > 10)
             setParentIdBaseSales(select_idx, params)
         else
+        */
             setMchtBaseSales(select_idx, params)
     }
 
