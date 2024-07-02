@@ -217,4 +217,13 @@ class BatchUpdatePayModuleController extends Controller
         $row = $this->payModuleBatch($request)->update($cols);
         return $this->response(1);
     }
+
+    /**
+     * 일괄삭제
+     */
+    public function batchRemove(Request $request)
+    {
+        $res = $this->payModuleBatch($request)->update(['is_delete' => true]);
+        return $this->response($res ? 1 : 990);
+    }
 }

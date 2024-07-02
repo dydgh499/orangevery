@@ -258,7 +258,8 @@ onMounted(() => {
         <CancelPartDialog ref="cancelPart" />
         <CancelDepositDialog ref="cancelDeposit" />
         <RealtimeHistoriesDialog ref="realtimeHistories" />
-        <TransactionBatchDialog ref="transactionBatchDialog" :selected_idxs="selected" :store="store" :is_mcht="true"/>
+        <TransactionBatchDialog ref="transactionBatchDialog" :selected_idxs="selected" :store="store"
+            @update:select_idxs="selected = $event; store.setTable(); store.getChartData()"/>
         <MchtBlacklistCreateDialog ref="mchtBlackListDlg" />
 </div>
 </template>

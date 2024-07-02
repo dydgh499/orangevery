@@ -4,6 +4,7 @@
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { banks, getOnlyNumber } from '@/views/users/useStore'
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const emits = defineEmits(['update:select_idxs'])
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
@@ -24,6 +26,7 @@ const errorHandler = <any>(inject('$errorHandler'))
 const formatDate = <any>(inject('$formatDate'))
 
 const { cus_filters } = useStore()
+const { request } = useRequestStore()
 const { sales, initAllSales } = useSalesFilterStore()
 
 const feeBookDialog = ref()
@@ -68,6 +71,7 @@ const post = async (page: string, params: any) => {
                 Object.assign(params, getCommonParams())
                 const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/' + page, params)
                 snackbar.value.show('성공하였습니다.', 'success')
+                emits('update:select_idxs', [])
             }
         }
         else
@@ -100,6 +104,7 @@ const setSalesFeeBooking = async (sales_idx: number) => {
             }
             const r = await axios.post('/api/v1/manager/merchandises/batch-updaters/sales-fee-book-apply', Object.assign(params, getCommonParams()))
             snackbar.value.show('성공하였습니다.', 'success')
+            emits('update:select_idxs', [])
         }
     }
 }
@@ -161,8 +166,13 @@ const setNotiUrl = () => {
     })
 }
 
-const batchRemove = () => {
-
+const batchRemove = async () => {
+    const count = props.selected_idxs.length
+    if (await alert.value.show('정말 ' + count + '개의 가맹점을 일괄삭제 하시겠습니까?<br><h5>결제모듈 등 하위 정보들도 같이 삭제됩니다.</h5>')) {
+        const params = { selected_idxs: props.selected_idxs }
+        const r = await request({ url: `/api/v1/manager/merchandises/batch-updaters/remove`, method: 'delete', data: params }, true)
+        emits('update:select_idxs', [])
+    }
 }
 
 initAllSales()

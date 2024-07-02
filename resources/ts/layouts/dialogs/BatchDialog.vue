@@ -9,6 +9,7 @@ interface Props {
     item_type: number,
 }
 const props = defineProps<Props>()
+const emits = defineEmits(['update:select_idxs'])
 
 const visible = ref(false)
 const show = () => {
@@ -22,8 +23,11 @@ defineExpose({
 <template>
     <VDialog v-model="visible" persistent style="max-width: 1000px;">
         <DialogCloseBtn @click="visible = !visible" />
-        <MchtBatchOverview :selected_idxs="props.selected_idxs" :selected_sales_id="0" :selected_level="0" v-if="props.item_type === ItemTypes.Merchandise"/>
-        <PayModuleBatchOverview :selected_idxs="props.selected_idxs" :selected_sales_id="0" :selected_level="0" v-if="props.item_type === ItemTypes.PaymentModule"/>
-        <SalesBatchOverview :selected_idxs="props.selected_idxs" v-if="props.item_type === ItemTypes.Salesforce"/>
+        <MchtBatchOverview :selected_idxs="props.selected_idxs" :selected_sales_id="0" :selected_level="0" v-if="props.item_type === ItemTypes.Merchandise"
+            @update:select_idxs="emits('update:select_idxs', $event)"/>
+        <PayModuleBatchOverview :selected_idxs="props.selected_idxs" :selected_sales_id="0" :selected_level="0" v-if="props.item_type === ItemTypes.PaymentModule"
+            @update:select_idxs="emits('update:select_idxs', $event)"/>
+        <SalesBatchOverview :selected_idxs="props.selected_idxs" v-if="props.item_type === ItemTypes.Salesforce"
+            @update:select_idxs="emits('update:select_idxs', $event)"/>
     </VDialog>
 </template>

@@ -179,6 +179,7 @@ onMounted(() => {
                 </tr>
             </template>
         </BaseIndexView>
-        <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.Salesforce"/>
+        <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.Salesforce"
+            @update:select_idxs="selected = $event; store.setTable(); store.getChartData()"/>
     </div>
 </template>

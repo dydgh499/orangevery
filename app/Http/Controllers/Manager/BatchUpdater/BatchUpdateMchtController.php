@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager\BatchUpdater;
 
 use App\Models\Merchandise;
 use App\Models\Merchandise\NotiUrl;
+use App\Models\Merchandise\PaymentModule;
 use App\Models\Log\MchtFeeChangeHistory;
 use App\Models\Log\SfFeeChangeHistory;
 use App\Models\Log\SfFeeApplyHistory;
@@ -56,7 +57,7 @@ class BatchUpdateMchtController extends Controller
                 $idx    = globalLevelByIndex($request->selected_level);
                 $query  = $query->where('sales'.$idx.'_id', $request->selected_sales_id);
             }
-            return $query;    
+            return $query;
         }
     }
 
@@ -314,4 +315,20 @@ class BatchUpdateMchtController extends Controller
         return $this->response(1, ['registered_notis'=>$registered_notis->pluck('id'), 'count'=>count($datas)]);
     }
 
+    /**
+     * 일괄삭제
+     */
+    public function batchRemove(Request $request)
+    {
+        $res = DB::transaction(function () use($request) {
+            $query = $this->merchandiseBatch($request);
+            $mcht_ids = (clone $query)->pluck('id')->all();
+
+            $res = (clone $query)->update(['is_delete' => true]);
+            $res = PaymentModule::whereIn('id', $mcht_ids)->update(['is_delete' => true]);
+            $res = NotiUrl::whereIn('id', $mcht_ids)->update(['is_delete' => true]);
+            return true;
+        });
+        return $this->response($res ? 1 : 990);
+    }
 }

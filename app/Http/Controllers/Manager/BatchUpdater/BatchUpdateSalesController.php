@@ -88,4 +88,13 @@ class BatchUpdateSalesController extends Controller
         $row = $this->salesforceBatch($request)->update($cols);
         return $this->response(1);
     }
+
+    /**
+     * 일괄삭제
+     */
+    public function batchRemove(Request $request)
+    {
+        $res = $this->salesforceBatch($request)->update(['is_delete' => true]);
+        return $this->response($res ? 1 : 990);
+    }
 }

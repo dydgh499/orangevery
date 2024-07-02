@@ -12,6 +12,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
 const financeDialog = ref()
 const visible = ref(false)
 

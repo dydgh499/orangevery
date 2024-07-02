@@ -177,7 +177,8 @@ onMounted(() => {
                 </tr>
             </template>
         </BaseIndexView>
-         <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.Merchandise"/>
+         <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.Merchandise"
+            @update:select_idxs="selected = $event; store.setTable(); store.getChartData()"/>
         <PasswordChangeDialog ref="password" />
     </div>
 </template>

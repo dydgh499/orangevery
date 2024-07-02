@@ -3,6 +3,7 @@
 <script lang="ts" setup>
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { abnormal_trans_limits, installments } from '@/views/merchandises/pay-modules/useStore'
+import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { axios } from '@axios'
 import corp from '@corp'
@@ -13,11 +14,13 @@ interface Props {
     selected_level: number,
 }
 const props = defineProps<Props>() 
+const emits = defineEmits(['update:select_idxs'])
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 
+const { request } = useRequestStore()
 const { pgs, pss, settle_types, terminals, finance_vans, psFilter, setFee } = useStore()
 const pay_module = reactive<any>({
     abnormal_trans_limit: 0,
@@ -56,6 +59,7 @@ const post = async (page: string, params: any) => {
                 })
                 const r = await axios.post('/api/v1/manager/merchandises/pay-modules/batch-updaters/' + page, params)
                 snackbar.value.show('성공하였습니다.', 'success')
+                emits('update:select_idxs', [])
             }
         }
         else
@@ -152,8 +156,13 @@ const setNote = () => {
     })
 }
 
-const batchRemove = () => {
-    
+const batchRemove = async () => {
+    const count = props.selected_idxs.length
+    if (await alert.value.show('정말 ' + count + '개의 결제모듈을 일괄삭제 하시겠습니까?')) {
+        const params = { selected_idxs: props.selected_idxs }
+        const r = await request({ url: `/api/v1/manager/merchandises/pay-modules/batch-updaters/remove`, method: 'delete', data: params }, true)
+        emits('update:select_idxs', [])
+    }
 }
 
 const filterPgs = computed(() => {
@@ -180,7 +189,7 @@ const filterPgs = computed(() => {
                 <VRow class="pt-3">
                     <VCol :cols="12">
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>구간</VCol>
+                            <VCol>PG사/구간</VCol>
                             <VCol md="8">
                                 <div class="batch-container" style="justify-content: end !important;">
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.pg_id" :items="pgs"

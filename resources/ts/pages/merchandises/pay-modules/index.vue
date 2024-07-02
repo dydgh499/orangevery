@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_types, useSearchStore } from '@/views/merchandises/pay-modules/useStore'
-import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { selectFunctionCollect } from '@/views/selected'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -12,26 +11,15 @@ import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { getUserLevel, isAbleModiy } from '@axios'
 import { DateFilters, ItemTypes } from '@core/enums'
 
-const { request } = useRequestStore()
 const { pgs, pss, settle_types, finance_vans, terminals } = useStore()
 const { findSalesName } = useSalesFilterStore()
 const { store, head, exporter, metas } = useSearchStore()
-const { selected, all_selected, dialog } = selectFunctionCollect(store)
+const { selected, all_selected } = selectFunctionCollect(store)
 const batchDialog = ref()
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
-
-const batchDelete = async () => {
-    const count = selected.value.length
-    if (await dialog('정말 ' + count + '개의 결제모듈을 일괄삭제 하시겠습니까?')) {
-        const params = { selected: selected.value }
-        const r = await request({ url: `/api/v1/manager/merchandises/pay-modules/batch-remove`, method: 'delete', data: params }, true)
-        store.setChartProcess()
-        store.setTable()
-    }
-}
 
 onMounted(() => {
     watchEffect(async () => {
@@ -70,10 +58,6 @@ onMounted(() => {
                 <VBtn prepend-icon="carbon:batch-job" @click="batchDialog.show()" v-if="getUserLevel() >= 35"
                     color="primary" size="small">
                     일괄 작업
-                </VBtn>
-                <VBtn prepend-icon="tabler:device-tablet-cancel" @click="batchDelete()" v-if="getUserLevel() >= 35"
-                    color="error" size="small">
-                    일괄 삭제
                 </VBtn>
                 <VSwitch hide-details :false-value=0 :true-value=1 v-model="store.params.un_use" label="작월 미결제 결제모듈 조회"
                     color="warning" @update:modelValue="store.updateQueryString({ un_use: store.params.un_use })" />
@@ -207,6 +191,7 @@ onMounted(() => {
                 </tr>
             </template>
         </BaseIndexView>
-        <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.PaymentModule"/>
+        <BatchDialog ref="batchDialog" :selected_idxs="selected" :item_type="ItemTypes.PaymentModule"
+            @update:select_idxs="selected = $event; store.setTable(); store.getChartData()"/>
     </div>
 </template>

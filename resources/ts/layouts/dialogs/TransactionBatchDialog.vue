@@ -9,10 +9,11 @@ import corp from '@corp'
 interface Props {
     selected_idxs: number[],
     store: any
-    is_mcht: boolean,
 }
 
 const props = defineProps<Props>()
+const emits = defineEmits(['update:select_idxs'])
+
 const changeSettleDateDialog = ref()
 const visible = ref(false)
 
@@ -30,11 +31,11 @@ const batchRetry = async (url: string) => {
             snackbar.value.show('성공하였습니다.', 'success')
         else
             snackbar.value.show(r.data.message, 'error')
-        props.store.setTable()
+        emits('update:select_idxs', [])
     }
 }
 
-const changeSettleDay = () => {
+const changeSettleDay = async () => {
     for (let i = 0; i < props.selected_idxs.length; i++) 
     {
         let trans = props.store.getItems.find(obj => obj.id === props.selected_idxs[i])
@@ -53,8 +54,7 @@ const singleDepositCancelJobReservation = async (trx_ids: number[]) => {
         }
         const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit-cancel-job-reservation', params, true)
         if(r.status == 201) {
-            props.store.setChartProcess()
-            props.store.setTable()
+            emits('update:select_idxs', [])
         }
     }
 }

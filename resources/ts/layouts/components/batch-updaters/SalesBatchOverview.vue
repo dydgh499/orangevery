@@ -2,6 +2,7 @@
 
 <script lang="ts" setup>
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
+import { useRequestStore } from '@/views/request'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import { Salesforce } from '@/views/types'
 import { banks } from '@/views/users/useStore'
@@ -12,9 +13,12 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const emits = defineEmits(['update:select_idxs'])
+
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
+const { request } = useRequestStore()
 
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
@@ -27,6 +31,7 @@ const post = async (page: string, params: any) => {
                 Object.assign(params, { 'selected_idxs': props.selected_idxs })
                 const r = await axios.post('/api/v1/manager/salesforces/batch-updaters/' + page, params)
                 snackbar.value.show('성공하였습니다.', 'success')
+                emits('update:select_idxs', [])
             }
         }
         else
@@ -97,8 +102,13 @@ const setNote = () => {
     })
 }
 
-const batchRemove = () => {
-    
+const batchRemove = async () => {
+    const count = props.selected_idxs.length
+    if (await alert.value.show('정말 ' + count + '개의 영업점을 일괄삭제 하시겠습니까?')) {
+        const params = { selected_idxs: props.selected_idxs }
+        const r = await request({ url: `/api/v1/manager/salesforces/batch-updaters/remove`, method: 'delete', data: params }, true)
+        emits('update:select_idxs', [])
+    }
 }
 
 </script>

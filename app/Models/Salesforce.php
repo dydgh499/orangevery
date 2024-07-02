@@ -29,7 +29,7 @@ class Salesforce extends Authenticatable
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
     protected   $appends    = ['resident_num_front', 'resident_num_back', 'is_2fa_use'];
-    protected   $hidden     = ['user_pw', 'resident_num'];
+    protected   $hidden     = ['user_pw', 'google_2fa_secret_key', 'resident_num'];
 
     public function transactions()
     {

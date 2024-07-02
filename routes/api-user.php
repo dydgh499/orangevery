@@ -46,6 +46,7 @@ Route::prefix('salesforces')->group(function() {
                 Route::post('set-view-type', [BatchUpdateSalesController::class, 'setViewType']);
                 Route::post('set-account-info', [BatchUpdateSalesController::class, 'setAccountInfo']);
                 Route::post('set-note', [BatchUpdateSalesController::class, 'setNote']);
+                Route::delete('remove', [BatchUpdateSalesController::class, 'batchRemove']);   
             });
             Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'salesforce']);
             Route::middleware(['is.edit.able'])->group(function() {
@@ -53,7 +54,6 @@ Route::prefix('salesforces')->group(function() {
                 Route::post('bulk-register', [SalesforceController::class, 'bulkRegister']);
             });
         Route::apiResource('under-auto-settings', UnderAutoSettingController::class);    
-        Route::delete('batch-remove', [SalesforceController::class, 'batchRemove']);   
     });
 });
 Route::apiResource('salesforces', SalesforceController::class);
@@ -93,6 +93,7 @@ Route::prefix('merchandises')->group(function() {
                 Route::post('set-custom-filter', [BatchUpdateMchtController::class, 'setCustomFilter']);
                 Route::post('set-business-num', [BatchUpdateMchtController::class, 'setBusinessNum']);
                 Route::post('set-account-info', [BatchUpdateMchtController::class, 'setAccountInfo']);
+                Route::delete('remove', [BatchUpdateMchtController::class, 'batchRemove']);   
             });    
             Route::post('{id}/set-settle-hold', [MerchandiseController::class, 'setSettleHold']);
             Route::post('{id}/clear-settle-hold', [MerchandiseController::class, 'clearSettleHold']);
@@ -103,7 +104,6 @@ Route::prefix('merchandises')->group(function() {
             Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisablePaymentController::class);
             Route::apiResource('sub-business-registrations', SubBusinessRegistrationController::class);             
             Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
-            Route::delete('batch-remove', [MerchandiseController::class, 'batchRemove']);   
         });
         Route::post('{id}/unlock-account', [MerchandiseController::class, 'unlockAccount']);
         Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
@@ -125,6 +125,7 @@ Route::prefix('merchandises')->group(function() {
                     Route::post('set-pay-disable-time', [BatchUpdatePayModuleController::class, 'setForbiddenPayTime']);
                     Route::post('set-show-pay-view', [BatchUpdatePayModuleController::class, 'setShowPayView']);
                     Route::post('set-use-realtime-deposit', [BatchUpdatePayModuleController::class, 'setUseRealtimeDeposit']);
+                    Route::delete('remove', [BatchUpdatePayModuleController::class, 'batchRemove']);   
                 });
                 Route::post('tid-create', [PaymentModuleController::class, 'tidCreate']);
                 Route::post('mid-create', [PaymentModuleController::class, 'midCreate']);
@@ -133,7 +134,6 @@ Route::prefix('merchandises')->group(function() {
                 Route::post('pay-key-create', [PaymentModuleController::class, 'payKeyCreate']);
                 Route::post('bulk-register', [PaymentModuleController::class, 'bulkRegister']);
                 Route::post('pg-bulk-updater', [PaymentModuleController::class, 'bulkRegisterPG']);
-                Route::delete('batch-remove', [PaymentModuleController::class, 'batchRemove']);   
             });
         });
     });
