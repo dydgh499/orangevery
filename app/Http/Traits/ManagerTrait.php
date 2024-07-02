@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Auth\AuthGoogleOTP;
 use App\Http\Controllers\Auth\AuthAccountLock;
 use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Controllers\Ablilty\Ablilty;
@@ -168,5 +169,25 @@ trait ManagerTrait
             AuthAccountLock::setUserUnlock($query->first());
             return $this->response(1);    
         }
+    }
+
+    public function _create2FAQRLink($request, int $id)
+    {
+        $qrcode_url = AuthGoogleOTP::getQrcodeUrl($request);
+        return $this->response(1, ['qrcode_url' => $qrcode_url]);
+    }
+
+    public function _vertify2FAQRLink($request, $orm)
+    {
+        $cond_1 = AuthGoogleOTP::createVerify($request, $request->verify_code);
+        $cond_2 = AuthPasswordChange::HashCheck($request->user(), $request->user_pw);
+        if($cond_1 && $cond_2)
+        {
+            $data = $this->setEncryptPersonalInfo(['google_2fa_secret_key' => AuthGoogleOTP::getTempSecretKey($request->user())]);
+            $orm->update($data);
+            return $this->response(1);
+        }
+        else
+            return $this->extendResponse(952, '핀번호 또는 패스워드가 정확하지 않습니다.');
     }
 }

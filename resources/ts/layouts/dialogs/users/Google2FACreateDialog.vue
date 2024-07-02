@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { axios, user_info } from '@/plugins/axios';
-import { timer } from '@/views/utils/timer';
+import { pinInputEvent } from '@/@core/utils/pin_input_event';
+import { axios, getUserType, user_info } from '@/plugins/axios';
+import { timer } from '@core/utils/timer';
 
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
@@ -12,10 +13,11 @@ const errors = ref<Record<string, string | undefined>>({
 
 const visible = ref(false)
 const qrcode_url = ref('')
+const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(6)
 const { countdown_time, countdownTimer, startTimer } = timer(300)
 
-const fin_number = ref('')
 const user_pw = ref('')
+const user_type = getUserType().id === 2 ? 'services/operators' : 'salesforces'
 
 const current_step = ref(0)
 const steps = [
@@ -40,10 +42,10 @@ const show = async () => {
 
 const onAgree = async () => {
     const params = {
-        verify_code : fin_number.value,
+        verify_code : digits.value.join(''),
         user_pw: user_pw.value,
     }
-    axios.post(`/api/v1/manager/services/operators/${user_info.value.id}/2fa-qrcode/create-vertify`, params)
+    axios.post(`/api/v1/manager/${user_type}/${user_info.value.id}/2fa-qrcode/create-vertify`, params)
         .then(r => {
             snackbar.value.show('2FA 설정에 성공하였습니다.<br>차후 로그인부터 2FA인증이 활성화 됩니다.', 'success')
             user_info.value.is_2fa_use = true
@@ -66,7 +68,7 @@ const onCancel = () => {
 const stepUp = async () => {
     current_step.value++
     if(current_step.value === 1 && qrcode_url.value === '') {
-        const res = await axios.post(`/api/v1/manager/services/operators/${user_info.value.id}/2fa-qrcode`)
+        const res = await axios.post(`/api/v1/manager/${user_type}/${user_info.value.id}/2fa-qrcode`)
         qrcode_url.value = res.data.qrcode_url
         startTimer()
     }
@@ -126,6 +128,15 @@ defineExpose({
                                                     <span id="countdown" class="text-primary">{{ countdownTimer }}</span>
                                                 </div>
                                             </div>
+                                            <br>
+                                            <span class="text-base">
+                                                어플리케이션에 6자리 랜덤 핀번호가 추가된 것을 확인하였으면
+                                                <VBtn type="button" aria-readonly="" size="small">
+                                                    다음
+                                                    <VIcon end icon="tabler-arrow-right" />
+                                                </VBtn>
+                                                을 클릭합니다.
+                                            </span>
                                     </VWindowItem>
                                     <VWindowItem>
                                             <div style="margin-bottom: 2em;">
@@ -133,10 +144,10 @@ defineExpose({
                                                 Authenticator 에서 확인되는 6자리 핀번호를 입력해주세요.
                                                 </span>
                                                 <br>
-                                                <VTextField v-model="fin_number" type="number"
-                                                    prepend-inner-icon="arcticons:2fas-auth" placeholder="핀번호 입력"
-                                                    persistent-placeholder 
-                                                    :error-messages="errors.message"/>
+                                                <div ref="ref_opt_comp" class="d-flex align-center gap-4">
+                                                    <VTextField v-for="i in 6" :key="i" :model-value="digits[i - 1]" type="number"
+                                                        v-bind="defaultStyle" maxlength="1" @input="handleKeyDown(i)" />
+                                                </div>
                                             </div>
                                             <div>
                                                 <span class="text-base">
@@ -148,6 +159,16 @@ defineExpose({
                                                     persistent-placeholder 
                                                     :error-messages="errors.message"/>
                                             </div>
+                                            <br>
+                                            <span class="text-base">
+                                                핀번호 및 패스워드를 입력한 후
+                                                <VBtn type="button" aria-readonly="" size="small" color="success">
+                                                    완료
+                                                    <VIcon end icon="tabler-check" />
+                                                </VBtn>
+                                                를 클릭합니다.
+                                            </span>
+                                            <h5>(추후 2차 인증을 재설정할 시 본사등급의 휴대폰 인증후 재발급 가능합니다.)</h5>
                                     </VWindowItem>
                                 </VWindow>
                             </VForm>

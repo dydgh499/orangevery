@@ -45,8 +45,16 @@ const showAvatar = (preview: string) => {
     imageDialog.value.show(preview)
 }
 
+const show2FAAuthDialog = () => {
+    if(getUserLevel() >= 35 && user_info.is_2fa_use && corp.pv_options.paid.use_head_office_withdraw) {
+        // 휴대폰 인증 후 재설정
+    }
+    else
+        google2FACreateDialog.value.show()
+}
+
 const noticeOperator2FaStatus = () => {
-    if(getUserLevel() >= 35) {
+    if(getUserLevel() > 10) {
         if(user_info.value.is_2fa_use === false) {
             notice_mark.value.dot = false
             notice_mark.value.location = 'top right'
@@ -102,15 +110,17 @@ require_2fa.value = noticeOperator2FaStatus()
                         </template>
                         <VListItemTitle>패스워드 변경</VListItemTitle>
                     </VListItem>
-                    <VDivider class="my-2" />
-                    <VListItem value="2fa" @click="google2FACreateDialog.show()" 
-                     :class="require_2fa ? 'pg-cancel' : ''" v-if="getUserLevel() >= 35">
-                        <template #prepend>
-                            <VIcon size="22" class="me-2" icon="carbon:two-factor-authentication" />
-                        </template>
-                        <VListItemTitle v-if="user_info.is_2fa_use">2차인증 재설정</VListItemTitle>
-                        <VListItemTitle v-else>2차인증 설정</VListItemTitle>
-                    </VListItem>
+                    <template v-if="getUserLevel() > 10">
+                        <VDivider class="my-2" />
+                        <VListItem value="2fa" @click="show2FAAuthDialog()" 
+                        :class="require_2fa ? 'pg-cancel' : ''">
+                            <template #prepend>
+                                <VIcon size="22" class="me-2" icon="carbon:two-factor-authentication" />
+                            </template>
+                            <VListItemTitle v-if="user_info.is_2fa_use">2차인증 재설정</VListItemTitle>
+                            <VListItemTitle v-else>2차인증 설정</VListItemTitle>
+                        </VListItem>
+                    </template>
                     <VDivider class="my-2" />
                     <VListItem link @click="logout">
                         <template #prepend>

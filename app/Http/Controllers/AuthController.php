@@ -192,7 +192,7 @@ class AuthController extends Controller
     {
         $vertifyUser = function($orm, $request) {
             $result = Login::isSafeLogin($orm, $request);
-            if($result !== null)
+            if($result['result'] !== -1)
             {
                 [$result, $token] = AuthGoogleOTP::verify($result['user'], $request->verify_code);
                 if($result)
@@ -215,6 +215,8 @@ class AuthController extends Controller
         $result = $vertifyUser(new Merchandise(), $request);
         if($result !== false)
             return $result;
+
+        return $this->response(951);
     }
 
     /*

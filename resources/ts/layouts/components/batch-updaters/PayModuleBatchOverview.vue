@@ -152,6 +152,10 @@ const setNote = () => {
     })
 }
 
+const batchRemove = () => {
+    
+}
+
 const filterPgs = computed(() => {
     const filter = pss.filter(item => { return item.pg_id == pay_module.pg_id })
     pay_module.ps_id = psFilter(filter, pay_module.ps_id)
@@ -163,42 +167,35 @@ const filterPgs = computed(() => {
     <VCard title="결제모듈 일괄 작업">
         <VCardText>
             <template v-if="props.selected_sales_id === 0 && props.selected_level === 0">
-                <b>선택된 결제모듈 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
-                <VDivider style="margin: 1em 0;" />
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <b>선택된 결제모듈 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
+                    <VBtn type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small">
+                        일괄삭제
+                        <VIcon size="18" icon="tabler-trash" />
+                    </VBtn>
+                </div>
+                <VDivider style="margin: 0.5em 0;" />
             </template>
             <div style="width: 100%;">
                 <VRow class="pt-3">
-                    <VCol :md="5" :cols="12">
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol>PG사</VCol>
-                            <VCol md="8">
-                                <div class="batch-container">                                    
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.pg_id" :items="pgs"
-                                        prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_name" item-value="id"
-                                        single-line />
-                                </div>
-                            </VCol>
-                        </VRow>                        
-                    </VCol>
-                    <VCol :md="5" :cols="12">
+                    <VCol :cols="12">
                         <VRow no-gutters style="align-items: center;">
                             <VCol>구간</VCol>
                             <VCol md="8">
-                                <div class="batch-container">
+                                <div class="batch-container" style="justify-content: end !important;">
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.pg_id" :items="pgs"
+                                        prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_name" item-value="id"
+                                        single-line style="max-width: 200px; margin-right: 0.5em;" />
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.ps_id" :items="filterPgs"
                                         prepend-inner-icon="mdi-vector-intersection" label="구간 선택" item-title="name"
                                         item-value="id" :hint="`${setFee(pss, pay_module.ps_id)}`" persistent-hint
-                                        single-line />
+                                        single-line style="max-width: 200px;" />
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setPaymentGateway()">
+                                        즉시적용
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
+                                    </VBtn>
                                 </div>
                             </VCol>
-                        </VRow>
-                    </VCol>
-                    <VCol :md="2" :cols="12">
-                        <VRow no-gutters style="align-items: center;">
-                            <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPaymentGateway()">
-                                즉시적용
-                                <VIcon end icon="tabler-direction-sign" />
-                            </VBtn>
                         </VRow>
                     </VCol>
                 </VRow>
@@ -212,9 +209,9 @@ const filterPgs = computed(() => {
                                     <VSelect v-model="pay_module.abnormal_trans_limit" :items="abnormal_trans_limits"
                                         prepend-inner-icon="jam-triangle-danger" label="이상거래 한도설정" item-title="title"
                                         item-value="id" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setAbnormalTransLimit()">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setAbnormalTransLimit()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -227,9 +224,9 @@ const filterPgs = computed(() => {
                                 <div class="batch-container">
                                     <VTextField type="number" v-model="pay_module.pay_dupe_least"
                                         prepend-inner-icon="tabler-currency-won" suffix="만원" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setDupPayLeastValidation()">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setDupPayLeastValidation()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -244,9 +241,9 @@ const filterPgs = computed(() => {
                                 <div class="batch-container">
                                     <VTextField v-model="pay_module.pay_dupe_limit" label="중복결제 허용회수" type="number"
                                         suffix="회 허용" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setDupPayCountValidation()">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setDupPayCountValidation()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -262,9 +259,9 @@ const filterPgs = computed(() => {
                                         <template #true>노출</template>
                                         <template #false>숨김</template>
                                     </BooleanRadio>
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setShowPayView()">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setShowPayView()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -280,9 +277,9 @@ const filterPgs = computed(() => {
                                 <div class="batch-container">
                                     <VTextField prepend-inner-icon="tabler-currency-won"
                                         v-model="pay_module.pay_single_limit" type="number" suffix="만원" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPayLimit('single')">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setPayLimit('single')">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -295,9 +292,9 @@ const filterPgs = computed(() => {
                                 <div class="batch-container">
                                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_day_limit"
                                         type="number" suffix="만원" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPayLimit('day')">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setPayLimit('day')">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -312,9 +309,9 @@ const filterPgs = computed(() => {
                                 <div class="batch-container">
                                     <VTextField prepend-inner-icon="tabler-currency-won"
                                         v-model="pay_module.pay_month_limit" type="number" suffix="만원" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPayLimit('month')">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setPayLimit('month')">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -327,9 +324,9 @@ const filterPgs = computed(() => {
                                 <div class="batch-container">
                                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_year_limit"
                                         type="number" suffix="만원" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setPayLimit('year')">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setPayLimit('year')">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -344,9 +341,9 @@ const filterPgs = computed(() => {
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField v-model="pay_module.pay_mid" label="MID" type="text" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setMid()">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setMid()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -358,9 +355,9 @@ const filterPgs = computed(() => {
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField v-model="pay_module.pay_tid" label="TID" type="text" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setTid()">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setTid()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -374,9 +371,9 @@ const filterPgs = computed(() => {
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField v-model="pay_module.api_key" label="API KEY" type="text" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setApiKey()">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setApiKey()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -388,9 +385,9 @@ const filterPgs = computed(() => {
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField v-model="pay_module.sub_key" label="SUB KEY" type="text" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setSubKey()">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setSubKey()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -406,9 +403,9 @@ const filterPgs = computed(() => {
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.installment"
                                         :items="installments" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
                                         label="할부한도 선택" item-title="title" item-value="id" single-line />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setInstallment()">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setInstallment()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -421,9 +418,9 @@ const filterPgs = computed(() => {
                                 <div class="batch-container">
                                     <VTextField v-model="pay_module.note" placeholder='결제모듈 명칭을 적어주세요.😀'
                                         prepend-inner-icon="twemoji-spiral-notepad" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setNote()">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setNote()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -441,9 +438,9 @@ const filterPgs = computed(() => {
                                         <template #true>사용</template>
                                         <template #false>미사용</template>
                                     </BooleanRadio>
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setUseRealtimeDeposit()">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setUseRealtimeDeposit()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -456,12 +453,12 @@ const filterPgs = computed(() => {
                             <VCol md="2">결제금지 시간</VCol>
                             <VCol md="6">
                                 <div class="batch-container">
-                                    <VTextField v-model="pay_module.pay_disable_s_tm" type="time" />
+                                    <VTextField v-model="pay_module.pay_disable_s_tm" type="time" style="margin-right: 0.1em;"/>
                                     <span class="text-center mx-auto">~</span>
-                                    <VTextField v-model="pay_module.pay_disable_e_tm" type="time" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setForbiddenPayTime()">
+                                    <VTextField v-model="pay_module.pay_disable_e_tm" type="time" style="margin-left: 0.1em;"/>
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setForbiddenPayTime()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -472,10 +469,3 @@ const filterPgs = computed(() => {
         </VCardText>
     </VCard>
 </template>
-<style scoped>
-.batch-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>

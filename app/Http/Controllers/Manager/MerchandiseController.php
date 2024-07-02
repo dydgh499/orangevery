@@ -520,4 +520,9 @@ class MerchandiseController extends Controller
         else
             return $this->response(990);
     }
+    
+    public function batchRemove(Request $request)
+    {
+
+    }
 }

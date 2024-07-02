@@ -165,6 +165,11 @@ onMounted(() => {
                                 <span v-else-if="_key == 'extra_col'">
                                     <UserExtraMenu :item="item" :type="1" :key="item['id']"/>
                                 </span>
+                                <span v-else-if="_key == 'is_2fa_use'">
+                                    <VChip :color="store.booleanTypeColor(!item[_key])">
+                                        {{ item[_key] ? 'O' : 'X' }}
+                                    </VChip>
+                                </span>
                                 <span v-else>
                                     {{ item[_key] }}
                                 </span>

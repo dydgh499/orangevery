@@ -96,33 +96,53 @@ const setNote = () => {
         'note': salesforces.note,
     })
 }
+
+const batchRemove = () => {
+    
+}
+
 </script>
 <template>
         <VCard title="영업점 일괄 작업">
             <VCardText>
-                <b>선택된 영업점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <b>선택된 영업점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
+                    <VBtn type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small">
+                        일괄삭제
+                        <VIcon size="18" icon="tabler-trash" />
+                    </VBtn>
+                </div>
                 <VDivider style="margin: 1em 0;" />
                 <div style="width: 100%;">
                     <VRow>
-                        <VCol :md="4">정산세율</VCol>
-                        <VCol :md="8">
+                        <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
-                                <VCol></VCol>
-                                <VCol md="10">
+                                <VCol>정산세율</VCol>
+                                <VCol md="9">
                                     <div class="batch-container">
-                                        <VRadioGroup v-model="salesforces.settle_tax_type" inline>
-                                            <VRadio v-for="(tax_type, key, index) in tax_types" :value="tax_type.id"
-                                                :key="index">
-                                                <template #label>
-                                                    <span>
-                                                        {{ tax_type.title }}
-                                                    </span>
-                                                </template>
-                                            </VRadio>
-                                        </VRadioGroup>
-                                        <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setSettleTaxType()">
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="salesforces.settle_tax_type"
+                                            :items="tax_types" prepend-inner-icon="icon-park-outline:cycle"
+                                            label="정산세율 선택" item-title="title" item-value="id" persistent-hint
+                                            single-line />
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setSettleTaxType()">
                                             즉시적용
-                                            <VIcon end icon="tabler-direction-sign" />
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol>메모</VCol>
+                                <VCol md="9">
+                                    <div class="batch-container">
+                                        <VTextField v-model="salesforces.note" label="메모사항"
+                                            prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small"
+                                            @click="setNote()">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
                                     </div>
                                 </VCol>
@@ -140,9 +160,9 @@ const setNote = () => {
                                             label="정산 주기 선택" item-title="title" item-value="id" persistent-hint
                                             single-line />
 
-                                        <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setSettleCycle()">
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setSettleCycle()">
                                             즉시적용
-                                            <VIcon end icon="tabler-direction-sign" />
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
                                     </div>
                                 </VCol>
@@ -157,9 +177,9 @@ const setNote = () => {
                                             :items="all_days" prepend-inner-icon="icon-park-outline:cycle" label="정산 요일 선택"
                                             item-title="title" item-value="id" persistent-hint single-line />
 
-                                        <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setSettleDay()">
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setSettleDay()">
                                             즉시적용
-                                            <VIcon end icon="tabler-direction-sign" />
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
                                     </div>
                                 </VCol>
@@ -178,9 +198,9 @@ const setNote = () => {
                                             <template #true>가능</template>
                                             <template #false>불가능</template>
                                         </BooleanRadio>
-                                        <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setIsAbleModifyMcht()">
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setIsAbleModifyMcht()">
                                             즉시적용
-                                            <VIcon end icon="tabler-direction-sign" />
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
                                     </div>
                                 </VCol>
@@ -196,9 +216,9 @@ const setNote = () => {
                                             <template #true>상세보기</template>
                                             <template #false>간편보기</template>
                                         </BooleanRadio>
-                                        <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setViewType()">
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setViewType()">
                                             즉시적용
-                                            <VIcon end icon="tabler-direction-sign" />
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
                                     </div>
                                 </VCol>
@@ -207,69 +227,34 @@ const setNote = () => {
                     </VRow>
                     <VDivider style="margin: 1em 0;" />
                     <VRow>
-                        <VCol :cols="12">
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol>계좌 정보</VCol>
-                                <VCol md="9">
-                                    <div class="batch-container">
-                                        <VTextField v-model="salesforces.acct_num" prepend-inner-icon="ri-bank-card-fill"
-                                            placeholder="계좌번호 입력" persistent-placeholder />
-                                    </div>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                    <VRow>
-                        <VCol :cols="12">
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol></VCol>
-                                <VCol md="9">
-                                    <div class="batch-container" style="align-items: baseline;">
-                                        <VTextField v-model="salesforces.acct_name" prepend-inner-icon="tabler-user"
-                                            placeholder="예금주 입력" persistent-placeholder />
-                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforces.bank"
-                                            :items="[{ code: null, title: '선택안함' }].concat(banks)"
-                                            prepend-inner-icon="ph-buildings" label="은행 선택"
-                                            :hint="`${salesforces.bank.title}, 은행 코드: ${salesforces.bank.code ? salesforces.bank.code : '000'} `"
-                                            item-title="title" item-value="code" persistent-hint return-object single-line
-                                            create />
-                                        <VBtn variant="tonal" @click="setAccountInfo()"
-                                            style="margin-bottom: auto; margin-left: 0.5em;">
-                                            즉시적용
-                                            <VIcon end icon="tabler-direction-sign" />
-                                        </VBtn>
-                                    </div>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                    <VDivider style="margin: 1em 0;" />
-                    <VRow>
-                        <VCol :md="12">
-                            <VRow no-gutters>
-                                <VCol>메모</VCol>
-                                <VCol md="9">
-                                    <div class="batch-container">
-                                        <VTextField v-model="salesforces.note" counter label="메모사항"
-                                            prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />
-                                        <VBtn style='margin-bottom: auto; margin-left: 0.5em;' variant="tonal"
-                                            @click="setNote()">
-                                            즉시적용
-                                            <VIcon end icon="tabler-direction-sign" />
-                                        </VBtn>
-                                    </div>
-                                </VCol>
-                            </VRow>
-                        </VCol>
+                    <VCol :cols="12">
+                        <VRow no-gutters style="align-items: center;">
+                            <VCol>계좌 정보</VCol>
+                            <VCol md="10">
+                                <div class="batch-container" style="align-items: baseline;">
+                                    <VTextField v-model="salesforces.acct_num" prepend-inner-icon="ri-bank-card-fill"
+                                        placeholder="계좌번호 입력" persistent-placeholder 
+                                        style="margin-right: 0.5em;"/>
+                                    <VTextField v-model="salesforces.acct_name" prepend-inner-icon="tabler-user"
+                                        placeholder="예금주 입력" persistent-placeholder 
+                                        style="max-width: 11em; margin-right: 0.5em;"/>
+                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforces.bank"
+                                        :items="[{ code: null, title: '선택안함' }].concat(banks)"
+                                        prepend-inner-icon="ph-buildings" label="은행 선택"
+                                        :hint="`${salesforces.bank.title}, 은행 코드: ${salesforces.bank.code ? salesforces.bank.code : '000'} `"
+                                        item-title="title" item-value="code" persistent-hint return-object single-line
+                                        style="max-width: 11em;" />
+                                    <VBtn variant="tonal" size="small" @click="setAccountInfo()"
+                                        style="margin-bottom: auto; margin-left: 0.5em;">
+                                        즉시적용
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
+                                    </VBtn>
+                                </div>
+                            </VCol>
+                        </VRow>
+                    </VCol>
                     </VRow>
                 </div>
             </VCardText>
         </VCard>
 </template>
-<style scoped>
-.batch-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>

@@ -69,6 +69,7 @@ const getSalesHeaders = () => {
         headers['locked_at'] = '계정잠금시간'
     }
 
+    headers['is_2fa_use'] = '2FA 사용'
     headers['created_at'] = '생성시간'
     headers['updated_at'] = '업데이트시간'
     headers['extra_col'] = '더보기'

@@ -160,6 +160,11 @@ const setNotiUrl = () => {
         'note': noti.noti_note,
     })
 }
+
+const batchRemove = () => {
+
+}
+
 initAllSales()
 
 watchEffect(() => {
@@ -175,8 +180,14 @@ watchEffect(() => {
         <VCard title="가맹점 일괄 작업">
         <VCardText>
             <template v-if="props.selected_sales_id === 0 && props.selected_level === 0">
-                <b>선택된 가맹점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
-                <VDivider style="margin: 1em 0;" />
+                <div style=" display: flex;align-items: center; justify-content: space-between;">
+                    <b>선택된 가맹점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
+                    <VBtn type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small">
+                        일괄삭제
+                        <VIcon size="18" icon="tabler-trash" />
+                    </VBtn>
+                </div>
+                <VDivider style="margin: 0.5em 0;" />
             </template>
             <div style="width: 100%;">
                 <template v-for="i in 6" :key="i">
@@ -200,14 +211,14 @@ watchEffect(() => {
                                         </div>
                                         <VTextField v-model="merchandise['sales' + (6 - i) + '_fee']" type="number"
                                             suffix="%" style='margin-left: 0.5em;' />
-                                        <VBtn variant="tonal" @click="setSalesFee(6 - i)" style='margin-left: 0.5em;'>
+                                        <VBtn variant="tonal" size="small" @click="setSalesFee(6 - i)" style='margin-left: 0.5em;'>
                                             즉시적용
-                                            <VIcon end icon="tabler-direction-sign" />
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
-                                        <VBtn variant="tonal" color="secondary" @click="setSalesFeeBooking(6 - i)"
+                                        <VBtn variant="tonal" size="small" color="secondary" @click="setSalesFeeBooking(6 - i)"
                                             style='margin-left: 0.5em;'>
                                             예약적용
-                                            <VIcon end icon="tabler-clock-up" />
+                                            <VIcon end size="18" icon="tabler-clock-up" />
                                         </VBtn>
                                     </div>
                                 </VCol>
@@ -224,15 +235,15 @@ watchEffect(() => {
                                 <div class="batch-container">
                                     <VTextField v-model="merchandise.mcht_fee" type="number" suffix="%" />
                                     <VTextField v-model="merchandise.hold_fee" type="number" suffix="%"
-                                        style="margin-left: 0.5em;" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setMchtFee()">
+                                        style="width: 200px; margin-left: 0.5em;" />
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setMchtFee()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
-                                    <VBtn variant="tonal" color="secondary" @click="setMchtFeeBooking()"
+                                    <VBtn variant="tonal" size="small" color="secondary" @click="setMchtFeeBooking()"
                                         style='margin-left: 0.5em;'>
                                         예약적용
-                                        <VIcon end icon="tabler-clock-up" />
+                                        <VIcon end size="18" icon="tabler-clock-up" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -244,33 +255,24 @@ watchEffect(() => {
                     <VCol :cols="12">
                         <VRow no-gutters style="align-items: center;">
                             <VCol>계좌 정보</VCol>
-                            <VCol md="8">
-                                <div class="batch-container">
-                                    <VTextField v-model="merchandise.acct_num" prepend-inner-icon="ri-bank-card-fill"
-                                        placeholder="계좌번호 입력" persistent-placeholder />
-                                </div>
-                            </VCol>
-                        </VRow>
-                    </VCol>
-                </VRow>
-                <VRow>
-                    <VCol :cols="12">
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol></VCol>
-                            <VCol md="8">
+                            <VCol md="10">
                                 <div class="batch-container" style="align-items: baseline;">
+                                    <VTextField v-model="merchandise.acct_num" prepend-inner-icon="ri-bank-card-fill"
+                                        placeholder="계좌번호 입력" persistent-placeholder 
+                                        style="margin-right: 0.5em;"/>
                                     <VTextField v-model="merchandise.acct_name" prepend-inner-icon="tabler-user"
-                                        placeholder="예금주 입력" persistent-placeholder />
+                                        placeholder="예금주 입력" persistent-placeholder 
+                                        style="max-width: 11em; margin-right: 0.5em;"/>
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.bank"
                                         :items="[{ code: null, title: '선택안함' }].concat(banks)"
                                         prepend-inner-icon="ph-buildings" label="은행 선택"
                                         :hint="`${merchandise.bank.title}, 은행 코드: ${merchandise.bank.code ? merchandise.bank.code : '000'} `"
                                         item-title="title" item-value="code" persistent-hint return-object single-line
-                                        create />
-                                    <VBtn variant="tonal" @click="setAccountInfo()"
+                                        style="max-width: 11em;" />
+                                    <VBtn variant="tonal" size="small" @click="setAccountInfo()"
                                         style="margin-bottom: auto; margin-left: 0.5em;">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -287,9 +289,9 @@ watchEffect(() => {
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.custom_id"
                                         :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)" label="커스텀 필터"
                                         item-title="name" item-value="id" single-line />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setCustomFilter()">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setCustomFilter()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -300,11 +302,11 @@ watchEffect(() => {
                             <VCol>사업자 번호</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
-                                    <VTextField v-model="merchandise.business_num" type="text" placeholder="사업자등록번호 입력"
+                                    <VTextField v-model="merchandise.business_num" type="number" placeholder="사업자등록번호 입력"
                                         persistent-placeholder @update:model-value="merchandise.business_num = getOnlyNumber($event)"/>
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setBusinessNum()">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setBusinessNum()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -321,9 +323,9 @@ watchEffect(() => {
                                         <template #true>ON</template>
                                         <template #false>OFF</template>
                                     </BooleanRadio>
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" @click="setEnabled()">
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setEnabled()">
                                         즉시적용
-                                        <VIcon end icon="tabler-direction-sign" />
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
@@ -340,28 +342,18 @@ watchEffect(() => {
                                         :content="'선택한 가맹점의 모든 노티 URL이 추가됩니다.<br>(같은 노티 URL의 중복등록은 불가능합니다.)'">
                                     </BaseQuestionTooltip>
                                 </VCol>
-                                <VCol md="8">
+                                <VCol md="10">
                                     <div class="batch-container">
                                         <VTextField v-model="noti.noti_url" type="text"
-                                            placeholder="https://www.naver.com" />
-                                    </div>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                    <VRow>
-                        <VCol :cols="12">
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol>
-                                </VCol>
-                                <VCol md="8">
-                                    <div class="batch-container">
-                                        <VTextField v-model="noti.noti_note" counter label="메모사항"
-                                            prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" />
-                                        <VBtn variant="tonal" @click="setNotiUrl()"
-                                            style="margin-bottom: auto; margin-left: 0.5em;">
+                                            placeholder="https://www.naver.com" 
+                                            style="margin-right: 0.5em;"/>
+                                        <VTextField v-model="noti.noti_note" label="메모사항"
+                                            prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" 
+                                            style="margin-right: 0.5em;"/>
+                                        <VBtn variant="tonal" size="small" @click="setNotiUrl()"
+                                            >
                                             즉시적용
-                                            <VIcon end icon="tabler-direction-sign" />
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
                                     </div>
                                 </VCol>
@@ -375,10 +367,3 @@ watchEffect(() => {
     <FeeBookDialog ref="feeBookDialog"/>
     </section>
 </template>
-<style scoped>
-.batch-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>

@@ -34,6 +34,8 @@ Route::prefix('salesforces')->group(function() {
                 Route::post('{user}/{type}', [FeeChangeHistoryController::class, 'apply']);
             });
             Route::post('{id}/mcht-batch-fee', [SalesforceController::class, 'mchtBatchFee']);
+            Route::post('{id}/2fa-qrcode', [SalesforceController::class, 'create2FAQRLink']);  
+            Route::post('{id}/2fa-qrcode/create-vertify', [SalesforceController::class, 'vertify2FAQRLink']);
         });
         Route::middleware(['is.operate'])->group(function() {
             Route::prefix('batch-updaters')->middleware(['is.edit.able'])->group(function() {
@@ -51,6 +53,7 @@ Route::prefix('salesforces')->group(function() {
                 Route::post('bulk-register', [SalesforceController::class, 'bulkRegister']);
             });
         Route::apiResource('under-auto-settings', UnderAutoSettingController::class);    
+        Route::delete('batch-remove', [SalesforceController::class, 'batchRemove']);   
     });
 });
 Route::apiResource('salesforces', SalesforceController::class);
@@ -100,6 +103,7 @@ Route::prefix('merchandises')->group(function() {
             Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisablePaymentController::class);
             Route::apiResource('sub-business-registrations', SubBusinessRegistrationController::class);             
             Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
+            Route::delete('batch-remove', [MerchandiseController::class, 'batchRemove']);   
         });
         Route::post('{id}/unlock-account', [MerchandiseController::class, 'unlockAccount']);
         Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       

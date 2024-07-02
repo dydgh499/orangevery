@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { timer } from '@/@core/utils/timer';
 import { Merchandise } from '@/views/types';
-import { pinInputEvent } from '@/views/utils/pin_input_event';
-import { timer } from '@/views/utils/timer';
 import { axios, getUserLevel } from '@axios';
+import { pinInputEvent } from '@core/utils/pin_input_event';
 import corp from '@corp';
 
 interface Props {
@@ -129,15 +129,5 @@ const verification = async () => {
 
 #countdown {
   margin-inline-start: 0.5em;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  margin: 0;
-  appearance: none;
-}
-
-input[type="number"] {
-  appearance: textfield;
 }
 </style>

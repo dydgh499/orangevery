@@ -28,7 +28,7 @@ class Salesforce extends Authenticatable
     protected   $table      = 'salesforces';
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
-    protected   $appends    = ['resident_num_front', 'resident_num_back'];
+    protected   $appends    = ['resident_num_front', 'resident_num_back', 'is_2fa_use'];
     protected   $hidden     = ['user_pw', 'resident_num'];
 
     public function transactions()
@@ -93,5 +93,10 @@ class Salesforce extends Authenticatable
         return new Attribute(
             get: fn ($value) => round($value * 100, 3),
         );
+    }
+    
+    public function getIs2faUseAttribute()
+    {
+        return $this->google_2fa_secret_key ? true : false;
     }
 }

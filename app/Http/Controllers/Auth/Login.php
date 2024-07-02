@@ -47,7 +47,12 @@ class Login
             if($result['user']->password_change_at === null && $request->is('*/v1/bf/sign-in') === false)
                 return AuthLoginCode::REQUIRE_PASSWORD_CHANGE->value;
             else
-                return AuthLoginCode::SUCCESS->value;
+            {
+                if($result['user']->google_2fa_secret_key)
+                    return AuthGoogleOTP::validate($request->token);
+                else
+                    return AuthLoginCode::SUCCESS->value;
+            }
         }
     }
 

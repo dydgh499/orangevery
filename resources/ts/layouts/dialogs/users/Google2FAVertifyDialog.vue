@@ -1,7 +1,7 @@
 <script lang="ts" setup>
+import { pinInputEvent } from '@/@core/utils/pin_input_event';
 import { axios } from '@/plugins/axios';
 import corp from '@/plugins/corp';
-import { pinInputEvent } from '@/views/utils/pin_input_event';
 
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
@@ -81,7 +81,6 @@ defineExpose({
         </VCard>
     </VDialog>
 </template>
-
 <style scoped>
 .retry-text {
   cursor: pointer;
@@ -99,15 +98,5 @@ defineExpose({
   padding: 0.1rem !important;
   font-size: 1.25rem !important;
   text-align: center !important;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  margin: 0;
-  appearance: none;
-}
-
-input[type="number"] {
-  appearance: textfield;
 }
 </style>

@@ -109,9 +109,3 @@ defineExpose({
     </div>
 </template>
 <style scoped>
-.batch-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>

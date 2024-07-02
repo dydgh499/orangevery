@@ -139,6 +139,22 @@ th {
   cursor: pointer;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  margin: 0 !important;
+  appearance: none !important;
+}
+
+input[type="number"] {
+  appearance: textfield !important;
+}
+
+.batch-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media only screen and (max-device-width: 960px) {
   .preview {
     margin-block: 0.5em !important;

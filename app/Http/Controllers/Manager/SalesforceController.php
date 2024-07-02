@@ -11,6 +11,7 @@ use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\Models\EncryptDataTrait;
 use App\Http\Traits\Salesforce\UnderSalesTrait;
 use App\Http\Controllers\Manager\Salesforce\SalesforceOverlap;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
@@ -32,7 +33,7 @@ use App\Enums\HistoryType;
  */
 class SalesforceController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, StoresTrait, UnderSalesTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait, UnderSalesTrait, EncryptDataTrait;
     protected $salesforces, $target;
 
     public function __construct(Salesforce $salesforces)
@@ -321,6 +322,22 @@ class SalesforceController extends Controller
             return $this->response(951);
     }
 
+    public function create2FAQRLink(Request $request, int $id)
+    {
+        if(Ablilty::isMySalesforce($request, $id))
+            return $this->_create2FAQRLink($request, $id);
+        else
+            return $this->response(951);
+    }
+
+    public function vertify2FAQRLink(Request $request, int $id)
+    {
+        if(Ablilty::isMySalesforce($request, $id))    
+            return $this->_vertify2FAQRLink($request, $this->salesforces->where('id', $id));   
+        else
+            return $this->response(951);
+    }
+
     public function mchtBatchFee(Request $request, int $id)
     {
         if(Ablilty::isSalesforce($request) || Ablilty::isOperator($request))
@@ -334,7 +351,6 @@ class SalesforceController extends Controller
         else
             return $this->response(951);
     }
-
 
     public function bulkRegister(BulkSalesforceRequest $request)
     {

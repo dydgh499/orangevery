@@ -8,7 +8,6 @@ use App\Http\Controllers\Ablilty\Ablilty;
 use App\Enums\AuthLoginCode;
 use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Auth\AuthPasswordChange;
-use App\Http\Controllers\Auth\AuthGoogleOTP;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Manager\Service\BrandInfo;
@@ -273,10 +272,7 @@ class OperatorController extends Controller
     public function create2FAQRLink(Request $request, int $id)
     {
         if(Ablilty::isMyOperator($request, $id))
-        {
-            $qrcode_url = AuthGoogleOTP::getQrcodeUrl($request);
-            return $this->response(1, ['qrcode_url' => $qrcode_url]);
-        }
+            return $this->_create2FAQRLink($request, $id);
         else
             return $this->response(951);
     }
@@ -284,20 +280,8 @@ class OperatorController extends Controller
     public function vertify2FAQRLink(Request $request, int $id)
     {
         if(Ablilty::isMyOperator($request, $id))
-        {
-            $cond_1 = AuthGoogleOTP::createVerify($request, $request->verify_code);
-            $cond_2 = AuthPasswordChange::HashCheck($request->user(), $request->user_pw);
-            if($cond_1 && $cond_2)
-            {
-                $data = $this->setEncryptPersonalInfo(['google_2fa_secret_key' => AuthGoogleOTP::getTempSecretKey($request->user())]);
-                $this->operators->where('id', $id)->update($data);
-                return $this->response(1);
-            }
-            else
-                return $this->extendResponse(952, '핀번호 또는 패스워드가 정확하지 않습니다.');            
-        }
+             return $this->_vertify2FAQRLink($request, $this->operators->where('id', $id));   
         else
             return $this->response(951);
-
     }
 }

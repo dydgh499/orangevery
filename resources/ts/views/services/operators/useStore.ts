@@ -19,7 +19,7 @@ export const useSearchStore = defineStore('operatorSearchStore', () => {
         'user_name' : 'ID',
         'nick_name' : '성명',
         'phone_num' : '연락처',
-        'is_2fa_use': '2FA 사용여부',
+        'is_2fa_use': '2FA 사용',
     }
 
     if(getUserLevel() >= 35) {
@@ -31,7 +31,7 @@ export const useSearchStore = defineStore('operatorSearchStore', () => {
     headers['updated_at'] = '업데이트시간'
 
     if(getUserLevel() >= 40)
-        headers['extra_col'] = '더보기';
+        headers['extra_col'] = '더보기'
 
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
