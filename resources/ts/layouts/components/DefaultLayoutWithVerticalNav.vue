@@ -23,18 +23,19 @@ import PopupDialog from '@/layouts/dialogs/utils/PopupDialog.vue'
 import PWASnackbar from '@/layouts/snackbars/PWASnackbar.vue'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 
+import corp from '@/plugins/corp'
 import { isFixplus } from '@/plugins/fixplus'
 import { axios, getUserLevel, user_info } from '@axios'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { config } from '@layouts/config'
 
 const popup = ref()
-const alert = ref(null)
-const snackbar = ref(null)
-const loading = ref(null)
-const payLink = ref(null)
-const pwaSnackbar = ref(null)
-const passwordChangeNoticeDialog = ref(null)
+const alert = ref()
+const snackbar = ref()
+const loading = ref()
+const payLink = ref()
+const pwaSnackbar = ref()
+const passwordChangeNoticeDialog = ref()
 
 const is_pay_link = ref(router.currentRoute.value.path.includes('/pay/'))
 
@@ -57,6 +58,15 @@ const passwordChangeWarningValidate = () => {
         passwordChangeNoticeDialog.value.show()
 }
 
+const fa2RequireNotification = () => {
+    if(user_info.value.is_2fa_use === false) {
+        if(corp.pv_options.paid.use_head_office_withdraw)
+            alert.value.show('휴대폰 인증대신 구글 OTP 인증으로 전환하세요.')
+        else
+            alert.value.show('2FA 인증을 활성화하여 계정의 보안등급을 높일 수 있습니다.<br>안전한 운영을 위해 우측 상단 프로필에서 2차인증 설정을 요구합니다.')
+    }
+}
+
 onMounted(() => {
     axios.get('/api/v1/manager/popups/currently', {
         params: {
@@ -72,6 +82,7 @@ onMounted(() => {
         console.log(e) 
     })
     passwordChangeWarningValidate()
+    fa2RequireNotification()
 })
 </script>
 

@@ -16,6 +16,7 @@ declare module '@vue/runtime-core' {
     AppDrawerHeaderSection: typeof import('./resources/ts/@core/components/AppDrawerHeaderSection.vue')['default']
     AppOtpInput: typeof import('./resources/ts/@core/components/AppOtpInput.vue')['default']
     AppSelect: typeof import('./resources/ts/@core/components/app-form-elements/AppSelect.vue')['default']
+    AppStepper: typeof import('./resources/ts/@core/components/AppStepper.vue')['default']
     AppTextarea: typeof import('./resources/ts/@core/components/app-form-elements/AppTextarea.vue')['default']
     AppTextField: typeof import('./resources/ts/@core/components/app-form-elements/AppTextField.vue')['default']
     CustomCheckboxes: typeof import('./resources/ts/@core/components/app-form-elements/CustomCheckboxes.vue')['default']

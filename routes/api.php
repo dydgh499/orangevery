@@ -44,7 +44,8 @@ Route::prefix('v1')->group(function() {
         Route::post('reset-password', [AuthController::class, 'resetPassword']);    
         Route::post('sign-in', [AuthController::class, 'signin']);
         Route::post('sign-up', [AuthController::class, 'signUp']);
-        
+        Route::post('2fa-qrcode/vertify', [AuthController::class, 'vertify2FA']);  
+
         Route::middleware(['auth:sanctum'])->group(function() {
             Route::post('extend-password-at', [AuthController::class, 'extendPasswordAt']);   
             Route::post('sign-out', [AuthController::class, 'signout']);

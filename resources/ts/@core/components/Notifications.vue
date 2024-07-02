@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import type { Anchor } from 'vuetify/lib/components'
 import type { Notification } from '@layouts/types'
+import type { Anchor } from 'vuetify/lib/components'
 
 interface Props {
     notifications: Notification[]
@@ -11,6 +11,7 @@ const props = withDefaults(defineProps<Props>(), {
     location: 'bottom end',
     badgeProps: undefined,
 })
+
 
 const getLocaleString = (update_dt: Date) => {
     return update_dt.toLocaleString('ko-KR', {
@@ -24,7 +25,6 @@ const getLocaleString = (update_dt: Date) => {
 const getTitleStatus = computed(() => {
     return props.notifications.length ? '최근 1:1 문의 요청의 건' : '최근 5일간 문의가 존재하지 않습니다! 🎉'
 })
-
 </script>
 
 <template>
@@ -36,7 +36,6 @@ const getTitleStatus = computed(() => {
 
             <VMenu activator="parent" width="380" :location="props.location" offset="14px">
                 <VList class="py-0">
-                    <!-- 👉 Header -->
                     <VListItem :title="getTitleStatus" class="notification-section" height="48px">
                         <template #append>
                             <VChip v-if="props.notifications.length" color="primary" size="small">

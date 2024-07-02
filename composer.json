@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.0.2",
         "arcanedev/log-viewer": "^10.0",
+        "bacon/bacon-qr-code": "^3.0",
         "doctrine/dbal": "^3.6",
         "guzzlehttp/guzzle": "^7.2",
         "illuminatech/multipart-middleware": "^1.1",
@@ -15,6 +16,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "league/flysystem-sftp-v3": "3.0",
+        "pragmarx/google2fa-laravel": "^2.2",
         "predis/predis": "^2.1"
     },
     "require-dev": {

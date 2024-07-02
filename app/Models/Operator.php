@@ -19,8 +19,15 @@ class Operator extends Authenticatable
 
     protected   $table      = 'operators';
     protected   $primaryKey = 'id';
+    protected   $appends    = ['is_2fa_use'];
     protected   $guarded    = [];
     protected   $hidden     = [
         'user_pw',
+        'google_2fa_secret_key',
     ];
+
+    public function getIs2faUseAttribute()
+    {
+        return $this->google_2fa_secret_key ? true : false;
+    }
 }

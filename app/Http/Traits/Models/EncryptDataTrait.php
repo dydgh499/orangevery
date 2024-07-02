@@ -40,9 +40,18 @@ trait EncryptDataTrait
         );
     }
 
+    protected function google2faSecretKey(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $this->aes256_decode($value),
+            set: fn ($value) => $this->aes256_encode($value),
+        );
+    }
+
+    
     public function setEncryptPersonalInfo($data)
     {
-        $enc_keys = ['enable_ip'];
+        $enc_keys = ['enable_ip', 'google_2fa_secret_key'];
         foreach($enc_keys as $enc_key)
         {
             if(isset($data[$enc_key]))

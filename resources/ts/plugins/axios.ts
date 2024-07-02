@@ -5,6 +5,17 @@ import axiosIns from 'axios';
 
 const levels = corp.pv_options.auth.levels
 
+export const getUserType = () => {
+    if (getUserLevel() == 10) 
+        return {id:0, link:'/merchandises/edit/' + user_info.value.id}
+    else if (getUserLevel() <= 30)
+        return {id:1, link:'/salesforces/edit/' + user_info.value.id}
+    else if (getUserLevel() <= 45) 
+        return {id:2, link:'/services/operators/edit/' + user_info.value.id}
+    else
+        return {id:3, link:''}
+}
+
 export const getSalesLevelByCol = (key: string) => {
     switch(key) {
         case 'sales5_id':

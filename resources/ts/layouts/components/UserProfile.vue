@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import Google2FACreateDialog from '@/layouts/dialogs/users/Google2FACreateDialog.vue'
 import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
+import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
 import { initialAbility } from '@/plugins/casl/ability'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
-import { axios, pay_token, user_info, allLevels } from '@axios'
-import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
-import { avatars } from '@/views/users/useStore'
 import router from '@/router'
+import { avatars } from '@/views/users/useStore'
+import { allLevels, axios, getUserLevel, getUserType, pay_token, user_info } from '@axios'
 import corp from '@corp'
 
 const ability = useAppAbility()
@@ -13,30 +14,22 @@ const password = ref()
 const all_levels = allLevels()
 const snackbar = <any>(inject('snackbar'))
 const imageDialog = ref()
+const google2FACreateDialog = ref()
 
-let mylink = ''
-let mytype = 0
-if (user_info.value.level == 10) {
-    mylink = '/merchandises/edit/' + user_info.value.id
-    mytype = 0
-}
-else if (user_info.value.level <= 30) {
-    mylink = '/salesforces/edit/' + user_info.value.id
-    mytype = 1
-}
-else if (user_info.value.level <= 45) {
-    mylink = '/services/operators/edit/' + user_info.value.id
-    mytype = 2
-}
-else
-    mytype = 3
+const notice_mark = ref({
+    dot: true,
+    location: 'bottom right',
+    color: 'success',
+    content: '',
+})
+const require_2fa = ref(false)
+const mytype = getUserType()
 
 // 개발사는 이동할 수 없음
 const profile = () => {
-    if(mytype < 3)
-        router.push(mylink)
-    else
-    
+    if(mytype.id < 3)
+        router.push(mytype.link)
+    else   
         snackbar.value.show(`${corp.pv_options.auth.levels.dev_name}는 프로필로 이동할 수 없습니다.`, 'warning')
 }
 
@@ -52,11 +45,28 @@ const showAvatar = (preview: string) => {
     imageDialog.value.show(preview)
 }
 
+const noticeOperator2FaStatus = () => {
+    if(getUserLevel() >= 35) {
+        if(user_info.value.is_2fa_use === false) {
+            notice_mark.value.dot = false
+            notice_mark.value.location = 'top right'
+            notice_mark.value.color = 'error'
+            notice_mark.value.content = '!'
+            return true
+        }
+    }
+    return false
+}
+
 user_info.value.profile_img = user_info.value.profile_img ? user_info.value.profile_img : avatars[Math.floor(Math.random() * avatars.length)]
+require_2fa.value = noticeOperator2FaStatus()
 </script>
 
 <template>
-    <VBadge dot location="bottom right" offset-x="3" offset-y="3" bordered color="success">
+    <VBadge :dot="notice_mark.dot" :location="notice_mark.location" offset-x="3" offset-y="3" bordered :color="notice_mark.color" :content="notice_mark.content">
+        <VTooltip v-if="require_2fa" activator="parent" location="top" transition="scale-transition" style="max-width: 15em; margin-left: auto;">
+            <span>2차인증 설정이 필요합니다.</span>
+        </VTooltip>
         <VAvatar class="cursor-pointer" color="primary preview" variant="tonal">
             <VImg :src="user_info.profile_img" />
             <!-- SECTION Menu -->
@@ -66,43 +76,46 @@ user_info.value.profile_img = user_info.value.profile_img ? user_info.value.prof
                     <VListItem>
                         <template #prepend>
                             <VListItemAction start>
-                                <VBadge dot location="bottom right" offset-x="3" offset-y="3" color="success">
+                                <VBadge :dot="notice_mark.dot" :location="notice_mark.location" offset-x="3" offset-y="3" bordered :color="notice_mark.color" :content="notice_mark.content">
                                     <VAvatar color="primary" variant="tonal" @click="showAvatar(user_info.profile_img)" class="preview">
                                         <VImg :src="user_info.profile_img" />
                                     </VAvatar>
                                 </VBadge>
                             </VListItemAction>
                         </template>
-
                         <VListItemTitle class="font-weight-semibold">
                             {{ user_info.user_name }}
                         </VListItemTitle>
-                        <VListItemSubtitle>{{ all_levels.find(level => level['id'] === user_info.level)?.title }}</VListItemSubtitle>
+                        <VListItemSubtitle>{{ all_levels.find(level => level['id'] === getUserLevel())?.title }}</VListItemSubtitle>
                     </VListItem>
-
-                    <VDivider class="my-2" v-if="user_info.level > 10" />
-                    <VListItem @click="profile()" class="custom-link" v-if="user_info.level > 10">
+                    <VDivider class="my-2" v-if="getUserLevel() > 10" />
+                    <VListItem @click="profile()" class="custom-link" v-if="getUserLevel() > 10">
                         <template #prepend>
                             <VIcon class="me-2" icon="tabler-user" size="22" />
                         </template>
                         <VListItemTitle>프로필</VListItemTitle>
                     </VListItem>
                     <VDivider class="my-2" />
-                    <VListItem @click="password.show(user_info.id, mytype)">
+                    <VListItem @click="password.show(user_info.id, mytype.id)">
                         <template #prepend>
                             <VIcon class="me-2" icon="tabler-lock" size="22" />
                         </template>
                         <VListItemTitle>패스워드 변경</VListItemTitle>
                     </VListItem>
-                    <!-- Divider -->
                     <VDivider class="my-2" />
-
-                    <!-- 👉 Logout -->
+                    <VListItem value="2fa" @click="google2FACreateDialog.show()" 
+                     :class="require_2fa ? 'pg-cancel' : ''" v-if="getUserLevel() >= 35">
+                        <template #prepend>
+                            <VIcon size="22" class="me-2" icon="carbon:two-factor-authentication" />
+                        </template>
+                        <VListItemTitle v-if="user_info.is_2fa_use">2차인증 재설정</VListItemTitle>
+                        <VListItemTitle v-else>2차인증 설정</VListItemTitle>
+                    </VListItem>
+                    <VDivider class="my-2" />
                     <VListItem link @click="logout">
                         <template #prepend>
                             <VIcon class="me-2" icon="tabler-logout" size="22" />
                         </template>
-
                         <VListItemTitle>로그아웃</VListItemTitle>
                     </VListItem>
                 </VList>
@@ -111,6 +124,7 @@ user_info.value.profile_img = user_info.value.profile_img ? user_info.value.prof
         </VAvatar>
         <PasswordChangeDialog ref="password" />
         <ImageDialog ref="imageDialog" :style="`inline-size:20em !important;`"/>
+        <Google2FACreateDialog ref="google2FACreateDialog"/>
     </VBadge>
 </template>
 <style scoped>

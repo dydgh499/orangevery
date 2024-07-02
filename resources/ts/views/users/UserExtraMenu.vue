@@ -15,8 +15,6 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 
-
-
 const unlockAccount = async () => {
     const [name, path] = getUserTypeName(props.type)
     if (await alert.value.show(`정말 ${name}(${props.item.user_name})의 계정을 잠금해제 하시겠습니까?`)) {
@@ -49,7 +47,7 @@ const unlockAccount = async () => {
                             <VIcon size="24" class="me-3" icon="tabler-lock" />
                         </template>
                         <VListItemTitle>계정잠금해제</VListItemTitle>
-                </VListItem>
+                </VListItem>                
             </VList>
         </VMenu>
     </VBtn>

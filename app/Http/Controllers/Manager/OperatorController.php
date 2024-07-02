@@ -8,6 +8,7 @@ use App\Http\Controllers\Ablilty\Ablilty;
 use App\Enums\AuthLoginCode;
 use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Auth\AuthPasswordChange;
+use App\Http\Controllers\Auth\AuthGoogleOTP;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Manager\Service\BrandInfo;
@@ -16,6 +17,7 @@ use App\Models\Service\OperatorIP;
 use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\Models\EncryptDataTrait;
 use App\Http\Requests\Manager\OperatorReqeust;
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\Hash;
@@ -31,7 +33,7 @@ use App\Enums\HistoryType;
  */
 class OperatorController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, StoresTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait, EncryptDataTrait;
     protected $operators;
     protected $target;
     protected $imgs;
@@ -266,5 +268,36 @@ class OperatorController extends Controller
             return $this->_unlockAccount($this->operators->where('id', $id));
         else
             return $this->response(951);
+    }
+
+    public function create2FAQRLink(Request $request, int $id)
+    {
+        if(Ablilty::isMyOperator($request, $id))
+        {
+            $qrcode_url = AuthGoogleOTP::getQrcodeUrl($request);
+            return $this->response(1, ['qrcode_url' => $qrcode_url]);
+        }
+        else
+            return $this->response(951);
+    }
+
+    public function vertify2FAQRLink(Request $request, int $id)
+    {
+        if(Ablilty::isMyOperator($request, $id))
+        {
+            $cond_1 = AuthGoogleOTP::createVerify($request, $request->verify_code);
+            $cond_2 = AuthPasswordChange::HashCheck($request->user(), $request->user_pw);
+            if($cond_1 && $cond_2)
+            {
+                $data = $this->setEncryptPersonalInfo(['google_2fa_secret_key' => AuthGoogleOTP::getTempSecretKey($request->user())]);
+                $this->operators->where('id', $id)->update($data);
+                return $this->response(1);
+            }
+            else
+                return $this->extendResponse(952, '핀번호 또는 패스워드가 정확하지 않습니다.');            
+        }
+        else
+            return $this->response(951);
+
     }
 }

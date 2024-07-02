@@ -75,6 +75,7 @@ export interface BasePropertie {
     profile_img?: string,
     is_lock?: number,
     locked_at?: string,
+    is_2fa_use?: boolean,
     password_change_at?: string,
     created_at: datetime | null,
     updated_at: datetime | null,

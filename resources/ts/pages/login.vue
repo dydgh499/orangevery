@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Google2FAVertifyDialog from '@/layouts/dialogs/users/Google2FAVertifyDialog.vue'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import { UserAbility } from '@/plugins/casl/AppAbility'
@@ -34,6 +35,7 @@ const errors = ref<Record<string, string | undefined>>({
 
 const snackbar = ref(null)
 const passwordAuthDialog = ref()
+const google2FAVertifyDialog = ref()
 const refVForm = ref<VForm>()
 const user_name = ref('')
 const user_pw = ref('')
@@ -70,7 +72,7 @@ const login = () => {
             if(e.response.data.code === 955) {
                 router.replace('reset-password?token='+encodeURIComponent(e.response.data.data.token)+"&level="+encodeURIComponent(e.response.data.data.level))
             }
-            if(e.response.data.code === 956) {
+            else if(e.response.data.code === 956) {
                 let phone_num = e.response.data.data.phone_num
                 if(phone_num) {
                     phone_num = phone_num.replaceAll(' ', '').replaceAll('-', '')
@@ -81,15 +83,22 @@ const login = () => {
                 else
                     snackbar.value.show('등록된 로그인정보가 없습니다.<br>관리자에게 문의해주세요.', 'warning')
             }
+            else if(e.response.data.code === 957) {
+                token.value = await google2FAVertifyDialog.value.show(user_name.value, user_pw.value)
+                if(token.value !== '')
+                    login()
+            }
             else
                 pay_token.value = ''
             console.log(e)
             errors.value = e.response.data
         })
 }
+
 const forgotPassword = () => {
     snackbar.value.show('각 영업점들에게 전화해 주세요.', 'warning')
 }
+
 const onSubmit = () => {
     refVForm.value?.validate()
         .then(({ valid: isValid }) => {
@@ -159,6 +168,7 @@ const onSubmit = () => {
     </VRow>
     <Snackbar ref="snackbar" />
     <PasswordAuthDialog ref="passwordAuthDialog"/>
+    <Google2FAVertifyDialog ref="google2FAVertifyDialog"/>
 </template>
 
 <style lang="scss">

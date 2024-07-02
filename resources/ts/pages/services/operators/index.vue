@@ -19,7 +19,6 @@ provide('exporter', exporter)
 const showAvatar = (preview: string) => {
     imageDialog.value.show(preview)
 }
-
 </script>
 <template>
     <div>
@@ -62,6 +61,11 @@ const showAvatar = (preview: string) => {
                                 <span v-else-if="_key == 'is_lock'">
                                     <VChip :color="store.booleanTypeColor(item[_key])">
                                         {{ item[_key] ? 'LOCK' : 'X' }}
+                                    </VChip>
+                                </span>
+                                <span v-else-if="_key == 'is_2fa_use'">
+                                    <VChip :color="store.booleanTypeColor(!item[_key])">
+                                        {{ item[_key] ? 'O' : 'X' }}
                                     </VChip>
                                 </span>
                                 <span v-else-if="_key == 'profile_img'">

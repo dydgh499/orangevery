@@ -327,16 +327,11 @@ export const useSalesFilterStore = defineStore('useSalesFilterStore', () => {
                 // 상위가 아무것도 클릭된게 없을 때
                 if(isAboveCheck(i, params) == false) {
                     initAllSales()
-                    return    
+                    return
                 }
             }
         }
-        /*
-        if(corp.pv_options.paid.sales_parent_structure && getUserLevel() > 10)
-            setParentIdBaseSales(select_idx, params)
-        else
-        */
-            setMchtBaseSales(select_idx, params)
+        setMchtBaseSales(select_idx, params)
     }
 
     const setParentIdBaseSales = (select_idx: number, params: any) => {

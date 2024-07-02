@@ -19,6 +19,7 @@ export const useSearchStore = defineStore('operatorSearchStore', () => {
         'user_name' : 'ID',
         'nick_name' : '성명',
         'phone_num' : '연락처',
+        'is_2fa_use': '2FA 사용여부',
     }
 
     if(getUserLevel() >= 35) {

@@ -8,6 +8,7 @@ use App\Http\Traits\Models\EncryptDataTrait;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Auth\AuthPhoneNum;
+use App\Http\Controllers\Auth\AuthGoogleOTP;
 use App\Http\Controllers\Auth\AuthAccountLock;
 use App\Http\Controllers\Auth\AuthOperatorIP;
 use App\Http\Controllers\Auth\AuthPasswordChange;
@@ -24,11 +25,13 @@ class Login
     {
         if($result['user']->level >= 35)
         {
-            // IP 인증
+            // 3FA
             $brand = BrandInfo::getBrandById($result['user']->brand_id);
             if(AuthOperatorIP::valiate($result['user']->brand_id, $request->ip()))
-            {
-                if($brand['pv_options']['paid']['use_head_office_withdraw'])
+            {   // 2FA
+                if($result['user']->google_2fa_secret_key)
+                    return AuthGoogleOTP::validate($request->token);
+                else if($brand['pv_options']['paid']['use_head_office_withdraw'])
                     return AuthPhoneNum::validate($request->token);   // 휴대폰 인증
                 else
                     return AuthLoginCode::SUCCESS->value;
@@ -75,6 +78,13 @@ class Login
             $result['msg'] = '휴대폰 인증을 해주세요.';
             $result['data'] = [
                 'phone_num' => $result['user']->phone_num,
+                'nick_name' => $result['user']->nick_name
+            ];
+        }
+        else if($result['result'] === AuthLoginCode::REQUIRE_OTP_AUTH->value)
+        {
+            $result['msg'] = '2차 인증을 해주세요.';
+            $result['data'] = [
                 'nick_name' => $result['user']->nick_name
             ];
         }

@@ -10,4 +10,5 @@ enum AuthLoginCode: int {
     case NOT_ALLOW_FIRST_PASSWORD   = 954;
     case REQUIRE_PASSWORD_CHANGE    = 955;
     case REQUIRE_PHONE_AUTH         = 956;
+    case REQUIRE_OTP_AUTH           = 957;
 }

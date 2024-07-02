@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Auth\AuthGoogleOTP;
+use App\Http\Controllers\Manager\Service\OperatorIPController;
 use App\Enums\AuthLoginCode;
 
 use App\Models\Brand;
@@ -181,8 +183,38 @@ class AuthController extends Controller
                 'created_at'    => $current,
             ]);
             $user = Operator::where('id', $res->id)->first();
+            OperatorIPController::addIP($res->id, $request->ip());
             return $this->response(0, $user->loginInfo(40));
         }, 3);
+    }
+
+    public function vertify2FA(Request $request)
+    {
+        $vertifyUser = function($orm, $request) {
+            $result = Login::isSafeLogin($orm, $request);
+            if($result !== null)
+            {
+                [$result, $token] = AuthGoogleOTP::verify($result['user'], $request->verify_code);
+                if($result)
+                    return $this->response(0, ['token'=>$token]);
+                else
+                    return $this->response(952);
+            }
+            else
+                return false;    
+        };
+
+        $result = $vertifyUser(new Operator(), $request);
+        if($result !== false)
+            return $result;
+
+        $result = $vertifyUser(new Salesforce(), $request);
+        if($result !== false)
+            return $result;
+
+        $result = $vertifyUser(new Merchandise(), $request);
+        if($result !== false)
+            return $result;
     }
 
     /*

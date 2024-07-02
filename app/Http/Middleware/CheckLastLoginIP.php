@@ -28,7 +28,7 @@ class CheckLastLoginIP
                 return $next($request);
             else
             {
-                AbnormalConnection::notSameLoginIP();
+                // AbnormalConnection::notSameLoginIP();
                 return $this->response(954);    
             }
         }

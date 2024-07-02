@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import CreateHalfVColV2 from '@/layouts/utils/CreateHalfVColV2.vue'
 import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
 import type { Operator, Options } from '@/views/types'
 import { avatars } from '@/views/users/useStore'
@@ -18,6 +18,8 @@ const operator_levels:Options[] = []
 
 if(getUserLevel() >= 35)
     operator_levels.push({id:35, title:'직원'})
+if(getUserLevel() >= 40 && props.id !== 0)
+    operator_levels.push({id:40, title:'본사'})
 
 const verification = async () => {
     try {
@@ -38,73 +40,65 @@ const verification = async () => {
             <VCard>
                 <VCardItem>
                     <VCardTitle>기본정보</VCardTitle>
-                    <VRow class="pt-5">
-                        <!-- 👉 Email -->
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>아이디</template>
-                            <template #input>
-                                <VTextField v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
-                                    placeholder="ID로 사용됩니다." persistent-placeholder :rules="[requiredValidatorV2(props.item.user_name, '아이디'), lengthValidator(props.item.user_name, 8)]"
-                                    maxlength="30" v-if="getUserLevel() >= 40"/>
-                                <span v-else>{{ props.item.user_name }}</span>
-                            </template>
-                        </CreateHalfVCol>
-                        <!-- 👉 Password -->
-                        <CreateHalfVCol :mdl="3" :mdr="9" v-if="props.id == 0">
-                            <template #name>패스워드</template>
-                            <template #input>
-                                <VTextField v-model="props.item.user_pw" counter prepend-inner-icon="tabler-lock"
-                                    :rules="[requiredValidatorV2(props.item.user_pw, '패스워드'), passwordValidatorV2]"
-                                    :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
-                                    :type="is_show ? 'text' : 'password'" placeholder="소문자,대문자,특수문자로 이루어진 10자 이상 문자열"
-                                    persistent-placeholder @click:append-inner="is_show = !is_show" autocomplete />
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>대표자명</template>
-                            <template #input>
-                                <VTextField v-model="props.item.nick_name" prepend-inner-icon="tabler-user"
-                                    placeholder="사용자명으로 사용됩니다." :rules="[requiredValidatorV2(props.item.nick_name, '대표자명')]" persistent-placeholder 
-                                    v-if="getUserLevel() >= 40"/>
-                                <span v-else>{{ props.item.nick_name }}</span>
+                    <CreateHalfVColV2 :mdl="5" :mdr="7">
+                        <template #l_name>아이디</template>
+                        <template #l_input>
+                            <VTextField v-model="props.item.user_name" prepend-inner-icon="tabler-mail"
+                                placeholder="ID로 사용됩니다." persistent-placeholder :rules="[requiredValidatorV2(props.item.user_name, '아이디'), lengthValidator(props.item.user_name, 8)]"
+                                maxlength="30" v-if="getUserLevel() >= 40"/>
+                            <span v-else>{{ props.item.user_name }}</span>
+                        </template>
+                        <template #r_name v-if="props.id == 0">패스워드</template>
+                        <template #r_input v-if="props.id == 0">
+                            <VTextField v-model="props.item.user_pw" counter prepend-inner-icon="tabler-lock"
+                                :rules="[requiredValidatorV2(props.item.user_pw, '패스워드'), passwordValidatorV2]"
+                                :append-inner-icon="is_show ? 'tabler-eye' : 'tabler-eye-off'"
+                                :type="is_show ? 'text' : 'password'" placeholder="소문자,대문자,특수문자로 이루어진 10자 이상 문자열"
+                                persistent-placeholder @click:append-inner="is_show = !is_show" autocomplete />
+                        </template>
+                    </CreateHalfVColV2>
 
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="3" :mdr="9" v-if="props.item.level === 35 || props.item.id === 0">
-                            <template #name>휴대폰번호</template>
-                            <template #input>
-                                <VTextField v-model="props.item.phone_num" type="number"
-                                    prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호 입력"
-                                    :rules="[requiredValidatorV2(props.item.phone_num, '휴대폰번호')]" persistent-placeholder 
-                                    v-if="getUserLevel() >= 40"/>
-                                <span v-else>{{ props.item.phone_num }}</span>
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="3" :mdr="9">
-                            <template #name>관리자 등급</template>
-                            <template #input>
-                                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
-                                    :items="operator_levels" prepend-inner-icon="tabler-adjustments-up" label="등급 선택"
-                                    item-title="title" item-value="id" single-line :rules="[requiredValidatorV2(props.item.level, '등급')]"
-                                    :readonly="props.id != 0" v-if="getUserLevel() >= 40"/>
-                                <span v-else>{{ operator_levels.find(obj => obj.id === props.item.level)?.title }}</span>
-                            </template>
-                        </CreateHalfVCol>
-                        <CreateHalfVCol :mdl="6" :mdr="6" v-if="props.item.result === 956">
-                            <template #name>인증번호</template>
-                            <template #input>
-                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                                    <VTextField v-model="props.item.appr_num" type="number"
-                                        prepend-inner-icon="arcticons:2fas-auth" placeholder="인증번호 입력"
-                                        persistent-placeholder />
-                                    <VBtn end @click="verification()" style="margin-left: 1em;">
-                                        휴대폰 인증하기
-                                    </VBtn>
-                                </div>
-                            </template>
-                        </CreateHalfVCol>
-                    </VRow>
-                </VCardItem>
+                    <CreateHalfVColV2 :mdl="5" :mdr="7">
+                        <template #l_name>대표자명</template>
+                        <template #l_input>
+                            <VTextField v-model="props.item.nick_name" prepend-inner-icon="tabler-user"
+                                placeholder="사용자명으로 사용됩니다." :rules="[requiredValidatorV2(props.item.nick_name, '대표자명')]" persistent-placeholder 
+                                v-if="getUserLevel() >= 40"/>
+                            <span v-else>{{ props.item.nick_name }}</span>
+                        </template>
+                        <template #r_name v-if="props.item.level === 35 || props.item.id === 0">휴대폰번호</template>
+                        <template #r_input v-if="props.item.level === 35 || props.item.id === 0">
+                            <VTextField v-model="props.item.phone_num" type="number"
+                                prepend-inner-icon="tabler-device-mobile" placeholder="휴대폰번호 입력"
+                                :rules="[requiredValidatorV2(props.item.phone_num, '휴대폰번호')]" persistent-placeholder 
+                                v-if="getUserLevel() >= 40"/>
+                            <span v-else>{{ props.item.phone_num }}</span>
+                        </template>
+                    </CreateHalfVColV2>
+
+                    <CreateHalfVColV2 :mdl="5" :mdr="7">
+                        <template #l_name>등급</template>
+                        <template #l_input>
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
+                                :items="operator_levels" prepend-inner-icon="tabler-adjustments-up" label="등급 선택"
+                                item-title="title" item-value="id" single-line :rules="[requiredValidatorV2(props.item.level, '등급')]"
+                                :readonly="props.id != 0" v-if="getUserLevel() >= 40"/>
+                            <span v-else>{{ operator_levels.find(obj => obj.id === props.item.level)?.title }}</span>
+
+                        </template>
+                        <template #r_name v-if="props.item.result === 956">인증번호</template>
+                        <template #r_input v-if="props.item.result === 956">
+                            <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                <VTextField v-model="props.item.appr_num" type="number"
+                                    prepend-inner-icon="arcticons:2fas-auth" placeholder="인증번호 입력"
+                                    persistent-placeholder />
+                                <VBtn end @click="verification()" style="margin-left: 1em;">
+                                    휴대폰 인증하기
+                                </VBtn>
+                            </div>
+                        </template>
+                    </CreateHalfVColV2>
+            </VCardItem>
             </VCard>
         </VCol>
         <VCol cols="12" md="6">

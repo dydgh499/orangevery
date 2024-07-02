@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Merchandise } from '@/views/types';
+import { pinInputEvent } from '@/views/utils/pin_input_event';
+import { timer } from '@/views/utils/timer';
 import { axios, getUserLevel } from '@axios';
 import corp from '@corp';
 
@@ -19,13 +21,10 @@ const emits = defineEmits(['update:token'])
 
 const snackbar = <any>(inject('snackbar'))
 const button_status = ref(0)
-const digits = ref<string[]>([])
-const ref_opt_comp = ref<HTMLInputElement | null>(null)
-const defaultStyle = {
-    style: 'max-width: 48px; text-align: center;',
-}
-const countdown_time = ref(180)
-let countdown_timer = <any>(null)
+
+const { digits, ref_opt_comp, handleKeyDown, defaultStyle} = pinInputEvent(props.totalInput)
+
+const { countdown_timer, countdownTimer, startTimer } = timer(180)
 
 digits.value = props.default.split('')
 
@@ -34,40 +33,12 @@ if (getUserLevel() >= 35 && props.merchandise.id !== -1) {
     emits('update:token', true)
 }
 
-const handleKeyDown = (index: number) => {
-    if (ref_opt_comp.value !== null && index > 0) {
-        const children = ref_opt_comp.value.children
-        const cur_ele = <HTMLInputElement>(children[index - 1].querySelector('input'))
-        const value = cur_ele.value
-
-        // backspace
-        if (value === '') {
-            if (index > 1) {
-                const inputEl = children[index - 2].querySelector('input')
-                if (inputEl)
-                    inputEl.focus()
-            }
-        }
-        const numberRegExp = /^([0-9])$/
-        if (numberRegExp.test(value)) {
-            if (ref_opt_comp.value !== null && index !== 0 && index < children.length) {
-                const inputEl = children[index].querySelector('input')
-                if (inputEl)
-                    inputEl.focus()
-            }
-        }
-
-        digits.value[index - 1] = value
-        if (digits.value.join('').length === props.totalInput)
+const handleKeyDownEvent = (index: number) => {
+    handleKeyDown(index)
+    if (digits.value.join('').length === props.totalInput)
             verification()
-    }
 }
-const timer = () => {
-    if (countdown_time.value === 0)
-        clearInterval(countdown_timer)
-    else
-        countdown_time.value--
-}
+
 const requestCodeIssuance = async () => {
     try {
         const r = await axios.post('/api/v1/bonaejas/mobile-code-issuance', { 
@@ -79,8 +50,7 @@ const requestCodeIssuance = async () => {
         if (countdown_timer)
             clearInterval(countdown_timer)
 
-        countdown_time.value = 180
-        countdown_timer = setInterval(timer, 1000);
+        startTimer()
     }
     catch (e: any) {
         snackbar.value.show(e.response.data.message, 'error')
@@ -105,15 +75,6 @@ const verification = async () => {
         snackbar.value.show('이미 인증에 성공하였습니다.', 'success')
     }
 }
-const countdownTimer = computed(() => {
-    if (countdown_time.value > 0) {
-        const min = parseInt((countdown_time.value / 60).toString())
-        const sec = countdown_time.value % 60
-        return `${min}:${sec < 10 ? '0' + sec : sec}`
-    }
-    else
-        return `0:00`
-})
 </script>
 <template>
     <div>
@@ -125,7 +86,7 @@ const countdownTimer = computed(() => {
                     </h6>
                     <div ref="ref_opt_comp" class="d-flex align-center gap-4">
                         <VTextField v-for="i in props.totalInput" :key="i" :model-value="digits[i - 1]" type="number"
-                            v-bind="defaultStyle" maxlength="1" @input="handleKeyDown(i)" />
+                            v-bind="defaultStyle" maxlength="1" @input="handleKeyDownEvent(i)" />
                     </div>
                 </VCol>
                 <VCol class="retry-container">
@@ -168,5 +129,15 @@ const countdownTimer = computed(() => {
 
 #countdown {
   margin-inline-start: 0.5em;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+input[type="number"] {
+  appearance: textfield;
 }
 </style>

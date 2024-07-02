@@ -3,7 +3,6 @@ import CollectWithdrawDangerDialog from '@/layouts/dialogs/transactions/CollectW
 import DetailWorkStatusDialog from '@/layouts/dialogs/utils/DetailWorkStatusDialog.vue'
 import SecureReportDialog from '@/layouts/dialogs/utils/SecureReportDialog.vue'
 
-
 import { axios } from '@axios'
 import Notifications from '@core/components/Notifications.vue'
 import type { Notification } from '@layouts/types'
@@ -15,6 +14,7 @@ const detailWorkStatusDialog = ref()
 const secureReportDialog = ref()
 
 provide('detailWorkStatusDialog', detailWorkStatusDialog)
+
 
 axios.get('/api/v1/manager/posts/recent')
     .then(r => {
