@@ -108,4 +108,3 @@ defineExpose({
         <ChangeSettleDateDialog ref="changeSettleDateDialog" />
     </div>
 </template>
-<style scoped>
