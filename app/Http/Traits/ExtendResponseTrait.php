@@ -62,6 +62,12 @@ trait ExtendResponseTrait
         return Response::json(['code'=>$code, 'message'=>$msg, 'data'=>$data], $http_code, [], JSON_UNESCAPED_UNICODE);        
     }
     
+    private function checkAbnormalConnection($code)
+    {
+        if($code === 951)
+            AbnormalConnection::tryOperationNotPermitted();
+    }
+
     public function response($code, $data=[])
     {
         switch($code)
@@ -77,7 +83,7 @@ trait ExtendResponseTrait
             case 952:   $msg = __("auth.password"); break;
             case 953:   $msg = "CSRF token mismatch"; break;
             case 954:   $msg = "세션이 변경되었습니다."; break;
-            
+            case 955:   $msg = __("auth.expire"); break;
             //-------------- server error ----------------- (990 ~ 999)
             case 990:   $msg = "시스템 에러입니다."; break;
             //---------- business logic error ------------- (1000 ~ 1999)
@@ -119,6 +125,7 @@ trait ExtendResponseTrait
             else if($code > 989 && $code < 1000)
                 Log::error($msg, $logs);
 
+            //$this->checkAbnormalConnection($code);
             return Response::json(['code'=>$code, 'message'=>$msg], $http_code, [], JSON_UNESCAPED_UNICODE);        
         }
     }

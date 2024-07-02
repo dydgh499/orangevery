@@ -160,17 +160,17 @@ class OperatorController extends Controller
             $result = AuthPhoneNum::validate((string)$request->token);
             if($result === AuthLoginCode::REQUIRE_PHONE_AUTH->value)
             {
-                $request = $request->merge([
-                    'phone_num' => $request->user()->phone_num,
-                    'brand_id'  => $request->user()->brand_id,
-                    'mcht_id'   => -1,
-                ]);
-                resolve(MessageController::class)->mobileCodeIssuence($request);
-                $msg = '직원 휴대폰번호 변경은 본사 휴대폰번호 인증이 필요합니다.<br>'.$request->user()->nick_name.'님에게 인증번호를 보냈습니다.';
-                $data = [
-                    'phone_num' => $request->user()->phone_num,
-                    'nick_name' => $request->user()->nick_name
-                ];
+                [$code, $msg] = resolve(MessageController::class)->mobileCodeSend($request->user()->brand_id, $request->user()->phone_num, -1);
+                if($code === 0)
+                {
+                    $msg = '직원 휴대폰번호 변경은 본사 휴대폰번호 인증이 필요합니다.<br>'.$request->user()->nick_name.'님에게 인증번호를 보냈습니다.';
+                    $data = [
+                        'phone_num' => $request->user()->phone_num,
+                        'nick_name' => $request->user()->nick_name
+                    ];
+                }
+                else
+                    $result = $code;
             }
             else if($result === AuthLoginCode::WRONG_ACCESS->value)
                 $msg = '잘못된 접근입니다.';

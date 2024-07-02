@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { pinInputEvent } from '@/@core/utils/pin_input_event';
-import { axios, getUserType, user_info } from '@/plugins/axios';
+import { axios, getUserLevel, getUserType, user_info } from '@/plugins/axios';
 import { timer } from '@core/utils/timer';
 
 const snackbar = <any>(inject('snackbar'))
@@ -68,9 +68,14 @@ const onCancel = () => {
 const stepUp = async () => {
     current_step.value++
     if(current_step.value === 1 && qrcode_url.value === '') {
-        const res = await axios.post(`/api/v1/manager/${user_type}/${user_info.value.id}/2fa-qrcode`)
-        qrcode_url.value = res.data.qrcode_url
-        startTimer()
+        axios.post(`/api/v1/manager/${user_type}/${user_info.value.id}/2fa-qrcode`)
+        .then(r => {
+            qrcode_url.value = r.data.qrcode_url
+            startTimer()
+        })
+        .catch(e => {
+            snackbar.value.show(e.response.data.message, 'error') 
+        })
     }
 }
 
@@ -168,7 +173,7 @@ defineExpose({
                                                 </VBtn>
                                                 를 클릭합니다.
                                             </span>
-                                            <h5>(추후 2차 인증을 재설정할 시 본사등급의 휴대폰 인증후 재발급 가능합니다.)</h5>
+                                            <h5 v-if="getUserLevel() >= 35">(운영자 등급의 경우 추후 2차 인증을 재설정할 시 본사등급 계정중 하나의 휴대폰 인증번호 인증 후 재발급이 가능합니다.)</h5>
                                     </VWindowItem>
                                 </VWindow>
                             </VForm>

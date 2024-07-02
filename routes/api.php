@@ -10,6 +10,7 @@ use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
 use App\Http\Controllers\Manager\Transaction\TransactionController;
 use App\Http\Controllers\Manager\Dashboard\DashboardController;
 use App\Http\Controllers\Manager\Service\MchtBlacklistController;
+use App\Http\Controllers\Log\RealtimeSendHistoryController;
 
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\BeforeSystem\BeforeSystemController;
@@ -37,7 +38,10 @@ Route::prefix('v1')->group(function() {
     Route::prefix('bonaejas')->group(function() {
         Route::post('mobile-code-issuance', [MessageController::class, 'mobileCodeIssuence']);
         Route::post('mobile-code-auth', [MessageController::class, 'mobileCodeAuth']);
-        Route::middleware(['auth:sanctum', 'log.route'])->post('sms-link-send', [MessageController::class, 'smslinkSend']);
+        Route::middleware(['auth:sanctum', 'log.route'])->group(function () {
+            Route::post('sms-link-send', [MessageController::class, 'smslinkSend']);
+            Route::middleware(['is.operate', 'is.edit.able'])->post('mobile-code-head-office-issuence', [MessageController::class, 'headOfficeMobileCodeIssuence']);
+        });
     });
     
     Route::prefix('auth')->middleware(['log.route'])->group(function() {
@@ -49,7 +53,7 @@ Route::prefix('v1')->group(function() {
         Route::middleware(['auth:sanctum'])->group(function() {
             Route::post('extend-password-at', [AuthController::class, 'extendPasswordAt']);   
             Route::post('sign-out', [AuthController::class, 'signout']);
-            Route::post('onwer-check', [AuthController::class, 'onwerCheck']);
+            Route::post('onwer-check', [RealtimeSendHistoryController::class, 'onwerCheck']);
         });
     }); 
 

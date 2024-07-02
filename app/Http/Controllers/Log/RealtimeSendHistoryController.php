@@ -168,6 +168,20 @@ class RealtimeSendHistoryController extends Controller
         return $this->response($data ? 0 : 1000, $data);
     }
 
+    /*
+    * 예금주 조회
+    */
+    public function onwerCheck(Request $request)
+    {
+        $data = $request->all();
+        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/onwer-check';
+        $res = post($url, $data);
+        if($res['body']['result'] === 100)
+            return $this->response(1, ['message'=> $res['body']['message']]);
+        else
+            return $this->extendResponse(1999, $res['body']['message'], $res['body']['data']);
+    }
+
     /**
      * 잔액조회
      */
@@ -219,12 +233,12 @@ class RealtimeSendHistoryController extends Controller
                     return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);    
                 }
                 else
-                    return $this->extendResponse(403, '잘못된 접근입니다.', '');
+                    return $this->response(951);
             }
             else
-                return $this->extendResponse(403, '잘못된 접근입니다.', '');    
+                return $this->response(951);
         }
         else
-            return $this->extendResponse(951, '잘못된 접근입니다.', '');
+            return $this->response(951);
     }
 }

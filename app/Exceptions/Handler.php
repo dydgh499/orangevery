@@ -62,7 +62,7 @@ class Handler extends ExceptionHandler
             return $this->response(950);
         });
         $this->renderable(function (AccessDeniedHttpException $e, $request) {
-            return $this->response(951);
+            return $this->response(955);
         });
         $this->renderable(function (QueryException $e, $request) {
             return $this->extendResponse(990, $e->getMessage());
