@@ -270,7 +270,7 @@ class DifferenceSettlementHistoryController extends Controller
         //DifferenceSettlementHistoryController::differenceSettleRequestTest()
         $ds_ids      = [3];
         $date       = Carbon::now();
-        $yesterday  = $date->copy()->subDay(0)->format('Y-m-d');
+        $yesterday  = $date->copy()->subDay(1)->format('Y-m-d');
         foreach($ds_ids as $ds_id)
         {
             $brand = Brand::join('different_settlement_infos', 'brands.id', '=', 'different_settlement_infos.brand_id')
