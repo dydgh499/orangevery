@@ -50,11 +50,12 @@ class PaymentModule extends Model
         // 단말기 정산일이 정산일에 포함되는 것들 모두 조회
         return $query->join('merchandises', 'payment_modules.mcht_id', '=', 'merchandises.id')
             ->where('merchandises.brand_id', request()->user()->brand_id)
-            ->where('payment_modules.comm_settle_day', '>=', $settle_s_day)
+            ->where('payment_modules.begin_dt', '<=', request()->s_dt)
+            #->where('payment_modules.comm_settle_day', '>=', $settle_s_day)
             ->where('payment_modules.comm_settle_day', '<=', $settle_e_day)
             ->where('payment_modules.last_settle_month', '<', $settle_month)
+            ->where('payment_modules.comm_settle_fee', '>', 0)
             ->where('payment_modules.comm_calc_level', $level)
-            ->where('payment_modules.begin_dt', '<', request()->s_dt)
             ->where('payment_modules.is_delete', false);
     }
 

@@ -21,24 +21,30 @@ class LogRoute
         $url = url()->full();
         try
         {
-            $logs = [
-                'ip'    => $request->ip(),
-                'method'=> $request->method(),                
-            ];
-            $user = $request->user();
-            if(isset($user))
+            if($request->is('*/build/assets/*'))
+                return $next($request);
+            else
             {
-                $logs['user_name'] = $user->user_name;
-                $logs['brand_id'] = $user->brand_id;
-                if(Ablilty::isMerchandise($request))
-                    $logs['level'] = 10;
-                else if(Ablilty::isSalesforce($request))
-                    $logs['level'] = $user->level;
-                else if(Ablilty::isOperator($request))
-                    $logs['level'] = $user->level;
+                $user = $request->user();
+                $logs = [
+                    'ip'    => $request->ip(),
+                    'method'=> $request->method(),
+                    'login' => [],
+                ];
+                if(isset($user))
+                {
+                    $logs['login']['user_name'] = $user->user_name;
+                    $logs['login']['brand_id'] = $user->brand_id;
+                    if(Ablilty::isMerchandise($request))
+                        $logs['login']['level'] = 10;
+                    else if(Ablilty::isSalesforce($request))
+                        $logs['login']['level'] = $user->level;
+                    else if(Ablilty::isOperator($request))
+                        $logs['login']['level'] = $user->level;
+                }
+                $logs['input'] = $request->all();
+                Log::info($url, $logs);    
             }
-            $logs['input'] = $request->all();
-            Log::info($url, $logs);
         }
         catch(Exception $ex)
         {

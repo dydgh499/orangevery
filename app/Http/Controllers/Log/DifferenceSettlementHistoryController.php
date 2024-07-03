@@ -28,7 +28,7 @@ class DifferenceSettlementHistoryController extends Controller
     protected $difference_settlement_histories;
     protected $base_path = "App\Http\Controllers\Log\DifferenceSettlement\\";
     protected $cols = [];
-    
+
     public function __construct(DifferenceSettlementHistory $difference_settlement_histories)
     {
         $this->difference_settlement_histories = $difference_settlement_histories;    
@@ -287,8 +287,8 @@ class DifferenceSettlementHistoryController extends Controller
                     ->where('merchandises.business_num', '!=', '')
                     ->where('payment_gateways.pg_type', $brand->pg_type)
                     ->where('transactions.brand_id', $brand->brand_id)
-                    ->where('transactions.trx_at', '>=', "2024-06-01 00:00:00")
-                    ->where('transactions.trx_at', '<=', "2024-06-19 23:59:59")
+                    ->where('transactions.trx_at', '>=', "2024-06-15 00:00:00")
+                    ->where('transactions.trx_at', '<=', "2024-07-03 23:59:59")
                     ->get(['transactions.*', 'merchandises.business_num', 'payment_modules.p_mid']);
 
                 $inst = new DifferenceSettlementHistoryController(new DifferenceSettlementHistory);
