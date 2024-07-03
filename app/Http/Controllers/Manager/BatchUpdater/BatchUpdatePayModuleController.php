@@ -141,7 +141,6 @@ class BatchUpdatePayModuleController extends Controller
     /**
      * MID 일괄적용
      *
-     * 가맹점 이상 가능
      */
     public function setMid(Request $request)
     {
@@ -153,7 +152,6 @@ class BatchUpdatePayModuleController extends Controller
     /**
      * TID 일괄적용
      *
-     * 가맹점 이상 가능
      */
     public function setTid(Request $request)
     {
@@ -164,8 +162,6 @@ class BatchUpdatePayModuleController extends Controller
 
     /**
      * API KEY 일괄적용
-     *
-     * 가맹점 이상 가능
      *
      */
     public function setApiKey(Request $request)
@@ -178,7 +174,6 @@ class BatchUpdatePayModuleController extends Controller
     /**
      * SUB KEY 일괄적용
      *
-     * 가맹점 이상 가능
      */
     public function setSubKey(Request $request)
     {
@@ -197,7 +192,6 @@ class BatchUpdatePayModuleController extends Controller
     /**
      * 결제모듈 별칭 일괄적용
      *
-     * 가맹점 이상 가능
      */
     public function setNote(Request $request)
     {
@@ -209,11 +203,21 @@ class BatchUpdatePayModuleController extends Controller
     /**
      * 결제모듈 실시간 사용여부 일괄적용
      *
-     * 가맹점 이상 가능
      */
     public function setUseRealtimeDeposit(Request $request)
     {
         $cols = ['use_realtime_deposit' => $request->use_realtime_deposit];
+        $row = $this->payModuleBatch($request)->update($cols);
+        return $this->response(1);
+    }
+
+    /**
+     * 결제모듈 허용간격 일괄적용
+     * 
+     */
+    public function setPaymentTermMin(Request $request)
+    {
+        $cols = ['payment_term_min' => $request->payment_term_min];
         $row = $this->payModuleBatch($request)->update($cols);
         return $this->response(1);
     }

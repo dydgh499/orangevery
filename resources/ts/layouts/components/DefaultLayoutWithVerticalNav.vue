@@ -58,7 +58,7 @@ const passwordChangeWarningValidate = () => {
 }
 
 const fa2RequireNotification = () => {
-    if(getUserLevel() >= 35) {
+    if(getUserLevel() >= 35 && getUserLevel() < 50) {
         if(user_info.value.is_2fa_use === false) {
             if(corp.pv_options.paid.use_head_office_withdraw)
                 alert.value.show('휴대폰 인증대신 구글 OTP 인증으로 전환하세요.')

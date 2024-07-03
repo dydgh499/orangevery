@@ -10,10 +10,22 @@ class Bonacamp extends FirstSettlementBase implements FirstSettlementInterface
         'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8',
     ];
 
+    static private function getC3VanId($tran)
+    {
+        if(isset($tran['temp']))
+        {
+            $temp = json_decode($tran['temp'], true);
+            if($temp && isset($temp['brightfix_c3_van_id']))
+                return $temp['brightfix_c3_van_id'];
+        }
+        return $tran['mid'];
+    }
+
     static public function getParams($tran)
     {
         $trx_dttm = str_replace('-', '', $tran['trx_at']);
         $trx_dttm = str_replace(':', '', $trx_dttm);
+        $trx_dttm = str_replace(' ', '', $trx_dttm);
 
         if(strlen($tran['card_num']) > 12)
         {
@@ -26,10 +38,11 @@ class Bonacamp extends FirstSettlementBase implements FirstSettlementInterface
             $last4 = '';
         }
 
+        $van_id = self::getC3VanId($tran);
         $params = [
             'trxId' => $tran['ord_num'],
             'van' => $tran['pg_name'],
-            'vanId' => $tran['mid'],
+            'vanId' => $van_id,
             'tmnId' => $tran['tid'],
             'trxDate' => $trx_dttm,
             'payerName' => $tran['buyer_name'],

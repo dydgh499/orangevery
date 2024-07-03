@@ -125,6 +125,7 @@ Route::prefix('merchandises')->group(function() {
                     Route::post('set-pay-disable-time', [BatchUpdatePayModuleController::class, 'setForbiddenPayTime']);
                     Route::post('set-show-pay-view', [BatchUpdatePayModuleController::class, 'setShowPayView']);
                     Route::post('set-use-realtime-deposit', [BatchUpdatePayModuleController::class, 'setUseRealtimeDeposit']);
+                    Route::post('set-payment-term-min', [BatchUpdatePayModuleController::class, 'setPaymentTermMin']);
                     Route::delete('remove', [BatchUpdatePayModuleController::class, 'batchRemove']);   
                 });
                 Route::post('tid-create', [PaymentModuleController::class, 'tidCreate']);

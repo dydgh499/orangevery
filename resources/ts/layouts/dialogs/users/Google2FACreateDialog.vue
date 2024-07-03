@@ -106,7 +106,7 @@ defineExpose({
                                 <VWindow v-model="current_step" class="disable-tab-transition">
                                     <VWindowItem>
                                             <span class="text-base">
-                                                인증이 진행될 Authenticator 어플리케이션을 먼저 휴대폰에 설치해주세요.
+                                                인증이 진행될 Google OTP(Authenticator)을 먼저 휴대폰에 설치해주세요.
                                             </span>
                                             <h5>(이미 설치되어 있는 경우 스킵하세요.)</h5>
                                             <br>

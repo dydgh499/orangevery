@@ -1,6 +1,7 @@
 
 
 <script lang="ts" setup>
+import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { abnormal_trans_limits, installments } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
@@ -39,6 +40,7 @@ const pay_module = reactive<any>({
     pay_day_limit: 0,
     pay_month_limit: 0,
     pay_year_limit: 0,
+    payment_term_min: 1,
 
     use_realtime_deposit: 0,
     show_pay_view: 0,
@@ -153,6 +155,12 @@ const setInstallment = () => {
 const setNote = () => {
     post('set-note', {
         'note': pay_module.note,
+    })
+}
+
+const setPaymentTermMin = () => {
+    post('set-payment-term-min', {
+        'payment_term_min': pay_module.payment_term_min,
     })
 }
 
@@ -448,6 +456,24 @@ const filterPgs = computed(() => {
                                         <template #false>미사용</template>
                                     </BooleanRadio>
                                     <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setUseRealtimeDeposit()">
+                                        즉시적용
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
+                                    </VBtn>
+                                </div>
+                            </VCol>
+                        </VRow>
+                    </VCol>
+                    <VCol :md="6" :cols="12">
+                        <VRow no-gutters style="align-items: center;">
+                            <VCol>
+                                <BaseQuestionTooltip :location="'top'" :text="'결제 허용 간격'" :content="'중복결제 방지를 위해 결제 텀을 설정합니다.<br>동일 결제모듈+금액+카드번호 조건일 시 동작합니다.'">
+                                </BaseQuestionTooltip>
+                            </VCol>
+                            <VCol md="8">
+                                <div class="batch-container">
+                                    <VTextField prepend-inner-icon="material-symbols:shutter-speed-minus" v-model="pay_module.payment_term_min"
+                                        type="number" suffix="분"/>
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setPaymentTermMin()">
                                         즉시적용
                                         <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>

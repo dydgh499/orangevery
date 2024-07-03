@@ -47,7 +47,7 @@ class nicepay implements DifferenceSettlementInterface
                     $this->setAtypeField($trans[$i]->ord_num, 70).
                     $this->setNtypeField(abs($trans[$i]->amount), 15).
                     $this->setNtypeField(abs($trans[$i]->amount), 15).
-                    $this->setNtypeField($trans[$i]->trx_dt, 8).
+                    $this->setNtypeField(Carbon::createFromFormat('Y-m-d', $trans[$i]->trx_dt)->format('Ymd'), 8).
                     $this->setAtypeField($trans[$i]->id, 40).
                     $this->setAtypeField('', 161).
                     "\r\n";
