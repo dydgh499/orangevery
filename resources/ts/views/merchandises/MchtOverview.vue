@@ -411,11 +411,11 @@ watchEffect(() => {
                                             <VCol>매출전표 공급자 정보</VCol>
                                             <VCol md="6">
                                                 <div class="batch-container">
-                                            <BooleanRadio :radio="props.item.use_saleslip_prov"
-                                                @update:radio="props.item.use_saleslip_prov = $event">
-                                                <template #true>PG사</template>
-                                                <template #false>본사</template>
-                                            </BooleanRadio>
+                                                    <BooleanRadio :radio="props.item.use_saleslip_prov"
+                                                        @update:radio="props.item.use_saleslip_prov = $event">
+                                                        <template #true>PG사</template>
+                                                        <template #false>본사</template>
+                                                    </BooleanRadio>
                                                 </div>
                                             </VCol>
                                         </VRow>
@@ -426,10 +426,10 @@ watchEffect(() => {
                                             <VCol md="6">
                                                 <div class="batch-container">     
                                                     <BooleanRadio :radio="props.item.use_saleslip_sell"
-                                                    @update:radio="props.item.use_saleslip_sell = $event">
-                                                    <template #true>본사</template>
-                                                    <template #false>가맹점</template>
-                                                </BooleanRadio>
+                                                        @update:radio="props.item.use_saleslip_sell = $event">
+                                                        <template #false>가맹점</template>
+                                                        <template #true>본사</template>
+                                                    </BooleanRadio>
                                                 </div>
                                             </VCol>
                                         </VRow>
