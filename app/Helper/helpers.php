@@ -345,7 +345,7 @@
             'ip' => request()->ip(), 
             'url'=> request()->url(),
             'method' => request()->method(),
-            'input' => array_merge($request()->all(), $data)
+            'input' => array_merge(request()->all(), $data)
         ];
         Log::critical($msg, $logs);
     }
