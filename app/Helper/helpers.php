@@ -339,13 +339,13 @@
         Log::error($msg, $data);
     }
 
-    function critical($msg)
+    function critical($msg, $data=[])
     {
         $logs = [
             'ip' => request()->ip(), 
             'url'=> request()->url(),
             'method' => request()->method(),
-            'input' => request()->all()
+            'input' => array_merge($request()->all(), $data)
         ];
         Log::critical($msg, $logs);
     }

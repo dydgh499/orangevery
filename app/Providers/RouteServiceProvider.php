@@ -37,27 +37,27 @@ class RouteServiceProvider extends ServiceProvider
                         ->group(base_path("routes/$api.php"));
             }
 
-            Route::middleware(['api', 'log.route', 'auth:sanctum', 'last.login.ip'])
+            Route::middleware(['api', 'log.route', 'auth:sanctum', 'is.browser', 'last.login.ip'])
                 ->prefix('api/v1/manager')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api-service.php'));
 
-            Route::middleware(['api', 'log.route', 'auth:sanctum', 'last.login.ip'])
+            Route::middleware(['api', 'log.route', 'auth:sanctum', 'is.browser'])
                 ->prefix('api/v1/manager')
                 ->namespace($this->namespace)
-                ->group(base_path('routes/api-transaction.php', 'last.login.ip'));
+                ->group(base_path('routes/api-transaction.php'));
 
-            Route::middleware(['api', 'log.route', 'auth:sanctum'])
+            Route::middleware(['api', 'log.route', 'auth:sanctum', 'is.browser'])
                 ->prefix('api/v1/manager')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api-user.php'));
 
-            Route::middleware('api')
+            Route::middleware(['api', 'is.browser'])
                 ->prefix('api')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
-            Route::middleware('web')
+            Route::middleware(['web', 'is.browser'])
             ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
         });

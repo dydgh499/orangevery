@@ -70,6 +70,7 @@ class Kernel extends HttpKernel
         'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
         'log.route' => \App\Http\Middleware\LogRoute::class,
         'dev.ip' => \App\Http\Middleware\CheckDevelopOfficeIP::class,
+        'is.browser' => \App\Http\Middleware\CheckUserAgent::class,
         'is.operate' => \App\Http\Middleware\CheckOperator::class,
         'is.edit.able' => \App\Http\Middleware\CheckEditAbleTime::class,
         'last.login.ip' => \App\Http\Middleware\CheckLastLoginIP::class,

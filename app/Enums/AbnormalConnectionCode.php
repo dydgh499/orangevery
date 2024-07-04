@@ -10,4 +10,5 @@ enum AbnormalConnectionCode: int {
     case MECRO = 5;
     case OVERSEA_IP = 6;
     case NOT_SAME_LOGIN_IP = 7;
+    case NOT_BROWSER       = 8;
 }

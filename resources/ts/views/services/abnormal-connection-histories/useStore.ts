@@ -8,10 +8,11 @@ export const connection_types = <Options[]>([
     {id:1, title:'URL 조작, 파라미터 변조시도'},
     {id:2, title:'작업불가 시간대에 작업시도'},
     {id:3, title:'차단된 IP에서 접속시도'},
-    {id:4, title:'허용되지 않은 작업 시도'},
+    {id:4, title:'허용되지 않은 작업시도'},
     {id:5, title:'매크로 탐지'},
     {id:6, title:'해외 IP 접속'},
     {id:7, title:'세션변경'},
+    {id:8, title:'브라우저가 아닌방식으로 접근시도'},
 ])
 
 export const getLevelByChipColor = (level: number) => {

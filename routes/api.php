@@ -60,7 +60,6 @@ Route::prefix('v1')->group(function() {
     Route::prefix('manager')->middleware(['auth:sanctum', 'log.route'])->group(function() {
         Route::post('computational-transfer/login', [BeforeSystemController::class, 'login']);
         Route::post('computational-transfer/register', [BeforeSystemController::class, 'register']);
-    
         Route::prefix('dashsboards')->group(function() {
             Route::get('monthly-transactions-analysis', [DashboardController::class, 'monthlyTranAnalysis']);
             Route::get('upside-merchandises-analysis', [DashboardController::class, 'upSideMchtAnalysis']);

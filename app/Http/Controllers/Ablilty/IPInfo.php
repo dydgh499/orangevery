@@ -52,7 +52,7 @@ class IPInfo
     }
 
     static public function get($request)
-    {    
+    {
         if($request->ip() === '127.0.0.1' || in_array($request->ip(), json_decode(env('EXCEPT_IPS', "[]"), true)))
             return ["ip" => "127.0.0.1", "bogon" => true, 'country'=>'KR'];
 
@@ -106,12 +106,12 @@ class IPInfo
         }
     }
 
-    static public function setBlock($ip, $add_sec=0)
+    static public function setBlock($ip, $sec)
     {
         if(env('APP_ENV', 'production') === 'local')
             Redis::set('blocked:'.$ip, 1, 'EX', 1);
         else
-            Redis::set('blocked:'.$ip, 1, 'EX', 3600+$add_sec);
+            Redis::set('blocked:'.$ip, 1, 'EX', $sec);
     }
 
     static public function getBlock($ip)

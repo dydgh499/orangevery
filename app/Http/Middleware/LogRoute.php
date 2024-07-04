@@ -29,6 +29,7 @@ class LogRoute
                 $logs = [
                     'ip'    => $request->ip(),
                     'method'=> $request->method(),
+                    'header'=> $request->header('User-Agent'),
                     'login' => [],
                 ];
                 if(isset($user))
