@@ -25,15 +25,9 @@ class CheckOperator
             if(AuthOperatorIP::valiate($request->user()->brand_id, $request->ip()) || Ablilty::isDevLogin($request))
                 return $next($request);
             else
-            {
-                AbnormalConnection::tryOperationNotPermitted();
                 return $this->response(951);
-            }
         }
         else
-        {
-            AbnormalConnection::tryOperationNotPermitted();
             return $this->response(951);
-        }
     }
 }

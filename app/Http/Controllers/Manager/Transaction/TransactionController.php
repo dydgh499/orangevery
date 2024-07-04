@@ -121,7 +121,7 @@ class TransactionController extends Controller
             $data = $request->data();
             $data['dev_fee'] = $request->input('dev_fee', 0)/100;
             $data['dev_realtime_fee'] = $request->input('dev_realtime_fee', 0)/100;
-            
+
             request()->merge([
                 's_dt' => $data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'],
                 'e_dt' => $data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'],

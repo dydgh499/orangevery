@@ -3,9 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Ezpg\EzpgController;
 
-Route::middleware('log.route')->group(function() {
-    Route::post('sign-in', [EzpgController::class, 'login']);
-    Route::middleware('auth:sanctum')->group(function() {
-        Route::get('transactions', [EzpgController::class, 'transactionIndex']);
-    });
+Route::post('sign-in', [EzpgController::class, 'login']);
+Route::middleware('auth:sanctum')->group(function() {
+    Route::get('transactions', [EzpgController::class, 'transactionIndex']);
 });

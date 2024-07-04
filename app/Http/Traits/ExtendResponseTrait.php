@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use App\Http\Controllers\Ablilty\AbnormalConnection;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -59,6 +60,7 @@ trait ExtendResponseTrait
             Log::notice($msg, $logs);
         }
         
+        $this->checkAbnormalConnection($code);
         return Response::json(['code'=>$code, 'message'=>$msg, 'data'=>$data], $http_code, [], JSON_UNESCAPED_UNICODE);        
     }
     
@@ -125,7 +127,7 @@ trait ExtendResponseTrait
             else if($code > 989 && $code < 1000)
                 Log::error($msg, $logs);
 
-            //$this->checkAbnormalConnection($code);
+            $this->checkAbnormalConnection($code);
             return Response::json(['code'=>$code, 'message'=>$msg], $http_code, [], JSON_UNESCAPED_UNICODE);        
         }
     }

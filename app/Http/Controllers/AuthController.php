@@ -163,7 +163,7 @@ class AuthController extends Controller
         ]);
 
         return DB::transaction(function () use($request) {
-            if(Operator::where('brand_id')->where('level', 40)->where('is_delete', false)->exists())
+            if(Operator::where('brand_id', $request->brand_id)->where('level', 40)->where('is_delete', false)->exists())
                 return $this->response(951);
             $res = Brand::where('id', $request->brand_id)
                 ->update([

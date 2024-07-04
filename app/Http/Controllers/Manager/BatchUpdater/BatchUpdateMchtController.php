@@ -203,10 +203,7 @@ class BatchUpdateMchtController extends Controller
             return $this->response($res ? 1 : 990);    
         }
         else
-        {
-            AbnormalConnection::tryOperationNotPermitted();
             return $this->response(951);
-        }
     }
 
     /**
@@ -224,10 +221,7 @@ class BatchUpdateMchtController extends Controller
             return $this->response($res ? 1 : 990);
         }
         else
-        {
-            AbnormalConnection::tryOperationNotPermitted();
             return $this->response(951);
-        }
     }
 
     public function setEnabled(Request $request)

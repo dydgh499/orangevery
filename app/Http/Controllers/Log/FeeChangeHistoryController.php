@@ -248,9 +248,6 @@ class FeeChangeHistoryController extends Controller
                 return $this->response(1000);    
         }
         else
-        {
-            AbnormalConnection::tryOperationNotPermitted();
             return $this->response(951);
-        }
     }
 }
