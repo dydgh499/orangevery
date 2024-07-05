@@ -38,9 +38,13 @@ class NotiSendHistoryController extends Controller
             'transactions.tid',
             'transactions.is_cancel',
             'transactions.module_type',
+            'merchandises.mcht_name',
+            'payment_modules.note as pmod_note',
         ];
         $query  = $this->noti_send_histories
-            ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')       
+            ->join('transactions', 'noti_send_histories.trans_id', '=', 'transactions.id')
+            ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
+            ->join('payment_modules', 'transactions.pmod_id', '=', 'payment_modules.id')
             ->where('noti_send_histories.brand_id', $request->user()->brand_id)
             ->where('noti_send_histories.is_delete', false);
         $query = globalPGFilter($query, $request, 'transactions');

@@ -45,14 +45,20 @@ class NotiUrlController extends Controller
         $search = $request->input('search', '');
         $query = $this->noti_urls
                 ->join('merchandises', 'noti_urls.mcht_id', '=', 'merchandises.id')
+                ->leftJoin('payment_modules', 'noti_urls.pmod_id', '=', 'payment_modules.id')
                 ->where('merchandises.brand_id', $request->user()->brand_id)
+                ->where(function ($query) {
+                    return $query->whereColumn('noti_urls.pmod_id', 'payment_modules.id')
+                        ->orWhere('noti_urls.pmod_id', -1);
+                })
                 ->where('merchandises.is_delete', false)
                 ->where('noti_urls.is_delete', false)
                 ->where(function ($query) use ($search) {
                     return $query->where('merchandises.mcht_name', 'like', "%$search%")
-                        ->orWhere('noti_urls.send_url', 'like', "%$search%");
+                        ->orWhere('noti_urls.send_url', 'like', "%$search%")
+                        ->orWhere('payment_modules.note', 'like', "%$search%");
                 });
-
+                
         $query = globalSalesFilter($query, $request, 'merchandises');
         $query = globalAuthFilter($query, $request, 'merchandises');        
         if($request->mcht_id)

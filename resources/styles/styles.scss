@@ -139,6 +139,7 @@ th {
   cursor: pointer;
 }
 
+// fin number
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   margin: 0 !important;
@@ -155,6 +156,19 @@ input[type="number"] {
   justify-content: center;
 }
 
+// dialog
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.not-open-today {
+  position: absolute;
+  z-index: 9999;
+  inset-inline-end: 2em;
+}
+
+// --
 @media only screen and (max-device-width: 960px) {
   .preview {
     margin-block: 0.5em !important;

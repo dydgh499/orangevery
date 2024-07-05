@@ -865,6 +865,7 @@ export interface LockedUser {
 export interface NotiUrl {
     id: number,
     mcht_id: number | null,
+    pmod_id: number | null,
     mcht_name?: string,
     send_url: string,
     noti_status: number,
@@ -929,6 +930,7 @@ export interface Popup {
     open_e_dt: string,
     open_range?: string,
     visible?: boolean,
+    is_hide?: boolean,
 }
 
 export interface MchtBlacklist {

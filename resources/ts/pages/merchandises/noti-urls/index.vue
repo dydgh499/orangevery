@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useSearchStore, noti_statuses } from '@/views/merchandises/noti-urls/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { noti_statuses, useSearchStore } from '@/views/merchandises/noti-urls/useStore'
 import { user_info } from '@axios'
 import { DateFilters } from '@core/enums'
 
@@ -47,10 +47,13 @@ provide('exporter', exporter)
                                     #{{ item[_key] }}
                                 </span>
                                 <span v-else-if="_key == 'noti_status'">
-                                <VChip :color="store.booleanTypeColor(!noti_statuses.find(obj => obj.id === item[_key])?.id)">
-                                    {{ noti_statuses.find(module_type => module_type['id'] === item[_key])?.title }}
-                                </VChip>
-                            </span>
+                                    <VChip :color="store.booleanTypeColor(!noti_statuses.find(obj => obj.id === item[_key])?.id)">
+                                        {{ noti_statuses.find(module_type => module_type['id'] === item[_key])?.title }}
+                                    </VChip>
+                                </span>
+                                <span v-else-if="_key == 'pmod_note'">
+                                    {{ item['pmod_id'] === -1 ? '전체' : item[_key] }}
+                                </span>
                                 <span v-else>
                                     {{ item[_key] }}
                                 </span>

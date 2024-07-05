@@ -317,11 +317,6 @@ div {
   padding-block: 3px;
 }
 
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-}
-
 .copy-btn {
   position: absolute;
   z-index: 9999;

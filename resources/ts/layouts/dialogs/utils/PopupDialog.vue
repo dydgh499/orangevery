@@ -1,43 +1,23 @@
 <script lang="ts" setup>
 import type { Popup } from '@/views/types'
+import { PopupEvent } from '@core/utils/popup'
 
-const not_open_key = 'popups/hide/'
+const { setOpenStatus, init } = PopupEvent('popups/hide/')
 const popups = ref<Popup[]>([])
 
 const show = (_popups: Popup[]) => {
     popups.value = _popups
     popups.value.forEach(popup => {
-        if(getCookie(not_open_key+popup.id) !== null)
-            popup.visible = false
-        else
-            popup.visible = true
+        init(popup)
     });
 }
-
-const setOpenStatus = (popup: Popup) => {
-    popup.visible = !popup.visible
-    if(popup?.is_hide) {
-        setCookie(not_open_key+popup.id, 'true', 1)
-    }
-}
-
-const getCookie = (name: string) => {
-    var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-    return value? value[2] : null;  
-}
-
-const setCookie = function(name: string, value: string, exp: number) {
-    var date = new Date()
-    date.setHours(23, 59, 59, 999)
-    document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
-};
 
 defineExpose({
     show
 });
 </script>
 <template>
-    <VDialog v-model="popup.visible" persistent v-for="(popup, index) in popups" :key="index" max-width="900" style="height: 50% !important;">
+    <VDialog v-model="popup.visible" persistent v-for="(popup, index) in popups" :key="index" max-width="900" style="height: 90% !important;">
         <!-- Dialog close btn -->
         <div class="button-container">
             <VCheckbox v-model="popup.is_hide" class="check-label not-open-today" label="오늘 안보기" />
@@ -60,17 +40,6 @@ defineExpose({
   block-size: 100%;
   inline-size: 100%;
   object-fit: cover;
-}
-
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.not-open-today {
-  position: absolute;
-  z-index: 9999;
-  inset-inline-end: 2em;
 }
 
 </style>

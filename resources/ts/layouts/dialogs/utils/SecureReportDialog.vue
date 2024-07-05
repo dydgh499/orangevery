@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import { StatusColorSetter } from '@/views/searcher';
 import { connection_types, getLevelByChipColor } from '@/views/services/abnormal-connection-histories/useStore';
-import type { AbnormalConnectionHistory } from '@/views/types';
+import type { AbnormalConnectionHistory, Popup } from '@/views/types';
 import { allLevels, axios, getUserLevel } from '@axios';
+import { PopupEvent } from '@core/utils/popup';
 
 interface WorkStatusByTimezone {
     type: number,
@@ -21,9 +22,13 @@ interface LoginHistory {
 
 const detailWorkStatusDialog = <any>inject('detailWorkStatusDialog')
 
-const not_open_key = 'secure-report/hide'
-const is_hide = ref(false)
-const visible = ref(false)
+const { setOpenStatus, init } = PopupEvent('secure-report/hide/')
+const popup = ref(<Popup>({
+    id: 0,
+    visible: false,
+    is_hide: false,
+}))
+
 const histories = ref(<AbnormalConnectionHistory[]>([]))
 const work_status_by_timezone = ref(<WorkStatusByTimezone[]>([]))
 const login_histories = ref(<LoginHistory[]>([]))
@@ -34,7 +39,8 @@ const current_at = ref(<string>(''))
 const snackbar = <any>(inject('snackbar'))
 
 const setSecureReport = async () => {
-    if(getUserLevel() >= 35 && getCookie(not_open_key) === null) {
+    init(popup.value)
+    if(getUserLevel() >= 35 && popup.value.visible) {
         const res = await axios.get('/api/v1/manager/services/abnormal-connection-histories/secure-report')
         histories.value = res.data.abnormal_connections
         login_histories.value = res.data.login_histories
@@ -43,7 +49,6 @@ const setSecureReport = async () => {
         current_at.value = res.data.current_at
         abnormal_s_at.value = res.data.abnormal_s_at
         work_status_s_at.value = res.data.work_status_s_at
-        visible.value = true
     }
 }
 
@@ -56,31 +61,13 @@ const timeZoneTotalCount = (detail_time_type: number) => {
     return count
 }
 
-const setOpenStatus = () => {
-    if(is_hide.value) {
-        setCookie(not_open_key, 'true', 1)
-    }
-    visible.value = !visible.value
-}
-
-const getCookie = (name: string) => {
-    var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-    return value? value[2] : null;  
-}
-
-const setCookie = function(name: string, value: string, exp: number) {
-    var date = new Date()
-    date.setHours(23, 59, 59, 999)
-    document.cookie = name + '=' + value + ';expires=' + date.toUTCString() + ';path=/';
-};
-
 setSecureReport()
 </script>
 <template>
-    <VDialog v-model="visible" persistent max-width="1600">
+    <VDialog v-model="popup.visible" persistent max-width="1600">
         <div class="button-container">
-            <VCheckbox v-model="is_hide" class="check-label not-open-today" label="오늘 안보기" />
-            <DialogCloseBtn @click="setOpenStatus()" />
+            <VCheckbox v-model="popup.is_hide" class="check-label not-open-today" label="오늘 안보기" />
+            <DialogCloseBtn @click="setOpenStatus(popup)" />
         </div>
         <VCard title="보안 리포트">
             <VCardText>
@@ -297,16 +284,5 @@ setSecureReport()
 :deep(.v-table__wrapper) > th,
 td {
   font-size: 0.5em;
-}
-
-.button-container {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.not-open-today {
-  position: absolute;
-  z-index: 9999;
-  inset-inline-end: 2em;
 }
 </style>
