@@ -80,8 +80,8 @@ class Ablilty
     static function isEditAbleTime()
     {   
         //except
-        $cond_0 = Carbon::now()->between(Carbon::create(null, 7, 4, 21, 0, 0), Carbon::create(null, 7, 5, 6, 0, 0));
-        $cond_1 = request()->user()->user_name === 'leejeoung' && $cond_0 && request()->user()->brand_id === 30;
+        $cond_0 = Carbon::now()->between(Carbon::create(null, 7, 5, 21, 0, 0), Carbon::create(null, 7, 6, 6, 0, 0));
+        $cond_1 = request()->user()->user_name === 'woozywon' && $cond_0 && request()->user()->brand_id === 18;
         $cond_2 = request()->user()->user_name === 'admin ' && $cond_0 && request()->user()->brand_id === 30;
 
         if($cond_1 || $cond_2)
