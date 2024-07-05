@@ -216,7 +216,6 @@ class PaymentModuleController extends Controller
                 ->where('brand_id', $request->user()->brand_id)
                 ->where('serial_num', $data['serial_num'])
                 ->where('id', '!=', $id)
-                ->where('module_type', 0)
                 ->where('is_delete', false)
                 ->exists();
             if($res)

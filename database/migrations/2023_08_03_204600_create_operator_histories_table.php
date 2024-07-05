@@ -20,8 +20,8 @@ return new class extends Migration
             $table->tinyInteger('history_type')->default(0)->comment('이력 타입(0=추가, 1=수정, 2=삭제, 3=조회)');
             $table->string('history_target', 50)->nullable()->comment('활동종류');
             $table->string('history_title', 50)->nullable()->comment('활동대상');            
-            $table->string('before_history_detail', 1500)->nullable()->comment('이전 내용');          
-            $table->string('after_history_detail', 1500)->nullable()->comment('변경 내용');            
+            $table->string('before_history_detail', 3000)->nullable()->comment('이전 내용');          
+            $table->string('after_history_detail', 3000)->nullable()->comment('변경 내용');            
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             $table->timestamps();
         });

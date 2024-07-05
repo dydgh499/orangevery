@@ -20,6 +20,7 @@ use App\Http\Requests\Manager\MerchandiseRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
 use App\Http\Controllers\Auth\AuthPasswordChange;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\FirstSettlement\SysLink;
@@ -343,11 +344,12 @@ class MerchandiseController extends Controller
             if(Ablilty::isEditAbleTime() === false)
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
-            $res = $this->delete($this->merchandises->where('id', $id));
-            $res = $this->delete($this->pay_modules->where('mcht_id', $id));
-            $res = $this->delete(NotiUrl::where('mcht_id', $id));
-    
-            operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->mcht_name);
+            DB::transaction(function () use($id, $data) {
+                $res = $this->delete($this->merchandises->where('id', $id));
+                $res = $this->delete($this->pay_modules->where('mcht_id', $id));
+                $res = $this->delete(NotiUrl::where('mcht_id', $id));
+                operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->mcht_name);
+            });
             return $this->response($res ? 1 : 990, ['id'=>$id]);    
         }
         else
@@ -519,10 +521,5 @@ class MerchandiseController extends Controller
         }
         else
             return $this->response(990);
-    }
-    
-    public function batchRemove(Request $request)
-    {
-
     }
 }

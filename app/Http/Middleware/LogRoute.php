@@ -21,7 +21,7 @@ class LogRoute
         $url = url()->full();
         try
         {
-            if($request->is('*/build/assets/*'))
+            if($request->is('/build/assets/*'))
                 return $next($request);
             else
             {
