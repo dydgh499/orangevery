@@ -8,7 +8,7 @@ const props = defineProps<Props>()
 </script>
 <template>
     <VRow>
-        <VCol md="6">
+        <VCol md="6" style="margin-top: auto; margin-bottom: auto;">
             <VRow style="align-items: center;">
                 <VCol :md="props.mdl">
                     <slot name="l_name"></slot>
@@ -18,7 +18,7 @@ const props = defineProps<Props>()
                 </VCol>
             </VRow>
         </VCol>
-        <VCol md="6">
+        <VCol md="6" style="margin-top: auto; margin-bottom: auto;">
             <VRow style="align-items: center;">
                 <VCol :md="props.mdl">
                     <slot name="r_name"></slot>

@@ -36,7 +36,9 @@ const filterPayMod = computed(() => {
                     <VCol cols="12">
                         <VCardItem>
                             <CreateHalfVColV2 :mdl="5" :mdr="7" class="pt-3">
-                            <template #l_name>소유 가맹점</template>
+                            <template #l_name>
+                                <span>소유 가맹점</span>
+                            </template>
                             <template #l_input>
                                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.mcht_id"
                                         :items="mchts" prepend-inner-icon="tabler-building-store" label="가맹점 선택" v-if="isAbleModiy(props.item.id as number) && props.able_mcht_chanage"
@@ -106,8 +108,3 @@ const filterPayMod = computed(() => {
         </AppCardActions>
     </VCol>
 </template>
-<style scoped>
-span {
-  margin-block: auto !important;
-}
-</style>
