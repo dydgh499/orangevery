@@ -10,6 +10,7 @@ class NotiRequest extends FormRequest
     use FormRequestTrait;
     public $keys = [
         'mcht_id',
+        'pmod_id',
         'send_url',
         'noti_status',
         'note',
@@ -29,6 +30,7 @@ class NotiRequest extends FormRequest
     {
         $sub = [
             'mcht_id' => 'required',
+            'pmod_id' => 'required',
             'send_url' => 'required',
             'noti_status' => 'required',
         ];

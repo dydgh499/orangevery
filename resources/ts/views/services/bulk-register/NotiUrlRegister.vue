@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { noti_statuses, useSearchStore } from '@/views/merchandises/noti-urls/useStore'
+import { getAllPayModules } from '@/views/merchandises/pay-modules/useStore'
 import { Registration } from '@/views/registration'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useRegisterStore } from '@/views/services/bulk-register/NotiUrlRegisterStore'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
-import type { NotiUrl } from '@/views/types'
+import type { NotiUrl, PayModule } from '@/views/types'
 import { isEmpty } from '@core/utils'
 
 const { store } = useSearchStore()
@@ -20,6 +21,9 @@ const snackbar = <any>(inject('snackbar'))
 const excel = ref()
 const items = ref<NotiUrl[]>([])
 const is_clear = ref<boolean>(false)
+const pay_modules = reactive<PayModule[]>([])
+
+Object.assign(pay_modules, await getAllPayModules())
 
 
 const validate = () => {
@@ -27,17 +31,24 @@ const validate = () => {
         items.value[i].mcht_name = items.value[i].mcht_name ? items.value[i].mcht_name?.trim() : ''
         const mcht = mchts.find(item => item.mcht_name == items.value[i].mcht_name)
 
-        if (mcht == null) {
+        if (mcht) {
+            items.value[i].pmod_id = items.value[i].pmod_note == -1 ? -1 : filterPayModuleNote(items.value[i].pmod_note, mcht.id) as number
+            if (items.value[i].pmod_id === null) {
+                snackbar.value.show((i + 1) + '번째 노티의 결제모듈 별칭이 이상합니다.', 'error')
+                is_clear.value = false
+            }
+
+            else if (isEmpty(items.value[i].send_url)) {
+                snackbar.value.show((i + 2) + '번째 노티주소가 비어있습니다.', 'error')
+                is_clear.value = false
+            }
+            else
+                is_clear.value = true
+        }
+        else {
             snackbar.value.show((i + 2) + '번째 노티의 가맹점 상호가 이상합니다.', 'error')
             is_clear.value = false
         }
-        else if (isEmpty(items.value[i].send_url)) {
-            snackbar.value.show((i + 2) + '번째 노티주소가 비어있습니다.', 'error')
-            is_clear.value = false
-        }
-        else
-            is_clear.value = true
-
         items.value[i].mcht_id = mcht?.id as number
         if (is_clear.value == false)
             return
@@ -49,6 +60,12 @@ const register = async () => {
     if (await bulkRegister('노티주소', 'merchandises/noti-urls', items.value))
         location.reload()
 }
+
+const filterPayModuleNote = (pmod_note: string, mcht_id: number) => {
+    const filter = pay_modules.filter((obj: PayModule) => { return obj.mcht_id === mcht_id })
+    return filter.find(obj => obj.note === pmod_note.trim())?.id
+}
+
 watchEffect(async () => {
     if (excel.value) {
         items.value = await ExcelReader(headers, excel.value[0]) as NotiUrl[]

@@ -51,9 +51,6 @@ provide('exporter', exporter)
                                         {{ noti_statuses.find(module_type => module_type['id'] === item[_key])?.title }}
                                     </VChip>
                                 </span>
-                                <span v-else-if="_key == 'pmod_note'">
-                                    {{ item['pmod_id'] === -1 ? '전체' : item[_key] }}
-                                </span>
                                 <span v-else>
                                     {{ item[_key] }}
                                 </span>

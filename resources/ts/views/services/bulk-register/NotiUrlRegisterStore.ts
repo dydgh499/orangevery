@@ -5,6 +5,7 @@ export const useRegisterStore = defineStore('NotiUrlRegisterStore', () => {
 
     const headers: Record<string, string> = {
         mcht_name: '가맹점 상호(O)',
+        pmod_note: '결제모듈 별칭(O)',
         noti_status: '노티 사용 유무(O)',
         note: '별칭(O)',
         send_url: '발송 URL(O)',

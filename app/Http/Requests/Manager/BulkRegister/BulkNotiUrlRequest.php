@@ -14,6 +14,7 @@ class BulkNotiUrlRequest extends FormRequest
     ];
     public $integer_keys = [
         'mcht_id',
+        'pmod_id',
         'noti_status',
     ];
     public function bodyParameters()

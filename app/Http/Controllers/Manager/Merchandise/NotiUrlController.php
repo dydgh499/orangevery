@@ -41,7 +41,7 @@ class NotiUrlController extends Controller
      */
     public function index(IndexRequest $request)
     {
-        $cols = ['noti_urls.*', 'merchandises.mcht_name'];
+        $cols = ['noti_urls.*', 'merchandises.mcht_name', 'payment_modules.note as pmod_note'];
         $search = $request->input('search', '');
         $query = $this->noti_urls
                 ->join('merchandises', 'noti_urls.mcht_id', '=', 'merchandises.id')
