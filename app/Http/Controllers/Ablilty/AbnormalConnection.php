@@ -256,7 +256,7 @@ class AbnormalConnection
             'target_level'  => $level,
             'target_key'    => request()->url(),
             'target_value'  => array_merge(self::privateDataHidden(request()->all()), request()->headers->all()),
-            'comment'       =>  $user_name,
+            'comment'       => $user_name,
         ]);
     }
 }

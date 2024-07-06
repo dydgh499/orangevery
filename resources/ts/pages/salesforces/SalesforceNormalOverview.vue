@@ -116,7 +116,7 @@ onMounted(() => {
                                 </span>
                                 <span v-else-if="_key == 'settle_cycle'">
                                     <VChip
-                                        :color="store.getSelectIdColor(all_cycles.find(obj => obj.id === item[_key])?.id)">
+                                        :color="store.getSelectIdColor(all_cycles.find(obj => obj.id === item[_key]/7)?.id)">
                                         {{ all_cycles.find(sales => sales.id === item[_key])?.title }}
                                     </VChip>
                                 </span>                                

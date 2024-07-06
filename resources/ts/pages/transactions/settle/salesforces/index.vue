@@ -1,16 +1,15 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/transactions/settle/useSalesforceStore'
-import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
-import { selectFunctionCollect } from '@/views/selected'
-import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
-import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
-import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import { getUserLevel, salesLevels } from '@axios'
-import type { Options } from '@/views/types'
+import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
+import { selectFunctionCollect } from '@/views/selected'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import AddDeductBtn from '@/views/transactions/settle/AddDeductBtn.vue'
+import ExtraMenu from '@/views/transactions/settle/ExtraMenu.vue'
+import { settlementFunctionCollect } from '@/views/transactions/settle/Settle'
+import { useSearchStore } from '@/views/transactions/settle/useSalesforceStore'
+import { getLevelByIndex, getUserLevel, salesLevels } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
@@ -165,12 +164,12 @@ onMounted(() => {
                                 </div>
                             </span>
                             <span v-else-if="_key == 'level'">
-                                <VChip :color="store.getSelectIdColor(all_sales.find(obj => obj.id === item[_key])?.id)">
-                                    {{ all_sales.find(sales => sales.id === item[_key])?.title }}
+                                <VChip :color="store.getSelectIdColor(getLevelByIndex(item[_key]))">
+                                    {{ all_sales.find(obj => obj.id === item[_key])?.title }}
                                 </VChip>
                             </span>
                             <span v-else-if="_key == 'settle_cycle'">
-                                <VChip :color="store.getSelectIdColor(all_cycles.find(obj => obj.id === item[_key])?.id)">
+                                <VChip :color="store.getSelectIdColor(all_cycles.find(obj => obj.id === item[_key]/7)?.id)">
                                     {{ all_cycles.find(sales => sales.id === item[_key])?.title }}
                                 </VChip>
                             </span>

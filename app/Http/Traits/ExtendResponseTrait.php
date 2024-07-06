@@ -79,12 +79,11 @@ trait ExtendResponseTrait
             case 4:     $msg = ""; break;
             //---------------- route error ----------------- (404)
             case 940:   $msg = "not found route."; break;
+            case 949:   $msg = __("auth.csrf_miss"); break;
             //---------------- auth error ----------------- (950 ~ 959)
             case 950:   $msg = __("auth.failed"); break;
             case 951:   $msg = __("auth.auth"); break;
             case 952:   $msg = __("auth.password"); break;
-            case 953:   $msg = "CSRF token mismatch"; break;
-            case 954:   $msg = "세션이 변경되었습니다."; break;
             case 955:   $msg = __("auth.expire"); break;
             //-------------- server error ----------------- (990 ~ 999)
             case 990:   $msg = "시스템 에러입니다."; break;
@@ -109,12 +108,12 @@ trait ExtendResponseTrait
             $logs = ['ip'=>request()->ip(), 'method'=>request()->method(),'input'=>request()->all()];
             if($code == 940)
                 $http_code = 404;
+            else if($code == 949)
+                $http_code = 419;
             else if($code == 950)
                 $http_code = 401;
-            else if($code == 951 || $code == 952 || $code == 954)
+            else if($code > 950 && $code < 960)
                 $http_code = 403;                
-            else if($code == 953)
-                $http_code = 419;
             else if($code > 989 && $code < 1000)
                 $http_code = 500;
             else if($code > 999 && $code < 2000)
@@ -122,7 +121,7 @@ trait ExtendResponseTrait
             else
                 $http_code = 500;
                 
-            if(($code > 949 && $code < 960) || $code > 999)
+            if(($code >= 949 && $code <= 960) || $code > 999)
                 Log::notice($msg, $logs);
             else if($code > 989 && $code < 1000)
                 Log::error($msg, $logs);

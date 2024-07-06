@@ -53,8 +53,7 @@ const showAvatar = (preview: string) => {
                                     #{{ item[_key] }}
                                 </span>
                                 <span v-else-if="_key == `level`">
-                                    <VChip
-                                        :color="store.getSelectIdColor(operator_levels.find(obj => obj.id === item[_key])?.id)">
+                                    <VChip :color="item[_key] === 35 ? 'default' : 'primary'">
                                         {{ operator_levels.find(obj => obj.id === item[_key])?.title }}
                                     </VChip>
                                 </span>

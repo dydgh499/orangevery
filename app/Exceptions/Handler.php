@@ -56,7 +56,7 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (TokenMismatchException $e, $request) {
-            return $this->response(953);
+            return $this->response(949);
         });
         $this->renderable(function (AuthenticationException $e, $request) {
             return $this->response(950);
