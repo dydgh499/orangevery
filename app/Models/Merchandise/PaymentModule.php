@@ -17,9 +17,8 @@ class PaymentModule extends Model
     protected   $table      = 'payment_modules';
     protected   $primaryKey = 'id';
     protected   $guarded    = [];
-    protected   $hidden     = [
-        'brand_id',
-    ];
+    protected   $hidden     = [];
+    
     public function classifications()
     {
         return $this->belongsTo(Classification::class, 'terminal_id')
