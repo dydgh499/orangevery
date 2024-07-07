@@ -93,7 +93,7 @@ watchEffect(async () => {
             <CreateHalfVCol :mdl="8" :mdr="4">
                 <template #name>
                     <VCol class="pb-0">
-                        <b>노티 사용유무</b>
+                        <b>노티 사용여부</b>
                         <br>
                         <VChip color="primary" style="margin: 0.5em;" v-for="(cus, key) in noti_statuses" :key="key">
                             {{ cus.title }} = {{ cus.id }}
@@ -101,6 +101,13 @@ watchEffect(async () => {
                     </VCol>
                 </template>
                 <template #input>
+                    <VCol class="pb-0">
+                        <b>결제모듈 별칭</b>
+                        <br>
+                        <VChip color="primary" style="margin: 0.5em;">
+                            -1 = 전체
+                        </VChip>
+                    </VCol>
                 </template>
             </CreateHalfVCol>
         </VRow>

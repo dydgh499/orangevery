@@ -15,7 +15,6 @@ export const useSearchStore = defineStore('NotiSearchStore', () => {
         'id' : 'NO.',
         'note' : '별칭',
         'mcht_name' : '가맹점 상호',
-        'pmod_note' : '결제모듈 별칭',
         'send_url' : '전송 URL',
         'noti_status' : '사용여부',
         'created_at' : '생성시간',

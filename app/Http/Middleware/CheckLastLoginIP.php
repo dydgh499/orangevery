@@ -28,9 +28,7 @@ class CheckLastLoginIP
                 return $next($request);
             else
             {
-                if(Ablilty::isOperator($request))
-                    AbnormalConnection::notSameLoginIP();
-
+                AbnormalConnection::notSameLoginIP();
                 return $this->response(955);    
             }
         }

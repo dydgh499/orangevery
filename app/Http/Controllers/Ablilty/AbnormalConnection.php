@@ -255,7 +255,7 @@ class AbnormalConnection
             'action'        => "1시간 IP차단 (~ ".$block_time.")",
             'target_level'  => $level,
             'target_key'    => request()->url(),
-            'target_value'  => array_merge(self::privateDataHidden(request()->all()), request()->headers->all()),
+            'target_value'  => self::privateDataHidden(array_merge(request()->all(), request()->headers->all())),
             'comment'       => $user_name,
         ]);
     }
