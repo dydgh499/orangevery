@@ -173,7 +173,7 @@ class PaymentModuleController extends Controller
         {
             if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                 return $this->response(951);
-            if((Ablilty::isMyMerchandise($request, $data->mcht_id) || Ablilty::isSalesforce($request) || Ablilty::isOperator($request)))
+            if((Ablilty::isSalesforce($request) || Ablilty::isOperator($request)))
                 return $this->response(0, $data);
             else
                 return $this->response(951);
