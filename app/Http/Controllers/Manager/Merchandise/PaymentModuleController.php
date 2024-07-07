@@ -168,19 +168,18 @@ class PaymentModuleController extends Controller
      */
     public function show(Request $request, int $id)
     {
-        if($this->authCheck($request->user(), $id, 13))
+        $data = $this->pay_modules->where('id', $id)->first();
+        if($data)
         {
-            $data = $this->pay_modules->where('id', $id)->first();
-            if($data)
-            {
-                if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
-                    return $this->response(951);
-                else
-                    return $this->response(0, $data);
-            }
+            if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
+                return $this->response(951);
+            if((Ablilty::isMyMerchandise($request, $id) || Ablilty::isSalesforce($request) || Ablilty::isOperator($request)))
+                return $this->response(0, $data);
+            else
+                return $this->response(951);
         }
         else
-            return $this->response(951);
+            return $this->response(1000);
     }
 
     /**

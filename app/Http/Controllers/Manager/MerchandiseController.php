@@ -264,18 +264,20 @@ class MerchandiseController extends Controller
         if($data)
         {
             $data->setFeeFormatting(true);
-            if((Ablilty::isMyMerchandise($request, $id) || Ablilty::isSalesforce($request) || Ablilty::isOperator($request)) === false)
+            if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
+                return $this->response(951);
+            if((Ablilty::isMyMerchandise($request, $id) || Ablilty::isSalesforce($request) || Ablilty::isOperator($request)))
+            {
+                if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request))
+                    $data['syslink'] = SysLink::show($data['user_name']);
+                return $data ? $this->response(0, $data) : $this->response(1000);    
+            }
+            else
             {   // URL 조작 (가맹점인데 다른가맹점 조회하려할 시) 영업점일때 자신아래 영업점이 아닌경우?
                 AbnormalConnection::tryParameterModulationApproach();
                 return $this->response(951);
             }
-            if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
-                return $this->response(951);
-    
-            if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request))
-                $data['syslink'] = SysLink::show($data['user_name']);
-    
-            return $data ? $this->response(0, $data) : $this->response(1000);    
+            
         }
         else
             return $this->response(1000);
