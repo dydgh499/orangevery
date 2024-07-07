@@ -55,7 +55,10 @@ const all_levels = allLevels()
                         <span v-else-if="_key === 'id' && getUserLevel() === 10">
                             #{{ item[_key] }}
                         </span>
-                        <span v-else-if="_key == 'note'" class="edit-link" @click="store.edit(item['id'])">
+                        <span v-else-if="_key == 'note' && getUserLevel() > 10" class="edit-link" @click="store.edit(item['id'])">
+                            {{ item[_key] }}
+                        </span>
+                        <span v-else-if="_key == 'note' && getUserLevel() === 10">
                             {{ item[_key] }}
                         </span>
                         <span v-else-if="_key == 'module_type'">

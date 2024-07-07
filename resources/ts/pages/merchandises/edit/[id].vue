@@ -9,6 +9,7 @@ import PayModuleOverview from '@/views/merchandises/pay-modules/PayModuleOvervie
 import UserOverview from '@/views/users/UserOverview.vue'
 
 import CreateForm from '@/layouts/utils/CreateForm.vue'
+import { getUserLevel } from '@/plugins/axios'
 import corp from '@/plugins/corp'
 import { defaultItemInfo } from '@/views/merchandises/useStore'
 import type { Tab } from '@/views/types'
@@ -20,14 +21,13 @@ if(isFixplus()) {
     tabs.push({ icon: 'tabler-user-check', title: '가맹점정보' })
 }
 else {
-    tabs.push(...[
-        { icon: 'tabler-user-check', title: '개인정보' },
-        { icon: 'tabler-building-store', title: '가맹점정보' },
-        { icon: 'ic-outline-send-to-mobile', title: '결제모듈정보' },
-    ])
-    if(corp.pv_options.paid.use_noti) {
-        tabs.push({ icon: 'emojione:envelope', title: '노티정보(가맹점 추가 후 가능)' })
-    }
+    tabs.push({ icon: 'tabler-user-check', title: '개인정보' })
+    tabs.push({ icon: 'tabler-building-store', title: '가맹점정보' })
+
+    if(getUserLevel() > 10)
+        tabs.push({ icon: 'ic-outline-send-to-mobile', title: '결제모듈정보' })
+    if(corp.pv_options.paid.use_noti) 
+        tabs.push({ icon: 'emojione:envelope', title: '노티정보' })
 }
 
 const id    = ref<number>(0)
@@ -52,13 +52,13 @@ watchEffect(() => {
                     <VWindowItem>
                         <MchtOverview :item="item"/>
                     </VWindowItem>
-                    <VWindowItem>
+                    <VWindowItem v-if="getUserLevel() > 10">
                         <Suspense>
                             <PayModuleOverview :item="item" v-if="corp.pv_options.free.pay_module_detail_view"/>
                             <PayModuleOldOverview :item="item" v-else/>               
                         </Suspense>
                     </VWindowItem>
-                    <VWindowItem>
+                    <VWindowItem v-if="corp.pv_options.paid.use_noti">
                         <Suspense>
                             <NotiOverview :item="item" />
                         </Suspense>
