@@ -260,6 +260,7 @@ class MerchandiseController extends Controller
             array_push($with, 'regularCreditCards');
         if($b_info['pv_options']['paid']['use_specified_limit']);
             array_push($with, 'specifiedTimeDisableLimitPayments');
+
         $data = $this->merchandises->where('id', $id)->with($with)->first();
         if($data)
         {

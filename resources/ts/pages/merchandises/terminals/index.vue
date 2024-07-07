@@ -17,19 +17,6 @@ provide('head', head)
 provide('exporter', exporter)
 
 const all_levels = allLevels()
-const isMchtUnableCol = (key: string) => {
-    if(getUserLevel() > 10)
-        return false
-    else {
-        const cols = [
-            'module_type', 'installment', 'pg_id', 'ps_id', 
-            'settle_type', 'terminal_id', 'comm_settle_fee', 'ship_out_stat',
-            'comm_calc_level', 'mid', 'tid', 'begin_dt', 'ship_out_dt',
-            'under_sales_amt', 'under_sales_type', 'comm_settle_day',
-        ]
-        return cols.includes(key);
-    }
-}
 </script>
 <template>
     <BaseIndexView placeholder="MID, TID, 시리얼 번호, 가맹점 상호 검색" :metas="[]" :add="isAbleModiy(0)" add_name="장비"
@@ -52,24 +39,26 @@ const isMchtUnableCol = (key: string) => {
         <template #headers>
             <tr>
                 <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
-                    <span v-if="isMchtUnableCol(key as string) == false">
+                    <span>
                         {{ header.ko }}
                     </span>
                 </th>
             </tr>
         </template>
-
         <template #body>
             <tr v-for="(item, index) in store.getItems" :key="index">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <td v-show="_header.visible" class='list-square'>
-                        <span v-if="_key == 'id'" class="edit-link" @click="store.edit(item['id'])">
+                        <span v-if="_key === 'id' && getUserLevel() > 10" class="edit-link" @click="store.edit(item['id'])">
+                            #{{ item[_key] }}
+                        </span>
+                        <span v-else-if="_key === 'id' && getUserLevel() === 10">
                             #{{ item[_key] }}
                         </span>
                         <span v-else-if="_key == 'note'" class="edit-link" @click="store.edit(item['id'])">
                             {{ item[_key] }}
                         </span>
-                        <span v-else-if="_key == 'module_type' && isMchtUnableCol(_key) == false">
+                        <span v-else-if="_key == 'module_type'">
                             <VChip :color="store.getSelectIdColor(module_types.find(obj => obj.id === item[_key])?.id)">
                                 {{ module_types.find(obj => obj.id === item[_key])?.title }}
                             </VChip>
@@ -82,39 +71,39 @@ const isMchtUnableCol = (key: string) => {
                                 {{ (item[_key] * 100).toFixed(3) }} %
                             </VChip>
                         </span>
-                        <span v-else-if="_key == 'installment' && isMchtUnableCol(_key) == false">
+                        <span v-else-if="_key == 'installment'">
                             {{ installments.find(item => item['id'] === item[_key])?.title }}
                         </span>
-                        <span v-else-if="_key == 'pg_id' && isMchtUnableCol(_key) == false">
+                        <span v-else-if="_key == 'pg_id'">
                             {{ pgs.find(pg => pg['id'] === item[_key])?.pg_name }}
                         </span>
-                        <span v-else-if="_key == 'ps_id' && isMchtUnableCol(_key) == false">
+                        <span v-else-if="_key == 'ps_id'">
                             {{ pss.find(ps => ps['id'] === item[_key])?.name }}
                         </span>
-                        <span v-else-if="_key == 'settle_type' && isMchtUnableCol(_key) == false">
+                        <span v-else-if="_key == 'settle_type'">
                             {{ settle_types.find(settle_type => settle_type['id'] === item[_key])?.name }}
                         </span>
-                        <span v-else-if="_key == 'terminal_id' && isMchtUnableCol(_key) == false">
+                        <span v-else-if="_key == 'terminal_id'">
                             {{ terminals.find(terminal => terminal['id'] === item[_key])?.name }}
                         </span>
-                        <span v-else-if="_key == 'comm_settle_fee' && isMchtUnableCol(_key) == false">
+                        <span v-else-if="_key == 'comm_settle_fee'">
                             {{ item[_key].toLocaleString() }}
                         </span>
-                        <span v-else-if="_key == 'under_sales_amt' && isMchtUnableCol(_key) == false">
+                        <span v-else-if="_key == 'under_sales_amt'">
                             {{ item[_key].toLocaleString() }}
                         </span>                        
-                        <span v-else-if="_key == 'under_sales_type' && isMchtUnableCol(_key) == false">
+                        <span v-else-if="_key == 'under_sales_type'">
                             {{ under_sales_types.find(under_sales_type => under_sales_type['id'] === item[_key])?.title }}
                         </span>
-                        <span v-else-if="_key == 'ship_out_stat' && isMchtUnableCol(_key) == false">
+                        <span v-else-if="_key == 'ship_out_stat'">
                             <VChip :color="store.getSelectIdColor(ship_out_stats.find(obj => obj.id === item[_key])?.id)">
                                 {{ ship_out_stats.find(obj => obj.id === item[_key])?.title }}
                             </VChip>
                         </span>
-                        <span v-else-if="_key == 'comm_calc_level' && isMchtUnableCol(_key) == false">
+                        <span v-else-if="_key == 'comm_calc_level'">
                             {{ all_levels.find(level => level['id'] === item[_key])?.title }}
                         </span>
-                        <span v-else-if="isMchtUnableCol(_key) == false">
+                        <span v-else>
                             {{ item[_key] }}
                         </span>
                     </td>

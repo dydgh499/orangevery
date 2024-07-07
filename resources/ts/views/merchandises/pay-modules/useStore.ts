@@ -120,7 +120,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
         'mid' : 'MID',
         'tid' : 'TID',
         'installment' : '최대할부한도',
-    }        
+    }
     const headers3: Record<string, string> = {
         'contract_s_dt': '계약 시작일',
         'contract_e_dt':  '계약 종료일',

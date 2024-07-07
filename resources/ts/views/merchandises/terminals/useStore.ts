@@ -17,9 +17,9 @@ export const useSearchStore = defineStore('terminalSearchStore', () => {
         'id': 'NO.',
         'mcht_name': '가맹점 상호',
         'note': '별칭',
-        'module_type': '모듈타입',
     }
-
+    if(getUserLevel() > 10)
+        headers1['module_type'] = '모듈타입'
     if (levels.sales5_use && getUserLevel() >= 30) {
         headers1['sales5_id'] = levels.sales5_name
         headers1['sales5_fee'] = '수수료'
@@ -50,31 +50,30 @@ export const useSearchStore = defineStore('terminalSearchStore', () => {
         headers1['ps_id'] = '구간'
         headers1['settle_fee'] = '입금수수료'        
     }
-    const headers2: Record<string, string> = {
-        'settle_type': '정산일',
-        'mid': 'MID',
-        'tid': 'TID',
-        'installment': '할부한도',
-        'terminal_id': '장비 타입',
-        'serial_num': '시리얼 번호',
-        'comm_settle_fee': '통신비',
-        'comm_settle_day': '통신비 정산일',
-        'comm_calc_level': '통신비 정산주체',
-        'under_sales_amt': '매출미달 차감금',
-        'under_sales_type': '매출미달 적용타입',
-        'begin_dt': '개통일',
-        'ship_out_dt': '출고일',
-        'ship_out_stat': '출고상태',
-        'created_at': '생성시간',
-        'updated_at': '업데이트시간',
-    }    
-    const headers = {
-        ...headers1,
-        ...headers2,
+    if(getUserLevel() > 10) {
+        headers1['settle_type'] = '정산일'
+        headers1['mid'] = 'MID'
+        headers1['tid'] = 'TID'
+        headers1['installment'] = '할부한도'
+        headers1['terminal_id'] = '장비 타입'
     }
+    headers1['serial_num'] = '시리얼 번호'
+    if(getUserLevel() > 10) {
+        headers1['comm_settle_fee'] = '통신비'
+        headers1['comm_settle_day'] = '통신비 정산일'
+        headers1['comm_calc_level'] = '통신비 정산주체'
+        headers1['under_sales_amt'] = '매출미달 차감금'
+        
+        headers1['under_sales_type'] = '매출미달 적용타입'
+        headers1['begin_dt'] = '개통일'
+        headers1['ship_out_dt'] = '출고일'
+        headers1['ship_out_stat'] = '출고상태'
+    }
+    headers1['created_at'] = '생성시간'
+    headers1['updated_at'] = '업데이트시간'
 
     head.sub_headers.value = []
-    head.headers.value = head.initHeader(headers, {})
+    head.headers.value = head.initHeader(headers1, {})
     head.flat_headers.value = head.flatten(head.headers.value)
 
     const exporter = async (type: number) => {
