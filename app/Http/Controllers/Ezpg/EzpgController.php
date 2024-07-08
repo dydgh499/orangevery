@@ -43,7 +43,7 @@ class EzpgController extends Controller
     public function login(Request $request)
     {
         $validated = $request->validate(['user_name'=>'required|string', 'user_pw'=>'required|string']);
-        $request = $request->merge(['brand_id' => 19]);
+        $request = $request->merge(['brand_id' => 4]);
 
         $result = Login::isSafeLogin(new Merchandise(), $request);    // check merchandise
         if($result['result'] === 0)
