@@ -56,7 +56,11 @@ class AbnormalConnectionController extends Controller
     private function registrationByTimePeriod($query, $request, $type)
     {
         if($type > 0)
-            $query = $query->whereColumn('updated_at', '!=', 'password_change_at');
+        {
+            $query = $query->whereColumn('updated_at', '!=', 'password_change_at')
+                ->whereColumn('updated_at', '!=', 'last_login_at')
+                ->whereColumn('updated_at', '!=', 'locked_at');
+        }
 
         return $query
             ->where('brand_id', $request->user()->brand_id)            
