@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import SkeletonBox from '@/layouts/utils/SkeletonBox.vue';
 import { StatusColorSetter } from '@/views/searcher';
 import { connection_types, getLevelByChipColor } from '@/views/services/abnormal-connection-histories/useStore';
 import type { AbnormalConnectionHistory, Popup } from '@/views/types';
@@ -83,7 +84,7 @@ setSecureReport()
                                 </span>
                             </div>
                         </b>
-                        <VTable class="text-no-wrap"  v-if="work_status_by_timezone.length === 4">
+                        <VTable class="text-no-wrap">
                             <thead>
                                 <tr>
                                     <th class='list-square'>작업시간대</th>
@@ -100,7 +101,10 @@ setSecureReport()
                                 <tr>
                                     <th class='list-square'>12:00 ~ 18:00 (작일)</th>
                                     <td class='list-square' v-for="key in 4" :key="'12-18-' + key">
-                                        {{ parseInt(work_status_by_timezone[key - 1].yesterday_afternoon).toLocaleString() }}
+                                        <span v-if="work_status_by_timezone.length === 4">
+                                            {{ parseInt(work_status_by_timezone[key - 1].yesterday_afternoon).toLocaleString() }}
+                                        </span>
+                                        <SkeletonBox :width="'3em'" v-else/>
                                     </td>
                                     <!--
                                         <td class='list-square'>
@@ -111,7 +115,10 @@ setSecureReport()
                                 <tr>
                                     <th class='list-square'>18:00 ~ 24:00 (작일)</th>
                                     <td class='list-square' v-for="key in 4" :key="'18-24-' + key">
-                                        {{ parseInt(work_status_by_timezone[key - 1].yesterday_evening).toLocaleString() }}
+                                        <span v-if="work_status_by_timezone.length === 4">
+                                            {{ parseInt(work_status_by_timezone[key - 1].yesterday_evening).toLocaleString() }}
+                                        </span>
+                                        <SkeletonBox :width="'3em'" v-else/>
                                     </td>
                                     <!--
                                     <td class='list-square'>
@@ -122,13 +129,19 @@ setSecureReport()
                                 <tr>
                                     <th class='list-square'>00:00 ~ 06:00 (금일)</th>
                                     <td class='list-square' v-for="key in 4" :key="'00-06-' + key">
-                                        {{ parseInt(work_status_by_timezone[key - 1].today_last_night).toLocaleString() }}
+                                        <span v-if="work_status_by_timezone.length === 4">
+                                            {{ parseInt(work_status_by_timezone[key - 1].today_last_night).toLocaleString() }}
+                                        </span>
+                                        <SkeletonBox :width="'3em'" v-else/>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th class='list-square'>06:00 ~ 12:00 (금일)</th>
                                     <td class='list-square' v-for="key in 4" :key="'06-12-' + key">
-                                        {{ parseInt(work_status_by_timezone[key - 1].today_noon).toLocaleString() }}
+                                        <span v-if="work_status_by_timezone.length === 4">
+                                            {{ parseInt(work_status_by_timezone[key - 1].today_noon).toLocaleString() }}
+                                        </span>
+                                        <SkeletonBox :width="'3em'" v-else/>
                                     </td>
                                 </tr>
                             </tbody>
@@ -155,7 +168,7 @@ setSecureReport()
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(history, key) in login_histories" :key="key">
+                                <tr v-for="(history, key) in login_histories" :key="key"  v-if="work_status_by_timezone.length === 4">
                                     <td class='list-square'>
                                         <VAvatar :image="history.profile_img" class="me-3 preview"/>
                                     </td>
@@ -168,8 +181,14 @@ setSecureReport()
                                     </td>
                                     <td class='list-square'>{{ history.created_at }}</td>
                                 </tr>
+                                <tr v-for="key in 4" v-else>
+                                    <td class='list-square'><SkeletonBox :width="'3em'"/></td>
+                                    <td class='list-square'><SkeletonBox :width="'3em'"/></td>
+                                    <td class='list-square'><SkeletonBox :width="'3em'"/></td>
+                                    <td class='list-square'><SkeletonBox :width="'5em'"/></td>
+                                </tr>
                             </tbody>
-                            <tfoot v-if="!Boolean(login_histories.length)">
+                            <tfoot v-if="!Boolean(login_histories.length) && work_status_by_timezone.length === 4">
                                 <tr>
                                     <td :colspan="4" class='list-square' style="border: 0;">
                                         로그인 이력이 존재하지 않습니다.
@@ -205,7 +224,7 @@ setSecureReport()
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(history, key) in histories" :key="key">
+                        <tr v-for="(history, key) in histories" :key="key" v-if="work_status_by_timezone.length === 4">
                             <td class='list-square'>
                                 <VChip :color="StatusColorSetter().getSelectIdColor(history['connection_type'])">
                                     {{ connection_types.find(obj => obj.id === history['connection_type'])?.title }}
@@ -254,9 +273,19 @@ setSecureReport()
                                     <VBtn size="small" variant="tonal" @click="snackbar.show(JSON.stringify(history['request_detail'], null, '\n'))" style="margin-left: 1em;">상세보기</VBtn>
                                 </div>
                             </td>
+                        </tr>                        
+                        <tr v-for="key in 4" v-else>
+                            <td class='list-square'><SkeletonBox :width="'5em'"/></td>
+                            <td class='list-square'><SkeletonBox :width="'5em'"/></td>
+                            <td class='list-square'><SkeletonBox :width="'5em'"/></td>
+                            <td class='list-square'><SkeletonBox :width="'5em'"/></td>
+                            <td class='list-square'><SkeletonBox :width="'3em'"/></td>
+                            <td class='list-square'><SkeletonBox :width="'3em'"/></td>
+                            <td class='list-square'><SkeletonBox :width="'10em'"/></td>
+                            <td class='list-square'><SkeletonBox :width="'5em'"/></td>
                         </tr>
                     </tbody>
-                    <tfoot v-if="!Boolean(histories.length)">
+                    <tfoot v-if="!Boolean(histories.length) && work_status_by_timezone.length === 4">
                         <tr>
                             <td :colspan="8" class='list-square' style="border: 0;">
                                 이상접속 이력이 존재하지 않습니다.
