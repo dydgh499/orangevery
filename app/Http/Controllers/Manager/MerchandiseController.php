@@ -348,8 +348,8 @@ class MerchandiseController extends Controller
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
             DB::transaction(function () use($id, $data) {
-                $res = $this->delete($this->merchandises->where('id', $id));
                 $res = $this->delete($this->pay_modules->where('mcht_id', $id));
+                $res = $this->delete($this->merchandises->where('id', $id));
                 $res = $this->delete(NotiUrl::where('mcht_id', $id));
                 operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->mcht_name);
             });

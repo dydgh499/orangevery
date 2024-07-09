@@ -54,7 +54,7 @@ trait ManagerTrait
     // S3
     public function ToS3($folder, $img, $name)
     {
-        $path = $img->storePubliclyAs($folder, $name, 's3'); //storeAs -> private
+        $path = $img->store($folder);
         return env('AWS_URL')."/".$path;
     }
     // Cloudinary
