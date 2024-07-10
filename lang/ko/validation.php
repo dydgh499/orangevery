@@ -21,7 +21,6 @@ return [
     'not_found_obj'     => '데이터를 찾을 수 없습니다.',
     'already_exsit'     => '이미 존재하는 :attribute입니다.',
     'running_out_point' => '포인트가 부족합니다.',
-    'wrong_point_price' => '포인트 금액이 이상합니다.',
     'wrong_password'    => '패스워드가 정확하지 않습니다.',
 
     'after_or_equal'       => ':attribute 은 :date 보다 빠르거나 같아야합니다.',

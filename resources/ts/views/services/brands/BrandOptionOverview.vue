@@ -68,7 +68,7 @@ const accountLockLimits = <Options[]>([
                         </VCol>
                     </VRow>
                     <VCardTitle class="pt-10">기능 옵션</VCardTitle>
-                    <CreateHalfVColV2 :mdl="7" :mdr="5" class="pt-5">
+                    <CreateHalfVColV2 :mdl="6" :mdr="6" class="pt-5">
                         <template #l_name>MID 중복검사 사용</template>
                         <template #l_input>
                             <VSwitch hide-details v-model="props.item.free.use_mid_duplicate" color="primary" />
@@ -78,7 +78,7 @@ const accountLockLimits = <Options[]>([
                             <VSwitch hide-details v-model="props.item.free.use_tid_duplicate" color="primary" />
                         </template>
                     </CreateHalfVColV2>
-                    <CreateHalfVColV2 :mdl="7" :mdr="5">
+                    <CreateHalfVColV2 :mdl="6" :mdr="6">
                         <template #l_name>
                             <BaseQuestionTooltip location="top" text="검색옵션 자동 초기화"
                                     :content="`목록 페이지에서 선택한 검색옵션들이 메뉴 이동시 자동으로 초기화됩니다.`"/>
@@ -95,7 +95,7 @@ const accountLockLimits = <Options[]>([
                     </CreateHalfVColV2>
 
                     <VCardTitle class="pt-10">화면 옵션</VCardTitle>
-                    <CreateHalfVColV2 :mdl="7" :mdr="5" class="pt-5">
+                    <CreateHalfVColV2 :mdl="6" :mdr="6" class="pt-5">
                         <template #l_name>    
                             <BaseQuestionTooltip location="top" text="날짜 상세조회" :content="`(연-월-일 ~ 연-월-일) 조회방식에서<br>(연-월-일 시:분:초 ~ 연-월-일 시:분:초) 방식으로 조회합니다.`"/>
                         </template>
@@ -103,14 +103,14 @@ const accountLockLimits = <Options[]>([
                             <VSwitch hide-details v-model="props.item.free.use_search_date_detail" color="primary" />
                         </template>
                         <template #r_name>
-                            <BaseQuestionTooltip location="top" text="주민등록번호 뒷자리 마스킹" :content="`전산내 표기되는 모든 주민번호뒷자리가 * 표시로 마스킹되어 표시됩니다.`"/>
+                            <BaseQuestionTooltip location="top" text="주민번호 뒷자리 숨김" :content="`전산내 표기되는 모든 주민번호뒷자리가 * 표시로 마스킹되어 표시됩니다.`"/>
                         </template>
                         <template #r_input>
                             <VSwitch hide-details v-model="props.item.free.resident_num_masking" color="primary" />
                         </template>
                     </CreateHalfVColV2>
 
-                    <CreateHalfVColV2 :mdl="7" :mdr="5">
+                    <CreateHalfVColV2 :mdl="6" :mdr="6">
                         <template #l_name>
                             <BaseQuestionTooltip location="top" text="고정 테이블 사용" :content="`리스트 화면에서 테이블 헤더가 고정됩니다.`"/>
                         </template>
@@ -128,7 +128,7 @@ const accountLockLimits = <Options[]>([
                     <VCardTitle class="pt-10">                        
                         보안 옵션<span><b class="text-error" style="font-size: 0.6em;"> (보안 옵션 해제로인한 금융사고는 책임지지 않습니다.)</b></span>
                     </VCardTitle>
-                    <CreateHalfVColV2 :mdl="7" :mdr="5" class="pt-5">
+                    <CreateHalfVColV2 :mdl="6" :mdr="6" class="pt-5">
                         <template #l_name>
                             <BaseQuestionTooltip location="top" text="가맹점 ID 입력 난이도" :content="`가맹점 ID 추가/수정시 요구되는 검증 난이도입니다.`"/>
                         </template>
@@ -146,7 +146,7 @@ const accountLockLimits = <Options[]>([
                                 label="패스워드 난이도 선택"  item-title="title" item-value="id" single-line />
                         </template>
                     </CreateHalfVColV2>
-                    <CreateHalfVColV2 :mdl="7" :mdr="5" class="pt-5">
+                    <CreateHalfVColV2 :mdl="6" :mdr="6">
                         <template #l_name>
                             <BaseQuestionTooltip location="top" text="영업점 ID 입력 난이도" :content="`영업점 ID 추가/수정시 요구되는 검증 난이도입니다.`"/>
                         </template>
@@ -164,7 +164,7 @@ const accountLockLimits = <Options[]>([
                                 label="패스워드 난이도 선택"  item-title="title" item-value="id" single-line />
                         </template>
                     </CreateHalfVColV2>
-                    <CreateHalfVColV2 :mdl="7" :mdr="5" class="pt-5">
+                    <CreateHalfVColV2 :mdl="6" :mdr="6">
                         <template #l_name>
                             <BaseQuestionTooltip location="top" text="패스워드 허용회수" :content="`로그인시 패스워드 오입력으로 계정이 잠금되는 시도회수를 설정합니다.`"/>
                         </template>
@@ -282,20 +282,7 @@ const accountLockLimits = <Options[]>([
                         <VCardTitle class="pt-10">
                             <BaseQuestionTooltip location="top" text="기본 설정 값" :content="`각 정보 추가시 기본으로 세팅되어있는 값들을 변경합니다.`"/> 
                         </VCardTitle>
-                        <CreateHalfVColV2 :mdl="6" :mdr="6" class="pt-5">
-                            <template #l_name>
-                                가맹점 수수료율 노출
-                            </template>
-                            <template #l_input>                                
-                            <VSwitch hide-details v-model="props.item.free.default.is_show_fee"
-                                color="primary" :false-value=0 :true-value=1 />
-                            </template>
-                            <template #r_name>             
-                            </template>
-                            <template #r_input>
-                            </template>
-                        </CreateHalfVColV2>
-                        <CreateHalfVColV2 :mdl="6" :mdr="6">
+                        <CreateHalfVColV2 :mdl="5" :mdr="7" class="pt-5">
                             <template #l_name>
                                 할부개월
                             </template>
@@ -311,11 +298,24 @@ const accountLockLimits = <Options[]>([
                                     prepend-inner-icon="jam-triangle-danger" item-title="title" item-value="id"  single-line />
                             </template>
                         </CreateHalfVColV2>
+                        <CreateHalfVColV2 :mdl="5" :mdr="7">
+                            <template #l_name>
+                                가맹점 수수료율 노출
+                            </template>
+                            <template #l_input>
+                                <VSwitch hide-details v-model="props.item.free.default.is_show_fee"
+                                    color="primary" :false-value=0 :true-value=1 />
+                            </template>
+                            <template #r_name>             
+                            </template>
+                            <template #r_input>
+                            </template>
+                        </CreateHalfVColV2>
                     </div>
                 </VCardItem>
             </VCard>
         </VCol>
-        <template v-if="getUserLevel() === 50 && corp.id === 1">
+        <template v-if="getUserLevel() === 50">
             <VCol cols="12" :md="4">
                 <VCard>
                     <VCardItem>

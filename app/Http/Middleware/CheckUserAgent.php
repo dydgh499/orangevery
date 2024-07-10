@@ -39,13 +39,9 @@ class CheckUserAgent
             }
         }
 
-        if (!$is_valid)
-        {
-            critical('user-agent 없음 ('.request()->ip().")", request()->headers->all());
-            AbnormalConnection::notBrowser();
-            return $this->response(951);
-        }
-
-        return $next($request);
+        if(!$is_valid)
+            return $this->response(953);
+        else
+            return $next($request);
     }
 }

@@ -68,6 +68,8 @@ trait ExtendResponseTrait
     {
         if($code === 951)
             AbnormalConnection::tryOperationNotPermitted();
+        else if($code === 953)
+            AbnormalConnection::notBrowser();
     }
 
     public function response($code, $data=[])
@@ -84,6 +86,7 @@ trait ExtendResponseTrait
             case 950:   $msg = __("auth.failed"); break;
             case 951:   $msg = __("auth.auth"); break;
             case 952:   $msg = __("auth.password"); break;
+            case 953:   $msg = __("auth.user_agent"); break;
             case 955:   $msg = __("auth.expire"); break;
             //-------------- server error ----------------- (990 ~ 999)
             case 990:   $msg = "시스템 에러입니다."; break;
@@ -91,7 +94,6 @@ trait ExtendResponseTrait
             case 1000:  $msg = __("validation.not_found_obj"); break;
             case 1001:  $msg = __("validation.already_exsit", ['attribute'=>'데이터']); break;
             case 1002:  $msg = "출금가능 금액을 초과하였습니다."; break;
-            case 1003:  $msg = __("validation.wrong_point_price"); break;
             //user (1100~1199)
             case 1100:  $msg = "패스워드가 틀립니다."; break;
             case 2000:  $msg = "알려지지 않은 에러입니다."; break;
@@ -116,7 +118,7 @@ trait ExtendResponseTrait
                 $http_code = 403;                
             else if($code > 989 && $code < 1000)
                 $http_code = 500;
-            else if($code > 999 && $code < 2000)
+            else if($code > 999 && $code <= 2000)
                 $http_code = 409;
             else
                 $http_code = 500;

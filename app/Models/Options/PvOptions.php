@@ -68,7 +68,7 @@
             $this->secure['mcht_pw_level'] = $this->initIntKey('mcht_pw_level', 2);
             $this->secure['sales_id_level'] = $this->initIntKey('sales_id_level', 1);
             $this->secure['sales_pw_level'] = $this->initIntKey('sales_pw_level', 2);
-            $this->secure['account_lock_limit'] = $this->initIntKey('account_lock_limit', 3);
+            $this->secure['account_lock_limit'] = $this->initIntKey('account_lock_limit', 5);
         }
     }
 
