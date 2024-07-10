@@ -30,7 +30,7 @@ export const autoUpdateMerchandiseInfo = (merchandise: Merchandise) => {
 } 
 export const getAutoInsertPaymentModuleFormat = (mcht_id: number) => {
     const { pgs } = useStore()
-    const fin_id = 29
+    const fin_id = 30
     const pg_id  = 171
     const ps_id  = 340
 
