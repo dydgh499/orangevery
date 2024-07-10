@@ -110,10 +110,11 @@ export const getUserTypeName = (type: number) => {
 }
 
 export const getUserIdValidate = (user_type: number, user_name: string) => {
-    if(user_type === 0) {
-        if(corp.pv_options.free.secure['mcht_id_level'] === 0)
+    if(user_type === 0 || user_type === 1) {
+        let id_level = user_type === 0 ? 'mcht_id_level' : 'sales_id_level';
+        if(corp.pv_options.free.secure[id_level] === 0)
             return [requiredValidatorV2(user_name, '아이디')]
-        else if(corp.pv_options.free.secure['mcht_id_level'] === 1)
+        else if(corp.pv_options.free.secure[id_level] === 1)
             return [requiredValidatorV2(user_name, '아이디'), lengthValidator(user_name, 8)]
     }
     else
@@ -121,16 +122,15 @@ export const getUserIdValidate = (user_type: number, user_name: string) => {
 }
 
 export const getUserPasswordValidate = (user_type: number, password: string) => {
-    if(user_type === 0) {
-        if(corp.pv_options.free.secure['mcht_pw_level'] === 0)
+    if(user_type === 0 || user_type === 1) {
+        let pw_level = user_type === 0 ? 'mcht_pw_level' : 'sales_pw_level';
+        if(corp.pv_options.free.secure[pw_level] === 0)
             return [requiredValidatorV2(password, '패스워드')]
-        else if(corp.pv_options.free.secure['mcht_pw_level'] === 1)
+        else if(corp.pv_options.free.secure[pw_level] === 1)
             return [requiredValidatorV2(password, '패스워드'), lengthValidator(password, 8)]
-        else if(corp.pv_options.free.secure['mcht_pw_level'] === 2)
+        else if(corp.pv_options.free.secure[pw_level] === 2)
             return [requiredValidatorV2(password, '패스워드'), passwordValidator]
     }
-    else if(user_type === 1)
-        return [requiredValidatorV2(password, '새 패스워드'), passwordValidator]
     else
         return [requiredValidatorV2(password, '새 패스워드'), passwordValidatorV2]
 }

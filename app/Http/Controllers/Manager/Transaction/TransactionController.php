@@ -87,7 +87,7 @@ class TransactionController extends Controller
 
         $with  = ['cancelDeposits'];
         $query = $this->commonSelect($request);
-        if($request->use_realtime_deposit && $request->level == 10)
+        if($request->use_realtime_deposit && (int)$request->level === 10)
             $with[] = 'realtimes';
 
         if(count($with))

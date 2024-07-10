@@ -351,6 +351,8 @@ interface FreeOption {
         mcht_id_level: number,
         mcht_pw_level: number,
         account_lock_limit: number,
+        sales_id_level: number,
+        sales_pw_level: number,
     }
 }
 interface PaidOption {

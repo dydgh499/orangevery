@@ -105,7 +105,7 @@ class AuthPasswordChange
     static function passwordValidate($user_name, $password)
     {
         $pattern = '/(\d)\1{2,}|0123|1234|2345|3456|4567|5678|6789|7890/';
-        if(preg_match($pattern, $password)) 
+        if(preg_match($pattern, $password) && request()->user()->brand_id != 30) // 픽스플러스 제외
             return [false, '패스워드에 연속된 숫자나 중복된 숫자(3개 이상)를 포함할 수 없습니다.'];
         else if(strpos($password, $user_name) !== false)
             return [false, '패스워드에 ID를 포함할 수 없습니다.'];

@@ -41,8 +41,4 @@ class IndexRequest extends FormRequest
         $this->params['e_dt']['example']      = '2023-10-15';
         return $this->params;
     }
-    public function bodyParameters()
-    {
-        return [];
-    }
 }

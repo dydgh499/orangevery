@@ -148,12 +148,30 @@ const accountLockLimits = <Options[]>([
                     </CreateHalfVColV2>
                     <CreateHalfVColV2 :mdl="7" :mdr="5" class="pt-5">
                         <template #l_name>
+                            <BaseQuestionTooltip location="top" text="영업점 ID 입력 난이도" :content="`영업점 ID 추가/수정시 요구되는 검증 난이도입니다.`"/>
+                        </template>
+                        <template #l_input>
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure.sales_id_level"
+                                :items="mchtIdLevels" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                label="ID 난이도 선택" item-title="title" item-value="id" single-line />
+                        </template>
+                        <template #r_name>
+                            <BaseQuestionTooltip location="top" text="영업점 PW 입력 난이도" :content="`영업점 패스워드 추가/수정시 요구되는 검증 난이도입니다.`"/>
+                        </template>
+                        <template #r_input>
+                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure.sales_pw_level"
+                                :items="mchtPwLevels" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                label="패스워드 난이도 선택"  item-title="title" item-value="id" single-line />
+                        </template>
+                    </CreateHalfVColV2>
+                    <CreateHalfVColV2 :mdl="7" :mdr="5" class="pt-5">
+                        <template #l_name>
                             <BaseQuestionTooltip location="top" text="패스워드 허용회수" :content="`로그인시 패스워드 오입력으로 계정이 잠금되는 시도회수를 설정합니다.`"/>
                         </template>
                         <template #l_input>
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure.account_lock_limit"
                                 :items="accountLockLimits" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
-                                label="패스워드 허용회수" item-title="title" item-value="id" single-line />
+                                label="가맹점 패스워드 허용회수" item-title="title" item-value="id" single-line />
                         </template>
                         <template #r_name>
                         </template>

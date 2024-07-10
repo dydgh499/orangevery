@@ -32,8 +32,8 @@ body {
   text-align: center !important;
 }
 
-.list-square th {
-
+.v-table__wrapper > table > tbody > tr:hover {
+  background: rgba(var(--v-theme-primary), 10%);
 }
 
 .edit-link {
