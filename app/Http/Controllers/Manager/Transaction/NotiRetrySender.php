@@ -61,7 +61,7 @@ class NotiRetrySender
 
     static public function notiSender($url, $tran, $temp='')
     {
-        if($url === 'http://121.141.60.135:40610/otif/bfix/approvTrans')
+        if($url === 'https://payweb.bona-pay.com/otif/bfix/approvTrans')
             [$params, $headers] = Bonacamp::getParams($tran);
         else if($url === 'https://dapi.syslink.kr/v1/payout/set')
             [$params, $headers] = SysLink::getParams($tran);
