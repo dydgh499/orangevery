@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { getUserLevel } from '@/plugins/axios'
 import corp from '@/plugins/corp'
 import type { Popup } from '@/views/types'
 import { PopupEvent } from '@core/utils/popup'
@@ -7,12 +8,13 @@ const { setOpenStatus, init } = PopupEvent('popups/hide/')
 const popups = ref<Popup[]>([])
 
 const show = (_popups: Popup[]) => {
-    if(corp.id !== 30) {
-        popups.value = _popups
-        popups.value.forEach(popup => {
-            init(popup)
-        });
+    if(corp.id === 30 && getUserLevel() <= 25) {
+        return
     }
+    popups.value = _popups
+    popups.value.forEach(popup => {
+        init(popup)
+    });
 }
 
 defineExpose({
