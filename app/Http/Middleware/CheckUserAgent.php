@@ -41,7 +41,7 @@ class CheckUserAgent
         }
 
         if(!$is_valid)
-            return $this->response(953);
+            return $this->response(958);
         else
             return $next($request);
     }

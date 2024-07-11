@@ -353,7 +353,7 @@ class MerchandiseController extends Controller
                 $res = $this->delete(NotiUrl::where('mcht_id', $id));
                 operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->mcht_name);
             });
-            return $this->response($res ? 1 : 990, ['id'=>$id]);    
+            return $this->response(1, ['id'=>$id]);    
         }
         else
             return $this->response(951);

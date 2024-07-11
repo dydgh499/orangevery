@@ -68,7 +68,7 @@ trait ExtendResponseTrait
     {
         if($code === 951)
             AbnormalConnection::tryOperationNotPermitted();
-        else if($code === 953)
+        else if($code === 958)
             AbnormalConnection::notBrowser();
     }
 
@@ -86,7 +86,7 @@ trait ExtendResponseTrait
             case 950:   $msg = __("auth.failed"); break;
             case 951:   $msg = __("auth.auth"); break;
             case 952:   $msg = __("auth.password"); break;
-            case 953:   $msg = __("auth.user_agent"); break;
+            case 958:   $msg = __("auth.user_agent"); break;
             case 955:   $msg = __("auth.expire"); break;
             //-------------- server error ----------------- (990 ~ 999)
             case 990:   $msg = "시스템 에러입니다."; break;
