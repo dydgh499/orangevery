@@ -1,0 +1,9 @@
+{
+    "mcht_id": 12345,
+    "appr_amount": 1000,
+    "appr_count": 1,
+    "cxl_amount": -1000,
+    "cxl_count": 1,
+    "sales_amount": 0,
+    "total_count": 2
+}

@@ -1,0 +1,45 @@
+{
+    "page": "1",
+    "page_size": "20",
+    "total": 2,
+    "content": [
+        {
+            "is_cancel": 0,
+            "trx_dt": "2023-11-01",
+            "trx_tm": "14:20:15",
+            "cxl_dt": null,
+            "cxl_tm": null,
+            "cxl_seq": 0,
+            "ori_trx_id": null,
+            "amount": 1000,
+            "ord_num": "57839H1700562509",
+            "trx_id": "202311210528348",
+            "mid": "PVPG_C3568479",
+            "tid": "2824020001",
+            "card_num": "467309******5166",
+            "issuer": "국민",
+            "acquirer": "국민",
+            "installment": 0,
+            "appr_num": "30018849"
+        },
+        {
+            "is_cancel": 1,
+            "trx_dt": "2023-11-01",
+            "trx_tm": "14:25:15",
+            "cxl_dt": "2023-11-01",
+            "cxl_tm": "17:30:37",
+            "cxl_seq": 1,
+            "ori_trx_id": "202311210528348",
+            "amount": -1000,
+            "ord_num": "57839H1700562509",
+            "trx_id": "202311210528413",
+            "mid": "PVPG_C3568479",
+            "tid": "2824020001",
+            "card_num": "467309******5166",
+            "issuer": "국민",
+            "acquirer": "국민",
+            "installment": 0,
+            "appr_num": "30018849"
+        }
+    ]
+}

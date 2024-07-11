@@ -11,4 +11,5 @@ return [
     'not_found_obj' => '계정을 찾을 수 없습니다.',
     'password' => '제공된 비밀번호가 올바르지 않습니다.',
     'failed_token' => '인증번호가 정확하지 않습니다.',
+    'failed_pay_key' => 'pay key가 정확하지 않습니다.',
 ];

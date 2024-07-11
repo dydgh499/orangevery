@@ -28,10 +28,6 @@ class SalesforceRequest extends FormRequest
         'settle_cycle',
         'settle_day',
         'note',
-        'passbook_img',
-        'contract_img',
-        'bsin_lic_img',
-        'id_img',
     ];
     public $integer_keys = [
         'sales_fee',
@@ -105,8 +101,6 @@ class SalesforceRequest extends FormRequest
         $data['phone_num'] = $data['phone_num'] == '' ? 0 : $data['phone_num'];
         if($data['acct_bank_code'] == '')
             $data['acct_bank_code'] = "000";
-        if($this->has('profile_img'))
-            $data['profile_img'] = $this->profile_img;
         return $data;
     }
 }

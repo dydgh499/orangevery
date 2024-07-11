@@ -52,8 +52,6 @@ class OperatorReqeust extends FormRequest
     {
         $data = $this->getParmasBaseKey();
         $data['brand_id'] = $this->user()->brand_id;
-        if($this->has('profile_img'))
-            $data['profile_img'] = $this->profile_img;
         return $data;
     }
 }

@@ -49,7 +49,6 @@
         private function initIntKey($parent, $key, $default)
         {
             return isset($parent[$key]) ? (int)$parent[$key] : $default;
-
         }
 
         public function __construct(array $source)

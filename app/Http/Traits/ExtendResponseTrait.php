@@ -85,6 +85,7 @@ trait ExtendResponseTrait
             case 950:   $msg = __("auth.failed"); break;
             case 951:   $msg = __("auth.auth"); break;
             case 952:   $msg = __("auth.password"); break;
+            case 954:   $msg = __("auth.failed_pay_key"); break;
             case 958:   $msg = __("auth.user_agent"); break;
             case 955:   $msg = __("auth.expire"); break;
             //-------------- server error ----------------- (990 ~ 999)

@@ -30,10 +30,6 @@ class BrandRequest extends FormRequest
         'use_different_settlement',
         'logo_img',         
         'favicon_img',
-        'passbook_img',
-        'contract_img',
-        'bsin_lic_img',
-        'id_img',
         'og_img',
     ];
     public $file_keys = [   

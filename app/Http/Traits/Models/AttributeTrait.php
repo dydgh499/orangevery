@@ -5,6 +5,8 @@ namespace App\Http\Traits\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use DateTimeInterface;
 use Carbon\Carbon;
+use Config;
+use Illuminate\Support\Facades\Storage;
 
 trait AttributeTrait
 {
@@ -18,5 +20,16 @@ trait AttributeTrait
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format("Y-m-d H:i:s");
+    }
+
+    private function toS3PrivateLink($link)
+    {
+        $client = Storage::disk('s3')->getClient();
+        $command = $client->getCommand('GetObject', [
+            'Bucket' => Config::get('filesystems.disks.s3.bucket'),
+            'Key'    => str_replace(Config::get('filesystems.disks.s3.url'), '', $link)
+        ]);
+        $request = $client->createPresignedRequest($command, '+10 minutes');
+        return Config::get('filesystems.disks.s3.url').$request->getUri();
     }
 }
