@@ -78,8 +78,11 @@ class Ablilty
     }
 
     static function isEditAbleTime()
-    {   
+    {
         //except
+        if(self::isDevOffice(request()) && request()->user()->brand_id === 35)
+            return true;
+
         $cond_0 = Carbon::now()->between(Carbon::create(null, 7, 5, 21, 0, 0), Carbon::create(null, 7, 6, 6, 0, 0));
         $cond_1 = request()->user()->user_name === 'woozywon' && $cond_0 && request()->user()->brand_id === 18;
         $cond_2 = request()->user()->user_name === 'woozywon' && $cond_0 && request()->user()->brand_id === 35;
