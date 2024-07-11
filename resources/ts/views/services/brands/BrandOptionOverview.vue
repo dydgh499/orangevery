@@ -130,7 +130,7 @@ const accountLockLimits = <Options[]>([
                     </VCardTitle>
                     <CreateHalfVColV2 :mdl="6" :mdr="6" class="pt-5">
                         <template #l_name>
-                            <BaseQuestionTooltip location="top" text="가맹점 ID 입력 난이도" :content="`가맹점 ID 추가/수정시 요구되는 검증 난이도입니다.`"/>
+                            <BaseQuestionTooltip location="top" text="가맹점 ID 난이도" :content="`가맹점 ID 추가/수정시 요구되는 검증 난이도입니다.`"/>
                         </template>
                         <template #l_input>
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure.mcht_id_level"
@@ -138,7 +138,7 @@ const accountLockLimits = <Options[]>([
                                 label="ID 난이도 선택" item-title="title" item-value="id" single-line />
                         </template>
                         <template #r_name>
-                            <BaseQuestionTooltip location="top" text="가맹점 PW 입력 난이도" :content="`가맹점 패스워드 추가/수정시 요구되는 검증 난이도입니다.`"/>
+                            <BaseQuestionTooltip location="top" text="가맹점 PW 난이도" :content="`가맹점 패스워드 추가/수정시 요구되는 검증 난이도입니다.`"/>
                         </template>
                         <template #r_input>
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure.mcht_pw_level"
@@ -148,7 +148,7 @@ const accountLockLimits = <Options[]>([
                     </CreateHalfVColV2>
                     <CreateHalfVColV2 :mdl="6" :mdr="6">
                         <template #l_name>
-                            <BaseQuestionTooltip location="top" text="영업점 ID 입력 난이도" :content="`영업점 ID 추가/수정시 요구되는 검증 난이도입니다.`"/>
+                            <BaseQuestionTooltip location="top" text="영업점 ID 난이도" :content="`영업점 ID 추가/수정시 요구되는 검증 난이도입니다.`"/>
                         </template>
                         <template #l_input>
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure.sales_id_level"
@@ -156,7 +156,7 @@ const accountLockLimits = <Options[]>([
                                 label="ID 난이도 선택" item-title="title" item-value="id" single-line />
                         </template>
                         <template #r_name>
-                            <BaseQuestionTooltip location="top" text="영업점 PW 입력 난이도" :content="`영업점 패스워드 추가/수정시 요구되는 검증 난이도입니다.`"/>
+                            <BaseQuestionTooltip location="top" text="영업점 PW 난이도" :content="`영업점 패스워드 추가/수정시 요구되는 검증 난이도입니다.`"/>
                         </template>
                         <template #r_input>
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.free.secure.sales_pw_level"
@@ -277,7 +277,6 @@ const accountLockLimits = <Options[]>([
                             </template>
                         </CreateHalfVColV2>
                     </div>
-
                     <div>
                         <VCardTitle class="pt-10">
                             <BaseQuestionTooltip location="top" text="기본 설정 값" :content="`각 정보 추가시 기본으로 세팅되어있는 값들을 변경합니다.`"/> 
@@ -306,7 +305,7 @@ const accountLockLimits = <Options[]>([
                                 <VSwitch hide-details v-model="props.item.free.default.is_show_fee"
                                     color="primary" :false-value=0 :true-value=1 />
                             </template>
-                            <template #r_name>             
+                            <template #r_name>
                             </template>
                             <template #r_input>
                             </template>

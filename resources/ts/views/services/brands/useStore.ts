@@ -175,7 +175,14 @@ export const defaultItemInfo = () => {
                 fix_table_size: 749,
                 init_search_filter: false,
                 resident_num_masking: false,
-
+                pay_module_detail_view: false,
+                secure: {
+                    mcht_id_level: 0,
+                    mcht_pw_level: 0,
+                    account_lock_limit: 0,
+                    sales_id_level: 0,
+                    sales_pw_level: 0
+                }
             }),
             paid: reactive<PaidOption>({
                 use_acct_verification: false,
@@ -205,26 +212,29 @@ export const defaultItemInfo = () => {
                 use_settle_hold: false,
                 use_hide_account: false,
                 use_settle_count: true,
+                sales_parent_structure: false,
+                use_specified_limit: false,
+                use_syslink: false
             }),
             auth: reactive<AuthOption>({
                 levels: {
-                    dev_use: 0,
+                    dev_use: false,
                     dev_name: '개발사',
-                    sales5_use: 0,
+                    sales5_use: false,
                     sales5_name: '지사',
-                    sales4_use: 1,
+                    sales4_use: true,
                     sales4_name: '영업점',
-                    sales3_use: 1,
+                    sales3_use: true,
                     sales3_name: '지사',
-                    sales2_use: 1,
+                    sales2_use: true,
                     sales2_name: '총판',
-                    sales1_use: 1,
+                    sales1_use: true,
                     sales1_name: '대리점',
-                    sales0_use: 0,
+                    sales0_use: true,
                     sales0_name: '하위대리점'
                 },
                 visibles: {
-                    abnormal_trans_sales: 1,
+                    abnormal_trans_sales: true,
                 }
             })
         },
@@ -247,7 +257,8 @@ export const defaultItemInfo = () => {
         curr_deposit_amount: 0,
         use_different_settlement: 0,
         before_brand_infos: [],
-        different_settlement_infos: []
+        different_settlement_infos: [],
+        operator_ips: []
     })
 
 

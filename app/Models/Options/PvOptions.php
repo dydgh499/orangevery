@@ -46,9 +46,9 @@
             'account_lock_limit' => 5,
         ];
 
-        private function initIntKey($key, $default)
+        private function initIntKey($parent, $key, $default)
         {
-            return isset($this->secure[$key]) ? (int)$this->secure[$key] : $default;
+            return isset($parent[$key]) ? (int)$parent[$key] : $default;
 
         }
 
@@ -60,15 +60,15 @@
                     $this->$property = $value;
             }
             
-            $this->default['installment'] = $this->initIntKey('installment', 0);
-            $this->default['is_show_fee'] = $this->initIntKey('is_show_fee', 0);
-            $this->default['abnormal_trans_limit'] = $this->initIntKey('abnormal_trans_limit', 0);
+            $this->default['installment'] = $this->initIntKey($this->default, 'installment', 0);
+            $this->default['is_show_fee'] = $this->initIntKey($this->default, 'is_show_fee', 0);
+            $this->default['abnormal_trans_limit'] = $this->initIntKey($this->default, 'abnormal_trans_limit', 0);
             
-            $this->secure['mcht_id_level'] = $this->initIntKey('mcht_id_level', 1);
-            $this->secure['mcht_pw_level'] = $this->initIntKey('mcht_pw_level', 2);
-            $this->secure['sales_id_level'] = $this->initIntKey('sales_id_level', 1);
-            $this->secure['sales_pw_level'] = $this->initIntKey('sales_pw_level', 2);
-            $this->secure['account_lock_limit'] = $this->initIntKey('account_lock_limit', 5);
+            $this->secure['mcht_id_level'] = $this->initIntKey($this->secure, 'mcht_id_level', 1);
+            $this->secure['mcht_pw_level'] = $this->initIntKey($this->secure, 'mcht_pw_level', 2);
+            $this->secure['sales_id_level'] = $this->initIntKey($this->secure, 'sales_id_level', 1);
+            $this->secure['sales_pw_level'] = $this->initIntKey($this->secure, 'sales_pw_level', 2);
+            $this->secure['account_lock_limit'] = $this->initIntKey($this->secure, 'account_lock_limit', 5);
         }
     }
 
