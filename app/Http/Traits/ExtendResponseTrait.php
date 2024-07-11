@@ -60,7 +60,6 @@ trait ExtendResponseTrait
             Log::notice($msg, $logs);
         }
         
-        $this->checkAbnormalConnection($code);
         return Response::json(['code'=>$code, 'message'=>$msg, 'data'=>$data], $http_code, [], JSON_UNESCAPED_UNICODE);        
     }
     
