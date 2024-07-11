@@ -49,6 +49,7 @@ const merchandise = reactive<any>({
     bank: { code: null, title: '선택안함' },
     business_num: "",
     enabled: 1,
+    is_show_fee: 0,
 })
 const noti = reactive<any>({
     noti_url: "",
@@ -157,6 +158,13 @@ const setAccountInfo = () => {
         'acct_bank_name': merchandise.bank.title,
     })
 }
+
+const setIsShowFee = async () => {
+    post('set-show-fee', {
+        'is_show_fee': merchandise.is_show_fee,
+    })
+}
+
 // -------------- noti ----------------
 const setNotiUrl = () => {
     post('set-noti-url', {
@@ -165,6 +173,7 @@ const setNotiUrl = () => {
         'note': noti.noti_note,
     })
 }
+
 
 const batchRemove = async () => {
     const count = props.selected_idxs.length
@@ -323,7 +332,25 @@ watchEffect(() => {
                         </VRow>
                     </VCol>
                 </VRow>
-                <VRow v-if="corp.pv_options.paid.subsidiary_use_control" md="12" :cols=12>
+                <VRow md="12" :cols=12>
+                    <VCol :md="6" :cols="12">
+                        <VRow no-gutters style="align-items: center;">
+                            <VCol>수수료율 노출</VCol>
+                            <VCol md="8">
+                                <div class="batch-container">
+                                    <BooleanRadio :radio="merchandise.is_show_fee"
+                                        @update:radio="merchandise.is_show_fee = $event">
+                                        <template #true>노출</template>
+                                        <template #false>숨김</template>
+                                    </BooleanRadio>
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setIsShowFee()">
+                                        즉시적용
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
+                                    </VBtn>
+                                </div>
+                            </VCol>
+                        </VRow>
+                    </VCol>
                     <VCol :md="6" v-if="corp.pv_options.paid.subsidiary_use_control">
                         <VRow no-gutters style="align-items: center;">
                             <VCol>전산 사용상태</VCol>

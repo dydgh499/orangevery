@@ -93,7 +93,8 @@ Route::prefix('merchandises')->group(function() {
                 Route::post('set-custom-filter', [BatchUpdateMchtController::class, 'setCustomFilter']);
                 Route::post('set-business-num', [BatchUpdateMchtController::class, 'setBusinessNum']);
                 Route::post('set-account-info', [BatchUpdateMchtController::class, 'setAccountInfo']);
-                Route::delete('remove', [BatchUpdateMchtController::class, 'batchRemove']);   
+                Route::post('set-show-fee', [BatchUpdateMchtController::class, 'setShowFee']);
+                Route::delete('remove', [BatchUpdateMchtController::class, 'batchRemove']);
             });    
             Route::post('{id}/set-settle-hold', [MerchandiseController::class, 'setSettleHold']);
             Route::post('{id}/clear-settle-hold', [MerchandiseController::class, 'clearSettleHold']);

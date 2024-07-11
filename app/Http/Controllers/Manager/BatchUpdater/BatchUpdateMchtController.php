@@ -251,6 +251,16 @@ class BatchUpdateMchtController extends Controller
     }
     
     /**
+     * 수수료율 노출여부 적용
+     */
+    public function setShowFee(Request $request)
+    {
+        $cols = ['is_show_fee' => $request->is_show_fee];
+        $row = $this->merchandiseBatch($request)->update($cols);
+        return $this->response(1);
+    }
+
+    /**
      * 계좌정보 적용 
     */
     public function setAccountInfo(Request $request)
