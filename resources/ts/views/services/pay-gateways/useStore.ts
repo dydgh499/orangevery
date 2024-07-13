@@ -100,19 +100,30 @@ export const useStore = defineStore('payGatewayStore', () => {
             //errorHandler(e)
         }
     })
+
+    const updateFinanceVan = (fin_id: number) => {
+        const finance_van = finance_vans.value.find(obj => obj.id === fin_id)
+        if(finance_van)
+            getFinanceVan(finance_van)
+    }
+
+    const getFinanceVan = async (finance_van: FinanceVan) => {
+        let res = await post('/api/v1/manager/transactions/realtime-histories/get-balance', finance_van, false)
+        let data = res.data
+        if(data.code == 1) {
+            finance_van.balance = <number>(parseInt(data['data']['WDRW_CAN_AMT']))
+        } 
+        else {
+            finance_van.balance = 0
+            const message = finance_van.nick_name+'의 잔고를 불러오는 도중 에러가 발생하였습니다.<br><br>'+data['message']+'('+data['code']+')'
+            snackbar.value.show(message, 'error')
+        }
+    }
+
     const getFianaceVansBalance = async () => {
         if(getUserLevel() >= 35) {
             for (let i = 0; i < finance_vans.value.length; i++)  {
-                let res = await post('/api/v1/manager/transactions/realtime-histories/get-balance', finance_vans.value[i], false)
-                let data = res.data
-                if(data.code == 1) {
-                    finance_vans.value[i].balance = <number>(parseInt(data['data']['WDRW_CAN_AMT']))
-                } 
-                else {
-                    finance_vans.value[i].balance = 0
-                    const message = finance_vans.value[i].nick_name+'의 잔고를 불러오는 도중 에러가 발생하였습니다.<br><br>'+data['message']+'('+data['code']+')'
-                    snackbar.value.show(message, 'error')
-                }
+                getFinanceVan(finance_vans.value[i])
             }    
         }
     }
@@ -145,6 +156,7 @@ export const useStore = defineStore('payGatewayStore', () => {
     return {
         pgs, pss, terminals, settle_types, cus_filters, finance_vans, 
         pg_companies, finance_companies, fin_types,
-        psFilter, setFee, getFianaceVansBalance,
+        psFilter, setFee, 
+        updateFinanceVan, getFianaceVansBalance,
     }
 })

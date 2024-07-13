@@ -18,6 +18,13 @@ const visible = ref(false)
 
 const { batchDeposit, batchCancel, batchLinkAccount } = settlementHistoryFunctionCollect(props.store)
 
+const getTotalSettleAmount = () => {
+    return props.selected_idxs.reduce((total, id) => {
+        const item = props.store.items.find(obj => obj.id === id && obj.deposit_status === 0)
+        return item ? total + item.settle_amount : total
+    }, 0)
+}
+
 const getBatchDepositParams = async () => {
     if (props.selected_idxs) {
         const params: any = {
@@ -25,7 +32,7 @@ const getBatchDepositParams = async () => {
             use_finance_van_deposit: Number(corp.pv_options.paid.use_finance_van_deposit),
         }
         if (params['use_finance_van_deposit']) {
-            params['fin_id'] = await financeDialog.value.show()
+            params['fin_id'] = await financeDialog.value.show(getTotalSettleAmount())
             // 선택안함
             if (params['fin_id'] == 0)
                 return 0

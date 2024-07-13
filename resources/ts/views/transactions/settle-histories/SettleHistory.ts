@@ -1,4 +1,5 @@
 import { useRequestStore } from '@/views/request'
+import { useStore } from '@/views/services/pay-gateways/useStore'
 import { useSearchStore } from '@/views/transactions/useStore'
 import { SettlesHistory } from '@/views/types'
 import { axios, getLevelByIndex } from '@axios'
@@ -7,6 +8,7 @@ import corp from '@corp'
 export function settlementHistoryFunctionCollect(store: any) {
     const { post, get } = useRequestStore()
     const { printer } = useSearchStore()
+    const { updateFinanceVan } = useStore()
     const alert = <any>(inject('alert'))
     const snackbar = <any>(inject('snackbar'))
 
@@ -22,6 +24,10 @@ export function settlementHistoryFunctionCollect(store: any) {
 
             await post(rootUrlBuilder(is_mcht, item.id) + '/deposit', params, true)
             store.setTable()
+
+            if(params.fin_id && params.fin_id > 0) {
+                updateFinanceVan(params.fin_id)
+            }
         }
     }
 
@@ -37,6 +43,10 @@ export function settlementHistoryFunctionCollect(store: any) {
             }
             await post('/api/v1/manager/transactions/settle-histories/' + (is_mcht ? 'merchandises' : 'salesforces') + '/batch-deposit', params, true)
             store.setTable()
+            
+            if(params.fin_id && params.fin_id > 0) {
+                updateFinanceVan(params.fin_id)
+            }
         }
     }
 
