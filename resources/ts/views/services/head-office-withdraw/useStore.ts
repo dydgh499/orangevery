@@ -15,9 +15,9 @@ export const useSearchStore = defineStore('useHeadOfficeSearchStore', () => {
         'acct_name': '예금주',
         'acct_bank_name': '입금은행명',
         'acct_bank_code': '은행코드',
-        'message'   : '출금사유',
+        'note'      : '출금사유',
         'created_at': '출금시간',
-    }    
+    }
         
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
