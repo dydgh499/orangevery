@@ -32,6 +32,28 @@ const getPaymentTap = () => {
     return payment
 }
 
+const getRiskTap = () => {
+    const risks = []
+    if (getUserLevel() >= 35 || corp.pv_options.auth.visibles.abnormal_trans_sales) {
+        risks.push({
+            title: '이상거래 관리',
+            to: 'transactions-dangers',
+        },
+        {
+            title: '결제실패 관리',
+            to: 'transactions-fails',
+        })        
+        if (corp.pv_options.paid.use_realtime_deposit)
+        {
+            risks.push({
+                title: '즉시출금 관리',
+                to: 'transactions-realtime-histories',
+            })
+        }
+    }
+    return risks
+}
+
 const getTransactionTap = () => {
     let transactions = []
     transactions.push({
@@ -50,6 +72,7 @@ const getTransactionTap = () => {
             to: 'transactions-summary',
         })
     }
+    transactions[0].children.push(...getRiskTap())
     return transactions
 }
 
@@ -124,37 +147,11 @@ const getSettleHistoryTap = () => {
     return settle_histories
 }
 
-const getRiskTap = () => {
-    const risks = []
-    if (getUserLevel() >= 35 || corp.pv_options.auth.visibles.abnormal_trans_sales) {
-        risks.push({
-            title: '이상거래 관리',
-            icon: { icon: 'jam-triangle-danger' },
-            to: 'transactions-dangers',
-        },
-        {
-            title: '결제실패 관리',
-            icon: { icon: 'carbon:ai-status-failed' },
-            to: 'transactions-fails',
-        })        
-        if (corp.pv_options.paid.use_realtime_deposit)
-        {
-            risks.push({
-                title: '실시간이체 관리',
-                icon: { icon: 'tabler:history' },
-                to: 'transactions-realtime-histories',
-            })
-        }
-    }
-    return risks
-}
-
 const getAbilitiesMenu = computed(() => {
     const payment = getPaymentTap()
     const transactions = getTransactionTap()
     const settles = getSettleManagement()
     const settle_histories = getSettleHistoryTap()
-    const risks = getRiskTap()
 
     return [
         { heading: 'Transaction' },
@@ -162,7 +159,6 @@ const getAbilitiesMenu = computed(() => {
         ...transactions,
         ...settles,
         ...settle_histories,
-        ...risks,
     ]
 })
 

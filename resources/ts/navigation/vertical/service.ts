@@ -2,8 +2,6 @@ import { getUserLevel } from '@axios'
 
 const getAbilitiesMenu = computed(() => {
     const operations:any[] = []
-    const complaints = []
-    const popups = []
     if (getUserLevel() >= 35) {
         operations.push({
             title: '운영 관리',
@@ -32,18 +30,18 @@ const getAbilitiesMenu = computed(() => {
             title: '대량 등록',
             to: 'services-bulk-register',
         })
+        /*
+            operations[0].children.push({
+                title: '이전 전산 연동',
+                to: 'services-computational-transfer',
+            })
+        */
         operations[0].children.push({
-            title: '이전 전산 연동',
-            to: 'services-computational-transfer',
-        })
-        popups.push({
             title: '팝업 관리',
-            icon: { icon: 'carbon:popup' },
             to: 'popups',
         })
-        complaints.push({
+        operations[0].children.push({
             title: '민원 관리',
-            icon: { icon: 'ic-round-sentiment-dissatisfied' },
             to: 'complaints',
         })
     }
@@ -55,8 +53,6 @@ const getAbilitiesMenu = computed(() => {
             icon: { icon: 'fe-notice-active' },
             to: 'posts',
         },
-        ...popups,
-        ...complaints,
     ]
 })
 

@@ -21,7 +21,7 @@ watchEffect(() => {
 </script>
 <template>
     <VCardTitle>
-        <BaseQuestionTooltip :location="'top'" :text="'본사 지정계좌 등록'" :content="'출금에 사용할 지정계좌를 등록합니다.'">
+        <BaseQuestionTooltip :location="'top'" :text="'본사 지정계좌'" :content="'출금에 사용할 지정계좌 입니다.<br>등록 및 수정작업은 개발사에 문의해주세요.'">
         </BaseQuestionTooltip>
     </VCardTitle>
     <VDivider style="margin-top: 1em;" />
@@ -32,6 +32,7 @@ watchEffect(() => {
                 <th scope="col" style="text-align: center;">계좌번호</th>
                 <th scope="col" style="text-align: center;">예금주</th>
                 <th scope="col" style="text-align: center;">출금은행</th>
+                <th scope="col" style="text-align: center;">은행코드</th>
             </tr>
         </thead>
         <tbody>
@@ -47,3 +48,8 @@ watchEffect(() => {
         </tfoot>
     </VTable>
 </template>
+<style scoped>
+  :deep(.v-table__wrapper) {
+    block-size: auto !important;
+  }
+</style>

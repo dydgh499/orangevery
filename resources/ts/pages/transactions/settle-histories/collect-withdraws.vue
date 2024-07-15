@@ -1,10 +1,10 @@
 
 <script setup lang="ts">
-import { useSearchStore, realtimeResult, realtimeMessage } from '@/views/transactions/settle-histories/useCollectWithdrawHistoryStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import { DateFilters } from '@core/enums'
+import { realtimeMessage, realtimeResult, useSearchStore } from '@/views/transactions/settle-histories/useCollectWithdrawHistoryStore'
 import { getUserLevel } from '@axios'
+import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 
@@ -70,4 +70,3 @@ provide('exporter', exporter)
         </BaseIndexView>
     </section>
 </template>
-@/views/transactions/settle-histories/useMerchandiseSelfSettleStore

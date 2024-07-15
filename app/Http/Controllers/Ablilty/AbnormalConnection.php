@@ -195,7 +195,7 @@ class AbnormalConnection
                 'target_level'  => $level,
                 'target_key'    => request()->url(),
                 'target_value'  => self::privateDataHidden(request()->all()),
-                'comment'       => '분당 요청수 100회 초과 '.$user_name,
+                'comment'       => '분당 요청수 500회 초과 '.$user_name,
             ]);    
         }
     }

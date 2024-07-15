@@ -1,72 +1,19 @@
 
 <script setup lang="ts">
-import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import HeadOfficeWithdrawDialog from '@/layouts/dialogs/services/HeadOfficeWithdrawDialog.vue'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { getUserLevel, pay_token, user_info } from '@/plugins/axios'
-import { useRequestStore } from '@/views/request'
-import HeadOfficeAccountCard from '@/views/services/head-office-withdraw/HeadOfficeAccountCard.vue'
-import { useHeadOfficeAccountStore } from '@/views/services/head-office-withdraw/useStore'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import type { FinanceVan, HeadOffceAccount } from '@/views/types'
-import { requiredValidatorV2 } from '@validators'
+import { useSearchStore } from '@/views/services/head-office-withdraw/useStore'
+import { realtimeMessage, realtimeResult } from '@/views/transactions/settle-histories/useCollectWithdrawHistoryStore'
+import { DateFilters } from '@core/enums'
 
-const { head_office_accounts } = useHeadOfficeAccountStore()
-const { post } = useRequestStore()
-const { finance_vans } = useStore()
+const { store, head, exporter } = useSearchStore()
+const headOfficeWithdrawDialog = ref()
 
-const alert = <any>(inject('alert'))
-const snackbar = <any>(inject('snackbar'))
-const passwordAuthDialog = ref()
-const token = ref('')
- 
-const fin_id = ref(null)
-const head_office_acct_id = ref(null)
-const amount = ref(0)
+provide('store', store)
+provide('head', head)
+provide('exporter', exporter)
 
-const withdrawAcctBalance = () => {
-    const finance_van = <FinanceVan>(finance_vans.find(obj => obj.id == fin_id.value))
-    if(finance_van)
-        return `출금 가능잔액: ${finance_van.balance?.toLocaleString()}원`
-    else
-        return ``
-}
-
-const withdrawAcctHint = () => {
-    const finance_van = <FinanceVan>(finance_vans.find(obj => obj.id == fin_id.value))
-    if(finance_van)
-        return `은행코드: ${finance_van.bank_code}, 계좌번호: ${finance_van.withdraw_acct_num}`
-    else
-        return ``
-}
-
-const depositAcctHint = () => {
-    const head_office_account = <HeadOffceAccount>(head_office_accounts.find(obj => obj.id == head_office_acct_id.value))
-    if(head_office_account)
-        return `예금주: ${head_office_account.acct_name}, 은행명: ${head_office_account.acct_bank_name}`
-    else
-        return ``
-}
-
-const deposit = async () => {
-    if(amount.value) {
-        const phone_num = user_info.value.phone_num.replaceAll(' ', '').replaceAll('-', '')
-        token.value = await passwordAuthDialog.value.show(phone_num)
-        
-        if(token.value !== '') {
-            if(await alert.value.show('정말 '+amount.value+'원을 이체하시겠습니까?')) {
-                const params = {
-                    fin_id: fin_id.value,
-                    head_office_acct_id: head_office_acct_id.value,
-                    withdraw_amount: amount.value,
-                    token: token.value
-                }
-                const r = await post('/api/v1/manager/transactions/realtime-histories/head-office-transfer', params, true)
-            }
-        }
-    }
-    else
-        snackbar.value.show('출금 금액을 입력해주세요.', 'warning')
-}
 if(getUserLevel() < 35) {
     pay_token.value = ''
     user_info.value = {}
@@ -76,66 +23,46 @@ if(getUserLevel() < 35) {
 <template>
     <section>
         <div>
-            <VRow class="match-height">
-                <!-- 👉 운영정보 -->
-                <VCol cols="12" md="4">
-                    <VCard>
-                        <VCardItem>
-                            <VCardTitle style="margin-bottom: 1em;">본사 지정계좌 이체</VCardTitle>
-                            <VDivider style="margin: 1em 0;" />
-                            <VRow class="pt-3">
-                                <CreateHalfVCol :mdl="6" :mdr="6">
-                                    <template #name>출금 이체모듈 선택<br>
-                                        <h4>
-                                            {{ withdrawAcctBalance() }}
-                                        </h4>
-                                    </template>
-                                    <template #input>
-                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="fin_id" :items="finance_vans"
-                                            label="출금 이체모듈 선택" item-title="nick_name" item-value="id" 
-                                            persistent-hint single-line  :hint="withdrawAcctHint()"/>
-                                    </template>
-                                </CreateHalfVCol>
-                                <CreateHalfVCol :mdl="6" :mdr="6">
-                                    <template #name>지정계좌 선택</template>
-                                    <template #input>
-                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="head_office_acct_id"
-                                            :items="head_office_accounts" label="입금 계좌 선택" item-title="acct_num" item-value="id"
-                                            persistent-hint single-line  :hint="depositAcctHint()" />
-                                    </template>
-                                </CreateHalfVCol>
-                                <CreateHalfVCol :mdl="6" :mdr="6">
-                                    <template #name>출금금액 입력</template>
-                                    <template #input>
-                                        <VTextField v-model="amount" type="number" suffix="￦" placeholder="출금금액 입력"
-                                            prepend-inner-icon="ic:outline-price-change" :rules="[requiredValidatorV2(amount, '출금금액')]" />
-                                    </template>
-                                </CreateHalfVCol>
-                            </VRow>
-                            <VRow>
-                            <VCol class="d-flex gap-4">
-                                <VBtn type="button" style="margin-left: auto;" @click="deposit()">
-                                    지정계좌로 이체
-                                    <VIcon end icon="fa6-solid:money-bill-transfer" />
-                                </VBtn>
-                            </VCol>
-                        </VRow>
-                        </VCardItem>
-                    </VCard>
-                </VCol>
-                <VCol cols="12" md="8">
-                    <VCard>
-                        <VCardItem>
-                            <VCol cols="12">
-                                <VRow>
-                                    <HeadOfficeAccountCard />
-                                </VRow>
-                            </VCol>
-                        </VCardItem>
-                    </VCard>
-                </VCol>
-            </VRow>
-            <PasswordAuthDialog ref="passwordAuthDialog"/>
+            <BaseIndexView placeholder="입금계좌 검색" :metas="[]" :add="false" add_name="입금계좌" :date_filter_type="DateFilters.SETTLE_RANGE">
+                <template #filter>
+                </template>
+                <template #index_extra_field>
+                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
+                        :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})"/>                        
+                    <VBtn prepend-icon="carbon:batch-job" @click="headOfficeWithdrawDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
+                        지정계좌 이체
+                    </VBtn>
+                </template>
+                <template #headers>
+                    <tr>
+                        <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
+                            <span>{{ header.ko }}</span>
+                        </th>
+                    </tr>
+                </template>
+                <template #body>
+                    <template v-for="(item, index) in store.getItems" :key="index">
+                        <tr>
+                            <template v-for="(_header, _key, _index) in head.headers" :key="_index">
+                                <td v-show="_header.visible" :class="_key == 'title' ? 'list-square title' : 'list-square'">
+                                    <b v-if="_key === 'withdraw_amount'" class="text-primary">
+                                        {{ item[_key].toLocaleString() }}
+                                    </b>
+                                    <span v-else-if="_key == 'result_code'">
+                                        <VChip :color="store.getSelectIdColor(realtimeResult(item[_key]))">
+                                            {{ realtimeMessage(item) }}
+                                        </VChip>
+                                    </span>
+                                    <span v-else>
+                                        {{ item[_key] }}
+                                    </span>
+                                </td>
+                            </template>
+                        </tr>
+                    </template>
+                </template>
+            </BaseIndexView>
+            <HeadOfficeWithdrawDialog ref="headOfficeWithdrawDialog"/>
         </div>
     </section>
 </template>

@@ -62,9 +62,10 @@ Route::middleware(['is.operate', 'last.login.ip'])->group(function() {
         Route::apiResource('pay-sections', PaymentSectionController::class);
         Route::apiResource('finance-vans', FinanceVanController::class);
         Route::apiResource('classifications', ClassificationController::class);
-        Route::apiResource('head-office-accounts', HeadOfficeAccountController::class);
         Route::apiResource('mcht-blacklists', MchtBlacklistController::class);            
         Route::apiResource('holidays', HolidayController::class);
+        Route::get('head-office-accounts', [HeadOfficeAccountController::class, 'index']);
+        Route::get('head-office-accounts/all', [HeadOfficeAccountController::class, 'all']);
         
     });
     Route::apiResource('popups', PopupController::class);

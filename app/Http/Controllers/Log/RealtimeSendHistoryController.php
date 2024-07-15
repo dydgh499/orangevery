@@ -200,10 +200,11 @@ class RealtimeSendHistoryController extends Controller
     public function headOfficeTransfer(Request $request)
     {
         $validated = $request->validate([
-            'fin_id'=>'required|numeric',
-            'head_office_acct_id'=>'required|numeric',
-            'withdraw_amount'=>'required|numeric',
-            'token'=>'required|string',
+            'fin_id' => 'required|numeric',
+            'head_office_acct_id' => 'required|numeric',
+            'withdraw_amount' => 'required|numeric',
+            'note' => 'required|string',
+            'token' => 'required|string',
         ]);
 
         if(AuthPhoneNum::validate($request->token) === 0)
@@ -224,6 +225,7 @@ class RealtimeSendHistoryController extends Controller
                     'mcht_id'   => -1,
                     'withdraw_amount' => $request->withdraw_amount,
                     'withdraw_fee' => 0,
+                    'note' => $request->note,
                 ];
 
                 if($privacy && $finance)

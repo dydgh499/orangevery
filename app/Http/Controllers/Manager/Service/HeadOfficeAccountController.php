@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Manager\Service;
 
+use App\Models\CollectWithdraw;
 use App\Models\Service\HeadOfficeAccount;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
@@ -15,7 +16,7 @@ use Illuminate\Http\Request;
 /**
  * @group Head Office Account API
  *
- * 본사 지정계좌 API입니다.
+ * 가상계좌 출금 API 입니다.
  */
 class HeadOfficeAccountController extends Controller
 {
@@ -27,93 +28,21 @@ class HeadOfficeAccountController extends Controller
         $this->head_office_accounts = $head_office_accounts;
     }
 
-    /**
-     * 목록출력
-     *
-     * 가맹점 이상 가능
-     *
-     */
-    public function index(Request $request)
+    public function all(Request $request)
     {
         $request->merge([
             'page' => 1,
-            'page_size' => 99999999,
+            'page_size' => 999,
         ]);
         $query  = $this->head_office_accounts->where('brand_id', $request->user()->brand_id);
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }
 
-    /**
-     * 추가
-     *
-     * 마스터 이상 가능
-     *
-     */
-    public function store(HeadOfficeAccountRequest $request)
+    public function index(Request $request)
     {
-        /*
-            $data = $request->data();
-            $res = $this->head_office_accounts->create($data);
-            return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
-        */
-        return $this->extendResponse(1999, '지금은 추가할 수 없습니다,');
-    }
-
-    /**
-     * 단일조회
-     *
-     * 가맹점 이상 가능
-     *
-     * @urlParam id integer required 정기등록카드 PK
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $query = $this->head_office_accounts->where('id', $id);
-        $user = $user->first();
-
-        if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
-            return $this->response(951);
-        else
-            return $this->response($user ? 0 : 1000, $user);
-    }
-
-    /**
-     * 업데이트
-     *
-     * 마스터 이상 가능
-     *
-     * @urlParam id integer required 정기등록카드 PK
-     * @return \Illuminate\Http\Response
-     */
-    public function update(HeadOfficeAccountRequest $request, int $id)
-    {
-        /*
-            $data = $request->data();
-            $res  = $this->head_office_accounts->where('id', $id)->update($data);
-            return $this->response($res ? 1 : 990, ['id'=>$id]);
-        */
-        return $this->extendResponse(1999, '지금은 업데이트할 수 없습니다.');
-    }
-
-    /**
-     * 단일삭제
-     *
-     * 마스터 이상 가능
-     *
-     * @urlParam id integer required 정기등록카드 PK
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        $query = $this->head_office_accounts->where('id', $id);
-        $user = $user->first();
-
-        if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
-            return $this->response(951);
-
-        $res = $query->delete();
-        return $this->response($res ? 1 : 990, ['id'=>$id]);
+        $query = CollectWithdraw::where('brand_id', $request->user()->brand_id)->whereNull('mcht_id');
+        $data = $this->getIndexData($request, $query);
+        return $this->response(0, $data);
     }
 }
