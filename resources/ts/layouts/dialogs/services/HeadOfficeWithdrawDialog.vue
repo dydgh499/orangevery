@@ -4,7 +4,7 @@ import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { user_info } from '@/plugins/axios'
 import { useRequestStore } from '@/views/request'
-import { useHeadOfficeAccountStore } from '@/views/services/head-office-withdraw/useStore'
+import { useHeadOfficeAccountStore } from '@/views/services/cms-transactions/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { FinanceVan, HeadOffceAccount } from '@/views/types'
 import { requiredValidatorV2 } from '@validators'
@@ -43,7 +43,7 @@ const withdrawAcctHint = () => {
         return `은행코드: ${finance_van.bank_code}, 계좌번호: ${finance_van.withdraw_acct_num}`
     else
         return ``
-}
+} 
 
 const depositAcctHint = () => {
     const head_office_account = <HeadOffceAccount>(head_office_accounts.find(obj => obj.id == head_office_acct_id.value))
@@ -70,7 +70,7 @@ const deposit = async () => {
                     note: note.value,
                     token: token.value
                 }
-                const r = await post('/api/v1/manager/transactions/realtime-histories/head-office-transfer', params, true)
+                const r = await post('/api/v1/manager/services/cms-transactions/withdraw', params, true)
                 if(r.status_code === 201) {
                     updateFinanceVan(fin_id.value)
                 }

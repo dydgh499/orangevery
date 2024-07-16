@@ -10,6 +10,8 @@ use App\Http\Controllers\Manager\Service\DifferentSettlementInfoController;
 
 use App\Http\Controllers\Manager\Service\MchtBlacklistController;
 use App\Http\Controllers\Manager\Service\HeadOfficeAccountController;
+use App\Http\Controllers\Manager\Service\CMSTransactionController;
+
 use App\Http\Controllers\Manager\Service\ClassificationController;
 use App\Http\Controllers\Manager\Service\OperatorIPController;
 use App\Http\Controllers\Manager\Service\HolidayController;
@@ -48,6 +50,7 @@ Route::middleware(['is.operate', 'last.login.ip'])->group(function() {
 
             Route::post('mcht-blacklists/bulk-register', [MchtBlacklistController::class, 'bulkRegister']);            
             Route::post('holidays/bulk-register', [HolidayController::class, 'updateHolidays']);
+            Route::post('cms-transactions/withdraw', [CMSTransactionController::class, 'withdraw']);
         });
     
         Route::apiResource('brands/before-brand-infos', BeforeBrandInfoController::class);
@@ -64,9 +67,10 @@ Route::middleware(['is.operate', 'last.login.ip'])->group(function() {
         Route::apiResource('classifications', ClassificationController::class);
         Route::apiResource('mcht-blacklists', MchtBlacklistController::class);            
         Route::apiResource('holidays', HolidayController::class);
-        Route::get('head-office-accounts', [HeadOfficeAccountController::class, 'index']);
-        Route::get('head-office-accounts/all', [HeadOfficeAccountController::class, 'all']);
-        
+        Route::get('head-office-accounts', [HeadOfficeAccountController::class, 'index']);        
+        Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
+        Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);
+        Route::post('cms-transactions/get-balance', [CMSTransactionController::class, 'getBalance']);
     });
     Route::apiResource('popups', PopupController::class);
 });

@@ -204,8 +204,3 @@ onMounted(() => {
         </template>
     </BaseIndexView>
 </template>
-<style scoped>
-  :deep(.sub-headers) {
-    border-inline-end: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
-  }
-</style>

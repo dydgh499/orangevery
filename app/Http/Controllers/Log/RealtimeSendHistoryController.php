@@ -2,17 +2,12 @@
 
 namespace App\Http\Controllers\Log;
 
-use App\Models\FinanceVan;
 use App\Models\Merchandise;
-use App\Models\Transaciton;
-use App\Models\Service\HeadOfficeAccount;
 use App\Models\Log\RealtimeSendHistory;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
-use App\Http\Controllers\Auth\AuthPhoneNum;
-use App\Http\Controllers\Ablilty\Ablilty;
 
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
@@ -26,12 +21,11 @@ use Illuminate\Http\Request;
 class RealtimeSendHistoryController extends Controller
 {
     use ManagerTrait, ExtendResponseTrait;
-    protected $realtime_send_histories, $base_noti_url;
+    protected $realtime_send_histories;
 
     public function __construct(RealtimeSendHistory $realtime_send_histories)
     {
         $this->realtime_send_histories = $realtime_send_histories;
-        $this->base_noti_url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes';
     }
     
     public function getAutoWithdrawParams($merchandises, $pay_modules)
@@ -108,7 +102,7 @@ class RealtimeSendHistoryController extends Controller
 
         foreach($params as $param)
         {
-            $res = post($this->base_noti_url.'/collect-deposit', $param);
+            $res = post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/collect-deposit', $param);
             if($res['code'] == 201)
                 return $this->response($res ? 1 : 990);
         }
@@ -153,94 +147,5 @@ class RealtimeSendHistoryController extends Controller
         $query = $this->commonSelect($request);
         $data = $this->getIndexData($request, $query, 'realtime_send_histories.id', $cols, 'realtime_send_histories.created_at');
         return $this->response(0, $data);
-    }
-
-    /**
-     * 단일조회(상세조회)
-     *
-     * 운영자 이상 가능
-     *
-     * @urlParam id integer required 영업자 이력 PK
-     */
-    public function show($id)
-    {
-        $data = $this->realtime_send_histories->where('id', $id)->first();
-        return $this->response($data ? 0 : 1000, $data);
-    }
-
-    /*
-    * 예금주 조회
-    */
-    public function onwerCheck(Request $request)
-    {
-        $data = $request->all();
-        $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/onwer-check';
-        $res = post($url, $data);
-        if($res['body']['result'] === 100)
-            return $this->response(1, ['message'=> $res['body']['message']]);
-        else
-            return $this->extendResponse(1999, $res['body']['message'], $res['body']['data']);
-    }
-
-    /**
-     * 잔액조회
-     */
-    public function getBalance(Request $request)
-    {
-        $data = $request->all();
-        $url = $this->base_noti_url.'/get-balance';
-        $res = post($url, $data);
-        $res = $res['body']['data'];
-        return $this->extendResponse($res['result_cd'] == "0000" ? 1 : 2000, $res['result_msg'], $res['data']);
-    }
-
-    /**
-     * 본사지정계좌 출금
-     */
-    public function headOfficeTransfer(Request $request)
-    {
-        $validated = $request->validate([
-            'fin_id' => 'required|numeric',
-            'head_office_acct_id' => 'required|numeric',
-            'withdraw_amount' => 'required|numeric',
-            'note' => 'required|string',
-            'token' => 'required|string',
-        ]);
-
-        if(AuthPhoneNum::validate($request->token) === 0)
-        {
-            if($request->user()->tokenCan(35))
-            {
-                $data = $request->all();
-                // parameter 변조 방지
-                $privacy = HeadOfficeAccount::where('id', $request->head_office_acct_id)
-                    ->where('brand_id', $request->user()->brand_id)
-                    ->first();
-                $finance = FinanceVan::where('id', $request->fin_id)
-                    ->where('brand_id', $request->user()->brand_id)
-                    ->first();
-
-                $params = [
-                    'fin_id'    => $request->fin_id,
-                    'mcht_id'   => -1,
-                    'withdraw_amount' => $request->withdraw_amount,
-                    'withdraw_fee' => 0,
-                    'note' => $request->note,
-                ];
-
-                if($privacy && $finance)
-                {
-                    $params = array_merge($params, $privacy->toArray());
-                    $res    = post($this->base_noti_url.'/collect-deposit', $params);
-                    return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);    
-                }
-                else
-                    return $this->response(951);
-            }
-            else
-                return $this->response(951);
-        }
-        else
-            return $this->response(951);
     }
 }

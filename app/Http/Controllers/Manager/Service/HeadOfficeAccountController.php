@@ -28,20 +28,13 @@ class HeadOfficeAccountController extends Controller
         $this->head_office_accounts = $head_office_accounts;
     }
 
-    public function all(Request $request)
+    public function index(Request $request)
     {
         $request->merge([
             'page' => 1,
             'page_size' => 999,
         ]);
         $query  = $this->head_office_accounts->where('brand_id', $request->user()->brand_id);
-        $data = $this->getIndexData($request, $query);
-        return $this->response(0, $data);
-    }
-
-    public function index(Request $request)
-    {
-        $query = CollectWithdraw::where('brand_id', $request->user()->brand_id)->whereNull('mcht_id');
         $data = $this->getIndexData($request, $query);
         return $this->response(0, $data);
     }

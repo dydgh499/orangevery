@@ -23,7 +23,7 @@ const setAcctBankName = () => {
     props.item.acct_bank_name = bank ? bank.title : '선택안함'
 }
 
-const onwerCheck = async () => {
+const ownerCheck = async () => {
     if (await alert.value.show('정말 예금주 검증을 하시겠습니까?')) {
         try {
             const params = {
@@ -31,7 +31,7 @@ const onwerCheck = async () => {
                 acct_num: props.item.acct_num.trim().replace('-', ''),
                 acct_nm: props.item.acct_name
             }
-            const r = await axios.post('/api/v1/auth/onwer-check', params)
+            const r = await axios.post('/api/v1/auth/owner-check', params)
             snackbar.value.show(r.data.message, 'success')
         }
         catch (e: any) {
@@ -267,7 +267,7 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                     <VCol cols="12" v-if="corp.pv_options.paid.use_acct_verification && isAbleModiy(props.item.id)">
-                        <VBtn @click="onwerCheck" prepend-icon="ri:pass-valid-line" class="float-right">
+                        <VBtn @click="ownerCheck" prepend-icon="ri:pass-valid-line" class="float-right">
                             예금주 검증
                         </VBtn>
                     </VCol>

@@ -40,7 +40,7 @@ const getDateFormat = (_settle_dt: number) => {
             <tr v-for="(item, index) in store.getItems" :key="index">
                 <template v-for="(_header, _key, _index) in head.headers" :key="_index">
                     <td v-show="_header.visible" class='list-square'>
-                        <span v-if="_key == 'id'" class="edit-link">
+                        <span v-if="_key == 'id'">
                             #{{ item[_key] }}
                         </span>
                         <span v-else-if="_key == 'deposit_amount'">

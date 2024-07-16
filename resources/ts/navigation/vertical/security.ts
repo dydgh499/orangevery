@@ -24,8 +24,8 @@ const getAbilitiesMenu = computed(() => {
         })
         if(corp.pv_options.paid.use_head_office_withdraw) {
             securities[1].children.push({
-                title: '가상계좌 출금',
-                to: 'services-head-office-withdraw',
+                title: '가상계좌 입출금',
+                to: 'services-cms-transactions',
             })
         }
         if(corp.pv_options.paid.use_mcht_blacklist) {

@@ -50,12 +50,7 @@ Route::prefix('transactions')->group(function() {
             });
             Route::post('merchandises/single-deposit', [MchtSettleHistoryController::class, 'singleDeposit']);
             Route::post('merchandises/single-deposit-cancel-job-reservation', [MchtSettleHistoryController::class, 'singleDepositCancelJobReservation']);
-        });
-    
-        Route::prefix('realtime-histories')->group(function() {
-            Route::post('get-balance', [RealtimeSendHistoryController::class, 'getBalance']);
-            Route::post('head-office-transfer', [RealtimeSendHistoryController::class, 'headOfficeTransfer']);
-        });
+        });    
     });
 
     Route::post('noti/{id}', [TransactionController::class, 'noti']);
@@ -96,7 +91,7 @@ Route::prefix('transactions')->group(function() {
         Route::apiResource('merchandises', MchtSettleHistoryController::class);
         Route::apiResource('salesforces', SalesSettleHistoryController::class);
     });
-    Route::apiResource('realtime-histories', RealtimeSendHistoryController::class);
+    Route::get('realtime-histories', [RealtimeSendHistoryController::class, 'index']);
 });
 Route::apiResource('transactions', TransactionController::class);
 

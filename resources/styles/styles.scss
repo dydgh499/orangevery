@@ -168,6 +168,11 @@ input[type="number"] {
   inset-inline-end: 2em;
 }
 
+// sub headers
+.sub-headers {
+  border-inline-end: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
 // --
 @media only screen and (max-device-width: 960px) {
   .preview {

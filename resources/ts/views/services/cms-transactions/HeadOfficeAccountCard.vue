@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { useRequestStore } from '@/views/request'
-import HeadOfficeAccountTr from '@/views/services/head-office-withdraw/HeadOfficeAccountTr.vue'
-import { useHeadOfficeAccountStore } from '@/views/services/head-office-withdraw/useStore'
+import HeadOfficeAccountTr from '@/views/services/cms-transactions/HeadOfficeAccountTr.vue'
+import { useHeadOfficeAccountStore } from '@/views/services/cms-transactions/useStore'
 import type { HeadOffceAccount } from '@/views/types'
 
 const { setNullRemove } = useRequestStore()

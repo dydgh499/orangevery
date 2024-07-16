@@ -176,8 +176,7 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['buyer_phone'] = '구매자 연락처'
     
     headers['item_name'] = '상품명'
-    if(getUserLevel() >= 13)
-    {
+    if(getUserLevel() >= 13) {
         headers['ord_num'] = '주문번호'
         headers['trx_id'] = '거래번호'
         headers['ori_trx_id'] = '원거래번호'

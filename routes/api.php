@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Manager\MerchandiseController;
@@ -10,7 +9,7 @@ use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
 use App\Http\Controllers\Manager\Transaction\TransactionController;
 use App\Http\Controllers\Manager\Dashboard\DashboardController;
 use App\Http\Controllers\Manager\Service\MchtBlacklistController;
-use App\Http\Controllers\Log\RealtimeSendHistoryController;
+use App\Http\Controllers\Manager\Service\CMSTransactionController;
 
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\BeforeSystem\BeforeSystemController;
@@ -53,7 +52,7 @@ Route::prefix('v1')->group(function() {
         Route::middleware(['auth:sanctum'])->group(function() {
             Route::post('extend-password-at', [AuthController::class, 'extendPasswordAt']);   
             Route::post('sign-out', [AuthController::class, 'signout']);
-            Route::post('onwer-check', [RealtimeSendHistoryController::class, 'onwerCheck']);
+            Route::post('owner-check', [CMSTransactionController::class, 'ownerCheck']);
         });
     }); 
 
