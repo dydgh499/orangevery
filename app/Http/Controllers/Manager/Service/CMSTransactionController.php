@@ -156,7 +156,7 @@ class CMSTransactionController extends Controller
                 'created_at' => $collect_withdraw->created_at,
                 'updated_at' => $collect_withdraw->updated_at,
                 'note' => $collect_withdraw->note,
-                'withdraw_code' => $collect_withdraw->result_code,
+                'result_code' => $collect_withdraw->result_code,
                 'message' => $collect_withdraw->message,
                 'acct_num' => $collect_withdraw->acct_num,
                 'acct_name' => $collect_withdraw->acct_name,

@@ -12,7 +12,7 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
     const { finance_vans } = useStore()
     const headers: Record<string, string> = {
         'id' : 'NO.',
-        'withdraw_code': '성공여부',
+        'result_code': '성공여부',
         'fin_id': '거래모듈',
         'is_withdraw': '거래타입',
         'trx_at': '거래시간',
@@ -44,7 +44,7 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
         for (let i = 0; i < datas.length; i++) {
             datas[i]['fin_id'] = (finance_vans.find(obj => obj.id == datas[i]['fin_id']))?.nick_name
             datas[i]['is_withdraw'] = datas[i]['is_withdraw'] ? '출금' : '입금'
-            datas[i]['withdraw_code'] = realtimeMessage(datas[i]['withdraw_code'])
+            datas[i]['result_code'] = realtimeMessage(datas[i]['result_code'])
             datas[i] = head.sortAndFilterByHeader(datas[i], keys)
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)

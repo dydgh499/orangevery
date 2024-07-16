@@ -108,7 +108,7 @@ onMounted(() => {
                                             {{ item[_key] ? '출금' : '입금' }}
                                         </VChip>
                                     </span>
-                                    <span v-else-if="_key === 'withdraw_code'">
+                                    <span v-else-if="_key === 'result_code'">
                                         <VChip :color="store.getSelectIdColor(realtimeResult(item[_key]))">
                                             {{ realtimeMessage(item) }}
                                         </VChip>
