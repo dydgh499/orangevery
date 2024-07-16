@@ -84,40 +84,39 @@ class MerchandiseController extends Controller
 
         $query = globalPGFilter($query, $request, 'payment_modules');
         $query = $this->mchtCommonFilter($query, $request, 'merchandises', $is_all);
-        return $this->getIndexData($request, $query, 'merchandises.id', ['merchandises.*'], 'merchandises.created_at');
+        return $this->getIndexData($request, $query, 'merchandises.id', ['merchandises.*'], 'merchandises.id', false);
     }
 
     private function byNormalIndex($request, $is_all)
     {
         $query = $this->merchandises;
         $query = $this->mchtCommonFilter($query, $request, 'merchandises', $is_all);
-        return $this->getIndexData($request, $query, 'id');
+        return $this->getIndexData($request, $query, 'id', [], 'id', false);
     }
 
     private function mchtCommonFilter($query, $request, $parent, $is_all)
     {
-        $full_parent = $parent != '' ? $parent."." : '';
         $search = $request->input('search', '');
 
         $query = globalSalesFilter($query, $request, $parent);
         $query = globalAuthFilter($query, $request, $parent);
         $query = $query
-                ->where($full_parent.'brand_id', $request->user()->brand_id)
-                ->where(function ($query) use ($search, $full_parent) {                  
-                    return $query->where('mcht_name', 'like', "%$search%")
-                        ->orWhere($full_parent.'user_name', 'like', "%$search%")
-                        ->orWhere($full_parent.'phone_num', 'like', "%$search%")
-                        ->orWhere($full_parent.'business_num', 'like', "%$search%")
-                        ->orWhere($full_parent.'nick_name', 'like', "%$search%")
-                        ->orWhere($full_parent.'acct_num', 'like', "%$search%")
-                        ->orWhere($full_parent.'acct_name', 'like', "%$search%");
+                ->where($parent.'.brand_id', $request->user()->brand_id)
+                ->where(function ($query) use ($search, $parent) {
+                    return $query->where($parent.'.mcht_name', 'like', "%$search%")
+                        ->orWhere($parent.'.user_name', 'like', "%$search%")
+                        ->orWhere($parent.'.phone_num', 'like', "%$search%")
+                        ->orWhere($parent.'.business_num', 'like', "%$search%")
+                        ->orWhere($parent.'.nick_name', 'like', "%$search%")
+                        ->orWhere($parent.'.acct_num', 'like', "%$search%")
+                        ->orWhere($parent.'.acct_name', 'like', "%$search%");
                 });
         if($request->is_lock)
-            $query = $query->where($full_parent.'is_lock', 1);
+            $query = $query->where($parent.'.is_lock', 1);
         if($request->input('settle_hold', 0))
-            $query = $query->whereNotNull($full_parent.'settle_hold_s_dt');
+            $query = $query->whereNotNull($parent.'.settle_hold_s_dt');
         if($is_all == false)
-            $query = $query->where($full_parent.'is_delete', false);
+            $query = $query->where($parent.'.is_delete', false);
         return $query;
     }
     
