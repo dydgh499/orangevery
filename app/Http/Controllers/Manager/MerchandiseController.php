@@ -151,7 +151,7 @@ class MerchandiseController extends Controller
         else 
             $data = $this->byNormalIndex($request, $is_all);
         // payment modules sections
-        $mcht_ids = collect($data['content'])->orderby('id', 'desc')->pluck('id')->all();
+        $mcht_ids = collect($data['content'])->pluck('id')->all();
         $pay_modules = $this->pay_modules
             ->where('brand_id', $request->user()->brand_id)
             ->where('is_delete', false)
