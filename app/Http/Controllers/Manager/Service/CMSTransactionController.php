@@ -37,8 +37,8 @@ class CMSTransactionController extends Controller
     {
         $search = $request->input('search', '');
         $query = $this->cms_transactions->where('brand_id', $request->user()->brand_id)
-            ->where('trx_at', '>=', $request->s_dt)
-            ->where('trx_at', '<=', $request->e_dt)
+            ->where('trx_at', '>=', $request->s_dt. '00:00:00')
+            ->where('trx_at', '<=', $request->e_dt. '23:59:59')
             ->where(function ($query) use ($search) {
                 return $query->where('acct_num', 'like', "%$search%")
                     ->orWhere('note', 'like', "%$search%");
