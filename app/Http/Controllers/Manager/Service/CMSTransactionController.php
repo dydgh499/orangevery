@@ -54,6 +54,7 @@ class CMSTransactionController extends Controller
     public function chart(Request $request)
     {
         $data = $this->commonSelect($request)
+            ->where('result_code', '0000')
             ->first([
                 DB::raw("SUM(IF(is_withdraw = 0, amount, 0)) AS deposit_amount"),
                 DB::raw("SUM(IF(is_withdraw = 1, amount, 0)) AS withdraw_amount"),
