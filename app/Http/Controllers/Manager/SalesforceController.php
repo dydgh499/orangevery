@@ -305,7 +305,7 @@ class SalesforceController extends Controller
      */
     public function passwordChange(Request $request, int $id)
     {
-        if(Ablilty::isMySalesforce($request, $id) || Ablilty::isOperator($request))
+        if(Ablilty::isSalesforce($request) || Ablilty::isOperator($request))
             return $this->_passwordChange($this->salesforces->where('id', $id), $request);
         else
             return $this->response(951);
