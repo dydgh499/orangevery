@@ -323,6 +323,7 @@ return [
         'apply_s_dt' => '적용 시작일',
         'apply_e_dt' => '적용 종료일',
         // util
-        'msg' => '메세지',
+        'msg' => '메세지',        
+        'deposit_history' => '입금내역',
     ],
 ];
