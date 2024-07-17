@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('result_code', 5)->nullable()->comment('응답코드');
             $table->boolean('is_withdraw')->default(false)->comment('출금 여부');
             $table->timestamp('trx_at')->index()->nullable()->comment('거래발생시간(취소, 승인)');
-            $table->string('trans_seq_num', 20)->nullable()->comment('거래번호');
+            $table->string('trans_seq_num', 50)->nullable()->comment('거래번호');
             $table->integer('amount')->nullable()->comment('거래금액');
             $table->string('acct_num', 20)->nullable()->comment('계좌번호');
             $table->string('acct_name', 50)->nullable()->comment('계좌명');

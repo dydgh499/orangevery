@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('acct_num', 20)->nullable()->comment('계좌번호');
             $table->string('acct_bank_name', 30)->nullable()->comment('입금은행명');
             $table->string('acct_bank_code', 3)->nullable()->comment('은행코드');
-            $table->string('trans_seq_num', 20)->nullable()->comment('요청 ID');
+            $table->string('trans_seq_num', 50)->nullable()->comment('요청 ID');
             $table->boolean('is_delete')->default(false)->comment('삭제 여부');
             
             $table->timestamps();

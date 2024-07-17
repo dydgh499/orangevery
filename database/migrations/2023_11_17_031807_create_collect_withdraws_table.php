@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('brand_id')->nullable()->comment('브랜드 FK')->constrained('brands')->onDelete('SET NULL');
             $table->unsignedMediumInteger('mcht_id')->nullable()->comment('사용 가맹점 ID')->constrained('merchandises')->onDelete('SET NULL');
             $table->integer('mcht_settle_id')->nullable()->comment('정산 ID');
-            $table->string('trans_seq_num', 20)->nullable()->index()->comment('요청 ID');
+            $table->string('trans_seq_num', 50)->nullable()->index()->comment('요청 ID');
             $table->string('result_code', 5)->nullable()->comment('응답코드');
             $table->string('message', 100)->nullable()->comment('내용');
             $table->integer('withdraw_amount')->default(0)->comment('출금 금액');
