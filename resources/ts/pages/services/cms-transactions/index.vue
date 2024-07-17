@@ -8,7 +8,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import { realtimeMessage, realtimeResult } from '@/views/transactions/settle-histories/useCollectWithdrawHistoryStore'
 import { DateFilters } from '@core/enums'
 
-const { store, head, exporter, noteReplace } = useSearchStore()
+const { store, head, exporter } = useSearchStore()
 const { finance_vans } = useStore()
 const headOfficeWithdrawDialog = ref()
 const total_amount = ref(<any>{
@@ -113,7 +113,7 @@ onMounted(() => {
                                             {{ realtimeMessage(item) }}
                                         </VChip>
                                     </span>
-                                    <span v-else-if="_key === 'note'" v-html="noteReplace(item[_key])" style="line-height: 2em;"></span>
+                                    <span v-else-if="_key === 'note'" v-html="item[_key]" style="line-height: 2em;"></span>
                                     <span v-else>
                                         {{ item[_key] }}
                                     </span>

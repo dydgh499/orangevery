@@ -32,10 +32,6 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
     ]
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
-    
-    const noteReplace = (note: string) => {
-        return note.replaceAll("\n", "<br>")
-    }
 
     const exporter = async (type: number) => {
         const keys = Object.keys(head.flat_headers.value)
@@ -54,7 +50,6 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
         store,
         head,
         exporter,
-        noteReplace,
     }
 })
 
