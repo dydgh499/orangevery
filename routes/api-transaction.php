@@ -50,7 +50,8 @@ Route::prefix('transactions')->group(function() {
             });
             Route::post('merchandises/single-deposit', [MchtSettleHistoryController::class, 'singleDeposit']);
             Route::post('merchandises/single-deposit-cancel-job-reservation', [MchtSettleHistoryController::class, 'singleDepositCancelJobReservation']);
-        });    
+        });
+        Route::post('settle/merchandises/deposit-validate', [MchtSettleController::class, 'depositValidate']);
     });
 
     Route::post('noti/{id}', [TransactionController::class, 'noti']);
@@ -75,7 +76,6 @@ Route::prefix('transactions')->group(function() {
             Route::post('/deduct', [MchtSettleController::class, 'deduct']);
             Route::get('/part', [MchtSettleController::class, 'part']);
             Route::get('/part/chart', [MchtSettleController::class, 'partChart']);
-            Route::post('/deposit-validate', [MchtSettleController::class, 'depositValidate']);
             Route::apiResource('cancel-deposits', CancelDepositController::class);
         });
         Route::prefix('salesforces')->group(function() {
