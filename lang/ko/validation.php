@@ -287,7 +287,6 @@ return [
         //finance van
         'receive_phone' => '수신자 전화번호',
         'sender_phone' => '발신자 전화번호',
-        'fin_type' => '금융 VAN 타입',
         'dev_fee' => '개발사 수수료',
         'min_balance_limit' => '유보금미달알림 하한금',
         'corp_name' => '법인명',

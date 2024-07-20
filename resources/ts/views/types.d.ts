@@ -278,7 +278,7 @@ export interface Classification {
 export interface FinanceVan {
     id: number | null,
     finance_company_num: number | null,
-    fin_type: number | null,
+    is_agency_van: number,
     api_key: string,
     sub_key: string,
     enc_key: string,
@@ -353,6 +353,7 @@ interface FreeOption {
         account_lock_limit: number,
         sales_id_level: number,
         sales_pw_level: number,
+        login_only_operate: number,
     }
 }
 interface PaidOption {

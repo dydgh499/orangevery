@@ -23,7 +23,9 @@ export function settlementHistoryFunctionCollect(store: any) {
             params.current_status = Number(item.deposit_status)
 
             await post(rootUrlBuilder(is_mcht, item.id) + '/deposit', params, true)
+
             store.setTable()
+            store.getChartData()
 
             if(params.fin_id && params.fin_id > 0) {
                 updateFinanceVan(params.fin_id)
@@ -43,7 +45,7 @@ export function settlementHistoryFunctionCollect(store: any) {
             }
             await post('/api/v1/manager/transactions/settle-histories/' + (is_mcht ? 'merchandises' : 'salesforces') + '/batch-deposit', params, true)
             store.setTable()
-            
+            store.getChartData()            
             if(params.fin_id && params.fin_id > 0) {
                 updateFinanceVan(params.fin_id)
             }
@@ -65,6 +67,7 @@ export function settlementHistoryFunctionCollect(store: any) {
                 if (res.status === 201) {
                     snackbar.value.show('성공하였습니다.', 'success')
                     store.setTable()
+                    store.getChartData()
                 }
             }
             catch (e: any) {
@@ -91,6 +94,7 @@ export function settlementHistoryFunctionCollect(store: any) {
                 }
                 snackbar.value.show('성공하였습니다.', 'success')
                 store.setTable()
+                store.getChartData()
             }
         }
     }
@@ -126,6 +130,7 @@ export function settlementHistoryFunctionCollect(store: any) {
             if (await alert.value.show(`정말 ${parseInt(deduct_amount).toLocaleString()}원을 차감하시겠습니까?`)) {
                 await post(rootUrlBuilder(is_mcht, item.id) + '/add-deduct', { 'deduct_amount': deduct_amount }, true)
                 store.setTable()
+                store.getChartData()
             }
         }
     }

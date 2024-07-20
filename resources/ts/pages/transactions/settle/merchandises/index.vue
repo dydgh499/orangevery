@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import MchtSettleDepsoitValidateSnackbar from '@/layouts/snackbars/MchtSettleDepsoitValidateSnackbar.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { selectFunctionCollect } from '@/views/selected'
@@ -15,9 +16,12 @@ import corp from '@corp'
 
 const { store, head, exporter } = useSearchStore()
 const { findSalesName } = useSalesFilterStore()
-const { getSettleStyle, batchSettle, isSalesCol, movePartSettle, representativeSettle } = settlementFunctionCollect(store)
 const { selected, all_selected } = selectFunctionCollect(store)
-
+const { 
+    getSettleStyle, batchSettle, isSalesCol, 
+    movePartSettle, representativeSettle
+} = settlementFunctionCollect(store)
+const mchtSettleDepsoitValidateSnackbar = ref()
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
@@ -38,11 +42,17 @@ const isExtendSettleCols = (parent_key: string, key: string) => {
     return parent_key === 'settle' && (key === 'cancel_deposit_amount' || key === 'collect_withdraw_fee')
 }
 
+
 onMounted(() => {
     watchEffect(async () => {
         if (store.getChartProcess() === false) {
             const r = await store.getChartData()
             totals.value = [r.data]
+        }
+    })
+    watchEffect(async () => {
+        if(getUserLevel() >= 35) {
+            mchtSettleDepsoitValidateSnackbar.value.show(store.params)
         }
     })
     snackbar.value.show('정산일은 검색 종료일(' + store.params.e_dt + ') 기준으로 진행됩니다.', 'success')
@@ -220,5 +230,6 @@ onMounted(() => {
                 <!-- part -->
             </template>
         </BaseIndexView>
+        <MchtSettleDepsoitValidateSnackbar ref="mchtSettleDepsoitValidateSnackbar"/>
     </div>
 </template>

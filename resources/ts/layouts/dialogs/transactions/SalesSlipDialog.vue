@@ -100,7 +100,7 @@ const getProviderInfo = (): BeforeBrandInfo => {
 const show = (item: SalesSlip, _reload_mode:boolean=false) => {
     reload_mode.value = _reload_mode
     trans.value = item
-    pg.value = props.pgs.find(pg => pg['id'] === item.pg_id)
+    pg.value = props.pgs.find(pg => pg['id'] === Number(item.pg_id))
     if (trans.value.tax_category_type == 1) {
         supply_amount.value = 0
         vat.value = 0

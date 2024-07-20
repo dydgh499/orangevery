@@ -75,6 +75,7 @@ Route::prefix('transactions')->group(function() {
             Route::post('/deduct', [MchtSettleController::class, 'deduct']);
             Route::get('/part', [MchtSettleController::class, 'part']);
             Route::get('/part/chart', [MchtSettleController::class, 'partChart']);
+            Route::post('/deposit-validate', [MchtSettleController::class, 'depositValidate']);
             Route::apiResource('cancel-deposits', CancelDepositController::class);
         });
         Route::prefix('salesforces')->group(function() {

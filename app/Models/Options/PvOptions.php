@@ -44,6 +44,7 @@
             'sales_id_level' => 1,
             'sales_pw_level' => 2,
             'account_lock_limit' => 5,
+            'login_only_operate' => 0,
         ];
 
         private function initIntKey($parent, $key, $default)
@@ -68,6 +69,7 @@
             $this->secure['sales_id_level'] = $this->initIntKey($this->secure, 'sales_id_level', 1);
             $this->secure['sales_pw_level'] = $this->initIntKey($this->secure, 'sales_pw_level', 2);
             $this->secure['account_lock_limit'] = $this->initIntKey($this->secure, 'account_lock_limit', 5);
+            $this->secure['login_only_operate'] = $this->initIntKey($this->secure, 'login_only_operate', 0);
         }
     }
 

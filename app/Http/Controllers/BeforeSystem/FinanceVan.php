@@ -28,7 +28,6 @@ class FinanceVan
         foreach($finances as $finance) {
             $item = [
                 'brand_id' => $brand_id,
-                'fin_type' => 1,
                 'balance_status' => $finance->BAL_STATUS,
                 'dev_fee' => $finance->DEV_FEE,
                 'api_key' => $finance->API_KEY,

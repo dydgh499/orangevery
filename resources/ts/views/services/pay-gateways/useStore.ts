@@ -61,10 +61,9 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:3, title:'웰컴페이먼츠'},
     ])
     
-    const fin_types = <Options[]>([
-        {id:null, title:'선택안함'},
-        {id:1, title:'중계'},
-        {id:2, title:'재판'},
+    const is_agency_vans = <Options[]>([
+        {id:0, title:'미사용'},
+        {id:1, title:'사용'},
     ])
 
     const settle_types = [
@@ -155,7 +154,7 @@ export const useStore = defineStore('payGatewayStore', () => {
     }
     return {
         pgs, pss, terminals, settle_types, cus_filters, finance_vans, 
-        pg_companies, finance_companies, fin_types,
+        pg_companies, finance_companies, is_agency_vans,
         psFilter, setFee, 
         updateFinanceVan, getFianaceVansBalance,
     }

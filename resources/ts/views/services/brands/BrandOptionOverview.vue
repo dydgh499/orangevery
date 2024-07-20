@@ -126,7 +126,7 @@ const accountLockLimits = <Options[]>([
                     </CreateHalfVColV2>
 
                     <VCardTitle class="pt-10">                        
-                        보안 옵션<span><b class="text-error" style="font-size: 0.6em;"> (보안 옵션 해제로인한 금융사고는 책임지지 않습니다.)</b></span>
+                        보안 옵션<span><b class="text-error" style="font-size: 0.6em;"> (보안 옵션 완화로인한 금융사고는 책임지지 않습니다.)</b></span>
                     </VCardTitle>
                     <CreateHalfVColV2 :mdl="6" :mdr="6" class="pt-5">
                         <template #l_name>
@@ -174,8 +174,11 @@ const accountLockLimits = <Options[]>([
                                 label="가맹점 패스워드 허용회수" item-title="title" item-value="id" single-line />
                         </template>
                         <template #r_name>
+                            <BaseQuestionTooltip location="top" text="운영자만 로그인" :content="`가맹점과 영업점은 본 전산에서 로그인할 수 없습니다.`"/>
                         </template>
                         <template #r_input>
+                            <VSwitch hide-details v-model="props.item.free.secure.login_only_operate"
+                                    color="primary" :false-value=0 :true-value=1 />
                         </template>
                     </CreateHalfVColV2>
                 </VCardItem>

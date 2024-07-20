@@ -74,6 +74,7 @@ class SalesSettleHistoryController extends Controller
             DB::raw("SUM(under_sales_amount) AS under_sales_amount"),
             DB::raw("SUM(deduct_amount) AS deduct_amount"),
             DB::raw("SUM(settle_amount) AS settle_amount"),
+            DB::raw("SUM(deposit_amount) AS deposit_amount"),
         ]);
         return $this->response(0, $total);
     }

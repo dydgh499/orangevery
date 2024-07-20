@@ -10,7 +10,7 @@ class FinanceRequest extends FormRequest
     use FormRequestTrait;
     public $keys = [
         'finance_company_num',
-        'fin_type',
+        'is_agency_van',
         'dev_fee',
         'api_key',
         'sub_key',
@@ -33,7 +33,6 @@ class FinanceRequest extends FormRequest
     {
         $sub = [
             'finance_company_num' => 'required',
-            'fin_type' => 'required',
             'dev_fee' => 'required|numeric',
             'min_balance_limit'=>'required',
             'corp_name'=>'required',

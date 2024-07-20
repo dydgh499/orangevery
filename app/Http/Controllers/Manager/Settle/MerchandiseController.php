@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Models\Log\RealtimeSendHistory;
 use App\Models\Log\SettleDeductMerchandise;
 use App\Models\Merchandise\PaymentModule;
+use App\Models\Service\CMSTransaction;
 
 use App\Http\Controllers\Manager\Settle\AddDeduct;
 use App\Http\Controllers\Controller;
@@ -120,7 +121,6 @@ class MerchandiseController extends Controller
                 'transfer' => 0,
             ]
         ];
-        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
         $transactions = collect();
         $data = $this->commonQuery($request);
@@ -137,6 +137,7 @@ class MerchandiseController extends Controller
             $total['settle']['deposit'] += $item->settle['deposit'];
             $total['settle']['transfer'] += $item->settle['transfer'];
         }
+        [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
         $chart = getDefaultTransChartFormat($transactions, $target_settle_amount);
         $total = array_merge($total, $chart);
         return $this->response(0, $total);
@@ -159,5 +160,33 @@ class MerchandiseController extends Controller
             return $this->extendResponse(1999, '추가차감은 300만원 이상할 수 없습니다.');
         else
             return $this->commonDeduct($this->settleDeducts, 'mcht_id', $request);
+    }
+
+    /*
+    * 금일 입금액 검증
+    */
+    public function depositValidate(Request $request)
+    {
+        $settle_amount = 0;
+        $data = $this->commonQuery($request);
+        foreach($data['content'] as $item)
+        {
+            $settle_amount += $item->settle['deposit'];
+        }
+        $cms = CMSTransaction::where('brand_id', $request->user()->brand_id)
+            ->where('trx_at', '>=', $request->s_dt." 00:00:00")
+            ->where('trx_at', '<=', $request->e_dt." 23:59:59")
+            ->where('result_code', '0000')
+            ->whereIn('fin_id', $request->fin_ids)
+            ->where('is_withdraw', false)
+            ->first([
+                DB::raw('SUM(amount) as deposit_amount')
+            ]);
+        $data = [
+            'settle_amount' => $settle_amount,
+            'deposit_amount' => (int)$cms->deposit_amount,
+            'profit_amount' => (int)$cms->deposit_amount - $settle_amount
+        ];
+        return $this->response(0, $data);
     }
 }

@@ -23,10 +23,10 @@ class Login
 
     static private function secondAuthValidate($result, $request)
     {
+        $brand = BrandInfo::getBrandById($result['user']->brand_id);
         if($result['user']->level >= 35)
         {
             // 3FA
-            $brand = BrandInfo::getBrandById($result['user']->brand_id);
             if(AuthOperatorIP::valiate($result['user']->brand_id, $request->ip()))
             {   // 2FA
                 if($result['user']->google_2fa_secret_key)
@@ -44,6 +44,8 @@ class Login
         }
         else
         {
+            if($brand['pv_options']['free']['secure']['login_only_operate'])
+                return AuthLoginCode::NOT_FOUND->value;
             if($result['user']->password_change_at === null && $request->is('*/v1/bf/sign-in') === false)
                 return AuthLoginCode::REQUIRE_PASSWORD_CHANGE->value;
             else

@@ -145,7 +145,7 @@ export function settlementFunctionCollect(store: any) {
     const isAbleMchtDepositCollect = (use_collect_withdraw: number) => {
         return (getUserLevel() == 10 || getUserLevel() >= 35) && corp.pv_options.paid.use_realtime_deposit && use_collect_withdraw
     }
-    
+
     return {
         batchSettle, settle, getSettleStyle, isSalesCol, movePartSettle, isAbleMchtDepositCollect,
         representativeSettle
