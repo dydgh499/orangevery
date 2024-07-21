@@ -1,10 +1,8 @@
 <script setup lang="tsx">
 import { useThemeConfig } from '@core/composable/useThemeConfig'
-import { RouteTransitions, Skins } from '@core/enums'
+import { Skins } from '@core/enums'
 import { AppContentLayoutNav, ContentWidth, FooterType, NavbarType } from '@layouts/enums'
-import { themeConfig } from '@themeConfig'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
-import { useTheme } from 'vuetify'
 
 // import { useTheme } from 'vuetify'
 
@@ -71,15 +69,11 @@ const headerValues = computed(() => {
                     <VRadioGroup v-model="skin" inline>
                         <VRadio v-for="[key, val] in Object.entries(Skins)" :key="key" :label="key" :value="val" />
                     </VRadioGroup>
-
                     <!-- 👉 Theme -->
                     <h6 class="mt-3 text-base font-weight-regular">
                         다크모드
                     </h6>
                     <div class="d-flex align-center">
-                        <VLabel for="pricing-plan-toggle" class="me-3">
-                            비활성화
-                        </VLabel>
                         <VSwitch id="pricing-plan-toggle" v-model="theme" label="활성화" true-value="dark"
                             false-value="light" color="primary" style="margin-top: 1.2em;"/>
                     </div>

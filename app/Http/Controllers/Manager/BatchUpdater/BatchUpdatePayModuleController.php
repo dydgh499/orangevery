@@ -76,7 +76,7 @@ class BatchUpdatePayModuleController extends Controller
     }
 
     /**
-     * 중복결제 허용회수 적용 
+     * 동일카드 결제허용 회수 적용 
      */
     public function setDupPayCountValidation(Request $request)
     {

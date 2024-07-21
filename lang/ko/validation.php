@@ -227,7 +227,7 @@ return [
         'is_old_auth' => '비인증/구인증 여부',
         'use_saleslip_prov' => '매출전표 공급자 정보',
         'use_saleslip_sell' => '매출전표 판매자 정보',        
-        'pay_dupe_limit' => '중복결제 허용회수',
+        'pay_dupe_limit' => '동일카드 결제허용 회수',
         'abnormal_trans_limit' => '이상거래 상한금',
         'pay_dupe_least' => '중복결제 하한금',
         'pay_year_limit' => '연 결제 한도',

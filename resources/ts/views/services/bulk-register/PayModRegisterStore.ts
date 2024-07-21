@@ -47,7 +47,7 @@ export const useRegisterStore = defineStore('payModRegisterStore', () => {
     })
     
     if(corp.pv_options.paid.use_dup_pay_validation) {
-        headers2['pay_dupe_limit'] = '중복결제 허용회수(X)'
+        headers2['pay_dupe_limit'] = '동일카드 결제허용 회수(X)'
     }
     if(corp.pv_options.paid.use_pay_limit) {
         headers2['pay_year_limit'] = '결제 연 한도(X)'

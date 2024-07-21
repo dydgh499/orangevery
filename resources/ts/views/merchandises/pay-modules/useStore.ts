@@ -142,7 +142,7 @@ export const useSearchStore = defineStore('payModSearchStore', () => {
     headers2['abnormal_trans_limit'] = '이상거래 한도'
     headers2['pay_dupe_least'] = '중복거래 하한금'    
     if(corp.pv_options.paid.use_dup_pay_validation)
-        headers2['pay_dupe_limit'] = '중복결제 허용회수'
+        headers2['pay_dupe_limit'] = '동일카드 결제허용 회수'
     if(corp.pv_options.paid.use_pay_limit) {
         headers2['pay_year_limit'] = '연 결제 한도'
         headers2['pay_month_limit'] = '월 결제 한도'

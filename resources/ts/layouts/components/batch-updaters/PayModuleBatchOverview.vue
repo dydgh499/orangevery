@@ -253,10 +253,10 @@ const filterPgs = computed(() => {
                 <VRow>
                     <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>중복결제 허용회수</VCol>
+                            <VCol>동일카드 결제허용 회수</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
-                                    <VTextField v-model="pay_module.pay_dupe_limit" label="중복결제 허용회수" type="number"
+                                    <VTextField v-model="pay_module.pay_dupe_limit" label="동일카드 결제허용 회수" type="number"
                                         suffix="회 허용" />
                                     <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setDupPayCountValidation()">
                                         즉시적용

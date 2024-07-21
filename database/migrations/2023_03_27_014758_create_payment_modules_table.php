@@ -49,7 +49,7 @@ return new class extends Migration
             $table->boolean('show_pay_view')->default(true)->comment('결제창 사용(0=미사용, 1=사용)');
             
             $table->tinyInteger('installment')->default(0)->comment('할부 한도(0~12)');
-            $table->tinyInteger('pay_dupe_limit')->default(0)->comment('중복결제 허용회수');
+            $table->tinyInteger('pay_dupe_limit')->default(0)->comment('동일카드 결제허용 회수');
             $table->integer('abnormal_trans_limit')->default(0)->comment('이상거래 한도(단위:만원)');
             $table->integer('pay_year_limit')->default(0)->comment('결제 연 한도(단위:만원)');
             $table->integer('pay_month_limit')->default(0)->comment('결제 월 한도(단위:만원)');
