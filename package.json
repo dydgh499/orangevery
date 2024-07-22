@@ -1,6 +1,7 @@
 {
   "name": "redvery-vuejs-admin",
   "version": "7.0.1",
+  "license": "MIT",
   "scripts": {
     "serve": "vite preview",
     "build": "vite build",

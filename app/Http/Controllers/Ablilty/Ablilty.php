@@ -81,7 +81,7 @@ class Ablilty
     {
         if(env('APP_ENV') === 'local')
             return true;
-        if(self::isDevOffice(request()) && in_array(request()->user()->brand_id, [18, 35]))
+        if(self::isDevOffice(request()) && in_array(request()->user()->brand_id, [18, 35, 2,9,15,39,42]))
             return true;
 
         $cond_0 = Carbon::now()->between(Carbon::create(null, 7, 5, 21, 0, 0), Carbon::create(null, 7, 6, 6, 0, 0));
