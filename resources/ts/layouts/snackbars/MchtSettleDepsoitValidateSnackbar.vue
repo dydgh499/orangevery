@@ -12,7 +12,7 @@ const settle_cookie = ref(<Popup>({
     visible: false,
     is_hide: false,
 }))
-const { setOpenStatus, init } = PopupEvent('settle/merchandises/'+settle_cookie.value.id)
+const { setOpenStatus, init } = PopupEvent('settle/merchandises/')
 const { finance_vans } = useStore()
 const { post } = useRequestStore()
 
@@ -46,10 +46,10 @@ const show = async (params: any) => {
                     page_size: 1,
                     fin_ids: fin_ids
                 }, false)
+                settle_info.value = r.data
                 if(settle_info.value.settle_amount !== 0) {
                     deposit_snackbar.value = true
                     if(r.data.deposit_amount) {
-                        settle_info.value = r.data
                         deposit_status.value = true
                     }
                 }
