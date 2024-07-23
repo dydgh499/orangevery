@@ -45,9 +45,11 @@ const setDangerCollectWithdraws = async () => {
         init(popup.value)
         if(popup.value.visible) {
             popup.value.visible = false
+            /*
             dangers.value = await getDangerCollectWithdraws(1, page_size);
             if( dangers.value.length)
                 popup.value.visible = true
+            */
         }
     }
 }
