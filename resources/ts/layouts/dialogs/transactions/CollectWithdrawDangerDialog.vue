@@ -12,7 +12,8 @@ const popup = ref(<Popup>({
 const { setOpenStatus, init } = PopupEvent('collect-withdraw-danger/hide/')
 const dangers = ref(<any[]>([]))
 
-const getDangerCollectWithdraws = async (page: number, page_size: number) => {
+const getDangerCollectWithdraws = async (page: number) => {
+    const page_size = 999
     const _dangers:any[] = []
     const res = await axios.get('/api/v1/manager/transactions/settle/collect-withdraws/dangers', {
         params: {
@@ -28,6 +29,7 @@ const getDangerCollectWithdraws = async (page: number, page_size: number) => {
         const least = (total_count/page_size) - parseInt(total_count/page_size)
         const total_page = parseInt(total_count/page_size) + (least > 0 ? 1 : 0)
         const promises = []
+        /*
         for (let i = 0; i < total_page-1; i++) {
             promises.push(getDangerCollectWithdraws(i+2, page_size));
         }
@@ -36,20 +38,18 @@ const getDangerCollectWithdraws = async (page: number, page_size: number) => {
         for (let i = 0; i < results.length; i++) {
             _dangers.push(...results[i].data.data)
         }
+        */
     }
     return _dangers
 }
 const setDangerCollectWithdraws = async () => {
-    const page_size = 999
     if(corp.pv_options.paid.use_collect_withdraw && getUserLevel() >= 35) {
         init(popup.value)
         if(popup.value.visible) {
             popup.value.visible = false
-            /*
-            dangers.value = await getDangerCollectWithdraws(1, page_size);
+            dangers.value = await getDangerCollectWithdraws(1);
             if( dangers.value.length)
                 popup.value.visible = true
-            */
         }
     }
 }
