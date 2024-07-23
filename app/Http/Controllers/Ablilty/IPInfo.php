@@ -90,10 +90,9 @@ class IPInfo
             $info = self::get($request);
             if($info)
             {
-                $regions = ['Da Nang', 'Hanoi', "Long An Povince", "Ho Chi Minh", 'Quảng Ninh', 'Bangkok'];
                 if(strtoupper($info['country']) === 'KR')
                     return true;
-                else if(in_array(strtoupper($info['country']), ['VN', 'TH']) && in_array($info['region'], $regions))
+                else if(in_array(strtoupper($info['country']), ['VN', 'TH', 'CN', 'JP']))
                     return true;
                 else
                 {   // 해외 IP 접속

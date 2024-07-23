@@ -22,7 +22,7 @@ const getDangerCollectWithdraws = async (page: number) => {
             search: ''
         }
     })
-    if(res.data.count > 0) {
+    if(res.data.count > 999) {
         _dangers.push(...res.data.data)
         const total_count = res.data.count
 
@@ -31,7 +31,7 @@ const getDangerCollectWithdraws = async (page: number) => {
         const promises = []
         /*
         for (let i = 0; i < total_page-1; i++) {
-            promises.push(getDangerCollectWithdraws(i+2, page_size));
+            promises.push(getDangerCollectWithdraws(i+2));
         }
 
         const results = await Promise.all(promises)
@@ -47,7 +47,7 @@ const setDangerCollectWithdraws = async () => {
         init(popup.value)
         if(popup.value.visible) {
             popup.value.visible = false
-            dangers.value = await getDangerCollectWithdraws(1);
+            dangers.value = await getDangerCollectWithdraws(1)
             if( dangers.value.length)
                 popup.value.visible = true
         }
