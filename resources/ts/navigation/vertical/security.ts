@@ -34,6 +34,12 @@ const getAbilitiesMenu = computed(() => {
                 to: 'services-mcht-blacklists',
             })
         }
+        /*
+        securities[1].children.push({
+            title: '예외 작업시간 추가',
+            to: 'services-exception-work-times',
+        })
+        */
     }
     return [
         ...securities,

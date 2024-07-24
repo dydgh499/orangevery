@@ -167,12 +167,7 @@ class MerchandiseController extends Controller
     */
     public function depositValidate(Request $request)
     {
-        $settle_amount = 0;
-        $data = $this->commonQuery($request);
-        foreach($data['content'] as $item)
-        {
-            $settle_amount += $item->settle['deposit'];
-        }
+        $res = json_decode($this->chart($request)->getContent(), true);
         $cms = CMSTransaction::where('brand_id', $request->user()->brand_id)
             ->where('trx_at', '>=', $request->s_dt." 00:00:00")
             ->where('trx_at', '<=', $request->e_dt." 23:59:59")
@@ -183,9 +178,9 @@ class MerchandiseController extends Controller
                 DB::raw('SUM(amount) as deposit_amount')
             ]);
         $data = [
-            'settle_amount' => $settle_amount,
+            'settle_amount' => $res['settle']['deposit'],
             'deposit_amount' => (int)$cms->deposit_amount,
-            'profit_amount' => (int)$cms->deposit_amount - $settle_amount
+            'profit_amount' => (int)$cms->deposit_amount - $res['settle']['deposit']
         ];
         return $this->response(0, $data);
     }

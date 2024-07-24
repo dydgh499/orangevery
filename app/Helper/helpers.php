@@ -312,7 +312,8 @@
         ];
 
         // 트랜잭션 유형별로 데이터를 분류하며, 동시에 필요한 합계를 계산합니다.
-        foreach ($data as $transaction) {
+        foreach ($data as $transaction) 
+        {
             $type = $transaction->is_cancel ? 'cxl' : 'appr';
             $chart[$type]['amount'] += $transaction->amount;
             $chart[$type]['count']++;
@@ -323,7 +324,8 @@
             $chart[$type]['total_trx_amount'] += $transaction->total_trx_amount;
         }
         // 전체 차트 값을 계산합니다.
-        foreach ($chart['appr'] as $key => $value) {
+        foreach ($chart['appr'] as $key => $value) 
+        {
             $chart['total'][$key] = $chart['appr'][$key] + $chart['cxl'][$key];
         }
         return $chart;  

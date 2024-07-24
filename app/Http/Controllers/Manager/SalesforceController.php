@@ -181,18 +181,20 @@ class SalesforceController extends Controller
             ->first();
         if($data)
         {
-            $sales_cond_1 = (Ablilty::isMySalesforce($request, $id) || $data->level < $request->user()->level);
-            if(($sales_cond_1 || Ablilty::isOperator($request)) === false)
+            if(Ablilty::isSalesforce($request, $id) || Ablilty::isOperator($request))
+            {
+                if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
+                    return $this->response(951);
+                if($request->user()->tokenCan($data->level) === false)
+                    return $this->response(951);
+                else
+                    return $this->response(0, $data);
+            }
+            else
             {   // URL 조작 (영업점인데 하위가아닌 다른영업점 조회하려할 시) 자신아래 영업점이 아닌경우?
                 AbnormalConnection::tryParameterModulationApproach();
                 return $this->response(951);
             }
-            if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
-                return $this->response(951);
-            if($request->user()->tokenCan($data->level) === false)
-                return $this->response(951);
-            else
-                return $this->response(0, $data);
         }
         else
             return $this->response(1000);

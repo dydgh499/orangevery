@@ -8,13 +8,6 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     *  - 입금받지 않았다면, 아직 입금받지 않았습니다.
-     *  - 입금을 받았다면, 오늘 입금받은 금액 + 상위사 수수료 .=. 오늘 정산할 금액
-     *     - 차액이 일정 %보다 클시
-     * NO. 입금받은 금융 VAN, 입금금액, 입금자명, 입금시간
-     * 
-     * 거래 VAN ID, 거래타입(입금, 출금), 거래시간, 거래금액, 거래번호, 메모사항(입금자명, 예금주,)
-     *  - ()
      */
     public function up(): void
     {
