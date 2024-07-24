@@ -90,9 +90,10 @@ class IPInfo
             $info = self::get($request);
             if($info)
             {
+                $except_countries = json_decode(env('EXCEPT_COUNTRIES'), true);
                 if(strtoupper($info['country']) === 'KR')
                     return true;
-                else if(in_array(strtoupper($info['country']), ['VN', 'TH', 'CN', 'JP']))
+                else if(in_array(strtoupper($info['country']), $except_countries))
                     return true;
                 else
                 {   // 해외 IP 접속
