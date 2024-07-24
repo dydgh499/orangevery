@@ -67,7 +67,7 @@ class Login
                 $result['result'] = AuthLoginCode::SITE_HAS_BEEN_TRANSFER->value;
                 $result['msg'] = '전산주소가 이전되었습니다. 새로운 전산에서 로그인 부탁드립니다.<br>';
                 if($result['user']->brand_id === 2)
-                    $dns = 'https://b.onecheck.co.kr/build/login';
+                    $dns = 'https://b.onechek.co.kr/build/login';
                 else if($result['user']->brand_id === 9)
                     $dns = 'https://b.bicompany.co.kr/build/login';
                 else if($result['user']->brand_id === 15)
@@ -89,7 +89,7 @@ class Login
                 (clone $orm)->where('id', $result['user']->id)->update([
                     'last_login_at' => date('Y-m-d H:i:s'),
                     'last_login_ip' => (new Login)->aes256_encode(request()->ip()),
-                ]);    
+                ]);
             }
         }
         else if($result['result'] === AuthLoginCode::WRONG_PASSWORD->value)
