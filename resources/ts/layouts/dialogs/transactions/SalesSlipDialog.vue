@@ -6,6 +6,7 @@ import corp from '@corp'
 import background from '@images/salesslip/background.jpg'
 import cancel from '@images/salesslip/cancel.png'
 import html2canvas from "html2canvas"
+import { useDisplay } from 'vuetify'
 
 interface Props {
     pgs: PayGateway[],
@@ -26,6 +27,7 @@ const supply_amount = ref(0)
 const vat = ref(0)
 const tax_free = ref(0)
 const total_amount = ref(0)
+const { mobile } = useDisplay()
 
 
 const updateThickness = () => {
@@ -40,12 +42,68 @@ const getVat = () => {
 }
 
 const copySalesSlip = async () => {
-    snackbar.value.show('영수증을 복사하고있습니다..', 'success')
-    if (card.value) {
-        const canvas = await html2canvas(document.getElementsByClassName('sales-slip-rect')[0], { useCORS: true, removeContainer: true })
-        canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({ "image/png": blob as Blob })]))
-        snackbar.value.show('영수증이 클립보드에 복사되었습니다.', 'success')
+    if(mobile.value)
+        copySalesSlipText()
+    else
+    {
+        if (card.value) {
+            const canvas = await html2canvas(document.getElementsByClassName('sales-slip-rect')[0], { useCORS: true, removeContainer: true })
+            canvas.toBlob(blob => navigator.clipboard.write([new ClipboardItem({ "image/png": blob as Blob })]))
+            snackbar.value.show('영수증 이미지가 클립보드에 복사되었습니다.', 'success')
+        }
     }
+}
+
+const copySalesSlipText = () => {
+    let text = `신용카드 영수증\n
+결제정보
+---------------------------------
+결제수단\t\t${module_types.find(obj => obj.id === trans.value?.module_type)?.title}
+거래상태\t\t${trans.value?.is_cancel ? "취소" : '승인'}
+승인일시\t\t${trans.value?.trx_dttm}
+`
+    if(trans.value?.is_cancel) {
+        text += `취소일시\t\t${trans.value?.cxl_dttm}
+`
+    }
+        text += `발급사\t\t\t${trans.value?.issuer ?? ''}
+매입사\t\t\t${trans.value?.acquirer ?? ''}
+카드번호\t\t${trans.value?.card_num ?? ''}
+할부개월\t\t${installments.find(inst => inst['id'] === parseInt(trans.value?.installment as string))?.title}
+구매자명\t\t${trans.value?.buyer_name ?? ''}
+상품명\t\t\t${trans.value?.item_name ?? ''}
+승인번호\t\t${trans.value?.appr_num ?? ''}
+과세금액\t\t${supply_amount.value.toLocaleString()}
+부가세액\t\t${vat.value.toLocaleString()}
+`
+if(trans.value?.tax_category_type === 1)
+    text += `면세액\t\t\t${tax_free.value.toLocaleString()}
+`
+text += `총결제액\t\t${total_amount.value.toLocaleString()}
+
+판매자 정보
+---------------------------------
+상호\t\t\t\t${trans.value?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.company_name : trans.value?.mcht_name}
+사업자번호\t${trans.value?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.business_num : trans.value?.business_num}
+대표자명\t\t${trans.value?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.rep_name : trans.value?.nick_name}
+주소\t\t\t\t${trans.value?.use_saleslip_sell ? corp.pv_options.free.sales_slip.merchandise.addr : trans.value?.addr}
+
+공급자(결제대행사)정보
+---------------------------------
+상호\t\t\t\t${provider_info.value?.company_name}
+사업자번호\t${provider_info.value?.business_num}
+대표자명\t\t${provider_info.value?.rep_name}
+주소\t\t\t\t${provider_info.value?.addr}
+
+---------------------------------
+신용카드 매출전표는 부가가치세법 제32조 2 제3항에 의거하여 발행되었으며 부가가치세법 제 46조에 따라 신용카드매출전표 등을 발급받은 경우에는 매입세액 공제가 가능합니다.`
+    
+    navigator.clipboard.writeText(text).then(() => {
+        snackbar.value.show('영수증 텍스트가 클립보드에 복사되었습니다.', 'success')
+    }).catch(err => {
+        snackbar.value.show('텍스트 복사에 실패했습니다.', 'error')
+        console.error('Could not copy text: ', err)
+    });   
 }
 
 const downloadSalesSlip = async () => {
@@ -142,7 +200,7 @@ defineExpose({
     <VDialog v-model="visible" class="v-dialog-sm" style="box-shadow: 0 !important;">
         <div class="button-container">
             <VBtn size="small" @click="copySalesSlip()" class="copy-btn">
-                복사하기
+                영수증 복사
                 <VIcon end icon="tabler:copy" />
             </VBtn>
             <VBtn size="small" @click="downloadSalesSlip()" class="download-btn" color="secondary">
@@ -325,12 +383,20 @@ div {
   inset-inline-end: 3em;
 }
 
+.copy-text-btn {
+  position: absolute;
+  z-index: 9999;
+  block-size: calc(var(--v-btn-height) + 3px);
+  inset-block-start: -0.75em;
+  inset-inline-end: 3em;
+}
+
 .download-btn {
   position: absolute;
   z-index: 9999;
   block-size: calc(var(--v-btn-height) + 3px);
   inset-block-start: -0.75em;
-  inset-inline-end: 13em;
+  inset-inline-end: 14em;
 }
 
 .v-col-custom {
