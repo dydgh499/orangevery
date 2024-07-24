@@ -73,13 +73,13 @@ const copySalesSlipText = () => {
 구매자명\t\t${trans.value?.buyer_name ?? ''}
 상품명\t\t\t${trans.value?.item_name ?? ''}
 승인번호\t\t${trans.value?.appr_num ?? ''}
-과세금액\t\t${supply_amount.value.toLocaleString()}
-부가세액\t\t${vat.value.toLocaleString()}
+과세금액\t\t${supply_amount.value.toLocaleString()}원
+부가세액\t\t${vat.value.toLocaleString()}원
 `
 if(trans.value?.tax_category_type === 1)
-    text += `면세액\t\t\t${tax_free.value.toLocaleString()}
+    text += `면세액\t\t\t${tax_free.value.toLocaleString()}원
 `
-text += `총결제액\t\t${total_amount.value.toLocaleString()}
+text += `총결제액\t\t${total_amount.value.toLocaleString()}원
 
 판매자 정보
 ---------------------------------

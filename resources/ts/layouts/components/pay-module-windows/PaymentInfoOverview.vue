@@ -243,6 +243,9 @@ useCollectWithdrawTrxFinDelayValidate()
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_trx_delay"
                             :items="fin_trx_delays" prepend-inner-icon="streamline-emojis:bug" label="이체 딜레이 선택"
                             item-title="title" item-value="id" single-line :readonly="is_readonly_fin_trx_delay"/>
+                        <VTooltip activator="parent" location="top">
+                            사고 방지를 위해 결제모듈이 최초거래가 발생한 순간부터 이체 딜레이를 수정할 수 없습니다.
+                        </VTooltip>
                     </template>
                 </CreateHalfVCol>
             </VRow>

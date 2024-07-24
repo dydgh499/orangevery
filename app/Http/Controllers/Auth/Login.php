@@ -62,16 +62,35 @@ class Login
     {
         if($result['result'] === AuthLoginCode::SUCCESS->value)
         {
-            AuthAccountLock::initPasswordWrongCounter($result['user']);
-            if($result['user']->level >= 35)
+            if($_SERVER['SERVER_ADDR'] === '211.45.163.74' && in_array($result['user']->brand_id, [2,9,15,42,39]) && $result['user']->level < 35)
             {
-                operLogging(HistoryType::LOGIN, '', [], [], '', $result['user']->brand_id, $result['user']->id);
+                $result['result'] = AuthLoginCode::SITE_HAS_BEEN_TRANSFER->value;
+                $result['msg'] = '전산주소가 이전되었습니다. 새로운 전산에서 로그인 부탁드립니다.<br>';
+                if($result['user']->brand_id === 2)
+                    $dns = 'https://b.onecheck.co.kr/build/login';
+                else if($result['user']->brand_id === 9)
+                    $dns = 'https://b.bicompany.co.kr/build/login';
+                else if($result['user']->brand_id === 15)
+                    $dns = 'https://b.dooripayplus.co.kr/build/login';
+                else if($result['user']->brand_id === 42)
+                    $dns = 'https://b.paypass.co.kr/build/login';
+                else if($result['user']->brand_id === 39)
+                    $dns = 'https://b.raysolution.kr/build/login';
+                $result['msg'] .="<a href='$dns'>$dns</a>";
             }
-            
-            (clone $orm)->where('id', $result['user']->id)->update([
-                'last_login_at' => date('Y-m-d H:i:s'),
-                'last_login_ip' => (new Login)->aes256_encode(request()->ip()),
-            ]);
+            else
+            {
+                AuthAccountLock::initPasswordWrongCounter($result['user']);
+                if($result['user']->level >= 35)
+                {
+                    operLogging(HistoryType::LOGIN, '', [], [], '', $result['user']->brand_id, $result['user']->id);
+                }
+                
+                (clone $orm)->where('id', $result['user']->id)->update([
+                    'last_login_at' => date('Y-m-d H:i:s'),
+                    'last_login_ip' => (new Login)->aes256_encode(request()->ip()),
+                ]);    
+            }
         }
         else if($result['result'] === AuthLoginCode::WRONG_PASSWORD->value)
         {

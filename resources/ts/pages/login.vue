@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Google2FAVertifyDialog from '@/layouts/dialogs/users/Google2FAVertifyDialog.vue'
 import PasswordAuthDialog from '@/layouts/dialogs/users/PasswordAuthDialog.vue'
+import AlertDialog from '@/layouts/dialogs/utils/AlertDialog.vue'
 import Snackbar from '@/layouts/snackbars/Snackbar.vue'
 import { UserAbility } from '@/plugins/casl/AppAbility'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
@@ -33,7 +34,8 @@ const errors = ref<Record<string, string | undefined>>({
     data: undefined,
 })
 
-const snackbar = ref(null)
+const alert = ref()
+const snackbar = ref()
 const passwordAuthDialog = ref()
 const google2FAVertifyDialog = ref()
 const refVForm = ref<VForm>()
@@ -87,6 +89,10 @@ const login = () => {
                 token.value = await google2FAVertifyDialog.value.show(user_name.value, user_pw.value)
                 if(token.value !== '')
                     login()
+            }
+            else if(e.response.data.code === 958) {
+                alert.value.show(e.response.data.message)
+                return
             }
             else
                 pay_token.value = ''
@@ -166,6 +172,7 @@ const onSubmit = () => {
             </VCard>
         </VCol>
     </VRow>
+    <AlertDialog ref="alert"/>
     <Snackbar ref="snackbar" />
     <PasswordAuthDialog ref="passwordAuthDialog"/>
     <Google2FAVertifyDialog ref="google2FAVertifyDialog"/>
