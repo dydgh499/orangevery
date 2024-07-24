@@ -42,8 +42,9 @@ const show = async (params: any) => {
                     search: '',
                     use_collect_withdraw: params.use_collect_withdraw,
                     use_realtime_deposit: params.use_realtime_deposit,
+                    use_settle_hold: params.use_settle_hold,
                     page: 1,
-                    page_size: 1,
+                    page_size: 999999,
                     fin_ids: fin_ids
                 }, false)
                 settle_info.value = r.data
