@@ -11,5 +11,4 @@ enum AuthLoginCode: int {
     case REQUIRE_PASSWORD_CHANGE    = 955;
     case REQUIRE_PHONE_AUTH         = 956;
     case REQUIRE_OTP_AUTH           = 957;
-    case SITE_HAS_BEEN_TRANSFER     = 958;
 }

@@ -57,6 +57,20 @@ class AuthController extends Controller
         $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
         if($brand)
         {
+            if(env('APP_ENV') === 'production' && $_SERVER['SERVER_ADDR'] === '211.45.163.74' && in_array($brand['id'], [2,9,15,42,39]))
+            {
+                if($result['user']->brand_id === 2)
+                    return redirect()->to('https://b.onechek.co.kr/build/login');
+                else if($result['user']->brand_id === 9)
+                    return redirect()->to('https://b.bicompany.co.kr/build/login');
+                else if($result['user']->brand_id === 15)
+                    return redirect()->to('https://b.dooripayplus.co.kr/build/login');
+                else if($result['user']->brand_id === 42)
+                    return redirect()->to('https://b.paypass.co.kr/build/login');
+                else if($result['user']->brand_id === 39)
+                    return redirect()->to('https://b.raysolution.kr/build/login');
+            }
+    
             $brand['color'] = $brand['theme_css']['main_color'];
             $brand['pv_options']['free']['bonaeja'] = [];
             $brand['pv_options']['free']['bonaeja']['min_balance_limit'] = 0;
