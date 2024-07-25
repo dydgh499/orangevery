@@ -57,6 +57,7 @@ class AuthController extends Controller
         $brand = BrandInfo::getBrandByDNS($_SERVER['HTTP_HOST']);
         if($brand)
         {
+            //TODO 2024-08-25 쯤 지워야함(두리페이플러스 서버이전)
             if(env('APP_ENV') === 'production' && $_SERVER['SERVER_ADDR'] === '211.45.163.74' && in_array($brand['id'], [2,9,15,42,39]))
             {
                 if($brand['id'] === 2)

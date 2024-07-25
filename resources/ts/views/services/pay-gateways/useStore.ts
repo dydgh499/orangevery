@@ -52,6 +52,7 @@ export const useStore = defineStore('payGatewayStore', () => {
         {id:34, name:'나이스페이', rep_name:'김광철', company_name:'나이스페이먼츠(주)', business_num:'288-87-02685', phone_num:'1661-7335', addr:'서울특별시 마포구 마포대로 217 크레디트센터 7층'},
         {id:35, name:'보나캠프', rep_name:'강기성', company_name:'보나캠프(주)', business_num:'320-87-01210', phone_num:'1644-7676', addr:'서울특별시 금천구 범안로 1130, 14층 (가산동, 디지털엠파이어빌딩)'},
         {id:36, name:'온오프코리아', rep_name:'서은교', company_name:' 온오프코리아 주식회사', business_num:'636-88-00753', phone_num:'02-1600-8952', addr:'경기 광명시 오리로619번길 11. 2층(하안동)'},
+        {id:37, name:'케이에스넷', rep_name:'서은교', company_name:' (주)케이에스넷', business_num:'120-81-97322', phone_num:'02-3420-5800', addr:'서울특별시 서초구 반포대로 95, 2층(서초동)'},
     ]
 
     const finance_companies = <Options[]>([
