@@ -8,7 +8,7 @@ import { useStore } from '@/views/services/pay-gateways/useStore'
 import { realtimeMessage, realtimeResult } from '@/views/transactions/settle-histories/useCollectWithdrawHistoryStore'
 import { DateFilters } from '@core/enums'
 
-const { store, head, exporter } = useSearchStore()
+const { store, head, exporter, metas } = useSearchStore()
 const { finance_vans } = useStore()
 const headOfficeWithdrawDialog = ref()
 const total_amount = ref(<any>{
@@ -32,7 +32,21 @@ onMounted(() => {
             const r = await store.getChartData()
             total_amount.value.deposit_amount = Number(r.data.deposit_amount)
             total_amount.value.withdraw_amount = Number(r.data.withdraw_amount)
+
+            metas[0]['stats'] = Number(r.data.deposit_amount).toLocaleString() + ' ￦'
+            metas[1]['stats'] = Number(r.data.withdraw_amount).toLocaleString() + ' ￦'
+            metas[2]['stats'] = (Number(r.data.deposit_amount) + Number(r.data.withdraw_amount)).toLocaleString() + ' ￦'
+            metas[0]['subtitle'] = Number(r.data.total_deposit_count).toLocaleString() + '건'
+            metas[1]['subtitle'] = Number(r.data.total_withdraw_count).toLocaleString() + '건'
+            metas[2]['subtitle'] = (Number(r.data.total_deposit_count) + Number(r.data.total_withdraw_count)).toLocaleString() + '건'
         }
+    })
+    watchEffect(() => {
+        let finance_vans_balances = ''
+        finance_vans.forEach(finance_van => {
+            finance_vans_balances += `${finance_van.nick_name}: ${finance_van.balance ? finance_van.balance.toLocaleString() : 0 } ￦<br>`
+        })
+        metas[3]['stats'] = finance_vans_balances
     })
     snackbar.value.show('거래모듈 및 입금정보는 2024-07-17부터 업데이트됩니다.', 'success')
 })
@@ -41,7 +55,7 @@ onMounted(() => {
 <template>
     <section>
         <div>
-            <BaseIndexView placeholder="계좌번호, 메모사항 검색" :metas="[]" :add="false" add_name="입금계좌" :date_filter_type="DateFilters.SETTLE_RANGE">
+            <BaseIndexView placeholder="계좌번호, 메모사항 검색" :metas="metas" :add="false" add_name="입금계좌" :date_filter_type="DateFilters.SETTLE_RANGE">
                 <template #filter>
                 </template>
                 <template #index_extra_field>
@@ -59,18 +73,6 @@ onMounted(() => {
                     <VBtn prepend-icon="carbon:batch-job" @click="headOfficeWithdrawDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
                         지정계좌 이체
                     </VBtn>
-                    <div style="display: flex;">
-                        <table>
-                            <tr>
-                                <th>입금액 합계</th>
-                                <td><span>{{ total_amount.deposit_amount.toLocaleString() }}</span> &#8361;</td>
-                            </tr>
-                            <tr>
-                                <th>출금액 합계</th>
-                                <td><span>{{ total_amount.withdraw_amount.toLocaleString() }}</span> &#8361;</td>
-                            </tr>
-                        </table>
-                    </div>
                 </template>
                 <template #headers>
                     <tr>

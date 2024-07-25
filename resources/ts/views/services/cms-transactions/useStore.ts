@@ -45,11 +45,47 @@ export const useSearchStore = defineStore('useCMSTransactionSearchStore', () => 
         }
         type == 1 ? head.exportToExcel(datas) : head.exportToPdf(datas)
     }
+
+    const metas = ref([
+        {
+            icon: 'ic-outline-payments',
+            color: 'primary',
+            title: '입금액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        },
+        {
+            icon: 'ic-outline-payments',
+            color: 'error',
+            title: '출금액 합계',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        },
+        {
+            icon: 'ic-outline-payments',
+            color: 'success',
+            title: '입출금 차액',
+            stats: '0',
+            percentage: 0,
+            subtitle: '0건',
+        },
+        {
+            icon: 'ic-outline-payments',
+            color: 'warning',
+            title: '가상계좌 잔액',
+            stats: '',
+            percentage: 0,
+            subtitle: '',
+        }     
+    ])
     
     return {
         store,
         head,
         exporter,
+        metas,
     }
 })
 

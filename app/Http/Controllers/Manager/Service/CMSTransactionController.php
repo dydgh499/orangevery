@@ -58,6 +58,8 @@ class CMSTransactionController extends Controller
             ->first([
                 DB::raw("SUM(IF(is_withdraw = 0, amount, 0)) AS deposit_amount"),
                 DB::raw("SUM(IF(is_withdraw = 1, amount, 0)) AS withdraw_amount"),
+                DB::raw("SUM(is_withdraw = 0) AS total_deposit_count"),
+                DB::raw("SUM(is_withdraw = 1) AS total_withdraw_count"),
             ]);
         return $this->response(0, $data);
     }

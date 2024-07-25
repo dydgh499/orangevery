@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SkeletonBox from '@/layouts/utils/SkeletonBox.vue'
+import SkeletonBox from '@/layouts/utils/SkeletonBox.vue';
 import { getUserLevel, user_info } from '@axios';
 
 interface Props {
@@ -25,21 +25,19 @@ onMounted (() => {
     <VCard>
         <VCardText class="d-flex justify-space-between">
             <div v-if="store.is_skeleton">
-                <span>{{ meta.title }}</span>
+                <span v-html="meta.title"></span>
                 <div class="d-flex align-center gap-2 my-1">
                     <SkeletonBox :width="'3em'"/>
                     <SkeletonBox :width="'5em'"/>
                 </div>
             </div>
             <div v-else>
-                <span>{{ meta.title }}</span>
+                <span v-html="meta.title"></span>
                 <div class="d-flex align-center gap-2 my-1">
-                    <h6 class="text-h6">
-                        {{ meta.stats }}
-                    </h6>
-                    <span :class="meta.percentage > 0 ? 'text-success' : 'text-error'">({{ meta.percentage }}%)</span>
+                    <h6 class="text-h6" v-html="meta.stats"></h6>
+                    <span :class="meta.percentage > 0 ? 'text-success' : 'text-error'" v-if="meta.percentage">({{ meta.percentage }}%)</span>
                 </div>
-                <span>{{ meta.subtitle }}</span>
+                <span v-html="meta.subtitle"></span>
             </div>
             <VAvatar rounded variant="tonal" :color="meta.color" :icon="meta.icon" />
         </VCardText>

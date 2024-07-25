@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/transactions/realtime-histories/useStore'
-import { useStore } from '@/views/services/pay-gateways/useStore'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import { useSearchStore } from '@/views/transactions/realtime-histories/useStore'
 import type { RealtimeHistory } from '@/views/types'
 import { DateFilters } from '@core/enums'
 
@@ -30,7 +30,7 @@ const getLogStyle = (item: RealtimeHistory) => {
         </template>
         <template #index_extra_field>
             <table>
-                <tr v-for="(finance_van, key) in finance_vans" :key="key" :style="finance_van.balance_status ? '' : 'color:red'">
+                <tr v-for="(finance_van, key) in finance_vans.filter(t => t.is_agency_van === 0)" :key="key" :style="finance_van.balance_status ? '' : 'color:red'">
                     <th style="text-align: start;">{{ finance_van.nick_name }} 잔액: </th>
                     <td style="text-align: end;">{{ finance_van.balance ? finance_van.balance.toLocaleString() : 0 }} &#8361;</td>
                 </tr>
