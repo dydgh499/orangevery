@@ -22,14 +22,55 @@ trait AttributeTrait
         return $date->format("Y-m-d H:i:s");
     }
 
+
     private function toS3PrivateLink($link)
     {
         $client = Storage::disk('s3')->getClient();
         $command = $client->getCommand('GetObject', [
             'Bucket' => Config::get('filesystems.disks.s3.bucket'),
-            'Key'    => str_replace(Config::get('filesystems.disks.s3.url'), '', $link)
+            'Key'    => str_replace(Config::get('filesystems.disks.s3.url').'/', '', $link)
         ]);
         $request = $client->createPresignedRequest($command, '+10 minutes');
-        return Config::get('filesystems.disks.s3.url').$request->getUri();
+        return $request->getUri();
+    }
+
+    private function isS3Img($value)
+    {
+        return env('FILESYSTEM_DISK') === 's3' && strpos($value, 'amazonaws.com') !== false;
+    }
+
+    protected function ProfileImg() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => $this->isS3Img($value) ? $this->toS3PrivateLink($value) : $value
+        );
+    }
+
+    protected function ContractImg() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => $this->isS3Img($value) ? $this->toS3PrivateLink($value) : $value
+        );
+    }
+
+    protected function BsinLicImg() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => $this->isS3Img($value) ? $this->toS3PrivateLink($value) : $value
+        );
+    }
+
+    protected function IdImg() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => $this->isS3Img($value) ? $this->toS3PrivateLink($value) : $value
+        );
+    }
+
+    protected function PassbookImg() : Attribute
+    {
+        return new Attribute(
+            get: fn ($value) => $this->isS3Img($value) ? $this->toS3PrivateLink($value) : $value
+        );
     }
 }
