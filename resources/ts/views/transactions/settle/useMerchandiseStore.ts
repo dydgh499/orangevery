@@ -11,7 +11,7 @@ export const useSearchStore = defineStore('transSettlesMchtSearchStore', () => {
         headers0['id'] = 'NO.'
         if(corp.pv_options.paid.use_settle_hold) {
             headers0['settle_hold_s_dt'] = '지급보류 시작일'
-            headers0['settle_hold_reason'] = '지급보유 사유'
+            headers0['settle_hold_reason'] = '지급보류 사유'
         }
         headers0['user_name'] = '가맹점 ID'
         headers0['mcht_name'] = '상호'
