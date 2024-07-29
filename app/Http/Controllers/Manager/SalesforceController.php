@@ -7,6 +7,7 @@ use App\Models\Merchandise;
 use App\Models\Log\SfFeeApplyHistory;
 
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 
 use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ManagerTrait;
@@ -134,7 +135,7 @@ class SalesforceController extends Controller
     {
         if(Ablilty::isSalesforce($request) &&  $request->level >= $request->user()->level)
             return $this->extendResponse(1999, "추가할 수 없는 등급입니다.");
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $validated = $request->validate(['user_pw'=>'required']);
@@ -212,7 +213,7 @@ class SalesforceController extends Controller
         $data = $request->data();
         $data = $this->saveImages($request, $data, $this->imgs);
         // 상호 검사
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($this->isExistMutual($this->salesforces->where('id', '!=', $id), $request->user()->brand_id, 'sales_name', $data['sales_name']))
             return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'상호']));
@@ -242,7 +243,7 @@ class SalesforceController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($this->authCheck($request->user(), $id, 15))
         {

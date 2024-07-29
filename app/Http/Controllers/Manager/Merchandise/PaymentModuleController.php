@@ -24,6 +24,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Enums\HistoryType;
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 
 
 /**
@@ -126,7 +127,7 @@ class PaymentModuleController extends Controller
 
         $data = $request->data();
         
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'tid', $data['tid']))
             return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['tid'=>$data['tid']]);
@@ -205,7 +206,7 @@ class PaymentModuleController extends Controller
 
         $data = $request->data();
         
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
             return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid'=>$data['tid']]);
@@ -250,7 +251,7 @@ class PaymentModuleController extends Controller
             {
                 if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                     return $this->response(951);
-                if(Ablilty::isEditAbleTime() === false)
+                if(EditAbleWorkTime::validate() === false)
                     return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
                 $res = $this->delete($this->pay_modules->where('id', $id));            
                 operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->note);

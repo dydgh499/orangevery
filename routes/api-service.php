@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Message\MessageController;
 use App\Http\Controllers\Manager\BrandController;
 use App\Http\Controllers\Manager\Service\BeforeBrandInfoController;
+use App\Http\Controllers\Manager\Service\ExceptionWorkTimeController;
 use App\Http\Controllers\Manager\Service\AbnormalConnectionController;
 use App\Http\Controllers\Manager\Service\DifferentSettlementInfoController;
 

@@ -108,7 +108,7 @@ defineExpose({
                             </template>
                             <template v-if="corp.pv_options.paid.use_collect_withdraw_scheduler && getUserLevel() >= 35">
                                 <span style="margin: 0.25em 0;"></span>
-                                <VBtn prepend-icon="tabler:column-remove" @click="removeDepositFee(props.selected_idxs)" size="small" color="warning">
+                                <VBtn prepend-icon="tabler:column-remove" @click="removeDepositFee(props.selected_idxs)" size="small" color="primary">
                                     입금 수수료 삭제
                                 </VBtn>
                             </template>

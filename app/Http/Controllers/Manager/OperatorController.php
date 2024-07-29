@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Manager;
 
 use App\Models\Operator;
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 
 use App\Enums\AuthLoginCode;
 use App\Http\Controllers\Auth\AuthPhoneNum;
@@ -93,7 +94,7 @@ class OperatorController extends Controller
         $validated = $request->validate(['user_pw'=>'required']);
         if($request->user()->level > 35)
         {
-            if(Ablilty::isEditAbleTime() === false)
+            if(EditAbleWorkTime::validate() === false)
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
             if($this->isExistUserName($request->user()->brand_id, $request->user_name))
                 return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
@@ -197,7 +198,7 @@ class OperatorController extends Controller
 
             if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
                 return $this->response(951);
-            if(Ablilty::isEditAbleTime() === false)
+            if(EditAbleWorkTime::validate() === false)
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
     
             if((int)$data['level'] === 40)
@@ -236,7 +237,7 @@ class OperatorController extends Controller
             return $this->response(951);
         else
         {
-            if(Ablilty::isEditAbleTime() === false)
+            if(EditAbleWorkTime::validate() === false)
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
             $res = $this->delete($this->operators->where('id', $id));
@@ -250,7 +251,7 @@ class OperatorController extends Controller
      */
     public function passwordChange(Request $request, int $id)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if(Ablilty::isOperator($request))
             return $this->_passwordChange($this->operators->where('id', $id), $request);

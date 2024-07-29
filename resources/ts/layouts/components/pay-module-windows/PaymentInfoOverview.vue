@@ -49,7 +49,7 @@ const midCreate = async() => {
     }
 }
 const payKeyCreate = async() => {
-    if(await alert.value.show('정말 결제 KEY를 신규 발급하시겠습니까?<br><br><b>이전 결제키는 더이상 사용할 수 없으니 주의하시기바랍니다.</b>')) {
+    if(await alert.value.show('정말 결제 KEY를 신규 발급하시겠습니까?<br><br><b>이전 결제 KEY는 더이상 사용할 수 없으니 주의하시기바랍니다.</b>')) {
         try {
             const r = await axios.post('/api/v1/manager/merchandises/pay-modules/pay-key-create', {id: props.item.id})
             props.item.pay_key = r.data.pay_key
@@ -63,7 +63,7 @@ const payKeyCreate = async() => {
 }
 
 const signKeyCreate = async() => {
-    if(await alert.value.show('정말 서명 KEY를 신규 발급하시겠습니까?<br><br><b>이전 결제키는 더이상 사용할 수 없으니 주의하시기바랍니다.</b>')) {
+    if(await alert.value.show('정말 서명 KEY를 신규 발급하시겠습니까?<br><br><b>이전 서명 KEY는 더이상 사용할 수 없으니 주의하시기바랍니다.</b>')) {
         try {
             const r = await axios.post('/api/v1/manager/merchandises/pay-modules/sign-key-create', {id: props.item.id})
             props.item.sign_key = r.data.sign_key
@@ -234,7 +234,7 @@ useCollectWithdrawTrxFinDelayValidate()
             <CreateHalfVCol :mdl="5" :mdr="7" v-if="isAbleModiy(props.item.id)">
                 <template #name>
                     <BaseQuestionTooltip :location="'top'" :text="'서명 KEY'"
-                        :content="'결제통보시 거래정보 무결성 보장에 사용됩니다.<br>키를 복사하려면 입력필드에서 더블클릭하세요.'">
+                        :content="'노티발송시 데이터 위변조 방지 값으로 사용됩니다.<br>키를 복사하려면 입력필드에서 더블클릭하세요.'">
                     </BaseQuestionTooltip>
                 </template>
                 <template #input>

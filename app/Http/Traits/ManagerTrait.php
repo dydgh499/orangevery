@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\AuthGoogleOTP;
 use App\Http\Controllers\Auth\AuthAccountLock;
 use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 
 
 trait ManagerTrait
@@ -162,7 +163,7 @@ trait ManagerTrait
 
     public function _unlockAccount($query)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         else
         {

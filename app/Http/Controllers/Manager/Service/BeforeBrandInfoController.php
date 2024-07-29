@@ -8,6 +8,8 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
 
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+
 use App\Http\Requests\Manager\BulkRegister\BulkRegularCardRequest;
 use App\Http\Requests\Manager\Service\BeforeBrandInfoRequest;
 use App\Http\Requests\Manager\IndexRequest;
@@ -49,7 +51,7 @@ class BeforeBrandInfoController extends Controller
      */
     public function store(BeforeBrandInfoRequest $request)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $data = $request->data();
@@ -81,7 +83,7 @@ class BeforeBrandInfoController extends Controller
      */
     public function update(BeforeBrandInfoRequest $request, int $id)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $data = $request->data();
@@ -99,7 +101,7 @@ class BeforeBrandInfoController extends Controller
      */
     public function destroy($id)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         $res = $this->before_brand_infos->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);

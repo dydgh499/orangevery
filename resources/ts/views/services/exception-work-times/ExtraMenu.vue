@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { Holiday } from '@/views/types';
+import type { ExceptionWorkTime } from '@/views/types';
 import { axios } from '@axios';
 
 interface Props {
-    item: Holiday,
+    item: ExceptionWorkTime,
 }
 
 const props = defineProps<Props>()
@@ -11,12 +11,12 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const store = <any>(inject('store'))
 const errorHandler = <any>(inject('$errorHandler'))
-const holidayDlg = <any>(inject('holidayDlg'))
+const exceptionWorkTimeDialog = <any>(inject('exceptionWorkTimeDialog'))
 
 const remove = async () => {
     if (await alert.value.show('정말 삭제 하시겠습니까?')) {
         try {
-            const r = await axios.delete(`/api/v1/manager/services/holidays/${props.item.id}`)
+            const r = await axios.delete(`/api/v1/manager/services/exception-work-times/${props.item.id}`)
             snackbar.value.show('성공하였습니다.', 'success')
             store.setTable()
         }
@@ -32,7 +32,7 @@ const remove = async () => {
         <VIcon size="22" icon="tabler-dots-vertical" />
         <VMenu activator="parent" width="230">
             <VList>
-                <VListItem value="saleslip" @click="holidayDlg.show(props.item)">
+                <VListItem value="saleslip" @click="exceptionWorkTimeDialog.show(props.item)">
                     <template #prepend>
                         <VIcon size="24" class="me-3" icon="tabler-pencil" />
                     </template>

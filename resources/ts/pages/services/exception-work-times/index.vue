@@ -1,25 +1,23 @@
 <script setup lang="ts">
-import HolidayDlg from '@/layouts/dialogs/services/HolidayDlg.vue'
+import ExceptionWorkTimeDialog from '@/layouts/dialogs/services/ExceptionWorkTimeDialog.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import ExtraMenu from '@/views/services/holidays/ExtraMenu.vue'
-import { rest_types, useSearchStore } from '@/views/services/holidays/useStore'
-import { useRequestStore } from '@/views/request'
+import ExtraMenu from '@/views/services/exception-work-times/ExtraMenu.vue'
+import { useSearchStore } from '@/views/services/exception-work-times/useStore'
 import { DateFilters } from '@core/enums'
-
 const { 
     store, 
     head, 
     exporter, 
     metas
 } = useSearchStore()
-const { post } = useRequestStore()
 
-const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
+const exceptionWorkTimeDialog = ref()
 
 provide('store', store)
 provide('head', head)
 provide('exporter', exporter)
+provide('exceptionWorkTimeDialog', exceptionWorkTimeDialog)
 
 
 onMounted(() => {
@@ -28,12 +26,12 @@ onMounted(() => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="공휴일 명칭" :metas="metas" :add="false" add_name="" :date_filter_type="DateFilters.NOT_USE">
+        <BaseIndexView placeholder="작업자 ID" :metas="metas" :add="false" add_name="" :date_filter_type="DateFilters.NOT_USE">
             <template #index_extra_field>
                 <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
                     :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager  @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
-                    <VBtn prepend-icon="material-symbols:holiday-village" @click="holidayDlg.show({id:0})" size="small">
-                        공휴일 추가
+                    <VBtn prepend-icon="material-symbols:work-history-outline" @click="exceptionWorkTimeDialog.show({id:0})" size="small">
+                        예외작업시간 추가
                     </VBtn>
             </template>
             <template #headers>
@@ -58,11 +56,6 @@ onMounted(() => {
                                 <span v-if="_key === 'id'">
                                     #{{ item[_key] }}
                                 </span>
-                                <span v-else-if="_key === 'rest_type'">
-                                    <VChip :color="store.getSelectIdColor(item[_key])">
-                                        {{ rest_types.find(obj => obj.id === item[_key]).title }}
-                                    </VChip>
-                                </span>
                                 <span v-else-if="_key === 'extra_col'">
                                     <ExtraMenu :item="item"/>
                                 </span>
@@ -75,6 +68,6 @@ onMounted(() => {
                 </tr>
             </template>
         </BaseIndexView>
-        <HolidayDlg ref="holidayDlg"/>
+        <ExceptionWorkTimeDialog ref="exceptionWorkTimeDialog"/>
     </div>
 </template>

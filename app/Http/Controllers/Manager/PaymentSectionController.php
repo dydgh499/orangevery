@@ -9,6 +9,8 @@ use App\Http\Requests\Manager\PaySectionRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -50,7 +52,7 @@ class PaymentSectionController extends Controller
      */
     public function store(PaySectionRequest $request)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $user = $request->data();
@@ -80,7 +82,7 @@ class PaymentSectionController extends Controller
      */
     public function update(PaySectionRequest $request, int $id)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $data = $request->data();
@@ -95,7 +97,7 @@ class PaymentSectionController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $res = $this->delete($this->pay_sections->where('id', $id));

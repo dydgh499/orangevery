@@ -9,6 +9,8 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Models\EncryptDataTrait;
 
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+
 use App\Http\Requests\Manager\Service\OperatorIPRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;
@@ -48,7 +50,7 @@ class OperatorIPController extends Controller
      */
     public function store(OperatorIPRequest $request)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
     
         $data = $request->data();
@@ -79,7 +81,7 @@ class OperatorIPController extends Controller
      */
     public function update(OperatorIPRequest $request, int $id)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         $data = $request->data();
         $data = $this->setEncryptPersonalInfo($data);
@@ -99,7 +101,7 @@ class OperatorIPController extends Controller
      */
     public function destroy(int $id)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         $res = $this->operator_ips->where('id', $id)->delete();
         return $this->response($res ? 1 : 990, ['id'=>$id]);

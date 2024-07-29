@@ -9,6 +9,8 @@ use App\Http\Requests\Manager\Service\ClassificationReqeust;
 use App\Http\Requests\Manager\IndexRequest;
 
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Enums\HistoryType;
@@ -53,7 +55,7 @@ class ClassificationController extends Controller
      */
     public function store(ClassificationReqeust $request)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $data = $request->data();
@@ -85,7 +87,7 @@ class ClassificationController extends Controller
      */
     public function update(ClassificationReqeust $request, int $id)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $data = $request->data();
@@ -103,7 +105,7 @@ class ClassificationController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $res = $this->classifications->where('id', $id)->update(['is_delete'=>true]);

@@ -12,6 +12,8 @@ use App\Http\Requests\Manager\PayGatewayRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -54,7 +56,7 @@ class PaymentGatewayController extends Controller
      */
     public function store(PayGatewayRequest $request)
     {
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $user = $request->data();
@@ -93,7 +95,7 @@ class PaymentGatewayController extends Controller
     public function update(PayGatewayRequest $request, int $id)
     {
         $data = $this->pay_gateways->where('id', $id)->first();
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                 return $this->response(951);
@@ -112,7 +114,7 @@ class PaymentGatewayController extends Controller
         if($this->authCheck($request->user(), $id, 35))
         {
             $data = $this->pay_gateways->where('id', $id)->first();
-            if(Ablilty::isEditAbleTime() === false)
+            if(EditAbleWorkTime::validate() === false)
                 return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
             if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                 return $this->response(951);

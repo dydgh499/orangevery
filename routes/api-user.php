@@ -134,6 +134,7 @@ Route::prefix('merchandises')->group(function() {
                 Route::post('mid-bulk-create', [PaymentModuleController::class, 'midBulkCreate']);
                 Route::post('tid-bulk-create', [PaymentModuleController::class, 'tidBulkCreate']);
                 Route::post('pay-key-create', [PaymentModuleController::class, 'payKeyCreate']);
+                Route::post('sign-key-create', [PaymentModuleController::class, 'signKeyCreate']);
                 Route::post('bulk-register', [PaymentModuleController::class, 'bulkRegister']);
                 Route::post('pg-bulk-updater', [PaymentModuleController::class, 'bulkRegisterPG']);
             });

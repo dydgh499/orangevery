@@ -12,6 +12,8 @@ use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Redis;
@@ -175,7 +177,7 @@ class BrandController extends Controller
         // 휴대폰 인증
         if(Ablilty::isBrandCheck($request, $id, true) === false)
             return $this->response(951);
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if($request->user()->level > 35)
         {
@@ -208,7 +210,7 @@ class BrandController extends Controller
     {
         if(Ablilty::isBrandCheck($request, $id) === false)
             return $this->response(951);
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         $brand = $this->brands->where('id', $id)->first();
         $res = $this->delete($this->brands->where('id', $id), ['logo_img', 'favicon_img']);

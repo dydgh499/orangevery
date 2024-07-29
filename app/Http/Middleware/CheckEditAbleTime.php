@@ -5,9 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Controllers\Ablilty\AbnormalConnection;
 
 class CheckEditAbleTime
 {
@@ -19,7 +18,7 @@ class CheckEditAbleTime
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Ablilty::isEditAbleTime())
+        if(EditAbleWorkTime::validate())
             return $next($request);
         else
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');

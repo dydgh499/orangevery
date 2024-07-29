@@ -187,7 +187,7 @@ export interface UnderAutoSetting {
     note: string,
 }
 
-export interface Operator extends BasePropertie{
+export interface Operator extends BasePropertie {
     level: number
     token?: string,
     result?: number,
@@ -987,4 +987,11 @@ export interface AbnormalConnectionHistory {
     mobile_type: string,
     comment: string,
     created_at: string,
+}
+
+export interface ExceptionWorkTime {
+    id: number,
+    oper_id: number|null,
+    work_s_at: string,
+    work_e_at: string,
 }

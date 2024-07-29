@@ -15,6 +15,7 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleHistoryTrait;
 use App\Http\Traits\Salesforce\UnderSalesTrait;
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Log\CreateSettleHistoryRequest;
@@ -124,7 +125,7 @@ class SalesSettleHistoryController extends Controller
         $item = $request->all();
         $data = $request->data('sales_id');
 
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         
         $c_id = DB::transaction(function () use($item, $data) {

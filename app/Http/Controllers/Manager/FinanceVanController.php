@@ -11,6 +11,8 @@ use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\FinanceRequest;
 
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -58,7 +60,7 @@ class FinanceVanController extends Controller
     {
         $data = $request->data();
 
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         else
         {
@@ -99,7 +101,7 @@ class FinanceVanController extends Controller
         $before = $this->finance_vans->where('id', $id)->first();
         if(Ablilty::isBrandCheck($request, $before->brand_id) === false)
             return $this->response(951);
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $data = $request->data();
@@ -118,7 +120,7 @@ class FinanceVanController extends Controller
         $data = $this->finance_vans->where('id', $id)->first();
         if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
             return $this->response(951);
-        if(Ablilty::isEditAbleTime() === false)
+        if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
 
         $res = $this->delete($this->finance_vans->where('id', $id));

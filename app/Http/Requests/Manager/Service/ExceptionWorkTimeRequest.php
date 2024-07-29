@@ -9,10 +9,9 @@ class ExceptionWorkTimeRequest extends FormRequest
 {
     use FormRequestTrait;
     public $keys = [
-        'acct_bank_name',
-        'acct_bank_code',
-        'acct_num',
-        'acct_name',
+        'oper_id',
+        'work_s_at',
+        'work_e_at',
     ];
 
     public function authorize(): bool
@@ -23,10 +22,9 @@ class ExceptionWorkTimeRequest extends FormRequest
     public function rules(): array
     {
         $sub = [
-            'acct_bank_name' => 'required',
-            'acct_bank_code' => 'required',
-            'acct_num' => 'required',
-            'acct_name' => 'required',
+            'oper_id' => 'required',
+            'work_s_at' => 'required',
+            'work_e_at' => 'required',
         ];
         return $this->getRules($this->keys, $sub);
     }

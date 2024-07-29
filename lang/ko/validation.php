@@ -324,5 +324,8 @@ return [
         // util
         'msg' => '메세지',        
         'deposit_history' => '입금내역',
+        'oper_id' => '운영자',
+        'work_s_at' => '작업시작 시간',
+        'work_e_at' => '작업종료 시간',
     ],
 ];
