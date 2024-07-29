@@ -48,11 +48,21 @@ const changeSettleDay = async () => {
 }
 
 const singleDepositCancelJobReservation = async (trx_ids: number[]) => {
-    if (await alert.value.show('정말 해당 거래건을 이체예약취소처리 하시겠습니까?')) {
-        const params = {
+    if (await alert.value.show('정말 해당 거래건들을 이체예약취소처리 하시겠습니까?')) {
+        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit-cancel-job-reservation', {
             'trx_ids': trx_ids,
+        }, true)
+        if(r.status == 201) {
+            emits('update:select_idxs', [])
         }
-        const r = await post('/api/v1/manager/transactions/settle-histories/merchandises/single-deposit-cancel-job-reservation', params, true)
+    }
+}
+
+const removeDepositFee = async (trx_ids: number[]) => {
+    if (await alert.value.show('정말 해당 거래건들의 이체 수수료를 제거하시겠습니까?')) {
+        const r = await post('/api/v1/manager/transactions/remove-deposit-fee', {
+            'trx_ids': trx_ids,
+        }, true)
         if(r.status == 201) {
             emits('update:select_idxs', [])
         }
@@ -94,6 +104,12 @@ defineExpose({
                                 <span style="margin: 0.25em 0;"></span>
                                 <VBtn prepend-icon="tabler-calculator" @click="singleDepositCancelJobReservation(props.selected_idxs)" size="small" color="warning">
                                     이체예약취소
+                                </VBtn>
+                            </template>
+                            <template v-if="corp.pv_options.paid.use_collect_withdraw_scheduler && getUserLevel() >= 35">
+                                <span style="margin: 0.25em 0;"></span>
+                                <VBtn prepend-icon="tabler:column-remove" @click="removeDepositFee(props.selected_idxs)" size="small" color="warning">
+                                    입금 수수료 삭제
                                 </VBtn>
                             </template>
                             <span style="margin: 0.25em 0;"></span>

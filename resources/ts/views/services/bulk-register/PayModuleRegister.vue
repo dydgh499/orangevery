@@ -5,7 +5,7 @@ import { comm_settle_types, cxl_types, fin_trx_delays, installments, module_type
 import { Registration } from '@/views/registration'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import PGExplainDialog from '@/views/services/bulk-register/PGExplainDialog.vue'
-import { useRegisterStore } from '@/views/services/bulk-register/PayModRegisterStore'
+import { keyCreater, useRegisterStore } from '@/views/services/bulk-register/PayModRegisterStore'
 import SettleTypeExplainDialog from '@/views/services/bulk-register/SettleTypeExplainDialog.vue'
 import UsageTooltip from '@/views/services/bulk-register/UsageTooltip.vue'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -43,6 +43,7 @@ const is_clear = ref<boolean>(false)
 const midCreateDlg = ref()
 const settleTypeExplain = ref()
 const pgExplain = ref()
+const { payKeyCreater, signKeyCreater } = keyCreater(snackbar, items)
 
 const validate = async () => {
     var date_regex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
@@ -153,8 +154,11 @@ const validate = async () => {
         await midCreater()
     if(corp.pv_options.paid.use_tid_create && use_tid_create.value)
         await tidCreater()
-    if(corp.pv_options.paid.use_online_pay && use_online_pay.value)
-       payKeyCreater()
+    if(corp.pv_options.paid.use_online_pay) {
+        signKeyCreater()
+        if(use_online_pay.value)
+            payKeyCreater()
+    }
 }
 
 const midCreater = async () => {
@@ -197,29 +201,6 @@ const tidCreater = async () => {
         }
     }
     snackbar.value.show('TID들이 발급 되었습니다.', 'success')
-}
-
-const payKeyCreater = () => {
-    const getRandomNumber = (min: number, max: number) => {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    const generateRandomString = (id: number) => {
-        const remaining_length = 64 - id.toString().length
-        const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        let result = '';
-        for (let i = 0; i < remaining_length; i++) {
-            const rand_idx = Math.floor(Math.random() * characters.length);
-            result += characters.charAt(rand_idx);
-        }
-        return id + result;
-    }
-    
-    snackbar.value.show('PAY KEY들을 자동 발급 중입니다.', 'primary')
-    for (let i = 0; i < items.value.length; i++) {
-        items.value[i].pay_key = generateRandomString(getRandomNumber(1, 99999))        
-    }
-    snackbar.value.show('PAY KEY들이 발급 되었습니다.', 'success')
 }
 
 const payModRegister = async () => {

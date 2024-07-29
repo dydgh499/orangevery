@@ -26,6 +26,7 @@ Route::prefix('transactions')->group(function() {
             Route::post('batch-retry', [TransactionController::class, 'batchRetry']);
             Route::post('batch-self-retry', [TransactionController::class, 'batchSelfRetry']);    
             Route::post('change-settle-date', [TransactionController::class, 'changeSettleDate']);
+            Route::post('remove-deposit-fee', [TransactionController::class, 'removeDepositFee']);
             Route::post('settle/merchandises/representative-settle', [RepMerchandiseController::class, 'settlement']);
         });
     
@@ -57,7 +58,7 @@ Route::prefix('transactions')->group(function() {
     Route::post('noti/{id}', [TransactionController::class, 'noti']);
     Route::post('cancel', [TransactionController::class, 'cancel']);
     Route::get('chart', [TransactionController::class, 'chart']);
-    Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);            
+    Route::get('merchandises/groups', [TransactionController::class, 'mchtGroups']);
     Route::get('fails', [FailTransController::class, 'index']);
     Route::get('summary/chart', [TransactionSummaryController::class, 'chart']);
     Route::get('summary', [TransactionSummaryController::class, 'index']);

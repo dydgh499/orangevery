@@ -243,6 +243,7 @@ export interface PayModule {
     use_realtime_deposit: number,
     payment_term_min: number,
     pay_key?: string,
+    sign_key?: string,
 }
 
 export interface PayGateway {

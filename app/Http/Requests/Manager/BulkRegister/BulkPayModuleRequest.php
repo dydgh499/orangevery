@@ -40,6 +40,7 @@ class BulkPayModuleRequest extends FormRequest
         'api_key',
         'sub_key',
         'pay_key',
+        'sign_key',
         'p_mid',
         'mid',
         'tid',

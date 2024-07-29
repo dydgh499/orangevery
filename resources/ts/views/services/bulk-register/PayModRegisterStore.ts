@@ -3,6 +3,44 @@
 import { Header } from '@/views/headers';
 import corp from '@corp';
 
+
+export const keyCreater = (snackbar: any, items: any) => {
+    const getRandomNumber = (min: number, max: number) => {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    const generateRandomString = (id: number) => {
+        const remaining_length = 64 - id.toString().length
+        const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let result = '';
+        for (let i = 0; i < remaining_length; i++) {
+            const rand_idx = Math.floor(Math.random() * characters.length);
+            result += characters.charAt(rand_idx);
+        }
+        return id + result;
+    }
+    
+    const payKeyCreater = () => {
+        snackbar.value.show('PAY KEY들을 자동 발급 중입니다.', 'primary')
+        for (let i = 0; i < items.value.length; i++) {
+            items.value[i].pay_key = generateRandomString(getRandomNumber(1, 999999))        
+        }
+        snackbar.value.show('PAY KEY들이 발급 되었습니다.', 'success')
+    }
+
+    const signKeyCreater = () => {
+        snackbar.value.show('서명 KEY들을 자동 발급 중입니다.', 'primary')
+        for (let i = 0; i < items.value.length; i++) {
+            items.value[i].sign_key = generateRandomString(getRandomNumber(1, 999999))        
+        }
+        snackbar.value.show('서명 KEY들이 발급 되었습니다.', 'success')
+    }
+
+    return {
+        payKeyCreater,
+        signKeyCreater
+    }
+}
+
 export const useRegisterStore = defineStore('payModRegisterStore', () => {
     const head  = Header('pay-modules/bulk-register', '결제모듈 대량등록 포멧')
     const headers1: Record<string, string> = {

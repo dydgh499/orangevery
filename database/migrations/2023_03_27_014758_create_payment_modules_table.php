@@ -62,7 +62,7 @@ return new class extends Migration
             $table->date('contract_e_dt')->nullable()->comment('계약 종료일');
             $table->boolean('use_realtime_deposit')->default(false)->comment('실시간 이체 사용여부');
 
-            $table->string('pay_key', 100)->default('')->comment('API KEY');
+            $table->string('pay_key', 100)->default('')->comment('결제 KEY');
             $table->string('filter_issuers', 200)->default('[]')->comment('카드사 필터');
             $table->string('note', 200)->nullable()->default('')->comment('별칭');
             $table->integer('last_settle_month')->length(3)->default(0)->comment('마지막 정산달');

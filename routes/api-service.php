@@ -67,6 +67,7 @@ Route::middleware(['is.operate', 'last.login.ip'])->group(function() {
         Route::apiResource('classifications', ClassificationController::class);
         Route::apiResource('mcht-blacklists', MchtBlacklistController::class);            
         Route::apiResource('holidays', HolidayController::class);
+        Route::apiResource('exception-work-times', ExceptionWorkTimeController::class);        
         Route::get('head-office-accounts', [HeadOfficeAccountController::class, 'index']);        
         Route::get('cms-transactions', [CMSTransactionController::class, 'index']);
         Route::get('cms-transactions/chart', [CMSTransactionController::class, 'chart']);

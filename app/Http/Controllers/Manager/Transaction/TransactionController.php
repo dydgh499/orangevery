@@ -15,6 +15,7 @@ use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\Manager\Transaction\NotiRetrySender;
 
+use App\Http\Controllers\Manager\Service\BrandInfo;
 use Carbon\Carbon;
 use App\Enums\DevSettleType;
 use Illuminate\Database\QueryException;
@@ -398,6 +399,24 @@ class TransactionController extends Controller
                 ->orderBy('merchandises.mcht_name')
                 ->get($cols);
         return $grouped;
+    }
+
+    public function removeDepositFee(Request $request)
+    {
+        $this->transactions->whereIn('id', $request->trx_ids)->update(['mcht_settle_fee' => 0]);
+        $db_trans = $this->transactions->whereIn('id', $request->trx_ids)->get();
+
+        $b_info = BrandInfo::getBrandById($request->user()->brand_id);
+        $trans = json_decode(json_encode($db_trans), true);
+        $trans = $this->setSettleAmount($trans, $b_info['dev_settle_type']);
+        $i=0;
+
+        foreach($db_trans as $tran)
+        {
+            $tran->mcht_settle_amount = $trans[$i]['mcht_settle_amount'];
+            $tran->save();
+            $i++;
+        }
     }
 
     public function _test()

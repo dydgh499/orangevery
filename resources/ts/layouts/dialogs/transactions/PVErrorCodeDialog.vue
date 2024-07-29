@@ -54,6 +54,7 @@ const setErrorCode = () => {
             {id: 'PV425', message: '단건 결제한도를 초과하였습니다.', reason: '단건 결제한도 하향 시간대에 이상금액 결제시도', resolve: '해당 가맹점 단건 결제한도 하향금 수정'},
         ])
     }
+    errors.value.push({id: 'PV426', message: '계약기간이 만료되었습니다.', reason: '', resolve: '결제모듈 정보 -> 계약 종료일 연장'})
 
     if(corp.pv_options.paid.use_realtime_deposit) {
         errors.value.push(...[

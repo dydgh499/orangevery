@@ -62,6 +62,20 @@ const payKeyCreate = async() => {
     }
 }
 
+const signKeyCreate = async() => {
+    if(await alert.value.show('정말 서명 KEY를 신규 발급하시겠습니까?<br><br><b>이전 결제키는 더이상 사용할 수 없으니 주의하시기바랍니다.</b>')) {
+        try {
+            const r = await axios.post('/api/v1/manager/merchandises/pay-modules/sign-key-create', {id: props.item.id})
+            props.item.sign_key = r.data.sign_key
+            snackbar.value.show('서명 KEY가 업데이트 되었습니다.', 'success')
+        }
+        catch (e: any) {
+            snackbar.value.show(e.response.data.message, 'error')
+            const r = errorHandler(e)
+        }
+    }
+}
+
 const useCollectWithdrawTrxFinDelayValidate = () => {
     if (corp.pv_options.paid.use_collect_withdraw && props.item.use_realtime_deposit && props.item.id) {
         axios.get('/api/v1/bf/occuerred-sale', {params: {mcht_id:props.item.mcht_id}}).then( r => {
@@ -168,7 +182,11 @@ useCollectWithdrawTrxFinDelayValidate()
         </VRow>
         <VRow v-if="isAbleModiy(props.item.id)">
             <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>계약 종료일</template>
+                <template #name>
+                    <BaseQuestionTooltip :location="'top'" :text="'계약 종료일'"
+                        :content="'결제일이 계약 시작일 ~ 계약 종료일에 포함되지 않을 시 결제가 불가능합니다.<br>입력하지 않을 시 검증하지 않으며 <b>온라인 결제</b>만 적용 가능합니다.'">
+                    </BaseQuestionTooltip>
+                </template>
                 <template #input>
                     <VTextField type="date" v-model="props.item.contract_e_dt"
                         prepend-inner-icon="ic-baseline-calendar-today" label="종료일 입력" single-line />
@@ -209,6 +227,35 @@ useCollectWithdrawTrxFinDelayValidate()
                 </template>
                 <template #input>
                     <span style="background-color: rgba(var(--v-theme-on-surface));">{{ props.item.pay_key }}</span>
+                </template>
+            </CreateHalfVCol>
+        </VRow>
+        <VRow v-if="props.item.id != 0 && corp.pv_options.paid.use_online_pay">
+            <CreateHalfVCol :mdl="5" :mdr="7" v-if="isAbleModiy(props.item.id)">
+                <template #name>
+                    <BaseQuestionTooltip :location="'top'" :text="'서명 KEY'"
+                        :content="'결제통보시 거래정보 무결성 보장에 사용됩니다.<br>키를 복사하려면 입력필드에서 더블클릭하세요.'">
+                    </BaseQuestionTooltip>
+                </template>
+                <template #input>
+                    <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                        <VTextField type="text" v-model="props.item.sign_key" prepend-inner-icon="ic-baseline-vpn-key"
+                            persistent-placeholder :disabled="true" />
+
+                        <VBtn type="button" variant="tonal" @click="signKeyCreate()">
+                            {{ "발급" }}
+                            <VIcon end icon="material-symbols:add-to-home-screen" />
+                        </VBtn>
+                    </div>
+                </template>
+            </CreateHalfVCol>
+            <CreateHalfVCol :mdl="5" :mdr="7" v-else>
+                <template #name>
+                    <BaseQuestionTooltip :location="'top'" :text="'서명 KEY'" :content="'드래그하여 확인할 수 있습니다.'">
+                    </BaseQuestionTooltip>
+                </template>
+                <template #input>
+                    <span style="background-color: rgba(var(--v-theme-on-surface));">{{ props.item.sign_key }}</span>
                 </template>
             </CreateHalfVCol>
         </VRow>

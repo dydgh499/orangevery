@@ -53,12 +53,12 @@ const props = defineProps<Props>()
         <VRow v-if="corp.pv_options.paid.use_dup_pay_validation && props.item.module_type != 0">
             <CreateHalfVCol :mdl="6" :mdr="6">
                 <template #name>
-                    <BaseQuestionTooltip :location="'top'" :text="'동일카드 결제허용 회수'"
-                        :content="'입력된 카드번호를 통해 중복해서 결제가되었는지 검증합니다.<br>0 입력 시 허용회수를 검증하지 않으며, <b>온라인 결제</b>만 적용 가능합니다.'">
+                    <BaseQuestionTooltip :location="'top'" :text="'동일카드 결제허용'"
+                        :content="'결제가 발생할 시 카드당 하루에 결제가 가능한 회수를 제한합니다.<br>0 입력 시 허용회수를 검증하지 않으며, <b>온라인 결제</b>만 적용 가능합니다.'">
                     </BaseQuestionTooltip>
                 </template>
                 <template #input>
-                    <VTextField v-model="props.item.pay_dupe_limit" label="동일카드 결제허용 회수" type="number" suffix="회 허용"
+                    <VTextField v-model="props.item.pay_dupe_limit" type="number" suffix="회 허용"
                         :rules="[requiredValidatorV2(props.item.pay_dupe_limit, '동일카드 결제허용 회수')]" />
                 </template>
             </CreateHalfVCol>
@@ -140,7 +140,11 @@ const props = defineProps<Props>()
         </VRow>
         <VRow v-if="props.item.module_type != 0">
             <CreateHalfVCol :mdl="6" :mdr="6">
-                <template #name>결제창 노출여부</template>
+                <template #name>
+                    <BaseQuestionTooltip :location="'top'" :text="'결제창 노출여부'"
+                        :content="'상위 PG사, 할부한도, 수기결제 타입(수기결제 일 시)이 변경될 경우 가맹점에 꼭 결제창을 재생성하도록 고지해야합니다.'">
+                    </BaseQuestionTooltip>
+                </template>
                 <template #input>
                     <BooleanRadio :radio="props.item.show_pay_view" @update:radio="props.item.show_pay_view = $event">
                         <template #true>노출</template>

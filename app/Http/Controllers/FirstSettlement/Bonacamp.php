@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers\FirstSettlement;
 
-use App\Http\Controllers\FirstSettlement\FirstSettlementBase;
+use App\Http\Controllers\FirstSettlement\NotiSenderBase;
 use App\Http\Controllers\FirstSettlement\FirstSettlementInterface;
 
-class Bonacamp extends FirstSettlementBase implements FirstSettlementInterface
+class Bonacamp extends NotiSenderBase implements FirstSettlementInterface
 {
     static private $headers = [
         'Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -64,7 +64,7 @@ class Bonacamp extends FirstSettlementBase implements FirstSettlementInterface
             $params['trxType'] = "refund";
             $params['rootTrxId'] = $tran['ori_trx_id'];
 
-            $mcht = self::getMcht($tran['mcht_id']);
+            $mcht = self::getMcht($tran);
             $tran['mchtId'] = $mcht['user_name'];
             $tran['name'] = $mcht['mcht_name'];
         }

@@ -150,7 +150,10 @@ class PaymentModuleController extends Controller
             {
                 $this->pay_modules
                     ->where('id', $res->id)
-                    ->update(['pay_key' => $this->getNewPayKey($res->id)]);
+                    ->update([
+                        'pay_key' => $this->getNewPayKey($res->id),
+                        'sign_key' => $this->getNewPayKey($res->id)
+                    ]);
             }
             return $res;
         });
@@ -420,5 +423,17 @@ class PaymentModuleController extends Controller
             ->where('id', $request->id)
             ->update(['pay_key' => $pay_key]);
         return $this->response(0, ['pay_key'=>$pay_key]);    
+    }
+
+    /**
+     * 서명 KEY 발급
+     */
+    public function signKeyCreate(Request $request)
+    {
+        $pay_key = $this->getNewPayKey($request->id);
+        $res = $this->pay_modules
+            ->where('id', $request->id)
+            ->update(['sign_key' => $pay_key]);
+        return $this->response(0, ['sign_key' => $sign_key]);    
     }
 }

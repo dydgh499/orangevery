@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers\FirstSettlement;
 
-use App\Http\Controllers\FirstSettlement\FirstSettlementBase;
+use App\Http\Controllers\FirstSettlement\NotiSenderBase;
 use App\Http\Controllers\FirstSettlement\FirstSettlementInterface;
 
-class SysLink extends FirstSettlementBase implements FirstSettlementInterface
+class SysLink extends NotiSenderBase implements FirstSettlementInterface
 {
     static private $host = "https://dapi.syslink.kr";
     static private $headers = [
@@ -74,8 +74,7 @@ class SysLink extends FirstSettlementBase implements FirstSettlementInterface
 
         if((int)$tran['is_cancel'])
         {
-
-            $mcht = self::getMcht($tran['mcht_id']);
+            $mcht = self::getMcht($tran);
             $user_name = $mcht['user_name'];
             $ori_trx_id = $tran['ori_trx_id'];
             $trx_type = '취소';
