@@ -36,7 +36,7 @@ const getAbilitiesMenu = computed(() => {
         }
         if (getUserLevel() >= 40) {
                 securities[1].children.push({
-                title: '예외 작업시간 추가',
+                title: '예외 작업시간 관리',
                 to: 'services-exception-work-times',
             })
         }

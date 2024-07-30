@@ -158,15 +158,13 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['business_num'] = '사업자등록번호'
     headers['nick_name'] = '대표자명'
     
-    if(getUserLevel() >= 35)
-    {
+    if(getUserLevel() >= 35) {
         headers['custom_id'] = '커스텀필터'
         headers['terminal_id'] = '장비타입'
     }
 
 
-    if(getUserLevel() >= 13)
-    {
+    if(getUserLevel() >= 13) {
         headers['mid'] = 'MID'
         headers['tid'] = 'TID'
     }
@@ -178,8 +176,6 @@ export const useSearchStore = defineStore('transSearchStore', () => {
     headers['item_name'] = '상품명'
     if(getUserLevel() >= 13) {
         headers['ord_num'] = '주문번호'
-        headers['trx_id'] = '거래번호'
-        headers['ori_trx_id'] = '원거래번호'
     }
     
     if(getUserLevel() >= 35 && corp.pv_options.paid.use_realtime_deposit)

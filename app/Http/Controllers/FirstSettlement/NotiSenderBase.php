@@ -14,11 +14,11 @@ class NotiSenderBase
             return json_decode($mcht, true);
         else
         {
-            $mcht = Merchandise::join('payment_modules', 'merchandise.id', '=', 'payment_modules.mcht_id')
-                ->where('merchandise.id', $tran['mcht_id'])
+            $mcht = Merchandise::join('payment_modules', 'merchandises.id', '=', 'payment_modules.mcht_id')
+                ->where('merchandises.id', $tran['mcht_id'])
                 ->where('payment_modules.id', $tran['pmod_id'])
                 ->first([
-                    'merchandise.id', 'merchandise.user_name', 'merchandise.mcht_name',
+                    'merchandises.id', 'merchandises.user_name', 'merchandises.mcht_name',
                     'payment_modules.sign_key'
                 ])
                 ->toArray();
