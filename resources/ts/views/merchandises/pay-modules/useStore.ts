@@ -56,7 +56,7 @@ if(corp.pv_options.paid.use_collect_withdraw)
     fin_trx_delays.unshift(<Options>{id: -1, title:'모아서 출금(직접 정산)'})
 if(corp.pv_options.paid.use_collect_withdraw_scheduler) {
     fin_trx_delays.unshift(<Options>{id: -2, title: '모아서 출금(1시간 스케줄링)'})
-    fin_trx_delays.unshift(<Options>{id: -3, title: '페이투스 정산(30분)'})
+    fin_trx_delays.unshift(<Options>{id: 31, title: '페이투스 정산(30분)'})
 }
 
 export const cxl_types = <Options[]>([

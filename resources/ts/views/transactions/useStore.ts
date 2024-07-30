@@ -51,7 +51,7 @@ export const realtimeResult = (item: Transaction) => {
     if(item.fin_trx_delay as number < 0 && item.realtimes?.length == 0)    // 모아서 출금
         return StatusColors.Info
     if(item.realtimes?.length == 0) //요청 대기
-    {            
+    {
         const retry_able_time = (new Date(item.trx_dttm as string)).getTime() + (item.fin_trx_delay as number * 60000)
         const offset_time = new Date(retry_able_time) - new Date() 
 
