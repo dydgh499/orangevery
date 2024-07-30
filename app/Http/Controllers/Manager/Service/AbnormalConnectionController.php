@@ -11,6 +11,7 @@ use App\Models\Log\OperatorHistory;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
+use App\Http\Traits\Models\EncryptDataTrait;
 
 use App\Enums\HistoryType;
 use App\Http\Controllers\Ablilty\Ablilty;
@@ -28,7 +29,7 @@ use Carbon\Carbon;
  */
 class AbnormalConnectionController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait;
+    use ManagerTrait, ExtendResponseTrait, EncryptDataTrait;
     protected $abnormal_connections;
 
     public function __construct(AbnormalConnectionHistory $abnormal_connections)
@@ -172,5 +173,33 @@ class AbnormalConnectionController extends Controller
                 'operator_histories.history_target',
             ]);
         return $this->response(0, $histories);
+    }
+    
+    public function findLastLogin(Request $request)
+    {
+        $_findLastLogin = function($orm, $ip, $type) {
+            $level = $type === 1 ? '10 as level' : 'level';
+            if($type === 1)
+                $mutual = 'mcht_name as  mutual';
+            else if($type === 2)
+                $mutual = 'sales_name as  mutual';
+            else if($type === 3)
+                $mutual = "'' as mutual";
+
+            return $orm->where('last_login_ip', $ip)
+                ->select([
+                    DB::raw($level),
+                    DB::raw($mutual),
+                    'user_name',
+                    'nick_name',
+                    'last_login_at',
+                ]);
+        };
+        $ip = $this->aes256_encode($request->connection_ip);
+        $last_logins = $_findLastLogin(new Merchandise, $ip, 1)
+            ->unionAll($_findLastLogin(new Salesforce, $ip, 2))
+            ->unionAll($_findLastLogin(new Operator, $ip, 3))
+            ->get();
+        return $this->response(0, $last_logins);
     }
 }

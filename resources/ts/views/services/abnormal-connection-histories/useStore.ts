@@ -37,6 +37,7 @@ export const useSearchStore = defineStore('abnormalConnectionHistoSearchStore', 
         'target_key': '대상',
         'target_value': '값',
         'request_ip': '접속 IP',
+        'extra_cols': '추가기능'
     }
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})

@@ -24,7 +24,7 @@ class HolidayController extends Controller
 
     public function __construct(Holiday $holidays)
     {
-        $this->holidays = $holidays;
+        $this->holidays = $holidays;       
     }
 
     private function getHolidayFromOpenAPI($item)

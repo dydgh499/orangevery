@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import IPDetailDialog from '@/layouts/dialogs/services/IPDetailDialog.vue';
+import LastLoginDialog from '@/layouts/dialogs/services/LastLoginDialog.vue';
 import SkeletonBox from '@/layouts/utils/SkeletonBox.vue';
 import { StatusColorSetter } from '@/views/searcher';
 import { connection_types, getLevelByChipColor } from '@/views/services/abnormal-connection-histories/useStore';
@@ -22,6 +24,8 @@ interface LoginHistory {
 }
 
 const detailWorkStatusDialog = <any>inject('detailWorkStatusDialog')
+const iPDetailDialog = ref()
+const lastLoginDialog = ref()
 
 const { setOpenStatus, init } = PopupEvent('secure-report/hide/')
 const popup = ref(<Popup>({
@@ -221,6 +225,7 @@ setSecureReport()
                             <th class='list-square'>대상</th>
                             <th class='list-square'>값</th>
                             <th class='list-square'>접속 IP</th>    <!-- ip 상세보기 이동통신 여부-->
+                            <th class='list-square'>추가기능</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -270,7 +275,12 @@ setSecureReport()
                                             ({{ history['mobile_type'] }})
                                         </span>
                                     </div>
-                                    <VBtn size="small" variant="tonal" @click="snackbar.show(JSON.stringify(history['request_detail'], null, '\n'))" style="margin-left: 1em;">상세보기</VBtn>
+                                </div>
+                            </td>
+                            <td class='list-square'>
+                                <div style="display: inline-flex; flex-direction: column; align-items: center; justify-content: space-evenly; padding: 0.25em;">
+                                    <VBtn size="small" variant="tonal" @click="iPDetailDialog.show(history['request_detail'])" style="margin-bottom: 0.25em;">상세보기</VBtn>
+                                    <VBtn size="small" variant="tonal" color="error" @click="lastLoginDialog.show(history['request_ip'])">로그인 목록</VBtn>
                                 </div>
                             </td>
                         </tr>                        
@@ -281,13 +291,14 @@ setSecureReport()
                             <td class='list-square'><SkeletonBox :width="'5em'"/></td>
                             <td class='list-square'><SkeletonBox :width="'3em'"/></td>
                             <td class='list-square'><SkeletonBox :width="'3em'"/></td>
-                            <td class='list-square'><SkeletonBox :width="'10em'"/></td>
+                            <td class='list-square'><SkeletonBox :width="'15em'"/></td>
+                            <td class='list-square'><SkeletonBox :width="'5em'"/></td>
                             <td class='list-square'><SkeletonBox :width="'5em'"/></td>
                         </tr>
                     </tbody>
                     <tfoot v-if="!Boolean(histories.length) && work_status_by_timezone.length === 4">
                         <tr>
-                            <td :colspan="8" class='list-square' style="border: 0;">
+                            <td :colspan="9" class='list-square' style="border: 0;">
                                 이상접속 이력이 존재하지 않습니다.
                             </td>
                         </tr>
@@ -296,6 +307,8 @@ setSecureReport()
             </VCardText>
         </VCard>
     </VDialog>
+    <IPDetailDialog ref="iPDetailDialog"/>
+    <LastLoginDialog ref="lastLoginDialog"/>
 </template>
 <style scoped>
 .report-content {

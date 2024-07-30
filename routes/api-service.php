@@ -41,6 +41,7 @@ Route::middleware(['is.operate', 'last.login.ip'])->group(function() {
         Route::get('brands/chart', [BrandController::class, 'chart']);
         Route::get('abnormal-connection-histories/secure-report', [AbnormalConnectionController::class, 'secureReport']);
         Route::get('abnormal-connection-histories/secure-report/detail-work-status', [AbnormalConnectionController::class, 'detailWorkStatus']);
+        Route::get('abnormal-connection-histories/last-login', [AbnormalConnectionController::class, 'findLastLogin']);
         Route::get('abnormal-connection-histories', [AbnormalConnectionController::class, 'index']);
 
         Route::middleware(['is.edit.able'])->group(function() {
