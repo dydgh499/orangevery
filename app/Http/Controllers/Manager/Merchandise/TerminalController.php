@@ -6,7 +6,7 @@ use App\Models\Merchandise\PaymentModule;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
-use App\Http\Traits\Salesforce\UnderSalesTrait;
+use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 
 use App\Http\Requests\Manager\Merchandise\PayModuleRequest;
 use App\Http\Requests\Manager\IndexRequest;
@@ -22,7 +22,7 @@ use Carbon\Carbon;
  */
 class TerminalController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, StoresTrait, UnderSalesTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $payModules;
 
     public function __construct(PaymentModule $payModules)
@@ -41,7 +41,7 @@ class TerminalController extends Controller
     public function index(IndexRequest $request)
     {
         $cols = ['payment_modules.*', 'merchandises.mcht_name'];
-        $cols = $this->getViewableSalesCols($request, $cols);
+        $cols = UnderSalesforce::getViewableSalesCols($request, $cols);
 
         $search = $request->input('search', '');
         $query = $this->payModules

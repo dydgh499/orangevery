@@ -6,10 +6,10 @@ use App\Models\Merchandise\PaymentModule;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
-use App\Http\Traits\Salesforce\UnderSalesTrait;
 
 use App\Http\Controllers\Manager\CodeGenerator\TidGenerator;
 use App\Http\Controllers\Manager\CodeGenerator\MidGenerator;
+use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 
 use App\Http\Requests\Manager\BulkRegister\BulkPayModuleRequest;
 use App\Http\Requests\Manager\BulkRegister\BulkPayModulePGRequest;
@@ -34,7 +34,7 @@ use App\Http\Controllers\Ablilty\EditAbleWorkTime;
  */
 class PaymentModuleController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, StoresTrait, UnderSalesTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $pay_modules;
     protected $target;
 
@@ -102,7 +102,7 @@ class PaymentModuleController extends Controller
     public function index(IndexRequest $request)
     {
         $cols = ['payment_modules.*', 'merchandises.mcht_name'];
-        $cols = $this->getViewableSalesCols($request, $cols);
+        $cols = UnderSalesforce::getViewableSalesCols($request, $cols);
 
         $query = $this->commonSelect($request);
         $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
@@ -177,7 +177,7 @@ class PaymentModuleController extends Controller
         {
             if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                 return $this->response(951);
-            if((Ablilty::isSalesforce($request) || Ablilty::isOperator($request)))
+            if(Ablilty::isOperator($request) || Ablilty::isMyMerchandise($request, $data->mcht_id) || Ablilty::isUnderMerchandise($request, $data->mcht_id))
                 return $this->response(0, $data);
             else
                 return $this->response(951);
@@ -230,10 +230,14 @@ class PaymentModuleController extends Controller
             return $this->response(951);
         else
         {
-            $res = $this->pay_modules->where('id', $id)->update($data);
-
-            operLogging(HistoryType::UPDATE, $this->target, $before, $data, $data['note']."(#".$id.")");
-            return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);    
+            if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $data['mcht_id']))
+            {
+                $res = $this->pay_modules->where('id', $id)->update($data);
+                operLogging(HistoryType::UPDATE, $this->target, $before, $data, $data['note']."(#".$id.")");
+                return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
+            }
+            else
+                return $this->response(951);
         }
     }
 
@@ -253,9 +257,15 @@ class PaymentModuleController extends Controller
                     return $this->response(951);
                 if(EditAbleWorkTime::validate() === false)
                     return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-                $res = $this->delete($this->pay_modules->where('id', $id));            
-                operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->note);
-                return $this->response($res, ['id'=>$id, 'mcht_id'=>$data->mcht_id]);    
+
+                if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $data->mcht_id))
+                {
+                    $res = $this->delete($this->pay_modules->where('id', $id));            
+                    operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->note);
+                    return $this->response($res, ['id'=>$id, 'mcht_id'=>$data->mcht_id]);        
+                }
+                else
+                    return $this->response(951);
             }
             else
                 return $this->response(1000);

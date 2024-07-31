@@ -13,13 +13,13 @@ use Illuminate\Http\Request;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleHistoryTrait;
-use App\Http\Traits\Salesforce\UnderSalesTrait;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
 
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Log\CreateSettleHistoryRequest;
 use App\Http\Requests\Manager\Log\BatchSettleHistoryRequest;
+use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 
 /**
  * @group Sales-Settle-History API
@@ -28,7 +28,7 @@ use App\Http\Requests\Manager\Log\BatchSettleHistoryRequest;
  */
 class SalesSettleHistoryController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, SettleHistoryTrait, UnderSalesTrait;
+    use ManagerTrait, ExtendResponseTrait, SettleHistoryTrait;
     protected $settle_sales_hist;
     
     public function __construct(SettleHistorySalesforce $settle_sales_hist)
@@ -53,7 +53,7 @@ class SalesSettleHistoryController extends Controller
         if($request->has('deposit_status'))
             $query = $query->where('settle_histories_salesforces.deposit_status', $request->deposit_status);
 
-        $sales_ids = $this->underSalesFilter($request);
+        $sales_ids = UnderSalesforce::getSalesIds($request);
         if(count($sales_ids))
             $query = $query->whereIn('salesforces.id', $sales_ids);
         if($request->level)

@@ -54,5 +54,5 @@ defineExpose({
             </VCardText>
         </VCard>
     </VDialog>
-    <PasswordChangeDialog ref="password" />
+    <PasswordChangeDialog ref="password"/>
 </template>

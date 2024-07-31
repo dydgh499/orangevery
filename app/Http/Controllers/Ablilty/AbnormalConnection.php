@@ -158,19 +158,24 @@ class AbnormalConnection
     */
     static public function tryOperationNotPermitted()
     {
-        critical("허용되지 않은 작업 시도 (".request()->ip().")");
-        $block_time = self::blockIP(60);
-        [$brand_id, $level, $user_name] = self::getConnectionInfo();
-
-        self::create([
-            'brand_id' => $brand_id,
-            'connection_type' => AbnormalConnectionCode::OPERATION_PERMIITED->value,
-            'action' => "1시간 IP차단 (~ ".$block_time.")",
-            'target_level'  => $level,
-            'target_key'    => request()->url(),
-            'target_value'  => self::privateDataHidden(request()->all()),
-            'comment'       => $user_name,
-        ]);
+        if(request()->ip() === '127.0.0.1')
+            return true;
+        else
+        {
+            critical("허용되지 않은 작업 시도 (".request()->ip().")");
+            $block_time = self::blockIP(60);
+            [$brand_id, $level, $user_name] = self::getConnectionInfo();
+    
+            self::create([
+                'brand_id' => $brand_id,
+                'connection_type' => AbnormalConnectionCode::OPERATION_PERMIITED->value,
+                'action' => "1시간 IP차단 (~ ".$block_time.")",
+                'target_level'  => $level,
+                'target_key'    => request()->url(),
+                'target_value'  => self::privateDataHidden(request()->all()),
+                'comment'       => $user_name,
+            ]);    
+        }
     }
 
     /*

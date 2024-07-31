@@ -13,8 +13,8 @@ use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Models\EncryptDataTrait;
-use App\Http\Traits\Salesforce\UnderSalesTrait;
 use App\Http\Controllers\Manager\Salesforce\SalesforceOverlap;
+use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 
 use App\Http\Controllers\Auth\AuthPasswordChange;
@@ -34,7 +34,7 @@ use App\Enums\HistoryType;
  */
 class SalesforceController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, StoresTrait, UnderSalesTrait, EncryptDataTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait, EncryptDataTrait;
     protected $salesforces, $target;
 
     public function __construct(Salesforce $salesforces)
@@ -83,7 +83,7 @@ class SalesforceController extends Controller
         if($is_all == false)
             $query = $query->where('is_delete', false);
 
-        $sales_ids = $this->underSalesFilter($request);
+        $sales_ids = UnderSalesforce::getSalesIds($request);
         if(count($sales_ids))
             $query = $query->whereIn('salesforces.id', $sales_ids);
         if($request->level)
@@ -115,7 +115,6 @@ class SalesforceController extends Controller
         }
         else
         {
-            
             $query = $this->commonSelect($request);
             $query->with(['underAutoSettings']);
     
@@ -182,10 +181,11 @@ class SalesforceController extends Controller
             ->first();
         if($data)
         {
-            if(Ablilty::isSalesforce($request, $id) || Ablilty::isOperator($request))
+            if(Ablilty::isOperator($request) || Ablilty::isUnderSalesforce($request, $id))
             {
                 if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                     return $this->response(951);
+                // 하위 영업점에서 상위 영업점 추가 불가
                 if($request->user()->tokenCan($data->level) === false)
                     return $this->response(951);
                 else
@@ -222,17 +222,22 @@ class SalesforceController extends Controller
             $query = $this->salesforces->where('id', $id);
             $user = $query->first();
 
-            if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
-                return $this->response(951);
-            // 아이디 중복 검사
-            if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $data['user_name']))
-                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
-            else
+            if(Ablilty::isOperator($request) || Ablilty::isUnderSalesforce($request, $id))
             {
-                $res = $query->update($data);
-                operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['sales_name']);
-                return $this->response($res ? 1 : 990, ['id'=>$id]);    
+                if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
+                    return $this->response(951);
+                // 아이디 중복 검사
+                if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $data['user_name']))
+                    return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+                else
+                {
+                    $res = $query->update($data);
+                    operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['sales_name']);
+                    return $this->response($res ? 1 : 990, ['id'=>$id]);    
+                }
             }
+            else
+                return $this->response(951);
         }
     }
 
@@ -266,19 +271,21 @@ class SalesforceController extends Controller
         else
         {
             $data = [];
-            if(Ablilty::isMerchandise($request) == false)
+            if(Ablilty::isMerchandise($request) === false)
             {
-                [$levels, $sales_keys] = $this->getViewableSalesInfos($request);
-                $grouped = $this->salesforces
+                $query = $this->salesforces
                     ->where('brand_id', $request->user()->brand_id)
-                    ->where('is_delete', false)
-                    ->with(['underAutoSettings'])
-                    ->get(['id', 'sales_name', 'level', 'settle_tax_type', 'parent_id', 'is_able_under_modify', 'mcht_batch_fee', 'sales_fee'])
-                    ->groupBy('level');
+                    ->where('is_delete', false);
 
                 if(Ablilty::isSalesforce($request))
-                    $grouped = $this->salesClassFilter($request, $grouped, $levels);   
+                    $query = $query->whereIn('id', UnderSalesforce::getSalesIds($request));
     
+                $grouped = $query
+                        ->with(['underAutoSettings'])
+                        ->get(['id', 'sales_name', 'level', 'settle_tax_type', 'parent_id', 'is_able_under_modify', 'mcht_batch_fee', 'sales_fee'])
+                        ->groupBy('level');
+
+                [$levels, $s_keys] = UnderSalesforce::getViewableSalesInfos($request);
                 for($i=0; $i<count($levels); $i++)
                 {
                     $level = $levels[$i];
@@ -294,8 +301,8 @@ class SalesforceController extends Controller
         if(Ablilty::isOperator($request))
         {
             $histories = SfFeeApplyHistory::where('brand_id', $request->user()->brand_id)
-            ->where('is_delete', false)
-            ->get();
+                ->where('is_delete', false)
+                ->get();
         }
         else
             $histories = [];
@@ -309,7 +316,10 @@ class SalesforceController extends Controller
     public function passwordChange(Request $request, int $id)
     {
         if(Ablilty::isSalesforce($request) || Ablilty::isOperator($request))
-            return $this->_passwordChange($this->salesforces->where('id', $id), $request);
+        {
+            $is_me = Ablilty::isMySalesforce($request, $id) ? true : false;
+            return $this->_passwordChange($this->salesforces->where('id', $id), $request, $is_me);
+        }
         else
             return $this->response(951);
     }

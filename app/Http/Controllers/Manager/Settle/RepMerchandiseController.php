@@ -8,6 +8,7 @@ use App\Models\Log\SettleDeductMerchandise;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Log\MchtSettleHistoryController;
+use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 
 use App\Http\Requests\Manager\Log\BatchSettleHistoryRequest;
 use Illuminate\Http\Request;
@@ -18,7 +19,6 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleTrait;
 use App\Http\Traits\Settle\SettleTerminalTrait;
 use App\Http\Traits\Settle\TransactionTrait;
-use App\Http\Traits\Salesforce\UnderSalesTrait;
 
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\DB;
  */
 class RepMerchandiseController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, SettleTrait, SettleTerminalTrait, TransactionTrait, UnderSalesTrait, StoresTrait;
+    use ManagerTrait, ExtendResponseTrait, SettleTrait, SettleTerminalTrait, TransactionTrait, StoresTrait;
     protected $merchandises, $settleDeducts;
 
     public function __construct(Merchandise $merchandises, SettleDeductMerchandise $settleDeducts)
@@ -69,7 +69,7 @@ class RepMerchandiseController extends Controller
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo(10);
 
         $cols = array_merge($this->getDefaultCols(), ['mcht_name', 'use_collect_withdraw', 'withdraw_fee']);
-        $cols = $this->getViewableSalesCols($request, $cols);
+        $cols = UnderSalesforce::getViewableSalesCols($request, $cols);
 
         $mcht_ids = $this->getRepMerchandiseIds($request, $request->user()->brand_id);
         $query = $this->getDefaultQuery($this->merchandises, $request, $mcht_ids)

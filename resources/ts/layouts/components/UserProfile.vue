@@ -155,7 +155,7 @@ require_2fa.value = noticeOperator2FaStatus()
             </VMenu>
             <!-- !SECTION -->
         </VAvatar>
-        <PasswordChangeDialog ref="password" />
+        <PasswordChangeDialog ref="password"/>
         <ImageDialog ref="imageDialog" :style="`inline-size:20em !important;`"/>
         <Google2FACreateDialog ref="google2FACreateDialog"/>
         <PhoneNum2FAVertifyDialog ref="phoneNum2FAVertifyDialog"/>

@@ -3,7 +3,6 @@ namespace App\Http\Controllers\Manager\Salesforce;
 use App\Models\Salesforce;
 use App\Http\Controllers\Ablilty\Ablilty;
 
-
 class SalesforceOverlap
 {
     static private function getSalesforceChilds($request)

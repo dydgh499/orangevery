@@ -7,7 +7,6 @@ use App\Models\Salesforce;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\TransactionTrait;
-use App\Http\Traits\Salesforce\UnderSalesTrait;
 use App\Http\Requests\Manager\IndexRequest;
 
 use Carbon\Carbon;
@@ -17,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 class TransactionSummaryController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, TransactionTrait, UnderSalesTrait;
+    use ManagerTrait, ExtendResponseTrait, TransactionTrait;
     protected $transactions;
     
     public function __construct(Transaction $transactions)

@@ -254,7 +254,10 @@ class OperatorController extends Controller
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
         if(Ablilty::isOperator($request))
-            return $this->_passwordChange($this->operators->where('id', $id), $request);
+        {
+            $is_me = Ablilty::isMyOperator($request, $id) ? true : false;
+            return $this->_passwordChange($this->operators->where('id', $id), $request, $is_me);
+        }
         else
             return $this->response(951);
     }

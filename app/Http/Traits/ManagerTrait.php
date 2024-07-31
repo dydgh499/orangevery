@@ -136,15 +136,24 @@ trait ManagerTrait
         return $auth;
     }
 
-    public function _passwordChange($query, $request)
+    public function _passwordChange($query, $request, $is_me)
     {
-        $validated = $request->validate(['user_pw'=>'required']);
+        if($is_me)
+            $validated = $request->validate(['user_pw'=>'required', 'current_pw'=>'required']);
+        else
+            $validated = $request->validate(['user_pw'=>'required']);
 
         $user = $query->first();
         if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
             return $this->response(951);
         else
         {
+            if($is_me)
+            {
+                if(AuthPasswordChange::HashCheck($user, $request->current_pw) === false)
+                    return $this->extendResponse(954, '현재 패스워드가 정확하지 않습니다.', []);
+            }
+
             [$result, $msg] = AuthPasswordChange::passwordValidate($user->user_name, $request->user_pw);
             if($result === false)
                 return $this->extendResponse(954, $msg, []);

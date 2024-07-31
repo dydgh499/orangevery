@@ -87,27 +87,6 @@ class Merchandise extends Authenticatable
             ->groupBy('mcht_id')
             ->selectRaw('mcht_id, SUM(withdraw_amount + withdraw_fee) as total_withdraw_amount');
     }
-
-    public function scopeFlatSalesIdByFilter($query, $selected_sales_infos, $s_keys)
-    {
-        $query = $query->where('merchandises.brand_id', request()->user()->brand_id)->where('merchandises.is_delete', false);
-
-        foreach($selected_sales_infos as $selected_sales_info)
-        {
-            $query = $query->where('merchandises.'.$selected_sales_info['id'], $selected_sales_info['value']);
-        }
-
-        $sales_ids = $query->get($s_keys)->flatMap(function ($sale) use($s_keys) {
-            $keys = [];
-            foreach($s_keys as $s_key)
-            {
-                if($sale[$s_key] != 0)
-                    $keys[] = $sale[$s_key];
-            }
-            return $keys;
-        })->unique()->values()->all();
-        return $sales_ids;
-    }
     
     /*
     * 가맹점 정산관리

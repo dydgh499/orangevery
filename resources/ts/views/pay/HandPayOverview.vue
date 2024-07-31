@@ -145,7 +145,7 @@ watchEffect(() => {
                     </template>
                 </CreateHalfVCol>
                 <CreateHalfVCol :mdl="6" :mdr="6" style="padding: 6px 0;" v-if="hand_pay_info.is_old_auth">
-                    <template #name>생년월일(사업자등록번호)</template>
+                    <template #name>생년월일6자리(사업자등록번호)</template>
                     <template #input>
                         <VTextField v-model="hand_pay_info.auth_num" type="number" maxlength="10"
                             prepend-inner-icon="carbon:two-factor-authentication" />

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { installments } from '@/views/merchandises/pay-modules/useStore'
-import { requiredValidatorV2, lengthValidator, lengthValidatorV2 } from '@validators'
 import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { VForm } from 'vuetify/components'
-import type { PayModule, Options, MultipleHandPay } from '@/views/types'
+import { installments } from '@/views/merchandises/pay-modules/useStore'
+import type { MultipleHandPay, Options, PayModule } from '@/views/types'
+import { lengthValidator, lengthValidatorV2, requiredValidatorV2 } from '@validators'
 import { computed } from 'vue'
+import { VForm } from 'vuetify/components'
 
 interface Props {
     hand_pay_info: MultipleHandPay,
@@ -78,7 +78,7 @@ watchEffect(async () => {
                 </template>
             </CreateHalfVCol>
             <CreateHalfVCol :mdl="6" :mdr="6" v-if="props.hand_pay_info.is_old_auth">
-                <template #name>생년월일(사업자등록번호)</template>
+                <template #name>생년월일6자리(사업자등록번호)</template>
                 <template #input>
                     <VTextField v-model="props.hand_pay_info.auth_num" type="number" maxlength="10"
                         prepend-inner-icon="carbon:two-factor-authentication" />

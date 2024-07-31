@@ -1,7 +1,10 @@
 <?php
 namespace App\Http\Controllers\Ablilty;
 
+use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
+use Illuminate\Support\Facades\Redis;
+use App\Models\Merchandise;
 use Carbon\Carbon;
 
 class Ablilty
@@ -26,6 +29,32 @@ class Ablilty
         $cond_1 = $request->user()->tokenCan(13) == true;
         $cond_2 = $request->user()->tokenCan(35) == false;
         return $cond_1 && $cond_2;
+    }
+
+    static function isUnderSalesforce($request, $id)
+    {
+        if($request->user()->brand_id === 30 && self::isSalesforce($request))
+            return true;
+        else
+        {
+            $sales_ids = UnderSalesforce::getSalesIds($request);
+            return in_array($id, $sales_ids);    
+        }
+    }
+
+    static function isUnderMerchandise($request, $id)
+    {
+        if($request->user()->brand_id === 30 && self::isSalesforce($request))
+            return true;
+        else
+        {
+            $sales_filter = [
+                'id' => 'sales'.globalLevelByIndex($request->user()->level).'_id',
+                'value' => $request->user()->id,
+            ];
+            $mcht_ids = Merchandise::where($sales_filter['id'], $sales_filter['value'])->pluck('id')->all();
+            return in_array($id, $mcht_ids);    
+        }
     }
 
     static function isOperator($request)

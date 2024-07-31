@@ -8,12 +8,12 @@ use App\Models\Salesforce;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\TransactionTrait;
-use App\Http\Traits\Salesforce\UnderSalesTrait;
 
 use App\Http\Requests\Manager\TransactionRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\QuickView\QuickViewController;
 use App\Http\Controllers\Manager\Transaction\NotiRetrySender;
+use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use Carbon\Carbon;
@@ -31,7 +31,7 @@ use App\Enums\HistoryType;
  */
 class TransactionController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, TransactionTrait, UnderSalesTrait;
+    use ManagerTrait, ExtendResponseTrait, TransactionTrait;
     protected $transactions;
     protected $target;
     public $cols;
@@ -100,7 +100,7 @@ class TransactionController extends Controller
         
         foreach($data['content'] as $content)
         {
-            $content = $this->hiddenSalesInfos($request, $content);
+            $content = UnderSalesforce::setViewableSalesInfos($request, $content);
             $content->append(['resident_num_front', 'resident_num_back']);
             $content->setHidden(['resident_num']);
         }

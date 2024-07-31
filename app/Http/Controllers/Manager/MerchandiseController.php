@@ -14,8 +14,8 @@ use App\Models\Merchandise\NotiUrl;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\StoresTrait;
-use App\Http\Traits\Salesforce\UnderSalesTrait;
 
+use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
 use App\Http\Requests\Manager\BulkRegister\BulkMerchandiseRequest;
 use App\Http\Requests\Manager\MerchandiseRequest;
 use App\Http\Requests\Manager\IndexRequest;
@@ -38,7 +38,7 @@ use App\Enums\HistoryType;
  */
 class MerchandiseController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, StoresTrait, UnderSalesTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $merchandises, $pay_modules;
     protected $target;
     protected $imgs;
@@ -176,7 +176,7 @@ class MerchandiseController extends Controller
         $data['content'] = globalMappingSales($salesforces, $data['content']);
         foreach($data['content'] as $content)
         {
-            $content = $this->hiddenSalesInfos($request, $content);
+            $content = UnderSalesforce::setViewableSalesInfos($request, $content);
         }
         return $this->response(0, $data);
     }
@@ -267,7 +267,7 @@ class MerchandiseController extends Controller
             $data->setFeeFormatting(true);
             if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                 return $this->response(951);
-            if((Ablilty::isMyMerchandise($request, $id) || Ablilty::isSalesforce($request) || Ablilty::isOperator($request)))
+            if(Ablilty::isOperator($request) || Ablilty::isMyMerchandise($request, $id) || Ablilty::isUnderMerchandise($request, $id))
             {
                 if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request))
                     $data['syslink'] = SysLink::show($data['user_name']);
@@ -300,34 +300,39 @@ class MerchandiseController extends Controller
             return $this->extendResponse(1001, '이미 존재하는 상호 입니다.');
         else
         {
-            $query = $this->merchandises->where('id', $id);
-            $user = $query->first();
-
-            if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
-                return $this->response(951);
-            // 변경된 아이디가 이미 존재할 떄
-            if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $request->user_name))
-                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
-            else
+            if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $id))
             {
-                $data = $this->saveImages($request, $data, $this->imgs);
-                // -- update syslink
-                $b_info = BrandInfo::getBrandById($request->user()->brand_id);
-                if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request) && (int)$request->use_syslink)
+                $query = $this->merchandises->where('id', $id);
+                $user = $query->first();
+
+                if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
+                    return $this->response(951);
+                // 변경된 아이디가 이미 존재할 떄
+                if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $request->user_name))
+                    return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+                else
                 {
-                    if($request->syslink['code'] !== 'SUCCESS')
-                        $res = SysLink::create($data);
-                    else
-                        $res = SysLink::update($data);
-
-                    if($res['code'] !== 'SUCCESS')
-                        return $this->extendResponse(1999, $res['message']);
+                    $data = $this->saveImages($request, $data, $this->imgs);
+                    // -- update syslink
+                    $b_info = BrandInfo::getBrandById($request->user()->brand_id);
+                    if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request) && (int)$request->use_syslink)
+                    {
+                        if($request->syslink['code'] !== 'SUCCESS')
+                            $res = SysLink::create($data);
+                        else
+                            $res = SysLink::update($data);
+    
+                        if($res['code'] !== 'SUCCESS')
+                            return $this->extendResponse(1999, $res['message']);
+                    }
+    
+                    $res = $query->update($data);                
+                    operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['mcht_name']);
+                    return $this->response($res ? 1 : 990, ['id'=>$id]);        
                 }
-
-                $res = $query->update($data);                
-                operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['mcht_name']);
-                return $this->response($res ? 1 : 990, ['id'=>$id]);    
-            }
+            }        
+            else
+                return $this->response(951);
         }
     }
 
@@ -338,7 +343,7 @@ class MerchandiseController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        if(Ablilty::isOperator($request) || (Ablilty::isSalesforce($request) && $request->user()->is_able_modify_mcht))
+        if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $id))
         {
             $data = $this->merchandises->where('id', $id)->first();
 
@@ -409,7 +414,10 @@ class MerchandiseController extends Controller
     public function passwordChange(Request $request, int $id)
     {
         if(Ablilty::isMyMerchandise($request, $id) || Ablilty::isOperator($request) || Ablilty::isSalesforce($request))
-            return $this->_passwordChange($this->merchandises->where('id', $id), $request);
+        {
+            $is_me = Ablilty::isMyMerchandise($request, $id) ? true : false;
+            return $this->_passwordChange($this->merchandises->where('id', $id), $request, $is_me);
+        }
         else
             return $this->response(951);
     }
