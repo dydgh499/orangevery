@@ -293,47 +293,45 @@ class MerchandiseController extends Controller
      */
     public function update(MerchandiseRequest $request, int $id)
     {
-        $data = $request->data();
-        if(EditAbleWorkTime::validate() === false)
-            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-        if($this->isExistMutual($this->merchandises->where('id', '!=', $id), $request->user()->brand_id, 'mcht_name', $data['mcht_name']))
-            return $this->extendResponse(1001, '이미 존재하는 상호 입니다.');
-        else
+        if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $id))
         {
-            if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $id))
-            {
-                $query = $this->merchandises->where('id', $id);
-                $user = $query->first();
+            $query = $this->merchandises->where('id', $id);
+            $user = $query->first();
+            $data = $request->data();
 
-                if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
-                    return $this->response(951);
-                // 변경된 아이디가 이미 존재할 떄
-                if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $request->user_name))
-                    return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
-                else
-                {
-                    $data = $this->saveImages($request, $data, $this->imgs);
-                    // -- update syslink
-                    $b_info = BrandInfo::getBrandById($request->user()->brand_id);
-                    if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request) && (int)$request->use_syslink)
-                    {
-                        if($request->syslink['code'] !== 'SUCCESS')
-                            $res = SysLink::create($data);
-                        else
-                            $res = SysLink::update($data);
-    
-                        if($res['code'] !== 'SUCCESS')
-                            return $this->extendResponse(1999, $res['message']);
-                    }
-    
-                    $res = $query->update($data);                
-                    operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['mcht_name']);
-                    return $this->response($res ? 1 : 990, ['id'=>$id]);        
-                }
-            }        
-            else
+            if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
                 return $this->response(951);
-        }
+            if(EditAbleWorkTime::validate() === false)
+                return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+            if($this->isExistMutual($this->merchandises->where('id', '!=', $id), $request->user()->brand_id, 'mcht_name', $data['mcht_name']))
+                return $this->extendResponse(1001, '이미 존재하는 상호 입니다.');
+            // 변경된 아이디가 이미 존재할 떄
+            if($user->user_name !== $request->user_name && $this->isExistUserName($request->user()->brand_id, $request->user_name))
+                return $this->extendResponse(1001, __("validation.already_exsit", ['attribute'=>'아이디']));
+            else
+            {
+                $data = $this->saveImages($request, $data, $this->imgs);
+                // -- update syslink
+                $b_info = BrandInfo::getBrandById($request->user()->brand_id);
+                if($b_info['pv_options']['paid']['use_syslink'] && Ablilty::isOperator($request) && (int)$request->use_syslink)
+                {
+                    if($request->syslink['code'] !== 'SUCCESS')
+                        $res = SysLink::create($data);
+                    else
+                        $res = SysLink::update($data);
+
+                    if($res['code'] !== 'SUCCESS')
+                        return $this->extendResponse(1999, $res['message']);
+                }
+
+                $res = $query->update($data);                
+                operLogging(HistoryType::UPDATE, $this->target, $user, $data, $data['mcht_name']);
+                return $this->response($res ? 1 : 990, ['id'=>$id]);        
+            }
+        }        
+        else
+            return $this->response(951);
+        
     }
 
     /**
@@ -346,7 +344,6 @@ class MerchandiseController extends Controller
         if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $id))
         {
             $data = $this->merchandises->where('id', $id)->first();
-
             if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
                 return $this->response(951);
             if(EditAbleWorkTime::validate() === false)

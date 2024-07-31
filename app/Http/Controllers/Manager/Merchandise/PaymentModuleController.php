@@ -203,42 +203,39 @@ class PaymentModuleController extends Controller
                 ->where($key, $value)
                 ->exists();
         };  // tid 중복해서 사용하는 브랜드들은 ..?
-
+        $query = $this->pay_modules->where('id', $id);
+        $module = $query->first();
         $data = $request->data();
-        
+
+        if(Ablilty::isBrandCheck($request, $module->brand_id) === false)
+            return $this->response(951);
         if(EditAbleWorkTime::validate() === false)
             return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-        if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
-            return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid'=>$data['tid']]);
-        if($request->use_mid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
-            return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid'=>$data['mid']]);            
-
-        if($data['module_type'] == 0 && $data['serial_num'] != '')
+        if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $data['mcht_id']))
         {
-            $res = $this->pay_modules
-                ->where('brand_id', $request->user()->brand_id)
-                ->where('serial_num', $data['serial_num'])
-                ->where('id', '!=', $id)
-                ->where('is_delete', false)
-                ->exists();
-            if($res)
-                return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
-        }
-        $before = $this->pay_modules->where('id', $id)->first();
-
-        if(Ablilty::isBrandCheck($request, $before->brand_id) === false)
-            return $this->response(951);
-        else
-        {
-            if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $data['mcht_id']))
+            if($request->use_tid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], $id, 'tid', $data['tid']))
+                return $this->extendResponse(2000, '이미 존재하는 TID 입니다.',['mid'=>$data['tid']]);
+            if($request->use_mid_duplicate && $data['tid'] != '' && $isDuplicateId($data['brand_id'], 'mid', $data['mid']))
+                return $this->extendResponse(2000, '이미 존재하는 MID 입니다.',['mid'=>$data['mid']]);            
+    
+            if($data['module_type'] == 0 && $data['serial_num'] != '')
             {
-                $res = $this->pay_modules->where('id', $id)->update($data);
-                operLogging(HistoryType::UPDATE, $this->target, $before, $data, $data['note']."(#".$id.")");
-                return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
+                $res = $this->pay_modules
+                    ->where('brand_id', $request->user()->brand_id)
+                    ->where('serial_num', $data['serial_num'])
+                    ->where('id', '!=', $id)
+                    ->where('is_delete', false)
+                    ->exists();
+                if($res)
+                    return $this->extendResponse(1001, '이미 존재하는 시리얼 번호 입니다.');
             }
-            else
-                return $this->response(951);
+            $res = $query->update($data);
+            operLogging(HistoryType::UPDATE, $this->target, $module, $data, $data['note']."(#".$id.")");
+            return $this->response($res ? 1 : 990, ['id'=>$id, 'mcht_id'=>$data['mcht_id']]);
         }
+        else
+            return $this->response(951);
+        
     }
 
     /**
@@ -248,30 +245,25 @@ class PaymentModuleController extends Controller
      */
     public function destroy(Request $request, int $id)
     {
-        if($this->authCheck($request->user(), $id, 15))
+        $data = $this->pay_modules->where('id', $id)->first();
+        if($data)
         {
-            $data = $this->pay_modules->where('id', $id)->first();
-            if($data)
+            if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
+                return $this->response(951);
+            if(EditAbleWorkTime::validate() === false)
+                return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
+            if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $data->mcht_id))
             {
-                if(Ablilty::isBrandCheck($request, $data->brand_id) === false)
-                    return $this->response(951);
-                if(EditAbleWorkTime::validate() === false)
-                    return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-
-                if(Ablilty::isOperator($request) || Ablilty::isUnderMerchandise($request, $data->mcht_id))
-                {
-                    $res = $this->delete($this->pay_modules->where('id', $id));            
-                    operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->note);
-                    return $this->response($res, ['id'=>$id, 'mcht_id'=>$data->mcht_id]);        
-                }
-                else
-                    return $this->response(951);
+                $res = $this->delete($this->pay_modules->where('id', $id));            
+                operLogging(HistoryType::DELETE, $this->target, $data, ['id' => $id], $data->note);
+                return $this->response($res, ['id'=>$id, 'mcht_id'=>$data->mcht_id]);        
             }
             else
-                return $this->response(1000);
+                return $this->response(951);
         }
         else
-            return $this->response(951);
+            return $this->response(1000);
+       
     }
 
     /**
