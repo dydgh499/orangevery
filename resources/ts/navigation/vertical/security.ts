@@ -15,6 +15,10 @@ const getAbilitiesMenu = computed(() => {
             to: 'services-operator-histories',
         })
         securities[1].children.push({
+            title: '활동이력(beta)',
+            to: 'services-operator-histories2',
+        })
+        securities[1].children.push({
             title: '이상접속 이력',
             to: 'services-abnormal-connection-histories',
         })
