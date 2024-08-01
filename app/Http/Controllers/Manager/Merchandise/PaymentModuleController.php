@@ -433,10 +433,10 @@ class PaymentModuleController extends Controller
      */
     public function signKeyCreate(Request $request)
     {
-        $pay_key = $this->getNewPayKey($request->id);
+        $sign_key = $this->getNewPayKey($request->id);
         $res = $this->pay_modules
             ->where('id', $request->id)
-            ->update(['sign_key' => $pay_key]);
+            ->update(['sign_key' => $sign_key]);
         return $this->response(0, ['sign_key' => $sign_key]);    
     }
 }
