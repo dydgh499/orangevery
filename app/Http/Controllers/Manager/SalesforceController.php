@@ -83,9 +83,9 @@ class SalesforceController extends Controller
         if($is_all == false)
             $query = $query->where('is_delete', false);
 
-        $sales_ids = UnderSalesforce::getSalesIds($request);
-        if(count($sales_ids))
-            $query = $query->whereIn('salesforces.id', $sales_ids);
+        $sales_filters = UnderSalesforce::getSelectedSalesFilter($request);
+        if(count($sales_filters))
+            $query = $query->whereIn('salesforces.id', UnderSalesforce::getSalesIds($request));
         if($request->level)
             $query = $query->where('salesforces.level', $request->level);    
         if($request->is_lock)
@@ -285,7 +285,7 @@ class SalesforceController extends Controller
                         ->get(['id', 'sales_name', 'level', 'settle_tax_type', 'parent_id', 'is_able_under_modify', 'mcht_batch_fee', 'sales_fee'])
                         ->groupBy('level');
 
-                [$levels, $s_keys] = UnderSalesforce::getViewableSalesInfos($request);
+                $levels = UnderSalesforce::getViewableSalesLevels($request);
                 for($i=0; $i<count($levels); $i++)
                 {
                     $level = $levels[$i];

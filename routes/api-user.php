@@ -103,11 +103,11 @@ Route::prefix('merchandises')->group(function() {
             Route::post('noti-urls/bulk-register', [NotiUrlController::class, 'bulkRegister']);
     
             Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisablePaymentController::class);
-            Route::apiResource('sub-business-registrations', SubBusinessRegistrationController::class);             
             Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
         });
         Route::post('{id}/unlock-account', [MerchandiseController::class, 'unlockAccount']);
         Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
+        Route::get('sub-business-registrations', [SubBusinessRegistrationController::class, 'index']);
     
         Route::prefix('pay-modules')->group(function() {
             Route::middleware(['is.edit.able'])->group(function() {

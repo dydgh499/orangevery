@@ -16,14 +16,13 @@ class UnderSalesforce
         return $query->get($s_keys);
     }
 
-    // 가맹점 목록에 조회될 영업점 필터
-    static private function getMappingMchtFilter($request)
+    // 영업점 필터가 있는지 선택되었는지 검사
+    static public function getSelectedSalesFilter($request)
     {
         $sales_filters = [];
-        [$levels, $s_keys] = self::getViewableSalesInfos($request);
+        $s_keys = self::getViewableSalesIds($request);
         foreach($s_keys as $s_key)
         {
-            // 영업점 필터가 있는지 선택되었는지 검사
             $sales_id = $request->input($s_key, 0);
             if($sales_id)
             {
@@ -34,18 +33,26 @@ class UnderSalesforce
             }
         }
         if(Ablilty::isSalesforce($request))
-        {   // 로그인 계정이 영업점이라면 본인도 추가
+        {   // 로그인 계정이 영업점이라면 자동으로 본인 선택
             $sales_filters[] = [
                 'id' => 'sales'.globalLevelByIndex($request->user()->level).'_id',
                 'value' => $request->user()->id,
             ];
         }
+        return $sales_filters;
+    }
+
+    // 가맹점 목록에 조회될 영업점 필터
+    static private function getMappingMchtFilter($request)
+    {
+        $s_keys = self::getViewableSalesIds($request);
+        $sales_filters = self::getSelectedSalesFilter($request);
         return self::getMappingMcht($request, $sales_filters, $s_keys);
     }
 
     static public function getViewableSalesCols($request, $cols)
     {
-        [$levels, $s_keys] = self::getViewableSalesInfos($request);
+        $s_keys = self::getViewableSalesIds($request);
         foreach($s_keys as $keys)
         {
             $key = explode('_', $keys);
@@ -76,7 +83,7 @@ class UnderSalesforce
     }
 
     // 레벨에 따라 확인 가능한 하위 영업점 ID
-    static public function getViewableSalesInfos($request)
+    static public function getViewableSalesIds($request)
     {
         $levels = [];
         $s_keys = [];
@@ -90,12 +97,25 @@ class UnderSalesforce
             $idx = globalLevelByIndex($level);
             $s_keys[] = 'sales'.$idx.'_id';
         }
-        return [$levels, $s_keys];
+        return $s_keys;
     }
+
+    // 레벨에 따라 확인 가능한 하위 영업점 level
+    static public function getViewableSalesLevels($request)
+    {
+        $levels = [];
+        foreach([13,15,17,20,25,30] as $level)
+        {
+            if($request->user()->tokenCan($level))
+                $levels[] = $level;
+        }
+        return $levels;
+    }
+
 
     static public function getSalesIds($request)
     {
-        [$levels, $s_keys] = self::getViewableSalesInfos($request);
+        $s_keys = self::getViewableSalesIds($request);
         $mchts = self::getMappingMchtFilter($request);
         if(count($mchts) > 0)
         {
