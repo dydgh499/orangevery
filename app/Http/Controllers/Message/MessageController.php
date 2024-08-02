@@ -12,6 +12,7 @@ use App\Http\Traits\Models\EncryptDataTrait;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\Auth\AuthPhoneNum;
+use App\Http\Controllers\Utils\Comm;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -48,7 +49,7 @@ class MessageController extends Controller
                 'e_dt'      => $request->e_dt,
                 'search'    => $request->search,
             ];
-            $res = post("https://api.bonaeja.com/api/msg/v1/list", $params);
+            $res = Comm::post("https://api.bonaeja.com/api/msg/v1/list", $params);
             if($res['code'] == 500)
                 return $this->extendResponse(1000, '통신 과정에서 에러가 발생했습니다.');
             else
@@ -69,7 +70,7 @@ class MessageController extends Controller
                 'user_id'   => $bonaeja['user_id'],
                 'api_key'   => $bonaeja['api_key'],
             ];
-            $res = post("https://api.bonaeja.com/api/msg/v1/remain", $params);
+            $res = Comm::post("https://api.bonaeja.com/api/msg/v1/remain", $params);
             if($res['code'] == 500)
                 return $this->extendResponse(1000, '통신 과정에서 에러가 발생했습니다.');
             else
@@ -86,7 +87,7 @@ class MessageController extends Controller
             'user_id'   => $bonaeja['user_id'],
             'api_key'   => $bonaeja['api_key'],
         ];
-        $res = post("https://api.bonaeja.com/api/msg/v1/remain", $params);
+        $res = Comm::post("https://api.bonaeja.com/api/msg/v1/remain", $params);
         if($res['body']['code'] == 100)
         {
             $total_deposit = $res['body']['data']['TOTAL_DEPOSIT'];
@@ -99,7 +100,7 @@ class MessageController extends Controller
                     'receiver'  => $bonaeja['receive_phone'],
                     'msg'       => "[".$brand_name."] 보내자 예치금이 부족합니다. 예치금을 충전해주세요.(현재 잔액:".number_format($total_deposit)."원)",
                 ];
-                $_res = post("https://api.bonaeja.com/api/msg/v1/send", $sms);
+                $_res = Comm::post("https://api.bonaeja.com/api/msg/v1/send", $sms);
             }
         }
     }
@@ -120,7 +121,7 @@ class MessageController extends Controller
                     'receiver'  => $phone_num,
                     'msg'       =>  $message,
                 ];
-                return post("https://api.bonaeja.com/api/msg/v1/send", $sms);
+                return Comm::post("https://api.bonaeja.com/api/msg/v1/send", $sms);
                 
             }
             else

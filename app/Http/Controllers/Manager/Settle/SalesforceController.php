@@ -16,9 +16,9 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleTrait;
 use App\Http\Traits\Settle\SettleTerminalTrait;
-use App\Http\Traits\Settle\TransactionTrait;
 
 use App\Http\Requests\Manager\IndexRequest;
+use App\Http\Controllers\Utils\ChartFormat;
 
 /**
  * @group Settle-Salesforce API
@@ -27,7 +27,7 @@ use App\Http\Requests\Manager\IndexRequest;
  */
 class SalesforceController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, SettleTrait, SettleTerminalTrait, TransactionTrait;
+    use ManagerTrait, ExtendResponseTrait, SettleTrait, SettleTerminalTrait;
     protected $salesforces, $settleDeducts;
 
     public function __construct(Salesforce $salesforces, SettleDeductSalesforce $settleDeducts)
@@ -153,8 +153,7 @@ class SalesforceController extends Controller
             $total['settle']['deposit'] += $item->settle['deposit'];
             $total['settle']['transfer'] += $item->settle['transfer'];
         }
-        $chart = getDefaultTransChartFormat($transactions, $target_settle_amount);
-        $total = array_merge($total, $chart);
+        $total = array_merge($total, ChartFormat::settle($transactions, $target_settle_amount));
         return $this->response(0, $total);
     }
 

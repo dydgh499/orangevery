@@ -3,6 +3,7 @@ namespace App\Http\Controllers\FirstSettlement;
 
 use App\Http\Controllers\FirstSettlement\NotiSenderBase;
 use App\Http\Controllers\FirstSettlement\FirstSettlementInterface;
+use App\Http\Controllers\Utils\Comm;
 
 class SysLink extends NotiSenderBase implements FirstSettlementInterface
 {
@@ -32,7 +33,7 @@ class SysLink extends NotiSenderBase implements FirstSettlementInterface
                 "holder"    => $mcht['acct_name']
             ]
         ];
-        $res = post(self::$host.'/v1/sapp/create', $params, self::$headers);
+        $res = Comm::post(self::$host.'/v1/sapp/create', $params, self::$headers);
         return $res['body'];
     }
 
@@ -50,20 +51,20 @@ class SysLink extends NotiSenderBase implements FirstSettlementInterface
             "email"       => "",
             "address"     => $mcht['addr'],
         ];
-        $res = post(self::$host.'/v1/sapp/update/'.$mcht['user_name'], $params, self::$headers);
+        $res = Comm::post(self::$host.'/v1/sapp/update/'.$mcht['user_name'], $params, self::$headers);
 
         $acct_params = [
             "bankCd"    => $mcht['acct_bank_code'],
             "account"   => $mcht['acct_num'],
             "holder"    => $mcht['acct_name']
         ];
-        $res = post(self::$host.'/v1/accnt/update/'.$mcht['user_name'], $acct_params, self::$headers);
+        $res = Comm::post(self::$host.'/v1/accnt/update/'.$mcht['user_name'], $acct_params, self::$headers);
         return $res['body'];
     }
 
     static public function show($user_name)
     {
-        $res = get(self::$host.'/v1/sapp/retrieve/'.$user_name, [], self::$headers);
+        $res = Comm::get(self::$host.'/v1/sapp/retrieve/'.$user_name, [], self::$headers);
         return $res['body'];
     }
 

@@ -21,8 +21,9 @@ use App\Http\Controllers\Auth\AuthPasswordChange;
 use App\Http\Requests\Manager\BulkRegister\BulkSalesforceRequest;
 use App\Http\Requests\Manager\SalesforceRequest;
 use App\Http\Requests\Manager\IndexRequest;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Utils\ChartFormat;
 
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Enums\HistoryType;
@@ -66,8 +67,7 @@ class SalesforceController extends Controller
     {
         $query = $this->commonSelect($request, true);
         $data = $this->getIndexData($request, $query);
-        $chart = getDefaultUsageChartFormat($data);
-        return $this->response(0, $chart);    
+        return $this->response(0, ChartFormat::default($data));    
     }
 
     private function commonSelect($request, $is_all=false)

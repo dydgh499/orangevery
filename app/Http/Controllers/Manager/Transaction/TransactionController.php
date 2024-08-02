@@ -7,13 +7,18 @@ use App\Models\Log\RealtimeSendHistory;
 use App\Models\Salesforce;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Traits\Settle\TransactionTrait;
 
 use App\Http\Requests\Manager\TransactionRequest;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\QuickView\QuickViewController;
-use App\Http\Controllers\Manager\Transaction\NotiRetrySender;
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
+use App\Http\Controllers\Manager\Transaction\NotiRetrySender;
+use App\Http\Controllers\Manager\Transaction\SettleDateCalculator;
+use App\Http\Controllers\Manager\Transaction\SettleAmountCalculator;
+use App\Http\Controllers\Manager\Transaction\TransactionFilter;
+
+use App\Http\Controllers\Utils\Comm;
+use App\Http\Controllers\Utils\ChartFormat;
 
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use Carbon\Carbon;
@@ -31,7 +36,7 @@ use App\Enums\HistoryType;
  */
 class TransactionController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, TransactionTrait;
+    use ManagerTrait, ExtendResponseTrait;
     protected $transactions;
     protected $target;
     public $cols;
@@ -70,10 +75,10 @@ class TransactionController extends Controller
     {
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
-        $query = $this->commonSelect($request);
-        $cols = $this->getTotalCols($target_settle_amount);
+        $query = TransactionFilter::common($request);
+        $cols = TransactionFilter::getTotalCols($target_settle_amount);
         $chart = $query->first($cols);
-        $chart = $this->setTransChartFormat($chart);
+        $chart = ChartFormat::transaction($chart);
         return $this->response(0, $chart);
     }
 
@@ -87,13 +92,13 @@ class TransactionController extends Controller
         $this->setTransactionData($request->level);
 
         $with  = ['cancelDeposits'];
-        $query = $this->commonSelect($request);
+        $query = TransactionFilter::common($request);
         if($request->use_realtime_deposit && (int)$request->level === 10)
             $with[] = 'realtimes';
 
         if(count($with))
             $query = $query->with($with);
-        $data = $this->transPagenation($request, $query, $this->cols, 'transactions.trx_at', false);
+        $data = TransactionFilter::pagenation($request, $query, $this->cols, 'transactions.trx_at', false);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
         $data['content'] = globalMappingSales($salesforces, $data['content']);
@@ -123,18 +128,13 @@ class TransactionController extends Controller
             $data['dev_fee'] = $request->input('dev_fee', 0)/100;
             $data['dev_realtime_fee'] = $request->input('dev_realtime_fee', 0)/100;
 
-            request()->merge([
-                's_dt' => $data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'],
-                'e_dt' => $data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'],
-            ]);
-            $holidays = Transaction::getHolidays($request->user()->brand_id);
-            $data['settle_dt'] = $this->getSettleDate($data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'], $data['mcht_settle_type']+1, 1, $holidays);
+            $data['settle_dt'] = SettleDateCalculator::getSettleDate($request->user()->brand_id, $data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'], $data['mcht_settle_type']+1, 1);
             $data['pg_settle_type'] = 1;
             if($data['dev_fee'] >= 1)
                 return $this->extendResponse(991, '개발사 수수료가 이상합니다.<br>관리자에게 문의하세요.');
             else
             {
-                [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
+                [$data] = SettleAmountCalculator::setSettleAmount([$data], $request->dev_settle_type);
                 $res = $this->transactions->create($data);
                 operLogging(HistoryType::CREATE, $this->target, [], $data, "#".$res->id);
                 return $this->response($res ? 1 : 990, ['id'=>$res->id]);    
@@ -191,18 +191,13 @@ class TransactionController extends Controller
             $tran = $this->transactions->where('id', $id)->first();
             $data = $request->data();
 
-            request()->merge([
-                's_dt' => $data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'],
-                'e_dt' => $data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'],
-            ]);
-            $holidays = Transaction::getHolidays($request->user()->brand_id);
-            $data['settle_dt'] = $this->getSettleDate($data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt'], $data['mcht_settle_type']+1, 1, $holidays);
+            $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], ($data['is_cancel'] ? $data['cxl_dt'] : $data['trx_dt']), $data['mcht_settle_type']+1, 1);
             $data['pg_settle_type'] = 1;
 
             $data['dev_fee'] = $tran->dev_fee;
             $data['dev_realtime_fee'] = $tran->dev_realtime_fee;
 
-            [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
+            [$data] = SettleAmountCalculator::setSettleAmount([$data], $request->dev_settle_type);
             $res = $this->transactions->where('id', $id)->update($data);
             operLogging(HistoryType::UPDATE, $this->target, $tran, $data, "#".$id);
             return $this->response($res ? 1 : 990, ['id'=>$id]);
@@ -240,10 +235,6 @@ class TransactionController extends Controller
     public function cancel(TransactionRequest $request)
     {
         $data = $request->data();
-        request()->merge([
-            's_dt' => $data['cxl_dt'],
-            'e_dt' => $data['cxl_dt'],
-        ]);
         // TransactionRequest 에서 100을 먼저 나눠서 가져오기 떄문에 다시가져옴
         $data['ps_fee']  = $request->input('ps_fee', 0);
         $data['hold_fee'] = $request->input('hold_fee', 0);
@@ -255,12 +246,10 @@ class TransactionController extends Controller
         $data['sales4_fee'] = $request->input('sales4_fee', 0);
         $data['sales5_fee'] = $request->input('sales5_fee', 0);
 
-        
-        $holidays = Transaction::getHolidays($request->user()->brand_id);
-        $data['settle_dt'] = $this->getSettleDate($data['cxl_dt'], $data['mcht_settle_type']+1, $request->pg_settle_type, $holidays);
+        $data['settle_dt'] = SettleDateCalculator::getSettleDate($data['brand_id'], $data['cxl_dt'], $data['mcht_settle_type']+1, $request->pg_settle_type);
         try 
         {
-            [$data] = $this->setSettleAmount([$data], $request->dev_settle_type);
+            [$data] = SettleAmountCalculator::setSettleAmount([$data], $request->dev_settle_type);
             $res = $this->transactions->create($data);
             operLogging(HistoryType::CREATE, $this->target, [], $data, "#".$res->id);
             return $this->response(1);
@@ -295,7 +284,7 @@ class TransactionController extends Controller
         $data = $request->all();
         $data['yymm'] = $getYYMM($data['yymm']); // mmyy to yymm
         $url = env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/hand';
-        $res = post($url, $data);
+        $res = Comm::post($url, $data);
         
         if($res['body']['result_cd'] == '0000')
             return $this->response(1, $res['body']);
@@ -310,7 +299,7 @@ class TransactionController extends Controller
     public function payCancel(Request $request)
     {
         $data = $request->all();
-        $res = post(env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/cancel', $data);
+        $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/online/pay/cancel', $data);
         if($res['body']['result_cd'] == '0000')
             return $this->response(1, $res['body']);
         else
@@ -391,9 +380,9 @@ class TransactionController extends Controller
             'merchandises.business_num', 'merchandises.nick_name', 'merchandises.addr', 
             'merchandises.sector', 'merchandises.custom_id',
         ];
-        $cols = array_merge($cols , $this->getTotalCols('mcht_settle_amount'));
+        $cols = array_merge($cols , TransactionFilter::getTotalCols('mcht_settle_amount'));
 
-        $query = $this->commonSelect($request);
+        $query = TransactionFilter::common($request);
         $grouped = $query
                 ->groupBy('merchandises.id')
                 ->orderBy('merchandises.mcht_name')
@@ -408,7 +397,7 @@ class TransactionController extends Controller
 
         $b_info = BrandInfo::getBrandById($request->user()->brand_id);
         $trans = json_decode(json_encode($db_trans), true);
-        $trans = $this->setSettleAmount($trans, $b_info['dev_settle_type']);
+        $trans = SettleAmountCalculator::setSettleAmount($trans, $b_info['dev_settle_type']);
         $i=0;
 
         foreach($db_trans as $tran)
@@ -430,7 +419,7 @@ class TransactionController extends Controller
             ->get();
 
         $trans = json_decode(json_encode($db_trans), true);
-        $trans = $this->setSettleAmount($trans, $dev_settle_type);
+        $trans = SettleAmountCalculator::setSettleAmount($trans, $dev_settle_type);
         $i=0;
 
         foreach($db_trans as $tran)

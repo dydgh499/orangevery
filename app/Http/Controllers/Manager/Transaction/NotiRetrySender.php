@@ -6,6 +6,7 @@ use App\Http\Controllers\FirstSettlement\NotiSenderBase;
 use App\Http\Controllers\FirstSettlement\Bonacamp;
 use App\Http\Controllers\FirstSettlement\SysLink;
 
+use App\Http\Controllers\Utils\Comm;
 use App\Models\Log\NotiSendHistory;
 use App\Models\Transaction;
 use Carbon\Carbon;
@@ -73,7 +74,7 @@ class NotiRetrySender
             [$params, $headers] = SysLink::getParams($tran);
         else
             [$params, $headers] = self::getNotiSendFormat($tran, $temp);
-        return post($url, $params, $headers);
+        return Comm::post($url, $params, $headers);
     }
 
     static public function notiSenderWrap($id)

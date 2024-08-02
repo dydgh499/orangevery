@@ -16,6 +16,7 @@ use App\Http\Requests\Manager\BulkRegister\BulkPayModulePGRequest;
 use App\Http\Requests\Manager\Merchandise\PayModuleRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
+use App\Http\Controllers\Utils\ChartFormat;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -52,11 +53,9 @@ class PaymentModuleController extends Controller
      */
     public function chart(Request $request)
     {
-        $cols = ['payment_modules.*'];
         $query = $this->commonSelect($request, true);
-        $data = $this->getIndexData($request, $query, 'payment_modules.id', $cols, 'payment_modules.created_at');
-        $chart = getDefaultUsageChartFormat($data);
-        return $this->response(0, $chart);
+        $data = $this->getIndexData($request, $query, 'payment_modules.id', ['payment_modules.*'], 'payment_modules.created_at');
+        return $this->response(0, ChartFormat::default($data));
     }
 
     private function commonSelect($request, $is_all=false)

@@ -6,8 +6,11 @@ use App\Models\Transaction;
 use App\Models\Salesforce;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Traits\Settle\TransactionTrait;
 use App\Http\Requests\Manager\IndexRequest;
+
+use App\Http\Controllers\Manager\Transaction\TransactionFilter;
+
+use App\Http\Controllers\Utils\ChartFormat;
 
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
@@ -16,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 
 class TransactionSummaryController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, TransactionTrait;
+    use ManagerTrait, ExtendResponseTrait;
     protected $transactions;
     
     public function __construct(Transaction $transactions)
@@ -33,10 +36,10 @@ class TransactionSummaryController extends Controller
     {
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
-        $query = $this->commonSelect($request);
-        $cols = $this->getTotalCols($target_settle_amount);
+        $query = TransactionFilter::common($request);
+        $cols = TransactionFilter::getTotalCols($target_settle_amount);
         $chart = $query->first($cols);
-        $chart = $this->setTransChartFormat($chart);
+        $chart = ChartFormat::transaction($chart);
         return $this->response(0, $chart);
     }
     
@@ -59,9 +62,8 @@ class TransactionSummaryController extends Controller
         if((int)$request->level === 10)
             $cols[] = 'merchandises.mcht_name as user_name';
 
-        $query = $this->commonSelect($request);
-        $query = $query->groupBy("transactions.$target_id");
-        $data = $this->transPagenation($request, $query, $cols, "transactions.$target_id", true);
+        $query = TransactionFilter::common($request)->groupBy("transactions.$target_id");
+        $data = TransactionFilter::pagenation($request, $query, $cols, "transactions.$target_id", true);
 
         if((int)$request->level !== 10)
         {

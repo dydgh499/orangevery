@@ -8,6 +8,7 @@ use App\Models\Log\RealtimeSendHistory;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
+use App\Http\Controllers\Utils\Comm;
 
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
@@ -102,7 +103,7 @@ class RealtimeSendHistoryController extends Controller
 
         foreach($params as $param)
         {
-            $res = post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/collect-deposit', $param);
+            $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/collect-deposit', $param);
             if($res['code'] == 201)
                 return $this->response($res ? 1 : 990);
         }

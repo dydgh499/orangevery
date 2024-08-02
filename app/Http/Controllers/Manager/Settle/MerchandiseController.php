@@ -18,8 +18,8 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleTrait;
 use App\Http\Traits\Settle\SettleTerminalTrait;
-use App\Http\Traits\Settle\TransactionTrait;
 use App\Http\Controllers\Manager\Salesforce\UnderSalesforce;
+use App\Http\Controllers\Utils\ChartFormat;
 
 
 use App\Http\Requests\Manager\IndexRequest;
@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\DB;
  */
 class MerchandiseController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, SettleTrait, SettleTerminalTrait, TransactionTrait;
+    use ManagerTrait, ExtendResponseTrait, SettleTrait, SettleTerminalTrait;
     protected $merchandises, $settleDeducts;
 
     public function __construct(Merchandise $merchandises, SettleDeductMerchandise $settleDeducts)
@@ -138,8 +138,7 @@ class MerchandiseController extends Controller
             $total['settle']['transfer'] += $item->settle['transfer'];
         }
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
-        $chart = getDefaultTransChartFormat($transactions, $target_settle_amount);
-        $total = array_merge($total, $chart);
+        $total = array_merge($total, ChartFormat::settle($transactions, $target_settle_amount));
         return $this->response(0, $total);
     }
 

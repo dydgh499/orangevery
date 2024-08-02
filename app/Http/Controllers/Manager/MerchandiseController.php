@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Manager\Service\BrandInfo;
 use App\Http\Controllers\FirstSettlement\SysLink;
+use App\Http\Controllers\Utils\ChartFormat;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -72,8 +73,7 @@ class MerchandiseController extends Controller
     public function chart(Request $request)
     {
         $data = $this->commonSelect($request, true);
-        $chart = getDefaultUsageChartFormat($data);
-        return $this->response(0, $chart);
+        return $this->response(0, ChartFormat::default($data));
     }
 
     private function byPayModules($request, $is_all)

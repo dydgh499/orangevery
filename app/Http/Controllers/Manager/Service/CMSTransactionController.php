@@ -14,6 +14,7 @@ use App\Http\Traits\ExtendResponseTrait;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Auth\AuthPhoneNum;
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Utils\Comm;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -77,7 +78,7 @@ class CMSTransactionController extends Controller
     public function ownerCheck(Request $request)
     {
         $data = $request->all();
-        $res = post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', $data);
+        $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/owner-check', $data);
         if($res['body']['result'] === 100)
             return $this->response(1, ['message'=> $res['body']['message']]);
         else
@@ -90,7 +91,7 @@ class CMSTransactionController extends Controller
     public function getBalance(Request $request)
     {
         $data = $request->all();
-        $res = post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/get-balance', $data);
+        $res = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/get-balance', $data);
         $res = $res['body']['data'];
         return $this->extendResponse($res['result_cd'] == "0000" ? 1 : 2000, $res['result_msg'], $res['data']);
     }
@@ -130,7 +131,7 @@ class CMSTransactionController extends Controller
                 if($privacy && $finance)
                 {
                     $params = array_merge($params, $privacy->toArray());
-                    $res    = post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/operate-withdraw', $params);
+                    $res    = Comm::post(env('NOTI_URL', 'http://localhost:81').'/api/v2/realtimes/operate-withdraw', $params);
                     return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);    
                 }
                 else

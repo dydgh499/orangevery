@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Manager\Service;
 use App\Models\Brand;
 use App\Models\Service\Holiday;
 
+use App\Http\Controllers\Utils\Comm;
 use App\Http\Requests\Manager\Service\HolidayRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
@@ -47,7 +48,7 @@ class HolidayController extends Controller
                 'solYear'	 => $year,
                 'solMonth'	=> sprintf("%02d", $month),
             ];
-            $res = get($url, $params);            
+            $res = Comm::get($url, $params);            
             $xml = new SimpleXMLElement($res['body']);
             $xml = json_decode(json_encode($xml), true);
 

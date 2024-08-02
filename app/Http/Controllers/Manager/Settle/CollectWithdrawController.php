@@ -14,6 +14,7 @@ use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\Settle\CollectWithdrawRequest;
 use App\Http\Requests\Manager\IndexRequest;
 
+use App\Http\Controllers\Utils\Comm;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -196,7 +197,7 @@ class CollectWithdrawController extends Controller
                 'acct_bank_name' => $request->user()->acct_bank_name,
                 'acct_bank_code' => $request->user()->acct_bank_code,
             ];
-            $res = post($this->base_noti_url.'/collect-deposit', $params);
+            $res = Comm::post($this->base_noti_url.'/collect-deposit', $params);
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
         }
         else

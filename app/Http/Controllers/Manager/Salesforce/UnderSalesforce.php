@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Controllers\Manager\Salesforce;
+
 use App\Models\Salesforce;
 use App\Models\Merchandise;
 use App\Http\Controllers\Ablilty\Ablilty;

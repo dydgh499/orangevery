@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BeforeSystem\Merchandise;
 use App\Http\Controllers\BeforeSystem\PaymentModule;
 use App\Http\Controllers\BeforeSystem\Transaction;
+use App\Http\Controllers\Utils\Comm;
 use Illuminate\Support\Facades\Redis;
 
 /**
@@ -54,7 +55,7 @@ class BeforeSystemController extends Controller
                 'id' => $request->user_name,
                 'pw' => $request->user_pw,
             ];
-            $res = asPost('https://'.$domain.'/paywell/login/logining.php', $params);
+            $res = Comm::asPost('https://'.$domain.'/paywell/login/logining.php', $params);
             if($res['body']['result'] != 100)
                 return $this->extendResponse(2000, $res['body']['message']);
             else

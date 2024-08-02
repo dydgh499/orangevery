@@ -18,6 +18,7 @@ use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\Log\CreateSettleHistoryRequest;
 use App\Http\Requests\Manager\Log\BatchSettleHistoryRequest;
 use App\Http\Controllers\Ablilty\Ablilty;
+use App\Http\Controllers\Utils\Comm;
 
 /**
  * @group Merchandise-Settle-History API
@@ -268,7 +269,7 @@ class MchtSettleHistoryController extends Controller
             $validated = $request->validate(['trx_id'=>'required', 'mid'=>'required', 'tid'=>'nullable']);
             $data = $request->all();
             $url = $this->base_noti_url.'/single-deposit';
-            $res = post($url, $data);
+            $res = Comm::post($url, $data);
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
         }
         else
@@ -281,7 +282,7 @@ class MchtSettleHistoryController extends Controller
         {
             $validated = $request->validate(['trx_ids.*'=>'required|numeric']);
             $url = $this->base_noti_url.'/single-deposit-cancel-job-reservation';
-            $res = post($url,$request->all());
+            $res = Comm::post($url,$request->all());
             return $this->apiResponse($res['body']['result_cd'], $res['body']['result_msg']);
         }
         else

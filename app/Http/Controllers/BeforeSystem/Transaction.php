@@ -4,11 +4,12 @@ namespace App\Http\Controllers\BeforeSystem;
 
 use App\Http\Traits\StoresTrait;
 use App\Http\Traits\BeforeSystem\BeforeSystemTrait;
-use App\Http\Traits\Settle\TransactionTrait;
+use App\Http\Controllers\Manager\Transaction\SettleDateCalculator;
+use App\Http\Controllers\Manager\Transaction\SettleAmountCalculator;
 
 class Transaction
 {
-    use StoresTrait, BeforeSystemTrait, TransactionTrait;
+    use StoresTrait, BeforeSystemTrait;
 
     public $paywell, $payvery, $paywell_to_payvery, $current_time;
     protected $connect_pgs, $connect_pss, $connect_cls, $connect_finance;
@@ -207,7 +208,7 @@ class Transaction
                                 'created_at' => $this->current_time,
                                 'updated_at' => $this->current_time,
                             ];
-                            $item['settle_dt'] = $this->getSettleDate($item['is_cancel'] ? $item['cxl_dt'] : $item['trx_dt'], $item['mcht_settle_type']+1, 1, '');
+                            $item['settle_dt'] = SettleDateCalculator::getSettleDate($brand_id, $item['is_cancel'] ? $item['cxl_dt'] : $item['trx_dt'], $item['mcht_settle_type']+1, 1);
                             $item['trx_at'] = $item['is_cancel'] ? ($item['cxl_dt']." ".$item['cxl_tm']) : ($item['trx_dt']." ".$item['trx_tm']);
                             if(strpos(date($item['trx_at']), '1970-01-01 09:00:00') === false)
                                 $items[] = $item;                            
@@ -216,7 +217,7 @@ class Transaction
                 });
         print('set settle amount prepare items: '.count($items)."\r\n");
         $items = json_decode(json_encode($items), true);
-        $items = $this->setSettleAmount($items, $this->dev_settle_type);
+        $items = SettleAmountCalculator::setSettleAmount($items, $this->dev_settle_type);
         $this->paywell = $items;
         print("complate transactions getPaywell - found:".count($this->paywell)."\r\n");
     }

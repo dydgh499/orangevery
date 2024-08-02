@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Ablilty;
 use App\Http\Controllers\Ablilty\AbnormalConnection;
 use App\Http\Controllers\Ablilty\Ablilty;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Utils\Comm;
 use Carbon\Carbon;
 
 class IPInfo
@@ -51,8 +53,10 @@ class IPInfo
         Redis::set(request()->ip(), json_encode($info), 'EX', 86400);
     }
 
-    static public function get($request)
+    static public function get($request, $retry=0)
     {
+        if($retry >= 4)
+            return null;
         if($request->ip() === '127.0.0.1' || in_array($request->ip(), json_decode(env('EXCEPT_IPS', "[]"), true)))
             return ["ip" => "127.0.0.1", "bogon" => true, 'country'=>'KR'];
 
@@ -62,21 +66,26 @@ class IPInfo
         else
         {
             $token = env('IPINFO_API_KEY', '2c693805e1bced');
-            $res = get("https://ipinfo.io/".$request->ip()."?token=$token", [], [
+            $res = Comm::get("https://ipinfo.io/".$request->ip()."?token=$token", [], [
                 'Authorization' => "Bearer $token",
                 'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
                 "Accept" =>  "application/json",
             ]);
-            
-            if($res['code'] !== 200)
+            if($res['code'] === 503)
             {
-                error(array_merge($request->all(), $res), 'ip blacklist API count over');
-                return null;
+                sleep(0.1);
+                Log::warning('ip-info timeout retry('.($retry+1).')', []);
+                return self::get($request, ++$retry);
             }
-            else
+            else if($res['code'] === 200)
             {
                 self::set($res['body']);
                 return $res['body'];
+            }
+            else
+            {
+                error(array_merge($request->all(), $res), 'ip blacklist API count over');
+                return null;
             }
         }
     }

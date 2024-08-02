@@ -177,10 +177,14 @@ const setNotiUrl = () => {
 
 const batchRemove = async () => {
     const count = props.selected_idxs.length
-    if (await alert.value.show('정말 ' + count + '개의 가맹점을 일괄삭제 하시겠습니까?<br><h5>결제모듈 등 하위 정보들도 같이 삭제됩니다.</h5>')) {
-        const params = { selected_idxs: props.selected_idxs }
-        const r = await request({ url: `/api/v1/manager/merchandises/batch-updaters/remove`, method: 'delete', data: params }, true)
-        emits('update:select_idxs', [])
+    if(count === 0)
+        snackbar.value.show('가맹점을 1개이상 선택해주세요.', 'error')
+    else {
+        if (await alert.value.show('정말 ' + count + '개의 가맹점을 일괄삭제 하시겠습니까?<br><h5>결제모듈 등 하위 정보들도 같이 삭제됩니다.</h5>')) {
+            const params = { selected_idxs: props.selected_idxs }
+            const r = await request({ url: `/api/v1/manager/merchandises/batch-updaters/remove`, method: 'delete', data: params }, true)
+            emits('update:select_idxs', [])
+        }
     }
 }
 

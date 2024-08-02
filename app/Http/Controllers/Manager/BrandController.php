@@ -56,6 +56,11 @@ class BrandController extends Controller
         ];
     }
 
+    private function isMainBrand($brand_id)
+    {
+        return $brand_id == env('MAIN_BRAND_ID', 1) ? true : false;
+    }
+
     /**
      * 차트 데이터 출력
      *
@@ -77,7 +82,7 @@ class BrandController extends Controller
 
     public function getTotalDevFee($request)
     {
-        if(isMainBrand($request->user()->brand_id) && Ablilty::isDevLogin($request))
+        if($this->isMainBrand($request->user()->brand_id) && Ablilty::isDevLogin($request))
         {
             $s_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->startOfMonth()->format('Y-m-d 00:00:00');
             $e_dt = Carbon::now()->copy()->subMonthNoOverflow(1)->endOfMonth()->format('Y-m-d 23:59:59');
@@ -103,7 +108,7 @@ class BrandController extends Controller
         $search     = $request->input('search', '');
         $brand_id   = $request->user()->brand_id;
 
-        if(isMainBrand($request->user()->brand_id) && Ablilty::isDevLogin($request))
+        if($this->isMainBrand($request->user()->brand_id) && Ablilty::isDevLogin($request))
             $query = $this->brands;
         else
             $query = $this->brands->where('id', $brand_id);

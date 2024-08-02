@@ -6,10 +6,10 @@ use App\Models\Log\NotiSendHistory;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Manager\Transaction\NotiRetrySender;
+use App\Http\Controllers\Manager\Transaction\TransactionFilter;
 
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Traits\Settle\TransactionTrait;
 use App\Http\Requests\Manager\IndexRequest;
 
 /**
@@ -19,7 +19,7 @@ use App\Http\Requests\Manager\IndexRequest;
  */
 class NotiSendHistoryController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, TransactionTrait;
+    use ManagerTrait, ExtendResponseTrait;
     protected $noti_send_histories;
 
     public function __construct(NotiSendHistory $noti_send_histories)

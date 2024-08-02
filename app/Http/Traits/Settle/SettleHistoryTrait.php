@@ -7,6 +7,7 @@ use App\Models\Merchandise\PaymentModule;
 use App\Models\CancelDeposit;
 use App\Models\Salesforce;
 use Carbon\Carbon;
+use App\Http\Controllers\Utils\Comm;
 
 trait SettleHistoryTrait
 {
@@ -59,7 +60,7 @@ trait SettleHistoryTrait
                 $url = $this->base_noti_url."/$target-settle-deposit/".$data['id'];
                 $params = ['brand_id'=> $request->brand_id, 'fin_id'=> $request->fin_id];
 
-                $res = post($url, $params);
+                $res = Comm::post($url, $params);
                 sleep(0.1);
                 if($res['body']['result_cd'] == '0000')
                     return $getDBResponseMessage($this->deposit($orm, $data['id']));

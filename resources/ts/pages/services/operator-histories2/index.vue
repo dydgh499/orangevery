@@ -59,9 +59,9 @@ const showAvatar = (preview: string) => {
                                 <VAvatar :image="item[_key]" class="me-3 preview" @click="showAvatar(item['profile_img'])"/>
                             </span>
                             <span v-else-if="_key === 'history_target'">
-                                <div style="width: 500px;">
+                                <div style=" display: flex; min-width: 500px; flex-wrap: wrap;">
                                     <VChip v-for="(target, index) in (item[_key] ? item[_key].split(',') : [])"
-                                        :color="'primary'" style="margin-left: 0.5em;">
+                                        :color="'primary'" style="margin: 0.25em;">
                                             {{ target }}
                                     </VChip>
                                 </div>

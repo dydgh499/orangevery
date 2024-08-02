@@ -9,7 +9,8 @@ use App\Models\Merchandise\PaymentModule;
 use App\Models\CollectWithdraw;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Traits\Settle\TransactionTrait;
+
+use App\Http\Controllers\Manager\Transaction\TransactionFilter;
 
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -23,7 +24,7 @@ use Carbon\Carbon;
  */
 class QuickViewController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, TransactionTrait;
+    use ManagerTrait, ExtendResponseTrait;
 
     public function __construct(Transaction $transactions)
     {
@@ -36,8 +37,8 @@ class QuickViewController extends Controller
         $curl_date = Carbon::now()->format('Y-m-d 23:59:59');
 
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
+        $cols = TransactionFilter::getTotalCols($target_settle_amount);
 
-        $cols = $this->getTotalCols($target_settle_amount);
         array_push($cols, DB::raw("DATE_FORMAT(trx_at, '%Y-%m-%d') as day"));
 
         return $this->transactions
@@ -57,7 +58,7 @@ class QuickViewController extends Controller
 
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
 
-        $cols = $this->getTotalCols($target_settle_amount, 'transactions.mcht_id');
+        $cols = TransactionFilter::getTotalCols($target_settle_amount, 'transactions.mcht_id');
         array_push($cols, 'merchandises.mcht_name');
 
         return $this->transactions

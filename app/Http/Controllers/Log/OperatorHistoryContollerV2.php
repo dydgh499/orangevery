@@ -86,7 +86,7 @@ class OperatorHistoryContollerV2 extends Controller
 
         $query = $this->commonSelect($request)->groupBy('operator_histories.oper_id');
         // 총 레코드 수를 구할 때, select를 최소화하여 count만 가져옵니다.
-        $total = (clone $query)->count();
+        $total = (clone $query)->get('operator_histories.oper_id')->count();
         // 페이지네이션을 위한 쿼리
         $content = $query
                     ->orderBy(DB::raw("MAX(operator_histories.created_at)"), 'desc')
@@ -113,7 +113,7 @@ class OperatorHistoryContollerV2 extends Controller
         foreach($content as $data)
         {
             $data->before_history_detail = $this->paidOptionFilter($data, $data->before_history_detail);
-            $data->after_history_detail  = $this->paidOptionFilter($data, $data->after_history_detail);    
+            $data->after_history_detail  = $this->paidOptionFilter($data, $data->after_history_detail);
         }
 
         return $this->response(0, $content);

@@ -8,13 +8,13 @@ use App\Models\Transaction;
 use App\Models\Merchandise;
 use App\Models\Log\SubBusinessRegistration;
 use App\Models\Log\DifferenceSettlementHistory;
+use App\Http\Controllers\Manager\Transaction\TransactionFilter;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Traits\StoresTrait;
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
-use App\Http\Traits\Settle\TransactionTrait;
 use App\Http\Requests\Manager\IndexRequest;
 
 /**
@@ -24,7 +24,7 @@ use App\Http\Requests\Manager\IndexRequest;
  */
 class DifferenceSettlementHistoryController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, StoresTrait, TransactionTrait;
+    use ManagerTrait, ExtendResponseTrait, StoresTrait;
     protected $difference_settlement_histories;
     protected $base_path = "App\Http\Controllers\Log\DifferenceSettlement\\";
     protected $cols = [];
@@ -64,34 +64,8 @@ class DifferenceSettlementHistoryController extends Controller
 
     public function index(IndexRequest $request)
     {
-        $query = $this->commonSelect($request);
+        $query = TransactionFilter::common($request);
         return $this->getIndexData($request, $query, 'difference_settlement_histories.id', $this->cols, 'transactions.trx_at');
-    }
-
-    public function commonSelect($request)
-    {
-        $search = $request->input('search', '');
-        $query = $this->difference_settlement_histories
-            ->join('transactions', 'difference_settlement_histories.trans_id', '=', 'transactions.id')
-            ->join('merchandises', 'transactions.mcht_id', '=', 'merchandises.id')
-            ->where('transactions.brand_id', $request->user()->brand_id);
-
-        if($search != '')
-        {
-            $query = $query->where(function ($query) use ($search) {
-                return $query->where('transactions.mid', 'like', "%$search%")
-                    ->orWhere('transactions.tid', 'like', "%$search%")
-                    ->orWhere('transactions.trx_id', 'like', "%$search%")
-                    ->orWhere('transactions.appr_num', 'like', "%$search%")
-                    ->orWhere('merchandises.mcht_name', 'like', "%$search%")
-                    ->orWhere('merchandises.resident_num', 'like', "%$search%")
-                    ->orWhere('merchandises.business_num', 'like', "%$search%");
-            });
-        }
-        $query = globalPGFilter($query, $request, 'transactions');
-        $query = globalSalesFilter($query, $request, 'transactions');
-        $query = globalAuthFilter($query, $request, 'transactions');
-        return $query;
     }
 
     /**
@@ -101,8 +75,8 @@ class DifferenceSettlementHistoryController extends Controller
      */
     public function chart(IndexRequest $request)
     {
-        $query  = $this->commonSelect($request);        
-        $query  = $this->transDateFilter($request, $query);
+        $query  = TransactionFilter::common($request);        
+        $query  = TransactionFilter::date($request, $query);
         $chart  = $query->first([
             DB::raw("SUM(transactions.amount) AS amount"),
             DB::raw("SUM(difference_settlement_histories.supply_amount) AS supply_amount"),

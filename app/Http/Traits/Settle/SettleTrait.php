@@ -6,6 +6,8 @@ use App\Models\Log\RealtimeSendHistory;
 use App\Models\Transaction;
 use App\Http\Controllers\Ablilty\Ablilty;
 use App\Http\Controllers\Ablilty\EditAbleWorkTime;
+use App\Http\Controllers\Utils\ChartFormat;
+use App\Http\Controllers\Manager\Transaction\TransactionFilter;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -20,10 +22,11 @@ trait SettleTrait
             "acct_num", "acct_name", "acct_bank_name", "acct_bank_code",
         ];
     }
+    
     public function getSettleInformation($data, $settle_amount)
     {
         foreach($data['content'] as $content) {
-            $chart = getDefaultTransChartFormat($content->transactions, $settle_amount);
+            $chart = ChartFormat::settle($content->transactions, $settle_amount);
             $content->total = $chart['total'];
             $content->appr = $chart['appr'];
             $content->cxl = $chart['cxl'];
@@ -196,8 +199,8 @@ trait SettleTrait
     {
         $validated = $request->validate(['id'=>'required']);
         [$target_id, $target_settle_id, $target_settle_amount] = getTargetInfo($request->level);
-        $cols  = $this->getTotalCols($target_settle_amount);
+        $cols  = TransactionFilter::getTotalCols($target_settle_amount);
         $chart  = $this->partSettleCommonQuery($request)->first($cols);
-        return $this->response(0, $this->setTransChartFormat($chart));
+        return $this->response(0, ChartFormat::transaction($chart));
     }
 }

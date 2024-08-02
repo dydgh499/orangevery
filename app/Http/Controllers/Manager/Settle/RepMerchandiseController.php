@@ -18,7 +18,6 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Traits\Settle\SettleTrait;
 use App\Http\Traits\Settle\SettleTerminalTrait;
-use App\Http\Traits\Settle\TransactionTrait;
 
 use App\Http\Requests\Manager\IndexRequest;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +29,7 @@ use Illuminate\Support\Facades\DB;
  */
 class RepMerchandiseController extends Controller
 {
-    use ManagerTrait, ExtendResponseTrait, SettleTrait, SettleTerminalTrait, TransactionTrait, StoresTrait;
+    use ManagerTrait, ExtendResponseTrait, SettleTrait, SettleTerminalTrait, StoresTrait;
     protected $merchandises, $settleDeducts;
 
     public function __construct(Merchandise $merchandises, SettleDeductMerchandise $settleDeducts)
