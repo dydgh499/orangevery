@@ -442,6 +442,7 @@ class PaymentModuleController extends Controller
 
     static public function keyUpdate()
     {
+        $i =0;
         $pmods = PaymentModule::where('brand_id', 4)->where('is_delete', 0)->where('sign_key', '')->get();
         foreach($pmods as $pmod)
         {
