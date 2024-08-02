@@ -56,7 +56,7 @@ class EditAbleWorkTime
         {
             if(env('APP_ENV') === 'local')
                 return true;
-            else if(Ablilty::isDevOffice(request()) && in_array(request()->user()->brand_id, [18, 35]))
+            else if(Ablilty::isDevOffice(request()) && in_array(request()->user()->brand_id, [18, 35, 30]))
                 return true;
             else if(self::isExceptionOperator())
                 return true;
