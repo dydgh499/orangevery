@@ -439,4 +439,41 @@ class PaymentModuleController extends Controller
             ->update(['sign_key' => $sign_key]);
         return $this->response(0, ['sign_key' => $sign_key]);    
     }
+
+    static public function keyUpdate()
+    {
+        $pmods = PaymentModule::where('brand_id', 4)->where('is_delete', 0)->where('sign_key', '')->get();
+        foreach($pmods as $pmod)
+        {
+            $pmod->sign_key = $pmod->id.Str::random(64 - strlen((string)$pmod->id));
+            $pmod->save();
+            $i++;
+
+        }
+        echo "(ezpg) sign key update: $i\n";
+        $i =0;
+        $pmods = PaymentModule::where('brand_id', 4)->where('module_type', '!=', 0)->where('is_delete', 0)->where('pay_key', '')->get();
+        foreach($pmods as $pmod)
+        {
+            $pmod->pay_key = $pmod->id.Str::random(64 - strlen((string)$pmod->id));
+            $pmod->save();
+            $i++;
+        }
+        echo "(ezpg) pay key update: $i\n";
+        $paydays = PaymentModule::where('brand_id', 6)->where('pg_id', 43)->where('is_delete', 0)
+            ->where('module_type', 1)
+            ->where('sub_key', '!=', '')
+            ->get();
+
+        $i =0;
+        foreach($paydays as $payday)
+        {
+            $ezpg = PaymentModule::where('brand_id', 4)->where('is_delete', 0)->where('mid', $payday->mid)->first();
+            $payday->api_key = $ezpg->pay_key;
+            $payday->sub_key = '';
+            $payday->save();
+            $i++;
+        }
+        echo "(pay day) api key update: $i\n";
+    }
 }
