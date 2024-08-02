@@ -77,7 +77,10 @@ const replaceIdtoName = (history_detail: any) => {
 const show = async (item: any) => {
     history_info.value = item
     const res = await get(`/api/v1/manager/services/operator-historiesv2/${item.oper_id}/detail`, {
-        params: store.params
+        params: {
+            ...store.params,
+            search: (document.getElementById('search') as HTMLInputElement)?.value,
+        }
     })
     temp_histories.value = res.data
     for (let i = 0; i < temp_histories.value.length; i++) {

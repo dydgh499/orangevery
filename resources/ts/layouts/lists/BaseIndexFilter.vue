@@ -76,7 +76,8 @@ const useDateSelecter = computed(() => {
         head.path === 'transactions' || head.path === 'transactions/summary' || 
         head.path === 'transactions/settle/salesforces' || head.path === 'transactions/settle/merchandises' || 
         head.path === 'transactions/settle-histories/merchandises' || head.path === 'transactions/settle-histories/salesforces' ||
-        head.path === 'services/head-office-accounts' || head.path === 'services/cms-transactions'
+        head.path === 'services/head-office-accounts' || head.path === 'services/cms-transactions' ||
+        head.path === 'services/operator-historiesv2'        
     )
 })
 
