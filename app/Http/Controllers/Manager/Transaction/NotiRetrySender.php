@@ -52,11 +52,11 @@ class NotiRetrySender
             $params['cxl_dttm'] = $tran->cxl_dt." ".$tran->cxl_tm;
             $params['ori_trx_id'] = $tran->ori_trx_id;
         }
-        /*
+        
         [$timestamp, $signature] = NotiSenderBase::getSignature($tran);
         $params['timestamp'] = $timestamp;
         $params['signature'] = $signature;
-        */        
+
         $headers = [
             'Content-Type'  => 'application/json',
             'Accept' => 'application/json',

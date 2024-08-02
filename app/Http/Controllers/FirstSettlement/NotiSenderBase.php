@@ -30,17 +30,12 @@ class NotiSenderBase
     static public function getSignature($tran)
     {
         $timestamp = time();
-        if($tran['is_cancel'])
-        {
-            $mcht = self::getMcht($tran);
-            $sign_key = $mcht['sign_key'];
-        }
-        else
-            $sign_key = $tran['sign_key'];
+        $mcht = self::getMcht($tran);
+        $sign_key = $mcht['sign_key'];
 
         if($sign_key)
         {
-            $signature = hash('sha256', 'sign_key='.$sign_key.'&timestamp='.$timestamp);
+            $signature = hash('sha256', 'sign_key='.$sign_key.'&timestamp='.$timestamp."&mid=".$tran['mid']);
             return [$timestamp, $signature];
         }
         else
