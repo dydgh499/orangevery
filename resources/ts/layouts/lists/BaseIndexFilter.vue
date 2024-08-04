@@ -82,7 +82,6 @@ const useDateSelecter = computed(() => {
 })
 
 if (props.date_filter_type == DateFilters.DATE_RANGE) {
-    store.params.use_search_date_detail = Number(corp.pv_options.free.use_search_date_detail)
     enable.value = true
     format.value = { format: 'yyyy-MM-dd HH:mm:ss' }
     time_picker.value = true

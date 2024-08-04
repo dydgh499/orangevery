@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { token_expire_time } from '@axios'
+import { token_expire_time } from '@axios';
 
 
 const remaining_time = ref(<string>("00:00:00"))
@@ -44,7 +44,7 @@ onUnmounted(() => {
 });
 </script>
 <template>
-    <span style="margin-right: 1em;">
+    <span :style="$vuetify.display.smAndDown ? '' : 'margin-right: 1em;'">
         <span>세션 유지: </span>
         <span :class="getRemainTimeColor">{{ remaining_time }}</span>
     </span>
