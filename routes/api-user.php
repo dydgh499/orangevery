@@ -60,6 +60,7 @@ Route::apiResource('salesforces', SalesforceController::class);
     
 Route::prefix('merchandises')->group(function() {
     Route::post('{id}/password-change', [MerchandiseController::class, 'passwordChange']);
+    Route::post('{id}/unlock-account', [MerchandiseController::class, 'unlockAccount']);
     Route::get('chart', [MerchandiseController::class, 'chart']);
     Route::get('all', [MerchandiseController::class, 'all']);   
     Route::get('terminals', [TerminalController::class, 'index']);   
@@ -80,7 +81,7 @@ Route::prefix('merchandises')->group(function() {
         Route::prefix('batch-updaters')->group(function() {
             Route::post('mcht-fee-direct-apply', [BatchUpdateMchtController::class, 'setMchtFeeDirect']);
             Route::post('mcht-fee-book-apply', [BatchUpdateMchtController::class, 'setMchtFeeBooking']);    
-        });    
+        });
     });
 
     Route::middleware(['is.operate'])->group(function() {
@@ -105,7 +106,6 @@ Route::prefix('merchandises')->group(function() {
             Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisablePaymentController::class);
             Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
         });
-        Route::post('{id}/unlock-account', [MerchandiseController::class, 'unlockAccount']);
         Route::get('fee-change-histories', [FeeChangeHistoryController::class, 'merchandise']);       
         Route::get('sub-business-registrations', [SubBusinessRegistrationController::class, 'index']);
     
@@ -126,6 +126,7 @@ Route::prefix('merchandises')->group(function() {
                     Route::post('set-pay-disable-time', [BatchUpdatePayModuleController::class, 'setForbiddenPayTime']);
                     Route::post('set-show-pay-view', [BatchUpdatePayModuleController::class, 'setShowPayView']);
                     Route::post('set-use-realtime-deposit', [BatchUpdatePayModuleController::class, 'setUseRealtimeDeposit']);
+                    Route::post('set-fin-id', [BatchUpdatePayModuleController::class, 'setFinId']);
                     Route::post('set-payment-term-min', [BatchUpdatePayModuleController::class, 'setPaymentTermMin']);
                     Route::delete('remove', [BatchUpdatePayModuleController::class, 'batchRemove']);   
                 });

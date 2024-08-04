@@ -3,10 +3,10 @@
 <script lang="ts" setup>
 import FeeBookDialog from '@/layouts/dialogs/users/FeeBookDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { useRequestStore } from '@/views/request'
 import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
+import type { Options } from '@/views/types'
 import { banks, getOnlyNumber } from '@/views/users/useStore'
 import { axios, getIndexByLevel, getLevelByIndex, getUserLevel } from '@axios'
 import corp from '@corp'
@@ -32,7 +32,7 @@ const { sales, initAllSales } = useSalesFilterStore()
 const feeBookDialog = ref()
 
 const levels = corp.pv_options.auth.levels
-
+const show_fees = <Options[]>([{id:0, title:"숨김"}, {id:1, title:"노출"}])
 const merchandise = reactive<any>({
     custom_id: null,
     mcht_fee: 0,
@@ -200,70 +200,46 @@ watchEffect(() => {
 </script>
 <template>
     <section>
-        <VCard title="가맹점 일괄 작업">
-        <VCardText>
-            <template v-if="props.selected_sales_id === 0 && props.selected_level === 0">
-                <div style=" display: flex;align-items: center; justify-content: space-between;">
-                    <b>선택된 가맹점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
-                    <VBtn type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small">
-                        일괄삭제
-                        <VIcon size="18" icon="tabler-trash" />
-                    </VBtn>
-                </div>
-                <VDivider style="margin: 0.5em 0;" />
-            </template>
-            <div style="width: 100%;">
-                <template v-for="i in 6" :key="i">
-                    <VRow>
-                        <VCol :cols="12"
-                            v-if="levels['sales' + (6 - i) + '_use'] && getUserLevel() >= getIndexByLevel(6 - i)">
-                            <VRow no-gutters style="align-items: center;">
-                                <VCol>{{ levels['sales' + (6 - i) + '_name'] }}/수수료율</VCol>
-                                <VCol md="8">
-                                    <div class="batch-container">
-                                        <div>
-                                            <VAutocomplete :menu-props="{ maxHeight: 400 }"
-                                                v-model="merchandise['sales' + (6 - i) + '_id']" :items="sales[6 - i].value"
-                                                :label="levels['sales' + (6 - i) + '_name'] + '선택'" item-title="sales_name"
-                                                item-value="id" single-line style="width: 200px;" />
-                                            <VTooltip activator="parent" location="top"
-                                                v-if="merchandise['sales' + (6 - i) + '_id']">
-                                                {{ sales[6 - i].value.find(obj => obj.id ===
-                                                    merchandise['sales' + (6 - i) + '_id'])?.sales_name }}
-                                            </VTooltip>
-                                        </div>
-                                        <VTextField v-model="merchandise['sales' + (6 - i) + '_fee']" type="number"
-                                            suffix="%" style='margin-left: 0.5em;' />
-                                        <VBtn variant="tonal" size="small" @click="setSalesFee(6 - i)" style='margin-left: 0.5em;'>
-                                            즉시적용
-                                            <VIcon end size="18" icon="tabler-direction-sign" />
-                                        </VBtn>
-                                        <VBtn variant="tonal" size="small" color="secondary" @click="setSalesFeeBooking(6 - i)"
-                                            style='margin-left: 0.5em;'>
-                                            예약적용
-                                            <VIcon end size="18" icon="tabler-clock-up" />
-                                        </VBtn>
-                                    </div>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
+        <VCard title="가맹점 일괄 작업" style="max-height: 55em !important;overflow-y: auto !important;">
+            <VCardText>
+                <template v-if="props.selected_sales_id === 0 && props.selected_level === 0">
+                    <div style=" display: flex;align-items: center; justify-content: space-between;">
+                        <b>선택된 가맹점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
+                        <VBtn type="button" color="error" @click="batchRemove()" style="float: inline-end;" size="small">
+                            일괄삭제
+                            <VIcon size="18" icon="tabler-trash" />
+                        </VBtn>
+                    </div>
+                    <VDivider style="margin: 0.5em 0;" />
                 </template>
-                <VDivider style="margin: 1em 0;" />
-                <VRow>
-                    <VCol :cols="12">
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol>거래/유보금 수수료율</VCol>
-                            <VCol md="8">
-                                <div class="batch-container">
-                                    <VTextField v-model="merchandise.mcht_fee" type="number" suffix="%" />
-                                    <VTextField v-model="merchandise.hold_fee" type="number" suffix="%"
-                                        style="width: 200px; margin-left: 0.5em;" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setMchtFee()">
+                <div style="width: 100%;">
+                    <template v-for="i in 6" :key="i">
+                        <VRow no-gutters style="align-items: center; margin-bottom: 0.5em;" v-if="levels['sales' + (6 - i) + '_use'] && getUserLevel() >= getIndexByLevel(6 - i)">
+                            <VCol md="3" cols="12" style="padding: 0.25em;">
+                                {{ levels['sales' + (6 - i) + '_name'] }}/수수료율
+                            </VCol>
+                            <VCol md="3" cols="12" style="padding: 0.25em;">
+                                <VAutocomplete :menu-props="{ maxHeight: 400 }"
+                                    v-model="merchandise['sales' + (6 - i) + '_id']" :items="sales[6 - i].value"
+                                    :label="levels['sales' + (6 - i) + '_name'] + ' 선택'" item-title="sales_name"
+                                    item-value="id" single-line />
+                                <VTooltip activator="parent" location="top"
+                                    v-if="merchandise['sales' + (6 - i) + '_id']">
+                                    {{ sales[6 - i].value.find(obj => obj.id ===
+                                        merchandise['sales' + (6 - i) + '_id'])?.sales_name }}
+                                </VTooltip>
+                            </VCol>
+                            <VCol md="2" cols="12" style="padding: 0.25em;">
+                                <VTextField v-model="merchandise['sales' + (6 - i) + '_fee']" type="number"
+                                    suffix="%" />
+                            </VCol>
+                            <VCol md="4" cols="12" style="padding: 0.25em;">
+                                <div style="float: inline-end;">
+                                    <VBtn variant="tonal" size="small" @click="setSalesFee(6 - i)" style='margin-left: 0.5em;'>
                                         즉시적용
                                         <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
-                                    <VBtn variant="tonal" size="small" color="secondary" @click="setMchtFeeBooking()"
+                                    <VBtn variant="tonal" size="small" color="secondary" @click="setSalesFeeBooking(6 - i)"
                                         style='margin-left: 0.5em;'>
                                         예약적용
                                         <VIcon end size="18" icon="tabler-clock-up" />
@@ -271,128 +247,110 @@ watchEffect(() => {
                                 </div>
                             </VCol>
                         </VRow>
-                    </VCol>
-                </VRow>
-                <VDivider style="margin: 1em 0;" />
-                <VRow>
-                    <VCol :cols="12">
+                    </template>
+                    <VDivider style="margin: 1em 0;" />
+                    <VRow no-gutters style="align-items: center;">
+                        <VCol md="3" cols="12" style="padding: 0.25em;">
+                            거래/유보금 수수료율
+                        </VCol>
+                        <VCol md="3" cols="12" style="padding: 0.25em;">
+                            <VTextField v-model="merchandise.mcht_fee" type="number" suffix="%"/>
+                        </VCol>
+                        <VCol md="2" cols="12" style="padding: 0.25em;">
+                            <VTextField v-model="merchandise.hold_fee" type="number" suffix="%"/>
+                        </VCol>
+                        <VCol md="4" cols="12" style="padding: 0.25em;">
+                            <div style="float: inline-end;">
+                                <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setMchtFee()">
+                                    즉시적용
+                                    <VIcon end size="18" icon="tabler-direction-sign" />
+                                </VBtn>
+                                <VBtn variant="tonal" size="small" color="secondary" @click="setMchtFeeBooking()"
+                                    style='margin-left: 0.5em;'>
+                                    예약적용
+                                    <VIcon end size="18" icon="tabler-clock-up" />
+                                </VBtn>
+                            </div>
+                        </VCol>
+                    </VRow>
+                    <template v-if="corp.pv_options.paid.use_noti">
+                        <VDivider style="margin: 1em 0;" />
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>계좌 정보</VCol>
-                            <VCol md="10">
-                                <div class="batch-container" style="align-items: baseline;">
-                                    <VTextField v-model="merchandise.acct_num" prepend-inner-icon="ri-bank-card-fill"
-                                        placeholder="계좌번호 입력" persistent-placeholder 
-                                        style="margin-right: 0.5em;"/>
-                                    <VTextField v-model="merchandise.acct_name" prepend-inner-icon="tabler-user"
-                                        placeholder="예금주 입력" persistent-placeholder 
-                                        style="max-width: 11em; margin-right: 0.5em;"/>
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.bank"
-                                        :items="[{ code: null, title: '선택안함' }].concat(banks)"
-                                        prepend-inner-icon="ph-buildings" label="은행 선택"
-                                        :hint="`${merchandise.bank.title}, 은행 코드: ${merchandise.bank.code ? merchandise.bank.code : '000'} `"
-                                        item-title="title" item-value="code" persistent-hint return-object single-line
-                                        style="max-width: 11em;" />
-                                    <VBtn variant="tonal" size="small" @click="setAccountInfo()"
-                                        style="margin-bottom: auto; margin-left: 0.5em;">
+                            <VCol md="3" cols="12" style="padding: 0.25em;">
+                                <BaseQuestionTooltip :location="'top'" :text="'노티 URL 등록'"
+                                    :content="'선택한 가맹점의 모든 노티 URL이 추가됩니다.<br>(같은 노티 URL의 중복등록은 불가능합니다.)'">
+                                </BaseQuestionTooltip>
+                            </VCol>
+                            <VCol md="3" cols="12" style="padding: 0.25em;">
+                                <VTextField v-model="noti.noti_url" type="text"
+                                    placeholder="https://www.naver.com" />
+                            </VCol>
+                            <VCol md="2" cols="12" style="padding: 0.25em;">
+                                <VTextField v-model="noti.noti_note" label="메모사항"
+                                    prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" />
+                            </VCol>
+                            <VCol md="4" cols="12" style="padding: 0.25em;">
+                                <div style="float: inline-end;">
+                                    <VBtn variant="tonal" size="small" @click="setNotiUrl()" style='margin-left: 0.5em;'>
                                         즉시적용
                                         <VIcon end size="18" icon="tabler-direction-sign" />
                                     </VBtn>
                                 </div>
                             </VCol>
                         </VRow>
-                    </VCol>
-                </VRow>
-                <VDivider style="margin: 1em 0;" />
-                <VRow>
-                    <VCol :md="6" :cols="12">
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol>커스텀 필터</VCol>
-                            <VCol md="8">
-                                <div class="batch-container">
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.custom_id"
-                                        :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)" label="커스텀 필터"
-                                        item-title="name" item-value="id" single-line />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setCustomFilter()">
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                </div>
-                            </VCol>
-                        </VRow>
-                    </VCol>
-                    <VCol :md="6" :cols="12">
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol>사업자 번호</VCol>
-                            <VCol md="8">
-                                <div class="batch-container">
-                                    <VTextField v-model="merchandise.business_num" type="number" placeholder="사업자등록번호 입력"
-                                        persistent-placeholder @update:model-value="merchandise.business_num = getOnlyNumber($event)"/>
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setBusinessNum()">
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                </div>
-                            </VCol>
-                        </VRow>
-                    </VCol>
-                </VRow>
-                <VRow md="12" :cols=12>
-                    <VCol :md="6" :cols="12">
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol>수수료율 노출</VCol>
-                            <VCol md="8">
-                                <div class="batch-container">
-                                    <BooleanRadio :radio="merchandise.is_show_fee"
-                                        @update:radio="merchandise.is_show_fee = $event">
-                                        <template #true>노출</template>
-                                        <template #false>숨김</template>
-                                    </BooleanRadio>
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setIsShowFee()">
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                </div>
-                            </VCol>
-                        </VRow>
-                    </VCol>
-                    <VCol :md="6" v-if="corp.pv_options.paid.subsidiary_use_control">
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol>전산 사용상태</VCol>
-                            <VCol md="8">
-                                <div class="batch-container">
-                                    <BooleanRadio :radio="merchandise.enabled" @update:radio="merchandise.enabled = $event">
-                                        <template #true>ON</template>
-                                        <template #false>OFF</template>
-                                    </BooleanRadio>
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setEnabled()">
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                </div>
-                            </VCol>
-                        </VRow>
-                    </VCol>
-                </VRow>
-                <template v-if="corp.pv_options.paid.use_noti">
+                    </template>
+                    <VDivider style="margin: 1em 0;" />
+                    <VRow no-gutters style="align-items: center;">
+                        <VCol md="2" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">계좌 정보</VCol>
+                        <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">
+                            <VTextField v-model="merchandise.acct_num" prepend-inner-icon="ri-bank-card-fill"
+                                placeholder="계좌번호 입력" persistent-placeholder />
+                        </VCol>
+                        <VCol md="2" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">
+                            <VTextField v-model="merchandise.acct_name" prepend-inner-icon="tabler-user"
+                                placeholder="예금주 입력" persistent-placeholder />
+                        </VCol>
+                        <VCol md="3" cols="12" style="padding: 0.25em;">
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.bank"
+                                :items="[{ code: null, title: '선택안함' }].concat(banks)"
+                                prepend-inner-icon="ph-buildings" label="은행 선택"
+                                :hint="`${merchandise.bank.title}, 은행 코드: ${merchandise.bank.code ? merchandise.bank.code : '000'} `"
+                                item-title="title" item-value="code" persistent-hint return-object single-line
+                                />
+                        </VCol>
+                        <VCol md="2" cols="12" style="padding: 0.25em;margin-bottom: auto !important; margin-left: auto;">
+                            <VBtn variant="tonal" size="small" @click="setAccountInfo()">
+                                즉시적용
+                                <VIcon end size="18" icon="tabler-direction-sign" />
+                            </VBtn>
+                        </VCol>
+                    </VRow>
                     <VDivider style="margin: 1em 0;" />
                     <VRow>
-                        <VCol :cols="12">
+                        <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
-                                <VCol>
-                                    <BaseQuestionTooltip :location="'top'" :text="'노티 URL 등록'"
-                                        :content="'선택한 가맹점의 모든 노티 URL이 추가됩니다.<br>(같은 노티 URL의 중복등록은 불가능합니다.)'">
-                                    </BaseQuestionTooltip>
-                                </VCol>
-                                <VCol md="10">
+                                <VCol md="4" cols="12">커스텀 필터</VCol>
+                                <VCol md="8">
                                     <div class="batch-container">
-                                        <VTextField v-model="noti.noti_url" type="text"
-                                            placeholder="https://www.naver.com" 
-                                            style="margin-right: 0.5em;"/>
-                                        <VTextField v-model="noti.noti_note" label="메모사항"
-                                            prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" 
-                                            style="margin-right: 0.5em;"/>
-                                        <VBtn variant="tonal" size="small" @click="setNotiUrl()"
-                                            >
+                                        <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.custom_id"
+                                            :items="[{ id: null, type: 1, name: '사용안함' }].concat(cus_filters)" label="커스텀 필터"
+                                            item-title="name" item-value="id" single-line />
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setCustomFilter()">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="4" cols="12">사업자 번호</VCol>
+                                <VCol md="8">
+                                    <div class="batch-container">
+                                        <VTextField v-model="merchandise.business_num" type="number" placeholder="사업자등록번호 입력"
+                                            persistent-placeholder @update:model-value="merchandise.business_num = getOnlyNumber($event)"/>
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setBusinessNum()">
                                             즉시적용
                                             <VIcon end size="18" icon="tabler-direction-sign" />
                                         </VBtn>
@@ -401,10 +359,42 @@ watchEffect(() => {
                             </VRow>
                         </VCol>
                     </VRow>
-                </template>
-            </div>
-        </VCardText>
-    </VCard>
-    <FeeBookDialog ref="feeBookDialog"/>
+                    <VRow md="12" :cols=12>
+                        <VCol :md="6" :cols="12">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="4" cols="12">수수료율 노출</VCol>
+                                <VCol md="8">
+                                    <div class="batch-container">
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="merchandise.is_show_fee" 
+                                            :items="show_fees" item-title="title" item-value="id" single-line/>
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setIsShowFee()">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md="6" v-if="corp.pv_options.paid.subsidiary_use_control">
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="4" cols="12">전산 사용상태</VCol>
+                                <VCol md="8">
+                                    <div class="batch-container">
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="merchandise.enabled" 
+                                            :items="[{id:0, title:'OFF'}, {id:1, title:'ON'}]" item-title="title" item-value="id" 
+                                            single-line/>
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setEnabled()">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                </div>
+            </VCardText>
+        </VCard>
+        <FeeBookDialog ref="feeBookDialog"/>
     </section>
 </template>

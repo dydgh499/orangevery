@@ -70,123 +70,118 @@ const filterPgs = computed(() => {
         </VRow>
         <!-- 👉 결제 모듈 타입 -->
         <VRow v-if="isAbleModiy(props.item.id)">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>결제모듈 타입</template>
-                <template #input>
-                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.module_type"
+            <VCol md="4" style="align-items: center;">결제모듈 타입</VCol>
+            <VCol md="8">
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.module_type"
                         @update:modelValue="onModuleTypeChange" :items="module_types"
                         prepend-inner-icon="ic-outline-send-to-mobile" label="결제모듈 선택" item-title="title"
                         item-value="id" single-line :rules="[requiredValidatorV2(props.item.module_type, '결제모듈 타입')]" />
-                </template>
-            </CreateHalfVCol>
+            </VCol>
         </VRow>
         <VRow v-else>
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name><span class="font-weight-bold">결제모듈 타입</span></template>
-                <template #input>
-                    {{ module_types.find(obj => obj.id === props.item.module_type)?.title }}
-                </template>
-            </CreateHalfVCol>
+            <VCol md="4" style="align-items: center;">
+                <span class="font-weight-bold">결제모듈 타입</span>
+            </VCol>
+            <VCol md="8">
+                {{ module_types.find(obj => obj.id === props.item.module_type)?.title }}
+            </VCol>
         </VRow>
-        <!-- 👉 수기결제 타입(구인증, 비인증) -->
+        
         <VRow v-show="props.item.module_type == 1" v-if="isAbleModiy(props.item.id)">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>수기결제 타입</template>
-                <template #input>
-                    <BooleanRadio :radio="props.item.is_old_auth" @update:radio="props.item.is_old_auth = $event">
-                        <template #true>구인증</template>
-                        <template #false>비인증</template>
-                    </BooleanRadio>
-                </template>
-            </CreateHalfVCol>
+            <VCol md="4" style="align-items: center;">수기결제 타입</VCol>
+            <VCol md="8">
+                <BooleanRadio :radio="props.item.is_old_auth" @update:radio="props.item.is_old_auth = $event">
+                    <template #true>구인증</template>
+                    <template #false>비인증</template>
+                </BooleanRadio>                
+            </VCol>
         </VRow>
-        <VRow v-else>
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name><span class="font-weight-bold">수기결제 타입</span></template>
-                <template #input>
+        <template v-else>
+            <VRow v-if="props.item.module_type == 1">
+                    <VCol md="4" style="align-items: center;">
+                    <span class="font-weight-bold">수기결제 타입</span>
+                </VCol>
+                <VCol md="8">
                     {{ props.item.is_old_auth ? "구인증" : "비인증" }}
-                </template>
-            </CreateHalfVCol>
-        </VRow>
-        <!-- 👉 할부한도 (수기,인증,간편,실시간,비인증) -->
+                </VCol>
+            </VRow>
+        </template>
+
+
         <VRow v-if="isAbleModiy(props.item.id)">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>할부한도</template>
-                <template #input>
-                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.installment" :items="installments"
-                        prepend-inneer-icon="fluent-credit-card-clock-20-regular" label="할부한도 선택" item-title="title"
-                        item-value="id" single-line />
-                </template>
-            </CreateHalfVCol>
+            <VCol md="4" style="align-items: center;">할부한도</VCol>
+            <VCol md="8">
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.installment" :items="installments"
+                    prepend-inneer-icon="fluent-credit-card-clock-20-regular" label="할부한도 선택" item-title="title"
+                    item-value="id" single-line />
+            </VCol>
         </VRow>
         <VRow v-else>
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name><span class="font-weight-bold">할부한도</span></template>
-                <template #input>
-                    {{ installments.find(obj => obj.id === props.item.installment)?.title }}
-                </template>
-            </CreateHalfVCol>
+            <VCol md="4" style="align-items: center;">
+                <span class="font-weight-bold">할부한도</span>
+            </VCol>
+            <VCol md="8">
+                {{ installments.find(obj => obj.id === props.item.installment)?.title }}
+            </VCol>
         </VRow>
         <!-- 👉 PG사 -->
         <VRow v-if="isAbleModiy(props.item.id)">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>
-                    <span>PG사</span>
-                    <VBtn size="small" variant="tonal" @click="setPGKeyInfo()" style="margin-left: 0.5em;">가져오기</VBtn>
-                </template>
-                <template #input>
-                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_id" :items="pgs"
+            <VCol md="4" style="align-items: center;">
+                <span>PG사</span>
+                <VBtn size="small" variant="tonal" @click="setPGKeyInfo()" style="margin-left: 0.5em;">가져오기</VBtn>
+            </VCol>
+            <VCol md="8">
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.pg_id" :items="pgs"
                         prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_name" item-value="id"
-                        single-line :rules="[requiredValidatorV2(props.item.pg_id, 'PG사')]" />
-                </template>
-            </CreateHalfVCol>
+                        single-line :rules="[requiredValidatorV2(props.item.pg_id, 'PG사')]" />                
+            </VCol>
         </VRow>
         <!-- 👉 PG 구간 -->
         <VRow v-if="isAbleModiy(props.item.id)">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>구간</template>
-                <template #input>
-                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.ps_id" :items="filterPgs"
+            <VCol md="4" style="align-items: center;">
+                <span>구간</span>
+            </VCol>
+            <VCol md="8">
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.ps_id" :items="filterPgs"
                         prepend-inner-icon="mdi-vector-intersection" label="구간 선택" item-title="name" item-value="id"
                         :hint="`${setFee(pss, props.item.ps_id)}`" persistent-hint single-line
                         :rules="[requiredValidatorV2(props.item.ps_id, '구간')]" />
-                </template>
-            </CreateHalfVCol>
+            </VCol>
         </VRow>
         <VRow v-if="isAbleModiy(props.item.id)">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>정산일</template>
-                <template #input>
-                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type" :items="settle_types"
+            <VCol md="4" style="align-items: center;">
+                정산일
+            </VCol>
+            <VCol md="8">
+                <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_type" :items="settle_types"
                         prepend-inner-icon="ic-outline-send-to-mobile" label="정산일 선택" item-title="name" item-value="id"
                         :rules="[requiredValidatorV2(props.item.settle_type, '정산일')]" />
-                </template>
-            </CreateHalfVCol>
+            </VCol>
         </VRow>
         <VRow v-else>
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name><span class="font-weight-bold">정산일</span></template>
-                <template #input>
-                    {{ settle_types.find(obj => obj.id === props.item.settle_type)?.name }}
-                </template>
-            </CreateHalfVCol>
+            <VCol md="4" style="align-items: center;">
+                <span class="font-weight-bold">정산일</span>
+            </VCol>
+            <VCol md="8">
+                {{ settle_types.find(obj => obj.id === props.item.settle_type)?.name }}
+            </VCol>
         </VRow>
         <VRow v-if="isAbleModiy(props.item.id)">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>이체 수수료</template>
-                <template #input>
-                    <VTextField v-model="props.item.settle_fee" type="number" suffix="₩"
+            <VCol md="4" style="align-items: center;">
+                이체 수수료
+            </VCol>
+            <VCol md="8">
+                <VTextField v-model="props.item.settle_fee" type="number" suffix="₩"
                         :rules="[requiredValidatorV2(props.item.settle_fee, '이체 수수료')]" />
-                </template>
-            </CreateHalfVCol>
+            </VCol>
         </VRow>
         <VRow v-else>
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name><span class="font-weight-bold">이체 수수료</span></template>
-                <template #input>
-                    {{ props.item.settle_fee }} ₩
-                </template>
-            </CreateHalfVCol>
+            <VCol md="4" style="align-items: center;">
+                <span class="font-weight-bold">이체 수수료</span>
+            </VCol>
+            <VCol md="8">
+                {{ props.item.settle_fee }} ₩
+            </VCol>
         </VRow>
         <!-- 👉 비고 -->
         <VRow v-if="isAbleModiy(props.item.id)">

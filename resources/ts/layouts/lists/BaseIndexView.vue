@@ -27,8 +27,7 @@ onMounted(() => {
 <template>
     <section>
         <VRow>
-            <BaseIndexChart :metas="props.metas">
-            </BaseIndexChart>
+            <BaseIndexChart :metas="props.metas"/>
             <VCol>
                 <slot name="filter"></slot>
                 <br>
@@ -97,12 +96,5 @@ onMounted(() => {
 <style>
 .search-input {
   min-inline-size: 18.35rem;
-}
-
-@media (max-width: 600px) {
-  .search-date,
-  .search-input {
-    min-inline-size: 100%;
-  }
 }
 </style>

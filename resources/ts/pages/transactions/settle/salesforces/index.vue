@@ -55,19 +55,19 @@ onMounted(() => {
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                 :sales="true">
                 <template #sales_extra_field>
-                    <VCol cols="12" sm="3">
+                    <VCol cols="6" sm="3">
                         <VSelect v-model="store.params.level" :items="salesLevels()" density="compact" label="조회 등급"
                             item-title="title" item-value="id"
                             @update:modelValue="store.updateQueryString({ level: store.params.level })" />
                     </VCol>
-                    <VCol cols="12" sm="3">
+                    <VCol cols="6" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
                             :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`영업점 정산주기 필터`"
                             item-title="title" item-value="id" @update:modelValue="[store.updateQueryString({settle_cycle: store.params.settle_cycle})]" />
                     </VCol>
                 </template>
                 <template #pg_extra_field>
-                    <VCol cols="12" sm="3">
+                    <VCol cols="6" sm="3">
                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                             :items="[{ id: null, name: '전체' }].concat(settle_types)" label="가맹점 정산타입 필터" item-title="name"
                             item-value="id" @update:modelValue="[store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})]"/>

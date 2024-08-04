@@ -1,5 +1,5 @@
 import type { Danger, LockedUser, MonthlyTransChart, OperatorHistory, UpSideChart } from '@/views/types'
-import { axios, getUserLevel } from '@axios'
+import { axios, getUserLevel, user_info } from '@axios'
 import { orderBy } from 'lodash'
 
 export const useCRMStore = defineStore('CRMStore', () => {
@@ -30,6 +30,7 @@ export const useCRMStore = defineStore('CRMStore', () => {
             Object.assign(upside_merchandises.value, r2.data)
             Object.assign(upside_salesforces.value, r3.data)
             Object.assign(danger_histories.value, r4.data.content)
+
             if(getUserLevel() >= 35) {
                 const [r5, r6] = await Promise.all([
                     axios.get('/api/v1/manager/dashsboards/recent-operator-histories'),
@@ -38,6 +39,8 @@ export const useCRMStore = defineStore('CRMStore', () => {
                 Object.assign(operator_histories.value, r5.data.content)
                 Object.assign(locked_users.value, r6.data.content)    
             }
+            else if(getUserLevel() >= 13 && user_info.value.is_able_unlock_mcht)
+                Object.assign(locked_users.value, (await axios.get('/api/v1/manager/dashsboards/locked-users')).data.content)    
         }
         catch (e) {
             const r = errorHandler(e)

@@ -45,7 +45,7 @@ onMounted(() => {
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true"
                     :sales="true">
                     <template #pg_extra_field>
-                        <VCol cols="12" sm="3">
+                        <VCol cols="6" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"
                                 :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 필터" item-title="title"
                                 item-value="id"

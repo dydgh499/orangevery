@@ -5,11 +5,10 @@ import CrmPayModuleGrowth from '@/views/dashboards/crm/CrmPayModuleGrowth.vue'
 import CrmRecentDanagerTransaction from '@/views/dashboards/crm/CrmRecentDanagerTransaction.vue'
 import CrmRecentLockUser from '@/views/dashboards/crm/CrmRecentLockUser.vue'
 import CrmRevenueGrowth from '@/views/dashboards/crm/CrmRevenueGrowth.vue'
-
 import CrmRevenueYearlyGrowth from '@/views/dashboards/crm/CrmRevenueYearlyGrowth.vue'
 import CrmUserGrowth from '@/views/dashboards/crm/CrmUserGrowth.vue'
 import { useCRMStore } from '@/views/dashboards/crm/crm'
-import { getUserLevel } from '@axios'
+import { getUserLevel, user_info } from '@axios'
 
 const { upside_merchandises, upside_salesforces, monthly_transactions, getGraphData } = useCRMStore()
 const is_skeleton = ref(true)
@@ -102,13 +101,13 @@ onMounted(async() => {
             <CrmPayModuleGrowth />
         </VCol>
         <!-- 👉 Recent Transaction -->
-        <VCol cols="12" :md="getUserLevel() < 35 ? 6 : 4">
+        <VCol cols="12" :md="4">
             <CrmRecentDanagerTransaction />
         </VCol>
         <VCol cols="12" md="4" v-if="getUserLevel() >= 35">
             <CrmOperatorHistory />
         </VCol>
-        <VCol cols="12" md="4" v-if="getUserLevel() >= 35">
+        <VCol cols="12" md="4" v-if="getUserLevel() >= 35 || (getUserLevel() >= 13 && user_info.is_able_unlock_mcht)">
             <CrmRecentLockUser />
         </VCol>
     </VRow>

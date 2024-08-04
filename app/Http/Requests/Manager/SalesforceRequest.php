@@ -14,7 +14,6 @@ class SalesforceRequest extends FormRequest
         'nick_name',
         'sales_name',
         'view_type',
-        'is_able_modify_mcht',
         'level',
         'resident_num',
         'business_num',
@@ -31,7 +30,9 @@ class SalesforceRequest extends FormRequest
     ];
     public $integer_keys = [
         'sales_fee',
+        'is_able_modify_mcht',
         'is_able_under_modify',
+        'is_able_unlock_mcht',
     ];
     public $nullable_keys = [
         'parent_id'

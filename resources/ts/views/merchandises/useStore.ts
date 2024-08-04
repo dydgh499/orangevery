@@ -5,7 +5,7 @@ import { Searcher } from '@/views/searcher'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import { Merchandise, Options } from '@/views/types'
 import { avatars } from '@/views/users/useStore'
-import { getUserLevel, isAbleModiy, user_info } from '@axios'
+import { getUserLevel, user_info } from '@axios'
 import corp from '@corp'
 
 export const tax_category_types = <Options[]>([
@@ -80,7 +80,7 @@ const getMchtHeaders = () => {
     if (paid.subsidiary_use_control)
         headers['enabled'] = '전산사용여부'
 
-    if(getUserLevel() >= 35) {
+    if(getUserLevel() >= 35 || (getUserLevel() >= 13 && user_info.value.is_able_unlock_mcht)) {
         headers['is_lock'] = '계정잠김여부'
         headers['locked_at'] = '계정잠금시간'
     }
@@ -95,7 +95,7 @@ export const useSearchStore = defineStore('mchtSearchStore', () => {
     const { pgs, settle_types }   = useStore()
 
     const headers: Record<string, string> = isFixplus() ? getFixplusMchtHeader() : getMchtHeaders()
-    if (getUserLevel() >= 35 || isAbleModiy(0))
+    if(getUserLevel() >= 35 || (getUserLevel() >= 13 && user_info.value.is_able_unlock_mcht)) 
         headers['extra_col'] = '더보기'
     
     head.sub_headers.value = []

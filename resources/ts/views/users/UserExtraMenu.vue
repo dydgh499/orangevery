@@ -15,6 +15,19 @@ const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
 
+const isAbleUnlock = () => {
+    if(props.item?.is_lock) {
+        if(props.type === 0 && getUserLevel() >= 13)
+            return true
+        else if(getUserLevel() >= 35)
+            return true
+        else
+            return false
+    }
+    else
+        return false
+}
+
 const unlockAccount = async () => {
     const [name, path] = getUserTypeName(props.type)
     if (await alert.value.show(`정말 ${name}(${props.item.user_name})의 계정을 잠금해제 하시겠습니까?`)) {
@@ -42,7 +55,7 @@ const unlockAccount = async () => {
                     </template>
                     <VListItemTitle>패스워드변경</VListItemTitle>
                 </VListItem>
-                <VListItem value="unlockAccount" @click="unlockAccount()" v-if="getUserLevel() >= 35 && props.item?.is_lock">
+                <VListItem value="unlockAccount" @click="unlockAccount()" v-if="isAbleUnlock()">
                         <template #prepend>
                             <VIcon size="24" class="me-3" icon="tabler-lock" />
                         </template>

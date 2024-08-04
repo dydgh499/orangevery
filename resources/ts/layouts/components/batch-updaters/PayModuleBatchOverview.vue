@@ -2,7 +2,6 @@
 
 <script lang="ts" setup>
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { abnormal_trans_limits, installments } from '@/views/merchandises/pay-modules/useStore'
 import { useRequestStore } from '@/views/request'
 import { useStore } from '@/views/services/pay-gateways/useStore'
@@ -20,6 +19,8 @@ const emits = defineEmits(['update:select_idxs'])
 const alert = <any>(inject('alert'))
 const snackbar = <any>(inject('snackbar'))
 const errorHandler = <any>(inject('$errorHandler'))
+const is_realtime_deposit_use = [{id:0, title:'미사용'}, {id:1, title:'사용'}]
+const is_payview_open = [{id:0, title:'숨김'}, {id:1, title:'노출'}]
 
 const { request } = useRequestStore()
 const { pgs, pss, settle_types, terminals, finance_vans, psFilter, setFee } = useStore()
@@ -42,6 +43,7 @@ const pay_module = reactive<any>({
     pay_year_limit: 0,
     payment_term_min: 1,
 
+    fin_id: null,
     use_realtime_deposit: 0,
     show_pay_view: 0,
     note: '',
@@ -126,6 +128,13 @@ const setUseRealtimeDeposit = () => {
         'use_realtime_deposit': pay_module.use_realtime_deposit,
     })
 }
+
+const setFinId = () => {
+    post('set-fin-id', {
+        'fin_id': pay_module.fin_id,
+    })
+}
+
 const setMid = () => {
     post('set-mid', {
         'mid': pay_module.pay_mid,
@@ -185,7 +194,7 @@ const filterPgs = computed(() => {
 
 </script>
 <template>
-    <VCard title="결제모듈 일괄 작업">
+    <VCard title="결제모듈 일괄 작업" style="max-height: 55em !important;overflow-y: auto !important;">
         <VCardText>
             <template v-if="props.selected_sales_id === 0 && props.selected_level === 0">
                 <div style="display: flex; align-items: center; justify-content: space-between;">
@@ -198,37 +207,37 @@ const filterPgs = computed(() => {
                 <VDivider style="margin: 0.5em 0;" />
             </template>
             <div style="width: 100%;">
-                <VRow class="pt-3">
-                    <VCol :cols="12">
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol>PG사/구간</VCol>
-                            <VCol md="8">
-                                <div class="batch-container" style="justify-content: end !important;">
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.pg_id" :items="pgs"
-                                        prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_name" item-value="id"
-                                        single-line style="max-width: 200px; margin-right: 0.5em;" />
-                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.ps_id" :items="filterPgs"
-                                        prepend-inner-icon="mdi-vector-intersection" label="구간 선택" item-title="name"
-                                        item-value="id" :hint="`${setFee(pss, pay_module.ps_id)}`" persistent-hint
-                                        single-line style="max-width: 200px;" />
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setPaymentGateway()">
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                </div>
-                            </VCol>
-                        </VRow>
+                <VRow no-gutters style="align-items: center;" class="pt-3">
+                    <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">PG사/구간</VCol>
+                    <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">
+                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.pg_id" :items="pgs"
+                                prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_name" item-value="id"
+                                single-line />
+                    </VCol>
+                    <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">
+                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.ps_id" :items="filterPgs"
+                                prepend-inner-icon="mdi-vector-intersection" label="구간 선택" item-title="name"
+                                item-value="id" :hint="`${setFee(pss, pay_module.ps_id)}`" persistent-hint
+                                single-line />
+                    </VCol>
+                    <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">
+                        <div style="float: inline-end;">
+                            <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setPaymentGateway()">
+                                즉시적용
+                                <VIcon end size="18" icon="tabler-direction-sign" />
+                            </VBtn>
+                        </div>
                     </VCol>
                 </VRow>
                 <VDivider style="margin: 1em 0;" />
                 <VRow>
                     <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>이상거래 한도</VCol>
+                            <VCol md="4" cols="12">이상거래 한도</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VSelect v-model="pay_module.abnormal_trans_limit" :items="abnormal_trans_limits"
-                                        prepend-inner-icon="jam-triangle-danger" label="이상거래 한도설정" item-title="title"
+                                        prepend-inner-icon="jam-triangle-danger" item-title="title"
                                         item-value="id" />
                                     <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setAbnormalTransLimit()">
                                         즉시적용
@@ -240,7 +249,7 @@ const filterPgs = computed(() => {
                     </VCol>
                     <VCol :md=6>
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>중복거래 하한금</VCol>
+                            <VCol md="4" cols="12">중복거래 하한금</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField type="number" v-model="pay_module.pay_dupe_least"
@@ -257,10 +266,10 @@ const filterPgs = computed(() => {
                 <VRow>
                     <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>동일카드 결제허용 회수</VCol>
+                            <VCol md="4" cols="12">동일카드 결제허용 회수</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
-                                    <VTextField v-model="pay_module.pay_dupe_limit" label="동일카드 결제허용 회수" type="number"
+                                    <VTextField v-model="pay_module.pay_dupe_limit" type="number"
                                         suffix="회 허용" />
                                     <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setDupPayCountValidation()">
                                         즉시적용
@@ -272,14 +281,12 @@ const filterPgs = computed(() => {
                     </VCol>
                     <VCol :md=6>
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>결제창 노출여부</VCol>
+                            <VCol md="4" cols="12">결제창 노출여부</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
-                                    <BooleanRadio :radio="pay_module.show_pay_view"
-                                        @update:radio="pay_module.show_pay_view = $event">
-                                        <template #true>노출</template>
-                                        <template #false>숨김</template>
-                                    </BooleanRadio>
+                                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.show_pay_view"
+                                        :items="is_payview_open" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                        item-title="title" item-value="id" single-line />
                                     <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setShowPayView()">
                                         즉시적용
                                         <VIcon end size="18" icon="tabler-direction-sign" />
@@ -293,7 +300,7 @@ const filterPgs = computed(() => {
                 <VRow>
                     <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_pay_limit">
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>단건 결제 한도</VCol>
+                            <VCol md="4" cols="12">단건 결제 한도</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField prepend-inner-icon="tabler-currency-won"
@@ -308,7 +315,7 @@ const filterPgs = computed(() => {
                     </VCol>
                     <VCol :md=6>
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>일 결제 한도</VCol>
+                            <VCol md="4" cols="12">일 결제 한도</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_day_limit"
@@ -325,7 +332,7 @@ const filterPgs = computed(() => {
                 <VRow>
                     <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_pay_limit">
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>월 결제 한도</VCol>
+                            <VCol md="4" cols="12">월 결제 한도</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField prepend-inner-icon="tabler-currency-won"
@@ -340,7 +347,7 @@ const filterPgs = computed(() => {
                     </VCol>
                     <VCol :md=6>
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>연 결제 한도</VCol>
+                            <VCol md="4" cols="12">연 결제 한도</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField prepend-inner-icon="tabler-currency-won" v-model="pay_module.pay_year_limit"
@@ -358,7 +365,7 @@ const filterPgs = computed(() => {
                 <VRow>
                     <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>MID</VCol>
+                            <VCol md="4" cols="12">MID</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField v-model="pay_module.pay_mid" label="MID" type="text" />
@@ -372,7 +379,7 @@ const filterPgs = computed(() => {
                     </VCol>
                     <VCol :md=6>
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>TID</VCol>
+                            <VCol md="4" cols="12">TID</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField v-model="pay_module.pay_tid" label="TID" type="text" />
@@ -388,7 +395,7 @@ const filterPgs = computed(() => {
                 <VRow>
                     <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>API KEY(license)</VCol>
+                            <VCol md="4" cols="12">API KEY(license)</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField v-model="pay_module.api_key" label="API KEY" type="text" />
@@ -402,7 +409,7 @@ const filterPgs = computed(() => {
                     </VCol>
                     <VCol :md=6>
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>SUB KEY(iv)</VCol>
+                            <VCol md="4" cols="12">SUB KEY(iv)</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField v-model="pay_module.sub_key" label="SUB KEY" type="text" />
@@ -418,7 +425,7 @@ const filterPgs = computed(() => {
                 <VRow>
                     <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>할부개월</VCol>
+                            <VCol md="4" cols="12">할부개월</VCol>
                             <VCol md="8">
                                 <div class="batch-container">                                    
                                     <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.installment"
@@ -434,7 +441,7 @@ const filterPgs = computed(() => {
                     </VCol>
                     <VCol :md="6" :cols="12">
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>결제모듈 별칭</VCol>
+                            <VCol md="4" cols="12">결제모듈 별칭</VCol>
                             <VCol md="8">
                                 <div class="batch-container">
                                     <VTextField v-model="pay_module.note" placeholder='결제모듈 명칭을 적어주세요.😀'
@@ -449,48 +456,10 @@ const filterPgs = computed(() => {
                     </VCol>
                 </VRow>
                 <VRow>
-                    <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_realtime_deposit">
+                    <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_forb_pay_time">
                         <VRow no-gutters style="align-items: center;">
-                            <VCol>실시간 사용여부</VCol>
+                            <VCol md="4" cols="12">결제금지 시간</VCol>
                             <VCol md="8">
-                                <div class="batch-container">
-                                    <BooleanRadio :radio="pay_module.use_realtime_deposit"
-                                        @update:radio="pay_module.use_realtime_deposit = $event">
-                                        <template #true>사용</template>
-                                        <template #false>미사용</template>
-                                    </BooleanRadio>
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setUseRealtimeDeposit()">
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                </div>
-                            </VCol>
-                        </VRow>
-                    </VCol>
-                    <VCol :md="6" :cols="12">
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol>
-                                <BaseQuestionTooltip :location="'top'" :text="'결제 허용 간격'" :content="'중복결제 방지를 위해 결제 텀을 설정합니다.<br>동일 결제모듈+금액+카드번호 조건일 시 동작합니다.'">
-                                </BaseQuestionTooltip>
-                            </VCol>
-                            <VCol md="8">
-                                <div class="batch-container">
-                                    <VTextField prepend-inner-icon="material-symbols:shutter-speed-minus" v-model="pay_module.payment_term_min"
-                                        type="number" suffix="분"/>
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setPaymentTermMin()">
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                </div>
-                            </VCol>
-                        </VRow>
-                    </VCol>
-                </VRow>
-                <VRow>
-                    <VCol :md="12" :cols="12" v-if="corp.pv_options.paid.use_forb_pay_time">
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol md="2">결제금지 시간</VCol>
-                            <VCol md="6">
                                 <div class="batch-container">
                                     <VTextField v-model="pay_module.pay_disable_s_tm" type="time" style="margin-right: 0.1em;"/>
                                     <span class="text-center mx-auto">~</span>
@@ -503,7 +472,62 @@ const filterPgs = computed(() => {
                             </VCol>
                         </VRow>
                     </VCol>
+                    <VCol :md="6" :cols="12">
+                        <VRow no-gutters style="align-items: center;">
+                            <VCol md="5" cols="12">
+                                <BaseQuestionTooltip :location="'top'" :text="'결제 허용 간격'" :content="'중복결제 방지를 위해 결제 텀을 설정합니다.<br>동일 결제모듈+금액+카드번호 조건일 시 동작합니다.'">
+                                </BaseQuestionTooltip>
+                            </VCol>
+                            <VCol md="7">
+                                <div class="batch-container">
+                                    <VTextField prepend-inner-icon="material-symbols:shutter-speed-minus" v-model="pay_module.payment_term_min"
+                                        type="number" suffix="분"/>
+                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setPaymentTermMin()">
+                                        즉시적용
+                                        <VIcon end size="18" icon="tabler-direction-sign" />
+                                    </VBtn>
+                                </div>
+                            </VCol>
+                        </VRow>
+                    </VCol>
                 </VRow>
+                <template v-if="corp.pv_options.paid.use_realtime_deposit">
+                    <VDivider style="margin: 1em 0;" />
+                    <VRow>
+                        <VCol :md="6" :cols="12" >
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="4" cols="12">실시간 사용여부</VCol>
+                                <VCol md="8">
+                                    <div class="batch-container">
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.use_realtime_deposit"
+                                            :items="is_realtime_deposit_use" prepend-inneer-icon="fluent-credit-card-clock-20-regular"
+                                            item-title="title" item-value="id" single-line />
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setUseRealtimeDeposit()">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol :md="6" :cols="12" >
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="4" cols="12">이체 모듈 타입</VCol>
+                                <VCol md="8">
+                                    <div class="batch-container">
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.fin_id" :items="finance_vans"
+                                            prepend-inner-icon="streamline-emojis:ant" label="모듈 타입 선택" item-title="nick_name"
+                                            item-value="id" single-line />
+                                        <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setFinId()">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                    </div>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                </template>
             </div>
         </VCardText>
     </VCard>

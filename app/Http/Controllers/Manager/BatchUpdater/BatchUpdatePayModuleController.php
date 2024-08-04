@@ -212,6 +212,18 @@ class BatchUpdatePayModuleController extends Controller
     }
 
     /**
+     * 결제모듈 이체 모듈 타입 일괄적용
+     *
+     */
+    public function setFinId(Request $request)
+    {
+        $cols = ['fin_id' => $request->fin_id];
+        $row = $this->payModuleBatch($request)->update($cols);
+        return $this->response(1);
+    }
+    
+
+    /**
      * 결제모듈 허용간격 일괄적용
      * 
      */

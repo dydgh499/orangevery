@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
-import { useSearchStore } from '@/views/transactions/settle/part/useSalesforceStore'
-import { useRequestStore } from '@/views/request'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import { selectFunctionCollect } from '@/views/selected'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
+import { useRequestStore } from '@/views/request'
+import { selectFunctionCollect } from '@/views/selected'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import { useSearchStore } from '@/views/transactions/settle/part/useSalesforceStore'
 import { getUserLevel } from '@axios'
-import { cloneDeep } from 'lodash'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
+import { cloneDeep } from 'lodash'
 
 const route = useRoute()
 const { store, head, exporter, metas } = useSearchStore()
@@ -145,7 +145,7 @@ onMounted(() => {
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">
                     <template #pg_extra_field>
-                        <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
+                        <VCol cols="6" sm="3" v-if="getUserLevel() >= 35">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
                                 item-value="id" @update:modelValue="[store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})]"/>

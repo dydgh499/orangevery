@@ -20,7 +20,7 @@ import { getUserLevel, salesLevels, user_info } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
-const { store, head, exporter, metas, realtimeMessage, mchtGroup } = useSearchStore()
+const { store, head, exporter, metas, realtimeMessage } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
 const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
 
@@ -106,20 +106,20 @@ onMounted(() => {
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">
                     <template #sales_extra_field>
-                        <VCol cols="12" sm="3">
+                        <VCol cols="6" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.level" :items="getAllLevels()"
                                 :label="`등급 선택`" item-title="title" item-value="id"
                                 @update:modelValue="store.updateQueryString({ level: store.params.level })" />
                         </VCol>
                     </template>
                     <template #pg_extra_field>
-                        <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
+                        <VCol cols="6" sm="3" v-if="getUserLevel() >= 35">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
                                 item-value="id"
                                 @update:modelValue="store.updateQueryString({ mcht_settle_type: store.params.mcht_settle_type })" />                                
                         </VCol>
-                        <VCol cols="12" sm="3">
+                        <VCol cols="6" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"
                                 :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 필터" item-title="title"
                                 item-value="id"
@@ -129,9 +129,6 @@ onMounted(() => {
                 </BaseIndexFilterCard>
             </template>
             <template #index_extra_field>
-                <VBtn prepend-icon="tabler-calculator" @click="mchtGroup()" size="small">
-                    가맹점별 매출집계
-                </VBtn>
                 <VBtn prepend-icon="carbon:batch-job" @click="transactionBatchDialog.show()" v-if="getUserLevel() >= 35" color="primary" size="small">
                     일괄 작업
                 </VBtn>

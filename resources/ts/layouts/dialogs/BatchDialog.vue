@@ -21,7 +21,7 @@ defineExpose({
 });
 </script>
 <template>
-    <VDialog v-model="visible" persistent style="max-width: 1000px;">
+    <VDialog v-model="visible" persistent style="max-width: 900px;">
         <DialogCloseBtn @click="visible = !visible" />
         <MchtBatchOverview :selected_idxs="props.selected_idxs" :selected_sales_id="0" :selected_level="0" v-if="props.item_type === ItemTypes.Merchandise"
             @update:select_idxs="emits('update:select_idxs', $event)"/>
@@ -31,3 +31,8 @@ defineExpose({
             @update:select_idxs="emits('update:select_idxs', $event)"/>
     </VDialog>
 </template>
+<style scoped>
+:deep(.v-input--density-compact) {
+  --v-input-control-height: 30px !important;
+}
+</style>

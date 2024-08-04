@@ -53,14 +53,14 @@ onMounted(() => {
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                     :sales="true">
                     <template #sales_extra_field>
-                        <VCol cols="12" sm="3">
+                        <VCol cols="6" sm="3">
                             <VSelect v-model="store.params.level" :items="[<Options>({ id: null, title: '전체' })].concat(salesLevels())" density="compact" label="조회 등급"
                                 item-title="title" item-value="id"
                                 @update:modelValue="store.updateQueryString({ level: store.params.level })" />
                         </VCol>
                     </template>
                     <template #pg_extra_field>
-                        <VCol cols="12" sm="3">
+                        <VCol cols="6" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.deposit_status"
                                 :items="deposit_statuses" label="입금 타입" item-title="title" item-value="id"
                                 @update:modelValue="[store.updateQueryString({ deposit_status: store.params.deposit_status })]" />

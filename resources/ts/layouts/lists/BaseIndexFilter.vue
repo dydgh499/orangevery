@@ -94,75 +94,154 @@ else if (props.date_filter_type == DateFilters.SETTLE_RANGE) {
 }
 init(store)
 queryToStoreParams()
-
 </script>
 <template>
-    <div class="d-inline-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
-        <VCol cols="12">
-            <VCardText>
-                <VRow>
-                    <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">
-                        <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">
-                            <template
-                                v-if="props.date_filter_type == DateFilters.DATE_RANGE || props.date_filter_type == DateFilters.SETTLE_RANGE">
-                                <template v-if="corp.pv_options.free.use_search_date_detail">
-                                    <div class="d-inline-flex">
-                                        <VueDatePicker v-model="range_date" :enable-seconds="enable" :text-input="format"
-                                            locale="ko" :format-locale="ko" range multi-calendars :dark="theme === 'dark'"
-                                            autocomplete="on" utc :format="getRangeFormat" :teleport="true"
-                                            input-class-name="search-input" select-text="Search"
-                                            :enable-time-picker="time_picker"
-                                            @update:modelValue="[dateChanged(store)]" />
-                                    </div>
-                                </template>
-                                <template v-else>
-                                    <VTextField type="date" v-model="range_date[0]"
-                                        prepend-inner-icon="ic-baseline-calendar-today" label="시작일 입력" single-line
-                                        @update:modelValue="[dateChanged(store)]" />
-                                    <VTextField type="date" v-model="range_date[1]"
-                                        prepend-inner-icon="ic-baseline-calendar-today" label="종료일 입력" single-line
-                                        @update:modelValue="[dateChanged(store)]" />
-                                </template>
-                            </template>
-                            <template v-else-if="props.date_filter_type == DateFilters.DATE">
-                                <VueDatePicker v-model="date" :text-input="{ format: 'yyyy-MM-dd' }" locale="ko"
-                                    :format-locale="ko" :dark="theme === 'dark'" autocomplete="on" utc :format="formatDate"
-                                    :teleport="true" @update:modelValue="[dateChanged(store)]" />
-                            </template>
-                            <template v-if="useDateSelecter">
-                                <VSelect v-model="date_selecter" :items="[{ id: null, title: '기간 조회' }].concat(dates)"
-                                    density="compact" variant="outlined" item-title="title" item-value="id" label="기간 조회" single-line
-                                    style="min-width: 10em;" @update:modelValue="[setDateRange(), dateChanged(store)]"
-                                     />
-                            </template>
-                        </div>
-                        <div class="d-inline-flex align-center flex-wrap gap-4 float-right justify-center">
-                            <VTextField id="search" :placeholder="props.placeholder" density="compact" v-model="search"
-                                @keyup="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input">
-                                <VTooltip activator="parent" location="top">
-                                    {{ props.placeholder }}
-                                </VTooltip>
-                            </VTextField>
-                            <VBtn prepend-icon="tabler:search"  size="small"
-                                @click="store.setTable(); store.updateQueryString({ search: search })">
-                                검색
-                            </VBtn>
-                            <VBtn variant="tonal" color="secondary" prepend-icon="tabler-filter"  size="small"
-                                @click="head.filter.show()">
-                                검색 필터
-                            </VBtn>
-                            <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel"  size="small"
-                                @click="exporter(1)">
-                                엑셀 추출
-                            </VBtn>
-                            <VBtn prepend-icon="tabler-plus" @click="store.edit(0)" v-if="props.add"  size="small">
-                                {{ props.add_name }} 추가
-                            </VBtn>
-                            <slot name="index_extra_field"></slot>
-                        </div>
-                    </div>
+    <VCol cols="12">
+        <VCardText style="padding: 12px;">
+            <template v-if="$vuetify.display.smAndDown">
+                <VRow 
+                    v-if="props.date_filter_type == DateFilters.DATE_RANGE || props.date_filter_type == DateFilters.SETTLE_RANGE"
+                    style="align-items: center; justify-content: space-around;"
+                    class="compact-density">
+                    <VCol :cols="12">
+                        <VueDatePicker 
+                            v-if="corp.pv_options.free.use_search_date_detail"
+                            v-model="range_date" :enable-seconds="enable" :text-input="format"
+                            locale="ko" :format-locale="ko" range multi-calendars :dark="theme === 'dark'"
+                            autocomplete="on" utc :format="getRangeFormat" :teleport="true"
+                            select-text="Search"
+                            :enable-time-picker="time_picker"
+                            @update:modelValue="[dateChanged(store)]" />
+                        <template v-else>
+                            <div style="display: flex;">
+                                <VTextField type="date" v-model="range_date[0]"
+                                    label="시작일 입력"
+                                    @update:modelValue="[dateChanged(store)]"
+                                    style="margin-right: 0.25em;"/>
+                                <VTextField type="date" v-model="range_date[1]"
+                                    label="종료일 입력"
+                                    @update:modelValue="[dateChanged(store)]" 
+                                    style="margin-left: 0.25em;"/>
+                            </div>
+                        </template>
+                    </VCol>
+                    <VCol cols="12" v-if="useDateSelecter" >
+                        <VSelect 
+                            v-model="date_selecter" :items="[{ id: null, title: '기간 조회' }].concat(dates)"
+                            density="compact" variant="outlined" item-title="title" item-value="id" label="기간 조회"
+                            @update:modelValue="[setDateRange(), dateChanged(store)]"
+                            />
+                    </VCol>
                 </VRow>
-            </VCardText>
-        </VCol>
-    </div>
+                <VRow v-else-if="props.date_filter_type == DateFilters.DATE">
+                    <VCol cols="6">
+                        <VueDatePicker v-model="date" :text-input="{ format: 'yyyy-MM-dd' }" locale="ko"
+                            :format-locale="ko" :dark="theme === 'dark'" autocomplete="on" utc :format="formatDate"
+                            :teleport="true" @update:modelValue="[dateChanged(store)]" />
+                    </VCol>
+                </VRow>
+                <VRow style="align-items: center; justify-content: space-around;">
+                    <VCol cols="12" style="display: flex;">
+                        <VTextField id="search" :placeholder="props.placeholder" density="compact" v-model="search"
+                            @keyup="handleEnterKey">
+                            <VTooltip activator="parent" location="top">
+                                {{ props.placeholder }}
+                            </VTooltip>
+                        </VTextField>
+                        <VBtn prepend-icon="tabler:search"  size="small" style="height: 40px;margin-left: 0.5em;"
+                            @click="store.setTable(); store.updateQueryString({ search: search })">
+                            검색
+                        </VBtn>
+                    </VCol>
+                </VRow>
+                <VRow style="align-items: center; justify-content: space-around;">
+                    <VCol cols="12" style="display: flex;">
+                        <VBtn variant="tonal" color="secondary" prepend-icon="tabler-filter" 
+                            :style="'margin: 0.25em;'" size="small"
+                            @click="head.filter.show()">
+                            검색 필터
+                        </VBtn>
+                        <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel" 
+                            :style="'margin: 0.25em;'" size="small"
+                            @click="exporter(1)">
+                            엑셀 추출
+                        </VBtn>
+                        <VBtn prepend-icon="tabler-plus" @click="store.edit(0)" v-if="props.add" 
+                            :style="'margin: 0.25em;'" size="small">
+                            {{ props.add_name }} 추가
+                        </VBtn>
+                    </VCol>
+                </VRow>
+                <VRow style="align-items: center; justify-content: space-around;">
+                    <slot name="index_extra_field"></slot>                                
+                </VRow>
+            </template>
+            <template v-else>
+                <div class="d-inline-flex justify-space-between flex-wrap flex-md-nowrap flex-column flex-md-row">
+                    <VRow>
+                        <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">
+                            <div class="d-inline-flex align-center flex-wrap gap-4 float-left justify-center">
+                                <template
+                                    v-if="props.date_filter_type == DateFilters.DATE_RANGE || props.date_filter_type == DateFilters.SETTLE_RANGE">
+                                    <template v-if="corp.pv_options.free.use_search_date_detail">
+                                        <div class="d-inline-flex">
+                                            <VueDatePicker v-model="range_date" :enable-seconds="enable" :text-input="format"
+                                                locale="ko" :format-locale="ko" range multi-calendars :dark="theme === 'dark'"
+                                                autocomplete="on" utc :format="getRangeFormat" :teleport="true"
+                                                input-class-name="search-input" select-text="Search"
+                                                :enable-time-picker="time_picker"
+                                                @update:modelValue="[dateChanged(store)]" />
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <VTextField type="date" v-model="range_date[0]"
+                                            prepend-inner-icon="ic-baseline-calendar-today" label="시작일 입력" single-line
+                                            @update:modelValue="[dateChanged(store)]" />
+                                        <VTextField type="date" v-model="range_date[1]"
+                                            prepend-inner-icon="ic-baseline-calendar-today" label="종료일 입력" single-line
+                                            @update:modelValue="[dateChanged(store)]" />
+                                    </template>
+                                </template>
+                                <template v-else-if="props.date_filter_type == DateFilters.DATE">
+                                    <VueDatePicker v-model="date" :text-input="{ format: 'yyyy-MM-dd' }" locale="ko"
+                                        :format-locale="ko" :dark="theme === 'dark'" autocomplete="on" utc :format="formatDate"
+                                        :teleport="true" @update:modelValue="[dateChanged(store)]" />
+                                </template>
+                                <template v-if="useDateSelecter">
+                                    <VSelect v-model="date_selecter" :items="[{ id: null, title: '기간 조회' }].concat(dates)"
+                                        density="compact" variant="outlined" item-title="title" item-value="id" label="기간 조회" single-line
+                                        style="min-width: 10em;" @update:modelValue="[setDateRange(), dateChanged(store)]"
+                                        />
+                                </template>
+                            </div>
+                            <div class="d-inline-flex align-center flex-wrap gap-4 float-right justify-center">
+                                <VTextField id="search" :placeholder="props.placeholder" density="compact" v-model="search"
+                                    @keyup="handleEnterKey" prepend-inner-icon="tabler:search" class="search-input">
+                                    <VTooltip activator="parent" location="top">
+                                        {{ props.placeholder }}
+                                    </VTooltip>
+                                </VTextField>
+                                <VBtn prepend-icon="tabler:search"  size="small"
+                                    @click="store.setTable(); store.updateQueryString({ search: search })">
+                                    검색
+                                </VBtn>
+                                <VBtn variant="tonal" color="secondary" prepend-icon="tabler-filter"  size="small"
+                                    @click="head.filter.show()">
+                                    검색 필터
+                                </VBtn>
+                                <VBtn variant="tonal" color="secondary" prepend-icon="vscode-icons:file-type-excel"  size="small"
+                                    @click="exporter(1)">
+                                    엑셀 추출
+                                </VBtn>
+                                <VBtn prepend-icon="tabler-plus" @click="store.edit(0)" v-if="props.add"  size="small">
+                                    {{ props.add_name }} 추가
+                                </VBtn>
+                                <slot name="index_extra_field"></slot>
+                            </div>
+                        </div>
+                    </VRow>
+                </div>
+            </template>
+        </VCardText>
+    </VCol>
 </template>

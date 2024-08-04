@@ -37,7 +37,7 @@ store.params.sales_parent_structure = 1
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                     :sales="false">
                     <template #sales_extra_field>
-                        <VCol cols="12" sm="3">
+                        <VCol cols="6" sm="3">
                             <VSelect v-model="store.params.level" :items="sales_levels" density="compact" label="조회 등급"
                                 item-title="title" item-value="id"
                                 @update:modelValue="store.updateQueryString({ level: store.params.level })" />

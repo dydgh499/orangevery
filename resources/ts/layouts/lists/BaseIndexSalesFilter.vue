@@ -26,7 +26,7 @@ if (corp.pv_options.free.init_search_filter)
 <template>
     <VRow>
         <template v-for="i in 6" :key="i">
-            <VCol :cols="12" :lg="3" :sm="3"
+            <VCol cols="6" sm="3"
                 v-if="levels[`sales${(6 - i)}_use`] && props.show && getUserLevel() > getIndexByLevel(6 - i)">
                 <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params[`sales${(6 - i)}_id`]"
                     :items="sales[6 - i].value" :label="levels[`sales${(6 - i)}_name`] + ' 필터'" item-title="sales_name"

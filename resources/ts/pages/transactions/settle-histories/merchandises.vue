@@ -49,7 +49,7 @@ onMounted(() => {
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="true"
                     :sales="true">
                     <template #pg_extra_field>
-                        <VCol cols="12" sm="3">
+                        <VCol cols="6" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.deposit_status" :items="deposit_statuses"
                                 label="입금 타입" item-title="title" item-value="id"
                                 @update:modelValue="[store.updateQueryString({ deposit_status: store.params.deposit_status })]" />

@@ -39,7 +39,7 @@ const getLevelByChipColor = (level: number) => {
         <VCardText style="height: 531px !important;">
                 <VTimeline side="end" align="start" truncate-line="both" density="compact" class="v-timeline-density-compact" style="overflow: auto !important;">
                     <template v-if="is_skeleton">
-                        <VTimelineItem v-for="(operator_history, _index) in 5" :key="_index" size="x-small" >
+                        <VTimelineItem v-for="(item, _index) in 5" :key="_index" size="x-small" >
                             <!-- 👉 Header -->
                         <div class="d-flex justify-space-between">
                             <h6 class="text-base font-weight-semibold me-3" style="display: flex; align-items: center;">

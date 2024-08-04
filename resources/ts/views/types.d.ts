@@ -174,6 +174,7 @@ export interface Salesforce extends SalesforcePropertie, UserPropertie {
     sales_fee?: number,
     mcht_batch_fee?: number,
     is_able_modify_mcht: number,
+    is_able_unlock_mcht: number,
     is_able_under_modify: number,
     under_auto_settings?: UnderAutoSetting[],
     childs?: Salesforce[],

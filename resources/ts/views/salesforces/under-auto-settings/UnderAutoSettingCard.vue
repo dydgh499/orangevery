@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
+import { useRequestStore } from '@/views/request'
 import UnderAutoSettingTr from '@/views/salesforces/under-auto-settings/UnderAutoSettingTr.vue'
 import type { Salesforce, UnderAutoSetting } from '@/views/types'
-import { useRequestStore } from '@/views/request'
 
 interface Props {
     item: Salesforce,
@@ -15,7 +15,7 @@ const addNewUnderAutoSetting = () => {
         id: 0,
         sales_id: props.item.id,
         sales_fee: 0,
-        note: "D+1",
+        note: "D+1(영세)",
     })
     under_auto_settings.push(under_auto_setting)
 }

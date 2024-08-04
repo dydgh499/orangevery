@@ -194,9 +194,8 @@ class BrandController extends Controller
             $res = $query->update($data);
             if($res)
             {
-                $b_info = json_encode($query->with(['beforeBrandInfos'])->first());
-                Redis::set($brand->dns, $b_info, 'EX', 600);    
-                Redis::set("brand-info-$id", $b_info, 'EX', 600);
+                Redis::set($brand->dns, null, 'EX', 1);    
+                Redis::set("brand-info-$id", null, 'EX', 1);
             }
             return $this->response($res ? 1 : 990, ['id'=>$id]);    
         }

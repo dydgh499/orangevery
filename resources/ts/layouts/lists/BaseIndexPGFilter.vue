@@ -33,32 +33,32 @@ if(corp.pv_options.free.init_search_filter) {
 </script>
 <template>
     <VRow>
-        <VCol cols="12" sm="3" v-if="props.pg && user_info.level > 30">
+        <VCol cols="6" sm="3" v-if="props.pg && user_info.level > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.pg_id" :items="[{ id: null, pg_name: '전체' }].concat(pgs)"
                 label="PG사 선택" item-title="pg_name" item-value="id" @update:modelValue="[store.updateQueryString({pg_id: store.params.pg_id})]"/>
         </VCol>
-        <VCol cols="12" sm="3" v-if="props.ps && user_info.level > 30">
+        <VCol cols="6" sm="3" v-if="props.ps && user_info.level > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.ps_id"
                 :items="[{ id: null, name: '전체' }].concat(filterPgs)" label="구간 필터" item-title="name" item-value="id"
                id="ps-filter" eager @update:modelValue="store.updateQueryString({ps_id: store.params.ps_id})"  />
         </VCol>
-        <VCol cols="12" sm="3" v-if="props.settle_type">
+        <VCol cols="6" sm="3" v-if="props.settle_type">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_type"
                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산일 필터" item-title="name" item-value="id"
                id="settle_types-filter" eager @update:modelValue="store.updateQueryString({settle_type: store.params.settle_type})" />
         </VCol>
-        <VCol cols="12" sm="3" v-if="props.terminal">
+        <VCol cols="6" sm="3" v-if="props.terminal">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.terminal_id"
                 :items="[{ id: null, name: '전체' }].concat(terminals)" label="장비 필터" item-title="name" item-value="id"
                id="terminal-filter" eager @update:modelValue="store.updateQueryString({terminal_id: store.params.terminal_id})"  />
         </VCol>
-        <VCol cols="12" sm="3" v-if="props.cus_filter && user_info.level > 30">
+        <VCol cols="6" sm="3" v-if="props.cus_filter && user_info.level > 30">
             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.custom_id"
                 :items="[{ id: null, name: '전체' }].concat(cus_filters)" label="커스텀 필터" item-title="name" item-value="id"
                id="custom-filter" eager @update:modelValue="store.updateQueryString({custom_id: store.params.custom_id})" />
         </VCol>
         <slot name="pg_extra_field"></slot>
-        <VCol cols="12" sm="3">
+        <VCol cols="6" sm="3">
             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.page_size" density="compact" variant="outlined"
                 :items="[10, 20, 30, 50, 100, 200]" label="표시 개수" id="page-size-filter" eager @update:modelValue="store.updateQueryString({page_size: store.params.page_size})" />
         </VCol>

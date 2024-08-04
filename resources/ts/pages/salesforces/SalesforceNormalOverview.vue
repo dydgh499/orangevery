@@ -51,12 +51,12 @@ onMounted(() => {
                 <BaseIndexFilterCard :pg="false" :ps="false" :settle_type="false" :terminal="false" :cus_filter="false"
                     :sales="true">
                     <template #sales_extra_field>
-                        <VCol cols="12" sm="3">
+                        <VCol cols="6" sm="3">
                             <VSelect v-model="store.params.level" :items="[<Options>({ id: null, title: '전체' })].concat(salesLevels())" density="compact" label="조회 등급"
                                 item-title="title" item-value="id"
                                 @update:modelValue="store.updateQueryString({ level: store.params.level })" />
                         </VCol>
-                        <VCol cols="12" sm="3" v-if="true">
+                        <VCol cols="6" sm="3" v-if="true">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.settle_cycle"
                                 :items="[{ id: null, title: '전체' }].concat(settleCycles())" :label="`영업점 정산주기 선택`"
                                 item-title="title" item-value="id" @update:modelValue="store.updateQueryString({settle_cycle: store.params.settle_cycle})"/>

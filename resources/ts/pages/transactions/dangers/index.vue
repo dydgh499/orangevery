@@ -44,7 +44,7 @@ const batchCheck = async () => {
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                 :sales="true">
                 <template #pg_extra_field>
-                    <VCol cols="12" sm="3">
+                    <VCol cols="6" sm="3">
                         <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                             :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
                             item-value="id" @update:modelValue="store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})"/>

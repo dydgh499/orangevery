@@ -72,7 +72,8 @@ const getSalesHeaders = () => {
     headers['is_2fa_use'] = '2FA 사용'
     headers['created_at'] = '생성시간'
     headers['updated_at'] = '업데이트시간'
-    headers['extra_col'] = '더보기'
+    if(getUserLevel() >= 35) 
+        headers['extra_col'] = '더보기'
    return headers
 }
 
@@ -426,6 +427,7 @@ export const defaultItemInfo = () => {
         view_type: 0,
         is_able_modify_mcht: 0,
         is_able_under_modify: 0,
+        is_able_unlock_mcht: 0,
         note: '',
         resident_num_front: '',
         resident_num_back: ''

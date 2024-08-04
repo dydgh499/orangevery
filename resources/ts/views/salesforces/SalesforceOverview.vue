@@ -8,7 +8,6 @@ import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderA
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import type { Options, Salesforce } from '@/views/types'
 
-import { useSalesFilterStore } from '@/views/salesforces/useStore'
 import { getUserLevel, isAbleModiy, salesLevels } from '@axios'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
@@ -18,7 +17,6 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const { sales } = useSalesFilterStore()
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
@@ -76,9 +74,28 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                         <VCol md="8"><span>{{ props.item.sales_name }}</span></VCol>
                                     </VRow>
                                 </VCol>
+
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
+                                        <VCol>
+                                            <BaseQuestionTooltip :location="'top'" :text="'등급'" :content="'영업자 등급은 추가 후 수정할 수 없습니다.'">
+                                            </BaseQuestionTooltip>
+                                        </VCol>
+                                        <VCol md="8">                                             
+                                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
+                                                :items="getSalesLevel()" prepend-inner-icon="ph:share-network" label="영업자 등급 선택"
+                                                item-title="title" item-value="id" persistent-hint single-line :rules="[requiredValidatorV2(props.item.level, '영업자 등급')]"
+                                                :readonly="props.item.id != 0" />
+                                        </VCol>
+                                    </VRow>
+                                    <VRow v-else>
+                                        <VCol class="font-weight-bold">등급</VCol>
+                                        <VCol md="8"><span>{{ salesLevels().find(obj => obj.id === props.item.level).title }}</span></VCol>
+                                    </VRow>
+                                </VCol>
                             </VRow>
                         </VCol>
-                        <VCol cols="12" v-if="corp.id !== 30">
+                        <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
@@ -113,19 +130,13 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                         </VCol>
                         <VCol cols="12">
                             <VRow>
-                                <VCol cols="12" md="6"  v-if="corp.id !== 30">
+                                <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
                                         <VCol>정산 세율</VCol>
                                         <VCol md="8">
-                                            <VRadioGroup v-model="props.item.settle_tax_type" inline :rules="[requiredValidatorV2(props.item.settle_tax_type, '정산 세율')]">
-                                                <VRadio v-for="(tax_type, key, index) in tax_types" :value="tax_type.id" :key="index">
-                                                    <template #label>
-                                                        <span>
-                                                            {{ tax_type.title }}
-                                                        </span>
-                                                    </template>
-                                                </VRadio>
-                                            </VRadioGroup>
+                                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_tax_type" :items="tax_types"
+                                                prepend-inner-icon="tabler:tax" label="정산 세율 선택" item-title="title" 
+                                                item-value="id" persistent-hint single-line :rules="[requiredValidatorV2(props.item.settle_tax_type, '정산 세율')]"/>
                                         </VCol>
                                     </VRow>
                                     <VRow v-else>
@@ -133,30 +144,8 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                         <VCol md="8"><span>{{ tax_types.find(obj => obj.id === props.item.settle_tax_type).title }}</span></VCol>
                                     </VRow>
                                 </VCol>
-                                <VCol cols="12" md="6">
-                                    <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>
-                                            <BaseQuestionTooltip :location="'top'" :text="'등급'" :content="'영업자 등급은 수정할 수 없습니다.'">
-                                            </BaseQuestionTooltip>
-                                        </VCol>
-                                        <VCol md="8">                                             
-                                            <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.level"
-                                                :items="getSalesLevel()" prepend-inner-icon="ph:share-network" label="영업자 등급 선택"
-                                                item-title="title" item-value="id" persistent-hint single-line :rules="[requiredValidatorV2(props.item.level, '영업자 등급')]"
-                                                :readonly="props.item.id != 0" @update:model-value="initParentSales()"/>
-                                        </VCol>
-                                    </VRow>
-                                    <VRow v-else>
-                                        <VCol class="font-weight-bold">등급</VCol>
-                                        <VCol md="8"><span>{{ salesLevels().find(obj => obj.id === props.item.level).title }}</span></VCol>
-                                    </VRow>
-                                </VCol>
-                            </VRow>
-                        </VCol>
-
-                        <VCol cols="12" v-if="getUserLevel() >= 35">
-                            <VRow>
-                                <VCol cols="12" md="6" v-if="corp.id !== 30">
+                                
+                                <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
                                     <VRow no-gutters style="align-items: center;">
                                         <VCol>화면 타입</VCol>
                                         <VCol md="8">
@@ -165,6 +154,25 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                         <template #true>상세보기</template>
                                         <template #false>간편보기</template>
                                     </BooleanRadio>
+                                        </VCol>
+                                    </VRow>
+                                </VCol>
+                            </VRow>
+                        </VCol>
+                        <VCol cols="12" v-if="getUserLevel() >= 35">
+                            <VRow>
+                                <VCol cols="12" md="6">
+                                    <VRow no-gutters style="align-items: center;">
+                                        <VCol>
+                                            <BaseQuestionTooltip :location="'top'" :text="'하위 가맹점 언락권한'" 
+                                                :content="'하위 가맹점의 계정잠금해제, 패스워드변경 권한을 부여합니다.<br>하위 모든 가맹점의 패스워드, LOCK 상태를 제어할 수 있으므로 설정 시 해당 영업점은 2FA 설정을 권장합니다.'"/>
+                                        </VCol>
+                                        <VCol md="6">                                            
+                                            <BooleanRadio :radio="props.item.is_able_unlock_mcht"
+                                                @update:radio="props.item.is_able_unlock_mcht = $event">
+                                                <template #true>가능</template>
+                                                <template #false>불가능</template>
+                                            </BooleanRadio>
                                         </VCol>
                                     </VRow>
                                 </VCol>
@@ -182,7 +190,6 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                 </VCol>
                             </VRow>
                         </VCol>
-
                         <VCol v-if="isAbleModiy(props.item.id)">
                             <VTextarea v-model="props.item.note" counter label="메모사항"
                                 prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" auto-grow />

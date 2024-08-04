@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useSearchStore } from '@/views/merchandises/noti-send-histories/useStore'
-import { useRequestStore } from '@/views/request'
-import { selectFunctionCollect } from '@/views/selected'
+import NotiDetailDialog from '@/layouts/dialogs/histories/NotiDetailDialog.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import ExtraMenu from '@/views/merchandises/noti-send-histories/ExtraMenu.vue'
-import NotiDetailDialog from '@/layouts/dialogs/histories/NotiDetailDialog.vue'
+import { useSearchStore } from '@/views/merchandises/noti-send-histories/useStore'
 import { module_types } from '@/views/merchandises/pay-modules/useStore'
-import { DateFilters } from '@core/enums'
+import { useRequestStore } from '@/views/request'
+import { selectFunctionCollect } from '@/views/selected'
 import { getUserLevel } from '@axios'
+import { DateFilters } from '@core/enums'
 
 const { store, head, exporter } = useSearchStore()
 const { selected, all_selected } = selectFunctionCollect(store)
@@ -62,7 +62,7 @@ const getResponseBody = (body: string) => {
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="false" :cus_filter="true"
                     :sales="true">
                     <template #pg_extra_field>
-                        <VCol cols="12" sm="3">
+                        <VCol cols="6" sm="3">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.module_type"
                                 :items="[{ id: null, title: '전체' }].concat(module_types)" label="모듈타입 필터" item-title="title"
                                 item-value="id" @update:modelValue="store.updateQueryString({module_type: store.params.module_type})" />

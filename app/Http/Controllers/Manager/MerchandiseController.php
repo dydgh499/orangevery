@@ -410,7 +410,7 @@ class MerchandiseController extends Controller
      */
     public function passwordChange(Request $request, int $id)
     {
-        if(Ablilty::isMyMerchandise($request, $id) || Ablilty::isOperator($request) || Ablilty::isSalesforce($request))
+        if(Ablilty::isMyMerchandise($request, $id) || Ablilty::isOperator($request) || (Ablilty::isUnderMerchandise($request, $id) && $request->user()->is_able_unlock_mcht))
         {
             $is_me = Ablilty::isMyMerchandise($request, $id) ? true : false;
             return $this->_passwordChange($this->merchandises->where('id', $id), $request, $is_me);
@@ -424,7 +424,7 @@ class MerchandiseController extends Controller
      */
     public function unlockAccount(Request $request, int $id)
     {
-        if(Ablilty::isOperator($request))
+        if(Ablilty::isOperator($request) || (Ablilty::isUnderMerchandise($request, $id) && $request->user()->is_able_unlock_mcht))
             return $this->_unlockAccount($this->merchandises->where('id', $id));
         else
             return $this->response(951);

@@ -25,7 +25,7 @@ const all_levels = allLevels()
             <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="true" :terminal="true" :cus_filter="true" :sales="true"
                 v-if="getUserLevel() > 10">
                 <template #pg_extra_field>
-                    <VCol cols="12" sm="3">
+                    <VCol cols="6" sm="3">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="store.params.ship_out_stat"
                             :items="[{ id: null, title: '전체' }].concat(ship_out_stats)" label="출고타입 필터" item-title="title"
                             item-value="id" @update:modelValue="store.updateQueryString({ship_out_stat: store.params.ship_out_stat})" />

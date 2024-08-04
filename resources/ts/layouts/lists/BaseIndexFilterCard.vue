@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import BaseIndexSalesFilter from '@/layouts/lists/BaseIndexSalesFilter.vue'
-import BaseIndexPGFilter from '@/layouts/lists/BaseIndexPGFilter.vue'
+import BaseIndexPGFilter from '@/layouts/lists/BaseIndexPGFilter.vue';
+import BaseIndexSalesFilter from '@/layouts/lists/BaseIndexSalesFilter.vue';
 
 interface Props {
     pg: boolean,

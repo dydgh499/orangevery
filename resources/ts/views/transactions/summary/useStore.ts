@@ -1,6 +1,9 @@
+import router from '@/router';
 import { Header } from '@/views/headers';
+import { useRequestStore } from '@/views/request';
 import { Searcher } from '@/views/searcher';
 import { getUserLevel, user_info } from '@axios';
+import * as XLSX from 'xlsx';
 
 
 export const useSearchStore = defineStore('transGroupSearchStore', () => {    
@@ -21,6 +24,7 @@ export const useSearchStore = defineStore('transGroupSearchStore', () => {
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
+    const { get } = useRequestStore()
     
     const metas = ref([
         {
@@ -59,6 +63,71 @@ export const useSearchStore = defineStore('transGroupSearchStore', () => {
         })
     }
 
+
+    const mchtGroup = async() => {        
+        const url = '/api/v1/manager/transactions/merchandises/groups'
+        const r = await get(url, {params: router.currentRoute.value.query})
+        const datas = []
+        datas.push([
+            'NO.',
+            '가맹점 상호',
+            '주민등록번호',
+            '사업자등록번호',
+            '대표자명',
+            '주소',
+            '업종',
+            '결제건수',
+            '승인금액',
+            '승인건수',
+            '취소금액',
+            '취소건수',
+            '거래금액',
+            '거래 수수료',
+            '거래 수수료 공급가액',
+            '거래 수수료 세액',
+            '정산금액',
+            '커스텀 필터',
+        ])
+        for (let i = 0; i < r.data.length; i++) 
+        {
+            r.data[i]['cxl_amount'] = Number(r.data[i]['cxl_amount'])
+            r.data[i]['appr_amount'] = Number(r.data[i]['appr_amount'])
+            r.data[i]['profit'] = Number(r.data[i]['profit'])
+            r.data[i]['count'] = Number(r.data[i]['appr_count']) + Number(r.data[i]['cxl_count'])
+            r.data[i]['total_amount'] = r.data[i]['appr_amount'] + r.data[i]['cxl_amount']
+            r.data[i]['trx_amount'] = r.data[i]['total_amount'] - r.data[i]['profit']
+            r.data[i]['trx_supply_amount'] = Math.round(r.data[i]['trx_amount']/1.1)
+            r.data[i]['trx_tax_amount'] = r.data[i]['trx_amount'] - r.data[i]['trx_supply_amount']
+            
+            datas.push([
+                r.data[i]['id'],
+                r.data[i]['mcht_name'],
+                r.data[i]['resident_num'],
+                r.data[i]['business_num'],
+                r.data[i]['nick_name'],
+                r.data[i]['addr'],
+                r.data[i]['sector'],
+                r.data[i]['count'],
+                r.data[i]['appr_amount'],
+                r.data[i]['appr_count'],
+                r.data[i]['cxl_amount'],
+                r.data[i]['cxl_count'],
+                r.data[i]['total_amount'],
+                r.data[i]['trx_amount'],
+                r.data[i]['trx_supply_amount'],
+                r.data[i]['trx_tax_amount'],
+                r.data[i]['profit'],
+                cus_filters.find(cus => cus.id === r.data[i]['custom_id'])?.name,
+            ])
+        }
+
+        const date = new Date().toISOString().split('T')[0];
+        const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(datas)
+        const wb = XLSX.utils.book_new()
+        XLSX.utils.book_append_sheet(wb, ws, "가맹점별 매출집계")
+        XLSX.writeFile(wb, "가맹점별 매출집계_" + date + ".xlsx")
+    }
+
     const exporter = async (type: number) => {      
         const r = await store.get(store.base_url, { params:store.getAllDataFormat()})
         printer(type, r.data.content)
@@ -81,5 +150,6 @@ export const useSearchStore = defineStore('transGroupSearchStore', () => {
         exporter,
         metas,
         printer,
+        mchtGroup,
     }
 })

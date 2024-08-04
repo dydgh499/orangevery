@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { module_types, installments } from '@/views/merchandises/pay-modules/useStore'
-import { useSearchStore, getDifferenceSettleMenual } from '@/views/transactions/settle-histories/useDifferenceStore'
-import { useStore } from '@/views/services/pay-gateways/useStore'
-import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import BaseIndexFilterCard from '@/layouts/lists/BaseIndexFilterCard.vue'
-import type { DifferentSettlementInfo } from '@/views/types';
-import { getUserLevel, axios } from '@axios'
+import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
+import { installments, module_types } from '@/views/merchandises/pay-modules/useStore'
+import { useStore } from '@/views/services/pay-gateways/useStore'
+import { getDifferenceSettleMenual, useSearchStore } from '@/views/transactions/settle-histories/useDifferenceStore'
+import type { DifferentSettlementInfo } from '@/views/types'
+import { axios, getUserLevel } from '@axios'
 import { DateFilters } from '@core/enums'
 import corp from '@corp'
 
@@ -58,7 +58,7 @@ onMounted(async() => {
                 <BaseIndexFilterCard :pg="true" :ps="true" :settle_type="false" :terminal="true" :cus_filter="true"
                     :sales="true">
                     <template #pg_extra_field>
-                        <VCol cols="12" sm="3" v-if="getUserLevel() >= 35">
+                        <VCol cols="6" sm="3" v-if="getUserLevel() >= 35">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="store.params.mcht_settle_type"
                                 :items="[{ id: null, name: '전체' }].concat(settle_types)" label="정산타입 필터" item-title="name"
                                 item-value="id"  @update:modelValue="[store.updateQueryString({mcht_settle_type: store.params.mcht_settle_type})]"/>

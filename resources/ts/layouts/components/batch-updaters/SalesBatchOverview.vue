@@ -1,7 +1,6 @@
 
 
 <script lang="ts" setup>
-import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
 import { useRequestStore } from '@/views/request'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import { Salesforce } from '@/views/types'
@@ -18,6 +17,9 @@ const emits = defineEmits(['update:select_idxs'])
 const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
+const is_ables = [{id:0, title:'불가능'}, {id:1, title:'가능'}]
+const view_types = [{id:0, title:'간편보기'}, {id:1, title:'상세보'}]
+
 const { request } = useRequestStore()
 
 const alert = <any>(inject('alert'))
@@ -117,7 +119,7 @@ const batchRemove = async () => {
 
 </script>
 <template>
-        <VCard title="영업점 일괄 작업">
+        <VCard title="영업점 일괄 작업" style="max-height: 55em !important;overflow-y: auto !important;">
             <VCardText>
                 <div style="display: flex; align-items: center; justify-content: space-between;">
                     <b>선택된 영업점 : {{ props.selected_idxs.length.toLocaleString() }}개</b>
@@ -131,7 +133,7 @@ const batchRemove = async () => {
                     <VRow>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
-                                <VCol>정산세율</VCol>
+                                <VCol md="3" cols="12">정산세율</VCol>
                                 <VCol md="9">
                                     <div class="batch-container">
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="salesforces.settle_tax_type"
@@ -148,7 +150,7 @@ const batchRemove = async () => {
                         </VCol>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
-                                <VCol>메모</VCol>
+                                <VCol md="3" cols="12">메모</VCol>
                                 <VCol md="9">
                                     <div class="batch-container">
                                         <VTextField v-model="salesforces.note" label="메모사항"
@@ -166,7 +168,7 @@ const batchRemove = async () => {
                     <VRow>
                         <VCol :md="6">
                             <VRow no-gutters style="align-items: center;">
-                                <VCol>정산주기</VCol>
+                                <VCol md="3" cols="12">정산주기</VCol>
                                 <VCol md="9">
                                     <div class="batch-container">
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="salesforces.settle_cycle"
@@ -184,7 +186,7 @@ const batchRemove = async () => {
                         </VCol>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
-                                <VCol>정산요일</VCol>
+                                <VCol md="3" cols="12">정산요일</VCol>
                                 <VCol md="9">
                                     <div class="batch-container">
                                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="salesforces.settle_day"
@@ -204,14 +206,11 @@ const batchRemove = async () => {
                     <VRow>
                         <VCol :md="6" :cols="12">
                             <VRow no-gutters style="align-items: center;">
-                                <VCol>하위 가맹점 수정</VCol>
+                                <VCol md="4" cols="12">하위 가맹점 수정</VCol>
                                 <VCol md="8">
-                                    <div class="batch-container">
-                                        <BooleanRadio :radio="salesforces.is_able_modify_mcht"
-                                            @update:radio="salesforces.is_able_modify_mcht = $event">
-                                            <template #true>가능</template>
-                                            <template #false>불가능</template>
-                                        </BooleanRadio>
+                                    <div class="batch-container">                                        
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="salesforces.is_able_modify_mcht" 
+                                            :items="is_ables" item-title="title" item-value="id" single-line/>
                                         <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setIsAbleModifyMcht()">
                                             즉시적용
                                             <VIcon end size="18" icon="tabler-direction-sign" />
@@ -221,15 +220,12 @@ const batchRemove = async () => {
                             </VRow>
                         </VCol>
                         <VCol :md="6">
-                            <VRow no-gutter style="align-items: center;">
-                                <VCol>화면 타입</VCol>
+                            <VRow no-gutters style="align-items: center;">
+                                <VCol md="3" cols="12">화면 타입</VCol>
                                 <VCol md="9" style="padding-left: 0;">
                                     <div class="batch-container">
-                                        <BooleanRadio :radio="salesforces.view_type"
-                                            @update:radio="salesforces.view_type = $event">
-                                            <template #true>상세보기</template>
-                                            <template #false>간편보기</template>
-                                        </BooleanRadio>
+                                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="salesforces.view_type" 
+                                            :items="view_types" item-title="title" item-value="id" single-line/>
                                         <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setViewType()">
                                             즉시적용
                                             <VIcon end size="18" icon="tabler-direction-sign" />
@@ -240,33 +236,30 @@ const batchRemove = async () => {
                         </VCol>
                     </VRow>
                     <VDivider style="margin: 1em 0;" />
-                    <VRow>
-                    <VCol :cols="12">
-                        <VRow no-gutters style="align-items: center;">
-                            <VCol>계좌 정보</VCol>
-                            <VCol md="10">
-                                <div class="batch-container" style="align-items: baseline;">
-                                    <VTextField v-model="salesforces.acct_num" prepend-inner-icon="ri-bank-card-fill"
-                                        placeholder="계좌번호 입력" persistent-placeholder 
-                                        style="margin-right: 0.5em;"/>
-                                    <VTextField v-model="salesforces.acct_name" prepend-inner-icon="tabler-user"
-                                        placeholder="예금주 입력" persistent-placeholder 
-                                        style="max-width: 11em; margin-right: 0.5em;"/>
-                                    <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforces.bank"
-                                        :items="[{ code: null, title: '선택안함' }].concat(banks)"
-                                        prepend-inner-icon="ph-buildings" label="은행 선택"
-                                        :hint="`${salesforces.bank.title}, 은행 코드: ${salesforces.bank.code ? salesforces.bank.code : '000'} `"
-                                        item-title="title" item-value="code" persistent-hint return-object single-line
-                                        style="max-width: 11em;" />
-                                    <VBtn variant="tonal" size="small" @click="setAccountInfo()"
-                                        style="margin-bottom: auto; margin-left: 0.5em;">
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                </div>
-                            </VCol>
-                        </VRow>
-                    </VCol>
+                    <VRow no-gutters style="align-items: center;">
+                        <VCol md="2" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">계좌 정보</VCol>
+                        <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">
+                            <VTextField v-model="salesforces.acct_num" prepend-inner-icon="ri-bank-card-fill"
+                                placeholder="계좌번호 입력" persistent-placeholder />
+                        </VCol>
+                        <VCol md="2" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">
+                            <VTextField v-model="salesforces.acct_name" prepend-inner-icon="tabler-user"
+                                placeholder="예금주 입력" persistent-placeholder />
+                        </VCol>
+                        <VCol md="3" cols="12" style="padding: 0.25em;">
+                            <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="salesforces.bank"
+                                :items="[{ code: null, title: '선택안함' }].concat(banks)"
+                                prepend-inner-icon="ph-buildings" label="은행 선택"
+                                :hint="`${salesforces.bank.title}, 은행 코드: ${salesforces.bank.code ? salesforces.bank.code : '000'} `"
+                                item-title="title" item-value="code" persistent-hint return-object single-line
+                                />
+                        </VCol>
+                        <VCol md="2" cols="12" style="padding: 0.25em;margin-bottom: auto !important;margin-left: auto;">
+                            <VBtn variant="tonal" size="small" @click="setAccountInfo()">
+                                즉시적용
+                                <VIcon end size="18" icon="tabler-direction-sign" />
+                            </VBtn>
+                        </VCol>
                     </VRow>
                 </div>
             </VCardText>
