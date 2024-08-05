@@ -209,7 +209,7 @@ queryToStoreParams()
                                 <template v-if="useDateSelecter">
                                     <VSelect v-model="date_selecter" :items="[{ id: null, title: '기간 조회' }].concat(dates)"
                                         density="compact" variant="outlined" item-title="title" item-value="id" label="기간 조회" single-line
-                                        style="min-width: 10em;" @update:modelValue="[setDateRange(), dateChanged(store)]"
+                                        @update:modelValue="[setDateRange(), dateChanged(store)]"
                                         />
                                 </template>
                             </div>

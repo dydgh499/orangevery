@@ -2,6 +2,7 @@ import router from '@/router';
 import { Header } from '@/views/headers';
 import { useRequestStore } from '@/views/request';
 import { Searcher } from '@/views/searcher';
+import { useStore } from '@/views/services/pay-gateways/useStore';
 import { getUserLevel, user_info } from '@axios';
 import * as XLSX from 'xlsx';
 
@@ -24,6 +25,7 @@ export const useSearchStore = defineStore('transGroupSearchStore', () => {
     head.sub_headers.value = []
     head.headers.value = head.initHeader(headers, {})
     head.flat_headers.value = head.flatten(head.headers.value)
+    const { pgs, pss, settle_types, terminals, cus_filters } = useStore()
     const { get } = useRequestStore()
     
     const metas = ref([
