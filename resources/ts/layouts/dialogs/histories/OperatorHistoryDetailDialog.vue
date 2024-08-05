@@ -34,6 +34,8 @@ const changeKeyName = (history_detail: any) => {
     const keys = [
         'sales0_id','sales1_id','sales2_id','sales3_id','sales4_id','sales5_id',    
         'sales0_fee','sales1_fee','sales2_fee','sales3_fee','sales4_fee','sales5_fee',
+        'sales0_settle_amount','sales1_settle_amount','sales2_settle_amount',
+        'sales3_settle_amount','sales4_settle_amount','sales5_settle_amount',
     ]
     keys.forEach((key) => {
         if("validation.attributes." + key in history_detail) {
@@ -42,6 +44,9 @@ const changeKeyName = (history_detail: any) => {
             if(key.includes('fee')) {
                 key_name += ' 수수료';
                 history_detail['validation.attributes.'+key] *= 100
+            }
+            else if(key.includes('_settle_amount')) {
+                key_name += ' 정산금';
             }
             history_detail[key_name] =  history_detail['validation.attributes.'+key]
             delete history_detail['validation.attributes.'+key]
@@ -76,7 +81,7 @@ const replaceIdtoName = (history_detail: any) => {
 
 const show = async (item: any) => {
     history_info.value = item
-    const res = await get(`/api/v1/manager/services/operator-historiesv2/${item.oper_id}/detail`, {
+    const res = await get(`/api/v1/manager/services/operator-histories/${item.oper_id}/detail`, {
         params: {
             ...store.params,
             search: (document.getElementById('search') as HTMLInputElement)?.value,

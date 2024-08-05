@@ -8,6 +8,7 @@ use App\Http\Controllers\Manager\Merchandise\PaymentModuleController;
 use App\Http\Controllers\Manager\Merchandise\RegularCreditCardController;
 use App\Http\Controllers\Manager\Merchandise\NotiUrlController;
 use App\Http\Controllers\Manager\Merchandise\SpecifiedTimeDisablePaymentController;
+use App\Http\Controllers\Manager\Merchandise\ProductController;
 
 use App\Http\Controllers\Manager\SalesforceController;
 use App\Http\Controllers\Manager\Salesforce\UnderAutoSettingController;
@@ -103,6 +104,7 @@ Route::prefix('merchandises')->group(function() {
             Route::post('regular-credit-cards/bulk-register', [RegularCreditCardController::class, 'bulkRegister']);
             Route::post('noti-urls/bulk-register', [NotiUrlController::class, 'bulkRegister']);
     
+            Route::apiResource('products', ProductController::class);
             Route::apiResource('specified-time-disable-payments', SpecifiedTimeDisablePaymentController::class);
             Route::delete('fee-change-histories/{id}', [FeeChangeHistoryController::class, 'deleteMerchandise']);
         });

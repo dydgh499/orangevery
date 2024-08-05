@@ -27,7 +27,6 @@ use App\Http\Controllers\Manager\PostController;
 use App\Http\Controllers\Manager\PopupController;
 use App\Http\Controllers\Manager\ComplaintController;
 use App\Http\Controllers\Log\OperatorHistoryContoller;
-use App\Http\Controllers\Log\OperatorHistoryContollerV2;
 
 Route::get('services/pay-gateways/detail', [PaymentGatewayController::class, 'detail']);
 Route::get('popups/currently', [PopupController::class, 'currently']);
@@ -63,9 +62,8 @@ Route::middleware(['is.operate', 'last.login.ip'])->group(function() {
         Route::apiResource('brands', BrandController::class);
     
         Route::apiResource('operators', OperatorController::class);            
-        Route::apiResource('operator-histories', OperatorHistoryContoller::class);
-        Route::get('operator-historiesv2', [OperatorHistoryContollerV2::class, 'index']);
-        Route::get('operator-historiesv2/{id}/detail', [OperatorHistoryContollerV2::class, 'detail']);
+        Route::get('operator-histories', [OperatorHistoryContoller::class, 'index']);
+        Route::get('operator-histories/{id}/detail', [OperatorHistoryContoller::class, 'detail']); 
         
         Route::apiResource('pay-gateways', PaymentGatewayController::class);
         Route::apiResource('pay-sections', PaymentSectionController::class);

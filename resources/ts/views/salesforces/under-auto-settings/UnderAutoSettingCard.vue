@@ -24,7 +24,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VCardTitle style="margin: 1em 0;">
+    <VCardTitle style="margin-bottom: 1em;">
         <BaseQuestionTooltip :location="'top'" :text="'하위 수수료율 자동세팅'" :content="'가맹점 수수료율 세팅시 해당정보가 자동반영됩니다.'">
         </BaseQuestionTooltip>
     </VCardTitle>

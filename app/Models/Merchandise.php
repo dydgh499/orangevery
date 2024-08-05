@@ -12,6 +12,8 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Models\Merchandise\PaymentModule;
 use App\Models\Transaction;
 use App\Models\CollectWithdraw;
+
+use App\Models\Merchandise\Product;
 use App\Models\Merchandise\RegularCreditCard;
 use App\Models\Merchandise\SpecifiedTimeDisablePayment;
 
@@ -43,6 +45,10 @@ class Merchandise extends Authenticatable
         return $this->hasMany(SpecifiedTimeDisablePayment::class, 'mcht_id');
     }
 
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'mcht_id');
+    }
     
     public function noSettles()
     {

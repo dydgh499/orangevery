@@ -8,6 +8,7 @@ use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 use App\Http\Requests\Manager\IndexRequest;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\Options\PvOptions;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -28,24 +29,16 @@ class OperatorHistoryContoller extends Controller
         $this->operator_histories = $operator_histories;
     }
     
-    /**
-     * 목록출력
-     *
-     */
-    public function index(IndexRequest $request)
+    private function commonSelect($request)
     {
         $search = $request->input('search', '');
-        $cols = [
-            'operators.nick_name',
-            'operator_histories.*',
-        ];
         $query  = $this->operator_histories
             ->join('operators', 'operator_histories.oper_id', '=', 'operators.id')
             ->where('operator_histories.brand_id', $request->user()->brand_id);
             
         if($request->history_type !== null)
             $query = $query->where('operator_histories.history_type', $request->history_type);
-        if($search != '')
+        if($search !== '')
         {
             $query = $query->where(function ($query) use ($search) {
                 return $query->where('operators.nick_name', 'like', "%$search%")
@@ -53,10 +46,79 @@ class OperatorHistoryContoller extends Controller
                     ->orWhere('operator_histories.after_history_detail', 'like', "%$search%");
             });
         }
+        if($request->has('s_dt'))
+        {
+            $s_dt = strlen($request->s_dt) === 10 ? date($request->s_dt." 00:00:00") : $request->s_dt;
+            $query = $query->where('operator_histories.created_at', '>=', $s_dt);
+        }
+        if($request->has('e_dt'))
+        {
+            $e_dt = strlen($request->e_dt) === 10 ? date($request->e_dt." 23:59:59") : $request->e_dt;
+            $query = $query->where('operator_histories.created_at', '<=', $e_dt);
+        }
+        return $query;
+    }
+    /**
+     * 목록출력
+     *
+     */
+    public function index(IndexRequest $request)
+    {
+        $page      = $request->input('page');
+        $page_size = $request->input('page_size');
+        $sp = ($page - 1) * $page_size;
 
-        $data = $this->getIndexData($request, $query, 'operator_histories.id', $this->operator_histories->cols, 'operator_histories.created_at');
+        $cols = [
+            'operator_histories.oper_id',
+            'operators.nick_name',
+            'operators.profile_img',
+            DB::raw("SUM(history_type = 0) AS add_count"),
+            DB::raw("SUM(history_type = 1) AS modify_count"),
+            DB::raw("SUM(history_type = 3) AS remove_count"),
+            DB::raw("SUM(history_type = 4) AS login_count"),
+            DB::raw("SUM(history_type = 5) AS book_change_count"),
+            DB::raw("SUM(history_type = 6) AS book_remove_count"),
+            DB::raw("SUM(history_type = 7) AS history_remove_count"),
+            DB::raw("MIN(operator_histories.created_at) AS activity_s_at"),
+            DB::raw("MAX(operator_histories.created_at) AS activity_e_at"),
+            DB::raw("GROUP_CONCAT(DISTINCT CASE WHEN history_target != '' THEN history_target END ORDER BY history_target SEPARATOR ',') AS history_target")
+        ];
+
+        $query = $this->commonSelect($request)->groupBy('operator_histories.oper_id');
+        // 총 레코드 수를 구할 때, select를 최소화하여 count만 가져옵니다.
+        $total = (clone $query)->get('operator_histories.oper_id')->count();
+        // 페이지네이션을 위한 쿼리
+        $content = $query
+                    ->orderBy(DB::raw("MAX(operator_histories.created_at)"), 'desc')
+                    ->offset($sp)
+                    ->limit($page_size)
+                    ->get($cols);
+        $data = [
+            'total' => $total,
+            'content' => $content,
+        ];
         return $this->response(0, $data);
     }
+
+    public function detail(Request $request, $id)
+    {
+        $content = $this->commonSelect($request)
+            ->join('brands', 'operator_histories.brand_id', '=', 'brands.id')
+            ->where('operator_histories.oper_id', $id)
+            ->get([
+                'operator_histories.*', 'operators.nick_name', 
+                'brands.pv_options', 'brands.use_different_settlement'
+            ]);
+
+        foreach($content as $data)
+        {
+            $data->before_history_detail = $this->paidOptionFilter($data, $data->before_history_detail);
+            $data->after_history_detail  = $this->paidOptionFilter($data, $data->after_history_detail);
+        }
+
+        return $this->response(0, $content);
+    }
+
 
     public static function logging(Request $request)
     {
@@ -160,48 +222,5 @@ class OperatorHistoryContoller extends Controller
         }
         else
             return [];
-
-    }
-
-    /**
-     * 단일조회(상세조회)
-     *
-     * 본사 이상 가능
-     *
-     * @urlParam id integer required 영업자 이력 PK
-     */
-    public function show($id)
-    {
-        $data = $this->operator_histories
-            ->join('operators', 'operator_histories.oper_id', '=', 'operators.id')
-            ->join('brands', 'operator_histories.brand_id', '=', 'brands.id')
-            ->where('operator_histories.id', $id)
-            ->first(['operator_histories.*', 'operators.nick_name', 'brands.pv_options', 'brands.use_different_settlement']);
-
-        $data->before_history_detail = $this->paidOptionFilter($data, $data->before_history_detail);
-        $data->after_history_detail  = $this->paidOptionFilter($data, $data->after_history_detail);
-        return $this->response($data ? 0 : 1000, $data);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, int $id)
-    {
-        //
-    }
-
-    /**
-     * 단일삭제
-     *
-     * @urlParam id integer required 이상거래 PK
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

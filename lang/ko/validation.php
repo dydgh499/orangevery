@@ -159,6 +159,7 @@ return [
         'sales_name' => '영업점 상호',
         'sales_fee' => '영업점 수수료',
         'parent_id' => '상위 영업점',
+        'is_able_unlock_mcht' => '하위 가맹점 언락여부',
         'is_able_modify_mcht' => '영업점 수정가능 여부',
         'is_able_under_modify' => '하위 영업점 수정가능 여부',
         'view_type'  => '화면타입',
@@ -336,6 +337,7 @@ return [
         'work_s_at' => '작업시작 시간',
         'work_e_at' => '작업종료 시간',
         // transactions
+        'cxl_seq' => '취소 회차',
         'dev_realtime_fee' => '개발사 수수료',
         'mcht_fee' => '가맹점 수수료',
         'ps_fee' => '구간 수수료',
@@ -353,5 +355,6 @@ return [
         'brand_settle_amount' => '본사 이익금',
         'dev_realtime_settle_amount' => '개발사 즉시출금 이익금',
         'dev_settle_amount' => '개발사 이익금',
+        'mcht_settle_amount' => '가맹점 정산금'
     ],
 ];

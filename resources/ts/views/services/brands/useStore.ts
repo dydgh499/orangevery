@@ -181,7 +181,8 @@ export const defaultItemInfo = () => {
                     mcht_pw_level: 0,
                     account_lock_limit: 0,
                     sales_id_level: 0,
-                    sales_pw_level: 0
+                    sales_pw_level: 0,
+                    login_only_operate: 0
                 }
             }),
             paid: reactive<PaidOption>({
@@ -214,7 +215,8 @@ export const defaultItemInfo = () => {
                 use_settle_count: true,
                 sales_parent_structure: false,
                 use_specified_limit: false,
-                use_syslink: false
+                use_syslink: false,
+                use_product: false
             }),
             auth: reactive<AuthOption>({
                 levels: {

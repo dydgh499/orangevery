@@ -8,6 +8,7 @@ import { requiredValidatorV2 } from '@validators'
 import UnderAutoSettingDialog from '@/layouts/dialogs/users/UnderAutoSettingDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import FeeChangeBtn from '@/views/merchandises/FeeChangeBtn.vue'
+import ProductCard from '@/views/merchandises/products/ProductCard.vue'
 import RegularCreditCard from '@/views/merchandises/regular-credit-cards/RegularCreditCard.vue'
 import SpecifiedTimeDisablePaymentCard from '@/views/merchandises/specified-time-disable-payments/SpecifiedTimeDisablePaymentCard.vue'
 
@@ -600,16 +601,30 @@ watchEffect(() => {
                     </VRow>
                 </VCardItem>
             </VCard>
-            <br>
-            <VCard v-if="props.item.use_regular_card && isAbleModiy(props.item.id)">
-                <VCardItem>
-                    <VCol cols="12">
-                        <VRow>
-                            <RegularCreditCard :item="props.item" />
-                        </VRow>
-                    </VCol>
-                </VCardItem>
-            </VCard>
+            <template v-if="props.item.use_regular_card">
+                <br>
+                <VCard v-if="isAbleModiy(props.item.id)">
+                    <VCardItem>
+                        <VCol cols="12">
+                            <VRow>
+                                <RegularCreditCard :item="props.item" />
+                            </VRow>
+                        </VCol>
+                    </VCardItem>
+                </VCard>
+            </template>
+            <template v-if="corp.pv_options.paid.use_product">
+                <br>
+                <VCard v-if="isAbleModiy(props.item.id)">
+                    <VCardItem>
+                        <VCol cols="12">
+                            <VRow>
+                                <ProductCard :item="props.item"/>
+                            </VRow>
+                        </VCol>
+                    </VCardItem>
+                </VCard>
+            </template>
         </VCol>
         <UnderAutoSettingDialog ref="underAutoSetting"/>
         <PasswordCheckDialog ref="passwordCheckDialog"/>

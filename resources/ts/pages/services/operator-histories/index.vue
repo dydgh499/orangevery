@@ -1,8 +1,7 @@
 <script setup lang="ts">
+import OperatorHistoryDetailDialog from '@/layouts/dialogs/histories/OperatorHistoryDetailDialog.vue'
 import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
-import OperDetailDialog from '@/layouts/dialogs/histories/OperDetailDialog.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
-import ExtraMenu from '@/views/services/operator-histories/ExtraMenu.vue'
 import { history_types, useSearchStore } from '@/views/services/operator-histories/useStore'
 import { DateFilters } from '@core/enums'
 
@@ -23,7 +22,7 @@ const showAvatar = (preview: string) => {
 </script>
 <template>
     <div>
-        <BaseIndexView placeholder="운영자명, 적용대상, 상세이력 검색" :metas="[]" :add="false" add_name="" :date_filter_type="DateFilters.DATE_RANGE">
+        <BaseIndexView placeholder="운영자명, 적용했던 값 검색" :metas="[]" :add="false" add_name="" :date_filter_type="DateFilters.DATE_RANGE">
             <template #filter>
             </template>
             <template #index_extra_field>
@@ -33,6 +32,14 @@ const showAvatar = (preview: string) => {
                     :items="[{ id: null, title: '전체' }].concat(history_types)" label="활동 타입" eager  @update:modelValue="store.updateQueryString({history_type: store.params.history_type})" />
             </template>
             <template #headers>
+                <tr>
+                    <template v-for="(sub_header, index) in head.getSubHeaderComputed" :key="index">
+                        <th :colspan="head.getSubHeaderComputed.length - 1 == index ? sub_header.width + 1 : sub_header.width"
+                            class='list-square sub-headers' v-show="sub_header.width">
+                            <span>{{ sub_header.ko }}</span>
+                        </th>
+                    </template>
+                </tr>
                 <tr>
                     <th v-for="(header, key) in head.flat_headers" :key="key" v-show="header.visible" class='list-square'>
                         <span>
@@ -44,35 +51,37 @@ const showAvatar = (preview: string) => {
             <template #body>
                 <tr v-for="(item, index) in store.getItems" :key="index">
                     <template v-for="(_header, _key, _index) in head.headers" :key="_index">
-                        <template v-if="head.getDepth(_header, 0) != 1">
-                        </template>
-                        <template v-else>
-                            <td v-show="_header.visible" class='list-square'>
-                                <span v-if="_key == `id`">
-                                    #{{ item[_key] }}
-                                </span>                                
-                                <span v-else-if="_key == 'profile_img'">
-                                    <VAvatar :image="item[_key]" class="me-3 preview" @click="showAvatar(item['profile_img'])"/>
-                                </span>
-                                <span v-else-if="_key == `history_type`">
-                                    <VChip
-                                        :color="store.getSelectIdColor(history_types.find(obj => obj.id === item[_key])?.id as number)">
-                                        {{ history_types.find(obj => obj.id === item[_key])?.title }}
+                        <td v-show="_header.visible" class='list-square'>
+                            <span v-if="_key == `oper_id`">
+                                #{{ item[_key] }}
+                            </span>                                
+                            <span v-else-if="_key === 'profile_img'">
+                                <VAvatar :image="item[_key]" class="me-3 preview" @click="showAvatar(item['profile_img'])"/>
+                            </span>
+                            <span v-else-if="_key === 'history_target'">
+                                <div style=" display: flex; min-width: 500px; flex-wrap: wrap;">
+                                    <VChip v-for="(target, index) in (item[_key] ? item[_key].split(',') : [])"
+                                        :color="'primary'" style="margin: 0.25em;">
+                                            {{ target }}
                                     </VChip>
-                                </span>
-                                <span v-else-if="_key == 'extra_col'">
-                                    <ExtraMenu :item="item"/>
-                                </span>
-                                <span v-else>
-                                    {{ item[_key] }}
-                                </span>
-                            </td>
-                        </template>
+                                </div>
+                            </span>
+                            <b v-else-if="(['add_count', 'modify_count', 'remove_count']).includes(_key)"
+                                class="text-error">
+                                {{ item[_key] }}
+                            </b>
+                            <span v-else-if="_key === `detail_view`">
+                                <VBtn size="small" variant="tonal" @click="operDetail.show(item)">상세보기</VBtn>
+                            </span>
+                            <span v-else>
+                                {{ item[_key] }}
+                            </span>
+                        </td>
                     </template>
                 </tr>
             </template>
         </BaseIndexView>
-        <OperDetailDialog ref="operDetail" />
+        <OperatorHistoryDetailDialog ref="operDetail" />
         <ImageDialog ref="imageDialog" :style="`inline-size:20em !important;`"/>
     </div>
 </template>

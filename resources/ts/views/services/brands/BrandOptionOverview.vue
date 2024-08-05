@@ -445,7 +445,14 @@ const accountLockLimits = <Options[]>([
                                 </template>
                             </CreateHalfVCol>
                         </VRow>
-                        
+                        <VRow>
+                            <CreateHalfVCol :mdl="6" :mdr="6">
+                                <template #name>수기 단말기 상품선택</template>
+                                <template #input>
+                                    <VSwitch hide-details v-model="props.item.paid.use_product" color="primary" />
+                                </template>
+                            </CreateHalfVCol>
+                        </VRow>                        
                     </VCardItem>
                 </VCard>
             </VCol>

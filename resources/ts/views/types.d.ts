@@ -155,6 +155,12 @@ export interface RegularCreditCard {
     note: string,
 }
 
+export interface Product {
+    id: number,
+    mcht_id: number,
+    product_name: string,
+}
+
 export interface Merchandise extends MerchandisePropertie, UserPropertie {    
     contact_num: string,
     regular_credit_cards?: RegularCreditCard[],
@@ -167,6 +173,7 @@ export interface Merchandise extends MerchandisePropertie, UserPropertie {
     single_payment_limit_e_tm?: string,
     specified_time_disable_limit?: number,
     specified_time_disable_limit_payments?: SpecifiedTimeDisablePayment[],
+    products?: Product[],
 }
 
 export interface Salesforce extends SalesforcePropertie, UserPropertie {
@@ -389,6 +396,7 @@ interface PaidOption {
     sales_parent_structure: boolean, // 영업점 종속구조
     use_specified_limit: boolean,   // 지정시간 제한
     use_syslink: boolean,
+    use_product: boolean,   // 수기단말기 상품선택
 }
 interface AuthOption {
     levels: {
