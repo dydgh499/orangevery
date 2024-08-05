@@ -104,7 +104,7 @@ class SettleAmountCalculator
 
             if(count($sales_ids) > 0)
             {
-                return json_decode(json_encode(DB::table('salesforces')->table('salesforces')
+                return json_decode(json_encode(DB::table('salesforces')
                     ->whereIn('id', $sales_ids)
                     ->get(['id', 'settle_tax_type'])), true);
             }

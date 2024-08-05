@@ -12,10 +12,12 @@ use App\Models\Transaction;
 use App\Http\Requests\Manager\IndexRequest;
 use App\Http\Requests\Manager\LoginRequest;
 
+use App\Http\Controllers\Auth\Login;
+use App\Http\Controllers\Manager\Transaction\TransactionFilter;
+
 use App\Http\Traits\ManagerTrait;
 use App\Http\Traits\ExtendResponseTrait;
 
-use App\Http\Controllers\Auth\Login;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -140,7 +142,7 @@ class EzpgController extends Controller
             DB::raw("concat(trx_dt, ' ', trx_tm) AS trx_dttm"), DB::raw("concat(cxl_dt, ' ', cxl_tm) AS cxl_dttm"),
         ];
         $inst->setTransactionData(10);
-        $query          = $inst->commonSelect($request);
+        $query = TransactionFilter::common($request);
         $data           = $inst->getIndexData($request, $query, 'transactions.id', $inst->cols, 'transactions.trx_at', false);
         $sales_ids      = globalGetUniqueIdsBySalesIds($data['content']);
         $salesforces    = globalGetSalesByIds($sales_ids);
