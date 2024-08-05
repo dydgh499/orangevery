@@ -1,10 +1,10 @@
 <script lang="ts" setup>
+import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
+import Editor from '@/layouts/utils/Editor.vue'
+import { getUserLevel } from '@/plugins/axios'
+import { types } from '@/views/posts/useStore'
 import type { Post } from '@/views/types'
 import { requiredValidatorV2 } from '@validators'
-import Editor from '@/layouts/utils/Editor.vue'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
-import { types } from '@/views/posts/useStore'
-import { getUserLevel } from '@/plugins/axios'
 
 interface Props {
     item: Post,
@@ -32,7 +32,7 @@ const getPostTypes = computed(() => {
                         </VCol>
                         <VCol md="2">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.type"
-                                    :items="getPostTypes" prepend-inner-icon="fxemoji-notepage" label="게시글 타입 선택" 
+                                    :items="getPostTypes" prepend-inner-icon="fxemoji-notepage" 
                                     item-title="title" item-value="id" />
                         </VCol>
                     </VRow>

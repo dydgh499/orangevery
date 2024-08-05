@@ -24,7 +24,6 @@ const onAgree = (token: string) => {
 const onCancel = () => {
     visible.value = false    
     resolveCallback(''); // 취소 버튼 누름
-
 }
 
 defineExpose({

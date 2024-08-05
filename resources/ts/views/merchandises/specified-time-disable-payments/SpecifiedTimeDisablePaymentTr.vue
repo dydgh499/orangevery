@@ -31,7 +31,8 @@ const disable_types = <Options[]>[
                 <VCol cols="12">
                     <VRow no-gutters>
                         <VTextField v-model="props.item.disable_s_tm" type="time" 
-                        :rules="[requiredValidatorV2(props.item.disable_s_tm, '시작시간')]"/>
+                        :rules="[requiredValidatorV2(props.item.disable_s_tm, '시작시간')]"
+                        style="min-width: 10em;" />
                     </VRow>
                 </VCol>
             </VForm>
@@ -40,7 +41,8 @@ const disable_types = <Options[]>[
             <VCol cols="12">
                 <VRow no-gutters>
                     <VTextField v-model="props.item.disable_e_tm" type="time"
-                    :rules="[requiredValidatorV2(props.item.disable_e_tm, '종료시간')]" />
+                        :rules="[requiredValidatorV2(props.item.disable_e_tm, '종료시간')]" 
+                        style="min-width: 10em;" />
                 </VRow>
             </VCol>
         </td>

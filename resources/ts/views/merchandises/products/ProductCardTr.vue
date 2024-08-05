@@ -20,7 +20,8 @@ const { update, remove } = useRequestStore()
                 <VCol cols="12">
                     <VRow no-gutters>
                         <VTextField v-model="props.item.product_name" type="text" placeholder="상품명 입력"
-                            prepend-inner-icon="icon-park-outline:ad-product" />
+                            prepend-inner-icon="icon-park-outline:ad-product" 
+                            style="min-width: 10em;" />
                     </VRow>
                 </VCol>
             </VForm>

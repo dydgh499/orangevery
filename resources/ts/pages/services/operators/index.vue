@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import PasswordChangeDialog from '@/layouts/dialogs/users/PasswordChangeDialog.vue'
+import PhoneNum2FAVertifyDialog from '@/layouts/dialogs/users/PhoneNum2FAVertifyDialog.vue'
 import ImageDialog from '@/layouts/dialogs/utils/ImageDialog.vue'
 import BaseIndexView from '@/layouts/lists/BaseIndexView.vue'
 import { operator_levels, useSearchStore } from '@/views/services/operators/useStore'
@@ -10,7 +11,9 @@ import { DateFilters } from '@core/enums'
 const { store, head, exporter } = useSearchStore()
 const password = ref()
 const imageDialog = ref()
+const phoneNum2FAVertifyDialog = ref()
 
+provide('phoneNum2FAVertifyDialog', phoneNum2FAVertifyDialog)
 provide('password', password)
 provide('store', store)
 provide('head', head)
@@ -83,6 +86,7 @@ const showAvatar = (preview: string) => {
             </template>
         </BaseIndexView>
         <PasswordChangeDialog ref="password" />
+        <PhoneNum2FAVertifyDialog ref="phoneNum2FAVertifyDialog"/>
         <ImageDialog ref="imageDialog" :style="`inline-size:20em !important;`"/>
     </div>
 </template>

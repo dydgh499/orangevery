@@ -108,4 +108,10 @@ class AuthGoogleOTP
                 return AuthLoginCode::WRONG_ACCESS->value;
         }
     }
+
+    static public function initSecretKey($user)
+    {
+        $user->google_2fa_secret_key = null;
+        $user->save();
+    }
 }

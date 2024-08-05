@@ -36,6 +36,7 @@ Route::prefix('salesforces')->group(function() {
             });
             Route::post('{id}/mcht-batch-fee', [SalesforceController::class, 'mchtBatchFee']);
             Route::post('{id}/2fa-qrcode', [SalesforceController::class, 'create2FAQRLink']);  
+            Route::post('{id}/2fa-qrcode/init', [SalesforceController::class, 'init2FA']);  
             Route::post('{id}/2fa-qrcode/create-vertify', [SalesforceController::class, 'vertify2FAQRLink']);
         });
         Route::middleware(['is.operate'])->group(function() {
@@ -60,6 +61,7 @@ Route::prefix('salesforces')->group(function() {
 Route::apiResource('salesforces', SalesforceController::class);
     
 Route::prefix('merchandises')->group(function() {
+    // 가맹점만 시간영향받지않고 패스워드 초기화 및 unlock 가능
     Route::post('{id}/password-change', [MerchandiseController::class, 'passwordChange']);
     Route::post('{id}/unlock-account', [MerchandiseController::class, 'unlockAccount']);
     Route::get('chart', [MerchandiseController::class, 'chart']);

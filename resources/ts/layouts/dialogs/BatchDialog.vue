@@ -6,9 +6,14 @@ import { ItemTypes } from '@core/enums'
 
 interface Props {
     selected_idxs: number[],
+    selected_sales_id?: number,
+    selected_level?: number,
     item_type: number,
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+    selected_sales_id: 0,
+    selected_level: 0,
+})
 const emits = defineEmits(['update:select_idxs'])
 
 const visible = ref(false)
@@ -23,9 +28,9 @@ defineExpose({
 <template>
     <VDialog v-model="visible" persistent style="max-width: 900px;">
         <DialogCloseBtn @click="visible = !visible" />
-        <MchtBatchOverview :selected_idxs="props.selected_idxs" :selected_sales_id="0" :selected_level="0" v-if="props.item_type === ItemTypes.Merchandise"
+        <MchtBatchOverview :selected_idxs="props.selected_idxs" :selected_sales_id="props.selected_sales_id" :selected_level="props.selected_level" v-if="props.item_type === ItemTypes.Merchandise"
             @update:select_idxs="emits('update:select_idxs', $event)"/>
-        <PayModuleBatchOverview :selected_idxs="props.selected_idxs" :selected_sales_id="0" :selected_level="0" v-if="props.item_type === ItemTypes.PaymentModule"
+        <PayModuleBatchOverview :selected_idxs="props.selected_idxs" :selected_sales_id="props.selected_sales_id" :selected_level="props.selected_level" v-if="props.item_type === ItemTypes.PaymentModule"
             @update:select_idxs="emits('update:select_idxs', $event)"/>
         <SalesBatchOverview :selected_idxs="props.selected_idxs" v-if="props.item_type === ItemTypes.Salesforce"
             @update:select_idxs="emits('update:select_idxs', $event)"/>

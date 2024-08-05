@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import { fin_trx_delays } from '@/views/merchandises/pay-modules/useStore'
 import { useStore } from '@/views/services/pay-gateways/useStore'
 import type { PayModule } from '@/views/types'
@@ -89,126 +88,110 @@ useCollectWithdrawTrxFinDelayValidate()
 <template>
     <VCardItem>
         <VRow v-if="isAbleModiy(props.item.id)">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>API KEY(license)</template>
-                <template #input>
-                    <VTextField type="text" v-model="props.item.api_key" prepend-inner-icon="ic-baseline-vpn-key"
+            <VCol md="5" cols="4">API KEY</VCol>
+            <VCol md="7">
+                <VTextField type="text" v-model="props.item.api_key" prepend-inner-icon="ic-baseline-vpn-key"
                         placeholder="API KEY 입력" persistent-placeholder />
-                </template>
-            </CreateHalfVCol>
+            </VCol>
         </VRow>
         <VRow v-if="isAbleModiy(props.item.id)">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>SUB KEY(iv)</template>
-                <template #input>
-                    <VTextField type="text" v-model="props.item.sub_key" prepend-inner-icon="ic-sharp-key"
+            <VCol md="5" cols="4">SUB KEY</VCol>
+            <VCol md="7">
+                <VTextField type="text" v-model="props.item.sub_key" prepend-inner-icon="ic-sharp-key"
                         placeholder="SUB KEY 입력" persistent-placeholder />
-                </template>
-            </CreateHalfVCol>
+            </VCol>
         </VRow>
         <VRow v-if="isAbleModiy(props.item.id) && corp.pv_options.paid.use_pmid">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>PMID</template>
-                <template #input>
-                    <VTextField type="text" v-model="props.item.p_mid" prepend-inner-icon="tabler-user"
+            <VCol md="5" cols="4">PMID</VCol>
+            <VCol md="7">
+                <VTextField type="text" v-model="props.item.p_mid" prepend-inner-icon="tabler-user"
                         placeholder="PMID 입력" persistent-placeholder />
-                </template>
-            </CreateHalfVCol>
+            </VCol>
         </VRow>
         <VRow v-if="isAbleModiy(props.item.id)">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>MID</template>
-                <template #input>
-                    <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                        <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
-                            placeholder="MID 입력" persistent-placeholder />
-                        <VBtn type="button" variant="tonal" v-if="isAbleModiy(props.item.id) && props.item.id == 0 && corp.pv_options.paid.use_mid_create"
-                            @click="midCreate()">
-                            {{ "생성" }}
-                            <VIcon end icon="material-symbols:add-to-home-screen" />
-                        </VBtn>
-                    </div>
-                </template>
-            </CreateHalfVCol>
+            <VCol md="5" cols="4">MID</VCol>
+            <VCol md="7">
+                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                    <VTextField type="text" v-model="props.item.mid" prepend-inner-icon="tabler-user"
+                        placeholder="MID 입력" persistent-placeholder />
+                    <VBtn type="button" variant="tonal" v-if="isAbleModiy(props.item.id) && props.item.id == 0 && corp.pv_options.paid.use_mid_create"
+                        @click="midCreate()">
+                        {{ "생성" }}
+                        <VIcon end icon="material-symbols:add-to-home-screen" />
+                    </VBtn>
+                </div>
+            </VCol>
         </VRow>
         <VRow v-else>
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name><span class="font-weight-bold">MID</span></template>
-                <template #input>
-                    {{ props.item.mid }}
-                </template>
-            </CreateHalfVCol>
+            <VCol md="5" cols="4">
+                <span class="font-weight-bold">MID</span>
+            </VCol>
+            <VCol md="7">
+                {{ props.item.mid }}
+            </VCol>
         </VRow>
         <!-- 👉 TID -->
         <VRow v-if="isAbleModiy(props.item.id)">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>TID</template>
-                <template #input>
-                    <div style="display: flex; flex-direction: row; justify-content: space-between;">
-                        <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
-                            placeholder="TID 입력" persistent-placeholder />
-                        <VBtn type="button" variant="tonal" v-if="props.item.id == 0 && corp.pv_options.paid.use_tid_create" @click="tidCreate()">
-                            {{ "생성" }}
-                            <VIcon end icon="material-symbols:add-to-home-screen" />
-                        </VBtn>
-                    </div>
-                </template>
-            </CreateHalfVCol>
+            <VCol md="5" cols="4">TID</VCol>
+            <VCol md="7">
+                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                    <VTextField type="text" v-model="props.item.tid" prepend-inner-icon="jam-key-f"
+                        placeholder="TID 입력" persistent-placeholder />
+                    <VBtn type="button" variant="tonal" v-if="props.item.id == 0 && corp.pv_options.paid.use_tid_create" @click="tidCreate()">
+                        {{ "생성" }}
+                        <VIcon end icon="material-symbols:add-to-home-screen" />
+                    </VBtn>
+                </div>
+            </VCol>
         </VRow>
         <VRow v-else>
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name><span class="font-weight-bold">TID</span></template>
-                <template #input>
-                    {{ props.item.tid }}
-                </template>
-            </CreateHalfVCol>
+            <VCol md="5" cols="4">
+                <span class="font-weight-bold">TID</span>
+            </VCol>
+            <VCol md="7">
+                {{ props.item.tid }}
+            </VCol>
         </VRow>
+
         <VRow v-if="isAbleModiy(props.item.id)">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>계약 시작일</template>
-                <template #input>
-                    <VTextField type="date" v-model="props.item.contract_s_dt"
+            <VCol md="5" cols="5">계약 시작일</VCol>
+            <VCol md="7">
+                <VTextField type="date" v-model="props.item.contract_s_dt"
                         prepend-inner-icon="ic-baseline-calendar-today" label="시작일 입력" single-line />
-                </template>
-            </CreateHalfVCol>
+            </VCol>
         </VRow>
         <VRow v-else>
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name><span class="font-weight-bold">계약 시작일</span></template>
-                <template #input>
-                    {{ props.item.contract_s_dt }}
-                </template>
-            </CreateHalfVCol>
+            <VCol md="5" cols="5"><span class="font-weight-bold">계약 시작일</span></VCol>
+            <VCol md="7">
+                {{ props.item.contract_s_dt }}
+            </VCol>
         </VRow>
+
         <VRow v-if="isAbleModiy(props.item.id)">
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name>
-                    <BaseQuestionTooltip :location="'top'" :text="'계약 종료일'"
-                        :content="'결제일이 계약 시작일 ~ 계약 종료일에 포함되지 않을 시 결제가 불가능합니다.<br>입력하지 않을 시 검증하지 않으며 <b>온라인 결제</b>만 적용 가능합니다.'">
-                    </BaseQuestionTooltip>
-                </template>
-                <template #input>
-                    <VTextField type="date" v-model="props.item.contract_e_dt"
-                        prepend-inner-icon="ic-baseline-calendar-today" label="종료일 입력" single-line />
-                </template>
-            </CreateHalfVCol>
+            <VCol md="5" cols="5">
+                <BaseQuestionTooltip :location="'top'" :text="'계약 종료일'"
+                    :content="'결제일이 계약 시작일 ~ 계약 종료일에 포함되지 않을 시 결제가 불가능합니다.<br>입력하지 않을 시 검증하지 않으며 <b>온라인 결제</b>만 적용 가능합니다.'"/>
+            </VCol>
+            <VCol md="7">
+                <VTextField type="date" v-model="props.item.contract_e_dt"
+                    prepend-inner-icon="ic-baseline-calendar-today" label="종료일 입력" single-line />
+            </VCol>
         </VRow>
         <VRow v-else>
-            <CreateHalfVCol :mdl="5" :mdr="7">
-                <template #name><span class="font-weight-bold">계약 종료일</span></template>
-                <template #input>
-                    {{ props.item.contract_e_dt }}
-                </template>
-            </CreateHalfVCol>
+            <VCol md="5" cols="5">
+                <span class="font-weight-bold">계약 종료일</span>    
+            </VCol>
+            <VCol md="7">
+                {{ props.item.contract_e_dt }}
+            </VCol>
         </VRow>
-        <VRow v-if="props.item.id != 0 && props.item.module_type != 0 && corp.pv_options.paid.use_online_pay">
-            <CreateHalfVCol :mdl="5" :mdr="7" v-if="isAbleModiy(props.item.id)">
-                <template #name>
+        <template v-if="props.item.id != 0 && props.item.module_type != 0 && corp.pv_options.paid.use_online_pay">
+            <VRow v-if="isAbleModiy(props.item.id)">
+                <VCol md="5" cols="4">
                     <BaseQuestionTooltip :location="'top'" :text="'결제 KEY'"
-                        :content="'해당 키를 통해 온라인 결제를 발생시킬 수 있습니다.<br>키를 복사하려면 입력필드에서 더블클릭하세요.'">
-                    </BaseQuestionTooltip>
-                </template>
-                <template #input>
+                        :content="'해당 키를 통해 온라인 결제를 발생시킬 수 있습니다.<br>키를 복사하려면 입력필드에서 더블클릭하세요.'"/>
+                </VCol>
+                <VCol md="7">
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <VTextField type="text" v-model="props.item.pay_key" prepend-inner-icon="ic-baseline-vpn-key"
                             persistent-placeholder :disabled="true" />
@@ -218,26 +201,27 @@ useCollectWithdrawTrxFinDelayValidate()
                             <VIcon end icon="material-symbols:add-to-home-screen" />
                         </VBtn>
                     </div>
-                </template>
-            </CreateHalfVCol>
-            <CreateHalfVCol :mdl="5" :mdr="7" v-else>
-                <template #name>
-                    <BaseQuestionTooltip :location="'top'" :text="'결제 KEY'" :content="'드래그하여 확인할 수 있습니다.'">
-                    </BaseQuestionTooltip>
-                </template>
-                <template #input>
+                </VCol>
+            </VRow>
+            <VRow v-else>
+                <VCol md="5" cols="4">
+                    <span class="font-weight-bold">
+                        <BaseQuestionTooltip :location="'top'" :text="'결제 KEY'" :content="'드래그하여 확인할 수 있습니다.'"/>
+                    </span>    
+                </VCol>
+                <VCol md="7" cols="12">
                     <span style="background-color: rgba(var(--v-theme-on-surface));">{{ props.item.pay_key }}</span>
-                </template>
-            </CreateHalfVCol>
-        </VRow>
-        <VRow v-if="props.item.id != 0 && corp.pv_options.paid.use_online_pay">
-            <CreateHalfVCol :mdl="5" :mdr="7" v-if="isAbleModiy(props.item.id)">
-                <template #name>
+                </VCol>
+            </VRow>
+        </template>
+
+        <template v-if="props.item.id != 0 && corp.pv_options.paid.use_online_pay">
+            <VRow v-if="isAbleModiy(props.item.id)">
+                <VCol md="5" cols="4">
                     <BaseQuestionTooltip :location="'top'" :text="'서명 KEY'"
-                        :content="'노티발송시 데이터 위변조 방지 값으로 사용됩니다.<br>키를 복사하려면 입력필드에서 더블클릭하세요.'">
-                    </BaseQuestionTooltip>
-                </template>
-                <template #input>
+                        :content="'노티발송시 데이터 위변조 방지 값으로 사용됩니다.<br>키를 복사하려면 입력필드에서 더블클릭하세요.'"/>
+                </VCol>
+                <VCol md="7">
                     <div style="display: flex; flex-direction: row; justify-content: space-between;">
                         <VTextField type="text" v-model="props.item.sign_key" prepend-inner-icon="ic-baseline-vpn-key"
                             persistent-placeholder :disabled="true" />
@@ -247,55 +231,56 @@ useCollectWithdrawTrxFinDelayValidate()
                             <VIcon end icon="material-symbols:add-to-home-screen" />
                         </VBtn>
                     </div>
-                </template>
-            </CreateHalfVCol>
-            <CreateHalfVCol :mdl="5" :mdr="7" v-else>
-                <template #name>
-                    <BaseQuestionTooltip :location="'top'" :text="'서명 KEY'" :content="'드래그하여 확인할 수 있습니다.'">
-                    </BaseQuestionTooltip>
-                </template>
-                <template #input>
+                </VCol>
+            </VRow>
+            <VRow v-else>
+                <VCol md="5" cols="4">
+                    <span class="font-weight-bold">
+                        <BaseQuestionTooltip :location="'top'" :text="'서명 KEY'" :content="'드래그하여 확인할 수 있습니다.'"/>
+                    </span>    
+                </VCol>
+                <VCol md="7" cols="12">
                     <span style="background-color: rgba(var(--v-theme-on-surface));">{{ props.item.sign_key }}</span>
-                </template>
-            </CreateHalfVCol>
-        </VRow>
+                </VCol>
+            </VRow>
+        </template>
+        
         <template v-if="isAbleModiy(props.item.id) && corp.pv_options.paid.use_realtime_deposit">
             <VDivider style="margin: 1em 0;" />
             <VRow>
-                <CreateHalfVCol :mdl="6" :mdr="6">
-                    <template #name>실시간 사용여부</template>
-                    <template #input>
-                        <BooleanRadio :radio="props.item.use_realtime_deposit"
+                <VCol md="5" cols="5">실시간 사용여부</VCol>
+                <VCol md="7">
+                    <BooleanRadio :radio="props.item.use_realtime_deposit"
                             @update:radio="props.item.use_realtime_deposit = $event">
                             <template #true>사용</template>
                             <template #false>미사용</template>
-                        </BooleanRadio>
-                    </template>
-                </CreateHalfVCol>
+                    </BooleanRadio>
+                </VCol>
             </VRow>
             <VRow>
-                <CreateHalfVCol :mdl="5" :mdr="7">
-                    <template #name>이체 모듈 타입</template>
-                    <template #input>
-                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_id" :items="finance_vans"
+                <VCol md="5" cols="5">이체 모듈 타입</VCol>
+                <VCol md="7">
+                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_id" :items="finance_vans"
                             prepend-inner-icon="streamline-emojis:ant" label="모듈 타입 선택" item-title="nick_name"
                             item-value="id" single-line />
-                    </template>
-                </CreateHalfVCol>
+                </VCol>
             </VRow>
             <VRow>
-                <CreateHalfVCol :mdl="5" :mdr="7">
-                    <template #name>이체 딜레이</template>
-                    <template #input>
-                        <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_trx_delay"
-                            :items="fin_trx_delays" prepend-inner-icon="streamline-emojis:bug" label="이체 딜레이 선택"
-                            item-title="title" item-value="id" single-line :readonly="is_readonly_fin_trx_delay"/>
-                        <VTooltip activator="parent" location="top">
-                            사고 방지를 위해 결제모듈이 최초거래가 발생한 순간부터 이체 딜레이를 수정할 수 없습니다.
-                        </VTooltip>
-                    </template>
-                </CreateHalfVCol>
+                <VCol md="5" cols="5">이체 딜레이</VCol>
+                <VCol md="7">
+                    <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.fin_trx_delay"
+                        :items="fin_trx_delays" prepend-inner-icon="streamline-emojis:bug" label="이체 딜레이 선택"
+                        item-title="title" item-value="id" single-line :readonly="is_readonly_fin_trx_delay"/>
+                    <VTooltip activator="parent" location="top">
+                        사고 방지를 위해 결제모듈이 최초거래가 발생한 순간부터 이체 딜레이를 수정할 수 없습니다.
+                    </VTooltip>
+                </VCol>
             </VRow>
         </template>
     </VCardItem>
 </template>
+<style scoped>
+:deep(.v-row) {
+  align-items: center;
+}
+</style>

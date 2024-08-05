@@ -49,7 +49,7 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VRow no-gutters>
+    <VRow no-gutters style="align-items: flex-start;">
         <VCol cols="12" md="6">
             <VFileInput accept="*" v-model="files" :label="label"  @change="upload()" v-if="isAbleModiy(0)">
                 <template #selection="{ fileNames }">

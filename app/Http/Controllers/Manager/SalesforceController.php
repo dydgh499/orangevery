@@ -343,6 +343,14 @@ class SalesforceController extends Controller
             return $this->response(951);
     }
 
+    public function init2FA(Request $request, int $id)
+    {
+        if(Ablilty::isOperator($request))
+            return $this->_init2FASecretKey($request, $this->salesforces->where('id', $id));
+        else
+            return $this->response(951);
+    }
+
     public function vertify2FAQRLink(Request $request, int $id)
     {
         if(Ablilty::isMySalesforce($request, $id))    

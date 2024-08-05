@@ -172,13 +172,8 @@ trait ManagerTrait
 
     public function _unlockAccount($query)
     {
-        if(EditAbleWorkTime::validate() === false)
-            return $this->extendResponse(1500, '지금은 작업할 수 없습니다.');
-        else
-        {
-            AuthAccountLock::setUserUnlock($query->first());
-            return $this->response(1);    
-        }
+        AuthAccountLock::setUserUnlock($query->first());
+        return $this->response(1);    
     }
 
     public function _create2FAQRLink($request, int $id)
@@ -199,5 +194,22 @@ trait ManagerTrait
         }
         else
             return $this->extendResponse(952, '핀번호 또는 패스워드가 정확하지 않습니다.');
+    }
+
+    public function _init2FASecretKey($request, $orm)
+    {
+        $user = (clone $orm)->first();
+        if(Ablilty::isBrandCheck($request, $user->brand_id) === false)
+            return $this->response(951);
+        else
+        {
+            if($user->level <= 35)
+            {
+                AuthGoogleOTP::initSecretKey($user);
+                return $this->response(1);        
+            }
+            else
+                return $this->response(951);
+        }
     }
 }

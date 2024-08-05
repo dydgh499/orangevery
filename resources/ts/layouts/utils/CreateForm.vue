@@ -1,10 +1,9 @@
 a
 <script setup lang="ts">
-
-import { useRequestStore } from '@/views/request';
-import type { Tab } from '@/views/types';
-import { getUserLevel, isAbleModiy, user_info } from '@axios';
-import { VForm } from 'vuetify/components';
+import { useRequestStore } from '@/views/request'
+import type { Tab } from '@/views/types'
+import { getUserLevel, isAbleModiy, user_info } from '@axios'
+import { VForm } from 'vuetify/components'
 
 interface Props {
     id: number | string,
@@ -77,7 +76,7 @@ watchEffect(() => {
         </VTab>
     </VTabs>
     <VForm ref="vForm" class="mt-5">
-        <VWindow v-model="tab">
+        <VWindow v-model="tab" :touch="false">
             <slot name="view"></slot>
         </VWindow>
     </VForm>

@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import FileInput from '@/layouts/utils/FileInput.vue'
-import SwiperPreview from '@/layouts/utils/SwiperPreview.vue'
 import type { UserPropertie } from '@/views/types'
-import { avatars, banks, getOnlyNumber, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore'
+import { banks, getOnlyNumber, getUserIdValidate, getUserPasswordValidate } from '@/views/users/useStore'
 import { axios, getUserLevel, isAbleModiy } from '@axios'
 import corp from '@corp'
 
@@ -176,24 +175,24 @@ watchEffect(() => {
                     <VRow>
                         <VCol cols="12">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol>
+                                <VCol md=2 cols="12">
                                     <label>주민등록번호</label>
                                 </VCol>
-                                <VCol md="10">
+                                <VCol md="10" cols="12">
                                     <VRow style="align-items: center;">
-                                        <VCol :cols="5">
+                                        <VCol md="8" :cols="12" style="display: flex;">
                                             <VTextField v-model="props.item.resident_num_front" type="number" id="regidentFrontNum"
                                                 prepend-inner-icon="carbon-identification" placeholder="800101" maxlength="6"
-                                                @update:model-value="props.item.resident_num_front = getOnlyNumber($event)"/>
-                                        </VCol>
-                                        <span> - </span>
-                                        <VCol :cols="5">
+                                                @update:model-value="props.item.resident_num_front = getOnlyNumber($event)"
+                                                style="width: 13em;"/>
+                                            <span style="margin: 0.5em;text-align: center;"> - </span>
                                             <VTextField v-model="props.item.resident_num_back" placeholder="*******" id="regidentBackNum"
                                                 maxlength="7"
                                                 :append-inner-icon="is_resident_num_back_show ? 'tabler-eye' : 'tabler-eye-off'"
                                                 :type="is_resident_num_back_show ? 'number' : 'password'"
                                                 @click:append-inner="is_resident_num_back_show = !is_resident_num_back_show" 
-                                                @update:model-value="props.item.resident_num_back = getOnlyNumber($event)"/>
+                                                @update:model-value="props.item.resident_num_back = getOnlyNumber($event)"
+                                                style="width: 13em;"/>
                                         </VCol>
                                     </VRow>
                                 </VCol>
@@ -211,7 +210,7 @@ watchEffect(() => {
                     <VRow class="pt-3">
                         <VCol cols="12" :md="getUserLevel() === 10 ? 6: 12">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol>
+                                <VCol md="2" cols="4">
                                     <label>계좌번호</label>
                                 </VCol>
                                 <VCol md="10">
@@ -220,13 +219,13 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold">계좌번호</VCol>
+                                <VCol class="font-weight-bold" cols="4">계좌번호</VCol>
                                 <VCol md="8"><span>{{ props.item.acct_num }}</span></VCol>
                             </VRow>
                         </VCol>
                         <VCol md="6" v-if="getUserLevel() === 10">
                             <VRow>
-                                <VCol class="font-weight-bold">은행코드</VCol>
+                                <VCol class="font-weight-bold" cols="4">은행코드</VCol>
                                 <VCol md="8"><span>{{ props.item.acct_bank_code }}</span></VCol>
                             </VRow>
                         </VCol>
@@ -234,8 +233,13 @@ watchEffect(() => {
                     <VRow>
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol>
-                                    <label>예금주</label>
+                                <VCol md="4" cols="5">
+                                    <label>
+                                        예금주
+                                        <VBtn @click="ownerCheck" size="small" v-if="corp.pv_options.paid.use_acct_verification">
+                                            검증
+                                        </VBtn>
+                                    </label>
                                 </VCol>
                                 <VCol md="8">
                                     <VTextField v-model="props.item.acct_name"
@@ -243,73 +247,57 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold">예금주</VCol>
+                                <VCol class="font-weight-bold" cols="4">예금주</VCol>
                                 <VCol md="8"><span>{{ props.item.acct_name }}</span></VCol>
                             </VRow>
                         </VCol>
                         <VCol cols="12" md="6">
                             <VRow no-gutters v-if="isAbleModiy(props.item.id)">
-                                <VCol>
+                                <VCol md="2" cols="5">
                                     <label>은행</label>
                                 </VCol>
-                                <VCol md="8">
+                                <VCol md="6">
                                     <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item.acct_bank_code"
                                     :items="[{ code: null, title: '선택안함' }].concat(banks)" prepend-inner-icon="ph-buildings"
-                                    label="은행 선택" item-title="title" item-value="code" persistent-hint single-line
-                                    :hint="`${props.item.acct_bank_name}, 은행 코드: ${props.item.acct_bank_code ? props.item.acct_bank_code : '000'} `" 
+                                    label="은행 선택" item-title="title" item-value="code" single-line
                                     @update:modelValue="setAcctBankName()" />
+                                </VCol>
+                                <VCol md="4" cols="12" :style="$vuetify.display.smAndDown ? 'text-align: end;' : ''">
+                                    <h5 style="margin-top: 0.5em; margin-left: 0.5em;">
+                                        {{ `은행 코드: ${props.item.acct_bank_code ? props.item.acct_bank_code : '000'} ` }}
+                                    </h5>
                                 </VCol>
                             </VRow>
                             <VRow v-else>
-                                <VCol class="font-weight-bold">은행</VCol>
+                                <VCol class="font-weight-bold" cols="4">은행</VCol>
                                 <VCol md="8"><span>{{ props.item.acct_bank_name }}</span></VCol>
-                            </VRow>
-                        </VCol>
-                    </VRow>
-                    <VCol cols="12" v-if="corp.pv_options.paid.use_acct_verification && isAbleModiy(props.item.id)">
-                        <VBtn @click="ownerCheck" prepend-icon="ri:pass-valid-line" class="float-right">
-                            예금주 검증
-                        </VBtn>
-                    </VCol>
-                </VCardItem>
-                <VCardItem>
-                    <VCardTitle>프로필 이미지</VCardTitle>
-                    <VRow class="pt-5">
-                        <VCol cols="12">
-                            <VRow no-gutters>
-                                <SwiperPreview :items="avatars"
-                                    :preview="props.item.profile_img ?? avatars[Math.floor(Math.random() * avatars.length)]"
-                                    :label="'프로필'" :lmd="10" :rmd="2" @update:file="props.item.profile_file = $event"
-                                    @update:path="props.item.profile_img = $event">
-                                </SwiperPreview>
                             </VRow>
                         </VCol>
                     </VRow>
                 </VCardItem>
             </VCard>
         </VCol>
-        <!-- 👉 계약정보 -->
         <VCol cols="12" md="6" v-if="getUserLevel() >= 35 || corp.id !== 8">
             <VCard>
                 <VCardItem>
                     <VCardTitle>계약파일</VCardTitle>
                     <VRow class="pt-5">
-                        <VCol cols="12" md=6>
-                            <VRow no-gutters>
+                        <VCol cols="6" md=6>
+                            <VRow no-gutters >
                                 <FileInput :label="`통장사본 업로드`"
                                     :preview="props.item.passbook_img ? props.item.passbook_img : '/utils/icons/img-preview.svg'"
                                     @update:file="props.item.passbook_file = $event"
                                     @update:path="props.item.passbook_img = $event" />
                             </VRow>
                         </VCol>
-                        <VCol cols="12" md=6>
+                        <VCol cols="6" md=6>
                             <VRow no-gutters>
                                 <FileInput :label="`신분증 업로드`"
                                     :preview="props.item.id_img ? props.item.id_img : '/utils/icons/img-preview.svg'"
                                     @update:file="props.item.id_file = $event" @update:path="props.item.id_img = $event" />
                             </VRow>
                         </VCol>
-                        <VCol cols="12" md=6>
+                        <VCol cols="6" md=6>
                             <VRow no-gutters>
                                 <FileInput :label="`계약서 업로드`"
                                     :preview="props.item.contract_img ? props.item.contract_img : '/utils/icons/img-preview.svg'"
@@ -317,7 +305,7 @@ watchEffect(() => {
                                     @update:path="props.item.contract_img = $event" />
                             </VRow>
                         </VCol>
-                        <VCol cols="12" md=6>
+                        <VCol cols="6" md=6>
                             <VRow no-gutters>
                                 <FileInput :label="`사업자 등록증 업로드`"
                                     :preview="props.item.bsin_lic_img ? props.item.bsin_lic_img : '/utils/icons/img-preview.svg'"
@@ -327,6 +315,22 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                 </VCardItem>
+                <!--
+                <VCardItem>
+                    <VCardTitle>프로필 이미지</VCardTitle>
+                    <VRow class="pt-5">
+                        <VCol cols="12">
+                            <VRow no-gutters>
+                                <SwiperPreview :items="avatars"
+                                    :preview="props.item.profile_img ?? avatars[Math.floor(Math.random() * avatars.length)]"
+                                    :label="'프로필'" :lmd="9" :rmd="3" @update:file="props.item.profile_file = $event"
+                                    @update:path="props.item.profile_img = $event">
+                                </SwiperPreview>
+                            </VRow>
+                        </VCol>
+                    </VRow>
+                </VCardItem>
+                -->
                 <template v-if="corp.pv_options.paid.use_syslink">
                     <div style="display: flex; margin-left: 2em;">
                         <span>SYSLINK 연동여부</span>
@@ -345,3 +349,8 @@ watchEffect(() => {
         </VCol>
     </VRow>
 </template>
+<style scoped>
+:deep(.v-row) {
+  align-items: center;
+}
+</style>

@@ -209,12 +209,12 @@ const filterPgs = computed(() => {
             <div style="width: 100%;">
                 <VRow no-gutters style="align-items: center;" class="pt-3">
                     <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">PG사/구간</VCol>
-                    <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">
+                    <VCol md="3" cols="6" style="padding: 0.25em;margin-bottom: auto !important;">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.pg_id" :items="pgs"
                                 prepend-inner-icon="ph-buildings" label="PG사 선택" item-title="pg_name" item-value="id"
                                 single-line />
                     </VCol>
-                    <VCol md="3" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">
+                    <VCol md="3" cols="6" style="padding: 0.25em;margin-bottom: auto !important;">
                         <VSelect :menu-props="{ maxHeight: 400 }" v-model="pay_module.ps_id" :items="filterPgs"
                                 prepend-inner-icon="mdi-vector-intersection" label="구간 선택" item-title="name"
                                 item-value="id" :hint="`${setFee(pss, pay_module.ps_id)}`" persistent-hint

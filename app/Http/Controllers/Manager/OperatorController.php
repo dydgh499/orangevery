@@ -164,7 +164,7 @@ class OperatorController extends Controller
                 [$code, $msg] = resolve(MessageController::class)->mobileCodeSend($request->user()->brand_id, $request->user()->phone_num, -1);
                 if($code === 0)
                 {
-                    $msg = '직원 휴대폰번호 변경은 본사 휴대폰번호 인증이 필요합니다.<br>'.$request->user()->nick_name.'님에게 인증번호를 보냈습니다.';
+                    $msg = '직원 정보변경은 본사 휴대폰번호 인증이 필요합니다.<br>'.$request->user()->nick_name.'님에게 인증번호를 보냈습니다.';
                     $data = [
                         'phone_num' => $request->user()->phone_num,
                         'nick_name' => $request->user()->nick_name
@@ -285,6 +285,22 @@ class OperatorController extends Controller
     {
         if(Ablilty::isMyOperator($request, $id))
              return $this->_vertify2FAQRLink($request, $this->operators->where('id', $id));   
+        else
+            return $this->response(951);
+    }
+
+    public function init2FA(Request $request, int $id)
+    {
+        if(Ablilty::isOperator($request) && $request->user()->level === 40)
+        {
+            $result = AuthPhoneNum::validate((string)$request->token);
+            {}
+            [$result, $msg, $datas] = $this->employeePhoneValidate($request);
+            if($result !== AuthLoginCode::SUCCESS->value)
+                return $this->extendResponse($result, $msg, $datas);
+            else
+                return $this->_init2FASecretKey($request, $this->operators->where('id', $id));
+        }
         else
             return $this->response(951);
     }

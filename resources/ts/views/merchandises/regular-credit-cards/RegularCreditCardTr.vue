@@ -21,7 +21,8 @@ const { update, remove } = useRequestStore()
                 <VCol cols="12">
                     <VRow no-gutters>
                         <VTextField v-model="props.item.note" type="text" placeholder="카드 별칭 입력"
-                            prepend-inner-icon="twemoji-spiral-notepad" />
+                            prepend-inner-icon="twemoji-spiral-notepad"
+                            style="min-width: 10em;" />
                     </VRow>
                 </VCol>
             </VForm>
@@ -30,7 +31,8 @@ const { update, remove } = useRequestStore()
             <VForm ref="vForm">
                 <VCol cols="12">
                     <VRow no-gutters>
-                        <VTextField v-model="props.item.card_num" type="number" placeholder="1234000000001234"/>
+                        <VTextField v-model="props.item.card_num" type="number" placeholder="1234000000001234"
+                            style="min-width: 12em;"/>
                     </VRow>
                 </VCol>
             </VForm>

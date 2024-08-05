@@ -108,7 +108,7 @@ watchEffect(() => {
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>* 가맹점 상호</VCol>
+                                        <VCol cols="4">* 가맹점 상호</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.mcht_name" prepend-inner-icon="tabler-building-store"
                                             placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.mcht_name, '가맹점 상호')]" />
@@ -121,7 +121,7 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>업종</VCol>
+                                        <VCol cols="4">업종</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.sector" prepend-inner-icon="tabler-building-store"
                                                 placeholder="업종을 입력해주세요" persistent-placeholder />
@@ -138,7 +138,7 @@ watchEffect(() => {
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>이메일</VCol>
+                                        <VCol cols="4">이메일</VCol>
                                         <VCol md="8"> 
                                             <VTextField v-model="props.item.email" prepend-inner-icon="material-symbols:mail"
                                                 placeholder="이메일을 입력해주세요" persistent-placeholder>
@@ -155,7 +155,7 @@ watchEffect(() => {
                                 </VCol>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>웹사이트 URL</VCol>
+                                        <VCol cols="4">웹사이트 URL</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.website_url" prepend-inner-icon="streamline:browser-website-1-solid"
                                                 placeholder="웹사이트 URL 입력해주세요" persistent-placeholder maxlength="250">
@@ -176,7 +176,7 @@ watchEffect(() => {
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>사업장 연락처</VCol>
+                                        <VCol cols="4">사업장 연락처</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.contact_num" prepend-inner-icon="tabler-building-store"
                                             placeholder="사업장 연락처를 입력해주세요" persistent-placeholder type="text"
@@ -190,7 +190,6 @@ watchEffect(() => {
                                 </VCol>
                             </VRow>
                         </VCol>
-                        <!-- 👉 상위 영업점 수수료율 -->
                         <template v-if="getUserLevel() > 10 && isFixplusAgency() === false">
                             <VDivider/>
                             <VCol cols="12">
@@ -200,7 +199,7 @@ watchEffect(() => {
                                 <VCol cols="12" v-if="levels['sales'+(6-i)+'_use'] && getUserLevel() >= getIndexByLevel(6-i)">
                                     <VRow v-if="isAbleModiy(props.item.id)">
                                         <VCol cols="12" md="3">* {{ levels['sales'+(6-i)+'_name'] }}/수수료율</VCol>
-                                        <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                        <VCol cols="6" :md="props.item.id ? 3 : 4">
                                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="props.item['sales'+(6-i)+'_id']"
                                                 :items="sales[6-i].value"
                                                 :label="levels['sales'+(6-i)+'_name'] + '선택'"
@@ -211,7 +210,7 @@ watchEffect(() => {
                                                     {{ sales[6-i].value.find(obj => obj.id === props.item['sales'+(6-i)+'_id'])?.sales_name }}
                                                 </VTooltip>                                                
                                         </VCol>
-                                        <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                        <VCol cols="6" :md="props.item.id ? 3 : 4">
                                             <VTextField v-model="props.item['sales'+(6-i)+'_fee'] " type="number" suffix="%"
                                                 :rules="[requiredValidatorV2(props.item['sales'+(6-i)+'_fee'], levels['sales'+(6-i)+'_name']+'수수료율')]" />
 
@@ -248,11 +247,11 @@ watchEffect(() => {
                                 <VCol cols="12" md="3">
                                     * 가맹점/유보금 수수료율
                                 </VCol>
-                                    <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VCol cols="6" :md="props.item.id ? 3 : 4">
                                         <VTextField v-model="props.item.trx_fee" type="number" suffix="%"
                                             :rules="[requiredValidatorV2(props.item.trx_fee, '가맹점 수수료율')]" v-if="isAbleModiy(props.item.id)"/>
                                     </VCol>
-                                    <VCol cols="12" :md="props.item.id ? 3 : 4">
+                                    <VCol cols="6" :md="props.item.id ? 3 : 4">
                                         <VTextField v-model="props.item.hold_fee" type="number" suffix="%"
                                             :rules="[requiredValidatorV2(props.item.hold_fee, '가맹점 유보금')]" v-if="isAbleModiy(props.item.id)"  />
                                     </VCol>
@@ -383,11 +382,11 @@ watchEffect(() => {
                                     </VCol>
                                     <VCol>
                                         <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                            <VCol>
-                                            <BaseQuestionTooltip :location="'top'" :text="'* 모아서 출금 수수료'"
-                                                :content="'모아서 출금 사용시마다 적용되는 수수료 입니다.'">
-                                            </BaseQuestionTooltip>
-                                        </VCol>
+                                            <VCol md="6" cols="7">
+                                                <BaseQuestionTooltip :location="'top'" :text="'모아서 출금 수수료'"
+                                                    :content="'모아서 출금 사용시마다 적용되는 수수료 입니다.'">
+                                                </BaseQuestionTooltip>
+                                            </VCol>
                                             <VCol md="6">
                                                 <div class="batch-container">     
                                                     <VTextField v-model="props.item.collect_withdraw_fee" type="number" suffix="₩"
@@ -637,4 +636,5 @@ watchEffect(() => {
   align-items: center;
   justify-content: center;
 }
+
 </style>

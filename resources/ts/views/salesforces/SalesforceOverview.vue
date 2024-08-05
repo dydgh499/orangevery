@@ -1,14 +1,13 @@
 <script lang="ts" setup>
-import MchtBatchOverview from '@/layouts/components/batch-updaters/MchtBatchOverview.vue'
-import PayModuleBatchOverview from '@/layouts/components/batch-updaters/PayModuleBatchOverview.vue'
+import BatchDialog from '@/layouts/dialogs/BatchDialog.vue'
 import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import BooleanRadio from '@/layouts/utils/BooleanRadio.vue'
-import { isFixplus } from '@/plugins/fixplus'
 import UnderAutoSettingCard from '@/views/salesforces/under-auto-settings/UnderAutoSettingCard.vue'
 import { settleCycles, settleDays, settleTaxTypes } from '@/views/salesforces/useStore'
 import type { Options, Salesforce } from '@/views/types'
 
 import { getUserLevel, isAbleModiy, salesLevels } from '@axios'
+import { ItemTypes } from '@core/enums'
 import corp from '@corp'
 import { requiredValidatorV2 } from '@validators'
 
@@ -21,8 +20,8 @@ const all_cycles = settleCycles()
 const all_days = settleDays()
 const tax_types = settleTaxTypes()
 
-const mchtBatchOverview = ref()
-const payModuleBatchOverview = ref()
+const mchtBatchDialog = ref()
+const pmodBatchDialog = ref()
 
 
 const getSalesLevel = () => {
@@ -57,13 +56,26 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
         <VCol cols="12" md="6">
             <VCard>
                 <VCardItem>
-                    <VCardTitle>영업점정보</VCardTitle>
+                    <VCardTitle>
+                        <div style="display: flex;align-items: center;justify-content: space-between;">
+                            <span style="margin-right: 1em;">영업점정보</span>
+                            <div v-if="getUserLevel() >= 35 && props.item.id"
+                                :style="$vuetify.display.smAndDown ? 'display: inline-flex;flex-direction: column;' : 'display: inline-flex;'">
+                                <VBtn style='margin: 0.25em;' variant="tonal" size="small" @click="mchtBatchDialog.show()">
+                                    하위 가맹점 일괄 작업
+                                </VBtn>
+                                <VBtn style='margin: 0.25em;' variant="tonal" size="small" color="error" @click="pmodBatchDialog.show()">
+                                    하위 결제모듈 일괄 작업
+                                </VBtn>
+                            </div>
+                        </div>
+                    </VCardTitle>
                     <VRow class="pt-5">
                         <VCol cols="12">
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>* 영업점 상호</VCol>
+                                        <VCol cols="4">* 영업점 상호</VCol>
                                         <VCol md="8">
                                             <VTextField v-model="props.item.sales_name" prepend-inner-icon="tabler-building-store"
                                                 placeholder="상호를 입력해주세요" persistent-placeholder :rules="[requiredValidatorV2(props.item.sales_name, '영업점 상호')]" />
@@ -77,7 +89,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
 
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>
+                                        <VCol cols="4">
                                             <BaseQuestionTooltip :location="'top'" :text="'등급'" :content="'영업자 등급은 추가 후 수정할 수 없습니다.'">
                                             </BaseQuestionTooltip>
                                         </VCol>
@@ -99,7 +111,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>정산 주기</VCol>
+                                        <VCol cols="4">정산 주기</VCol>
                                         <VCol md="8">
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_cycle"
                                                 :items="all_cycles" prepend-inner-icon="icon-park-outline:cycle" label="정산 주기 선택"
@@ -114,7 +126,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                 </VCol>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>정산 요일</VCol>
+                                        <VCol cols="4">정산 요일</VCol>
                                         <VCol md="8"> 
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_day" :items="all_days"
                                                 prepend-inner-icon="icon-park-outline:cycle" label="정산 요일 선택" item-title="title"
@@ -132,7 +144,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                             <VRow>
                                 <VCol cols="12" md="6">
                                     <VRow no-gutters style="align-items: center;" v-if="isAbleModiy(props.item.id)">
-                                        <VCol>정산 세율</VCol>
+                                        <VCol cols="4">정산 세율</VCol>
                                         <VCol md="8">
                                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.settle_tax_type" :items="tax_types"
                                                 prepend-inner-icon="tabler:tax" label="정산 세율 선택" item-title="title" 
@@ -147,7 +159,7 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                                 
                                 <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
                                     <VRow no-gutters style="align-items: center;">
-                                        <VCol>화면 타입</VCol>
+                                        <VCol cols="4">화면 타입</VCol>
                                         <VCol md="8">
                                     <BooleanRadio :radio="props.item.view_type"
                                         @update:radio="props.item.view_type = $event">
@@ -197,8 +209,9 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                     </VRow>
                 </VCardItem>
             </VCard>
-            <br>
-            <VCard v-if="getUserLevel() >= 35 && isFixplus() === false">
+        </VCol>
+        <VCol cols="12" md="6" v-if="getUserLevel() >= 35">
+            <VCard>
                 <VCardItem>
                     <VCol cols="12">
                         <VRow>
@@ -208,10 +221,14 @@ if(props.item.id === 0 && getSalesLevel().length > 0)
                 </VCardItem>
             </VCard>
         </VCol>
-        <VCol cols="12" md="6" v-if="getUserLevel() >= 35 && props.item.id">
-            <MchtBatchOverview ref="mchtBatchOverview" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"/>
-            <br>
-            <PayModuleBatchOverview ref="payModuleBatchOverview" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"/>
-        </VCol>
+        <BatchDialog ref="mchtBatchDialog" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"
+            :item_type="ItemTypes.Merchandise" @update:select_idxs=""/>
+        <BatchDialog ref="pmodBatchDialog" :selected_idxs="[]" :selected_sales_id="props.item.id" :selected_level="props.item.level"
+            :item_type="ItemTypes.PaymentModule" @update:select_idxs=""/>
     </VRow>
 </template>
+<style scoped>
+:deep(.v-row) {
+  align-items: center;
+}
+</style>

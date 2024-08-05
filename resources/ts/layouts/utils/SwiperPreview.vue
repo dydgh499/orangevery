@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import BaseQuestionTooltip from '@/layouts/tooltips/BaseQuestionTooltip.vue'
 import Preview from '@/layouts/utils/Preview.vue'
 import { isAbleModiy } from '@axios'
 import { EffectCoverflow, Navigation, Pagination } from 'swiper'
@@ -59,24 +58,8 @@ watchEffect(() => {
 })
 </script>
 <template>
-    <VCol cols="12" :md="props.lmd" style="padding: 0 0.5em;">
+    <VCol cols="12" :md="props.lmd" style="padding: 0 2.5em;">
         <template v-if="isAbleModiy(0)">
-            <VFileInput accept="image/*" show-size v-model="files" :label="label+' 이미지'"
-                prepend-icon="tabler-camera-up" @change="upload()">
-                <template #selection="{ fileNames }">
-                    <template v-for="fileName in fileNames" :key="fileName">
-                        <VChip label size="small" variant="outlined" color="primary" class="me-2">
-                            {{ fileName }}
-                        </VChip>
-                    </template>
-                </template>
-            </VFileInput>
-            <br>
-            <BaseQuestionTooltip :location="'top'" :text="'기본 '+label+' 이미지'"
-                :content="'기본으로 제공되는 '+label+' 이미지 입니다.<br>하단 스와이프뷰에서 이미지를 선택하신 후, 선택 버튼을 눌러주세요.'">
-            </BaseQuestionTooltip>
-            <br>
-            <br>
             <div class="coverflow-example">
                 <Swiper class="swiper" :modules="modules" :pagination="true" :effect="'coverflow'" :grab-cursor="true" :navigation="true" 
                     :centered-slides="true" :slides-per-view="'auto'" @swiper="getRef" :coverflow-effect="{
@@ -101,6 +84,17 @@ watchEffect(() => {
     </VCol>
     <VCol cols="12" :md="props.rmd">
         <Preview :preview="preview" :style="`inline-size:20em !important;`" :preview-style="previewStyle" class="preview" :ext="ext" />
+        <VFileInput accept="image/*" show-size v-model="files" :label="label+' 이미지'"
+            prepend-icon=""
+            prepend-inner-icon="tabler-camera-up" @change="upload()" style="padding: 0.5em;">
+            <template #selection="{ fileNames }">
+                <template v-for="fileName in fileNames" :key="fileName">
+                    <VChip label size="small" variant="outlined" color="primary" class="me-2">
+                        {{ fileName }}
+                    </VChip>
+                </template>
+            </template>
+        </VFileInput>
     </VCol>
 </template>
 <style lang="scss" scoped>
@@ -114,8 +108,8 @@ watchEffect(() => {
   padding-block-end: 50px;
 
   .slide {
-    block-size: 150px;
-    inline-size: 150px;
+    block-size: 80px;
+    inline-size: 80px;
 
     img {
       display: block;

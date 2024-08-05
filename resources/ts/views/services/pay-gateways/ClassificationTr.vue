@@ -24,7 +24,7 @@ const { update, remove } = useRequestStore()
                     <VRow no-gutters>
                         <VTextField v-model="props.item.name" prepend-inner-icon="mdi-vector-intersection"
                             :placeholder="`${props.placeholder} 입력`" persistent-placeholder :rules="[requiredValidatorV2(props.item.name, '구간')]"
-                            style="display: inline-block;" />
+                            style="display: inline-block; min-width: 10em;" />
                     </VRow>
                 </VCol>
             </VForm>

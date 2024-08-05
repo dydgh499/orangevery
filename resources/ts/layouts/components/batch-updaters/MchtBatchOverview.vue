@@ -218,7 +218,7 @@ watchEffect(() => {
                             <VCol md="3" cols="12" style="padding: 0.25em;">
                                 {{ levels['sales' + (6 - i) + '_name'] }}/수수료율
                             </VCol>
-                            <VCol md="3" cols="12" style="padding: 0.25em;">
+                            <VCol md="3" cols="6" style="padding: 0.25em;">
                                 <VAutocomplete :menu-props="{ maxHeight: 400 }"
                                     v-model="merchandise['sales' + (6 - i) + '_id']" :items="sales[6 - i].value"
                                     :label="levels['sales' + (6 - i) + '_name'] + ' 선택'" item-title="sales_name"
@@ -229,7 +229,7 @@ watchEffect(() => {
                                         merchandise['sales' + (6 - i) + '_id'])?.sales_name }}
                                 </VTooltip>
                             </VCol>
-                            <VCol md="2" cols="12" style="padding: 0.25em;">
+                            <VCol md="2" cols="6" style="padding: 0.25em;">
                                 <VTextField v-model="merchandise['sales' + (6 - i) + '_fee']" type="number"
                                     suffix="%" />
                             </VCol>
@@ -253,10 +253,10 @@ watchEffect(() => {
                         <VCol md="3" cols="12" style="padding: 0.25em;">
                             거래/유보금 수수료율
                         </VCol>
-                        <VCol md="3" cols="12" style="padding: 0.25em;">
+                        <VCol md="3" cols="6" style="padding: 0.25em;">
                             <VTextField v-model="merchandise.mcht_fee" type="number" suffix="%"/>
                         </VCol>
-                        <VCol md="2" cols="12" style="padding: 0.25em;">
+                        <VCol md="2" cols="6" style="padding: 0.25em;">
                             <VTextField v-model="merchandise.hold_fee" type="number" suffix="%"/>
                         </VCol>
                         <VCol md="4" cols="12" style="padding: 0.25em;">
@@ -281,11 +281,11 @@ watchEffect(() => {
                                     :content="'선택한 가맹점의 모든 노티 URL이 추가됩니다.<br>(같은 노티 URL의 중복등록은 불가능합니다.)'">
                                 </BaseQuestionTooltip>
                             </VCol>
-                            <VCol md="3" cols="12" style="padding: 0.25em;">
+                            <VCol md="3" cols="6" style="padding: 0.25em;">
                                 <VTextField v-model="noti.noti_url" type="text"
                                     placeholder="https://www.naver.com" />
                             </VCol>
-                            <VCol md="2" cols="12" style="padding: 0.25em;">
+                            <VCol md="2" cols="6" style="padding: 0.25em;">
                                 <VTextField v-model="noti.noti_note" label="메모사항"
                                     prepend-inner-icon="twemoji-spiral-notepad" maxlength="300" />
                             </VCol>
@@ -306,11 +306,11 @@ watchEffect(() => {
                             <VTextField v-model="merchandise.acct_num" prepend-inner-icon="ri-bank-card-fill"
                                 placeholder="계좌번호 입력" persistent-placeholder />
                         </VCol>
-                        <VCol md="2" cols="12" style="padding: 0.25em;margin-bottom: auto !important;">
+                        <VCol md="2" cols="6" style="padding: 0.25em;margin-bottom: auto !important;">
                             <VTextField v-model="merchandise.acct_name" prepend-inner-icon="tabler-user"
                                 placeholder="예금주 입력" persistent-placeholder />
                         </VCol>
-                        <VCol md="3" cols="12" style="padding: 0.25em;">
+                        <VCol md="3" cols="6" style="padding: 0.25em;">
                             <VAutocomplete :menu-props="{ maxHeight: 400 }" v-model="merchandise.bank"
                                 :items="[{ code: null, title: '선택안함' }].concat(banks)"
                                 prepend-inner-icon="ph-buildings" label="은행 선택"
@@ -319,7 +319,7 @@ watchEffect(() => {
                                 />
                         </VCol>
                         <VCol md="2" cols="12" style="padding: 0.25em;margin-bottom: auto !important; margin-left: auto;">
-                            <VBtn variant="tonal" size="small" @click="setAccountInfo()">
+                            <VBtn variant="tonal" size="small" @click="setAccountInfo()" style="float: inline-end;">
                                 즉시적용
                                 <VIcon end size="18" icon="tabler-direction-sign" />
                             </VBtn>
