@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import CreateHalfVCol from '@/layouts/utils/CreateHalfVCol.vue'
 import Editor from '@/layouts/utils/Editor.vue'
 import { getUserLevel } from '@/plugins/axios'
 import { types } from '@/views/posts/useStore'
@@ -30,29 +29,26 @@ const getPostTypes = computed(() => {
                         <VCol md="1">
                             작성타입
                         </VCol>
-                        <VCol md="2">
+                        <VCol md="2" cols="8">
                             <VSelect :menu-props="{ maxHeight: 400 }" v-model="props.item.type"
                                     :items="getPostTypes" prepend-inner-icon="fxemoji-notepage" 
                                     item-title="title" item-value="id" />
                         </VCol>
                     </VRow>
                     <VRow>
-                        <CreateHalfVCol :mdl="1" :mdr="11">
-                            <template #name>제목</template>
-                            <template #input>
-                                <VTextField v-model="props.item.title"
-                                    prepend-inner-icon="ic-round-subtitles" placeholder="제목을 입력해주세요"
-                                    persistent-placeholder :rules="[requiredValidatorV2(props.item.title, '제목')]" />
-                            </template>
-                        </CreateHalfVCol>
+                        <VCol md="1">
+                            제목
+                        </VCol>
+                        <VCol md="4" cols="10">
+                            <VTextField v-model="props.item.title"
+                                prepend-inner-icon="ic-round-subtitles" placeholder="제목을 입력해주세요"
+                                persistent-placeholder :rules="[requiredValidatorV2(props.item.title, '제목')]" />
+                        </VCol>
                     </VRow>
                     <VRow>
-                        <CreateHalfVCol :mdl="1" :mdr="11">
-                            <template #name>내용</template>
-                            <template #input>
-                                <Editor :content="props.item.content" @update:content="props.item.content = $event"/>
-                            </template>
-                        </CreateHalfVCol>
+                        <VCol>
+                            <Editor :content="props.item.content" @update:content="props.item.content = $event"/>
+                        </VCol>
                     </VRow>
                 </VCardItem>
             </VCard>
