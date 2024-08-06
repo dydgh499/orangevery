@@ -334,7 +334,7 @@ watchEffect(() => {
                         </VCol>
                     </VRow>
                 </VCardItem>
-                <template v-if="corp.pv_options.paid.use_syslink && props.is_mcht">
+                <template v-if="corp.pv_options.paid.use_syslink && props.is_mcht && getUserLevel() >= 35">
                     <div style="display: flex; margin-left: 2em;">
                         <span>SYSLINK 연동여부</span>
                         <span style="margin-left: 1em;">
