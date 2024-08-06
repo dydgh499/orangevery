@@ -62,7 +62,7 @@ class CancelDepositController extends Controller
     public function getSettleDateByTransId($trans_id, $deposit_dt)
     {
         $tran = Transaction::where('id', $trans_id)->first();
-        return SettleDateCalculator::getSettleDate(request()->user()->brand_id, $deposit_dt, $tran->mcht_settle_type+1, $tran->pg_settle_type);
+        return SettleDateCalculator::getSettleDate(request()->user()->brand_id, $deposit_dt, $tran->mcht_settle_type, $tran->pg_settle_type);
     }
 
     /**
