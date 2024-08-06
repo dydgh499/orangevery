@@ -106,7 +106,7 @@ watchEffect(() => {
     </VCol>
 </template>
 <style lang="scss" scoped>
-.swiper-wrapper {
+:deep(.swiper-wrapper) {
   margin-block-start: 1em;
 }
 

@@ -459,19 +459,21 @@ const filterPgs = computed(() => {
                     <VCol :md="6" :cols="12" v-if="corp.pv_options.paid.use_forb_pay_time">
                         <VRow no-gutters style="align-items: center;">
                             <VCol md="4" cols="12">결제금지 시간</VCol>
-                            <VCol md="8">
-                                <VCol md="6">
-                                    <VTextField v-model="pay_module.pay_disable_s_tm" type="time" label="시작시간"/>
-                                </VCol>
-                                <VCol>
-                                    <VTextField v-model="pay_module.pay_disable_e_tm" type="time" label="종료시간"/>
-                                </VCol>
-                                <VCol>
-                                    <VBtn style='margin-left: 0.5em;' variant="tonal" size="small" @click="setForbiddenPayTime()">
-                                        즉시적용
-                                        <VIcon end size="18" icon="tabler-direction-sign" />
-                                    </VBtn>
-                                </VCol>
+                            <VCol md="8" cols="12">
+                                <VRow style="align-items: center;">
+                                    <VCol md="6" cols="6">
+                                        <div class="d-flex flex-column">
+                                            <VTextField v-model="pay_module.pay_disable_s_tm" type="time" label="시작시간" style="width: 9em; margin-bottom: 1em;"/>
+                                            <VTextField v-model="pay_module.pay_disable_e_tm" type="time" label="종료시간" style="width: 9em;"/>
+                                        </div>
+                                    </VCol>
+                                    <VCol md="6" cols="6">
+                                        <VBtn style='float: inline-end;' variant="tonal" size="small" @click="setForbiddenPayTime()">
+                                            즉시적용
+                                            <VIcon end size="18" icon="tabler-direction-sign" />
+                                        </VBtn>
+                                    </VCol>
+                                </VRow>
                             </VCol>
                         </VRow>
                     </VCol>

@@ -346,7 +346,6 @@ watchEffect(() => {
                         <VCardTitle>SYSLINK 연동정보</VCardTitle>
                         <span :class="props.item?.syslink?.code === 'SUCCESS' ? 'text-success' : 'text-error'">{{ props.item?.syslink?.message }}</span>
                     </VCardItem>
-
                 </template>
             </VCard>
         </VCol>
